@@ -1,32 +1,9 @@
-
-#include <Core/CullableObjects.hh>
+#include <SpacePartitioning/Cullable/Object/PointLight.hh>
 #include <Utils/MathematicTools.hh>
-#include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
 namespace AGE
 {
-
-	Drawable::Drawable()
-	{
-	}
-
-	Drawable::~Drawable()
-	{
-	}
-
-	Drawable::Drawable(const SubMeshInstance &_m, const glm::mat4 &_t)
-		: mesh(_m)
-		, transformation(_t)
-	{
-	}
-
-	Drawable::Drawable(const SubMeshInstance &_m, const glm::mat4 &_t, const std::vector<glm::mat4> &_bones)
-		: mesh(_m)
-		, transformation(_t)
-		, bones(_bones)
-	{
-	}
 
 	PointLight::PointLight() :
 		attenuation(1.0f),
@@ -64,4 +41,5 @@ namespace AGE
 		assert(lightRange.x > 0);
 		sphereTransform = glm::scale(glm::translate(glm::mat4(1), position), lightRange);
 	}
+
 }

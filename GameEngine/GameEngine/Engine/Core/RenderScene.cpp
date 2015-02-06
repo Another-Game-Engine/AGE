@@ -1,5 +1,5 @@
 #include <Core/RenderScene.hpp>
-#include <Core/Commands/RenderCommands.hpp>
+#include <Core/Commands/ToRender.hpp>
 #include <Core/Tasks/RenderTasks.hpp>
 #include <Threads/PrepareRenderThread.hpp>
 #include <Threads/RenderThread.hpp>
@@ -9,6 +9,14 @@
 #include <glm/gtx/quaternion.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <chrono>
+#include <SpacePartitioning/Cullable/Object/Camera.hh>
+#include <SpacePartitioning/Cullable/Object/PointLight.hh>
+#include <SpacePartitioning/Cullable/Object/Mesh.hh>
+#include <SpacePartitioning/Ouptut/RenderCamera.hh>
+#include <SpacePartitioning/Ouptut/RenderLight.hh>
+#include <SpacePartitioning/Ouptut/RenderPainter.hh>
+#include <SpacePartitioning/Ouptut/RenderPipeline.hh>
+
 
 namespace AGE
 {
@@ -484,7 +492,7 @@ namespace AGE
 					
 				}
 			}
-			GetRenderThread()->getQueue()->emplaceCommand<Commands::Render::CopyDrawLists>(this->_octreeDrawList);
+			GetRenderThread()->getQueue()->emplaceCommand<Commands::ToRender::CopyDrawLists>(this->_octreeDrawList);
 		}
 
 }

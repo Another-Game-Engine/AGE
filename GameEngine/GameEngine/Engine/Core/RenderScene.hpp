@@ -7,8 +7,8 @@
 #include <Core/PrepareKey.hpp>
 #include <Entities/EntityTypedef.hpp>
 #include <SpacePartitioning/LooseOctree.hh>
-#include <Core/CullableObjects.hh>
-#include <Core/PrepareRender/RenderCamera.hh>
+#include <SpacePartitioning/Cullable/Object/Mesh.hh>
+#include <SpacePartitioning/Ouptut/RenderCamera.hh>
 #include <array>
 
 namespace AGE

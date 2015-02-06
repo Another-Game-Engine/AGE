@@ -3,6 +3,10 @@
 #include <Render/Program.hh>
 #include <Render/Pipelining/Render/Rendering.hh>
 #include <Render/OpenGLTask/Tasks.hh>
+#include <Render/GeometryManagement/Painting/Painter.hh>
+#include <SpacePartitioning/Ouptut/RenderPipeline.hh>
+#include <SpacePartitioning/Ouptut/RenderPainter.hh>
+#include <SpacePartitioning/Ouptut/RenderCamera.hh>
 #include <vector>
 #include <memory>
 

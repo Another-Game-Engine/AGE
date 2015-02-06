@@ -3,7 +3,8 @@
 #include <Utils/Dependency.hpp>
 #include <Utils/Containers/Vector.hpp>
 #include <memory>
-#include <Skinning/AnimationInstance.hpp>
+#include <AssetManagement/Data/AnimationData.hpp>
+#include <AssetManagement/Instance/AnimationInstance.hh>
 #include <mutex>
 
 namespace AGE
@@ -17,13 +18,13 @@ namespace AGE
 		virtual ~AnimationManager()
 		{}
 
-		Key<AnimationInstance> createAnimationInstance(std::shared_ptr<AGE::Skeleton> skeleton, std::shared_ptr<AGE::Animation> animation)
+		Key<AnimationInstance> createAnimationInstance(std::shared_ptr<Skeleton> skeleton, std::shared_ptr<AnimationData> animation)
 		{
 			std::lock_guard<std::mutex> lock(_mutex); //dirty lock not definitive, to test purpose
 
-			auto instance = AGE::AnimationInstance(skeleton, animation);
+			auto instance = AnimationInstance(skeleton, animation);
 			_list.emplace_back(instance);
-			instance.key = Key<AGE::AnimationInstance>::createKey(_list.size() - 1);
+			instance.key = Key<AnimationInstance>::createKey(_list.size() - 1);
 			return instance.key;
 		}
 

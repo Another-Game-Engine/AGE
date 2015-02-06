@@ -7,7 +7,7 @@
 #include <Threads/PrepareRenderThread.hpp>
 #include <Threads/RenderThread.hpp>
 
-#include <Core/Commands/RenderCommands.hpp>
+#include <Core/Commands/ToRender.hpp>
 
 #ifdef USE_DEFAULT_ENGINE_CONFIGURATION
 
@@ -169,7 +169,7 @@ namespace AGE
 #ifdef USE_IMGUI
 		ImGui::Render();
 #endif
-		GetPrepareThread()->getQueue()->emplaceCommand<Commands::Render::Flush>();
+		GetPrepareThread()->getQueue()->emplaceCommand<Commands::ToRender::Flush>();
 		return true;
 	}
 }

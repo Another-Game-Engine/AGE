@@ -4,8 +4,6 @@
 # include <string>
 # include <memory>
 # include <Render/GeometryManagement/Painting/PaintingManager.hh>
-# include <Core/CullableObjects.hh>
-# include <Core/PrepareRender/RenderCamera.hh>
 
 # define ARGS_FUNCTION_RENDER RenderPipeline &pipeline, RenderLightList &lights, CameraInfos &infos
 
@@ -15,6 +13,9 @@ namespace AGE
 	class IRendering;
 	class Painter;
 	class Program;
+	struct RenderPipeline;
+	struct RenderLightList;
+	struct CameraInfos;
 
 	class IRenderingPipeline
 	{

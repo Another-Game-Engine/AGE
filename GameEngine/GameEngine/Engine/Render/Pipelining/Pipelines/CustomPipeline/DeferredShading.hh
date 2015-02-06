@@ -1,6 +1,7 @@
 #pragma once
 
-# include <Render/Pipelining/Pipelines/ARenderingPipeline.hh>
+#include <Render/Pipelining/Pipelines/ARenderingPipeline.hh>
+#include <glm/glm.hpp>
 
 namespace AGE
 {

@@ -7,7 +7,6 @@
     <ClCompile Include="Engine\Components\RigidBody.cpp" />
     <ClCompile Include="Engine\Context\IRenderContext.cpp" />
     <ClCompile Include="Engine\Core\ConfigurationManager.cpp" />
-    <ClCompile Include="Engine\Core\CullableObjects.cpp" />
     <ClCompile Include="Engine\Core\DefaultConfiguration.cpp" />
     <ClCompile Include="Engine\Core\Link.cpp" />
     <ClCompile Include="Engine\Core\Tasks\RenderTasks.cpp" />
@@ -57,7 +56,6 @@
     <ClCompile Include="Engine\Render\Textures\Texture2D.cpp" />
     <ClCompile Include="Engine\Render\UnitProg.cpp" />
     <ClCompile Include="Engine\Skinning\AnimationChannel.cpp" />
-    <ClCompile Include="Engine\Skinning\AnimationInstance.cpp" />
     <ClCompile Include="Engine\Skinning\Bone.cpp" />
     <ClCompile Include="Engine\Skinning\Skeleton.cpp" />
     <ClCompile Include="Engine\Components\SpotLight.cpp" />
@@ -119,6 +117,11 @@
     <ClCompile Include="Engine\Core\Commands\MainToPrepare.cpp" />
     <ClCompile Include="Engine\Threads\RenderThread.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomPipeline\BasicPipeline.cpp" />
+    <ClCompile Include="Engine\AssetManagement\Instance\AnimationInstance.cpp" />
+    <ClCompile Include="Engine\SpacePartitioning\Cullable\Object\Mesh.cpp" />
+    <ClCompile Include="Engine\SpacePartitioning\Cullable\Object\PointLight.cpp" />
+    <ClCompile Include="Engine\AssetManagement\Data\MaterialData.cpp" />
+    <ClCompile Include="Engine\AssetManagement\Data\MeshData.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -177,7 +180,6 @@
     <ClInclude Include="Engine\Core\Tasks\Basics.hpp" />
     <ClInclude Include="Engine\Core\Tasks\MainToPrepare.hpp" />
     <ClInclude Include="Engine\Core\ComponentManager.hpp" />
-    <ClInclude Include="Engine\Core\CullableObjects.hh" />
     <ClInclude Include="Engine\Core\DefaultConfiguration.hpp" />
     <ClInclude Include="Engine\Core\Link.hpp" />
     <ClInclude Include="Engine\Core\OctreeCommands.hpp" />
@@ -214,9 +216,7 @@
     <ClInclude Include="Engine\Render\ProgramResources\Types\Uniform\Vec4.hh" />
     <ClInclude Include="Engine\Render\Program.hh" />
     <ClInclude Include="Engine\Render\UnitProg.hh" />
-    <ClInclude Include="Engine\Skinning\Animation.hpp" />
     <ClInclude Include="Engine\Skinning\AnimationChannel.hpp" />
-    <ClInclude Include="Engine\Skinning\AnimationInstance.hpp" />
     <ClInclude Include="Engine\Skinning\AnimationKey.hpp" />
     <ClInclude Include="Engine\Skinning\Bone.hpp" />
     <ClInclude Include="Engine\Skinning\Skeleton.hpp" />
@@ -315,10 +315,19 @@
     <ClInclude Include="Engine\Core\PreparableObject.hh" />
     <ClInclude Include="Engine\SpacePartitioning\Cullable\Cullable.hh" />
     <ClInclude Include="Engine\SpacePartitioning\Cullable\CullableShape.hh" />
-    <ClInclude Include="Engine\Core\PrepareRender\RenderCamera.hh" />
     <ClInclude Include="Engine\Core\Tasks\RenderTasks.hpp" />
-    <ClInclude Include="Engine\Core\Commands\RenderCommands.hpp" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomPipeline\BasicPipeline.hh" />
+    <ClInclude Include="Engine\Core\Commands\ToRender.hpp" />
+    <ClInclude Include="Engine\SpacePartitioning\Cullable\Object\Mesh.hh" />
+    <ClInclude Include="Engine\AssetManagement\Instance\AnimationInstance.hh" />
+    <ClInclude Include="Engine\SpacePartitioning\Cullable\Object\Camera.hh" />
+    <ClInclude Include="Engine\SpacePartitioning\Cullable\Object\PointLight.hh" />
+    <ClInclude Include="Engine\SpacePartitioning\Ouptut\RenderCamera.hh" />
+    <ClInclude Include="Engine\SpacePartitioning\Ouptut\RenderPainter.hh" />
+    <ClInclude Include="Engine\SpacePartitioning\Ouptut\RenderPipeline.hh" />
+    <ClInclude Include="Engine\SpacePartitioning\Ouptut\RenderLight.hh" />
+    <ClInclude Include="Engine\AssetManagement\Data\AnimationData.hpp" />
+    <ClInclude Include="Engine\Skinning\AnimationManager.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

@@ -3,7 +3,6 @@
 #include <functional>
 #include <Utils/Containers/Vector.hpp>
 #include <Render/GeometryManagement/Painting/Painter.hh>
-#include <Core/PrepareRender/RenderCamera.hh>
 #include <AssetManagement/Instance/MaterialInstance.hh>
 
 namespace AGE
@@ -12,7 +11,7 @@ namespace AGE
 
 	namespace Commands
 	{
-		namespace Render
+		namespace ToRender
 		{
 			struct Flush{
 				std::size_t aligned;

@@ -37,7 +37,7 @@ static std::pair<GLenum, std::function<void(Vertices &vertices, size_t index, Su
 };
 
 	struct Skeleton;
-	struct Animation;
+	struct AnimationData;
 
 	class AssetsManager : public Dependency<AssetsManager>
 	{
@@ -111,7 +111,7 @@ static std::pair<GLenum, std::function<void(Vertices &vertices, size_t index, Su
 
 	public:
 		bool loadAnimation(const File &filePath, const std::string &loadingChannel = "");
-		std::shared_ptr<Animation> getAnimation(const File &filePath);
+		std::shared_ptr<AnimationData> getAnimation(const File &filePath);
 		bool loadSkeleton(const File &filePath, const std::string &loadingChannel = "");
 		std::shared_ptr<Skeleton> getSkeleton(const File &filePath);
 		bool loadMaterial(const File &filePath, const std::string &loadingChannel = "");
@@ -128,7 +128,7 @@ static std::pair<GLenum, std::function<void(Vertices &vertices, size_t index, Su
 		std::map<std::bitset<MeshInfos::END>, Key<Painter>, BitsetComparer> _painters;
 		std::map<std::string, std::shared_ptr<MeshInstance>> _meshs;
 		std::map<std::string, std::shared_ptr<Skeleton>> _skeletons;
-		std::map<std::string, std::shared_ptr<Animation>> _animations;
+		std::map<std::string, std::shared_ptr<AnimationData>> _animations;
 		std::map<std::string, std::shared_ptr<MaterialSetInstance>> _materials;
 		std::map<std::string, std::shared_ptr<ITexture>> _textures;
 		std::map<std::string, std::shared_ptr<AssetsLoadingChannel>> _loadingChannels;

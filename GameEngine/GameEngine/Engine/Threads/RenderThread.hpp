@@ -5,7 +5,6 @@
 #include "QueueOwner.hpp"
 #include <Utils/Containers/Vector.hpp>
 #include <Render/GeometryManagement/Painting/PaintingManager.hh>
-#include <Core/PrepareRender/RenderCamera.hh>
 #include <Render/Pipelining/Pipelines/IRenderingPipeline.hh>
 #include <memory>
 #include <vector>
@@ -14,9 +13,9 @@ namespace AGE
 {
 	class SdlContext;
 	class Input;
-
 	class Engine;
 	struct DrawableCollection;
+	struct RenderCamera;
 
 	class RenderThread : public Thread, public QueueOwner
 	{
@@ -44,7 +43,7 @@ namespace AGE
 		bool _run;
 
 		SdlContext *_context;
-		AGE::Vector < AGE::RenderCamera > _drawlist;
+		AGE::Vector<RenderCamera> _drawlist;
 
 		friend class ThreadManager;
 	};

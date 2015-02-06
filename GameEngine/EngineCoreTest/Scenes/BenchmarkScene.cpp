@@ -7,7 +7,7 @@
 #include <Threads/RenderThread.hpp>
 #include <Threads/PrepareRenderThread.hpp>
 #include <Core/Commands/MainToPrepare.hpp>
-#include <Core/Commands/RenderCommands.hpp>
+#include <Core/Commands/ToRender.hpp>
 #include <Core/Tasks/Basics.hpp>
 #include <Core/Tasks/RenderTasks.hpp>
 #include <glm/glm.hpp>
@@ -207,18 +207,18 @@ bool BenchmarkScene::userStart()
 	}
 
 	getInstance<AGE::AssetsManager>()->setAssetsDirectory("../../Assets/AGE-Assets-For-Test/Serialized/");
-	getInstance<AGE::AssetsManager>()->loadMesh(File("cube/cube.sage"), { MeshInfos::Positions, MeshInfos::Normals, MeshInfos::Uvs, MeshInfos::Tangents }, "DEMO_SCENE_ASSETS");
-	getInstance<AGE::AssetsManager>()->loadMesh(File("ball/ball.sage"), { MeshInfos::Positions, MeshInfos::Normals, MeshInfos::Uvs, MeshInfos::Tangents }, "DEMO_SCENE_ASSETS");
+	getInstance<AGE::AssetsManager>()->loadMesh(File("cube/cube.sage"), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents }, "DEMO_SCENE_ASSETS");
+	getInstance<AGE::AssetsManager>()->loadMesh(File("ball/ball.sage"), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents }, "DEMO_SCENE_ASSETS");
 	//getInstance<AGE::AssetsManager>()->loadMesh(File("catwoman/catwoman.sage"), { MeshInfos::Positions, MeshInfos::Normals, MeshInfos::Uvs, MeshInfos::Tangents }, "DEMO_SCENE_ASSETS");
 	//getInstance<AGE::AssetsManager>()->loadMesh(File("Broken Tower/tower.sage"), { MeshInfos::Positions, MeshInfos::Normals, MeshInfos::Uvs, MeshInfos::Tangents }, "DEMO_SCENE_ASSETS");
 //	getInstance<AGE::AssetsManager>()->loadMesh(File("Venice/venice.sage"), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents }, "DEMO_SCENE_ASSETS");
-	//getInstance<AGE::AssetsManager>()->loadMesh(File("Sponza/sponza.sage"), { MeshInfos::Positions, MeshInfos::Normals, MeshInfos::Uvs, MeshInfos::Tangents }, "DEMO_SCENE_ASSETS");
+	getInstance<AGE::AssetsManager>()->loadMesh(File("Sponza/sponza.sage"), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents }, "DEMO_SCENE_ASSETS");
 	getInstance<AGE::AssetsManager>()->loadMaterial(File("cube/cube.mage"), "DEMO_SCENE_ASSETS");
 	getInstance<AGE::AssetsManager>()->loadMaterial(File("ball/ball.mage"), "DEMO_SCENE_ASSETS");
 	//getInstance<AGE::AssetsManager>()->loadMaterial(File("catwoman/catwoman.mage"), "DEMO_SCENE_ASSETS");
 	//getInstance<AGE::AssetsManager>()->loadMaterial(File("Venice/venice.mage"), "DEMO_SCENE_ASSETS");
 	//getInstance<AGE::AssetsManager>()->loadMaterial(File("Broken Tower/tower.mage"), "DEMO_SCENE_ASSETS");
-	//getInstance<AGE::AssetsManager>()->loadMaterial(File("Sponza/sponza.mage"), "DEMO_SCENE_ASSETS");
+	getInstance<AGE::AssetsManager>()->loadMaterial(File("Sponza/sponza.mage"), "DEMO_SCENE_ASSETS");
 	//getInstance<AGE::AssetsManager>()->loadSkeleton(File("catwoman/catwoman.skage"), "DEMO_SCENE_ASSETS");
 	//getInstance<AGE::AssetsManager>()->loadAnimation(File("catwoman/catwoman-roulade.aage"), "DEMO_SCENE_ASSETS");
 
@@ -289,10 +289,10 @@ bool BenchmarkScene::userUpdate(double time)
 				auto _l = getLink(GLOBAL_SPONZA);
 				_l->setPosition(glm::vec3(-5, 0, 0));
 				_l->setScale(glm::vec3(0.01f));
-		//		_l->setOrientation(glm::quat(glm::vec3(Mathematic::degreeToRadian(-90), Mathematic::degreeToRadian(90), 0)));
+				_l->setOrientation(glm::quat(glm::vec3(Mathematic::degreeToRadian(-90), Mathematic::degreeToRadian(90), 0)));
 
-		//		auto _m = addComponent<AGE::Component::MeshRenderer>(GLOBAL_SPONZA, getInstance<AGE::AssetsManager>()->getMesh("Sponza/sponza.sage"));
-		//		_m->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("Sponza/sponza.mage")));
+				auto _m = addComponent<AGE::Component::MeshRenderer>(GLOBAL_SPONZA, getInstance<AGE::AssetsManager>()->getMesh("Sponza/sponza.sage"));
+				_m->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("Sponza/sponza.mage")));
 			}
 			{
 				GLOBAL_CATWOMAN = createEntity();
@@ -448,6 +448,6 @@ bool BenchmarkScene::userUpdate(double time)
 	// TODO
 	AGE::GetPrepareThread()->getQueue()->emplaceCommand<AGE::Commands::MainToPrepare::PrepareDrawLists>();
 	// TODO
-	AGE::GetPrepareThread()->getQueue()->emplaceCommand<AGE::Commands::Render::RenderDrawLists>();
+	AGE::GetPrepareThread()->getQueue()->emplaceCommand<AGE::Commands::ToRender::RenderDrawLists>();
 	return true;
 }

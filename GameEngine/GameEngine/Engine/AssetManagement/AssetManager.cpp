@@ -2,7 +2,7 @@
 
 #include <AssetManagement/AssetManager.hh>
 #include <Skinning/Skeleton.hpp>
-#include <Skinning/Animation.hpp>
+#include <AssetManagement/Data/AnimationData.hpp>
 #include <AssetManagement/Data/MaterialData.hh>
 #include <AssetManagement/Data/MeshData.hh>
 #include <AssetManagement/Data/TextureData.hh>
@@ -154,7 +154,7 @@ namespace AGE
 	bool AssetsManager::loadAnimation(const File &_filePath, const std::string &loadingChannel)
 	{
 		File filePath(_assetsDirectory + _filePath.getFullName());
-		auto animation = std::make_shared<Animation>();
+		auto animation = std::make_shared<AnimationData>();
 		if (!filePath.exists()) 
 		{
 			std::cerr << "AssetsManager : File [" << filePath.getFullName() << "] does not exists." << std::endl;
@@ -178,7 +178,7 @@ namespace AGE
 		return (true);
 	}
 
-	std::shared_ptr<Animation> AssetsManager::getAnimation(const File &_filePath)
+	std::shared_ptr<AnimationData> AssetsManager::getAnimation(const File &_filePath)
 	{
 		File filePath(_assetsDirectory + _filePath.getFullName());
 		if (_animations.find(filePath.getFullName()) != std::end(_animations))

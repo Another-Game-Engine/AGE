@@ -1,6 +1,5 @@
 #include "MainToPrepare.hpp"
 #include <Utils/Containers/Vector.hpp>
-#include <Core/CullableObjects.hh>
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
 

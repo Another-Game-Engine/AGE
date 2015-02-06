@@ -5,7 +5,7 @@
 #include <AssetManagement/Instance/MaterialInstance.hh>
 #include <AssetManagement/Instance/MeshInstance.hh>
 #include <Core/PrepareKey.hpp>
-#include <Core/CullableObjects.hh>
+#include <vector>
 
 namespace AGE
 {
@@ -39,9 +39,9 @@ namespace AGE
 			struct SetGeometry
 			{
 				SetGeometry(const PrepareKey &_key
-					, const AGE::Vector<SubMeshInstance> &_submeshInstances);
+					, const std::vector<SubMeshInstance> &_submeshInstances);
 				PrepareKey key;
-				AGE::Vector<SubMeshInstance> submeshInstances;
+				std::vector<SubMeshInstance> submeshInstances;
 			};
 
 			struct CreateMesh

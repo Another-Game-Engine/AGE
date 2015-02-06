@@ -14,7 +14,7 @@
 #include <AssetManagement/AssetManager.hh>
 #include <Context/IRenderContext.hh>
 #include <CONFIGS.hh>
-#include <Skinning/AnimationInstance.hpp>
+#include <AssetManagement/Instance/AnimationInstance.hh>
 
 # define VERTEX_SHADER "../../Shaders/test_pipeline_1.vp"
 # define FRAG_SHADER "../../Shaders/test_pipeline_1.fp"

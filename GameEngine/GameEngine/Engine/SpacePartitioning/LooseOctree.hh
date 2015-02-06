@@ -1,11 +1,13 @@
 #pragma once
 
-#include <Core/CullableObjects.hh>
 #include <SpacePartitioning/LooseOctreeNode.hh>
 #include <Utils/MemoryPool.hpp>
 
 namespace AGE
 {
+	struct PointLight;
+	struct Drawable;
+
 	class LooseOctree
 	{
 	public:

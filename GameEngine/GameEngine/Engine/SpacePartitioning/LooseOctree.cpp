@@ -1,4 +1,8 @@
 #include <SpacePartitioning/LooseOctree.hh>
+#include <SpacePartitioning/Cullable/CullableShape.hh>
+#include <SpacePartitioning/Cullable/Object/PointLight.hh>
+#include <SpacePartitioning/Cullable/Object/Mesh.hh>
+#include <Utils/AABoundingBox.hh>
 
 namespace AGE
 {

@@ -1,8 +1,7 @@
 #include "Skeleton.hpp"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-
-#include "AnimationInstance.hpp"
+#include <AssetManagement/Instance/AnimationInstance.hh>
 
 using namespace AGE;
 
@@ -20,7 +19,7 @@ void Skeleton::updateSkinning()
 
 	for (std::size_t j = 0; j < this->animations.size(); ++j)
 	{
-		if (this->animations[j]->animation)
+		if (this->animations[j]->animationData)
 		{
 			for (std::size_t i = 0; i < bones.size(); ++i)
 			{

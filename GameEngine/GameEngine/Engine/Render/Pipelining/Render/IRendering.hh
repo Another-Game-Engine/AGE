@@ -1,9 +1,9 @@
 #pragma once
 
-# include <vector>
-# include <memory>
-# include <Render/GeometryManagement/Painting/PaintingManager.hh>
-# include <Core/CullableObjects.hh>
+#include <vector>
+#include <memory>
+#include <Render/GeometryManagement/Data/Vertices.hh>
+#include <Render/GeometryManagement/Painting/PaintingManager.hh>
 
 namespace AGE
 {

@@ -3,10 +3,9 @@
 #include <Context/SdlContext.hh>
 #include <Utils/ThreadName.hpp>
 #include <Core/Tasks/RenderTasks.hpp>
-#include <Core/Commands/RenderCommands.hpp>
+#include <Core/Commands/ToRender.hpp>
 #include <Context/SdlContext.hh>
 #include <Utils/Containers/Vector.hpp>
-#include <Core/CullableObjects.hh>
 #include <Core/Tasks/Basics.hpp>
 #include <Threads/ThreadManager.hpp>
 #include <Core/Engine.hh>
@@ -16,6 +15,9 @@
 #include <Utils/OpenGL.hh>
 #include <Utils/Age_Imgui.hpp>
 #include <Render/Properties/Transformation.hh>
+#include <SpacePartitioning/Ouptut/RenderCamera.hh>
+#include <SpacePartitioning/Ouptut/RenderLight.hh>
+#include <SpacePartitioning/Ouptut/RenderPipeline.hh>
 
 namespace AGE
 {
@@ -44,7 +46,7 @@ namespace AGE
 			msg.setValue(true);
 		});
 
- 		registerCallback<Commands::Render::Flush>([&](Commands::Render::Flush& msg)
+ 		registerCallback<Commands::ToRender::Flush>([&](Commands::ToRender::Flush& msg)
 		{
 			_context->swapContext();
 			glClear(GL_COLOR_BUFFER_BIT);
@@ -70,12 +72,12 @@ namespace AGE
 			_context->setScreenSize(msg.size);
 		});
 
-		registerCallback<Commands::Render::CopyDrawLists>([&](Commands::Render::CopyDrawLists& msg)
+		registerCallback<Commands::ToRender::CopyDrawLists>([&](Commands::ToRender::CopyDrawLists& msg)
 		{
 			_drawlist = msg.list;
 		});
 
-		registerCallback<Commands::Render::RenderDrawLists>([&](Commands::Render::RenderDrawLists& msg)
+		registerCallback<Commands::ToRender::RenderDrawLists>([&](Commands::ToRender::RenderDrawLists& msg)
 		{
 			uint32_t pipelineIdx = 0;
 
@@ -89,7 +91,7 @@ namespace AGE
 			}
 		});
 
-		registerCallback<Commands::Render::DrawTestTriangle>([&](Commands::Render::DrawTestTriangle& msg)
+		registerCallback<Commands::ToRender::DrawTestTriangle>([&](Commands::ToRender::DrawTestTriangle& msg)
 		{
 			glClearColor(1, 0, 1, 1);
 			glClear(GL_COLOR_BUFFER_BIT);

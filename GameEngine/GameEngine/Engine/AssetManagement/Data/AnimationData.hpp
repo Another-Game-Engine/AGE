@@ -1,13 +1,12 @@
 #pragma once
 
-#include "AnimationChannel.hpp"
-
+#include <Skinning/AnimationChannel.hpp>
 #include <cereal/types/vector.hpp>
 #include <cereal/types/string.hpp>
 
 namespace AGE
 {
-	struct Animation
+	struct AnimationData
 	{
 		std::string name;
 		AGE::Vector<AnimationChannel> channels;
@@ -16,7 +15,7 @@ namespace AGE
 	};
 
 	template <class Archive>
-	void serialize(Archive &ar, Animation &value)
+	void serialize(Archive &ar, AnimationData &value)
 	{
 		ar(cereal::make_nvp("name", value.name));
 		ar(cereal::make_nvp("channels", value.channels));
