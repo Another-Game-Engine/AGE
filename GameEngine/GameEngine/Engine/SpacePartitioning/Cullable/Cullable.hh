@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Core/PreparableObject.hh>
+#include <SpacePartitioning/PreparableObject.hh>
 
 namespace AGE
 {

@@ -2,7 +2,6 @@
 
 #include <Components/Component.hh>
 #include <Render/Key.hh>
-#include <Core/PreparableObject.hh>
 #include <Utils/Serialization/VectorSerialization.hpp>
 
 namespace gl { class GeometryManager; class Vertices; class Indices; }
@@ -11,7 +10,7 @@ namespace AGE
 {
 	namespace Component
 	{
-		struct PointLight : public ComponentBase < PointLight >
+		struct PointLight : public ComponentBase <PointLight>
 		{
 		public:
 			PointLight();

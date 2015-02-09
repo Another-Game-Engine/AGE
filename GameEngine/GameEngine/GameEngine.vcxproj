@@ -229,7 +229,7 @@
     <ClCompile Include="Engine\Core\ConfigurationManager.cpp" />
     <ClCompile Include="Engine\Core\DefaultConfiguration.cpp" />
     <ClCompile Include="Engine\Core\Link.cpp" />
-    <ClCompile Include="Engine\Core\PreparableObject.cpp" />
+    <ClCompile Include="Engine\SpacePartitioning\PreparableObject.cpp" />
     <ClCompile Include="Engine\Core\Tasks\RenderTasks.cpp" />
     <ClCompile Include="Engine\AssetManagement\Data\MaterialData.cpp" />
     <ClCompile Include="Engine\AssetManagement\Data\MeshData.cpp" />
@@ -361,7 +361,7 @@
     <ClInclude Include="Engine\Core\Material\MaterialData.hh" />
     <ClInclude Include="Engine\Core\Material\MaterialInstance.hh" />
     <ClInclude Include="Engine\Core\Material\MaterialSetInstance.hh" />
-    <ClInclude Include="Engine\Core\PreparableObject.hh" />
+    <ClInclude Include="Engine\SpacePartitioning\PreparableObject.hh" />
     <ClInclude Include="Engine\Skinning\AnimationManager.hpp" />
     <ClInclude Include="Engine\SpacePartitioning\Cullable\Object\Camera.hh" />
     <ClInclude Include="Engine\SpacePartitioning\Cullable\Object\Mesh.hh" />

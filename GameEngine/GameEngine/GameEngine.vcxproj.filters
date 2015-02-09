@@ -112,7 +112,6 @@
     <ClCompile Include="Engine\Utils\ThreadName.cpp" />
     <ClCompile Include="Engine\SpacePartitioning\LooseOctree.cpp" />
     <ClCompile Include="Engine\SpacePartitioning\LooseOctreeNode.cpp" />
-    <ClCompile Include="Engine\Core\PreparableObject.cpp" />
     <ClCompile Include="Engine\SpacePartitioning\Cullable\Cullable.cpp" />
     <ClCompile Include="Engine\Core\Commands\MainToPrepare.cpp" />
     <ClCompile Include="Engine\Threads\RenderThread.cpp" />
@@ -122,6 +121,7 @@
     <ClCompile Include="Engine\SpacePartitioning\Cullable\Object\PointLight.cpp" />
     <ClCompile Include="Engine\AssetManagement\Data\MaterialData.cpp" />
     <ClCompile Include="Engine\AssetManagement\Data\MeshData.cpp" />
+    <ClCompile Include="Engine\SpacePartitioning\PreparableObject.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -312,7 +312,6 @@
     <ClInclude Include="Engine\Utils\Worker.hpp" />
     <ClInclude Include="Engine\SpacePartitioning\LooseOctree.hh" />
     <ClInclude Include="Engine\SpacePartitioning\LooseOctreeNode.hh" />
-    <ClInclude Include="Engine\Core\PreparableObject.hh" />
     <ClInclude Include="Engine\SpacePartitioning\Cullable\Cullable.hh" />
     <ClInclude Include="Engine\SpacePartitioning\Cullable\CullableShape.hh" />
     <ClInclude Include="Engine\Core\Tasks\RenderTasks.hpp" />
@@ -328,6 +327,7 @@
     <ClInclude Include="Engine\SpacePartitioning\Ouptut\RenderLight.hh" />
     <ClInclude Include="Engine\AssetManagement\Data\AnimationData.hpp" />
     <ClInclude Include="Engine\Skinning\AnimationManager.hpp" />
+    <ClInclude Include="Engine\SpacePartitioning\PreparableObject.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />
