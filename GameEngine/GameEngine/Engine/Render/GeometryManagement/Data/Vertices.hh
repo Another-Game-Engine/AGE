@@ -40,7 +40,6 @@ namespace AGE
 		Vertices &update(std::shared_ptr<Program> const &program);
 
 	private:
-		size_t _index;
 		size_t _offset;
 		size_t _nbr_indices;
 		size_t _nbr_vertex;

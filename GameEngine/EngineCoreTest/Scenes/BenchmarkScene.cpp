@@ -302,7 +302,7 @@ bool BenchmarkScene::userUpdate(double time)
 				_l->setOrientation(glm::quat(glm::vec3(Mathematic::degreeToRadian(-90), Mathematic::degreeToRadian(90), 0)));
 				_l->setPosition(glm::vec3(-4, 0, 0));
 				_l->setScale(glm::vec3(0.007f));
-		//		auto _m = addComponent<AGE::Component::MeshRenderer>(GLOBAL_CATWOMAN, getInstance<AGE::AssetsManager>()->getMesh("catwoman/catwoman.sage"));
+				//auto _m = addComponent<AGE::Component::MeshRenderer>(GLOBAL_CATWOMAN, getInstance<AGE::AssetsManager>()->getMesh("catwoman/catwoman.sage"));
 				//GLOBAL_CAT_ANIMATION = getInstance<AGE::AnimationManager>()->createAnimationInstance(
 				//	getInstance<AGE::AssetsManager>()->getSkeleton("catwoman/catwoman.skage"),
 				//	getInstance<AGE::AssetsManager>()->getAnimation("catwoman/catwoman-roulade.aage")

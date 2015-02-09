@@ -30,7 +30,7 @@ namespace AGE
 	{
 		auto offset = 0ull;
 		for (auto &vertices : _vertices) {
-			offset = vertices.nbr_vertex();
+			offset += vertices.nbr_vertex();
 		}
 		_vertices.emplace_back(_buffer.get_types(), nbrVertex, nbrIndices, offset);
 		_buffer.insert(_vertices.back());
