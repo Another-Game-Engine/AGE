@@ -114,51 +114,54 @@ namespace AGE
 
 	Entity &AScene::createEntity()
 	{
-		if (_free.empty())
+		auto e = _entityPool.create();
+
+		if (_freeEntityId.empty())
 		{
-			auto &e = _pool[_entityNumber];
-			e.entity.id = _entityNumber;
-			e.link._octree = _renderScene;
-			assert(++_entityNumber != UINT16_MAX);
-			e.entity.setActive(true);
-			informFiltersEntityCreation(e);
-			return e.entity;
+			e->entity.id = _entityNumber;
+			++_entityNumber;
 		}
 		else
 		{
-			auto id = _free.front();
-			_free.pop();
-			_pool[id].link.reset();
-			_pool[id].entity.setActive(true);
-			informFiltersEntityCreation(_pool[id]);
-			return _pool[id].entity;
+			auto id = _freeEntityId.front();
+			_freeEntityId.pop();
+			e->entity.id = id;
 		}
+		e->link.reset();
+		e->link._octree = _renderScene;
+		e->entity.setActive(true);
+		e->entity.ptr = e;
+		informFiltersEntityCreation(*e);
+		_entities.insert(e->entity);
+		return e->entity;
 	}
 
 	void AScene::destroy(const Entity &e)
 	{
 		Barcode cachedCode;
-		auto &data = _pool[e.id];
-		assert(data.entity == e);
-		++data.entity.version;
-		data.entity.flags = 0;
-		data.entity.setActive(false);
-		cachedCode = data.barcode;
-		data.barcode.reset();
+		auto &data = e.ptr;
+		auto find = _entities.find(e);
+		assert(data->entity == e && find != std::end(_entities));
+		_entities.erase(find);
+		++data->entity.version;
+		data->entity.flags = 0;
+		data->entity.setActive(false);
+		cachedCode = data->barcode;
+		data->barcode.reset();
+		_freeEntityId.push(e.id);
 		for (std::size_t i = 0, mi = cachedCode.code.size(); i < mi; ++i)
 		{
 			if (i < MAX_CPT_NUMBER && cachedCode.code.test(i))
 			{
-				informFiltersComponentDeletion(COMPONENT_ID(i), data);
-				_componentsManagers[i]->removeComponent(data.entity);
+				informFiltersComponentDeletion(COMPONENT_ID(i), *data);
+				_componentsManagers[i]->removeComponent(data->entity);
 			}
 			if (i >= MAX_CPT_NUMBER && cachedCode.code.test(i))
 			{
-				informFiltersTagDeletion(TAG_ID(i - MAX_CPT_NUMBER), data);
+				informFiltersTagDeletion(TAG_ID(i - MAX_CPT_NUMBER), *data);
 			}
 		}
-		informFiltersEntityDeletion(data);
-		_free.push(e.id);
+		informFiltersEntityDeletion(*data);
 	}
 
 	void AScene::clearAllEntities()
@@ -167,15 +170,9 @@ namespace AGE
 
 		// we list entities
 		auto ctr = 0;
-		for (auto &e : _pool)
+		for (auto &e : _entities)
 		{
-			if (e.entity.isActive())
-			{
-				destroy(e.entity);
-				//++ctr;
-				//if (ctr >= entityNbr)
-				//	break;
-			}
+			destroy(e);
 		}
 	}
 
@@ -214,56 +211,56 @@ namespace AGE
 
 	void AScene::addTag(Entity &e, TAG_ID tag)
 	{
-		auto &data = _pool[e.id];
-		if (data.entity != e)
+		auto data = e.ptr;
+		if (data->entity != e)
 			return;
-		data.barcode.setTag(tag);
-		informFiltersTagAddition(tag, data);
+		data->barcode.setTag(tag);
+		informFiltersTagAddition(tag, *data);
 	}
 
 	void AScene::removeTag(Entity &e, TAG_ID tag)
 	{
-		auto &data = _pool[e.id];
-		if (data.entity != e)
+		auto &data = e.ptr;
+		if (data->entity != e)
 			return;
-		data.barcode.unsetTag(tag);
-		informFiltersTagDeletion(tag, data);
+		data->barcode.unsetTag(tag);
+		informFiltersTagDeletion(tag, *data);
 	}
 
 	bool AScene::isTagged(Entity &e, TAG_ID tag)
 	{
-		auto &data = _pool[e.id];
-		if (data.entity != e)
+		auto &data = e.ptr;
+		if (data->entity != e)
 			return false;
-		return data.barcode.hasTag(tag);
+		return data->barcode.hasTag(tag);
 	}
 
 	Component::Base *AScene::getComponent(const Entity &entity, COMPONENT_ID componentId)
 	{
-		auto &e = _pool[entity.id];
-		assert(e.entity == entity);
-		assert(e.barcode.hasComponent(componentId));
+		auto &e = entity.ptr;
+		assert(e->entity == entity);
+		assert(e->barcode.hasComponent(componentId));
 		return this->_componentsManagers[componentId]->getComponentPtr(entity);
 	}
 
 	bool AScene::removeComponent(Entity &entity, COMPONENT_ID componentId)
 	{
-		auto &e = _pool[entity.id];
-		if (e.entity != entity)
+		auto &e = entity.ptr;
+		if (e->entity != entity)
 			return false;
-		if (!e.barcode.hasComponent(componentId))
+		if (!e->barcode.hasComponent(componentId))
 			return false;
 		this->_componentsManagers[componentId]->removeComponent(entity);
-		e.barcode.unsetComponent(componentId);
-		informFiltersComponentDeletion(componentId, e);
+		e->barcode.unsetComponent(componentId);
+		informFiltersComponentDeletion(componentId, *e);
 		return true;
 	}
 
 	bool AScene::hasComponent(const Entity &entity, COMPONENT_ID componentId)
 	{
-		auto &e = _pool[entity.id];
-		assert(e.entity == entity);
-		return (e.barcode.hasComponent(componentId));
+		auto &e = entity.ptr;
+		assert(e->entity == entity);
+		return (e->barcode.hasComponent(componentId));
 	}
 
 	std::size_t AScene::getComponentHash(COMPONENT_ID componentId)
@@ -283,15 +280,10 @@ namespace AGE
 
 	const Entity *AScene::getEntityPtr(const Entity &e) const
 	{
-		auto &entity = _pool[e.id];
-		if (entity.entity != e)
+		auto entity = e.ptr;
+		if (entity->entity != e)
 			return nullptr;
-		return &(entity.entity);
-	}
-
-	const Entity &AScene::getEntityFromId(ENTITY_ID id) const
-	{
-		return _pool[id].entity;
+		return &(entity->entity);
 	}
 
 	AComponentManager *AScene::getComponentManager(COMPONENT_ID componentId)
@@ -301,11 +293,6 @@ namespace AGE
 
 	AGE::Link *AScene::getLink(const Entity &e)
 	{
-		return &_pool[e.id].link;
-	}
-
-	AGE::Link *AScene::getLink(const ENTITY_ID &id)
-	{
-		return &_pool[id].link;
+		return &e.ptr->link;
 	}
 }

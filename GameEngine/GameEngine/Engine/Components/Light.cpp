@@ -46,7 +46,7 @@ namespace AGE
 		void PointLight::reset(AScene *scene)
 		{
 			assert(!_key.invalid());
-			scene->getLink(entityId)->unregisterOctreeObject(_key);
+			scene->getLink(entity)->unregisterOctreeObject(_key);
 			_key = AGE::PrepareKey();
 			_color = glm::vec3(1);
 			_range = glm::vec3(1);
@@ -56,7 +56,7 @@ namespace AGE
 		{
 			_scene = scene;
 			_key = AGE::GetPrepareThread()->addPointLight();
-			scene->getLink(entityId)->registerOctreeObject(_key);
+			scene->getLink(entity)->registerOctreeObject(_key);
 			assert(!_key.invalid());
 		}
 

@@ -50,7 +50,7 @@ namespace AGE
 		{
 			_scene = scene;
 			_key = AGE::GetPrepareThread()->addCamera();
-			scene->getLink(entityId)->registerOctreeObject(_key);
+			scene->getLink(entity)->registerOctreeObject(_key);
 			auto screenSize = scene->getInstance<IRenderContext>()->getScreenSize();
 			setProjection(glm::perspective(60.0f, (float)screenSize.x / (float)screenSize.y, 0.1f, 2000.0f));
 		}
@@ -58,7 +58,7 @@ namespace AGE
 		void CameraComponent::reset(AScene *scene)
 		{
 			assert(!_key.invalid());
-			scene->getLink(entityId)->unregisterOctreeObject(_key);
+			scene->getLink(entity)->unregisterOctreeObject(_key);
 			_projection = glm::mat4(1);
 		}
 

@@ -16,6 +16,8 @@
 #include <Core/ComponentManager.hpp>
 #include <Utils/Containers/Queue.hpp>
 #include <Entities/EntitySerializationInfos.hpp>
+#include <Utils/ObjectPool.hpp>
+#include <unordered_set>
 
 namespace AGE
 {
@@ -32,8 +34,9 @@ namespace AGE
 		std::array<std::list<EntityFilter*>, MAX_CPT_NUMBER + MAX_TAG_NUMBER>   _filters;
 		std::list<EntityFilter*>                                                 _allFilters;
 		std::array<AComponentManager*, MAX_CPT_NUMBER>                          _componentsManagers;
-		std::array<EntityData, MAX_ENTITY_NUMBER>                               _pool;
-		AGE::Queue<std::uint16_t>                                               _free;
+		AGE::ObjectPool<EntityData>                                             _entityPool;
+		AGE::Queue<std::uint16_t>                                               _freeEntityId;
+		std::unordered_set<Entity>                                              _entities;
 		ENTITY_ID                                                               _entityNumber;
 		AGE::RenderScene                                                        *_renderScene;
 		bool                                                                    _active;
@@ -46,7 +49,7 @@ namespace AGE
 	public:
 		AScene(std::weak_ptr<AGE::Engine> engine);
 		virtual ~AScene();
-		inline std::uint16_t    getNumberOfEntities() const { return _entityNumber - static_cast<ENTITY_ID>(_free.size()); }
+		inline std::uint16_t    getNumberOfEntities() const { return _entities.size(); }
 		virtual bool 			userStart() = 0;
 		virtual bool 			userUpdateBegin(double time) = 0;
 		virtual bool            userUpdateEnd(double time) = 0;
@@ -151,11 +154,11 @@ namespace AGE
 
 			// we list entities
 			auto ctr = 0;
-			for (auto &e : _pool)
+			for (auto &e : _entities)
 			{
-				if (e.entity.isActive())
+				if (e.ptr->entity.isActive())
 				{
-					entities.push_back(e);
+					entities.push_back(*e.ptr);
 					++ctr;
 					if (ctr >= entityNbr)
 						break;
@@ -190,7 +193,7 @@ namespace AGE
 			for (unsigned int i = 0; i < size; ++i)
 			{
 				auto &e = createEntity();
-				auto &ed = _pool[e.getId()];
+				auto &ed = *e.ptr;
 
 				EntitySerializationInfos infos(ed);
 				ar(infos);
@@ -240,7 +243,7 @@ namespace AGE
 			auto &col = manager.getComponents();
 			for (std::size_t i = 0; i < manager.getSize(); ++i)
 			{
-				_pool[col[i].entityId].barcode.unsetComponent(COMPONENT_ID(id));
+				_entityPool[col[i].entityId].barcode.unsetComponent(COMPONENT_ID(id));
 			}
 			manager.clearComponents();
 			for (auto filter : _filters[id])
@@ -262,7 +265,7 @@ namespace AGE
 		T *addComponent(Entity &entity, Args &&...args)
 		{
 			COMPONENT_ID id = COMPONENT_ID(T::getTypeId());
-			auto &e = _pool[entity.id];
+			auto &e = *entity.ptr;
 			if (e.entity != entity)
 				return nullptr;
 			if (_componentsManagers[id] == nullptr)
@@ -286,7 +289,7 @@ namespace AGE
 		T *getComponent(const Entity &entity)
 		{
 			COMPONENT_ID id = COMPONENT_ID(T::getTypeId());
-			auto &e = _pool[entity.id];
+			auto &e = *entity.ptr;
 			assert(e.entity == entity);
 			//return nullptr;
 			assert(e.barcode.hasComponent(id));
@@ -298,7 +301,7 @@ namespace AGE
 		bool *hasComponent(const Entity &entity)
 		{
 			COMPONENT_ID id = COMPONENT_ID(T::getTypeId());
-			auto &e = _pool[entity.id];
+			auto &e = _entityPool[entity.id];
 			assert(e.entity == entity);
 			return (e.barcode.hasComponent(id));
 		}
@@ -312,7 +315,7 @@ namespace AGE
 		bool removeComponent(Entity &entity)
 		{
 			COMPONENT_ID id = T::getTypeId();
-			auto &e = _pool[entity.id];
+			auto &e = _entityPool[entity.id];
 			if (e.entity != entity)
 				return false;
 			if (!e.barcode.hasComponent(id))
@@ -327,9 +330,7 @@ namespace AGE
 
 		void reorganizeComponents();
 		const Entity *getEntityPtr(const Entity &e) const;
-		const Entity &getEntityFromId(ENTITY_ID id) const;
 		AComponentManager *getComponentManager(COMPONENT_ID componentId);
 		AGE::Link *getLink(const Entity &e);
-		AGE::Link *getLink(const ENTITY_ID &id);
 	};
 }

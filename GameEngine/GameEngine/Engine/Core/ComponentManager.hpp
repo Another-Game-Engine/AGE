@@ -79,7 +79,7 @@ namespace AGE
 				_components.resize(_size + 16);
 			_componentsRefs[entity.getId()] = ENTITY_ID(_size);
 			_components[_size] = std::move(T());
-			_components[_size].entityId = entity.getId();
+			_components[_size].entity = entity;
 			component = &_components[_size];
 			++_size;
 			//init component
@@ -95,7 +95,7 @@ namespace AGE
 				_components.resize(_size + 16);
 			_componentsRefs[entity.getId()] = ENTITY_ID(_size);
 			_components[_size] = std::move(T(std::move(*(static_cast<T*>(component)))));
-			_components[_size].entityId = entity.getId();
+			_components[_size].entity = entity;
 			_components[_size].postUnserialization(this->_scene);
 			++_size;
 			delete component;
@@ -119,8 +119,8 @@ namespace AGE
 			_components[id].reset(_scene);
 			if (_size > 0 && id < _size - 1)
 			{
-				_componentsRefs[_components[_size - 1].entityId] = id;
-				std::swap(_components[id].entityId, _components[_size - 1].entityId);
+				_componentsRefs[_components[_size - 1].entity.getId()] = id;
+				std::swap(_components[id].entity, _components[_size - 1].entity);
 				std::swap(_components[id], _components[_size - 1]);
 			}
 			--_size;

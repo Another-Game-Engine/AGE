@@ -21,6 +21,7 @@ namespace AGE
 	class AScene;
 	class AComponentManager;
 	class EntityFilter;
+	class EntityData;
 
 	class Entity
 	{
@@ -41,6 +42,7 @@ namespace AGE
 			version = o.version;
 			flags = o.flags;
 			active = o.active;
+			ptr = o.ptr;
 		}
 
 		Entity(Entity &&o)
@@ -49,6 +51,7 @@ namespace AGE
 			version = std::move(o.version);
 			flags = std::move(o.flags);
 			active = o.active;
+			ptr = o.ptr;
 		}
 
 		Entity &operator=(const Entity &o)
@@ -57,6 +60,7 @@ namespace AGE
 			version = o.version;
 			flags = o.flags;
 			active = o.active;
+			ptr = o.ptr;
 			return *this;
 		}
 
@@ -125,6 +129,7 @@ namespace AGE
 		ENTITY_VERSION version;
 		ENTITY_FLAGS flags;
 		bool active;
+		EntityData *ptr;
 
 		friend AScene;
 		friend AComponentManager;
@@ -236,5 +241,22 @@ namespace AGE
 		friend AScene;
 		friend AComponentManager;
 		friend EntityFilter;
+	};
+}
+
+namespace std
+{
+	template<>
+	struct hash < AGE::Entity >
+	{
+		typedef AGE::Entity argument_type;
+		typedef std::size_t result_type;
+
+		result_type operator()(argument_type const& s) const
+		{
+			result_type res = 0;
+			res = s.getId();
+			return res;
+		}
 	};
 }

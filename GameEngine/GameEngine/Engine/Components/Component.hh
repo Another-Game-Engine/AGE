@@ -70,12 +70,12 @@ namespace AGE
 			ComponentBase(ComponentBase &&other)
 				: Base()
 			{
-				entityId = std::move(other.entityId);
+				entity = std::move(other.entity);
 			}
 
 			ComponentBase &operator=(ComponentBase &&o)
 			{
-				entityId = std::move(other.entityId);
+				entity = std::move(other.entity);
 			}
 
 			static unsigned short getTypeId()
@@ -136,7 +136,7 @@ namespace AGE
 				return _name;
 			}
 
-			ENTITY_ID entityId;
+			Entity entity;
 		private:
 			ComponentBase(ComponentBase &other);
 			ComponentBase &operator=(ComponentBase const &o);

@@ -54,7 +54,7 @@ namespace AGE
 		void MeshRenderer::reset(AScene *scene)
 		{
 			assert(!_key.invalid());
-			scene->getLink(entityId)->unregisterOctreeObject(_key);
+			scene->getLink(entity)->unregisterOctreeObject(_key);
 			//scene->getInstance<AGE::Threads::Prepare>()->removeElement(_key);
 			_key = AGE::PrepareKey();
 		}
@@ -63,7 +63,7 @@ namespace AGE
 		{
 			_mesh = mesh;
 			_key = AGE::GetPrepareThread()->addMesh();
-			_scene->getLink(entityId)->registerOctreeObject(_key);
+			_scene->getLink(entity)->registerOctreeObject(_key);
 			assert(!_key.invalid());
 			updateGeometry();
 			return (*this);
