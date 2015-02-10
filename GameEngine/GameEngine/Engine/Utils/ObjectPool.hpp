@@ -24,8 +24,17 @@ namespace AGE
 		template <typename T>
 		struct Chunk
 		{
-			Chunk(std::size_t size)
+			Chunk()
+				: data(nullptr)
+				, from(0)
+				, to(0)
+				, sizeOfT(0)
 			{
+			}
+
+			void init(std::size_t size)
+			{
+				assert(data == nullptr);
 				data = new char[sizeof(T) * size];
 				for (auto i = 0; i < size; ++i)
 				{
@@ -35,10 +44,29 @@ namespace AGE
 				from = (std::size_t)(data);
 				to = from + sizeOfT * size;
 			}
+
+			Chunk(Chunk &&o)
+				: data(nullptr)
+				, from(0)
+				, to(0)
+				, sizeOfT(0)
+			{
+				std::swap(o.data, data);
+				sizeOfT = std::move(o.sizeOfT);
+				from = std::move(o.from);
+				to = std::move(o.to);
+			}
+
+			Chunk(const Chunk &o) = delete;
+			Chunk &operator=(const Chunk &o) = delete;
+			Chunk &operator=(Chunk &&o) = delete;
 			
 			~Chunk()
 			{
-				delete []data;
+				if (data)
+				{
+					delete[]data;
+				}
 			}
 
 			char *data;
@@ -98,8 +126,9 @@ namespace AGE
 
 			if (chunk == nullptr)
 			{
-				_chunks.emplace_back<Chunk<Type>>(_chunkSize);
+				_chunks.push_back(Chunk<Type>());
 				chunk = &_chunks.back();
+				chunk->init(_chunkSize);
 			}
 
 			auto index = chunk->trash.front();
