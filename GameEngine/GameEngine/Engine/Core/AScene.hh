@@ -18,6 +18,7 @@
 #include <Entities/EntitySerializationInfos.hpp>
 #include <Utils/ObjectPool.hpp>
 #include <unordered_set>
+#include <Components/ComponentManager.hpp>
 
 namespace AGE
 {
@@ -27,13 +28,12 @@ namespace AGE
 	class System;
 	class SceneManager;
 
-	class AScene : public DependenciesInjector, public EntityIdRegistrar
+	class AScene : public DependenciesInjector, public EntityIdRegistrar, public ComponentManager
 	{
 	private:
 		std::multimap<std::size_t, std::shared_ptr<System> >                    _systems;
 		std::array<std::list<EntityFilter*>, MAX_CPT_NUMBER + MAX_TAG_NUMBER>   _filters;
 		std::list<EntityFilter*>                                                 _allFilters;
-		std::array<AComponentManager*, MAX_CPT_NUMBER>                          _componentsManagers;
 		AGE::ObjectPool<EntityData>                                             _entityPool;
 		AGE::Queue<std::uint16_t>                                               _freeEntityId;
 		std::unordered_set<Entity>                                              _entities;
@@ -141,79 +141,83 @@ namespace AGE
 		template <typename Archive>
 		void save(std::ofstream &s)
 		{
-			Archive ar(s);
+			// @ECS TODO
 
-			//// we save type database
-			//ar(cereal::make_nvp("Types_database", _typeDatabase));
+			//Archive ar(s);
 
-			std::uint16_t entityNbr = getNumberOfEntities();
+			////// we save type database
+			////ar(cereal::make_nvp("Types_database", _typeDatabase));
 
-			ar(cereal::make_nvp("Number_of_serialized_entities", entityNbr));
+			//std::uint16_t entityNbr = getNumberOfEntities();
 
-			std::vector<EntityData> entities;
+			//ar(cereal::make_nvp("Number_of_serialized_entities", entityNbr));
 
-			// we list entities
-			auto ctr = 0;
-			for (auto &e : _entities)
-			{
-				if (e.ptr->entity.isActive())
-				{
-					entities.push_back(*e.ptr);
-					++ctr;
-					if (ctr >= entityNbr)
-						break;
-				}
-			}
+			//std::vector<EntityData> entities;
 
-			for (auto &e : entities)
-			{
-				auto es = EntitySerializationInfos(e);
-				for (ComponentType i = 0; i < MAX_CPT_NUMBER; ++i)
-				{
-					if (e.barcode.hasComponent(i))
-					{
-						auto cpt = getComponent(e.getEntity(), i);
-						auto hash_code = getComponentHash(i);
-						es.componentsHash.push_back(hash_code);
-						es.components.push_back(getComponent(e.getEntity(), i));
-					}
-				}
-				ar(cereal::make_nvp("Entity_" + std::to_string(e.getEntity().getId()), es));
-				es.serializeComponents(ar, this);
-			}
+			//// we list entities
+			//auto ctr = 0;
+			//for (auto &e : _entities)
+			//{
+			//	if (e.ptr->entity.isActive())
+			//	{
+			//		entities.push_back(*e.ptr);
+			//		++ctr;
+			//		if (ctr >= entityNbr)
+			//			break;
+			//	}
+			//}
+
+			//for (auto &e : entities)
+			//{
+			//	auto es = EntitySerializationInfos(e);
+			//	for (ComponentType i = 0; i < MAX_CPT_NUMBER; ++i)
+			//	{
+			//		if (e.barcode.hasComponent(i))
+			//		{
+			//			auto cpt = e.getComponent(i);
+			//			auto hash_code = getComponentHash(i);
+			//			es.componentsHash.push_back(hash_code);
+			//			es.components.push_back(e.getComponent(i));
+			//		}
+			//	}
+			//	ar(cereal::make_nvp("Entity_" + std::to_string(e.getEntity().getId()), es));
+			//	es.serializeComponents(ar, this);
+			//}
 		}
 
 		template <typename Archive>
 		void load(std::ifstream &s)
 		{
-			Archive ar(s);
+			// @ECS TODO
+			
+			//Archive ar(s);
 
-			std::uint16_t size = 0;
-			ar(size);
-			for (unsigned int i = 0; i < size; ++i)
-			{
-				auto &e = createEntity();
-				auto &ed = *e.ptr;
+			//std::uint16_t size = 0;
+			//ar(size);
+			//for (unsigned int i = 0; i < size; ++i)
+			//{
+			//	auto &e = createEntity();
+			//	auto &ed = *e.ptr;
 
-				EntitySerializationInfos infos(ed);
-				ar(infos);
-				e.flags = infos.flags;
-				ed.link.setPosition(infos.link.getPosition());
-				ed.link.setOrientation(infos.link.getOrientation());
-				ed.link.setScale(infos.link.getScale());
+			//	EntitySerializationInfos infos(ed);
+			//	ar(infos);
+			//	e.flags = infos.flags;
+			//	ed.link.setPosition(infos.link.getPosition());
+			//	ed.link.setOrientation(infos.link.getOrientation());
+			//	ed.link.setScale(infos.link.getScale());
 
-				for (auto &hash : infos.componentsHash)
-				{
-					std::size_t componentTypeId;
-					auto ptr = ComponentRegistrar::getInstance().createComponentFromType(hash, ar, componentTypeId, this);
-					ed.barcode.setComponent(componentTypeId);
-					assert(_componentsManagers[componentTypeId] != nullptr);
-					_componentsManagers[componentTypeId]->addComponentPtr(e, ptr);
-					informFiltersComponentAddition(componentTypeId, ed);
-				}
-				//	ar(*e.get());
-			}
-			//updateEntityHandles();
+			//	for (auto &hash : infos.componentsHash)
+			//	{
+			//		std::size_t componentTypeId;
+			//		auto ptr = ComponentRegistrar::getInstance().createComponentFromType(hash, ar, componentTypeId, this);
+			//		ed.barcode.setComponent(componentTypeId);
+			//		assert(_componentsManagers[componentTypeId] != nullptr);
+			//		_componentsManagers[componentTypeId]->addComponentPtr(e, ptr);
+			//		informFiltersComponentAddition(componentTypeId, ed);
+			//	}
+			//	//	ar(*e.get());
+			//}
+			////updateEntityHandles();
 		}
 
 
@@ -224,12 +228,14 @@ namespace AGE
 		template <typename T>
 		void registerComponentType()
 		{
-			ComponentType id = Component<T>::getTypeId();
-			if (_componentsManagers[id] == nullptr)
-			{
-				_componentsManagers[id] = new ComponentManager<T>(this);
-			}
-			REGISTER_COMPONENT_TYPE(T);
+			// @ECS TODO
+
+			//ComponentType id = Component<T>::getTypeId();
+			//if (_componentsManagers[id] == nullptr)
+			//{
+			//	_componentsManagers[id] = new ComponentManager<T>(this);
+			//}
+			//REGISTER_COMPONENT_TYPE(T);
 		}
 
 		template <typename T>
@@ -255,82 +261,5 @@ namespace AGE
 		void addTag(Entity &e, TAG_ID tag);
 		void removeTag(Entity &e, TAG_ID tag);
 		bool isTagged(Entity &e, TAG_ID tag);
-
-		////////////////////////
-		//////
-		// Component operation
-
-		// Components operations with handle
-		template <typename T, typename... Args>
-		T *addComponent(Entity &entity, Args &&...args)
-		{
-			ComponentType id = Component<T>::getTypeId();
-			auto &e = *entity.ptr;
-			if (e.entity != entity)
-				return nullptr;
-			if (_componentsManagers[id] == nullptr)
-			{
-				_componentsManagers[id] = new ComponentManager<T>(this);
-			}
-			if (e.barcode.hasComponent(id))
-			{
-				return static_cast<ComponentManager<T>*>(_componentsManagers[Component<T>::getTypeId()])->getComponent(entity);
-			}
-
-			auto res = static_cast<ComponentManager<T>*>(_componentsManagers[id])->addComponent(entity, std::forward<Args>(args)...);
-
-			e.barcode.setComponent(id);
-
-			informFiltersComponentAddition(Component<T>::getTypeId(), e);
-			return res;
-		}
-
-		template <typename T>
-		T *getComponent(const Entity &entity)
-		{
-			ComponentType id = Component<T>::getTypeId();
-			auto &e = *entity.ptr;
-			assert(e.entity == entity);
-			//return nullptr;
-			assert(e.barcode.hasComponent(id));
-			//return nullptr;
-			return static_cast<ComponentManager<T>*>(_componentsManagers[id])->getComponent(entity);
-		}
-
-		template <typename T>
-		bool *hasComponent(const Entity &entity)
-		{
-			ComponentType id = Component<T>::getTypeId();
-			auto &e = _entityPool[entity.id];
-			assert(e.entity == entity);
-			return (e.barcode.hasComponent(id));
-		}
-
-		ComponentBase *getComponent(const Entity &entity, ComponentType componentId);
-		bool hasComponent(const Entity &entity, ComponentType componentId);
-		bool removeComponent(Entity &entity, ComponentType componentId);
-		std::size_t getComponentHash(ComponentType componentId);
-
-		template <typename T>
-		bool removeComponent(Entity &entity)
-		{
-			ComponentType id = Component<T>::getTypeId();
-			auto &e = _entityPool[entity.id];
-			if (e.entity != entity)
-				return false;
-			if (!e.barcode.hasComponent(id))
-			{
-				return false;
-			}
-			static_cast<ComponentManager<T>*>(_componentsManagers[id])->removeComponent(entity);
-			e.barcode.unsetComponent(id);
-			informFiltersComponentDeletion(id, e);
-			return true;
-		}
-
-		void reorganizeComponents();
-		const Entity *getEntityPtr(const Entity &e) const;
-		AComponentManager *getComponentManager(ComponentType componentId);
-		AGE::Link *getLink(const Entity &e);
 	};
 }

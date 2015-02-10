@@ -263,18 +263,18 @@ namespace AGE
 				init = false;
 				auto camera = createEntity();
 				GLOBAL_CAMERA = camera;
-				auto cam = addComponent<CameraComponent>(camera);
+				auto cam = camera.addComponent<CameraComponent>();
 
 				auto screeSize = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<AGE::Tasks::Render::GetWindowSize, glm::uvec2>().get();
 
-				auto camLink = getLink(camera);
-				camLink->setPosition(glm::vec3(0, 1.5, 0));
+				auto &camLink = camera.getLink();
+				camLink.setPosition(glm::vec3(0, 1.5, 0));
 
 				GLOBAL_FLOOR = createEntity();
-				auto link = getLink(GLOBAL_FLOOR);
-				link->setPosition(glm::vec3(0, -0.532, 0));
-				link->setScale(glm::vec3(100, 1, 100));
-				auto mesh = addComponent<MeshRenderer>(GLOBAL_FLOOR, getInstance<AGE::AssetsManager>()->getMesh("cube/cube.sage"));
+				auto &link = GLOBAL_FLOOR.getLink();
+				link.setPosition(glm::vec3(0, -0.532, 0));
+				link.setScale(glm::vec3(100, 1, 100));
+				auto mesh = GLOBAL_FLOOR.addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("cube/cube.sage"));
 				mesh->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial("cube/cube.mage"));
 				for (size_t index = 0; index < mesh->getMaterial()->datas.size(); ++index)
 				{
@@ -284,14 +284,14 @@ namespace AGE
 				}
 {
 	GLOBAL_SPONZA = createEntity();
-	auto _l = getLink(GLOBAL_SPONZA);
+	auto& _l = GLOBAL_SPONZA.getLink();
 	//_l->setPosition(glm::vec3(-5, 0, 0));
 	std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
-	addComponent<RigidBody>(GLOBAL_SPONZA, 0.0f)->setCollisionMesh(weakOnThis, GLOBAL_SPONZA, "../../Assets/AGE-Assets-For-Test/Serialized/sponza/sponza_static.phage");
-	_l->setScale(glm::vec3(10.f));
+	GLOBAL_SPONZA.addComponent<RigidBody>(0.0f)->setCollisionMesh(weakOnThis, GLOBAL_SPONZA, "../../Assets/AGE-Assets-For-Test/Serialized/sponza/sponza_static.phage");
+	_l.setScale(glm::vec3(10.f));
 	//_l->setOrientation(glm::quat(glm::vec3(Mathematic::degreeToRadian(-90), Mathematic::degreeToRadian(90), 0)));
 
-	auto _m = addComponent<MeshRenderer>(GLOBAL_SPONZA, getInstance<AGE::AssetsManager>()->getMesh("Sponza/sponza.sage"));
+	auto _m = GLOBAL_SPONZA.addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("Sponza/sponza.sage"));
 	_m->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("Sponza/sponza.mage")));
 }
 {
@@ -313,16 +313,16 @@ namespace AGE
 
 	{
 		GLOBAL_CATWOMAN = createEntity();
-		auto _l = getLink(GLOBAL_CATWOMAN);
+		auto &_l = GLOBAL_CATWOMAN.getLink();
 
 		static bool useOnce = false;
-		auto rigidBody = addComponent<RigidBody>(GLOBAL_CATWOMAN, 0);
+		auto rigidBody = GLOBAL_CATWOMAN.addComponent<RigidBody>(0);
 		std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
 		rigidBody->setCollisionMesh(weakOnThis, GLOBAL_CATWOMAN, "../../Assets/AGE-Assets-For-Test/Serialized/catwoman/catwoman_dynamic.phage");
-		_l->setOrientation(glm::quat(glm::vec3(Mathematic::degreeToRadian(-90), Mathematic::degreeToRadian(90), 0)));
-		_l->setPosition(glm::vec3(-30, 0, 0));
-		_l->setScale(glm::vec3(8.5f));
-		auto _m = addComponent<MeshRenderer>(GLOBAL_CATWOMAN, getInstance<AGE::AssetsManager>()->getMesh("catwoman/catwoman.sage"));
+		_l.setOrientation(glm::quat(glm::vec3(Mathematic::degreeToRadian(-90), Mathematic::degreeToRadian(90), 0)));
+		_l.setPosition(glm::vec3(-30, 0, 0));
+		_l.setScale(glm::vec3(8.5f));
+		auto _m = GLOBAL_CATWOMAN.addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("catwoman/catwoman.sage"));
 		_m->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("catwoman/catwoman.mage")));
 		for (size_t index = 0; index < _m->getMaterial()->datas.size(); ++index)
 		{
@@ -343,10 +343,10 @@ namespace AGE
 	{
 		GLOBAL_LIGHTS[i] = createEntity();
 		auto e = GLOBAL_LIGHTS[i];
-		auto _l = getLink(e);
-		_l->setPosition(glm::vec3(i, 1.0f, i));
-		_l->setScale(glm::vec3(0.05f));
-		auto _m = addComponent<MeshRenderer>(e, getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage"));
+		auto &_l = e.getLink();
+		_l.setPosition(glm::vec3(i, 1.0f, i));
+		_l.setScale(glm::vec3(0.05f));
+		auto _m = e.addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage"));
 		_m->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial("ball/ball.mage"));
 		for (size_t index = 0; index < _m->getMaterial()->datas.size(); ++index)
 		{
@@ -354,15 +354,15 @@ namespace AGE
 			_renderManager->setMaterial<gl::Ratio_specular>(_m->getMaterial()->datas[index], 1.0f);
 			_renderManager->setMaterial<gl::Color_diffuse>(_m->getMaterial()->datas[index], glm::vec4(1.0f));
 		}
-		getLink(e)->setPosition(glm::vec3(i, 5.0f, 0));
-		addComponent<PointLightComponent>(e)->set(glm::vec3((float)(rand() % 1000) / 1000.0f, (float)(rand() % 1000) / 1000.0f, (float)(rand() % 1000) / 1000.0f), glm::vec3(1.f, 0.1f, 0.0f));
+		e.getLink().setPosition(glm::vec3(i, 5.0f, 0));
+		e.addComponent<PointLightComponent>()->set(glm::vec3((float)(rand() % 1000) / 1000.0f, (float)(rand() % 1000) / 1000.0f, (float)(rand() % 1000) / 1000.0f), glm::vec3(1.f, 0.1f, 0.0f));
 	}
 
 
 
 #ifdef PHYSIC_SIMULATION
 	std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
-	auto rigidBody = addComponent<RigidBody>(GLOBAL_FLOOR, 0.0f);
+	auto rigidBody = GLOBAL_FLOOR.addComponent<RigidBody>(0.0f);
 	rigidBody->setCollisionShape(weakOnThis, GLOBAL_FLOOR, RigidBody::BOX);
 	//	rigidBody->setCollisionMesh(weakOnThis, GLOBAL_FLOOR, "../../Assets/AGE-Assets-For-Test/Serialized/cube/cube_static.phage");
 	rigidBody->getBody().setFriction(0.3f);
@@ -371,30 +371,30 @@ namespace AGE
 			}
 		}
 
-		auto lc = getLink(GLOBAL_CAMERA);
+		auto &lc = GLOBAL_CAMERA.getLink();
 		float c = 5.f;
 		if (getInstance<Input>()->getInput(SDLK_LSHIFT))
 			c = c * 3.0f;
 		if (getInstance<Input>()->getInput(SDLK_z))
-			lc->setForward(glm::vec3(0.f, 0.f, -c * time));
+			lc.setForward(glm::vec3(0.f, 0.f, -c * time));
 		if (getInstance<Input>()->getInput(SDLK_s))
-			lc->setForward(glm::vec3(0.f, 0.f, c * time));
+			lc.setForward(glm::vec3(0.f, 0.f, c * time));
 		if (getInstance<Input>()->getInput(SDLK_q))
-			lc->setForward(glm::vec3(-c * time, 0.f, 0.f));
+			lc.setForward(glm::vec3(-c * time, 0.f, 0.f));
 		if (getInstance<Input>()->getInput(SDLK_d))
-			lc->setForward(glm::vec3(c * time, 0.f, 0.f));
+			lc.setForward(glm::vec3(c * time, 0.f, 0.f));
 		if (getInstance<Input>()->getInput(SDLK_RIGHT))
-			lc->setOrientation(glm::rotate(lc->getOrientation(), -50.f * (float)time, glm::vec3(0.f, 1.f, 0.f)));
+			lc.setOrientation(glm::rotate(lc.getOrientation(), -50.f * (float)time, glm::vec3(0.f, 1.f, 0.f)));
 		if (getInstance<Input>()->getInput(SDLK_LEFT))
-			lc->setOrientation(glm::rotate(lc->getOrientation(), 50.f * (float)time, glm::vec3(0.f, 1.f, 0.f)));
+			lc.setOrientation(glm::rotate(lc.getOrientation(), 50.f * (float)time, glm::vec3(0.f, 1.f, 0.f)));
 		if (getInstance<Input>()->getInput(SDLK_UP))
-			lc->setOrientation(glm::rotate(lc->getOrientation(), 50.f * (float)time, glm::vec3(1.f, 0.f, 0.f)));
+			lc.setOrientation(glm::rotate(lc.getOrientation(), 50.f * (float)time, glm::vec3(1.f, 0.f, 0.f)));
 		if (getInstance<Input>()->getInput(SDLK_DOWN))
-			lc->setOrientation(glm::rotate(lc->getOrientation(), -50.f * (float)time, glm::vec3(1.0f, 0.f, 0.f)));
+			lc.setOrientation(glm::rotate(lc.getOrientation(), -50.f * (float)time, glm::vec3(1.0f, 0.f, 0.f)));
 		if (getInstance<Input>()->getInput(SDLK_a))
-			lc->setOrientation(glm::rotate(lc->getOrientation(), 50.f * (float)time, glm::vec3(0.f, 0.f, 1.f)));
+			lc.setOrientation(glm::rotate(lc.getOrientation(), 50.f * (float)time, glm::vec3(0.f, 0.f, 1.f)));
 		if (getInstance<Input>()->getInput(SDLK_e))
-			lc->setOrientation(glm::rotate(lc->getOrientation(), -50.f * (float)time, glm::vec3(0.f, 0.f, 1.f)));
+			lc.setOrientation(glm::rotate(lc.getOrientation(), -50.f * (float)time, glm::vec3(0.f, 0.f, 1.f)));
 		if (getInstance<Input>()->getInput(SDLK_ESCAPE))
 			return (false);
 		static float trigger = 0.0f;
@@ -404,19 +404,19 @@ namespace AGE
 			if (trigger >= 1.0f)
 				trigger = 0;
 			auto e = createEntity();
-			addComponent<Lifetime>(e, 30.0f);
-			auto link = getLink(e);
-			link->setPosition(getLink(GLOBAL_CAMERA)->getPosition() + glm::vec3(0, 0, -2) * getLink(GLOBAL_CAMERA)->getOrientation());
-			link->setScale(glm::vec3(0.2f));
+			e.addComponent<Lifetime>(30.0f);
+			auto &link = e.getLink();
+			link.setPosition(GLOBAL_CAMERA.getLink().getPosition() + glm::vec3(0, 0, -2) * GLOBAL_CAMERA.getLink().getOrientation());
+			link.setScale(glm::vec3(0.2f));
 			MeshRenderer *mesh;
-			mesh = addComponent<MeshRenderer>(e, getInstance<AGE::AssetsManager>()->getMesh("cube/cube.sage"));
+			mesh = e.addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("cube/cube.sage"));
 			mesh->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("cube/cube.mage")));
-			auto rigidBody = addComponent<RigidBody>(e, 1.0f);
+			auto rigidBody = e.addComponent<RigidBody>(1.0f);
 			std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
 			rigidBody->setCollisionShape(weakOnThis, e, RigidBody::BOX);
 			rigidBody->getBody().setFriction(0.5f);
 			rigidBody->getBody().setRestitution(0.5f);
-			rigidBody->getBody().applyCentralImpulse(convertGLMVectorToBullet(getLink(GLOBAL_CAMERA)->getOrientation() * glm::vec3(0, 0, -10)));
+			rigidBody->getBody().applyCentralImpulse(convertGLMVectorToBullet(GLOBAL_CAMERA.getLink().getOrientation() * glm::vec3(0, 0, -10)));
 		}
 		else
 			trigger = 0.0f;
@@ -428,30 +428,30 @@ namespace AGE
 			{
 				auto e = createEntity();
 #ifdef LIFETIME_ACTIVATED
-				addComponent<Lifetime>(e, 5.0f);
+				e.addComponent<Lifetime>(5.0f);
 #endif
 
-				auto link = getLink(e);
-				link->setPosition(glm::vec3((rand() % 100) - 50, (rand() % 50) - 5, (rand() % 100) - 50));
-				link->setOrientation(glm::quat(glm::vec3(rand() % 360, rand() % 360, rand() % 360)));
-				link->setScale(glm::vec3(1.0f));
+				auto &link = e.getLink();
+				link.setPosition(glm::vec3((rand() % 100) - 50, (rand() % 50) - 5, (rand() % 100) - 50));
+				link.setOrientation(glm::quat(glm::vec3(rand() % 360, rand() % 360, rand() % 360)));
+				link.setScale(glm::vec3(1.0f));
 
 
 				MeshRenderer *mesh;
 				if (i % 4 == 0)
 				{
-					mesh = addComponent<MeshRenderer>(e, getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage"));
+					mesh = e.addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage"));
 					mesh->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("ball/ball.mage")));
-					link->setScale(glm::vec3(0.5f));
+					link.setScale(glm::vec3(0.5f));
 				}
 				else
 				{
-					mesh = addComponent<MeshRenderer>(e, getInstance<AGE::AssetsManager>()->getMesh("cube/cube.sage"));
+					mesh = e.addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("cube/cube.sage"));
 					mesh->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("cube/cube.mage")));
 				}
 
 #ifdef PHYSIC_SIMULATION
-				auto rigidBody = addComponent<RigidBody>(e, 1.0f);
+				auto rigidBody = e.addComponent<RigidBody>(1.0f);
 				//				rigidBody->setTransformation(link->getTransform());
 				if (i % 4 == 0)
 					rigidBody->setCollisionShape(weakOnThis, e, RigidBody::SPHERE);
@@ -486,14 +486,14 @@ namespace AGE
 			for (int i = 0; i < GLOBAL_LIGHTS.size(); ++i)
 			{
 				auto e = GLOBAL_LIGHTS[i];
-				auto link = getLink(e);
+				auto &link = e.getLink();
 
-				if (ImGui::SliderFloat3(std::string("Light " + std::to_string(i) + " position").c_str(), link->getPositionPtr(), -50, 50))
+				if (ImGui::SliderFloat3(std::string("Light " + std::to_string(i) + " position").c_str(), link.getPositionPtr(), -50, 50))
 				{
-					auto l = getLink(e);
-					l->setPosition(l->getPosition());
+					auto &l = e.getLink();
+					l.setPosition(l.getPosition());
 				}
-				auto lightComponent = getComponent<PointLightComponent>(e);
+				auto lightComponent = e.getComponent<PointLightComponent>();
 				if (ImGui::ColorEdit3(std::string("Light " + std::to_string(i) + " color").c_str(), lightComponent->getColorPtr()))
 				{
 					lightComponent->set(lightComponent->getColor(), lightComponent->getRange());

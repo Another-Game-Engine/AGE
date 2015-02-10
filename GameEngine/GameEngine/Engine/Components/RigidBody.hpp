@@ -72,15 +72,15 @@ namespace AGE
 
 
 	private:
+		btScalar _mass;
+		btVector3 _inertia;
+		glm::vec3 _rotationConstraint;
+		glm::vec3 _transformConstraint;
 		btCollisionShape *_collisionShape;
 		btMotionState *_motionState;
 		btRigidBody *_rigidBody;
 		BulletDynamicManager *_manager;
 		CollisionShape _shapeType;
-		btScalar _mass;
-		btVector3 _inertia;
-		glm::vec3 _rotationConstraint;
-		glm::vec3 _transformConstraint;
 		std::string _shapeName;
 
 	private:

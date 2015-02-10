@@ -48,7 +48,6 @@ namespace AGE
 
 		_shapeType = CollisionShape::UNDEFINED;
 		_mass = 0.0f;
-		_inertia = btVector3(0.0f, 0.0f, 0.0f);
 		_rotationConstraint = glm::vec3(1, 1, 1);
 		_transformConstraint = glm::vec3(1, 1, 1);
 	}
@@ -122,9 +121,8 @@ namespace AGE
 		_shapeName = meshPath;
 		_shapeType = MESH;
 
-		auto link = scene.lock()->getLink(entity);
-
-		_motionState = new DynamicMotionState(link);
+		auto e = entity;
+		_motionState = new DynamicMotionState(&e.getLink());
 		auto media = _manager->loadShape(meshPath);
 		if (!media)
 			return;
@@ -142,7 +140,7 @@ namespace AGE
 		if (_mass != 0)
 			_collisionShape->calculateLocalInertia(_mass, _inertia);
 		_rigidBody = new btRigidBody(_mass, _motionState, _collisionShape, _inertia);
-		_rigidBody->setUserPointer((void*)(scene.lock()->getEntityPtr(entity)));
+		_rigidBody->setUserPointer((void*)(entity.getPtr()));
 		_rigidBody->setAngularFactor(convertGLMVectorToBullet(_rotationConstraint));
 		_rigidBody->setLinearFactor(convertGLMVectorToBullet(_transformConstraint));
 
@@ -151,7 +149,7 @@ namespace AGE
 			//_rigidBody->setActivationState(DISABLE_SIMULATION);
 		}
 		_manager->getWorld()->addRigidBody(_rigidBody, filterGroup, filterMask);
-		setTransformation(link);
+		setTransformation(&e.getLink());
 	}
 
 	void RigidBody::setCollisionShape(
@@ -185,9 +183,8 @@ namespace AGE
 			_collisionShape = nullptr;
 		}
 		_shapeType = c;
-
-		auto link = scene.lock()->getLink(entity);
-		_motionState = new DynamicMotionState(link);
+		auto e = entity;
+		_motionState = new DynamicMotionState(&e.getLink());
 		if (c == BOX)
 		{
 			_collisionShape = new btBoxShape(btVector3(0.5, 0.5, 0.5));
@@ -204,7 +201,7 @@ namespace AGE
 		if (_mass != 0)
 			_collisionShape->calculateLocalInertia(_mass, _inertia);
 		_rigidBody = new btRigidBody(_mass, _motionState, _collisionShape, _inertia);
-		_rigidBody->setUserPointer((void*)(scene.lock()->getEntityPtr(entity)));
+		_rigidBody->setUserPointer((void*)(entity.getPtr()));
 		_rigidBody->setAngularFactor(convertGLMVectorToBullet(_rotationConstraint));
 		_rigidBody->setLinearFactor(convertGLMVectorToBullet(_transformConstraint));
 
@@ -213,7 +210,7 @@ namespace AGE
 			//_rigidBody->setActivationState(DISABLE_SIMULATION);
 		}
 		_manager->getWorld()->addRigidBody(_rigidBody, filterGroup, filterMask);
-		setTransformation(link);
+		setTransformation(&e.getLink());
 	}
 
 	void RigidBody::setRotationConstraint(bool x, bool y, bool z)

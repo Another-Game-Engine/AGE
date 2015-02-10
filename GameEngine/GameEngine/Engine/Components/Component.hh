@@ -15,14 +15,21 @@
 namespace AGE
 {
 	class AScene;
+	class ComponentManager;
 
 	struct ComponentBase
 	{
 		ComponentBase();
 		virtual ~ComponentBase();
-		virtual void reset(){};
+		virtual void reset(AScene *){};
 
 		Entity entity;
+
+		inline ComponentType getType() const
+		{
+			assert(_typeId != -1);
+			return _typeId;
+		}
 
 #ifdef EDITOR_ENABLED
 		virtual void editorCreate(AScene *scene){}
@@ -33,6 +40,10 @@ namespace AGE
 #endif
 	protected:
 		static ComponentType _typeCounter;
+	private:
+		ComponentType _typeId;
+
+		friend class ComponentManager;
 	};
 
 

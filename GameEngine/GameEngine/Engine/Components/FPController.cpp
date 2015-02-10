@@ -117,13 +117,13 @@ namespace AGE
 		//transform.setOrigin(convertGLMVectorToBullet(position));
 		//transform.setRotation(btQuaternion(rot.x, rot.y, rot.z));
 
-		auto link = scene->getLink(entity);
+		auto link = entity.getLink();
 		transform.setIdentity();
-		transform.setOrigin(convertGLMVectorToBullet(link->getPosition()));
-		transform.setRotation(convertGLMQuatToBullet(link->getOrientation()));
+		transform.setOrigin(convertGLMVectorToBullet(link.getPosition()));
+		transform.setRotation(convertGLMQuatToBullet(link.getOrientation()));
 
 		_ghost = new btPairCachingGhostObject();
-		_shape = new btCylinderShape(convertGLMVectorToBullet(link->getScale()));
+		_shape = new btCylinderShape(convertGLMVectorToBullet(link.getScale()));
 
 		_ghost->setCollisionShape(_shape);
 		// _ghost->setCollisionFlags(btCollisionObject::CF_KINEMATIC_OBJECT);

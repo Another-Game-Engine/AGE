@@ -18,7 +18,6 @@ namespace AGE
 		, _engine(engine)
 		, _renderScene(nullptr)
 	{
-		_componentsManagers.assign(nullptr);
 	}
 
 	AScene::~AScene()
@@ -129,37 +128,35 @@ namespace AGE
 		}
 		e->link.reset();
 		e->link._octree = _renderScene;
-		e->entity.setActive(true);
 		e->entity.ptr = e;
 		informFiltersEntityCreation(*e);
 		_entities.insert(e->entity);
+		e->scene = this;
 		return e->entity;
 	}
 
 	void AScene::destroy(const Entity &e)
 	{
-		Barcode cachedCode;
 		auto &data = e.ptr;
 		auto find = _entities.find(e);
 		assert(data->entity == e && find != std::end(_entities));
 		_entities.erase(find);
 		++data->entity.version;
 		data->entity.flags = 0;
-		data->entity.setActive(false);
-		cachedCode = data->barcode;
-		data->barcode.reset();
 		_freeEntityId.push(e.id);
-		for (std::size_t i = 0, mi = cachedCode.code.size(); i < mi; ++i)
+		for (ComponentType i = 0, mi = data->components.size(); i < mi; ++i)
 		{
-			if (i < MAX_CPT_NUMBER && cachedCode.code.test(i))
+			if (data->components[i])
 			{
 				informFiltersComponentDeletion(ComponentType(i), *data);
-				_componentsManagers[i]->removeComponent(data->entity);
+				data->removeComponent(i);
 			}
-			if (i >= MAX_CPT_NUMBER && cachedCode.code.test(i))
-			{
-				informFiltersTagDeletion(TAG_ID(i - MAX_CPT_NUMBER), *data);
-			}
+
+			// @ECS TODO
+			//if (i >= MAX_CPT_NUMBER && cachedCode.code.test(i))
+			//{
+			//	informFiltersTagDeletion(TAG_ID(i - MAX_CPT_NUMBER), *data);
+			//}
 		}
 		informFiltersEntityDeletion(*data);
 	}
@@ -211,88 +208,34 @@ namespace AGE
 
 	void AScene::addTag(Entity &e, TAG_ID tag)
 	{
-		auto data = e.ptr;
-		if (data->entity != e)
-			return;
-		data->barcode.setTag(tag);
-		informFiltersTagAddition(tag, *data);
+		// @ECS TODO
+
+		//auto data = e.ptr;
+		//if (data->entity != e)
+		//	return;
+		//data->barcode.setTag(tag);
+		//informFiltersTagAddition(tag, *data);
 	}
 
 	void AScene::removeTag(Entity &e, TAG_ID tag)
 	{
-		auto &data = e.ptr;
-		if (data->entity != e)
-			return;
-		data->barcode.unsetTag(tag);
-		informFiltersTagDeletion(tag, *data);
+		// @ECS TODO
+
+		//auto &data = e.ptr;
+		//if (data->entity != e)
+		//	return;
+		//data->barcode.unsetTag(tag);
+		//informFiltersTagDeletion(tag, *data);
 	}
 
 	bool AScene::isTagged(Entity &e, TAG_ID tag)
 	{
-		auto &data = e.ptr;
-		if (data->entity != e)
-			return false;
-		return data->barcode.hasTag(tag);
-	}
+		// @ECS TODO
 
-	ComponentBase *AScene::getComponent(const Entity &entity, ComponentType componentId)
-	{
-		auto &e = entity.ptr;
-		assert(e->entity == entity);
-		assert(e->barcode.hasComponent(componentId));
-		return this->_componentsManagers[componentId]->getComponentPtr(entity);
-	}
-
-	bool AScene::removeComponent(Entity &entity, ComponentType componentId)
-	{
-		auto &e = entity.ptr;
-		if (e->entity != entity)
-			return false;
-		if (!e->barcode.hasComponent(componentId))
-			return false;
-		this->_componentsManagers[componentId]->removeComponent(entity);
-		e->barcode.unsetComponent(componentId);
-		informFiltersComponentDeletion(componentId, *e);
+		//auto &data = e.ptr;
+		//if (data->entity != e)
+		//	return false;
+		//return data->barcode.hasTag(tag);
 		return true;
-	}
-
-	bool AScene::hasComponent(const Entity &entity, ComponentType componentId)
-	{
-		auto &e = entity.ptr;
-		assert(e->entity == entity);
-		return (e->barcode.hasComponent(componentId));
-	}
-
-	std::size_t AScene::getComponentHash(ComponentType componentId)
-	{
-		assert(this->_componentsManagers[componentId] != nullptr);
-		return this->_componentsManagers[componentId]->getHashCode();
-	}
-
-	void AScene::reorganizeComponents()
-	{
-		for (auto &&e : _componentsManagers)
-		{
-			if (e != nullptr)
-				e->reorder();
-		}
-	}
-
-	const Entity *AScene::getEntityPtr(const Entity &e) const
-	{
-		auto entity = e.ptr;
-		if (entity->entity != e)
-			return nullptr;
-		return &(entity->entity);
-	}
-
-	AComponentManager *AScene::getComponentManager(ComponentType componentId)
-	{
-		return _componentsManagers[componentId];
-	}
-
-	AGE::Link *AScene::getLink(const Entity &e)
-	{
-		return &e.ptr->link;
 	}
 }

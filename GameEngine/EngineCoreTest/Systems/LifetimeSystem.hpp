@@ -2,6 +2,7 @@
 
 #include "Systems/System.h"
 #include <Components/Component.hh>
+#include <Entities/Entity.hh>
 
 namespace AGE
 {
@@ -83,10 +84,11 @@ namespace AGE
 			float t = static_cast<float>(time);
 			auto scene = _scene.lock();
 			EntityFilter::Lock lock(_filter);
-			for (auto &e : _filter.getCollection())
+			auto &collection = _filter.getCollection();
+			for (auto e : collection)
 			{
-				scene->getComponent<Lifetime>(e)->_t -= t;
-				if (scene->getComponent<Lifetime>(e)->_t <= 0.0f)
+				e.getComponent<Lifetime>()->_t -= t;
+				if (e.getComponent<Lifetime>()->_t <= 0.0f)
 					scene->destroy(e);
 			}
 		}

@@ -237,6 +237,7 @@
     <ClCompile Include="Engine\Core\RenderScene.cpp" />
     <ClCompile Include="Engine\Core\Tasks\MainToPrepareTasks.cpp" />
     <ClCompile Include="Engine\Core\Tasks\RenderTasks.cpp" />
+    <ClCompile Include="Engine\Entities\Entity.cpp" />
     <ClCompile Include="Engine\Geometry\MaterialData.cpp" />
     <ClCompile Include="Engine\Geometry\Mesh.cpp" />
     <ClCompile Include="Engine\Physic\BulletCollisionManager.cpp" />
@@ -322,11 +323,13 @@
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
     <ClInclude Include="..\Vendors\imgui\imgui.h" />
     <ClInclude Include="..\Vendors\imgui\stb_textedit.h" />
+    <ClInclude Include="Engine\Components\ComponentManager.hpp" />
     <ClInclude Include="Engine\Components\Light.hh" />
     <ClInclude Include="Engine\Configuration.hpp" />
     <ClInclude Include="Engine\Core\AssetsManager.hpp" />
     <ClInclude Include="Engine\Core\Commands\Render.hpp" />
     <ClInclude Include="Engine\Core\Commands\MainToPrepare.hpp" />
+    <ClInclude Include="Engine\Entities\EntityData.hh" />
     <ClInclude Include="Engine\Geometry\MaterialData.hpp" />
     <ClInclude Include="Engine\Threads\TaskScheduler.hpp" />
     <ClInclude Include="Engine\Core\Tasks\Basics.hpp" />

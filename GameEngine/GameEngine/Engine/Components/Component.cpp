@@ -4,6 +4,7 @@ namespace AGE
 {
 
 	ComponentBase::ComponentBase()
+		: _typeId(-1)
 	{
 	}
 

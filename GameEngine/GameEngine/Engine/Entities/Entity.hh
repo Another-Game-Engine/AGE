@@ -18,10 +18,10 @@
 
 namespace AGE
 {
-	class AScene;
-	class AComponentManager;
-	class EntityFilter;
 	class EntityData;
+	class EntityFilter;
+	struct ComponentBase;
+	class ComponentManager;
 
 	class Entity
 	{
@@ -30,7 +30,6 @@ namespace AGE
 			: id(0)
 			, version(0)
 			, flags(0)
-			, active(false)
 		{}
 
 		~Entity()
@@ -41,7 +40,6 @@ namespace AGE
 			id = o.id;
 			version = o.version;
 			flags = o.flags;
-			active = o.active;
 			ptr = o.ptr;
 		}
 
@@ -50,7 +48,6 @@ namespace AGE
 			id = std::move(o.id);
 			version = std::move(o.version);
 			flags = std::move(o.flags);
-			active = o.active;
 			ptr = o.ptr;
 		}
 
@@ -59,7 +56,6 @@ namespace AGE
 			id = o.id;
 			version = o.version;
 			flags = o.flags;
-			active = o.active;
 			ptr = o.ptr;
 			return *this;
 		}
@@ -114,133 +110,49 @@ namespace AGE
 			return flags;
 		}
 
-		inline bool isActive() const
+		const AGE::Link &getLink() const;
+		AGE::Link &getLink();
+		const AGE::Entity *getPtr() const;
+		AGE::Entity *getPtr();
+
+		ComponentBase *getComponent(ComponentType id);
+
+		template <typename T>
+		T *getComponent()
 		{
-			return active;
+			return static_cast<T*>(ptr->getComponent(Component<T>::getTypeId()));
 		}
 
-		inline void setActive(bool v)
+		template <typename T, typename... Args>
+		T *addComponent(Args &&...args)
 		{
-			active = v;
+			return ptr->addComponent<T>(args...);
 		}
 
+		void removeComponent(ComponentType id);
+
+		template <typename T>
+		void removeComponent()
+		{
+			ptr->removeComponent(Component<T>::getTypeId());
+		}
+
+		bool haveComponent(ComponentType id) const;
+
+		template <typename T>
+		bool haveComponent() const
+		{
+			return ptr->haveComponent(Component<T>::getTypeId());
+		}
 	private:
 		ENTITY_ID id;
 		ENTITY_VERSION version;
 		ENTITY_FLAGS flags;
-		bool active;
 		EntityData *ptr;
 
 		friend AScene;
-		friend AComponentManager;
 		friend EntityFilter;
-	};
-
-	class Barcode
-	{
-	public:
-		Barcode()
-			: code(0)
-		{}
-
-		~Barcode()
-		{}
-
-		Barcode &operator=(const Barcode& o)
-		{
-			code = o.code;
-			return *this;
-		}
-
-		Barcode(const Barcode& o)
-		{
-			code = o.code;
-		}
-
-		Barcode(Barcode&& o)
-		{
-			code = std::move(o.code);
-		}
-
-		bool operator==(const Barcode& o) const
-		{
-			return (code == o.code);
-		}
-
-		bool match(const Barcode &model) const
-		{
-			return (code & model.code) == model.code;
-		}
-
-		inline void setTag(TAG_ID id)
-		{
-			code.set(id + MAX_CPT_NUMBER);
-		}
-
-		inline void unsetTag(TAG_ID id)
-		{
-			code.reset(id + MAX_CPT_NUMBER);
-		}
-
-		inline bool hasTag(TAG_ID id) const
-		{
-			return code.test(id + MAX_CPT_NUMBER);
-		}
-
-		inline void setComponent(ComponentType id)
-		{
-			code.set(id);
-		}
-
-		inline void unsetComponent(ComponentType id)
-		{
-			code.reset(id);
-		}
-
-		inline bool hasComponent(ComponentType id) const
-		{
-			return code.test(id);
-		}
-
-		inline void reset()
-		{
-			code.reset();
-		}
-
-		inline bool empty()
-		{
-			return code.none();
-		}
-
-		template < typename Archive >
-		void serialize(Archive &ar)
-		{
-			ar(
-				cereal::make_nvp("bitset", code)
-				);
-		}
-	private:
-		std::bitset<MAX_CPT_NUMBER + MAX_TAG_NUMBER> code;
-
-		friend AScene;
-		friend AComponentManager;
-	};
-
-	class EntityData
-	{
-	public:
-		const Entity &getEntity() const { return entity; }
-		const Barcode &getBarcode() const { return barcode; }
-		const AGE::Link &getLink() const { return link; }
-	private:
-		Entity entity;
-		AGE::Link link;
-		Barcode barcode;
-
-	public:
-		friend AScene;
-		friend AComponentManager;
-		friend EntityFilter;
+		friend ComponentManager;
 	};
 }
 

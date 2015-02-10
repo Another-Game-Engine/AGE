@@ -29,10 +29,10 @@ namespace AGE
 					name[i] = _name[i];
 				name[i] = '\0';
 			}
-			auto link = s->getLink(this->entity);
-			position = link->getPosition();
-			rotation = glm::eulerAngles(link->getOrientation());
-			scale = link->getScale();
+			auto &link = entity.getLink();
+			position = link.getPosition();
+			rotation = glm::eulerAngles(link.getOrientation());
+			scale = link.getScale();
 		}
 
 		void EntityRepresentation::reset(AScene *)

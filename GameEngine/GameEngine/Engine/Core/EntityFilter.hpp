@@ -16,14 +16,14 @@ namespace AGE
 		template <typename T>
 		void requireComponent()
 		{
-			_barcode.setComponent(Component<T>::getTypeId());
+			_barcode.insert(Component<T>::getTypeId());
 			_scene.lock()->filterSubscribe(Component<T>::getTypeId(), this);
 		}
 
 		template <typename T>
 		void unRequireComponent()
 		{
-			_barcode.unsetComponent(Component<T>::getTypeId());
+			_barcode.erase(Component<T>::getTypeId());
 			_scene.lock()->filterUnsubscribe(Component<T>::getTypeId(), this);
 		}
 
@@ -68,12 +68,14 @@ namespace AGE
 		};
 
 	protected:
-		Barcode _barcode;
+		std::set<ComponentType> _barcode;
 		std::set<Entity> _collection;
 		std::weak_ptr<AScene> _scene;
 
 		void lock();
 		void unlock();
+
+		bool match(const EntityData &e);
 
 	private:
 		bool _locked;

@@ -98,6 +98,7 @@
     <ClCompile Include="Engine\Utils\File.cpp" />
     <ClCompile Include="Engine\Utils\FileSystem.cpp" />
     <ClCompile Include="Engine\Utils\ObjectPool.cpp" />
+    <ClCompile Include="Engine\Entities\Entity.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -253,6 +254,8 @@
     <ClInclude Include="Engine\Geometry\MaterialData.hpp" />
     <ClInclude Include="Engine\Utils\FileSystem.hpp" />
     <ClInclude Include="Engine\Utils\ObjectPool.hpp" />
+    <ClInclude Include="Engine\Components\ComponentManager.hpp" />
+    <ClInclude Include="Engine\Entities\EntityData.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

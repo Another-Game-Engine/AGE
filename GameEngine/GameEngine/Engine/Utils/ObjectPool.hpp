@@ -12,6 +12,7 @@ namespace AGE
 		ObjectPoolBase() = delete;
 		virtual ~ObjectPoolBase();
 		virtual void destroy(void *ptr) = 0;
+		virtual void *createVoidPtr() = 0;
 	protected:
 		std::size_t _chunkSize;
 		std::size_t _objectSize;
@@ -166,6 +167,11 @@ namespace AGE
 				}
 			}
 			assert(false);
+		}
+
+		virtual void* createVoidPtr()
+		{
+			return (void*)(create());
 		}
 
 		Type *create()

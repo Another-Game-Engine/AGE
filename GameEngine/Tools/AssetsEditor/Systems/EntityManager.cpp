@@ -31,30 +31,30 @@ namespace AGE
 				EntityFilter::Lock lock(_filter);
 				for (auto e : _filter.getCollection())
 				{
-					auto cpt = scene->getComponent<AGE::WE::EntityRepresentation>(e);
+					auto cpt = e.getComponent<AGE::WE::EntityRepresentation>();
 					if (ImGui::TreeNode((void*)(cpt), cpt->name.data()))
 					{
 						ImGui::InputText("Name", cpt->name.data(), cpt->name.size());
 						if (ImGui::SliderFloat3("Position", glm::value_ptr(cpt->position), -1000000, 1000000))
 						{
-							scene->getLink(e)->setPosition(cpt->position);
+							e.getLink().setPosition(cpt->position);
 						}
 						if (ImGui::SliderFloat3("Rotation", glm::value_ptr(cpt->rotation), -360, 360))
 						{
 							// temporary TODO
 							//cpt->rotation.x = std::fmod(cpt->rotation.x, 360); cpt->rotation.y = std::fmod(cpt->rotation.y, 360); cpt->rotation.z = std::fmod(cpt->rotation.z, 360);
-							scene->getLink(e)->setOrientation(glm::quat(cpt->rotation));
+							e.getLink().setOrientation(glm::quat(cpt->rotation));
 						}
 						if (ImGui::SliderFloat3("Scale", glm::value_ptr(cpt->scale), 0.0f, 1000000))
 						{
-							scene->getLink(e)->setScale(cpt->scale);
+							e.getLink().setScale(cpt->scale);
 						}
 
 						for (ComponentType i = 0; i < MAX_CPT_NUMBER; ++i)
 						{
-							if (scene->hasComponent(e, i))
+							if (e.haveComponent(i))
 							{
-								auto ptr = scene->getComponent(e, i);
+								auto ptr = e.getComponent(i);
 								if (ptr->exposedInEditor)
 								{
 									if (ImGui::TreeNode("Component Name TODO"))
@@ -66,7 +66,7 @@ namespace AGE
 											if (ImGui::Button("Delete"))
 											{
 												ptr->editorDelete(scene.get());
-												scene->removeComponent(e, i);
+												e.removeComponent(i);
 											}
 											ImGui::PopID();
 										}
@@ -87,13 +87,13 @@ namespace AGE
 			bool EntityManager::initialize()
 			{
 				_filter.setOnAdd(std::function<void(Entity e)>([&](Entity e){
-					_scene.lock()->addComponent<AGE::WE::EntityRepresentation>(e, std::string("Entity " + std::to_string(e.getId()) + "\0").c_str());
+					e.addComponent<AGE::WE::EntityRepresentation>(std::string("Entity " + std::to_string(e.getId()) + "\0").c_str());
 				}));
 
 				for (auto i = 0; i < 30; ++i)
 				{
 					auto e = _scene.lock()->createEntity();
-					_scene.lock()->addComponent<PointLightComponent>(e)->set(glm::vec3((float)(rand() % 1000) / 1000.0f, (float)(rand() % 1000) / 1000.0f, (float)(rand() % 1000) / 1000.0f), glm::vec3(1.f, 0.1f, 0.0f));
+					e.addComponent<PointLightComponent>()->set(glm::vec3((float)(rand() % 1000) / 1000.0f, (float)(rand() % 1000) / 1000.0f, (float)(rand() % 1000) / 1000.0f), glm::vec3(1.f, 0.1f, 0.0f));
 				}
 				return true;
 			}

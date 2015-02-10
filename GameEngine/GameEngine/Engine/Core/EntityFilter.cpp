@@ -21,19 +21,34 @@ namespace AGE
 
 	void EntityFilter::requireTag(TAG_ID id)
 	{
-		_barcode.setTag(id);
-		_scene.lock()->filterSubscribe(id, this);
+		// @ECS TODO
+
+		//_barcode.setTag(id);
+		//_scene.lock()->filterSubscribe(id, this);
 	}
 
 	void EntityFilter::unRequireTag(TAG_ID id)
 	{
-		_barcode.unsetTag(id);
-		_scene.lock()->filterUnsubscribe(id, this);
+		// @ECS TODO
+
+		//_barcode.unsetTag(id);
+		//_scene.lock()->filterUnsubscribe(id, this);
+	}
+
+	bool EntityFilter::match(const EntityData &e)
+	{
+		for (auto &b : _barcode)
+		{
+			if (!e.haveComponent(b))
+				return false;
+		}
+		return true;
 	}
 
 	void EntityFilter::componentAdded(const EntityData &e, ComponentType typeId)
 	{
-		if (e.barcode.match(_barcode))
+
+		if (match(e))
 		{
 			if (_locked)
 			{
@@ -48,7 +63,7 @@ namespace AGE
 
 	void EntityFilter::componentRemoved(const EntityData &e, ComponentType typeId)
 	{
-		if (!e.barcode.match(_barcode))
+		if (!match(e))
 		{
 			if (_locked)
 			{
@@ -63,7 +78,7 @@ namespace AGE
 
 	void EntityFilter::tagAdded(const EntityData &e, TAG_ID typeId)
 	{
-		if (e.barcode.match(_barcode))
+		if (match(e))
 		{
 			if (_locked)
 			{
@@ -78,7 +93,7 @@ namespace AGE
 
 	void EntityFilter::tagRemoved(const EntityData &e, TAG_ID typeId)
 	{
-		if (!e.barcode.match(_barcode))
+		if (!match(e))
 		{
 			if (_locked)
 			{
