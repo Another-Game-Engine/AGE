@@ -50,7 +50,7 @@ namespace AGE
 							scene->getLink(e)->setScale(cpt->scale);
 						}
 
-						for (COMPONENT_ID i = 0; i < MAX_CPT_NUMBER; ++i)
+						for (ComponentType i = 0; i < MAX_CPT_NUMBER; ++i)
 						{
 							if (scene->hasComponent(e, i))
 							{
@@ -93,7 +93,7 @@ namespace AGE
 				for (auto i = 0; i < 30; ++i)
 				{
 					auto e = _scene.lock()->createEntity();
-					_scene.lock()->addComponent<Component::PointLight>(e)->set(glm::vec3((float)(rand() % 1000) / 1000.0f, (float)(rand() % 1000) / 1000.0f, (float)(rand() % 1000) / 1000.0f), glm::vec3(1.f, 0.1f, 0.0f));
+					_scene.lock()->addComponent<PointLightComponent>(e)->set(glm::vec3((float)(rand() % 1000) / 1000.0f, (float)(rand() % 1000) / 1000.0f, (float)(rand() % 1000) / 1000.0f), glm::vec3(1.f, 0.1f, 0.0f));
 				}
 				return true;
 			}

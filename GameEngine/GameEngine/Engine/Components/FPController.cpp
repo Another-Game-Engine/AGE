@@ -9,9 +9,8 @@
 
 namespace AGE
 {
-	using namespace Component;
 
-	FPController::FPController() : ComponentBase<FPController>()
+	FPController::FPController() : ComponentBase()
 		, _controller(nullptr)
 		, _ghost(nullptr)
 		, _shape(nullptr)

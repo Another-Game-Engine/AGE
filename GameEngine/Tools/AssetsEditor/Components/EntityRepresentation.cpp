@@ -50,7 +50,7 @@ namespace AGE
 		}
 
 		EntityRepresentation::EntityRepresentation(EntityRepresentation &&o)
-			: ComponentBase<EntityRepresentation>(std::move(o))
+			: ComponentBase(std::move(o))
 		{
 			name = std::move(o.name);
 			position = std::move(o.position);

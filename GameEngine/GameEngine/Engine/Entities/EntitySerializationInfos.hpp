@@ -11,7 +11,7 @@ namespace AGE
 		Barcode barcode;
 		ENTITY_FLAGS flags;
 		std::vector <std::size_t> componentsHash;
-		std::vector <Component::Base*> components;
+		std::vector <ComponentBase*> components;
 
 		EntitySerializationInfos(const EntityData& e)
 			: link(e.getLink())
@@ -34,8 +34,10 @@ namespace AGE
 		template < typename Archive >
 		void serializeComponents(Archive &ar, AScene *scene) const
 		{
-			for (auto &e : components)
-				e->serializeBase(ar, scene);
+			// @ECS TODO
+
+			//for (auto &e : components)
+			//	e->serializeBase(ar, scene);
 		}
 
 		template < typename Archive >

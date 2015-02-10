@@ -23,11 +23,11 @@ namespace AGE
 		inline void setReorder(bool v) { _reorder = v; }
 		virtual void reorder() = 0;
 		virtual bool removeComponent(Entity &e) = 0;
-		virtual Component::Base *getComponentPtr(const Entity &e) = 0;
-		virtual Component::Base *getComponentPtr(ENTITY_ID e) = 0;
+		virtual ComponentBase *getComponentPtr(const Entity &e) = 0;
+		virtual ComponentBase *getComponentPtr(ENTITY_ID e) = 0;
 
-		virtual void getDatabaseRegister(std::size_t &hash, unsigned short &id) const = 0;
-		virtual void addComponentPtr(const Entity &e, Component::Base *ptr) = 0;
+		virtual void getDatabaseRegister(std::size_t &hash, ComponentType &id) const = 0;
+		virtual void addComponentPtr(const Entity &e, ComponentBase *ptr) = 0;
 
 		inline std::size_t getHashCode() const { return _componentHash; }
 	protected:
@@ -43,15 +43,15 @@ namespace AGE
 			: _scene(scene)
 			, _size(0)
 		{
-			_componentHash = T::hash_code();
+			_componentHash = typeid(T).hash_code();
 		}
 
 		virtual ~ComponentManager()
 		{}
 
-		inline unsigned short getTypeId() const
+		inline ComponentType getTypeId() const
 		{
-			return T::getTypeId();
+			return Component<T>::getTypeId();
 		}
 
 		const AGE::Vector<T> &getComponents() const
@@ -89,17 +89,19 @@ namespace AGE
 		}
 
 		// used for unserialization
-		virtual void addComponentPtr(const Entity &entity, Component::Base *component)
+		virtual void addComponentPtr(const Entity &entity, ComponentBase *component)
 		{
-			if (_components.size() <= _size)
-				_components.resize(_size + 16);
-			_componentsRefs[entity.getId()] = ENTITY_ID(_size);
-			_components[_size] = std::move(T(std::move(*(static_cast<T*>(component)))));
-			_components[_size].entity = entity;
-			_components[_size].postUnserialization(this->_scene);
-			++_size;
-			delete component;
-			_reorder = true;
+			//@ECS TODO
+
+			//if (_components.size() <= _size)
+			//	_components.resize(_size + 16);
+			//_componentsRefs[entity.getId()] = ENTITY_ID(_size);
+			//_components[_size] = std::move(T(std::move(*(static_cast<T*>(component)))));
+			//_components[_size].entity = entity;
+			//_components[_size].postUnserialization(this->_scene);
+			//++_size;
+			//delete component;
+			//_reorder = true;
 		}
 
 		T *getComponent(const Entity &e)
@@ -138,20 +140,20 @@ namespace AGE
 			//this->_reorder = false;
 		}
 
-		virtual Component::Base *getComponentPtr(const Entity &e)
+		virtual ComponentBase *getComponentPtr(const Entity &e)
 		{
-			return static_cast<Component::Base*>(getComponent(e));
+			return static_cast<ComponentBase*>(getComponent(e));
 		}
 
-		virtual Component::Base *getComponentPtr(ENTITY_ID e)
+		virtual ComponentBase *getComponentPtr(ENTITY_ID e)
 		{
-			return static_cast<Component::Base*>(getComponent(e));
+			return static_cast<ComponentBase*>(getComponent(e));
 		}
 
-		virtual void getDatabaseRegister(std::size_t &hash, unsigned short &id) const
+		virtual void getDatabaseRegister(std::size_t &hash, ComponentType &id) const
 		{
 			hash = typeid(T).hash_code();
-			id = T::getTypeId();
+			id = Component<T>::getTypeId();
 		}
 
 	private:

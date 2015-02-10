@@ -187,17 +187,17 @@ namespace AGE
 			return code.test(id + MAX_CPT_NUMBER);
 		}
 
-		inline void setComponent(COMPONENT_ID id)
+		inline void setComponent(ComponentType id)
 		{
 			code.set(id);
 		}
 
-		inline void unsetComponent(COMPONENT_ID id)
+		inline void unsetComponent(ComponentType id)
 		{
 			code.reset(id);
 		}
 
-		inline bool hasComponent(COMPONENT_ID id) const
+		inline bool hasComponent(ComponentType id) const
 		{
 			return code.test(id);
 		}

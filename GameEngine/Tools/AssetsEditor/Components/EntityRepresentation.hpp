@@ -8,7 +8,7 @@ namespace AGE
 {
 	namespace WE
 	{
-		struct EntityRepresentation : public Component::ComponentBase < EntityRepresentation >
+		struct EntityRepresentation : public ComponentBase
 		{
 			EntityRepresentation();
 

@@ -60,13 +60,13 @@ namespace AGE
 		inline bool isActive() const { return _active; }
 
 		void                    registerFilter(EntityFilter *filter);
-		void                    filterSubscribe(COMPONENT_ID id, EntityFilter* filter);
-		void                    filterUnsubscribe(COMPONENT_ID id, EntityFilter* filter);
+		void                    filterSubscribe(ComponentType id, EntityFilter* filter);
+		void                    filterUnsubscribe(ComponentType id, EntityFilter* filter);
 
 		void                    informFiltersTagAddition(TAG_ID id, const EntityData &entity);
 		void                    informFiltersTagDeletion(TAG_ID id, const EntityData &entity);
-		void                    informFiltersComponentAddition(COMPONENT_ID id, const EntityData &entity);
-		void                    informFiltersComponentDeletion(COMPONENT_ID id, const EntityData &entity);
+		void                    informFiltersComponentAddition(ComponentType id, const EntityData &entity);
+		void                    informFiltersComponentDeletion(ComponentType id, const EntityData &entity);
 		void                    informFiltersEntityCreation(const EntityData &entity);
 		void                    informFiltersEntityDeletion(const EntityData &entity);
 
@@ -168,7 +168,7 @@ namespace AGE
 			for (auto &e : entities)
 			{
 				auto es = EntitySerializationInfos(e);
-				for (COMPONENT_ID i = 0; i < MAX_CPT_NUMBER; ++i)
+				for (ComponentType i = 0; i < MAX_CPT_NUMBER; ++i)
 				{
 					if (e.barcode.hasComponent(i))
 					{
@@ -224,7 +224,7 @@ namespace AGE
 		template <typename T>
 		void registerComponentType()
 		{
-			COMPONENT_ID id = COMPONENT_ID(T::getTypeId());
+			ComponentType id = Component<T>::getTypeId();
 			if (_componentsManagers[id] == nullptr)
 			{
 				_componentsManagers[id] = new ComponentManager<T>(this);
@@ -236,14 +236,14 @@ namespace AGE
 		void clearComponentsType()
 		{
 			//TODO
-			auto id = T::getTypeId();
+			auto id = Component<T>::getTypeId();
 			if (_componentsManagers[id] == nullptr)
 				return;
 			auto &manager = *static_cast<ComponentManager<T>*>(_componentsManagers[id]);
 			auto &col = manager.getComponents();
 			for (std::size_t i = 0; i < manager.getSize(); ++i)
 			{
-				_entityPool[col[i].entityId].barcode.unsetComponent(COMPONENT_ID(id));
+				_entityPool[col[i].entityId].barcode.unsetComponent(ComponentType(id));
 			}
 			manager.clearComponents();
 			for (auto filter : _filters[id])
@@ -264,7 +264,7 @@ namespace AGE
 		template <typename T, typename... Args>
 		T *addComponent(Entity &entity, Args &&...args)
 		{
-			COMPONENT_ID id = COMPONENT_ID(T::getTypeId());
+			ComponentType id = Component<T>::getTypeId();
 			auto &e = *entity.ptr;
 			if (e.entity != entity)
 				return nullptr;
@@ -274,21 +274,21 @@ namespace AGE
 			}
 			if (e.barcode.hasComponent(id))
 			{
-				return static_cast<ComponentManager<T>*>(_componentsManagers[T::getTypeId()])->getComponent(entity);
+				return static_cast<ComponentManager<T>*>(_componentsManagers[Component<T>::getTypeId()])->getComponent(entity);
 			}
 
 			auto res = static_cast<ComponentManager<T>*>(_componentsManagers[id])->addComponent(entity, std::forward<Args>(args)...);
 
 			e.barcode.setComponent(id);
 
-			informFiltersComponentAddition(COMPONENT_ID(T::getTypeId()), e);
+			informFiltersComponentAddition(Component<T>::getTypeId(), e);
 			return res;
 		}
 
 		template <typename T>
 		T *getComponent(const Entity &entity)
 		{
-			COMPONENT_ID id = COMPONENT_ID(T::getTypeId());
+			ComponentType id = Component<T>::getTypeId();
 			auto &e = *entity.ptr;
 			assert(e.entity == entity);
 			//return nullptr;
@@ -300,21 +300,21 @@ namespace AGE
 		template <typename T>
 		bool *hasComponent(const Entity &entity)
 		{
-			COMPONENT_ID id = COMPONENT_ID(T::getTypeId());
+			ComponentType id = Component<T>::getTypeId();
 			auto &e = _entityPool[entity.id];
 			assert(e.entity == entity);
 			return (e.barcode.hasComponent(id));
 		}
 
-		Component::Base *getComponent(const Entity &entity, COMPONENT_ID componentId);
-		bool hasComponent(const Entity &entity, COMPONENT_ID componentId);
-		bool removeComponent(Entity &entity, COMPONENT_ID componentId);
-		std::size_t getComponentHash(COMPONENT_ID componentId);
+		ComponentBase *getComponent(const Entity &entity, ComponentType componentId);
+		bool hasComponent(const Entity &entity, ComponentType componentId);
+		bool removeComponent(Entity &entity, ComponentType componentId);
+		std::size_t getComponentHash(ComponentType componentId);
 
 		template <typename T>
 		bool removeComponent(Entity &entity)
 		{
-			COMPONENT_ID id = T::getTypeId();
+			ComponentType id = Component<T>::getTypeId();
 			auto &e = _entityPool[entity.id];
 			if (e.entity != entity)
 				return false;
@@ -330,7 +330,7 @@ namespace AGE
 
 		void reorganizeComponents();
 		const Entity *getEntityPtr(const Entity &e) const;
-		AComponentManager *getComponentManager(COMPONENT_ID componentId);
+		AComponentManager *getComponentManager(ComponentType componentId);
 		AGE::Link *getLink(const Entity &e);
 	};
 }

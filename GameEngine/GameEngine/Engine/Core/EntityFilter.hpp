@@ -16,15 +16,15 @@ namespace AGE
 		template <typename T>
 		void requireComponent()
 		{
-			_barcode.setComponent(COMPONENT_ID(T::getTypeId()));
-			_scene.lock()->filterSubscribe(COMPONENT_ID(T::getTypeId()), this);
+			_barcode.setComponent(Component<T>::getTypeId());
+			_scene.lock()->filterSubscribe(Component<T>::getTypeId(), this);
 		}
 
 		template <typename T>
 		void unRequireComponent()
 		{
-			_barcode.unsetComponent(T::getTypeId());
-			_scene.lock()->filterUnsubscribe(T::getTypeId(), this);
+			_barcode.unsetComponent(Component<T>::getTypeId());
+			_scene.lock()->filterUnsubscribe(Component<T>::getTypeId(), this);
 		}
 
 		void requireTag(TAG_ID tag);
@@ -34,8 +34,8 @@ namespace AGE
 
 		inline void clearCollection() { _collection.clear(); }
 
-		void virtual componentAdded(const EntityData &e, COMPONENT_ID typeId);
-		void virtual componentRemoved(const EntityData &e, COMPONENT_ID typeId);
+		void virtual componentAdded(const EntityData &e, ComponentType typeId);
+		void virtual componentRemoved(const EntityData &e, ComponentType typeId);
 		void virtual tagAdded(const EntityData &e, TAG_ID typeId);
 		void virtual tagRemoved(const EntityData &e, TAG_ID typeId);
 		void virtual entityAdded(const EntityData &e);

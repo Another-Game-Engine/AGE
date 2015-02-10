@@ -31,7 +31,7 @@ namespace AGE
 		_scene.lock()->filterUnsubscribe(id, this);
 	}
 
-	void EntityFilter::componentAdded(const EntityData &e, COMPONENT_ID typeId)
+	void EntityFilter::componentAdded(const EntityData &e, ComponentType typeId)
 	{
 		if (e.barcode.match(_barcode))
 		{
@@ -46,7 +46,7 @@ namespace AGE
 		}
 	}
 
-	void EntityFilter::componentRemoved(const EntityData &e, COMPONENT_ID typeId)
+	void EntityFilter::componentRemoved(const EntityData &e, ComponentType typeId)
 	{
 		if (!e.barcode.match(_barcode))
 		{
