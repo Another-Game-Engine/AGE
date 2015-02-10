@@ -16,11 +16,13 @@ namespace AGE
 	class AssetsEditorScene : public AScene
 	{
 	public:
+		static const std::string Name;
 		AssetsEditorScene(std::weak_ptr<AGE::Engine> engine);
 
 		virtual ~AssetsEditorScene(void);
 		virtual bool userStart();
-		virtual bool userUpdate(double time);
+		virtual bool userUpdateBegin(double time);
+		virtual bool userUpdateEnd(double time);
 
 	private:
 		AE::Folder _raw;

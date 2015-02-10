@@ -450,4 +450,10 @@ bool BenchmarkScene::userUpdate(double time)
 	// TODO
 	AGE::GetPrepareThread()->getQueue()->emplaceCommand<AGE::Commands::ToRender::RenderDrawLists>();
 	return true;
+
+
+	bool BenchmarkScene::userUpdateEnd(double time)
+	{
+		return true;
+	}
 }
