@@ -17,8 +17,6 @@
 
 
 bool BenchmarkScene::initRenderingJustOneTime = true;
-//RenderKey BenchmarkScene::key = RenderKey();
-//gl::RenderManager *BenchmarkScene::_renderManager = nullptr;
 
 BenchmarkScene::BenchmarkScene(std::weak_ptr<AGE::Engine> engine)
 	: AScene(engine)
@@ -230,7 +228,7 @@ bool BenchmarkScene::userStart()
 	return true;
 }
 
-bool BenchmarkScene::userUpdate(double time)
+bool BenchmarkScene::userUpdateBegin(double time)
 {
 	++_frameCounter;
 	++_chunkFrame;
@@ -319,7 +317,7 @@ bool BenchmarkScene::userUpdate(double time)
 				_l->setScale(glm::vec3(0.05f));
 				auto _m = addComponent<AGE::Component::MeshRenderer>(e, getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage"));
 				_m->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial("ball/ball.mage"));
-			//	for (size_t index = 0; index < _m->getMaterial()->datas.size(); ++index)
+				//	for (size_t index = 0; index < _m->getMaterial()->datas.size(); ++index)
 				{
 					//_renderManager->setMaterial<gl::Shininess>(_m->getMaterial()->datas[index], 1.0f);
 					//_renderManager->setMaterial<gl::Ratio_specular>(_m->getMaterial()->datas[index], 1.0f);
@@ -330,12 +328,12 @@ bool BenchmarkScene::userUpdate(double time)
 			}
 
 #ifdef PHYSIC_SIMULATION
-	std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
-	auto rigidBody = addComponent<AGE::Component::RigidBody>(GLOBAL_FLOOR, 0.0f);
-	rigidBody->setCollisionShape(weakOnThis, GLOBAL_FLOOR, AGE::Component::RigidBody::BOX);
-	rigidBody->getBody().setFriction(0.3f);
+			std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
+			auto rigidBody = addComponent<AGE::Component::RigidBody>(GLOBAL_FLOOR, 0.0f);
+			rigidBody->setCollisionShape(weakOnThis, GLOBAL_FLOOR, AGE::Component::RigidBody::BOX);
+			rigidBody->getBody().setFriction(0.3f);
 #endif //PHYSIC_SIMULATION
-	return true;
+			return true;
 		}
 	}
 
@@ -450,10 +448,10 @@ bool BenchmarkScene::userUpdate(double time)
 	// TODO
 	AGE::GetPrepareThread()->getQueue()->emplaceCommand<AGE::Commands::ToRender::RenderDrawLists>();
 	return true;
+}	
 
 
-	bool BenchmarkScene::userUpdateEnd(double time)
-	{
-		return true;
-	}
+bool BenchmarkScene::userUpdateEnd(double time)
+{
+	return true;
 }
