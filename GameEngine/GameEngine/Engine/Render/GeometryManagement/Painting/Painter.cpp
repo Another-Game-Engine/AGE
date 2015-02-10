@@ -62,12 +62,6 @@ namespace AGE
 		return (&_vertices[key.getId()]);
 	}
 
-	Painter & Painter::update()
-	{
-		_buffer.update();
-		return (*this);
-	}
-
 	Key<Program> Painter::get_key_program(std::string const &name)
 	{
 		auto index = 0;
@@ -106,6 +100,7 @@ namespace AGE
 			return (*this);
 		}
 		_buffer.bind();
+		_buffer.update();
 		for (auto &draw_element : drawList) {
 			if (draw_element) {
 				_vertices[draw_element.getId()].update(_programs[program.getId()]);

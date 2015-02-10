@@ -27,7 +27,6 @@ namespace AGE
 			OpenGLTasks::set_depth_test(true);
 			OpenGLTasks::clear_buffer();
 			OpenGLTasks::set_clear_color(glm::vec4(0, 0, 0.2, 1));
-			painter.update();
 			painter.draw(GL_TRIANGLES, _programs[RENDER], vertices);
 		});
 		auto &rendering = std::static_pointer_cast<Rendering>(_rendering_list[RENDER]);

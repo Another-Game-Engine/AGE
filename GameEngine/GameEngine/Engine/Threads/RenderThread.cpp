@@ -91,16 +91,6 @@ namespace AGE
 			}
 		});
 
-		registerCallback<Commands::ToRender::DrawTestTriangle>([&](Commands::ToRender::DrawTestTriangle& msg)
-		{
-			glClearColor(1, 0, 1, 1);
-			glClear(GL_COLOR_BUFFER_BIT);
-			glDisable(GL_DEPTH_TEST);
-			msg.painter->update();
-			msg.painter->draw(GL_TRIANGLES, msg.program, msg.meshes);
-//			_context->swapContext();
-		});
-
 		registerSharedCallback<AGE::Tasks::Basic::BoolFunction>([&](AGE::Tasks::Basic::BoolFunction& msg)
 		{
 			msg.setValue(msg.function());

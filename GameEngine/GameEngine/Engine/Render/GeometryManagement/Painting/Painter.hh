@@ -26,7 +26,6 @@ namespace AGE
 		Key<Program> get_key_program(std::string const &name);
 		Key<Program> get_key_program(std::shared_ptr<Program> const &p);
 		Program *get_program(Key<Program> const &program);
-		Painter &update();
 		Painter &draw(GLenum mode, Key<Program> const &program, std::vector<Key<Vertices>> const &drawList);
 		Painter &draw(GLenum mode, std::shared_ptr<Program> const &p, std::vector<Key<Vertices>> const &drawList);
 

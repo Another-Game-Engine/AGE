@@ -11,7 +11,6 @@ namespace AGE
 
 	struct RenderPainter
 	{
-		std::vector<glm::mat4> transformation;
 		std::vector<Key<Vertices>> vertices;
 		Key<Painter> painter;
 	};
