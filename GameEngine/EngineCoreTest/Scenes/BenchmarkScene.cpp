@@ -6,10 +6,10 @@
 #include <Threads/ThreadManager.hpp>
 #include <Threads/RenderThread.hpp>
 #include <Threads/PrepareRenderThread.hpp>
-#include <Threads/Commands/MainToPrepare.hpp>
-#include <Threads/Commands/ToRender.hpp>
-#include <Core/Tasks/Basics.hpp>
-#include <Core/Tasks/RenderTasks.hpp>
+#include <Threads/Commands/MainToPrepareCommands.hpp>
+#include <Threads/Commands/ToRenderCommands.hpp>
+#include <Threads/Tasks/BasicTasks.hpp>
+#include <Threads/Tasks/ToRenderTasks.hpp>
 #include <glm/glm.hpp>
 #include <SDL/SDL.h>
 #include <Threads/TaskScheduler.hpp>

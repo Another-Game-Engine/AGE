@@ -3,10 +3,10 @@
 #include <Threads/MainThread.hpp>
 #include <Threads/ThreadManager.hpp>
 #include <Core/AScene.hh>
-#include <Core/Tasks/MainToPrepare.hpp>
-#include <Core/Tasks/Basics.hpp>
+#include <Threads/Tasks/MainToPrepareTasks.hpp>
+#include <Threads/Tasks/BasicTasks.hpp>
 #include <Threads/RenderThread.hpp>
-#include <Threads/Commands/ToRender.hpp>
+#include <Threads/Commands/ToRenderCommands.hpp>
 
 namespace AGE
 {

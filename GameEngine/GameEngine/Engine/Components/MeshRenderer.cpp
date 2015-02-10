@@ -8,7 +8,7 @@
 #include <Threads/ThreadManager.hpp>
 #include <Threads/PrepareRenderThread.hpp>
 #include <Threads/RenderThread.hpp>
-#include <Core/Tasks/RenderTasks.hpp>
+#include <Threads/Tasks/ToRenderTasks.hpp>
 
 namespace AGE
 {

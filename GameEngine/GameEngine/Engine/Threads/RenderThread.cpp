@@ -2,11 +2,11 @@
 #include <Core/Engine.hh>
 #include <Context/SdlContext.hh>
 #include <Utils/ThreadName.hpp>
-#include <Core/Tasks/RenderTasks.hpp>
-#include <Threads/Commands/ToRender.hpp>
+#include <Threads/Tasks/ToRenderTasks.hpp>
+#include <Threads/Commands/ToRenderCommands.hpp>
+#include <Threads/Tasks/BasicTasks.hpp>
 #include <Context/SdlContext.hh>
 #include <Utils/Containers/Vector.hpp>
-#include <Core/Tasks/Basics.hpp>
 #include <Threads/ThreadManager.hpp>
 #include <Core/Engine.hh>
 #include <Context/SdlContext.hh>

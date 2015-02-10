@@ -31,7 +31,7 @@
 #include <Threads/MainThread.hpp>
 #include <Core/DefaultConfiguration.hpp>
 #include <Threads/RenderThread.hpp>
-#include <Core/Tasks/Basics.hpp>
+#include <Threads/Tasks/BasicTasks.hpp>
 ////////////////////////////////////////
 
 #include <chrono>

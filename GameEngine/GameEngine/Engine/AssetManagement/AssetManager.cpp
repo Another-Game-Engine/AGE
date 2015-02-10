@@ -9,7 +9,7 @@
 #include <AssetManagement/Instance/MaterialInstance.hh>
 #include <AssetManagement/Instance/MeshInstance.hh>
 #include <Threads/ThreadManager.hpp>
-#include <Core/Tasks/Basics.hpp>
+#include <Threads/Tasks/BasicTasks.hpp>
 #include <Threads/RenderThread.hpp>
 #include <Threads/TaskScheduler.hpp>
 #include <Threads/QueueOwner.hpp>

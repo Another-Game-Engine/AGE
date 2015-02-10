@@ -3,7 +3,7 @@
 #include "Thread.hpp"
 #include "QueuePusher.hpp"
 #include "QueueOwner.hpp"
-#include <Core/RenderScene.hpp>
+#include <Threads/RenderScene.hpp>
 #include <vector>
 #include <memory>
 #include <thread>
