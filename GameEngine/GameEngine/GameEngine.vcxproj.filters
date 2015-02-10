@@ -113,7 +113,6 @@
     <ClCompile Include="Engine\SpacePartitioning\LooseOctree.cpp" />
     <ClCompile Include="Engine\SpacePartitioning\LooseOctreeNode.cpp" />
     <ClCompile Include="Engine\SpacePartitioning\Cullable\Cullable.cpp" />
-    <ClCompile Include="Engine\Core\Commands\MainToPrepare.cpp" />
     <ClCompile Include="Engine\Threads\RenderThread.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomPipeline\BasicPipeline.cpp" />
     <ClCompile Include="Engine\AssetManagement\Instance\AnimationInstance.cpp" />
@@ -122,6 +121,7 @@
     <ClCompile Include="Engine\AssetManagement\Data\MaterialData.cpp" />
     <ClCompile Include="Engine\AssetManagement\Data\MeshData.cpp" />
     <ClCompile Include="Engine\SpacePartitioning\PreparableObject.cpp" />
+    <ClCompile Include="Engine\Threads\Commands\MainToPrepare.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -135,7 +135,6 @@
     <ClInclude Include="Engine\AssetManagement\Instance\MeshInstance.hh" />
     <ClInclude Include="Engine\Components\Light.hh" />
     <ClInclude Include="Engine\Configuration.hpp" />
-    <ClInclude Include="Engine\Core\Commands\MainToPrepare.hpp" />
     <ClInclude Include="Engine\Core\Instance\MaterialInstance.hh" />
     <ClInclude Include="Engine\Core\Instance\MeshInstance.hh" />
     <ClInclude Include="Engine\Core\Material\MaterialData.hh" />
@@ -316,7 +315,6 @@
     <ClInclude Include="Engine\SpacePartitioning\Cullable\CullableShape.hh" />
     <ClInclude Include="Engine\Core\Tasks\RenderTasks.hpp" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomPipeline\BasicPipeline.hh" />
-    <ClInclude Include="Engine\Core\Commands\ToRender.hpp" />
     <ClInclude Include="Engine\SpacePartitioning\Cullable\Object\Mesh.hh" />
     <ClInclude Include="Engine\AssetManagement\Instance\AnimationInstance.hh" />
     <ClInclude Include="Engine\SpacePartitioning\Cullable\Object\Camera.hh" />
@@ -328,6 +326,8 @@
     <ClInclude Include="Engine\AssetManagement\Data\AnimationData.hpp" />
     <ClInclude Include="Engine\Skinning\AnimationManager.hpp" />
     <ClInclude Include="Engine\SpacePartitioning\PreparableObject.hh" />
+    <ClInclude Include="Engine\Threads\Commands\MainToPrepare.hpp" />
+    <ClInclude Include="Engine\Threads\Commands\ToRender.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

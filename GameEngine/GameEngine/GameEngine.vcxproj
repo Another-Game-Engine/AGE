@@ -225,7 +225,7 @@
     <ClCompile Include="Engine\Components\Light.cpp" />
     <ClCompile Include="Engine\Components\RigidBody.cpp" />
     <ClCompile Include="Engine\Context\IRenderContext.cpp" />
-    <ClCompile Include="Engine\Core\Commands\MainToPrepare.cpp" />
+    <ClCompile Include="Engine\Threads\Commands\MainToPrepare.cpp" />
     <ClCompile Include="Engine\Core\ConfigurationManager.cpp" />
     <ClCompile Include="Engine\Core\DefaultConfiguration.cpp" />
     <ClCompile Include="Engine\Core\Link.cpp" />
@@ -354,8 +354,8 @@
     <ClInclude Include="Engine\AssetManagement\Instance\MeshInstance.hh" />
     <ClInclude Include="Engine\Components\Light.hh" />
     <ClInclude Include="Engine\Configuration.hpp" />
-    <ClInclude Include="Engine\Core\Commands\ToRender.hpp" />
-    <ClInclude Include="Engine\Core\Commands\MainToPrepare.hpp" />
+    <ClInclude Include="Engine\Threads\Commands\ToRender.hpp" />
+    <ClInclude Include="Engine\Threads\Commands\MainToPrepare.hpp" />
     <ClInclude Include="Engine\Core\Instance\MaterialInstance.hh" />
     <ClInclude Include="Engine\Core\Instance\MeshInstance.hh" />
     <ClInclude Include="Engine\Core\Material\MaterialData.hh" />

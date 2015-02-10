@@ -6,8 +6,7 @@
 #include <Threads/MainThread.hpp>
 #include <Threads/PrepareRenderThread.hpp>
 #include <Threads/RenderThread.hpp>
-
-#include <Core/Commands/ToRender.hpp>
+#include <Threads/Commands/ToRender.hpp>
 
 #ifdef USE_DEFAULT_ENGINE_CONFIGURATION
 

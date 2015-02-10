@@ -3,7 +3,7 @@
 #include <Utils/Containers/Queue.hpp>
 #include <Utils/Containers/Vector.hpp>
 #include <Utils/MemoryPool.hpp>
-#include <Core/Commands/MainToPrepare.hpp>
+#include <Threads/Commands/MainToPrepare.hpp>
 #include <Core/PrepareKey.hpp>
 #include <Entities/EntityTypedef.hpp>
 #include <SpacePartitioning/LooseOctree.hh>

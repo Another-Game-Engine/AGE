@@ -6,8 +6,8 @@
 #include <Threads/ThreadManager.hpp>
 #include <Threads/RenderThread.hpp>
 #include <Threads/PrepareRenderThread.hpp>
-#include <Core/Commands/MainToPrepare.hpp>
-#include <Core/Commands/ToRender.hpp>
+#include <Threads/Commands/MainToPrepare.hpp>
+#include <Threads/Commands/ToRender.hpp>
 #include <Core/Tasks/Basics.hpp>
 #include <Core/Tasks/RenderTasks.hpp>
 #include <glm/glm.hpp>

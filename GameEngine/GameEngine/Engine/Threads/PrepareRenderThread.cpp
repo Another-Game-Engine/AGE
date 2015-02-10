@@ -6,7 +6,7 @@
 #include <Core/Tasks/MainToPrepare.hpp>
 #include <Core/Tasks/Basics.hpp>
 #include <Threads/RenderThread.hpp>
-#include <Core/Commands/ToRender.hpp>
+#include <Threads/Commands/ToRender.hpp>
 
 namespace AGE
 {

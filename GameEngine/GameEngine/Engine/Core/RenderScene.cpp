@@ -1,5 +1,5 @@
 #include <Core/RenderScene.hpp>
-#include <Core/Commands/ToRender.hpp>
+#include <Threads/Commands/ToRender.hpp>
 #include <Core/Tasks/RenderTasks.hpp>
 #include <Threads/PrepareRenderThread.hpp>
 #include <Threads/RenderThread.hpp>
@@ -459,7 +459,7 @@ namespace AGE
 							RenderPipeline *curRenderPipeline = &renderCamera.pipelines[0];
 							RenderPainter *curRenderPainter = nullptr;
 
-							for (auto &renderPainter : curRenderPipeline->painters)
+							for (auto &renderPainter : curRenderPipeline->keys)
 							{
 								if (renderPainter.painter == currentDrawable->mesh.painter)
 								{
@@ -469,11 +469,11 @@ namespace AGE
 							}
 							if (curRenderPainter == NULL)
 							{
-								curRenderPipeline->painters.emplace_back();
-								curRenderPainter = &curRenderPipeline->painters.back();
+								curRenderPipeline->keys.emplace_back();
+								curRenderPainter = &curRenderPipeline->keys.back();
 								curRenderPainter->painter = currentDrawable->mesh.painter;
 							}
-							// TODO: set property "transformation"
+							curRenderPainter->transformation.emplace_back(currentDrawable->mesh.transformation);
 							curRenderPainter->vertices.emplace_back(currentDrawable->mesh.vertices);
 						}
 						break;

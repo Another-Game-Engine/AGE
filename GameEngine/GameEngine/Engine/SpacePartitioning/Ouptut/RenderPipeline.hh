@@ -8,7 +8,7 @@ namespace AGE
 
 	struct RenderPipeline
 	{
-		std::vector<RenderPainter> painters;
+		std::vector<RenderPainter> keys;
 	};
 
 }

@@ -3,7 +3,7 @@
 #include <Context/SdlContext.hh>
 #include <Utils/ThreadName.hpp>
 #include <Core/Tasks/RenderTasks.hpp>
-#include <Core/Commands/ToRender.hpp>
+#include <Threads/Commands/ToRender.hpp>
 #include <Context/SdlContext.hh>
 #include <Utils/Containers/Vector.hpp>
 #include <Core/Tasks/Basics.hpp>
