@@ -32,16 +32,6 @@
 
 #include <Utils/FileSystem.hpp>
 
-
-///////////// FOR TEST ONLY TO REMOVE
-#include <Utils/ObjectPool.hpp>
-struct Prout
-{
-	int i;
-	char j;
-	char k[32];
-};
-
 namespace AGE
 {
 	const std::string AssetsEditorScene::Name = "AssetsEditor";
@@ -54,29 +44,6 @@ namespace AGE
 		_raw.list();
 		_cook.list();
 		AE::AssetFileManager::LinkRawToCooked(&_raw, &_cook);
-
-		AGE::ObjectPool<Prout> pool;
-		std::vector<Prout*> prout;
-		for (auto i = 0; i < 12000; ++i)
-		{
-			prout.push_back(pool.create());
-		}
-
-		for (auto i = 0; i < 12000; i += 2)
-		{
-			pool.destroy(prout[i]);
-		}
-
-		for (auto i = 0; i < 12000; i += 2)
-		{
-			prout[i] = pool.create();
-		}
-
-
-		for (auto i = 1; i < 12000; i += 2)
-		{
-			pool.destroy(prout[i]);
-		}
 	}
 
 	AssetsEditorScene::~AssetsEditorScene(void)
