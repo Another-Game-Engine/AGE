@@ -308,6 +308,7 @@
     <ClCompile Include="Engine\Utils\JsonSerializationBasicTypes.cpp" />
     <ClCompile Include="Engine\Utils\MathematicTools.cpp" />
     <ClCompile Include="Engine\Utils\MatrixConversion.cpp" />
+    <ClCompile Include="Engine\Utils\ObjectPool.cpp" />
     <ClCompile Include="Engine\Utils\Plane.cpp" />
     <ClCompile Include="Engine\Utils\ScreenPosToWorldRay.cpp" />
     <ClCompile Include="Engine\Utils\PerformanceDebugger.cpp" />
@@ -454,6 +455,7 @@
     <ClInclude Include="Engine\Utils\MatrixConversion.hpp" />
     <ClInclude Include="Engine\Utils\MemoryPool.hpp" />
     <ClInclude Include="Engine\Utils\MetaData.hpp" />
+    <ClInclude Include="Engine\Utils\ObjectPool.hpp" />
     <ClInclude Include="Engine\Utils\Plane.hh" />
     <ClInclude Include="Engine\Utils\PubSub.hpp" />
     <ClInclude Include="Engine\Utils\ScreenPosToWorldRay.hpp" />

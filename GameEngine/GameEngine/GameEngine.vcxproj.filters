@@ -97,6 +97,7 @@
     <ClCompile Include="Engine\Skinning\Bone.cpp" />
     <ClCompile Include="Engine\Utils\File.cpp" />
     <ClCompile Include="Engine\Utils\FileSystem.cpp" />
+    <ClCompile Include="Engine\Utils\ObjectPool.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -251,6 +252,7 @@
     <ClInclude Include="Engine\Utils\Serialization\SerializationMacros.hpp" />
     <ClInclude Include="Engine\Geometry\MaterialData.hpp" />
     <ClInclude Include="Engine\Utils\FileSystem.hpp" />
+    <ClInclude Include="Engine\Utils\ObjectPool.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />
