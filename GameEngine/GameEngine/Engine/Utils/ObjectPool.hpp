@@ -21,6 +21,14 @@ namespace AGE
 	class ObjectPool : public ObjectPoolBase
 	{
 	private:
+		struct ChunkHeader
+		{
+			ChunkHeader()
+				:used(false)
+			{}
+			bool used;
+		};
+
 		template <typename T>
 		struct Chunk
 		{
@@ -29,20 +37,49 @@ namespace AGE
 				, from(0)
 				, to(0)
 				, sizeOfT(0)
+				, sizeOfObj(0)
+				, blockNumber(0)
 			{
 			}
 
 			void init(std::size_t size)
 			{
 				assert(data == nullptr);
-				data = new char[sizeof(T) * size];
+
+				blockNumber = size;
+
+				auto headerSize = sizeof(ChunkHeader);
+
+				sizeOfT = sizeof(T);
+				sizeOfObj = sizeOfT + headerSize;
+
+				auto memSize = size * headerSize + size * sizeOfT;
+				data = new char[memSize];
 				for (auto i = 0; i < size; ++i)
 				{
+					new (data + sizeOfObj * i) ChunkHeader();
 					trash.push(i);
 				}
-				sizeOfT = sizeof(T);
 				from = (std::size_t)(data);
-				to = from + sizeOfT * size;
+				to = from + memSize;
+			}
+
+			void release()
+			{
+				if (data)
+				{
+					for (auto i = 0; i < blockNumber; ++i)
+					{
+						auto header = (ChunkHeader*)(data + i * sizeOfObj);
+						if (header->used)
+						{
+							auto ptr = (T*)(data + i * sizeOfObj + sizeof(ChunkHeader));
+							ptr->~T();
+						}
+					}
+					delete[]data;
+					data = nullptr;
+				}
 			}
 
 			Chunk(Chunk &&o)
@@ -50,11 +87,14 @@ namespace AGE
 				, from(0)
 				, to(0)
 				, sizeOfT(0)
+				, sizeOfObj(0)
 			{
 				std::swap(o.data, data);
 				sizeOfT = std::move(o.sizeOfT);
 				from = std::move(o.from);
 				to = std::move(o.to);
+				sizeOfObj = std::move(o.sizeOfObj);
+				blockNumber = std::move(o.blockNumber);
 			}
 
 			Chunk(const Chunk &o) = delete;
@@ -63,17 +103,33 @@ namespace AGE
 			
 			~Chunk()
 			{
-				if (data)
-				{
-					delete[]data;
-				}
+			}
+
+			void destroy(T *ptr)
+			{
+				ptr->~T();
+				auto addr = std::size_t(ptr);
+				((ChunkHeader*)((addr - sizeof(ChunkHeader))))->used = false;
+				trash.push((addr - from - sizeof(ChunkHeader)) / sizeOfObj);
+			}
+
+			T *create()
+			{
+				auto index = trash.front();
+				trash.pop();
+				Type *res = new (data + sizeOfObj * index + sizeof(ChunkHeader)) Type();
+				auto header = (ChunkHeader*)(std::size_t(res) - sizeof(ChunkHeader));
+				header->used = true;
+				return res;
 			}
 
 			char *data;
 			std::queue < std::size_t > trash;
 			std::size_t sizeOfT;
+			std::size_t sizeOfObj;
 			std::size_t from;
 			std::size_t to;
+			std::size_t blockNumber;
 			inline bool hasEmptyPlace() { return trash.size() > 0; }
 			inline bool isIn(std::size_t addr) { return from <= addr && to >= addr; }
 
@@ -85,8 +141,10 @@ namespace AGE
 
 		virtual ~ObjectPool()
 		{
-			// very very dirty
-			// for the moment it's leaking
+			for (auto &e : _chunks)
+			{
+				e.release();
+			}
 		}
 
 		virtual void destroy(void *ptr) final
@@ -103,8 +161,7 @@ namespace AGE
 			{
 				if (e.isIn(addr))
 				{
-					ptr->~Type();
-					e.trash.push((addr - e.from) / e.sizeOfT);
+					e.destroy(ptr);
 					return;
 				}
 			}
@@ -131,10 +188,7 @@ namespace AGE
 				chunk->init(_chunkSize);
 			}
 
-			auto index = chunk->trash.front();
-			chunk->trash.pop();
-			Type *res = new (chunk->data + chunk->sizeOfT * index) Type();
-			return res;
+			return chunk->create();
 		}
 
 		std::vector <Chunk<Type>> _chunks;
