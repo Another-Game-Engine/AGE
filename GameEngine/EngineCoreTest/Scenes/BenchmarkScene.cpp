@@ -518,6 +518,7 @@ namespace AGE
 	if (ImGui::Button("Save to json"))
 	{
 		saveToJson("SAVE_TO_JSON_TEST.json");
+		this->clearAllEntities();
 	}
 
 	// TODO

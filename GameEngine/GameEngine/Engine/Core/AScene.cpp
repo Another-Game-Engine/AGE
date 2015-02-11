@@ -164,14 +164,12 @@ namespace AGE
 
 	void AScene::clearAllEntities()
 	{
-		auto entityNbr = getNumberOfEntities();
-
-		// we list entities
-		auto ctr = 0;
-		for (auto &e : _entities)
+		auto copy = _entities;
+		for (auto &e : copy)
 		{
 			destroy(e);
 		}
+		_entities.clear();
 	}
 
 	void AScene::saveToJson(const std::string &fileName)
