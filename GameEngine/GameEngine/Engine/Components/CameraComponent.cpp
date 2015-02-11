@@ -8,7 +8,6 @@
 
 namespace AGE
 {
-
 	CameraComponent::CameraComponent()
 		: ComponentBase()
 	{

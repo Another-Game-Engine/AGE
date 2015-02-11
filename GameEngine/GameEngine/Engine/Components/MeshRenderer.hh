@@ -84,3 +84,4 @@ namespace AGE
 		ar(_serializationInfos);
 	}
 }
+

@@ -49,7 +49,7 @@ namespace AGE
 	public:
 		AScene(std::weak_ptr<AGE::Engine> engine);
 		virtual ~AScene();
-		inline std::uint16_t    getNumberOfEntities() const { return _entities.size(); }
+		inline std::size_t      getNumberOfEntities() const { return _entities.size(); }
 		virtual bool 			userStart() = 0;
 		virtual bool 			userUpdateBegin(double time) = 0;
 		virtual bool            userUpdateEnd(double time) = 0;
@@ -109,7 +109,6 @@ namespace AGE
 			}
 		}
 
-
 		template <typename T>
 		bool activateSystem()
 		{
@@ -136,54 +135,6 @@ namespace AGE
 		void loadFromJson(const std::string &fileName);
 		void saveToBinary(const std::string &fileName);
 		void loadFromBinary(const std::string &fileName);
-
-
-		template <typename Archive>
-		void save(std::ofstream &s)
-		{
-			// @ECS TODO
-
-			//Archive ar(s);
-
-			////// we save type database
-			////ar(cereal::make_nvp("Types_database", _typeDatabase));
-
-			//std::uint16_t entityNbr = getNumberOfEntities();
-
-			//ar(cereal::make_nvp("Number_of_serialized_entities", entityNbr));
-
-			//std::vector<EntityData> entities;
-
-			//// we list entities
-			//auto ctr = 0;
-			//for (auto &e : _entities)
-			//{
-			//	if (e.ptr->entity.isActive())
-			//	{
-			//		entities.push_back(*e.ptr);
-			//		++ctr;
-			//		if (ctr >= entityNbr)
-			//			break;
-			//	}
-			//}
-
-			//for (auto &e : entities)
-			//{
-			//	auto es = EntitySerializationInfos(e);
-			//	for (ComponentType i = 0; i < MAX_CPT_NUMBER; ++i)
-			//	{
-			//		if (e.barcode.hasComponent(i))
-			//		{
-			//			auto cpt = e.getComponent(i);
-			//			auto hash_code = getComponentHash(i);
-			//			es.componentsHash.push_back(hash_code);
-			//			es.components.push_back(e.getComponent(i));
-			//		}
-			//	}
-			//	ar(cereal::make_nvp("Entity_" + std::to_string(e.getEntity().getId()), es));
-			//	es.serializeComponents(ar, this);
-			//}
-		}
 
 		template <typename Archive>
 		void load(std::ifstream &s)
@@ -224,19 +175,6 @@ namespace AGE
 		////////////////////////
 		///////
 		// Component Manager Get / Set
-
-		template <typename T>
-		void registerComponentType()
-		{
-			// @ECS TODO
-
-			//ComponentType id = Component<T>::getTypeId();
-			//if (_componentsManagers[id] == nullptr)
-			//{
-			//	_componentsManagers[id] = new ComponentManager<T>(this);
-			//}
-			//REGISTER_COMPONENT_TYPE(T);
-		}
 
 		template <typename T>
 		void clearComponentsType()

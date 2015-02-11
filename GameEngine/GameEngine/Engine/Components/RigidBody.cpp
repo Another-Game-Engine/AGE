@@ -3,7 +3,6 @@
 #include <Physic/BulletDynamicManager.hpp>
 #include <Physic/DynamicMotionState.hpp>
 
-
 namespace AGE
 {
 	RigidBody::RigidBody()

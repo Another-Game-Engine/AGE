@@ -1,9 +1,9 @@
 #include <Components\SpotLight.hh>
 #include <glm/glm.hpp>
 
+
 namespace AGE
 {
-
 	SpotLightData::SpotLightData() { }
 
 	SpotLightData::SpotLightData(SpotLightData const &o)

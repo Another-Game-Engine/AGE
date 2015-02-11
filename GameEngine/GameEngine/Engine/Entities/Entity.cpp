@@ -32,6 +32,69 @@ namespace AGE
 
 	/////////////////////////////////////
 
+	Entity::Entity()
+		: id(0)
+		, version(0)
+		, flags(0)
+	{}
+
+	Entity::~Entity()
+	{}
+
+	Entity::Entity(const Entity &o)
+	{
+		id = o.id;
+		version = o.version;
+		flags = o.flags;
+		ptr = o.ptr;
+	}
+
+	Entity::Entity(Entity &&o)
+	{
+		id = std::move(o.id);
+		version = std::move(o.version);
+		flags = std::move(o.flags);
+		ptr = o.ptr;
+	}
+
+	Entity &Entity::operator=(const Entity &o)
+	{
+		id = o.id;
+		version = o.version;
+		flags = o.flags;
+		ptr = o.ptr;
+		return *this;
+	}
+
+	bool Entity::operator==(const Entity &o) const
+	{
+		return version == o.version && id == o.id;
+	}
+
+	bool Entity::operator!=(const Entity &o) const
+	{
+		return !(version == o.version && id == o.id);
+	}
+
+	bool Entity::operator<(const Entity &o) const
+	{
+		return id < o.id;
+	}
+
+	bool Entity::operator<=(const Entity &o) const
+	{
+		return id <= o.id;
+	}
+
+	bool Entity::operator>(const Entity &o) const
+	{
+		return id > o.id;
+	}
+
+	bool Entity::operator>=(const Entity &o) const
+	{
+		return id >= o.id;
+	}
 
 	Entity *Entity::getPtr()
 	{

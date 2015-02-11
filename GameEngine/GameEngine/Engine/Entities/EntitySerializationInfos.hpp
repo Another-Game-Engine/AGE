@@ -29,13 +29,19 @@ namespace AGE
 				);
 		}
 
-		template < typename Archive >
-		void serializeComponents(Archive &ar, AScene *scene) const
+		void serializeComponentsToJson(cereal::JSONOutputArchive &ar) const
 		{
-			// @ECS TODO
+			for (auto &e : components)
+			{
+				ComponentRegistrar::getInstance().serializeJson(e, ar);
+				//e->saveComponent(ar);
+			}
+		}
 
+		void serializeComponentsToBinary(cereal::PortableBinaryOutputArchive &ar) const
+		{
 			//for (auto &e : components)
-			//	e->serializeBase(ar, scene);
+			//	e->serializeBaseToBinary(ar);
 		}
 
 		template < typename Archive >

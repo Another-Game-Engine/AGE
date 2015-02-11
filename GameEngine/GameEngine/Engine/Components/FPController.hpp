@@ -137,3 +137,4 @@ namespace AGE
 		BulletDynamicManager *_manager;
 	};
 }
+

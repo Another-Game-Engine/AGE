@@ -9,6 +9,7 @@
 #include <Threads/ThreadManager.hpp>
 #include <Threads/MainThread.hpp>
 #include <Threads/PrepareRenderThread.hpp>
+#include <Components/ComponentRegistrar.hpp>
 
 namespace AGE
 {
@@ -177,7 +178,32 @@ namespace AGE
 	{
 		std::ofstream file(fileName, std::ios::binary);
 		assert(file.is_open());
-		save<cereal::JSONOutputArchive>(file);
+
+		auto ar = cereal::JSONOutputArchive(file);
+
+		std::uint16_t entityNbr = getNumberOfEntities();
+
+		ar(cereal::make_nvp("Number_of_serialized_entities", entityNbr));
+
+		std::vector<EntityData> entities;
+
+		for (auto &e : _entities)
+		{
+			auto es = EntitySerializationInfos(*e.ptr);
+			for (ComponentType i = 0; i < e.ptr->components.size(); ++i)
+			{
+				if (e.haveComponent(i))
+				{
+					auto cpt = e.ptr->getComponent(i);
+					auto hash_code = ComponentRegistrar::getInstance().getHashCodeForAgeTypeId(i);
+					es.componentsHash.push_back(hash_code);
+					es.components.push_back(e.ptr->getComponent(i));
+				}
+			}
+			ar(cereal::make_nvp("Entity_" + std::to_string(e.ptr->getEntity().getId()), es));
+			es.serializeComponentsToJson(ar);
+		}
+
 		file.close();
 	}
 
@@ -185,7 +211,7 @@ namespace AGE
 	{
 		std::ifstream file(fileName, std::ios::binary);
 		assert(file.is_open());
-		load<cereal::JSONInputArchive>(file);
+
 		file.close();
 	}
 
@@ -193,7 +219,7 @@ namespace AGE
 	{
 		std::ofstream file(fileName, std::ios::binary);
 		assert(file.is_open());
-		save<cereal::BinaryOutputArchive>(file);
+
 		file.close();
 	}
 
@@ -201,7 +227,7 @@ namespace AGE
 	{
 		std::ifstream file(fileName, std::ios::binary);
 		assert(file.is_open());
-		load<cereal::BinaryInputArchive>(file);
+
 		file.close();
 	}
 	///////////////////////////////////////////////////////////

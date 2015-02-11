@@ -7,9 +7,9 @@
 #include <Physic/BulletDynamicManager.hpp>
 #include <SDL/SDL.h>
 
+
 namespace AGE
 {
-
 	FPController::FPController() : ComponentBase()
 		, _controller(nullptr)
 		, _ghost(nullptr)

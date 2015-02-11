@@ -9,9 +9,9 @@
 #include <imgui\imgui.h>
 #include <glm/gtc/type_ptr.hpp>
 #endif
+
 namespace AGE
 {
-
 	PointLightComponent::PointLightComponent()
 		: _scene(nullptr)
 		, _range(1)

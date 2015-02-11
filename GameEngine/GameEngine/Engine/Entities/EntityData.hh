@@ -42,7 +42,6 @@ namespace AGE
 		AGE::Link link;
 		std::vector<ComponentBase*> components;
 		AScene *scene;
-
 	public:
 		friend AScene;
 		friend EntityFilter;

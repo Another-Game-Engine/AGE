@@ -49,5 +49,5 @@ namespace AGE
 	{
 		ar(cereal::make_nvp("color", _color), cereal::make_nvp("range", _range));
 	}
-
 }
+

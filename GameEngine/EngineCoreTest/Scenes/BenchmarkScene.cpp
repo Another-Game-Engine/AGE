@@ -180,10 +180,11 @@ namespace AGE
 		// We register component types so that we can load components from file
 		// It'll create the component manager for the scene and
 		// register the type in the global component register manager
-		registerComponentType<MeshRenderer>();
-		registerComponentType<Lifetime>();
-		registerComponentType<RigidBody>();
-		registerComponentType<PointLightComponent>();
+		REGISTER_COMPONENT_TYPE(MeshRenderer);
+		REGISTER_COMPONENT_TYPE(Lifetime);
+		REGISTER_COMPONENT_TYPE(RigidBody);
+		REGISTER_COMPONENT_TYPE(PointLightComponent);
+		REGISTER_COMPONENT_TYPE(CameraComponent);
 
 #ifdef PHYSIC_SIMULATION
 		setInstance<BulletDynamicManager, BulletCollisionManager>()->init();
@@ -513,6 +514,11 @@ namespace AGE
 		//}
 	}
 #endif
+
+	if (ImGui::Button("Save to json"))
+	{
+		saveToJson("SAVE_TO_JSON_TEST.json");
+	}
 
 	// TODO
 	AGE::GetPrepareThread()->getQueue()->emplaceCommand<AGE::Commands::MainToPrepare::PrepareDrawLists>();

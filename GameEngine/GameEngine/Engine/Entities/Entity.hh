@@ -26,89 +26,18 @@ namespace AGE
 	class Entity
 	{
 	public:
-		Entity()
-			: id(0)
-			, version(0)
-			, flags(0)
-		{}
+		Entity();
+		~Entity();
+		Entity(const Entity &o);
+		Entity(Entity &&o);
+		Entity &operator=(const Entity &o);
+		bool operator==(const Entity &o) const;
+		bool operator!=(const Entity &o) const;
+		bool operator<(const Entity &o) const;
+		bool operator<=(const Entity &o) const;
+		bool operator>(const Entity &o) const;
+		bool operator>=(const Entity &o) const;
 
-		~Entity()
-		{}
-
-		Entity(const Entity &o)
-		{
-			id = o.id;
-			version = o.version;
-			flags = o.flags;
-			ptr = o.ptr;
-		}
-
-		Entity(Entity &&o)
-		{
-			id = std::move(o.id);
-			version = std::move(o.version);
-			flags = std::move(o.flags);
-			ptr = o.ptr;
-		}
-
-		Entity &operator=(const Entity &o)
-		{
-			id = o.id;
-			version = o.version;
-			flags = o.flags;
-			ptr = o.ptr;
-			return *this;
-		}
-
-		bool operator==(const Entity &o) const
-		{
-			return version == o.version && id == o.id;
-		}
-
-		bool operator!=(const Entity &o) const
-		{
-			return !(version == o.version && id == o.id);
-		}
-
-		bool operator<(const Entity &o) const
-		{
-			return id < o.id;
-		}
-
-		bool operator<=(const Entity &o) const
-		{
-			return id <= o.id;
-		}
-
-		bool operator>(const Entity &o) const
-		{
-			return id > o.id;
-		}
-
-		bool operator>=(const Entity &o) const
-		{
-			return id >= o.id;
-		}
-
-		inline ENTITY_ID getId() const
-		{
-			return id;
-		}
-
-		inline ENTITY_VERSION getVersion() const
-		{
-			return version;
-		}
-
-		inline const ENTITY_FLAGS &getFlags() const
-		{
-			return flags;
-		}
-
-		inline ENTITY_FLAGS &setFlags()
-		{
-			return flags;
-		}
 
 		const AGE::Link &getLink() const;
 		AGE::Link &getLink();
@@ -143,6 +72,26 @@ namespace AGE
 		bool haveComponent() const
 		{
 			return ptr->haveComponent(Component<T>::getTypeId());
+		}
+
+		inline ENTITY_ID getId() const
+		{
+			return id;
+		}
+
+		inline ENTITY_VERSION getVersion() const
+		{
+			return version;
+		}
+
+		inline const ENTITY_FLAGS &getFlags() const
+		{
+			return flags;
+		}
+
+		inline ENTITY_FLAGS &setFlags()
+		{
+			return flags;
 		}
 	private:
 		ENTITY_ID id;
