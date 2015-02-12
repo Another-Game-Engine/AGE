@@ -30,7 +30,6 @@ namespace AGE
 			auto ptr = static_cast<T*>(voidPtr);
 			ptr->_typeId = id;
 			ptr->entity = entity;
-			ptr->init(entity.ptr->scene, args...);
 			return ptr;
 		}
 

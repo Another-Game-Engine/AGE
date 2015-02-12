@@ -11,8 +11,9 @@ namespace AGE
 {
 	class BulletDynamicManager;
 
-	ATTRIBUTE_ALIGNED16(struct) RigidBody : public ComponentBase
+	struct RigidBody : public ComponentBase
 	{
+		BT_DECLARE_ALIGNED_ALLOCATOR();
 		enum CollisionShape
 		{
 			SPHERE,
@@ -20,8 +21,18 @@ namespace AGE
 			MESH,
 			UNDEFINED
 		};
-
-		BT_DECLARE_ALIGNED_ALLOCATOR();
+	private:
+		ATTRIBUTE_ALIGNED16(btCollisionShape *_collisionShape);
+		ATTRIBUTE_ALIGNED16(btMotionState *_motionState);
+		ATTRIBUTE_ALIGNED16(btRigidBody *_rigidBody);
+		ATTRIBUTE_ALIGNED16(BulletDynamicManager *_manager);
+		ATTRIBUTE_ALIGNED16(btScalar _mass);
+		ATTRIBUTE_ALIGNED16(btVector3 _inertia);
+		ATTRIBUTE_ALIGNED16(glm::vec3 _rotationConstraint);
+		ATTRIBUTE_ALIGNED16(glm::vec3 _transformConstraint);
+		ATTRIBUTE_ALIGNED16(CollisionShape _shapeType);
+		ATTRIBUTE_ALIGNED16(std::string _shapeName);
+	public:
 		RigidBody();
 		void init(AScene *scene, float mass = 1.0f);
 		virtual void reset(AScene *scene);
@@ -69,19 +80,6 @@ namespace AGE
 		// !Serialization
 		////
 		//////
-
-
-	private:
-		btScalar _mass;
-		btVector3 _inertia;
-		glm::vec3 _rotationConstraint;
-		glm::vec3 _transformConstraint;
-		btCollisionShape *_collisionShape;
-		btMotionState *_motionState;
-		btRigidBody *_rigidBody;
-		BulletDynamicManager *_manager;
-		CollisionShape _shapeType;
-		std::string _shapeName;
 
 	private:
 		RigidBody &operator=(RigidBody const &o);

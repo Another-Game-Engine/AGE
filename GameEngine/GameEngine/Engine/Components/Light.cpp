@@ -44,8 +44,8 @@ namespace AGE
 
 	void PointLightComponent::reset(AScene *scene)
 	{
-		assert(!_key.invalid());
-		entity.getLink().unregisterOctreeObject(_key);
+		if (!_key.invalid())
+			entity.getLink().unregisterOctreeObject(_key);
 		_key = AGE::PrepareKey();
 		_color = glm::vec3(1);
 		_range = glm::vec3(1);

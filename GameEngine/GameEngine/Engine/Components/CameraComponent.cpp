@@ -55,8 +55,8 @@ namespace AGE
 
 	void CameraComponent::reset(AScene *scene)
 	{
-		assert(!_key.invalid());
-		entity.getLink().unregisterOctreeObject(_key);
+		if (_key.invalid())
+			entity.getLink().unregisterOctreeObject(_key);
 		_projection = glm::mat4(1);
 	}
 

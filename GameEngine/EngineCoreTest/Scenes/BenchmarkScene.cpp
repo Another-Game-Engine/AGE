@@ -288,7 +288,8 @@ namespace AGE
 	auto& _l = GLOBAL_SPONZA.getLink();
 	//_l->setPosition(glm::vec3(-5, 0, 0));
 	std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
-	GLOBAL_SPONZA.addComponent<RigidBody>(0.0f)->setCollisionMesh(weakOnThis, GLOBAL_SPONZA, "../../Assets/AGE-Assets-For-Test/Serialized/sponza/sponza_static.phage");
+	auto rb = GLOBAL_SPONZA.addComponent<RigidBody>(0.0f);
+	rb->setCollisionMesh(weakOnThis, GLOBAL_SPONZA, "../../Assets/AGE-Assets-For-Test/Serialized/sponza/sponza_static.phage");
 	_l.setScale(glm::vec3(10.f));
 	//_l->setOrientation(glm::quat(glm::vec3(Mathematic::degreeToRadian(-90), Mathematic::degreeToRadian(90), 0)));
 

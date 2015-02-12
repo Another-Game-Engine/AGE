@@ -14,8 +14,8 @@ namespace AGE
 #endif
 	{
 	protected:
-		Engine(Engine const &);
-		Engine &operator=(Engine const &);
+		Engine(Engine const &) = delete;
+		Engine &operator=(Engine const &) = delete;
 
 		Timer *_timer;
 	public:

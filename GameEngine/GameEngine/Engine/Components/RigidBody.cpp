@@ -32,23 +32,26 @@ namespace AGE
 		{
 			_manager->getWorld()->removeRigidBody(_rigidBody);
 			delete _rigidBody;
-			_rigidBody = nullptr;
 		}
+		_rigidBody = nullptr;
+
 		if (_motionState != nullptr)
 		{
 			delete _motionState;
-			_motionState = nullptr;
 		}
+		_motionState = nullptr;
+
 		if (_collisionShape != nullptr)
 		{
 			delete _collisionShape;
-			_collisionShape = nullptr;
 		}
+		_collisionShape = nullptr;
 
 		_shapeType = CollisionShape::UNDEFINED;
 		_mass = 0.0f;
 		_rotationConstraint = glm::vec3(1, 1, 1);
 		_transformConstraint = glm::vec3(1, 1, 1);
+		_inertia.setValue(0, 0, 0);
 	}
 
 	void RigidBody::setTransformation(const AGE::Link *link)
@@ -135,7 +138,7 @@ namespace AGE
 			auto m = dynamic_cast<btBvhTriangleMeshShape*>(media.get());
 			_collisionShape = new btScaledBvhTriangleMeshShape(m, btVector3(1, 1, 1));
 		}
-
+		
 		if (_mass != 0)
 			_collisionShape->calculateLocalInertia(_mass, _inertia);
 		_rigidBody = new btRigidBody(_mass, _motionState, _collisionShape, _inertia);
