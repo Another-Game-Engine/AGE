@@ -102,6 +102,7 @@ namespace AGE
 			if (!e.second->userUpdateEnd(time))
 				return false;
 		}
+		return true;
 	}
 
 	void SceneManager::getSceneList(std::vector<std::string> &list) const

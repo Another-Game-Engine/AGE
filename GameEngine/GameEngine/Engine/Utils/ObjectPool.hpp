@@ -35,6 +35,7 @@ namespace AGE
 		{
 			Chunk()
 				: data(nullptr)
+				, unalignedData(nullptr)
 				, from(0)
 				, to(0)
 				, sizeOfT(0)
@@ -55,7 +56,15 @@ namespace AGE
 				sizeOfObj = sizeOfT + headerSize;
 
 				auto memSize = size * headerSize + size * sizeOfT;
-				data = new char[memSize];
+				auto alignMemSize = memSize + 16;
+				unalignedData = new char[alignMemSize];
+
+				std::size_t mask = 16 - 1;
+				std::size_t misalignment = (std::size_t)(unalignedData) & mask;
+				auto adjustment = 16 - misalignment;
+				std::cout << mask << " " << misalignment << " " << adjustment;
+				data = (char*)(unalignedData + adjustment);
+
 				for (auto i = 0; i < size; ++i)
 				{
 					new (data + sizeOfObj * i) ChunkHeader();
@@ -67,7 +76,7 @@ namespace AGE
 
 			void release()
 			{
-				if (data)
+				if (unalignedData)
 				{
 					for (auto i = 0; i < blockNumber; ++i)
 					{
@@ -78,19 +87,22 @@ namespace AGE
 							ptr->~T();
 						}
 					}
-					delete[]data;
+					delete[]unalignedData;
+					unalignedData = nullptr;
 					data = nullptr;
 				}
 			}
 
 			Chunk(Chunk &&o)
 				: data(nullptr)
+				, unalignedData(nullptr)
 				, from(0)
 				, to(0)
 				, sizeOfT(0)
 				, sizeOfObj(0)
 			{
 				std::swap(o.data, data);
+				std::swap(o.unalignedData, unalignedData);
 				sizeOfT = std::move(o.sizeOfT);
 				from = std::move(o.from);
 				to = std::move(o.to);
@@ -125,6 +137,7 @@ namespace AGE
 			}
 
 			char *data;
+			char *unalignedData;
 			std::queue < std::size_t > trash;
 			std::size_t sizeOfT;
 			std::size_t sizeOfObj;

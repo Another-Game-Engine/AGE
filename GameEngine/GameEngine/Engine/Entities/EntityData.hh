@@ -30,7 +30,7 @@ namespace AGE
 				return static_cast<T*>(getComponent(id));
 			if (components.size() <= id)
 				components.resize(id + 1, nullptr);
-			auto ptr = scene->createComponent<T>(entity, args...);
+			T *ptr = scene->createComponent<T>(entity, args...);
 			components[id] = ptr;
 			scene->informFiltersComponentAddition(id, *this);
 			ptr->reset(scene);

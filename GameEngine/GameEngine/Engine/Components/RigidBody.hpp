@@ -13,7 +13,6 @@ namespace AGE
 
 	struct RigidBody : public ComponentBase
 	{
-		BT_DECLARE_ALIGNED_ALLOCATOR();
 		enum CollisionShape
 		{
 			SPHERE,
@@ -22,16 +21,16 @@ namespace AGE
 			UNDEFINED
 		};
 	private:
-		ATTRIBUTE_ALIGNED16(btCollisionShape *_collisionShape);
-		ATTRIBUTE_ALIGNED16(btMotionState *_motionState);
-		ATTRIBUTE_ALIGNED16(btRigidBody *_rigidBody);
-		ATTRIBUTE_ALIGNED16(BulletDynamicManager *_manager);
-		ATTRIBUTE_ALIGNED16(btScalar _mass);
-		ATTRIBUTE_ALIGNED16(btVector3 _inertia);
-		ATTRIBUTE_ALIGNED16(glm::vec3 _rotationConstraint);
-		ATTRIBUTE_ALIGNED16(glm::vec3 _transformConstraint);
-		ATTRIBUTE_ALIGNED16(CollisionShape _shapeType);
-		ATTRIBUTE_ALIGNED16(std::string _shapeName);
+		btCollisionShape *_collisionShape;
+		btMotionState *_motionState;
+		btRigidBody *_rigidBody;
+		BulletDynamicManager *_manager;
+		btScalar _mass;
+		btVector3 _inertia;
+		glm::vec3 _rotationConstraint;
+		glm::vec3 _transformConstraint;
+		CollisionShape _shapeType;
+		std::string _shapeName;
 	public:
 		RigidBody();
 		void init(AScene *scene, float mass = 1.0f);
@@ -57,8 +56,8 @@ namespace AGE
 		void setRotationConstraint(bool x, bool y, bool z);
 		void setTransformConstraint(bool x, bool y, bool z);
 		virtual ~RigidBody(void);
-		RigidBody(RigidBody &&o);
-		RigidBody &operator=(RigidBody &&o);
+		RigidBody(RigidBody &&o) = delete;
+		RigidBody &operator=(RigidBody &&o) = delete;
 		//////
 		////
 		// Serialization

@@ -7,15 +7,16 @@ namespace AGE
 {
 	RigidBody::RigidBody()
 		: ComponentBase(),
-		_shapeType(CollisionShape::UNDEFINED),
+		_collisionShape(nullptr),
+		_motionState(nullptr),
+		_rigidBody(nullptr),
+		_manager(nullptr),
 		_mass(0.0f),
 		_inertia(btVector3(0.0f, 0.0f, 0.0f)),
 		_rotationConstraint(glm::vec3(1, 1, 1)),
 		_transformConstraint(glm::vec3(1, 1, 1)),
-		_shapeName(""),
-		_collisionShape(nullptr),
-		_motionState(nullptr),
-		_rigidBody(nullptr)
+		_shapeType(CollisionShape::UNDEFINED),
+		_shapeName("")
 	{
 	}
 
@@ -124,7 +125,7 @@ namespace AGE
 		_shapeType = MESH;
 
 		auto e = entity;
-		_motionState = new DynamicMotionState(&e.getLink());
+		_motionState = new DynamicMotionState(&this->entity.getLink());
 		auto media = _manager->loadShape(meshPath);
 		if (!media)
 			return;
@@ -136,11 +137,20 @@ namespace AGE
 		else // static
 		{
 			auto m = dynamic_cast<btBvhTriangleMeshShape*>(media.get());
+			std::cout << std::endl << m << std::endl;
 			_collisionShape = new btScaledBvhTriangleMeshShape(m, btVector3(1, 1, 1));
 		}
 		
 		if (_mass != 0)
 			_collisionShape->calculateLocalInertia(_mass, _inertia);
+		if (((size_t)(this) & 0x3) == 0)
+		{
+			int i = 0;
+		}
+		else
+		{
+		//	assert(false);
+		}
 		_rigidBody = new btRigidBody(_mass, _motionState, _collisionShape, _inertia);
 		_rigidBody->setUserPointer((void*)(entity.getPtr()));
 		_rigidBody->setAngularFactor(convertGLMVectorToBullet(_rotationConstraint));
@@ -237,35 +247,5 @@ namespace AGE
 
 	RigidBody::~RigidBody(void)
 	{
-	}
-
-	RigidBody::RigidBody(RigidBody &&o)
-		: ComponentBase(std::move(o))
-	{
-		_shapeType = std::move(o._shapeType);
-		_mass = std::move(o._mass);
-		_inertia = std::move(o._inertia);
-		_rotationConstraint = std::move(o._rotationConstraint);
-		_transformConstraint = std::move(o._transformConstraint);
-		_shapeName = std::move(o._shapeName);
-		_collisionShape = std::move(o._collisionShape);
-		_motionState = std::move(o._motionState);
-		_rigidBody = std::move(o._rigidBody);
-		_manager = std::move(o._manager);
-	}
-
-	RigidBody &RigidBody::operator=(RigidBody &&o)
-	{
-		_shapeType = std::move(o._shapeType);
-		_mass = std::move(o._mass);
-		_inertia = std::move(o._inertia);
-		_rotationConstraint = std::move(o._rotationConstraint);
-		_transformConstraint = std::move(o._transformConstraint);
-		_shapeName = std::move(o._shapeName);
-		_collisionShape = std::move(o._collisionShape);
-		_motionState = std::move(o._motionState);
-		_rigidBody = std::move(o._rigidBody);
-		_manager = std::move(o._manager);
-		return *this;
 	}
 }
