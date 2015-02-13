@@ -120,6 +120,8 @@ namespace AGE
 
 			void destroy(T *ptr)
 			{
+				delete ptr;
+				return;
 				ptr->~T();
 				auto addr = std::size_t(ptr);
 				((ChunkHeader*)((addr - sizeof(ChunkHeader))))->used = false;
@@ -128,6 +130,7 @@ namespace AGE
 
 			T *create()
 			{
+				return new T();
 				auto index = trash.front();
 				trash.pop();
 				Type *res = new (data + sizeOfObj * index + sizeof(ChunkHeader)) Type();
