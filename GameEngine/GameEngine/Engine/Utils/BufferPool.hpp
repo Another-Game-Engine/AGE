@@ -76,7 +76,8 @@ namespace AGE
 			_freeObjectNumber += _objectPerChunk;
 			++_chunksNumber;
 
-			auto data = (unsigned char*)(newChunk + _chunkAlignement + 1);
+			auto data = (unsigned char*)(newChunk + 1);
+			data += _chunkAlignement;
 
 			for (std::size_t i = 0; i < _objectPerChunk; ++i)
 			{
