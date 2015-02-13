@@ -9,7 +9,7 @@ namespace AGE
 	class ComponentManager
 	{
 	private:
-		std::vector<std::shared_ptr<ObjectPoolBase>> _pools;
+		std::vector<std::shared_ptr<IObjectPool>> _pools;
 	public:
 		template <typename T, typename... Args>
 		T *createComponent(const Entity &entity, Args &&...args)
@@ -25,9 +25,8 @@ namespace AGE
 			{
 				_pools[id] = std::make_shared<ObjectPool<T>>();
 			}
-			auto pool = _pools[id];
-			auto voidPtr = pool->createVoidPtr();
-			auto ptr = static_cast<T*>(voidPtr);
+			auto pool = (ObjectPool<T>*)_pools[id].get();
+			auto ptr = pool->create();
 			ptr->_typeId = id;
 			ptr->entity = entity;
 			return ptr;

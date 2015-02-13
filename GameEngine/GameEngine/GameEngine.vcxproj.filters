@@ -256,6 +256,7 @@
     <ClInclude Include="Engine\Utils\ObjectPool.hpp" />
     <ClInclude Include="Engine\Components\ComponentManager.hpp" />
     <ClInclude Include="Engine\Entities\EntityData.hh" />
+    <ClInclude Include="Engine\Utils\BufferPool.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />
