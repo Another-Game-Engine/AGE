@@ -22,6 +22,7 @@ namespace AGE
 			, _objectSize(0)
 			, _chunksNumber(0)
 			, _freeObjectNumber(0)
+			, _objectNumber(0)
 			, _chunkAlignement(0)
 			, _objectAlignement(0)
 		{}
@@ -61,6 +62,7 @@ namespace AGE
 		std::size_t _objectSize;
 		std::size_t _chunksNumber;
 		std::size_t _freeObjectNumber;
+		std::size_t _objectNumber;
 		std::size_t _chunkAlignement;
 		std::size_t _objectAlignement;
 
@@ -106,6 +108,8 @@ namespace AGE
 					auto ptr = e->emptySlotsList.pop();
 					--e->emptySlotsNumber;
 					--_freeObjectNumber;
+					++_objectNumber;
+
 					addr = ptr;
 					return true;
 				}
@@ -122,15 +126,30 @@ namespace AGE
 			++chunk->emptySlotsNumber;
 			chunk->emptySlotsList.push((Link*)(addr));
 			++_freeObjectNumber;
+			--_objectNumber;
+
+			if (chunk != _chunks.front())
+			{
+				_chunks.remove(chunk);
+				_chunks.push_front(chunk);
+			}
+
+			if (chunk->emptySlotsNumber == _objectPerChunk)
+			{
+				delete[](unsigned char *)(chunk);
+				_chunks.pop_front();
+				_freeObjectNumber -= _objectPerChunk;
+			}
+
 			return false;
 		}
 
 		void _destroy()
 		{
-			//for (auto &e : _chunks)
-			//{
-			//	delete[](unsigned char *)e;
-			//}
+			for (auto &e : _chunks)
+			{
+				delete[](unsigned char *)e;
+			}
 		}
 		inline std::size_t _getChunkSize() const { return _chunkAlignement + sizeof(Chunk) + _objectPerChunk * (_objectSize + _objectAlignement + sizeof(ChunkHeader)); }
 

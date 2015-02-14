@@ -21,6 +21,7 @@ namespace AGE
 		}
 		virtual ~ObjectPool()
 		{
+			assert(_objectNumber == 0 && "All object has not been destroyed ! Memory Leak !");
 		}
 
 		T *create()
