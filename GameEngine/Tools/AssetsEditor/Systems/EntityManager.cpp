@@ -51,7 +51,8 @@ namespace AGE
 							e.getLink().setScale(cpt->scale);
 						}
 
-						for (ComponentType i = 0; i < MAX_CPT_NUMBER; ++i)
+						auto &components = e.getComponentList();
+						for (ComponentType i = 0; i < components.size(); ++i)
 						{
 							if (e.haveComponent(i))
 							{
@@ -73,6 +74,20 @@ namespace AGE
 										}
 										ImGui::TreePop();
 									}
+								}
+							}
+						}
+
+						auto &types = ComponentRegistrar::getInstance().getComponentsTypesMap();
+						auto &creationFn = ComponentRegistrar::getInstance().getCreationFunctions();
+
+						for (auto &t : types)
+						{
+							if (!e.haveComponent(t.second))
+							{
+								if (ImGui::Button(std::string("Add : " + ComponentRegistrar::getInstance().getComponentName(t.second)).c_str()))
+								{
+									creationFn.at(t.first)(&e);
 								}
 							}
 						}

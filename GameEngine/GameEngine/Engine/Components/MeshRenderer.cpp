@@ -44,7 +44,7 @@ namespace AGE
 		return *this;
 	}
 
-	void MeshRenderer::init(AScene *scene, std::shared_ptr<AGE::MeshInstance> r)
+	void MeshRenderer::init(AScene *scene, std::shared_ptr<AGE::MeshInstance> r /* = nullptr */)
 	{
 		_scene = scene;
 		setMesh(r);
@@ -60,6 +60,8 @@ namespace AGE
 
 	MeshRenderer &MeshRenderer::setMesh(const std::shared_ptr<AGE::MeshInstance> &mesh)
 	{
+		if (!mesh)
+			return (*this);
 		_mesh = mesh;
 		_key = AGE::GetPrepareThread()->addMesh();
 		entity.getLink().registerOctreeObject(_key);

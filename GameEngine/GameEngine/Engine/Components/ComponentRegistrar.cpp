@@ -7,7 +7,7 @@ namespace AGE
 
 	ComponentRegistrar::~ComponentRegistrar()
 	{
-		_collection.clear();
-		_typeId.clear();
+		_creationFunctions.clear();
+		_typeIds.clear();
 	}
 }

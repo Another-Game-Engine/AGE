@@ -39,6 +39,10 @@ namespace AGE
 		}
 		void removeComponent(ComponentType id);
 		bool haveComponent(ComponentType id) const;
+		const std::vector<ComponentBase*> &getComponentList() const
+		{
+			return components;
+		}
 	private:
 		Entity entity;
 		AGE::Link link;

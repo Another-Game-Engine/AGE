@@ -93,6 +93,8 @@ namespace AGE
 		{
 			return flags;
 		}
+
+		const std::vector<ComponentBase*> &getComponentList() const;
 	private:
 		ENTITY_ID id;
 		ENTITY_VERSION version;

@@ -130,4 +130,9 @@ namespace AGE
 	{
 		return ptr->haveComponent(id);
 	}
+
+	const std::vector<ComponentBase*> &Entity::getComponentList() const
+	{
+		return ptr->getComponentList();
+	}
 }

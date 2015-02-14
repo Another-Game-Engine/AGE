@@ -21,7 +21,7 @@ namespace AGE
 		MeshRenderer(MeshRenderer &&o);
 		MeshRenderer &operator=(MeshRenderer &&o);
 
-		void init(AScene *, std::shared_ptr<AGE::MeshInstance> file);
+		void init(AScene *, std::shared_ptr<AGE::MeshInstance> file = nullptr);
 		virtual void reset(AScene *);
 
 		template <typename Archive> void save(Archive &ar) const;

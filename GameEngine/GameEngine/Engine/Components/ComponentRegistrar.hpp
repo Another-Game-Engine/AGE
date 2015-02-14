@@ -41,11 +41,11 @@ namespace AGE
 		{
 			std::size_t key = typeid(T).hash_code();
 			auto ageId = Component<T>::getTypeId();
-			auto it = _collection.find(key);
-			if (it != std::end(_collection))
+			auto it = _creationFunctions.find(key);
+			if (it != std::end(_creationFunctions))
 				return;
-			_collection.insert(std::make_pair(key, [](){auto r = new T(); return r; }));
-			_typeId.insert(std::make_pair(key, ageId));
+			_creationFunctions.insert(std::make_pair(key, [](Entity *e){return e->addComponent<T>(); }));
+			_typeIds.insert(std::make_pair(key, ageId));
 			_ageTypeIds.insert(std::make_pair(ageId, key));
 
 			_jsonSaveMap.insert(std::make_pair(ageId, RegisterJsonFn([](ComponentBase *c, cereal::JSONOutputArchive &ar)
@@ -97,8 +97,11 @@ namespace AGE
 			return nullptr;
 		}
 
-		std::map<std::size_t, std::function<ComponentBase*()>> _collection;
-		std::map<std::size_t, std::size_t> _typeId;
+		inline const std::map<std::size_t, std::function<ComponentBase*(Entity *)>> &getCreationFunctions() { return _creationFunctions; }
+		inline const std::map<std::size_t, ComponentType> &getComponentsTypesMap() const { return _typeIds; }
+	private:
+		std::map<std::size_t, std::function<ComponentBase*(Entity *)>> _creationFunctions;
+		std::map<std::size_t, ComponentType> _typeIds;
 		std::map<ComponentType, std::size_t> _ageTypeIds;
 		std::map < ComponentType, RegisterJsonFn> _jsonSaveMap;
 		std::map < ComponentType, RegisterBinaryFn> _binarySaveMap;

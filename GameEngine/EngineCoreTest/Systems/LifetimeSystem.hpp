@@ -30,7 +30,7 @@ namespace AGE
 			return *this;
 		}
 
-		void init(AScene *, float t)
+		void init(AScene *, float t = 1.0f)
 		{
 			_t = t;
 		}
