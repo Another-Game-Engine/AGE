@@ -56,5 +56,10 @@ namespace AGE
 			static ComponentType type = _typeCounter++;
 			return type;
 		}
+
+		static const char *getName()
+		{
+			return typeid(Cpt).name();
+		}
 	};
 }

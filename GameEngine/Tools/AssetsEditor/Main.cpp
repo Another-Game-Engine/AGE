@@ -31,6 +31,18 @@
 #include <Scenes/SceneSelectorScene.hpp>
 #include <Scenes/WorldEditorScene.hpp>
 
+//COMPONENT REGISTRAR
+#include <Components/ComponentRegistrar.hpp>
+
+//COMPONENTS
+#include <Components/CameraComponent.hpp>
+#include <Components/FPController.hpp>
+#include <Components/MeshRenderer.hh>
+#include <Components/Light.hh>
+#include <Components/EntityRepresentation.hpp>
+#include <Components/RigidBody.hpp>
+#include <Components/SpotLight.hh>
+
 int			main(int ac, char **av)
 {
 	AGE::InitAGE();
@@ -51,6 +63,12 @@ int			main(int ac, char **av)
 		if (!loadAssets(engine.lock().get()))
 			return false;
 #endif
+
+		REGISTER_COMPONENT_TYPE(AGE::MeshRenderer);
+		REGISTER_COMPONENT_TYPE(AGE::RigidBody);
+		REGISTER_COMPONENT_TYPE(AGE::PointLightComponent);
+		REGISTER_COMPONENT_TYPE(AGE::CameraComponent);
+
 		engine.lock()->addScene(std::make_shared<AGE::AssetsEditorScene>(engine), AGE::AssetsEditorScene::Name);
 		engine.lock()->addScene(std::make_shared<AGE::SceneSelectorScene>(engine), AGE::SceneSelectorScene::Name);
 		engine.lock()->addScene(std::make_shared<AGE::WorldEditorScene>(engine), AGE::WorldEditorScene::Name);

@@ -5,6 +5,8 @@
 #include <Components/Component.hh>
 #include <Entities/EntityTypedef.hpp>
 
+#define TYPE_TO_STRING(T)(#T);
+
 namespace AGE
 {
 	class AScene;
@@ -35,7 +37,7 @@ namespace AGE
 		}
 
 		template <class T>
-		void registerComponentType()
+		void registerComponentType(const char *name)
 		{
 			std::size_t key = typeid(T).hash_code();
 			auto ageId = Component<T>::getTypeId();
@@ -54,6 +56,13 @@ namespace AGE
 			{
 				ar(*(static_cast<T*>(c)));
 			})));
+
+			_componentNames.insert(std::make_pair(ageId, name));
+		}
+
+		const std::string &getComponentName(ComponentType type)
+		{
+			return _componentNames[type];
 		}
 
 		void serializeJson(ComponentBase *c, cereal::JSONOutputArchive &ar)
@@ -93,7 +102,8 @@ namespace AGE
 		std::map<ComponentType, std::size_t> _ageTypeIds;
 		std::map < ComponentType, RegisterJsonFn> _jsonSaveMap;
 		std::map < ComponentType, RegisterBinaryFn> _binarySaveMap;
+		std::map < ComponentType, std::string> _componentNames;
 	};
 }
 
-#define REGISTER_COMPONENT_TYPE(T)(ComponentRegistrar::getInstance().registerComponentType<T>());
+#define REGISTER_COMPONENT_TYPE(T)(AGE::ComponentRegistrar::getInstance().registerComponentType<T>(#T));

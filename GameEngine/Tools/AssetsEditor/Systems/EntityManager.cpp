@@ -2,6 +2,7 @@
 #include <imgui/imgui.h>
 #include <Components/EntityRepresentation.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <Components/ComponentRegistrar.hpp>
 
 //FOR TEST ! TO REMOVE
 #include <Components/Light.hh>
@@ -57,7 +58,7 @@ namespace AGE
 								auto ptr = e.getComponent(i);
 								if (ptr->exposedInEditor)
 								{
-									if (ImGui::TreeNode("Component Name TODO"))
+									if (ImGui::TreeNode(ComponentRegistrar::getInstance().getComponentName(ptr->getType()).c_str()))
 									{
 										ptr->editorUpdate(scene.get());
 										if (ptr->deletableInEditor)
