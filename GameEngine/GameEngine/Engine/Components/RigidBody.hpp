@@ -2,6 +2,7 @@
 
 #include <btBulletDynamicsCommon.h>
 #include <Components/Component.hh>
+#include <Utils/UniqueTypeId.hpp>
 
 class btCollisionShape;
 class btMotionState;
@@ -15,12 +16,12 @@ namespace AGE
 	{
 		enum CollisionShape
 		{
-			SPHERE,
-			BOX,
-			MESH,
-			UNDEFINED
+			SPHERE = 0,
+			BOX = 1,
+			UNDEFINED = 2
 		};
 	private:
+
 		btCollisionShape *_collisionShape;
 		btMotionState *_motionState;
 		btRigidBody *_rigidBody;
@@ -29,8 +30,10 @@ namespace AGE
 		btVector3 _inertia;
 		glm::vec3 _rotationConstraint;
 		glm::vec3 _transformConstraint;
-		CollisionShape _shapeType;
+		UniqueTypeId _shapeType;
 		std::string _shapeName;
+
+		void _clearBulletObjects();
 	public:
 		RigidBody();
 		void init(AScene *scene, float mass = 1.0f);

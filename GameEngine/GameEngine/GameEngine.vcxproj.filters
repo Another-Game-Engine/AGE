@@ -99,6 +99,7 @@
     <ClCompile Include="Engine\Utils\FileSystem.cpp" />
     <ClCompile Include="Engine\Utils\ObjectPool.cpp" />
     <ClCompile Include="Engine\Entities\Entity.cpp" />
+    <ClCompile Include="Engine\Utils\UniqueTypeId.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -257,6 +258,8 @@
     <ClInclude Include="Engine\Components\ComponentManager.hpp" />
     <ClInclude Include="Engine\Entities\EntityData.hh" />
     <ClInclude Include="Engine\Utils\BufferPool.hpp" />
+    <ClInclude Include="Engine\Utils\MultiTypeObjectPool.hpp" />
+    <ClInclude Include="Engine\Utils\UniqueTypeId.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />
