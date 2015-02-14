@@ -7,7 +7,7 @@
 #include <AssetManagement/AssetManager.hh>
 #include <Threads/RenderThread.hpp>
 #include <Utils/Age_Imgui.hpp>
-#include <Core/Tasks/Basics.hpp>
+#include <Threads/Tasks/BasicTasks.hpp>
 #include <Threads/TaskScheduler.hpp>
 #include <Core/Input.hh>
 #include <SDL/SDL.h>
@@ -27,7 +27,6 @@
 #include <AssetFiles/RawFile.hpp>
 #include <AssetFiles/AssetFileManager.hpp>
 #include <AssetFiles/CookedFile.hpp>
-
 #include <AssetFiles/AssetsTypes.hpp>
 
 #include <Utils/FileSystem.hpp>
@@ -111,150 +110,6 @@ namespace AGE
 		{
 			if (_selectedRaw != nullptr)
 			{
-<<<<<<< HEAD
-				slowTouch = true;
-				// CATWOMAN
-				AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=](){
-					std::shared_ptr<AGE::AssetDataSet> dataSet = std::make_shared<AGE::AssetDataSet>();
-					dataSet->filePath = File("catwoman/catwoman.fbx");
-					dataSet->skeletonName = "catwoman";
-					dataSet->animationName = "catwoman-roulade";
-					dataSet->skinName = "catwoman";
-					dataSet->materialName = "catwoman";
-
-					dataSet->serializedDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>("../../Assets/AGE-Assets-For-Test/Serialized");
-					dataSet->rawDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>("../../Assets/AGE-Assets-For-Test/Raw");
-
-					AGE::AssimpLoader::Load(*dataSet.get());
-
-					AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=](){
-						AGE::MaterialLoader::load(*dataSet.get());
-						AGE::ImageLoader::load(*dataSet.get());
-						AGE::SkeletonLoader::load(*dataSet.get());
-						AGE::AnimationsLoader::load(*dataSet.get());
-						AGE::MeshLoader::load(*dataSet.get());
-						AGE::MaterialLoader::save(*dataSet.get());
-						AGE::ImageLoader::save(*dataSet.get());
-						AGE::MeshLoader::save(*dataSet.get());
-						AGE::SkeletonLoader::save(*dataSet.get());
-						AGE::AnimationsLoader::save(*dataSet.get());
-					});
-				});
-				//SPONZA
-				AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=](){
-					std::shared_ptr<AGE::AssetDataSet> dataSet = std::make_shared<AGE::AssetDataSet>();
-					dataSet->filePath = File("sponza/sponza.obj");
-					dataSet->skinName = "sponza";
-					dataSet->materialName = "sponza";
-
-					dataSet->serializedDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>("../../Assets/AGE-Assets-For-Test/Serialized");
-					dataSet->rawDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>("../../Assets/AGE-Assets-For-Test/Raw");
-
-					AGE::AssimpLoader::Load(*dataSet.get());
-					AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=](){
-						AGE::MaterialLoader::load(*dataSet.get());
-						AGE::MaterialLoader::save(*dataSet.get());
-
-						AGE::ImageLoader::load(*dataSet.get());
-						AGE::ImageLoader::save(*dataSet.get());
-
-						AGE::MeshLoader::load(*dataSet.get());
-						AGE::MeshLoader::save(*dataSet.get());
-					});
-				});
-				//CUBE
-				AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=](){
-					std::shared_ptr<AGE::AssetDataSet> dataSet = std::make_shared<AGE::AssetDataSet>();
-					dataSet->filePath = File("cube/cube.obj");
-					dataSet->skinName = "cube";
-					dataSet->materialName = "cube";
-
-					dataSet->serializedDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>("../../Assets/AGE-Assets-For-Test/Serialized");
-					dataSet->rawDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>("../../Assets/AGE-Assets-For-Test/Raw");
-
-					AGE::AssimpLoader::Load(*dataSet.get());
-
-					AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=](){
-						AGE::MaterialLoader::load(*dataSet.get());
-						AGE::MaterialLoader::save(*dataSet.get());
-
-						AGE::ImageLoader::load(*dataSet.get());
-						AGE::ImageLoader::save(*dataSet.get());
-
-						AGE::MeshLoader::load(*dataSet.get());
-						AGE::MeshLoader::save(*dataSet.get());
-					});
-				});
-				//BALL
-				AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=](){
-					std::shared_ptr<AGE::AssetDataSet> dataSet = std::make_shared<AGE::AssetDataSet>();
-					dataSet->filePath = File("ball/ball.obj");
-					dataSet->skinName = "ball";
-					dataSet->materialName = "ball";
-
-					dataSet->serializedDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>("../../Assets/AGE-Assets-For-Test/Serialized");
-					dataSet->rawDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>("../../Assets/AGE-Assets-For-Test/Raw");
-
-					AGE::AssimpLoader::Load(*dataSet.get());
-
-					AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=](){
-						AGE::MaterialLoader::load(*dataSet.get());
-						AGE::MaterialLoader::save(*dataSet.get());
-
-						AGE::ImageLoader::load(*dataSet.get());
-						AGE::ImageLoader::save(*dataSet.get());
-
-						AGE::MeshLoader::load(*dataSet.get());
-						AGE::MeshLoader::save(*dataSet.get());
-					});
-				});
-				//BROKEN TOWER
-				//AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=](){
-				//	std::shared_ptr<AGE::AssetDataSet> dataSet = std::make_shared<AGE::AssetDataSet>();
-				//	dataSet->filePath = File("Broken Tower/Broken Tower.fbx");
-				//	dataSet->skinName = "tower";
-				//	dataSet->materialName = "tower";
-				//
-				//	dataSet->serializedDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>("../../Assets/AGE-Assets-For-Test/Serialized");
-				//	dataSet->rawDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>("../../Assets/AGE-Assets-For-Test/Raw");
-				//
-				//	AGE::AssimpLoader::Load(*dataSet.get());
-				//
-				//	AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=](){
-				//		AGE::MaterialLoader::load(*dataSet.get());
-				//		AGE::MaterialLoader::save(*dataSet.get());
-				//
-				//		AGE::ImageLoader::load(*dataSet.get());
-				//		AGE::ImageLoader::save(*dataSet.get());
-				//
-				//		AGE::MeshLoader::load(*dataSet.get());
-				//		AGE::MeshLoader::save(*dataSet.get());
-				//	});
-				//});
-				//VENICE
-				//AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=](){
-				//	std::shared_ptr<AGE::AssetDataSet> dataSet = std::make_shared<AGE::AssetDataSet>();
-				//	dataSet->filePath = File("Venice/venice.obj");
-				//	dataSet->skinName = "venice";
-				//	dataSet->materialName = "venice";
-
-				//	dataSet->serializedDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>("../../Assets/AGE-Assets-For-Test/Serialized");
-				//	dataSet->rawDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>("../../Assets/AGE-Assets-For-Test/Raw");
-
-				//	AGE::AssimpLoader::Load(*dataSet.get());
-
-				//	AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=](){
-				//		AGE::MaterialLoader::load(*dataSet.get());
-				//		AGE::MaterialLoader::save(*dataSet.get());
-
-				//		AGE::ImageLoader::load(*dataSet.get());
-				//		AGE::ImageLoader::save(*dataSet.get());
-
-				//		AGE::MeshLoader::load(*dataSet.get());
-				//		AGE::MeshLoader::save(*dataSet.get());
-				//	});
-				//});
-=======
 				if (_selectedRaw->dataSet == nullptr)
 				{
 					auto path = _selectedRaw->getPath();
@@ -384,7 +239,6 @@ namespace AGE
 				{
 					ImGui::TextColored(ImVec4(1, 0, 0, 1), "Currently cooking : %s", _selectedRaw->getFileName().c_str());
 				}
->>>>>>> prod_graphic
 			}
 		}
 		ImGui::EndChild();

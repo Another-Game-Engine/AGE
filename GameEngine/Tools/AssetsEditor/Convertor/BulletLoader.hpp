@@ -5,7 +5,7 @@
 
 #include <map>
 #include <Skinning/Skeleton.hpp>
-#include <Geometry/Mesh.hpp>
+#include <AssetManagement/Data/MeshData.hh>
 #include <glm/glm.hpp>
 #include <BulletCollision/CollisionShapes/btShapeHull.h>
 #include <BulletCollision/CollisionShapes/btTriangleMesh.h>

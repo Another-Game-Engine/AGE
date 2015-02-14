@@ -18,6 +18,14 @@ namespace AGE
 
 	}
 
+	Transformation &Transformation::operator=(glm::mat4 const &other)
+	{
+		if (_model_matrix != other) {
+			_model_matrix = other;
+		}
+		return (*this);
+	}
+
 	IProperty & Transformation::update(std::shared_ptr<Program> const &p)
 	{
 		auto resource = std::static_pointer_cast<Mat4>(get_resource(p));

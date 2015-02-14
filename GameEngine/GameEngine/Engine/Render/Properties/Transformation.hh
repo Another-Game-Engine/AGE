@@ -14,6 +14,8 @@ namespace AGE
 		Transformation(glm::mat4 const &model_matrix);
 		Transformation(Transformation &&move);
 		Transformation(Transformation const &copy) = delete;
+		Transformation &operator=(Transformation const &other) = delete;
+		Transformation &operator=(glm::mat4 const &value);
 
 	public:
 		virtual IProperty &update(std::shared_ptr<Program> const &p) override final;

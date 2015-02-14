@@ -7,7 +7,7 @@
 
 #include <map>
 #include <Skinning/Skeleton.hpp>
-#include <Skinning/Animation.hpp>
+#include <AssetManagement/Data/AnimationData.hpp>
 #include "ConvertorStatusManager.hpp"
 #include "CookingTask.hpp"
 
@@ -54,7 +54,7 @@ namespace AGE
 			for (unsigned int animNum = 0; animNum < cookinTask->assimpScene->mNumAnimations; ++animNum)
 			{
 				auto aiAnim = cookinTask->assimpScene->mAnimations[animNum];
-				cookinTask->animations[animNum] = std::make_shared<Animation>();
+				cookinTask->animations[animNum] = std::make_shared<AnimationData>();
 				auto anim = cookinTask->animations[animNum];
 				anim->name = aiAnim->mName.data;
 				anim->duration = aiAnim->mDuration;

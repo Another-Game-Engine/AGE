@@ -287,7 +287,7 @@ bool BenchmarkScene::userUpdateBegin(double time)
 				auto _l = getLink(GLOBAL_SPONZA);
 				_l->setPosition(glm::vec3(-5, 0, 0));
 				_l->setScale(glm::vec3(0.01f));
-				_l->setOrientation(glm::quat(glm::vec3(Mathematic::degreeToRadian(-90), Mathematic::degreeToRadian(90), 0)));
+				_l->setOrientation(glm::quat(glm::vec3(Mathematic::degreeToRadian(0), Mathematic::degreeToRadian(0), 0)));
 
 				auto _m = addComponent<AGE::Component::MeshRenderer>(GLOBAL_SPONZA, getInstance<AGE::AssetsManager>()->getMesh("Sponza/sponza.sage"));
 				_m->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("Sponza/sponza.mage")));
@@ -378,7 +378,6 @@ bool BenchmarkScene::userUpdateBegin(double time)
 			link->setPosition(glm::vec3((rand() % 100) - 50, (rand() % 20) - 5, (rand() % 100) - 50));
 			link->setOrientation(glm::quat(glm::vec3(rand() % 360, rand() % 360, rand() % 360)));
 			link->setScale(glm::vec3(1.0f));
-
 
 			AGE::Component::MeshRenderer *mesh;
 			if (i % 4 == 0)

@@ -275,13 +275,8 @@ namespace AGE
 				added.scale = uo->scale;
 //				added.animation = msg.animation;
 				added.currentNode = UNDEFINED_IDX;
-				added.transformation = glm::scale(glm::translate(glm::mat4(1),
-															added.position) * glm::toMat4(added.orientation),
-															added.scale);
-				added.shape.fromTransformedBox(added.mesh.boundingBox, added.transformation);
-				added.hasMoved = false;
-				_octree.addElement(&added);
-				assert(added.currentNode != UNDEFINED_IDX);
+				_drawablesToMove.push_back(id);
+				added.hasMoved = true;
 			}
 		}
 
@@ -305,7 +300,7 @@ namespace AGE
 				for (uint32_t e : uo->drawableCollection)
 				{
 					_drawables.get(e).position = uo->position;
-					assert(_drawables.get(e).currentNode != UNDEFINED_IDX);
+					//assert(_drawables.get(e).currentNode != UNDEFINED_IDX);
 					if (_drawables.get(e).hasMoved == false)
 					{
 						_drawables.get(e).hasMoved = true;
@@ -346,7 +341,7 @@ namespace AGE
 				for (auto &e : uo->drawableCollection)
 				{
 					_drawables.get(e).scale = uo->scale;
-					assert(_drawables.get(e).currentNode != UNDEFINED_IDX);
+					//assert(_drawables.get(e).currentNode != UNDEFINED_IDX);
 					if (_drawables.get(e).hasMoved == false)
 					{
 						_drawables.get(e).hasMoved = true;
@@ -377,7 +372,7 @@ namespace AGE
 				for (auto &e : uo->drawableCollection)
 				{
 					_drawables.get(e).orientation = uo->orientation;
-					assert(_drawables.get(e).currentNode != UNDEFINED_IDX);
+					//assert(_drawables.get(e).currentNode != UNDEFINED_IDX);
 					if (_drawables.get(e).hasMoved == false)
 					{
 						_drawables.get(e).hasMoved = true;
@@ -396,11 +391,13 @@ namespace AGE
 			for (uint32_t idx : _drawablesToMove)
 			{
 				Drawable &e = _drawables.get(idx);
-				assert(e.currentNode != UNDEFINED_IDX);
 				e.hasMoved = false;
 				e.transformation = glm::scale(glm::translate(glm::mat4(1), e.position) * glm::toMat4(e.orientation), e.scale);
 				e.shape.fromTransformedBox(e.mesh.boundingBox, e.transformation);
-				_octree.moveElement(&e);
+				if (e.currentNode == UNDEFINED_IDX)
+					_octree.addElement(&e);
+				else
+					_octree.moveElement(&e);
 				AGE::GetRenderThread()->getQueue()->emplaceTask<AGE::Tasks::Render::SetMeshTransform>(e.mesh.painter, e.mesh.vertices, e.mesh.transformation, e.transformation);
 				assert(e.currentNode != UNDEFINED_IDX);
 			}

@@ -13,20 +13,17 @@
 
 #include <atomic>
 
-<<<<<<< HEAD
-struct MeshData;
-struct MaterialData;
-struct TextureData;
-=======
 class btBvhTriangleMeshShape;
 class btConvexHullShape;
 class btTriangleMesh;
->>>>>>> prod_graphic
 
 namespace AGE
 {
 	struct Skeleton;
-	struct Animation;
+	struct AnimationData;
+	struct MeshData;
+	struct MaterialData;
+	struct TextureData;
 
 	struct AssetDataSet
 	{

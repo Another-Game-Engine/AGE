@@ -1,4 +1,5 @@
 #include <Render/ProgramResources/Types/Uniform/Mat4.hh>
+#include <glm/gtc/type_ptr.hpp>
 #include <iostream>
 
 namespace AGE
@@ -34,7 +35,7 @@ namespace AGE
 	IProgramResources & Mat4::update()
 	{
 		if (!_update) {
-			glUniformMatrix4fv(_id, 1, GL_FALSE, (GLfloat *)(&_value[0]));
+			glUniformMatrix4fv(_id, 1, GL_FALSE, (GLfloat *)(glm::value_ptr(_value)));
 			_update = true;
 		}
 		return (*this);

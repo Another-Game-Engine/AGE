@@ -4,15 +4,11 @@
 #include "ImageLoader.hpp"
 #include <map>
 
-<<<<<<< HEAD
 #include <AssetManagement/Data/MaterialData.hh>
-
-=======
 #include "ConvertorStatusManager.hpp"
-#include <Geometry/MaterialData.hpp>
 #include "AssetDataSet.hpp"
 #include "CookingTask.hpp"
->>>>>>> prod_graphic
+
 namespace AGE
 {
 	class MaterialLoader
