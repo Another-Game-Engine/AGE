@@ -41,6 +41,7 @@ namespace AGE
 			Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PopTask(tid);
 			return true;
 		}
+
 		static bool load(std::shared_ptr<CookingTask> cookingTask)
 		{
 			if (!cookingTask->dataSet->loadMaterials)

@@ -2,28 +2,33 @@
 
 #include <cereal/types/vector.hpp>
 #include <cereal/types/string.hpp>
+#include <Utils/Containers/Vector.hpp>
 
 namespace AGE
 {
+	enum ECompressedFormat
+	{
+		UNCOMPRESSED,
+		LUM_DXT1_FORMAT,
+		RGB_DXT1_FORMAT,
+		RGBA_DXT5_FORMAT
+	};
 
 	struct TextureData
 	{
-	public:
 		std::string rawPath;
-		std::uint32_t width;
-		std::uint32_t height;
-		std::uint8_t bpp;
-		std::uint8_t colorNumber;
+		uint32_t width;
+		uint32_t height;
+		uint32_t bpp;
+		uint32_t colorNumber;
+		uint32_t mipmapNbr;
+		uint32_t format;
 		AGE::Vector<unsigned char> data;
 
-	public:
-		template <class Archive> void serialize(Archive &ar);
+		template <class Archive>
+		void serialize(Archive &ar)
+		{
+			ar(rawPath, width, height, bpp, colorNumber, mipmapNbr, format, data);
+		}
 	};
-
-	template <class Archive>
-	void TextureData::serialize(Archive &ar)
-	{
-		ar(rawPath, width, height, bpp, data, colorNumber);
-	}
-
 }

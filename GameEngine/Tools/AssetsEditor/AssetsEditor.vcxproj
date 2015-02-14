@@ -157,6 +157,7 @@
     <ClCompile Include="AssetFiles\Folder.cpp" />
     <ClCompile Include="Components\EntityRepresentation.cpp" />
     <ClCompile Include="Convertor\ConvertorStatusManager.cpp" />
+    <ClCompile Include="ImageUtils.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Scenes\AssetsEditorScene.cpp" />
     <ClCompile Include="Scenes\SceneSelectorScene.cpp" />
@@ -182,6 +183,7 @@
     <ClInclude Include="Convertor\SkeletonLoader.hpp" />
     <ClInclude Include="AssetFiles\File.hpp" />
     <ClInclude Include="AssetFiles\Folder.hpp" />
+    <ClInclude Include="ImageUtils.hh" />
     <ClInclude Include="Scenes\AssetsEditorScene.hpp" />
     <ClInclude Include="Scenes\SceneSelectorScene.hpp" />
     <ClInclude Include="Scenes\WorldEditorScene.hpp" />
@@ -190,6 +192,9 @@
   <ItemGroup>
     <ProjectReference Include="..\..\GameEngine\GameEngine.vcxproj">
       <Project>{e24d022c-e33b-47a1-bbb4-33666c76dda9}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Vendors\crunch\crnlib\crnlib.2008.vcxproj">
+      <Project>{cf2e70e8-7133-4d96-92c7-68bb406c0664}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
