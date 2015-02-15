@@ -10,20 +10,9 @@ namespace AGE
 
 	Painter::Painter(Painter &&move) :
 		_buffer(std::move(move._buffer)),
-		_programs(std::move(move._programs)),
 		_vertices(std::move(move._vertices))
 	{
 
-	}
-
-	Painter &Painter::set_programs(std::vector<std::shared_ptr<Program>> const &programs)
-	{
-		for (auto &program : programs) {
-			if (_buffer.coherent_program(program)) {
-				_programs.emplace_back(program);
-			}
-		}
-		return (*this);
 	}
 
 	Key<Vertices> Painter::add_vertices(size_t nbrVertex, size_t nbrIndices)
@@ -34,7 +23,7 @@ namespace AGE
 		}
 		_vertices.emplace_back(_buffer.get_types(), nbrVertex, nbrIndices, offset);
 		_buffer.insert(_vertices.back());
-		return (Key<Vertices>::createKey(_vertices.size() - 1));
+		return (Key<Vertices>::createKey(int(_vertices.size()) - 1));
 	}
 
 	Painter & Painter::remove_vertices(Key<Vertices> &key)
@@ -62,48 +51,14 @@ namespace AGE
 		return (&_vertices[key.getId()]);
 	}
 
-	Key<Program> Painter::get_key_program(std::string const &name)
+	Painter & Painter::draw(GLenum mode, std::shared_ptr<Program> const &p, std::vector<std::pair<>> const &drawList)
 	{
-		auto index = 0;
-		for (auto &program : _programs) {
-			if (name == program->name()) {
-				return (Key<Program>::createKey(index));
-			}
-			++index;
-		}
-		return (Key<Program>::createKey(-1));
-	}
-
-	Key<Program> Painter::get_key_program(std::shared_ptr<Program> const &p)
-	{
-		auto index = 0;
-		for (auto &program : _programs) {
-			if (*p == *program) {
-				return (Key<Program>::createKey(index));
-			}
-			++index;
-		}
-		return (Key<Program>::createKey(-1));
-	}
-
-	Program * Painter::get_program(Key<Program> const &program)
-	{
-		if (!program) {
-			return (nullptr);
-		}
-		return (_programs[program.getId()].get());
-	}
-
-	Painter & Painter::draw(GLenum mode, Key<Program> const &program, std::vector<Key<Vertices>> const &drawList)
-	{
-		if (!program) {
-			return (*this);
-		}
+		assert(p->coherent_attribute(_buffer.get_types()));
 		_buffer.bind();
 		_buffer.update();
 		for (auto &draw_element : drawList) {
 			if (draw_element) {
-				_vertices[draw_element.getId()].update(_programs[program.getId()]);
+				_vertices[draw_element.getId()].update(p);
 				_vertices[draw_element.getId()].draw(mode);
 			}
 		}
@@ -111,15 +66,18 @@ namespace AGE
 		return (*this);
 	}
 
-	Painter & Painter::draw(GLenum mode, std::shared_ptr<Program> const &p, std::vector<Key<Vertices>> const &drawList)
-	{
-		draw(mode, get_key_program(p), drawList);
-		return (*this);
-	}
-
 	bool Painter::coherent(std::vector<GLenum> const &types) const
 	{
-		return (_buffer.coherent_program(types));
+		auto &types_buffer = _buffer.get_types();
+		if (types.size() != types_buffer.size()) {
+			return (true);
+		}
+		for (auto index = 0ull; index < types_buffer.size(); ++index) {
+			if (types[index] != types_buffer[index]) {
+				return (false);
+			}
+		}
+		return (true);
 	}
 
 }

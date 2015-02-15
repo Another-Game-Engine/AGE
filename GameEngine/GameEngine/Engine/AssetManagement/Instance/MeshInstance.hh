@@ -12,7 +12,6 @@ namespace AGE
 
 	struct SubMeshInstance
 	{
-		Key<Property> transformation;
 		Key<Painter> painter;
 		Key<Vertices> vertices;
 		AGE::AABoundingBox boundingBox;

@@ -28,9 +28,9 @@ namespace AGE
 
 	Key<Painter> PaintingManager::get_painter(std::vector<GLenum> const &types) const
 	{
-		for (auto index = 0ull; index < _painters.size(); ++index) {
+		for (auto index = 0; index < int(_painters.size()); ++index) {
 			if (_painters[index]->coherent(types)) {
-				return (Key<Painter>::createKey(int(index)));
+				return (Key<Painter>::createKey(index));
 			}
 		}
 		return (Key<Painter>::createKey(-1));

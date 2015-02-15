@@ -291,9 +291,6 @@ namespace AGE
 			}
 			auto &painter = paintingManager->get_painter(mesh->painter);
 			mesh->vertices = painter->add_vertices(data.positions.size(), data.indices.size());
-			mesh->transformation = painter->get_vertices(mesh->vertices)->add_property(std::make_shared<Transformation>(Transformation(glm::mat4(1.0f))));
-			painter->set_programs(GetRenderThread()->pipelines[0]->get_programs());
-			painter->get_vertices(mesh->vertices)->get_property<Transformation>(mesh->transformation)->set_program(GetRenderThread()->pipelines[0]->get_programs());
 			auto vertices = painter->get_vertices(mesh->vertices);
 			for (auto i = 0ull; i < vertices->nbr_buffer(); ++i)
 			{

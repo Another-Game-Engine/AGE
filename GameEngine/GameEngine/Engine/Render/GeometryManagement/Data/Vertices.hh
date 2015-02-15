@@ -34,10 +34,6 @@ namespace AGE
 		Vertices &remove();
 		Vertices &reset(size_t o);
 		Vertices &draw(GLenum mode);
-		Key<Property> add_property(std::shared_ptr<IProperty> const &prop);
-		Vertices &remove_property(Key<Property> &key);
-		template <typename type_t> std::shared_ptr<type_t> get_property(Key<Property> const &p) const;
-		Vertices &update(std::shared_ptr<Program> const &program);
 
 	private:
 		size_t _offset;

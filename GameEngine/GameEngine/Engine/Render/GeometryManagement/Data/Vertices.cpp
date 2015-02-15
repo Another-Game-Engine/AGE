@@ -161,29 +161,4 @@ namespace AGE
 		return (*this);
 	}
 
-	Key<Property> Vertices::add_property(std::shared_ptr<IProperty> const &prop)
-	{
-		_properties.emplace_back(prop);
-		return (Key<Property>::createKey(_properties.size() - 1));
-	}
-
-	Vertices &Vertices::remove_property(Key<Property> &key)
-	{
-		if (!key) {
-			return (*this);
-		}
-		key.destroy();
-		_properties.erase(_properties.begin() + key.getId());
-		return (*this);
-	}
-
-	Vertices & Vertices::update(std::shared_ptr<Program> const &program)
-	{
-		for (auto &prop : _properties) {
-			prop->update(program);
-		}
-		program->update();
-		return (*this);
-	}
-
 }
