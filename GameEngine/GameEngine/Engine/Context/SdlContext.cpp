@@ -3,7 +3,6 @@
 #include <iostream>
 #include <Utils/DependenciesInjector.hpp>
 #include <Core/Input.hh>
-#include <Render/RenderManager.hh>
 #include <SDL/SDL.h>
 #include <Core/Input.hh>
 #include <Configuration.hpp>

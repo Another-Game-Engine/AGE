@@ -13,7 +13,6 @@
 #include <cereal/archives/portable_binary.hpp>
 #include <cereal/archives/xml.hpp>
 #include <cereal/types/map.hpp>
-#include <Core/ComponentManager.hpp>
 #include <Utils/Containers/Queue.hpp>
 #include <Entities/EntitySerializationInfos.hpp>
 #include <Utils/ObjectPool.hpp>

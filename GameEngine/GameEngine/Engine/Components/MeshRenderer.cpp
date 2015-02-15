@@ -1,14 +1,14 @@
 #include <Components/MeshRenderer.hh>
 #include "Core/Engine.hh"
 #include <Core/AScene.hh>
-#include <Geometry/Mesh.hpp>
-#include <Geometry/MaterialData.hpp>
+#include <AssetManagement/Instance/MeshInstance.hh>
+#include <AssetManagement/Instance/MaterialInstance.hh>
+#include <AssetManagement/AssetManager.hh>
 #include <assert.h>
-#include <Core/AssetsManager.hpp>
 #include <Threads/ThreadManager.hpp>
 #include <Threads/PrepareRenderThread.hpp>
-#include <Core/PrepareKey.hpp>
-#include <Skinning/AnimationInstance.hpp>
+#include <Threads/RenderThread.hpp>
+#include <Threads/Tasks/ToRenderTasks.hpp>
 
 namespace AGE
 {
@@ -24,25 +24,6 @@ namespace AGE
 	{
 	}
 
-	MeshRenderer::MeshRenderer(MeshRenderer &&o)
-		: ComponentBase(std::move(o)),
-		_scene(o._scene),
-		_key(o._key),
-		_serializationInfos(std::move(o._serializationInfos)),
-		_material(o._material),
-		_mesh(o._mesh)
-	{
-	}
-
-	MeshRenderer &MeshRenderer::operator=(MeshRenderer &&o)
-	{
-		_scene = o._scene;
-		_key = o._key;
-		_serializationInfos = std::move(o._serializationInfos);
-		_material = o._material;
-		_mesh = o._mesh;
-		return *this;
-	}
 
 	void MeshRenderer::init(AScene *scene, std::shared_ptr<AGE::MeshInstance> r /* = nullptr */)
 	{
@@ -78,6 +59,7 @@ namespace AGE
 	MeshRenderer &MeshRenderer::setMaterial(const std::shared_ptr<AGE::MaterialSetInstance> &material)
 	{
 		_material = material;
+		AGE::GetRenderThread()->getQueue()->emplaceTask<Tasks::Render::SetMeshMaterial>(_material, _mesh);
 		updateGeometry();
 		return (*this);
 	}
@@ -87,29 +69,14 @@ namespace AGE
 		return _material;
 	}
 
-	MeshRenderer &MeshRenderer::setAnimation(const gl::Key<AGE::AnimationInstance> &key)
-	{
-		_animation = key;
-		updateGeometry();
-		return (*this);
-	}
 
-	void MeshRenderer::updateGeometry()
-	{
-		assert(_scene != nullptr);
 
-		if (this->_mesh == nullptr || this->_material == nullptr)
-			return;
-		assert(_material->datas.size() > 0);
-		AGE::Vector<AGE::MaterialInstance> materials;
-		for (auto &e : _mesh->subMeshs)
+		void MeshRenderer::updateGeometry()
 		{
-			if (e.defaultMaterialIndex >= _material->datas.size())
-				materials.push_back(_material->datas[0]);
-			else
-				materials.push_back(_material->datas[e.defaultMaterialIndex]);
-		}
-		AGE::GetPrepareThread()->updateGeometry(_key, _mesh->subMeshs, materials, _animation);
+			assert(_scene != nullptr);
+			if (this->_mesh == nullptr || this->_material == nullptr)
+				return;
+			AGE::GetPrepareThread()->updateGeometry(_key, _mesh->subMeshs);
 	}
 
 	void MeshRenderer::postUnserialization(AScene *scene)
@@ -132,8 +99,9 @@ namespace AGE
 				{
 					setMaterial(material);
 				}
+				// todo with animations
 			}
-			// todo with animations
 		}
 	}
+
 }

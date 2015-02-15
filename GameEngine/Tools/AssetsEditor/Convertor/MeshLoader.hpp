@@ -2,14 +2,14 @@
 
 #include "AssimpLoader.hpp"
 #include "SkeletonLoader.hpp"
-
 #include <map>
 #include <Skinning/Skeleton.hpp>
-#include <Geometry/Mesh.hpp>
+#include <AssetManagement/Data/MeshData.hh>
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
 #include "ConvertorStatusManager.hpp"
 #include "CookingTask.hpp"
+
 namespace AGE
 {
 	class MeshLoader
@@ -44,7 +44,7 @@ namespace AGE
 				return true;
 			auto tid = Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PushTask("MeshLoader : loading " + cookingTask->dataSet->filePath.getShortFileName());
 
-			cookingTask->mesh = std::make_shared<MeshData>();
+			cookingTask->mesh = std::make_shared<AGE::MeshData>();
 
 			cookingTask->mesh->name = cookingTask->dataSet->filePath.getShortFileName();
 			cookingTask->mesh->subMeshs.resize(cookingTask->assimpScene->mNumMeshes);

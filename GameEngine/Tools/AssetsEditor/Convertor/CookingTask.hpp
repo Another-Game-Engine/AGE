@@ -33,7 +33,7 @@ namespace AGE
 
 		//Ptrs
 		std::shared_ptr<Skeleton> skeleton = nullptr;
-		AGE::Vector<std::shared_ptr<Animation>> animations;
+		AGE::Vector<std::shared_ptr<AnimationData>> animations;
 		std::shared_ptr<MeshData> mesh = nullptr;
 		AGE::Vector<std::shared_ptr<MaterialData>> materials;
 		AGE::Vector<std::shared_ptr<TextureData>> textures;

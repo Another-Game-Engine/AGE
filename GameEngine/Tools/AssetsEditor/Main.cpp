@@ -9,9 +9,9 @@
 #include <Convertor/ImageLoader.hpp>
 
 //SKINNING
-#include <Skinning/Animation.hpp>
+#include <AssetManagement/Data/AnimationData.hpp>
+#include <AssetManagement/Instance/AnimationInstance.hh>
 #include <Skinning/AnimationChannel.hpp>
-#include <Skinning/AnimationInstance.hpp>
 #include <Skinning/AnimationKey.hpp>
 #include <Skinning/Bone.hpp>
 #include <Skinning/Skeleton.hpp>
@@ -20,10 +20,10 @@
 #include <Threads/ThreadManager.hpp>
 #include <Core/Engine.hh>
 #include <Core/Timer.hh>
-#include <Core/AssetsManager.hpp>
+#include <AssetManagement/AssetManager.hh>
 #include <Threads/RenderThread.hpp>
 #include <Utils/Age_Imgui.hpp>
-#include <Core/Tasks/Basics.hpp>
+#include <Threads/Tasks/BasicTasks.hpp>
 #include <Threads/TaskScheduler.hpp>
 
 //SCENE

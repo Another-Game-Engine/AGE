@@ -12,7 +12,7 @@ Work is still in progress and many things have to be implemented, improved or fi
 - Tile based deferred rendering
 - Assets conversion pipeline (.obj, .fbx)
 - Game object serialization
-- Mesh skinning
+- Mesh skinning (not ready)
 
 Video :
 [![Video](http://img.youtube.com/vi/ebwDNA2wz-k/0.jpg)](http://www.youtube.com/watch?v=ebwDNA2wz-k)
