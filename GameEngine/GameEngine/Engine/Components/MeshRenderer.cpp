@@ -59,7 +59,7 @@ namespace AGE
 	MeshRenderer &MeshRenderer::setMaterial(const std::shared_ptr<AGE::MaterialSetInstance> &material)
 	{
 		_material = material;
-		AGE::GetRenderThread()->getQueue()->emplaceTask<Tasks::Render::SetMeshMaterial>(_material, _mesh);
+		AGE::GetPrepareThread()->getQueue()->emplaceCommand<Tasks::Render::SetMeshMaterial>(_material, _mesh);
 		updateGeometry();
 		return (*this);
 	}
