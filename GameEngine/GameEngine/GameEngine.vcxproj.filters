@@ -120,6 +120,7 @@
     <ClCompile Include="Engine\Threads\Tasks\MainToPrepareTasks.cpp" />
     <ClCompile Include="Engine\Threads\Tasks\ToRenderTasks.cpp" />
     <ClCompile Include="Engine\Threads\Commands\MainToPrepareCommands.cpp" />
+    <ClCompile Include="Engine\Render\ProgramResources\Types\Uniform\Vec3.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -326,6 +327,7 @@
     <ClInclude Include="Engine\Threads\Commands\ToRenderCommands.hpp" />
     <ClInclude Include="Engine\Threads\Commands\MainToPrepareCommands.hpp" />
     <ClInclude Include="Engine\Threads\Tasks\BasicTasks.hpp" />
+    <ClInclude Include="Engine\Render\ProgramResources\Types\Uniform\Vec3.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

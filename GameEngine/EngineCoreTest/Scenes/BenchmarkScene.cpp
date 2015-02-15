@@ -282,16 +282,16 @@ bool BenchmarkScene::userUpdateBegin(double time)
 			//	_renderManager->setMaterial<gl::Shininess>(mesh->getMaterial()->datas[index], 1.f);
 			//	_renderManager->setMaterial<gl::Ratio_specular>(mesh->getMaterial()->datas[index], 1.0f);
 			//}
-			{
-				GLOBAL_SPONZA = createEntity();
-				auto _l = getLink(GLOBAL_SPONZA);
-				_l->setPosition(glm::vec3(-5, 0, 0));
-				_l->setScale(glm::vec3(0.01f));
-				_l->setOrientation(glm::quat(glm::vec3(Mathematic::degreeToRadian(0), Mathematic::degreeToRadian(0), 0)));
-
-				auto _m = addComponent<AGE::Component::MeshRenderer>(GLOBAL_SPONZA, getInstance<AGE::AssetsManager>()->getMesh("Sponza/sponza.sage"));
-				_m->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("Sponza/sponza.mage")));
-			}
+//			{
+//				GLOBAL_SPONZA = createEntity();
+//				auto _l = getLink(GLOBAL_SPONZA);
+//				_l->setPosition(glm::vec3(-5, 0, 0));
+//				_l->setScale(glm::vec3(0.01f));
+//				_l->setOrientation(glm::quat(glm::vec3(Mathematic::degreeToRadian(0), Mathematic::degreeToRadian(0), 0)));
+//
+//				auto _m = addComponent<AGE::Component::MeshRenderer>(GLOBAL_SPONZA, getInstance<AGE::AssetsManager>()->getMesh("Sponza/sponza.sage"));
+//				_m->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("Sponza/sponza.mage")));
+//			}
 			{
 				GLOBAL_CATWOMAN = createEntity();
 				auto _l = getLink(GLOBAL_CATWOMAN);
@@ -308,24 +308,24 @@ bool BenchmarkScene::userUpdateBegin(double time)
 				//_m->setAnimation(GLOBAL_CAT_ANIMATION);
 			}
 
-			for (int i = 0; i < GLOBAL_LIGHTS.size(); ++i)
-			{
-				GLOBAL_LIGHTS[i] = createEntity();
-				auto e = GLOBAL_LIGHTS[i];
-				auto _l = getLink(e);
-				_l->setPosition(glm::vec3(i, 1.0f, i));
-				_l->setScale(glm::vec3(0.05f));
-				auto _m = addComponent<AGE::Component::MeshRenderer>(e, getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage"));
-				_m->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial("ball/ball.mage"));
-				//	for (size_t index = 0; index < _m->getMaterial()->datas.size(); ++index)
-				{
-					//_renderManager->setMaterial<gl::Shininess>(_m->getMaterial()->datas[index], 1.0f);
-					//_renderManager->setMaterial<gl::Ratio_specular>(_m->getMaterial()->datas[index], 1.0f);
-					//_renderManager->setMaterial<gl::Color_diffuse>(_m->getMaterial()->datas[index], glm::vec4(1.0f));
-				}
-				getLink(e)->setPosition(glm::vec3(i, 5.0f, 0));
-				addComponent<AGE::Component::PointLight>(e)->set(glm::vec3((float)(rand() % 1000) / 1000.0f, (float)(rand() % 1000) / 1000.0f, (float)(rand() % 1000) / 1000.0f), glm::vec3(1.f, 0.1f, 0.0f));
-			}
+//			for (int i = 0; i < GLOBAL_LIGHTS.size(); ++i)
+//			{
+//				GLOBAL_LIGHTS[i] = createEntity();
+//				auto e = GLOBAL_LIGHTS[i];
+//				auto _l = getLink(e);
+//				_l->setPosition(glm::vec3(i, 1.0f, i));
+//				_l->setScale(glm::vec3(0.05f));
+//				auto _m = addComponent<AGE::Component::MeshRenderer>(e, getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage"));
+//				_m->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial("ball/ball.mage"));
+//				//	for (size_t index = 0; index < _m->getMaterial()->datas.size(); ++index)
+//				{
+//					//_renderManager->setMaterial<gl::Shininess>(_m->getMaterial()->datas[index], 1.0f);
+//					//_renderManager->setMaterial<gl::Ratio_specular>(_m->getMaterial()->datas[index], 1.0f);
+//					//_renderManager->setMaterial<gl::Color_diffuse>(_m->getMaterial()->datas[index], glm::vec4(1.0f));
+//				}
+//				getLink(e)->setPosition(glm::vec3(i, 5.0f, 0));
+//				addComponent<AGE::Component::PointLight>(e)->set(glm::vec3((float)(rand() % 1000) / 1000.0f, (float)(rand() % 1000) / 1000.0f, (float)(rand() % 1000) / 1000.0f), glm::vec3(1.f, 0.1f, 0.0f));
+//			}
 
 #ifdef PHYSIC_SIMULATION
 			std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());

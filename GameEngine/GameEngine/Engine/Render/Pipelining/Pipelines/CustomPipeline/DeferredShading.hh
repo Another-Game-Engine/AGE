@@ -6,6 +6,8 @@
 namespace AGE
 {
 
+	class Vertices;
+
 	class DeferredShading : public ARenderingPipeline
 	{
 	public:
@@ -25,5 +27,10 @@ namespace AGE
 	public:
 		virtual IRenderingPipeline &render(ARGS_FUNCTION_RENDER) override final;
 
+	private:
+		static std::vector<glm::vec2> _quadPos;
+
+		Key<Painter> _quadPainter;
+		Key<Vertices> _quadVertices;
 	};
 }

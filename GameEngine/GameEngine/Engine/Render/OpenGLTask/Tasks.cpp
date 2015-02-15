@@ -39,8 +39,24 @@ namespace OpenGLTasks
 		is ? glEnable(GL_STENCIL_TEST) : glDisable(GL_STENCIL_TEST);
 	}
 
-	void set_blend_test(bool is, int attach_output)
+	void set_blend(bool is, int attach_output)
 	{
-		is ? glEnablei(GL_BLEND, attach_output) : glEnablei(GL_BLEND, attach_output);
+		is ? glEnablei(GL_BLEND, attach_output) : glDisablei(GL_BLEND, attach_output);
+	}
+
+	void set_blend_func(GLenum source_factor, GLenum destination_factor)
+	{
+		glBlendFunc(source_factor, destination_factor);
+	}
+
+	void set_blend_equation(GLenum mode)
+	{
+		glBlendEquation(mode);
+	}
+
+	void set_blend_func_separate(GLenum source_factor, GLenum destination_factor,
+		GLenum source_factor_alpha, GLenum destination_factor_alpha)
+	{
+		glBlendFuncSeparate(source_factor, destination_factor, source_factor_alpha, destination_factor_alpha);
 	}
 }

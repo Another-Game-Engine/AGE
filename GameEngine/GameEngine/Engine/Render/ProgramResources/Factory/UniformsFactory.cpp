@@ -1,5 +1,6 @@
 #include <Render/ProgramResources/Factory/UniformsFactory.hh>
 #include <Render/ProgramResources/Types/Uniform/Vec4.hh>
+#include <Render/ProgramResources/Types/Uniform/Vec3.hh>
 #include <Render/ProgramResources/Types/Uniform/Mat4.hh>
 #include <Render/ProgramResources/Types/Uniform/Vec1.hh>
 #include <Render/ProgramResources/Types/Uniform/Sampler/Sampler2D.hh>
@@ -7,11 +8,15 @@
 #define LAMBDA_PROTO [this](GLint id, std::string &&name)
 
 # define DECLAR_BUILDERS \
-std::make_pair(GL_FLOAT_VEC4, LAMBDA_PROTO\
+	std::make_pair(GL_FLOAT_VEC4, LAMBDA_PROTO\
 { \
 	return (std::make_shared<Vec4>(glm::vec4(0.0f), id, std::move(name))); \
 }), \
-std::make_pair(GL_FLOAT_MAT4, LAMBDA_PROTO\
+	std::make_pair(GL_FLOAT_VEC3, LAMBDA_PROTO\
+{ \
+	return (std::make_shared<Vec3>(glm::vec3(0.0f), id, std::move(name))); \
+}), \
+	std::make_pair(GL_FLOAT_MAT4, LAMBDA_PROTO\
 { \
 	return (std::make_shared<Mat4>(glm::mat4(1.0f), id, std::move(name))); \
 }), \

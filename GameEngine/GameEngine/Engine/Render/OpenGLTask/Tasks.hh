@@ -11,5 +11,9 @@ namespace OpenGLTasks
 	void set_depth_test(bool is);
 	void set_scissor_test(bool is);
 	void set_stencil_test(bool is);
-	void set_blend_test(bool is, int attach_ouput);
+	void set_blend(bool is, int attach_ouput);
+	void set_blend_func(GLenum source_factor, GLenum destination_factor);
+	void set_blend_equation(GLenum mode);
+	void set_blend_func_separate(GLenum source_factor, GLenum destination_factor,
+		GLenum source_factor_alpha, GLenum destination_factor_alpha);
 }

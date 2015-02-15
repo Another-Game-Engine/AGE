@@ -2,16 +2,9 @@
 
 layout (location = 0) out vec4 color;
 
-uniform global_state
-{
-	mat4 projection_matrix;
-	mat4 view_matrix;
-};
-
 uniform vec3 position_light;
 uniform vec3 attenuation_light;
 uniform vec3 color_light;
-uniform vec3 ambiant_color;
 
 uniform sampler2D depth_buffer;
 uniform sampler2D normal_buffer;
@@ -44,5 +37,6 @@ void main()
 	vec3 reflection = reflect(normalize(-lightDir), normal);
 	vec4 specular = texture(specular_buffer, interpolated_texCoord);
 	float specularRatio = clamp(pow(max(dot(reflection, worldPosToEyes), 0.0f), 100.f * specular.w), 0.0f, 1.0f);
-	color = vec4(vec3(ambiant_color + lambert * color_light + vec3(specular) * specularRatio), 1.0f) / (attenuation) * (1.f - step(1.0f, depth));
+	vec3 finalColor = vec3(lambert * color_light + vec3(specular) * specularRatio);
+	color = vec4(finalColor, 1.0f) / (attenuation) * (1.f - step(1.0f, depth));
 }
