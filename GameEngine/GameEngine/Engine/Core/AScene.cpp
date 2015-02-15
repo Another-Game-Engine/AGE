@@ -160,6 +160,7 @@ namespace AGE
 			//}
 		}
 		informFiltersEntityDeletion(*data);
+		_entityPool.destroy(e.ptr);
 	}
 
 	void AScene::clearAllEntities()

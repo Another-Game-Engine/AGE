@@ -427,6 +427,7 @@ namespace AGE
 				rigidBody->getBody().applyTorque(btVector3(float(rand() % 1000) / 300.0f, float(rand() % 1000) / 300.0f, float(rand() % 1000) / 300.0f));
 #endif
 			}
+			_chunkCounter = 0;
 		}
 
 #ifdef USE_IMGUI

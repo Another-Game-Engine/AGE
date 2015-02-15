@@ -21,22 +21,15 @@ namespace AGE
 		}
 		virtual ~ObjectPool()
 		{
-			assert(_objectNumber == 0 && "All object has not been destroyed ! Memory Leak !");
-		}
-
-		T *create()
-		{
-			void *res;
-			_allocateObject(res);
-			T *tRes = new (res)T();
-			return tRes;
+			//assert(_objectNumber == 0 && "All object has not been destroyed ! Memory Leak !");
 		}
 
 		template <typename ...Args>
 		T *create(Args &&...args)
 		{
 			void *res;
-			_allocateObject(res);
+			auto error = _allocateObject(res);
+			assert(error);
 			T *tRes = new (res)T(args...);
 			return tRes;
 		}
