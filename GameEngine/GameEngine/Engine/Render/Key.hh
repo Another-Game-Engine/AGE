@@ -3,63 +3,63 @@
 #include <iostream>
 #include <queue>
 #include <cstdint>
-#include <Utils/Containers/Vector.hpp>
-#include <assert.h>
+#include <vector>
 
-namespace gl
+template <typename TYPE>
+class Key
 {
-	struct InternalData
-	{
-		std::size_t id;
-		std::queue<std::size_t> trash;
-		InternalData() : id(0){}
-	};
+public:
+	Key();
 
-	template <typename TYPE>
-	class Key
-	{
-	public:
-		static Key<TYPE> createKey(size_t index = 0)
-		{
-			if (_data.size() <= index)
-			{
-				_data.push_back(InternalData());
-			}
-			assert(_data.size() > index);
-			auto &data = _data[index];
-			if (!data.trash.empty())
-			{
-				auto res = Key<TYPE>(data.trash.front(), index);
-				data.trash.pop();
-				return res;
-			}
-			return (Key<TYPE>(data.id++, index));
-		}
+public:
+	static Key<TYPE> createKey(int index);
 
-		static Key<TYPE> createKeyWithId(std::size_t _id, std::size_t index = 0)
-		{
-			return (Key<TYPE>(_id, index));
-		}
+public:
+	int getId() const;
+	operator bool() const;
+	void destroy();
 
-		Key();
-		~Key();
-		Key(Key<TYPE> const &copy);
-		Key<TYPE> &operator=(Key<TYPE> const &t);
-		size_t getId() const;
-		bool empty() const;
-		bool operator!() const;
-		bool operator==(Key<TYPE> const &compare) const;
-		bool operator!=(Key<TYPE> const &compare) const;
-		bool operator<(Key<TYPE> const &compare) const;
-		bool operator>(Key<TYPE> const &compare) const;
-		void destroy();
+private:
+	int _id;
+	explicit Key(int id);
+};
 
-	private:
-		size_t _id;
-		size_t _index;
-		explicit Key(size_t id, size_t index);
-		static AGE::Vector<InternalData> _data;
-	};
+template <typename type_t>
+int Key<type_t>::getId() const
+{
+	return (_id);
 }
 
-#include <Render/Key.hpp>
+template <typename type_t>
+Key<type_t>::operator bool() const
+{
+	if (_id == -1) {
+		return (false);
+	}
+	return (true);
+}
+
+template <typename type_t>
+void Key<type_t>::destroy()
+{
+	_id = -1;
+}
+
+template <typename type_t>
+Key<type_t>::Key(int id)
+{
+	_id = id;
+}
+
+template <typename type_t>
+Key<type_t> Key<type_t>::createKey(int index)
+{
+	return (Key<type_t>(index));
+}
+
+template <typename type_t>
+Key<type_t>::Key() :
+_id(-1)
+{
+
+}

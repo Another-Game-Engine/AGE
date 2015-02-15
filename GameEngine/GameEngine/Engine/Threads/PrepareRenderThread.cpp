@@ -3,10 +3,10 @@
 #include <Threads/MainThread.hpp>
 #include <Threads/ThreadManager.hpp>
 #include <Core/AScene.hh>
-#include <Core/Tasks/MainToPrepare.hpp>
-#include <Core/Tasks/Basics.hpp>
+#include <Threads/Tasks/MainToPrepareTasks.hpp>
+#include <Threads/Tasks/BasicTasks.hpp>
 #include <Threads/RenderThread.hpp>
-#include <Core/Commands/Render.hpp>
+#include <Threads/Commands/ToRenderCommands.hpp>
 
 namespace AGE
 {
@@ -55,7 +55,7 @@ namespace AGE
 			_activeScene->_deleteCamera(msg);
 		});
 
-		registerCallback<Commands::MainToPrepare::DeleteDrawable>([this](Commands::MainToPrepare::DeleteDrawable &msg){
+		registerCallback<Commands::MainToPrepare::DeleteMesh>([this](Commands::MainToPrepare::DeleteMesh &msg){
 			assert(this->_activeScene != nullptr);
 			_activeScene->_deleteDrawable(msg);
 		});
@@ -234,13 +234,11 @@ namespace AGE
 
 	void PrepareRenderThread::updateGeometry(
 		const PrepareKey &key
-		, const AGE::Vector<AGE::SubMeshInstance> &meshs
-		, const AGE::Vector<AGE::MaterialInstance> &materials
-		, const gl::Key<AGE::AnimationInstance> &animation)
+		, const Vector<SubMeshInstance> &meshs)
 	{
 		auto scene = _getRenderScene(GetMainThread()->getActiveScene());
 		assert(scene != nullptr);
-		scene->updateGeometry(key, meshs, materials, animation);
+		scene->updateGeometry(key, meshs);
 	}
 
 	PrepareKey PrepareRenderThread::addMesh()

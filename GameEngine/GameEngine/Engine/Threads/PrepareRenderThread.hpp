@@ -3,9 +3,8 @@
 #include "Thread.hpp"
 #include "QueuePusher.hpp"
 #include "QueueOwner.hpp"
-#include <Core/RenderScene.hpp>
-
-#include <Utils/Containers/Vector.hpp>
+#include <Threads/RenderScene.hpp>
+#include <vector>
 #include <memory>
 #include <thread>
 
@@ -24,9 +23,7 @@ namespace AGE
 		PrepareKey addCamera();
 		void updateGeometry(
 			const PrepareKey &key
-			, const AGE::Vector<AGE::SubMeshInstance> &meshs
-			, const AGE::Vector<AGE::MaterialInstance> &materials
-			, const gl::Key<AGE::AnimationInstance> &animation);
+			, const std::vector<SubMeshInstance> &meshs);
 		PrepareKey addMesh();
 		PrepareKey addPointLight();
 		void setPointLight(glm::vec3 const &color, glm::vec3 const &range, const PrepareKey &id);

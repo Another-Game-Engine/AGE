@@ -3,7 +3,7 @@
 #include <Threads/MainThread.hpp>
 #include <Threads/PrepareRenderThread.hpp>
 #include <Threads/ThreadManager.hpp>
-#include <Core/Tasks/MainToPrepare.hpp>
+#include <threads/Tasks/MainToPrepareTasks.hpp>
 
 namespace AGE
 {

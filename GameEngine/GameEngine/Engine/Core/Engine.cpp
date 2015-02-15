@@ -6,12 +6,11 @@
 #include <Threads/MainThread.hpp>
 #include <Threads/PrepareRenderThread.hpp>
 #include <Threads/RenderThread.hpp>
-
-#include <Core/Commands/Render.hpp>
+#include <Threads/Commands/ToRenderCommands.hpp>
 
 #ifdef USE_DEFAULT_ENGINE_CONFIGURATION
 
-#include <Core/AssetsManager.hpp>
+#include <AssetManagement/AssetManager.hh>
 #include <Core/SceneManager.hh>
 #include <Context/IRenderContext.hh>
 #include <Core/Input.hh>
@@ -168,7 +167,7 @@ namespace AGE
 #ifdef USE_IMGUI
 		ImGui::Render();
 #endif
-		GetPrepareThread()->getQueue()->emplaceCommand<Commands::Render::Flush>();
+		GetPrepareThread()->getQueue()->emplaceCommand<Commands::ToRender::Flush>();
 		return true;
 	}
 }

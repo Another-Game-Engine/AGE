@@ -4,19 +4,18 @@
 #include "QueuePusher.hpp"
 #include "QueueOwner.hpp"
 #include <Utils/Containers/Vector.hpp>
+#include <Render/GeometryManagement/Painting/PaintingManager.hh>
+#include <Render/Pipelining/Pipelines/IRenderingPipeline.hh>
 #include <memory>
+#include <vector>
 
-class Input;
-
-namespace gl
-{
-	class RenderManager;
-}
 namespace AGE
 {
 	class SdlContext;
+	class Input;
 	class Engine;
 	struct DrawableCollection;
+	struct RenderCamera;
 
 	class RenderThread : public Thread, public QueueOwner
 	{
@@ -26,6 +25,11 @@ namespace AGE
 		bool update();
 		virtual bool launch();
 		virtual bool stop();
+
+	public:
+		std::shared_ptr<PaintingManager> paintingManager;
+		std::vector<std::unique_ptr<IRenderingPipeline>> pipelines;
+
 	private:
 		RenderThread();
 		virtual ~RenderThread();
@@ -39,8 +43,7 @@ namespace AGE
 		bool _run;
 
 		SdlContext *_context;
-		gl::RenderManager *_render;
-		AGE::Vector < AGE::DrawableCollection > _drawlist;
+		AGE::Vector<RenderCamera> _drawlist;
 
 		friend class ThreadManager;
 	};

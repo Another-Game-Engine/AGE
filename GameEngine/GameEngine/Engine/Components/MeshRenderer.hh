@@ -5,14 +5,18 @@
 #include <Entities/Entity.hh>
 #include <cereal/types/memory.hpp>
 #include <Render/Key.hh>
+#include <AssetManagement/Instance/MaterialInstance.hh>
+#include <AssetManagement/Instance/MeshInstance.hh>
 
 namespace AGE
 {
+
 	struct MeshInstance;
 	struct MaterialSetInstance;
 	struct PrepareKey;
 	struct AnimationInstance;
 	class AScene;
+
 	namespace Component
 	{
 		struct MeshRenderer : public Component::ComponentBase < MeshRenderer >
@@ -33,7 +37,6 @@ namespace AGE
 			std::shared_ptr<AGE::MeshInstance> getMesh();
 			MeshRenderer &setMaterial(const std::shared_ptr<AGE::MaterialSetInstance> &_mesh);
 			std::shared_ptr<AGE::MaterialSetInstance> getMaterial();
-			MeshRenderer &setAnimation(const gl::Key<AGE::AnimationInstance> &key);
 
 			virtual void postUnserialization(AScene *scene);
 
@@ -42,7 +45,6 @@ namespace AGE
 			AScene *_scene;
 			std::shared_ptr<AGE::MeshInstance> _mesh;
 			std::shared_ptr<AGE::MaterialSetInstance> _material;
-			gl::Key<AGE::AnimationInstance> _animation;
 
 			struct SerializationInfos
 			{
@@ -85,4 +87,5 @@ namespace AGE
 			ar(_serializationInfos);
 		}
 	}
+
 }

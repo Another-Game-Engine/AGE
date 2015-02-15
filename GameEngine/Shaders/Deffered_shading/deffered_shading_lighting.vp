@@ -1,10 +1,6 @@
 #version 330
 
-uniform global_state
-{
-	mat4 projection_matrix;
-	mat4 view_matrix;
-};
+uniform mat4 view_matrix;
 
 layout (location = 0) in vec2 position;
 

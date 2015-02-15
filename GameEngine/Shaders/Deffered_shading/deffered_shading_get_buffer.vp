@@ -1,10 +1,10 @@
 #version 330
 
-uniform global_state
-{
-	mat4 projection_matrix;
-	mat4 view_matrix;
-};
+uniform mat4 projection_matrix;
+uniform mat4 view_matrix;
+uniform mat4 model_matrix;
+//uniform bool is_skinned = false;
+//uniform mat4 bones[200];
 
 layout (location = 0) in vec4 position;
 layout (location = 1) in vec4 normal;
@@ -12,11 +12,6 @@ layout (location = 2) in vec2 texCoord;
 layout (location = 3) in vec4 tangent;
 //layout (location = 4) in vec4 blendWeight;
 //layout (location = 5) in vec4 blendIndice;
-
-uniform mat4 model_matrix;
-
-//uniform bool is_skinned = false;
-//uniform mat4 bones[200];
 
 out vec3 inter_normal;
 out vec2 inter_texCoord;

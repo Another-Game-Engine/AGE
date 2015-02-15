@@ -1,11 +1,14 @@
 #pragma once
 
 #include "AssimpLoader.hpp"
-#include <Texture/Texture.hpp>
+#include <AssetManagement/Data/TextureData.hh>
+#include <AssetManagement/Data/MaterialData.hh>
+#include <ImageUtils.hh>
 #include <FreeImagePlus.h>
 #include <Utils/BitOperations.hpp>
 #include "ConvertorStatusManager.hpp"
 #include "CookingTask.hpp"
+
 namespace AGE
 {
 	class ImageLoader
@@ -18,6 +21,7 @@ namespace AGE
 			auto tid = Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PushTask("ImageLoader : load and save " + cookingTask->dataSet->filePath.getShortFileName());
 			while (!cookingTask->textures.empty())
 			{
+				bool convertBump = false;
 				auto t = cookingTask->textures.back();
 				cookingTask->textures.pop_back();
 				auto path = cookingTask->rawDirectory.path().string() + "\\" + t->rawPath;
@@ -29,52 +33,77 @@ namespace AGE
 					continue;
 				}
 
+				if (cookingTask->dataSet->bumpToNormal)
+				{
+					for (auto material : cookingTask->materials)
+					{
+						if (!t->rawPath.empty() &&
+							File(material->bumpTexPath).getShortFileName() == File(t->rawPath).getShortFileName())
+						{
+							convertBump = true;
+							break;
+						}
+					}
+				}
+
 				t->width = image.getWidth();
 				t->height = image.getHeight();
-				auto colorType = image.getColorType();
 				t->bpp = image.getBitsPerPixel();
+				t->colorNumber = t->bpp / 8;
 
-				bool toResize = false;
-				if (!Bits::isPowerOfTwo(t->width))
-				{
-					t->width = Bits::roundToHighestPowerOfTwo(t->width);
-					toResize = true;
-				}
-				if (!Bits::isPowerOfTwo(t->height))
-				{
-					t->height = Bits::roundToHighestPowerOfTwo(t->height);
-					toResize = true;
-				}
-				if (toResize)
-				{
-					if (!image.rescale(t->width, t->height, FILTER_BICUBIC));
-					{
-						//ERROR PAUL WILL FIXE ALL THAT PART :D
-					}
-					std::cout << "Texture : " << path << " resized !" << std::endl;
-				}
+				//				bool toResize = false;
+				//				if (!Bits::isPowerOfTwo(t->width))
+				//				{
+				//					t->width = Bits::roundToHighestPowerOfTwo(t->width);
+				//					toResize = true;
+				//				}
+				//				if (!Bits::isPowerOfTwo(t->height))
+				//				{
+				//					t->height = Bits::roundToHighestPowerOfTwo(t->height);
+				//					toResize = true;
+				//				}
+				//				if (toResize)
+				//				{
+				//					if (!image.rescale(t->width, t->height, FILTER_BICUBIC));
+				//					{
+				//						//ERROR PAUL WILL FIXE ALL THAT PART :D
+				//					}
+				//					std::cout << "Texture : " << path << " resized !" << std::endl;
+				//				}
 
-				t->colorNumber = 0;
-				if (colorType == FIC_RGB)
+				if (cookingTask->dataSet->compressTextures)
 				{
-					t->colorNumber = 3;
-					if (t->bpp > 24)
-						t->colorNumber = 4;
-				}
-				else if (colorType == FIC_RGBALPHA)
-				{
-					t->colorNumber = 4;
-					if (t->bpp < 32)
-						t->colorNumber = 3;
-				}
-				else if (colorType == FIC_MINISBLACK || colorType == FIC_MINISWHITE)
-				{
-					t->colorNumber = 1;
+					if (t->colorNumber == 1)
+						t->format = ECompressedFormat::LUM_DXT1_FORMAT;
+					else if (t->colorNumber == 3)
+						t->format = ECompressedFormat::RGB_DXT1_FORMAT;
+					else if (t->colorNumber == 4)
+						t->format = ECompressedFormat::RGBA_DXT5_FORMAT;
 				}
 				else
-					assert(false);
-				auto imgData = FreeImage_GetBits(image);
-				t->data.assign(imgData, imgData + sizeof(unsigned char) * t->width * t->height * t->colorNumber);
+					t->format = ECompressedFormat::UNCOMPRESSED;
+
+				uint8_t *imgData;
+				uint32_t dataSize = t->width * t->height * t->colorNumber;
+
+				if (convertBump)
+				{
+					if (t->colorNumber < 3)
+						t->colorNumber = 3;
+					dataSize = t->width * t->height * t->colorNumber;
+					ImageUtils::convertBumpToNormal(image, cookingTask->dataSet->normalStrength);
+				}
+
+				if (cookingTask->dataSet->compressTextures)
+				{
+					ImageUtils::switchRedBlue(image);
+					imgData = ImageUtils::compressImage(image, cookingTask->dataSet->generateMipmap,
+						cookingTask->dataSet->textureCompressionQuality, t, dataSize);
+				}
+				else
+					imgData = FreeImage_GetBits(image);
+
+				t->data.assign(imgData, imgData + dataSize);
 
 				auto folderPath = std::tr2::sys::path(cookingTask->serializedDirectory.path().directory_string() + "\\" + File(t->rawPath).getFolder());
 

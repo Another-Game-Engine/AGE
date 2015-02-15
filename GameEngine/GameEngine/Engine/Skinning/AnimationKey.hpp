@@ -1,12 +1,13 @@
 #pragma once
 
-
-
 #include <cereal/types/vector.hpp>
 #include <cereal/types/string.hpp>
 // TODO to pass in .cpp
 #include <Utils/Serialization/QuaternionSerialization.hpp>
 #include <Utils/Serialization/VectorSerialization.hpp>
+
+#include <glm/gtx/quaternion.hpp>
+#include <glm/gtc/quaternion.hpp>
 
 namespace AGE
 {

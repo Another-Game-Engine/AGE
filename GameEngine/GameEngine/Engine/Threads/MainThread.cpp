@@ -3,9 +3,9 @@
 #include "QueueOwner.hpp"
 #include "ThreadManager.hpp"
 #include "RenderThread.hpp"
-#include <Core/Tasks/Render.hpp>
+#include <Threads/Tasks/ToRenderTasks.hpp>
 #include <Threads/PrepareRenderThread.hpp>
-#include <Core/Tasks/Basics.hpp>
+#include <Threads/Tasks/BasicTasks.hpp>
 
 
 namespace AGE

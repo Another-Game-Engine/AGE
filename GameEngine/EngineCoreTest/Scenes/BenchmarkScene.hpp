@@ -1,19 +1,20 @@
 #pragma once
 
+#include <ostream>
+#include <fstream>
+#include <string>
+
 #include <Core/AScene.hh>
 #include <Systems/LifetimeSystem.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <Systems/BulletDynamicSystem.hpp>
 #include <Components/MeshRenderer.hh>
 #include <Components/Light.hh>
-#include <Core/AssetsManager.hpp>
+#include <Components/CameraComponent.hpp>
+#include <AssetManagement/AssetManager.hh>
 #include <Context/IRenderContext.hh>
 #include <CONFIGS.hh>
-#include <Skinning/AnimationInstance.hpp>
-#include <Render/Pipeline.hh>
-#include <ostream>
-#include <fstream>
-#include <string>
+#include <AssetManagement/Instance/AnimationInstance.hh>
 
 # define VERTEX_SHADER "../../Shaders/test_pipeline_1.vp"
 # define FRAG_SHADER "../../Shaders/test_pipeline_1.fp"
@@ -24,89 +25,33 @@
 # define DEFERRED_FRAG_SHADER_MERGE "../../Shaders/Deffered_shading/deferred_shading_merge.fp"
 # define DEFERRED_VERTEX_SHADER_MERGE "../../Shaders/Deffered_shading/deferred_shading_merge.vp"
 
-namespace AGE
+
+class BenchmarkScene : public AGE::AScene	
 {
-	struct Deferred_accum_light
-	{
-		gl::Key<gl::Shader> shader;
-		gl::Key<gl::Pipeline> pipeline;
-		gl::Key<gl::RenderPass> renderPass;
-		gl::Key<gl::RenderPostEffect> renderPostEffect;
-		gl::Key<gl::Uniform> position_light;
-		gl::Key<gl::Uniform> color_light;
-		gl::Key<gl::Uniform> range_light;
-		gl::Key<gl::Sampler> depth_buffer;
-		gl::Key<gl::Sampler> normal_buffer;
-		gl::Key<gl::Sampler> specular_buffer;
-		gl::Key<gl::Uniform> ambiant_color;
-	};
+public:
+	BenchmarkScene(std::weak_ptr<AGE::Engine> engine);
 
-	struct Deferred_get_buffer_Key
-	{
-		gl::Key<gl::Shader> shader;
-		gl::Key<gl::Uniform> model_matrix;
-		gl::Key<gl::RenderPass> renderPass;
-		gl::Key<gl::Pipeline> pipeline;
-		gl::Key<gl::Uniform> specular_color;
-		gl::Key<gl::Uniform> specular_ratio;
-		gl::Key<gl::Uniform> shininess;
-	};
+	virtual ~BenchmarkScene(void);
+	void initRendering();
+	virtual bool userStart();
+	virtual bool userUpdateBegin(double time);
+	virtual bool userUpdateEnd(double time);
 
-	struct Deffered_clean_buffer
-	{
-		gl::Key<gl::EmptyRenderPass> emptyRenderPass;
-		gl::Key<gl::Pipeline> pipeline;
-	};
+private:
 
-	struct Deffered_merge
-	{
-		gl::Key<gl::Shader> shader;
-		gl::Key<gl::Sampler> diffuse_buffer;
-		gl::Key<gl::Sampler> light_buffer;
-		gl::Key<gl::RenderPostEffect> renderPostEffect;
-		gl::Key<gl::Pipeline> pipeline;
-		gl::Key<gl::RenderOnScreen> renderOnScreen;
-	};
-
-	struct RenderKey
-	{
-		Deffered_merge merge;
-		Deffered_clean_buffer clean;
-		Deferred_accum_light Accum;
-		Deferred_get_buffer_Key getBuff;
-		gl::Key<gl::UniformBlock> global_state;
-	};
-
-	class BenchmarkScene : public AScene
-	{
-	public:
-		BenchmarkScene(std::weak_ptr<AGE::Engine> engine);
-
-		virtual ~BenchmarkScene(void);
-		void initRendering();
-		virtual bool userStart();
-		virtual bool userUpdateBegin(double time);
-		virtual bool userUpdateEnd(double time);
-
-	private:
-		static gl::RenderManager *_renderManager;
-		static RenderKey key;
-
-		std::size_t _frameCounter = 0;
-		double _timeCounter = 0.0;
-		double _maxTime = 10000000005.0f;
-		double _chunkCounter = 0.0;
-		double _maxChunk = 0.25f;
-		std::size_t _chunkFrame = 0;
-		std::ofstream _logFile;
-		Entity GLOBAL_CAMERA;
-		Entity GLOBAL_CATWOMAN;
-		std::array<Entity, 5> GLOBAL_LIGHTS;
-		Entity GLOBAL_SPONZA;
-		Entity GLOBAL_FLOOR;
-		Entity GLOBAL_HEAD;
-		gl::Key<AGE::AnimationInstance> GLOBAL_CAT_ANIMATION;
-		static bool initRenderingJustOneTime;
-		std::list<std::future<bool>> assetLoadingList;
-	};
-}
+	std::size_t _frameCounter = 0;
+	double _timeCounter = 0.0;
+	double _maxTime = 10000000005.0f;
+	double _chunkCounter = 0.0;
+	double _maxChunk = 0.25f;
+	std::size_t _chunkFrame = 0;
+	std::ofstream _logFile;
+	AGE::Entity GLOBAL_CAMERA;
+	AGE::Entity GLOBAL_CATWOMAN;
+	std::array<AGE::Entity, 5> GLOBAL_LIGHTS;
+	AGE::Entity GLOBAL_SPONZA;
+	AGE::Entity GLOBAL_FLOOR;
+	AGE::Entity GLOBAL_HEAD;
+	static bool initRenderingJustOneTime;
+	std::list<std::future<bool>> assetLoadingList;
+};

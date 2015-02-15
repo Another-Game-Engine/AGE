@@ -4,10 +4,10 @@
 #include <Threads/ThreadManager.hpp>
 #include <Core/Engine.hh>
 #include <Core/Timer.hh>
-#include <Core/AssetsManager.hpp>
+#include <AssetManagement/AssetManager.hh>
 #include <Threads/RenderThread.hpp>
 #include <Utils/Age_Imgui.hpp>
-#include <Core/Tasks/Basics.hpp>
+#include <Threads/Tasks/BasicTasks.hpp>
 #include <Threads/TaskScheduler.hpp>
 #include <Core/Input.hh>
 #include <SDL/SDL.h>
@@ -27,7 +27,6 @@
 #include <AssetFiles/RawFile.hpp>
 #include <AssetFiles/AssetFileManager.hpp>
 #include <AssetFiles/CookedFile.hpp>
-
 #include <AssetFiles/AssetsTypes.hpp>
 
 #include <Utils/FileSystem.hpp>
@@ -157,7 +156,7 @@ namespace AGE
 						ImGui::Checkbox("Generate normal map from bump", &dataset->bumpToNormal);
 						if (dataset->bumpToNormal)
 						{
-							ImGui::SliderInt("Normal strength", &dataset->normalStrength, 1, 10);
+							ImGui::SliderFloat("Normal strength", &dataset->normalStrength, 1.0f, 10.0f);
 						}
 					}
 					ImGui::Separator();
@@ -178,10 +177,10 @@ namespace AGE
 					if (dataset->loadTextures)
 					{
 						ImGui::Checkbox("Compress textures", &dataset->compressTextures);
-						ImGui::Checkbox("Generate mipmaps", &dataset->generateMipmap);
-						if (dataset->generateMipmap)
+						if (dataset->compressTextures)
 						{
-							ImGui::SliderInt("Mipmap levels", &dataset->mipmapLevels, 1, 16);
+							ImGui::SliderInt("Compression quality", &dataset->textureCompressionQuality, 0, 4);
+							ImGui::Checkbox("Generate mipmaps", &dataset->generateMipmap);
 						}
 					}
 					ImGui::Separator();
