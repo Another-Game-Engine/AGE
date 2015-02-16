@@ -25,18 +25,19 @@ namespace AGE
 		ImGui::Begin("Assets Convertor", (bool*)1, ImGui::GetIO().DisplaySize, 1, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoTitleBar);
 
 
-		ImGui::BeginChild("Global Options", ImVec2(300, 0), true);
+		ImGui::BeginChild("Global Options", ImVec2(ImGui::GetIO().DisplaySize.x, 30), false);
 		if (ImGui::Button("Asset Editor"))
 		{
 			getEngine().lock()->disableScene(WorldEditorScene::Name);
 			getEngine().lock()->enableScene(AssetsEditorScene::Name, 1000);
 		}
+		ImGui::SameLine();
 		if (ImGui::Button("World Editor"))
 		{
 			getEngine().lock()->enableScene(WorldEditorScene::Name, 1000);
 			getEngine().lock()->disableScene(AssetsEditorScene::Name);
 		}
-		ImGui::EndChild(); ImGui::SameLine();
+		ImGui::EndChild();
 		return true;
 	}
 

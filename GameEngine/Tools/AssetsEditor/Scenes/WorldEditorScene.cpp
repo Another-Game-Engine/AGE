@@ -23,7 +23,7 @@ namespace AGE
 
 	bool WorldEditorScene::userUpdateBegin(double time)
 	{
-		ImGui::BeginChild("Assets browser", ImVec2(ImGui::GetWindowWidth() * 0.3333333f, 0), true);
+		ImGui::BeginChild("Assets browser", ImVec2(ImGui::GetWindowWidth() * 0.2f, 0), true);
 		ImGui::BeginChild("Raw", ImVec2(0, 0), false);
 		return true;
 	}
