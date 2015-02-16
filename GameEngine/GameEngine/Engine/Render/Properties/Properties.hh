@@ -11,6 +11,7 @@ namespace AGE
 	class Properties
 	{
 	public:
+		Properties() = default;
 		Properties(std::vector<std::shared_ptr<IProperty>> const &properties);
 		Properties(Properties &&other);
 		Properties(Properties const &) = default;

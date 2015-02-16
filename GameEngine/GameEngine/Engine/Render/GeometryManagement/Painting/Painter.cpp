@@ -51,14 +51,14 @@ namespace AGE
 		return (&_vertices[key.getId()]);
 	}
 
-	Painter & Painter::draw(GLenum mode, std::shared_ptr<Program> const &p, std::vector<std::pair<>> const &drawList)
+	Painter & Painter::draw(GLenum mode, std::shared_ptr<Program> const &p, std::vector<Key<Vertices>> const &drawList)
 	{
 		assert(p->coherent_attribute(_buffer.get_types()));
 		_buffer.bind();
 		_buffer.update();
 		for (auto &draw_element : drawList) {
 			if (draw_element) {
-				_vertices[draw_element.getId()].update(p);
+//				_vertices[draw_element.getId()].update(p);
 				_vertices[draw_element.getId()].draw(mode);
 			}
 		}

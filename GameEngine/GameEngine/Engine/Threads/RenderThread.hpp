@@ -6,6 +6,7 @@
 #include <Utils/Containers/Vector.hpp>
 #include <Render/GeometryManagement/Painting/PaintingManager.hh>
 #include <Render/Pipelining/Pipelines/IRenderingPipeline.hh>
+#include <Render/Properties/PropertyManager.hh>
 #include <memory>
 #include <vector>
 
@@ -29,6 +30,7 @@ namespace AGE
 	public:
 		std::shared_ptr<PaintingManager> paintingManager;
 		std::vector<std::unique_ptr<IRenderingPipeline>> pipelines;
+		std::shared_ptr<PropertyManager> properties;
 
 	private:
 		RenderThread();

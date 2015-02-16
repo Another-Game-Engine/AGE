@@ -270,6 +270,14 @@ namespace AGE
 				added.key.id = id;
 
 				added.mesh = msg.submeshInstances[i];
+
+				auto addedProperty = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<AGE::Tasks::Render::CreateMeshProperty, std::pair<Key<Properties>, Key<Property>>>();
+
+				auto propertyInfos = addedProperty.get();
+
+				added.instanceProperties = propertyInfos.first;
+				added.transformationProperty = propertyInfos.second;
+
 				added.position = uo->position;
 				added.orientation = uo->orientation;
 				added.scale = uo->scale;
@@ -398,7 +406,7 @@ namespace AGE
 					_octree.addElement(&e);
 				else
 					_octree.moveElement(&e);
-				AGE::GetRenderThread()->getQueue()->emplaceTask<AGE::Tasks::Render::SetMeshTransform>(e.mesh.painter, e.mesh.vertices, e.mesh.transformation, e.transformation);
+				AGE::GetRenderThread()->getQueue()->emplaceTask<AGE::Tasks::Render::SetMeshTransform>(e.mesh.painter, e.mesh.vertices, e.transformationProperty, e.transformation);
 				assert(e.currentNode != UNDEFINED_IDX);
 			}
 			for (uint32_t idx : _pointLightsToMove)
@@ -471,6 +479,7 @@ namespace AGE
 								curRenderPainter->painter = currentDrawable->mesh.painter;
 							}
 							curRenderPainter->vertices.emplace_back(currentDrawable->mesh.vertices);
+							curRenderPainter->properties.emplace_back(currentDrawable->instanceProperties);
 						}
 						break;
 					case PrepareKey::Type::PointLight:

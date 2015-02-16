@@ -1,10 +1,10 @@
 #pragma once
 
-# include <vector>
-# include <string>
-# include <memory>
+#include <vector>
+#include <string>
+#include <memory>
 
-# define ARGS_FUNCTION_RENDER RenderPipeline &pipeline, RenderLightList &lights, CameraInfos &infos
+# define ARGS_FUNCTION_RENDER RenderPipeline &pipeline, RenderLightList &lights, CameraInfos &infos, PropertyManager &properties
 
 namespace AGE
 {
@@ -12,6 +12,7 @@ namespace AGE
 	class IRendering;
 	class Painter;
 	class Program;
+	class PropertyManager;
 	struct RenderPipeline;
 	struct RenderLightList;
 	struct CameraInfos;

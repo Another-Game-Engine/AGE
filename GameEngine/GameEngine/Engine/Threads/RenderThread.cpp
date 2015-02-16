@@ -54,12 +54,12 @@ namespace AGE
 
 		registerCallback<Tasks::Render::SetMeshTransform>([&](Tasks::Render::SetMeshTransform &msg)
 		{
-			auto painter = paintingManager->get_painter(msg.painter);
-			auto vertices = painter->get_vertices(msg.mesh);
-			auto property = vertices->get_property<Transformation>(msg.transform);
-			
-			assert(property != nullptr);
-			*property = msg.transformMat;
+//			auto painter = paintingManager->get_painter(msg.painter);
+//			auto vertices = painter->get_vertices(msg.mesh);
+//			auto property = vertices->get_property<Transformation>(msg.transform);
+//			
+//			assert(property != nullptr);
+//			*property = msg.transformMat;
 		});
 
 		registerCallback<Tasks::Render::GetWindowSize>([&](Tasks::Render::GetWindowSize &msg)
@@ -84,7 +84,7 @@ namespace AGE
 			for (auto &curPipeline : pipelines) {
 				for (auto &curCamera : _drawlist) {
 					if (pipelineIdx < curCamera.pipelines.size()) {
-						curPipeline->render(curCamera.pipelines[pipelineIdx], curCamera.lights, curCamera.camInfos);
+						curPipeline->render(curCamera.pipelines[pipelineIdx], curCamera.lights, curCamera.camInfos, *properties);
 					}
 				}
 				++pipelineIdx;
@@ -115,30 +115,40 @@ namespace AGE
 		});
 #endif
 
-		registerCallback<Tasks::Render::SetMeshMaterial>([&](Tasks::Render::SetMeshMaterial& msg)
+		registerCallback <Tasks::Render::CreateMeshProperty>([&](Tasks::Render::CreateMeshProperty &msg)
 		{
-			for (auto &subMesh : msg.mesh->subMeshs)
-			{
-				auto vertices = paintingManager->get_painter(subMesh.painter)->get_vertices(subMesh.vertices);
-				assert(vertices != nullptr);
-				if (subMesh.defaultMaterialIndex >= msg.material->datas.size())
-				{
-					for (auto &prop : msg.material->datas[0])
-					{
-						prop->set_program(pipelines[0]->get_programs());
-						vertices->add_property(prop);
-					}
-				}
-				else
-				{
-					for (auto &prop : msg.material->datas[subMesh.defaultMaterialIndex])
-					{
-						prop->set_program(pipelines[0]->get_programs());
-						vertices->add_property(prop);
-					}
-				}
-			}
+			std::shared_ptr<Transformation> transformProperty = std::make_shared<Transformation>(glm::mat4(1));
+			std::shared_ptr<Properties> addedProperties = std::make_shared<Properties>();
+
+			Key<Property> transformKey = addedProperties->add_property(transformProperty);
+			Key<Properties> meshPropertiesKey = properties->add_properties(addedProperties);
+			msg.setValue(std::make_pair(meshPropertiesKey, transformKey));
 		});
+
+//		registerCallback<Tasks::Render::SetMeshMaterial>([&](Tasks::Render::SetMeshMaterial& msg)
+//		{
+//			for (auto &subMesh : msg.mesh->subMeshs)
+//			{
+//				auto vertices = paintingManager->get_painter(subMesh.painter)->get_vertices(subMesh.vertices);
+//				assert(vertices != nullptr);
+//				if (subMesh.defaultMaterialIndex >= msg.material->datas.size())
+//				{
+//					for (auto &prop : msg.material->datas[0])
+//					{
+//						prop->set_program(pipelines[0]->get_programs());
+//						vertices->add_property(prop);
+//					}
+//				}
+//				else
+//				{
+//					for (auto &prop : msg.material->datas[subMesh.defaultMaterialIndex])
+//					{
+//						prop->set_program(pipelines[0]->get_programs());
+//						vertices->add_property(prop);
+//					}
+//				}
+//			}
+//		});
 
 		return true;
 	}

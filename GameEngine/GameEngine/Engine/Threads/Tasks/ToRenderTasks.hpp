@@ -56,6 +56,16 @@ namespace AGE
 
 			};
 
+			struct CreateMeshProperty : public TMQ::FutureData<std::pair<Key<Properties>, Key<Property>>>
+			{
+				int toto;
+			};
+
+			struct RemoveMeshProperty
+			{
+
+			};
+
 			struct SetMeshTransform
 			{
 				Key<Painter> painter;
