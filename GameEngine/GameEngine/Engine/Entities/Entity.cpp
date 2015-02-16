@@ -7,12 +7,27 @@ namespace AGE
 	Entity &EntityData::getEntity() { return entity; }
 	const AGE::Link &EntityData::getLink() const { return link; }
 	AGE::Link &EntityData::getLink() { return link; }
+	AScene *EntityData::getScene() { return scene; }
 
 	ComponentBase *EntityData::getComponent(ComponentType id)
 	{
 		if (!haveComponent(id))
 			return nullptr;
 		return components[id];
+	}
+
+	void EntityData::addComponentPtr(ComponentBase *cpt)
+	{
+		auto id = cpt->getType();
+		if (haveComponent(id))
+		{
+			// if already have component of this type, we remove the old one
+			removeComponent(id);
+		}
+		if (components.size() <= id)
+			components.resize(id + 1, nullptr);
+		components[id] = cpt;
+		scene->informFiltersComponentAddition(id, *this);
 	}
 
 	void EntityData::removeComponent(ComponentType id)
@@ -106,6 +121,11 @@ namespace AGE
 		return &ptr->getEntity();
 	}
 
+	AScene *Entity::getScene()
+	{
+		return ptr->getScene();
+	}
+
 	AGE::Link &Entity::getLink()
 	{
 		return ptr->getLink();
@@ -129,6 +149,11 @@ namespace AGE
 	bool Entity::haveComponent(ComponentType id) const
 	{
 		return ptr->haveComponent(id);
+	}
+
+	void Entity::addComponentPtr(ComponentBase *cpt)
+	{
+		ptr->addComponentPtr(cpt);
 	}
 
 	const std::vector<ComponentBase*> &Entity::getComponentList() const

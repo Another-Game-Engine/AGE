@@ -17,12 +17,14 @@ namespace AGE
 {
 	class AScene;
 	class ComponentManager;
+	class ComponentRegistrar;
 
 	struct ComponentBase
 	{
 		ComponentBase();
 		virtual ~ComponentBase();
 		virtual void reset(AScene *){};
+		virtual void postUnserialization(AScene *scene){}
 
 		Entity entity;
 
@@ -45,6 +47,7 @@ namespace AGE
 		ComponentType _typeId;
 
 		friend class ComponentManager;
+		friend class ComponentRegistrar;
 	};
 
 

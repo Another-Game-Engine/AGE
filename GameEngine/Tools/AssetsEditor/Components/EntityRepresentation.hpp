@@ -3,6 +3,8 @@
 #include <Components/Component.hh>
 #include <array>
 #include <glm/fwd.hpp>
+#include <cereal/archives/json.hpp>
+#include <cereal/types/array.hpp>
 
 namespace AGE
 {
@@ -21,8 +23,10 @@ namespace AGE
 			template <typename Archive>
 			void serialize(Archive &ar)
 			{
-
+			//	ar(name);
 			}
+
+			virtual void postUnserialization(AScene *scene);
 
 			std::array<char, 255> name;
 			glm::vec3 position;

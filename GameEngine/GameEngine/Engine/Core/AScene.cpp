@@ -178,31 +178,31 @@ namespace AGE
 		std::ofstream file(fileName, std::ios::binary);
 		assert(file.is_open());
 
-		auto ar = cereal::JSONOutputArchive(file);
-
-		std::uint16_t entityNbr = getNumberOfEntities();
-
-		ar(cereal::make_nvp("Number_of_serialized_entities", entityNbr));
-
-		std::vector<EntityData> entities;
-
-		auto &typesMap = ComponentRegistrar::getInstance().getSystemIdToAgeIdMap();
-		ar(cereal::make_nvp("Component type map", typesMap));
-
-		for (auto &e : _entities)
 		{
-			auto es = EntitySerializationInfos(*e.ptr);
-			for (auto &c : e.ptr->components)
-			{
-				if (c)
-				{
-					es.components.push_back(c);
-				}
-			}
-			ar(cereal::make_nvp("Entity_" + std::to_string(e.ptr->getEntity().getId()), es));
-			es.serializeComponentsToJson(ar);
-		}
+			auto ar = cereal::JSONOutputArchive(file);
 
+			std::size_t entityNbr = getNumberOfEntities();
+
+			ar(cereal::make_nvp("Number_of_serialized_entities", entityNbr));
+
+			auto &typesMap = ComponentRegistrar::getInstance().getAgeIdToSystemIdMap();
+			ar(cereal::make_nvp("Component type map", typesMap));
+
+			std::vector<EntitySerializationInfos> entities;
+			for (auto &e : _entities)
+			{
+				EntitySerializationInfos es(e.ptr);
+				for (auto &c : e.ptr->components)
+				{
+					if (c)
+					{
+						es.componentTypes.push_back(c->getType());
+						es.components.push_back(c);
+					}
+				}
+				ar(cereal::make_nvp("Entity_" + std::to_string(e.ptr->getEntity().getId()), es));
+			}
+		}
 		file.close();
 	}
 
@@ -211,6 +211,23 @@ namespace AGE
 		std::ifstream file(fileName, std::ios::binary);
 		assert(file.is_open());
 
+		{
+			auto ar = cereal::JSONInputArchive(file);
+
+			std::size_t entityNbr;
+			ar(entityNbr);
+
+			std::map<ComponentType, std::size_t> typesMap;
+			ar(typesMap);
+
+			for (std::size_t i = 0; i < entityNbr; ++i)
+			{
+				auto entity = createEntity();
+				EntitySerializationInfos es(entity.ptr);
+				es.typesMap = &typesMap;
+				ar(es);
+			}
+		}
 		file.close();
 	}
 

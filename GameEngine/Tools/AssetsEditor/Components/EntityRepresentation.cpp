@@ -57,5 +57,12 @@ namespace AGE
 			rotation = std::move(o.rotation);
 			scale = std::move(o.scale);
 		}
+
+		void EntityRepresentation::postUnserialization(AScene *scene)
+		{
+			position = entity.getLink().getPosition();
+			rotation = glm::eulerAngles(entity.getLink().getOrientation());
+			scale = entity.getLink().getScale();
+		}
 	}
 }

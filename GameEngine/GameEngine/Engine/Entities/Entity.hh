@@ -22,6 +22,7 @@ namespace AGE
 	class EntityFilter;
 	struct ComponentBase;
 	class ComponentManager;
+	struct EntitySerializationInfos;
 
 	class Entity
 	{
@@ -43,6 +44,7 @@ namespace AGE
 		AGE::Link &getLink();
 		const AGE::Entity *getPtr() const;
 		AGE::Entity *getPtr();
+		AScene *getScene();
 
 		ComponentBase *getComponent(ComponentType id);
 
@@ -67,6 +69,7 @@ namespace AGE
 		}
 
 		bool haveComponent(ComponentType id) const;
+		void addComponentPtr(ComponentBase *cpt);
 
 		template <typename T>
 		bool haveComponent() const
@@ -104,6 +107,7 @@ namespace AGE
 		friend AScene;
 		friend EntityFilter;
 		friend ComponentManager;
+		friend EntitySerializationInfos;
 	};
 }
 
