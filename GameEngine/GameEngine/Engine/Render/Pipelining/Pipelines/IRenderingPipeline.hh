@@ -3,7 +3,6 @@
 # include <vector>
 # include <string>
 # include <memory>
-# include <Render/GeometryManagement/Painting/PaintingManager.hh>
 
 # define ARGS_FUNCTION_RENDER RenderPipeline &pipeline, RenderLightList &lights, CameraInfos &infos
 

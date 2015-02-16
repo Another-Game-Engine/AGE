@@ -4,6 +4,8 @@
 #include <Render/Pipelining/Render/Rendering.hh>
 #include <Render/OpenGLTask/Tasks.hh>
 #include <Render/GeometryManagement/Painting/Painter.hh>
+#include <Render/Properties/PropertyManager.hh>
+#include <Render/GeometryManagement/Painting/PaintingManager.hh>
 #include <SpacePartitioning/Ouptut/RenderPipeline.hh>
 #include <SpacePartitioning/Ouptut/RenderPainter.hh>
 #include <SpacePartitioning/Ouptut/RenderCamera.hh>
@@ -45,7 +47,7 @@ namespace AGE
 		auto index = 0;
 		for (auto &key : pipeline.keys) {
 			auto painter = _painter_manager->get_painter(key.painter);
-			auto properties = _properties_manager->get_properties(key.properties);
+			auto properties = _property_manager->get_properties(key.properties);
 			_rendering_list[RENDER]->render(key.vertices, *painter);
 		}
 		return (*this);

@@ -3,11 +3,11 @@
 # include <string>
 # include <vector>
 # include <memory>
-# include <Render/Properties/IProperty.hh>
+# include <Render/Properties/Properties.hh>
 
 namespace AGE
 {
-	typedef std::vector<std::shared_ptr<IProperty>> MaterialInstance;
+	typedef Properties MaterialInstance;
 
 	struct MaterialSetInstance
 	{

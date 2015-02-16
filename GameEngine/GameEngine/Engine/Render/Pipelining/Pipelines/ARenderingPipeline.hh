@@ -8,6 +8,8 @@ namespace AGE
 
 	class Painter;
 	class Program;
+	class PaintingManager;
+	class PropertyManager;
 
 	class ARenderingPipeline : public IRenderingPipeline
 	{
@@ -26,6 +28,7 @@ namespace AGE
 	protected:
 		std::string _name;
 		std::shared_ptr<PaintingManager> _painter_manager;
+		std::shared_ptr<PropertyManager> _property_manager;
 		std::vector<std::shared_ptr<IRendering>> _rendering_list;
 		std::vector<std::shared_ptr<Program>> _programs;
 	};
