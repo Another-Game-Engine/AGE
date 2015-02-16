@@ -1,0 +1,1044 @@
+{
+    "Number_of_serialized_entities": 30,
+    "Component type map": [
+        {
+            "key": 573189261411184160,
+            "value": 2
+        },
+        {
+            "key": 1713135011246741269,
+            "value": 1
+        },
+        {
+            "key": 4665681159133520176,
+            "value": 3
+        },
+        {
+            "key": 5355615174208623061,
+            "value": 0
+        },
+        {
+            "key": 9818697393957024739,
+            "value": 4
+        }
+    ],
+    "Entity_8": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0
+            },
+            "Scale": {
+                "value0": 1,
+                "value1": 1,
+                "value2": 1
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "flags": 0
+    },
+    "AGE::PointLightComponent": {
+        "color": {
+            "value0": 0.42100000381469727,
+            "value1": 0.38199999928474426,
+            "value2": 0.29199999570846558
+        },
+        "range": {
+            "value0": 1,
+            "value1": 0.10000000149011612,
+            "value2": 0
+        }
+    },
+    "AGE::WE::EntityRepresentation": {},
+    "Entity_0": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0
+            },
+            "Scale": {
+                "value0": 1,
+                "value1": 1,
+                "value2": 1
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "flags": 0
+    },
+    "AGE::PointLightComponent": {
+        "color": {
+            "value0": 0.33399999141693115,
+            "value1": 0.46700000762939453,
+            "value2": 0.041000001132488251
+        },
+        "range": {
+            "value0": 1,
+            "value1": 0.10000000149011612,
+            "value2": 0
+        }
+    },
+    "AGE::WE::EntityRepresentation": {},
+    "Entity_1": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0
+            },
+            "Scale": {
+                "value0": 1,
+                "value1": 1,
+                "value2": 1
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "flags": 0
+    },
+    "AGE::PointLightComponent": {
+        "color": {
+            "value0": 0.72399997711181641,
+            "value1": 0.16899999976158142,
+            "value2": 0.5
+        },
+        "range": {
+            "value0": 1,
+            "value1": 0.10000000149011612,
+            "value2": 0
+        }
+    },
+    "AGE::WE::EntityRepresentation": {},
+    "Entity_2": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0
+            },
+            "Scale": {
+                "value0": 1,
+                "value1": 1,
+                "value2": 1
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "flags": 0
+    },
+    "AGE::PointLightComponent": {
+        "color": {
+            "value0": 0.96200001239776611,
+            "value1": 0.3580000102519989,
+            "value2": 0.4779999852180481
+        },
+        "range": {
+            "value0": 1,
+            "value1": 0.10000000149011612,
+            "value2": 0
+        }
+    },
+    "AGE::WE::EntityRepresentation": {},
+    "Entity_3": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0
+            },
+            "Scale": {
+                "value0": 1,
+                "value1": 1,
+                "value2": 1
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "flags": 0
+    },
+    "AGE::PointLightComponent": {
+        "color": {
+            "value0": 0.14499999582767487,
+            "value1": 0.70499998331069946,
+            "value2": 0.46399998664855957
+        },
+        "range": {
+            "value0": 1,
+            "value1": 0.10000000149011612,
+            "value2": 0
+        }
+    },
+    "AGE::WE::EntityRepresentation": {},
+    "Entity_4": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0
+            },
+            "Scale": {
+                "value0": 1,
+                "value1": 1,
+                "value2": 1
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "flags": 0
+    },
+    "AGE::PointLightComponent": {
+        "color": {
+            "value0": 0.96100002527236938,
+            "value1": 0.82700002193450928,
+            "value2": 0.28099998831748962
+        },
+        "range": {
+            "value0": 1,
+            "value1": 0.10000000149011612,
+            "value2": 0
+        }
+    },
+    "AGE::WE::EntityRepresentation": {},
+    "Entity_5": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0
+            },
+            "Scale": {
+                "value0": 1,
+                "value1": 1,
+                "value2": 1
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "flags": 0
+    },
+    "AGE::PointLightComponent": {
+        "color": {
+            "value0": 0.94199997186660767,
+            "value1": 0.99500000476837158,
+            "value2": 0.49099999666213989
+        },
+        "range": {
+            "value0": 1,
+            "value1": 0.10000000149011612,
+            "value2": 0
+        }
+    },
+    "AGE::WE::EntityRepresentation": {},
+    "Entity_6": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0
+            },
+            "Scale": {
+                "value0": 1,
+                "value1": 1,
+                "value2": 1
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "flags": 0
+    },
+    "AGE::PointLightComponent": {
+        "color": {
+            "value0": 0.39100000262260437,
+            "value1": 0.43599998950958252,
+            "value2": 0.82700002193450928
+        },
+        "range": {
+            "value0": 1,
+            "value1": 0.10000000149011612,
+            "value2": 0
+        }
+    },
+    "AGE::WE::EntityRepresentation": {},
+    "Entity_7": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0
+            },
+            "Scale": {
+                "value0": 1,
+                "value1": 1,
+                "value2": 1
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "flags": 0
+    },
+    "AGE::PointLightComponent": {
+        "color": {
+            "value0": 0.15299999713897705,
+            "value1": 0.90200001001358032,
+            "value2": 0.60399997234344482
+        },
+        "range": {
+            "value0": 1,
+            "value1": 0.10000000149011612,
+            "value2": 0
+        }
+    },
+    "AGE::WE::EntityRepresentation": {},
+    "Entity_9": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0
+            },
+            "Scale": {
+                "value0": 1,
+                "value1": 1,
+                "value2": 1
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "flags": 0
+    },
+    "AGE::PointLightComponent": {
+        "color": {
+            "value0": 0.89499998092651367,
+            "value1": 0.71799999475479126,
+            "value2": 0.7160000205039978
+        },
+        "range": {
+            "value0": 1,
+            "value1": 0.10000000149011612,
+            "value2": 0
+        }
+    },
+    "AGE::WE::EntityRepresentation": {},
+    "Entity_10": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0
+            },
+            "Scale": {
+                "value0": 1,
+                "value1": 1,
+                "value2": 1
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "flags": 0
+    },
+    "AGE::PointLightComponent": {
+        "color": {
+            "value0": 0.77100002765655518,
+            "value1": 0.72600001096725464,
+            "value2": 0.44699999690055847
+        },
+        "range": {
+            "value0": 1,
+            "value1": 0.10000000149011612,
+            "value2": 0
+        }
+    },
+    "AGE::WE::EntityRepresentation": {},
+    "Entity_11": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0
+            },
+            "Scale": {
+                "value0": 1,
+                "value1": 1,
+                "value2": 1
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "flags": 0
+    },
+    "AGE::PointLightComponent": {
+        "color": {
+            "value0": 0.91200000047683716,
+            "value1": 0.86900001764297485,
+            "value2": 0.53799998760223389
+        },
+        "range": {
+            "value0": 1,
+            "value1": 0.10000000149011612,
+            "value2": 0
+        }
+    },
+    "AGE::WE::EntityRepresentation": {},
+    "Entity_12": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0
+            },
+            "Scale": {
+                "value0": 1,
+                "value1": 1,
+                "value2": 1
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "flags": 0
+    },
+    "AGE::PointLightComponent": {
+        "color": {
+            "value0": 0.035000000149011612,
+            "value1": 0.29899999499320984,
+            "value2": 0.66699999570846558
+        },
+        "range": {
+            "value0": 1,
+            "value1": 0.10000000149011612,
+            "value2": 0
+        }
+    },
+    "AGE::WE::EntityRepresentation": {},
+    "Entity_13": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0
+            },
+            "Scale": {
+                "value0": 1,
+                "value1": 1,
+                "value2": 1
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "flags": 0
+    },
+    "AGE::PointLightComponent": {
+        "color": {
+            "value0": 0.81099998950958252,
+            "value1": 0.70300000905990601,
+            "value2": 0.89399999380111694
+        },
+        "range": {
+            "value0": 1,
+            "value1": 0.10000000149011612,
+            "value2": 0
+        }
+    },
+    "AGE::WE::EntityRepresentation": {},
+    "Entity_14": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0
+            },
+            "Scale": {
+                "value0": 1,
+                "value1": 1,
+                "value2": 1
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "flags": 0
+    },
+    "AGE::PointLightComponent": {
+        "color": {
+            "value0": 0.67299997806549072,
+            "value1": 0.33300000429153442,
+            "value2": 0.32199999690055847
+        },
+        "range": {
+            "value0": 1,
+            "value1": 0.10000000149011612,
+            "value2": 0
+        }
+    },
+    "AGE::WE::EntityRepresentation": {},
+    "Entity_15": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0
+            },
+            "Scale": {
+                "value0": 1,
+                "value1": 1,
+                "value2": 1
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "flags": 0
+    },
+    "AGE::PointLightComponent": {
+        "color": {
+            "value0": 0.71100002527236938,
+            "value1": 0.14100000262260437,
+            "value2": 0.66399997472763062
+        },
+        "range": {
+            "value0": 1,
+            "value1": 0.10000000149011612,
+            "value2": 0
+        }
+    },
+    "AGE::WE::EntityRepresentation": {},
+    "Entity_16": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0
+            },
+            "Scale": {
+                "value0": 1,
+                "value1": 1,
+                "value2": 1
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "flags": 0
+    },
+    "AGE::PointLightComponent": {
+        "color": {
+            "value0": 0.54699999094009399,
+            "value1": 0.86799997091293335,
+            "value2": 0.25299999117851257
+        },
+        "range": {
+            "value0": 1,
+            "value1": 0.10000000149011612,
+            "value2": 0
+        }
+    },
+    "AGE::WE::EntityRepresentation": {},
+    "Entity_17": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0
+            },
+            "Scale": {
+                "value0": 1,
+                "value1": 1,
+                "value2": 1
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "flags": 0
+    },
+    "AGE::PointLightComponent": {
+        "color": {
+            "value0": 0.75700002908706665,
+            "value1": 0.66200000047683716,
+            "value2": 0.64399999380111694
+        },
+        "range": {
+            "value0": 1,
+            "value1": 0.10000000149011612,
+            "value2": 0
+        }
+    },
+    "AGE::WE::EntityRepresentation": {},
+    "Entity_18": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0
+            },
+            "Scale": {
+                "value0": 1,
+                "value1": 1,
+                "value2": 1
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "flags": 0
+    },
+    "AGE::PointLightComponent": {
+        "color": {
+            "value0": 0.72299998998641968,
+            "value1": 0.85900002717971802,
+            "value2": 0.037000000476837158
+        },
+        "range": {
+            "value0": 1,
+            "value1": 0.10000000149011612,
+            "value2": 0
+        }
+    },
+    "AGE::WE::EntityRepresentation": {},
+    "Entity_19": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0
+            },
+            "Scale": {
+                "value0": 1,
+                "value1": 1,
+                "value2": 1
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "flags": 0
+    },
+    "AGE::PointLightComponent": {
+        "color": {
+            "value0": 0.77799999713897705,
+            "value1": 0.52899998426437378,
+            "value2": 0.74099999666213989
+        },
+        "range": {
+            "value0": 1,
+            "value1": 0.10000000149011612,
+            "value2": 0
+        }
+    },
+    "AGE::WE::EntityRepresentation": {},
+    "Entity_20": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0
+            },
+            "Scale": {
+                "value0": 1,
+                "value1": 1,
+                "value2": 1
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "flags": 0
+    },
+    "AGE::PointLightComponent": {
+        "color": {
+            "value0": 0.18999999761581421,
+            "value1": 0.035000000149011612,
+            "value2": 0.31600001454353333
+        },
+        "range": {
+            "value0": 1,
+            "value1": 0.10000000149011612,
+            "value2": 0
+        }
+    },
+    "AGE::WE::EntityRepresentation": {},
+    "Entity_21": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0
+            },
+            "Scale": {
+                "value0": 1,
+                "value1": 1,
+                "value2": 1
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "flags": 0
+    },
+    "AGE::PointLightComponent": {
+        "color": {
+            "value0": 0.10599999874830246,
+            "value1": 0.28799998760223389,
+            "value2": 0.84200000762939453
+        },
+        "range": {
+            "value0": 1,
+            "value1": 0.10000000149011612,
+            "value2": 0
+        }
+    },
+    "AGE::WE::EntityRepresentation": {},
+    "Entity_22": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0
+            },
+            "Scale": {
+                "value0": 1,
+                "value1": 1,
+                "value2": 1
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "flags": 0
+    },
+    "AGE::PointLightComponent": {
+        "color": {
+            "value0": 0.26399999856948853,
+            "value1": 0.94199997186660767,
+            "value2": 0.039999999105930328
+        },
+        "range": {
+            "value0": 1,
+            "value1": 0.10000000149011612,
+            "value2": 0
+        }
+    },
+    "AGE::WE::EntityRepresentation": {},
+    "Entity_23": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0
+            },
+            "Scale": {
+                "value0": 1,
+                "value1": 1,
+                "value2": 1
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "flags": 0
+    },
+    "AGE::PointLightComponent": {
+        "color": {
+            "value0": 0.80500000715255737,
+            "value1": 0.44600000977516174,
+            "value2": 0.64800000190734863
+        },
+        "range": {
+            "value0": 1,
+            "value1": 0.10000000149011612,
+            "value2": 0
+        }
+    },
+    "AGE::WE::EntityRepresentation": {},
+    "Entity_24": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0
+            },
+            "Scale": {
+                "value0": 1,
+                "value1": 1,
+                "value2": 1
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "flags": 0
+    },
+    "AGE::PointLightComponent": {
+        "color": {
+            "value0": 0.37000000476837158,
+            "value1": 0.72899997234344482,
+            "value2": 0.88999998569488525
+        },
+        "range": {
+            "value0": 1,
+            "value1": 0.10000000149011612,
+            "value2": 0
+        }
+    },
+    "AGE::WE::EntityRepresentation": {},
+    "Entity_25": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0
+            },
+            "Scale": {
+                "value0": 1,
+                "value1": 1,
+                "value2": 1
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "flags": 0
+    },
+    "AGE::PointLightComponent": {
+        "color": {
+            "value0": 0.10100000351667404,
+            "value1": 0.0060000000521540642,
+            "value2": 0.34999999403953552
+        },
+        "range": {
+            "value0": 1,
+            "value1": 0.10000000149011612,
+            "value2": 0
+        }
+    },
+    "AGE::WE::EntityRepresentation": {},
+    "Entity_26": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0
+            },
+            "Scale": {
+                "value0": 1,
+                "value1": 1,
+                "value2": 1
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "flags": 0
+    },
+    "AGE::PointLightComponent": {
+        "color": {
+            "value0": 0.62900000810623169,
+            "value1": 0.54799997806549072,
+            "value2": 0.39300000667572021
+        },
+        "range": {
+            "value0": 1,
+            "value1": 0.10000000149011612,
+            "value2": 0
+        }
+    },
+    "AGE::WE::EntityRepresentation": {},
+    "Entity_27": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0
+            },
+            "Scale": {
+                "value0": 1,
+                "value1": 1,
+                "value2": 1
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "flags": 0
+    },
+    "AGE::PointLightComponent": {
+        "color": {
+            "value0": 0.95399999618530273,
+            "value1": 0.083999998867511749,
+            "value2": 0.62300002574920654
+        },
+        "range": {
+            "value0": 1,
+            "value1": 0.10000000149011612,
+            "value2": 0
+        }
+    },
+    "AGE::WE::EntityRepresentation": {},
+    "Entity_28": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0
+            },
+            "Scale": {
+                "value0": 1,
+                "value1": 1,
+                "value2": 1
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "flags": 0
+    },
+    "AGE::PointLightComponent": {
+        "color": {
+            "value0": 0.9660000205039978,
+            "value1": 0.8399999737739563,
+            "value2": 0.75599998235702515
+        },
+        "range": {
+            "value0": 1,
+            "value1": 0.10000000149011612,
+            "value2": 0
+        }
+    },
+    "AGE::WE::EntityRepresentation": {},
+    "Entity_29": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0
+            },
+            "Scale": {
+                "value0": 1,
+                "value1": 1,
+                "value2": 1
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "flags": 0
+    },
+    "AGE::PointLightComponent": {
+        "color": {
+            "value0": 0.30799999833106995,
+            "value1": 0.9309999942779541,
+            "value2": 0.37599998712539673
+        },
+        "range": {
+            "value0": 1,
+            "value1": 0.10000000149011612,
+            "value2": 0
+        }
+    },
+    "AGE::WE::EntityRepresentation": {}

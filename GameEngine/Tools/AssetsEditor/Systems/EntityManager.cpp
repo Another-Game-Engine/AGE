@@ -78,7 +78,7 @@ namespace AGE
 							}
 						}
 
-						auto &types = ComponentRegistrar::getInstance().getComponentsTypesMap();
+						auto &types = ComponentRegistrar::getInstance().getSystemIdToAgeIdMap();
 						auto &creationFn = ComponentRegistrar::getInstance().getCreationFunctions();
 
 						for (auto &t : types)
@@ -97,6 +97,10 @@ namespace AGE
 					//ImGui::TreeNode(e)
 					//ImGui::TreeNode()
 					//ImGui::TreePop()
+				}
+				if (ImGui::Button("Save scene"))
+				{
+					scene->saveToJson("WorldEditorSceneTest.json");
 				}
 			}
 

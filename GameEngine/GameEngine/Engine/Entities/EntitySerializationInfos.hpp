@@ -10,7 +10,6 @@ namespace AGE
 	{
 		AGE::Link link;
 		ENTITY_FLAGS flags;
-		std::vector <std::size_t> componentsHash;
 		std::vector <ComponentBase*> components;
 
 		EntitySerializationInfos(const EntityData& e)
@@ -25,7 +24,6 @@ namespace AGE
 			ar(
 				cereal::make_nvp("link", link)
 				, cereal::make_nvp("flags", flags)
-				, cereal::make_nvp("components_hash", componentsHash)
 				);
 		}
 
@@ -51,7 +49,6 @@ namespace AGE
 			ar(
 				link
 				, flags
-				, componentsHash
 				);
 		}
 	};

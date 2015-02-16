@@ -186,17 +186,17 @@ namespace AGE
 
 		std::vector<EntityData> entities;
 
+		auto &typesMap = ComponentRegistrar::getInstance().getSystemIdToAgeIdMap();
+		ar(cereal::make_nvp("Component type map", typesMap));
+
 		for (auto &e : _entities)
 		{
 			auto es = EntitySerializationInfos(*e.ptr);
-			for (ComponentType i = 0; i < e.ptr->components.size(); ++i)
+			for (auto &c : e.ptr->components)
 			{
-				if (e.haveComponent(i))
+				if (c)
 				{
-					auto cpt = e.ptr->getComponent(i);
-					auto hash_code = ComponentRegistrar::getInstance().getHashCodeForAgeTypeId(i);
-					es.componentsHash.push_back(hash_code);
-					es.components.push_back(e.ptr->getComponent(i));
+					es.components.push_back(c);
 				}
 			}
 			ar(cereal::make_nvp("Entity_" + std::to_string(e.ptr->getEntity().getId()), es));

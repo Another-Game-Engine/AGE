@@ -14,7 +14,7 @@ namespace AGE
 
 			virtual ~EntityRepresentation(void);
 
-			void init(AScene *, const char* name);
+			void init(AScene *, const char* name = "NoName");
 
 			virtual void reset(AScene *);
 
