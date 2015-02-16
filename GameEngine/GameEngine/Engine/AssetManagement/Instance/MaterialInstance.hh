@@ -7,7 +7,7 @@
 
 namespace AGE
 {
-	typedef Properties MaterialInstance;
+	typedef std::vector<Key<Properties>> MaterialInstance;
 
 	struct MaterialSetInstance
 	{

@@ -77,12 +77,4 @@ namespace AGE
 		return (*this);
 	}
 
-	template <typename type_t>
-	std::shared_ptr<type_t> Vertices::get_property(Key<Property> const &p) const
-	{
-		if (!p) {
-			return (std::shared_ptr<type_t>(nullptr));
-		}
-		return (std::static_pointer_cast<type_t>(_properties[p.getId()]));
-	}
 }
