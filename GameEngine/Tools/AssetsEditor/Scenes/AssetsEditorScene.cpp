@@ -9,8 +9,6 @@
 #include <Utils/Age_Imgui.hpp>
 #include <Threads/Tasks/BasicTasks.hpp>
 #include <Threads/TaskScheduler.hpp>
-#include <Core/Input.hh>
-#include <SDL/SDL.h>
 
 #include <string>
 
@@ -37,8 +35,8 @@ namespace AGE
 
 	AssetsEditorScene::AssetsEditorScene(std::weak_ptr<AGE::Engine> engine)
 		: AScene(engine)
-		, _raw("../../Assets/AGE-Assets-For-Test/Raw")
-		, _cook("../../Assets/AGE-Assets-For-Test/Serialized")
+		, _raw("../../Assets/Raw")
+		, _cook("../../Assets/Serialized")
 	{
 		_raw.list();
 		_cook.list();
@@ -188,8 +186,8 @@ namespace AGE
 						auto cookingTask = std::make_shared<CookingTask>(_selectedRaw->dataSet);
 						AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=]()
 						{
-							cookingTask->serializedDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>("../../Assets/AGE-Assets-For-Test/Serialized");
-							cookingTask->rawDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>("../../Assets/AGE-Assets-For-Test/Raw");
+							cookingTask->serializedDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>("../../Assets/Serialized");
+							cookingTask->rawDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>("../../Assets/Raw");
 
 							AGE::AssimpLoader::Load(cookingTask);
 
@@ -251,8 +249,6 @@ namespace AGE
 	bool AssetsEditorScene::userUpdateEnd(double time)
 	{
 		ImGui::End();
-		if (getInstance<Input>()->getInput(SDLK_ESCAPE))
-			return (false);
 		return true;
 	}
 }

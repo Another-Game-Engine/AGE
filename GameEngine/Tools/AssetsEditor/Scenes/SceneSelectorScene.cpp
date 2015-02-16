@@ -2,6 +2,9 @@
 #include <imgui\imgui.h>
 #include "AssetsEditorScene.hpp"
 #include "WorldEditorScene.hpp"
+#include <Core/Input.hh>
+#include <SDL/SDL.h>
+
 namespace AGE
 {
 	const std::string SceneSelectorScene::Name = "SceneSelector";
@@ -22,7 +25,7 @@ namespace AGE
 
 	bool SceneSelectorScene::userUpdateBegin(double time)
 	{
-		ImGui::Begin("Assets Convertor", (bool*)1, ImGui::GetIO().DisplaySize, 1, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoTitleBar);
+		ImGui::Begin("Assets Convertor", (bool*)1, ImGui::GetIO().DisplaySize, -1.0f, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoTitleBar);
 
 
 		ImGui::BeginChild("Global Options", ImVec2(ImGui::GetIO().DisplaySize.x, 30), false);
@@ -43,6 +46,8 @@ namespace AGE
 
 	bool SceneSelectorScene::userUpdateEnd(double time)
 	{
+		if (getInstance<Input>()->getInput(SDLK_ESCAPE))
+			return (false);
 		return true;
 	}
 }

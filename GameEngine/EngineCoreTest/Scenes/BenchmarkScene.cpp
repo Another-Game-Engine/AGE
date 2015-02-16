@@ -211,7 +211,7 @@ namespace AGE
 			initRenderingJustOneTime = false;
 		}
 
-		getInstance<AGE::AssetsManager>()->setAssetsDirectory("../../Assets/AGE-Assets-For-Test/Serialized/");
+		getInstance<AGE::AssetsManager>()->setAssetsDirectory("../../Assets/Serialized/");
 		getInstance<AGE::AssetsManager>()->loadMesh(File("cube/cube.sage"), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents }, "DEMO_SCENE_ASSETS");
 		getInstance<AGE::AssetsManager>()->loadMesh(File("ball/ball.sage"), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents }, "DEMO_SCENE_ASSETS");
 		getInstance<AGE::AssetsManager>()->loadMesh(File("catwoman/catwoman.sage"), { MeshInfos::Positions, MeshInfos::Normals, MeshInfos::Uvs, MeshInfos::Tangents }, "DEMO_SCENE_ASSETS");
@@ -289,7 +289,7 @@ namespace AGE
 					//_l->setPosition(glm::vec3(-5, 0, 0));
 					std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
 					RigidBody *rb = GLOBAL_SPONZA.addComponent<RigidBody>(0.0f);
-					rb->setCollisionMesh(weakOnThis, GLOBAL_SPONZA, "../../Assets/AGE-Assets-For-Test/Serialized/sponza/sponza_static.phage");
+					rb->setCollisionMesh(weakOnThis, GLOBAL_SPONZA, "../../Assets/Serialized/sponza/sponza_static.phage");
 					_l.setScale(glm::vec3(10.f));
 					//_l->setOrientation(glm::quat(glm::vec3(Mathematic::degreeToRadian(-90), Mathematic::degreeToRadian(90), 0)));
 
@@ -304,7 +304,7 @@ namespace AGE
 		static bool useOnce = false;
 		auto rigidBody = GLOBAL_CATWOMAN.addComponent<RigidBody>(0);
 		std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
-		rigidBody->setCollisionMesh(weakOnThis, GLOBAL_CATWOMAN, "../../Assets/AGE-Assets-For-Test/Serialized/catwoman/catwoman_dynamic.phage");
+		rigidBody->setCollisionMesh(weakOnThis, GLOBAL_CATWOMAN, "../../Assets/Serialized/catwoman/catwoman_dynamic.phage");
 		_l.setOrientation(glm::quat(glm::vec3(Mathematic::degreeToRadian(-90), Mathematic::degreeToRadian(90), 0)));
 		_l.setPosition(glm::vec3(-30, 0, 0));
 		_l.setScale(glm::vec3(8.5f));
