@@ -33,7 +33,7 @@ namespace AGE
 				for (auto e : _filter.getCollection())
 				{
 					auto cpt = e.getComponent<AGE::WE::EntityRepresentation>();
-					if (ImGui::TreeNode((void*)(cpt), cpt->name.data()))
+					if (ImGui::TreeNode((void*)(cpt), "%s", cpt->name.data()))
 					{
 						ImGui::InputText("Name", cpt->name.data(), cpt->name.size());
 						if (ImGui::SliderFloat3("Position", glm::value_ptr(cpt->position), -1000000, 1000000))

@@ -8,8 +8,8 @@
 #include <Threads/MainThread.hpp>
 #include <Core/Engine.hh>
 #include <Core/Input.hh>
-#define STB_IMAGE_IMPLEMENTATION
-#include <imgui\stb_image.h>
+#define STB_TRUETYPE_IMPLEMENTATION
+#include <imgui/stb_truetype.h>
 #ifdef _MSC_VER
 #pragma warning (disable: 4996)         // 'This function or variable may be unsafe': strcpy, strdup, sprintf, vsnprintf, sscanf, fopen
 #endif
@@ -51,7 +51,6 @@ namespace AGE
 		auto screenSize = en->getInstance<IRenderContext>()->getScreenSize();
 		io.DisplaySize = ImVec2((float)screenSize.x, (float)screenSize.y);        // Display size, in pixels. For clamping windows positions.
 		io.DeltaTime = 1.0f / 60.0f;                          // Time elapsed since last frame, in seconds (in this sample app we'll override this every frame because our timestep is variable)
-		io.PixelCenterOffset = 0.0f;                        // Align OpenGL texels
 		io.KeyMap[ImGuiKey_Tab] = SDL_SCANCODE_TAB;             // Keyboard mapping. ImGui will use those indices to peek into the io.KeyDown[] array.
 		io.KeyMap[ImGuiKey_LeftArrow] = SDL_SCANCODE_LEFT;
 		io.KeyMap[ImGuiKey_RightArrow] = SDL_SCANCODE_RIGHT;
@@ -140,13 +139,13 @@ namespace AGE
 		glBindTexture(GL_TEXTURE_2D, fontTex);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		const void* png_data;
-		unsigned int png_size;
-		ImGui::GetDefaultFontData(NULL, NULL, &png_data, &png_size);
-		int tex_x, tex_y, tex_comp;
-		void* tex_data = stbi_load_from_memory((const unsigned char*)png_data, (int)png_size, &tex_x, &tex_y, &tex_comp, 0);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tex_x, tex_y, 0, GL_RGBA, GL_UNSIGNED_BYTE, tex_data);
-		stbi_image_free(tex_data);
+
+		unsigned char* pixels;
+		int width, height;
+		io.Fonts->GetTexDataAsRGBA32(&pixels, &width, &height);
+		io.Fonts->TexID = &fontTex;
+
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
 #else
 		UNUSED(di);
 #endif //USE_IMGUI
