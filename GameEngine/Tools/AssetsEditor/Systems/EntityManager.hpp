@@ -13,6 +13,9 @@ namespace AGE
 			virtual ~EntityManager();
 		private:
 			EntityFilter _filter;
+			std::vector<const char*> _entityNames;
+			std::vector<Entity> _entities;
+			int _selectedEntity;
 
 			virtual void updateBegin(double time);
 			virtual void updateEnd(double time);

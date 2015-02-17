@@ -14,6 +14,7 @@ namespace AGE
 			EntityManager::EntityManager(std::weak_ptr<AScene> &&scene)
 				: System(std::move(scene))
 				, _filter(std::move(scene))
+				, _selectedEntity(0)
 			{
 				_name = "we_entity_manager";
 			}
@@ -30,6 +31,9 @@ namespace AGE
 				float t = static_cast<float>(time);
 				auto scene = _scene.lock();
 				EntityFilter::Lock lock(_filter);
+
+				ImGui::ListBox("Entities list", &_selectedEntity, &(_entityNames.front()), (int)(_entityNames.size()), 4);
+
 				for (auto e : _filter.getCollection())
 				{
 					auto cpt = e.getComponent<AGE::WE::EntityRepresentation>();
@@ -110,8 +114,26 @@ namespace AGE
 
 			bool EntityManager::initialize()
 			{
-				_filter.setOnAdd(std::function<void(Entity e)>([&](Entity e){
-					e.addComponent<AGE::WE::EntityRepresentation>(std::string("Entity " + std::to_string(e.getId()) + "\0").c_str());
+				_filter.setOnAdd(std::function<void(Entity e)>([this](Entity en){
+					_entityNames.clear();
+					_entities.clear();
+					en.addComponent<AGE::WE::EntityRepresentation>(std::string("Entity " + std::to_string(en.getId()) + "\0").c_str());
+
+					for (auto e : _filter.getCollection())
+					{
+						_entityNames.push_back(e.getComponent<AGE::WE::EntityRepresentation>()->name);
+						_entities.push_back(e);
+					}
+				}));
+
+				_filter.setOnRemove(std::function<void(Entity e)>([this](Entity en){
+					_entityNames.clear();
+					_entities.clear();
+					for (auto e : _filter.getCollection())
+					{
+						_entityNames.push_back(e.getComponent<AGE::WE::EntityRepresentation>()->name);
+						_entities.push_back(e);
+					}
 				}));
 
 				for (auto i = 0; i < 2; ++i)
