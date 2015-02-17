@@ -58,7 +58,9 @@
                 "value2": 0
             }
         },
-        "AGE::WE::EntityRepresentation": {}
+        "AGE::WE::EntityRepresentation": {
+            "value0": "Entity 0"
+        }
     },
     "Entity_1": {
         "link": {
@@ -96,7 +98,9 @@
                 "value2": 0
             }
         },
-        "AGE::WE::EntityRepresentation": {}
+        "AGE::WE::EntityRepresentation": {
+            "value0": "Entity 1"
+        }
     },
     "Entity_2": {
         "link": {
@@ -134,7 +138,9 @@
                 "value2": 0
             }
         },
-        "AGE::WE::EntityRepresentation": {}
+        "AGE::WE::EntityRepresentation": {
+            "value0": "Entity 0"
+        }
     },
     "Entity_3": {
         "link": {
@@ -151,8 +157,8 @@
             "Orientation": {
                 "value0": 0,
                 "value1": 0,
-                "value2": 0,
-                "value3": 1
+                "value2": 0.75343924760818481,
+                "value3": -0.65751755237579346
             }
         },
         "flags": 0,
@@ -172,6 +178,8 @@
                 "value2": 0
             }
         },
-        "AGE::WE::EntityRepresentation": {}
+        "AGE::WE::EntityRepresentation": {
+            "value0": "NoName"
+        }
     }
 }
