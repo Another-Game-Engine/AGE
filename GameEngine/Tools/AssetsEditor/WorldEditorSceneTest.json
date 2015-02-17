@@ -1,5 +1,5 @@
 {
-    "Number_of_serialized_entities": 6,
+    "Number_of_serialized_entities": 2,
     "Component type map": [
         {
             "key": 0,
@@ -48,18 +48,18 @@
         ],
         "AGE::PointLightComponent": {
             "color": {
-                "value0": 0.33399999141693115,
-                "value1": 0.46700000762939453,
-                "value2": 0.041000001132488251
+                "value0": 1,
+                "value1": 0,
+                "value2": 0
             },
             "range": {
                 "value0": 1,
-                "value1": 0.10000000149011612,
-                "value2": 0
+                "value1": 1,
+                "value2": 1
             }
         },
         "AGE::WE::EntityRepresentation": {
-            "value0": "mierda-1"
+            "name": "Entity 0"
         }
     },
     "Entity_1": {
@@ -99,167 +99,7 @@
             }
         },
         "AGE::WE::EntityRepresentation": {
-            "value0": "fuck-my-life"
-        }
-    },
-    "Entity_2": {
-        "link": {
-            "Position": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 0
-            },
-            "Scale": {
-                "value0": 1,
-                "value1": 1,
-                "value2": 1
-            },
-            "Orientation": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 0,
-                "value3": 1
-            }
-        },
-        "flags": 0,
-        "components_number": [
-            2,
-            4
-        ],
-        "AGE::PointLightComponent": {
-            "color": {
-                "value0": 0.33399999141693115,
-                "value1": 0.46700000762939453,
-                "value2": 0.041000001132488251
-            },
-            "range": {
-                "value0": 1,
-                "value1": 0.10000000149011612,
-                "value2": 0
-            }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "value0": "mierda-1"
-        }
-    },
-    "Entity_3": {
-        "link": {
-            "Position": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 0
-            },
-            "Scale": {
-                "value0": 1,
-                "value1": 1,
-                "value2": 1
-            },
-            "Orientation": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 0,
-                "value3": 1
-            }
-        },
-        "flags": 0,
-        "components_number": [
-            2,
-            4
-        ],
-        "AGE::PointLightComponent": {
-            "color": {
-                "value0": 0.72399997711181641,
-                "value1": 0.16899999976158142,
-                "value2": 0.5
-            },
-            "range": {
-                "value0": 1,
-                "value1": 0.10000000149011612,
-                "value2": 0
-            }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "value0": "fuck-my-life"
-        }
-    },
-    "Entity_4": {
-        "link": {
-            "Position": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 0
-            },
-            "Scale": {
-                "value0": 1,
-                "value1": 1,
-                "value2": 1
-            },
-            "Orientation": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 0,
-                "value3": 1
-            }
-        },
-        "flags": 0,
-        "components_number": [
-            2,
-            4
-        ],
-        "AGE::PointLightComponent": {
-            "color": {
-                "value0": 0.33399999141693115,
-                "value1": 0.46700000762939453,
-                "value2": 0.041000001132488251
-            },
-            "range": {
-                "value0": 1,
-                "value1": 0.10000000149011612,
-                "value2": 0
-            }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "value0": "mierda-1"
-        }
-    },
-    "Entity_5": {
-        "link": {
-            "Position": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 0
-            },
-            "Scale": {
-                "value0": 1,
-                "value1": 1,
-                "value2": 1
-            },
-            "Orientation": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 0,
-                "value3": 1
-            }
-        },
-        "flags": 0,
-        "components_number": [
-            2,
-            4
-        ],
-        "AGE::PointLightComponent": {
-            "color": {
-                "value0": 0.72399997711181641,
-                "value1": 0.16899999976158142,
-                "value2": 0.5
-            },
-            "range": {
-                "value0": 1,
-                "value1": 0.10000000149011612,
-                "value2": 0
-            }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "value0": "fuck-my-life"
+            "name": "Entity 1"
         }
     }
 }

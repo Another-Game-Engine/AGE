@@ -93,6 +93,7 @@ namespace AGE
 		set(_color, _range);
 	}
 
+#ifdef EDITOR_ENABLED
 	void PointLightComponent::editorCreate(AScene *scene)
 	{}
 
@@ -101,13 +102,14 @@ namespace AGE
 
 	void PointLightComponent::editorUpdate(AScene *scene)
 	{
-		if (ImGui::SliderFloat3("Color", glm::value_ptr(_color), 0.0f, 1.0f))
+		if (ImGui::ColorEdit3("Color", getColorPtr()))
 		{
 			set(_color, _range);
 		}
-		if (ImGui::SliderFloat3("Range", glm::value_ptr(_range), 0.0f, 1000.0f))
+		if (ImGui::SliderFloat3("Range", glm::value_ptr(_range), 0.0f, 1.0f))
 		{
 			set(_color, _range);
 		}
 	}
+#endif
 }
