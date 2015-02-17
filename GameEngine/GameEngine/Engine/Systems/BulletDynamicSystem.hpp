@@ -21,7 +21,7 @@ namespace AGE
 		{
 			_name = "bullet_dynamic_system";
 			_manager = dynamic_cast<BulletDynamicManager*>(_scene.lock()->getInstance<BulletCollisionManager>());
-			_filter.requireComponent<Component::RigidBody>();
+			_filter.requireComponent<RigidBody>();
 		}
 		virtual ~BulletDynamicSystem(){}
 	private:
@@ -33,13 +33,13 @@ namespace AGE
 			auto scene = _scene.lock();
 			for (auto e : _filter.getCollection())
 			{
-				if (scene->getLink(e)->isUserModified())
+				if (e.getLink().isUserModified())
 				{
-					auto rb = scene->getComponent<Component::RigidBody>(e);
+					auto rb = e.getComponent<RigidBody>();
 					if (rb->getMass() == 0)
 					{
-						rb->setTransformation(scene->getLink(e));
-						scene->getLink(e)->setUserModified(false);
+						rb->setTransformation(&e.getLink());
+						e.getLink().setUserModified(false);
 					}
 				}
 

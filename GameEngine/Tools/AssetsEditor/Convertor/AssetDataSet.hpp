@@ -20,7 +20,7 @@ class btTriangleMesh;
 namespace AGE
 {
 	struct Skeleton;
-	struct Animation;
+	struct AnimationData;
 	struct MeshData;
 	struct MaterialData;
 	struct TextureData;
@@ -64,5 +64,14 @@ namespace AGE
 		//Physic Options
 		bool staticConcave = true;
 		bool dynamicConcave = true;
+
+		// Textures options
+		bool compressTextures = false;
+		int textureCompressionQuality = 2;
+		bool generateMipmap = true;
+
+		// Material options
+		bool bumpToNormal = true;
+		float normalStrength = 2;
 	};
 }

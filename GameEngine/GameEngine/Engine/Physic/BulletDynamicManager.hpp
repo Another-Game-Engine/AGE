@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Physic/BulletCollisionManager.hpp>
+#include <Utils/MultiTypeObjectPool.hpp>
 
 namespace AGE
 {
@@ -44,6 +45,9 @@ namespace AGE
 			}
 		}
 		inline btDynamicsWorld * getWorld() const { return std::dynamic_pointer_cast<btDynamicsWorld>(_world).get(); }
+
+		inline AGE::MultiTypeObjectPool<16, 124> &getObjectPool() { return _objectPool; }
 	private:
+		AGE::MultiTypeObjectPool<16, 124> _objectPool;
 	};
 }

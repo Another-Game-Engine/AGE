@@ -58,4 +58,17 @@ namespace AGE
 		return (true);
 	}
 
+	bool Frustum::checkCollision(Sphere const &sphere) const
+	{
+		assert(!"Not implemented");
+		return (false);
+	}
+
+	bool Frustum::checkCollision(Frustum const &frustum) const
+	{
+		assert(!"Not implemented");
+		return (false);
+	}
+
+
 }

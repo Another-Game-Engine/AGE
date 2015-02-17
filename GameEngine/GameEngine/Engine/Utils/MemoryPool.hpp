@@ -93,7 +93,7 @@ public:
 	}
 
 private:
-	std::vector<T>			_pool;
+	std::vector<T>	_pool;
 	std::queue<uint32_t>	_freeIdx;
 	uint32_t				_currentIdx;
 };

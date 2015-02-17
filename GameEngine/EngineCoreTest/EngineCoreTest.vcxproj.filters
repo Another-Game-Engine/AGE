@@ -3,6 +3,7 @@
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Scenes\BenchmarkScene.cpp" />
+    <ClCompile Include="Systems\LifetimeSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Components\lifetimeComponent.hh" />

@@ -7,8 +7,6 @@
 #include <Utils/Age_Imgui.hpp>
 #endif
 
-#include <Core/CullableObjects.hh>
-
 namespace AGE
 {
 	IRenderContext::IRenderContext()

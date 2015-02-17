@@ -30,6 +30,7 @@ namespace AGE
 				// load database
 			}
 			_saveFile = saveFile;
+			return true;
 		}
 
 		bool AssetsDatabase::init(const std::string &saveFile)

@@ -2,6 +2,7 @@
 
 #include <Entities/EntityTypedef.hpp>
 #include <Core/PrepareKey.hpp>
+#include <vector>
 #include <array>
 #include <Utils/Serialization/QuaternionSerialization.hpp>
 #include <Utils/Serialization/VectorSerialization.hpp>
@@ -59,10 +60,9 @@ namespace AGE
 		glm::quat _orientation;
 		glm::mat4 _trans;
 		bool _computeTrans;
-		std::array<PrepareKey, MAX_CPT_NUMBER> _octreeObjects;
+		std::vector<PrepareKey> _octreeObjects;
 		Link *_parent;
 		std::array<Link*, MAX_CHILDREN> _children;
-		std::size_t _lastOctreeObjectIndex;
 		std::size_t _lastChildrenIndex;
 
 		void _setChild(Link *ptr);

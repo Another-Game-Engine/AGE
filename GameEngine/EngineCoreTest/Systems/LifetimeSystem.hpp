@@ -2,67 +2,65 @@
 
 #include "Systems/System.h"
 #include <Components/Component.hh>
+#include <Entities/Entity.hh>
 
 namespace AGE
 {
-	namespace Component
+	struct Lifetime : public ComponentBase
 	{
-		struct Lifetime : public Component::ComponentBase < Lifetime >
+		Lifetime()
 		{
-			Lifetime()
-			{
 
-			}
+		}
 
-			virtual ~Lifetime(void)
-			{
+		virtual ~Lifetime(void)
+		{
 
-			}
+		}
 
-			Lifetime(Lifetime &&o)
-				: ComponentBase<Lifetime>(std::move(o))
-			{
-				_t = std::move(o._t);
-			}
+		Lifetime(Lifetime &&o)
+			: ComponentBase(std::move(o))
+		{
+			_t = std::move(o._t);
+		}
 
-			Lifetime &operator=(Lifetime &&o)
-			{
-				_t = std::move(o._t);
-				return *this;
-			}
+		Lifetime &operator=(Lifetime &&o)
+		{
+			_t = std::move(o._t);
+			return *this;
+		}
 
-			void init(AScene *, float t)
-			{
-				_t = t;
-			}
+		void init(AScene *, float t = 1.0f)
+		{
+			_t = t;
+		}
 
-			virtual void reset(AScene *)
-			{
-				_t = 0.0f;
-			}
+		virtual void reset(AScene *)
+		{
+			_t = 0.0f;
+		}
 
-			//////
-			////
-			// Serialization
+		//////
+		////
+		// Serialization
 
-			template <typename Archive>
-			void serialize(Archive &ar)
-			{
-				ar(CEREAL_NVP(_t));
-			}
+		template <typename Archive>
+		void serialize(Archive &ar)
+		{
+			ar(CEREAL_NVP(_t));
+		}
 
-			// !Serialization
-			////
-			//////
+		// !Serialization
+		////
+		//////
 
-			float _t;
-		private:
-			Lifetime &operator=(Lifetime const &o);
-			Lifetime(Lifetime const &o);
-		};
-	}
+		float _t;
+	private:
+		Lifetime &operator=(Lifetime const &o);
+		Lifetime(Lifetime const &o);
+	};
 
-	class LifetimeSystem : public System
+	class LifetimeSystem : public AGE::System
 	{
 	public:
 		LifetimeSystem(std::weak_ptr<AScene> &&scene)
@@ -86,18 +84,20 @@ namespace AGE
 			float t = static_cast<float>(time);
 			auto scene = _scene.lock();
 			EntityFilter::Lock lock(_filter);
-			for (auto &e : _filter.getCollection())
+			auto &collection = _filter.getCollection();
+			for (auto e : collection)
 			{
-				scene->getComponent<Component::Lifetime>(e)->_t -= t;
-				if (scene->getComponent<Component::Lifetime>(e)->_t <= 0.0f)
+				e.getComponent<Lifetime>()->_t -= t;
+				if (e.getComponent<Lifetime>()->_t <= 0.0f)
 					scene->destroy(e);
 			}
 		}
 
 		virtual bool initialize()
 		{
-			_filter.requireComponent<Component::Lifetime>();
+			_filter.requireComponent<Lifetime>();
 			return true;
 		}
 	};
 }
+

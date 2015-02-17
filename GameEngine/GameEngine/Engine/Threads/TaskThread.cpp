@@ -1,6 +1,6 @@
 #include "TaskThread.hpp"
 #include <Utils/ThreadName.hpp>
-#include <Core/Tasks/Basics.hpp>
+#include <Threads/Tasks/BasicTasks.hpp>
 #include <Threads/ThreadManager.hpp>
 
 namespace AGE

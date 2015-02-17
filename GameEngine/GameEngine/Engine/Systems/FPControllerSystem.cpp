@@ -57,7 +57,7 @@ namespace AGE
 		//}
 	}
 
-	void FPControllerSystem::updateComponent(Entity &entity, Component::FPController *fp, double time)
+	void FPControllerSystem::updateComponent(Entity &entity, FPController *fp, double time)
 	{
 		//float ftime = static_cast<float>(time);
 		//fp->resetControls();

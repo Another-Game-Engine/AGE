@@ -1,0 +1,105 @@
+{
+    "Number_of_serialized_entities": 2,
+    "Component type map": [
+        {
+            "key": 0,
+            "value": 5355615174208623061
+        },
+        {
+            "key": 1,
+            "value": 1713135011246741269
+        },
+        {
+            "key": 2,
+            "value": 573189261411184160
+        },
+        {
+            "key": 3,
+            "value": 4665681159133520176
+        },
+        {
+            "key": 4,
+            "value": 9818697393957024739
+        }
+    ],
+    "Entity_0": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0
+            },
+            "Scale": {
+                "value0": 1,
+                "value1": 1,
+                "value2": 1
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "flags": 0,
+        "components_number": [
+            2,
+            4
+        ],
+        "AGE::PointLightComponent": {
+            "color": {
+                "value0": 1,
+                "value1": 0,
+                "value2": 0
+            },
+            "range": {
+                "value0": 1,
+                "value1": 1,
+                "value2": 1
+            }
+        },
+        "AGE::WE::EntityRepresentation": {
+            "name": "Entity 0"
+        }
+    },
+    "Entity_1": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0
+            },
+            "Scale": {
+                "value0": 1,
+                "value1": 1,
+                "value2": 1
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "flags": 0,
+        "components_number": [
+            2,
+            4
+        ],
+        "AGE::PointLightComponent": {
+            "color": {
+                "value0": 0.72399997711181641,
+                "value1": 0.16899999976158142,
+                "value2": 0.5
+            },
+            "range": {
+                "value0": 1,
+                "value1": 0.10000000149011612,
+                "value2": 0
+            }
+        },
+        "AGE::WE::EntityRepresentation": {
+            "name": "Entity 1"
+        }
+    }
+}

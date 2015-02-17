@@ -2,13 +2,15 @@
 
 namespace AGE
 {
-	using namespace Component;
 
-	Base::Base()
+	ComponentBase::ComponentBase()
+		: _typeId(-1)
 	{
 	}
 
-	Base::~Base()
+	ComponentBase::~ComponentBase()
 	{
 	}
+
+	ComponentType ComponentBase::_typeCounter = 0;
 }

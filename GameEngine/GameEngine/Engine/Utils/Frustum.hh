@@ -2,12 +2,17 @@
 
 #include <Utils/Plane.hh>
 #include <Utils/AABoundingBox.hh>
+#include <Utils/Sphere.hh>
+#include <SpacePartitioning/Cullable/Cullable.hh>
 
 namespace AGE
 {
 
 	class Frustum
 	{
+	public:
+		enum { shape_type = CULLABLE_FRUSTUM };
+
 	private:
 		enum PlaneName
 		{
@@ -29,5 +34,7 @@ namespace AGE
 
 		// check the collision between AABB and frustum
 		bool checkCollision(AABoundingBox const &aabb) const;
+		bool checkCollision(Sphere const &sphere) const;
+		bool checkCollision(Frustum const &frustum) const;
 	};
 }

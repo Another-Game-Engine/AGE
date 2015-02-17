@@ -9,7 +9,6 @@
 #include <stdlib.h>
 #include <Core/Engine.hh>
 
-#include <Render/RenderManager.hh>
 // SCENES
 #include <Scenes/BenchmarkScene.hpp>
 
@@ -19,7 +18,7 @@
 #include <Physic/BulletDynamicManager.hpp>
 #include <Core/Timer.hh>
 #include <Utils/PerformanceDebugger.hh>
-#include <Core/AssetsManager.hpp>
+#include <AssetManagement/AssetManager.hh>
 
 #include <Utils/Age_Imgui.hpp>
 #include <Skinning/AnimationManager.hpp>
@@ -32,7 +31,7 @@
 #include <Threads/MainThread.hpp>
 #include <Core/DefaultConfiguration.hpp>
 #include <Threads/RenderThread.hpp>
-#include <Core/Tasks/Basics.hpp>
+#include <Threads/Tasks/BasicTasks.hpp>
 ////////////////////////////////////////
 
 #include <chrono>
