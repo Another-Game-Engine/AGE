@@ -32,7 +32,20 @@ namespace AGE
 				auto scene = _scene.lock();
 				EntityFilter::Lock lock(_filter);
 
-				ImGui::ListBox("Entities list", &_selectedEntity, &(_entityNames.front()), (int)(_entityNames.size()), 4);
+				// Disgusting but fuck it ! :)
+				_entityNames.clear();
+				_entities.clear();
+				for (auto e : _filter.getCollection())
+				{
+					_entityNames.push_back(e.getComponent<AGE::WE::EntityRepresentation>()->name);
+					_entities.push_back(e);
+				}
+				if (_selectedEntity >= _entities.size())
+					_selectedEntity = 0;
+				if (_entities.size() > 0)
+				{
+					ImGui::ListBox("Entities list", &_selectedEntity, &(_entityNames.front()), (int)(_entityNames.size()), 4);
+				}
 
 				for (auto e : _filter.getCollection())
 				{
@@ -115,25 +128,10 @@ namespace AGE
 			bool EntityManager::initialize()
 			{
 				_filter.setOnAdd(std::function<void(Entity e)>([this](Entity en){
-					_entityNames.clear();
-					_entities.clear();
 					en.addComponent<AGE::WE::EntityRepresentation>(std::string("Entity " + std::to_string(en.getId()) + "\0").c_str());
-
-					for (auto e : _filter.getCollection())
-					{
-						_entityNames.push_back(e.getComponent<AGE::WE::EntityRepresentation>()->name);
-						_entities.push_back(e);
-					}
 				}));
 
 				_filter.setOnRemove(std::function<void(Entity e)>([this](Entity en){
-					_entityNames.clear();
-					_entities.clear();
-					for (auto e : _filter.getCollection())
-					{
-						_entityNames.push_back(e.getComponent<AGE::WE::EntityRepresentation>()->name);
-						_entities.push_back(e);
-					}
 				}));
 
 				for (auto i = 0; i < 2; ++i)
