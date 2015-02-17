@@ -9,13 +9,15 @@
 #include <Threads/PrepareRenderThread.hpp>
 #include <Threads/RenderThread.hpp>
 #include <Threads/Tasks/ToRenderTasks.hpp>
+#ifdef EDITOR_ENABLED
+#include <imgui/imgui.h>
+#endif
 
 namespace AGE
 {
-
 	MeshRenderer::MeshRenderer() :
-		ComponentBase(),
-		_scene(nullptr)
+		ComponentBase()
+		, _scene(nullptr)
 		, _serializationInfos(nullptr)
 	{
 	}
@@ -104,4 +106,40 @@ namespace AGE
 		}
 	}
 
+#ifdef EDITOR_ENABLED
+	void MeshRenderer::editorCreate(AScene *scene)
+	{}
+
+	void MeshRenderer::editorDelete(AScene *scene)
+	{}
+
+	void MeshRenderer::editorUpdate(AScene *scene)
+	{
+		if (meshFileList && selectedMeshIndex < meshFileList->size())
+		{
+			if ((*meshFileList)[selectedMeshIndex] != selectedMeshName)
+			{
+				std::size_t i = 0;
+				for (auto &e : *meshFileList)
+				{
+					if (e == selectedMeshName)
+					{
+						selectedMeshIndex = i;
+						break;
+					}
+					++i;
+				}
+			}
+			ImGui::PushItemWidth(-1);
+			//ImGui::ListBoxHeader("##empty");
+			if (ImGui::ListBox("##empty", (int*)&selectedMeshIndex, &(meshFileList->front()), (int)(meshFileList->size())))
+			{
+				selectedMeshName = (*meshFileList)[selectedMeshIndex];
+			}
+			//ImGui::ListBoxFooter();
+			ImGui::PopItemWidth();
+			//const std::string &path
+		}
+	}
+#endif
 }

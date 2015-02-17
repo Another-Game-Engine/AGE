@@ -32,14 +32,14 @@
 namespace AGE
 {
 	const std::string AssetsEditorScene::Name = "AssetsEditor";
+	AE::Folder AssetsEditorScene::_raw = AE::Folder();
+	AE::Folder AssetsEditorScene::_cook = AE::Folder();
 
 	AssetsEditorScene::AssetsEditorScene(std::weak_ptr<AGE::Engine> engine)
 		: AScene(engine)
-		, _raw("../../Assets/Raw")
-		, _cook("../../Assets/Serialized")
 	{
-		_raw.list();
-		_cook.list();
+		_raw.list("../../Assets/Raw");
+		_cook.list("../../Assets/Serialized");
 		AE::AssetFileManager::LinkRawToCooked(&_raw, &_cook);
 	}
 

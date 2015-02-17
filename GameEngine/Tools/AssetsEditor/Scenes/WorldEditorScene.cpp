@@ -1,6 +1,7 @@
 #include "WorldEditorScene.hpp"
 #include <imgui\imgui.h>
 #include <Systems/EntityManager.hpp>
+#include <Systems/AssetsAndComponentRelationsSystem.hpp>
 
 namespace AGE
 {
@@ -17,6 +18,7 @@ namespace AGE
 
 	bool WorldEditorScene::userStart()
 	{
+		addSystem<WE::AssetsAndComponentRelationsSystem>(0);
 		addSystem<WE::EntityManager>(1);
 		return true;
 	}

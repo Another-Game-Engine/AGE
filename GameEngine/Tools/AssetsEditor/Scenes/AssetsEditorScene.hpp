@@ -24,9 +24,12 @@ namespace AGE
 		virtual bool userUpdateBegin(double time);
 		virtual bool userUpdateEnd(double time);
 
+		static AE::Folder &getRawList() { return _raw; }
+		static AE::Folder &getCookedList() { return _cook; }
+
 	private:
-		AE::Folder _raw;
-	 	AE::Folder _cook;
+		static AE::Folder _raw;
+	 	static AE::Folder _cook;
 		std::shared_ptr<AE::RawFile> _selectedRaw;
 		std::set<std::shared_ptr<AE::CookConfig>> _configs;
 	};

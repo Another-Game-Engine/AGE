@@ -35,6 +35,16 @@ namespace AGE
 		MeshRenderer &setMaterial(const std::shared_ptr<AGE::MaterialSetInstance> &_mesh);
 		std::shared_ptr<AGE::MaterialSetInstance> getMaterial();
 
+#ifdef EDITOR_ENABLED
+		std::vector<const char*> *meshFileList = nullptr;
+		std::size_t selectedMeshIndex = 0;
+		std::string selectedMeshName = "";
+
+		virtual void editorCreate(AScene *scene);
+		virtual void editorDelete(AScene *scene);
+		virtual void editorUpdate(AScene *scene);
+#endif
+
 		virtual void postUnserialization(AScene *scene);
 
 		private:

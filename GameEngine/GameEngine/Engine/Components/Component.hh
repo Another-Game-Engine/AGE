@@ -1,7 +1,5 @@
 #pragma once
 
-#define EDITOR_ENABLED
-
 #include <string>
 #include <Entities/Entity.hh>
 

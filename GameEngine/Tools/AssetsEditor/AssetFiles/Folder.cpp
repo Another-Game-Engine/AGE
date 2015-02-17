@@ -38,8 +38,16 @@ namespace AGE
 			}
 		}
 
-		void Folder::list()
+		void Folder::list(const std::string &path)
 		{
+			if (path.size() != 0)
+			{
+				auto strPath = path;
+				if (strPath.back() == '/')
+					strPath.pop_back();
+				_path = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>(strPath);
+			}
+
 			int dirCount = 0;
 			int fileCount = 0;
 			for (auto it = std::tr2::sys::directory_iterator(_path)
