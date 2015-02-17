@@ -60,7 +60,7 @@ namespace Age
 			template <typename... Args>
 			void logNormal(Args &&...args)
 			{
-				std::lock_guard<std::mutex> lock(mutex);
+				std::lock_guard<decltype(mutex)> lock(mutex);
 				internalLog(std::forward<Args>(args)...);
 #if defined(DEBUG)
 				fputs(formatStream("%sLog: %s\n", getTime().c_str(), stream.str().c_str()).c_str(), stdout);
