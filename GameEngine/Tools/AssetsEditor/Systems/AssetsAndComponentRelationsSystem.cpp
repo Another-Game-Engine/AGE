@@ -31,7 +31,7 @@ namespace AGE
 
 			_assetRenderMeshList.clear();
 			rawList.update(std::function<void(AE::RawFile*)>([&](AE::RawFile* file) {
-				_assetRenderMeshList.push_back(file->getFileName().c_str());
+				_assetRenderMeshList.push_back(file->getPath().c_str());
 			}));
 
 			for (auto e : _meshRenderer.getCollection())
