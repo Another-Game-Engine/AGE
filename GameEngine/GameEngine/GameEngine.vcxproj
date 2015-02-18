@@ -135,12 +135,12 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <SourcePath>$(SolutionDir)Vendors/TinyThread;$(SolutionDir)Vendors/TinyObjLoader;$(SourcePath);$(SolutionDir)Vendors/imgui/</SourcePath>
-    <IncludePath>$(ProjectDir)Engine;$(ProjectDir);$(SolutionDir)Vendors;$(SolutionDir)Vendors/TinyObjLoader;$(SolutionDir)Vendors/TinyThread;$(SolutionDir)Vendors/OpenGL/include;$(IncludePath);$(SolutionDir)Vendors/boost_1_55_0;$(SolutionDir)Vendors/bullet/src;$(SolutionDir)Vendors\fmod\inc</IncludePath>
+    <IncludePath>$(ProjectDir)Engine;$(ProjectDir);$(SolutionDir)Vendors;$(SolutionDir)Vendors/TinyObjLoader;$(SolutionDir)Vendors/TinyThread;$(SolutionDir)Vendors/OpenGL/include;$(IncludePath);$(SolutionDir)Vendors/boost_1_55_0;$(SolutionDir)Vendors/bullet/src;$(SolutionDir)Vendors\fmod\inc;$(SolutionDir)Vendors/minizip/include/;$(SolutionDir)Vendors/zlib/include/</IncludePath>
     <LibraryPath>$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_editor|x64'">
     <SourcePath>$(SolutionDir)Vendors/TinyThread;$(SolutionDir)Vendors/TinyObjLoader;$(SourcePath);$(SolutionDir)Vendors/imgui/</SourcePath>
-    <IncludePath>$(ProjectDir)Engine;$(ProjectDir);$(SolutionDir)Vendors;$(SolutionDir)Vendors/TinyObjLoader;$(SolutionDir)Vendors/TinyThread;$(SolutionDir)Vendors/OpenGL/include;$(IncludePath);$(SolutionDir)Vendors/boost_1_55_0;$(SolutionDir)Vendors/bullet/src;$(SolutionDir)Vendors\fmod\inc</IncludePath>
+    <IncludePath>$(ProjectDir)Engine;$(ProjectDir);$(SolutionDir)Vendors;$(SolutionDir)Vendors/TinyObjLoader;$(SolutionDir)Vendors/TinyThread;$(SolutionDir)Vendors/OpenGL/include;$(IncludePath);$(SolutionDir)Vendors/boost_1_55_0;$(SolutionDir)Vendors/bullet/src;$(SolutionDir)Vendors\fmod\inc;$(SolutionDir)Vendors/minizip/include/;$(SolutionDir)Vendors/zlib/include/</IncludePath>
     <LibraryPath>$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -162,14 +162,14 @@
     <IntDir>$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(ProjectDir)Engine;$(ProjectDir);$(SolutionDir)Vendors;$(SolutionDir)Vendors/TinyObjLoader;$(SolutionDir)Vendors/TinyThread;$(SolutionDir)Vendors/OpenGL/include;$(IncludePath);$(SolutionDir)Vendors/boost_1_55_0;$(SolutionDir)Vendors/bullet/src;$(SolutionDir)Vendors\fmod\inc</IncludePath>
+    <IncludePath>$(ProjectDir)Engine;$(ProjectDir);$(SolutionDir)Vendors;$(SolutionDir)Vendors/TinyObjLoader;$(SolutionDir)Vendors/TinyThread;$(SolutionDir)Vendors/OpenGL/include;$(IncludePath);$(SolutionDir)Vendors/boost_1_55_0;$(SolutionDir)Vendors/bullet/src;$(SolutionDir)Vendors\fmod\inc;$(SolutionDir)Vendors/minizip/include/;$(SolutionDir)Vendors/zlib/include/</IncludePath>
     <LibraryPath>$(LibraryPath)</LibraryPath>
     <TargetExt>.lib</TargetExt>
     <SourcePath>$(SolutionDir)Vendors/TinyThread;$(SolutionDir)Vendors/TinyObjLoader;$(SourcePath);$(SolutionDir)Vendors/imgui/</SourcePath>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_editor|x64'">
-    <IncludePath>$(ProjectDir)Engine;$(ProjectDir);$(SolutionDir)Vendors;$(SolutionDir)Vendors/TinyObjLoader;$(SolutionDir)Vendors/TinyThread;$(SolutionDir)Vendors/OpenGL/include;$(IncludePath);$(SolutionDir)Vendors/boost_1_55_0;$(SolutionDir)Vendors/bullet/src;$(SolutionDir)Vendors\fmod\inc</IncludePath>
+    <IncludePath>$(ProjectDir)Engine;$(ProjectDir);$(SolutionDir)Vendors;$(SolutionDir)Vendors/TinyObjLoader;$(SolutionDir)Vendors/TinyThread;$(SolutionDir)Vendors/OpenGL/include;$(IncludePath);$(SolutionDir)Vendors/boost_1_55_0;$(SolutionDir)Vendors/bullet/src;$(SolutionDir)Vendors\fmod\inc;$(SolutionDir)Vendors/minizip/include/;$(SolutionDir)Vendors/zlib/include/</IncludePath>
     <LibraryPath>$(LibraryPath)</LibraryPath>
     <TargetExt>.lib</TargetExt>
     <SourcePath>$(SolutionDir)Vendors/TinyThread;$(SolutionDir)Vendors/TinyObjLoader;$(SourcePath);$(SolutionDir)Vendors/imgui/</SourcePath>
@@ -541,6 +541,7 @@
     <ClCompile Include="Engine\Utils\FileMemory.cpp" />
     <ClCompile Include="Engine\Utils\FileStdio.cpp" />
     <ClCompile Include="Engine\Utils\FileSystem.cpp" />
+    <ClCompile Include="Engine\Utils\FileSystemHelpers.cpp" />
     <ClCompile Include="Engine\Utils\Frustum.cpp" />
     <ClCompile Include="Engine\Utils\Age_Imgui.cpp" />
     <ClCompile Include="Engine\Utils\JsonSerializationBasicTypes.cpp" />
@@ -548,6 +549,7 @@
     <ClCompile Include="Engine\Utils\MatrixConversion.cpp" />
     <ClCompile Include="Engine\Utils\ObjectPool.cpp" />
     <ClCompile Include="Engine\Utils\OldFile.cpp" />
+    <ClCompile Include="Engine\Utils\Path.cpp" />
     <ClCompile Include="Engine\Utils\Plane.cpp" />
     <ClCompile Include="Engine\Utils\ScreenPosToWorldRay.cpp" />
     <ClCompile Include="Engine\Utils\PerformanceDebugger.cpp" />
@@ -752,6 +754,7 @@
     <ClInclude Include="Engine\Utils\FileMemory.hpp" />
     <ClInclude Include="Engine\Utils\FileStdio.hpp" />
     <ClInclude Include="Engine\Utils\FileSystem.hpp" />
+    <ClInclude Include="Engine\Utils\FileSystemHelpers.hpp" />
     <ClInclude Include="Engine\Utils\Frustum.hh" />
     <ClInclude Include="Engine\Utils\Function.hpp" />
     <ClInclude Include="Engine\Utils\GlmSerialization.hpp" />
@@ -764,6 +767,7 @@
     <ClInclude Include="Engine\Utils\MultiTypeObjectPool.hpp" />
     <ClInclude Include="Engine\Utils\ObjectPool.hpp" />
     <ClInclude Include="Engine\Utils\OldFile.hpp" />
+    <ClInclude Include="Engine\Utils\Path.hpp" />
     <ClInclude Include="Engine\Utils\Plane.hh" />
     <ClInclude Include="Engine\Utils\Platform.hpp" />
     <ClInclude Include="Engine\Utils\PubSub.hpp" />

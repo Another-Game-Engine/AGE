@@ -58,7 +58,7 @@ namespace AGE
 	bool File::open(const char *name, const char *mode)
 	{
 		assert(!data->file && "File is already opened");
-		std::shared_ptr<FileSystem> fileSystem = Engine::GetInstance()->getFileSystem();
+		FileSystem *fileSystem = GetEngine()->getInstance<FileSystem>();
 		assert(fileSystem != nullptr && "FileSystem is not initialized");
 		data->file = fileSystem->getFile(name, mode);
 		return data->file != nullptr;
@@ -67,7 +67,7 @@ namespace AGE
 	bool File::execute(const char *command, const char *mode)
 	{
 		assert(!data->file && "File is already opened");
-		std::shared_ptr<FileSystem> fileSystem = Engine::GetInstance()->getFileSystem();
+		FileSystem *fileSystem = GetEngine()->getInstance<FileSystem>();
 		assert(fileSystem != nullptr && "FileSystem is not initialized");
 		data->file = fileSystem->getFile((std::string("command://") + command).c_str(), mode);
 		return data->file != nullptr;
