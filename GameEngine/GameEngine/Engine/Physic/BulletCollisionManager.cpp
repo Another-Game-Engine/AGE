@@ -6,7 +6,7 @@ namespace AGE
 {
 	std::shared_ptr<btCollisionShape> BulletCollisionManager::loadShape(const std::string &path)
 	{
-		File filePath(path);
+		OldFile filePath(path);
 		if (!filePath.exists())
 		{
 			std::cerr << "Bullet file not found" << std::endl;

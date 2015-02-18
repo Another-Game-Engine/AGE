@@ -33,7 +33,7 @@ bool FontManager::init()
 	return (true);
 }
 
-bool FontManager::loadFont(const File &file, const std::string &name)
+bool FontManager::loadFont(const OldFile &file, const std::string &name)
 {
 	if (!name.empty())
 	{

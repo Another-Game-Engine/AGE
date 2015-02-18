@@ -33,7 +33,7 @@ public:
 		return true;
 	}
 
-	bool loadFile(const File &file)
+	bool loadFile(const OldFile &file)
 	{
 		//if (!file.exists())
 		//	return false;

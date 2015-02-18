@@ -1,7 +1,7 @@
 #include <Audio/Audio.hh>
 #include <Audio/AudioManager.hh>
 
-Audio::Audio(std::shared_ptr<AudioManager> manager, const File &file, AudioType type, const std::string &name)
+Audio::Audio(std::shared_ptr<AudioManager> manager, const OldFile &file, AudioType type, const std::string &name)
 : _manager(manager)
 , _file(file)
 , _name(name.empty() ? file.getShortFileName() : name)
@@ -41,7 +41,7 @@ bool Audio::load(AudioSpatialType type)
 	return true;
 }
 
-const File &Audio::getPath() const
+const OldFile &Audio::getPath() const
 {
 	return _file;
 }

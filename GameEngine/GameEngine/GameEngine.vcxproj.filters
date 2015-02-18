@@ -123,6 +123,7 @@
     <ClCompile Include="Engine\SpacePartitioning\LooseOctree.cpp" />
     <ClCompile Include="Engine\SpacePartitioning\LooseOctreeNode.cpp" />
     <ClCompile Include="Engine\Threads\RenderThread.cpp" />
+    <ClCompile Include="Engine\Utils\Encoding.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -336,6 +337,7 @@
     <ClInclude Include="Engine\Render\UnitProg.hh" />
     <ClInclude Include="Engine\AssetManagement\Data\AnimationData.hpp" />
     <ClInclude Include="Engine\AssetManagement\Instance\AnimationInstance.hh" />
+    <ClInclude Include="Engine\Utils\Encoding.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

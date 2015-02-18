@@ -13,7 +13,7 @@
 #include <string>
 #include <glm/glm.hpp>
 
-class File;
+class OldFile;
 class Font;
 class PubSub;
 
@@ -30,7 +30,7 @@ public:
 	virtual ~FontManager();
 	bool init();
 
-	bool loadFont(const File &file, const std::string &name = "");
+	bool loadFont(const OldFile &file, const std::string &name = "");
 	bool isLoaded(const std::string &name);
 	void draw2DString(const std::string &s,
 		const std::string &fontName,

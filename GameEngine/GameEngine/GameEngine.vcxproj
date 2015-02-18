@@ -533,6 +533,7 @@
     <ClCompile Include="Engine\Text\Font.cpp" />
     <ClCompile Include="Engine\Text\FontGlyph.cpp" />
     <ClCompile Include="Engine\Text\FontManager.cpp" />
+    <ClCompile Include="Engine\Utils\Encoding.cpp" />
     <ClCompile Include="Engine\Utils\File.cpp" />
     <ClCompile Include="Engine\Utils\FileSystem.cpp" />
     <ClCompile Include="Engine\Utils\Frustum.cpp" />
@@ -733,6 +734,7 @@
     <ClInclude Include="Engine\Utils\Archive.hpp" />
     <ClInclude Include="Engine\Utils\DependenciesInjector.hpp" />
     <ClInclude Include="Engine\Utils\Dependency.hpp" />
+    <ClInclude Include="Engine\Utils\Encoding.hpp" />
     <ClInclude Include="Engine\Utils\File.hpp" />
     <ClInclude Include="Engine\Utils\FileSystem.hpp" />
     <ClInclude Include="Engine\Utils\Frustum.hh" />

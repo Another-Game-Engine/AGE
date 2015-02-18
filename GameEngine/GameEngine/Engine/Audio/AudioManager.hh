@@ -16,8 +16,8 @@ public:
 	virtual ~AudioManager();
 	bool init();
 	void update();
-	std::shared_ptr<Audio> loadSound(const File &file, Audio::AudioSpatialType spacialType, const std::string &name = "");
-	std::shared_ptr<Audio> loadStream(const File &file, Audio::AudioSpatialType spacialType, const std::string &name = "");
+	std::shared_ptr<Audio> loadSound(const OldFile &file, Audio::AudioSpatialType spacialType, const std::string &name = "");
+	std::shared_ptr<Audio> loadStream(const OldFile &file, Audio::AudioSpatialType spacialType, const std::string &name = "");
 	FMOD::System *getSystem();
 	FMOD::ChannelGroup* getChannelGroup(ChannelGroupType type);
 	inline std::shared_ptr<Audio> getAudio(const std::string &name){ auto r = _audios.find(name); if (r == std::end(_audios)) return nullptr; return r->second; }

@@ -30,17 +30,17 @@ namespace AGE
 		});
 	}
 
-	std::shared_ptr<MeshInstance> AssetsManager::getMesh(const File &_filePath)
+	std::shared_ptr<MeshInstance> AssetsManager::getMesh(const OldFile &_filePath)
 	{
-		File filePath(_assetsDirectory + _filePath.getFullName());
+		OldFile filePath(_assetsDirectory + _filePath.getFullName());
 		if (_meshs.find(filePath.getFullName()) != std::end(_meshs))
 			return _meshs[filePath.getFullName()];
 		return nullptr;
 	}
 
-	std::shared_ptr<MaterialSetInstance> AssetsManager::getMaterial(const File &_filePath)
+	std::shared_ptr<MaterialSetInstance> AssetsManager::getMaterial(const OldFile &_filePath)
 	{
-		File filePath(_assetsDirectory + _filePath.getFullName());
+		OldFile filePath(_assetsDirectory + _filePath.getFullName());
 		if (_materials.find(filePath.getFullName()) != std::end(_materials)) 
 		{
 			return _materials[filePath.getFullName()];
@@ -48,10 +48,10 @@ namespace AGE
 		return nullptr;
 	}
 
-	bool AssetsManager::loadMaterial(const File &_filePath, const std::string &loadingChannel)
+	bool AssetsManager::loadMaterial(const OldFile &_filePath, const std::string &loadingChannel)
 	{
 		auto material = std::make_shared<MaterialSetInstance>();
-		File filePath(_assetsDirectory + _filePath.getFullName());
+		OldFile filePath(_assetsDirectory + _filePath.getFullName());
 		{
 			std::lock_guard<std::mutex> lock(_mutex);
 			if (_materials.find(filePath.getFullName()) != std::end(_materials))
@@ -95,10 +95,10 @@ namespace AGE
 		return (true);
 	}
 
-	bool AssetsManager::loadTexture(const File &_filePath, const std::string &loadingChannel, std::function<void(std::shared_ptr<ITexture> &texture)> &callback)
+	bool AssetsManager::loadTexture(const OldFile &_filePath, const std::string &loadingChannel, std::function<void(std::shared_ptr<ITexture> &texture)> &callback)
 	{
 		std::shared_ptr<TextureData> data = std::make_shared<TextureData>();
-		File filePath(_assetsDirectory + _filePath.getFullName());
+		OldFile filePath(_assetsDirectory + _filePath.getFullName());
 
 		auto future = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]()
 		{
@@ -151,9 +151,9 @@ namespace AGE
 		return (true);
 	}
 
-	bool AssetsManager::loadAnimation(const File &_filePath, const std::string &loadingChannel)
+	bool AssetsManager::loadAnimation(const OldFile &_filePath, const std::string &loadingChannel)
 	{
-		File filePath(_assetsDirectory + _filePath.getFullName());
+		OldFile filePath(_assetsDirectory + _filePath.getFullName());
 		auto animation = std::make_shared<AnimationData>();
 		if (!filePath.exists()) 
 		{
@@ -178,17 +178,17 @@ namespace AGE
 		return (true);
 	}
 
-	std::shared_ptr<AnimationData> AssetsManager::getAnimation(const File &_filePath)
+	std::shared_ptr<AnimationData> AssetsManager::getAnimation(const OldFile &_filePath)
 	{
-		File filePath(_assetsDirectory + _filePath.getFullName());
+		OldFile filePath(_assetsDirectory + _filePath.getFullName());
 		if (_animations.find(filePath.getFullName()) != std::end(_animations))
 			return _animations[filePath.getFullName()];
 		return nullptr;
 	}
 
-	bool AssetsManager::loadSkeleton(const File &_filePath, const std::string &loadingChannel)
+	bool AssetsManager::loadSkeleton(const OldFile &_filePath, const std::string &loadingChannel)
 	{
-		File filePath(_assetsDirectory + _filePath.getFullName());
+		OldFile filePath(_assetsDirectory + _filePath.getFullName());
 		auto skeleton = std::make_shared<Skeleton>();
 		if (!filePath.exists()) 
 		{
@@ -214,18 +214,18 @@ namespace AGE
 	}
 
 
-	std::shared_ptr<Skeleton> AssetsManager::getSkeleton(const File &_filePath)
+	std::shared_ptr<Skeleton> AssetsManager::getSkeleton(const OldFile &_filePath)
 	{
-		File filePath(_assetsDirectory + _filePath.getFullName());
+		OldFile filePath(_assetsDirectory + _filePath.getFullName());
 		if (_skeletons.find(filePath.getFullName()) != std::end(_skeletons))
 			return _skeletons[filePath.getFullName()];
 		return nullptr;
 	}
 
-	bool AssetsManager::loadMesh(const File &_filePath, const std::vector<MeshInfos> &loadOrder, const std::string &loadingChannel)
+	bool AssetsManager::loadMesh(const OldFile &_filePath, const std::vector<MeshInfos> &loadOrder, const std::string &loadingChannel)
 	{
 		auto meshInstance = std::make_shared<MeshInstance>();
-		File filePath(_assetsDirectory + _filePath.getFullName());
+		OldFile filePath(_assetsDirectory + _filePath.getFullName());
 		{
 			std::lock_guard<std::mutex> lock(_mutex);
 			if (_meshs.find(filePath.getFullName()) != std::end(_meshs))

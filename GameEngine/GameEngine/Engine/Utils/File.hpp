@@ -2,11 +2,11 @@
 
 #include <string>
 
-class File
+class OldFile
 {
 public:
-	File(const std::string &name = "unknownFile");
-	File(const char *name);
+	OldFile(const std::string &name = "unknownFile");
+	OldFile(const char *name);
 	bool exists() const;
 	const std::string getFullName() const;
 	std::string	getFileName() const;

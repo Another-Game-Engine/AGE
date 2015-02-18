@@ -22,7 +22,7 @@ namespace AGE
 
 	/////////////////////////////////////////////////////////////////////////////////////////
 
-	ConfigurationManager::ConfigurationManager(const File &saveFile /*= File("./ConfigurationSaveFile.conf")*/)
+	ConfigurationManager::ConfigurationManager(const OldFile &saveFile /*= File("./ConfigurationSaveFile.conf")*/)
 		: _saveFile(saveFile)
 	{
 	}
@@ -32,7 +32,7 @@ namespace AGE
 
 	}
 
-	void ConfigurationManager::setConfigurationFilePath(const File &file)
+	void ConfigurationManager::setConfigurationFilePath(const OldFile &file)
 	{
 		_saveFile = file;
 	}

@@ -61,9 +61,9 @@ namespace AGE
 	class ConfigurationManager : public Dependency < ConfigurationManager >
 	{
 	public:
-		ConfigurationManager(const File &saveFile = File("./ConfigurationSaveFile.conf"));
+		ConfigurationManager(const OldFile &saveFile = OldFile("./ConfigurationSaveFile.conf"));
 		virtual ~ConfigurationManager();
-		void setConfigurationFilePath(const File &file);
+		void setConfigurationFilePath(const OldFile &file);
 		bool saveToFile();
 		bool loadFile();
 
@@ -109,7 +109,7 @@ namespace AGE
 		}
 
 	private:
-		File _saveFile;
+		OldFile _saveFile;
 		std::map<std::string, std::unique_ptr<Configuration>> _confs;
 	};
 }

@@ -2,17 +2,17 @@
 #include <algorithm>
 #include <fstream>
 
-File::File(const std::string &name /*= "unknownFile"*/) :
+OldFile::OldFile(const std::string &name /*= "unknownFile"*/) :
 fullPath_(name)
 {
 }
 
-File::File(const char *name) :
+OldFile::OldFile(const char *name) :
 fullPath_(name)
 {
 }
 
-bool File::exists() const
+bool OldFile::exists() const
 {
 	std::ifstream file(this->fullPath_.c_str());
 	bool isOpen = file.is_open();
@@ -21,12 +21,12 @@ bool File::exists() const
 	return isOpen;
 }
 
-const std::string File::getFullName() const
+const std::string OldFile::getFullName() const
 {
 	return this->fullPath_;
 }
 
-std::string File::getFileName() const
+std::string OldFile::getFileName() const
 {
 	std::string::size_type		pos;
 	auto path = fullPath_;
@@ -39,7 +39,7 @@ std::string File::getFileName() const
 		return path;
 }
 
-std::string File::getFolder() const
+std::string OldFile::getFolder() const
 {
 	std::string::size_type		pos;
 	auto path = fullPath_;
@@ -51,12 +51,12 @@ std::string File::getFolder() const
 		return "";
 }
 
-std::string File::getShortFileName() const
+std::string OldFile::getShortFileName() const
 {
 	return this->getFileName().substr(0, this->getFileName().find_last_of("."));
 }
 
-std::string File::getExtension() const
+std::string OldFile::getExtension() const
 {
 	std::string::size_type		pos;
 	auto path = fullPath_;
@@ -67,7 +67,7 @@ std::string File::getExtension() const
 		return "";
 }
 
-std::string File::getFileContent() const
+std::string OldFile::getFileContent() const
 {
 	std::ifstream			stream(fullPath_.c_str());
 
