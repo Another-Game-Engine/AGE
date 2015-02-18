@@ -10,41 +10,38 @@
 
 namespace AGE
 {
-	namespace Engine
+	class FSThreadBase
 	{
-		class Thread
-		{
-		private:
-			std::thread thread;
-			std::atomic<bool> running = false;
-			std::atomic<bool> waiting = false;
-			std::mutex mutex;
-			std::condition_variable condition;
-			SpinLock locker;
+	private:
+		std::thread thread;
+		std::atomic<bool> running = false;
+		std::atomic<bool> waiting = false;
+		std::mutex mutex;
+		std::condition_variable condition;
+		SpinLock locker;
 
-		protected:
-			virtual void process(void) = 0;
+	protected:
+		virtual void process(void) = 0;
 
-			void pause(void);
+		void pause(void);
 
-		public:
-			Thread(void) = default;
-			Thread(const Thread &other) = delete;
-			Thread &operator=(const Thread &other) = delete;
-			virtual ~Thread(void);
+	public:
+		FSThreadBase(void) = default;
+		FSThreadBase(const FSThreadBase &other) = delete;
+		FSThreadBase &operator=(const FSThreadBase &other) = delete;
+		virtual ~FSThreadBase(void);
 
-			void run(void);
-			void resume(void);
-			void stop(void);
+		void run(void);
+		void resume(void);
+		void stop(void);
 
-			bool isRunning(void) const;
-			bool isWaiting(void) const;
+		bool isRunning(void) const;
+		bool isWaiting(void) const;
 
-			void lock(void);
-			void unlock(void);
-			bool isLocked(void) const;
+		void lock(void);
+		void unlock(void);
+		bool isLocked(void) const;
 
-			static void Handler(Thread *thread);
-		};
-	}
+		static void Handler(FSThreadBase *thread);
+	};
 }

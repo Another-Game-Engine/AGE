@@ -133,6 +133,10 @@
     <ClCompile Include="Engine\Utils\FileSystemHelpers.cpp" />
     <ClCompile Include="Engine\Utils\FileSystem.cpp" />
     <ClCompile Include="Engine\Utils\Path.cpp" />
+    <ClCompile Include="Engine\Utils\FileSystemThread.cpp" />
+    <ClCompile Include="Engine\Utils\FSThreadBase.cpp" />
+    <ClCompile Include="Engine\Utils\SpinLock.cpp" />
+    <ClCompile Include="Engine\Utils\Logger.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -360,6 +364,10 @@
     <ClInclude Include="Engine\Utils\FileSystemHelpers.hpp" />
     <ClInclude Include="Engine\Utils\FileSystem.hpp" />
     <ClInclude Include="Engine\Utils\Path.hpp" />
+    <ClInclude Include="Engine\Utils\FileSystemThread.hpp" />
+    <ClInclude Include="Engine\Utils\FSThreadBase.hpp" />
+    <ClInclude Include="Engine\Utils\SpinLock.hpp" />
+    <ClInclude Include="Engine\Utils\Logger.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

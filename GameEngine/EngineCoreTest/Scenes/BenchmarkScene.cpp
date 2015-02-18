@@ -212,18 +212,18 @@ namespace AGE
 		}
 
 		getInstance<AGE::AssetsManager>()->setAssetsDirectory("../../Assets/Serialized/");
-		getInstance<AGE::AssetsManager>()->loadMesh(File("cube/cube.sage"), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents }, "DEMO_SCENE_ASSETS");
-		getInstance<AGE::AssetsManager>()->loadMesh(File("ball/ball.sage"), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents }, "DEMO_SCENE_ASSETS");
-		getInstance<AGE::AssetsManager>()->loadMesh(File("catwoman/catwoman.sage"), { MeshInfos::Positions, MeshInfos::Normals, MeshInfos::Uvs, MeshInfos::Tangents }, "DEMO_SCENE_ASSETS");
+		getInstance<AGE::AssetsManager>()->loadMesh(OldFile("cube/cube.sage"), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents }, "DEMO_SCENE_ASSETS");
+		getInstance<AGE::AssetsManager>()->loadMesh(OldFile("ball/ball.sage"), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents }, "DEMO_SCENE_ASSETS");
+		getInstance<AGE::AssetsManager>()->loadMesh(OldFile("catwoman/catwoman.sage"), { MeshInfos::Positions, MeshInfos::Normals, MeshInfos::Uvs, MeshInfos::Tangents }, "DEMO_SCENE_ASSETS");
 		//getInstance<AGE::AssetsManager>()->loadMesh(File("Broken Tower/tower.sage"), { MeshInfos::Positions, MeshInfos::Normals, MeshInfos::Uvs, MeshInfos::Tangents }, "DEMO_SCENE_ASSETS");
 		//	getInstance<AGE::AssetsManager>()->loadMesh(File("Venice/venice.sage"), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents }, "DEMO_SCENE_ASSETS");
-		getInstance<AGE::AssetsManager>()->loadMesh(File("Sponza/sponza.sage"), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents }, "DEMO_SCENE_ASSETS");
-		getInstance<AGE::AssetsManager>()->loadMaterial(File("cube/cube.mage"), "DEMO_SCENE_ASSETS");
-		getInstance<AGE::AssetsManager>()->loadMaterial(File("ball/ball.mage"), "DEMO_SCENE_ASSETS");
-		getInstance<AGE::AssetsManager>()->loadMaterial(File("catwoman/catwoman.mage"), "DEMO_SCENE_ASSETS");
+		getInstance<AGE::AssetsManager>()->loadMesh(OldFile("Sponza/sponza.sage"), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents }, "DEMO_SCENE_ASSETS");
+		getInstance<AGE::AssetsManager>()->loadMaterial(OldFile("cube/cube.mage"), "DEMO_SCENE_ASSETS");
+		getInstance<AGE::AssetsManager>()->loadMaterial(OldFile("ball/ball.mage"), "DEMO_SCENE_ASSETS");
+		getInstance<AGE::AssetsManager>()->loadMaterial(OldFile("catwoman/catwoman.mage"), "DEMO_SCENE_ASSETS");
 		//getInstance<AGE::AssetsManager>()->loadMaterial(File("Venice/venice.mage"), "DEMO_SCENE_ASSETS");
 		//getInstance<AGE::AssetsManager>()->loadMaterial(File("Broken Tower/tower.mage"), "DEMO_SCENE_ASSETS");
-		getInstance<AGE::AssetsManager>()->loadMaterial(File("Sponza/sponza.mage"), "DEMO_SCENE_ASSETS");
+		getInstance<AGE::AssetsManager>()->loadMaterial(OldFile("Sponza/sponza.mage"), "DEMO_SCENE_ASSETS");
 		//getInstance<AGE::AssetsManager>()->loadSkeleton(File("catwoman/catwoman.skage"), "DEMO_SCENE_ASSETS");
 		//getInstance<AGE::AssetsManager>()->loadAnimation(File("catwoman/catwoman-roulade.aage"), "DEMO_SCENE_ASSETS");
 
@@ -294,7 +294,7 @@ namespace AGE
 					//_l->setOrientation(glm::quat(glm::vec3(Mathematic::degreeToRadian(-90), Mathematic::degreeToRadian(90), 0)));
 
 					auto _m = GLOBAL_SPONZA.addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("Sponza/sponza.sage"));
-					_m->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("Sponza/sponza.mage")));
+					_m->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(OldFile("Sponza/sponza.mage")));
 				}
 
 	{
@@ -376,7 +376,7 @@ namespace AGE
 			link.setScale(glm::vec3(0.2f));
 			MeshRenderer *mesh;
 			mesh = e.addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("cube/cube.sage"));
-			mesh->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("cube/cube.mage")));
+			mesh->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(OldFile("cube/cube.mage")));
 			auto rigidBody = e.addComponent<RigidBody>(1.0f);
 			std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
 			rigidBody->setCollisionShape(weakOnThis, e, RigidBody::BOX);
@@ -407,13 +407,13 @@ namespace AGE
 				if (i % 4 == 0)
 				{
 					mesh = e.addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage"));
-					mesh->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("ball/ball.mage")));
+					mesh->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(OldFile("ball/ball.mage")));
 					link.setScale(glm::vec3(0.5f));
 				}
 				else
 				{
 					mesh = e.addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("cube/cube.sage"));
-					mesh->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(File("cube/cube.mage")));
+					mesh->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(OldFile("cube/cube.mage")));
 				}
 
 #ifdef PHYSIC_SIMULATION

@@ -60,27 +60,27 @@
 
 # define AGE_LOG(...) do \
 		{ \
-	Age::Engine::Logger::GetInstance()->log(Age::Engine::Logger::Level::Normal, "Function \"", AGE_FUNCTION, "\" in file \"", AGE_FILE, "\" (line ", AGE_LINE, "): ", __VA_ARGS__); \
+	Singleton<AGE::Logger>::getInstance()->log(AGE::Logger::Level::Normal, "Function \"", AGE_FUNCTION, "\" in file \"", AGE_FILE, "\" (line ", AGE_LINE, "): ", __VA_ARGS__); \
 		} \
 			while (false);
 
 # define AGE_WARNING(...) do \
 		{ \
-	Age::Engine::Logger::GetInstance()->log(Age::Engine::Logger::Level::Warning, "Function \"", AGE_FUNCTION, "\" in file \"", AGE_FILE, "\" (line ", AGE_LINE, "): ", __VA_ARGS__); \
+	Singleton<AGE::Logger>::getInstance()->log(AGE::Logger::Level::Warning, "Function \"", AGE_FUNCTION, "\" in file \"", AGE_FILE, "\" (line ", AGE_LINE, "): ", __VA_ARGS__); \
 	AGE_BREAK(); \
 		} \
 			while (false);
 
 # define AGE_ERROR(...) do \
 		{ \
-	Age::Engine::Logger::GetInstance()->log(Age::Engine::Logger::Level::Error, "Function \"", AGE_FUNCTION, "\" in file \"", AGE_FILE, "\" (line ", AGE_LINE, "): ", __VA_ARGS__); \
+	Singleton<AGE::Logger>::getInstance()->log(AGE::Logger::Level::Error, "Function \"", AGE_FUNCTION, "\" in file \"", AGE_FILE, "\" (line ", AGE_LINE, "): ", __VA_ARGS__); \
 	AGE_BREAK(); \
 		} \
 			while (false);
 
 # define AGE_FATAL(...) do \
 		{ \
-	Age::Engine::Logger::GetInstance()->log(Age::Engine::Logger::Level::Fatal, "Function \"", AGE_FUNCTION, "\" in file \"", AGE_FILE, "\" (line ", AGE_LINE, "): ", __VA_ARGS__); \
+	Singleton<AGE::Logger>::getInstance()->log(AGE::Logger::Level::Fatal, "Function \"", AGE_FUNCTION, "\" in file \"", AGE_FILE, "\" (line ", AGE_LINE, "): ", __VA_ARGS__); \
 	AGE_BREAK(); \
 	AGE_EXIT(AGE_FAILURE); \
 		} \
@@ -90,25 +90,25 @@
 
 # define AGE_LOG(...) do \
 		{ \
-	Age::Engine::Logger::GetInstance()->log(Age::Engine::Logger::Level::Normal, __VA_ARGS__); \
+	Singleton<AGE::Logger>::getInstance()->log(AGE::Logger::Level::Normal, __VA_ARGS__); \
 		} \
 			while (false);
 
 # define AGE_WARNING(...) do \
 		{ \
-	Age::Engine::Logger::GetInstance()->log(Age::Engine::Logger::Level::Warning, __VA_ARGS__); \
+	Singleton<AGE::Logger>::getInstance()->log(AGE::Logger::Level::Warning, __VA_ARGS__); \
 		} \
 			while (false);
 
 # define AGE_ERROR(...) do \
 		{ \
-	Age::Engine::Logger::GetInstance()->log(Age::Engine::Logger::Level::Error, __VA_ARGS__); \
+	Singleton<AGE::Logger>::getInstance()->log(AGE::Logger::Level::Error, __VA_ARGS__); \
 		} \
 			while (false);
 
 # define AGE_FATAL(...) do \
 		{ \
-	Age::Engine::Logger::GetInstance()->log(Age::Engine::Logger::Level::Fatal, __VA_ARGS__); \
+	Singleton<AGE::Logger>::getInstance()->log(AGE::Logger::Level::Fatal, __VA_ARGS__); \
 		} \
 			while (false);
 

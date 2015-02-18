@@ -1,17 +1,15 @@
 #include "FileSystemThread.hpp"
-#include "Engine.hpp"
 #include "FileSystem.hpp"
+
+#include <Core/Engine.hh>
 
 namespace AGE
 {
-	namespace Engine
+	void FileSystemThread::process(void)
 	{
-		void FileSystemThread::process(void)
+		while (isRunning())
 		{
-			while (isRunning())
-			{
-				Engine::GetInstance()->getFileSystem()->update();
-			}
+			GetEngine()->getInstance<FileSystem>()->update();
 		}
 	}
 }

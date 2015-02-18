@@ -1,97 +1,94 @@
 #pragma once
 
-#include "Thread.hpp"
+#include "FSThreadBase.hpp"
 
 namespace AGE
 {
-	namespace Engine
+	FSThreadBase::~FSThreadBase(void)
 	{
-		Thread::~Thread(void)
+		resume();
+		stop();
+	}
+
+	void FSThreadBase::run(void)
+	{
+		if (!running)
 		{
+			running = true;
+			thread = std::thread([this](void)
+			{
+				FSThreadBase::Handler(this);
+			});
+		}
+	}
+
+	void FSThreadBase::stop(void)
+	{
+		if (running)
+		{
+			running = false;
 			resume();
-			stop();
-		}
-
-		void Thread::run(void)
-		{
-			if (!running)
+			if (thread.joinable())
 			{
-				running = true;
-				thread = std::thread([this](void)
-				{
-					Thread::Handler(this);
-				});
+				thread.join();
 			}
 		}
+	}
 
-		void Thread::stop(void)
+	void FSThreadBase::resume(void)
+	{
+		if (waiting)
 		{
-			if (running)
+			std::unique_lock<std::mutex> lock(mutex);
+			waiting = false;
+			condition.notify_all();
+		}
+	}
+
+	void FSThreadBase::pause(void)
+	{
+		if (running && !waiting)
+		{
+			std::unique_lock<std::mutex> lock(mutex);
+			waiting = true;
+			while (waiting)
 			{
-				running = false;
-				resume();
-				if (thread.joinable())
-				{
-					thread.join();
-				}
+				condition.wait(lock);
 			}
 		}
+	}
 
-		void Thread::resume(void)
-		{
-			if (waiting)
-			{
-				std::unique_lock<std::mutex> lock(mutex);
-				waiting = false;
-				condition.notify_all();
-			}
-		}
+	bool FSThreadBase::isRunning(void) const
+	{
+		return running;
+	}
 
-		void Thread::pause(void)
-		{
-			if (running && !waiting)
-			{
-				std::unique_lock<std::mutex> lock(mutex);
-				waiting = true;
-				while (waiting)
-				{
-					condition.wait(lock);
-				}
-			}
-		}
+	bool FSThreadBase::isWaiting(void) const
+	{
+		return waiting;
+	}
 
-		bool Thread::isRunning(void) const
-		{
-			return running;
-		}
+	void FSThreadBase::lock(void)
+	{
+		locker.lock();
+	}
 
-		bool Thread::isWaiting(void) const
-		{
-			return waiting;
-		}
+	void FSThreadBase::unlock(void)
+	{
+		locker.unlock();
+	}
 
-		void Thread::lock(void)
-		{
-			locker.lock();
-		}
+	bool FSThreadBase::isLocked(void) const
+	{
+		return locker.isLocked();
+	}
 
-		void Thread::unlock(void)
+	void FSThreadBase::Handler(FSThreadBase *thread)
+	{
+		if (thread->running)
 		{
-			locker.unlock();
-		}
-
-		bool Thread::isLocked(void) const
-		{
-			return locker.isLocked();
-		}
-
-		void Thread::Handler(Thread *thread)
-		{
-			if (thread->running)
-			{
-				thread->process();
-				thread->running = false;
-			}
+			thread->process();
+			thread->running = false;
 		}
 	}
 }

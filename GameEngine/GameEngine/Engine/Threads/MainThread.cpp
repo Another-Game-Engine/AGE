@@ -6,6 +6,7 @@
 #include <Threads/Tasks/ToRenderTasks.hpp>
 #include <Threads/PrepareRenderThread.hpp>
 #include <Threads/Tasks/BasicTasks.hpp>
+#include <Utils/Debug.hpp>
 
 
 namespace AGE
@@ -109,7 +110,8 @@ namespace AGE
 		static bool unique = true;
 		if (unique)
 		{
-			_engine = std::make_shared<AGE::Engine>();
+			Singleton<Engine>::setInstance();
+			_engine = std::shared_ptr<AGE::Engine>(Singleton<Engine>::getInstance());
 			auto futur = GetRenderThread()->getQueue()->emplaceFutureTask<Tasks::Render::CreateRenderContext, bool>(_engine);
 			auto success = futur.get();
 			assert(success);

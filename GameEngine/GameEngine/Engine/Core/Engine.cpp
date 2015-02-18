@@ -6,6 +6,8 @@
 #include <Utils/Encoding.hpp>
 #include <Utils/File.hpp>
 #include <Utils/Directory.hpp>
+#include <Utils/FileSystem.hpp>
+#include <Utils/Path.hpp>
 
 #include <Threads/ThreadManager.hpp>
 #include <Threads/MainThread.hpp>
@@ -114,16 +116,18 @@ namespace AGE
 		return cachePath;
 	}
 
-	//std::shared_ptr<FileSystem> Engine::getFileSystem(void) const
-	//{
-	//	return fileSystem;
-	//}
+	std::size_t Engine::getFrameNumber(void) const
+	{
+		return frame;
+	}
 
 	bool Engine::launch(std::function<bool()> &fn)
 	{
 		AGE_ASSERT(!_initialized && "Engine already initialized.");
 
 		_timer = setInstance<Timer>();
+
+		setInstance<FileSystem>();
 
 #ifdef USE_DEFAULT_ENGINE_CONFIGURATION
 		setInstance<AGE::AssetsManager>();
@@ -163,7 +167,7 @@ namespace AGE
 		}
 		homePath = Directory::GetHomeDirectory();
 		homePath += '/';
-		fileSystem = std::make_shared<FileSystem>();
+
 		for (std::size_t index = 1, size = arguments.size(); index < size; ++index)
 		{
 			const char *argument = arguments[index].c_str();
@@ -191,7 +195,7 @@ namespace AGE
 		}
 		dataPath = Path::PathName((applicationPath + dataPath + "data/").c_str());
 		Directory::CreateDirectory(dataPath.c_str());
-		if (!fileSystem->initialize(password.c_str()))
+		if (!getInstance<FileSystem>()->initialize(password.c_str()))
 		{
 			throw std::exception("Impossible to initialize FileSystem");
 		}
@@ -203,12 +207,18 @@ namespace AGE
 		{
 			cachePath = dataPath;
 		}
-		fileSystem->initialize(password.c_str());
-		initialized = true;
+		getInstance<FileSystem>()->initialize(password.c_str());
+		_initialized = true;
 
 		if (!fn())
 			return false;
 		return GetMainThread()->run();
+	}
+
+	void Engine::finalize()
+	{
+		getInstance<FileSystem>()->finalize();
+		AGE_ASSERT(_initialized && "Engine not initialized yet");
 	}
 
 	bool Engine::update()
@@ -311,6 +321,7 @@ namespace AGE
 		ImGui::Render();
 #endif
 		GetPrepareThread()->getQueue()->emplaceCommand<Commands::ToRender::Flush>();
+		++frame;
 		return true;
 	}
 
@@ -321,7 +332,7 @@ namespace AGE
 
 	std::shared_ptr<Engine> CreateEngine()
 	{
-		GetThreadManager()->createEngine();
+		return GetThreadManager()->createEngine();
 	}
 
 }

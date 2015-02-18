@@ -7,6 +7,7 @@
 #include "QueuePusher.hpp"
 #include <TMQ/queue.hpp>
 #include <limits>
+#include <Utils/Debug.hpp>
 
 namespace AGE
 {
@@ -99,12 +100,13 @@ namespace AGE
 	std::shared_ptr<AGE::Engine> ThreadManager::createEngine()
 	{
 		_engine = getMainThread()->createEngine();
+		return _engine;
 	}
 
 	std::shared_ptr<AGE::Engine> ThreadManager::getEngine()
 	{
 		AGE_ASSERT(_engine != nullptr);
-		return _engine;S
+		return _engine;
 	}
 
 	MainThread *ThreadManager::getMainThread() const

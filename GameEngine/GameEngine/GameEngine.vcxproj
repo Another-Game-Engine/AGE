@@ -542,9 +542,12 @@
     <ClCompile Include="Engine\Utils\FileStdio.cpp" />
     <ClCompile Include="Engine\Utils\FileSystem.cpp" />
     <ClCompile Include="Engine\Utils\FileSystemHelpers.cpp" />
+    <ClCompile Include="Engine\Utils\FileSystemThread.cpp" />
     <ClCompile Include="Engine\Utils\Frustum.cpp" />
     <ClCompile Include="Engine\Utils\Age_Imgui.cpp" />
+    <ClCompile Include="Engine\Utils\FSThreadBase.cpp" />
     <ClCompile Include="Engine\Utils\JsonSerializationBasicTypes.cpp" />
+    <ClCompile Include="Engine\Utils\Logger.cpp" />
     <ClCompile Include="Engine\Utils\MathematicTools.cpp" />
     <ClCompile Include="Engine\Utils\MatrixConversion.cpp" />
     <ClCompile Include="Engine\Utils\ObjectPool.cpp" />
@@ -557,6 +560,7 @@
     <ClCompile Include="Engine\Utils\Serialization\QuaternionSerialization.cpp" />
     <ClCompile Include="Engine\Utils\Serialization\VectorSerialization.cpp" />
     <ClCompile Include="Engine\Utils\Sphere.cpp" />
+    <ClCompile Include="Engine\Utils\SpinLock.cpp" />
     <ClCompile Include="Engine\Utils\Stream.cpp" />
     <ClCompile Include="Engine\Utils\ThreadName.cpp" />
     <ClCompile Include="Engine\Utils\UniqueTypeId.cpp" />
@@ -755,11 +759,14 @@
     <ClInclude Include="Engine\Utils\FileStdio.hpp" />
     <ClInclude Include="Engine\Utils\FileSystem.hpp" />
     <ClInclude Include="Engine\Utils\FileSystemHelpers.hpp" />
+    <ClInclude Include="Engine\Utils\FileSystemThread.hpp" />
     <ClInclude Include="Engine\Utils\Frustum.hh" />
+    <ClInclude Include="Engine\Utils\FSThreadBase.hpp" />
     <ClInclude Include="Engine\Utils\Function.hpp" />
     <ClInclude Include="Engine\Utils\GlmSerialization.hpp" />
     <ClInclude Include="Engine\Utils\Age_Imgui.hpp" />
     <ClInclude Include="Engine\Utils\JsonSerialization.hpp" />
+    <ClInclude Include="Engine\Utils\Logger.hpp" />
     <ClInclude Include="Engine\Utils\MathematicTools.hh" />
     <ClInclude Include="Engine\Utils\MatrixConversion.hpp" />
     <ClInclude Include="Engine\Utils\MemoryPool.hpp" />
@@ -780,6 +787,7 @@
     <ClInclude Include="Engine\Utils\Singleton.hpp" />
     <ClInclude Include="Engine\Utils\SmartPointer.hpp" />
     <ClInclude Include="Engine\Utils\Sphere.hh" />
+    <ClInclude Include="Engine\Utils\SpinLock.hpp" />
     <ClInclude Include="Engine\Utils\Stream.hpp" />
     <ClInclude Include="Engine\Utils\StripQualifiers.hpp" />
     <ClInclude Include="Engine\Utils\PerformanceDebugger.hh" />

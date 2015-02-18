@@ -9,7 +9,7 @@ struct MyManager : public Age::Engine::PluginManagerBase < Age::Engine::FileInte
 protected:
 	virtual bool onPluginLoaded(const std::string &name) override final
 	{
-		Age::Engine::Logger::GetInstance()->log(Age::Engine::Logger::Level::Normal, "Plugin ", name, " loaded correctly!");
+		Singleton<AGE::Logger>::getInstance()->log(Age::Engine::Logger::Level::Normal, "Plugin ", name, " loaded correctly!");
 		return true;
 	}
 };

@@ -32,8 +32,7 @@ namespace AGE
 		const std::string &getSavePath(void) const;
 		const std::string &getCachePath(void) const;
 
-		//std::shared_ptr<FileSystem> getFileSystem(void) const;
-
+		std::size_t getFrameNumber(void) const;
 	private:
 		friend class Singleton < Engine > ;
 
@@ -55,12 +54,12 @@ namespace AGE
 		std::vector<std::string> arguments;
 		const std::string projectName;
 		const std::string password;
-		//std::shared_ptr<FileSystem> fileSystem;
 		std::string applicationPath;
 		std::string dataPath;
 		std::string homePath;
 		std::string savePath;
 		std::string cachePath;
+		std::size_t frame = 0;
 	};
 
 	std::shared_ptr<Engine> CreateEngine();
