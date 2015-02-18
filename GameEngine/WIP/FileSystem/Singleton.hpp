@@ -3,7 +3,7 @@
 #include <memory>
 #include <mutex>
 
-namespace Age
+namespace AGE
 {
 	namespace Engine
 	{

@@ -12,7 +12,7 @@
 
 #include "Singleton.hpp"
 
-namespace Age
+namespace AGE
 {
 	namespace Engine
 	{

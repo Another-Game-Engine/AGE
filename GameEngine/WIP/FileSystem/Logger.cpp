@@ -1,7 +1,7 @@
 #include "Debug.hpp"
 #include "Logger.hpp"
 
-namespace Age
+namespace AGE
 {
 	namespace Engine
 	{

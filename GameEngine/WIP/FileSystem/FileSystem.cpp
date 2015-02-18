@@ -14,7 +14,7 @@
 #include "Directory.hpp"
 #include "FileSystemThread.hpp"
 
-namespace Age
+namespace AGE
 {
 	namespace Engine
 	{

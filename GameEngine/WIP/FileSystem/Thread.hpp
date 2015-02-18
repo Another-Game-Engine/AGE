@@ -8,7 +8,7 @@
 
 #include "SpinLock.hpp"
 
-namespace Age
+namespace AGE
 {
 	namespace Engine
 	{

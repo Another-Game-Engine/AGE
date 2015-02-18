@@ -2,7 +2,7 @@
 
 #include "FileCommand.hpp"
 
-namespace Age
+namespace AGE
 {
 	namespace Engine
 	{

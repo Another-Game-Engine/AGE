@@ -2,7 +2,7 @@
 
 #include "PluginManager.hpp"
 
-namespace Age
+namespace AGE
 {
 	namespace Engine
 	{

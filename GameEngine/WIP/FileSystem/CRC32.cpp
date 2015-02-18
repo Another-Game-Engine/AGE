@@ -1,6 +1,6 @@
 #include "CRC32.hpp"
 
-namespace Age
+namespace AGE
 {
 	namespace Engine
 	{

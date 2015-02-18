@@ -2,7 +2,7 @@
 #include "Engine.hpp"
 #include "FileSystem.hpp"
 
-namespace Age
+namespace AGE
 {
 	namespace Engine
 	{

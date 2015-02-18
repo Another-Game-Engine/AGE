@@ -2,7 +2,7 @@
 
 #include <cstddef>
 
-namespace Age
+namespace AGE
 {
 	namespace Engine
 	{

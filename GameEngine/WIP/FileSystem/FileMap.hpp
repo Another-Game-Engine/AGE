@@ -4,7 +4,7 @@
 
 #include "FileMemory.hpp"
 
-namespace Age
+namespace AGE
 {
 	namespace Engine
 	{

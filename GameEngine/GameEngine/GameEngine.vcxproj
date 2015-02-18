@@ -533,6 +533,7 @@
     <ClCompile Include="Engine\Text\Font.cpp" />
     <ClCompile Include="Engine\Text\FontGlyph.cpp" />
     <ClCompile Include="Engine\Text\FontManager.cpp" />
+    <ClCompile Include="Engine\Utils\Directory.cpp" />
     <ClCompile Include="Engine\Utils\Encoding.cpp" />
     <ClCompile Include="Engine\Utils\File.cpp" />
     <ClCompile Include="Engine\Utils\FileSystem.cpp" />
@@ -542,6 +543,7 @@
     <ClCompile Include="Engine\Utils\MathematicTools.cpp" />
     <ClCompile Include="Engine\Utils\MatrixConversion.cpp" />
     <ClCompile Include="Engine\Utils\ObjectPool.cpp" />
+    <ClCompile Include="Engine\Utils\OldFile.cpp" />
     <ClCompile Include="Engine\Utils\Plane.cpp" />
     <ClCompile Include="Engine\Utils\ScreenPosToWorldRay.cpp" />
     <ClCompile Include="Engine\Utils\PerformanceDebugger.cpp" />
@@ -695,6 +697,7 @@
     <ClInclude Include="Engine\Utils\Containers\Queue.hpp" />
     <ClInclude Include="Engine\Utils\Containers\Vector.hpp" />
     <ClInclude Include="Engine\Utils\DataSwapper.hpp" />
+    <ClInclude Include="Engine\Utils\Directory.hpp" />
     <ClInclude Include="Engine\Utils\DrawQuad.hh" />
     <ClInclude Include="Engine\Audio\AudioManager.hh" />
     <ClInclude Include="Engine\Audio\ChannelGroupType.hpp" />
@@ -748,6 +751,7 @@
     <ClInclude Include="Engine\Utils\MetaData.hpp" />
     <ClInclude Include="Engine\Utils\MultiTypeObjectPool.hpp" />
     <ClInclude Include="Engine\Utils\ObjectPool.hpp" />
+    <ClInclude Include="Engine\Utils\OldFile.hpp" />
     <ClInclude Include="Engine\Utils\Plane.hh" />
     <ClInclude Include="Engine\Utils\PubSub.hpp" />
     <ClInclude Include="Engine\Utils\ScreenPosToWorldRay.hpp" />

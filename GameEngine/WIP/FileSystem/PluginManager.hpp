@@ -3,7 +3,7 @@
 #include "Library.hpp"
 #include "Singleton.hpp"
 
-namespace Age
+namespace AGE
 {
 	namespace Engine
 	{

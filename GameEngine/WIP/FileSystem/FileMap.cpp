@@ -1,7 +1,7 @@
 #include "FileMap.hpp"
 #include "Encoding.hpp"
 
-namespace Age
+namespace AGE
 {
 	namespace Engine
 	{

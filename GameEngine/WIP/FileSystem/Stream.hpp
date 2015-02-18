@@ -5,7 +5,7 @@
 #include <cstdio>
 #include <string>
 
-namespace Age
+namespace AGE
 {
 	namespace Engine
 	{

@@ -2,7 +2,7 @@
 
 #include <atomic>
 
-namespace Age
+namespace AGE
 {
 	namespace Engine
 	{

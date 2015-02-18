@@ -20,7 +20,7 @@
 # undef CreateFile
 #endif
 
-namespace Age
+namespace AGE
 {
 	namespace Engine
 	{

@@ -2,7 +2,7 @@
 
 #include "Buffer.hpp"
 
-namespace Age
+namespace AGE
 {
 	namespace Engine
 	{
