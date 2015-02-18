@@ -11,6 +11,7 @@
 namespace AGE
 {
 	ThreadManager::ThreadManager()
+		: _engine(nullptr)
 	{
 		// For old computer, we need at least 3 threads hahahahaha
 		// Yeah, we're like this :D
@@ -95,9 +96,15 @@ namespace AGE
 		return nullptr;
 	}
 
-	std::weak_ptr<AGE::Engine> ThreadManager::createEngine()
+	std::shared_ptr<AGE::Engine> ThreadManager::createEngine()
 	{
-		return getMainThread()->createEngine();
+		_engine = getMainThread()->createEngine();
+	}
+
+	std::shared_ptr<AGE::Engine> ThreadManager::getEngine()
+	{
+		AGE_ASSERT(_engine != nullptr);
+		return _engine;S
 	}
 
 	MainThread *ThreadManager::getMainThread() const
@@ -216,11 +223,6 @@ namespace AGE
 	PrepareRenderThread *GetPrepareThread()
 	{
 		return Singleton<ThreadManager>::getInstance()->getPrepareThread();
-	}
-
-	std::weak_ptr<Engine> CreateEngine()
-	{
-		return Singleton<ThreadManager>::getInstance()->createEngine();
 	}
 
 	bool InitAGE()

@@ -20,8 +20,8 @@ namespace AGE
 		virtual bool stop();
 		bool run();
 		bool update();
-		std::weak_ptr<AGE::Engine> createEngine();
-		std::weak_ptr<AGE::Engine> getEngine();
+		std::shared_ptr<AGE::Engine> createEngine();
+		std::shared_ptr<AGE::Engine> getEngine();
 		void setSceneAsActive(AScene *scene);
 		inline const AScene *getActiveScene() const { return _activeScene; }
 	private:

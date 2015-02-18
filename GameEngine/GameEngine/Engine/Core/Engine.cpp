@@ -313,4 +313,15 @@ namespace AGE
 		GetPrepareThread()->getQueue()->emplaceCommand<Commands::ToRender::Flush>();
 		return true;
 	}
+
+	std::shared_ptr<Engine> GetEngine()
+	{
+		return GetThreadManager()->getEngine();
+	}
+
+	std::shared_ptr<Engine> CreateEngine()
+	{
+		GetThreadManager()->createEngine();
+	}
+
 }

@@ -104,18 +104,23 @@ namespace AGE
 	MainThread::~MainThread()
 	{}
 
-	std::weak_ptr<AGE::Engine> MainThread::createEngine()
+	std::shared_ptr<AGE::Engine> MainThread::createEngine()
 	{
 		static bool unique = true;
 		if (unique)
 		{
 			_engine = std::make_shared<AGE::Engine>();
-			auto engine = std::weak_ptr<AGE::Engine>(_engine);
-			auto futur = GetRenderThread()->getQueue()->emplaceFutureTask<Tasks::Render::CreateRenderContext, bool>(engine);
+			auto futur = GetRenderThread()->getQueue()->emplaceFutureTask<Tasks::Render::CreateRenderContext, bool>(_engine);
 			auto success = futur.get();
 			assert(success);
 		}
 		unique = false;
+		return _engine;
+	}
+
+	std::shared_ptr<AGE::Engine> MainThread::getEngine()
+	{
+		AGE_ASSERT(_engine != nullptr && "Engine has not been created. Use 'CreateEngine()'.");
 		return _engine;
 	}
 

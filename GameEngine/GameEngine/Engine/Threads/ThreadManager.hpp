@@ -26,7 +26,8 @@ namespace AGE
 		MainThread *getMainThread() const;
 		RenderThread *getRenderThread() const;
 		PrepareRenderThread *getPrepareThread() const;
-		std::weak_ptr<AGE::Engine> createEngine();
+		std::shared_ptr<AGE::Engine> createEngine();
+		std::shared_ptr<AGE::Engine> getEngine();
 		bool initAndLaunch();
 		void exit();
 		void updateThreadStatistics(Thread::ThreadType type, std::size_t workTime, std::size_t waitTime);
@@ -66,6 +67,7 @@ namespace AGE
 		void setAsWorker(bool mainThread, bool prepareThread, bool renderThread);
 	private:
 		std::array<ThreadStatistics, Thread::END> _threadsStatistics;
+		std::shared_ptr<Engine> _engine;
 
 		ThreadManager();
 		virtual ~ThreadManager();
@@ -87,7 +89,6 @@ namespace AGE
 	MainThread *GetMainThread();
 	RenderThread *GetRenderThread();
 	PrepareRenderThread *GetPrepareThread();
-	std::weak_ptr<Engine> CreateEngine();
 	bool InitAGE();
 	void ExitAGE();
 }

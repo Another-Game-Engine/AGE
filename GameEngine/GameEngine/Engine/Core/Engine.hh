@@ -62,4 +62,7 @@ namespace AGE
 		std::string savePath;
 		std::string cachePath;
 	};
+
+	std::shared_ptr<Engine> CreateEngine();
+	std::shared_ptr<Engine> GetEngine();
 }
