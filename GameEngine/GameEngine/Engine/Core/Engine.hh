@@ -3,6 +3,7 @@
 #include <Configuration.hpp>
 #include "Utils/DependenciesInjector.hpp"
 #include <Core/SceneManager.hh>
+#include <Utils/Singleton.hh>
 
 namespace AGE
 {
@@ -13,16 +14,52 @@ namespace AGE
 		, public SceneManager
 #endif
 	{
-	protected:
-		Engine(Engine const &) = delete;
-		Engine &operator=(Engine const &) = delete;
-
-		Timer *_timer;
 	public:
-		Engine();
-		virtual ~Engine();
-
 		bool launch(std::function<bool()> &fn);
 		bool update();
+		void finalize();
+		~Engine();
+
+		std::size_t getNumberOfArguments(void) const;
+		const std::string &getArgument(std::size_t num) const;
+
+		const std::string &getProjectName(void) const;
+		const std::string &getPassword(void) const;
+
+		const std::string &getApplicationPath(void) const;
+		const std::string &getDataPath(void) const;
+		const std::string &getHomePath(void) const;
+		const std::string &getSavePath(void) const;
+		const std::string &getCachePath(void) const;
+
+		//std::shared_ptr<FileSystem> getFileSystem(void) const;
+
+	private:
+		friend class Singleton < Engine > ;
+
+		Engine(void);
+		Engine(int argc, char *argv[]);
+		Engine(const std::string &projectName, const std::string &password);
+		Engine(int argc, char *argv[], const std::string &projectName, const std::string &password);
+		Engine(const Engine &other) = delete;
+		Engine(Engine &&other) = delete;
+		Engine &operator=(const Engine &other) = delete;
+		Engine &operator=(Engine &&other) = delete;
+
+	private:
+		static const std::size_t BufferSize = 1024;
+
+		Timer *_timer;
+		bool _initialized = false;
+		int numberOfArguments;
+		std::vector<std::string> arguments;
+		const std::string projectName;
+		const std::string password;
+		//std::shared_ptr<FileSystem> fileSystem;
+		std::string applicationPath;
+		std::string dataPath;
+		std::string homePath;
+		std::string savePath;
+		std::string cachePath;
 	};
 }
