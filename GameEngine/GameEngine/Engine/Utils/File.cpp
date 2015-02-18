@@ -1,82 +1,167 @@
-#include "OldFile.hpp"
-#include <algorithm>
-#include <fstream>
+#include <cassert>
 
-OldFile::OldFile(const std::string &name /*= "unknownFile"*/) :
-fullPath_(name)
+#include <Core/Engine.hh>
+#include "File.hpp"
+#include "FileInterface.hpp"
+#include "FileSystem.hpp"
+
+namespace AGE
 {
-}
+	struct File::FileData final
+	{
+		std::shared_ptr<FileInterface> file = nullptr;
+	};
 
-OldFile::OldFile(const char *name) :
-fullPath_(name)
-{
-}
+	File::File(void)
+		: data(new FileData)
+	{
+		return;
+	}
 
-bool OldFile::exists() const
-{
-	std::ifstream file(this->fullPath_.c_str());
-	bool isOpen = file.is_open();
-	if (isOpen)
-		file.close();
-	return isOpen;
-}
+	File::File(const File &other)
+		: data(other.data)
+	{
+		return;
+	}
 
-const std::string OldFile::getFullName() const
-{
-	return this->fullPath_;
-}
+	File::File(File &&other)
+		: data(std::move(other.data))
+	{
+		return;
+	}
 
-std::string OldFile::getFileName() const
-{
-	std::string::size_type		pos;
-	auto path = fullPath_;
+	File &File::operator=(const File &other)
+	{
+		if (this != &other)
+		{
+			assert(!data->file && "File is not closed");
+			data = other.data;
+		}
+		return *this;
+	}
 
-	pos = path.find_last_of("\\/");
+	File &File::operator=(File &&other)
+	{
+		if (this != &other)
+		{
+			assert(!data->file && "File is not closed");
+			data = std::move(other.data);
+		}
+		return *this;
+	}
 
-	if (pos != std::string::npos)
-		return path.substr(pos + 1, std::string::npos);
-	else
-		return path;
-}
+	File::~File(void)
+	{
+		assert(!data->file && "File is not closed");
+	}
 
-std::string OldFile::getFolder() const
-{
-	std::string::size_type		pos;
-	auto path = fullPath_;
+	bool File::open(const char *name, const char *mode)
+	{
+		assert(!data->file && "File is already opened");
+		std::shared_ptr<FileSystem> fileSystem = Engine::GetInstance()->getFileSystem();
+		assert(fileSystem != nullptr && "FileSystem is not initialized");
+		data->file = fileSystem->getFile(name, mode);
+		return data->file != nullptr;
+	}
 
-	pos = path.find_last_of("\\/");
-	if (pos != std::string::npos)
-		return path.substr(0, pos + 1);
-	else
-		return "";
-}
+	bool File::execute(const char *command, const char *mode)
+	{
+		assert(!data->file && "File is already opened");
+		std::shared_ptr<FileSystem> fileSystem = Engine::GetInstance()->getFileSystem();
+		assert(fileSystem != nullptr && "FileSystem is not initialized");
+		data->file = fileSystem->getFile((std::string("command://") + command).c_str(), mode);
+		return data->file != nullptr;
+	}
 
-std::string OldFile::getShortFileName() const
-{
-	return this->getFileName().substr(0, this->getFileName().find_last_of("."));
-}
+	void File::close(void)
+	{
+		assert(data->file != nullptr && "File is not opened");
+		data->file.reset();
+		data->file = nullptr;
+	}
 
-std::string OldFile::getExtension() const
-{
-	std::string::size_type		pos;
-	auto path = fullPath_;
-	pos = path.find_last_of(".");
-	if (pos != std::string::npos)
-		return path.substr(pos + 1, std::string::npos);
-	else
-		return "";
-}
+	const char *File::getName(void) const
+	{
+		assert(data->file != nullptr && "File is not opened");
+		return data->file->getName();
+	}
 
-std::string OldFile::getFileContent() const
-{
-	std::ifstream			stream(fullPath_.c_str());
+	std::size_t File::getSize(void) const
+	{
+		assert(data->file != nullptr && "File is not opened");
+		return data->file->getSize();
+	}
 
-	if (!stream.is_open())
-		return "";
-	std::string				res;
+	bool File::isOpened(void) const
+	{
+		return data->file != nullptr;
+	}
 
-	res.assign((std::istreambuf_iterator<char>(stream)),
-		(std::istreambuf_iterator<char>()));
+	std::size_t File::read(void *ptr, std::size_t size, std::size_t nmemb) const
+	{
+		assert(data->file != nullptr && "File is not opened");
+		return data->file->read(ptr, size, nmemb);
+	}
 
-	return res;
+	std::size_t File::write(const void *ptr, std::size_t size, std::size_t nmemb) const
+	{
+		assert(data->file != nullptr && "File is not opened");
+		return data->file->write(ptr, size, nmemb);
+	}
+
+	bool File::endOfFile(void) const
+	{
+		assert(data->file != nullptr && "File is not opened");
+		return data->file->endOfFile();
+	}
+
+	int File::getCharacter(void) const
+	{
+		assert(data->file != nullptr && "File is not opened");
+		return data->file->getCharacter();
+	}
+
+	void File::seekSet(int offset) const
+	{
+		assert(data->file != nullptr && "File is not opened");
+		return data->file->seekSet(offset);
+	}
+
+	void File::seekEnd(int offset) const
+	{
+		assert(data->file != nullptr && "File is not opened");
+		return data->file->seekEnd(offset);
+	}
+
+	void File::seekCurrent(int offset) const
+	{
+		assert(data->file != nullptr && "File is not opened");
+		return data->file->seekCurrent(offset);
+	}
+
+	std::size_t File::tell(void) const
+	{
+		assert(data->file != nullptr && "File is not opened");
+		return data->file->tell();
+	}
+
+	bool File::flush(void) const
+	{
+		assert(data->file != nullptr && "File is not opened");
+		return data->file->flush();
+	}
+
+	File &File::swap(File &other)
+	{
+		if (this != &other)
+		{
+			std::swap(data, other.data);
+		}
+		return *this;
+	}
+
+	void swap(File &lhs, File &rhs)
+	{
+		lhs.swap(rhs);
+	}
 }

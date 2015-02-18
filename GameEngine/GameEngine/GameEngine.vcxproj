@@ -239,7 +239,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MultiProcessorCompilation>false</MultiProcessorCompilation>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <OpenMPSupport>true</OpenMPSupport>
@@ -270,7 +270,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;EDITOR_ENABLED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;EDITOR_ENABLED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MultiProcessorCompilation>false</MultiProcessorCompilation>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <OpenMPSupport>true</OpenMPSupport>
@@ -357,7 +357,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4503;4099</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -395,7 +395,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;EDITOR_ENABLED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;EDITOR_ENABLED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4503;4099</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -536,6 +536,10 @@
     <ClCompile Include="Engine\Utils\Directory.cpp" />
     <ClCompile Include="Engine\Utils\Encoding.cpp" />
     <ClCompile Include="Engine\Utils\File.cpp" />
+    <ClCompile Include="Engine\Utils\FileCommand.cpp" />
+    <ClCompile Include="Engine\Utils\FileMap.cpp" />
+    <ClCompile Include="Engine\Utils\FileMemory.cpp" />
+    <ClCompile Include="Engine\Utils\FileStdio.cpp" />
     <ClCompile Include="Engine\Utils\FileSystem.cpp" />
     <ClCompile Include="Engine\Utils\Frustum.cpp" />
     <ClCompile Include="Engine\Utils\Age_Imgui.cpp" />
@@ -551,6 +555,7 @@
     <ClCompile Include="Engine\Utils\Serialization\QuaternionSerialization.cpp" />
     <ClCompile Include="Engine\Utils\Serialization\VectorSerialization.cpp" />
     <ClCompile Include="Engine\Utils\Sphere.cpp" />
+    <ClCompile Include="Engine\Utils\Stream.cpp" />
     <ClCompile Include="Engine\Utils\ThreadName.cpp" />
     <ClCompile Include="Engine\Utils\UniqueTypeId.cpp" />
   </ItemGroup>
@@ -693,6 +698,7 @@
     <ClInclude Include="Engine\Utils\BitOperations.hpp" />
     <ClInclude Include="Engine\Utils\BoundingInfos.hpp" />
     <ClInclude Include="Engine\Utils\BufferPool.hpp" />
+    <ClInclude Include="Engine\Utils\Compiler.hpp" />
     <ClInclude Include="Engine\Utils\Containers\Config.hpp" />
     <ClInclude Include="Engine\Utils\Containers\Queue.hpp" />
     <ClInclude Include="Engine\Utils\Containers\Vector.hpp" />
@@ -738,7 +744,13 @@
     <ClInclude Include="Engine\Utils\DependenciesInjector.hpp" />
     <ClInclude Include="Engine\Utils\Dependency.hpp" />
     <ClInclude Include="Engine\Utils\Encoding.hpp" />
+    <ClInclude Include="Engine\Utils\Endianness.hpp" />
     <ClInclude Include="Engine\Utils\File.hpp" />
+    <ClInclude Include="Engine\Utils\FileCommand.hpp" />
+    <ClInclude Include="Engine\Utils\FileInterface.hpp" />
+    <ClInclude Include="Engine\Utils\FileMap.hpp" />
+    <ClInclude Include="Engine\Utils\FileMemory.hpp" />
+    <ClInclude Include="Engine\Utils\FileStdio.hpp" />
     <ClInclude Include="Engine\Utils\FileSystem.hpp" />
     <ClInclude Include="Engine\Utils\Frustum.hh" />
     <ClInclude Include="Engine\Utils\Function.hpp" />
@@ -753,6 +765,7 @@
     <ClInclude Include="Engine\Utils\ObjectPool.hpp" />
     <ClInclude Include="Engine\Utils\OldFile.hpp" />
     <ClInclude Include="Engine\Utils\Plane.hh" />
+    <ClInclude Include="Engine\Utils\Platform.hpp" />
     <ClInclude Include="Engine\Utils\PubSub.hpp" />
     <ClInclude Include="Engine\Utils\ScreenPosToWorldRay.hpp" />
     <ClInclude Include="Engine\Utils\Serialization\SerializationArchives.hpp" />
@@ -763,6 +776,7 @@
     <ClInclude Include="Engine\Utils\Singleton.hpp" />
     <ClInclude Include="Engine\Utils\SmartPointer.hpp" />
     <ClInclude Include="Engine\Utils\Sphere.hh" />
+    <ClInclude Include="Engine\Utils\Stream.hpp" />
     <ClInclude Include="Engine\Utils\StripQualifiers.hpp" />
     <ClInclude Include="Engine\Utils\PerformanceDebugger.hh" />
     <ClInclude Include="Engine\Utils\ThreadName.hpp" />

@@ -126,6 +126,11 @@
     <ClCompile Include="Engine\Utils\Encoding.cpp" />
     <ClCompile Include="Engine\Utils\OldFile.cpp" />
     <ClCompile Include="Engine\Utils\Directory.cpp" />
+    <ClCompile Include="Engine\Utils\Stream.cpp" />
+    <ClCompile Include="Engine\Utils\FileCommand.cpp" />
+    <ClCompile Include="Engine\Utils\FileMap.cpp" />
+    <ClCompile Include="Engine\Utils\FileMemory.cpp" />
+    <ClCompile Include="Engine\Utils\FileStdio.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -342,6 +347,15 @@
     <ClInclude Include="Engine\Utils\Encoding.hpp" />
     <ClInclude Include="Engine\Utils\OldFile.hpp" />
     <ClInclude Include="Engine\Utils\Directory.hpp" />
+    <ClInclude Include="Engine\Utils\Platform.hpp" />
+    <ClInclude Include="Engine\Utils\Stream.hpp" />
+    <ClInclude Include="Engine\Utils\Endianness.hpp" />
+    <ClInclude Include="Engine\Utils\FileCommand.hpp" />
+    <ClInclude Include="Engine\Utils\FileInterface.hpp" />
+    <ClInclude Include="Engine\Utils\FileMap.hpp" />
+    <ClInclude Include="Engine\Utils\FileMemory.hpp" />
+    <ClInclude Include="Engine\Utils\FileStdio.hpp" />
+    <ClInclude Include="Engine\Utils\Compiler.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

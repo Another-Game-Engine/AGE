@@ -4,6 +4,8 @@
 
 #include <Utils/Debug.hpp>
 #include <Utils/Encoding.hpp>
+#include <Utils/File.hpp>
+#include <Utils/Directory.hpp>
 
 #include <Threads/ThreadManager.hpp>
 #include <Threads/MainThread.hpp>
@@ -29,7 +31,6 @@
 
 namespace AGE
 {
-
 	Engine::Engine(void)
 		: Engine(0, nullptr)
 		//, _timer(nullptr)
@@ -121,7 +122,7 @@ namespace AGE
 	bool Engine::launch(std::function<bool()> &fn)
 	{
 		AGE_ASSERT(!_initialized && "Engine already initialized.");
-		
+
 		_timer = setInstance<Timer>();
 
 #ifdef USE_DEFAULT_ENGINE_CONFIGURATION
@@ -238,13 +239,13 @@ namespace AGE
 			}
 			refreshStats = 0.0;
 		}
-		for (auto i = (std::size_t)Thread::Main; i < Thread::hardwareConcurency() ; ++i)
+		for (auto i = (std::size_t)Thread::Main; i < Thread::hardwareConcurency(); ++i)
 		{
 			auto &e = stats[i];
 			e.averageWaitTimeCopy = e.averageWaitTime;
 			e.averageWorkTimeCopy = e.averageWorkTime;
 		}
-		#ifdef USE_IMGUI
+#ifdef USE_IMGUI
 		if (ImGui::Begin("Threads statistics", (bool*)0, ImVec2(0, 0), -1.0f, ImGuiWindowFlags_AlwaysAutoResize))
 		{
 			auto &stats = GetThreadManager()->getStatistics();

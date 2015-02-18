@@ -81,11 +81,8 @@
     <ClInclude Include="Buffer.hpp" />
     <ClInclude Include="Compiler.hpp" />
     <ClInclude Include="CRC32.hpp" />
-    <ClInclude Include="Debug.hpp" />
-    <ClInclude Include="Directory.hpp" />
     <ClInclude Include="Endianness.hpp" />
     <ClInclude Include="Engine.hpp" />
-    <ClInclude Include="File.hpp" />
     <ClInclude Include="FileCommand.hpp" />
     <ClInclude Include="FileInterface.hpp" />
     <ClInclude Include="FileMap.hpp" />
@@ -102,16 +99,13 @@
     <ClInclude Include="Singleton.hpp" />
     <ClInclude Include="SpinLock.hpp" />
     <ClInclude Include="Stream.hpp" />
-    <ClInclude Include="Encoding.hpp" />
     <ClInclude Include="Thread.hpp" />
     <ClInclude Include="Visibility.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Buffer.cpp" />
     <ClCompile Include="CRC32.cpp" />
-    <ClCompile Include="Directory.cpp" />
     <ClCompile Include="Engine.cpp" />
-    <ClCompile Include="File.cpp" />
     <ClCompile Include="FileCommand.cpp" />
     <ClCompile Include="FileMap.cpp" />
     <ClCompile Include="FileMemory.cpp" />
@@ -124,7 +118,6 @@
     <ClCompile Include="Path.cpp" />
     <ClCompile Include="SpinLock.cpp" />
     <ClCompile Include="Stream.cpp" />
-    <ClCompile Include="Encoding.cpp" />
     <ClCompile Include="Thread.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
