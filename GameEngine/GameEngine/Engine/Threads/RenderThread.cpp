@@ -125,6 +125,11 @@ namespace AGE
 			msg.setValue(std::make_pair(meshPropertiesKey, transformKey));
 		});
 
+		registerCallback <Tasks::Render::RemoveMeshProperty>([&](Tasks::Render::RemoveMeshProperty &msg)
+		{
+			properties->remove_properties(msg.toRemove);
+		});
+
 		registerCallback<Tasks::Render::SetMeshMaterial>([&](Tasks::Render::SetMeshMaterial& msg)
 		{
 //			for (auto &subMesh : msg.mesh->subMeshs)

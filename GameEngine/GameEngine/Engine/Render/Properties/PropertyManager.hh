@@ -3,6 +3,7 @@
 #include <vector>
 #include <memory>
 #include <Render/Key.hh>
+#include <Utils/MemoryPool.hpp>
 
 namespace AGE
 {
@@ -18,9 +19,10 @@ namespace AGE
 
 	public:
 		Key<Properties> add_properties(std::shared_ptr<Properties> const &);
+		void remove_properties(Key<Properties> const &toRm);
 		std::shared_ptr<Properties> get_properties(Key<Properties> const &) const;
 
 	private:
-		std::vector<std::shared_ptr<Properties>> _properties_array;
+		MemoryPool<std::shared_ptr<Properties>> _properties_array;
 	};
 }
