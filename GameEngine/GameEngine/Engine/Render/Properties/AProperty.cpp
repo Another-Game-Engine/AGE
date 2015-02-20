@@ -11,7 +11,7 @@ namespace AGE
 
 	AProperty::AProperty(AProperty &&move) :
 		_name(std::move(move._name)),
-		_resources(std::move(move._resources))
+		_registered_resources(std::move(move._registered_resources))
 	{
 
 	}
@@ -21,24 +21,21 @@ namespace AGE
 		return (_name);
 	}
 
-	std::shared_ptr<IProgramResources> AProperty::get_resource(std::shared_ptr<Program> const &p)
+	std::shared_ptr<IProgramResources> AProperty::get_resource(std::shared_ptr<Program> const &program)
 	{
-		for (auto &resource : _resources) {
-			if (*resource.first == *p) {
-				return (resource.second);
-			}
-		}
 		return (nullptr);
 	}
 
-	IProperty & AProperty::set_program(std::vector<std::shared_ptr<Program>> const &programs)
+	std::shared_ptr<IProgramResources> AProperty::get_resource(std::shared_ptr<Program> const &program)
 	{
-		for (auto &program : programs) {
-			auto &resource = program->get_resource_interface(_name);
-			if (resource) {
-				_resources.emplace_back(std::make_pair(program, resource));
+		for (auto &resource : _registered_resources) {
+			if (*program == *resource.first) {
+				return resource.second;
 			}
 		}
-		return (*this);
+		auto resource = program->get_resource_interface(_name);
+		_registered_resources.emplace_back(std::make_pair(program, resource));
+		return (resource);
 	}
+
 }

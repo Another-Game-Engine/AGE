@@ -14,13 +14,10 @@ namespace AGE
 
 	public:
 		virtual std::string const &name() const override final;
-		virtual std::shared_ptr<IProgramResources> get_resource(std::shared_ptr<Program> const &p) override final;
-
-	public:
-		virtual IProperty &set_program(std::vector<std::shared_ptr<Program>> const &programs) override;
+		virtual std::shared_ptr<IProgramResources> get_resource(std::shared_ptr<Program> const &program) override final;
 
 	private:
 		std::string _name;
-		std::vector<std::pair<std::shared_ptr<Program>, std::shared_ptr<IProgramResources>>> _resources;
+		std::vector<std::pair<std::shared_ptr<Program>, std::shared_ptr<IProgramResources>>> _registered_resources;
 	};
 }
