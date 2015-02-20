@@ -152,7 +152,7 @@ namespace AGE
 	void RenderScene::removeDrawableObject(DRAWABLE_ID id)
 	{
 		Drawable &toRm = _drawables.get(id);
-		AGE::GetRenderThread()->getQueue()->emplaceTask<AGE::Tasks::Render::RemoveMeshProperty>(toRm.instanceProperties);
+		AGE::GetRenderThread()->getQueue()->emplaceTask<AGE::Tasks::Render::RemoveMeshProperty>(toRm.mesh.painter, toRm.instanceProperties);
 		if (toRm.hasMoved)
 		{
 			uint32_t idxMoveBuffer = toRm.moveBufferIdx;
@@ -272,7 +272,7 @@ namespace AGE
 
 				added.mesh = msg.submeshInstances[i];
 
-				auto addedProperty = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<AGE::Tasks::Render::CreateMeshProperty, std::pair<Key<Properties>, Key<Property>>>();
+				auto addedProperty = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<AGE::Tasks::Render::CreateMeshProperty, std::pair<Key<Properties>, Key<Property>>>(added.mesh.painter);
 
 				added.position = uo->position;
 				added.orientation = uo->orientation;
@@ -405,7 +405,7 @@ namespace AGE
 					_octree.addElement(&e);
 				else
 					_octree.moveElement(&e);
-				AGE::GetRenderThread()->getQueue()->emplaceTask<AGE::Tasks::Render::SetMeshTransform>(e.instanceProperties, e.transformationProperty, e.transformation);
+				AGE::GetRenderThread()->getQueue()->emplaceTask<AGE::Tasks::Render::SetMeshTransform>(e.mesh.painter, e.instanceProperties, e.transformationProperty, e.transformation);
 				assert(e.currentNode != UNDEFINED_IDX);
 			}
 			for (uint32_t idx : _pointLightsToMove)

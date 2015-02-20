@@ -18,8 +18,7 @@ namespace AGE
 		};
 
 	public:
-		DeferredShading(glm::vec2 const &screen_size, std::shared_ptr<PaintingManager> const &painter_manager,
-			std::shared_ptr<PropertyManager> const &property_manager);
+		DeferredShading(glm::vec2 const &screen_size, std::shared_ptr<PaintingManager> const &painter_manager);
 		DeferredShading(DeferredShading &&move);
 		virtual ~DeferredShading() = default;
 

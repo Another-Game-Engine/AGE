@@ -16,9 +16,8 @@
 namespace AGE
 {
 
-	DeferredShading::DeferredShading(glm::vec2 const &screen_size, std::shared_ptr<PaintingManager> const &painter_manager,
-		std::shared_ptr<PropertyManager> const &property_manager) :
-		ARenderingPipeline(std::string("deferred shading"), painter_manager, property_manager)
+	DeferredShading::DeferredShading(glm::vec2 const &screen_size, std::shared_ptr<PaintingManager> const &painter_manager) :
+		ARenderingPipeline(std::string("deferred shading"), painter_manager)
 	{
 	//	_programs.resize(TOTAL);
 	//	_programs[BUFFERING] = std::make_shared<Program>(Program(std::string("program_buffering"), { std::make_shared<UnitProg>(DEFERRED_SHADING_BUFFERING_VERTEX, GL_VERTEX_SHADER), std::make_shared<UnitProg>(DEFERRED_SHADING_MERGING_FRAG, GL_FRAGMENT_SHADER) }));
