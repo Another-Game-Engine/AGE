@@ -282,7 +282,7 @@ namespace AGE
 				_drawablesToMove.push_back(id);
 				added.hasMoved = true;
 				auto propertyInfos = addedProperty.get();
-				added.instanceProperties = propertyInfos.first;
+				added.mesh.properties = propertyInfos.first;
 				added.transformationProperty = propertyInfos.second;
 			}
 		}
@@ -478,7 +478,7 @@ namespace AGE
 								curRenderPainter->painter = currentDrawable->mesh.painter;
 							}
 							curRenderPainter->vertices.emplace_back(currentDrawable->mesh.vertices);
-							curRenderPainter->properties.emplace_back(currentDrawable->instanceProperties);
+							curRenderPainter->properties.emplace_back(currentDrawable->mesh.properties);
 						}
 						break;
 					case PrepareKey::Type::PointLight:

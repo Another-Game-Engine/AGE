@@ -71,12 +71,12 @@ namespace AGE
 
 
 
-		void MeshRenderer::updateGeometry()
-		{
-			assert(_scene != nullptr);
-			if (this->_mesh == nullptr || this->_material == nullptr)
-				return;
-			AGE::GetPrepareThread()->updateGeometry(_key, _mesh->subMeshs);
+	void MeshRenderer::updateGeometry()
+	{
+		assert(_scene != nullptr);
+		if (this->_mesh == nullptr || this->_material == nullptr)
+			return;
+		AGE::GetPrepareThread()->updateGeometry(_key, _mesh->subMeshs);
 	}
 
 	void MeshRenderer::postUnserialization(AScene *scene)
