@@ -19,4 +19,9 @@ namespace AGE
 		return (Key<Property>::createKey(int(_properties.size()) - 1));
 	}
 
+	void Properties::updateProperties(std::shared_ptr<Program> const &p) const
+	{
+		for (auto property : _properties)
+			property->update(p);
+	}
 }

@@ -25,7 +25,8 @@ namespace AGE
 		: Thread(AGE::Thread::ThreadType::Render)
 		, _context(nullptr),
 		paintingManager(std::make_shared<PaintingManager>()),
-		pipelines(1)
+		pipelines(1),
+		properties(std::make_shared<PropertyManager>())
 	{
 	}
 
@@ -54,12 +55,11 @@ namespace AGE
 
 		registerCallback<Tasks::Render::SetMeshTransform>([&](Tasks::Render::SetMeshTransform &msg)
 		{
-//			auto painter = paintingManager->get_painter(msg.painter);
-//			auto vertices = painter->get_vertices(msg.mesh);
-//			auto property = vertices->get_property<Transformation>(msg.transform);
-//			
-//			assert(property != nullptr);
-//			*property = msg.transformMat;
+			auto meshProperties = properties->get_properties(msg.meshProperties);
+			auto transformProperty = meshProperties->get_property<Transformation>(msg.transformProperty);
+			
+			assert(transformProperty != nullptr);
+			*transformProperty = msg.transformMat;
 		});
 
 		registerCallback<Tasks::Render::GetWindowSize>([&](Tasks::Render::GetWindowSize &msg)
@@ -125,8 +125,8 @@ namespace AGE
 			msg.setValue(std::make_pair(meshPropertiesKey, transformKey));
 		});
 
-//		registerCallback<Tasks::Render::SetMeshMaterial>([&](Tasks::Render::SetMeshMaterial& msg)
-//		{
+		registerCallback<Tasks::Render::SetMeshMaterial>([&](Tasks::Render::SetMeshMaterial& msg)
+		{
 //			for (auto &subMesh : msg.mesh->subMeshs)
 //			{
 //				auto vertices = paintingManager->get_painter(subMesh.painter)->get_vertices(subMesh.vertices);
@@ -148,7 +148,7 @@ namespace AGE
 //					}
 //				}
 //			}
-//		});
+		});
 
 		return true;
 	}

@@ -7,7 +7,6 @@ namespace AGE
 	RenderingPass::RenderingPass(std::function<void(FUNCTION_ARGS)> const &function) :
 		ARendering(function)
 	{
-
 	}
 
 	RenderingPass::RenderingPass(RenderingPass &&move) :
@@ -15,7 +14,6 @@ namespace AGE
 		_frame_buffer(std::move(move._frame_buffer)),
 		_frame_output(std::move(move._frame_output))
 	{
-
 	}
 
 	IRendering & RenderingPass::render(FUNCTION_ARGS)

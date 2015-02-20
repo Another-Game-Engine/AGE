@@ -11,11 +11,11 @@ namespace AGE
 		{}
 		Render::CreateRenderContext::CreateRenderContext(std::weak_ptr<Engine> _engine) : engine(_engine){}
 
-		Render::SetMeshTransform::SetMeshTransform(Key<Painter> pPainter, Key<Vertices> pMesh,
-			Key<Property> pTransform, glm::mat4 pTransformMat) :
-			painter(pPainter),
-			mesh(pMesh),
-			transform(pTransform),
+		Render::SetMeshTransform::SetMeshTransform(Key<Properties> pMeshProperties,
+			Key<Property> pTransformProperty,
+			glm::mat4 pTransformMat) :
+			meshProperties(pMeshProperties),
+			transformProperty(pTransformProperty),
 			transformMat(pTransformMat)
 		{ }
 

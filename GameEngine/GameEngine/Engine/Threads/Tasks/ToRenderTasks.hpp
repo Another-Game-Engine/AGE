@@ -68,14 +68,12 @@ namespace AGE
 
 			struct SetMeshTransform
 			{
-				Key<Painter> painter;
-				Key<Vertices> mesh;
-				Key<Property> transform;
+				Key<Properties> meshProperties;
+				Key<Property> transformProperty;
 				glm::mat4 transformMat;
 
-				SetMeshTransform(Key<Painter> pPainter,
-					Key<Vertices> pMesh,
-					Key<Property> pTransform,
+				SetMeshTransform(Key<Properties> pMeshProperties,
+					Key<Property> pTransformProperty,
 					glm::mat4 pTransformMat);
 
 			};

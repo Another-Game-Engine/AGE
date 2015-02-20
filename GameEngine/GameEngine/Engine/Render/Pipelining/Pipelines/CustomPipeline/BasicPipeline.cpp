@@ -5,6 +5,7 @@
 #include <Render/OpenGLTask/Tasks.hh>
 #include <Render/GeometryManagement/Painting/Painter.hh>
 #include <Render/Properties/PropertyManager.hh>
+#include <Render/Properties/Properties.hh>
 #include <Render/GeometryManagement/Painting/PaintingManager.hh>
 #include <SpacePartitioning/Ouptut/RenderPipeline.hh>
 #include <SpacePartitioning/Ouptut/RenderPainter.hh>
@@ -44,11 +45,20 @@ namespace AGE
 		_programs[RENDER]->use();
 		*_programs[RENDER]->get_resource<Mat4>("projection_matrix") = infos.projection;
 		*_programs[RENDER]->get_resource<Mat4>("view_matrix") = infos.view;
-		auto index = 0;
+		std::vector<Key<Vertices>> tmpVec;
+
+		tmpVec.emplace_back();
 		for (auto &key : pipeline.keys) {
 			auto painter = _painter_manager->get_painter(key.painter);
-			auto properties = _property_manager->get_properties(key.properties);
-			_rendering_list[RENDER]->render(key.vertices, *painter);
+			int index = 0;
+
+			while (index < key.properties.size()) {
+				auto properties = _property_manager->get_properties(key.properties[index]);
+
+				properties->updateProperties(_programs[RENDER]);
+				tmpVec[0] = key.vertices[index];
+				_rendering_list[RENDER]->render(tmpVec, *painter);
+			}
 		}
 		return (*this);
 	}

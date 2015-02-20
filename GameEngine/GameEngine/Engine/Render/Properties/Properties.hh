@@ -20,7 +20,8 @@ namespace AGE
 
 	public:
 		Key<Property> add_property(std::shared_ptr<IProperty> const &prop);
-	
+		void updateProperties(std::shared_ptr<Program> const &p) const;
+
 	public:
 		template <typename type_t> std::shared_ptr<type_t> const &get_property(Key<Property> const &key);
 
