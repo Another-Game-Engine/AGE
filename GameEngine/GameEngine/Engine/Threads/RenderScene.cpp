@@ -152,6 +152,7 @@ namespace AGE
 	void RenderScene::removeDrawableObject(DRAWABLE_ID id)
 	{
 		Drawable &toRm = _drawables.get(id);
+		AGE::GetRenderThread()->getQueue()->emplaceTask<AGE::Tasks::Render::RemoveMeshProperty>(toRm.instanceProperties);
 		if (toRm.hasMoved)
 		{
 			uint32_t idxMoveBuffer = toRm.moveBufferIdx;
@@ -273,11 +274,6 @@ namespace AGE
 
 				auto addedProperty = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<AGE::Tasks::Render::CreateMeshProperty, std::pair<Key<Properties>, Key<Property>>>();
 
-				auto propertyInfos = addedProperty.get();
-
-				added.instanceProperties = propertyInfos.first;
-				added.transformationProperty = propertyInfos.second;
-
 				added.position = uo->position;
 				added.orientation = uo->orientation;
 				added.scale = uo->scale;
@@ -285,6 +281,9 @@ namespace AGE
 				added.currentNode = UNDEFINED_IDX;
 				_drawablesToMove.push_back(id);
 				added.hasMoved = true;
+				auto propertyInfos = addedProperty.get();
+				added.instanceProperties = propertyInfos.first;
+				added.transformationProperty = propertyInfos.second;
 			}
 		}
 

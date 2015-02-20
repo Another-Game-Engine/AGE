@@ -65,6 +65,8 @@ namespace AGE
 			{
 				Key<Properties> toRemove;
 				int notNull;
+
+				RemoveMeshProperty(Key<Properties> const &pToRemove);
 			};
 
 			struct SetMeshTransform

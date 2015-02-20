@@ -1,4 +1,5 @@
 #include <Threads/Tasks/ToRenderTasks.hpp>
+#include <Engine/Render/Properties/Properties.hh>
 #include <glm/glm.hpp>
 
 namespace AGE
@@ -10,6 +11,11 @@ namespace AGE
 			: size(_size)
 		{}
 		Render::CreateRenderContext::CreateRenderContext(std::weak_ptr<Engine> _engine) : engine(_engine){}
+
+		Render::RemoveMeshProperty::RemoveMeshProperty(Key<Properties> const &pToRemove) :
+			toRemove(pToRemove)
+		{
+		}
 
 		Render::SetMeshTransform::SetMeshTransform(Key<Properties> pMeshProperties,
 			Key<Property> pTransformProperty,
