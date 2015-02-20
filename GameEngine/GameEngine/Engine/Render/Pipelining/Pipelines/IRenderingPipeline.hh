@@ -4,7 +4,7 @@
 #include <string>
 #include <memory>
 
-# define ARGS_FUNCTION_RENDER RenderPipeline &pipeline, RenderLightList &lights, CameraInfos &infos, PropertyManager &properties
+# define ARGS_FUNCTION_RENDER RenderPipeline &pipeline, RenderLightList &lights, CameraInfos &infos
 
 namespace AGE
 {

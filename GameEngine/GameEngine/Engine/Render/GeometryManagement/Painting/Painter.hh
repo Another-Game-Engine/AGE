@@ -8,7 +8,7 @@
 # include <Render/Program.hh>
 # include <Render/GeometryManagement/Data/Vertices.hh>
 # include <Render/GeometryManagement/Buffer/BufferPrograms.hh>
-#include <Render/Properties/PropertyManager.hh>
+# include <Render/Properties/Properties.hh>
 
 namespace AGE
 {
@@ -23,13 +23,16 @@ namespace AGE
 	public:
 		bool coherent(std::vector<GLenum> const &types) const;
 		Key<Vertices> add_vertices(size_t nbrVertex, size_t nbrIndices);
+		Key<Properties> add_properties(std::shared_ptr<Properties> const &properties);
 		Painter &remove_vertices(Key<Vertices> &key);
+		Painter &remove_properties(Key<Properties> &key);
 		Vertices *get_vertices(Key<Vertices> const &key);
-		Painter &draw(GLenum mode, std::shared_ptr<Program> const &p, std::vector<Key<Properties>> const &propertiesList,
-			std::vector<Key<Vertices>> const &drawList, PropertyManager const &propertyManager);
+		std::shared_ptr<Properties> get_properties(Key<Properties> const &key) const;
+		Painter &draw(GLenum mode, std::shared_ptr<Program> const &p, std::vector<Key<Properties>> const &propertiesList, std::vector<Key<Vertices>> const &drawList);
 
 	private:
 		BufferPrograms _buffer;
 		std::vector<Vertices> _vertices;
+		MemoryPool<std::shared_ptr<Properties>> _properties;
 	};
 }

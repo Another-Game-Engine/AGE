@@ -12,14 +12,16 @@ namespace AGE
 		{}
 		Render::CreateRenderContext::CreateRenderContext(std::weak_ptr<Engine> _engine) : engine(_engine){}
 
-		Render::RemoveMeshProperty::RemoveMeshProperty(Key<Properties> const &pToRemove) :
+		Render::RemoveMeshProperty::RemoveMeshProperty(Key<Painter> const &painter, Key<Properties> const &pToRemove) :
+			meshPainter(painter),
 			toRemove(pToRemove)
 		{
 		}
 
-		Render::SetMeshTransform::SetMeshTransform(Key<Properties> pMeshProperties,
+		Render::SetMeshTransform::SetMeshTransform(Key<Painter> pPainter, Key<Properties> pMeshProperties,
 			Key<Property> pTransformProperty,
 			glm::mat4 pTransformMat) :
+			meshPainter(pPainter),
 			meshProperties(pMeshProperties),
 			transformProperty(pTransformProperty),
 			transformMat(pTransformMat)

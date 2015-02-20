@@ -62,13 +62,4 @@ namespace AGE
 		return (*this);
 	}
 
-	IProperty & Diffuse::set_program(std::vector<std::shared_ptr<Program>> const &programs)
-	{
-		AProperty::set_program(programs);
-		_ratio.set_program(programs);
-		_color.set_program(programs);
-		_mapColor.set_program(programs);
-		return (*this);
-	}
-
 }

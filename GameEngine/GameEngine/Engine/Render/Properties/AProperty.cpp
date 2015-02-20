@@ -23,11 +23,6 @@ namespace AGE
 
 	std::shared_ptr<IProgramResources> AProperty::get_resource(std::shared_ptr<Program> const &program)
 	{
-		return (nullptr);
-	}
-
-	std::shared_ptr<IProgramResources> AProperty::get_resource(std::shared_ptr<Program> const &program)
-	{
 		for (auto &resource : _registered_resources) {
 			if (*program == *resource.first) {
 				return resource.second;

@@ -4,7 +4,6 @@
 #include <Render/Pipelining/Render/Rendering.hh>
 #include <Render/OpenGLTask/Tasks.hh>
 #include <Render/GeometryManagement/Painting/Painter.hh>
-#include <Render/Properties/PropertyManager.hh>
 #include <Render/Properties/Properties.hh>
 #include <Render/GeometryManagement/Painting/PaintingManager.hh>
 #include <SpacePartitioning/Ouptut/RenderPipeline.hh>
@@ -19,16 +18,18 @@
 namespace AGE
 {
 
-	BasicPipeline::BasicPipeline(std::shared_ptr<PaintingManager> const &painter_manager,
-		std::shared_ptr<PropertyManager> const &property_manager) :
-		ARenderingPipeline(std::string("BasicName"), painter_manager, property_manager)
+	BasicPipeline::BasicPipeline(std::shared_ptr<PaintingManager> const &painter_manager) :
+		ARenderingPipeline(std::string("BasicName"), painter_manager)
 	{
 		_programs.resize(TOTAL);
 		std::vector<std::shared_ptr<UnitProg>> units = { std::make_shared<UnitProg>(VERTEX_SHADER), std::make_shared<UnitProg>(FRAGMENT_SHADER) };
 		_programs[RENDER] = std::make_shared<Program>(Program(std::string("basic program"), units));
 		_rendering_list.resize(TOTAL);
 		_rendering_list[RENDER] = std::make_shared<Rendering>([&](FUNCTION_ARGS) {
-			painter.draw(GL_TRIANGLES, _programs[RENDER], properties, vertices, *_property_manager);
+			OpenGLTasks::set_depth_test(true);
+			OpenGLTasks::set_clear_color(glm::vec4(0, 0, 0.2, 1));
+			OpenGLTasks::clear_buffer();
+			painter->draw(GL_TRIANGLES, _programs[RENDER], properties, vertices);
 		});
 		auto &rendering = std::static_pointer_cast<Rendering>(_rendering_list[RENDER]);
 	}
@@ -43,17 +44,8 @@ namespace AGE
 		_programs[RENDER]->use();
 		*_programs[RENDER]->get_resource<Mat4>("projection_matrix") = infos.projection;
 		*_programs[RENDER]->get_resource<Mat4>("view_matrix") = infos.view;
-
-		OpenGLTasks::set_depth_test(true);
-		OpenGLTasks::set_clear_color(glm::vec4(0, 0, 0.2, 1));
-		OpenGLTasks::clear_buffer();
 		for (auto key : pipeline.keys) {
-		auto painter = _painter_manager->get_painter(key.painter);
-//		auto properties = _property_manager->get_properties(key.properties[index]);
-
-	//	properties->updateProperties(_programs[RENDER]);
-	//	tmpVec[0] = key.vertices[index];
-		_rendering_list[RENDER]->render(key.properties, key.vertices, *painter);
+			_rendering_list[RENDER]->render(key.properties, key.vertices, _painter_manager->get_painter(key.painter));
 		}
 		return (*this);
 	}

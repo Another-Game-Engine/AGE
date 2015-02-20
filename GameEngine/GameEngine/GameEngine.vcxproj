@@ -360,7 +360,6 @@
     <ClInclude Include="Engine\Configuration.hpp" />
     <ClInclude Include="Engine\Entities\EntityData.hh" />
     <ClInclude Include="Engine\Render\Properties\Properties.hh" />
-    <ClInclude Include="Engine\Render\Properties\PropertyManager.hh" />
     <ClInclude Include="Engine\Threads\Commands\ToRenderCommands.hpp" />
     <ClInclude Include="Engine\Threads\Commands\MainToPrepareCommands.hpp" />
     <ClInclude Include="Engine\Core\Instance\MaterialInstance.hh" />

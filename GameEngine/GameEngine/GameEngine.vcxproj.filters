@@ -339,7 +339,6 @@
     <ClInclude Include="Engine\AssetManagement\Data\AnimationData.hpp" />
     <ClInclude Include="Engine\AssetManagement\Instance\AnimationInstance.hh" />
     <ClInclude Include="Engine\Render\Properties\Properties.hh" />
-    <ClInclude Include="Engine\Render\Properties\PropertyManager.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

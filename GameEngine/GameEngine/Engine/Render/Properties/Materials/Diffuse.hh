@@ -17,7 +17,6 @@ namespace AGE
 
 	public:
 		virtual IProperty &update(std::shared_ptr<Program> const &p) override final;
-		virtual IProperty &set_program(std::vector<std::shared_ptr<Program>> const &programs) override final;
 
 	public:
 		float get_ratio() const;

@@ -27,6 +27,11 @@ namespace AGE
 		return (Key<Vertices>::createKey(int(_vertices.size()) - 1));
 	}
 
+	Key<Properties> Painter::add_properties(std::shared_ptr<Properties> const &properties)
+	{
+		return (Key<Properties>::createKey(_properties.alloc(properties)));
+	}
+
 	Painter & Painter::remove_vertices(Key<Vertices> &key)
 	{
 		if (!key) {
@@ -44,6 +49,13 @@ namespace AGE
 		return (*this);
 	}
 
+	Painter &Painter::remove_properties(Key<Properties> &key)
+	{
+		key.destroy();
+		_properties.dealloc(key.getId());
+		return (*this);
+	}
+
 	Vertices * Painter::get_vertices(Key<Vertices> const &key)
 	{
 		if (!key) {
@@ -52,8 +64,12 @@ namespace AGE
 		return (&_vertices[key.getId()]);
 	}
 
-	Painter & Painter::draw(GLenum mode, std::shared_ptr<Program> const &p, std::vector<Key<Properties>> const &propertiesList,
-		std::vector<Key<Vertices>> const &drawList, PropertyManager const &propertyManager)
+	std::shared_ptr<Properties> Painter::get_properties(Key<Properties> const &key) const
+	{
+		return (_properties.get(key.getId()));
+	}
+
+	Painter & Painter::draw(GLenum mode, std::shared_ptr<Program> const &p, std::vector<Key<Properties>> const &propertiesList, std::vector<Key<Vertices>> const &drawList)
 	{
 		assert(p->coherent_attribute(_buffer.get_types()));
 		_buffer.bind();
@@ -61,10 +77,7 @@ namespace AGE
 		int index = 0;
 		for (auto &draw_element : drawList) {
 			if (draw_element) {
-				Key<Properties> curPropertiesKey = propertiesList[index];
-				auto curProperties = propertyManager.get_properties(curPropertiesKey);
-				curProperties->updateProperties(p);
-//				_vertices[draw_element.getId()].update(p);
+				_properties.get(propertiesList[index])->update_properties(p);
 				_vertices[draw_element.getId()].draw(mode);
 			}
 			++index;

@@ -25,8 +25,7 @@ namespace AGE
 		: Thread(AGE::Thread::ThreadType::Render)
 		, _context(nullptr),
 		paintingManager(std::make_shared<PaintingManager>()),
-		pipelines(1),
-		properties(std::make_shared<PropertyManager>())
+		pipelines(1)
 	{
 	}
 
@@ -43,7 +42,7 @@ namespace AGE
 				msg.setValue(false);
 				return;
 			}
-			pipelines[0] = std::make_unique<BasicPipeline>(paintingManager, properties);
+			pipelines[0] = std::make_unique<BasicPipeline>(paintingManager);
 			msg.setValue(true);
 		});
 
@@ -55,7 +54,7 @@ namespace AGE
 
 		registerCallback<Tasks::Render::SetMeshTransform>([&](Tasks::Render::SetMeshTransform &msg)
 		{
-			auto meshProperties = properties->get_properties(msg.meshProperties);
+			auto meshProperties = paintingManager->get_painter(msg.meshPainter)->get_properties(msg.meshProperties);
 			auto transformProperty = meshProperties->get_property<Transformation>(msg.transformProperty);
 			
 			assert(transformProperty != nullptr);
@@ -84,7 +83,7 @@ namespace AGE
 			for (auto &curPipeline : pipelines) {
 				for (auto &curCamera : _drawlist) {
 					if (pipelineIdx < curCamera.pipelines.size()) {
-						curPipeline->render(curCamera.pipelines[pipelineIdx], curCamera.lights, curCamera.camInfos, *properties);
+						curPipeline->render(curCamera.pipelines[pipelineIdx], curCamera.lights, curCamera.camInfos);
 					}
 				}
 				++pipelineIdx;
@@ -121,13 +120,13 @@ namespace AGE
 			std::shared_ptr<Properties> addedProperties = std::make_shared<Properties>();
 
 			Key<Property> transformKey = addedProperties->add_property(transformProperty);
-			Key<Properties> meshPropertiesKey = properties->add_properties(addedProperties);
+			Key<Properties> meshPropertiesKey = paintingManager->get_painter(msg.meshPainter)->add_properties(addedProperties);
 			msg.setValue(std::make_pair(meshPropertiesKey, transformKey));
 		});
 
 		registerCallback <Tasks::Render::RemoveMeshProperty>([&](Tasks::Render::RemoveMeshProperty &msg)
 		{
-			properties->remove_properties(msg.toRemove);
+			paintingManager->get_painter(msg.meshPainter)->remove_properties(msg.toRemove);
 		});
 
 		registerCallback<Tasks::Render::SetMeshMaterial>([&](Tasks::Render::SetMeshMaterial& msg)
