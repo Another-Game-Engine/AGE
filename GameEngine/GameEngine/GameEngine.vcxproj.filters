@@ -137,9 +137,9 @@
     <ClCompile Include="Engine\Utils\FSThreadBase.cpp" />
     <ClCompile Include="Engine\Utils\SpinLock.cpp" />
     <ClCompile Include="Engine\Utils\Logger.cpp" />
-    <ClCompile Include="Engine\Utils\Buffer.cpp" />
     <ClCompile Include="Engine\Utils\CRC32.cpp" />
     <ClCompile Include="Engine\Utils\Library.cpp" />
+    <ClCompile Include="Engine\Utils\StreamBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -372,10 +372,10 @@
     <ClInclude Include="Engine\Utils\SpinLock.hpp" />
     <ClInclude Include="Engine\Utils\Logger.hpp" />
     <ClInclude Include="Engine\Utils\Architecture.hpp" />
-    <ClInclude Include="Engine\Utils\Buffer.hpp" />
     <ClInclude Include="Engine\Utils\CRC32.hpp" />
     <ClInclude Include="Engine\Utils\Library.hpp" />
     <ClInclude Include="Engine\Utils\Visibility.hpp" />
+    <ClInclude Include="Engine\Utils\StreamBuffer.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

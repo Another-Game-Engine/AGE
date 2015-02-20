@@ -8,14 +8,14 @@ namespace AGE
 {
 	namespace FileSystemHelpers
 	{
-		bool CreateFolder(const std::string &path)
+		bool AgeCreateFolder(const std::string &path)
 		{
-			if (Exists(path))
+			if (AgeExists(path))
 				return true;
 			return std::tr2::sys::create_directories(std::tr2::sys::path(path));
 		}
 
-		bool Exists(const std::string &path)
+		bool AgeExists(const std::string &path)
 		{
 			return std::tr2::sys::exists(std::tr2::sys::path(path));
 		}

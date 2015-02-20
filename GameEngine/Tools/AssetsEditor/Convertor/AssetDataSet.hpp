@@ -34,14 +34,14 @@ namespace AGE
 		AssetDataSet() = delete;
 		AssetDataSet(const std::string &path)
 		{
-			filePath = File(path);
+			filePath = OldFile(path);
 			isConverting = false;
 		}
 
 		std::atomic_bool isConverting;
 
 		//Paths
-		File filePath = "";
+		OldFile filePath = "";
 
 		//Configurations
 		bool loadSkeleton = true;
