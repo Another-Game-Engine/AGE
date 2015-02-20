@@ -8,6 +8,7 @@
 # include <Render/Program.hh>
 # include <Render/GeometryManagement/Data/Vertices.hh>
 # include <Render/GeometryManagement/Buffer/BufferPrograms.hh>
+#include <Render/Properties/PropertyManager.hh>
 
 namespace AGE
 {
@@ -24,7 +25,8 @@ namespace AGE
 		Key<Vertices> add_vertices(size_t nbrVertex, size_t nbrIndices);
 		Painter &remove_vertices(Key<Vertices> &key);
 		Vertices *get_vertices(Key<Vertices> const &key);
-		Painter &draw(GLenum mode, std::shared_ptr<Program> const &p, std::vector<Key<Vertices>> const &drawList);
+		Painter &draw(GLenum mode, std::shared_ptr<Program> const &p, std::vector<Key<Properties>> const &propertiesList,
+			std::vector<Key<Vertices>> const &drawList, PropertyManager const &propertyManager);
 
 	private:
 		BufferPrograms _buffer;

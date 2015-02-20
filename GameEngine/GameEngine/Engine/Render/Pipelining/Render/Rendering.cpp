@@ -17,7 +17,7 @@ namespace AGE
 
 	IRendering & Rendering::render(FUNCTION_ARGS)
 	{
-		_render_function(vertices, painter);
+		_render_function(properties, vertices, painter);
 		return (*this);
 	}
 

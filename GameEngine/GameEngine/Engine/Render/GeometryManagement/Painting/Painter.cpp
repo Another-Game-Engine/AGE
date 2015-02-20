@@ -1,4 +1,5 @@
 #include <Render/GeometryManagement/Painting/Painter.hh>
+#include <Render/Properties/Properties.hh>
 
 namespace AGE
 {
@@ -51,16 +52,20 @@ namespace AGE
 		return (&_vertices[key.getId()]);
 	}
 
-	Painter & Painter::draw(GLenum mode, std::shared_ptr<Program> const &p, std::vector<Key<Vertices>> const &drawList)
+	Painter & Painter::draw(GLenum mode, std::shared_ptr<Program> const &p, std::vector<Key<Properties>> const &propertiesList,
+		std::vector<Key<Vertices>> const &drawList, PropertyManager const &propertyManager)
 	{
 		assert(p->coherent_attribute(_buffer.get_types()));
 		_buffer.bind();
 		_buffer.update();
+		int index = 0;
 		for (auto &draw_element : drawList) {
 			if (draw_element) {
+				propertyManager.get_properties(propertiesList[index])->updateProperties(p);
 //				_vertices[draw_element.getId()].update(p);
 				_vertices[draw_element.getId()].draw(mode);
 			}
+			++index;
 		}
 		_buffer.unbind();
 		return (*this);

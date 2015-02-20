@@ -31,7 +31,7 @@ namespace AGE
 			OpenGLTasks::set_depth_test(true);
 			OpenGLTasks::clear_buffer();
 			OpenGLTasks::set_clear_color(glm::vec4(0, 0, 0.2, 1));
-			painter.draw(GL_TRIANGLES, _programs[RENDER], vertices);
+			painter.draw(GL_TRIANGLES, _programs[RENDER], properties, vertices, *_property_manager);
 		});
 		auto &rendering = std::static_pointer_cast<Rendering>(_rendering_list[RENDER]);
 	}
@@ -46,21 +46,14 @@ namespace AGE
 		_programs[RENDER]->use();
 		*_programs[RENDER]->get_resource<Mat4>("projection_matrix") = infos.projection;
 		*_programs[RENDER]->get_resource<Mat4>("view_matrix") = infos.view;
-		std::vector<Key<Vertices>> tmpVec;
 
-		tmpVec.emplace_back();
-		for (auto &key : pipeline.keys) {
-			auto painter = _painter_manager->get_painter(key.painter);
-			int index = 0;
+		auto key = pipeline.keys[0];
+		auto painter = _painter_manager->get_painter(key.painter);
+//		auto properties = _property_manager->get_properties(key.properties[index]);
 
-			while (index < key.properties.size()) {
-				auto properties = _property_manager->get_properties(key.properties[index]);
-
-				properties->updateProperties(_programs[RENDER]);
-				tmpVec[0] = key.vertices[index];
-				_rendering_list[RENDER]->render(tmpVec, *painter);
-			}
-		}
+	//	properties->updateProperties(_programs[RENDER]);
+	//	tmpVec[0] = key.vertices[index];
+		_rendering_list[RENDER]->render(key.properties, key.vertices, *painter);
 		return (*this);
 	}
 

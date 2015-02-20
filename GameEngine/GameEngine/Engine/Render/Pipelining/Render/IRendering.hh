@@ -7,9 +7,10 @@
 
 namespace AGE
 {
+	class Properties;
 	class IRenderingPipeline;
 
-# define FUNCTION_ARGS std::vector<Key<Vertices>> const &vertices, Painter &painter
+# define FUNCTION_ARGS std::vector<Key<Properties>> const &properties, std::vector<Key<Vertices>> const &vertices, Painter &painter
 
 	class IRendering
 	{

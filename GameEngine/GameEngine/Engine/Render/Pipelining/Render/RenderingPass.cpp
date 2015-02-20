@@ -26,7 +26,7 @@ namespace AGE
 			}
 			_is_update = true;
 		}
-		_render_function(vertices, painter);
+		_render_function(properties, vertices, painter);
 		_frame_buffer.unbind();
 		return (*this);
 	}

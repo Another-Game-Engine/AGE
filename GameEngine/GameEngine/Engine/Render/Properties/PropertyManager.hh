@@ -18,7 +18,7 @@ namespace AGE
 
 	public:
 		Key<Properties> add_properties(std::shared_ptr<Properties> const &);
-		std::shared_ptr<Properties> get_properties(Key<Properties> const &);
+		std::shared_ptr<Properties> get_properties(Key<Properties> const &) const;
 
 	private:
 		std::vector<std::shared_ptr<Properties>> _properties_array;
