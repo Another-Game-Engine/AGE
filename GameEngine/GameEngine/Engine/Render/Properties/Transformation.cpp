@@ -26,9 +26,9 @@ namespace AGE
 		return (*this);
 	}
 
-	IProperty & Transformation::update(std::shared_ptr<Program> const &p)
+	IProperty & Transformation::update(std::shared_ptr<Program> const &program)
 	{
-		auto resource = std::static_pointer_cast<Mat4>(get_resource(p));
+		auto resource = std::static_pointer_cast<Mat4>(get_resource(program));
 		if (resource) {
 			*resource = _model_matrix;
 		}
