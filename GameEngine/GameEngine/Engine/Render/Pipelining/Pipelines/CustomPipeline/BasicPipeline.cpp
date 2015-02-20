@@ -19,8 +19,9 @@
 namespace AGE
 {
 
-	BasicPipeline::BasicPipeline(std::shared_ptr<PaintingManager> const &painter_manager) :
-		ARenderingPipeline(std::string("BasicName"), painter_manager)
+	BasicPipeline::BasicPipeline(std::shared_ptr<PaintingManager> const &painter_manager,
+		std::shared_ptr<PropertyManager> const &property_manager) :
+		ARenderingPipeline(std::string("BasicName"), painter_manager, property_manager)
 	{
 		_programs.resize(TOTAL);
 		std::vector<std::shared_ptr<UnitProg>> units = { std::make_shared<UnitProg>(VERTEX_SHADER), std::make_shared<UnitProg>(FRAGMENT_SHADER) };

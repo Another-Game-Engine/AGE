@@ -23,14 +23,14 @@ namespace AGE
 		void updateProperties(std::shared_ptr<Program> const &p) const;
 
 	public:
-		template <typename type_t> std::shared_ptr<type_t> const &get_property(Key<Property> const &key);
+		template <typename type_t> std::shared_ptr<type_t> get_property(Key<Property> const &key);
 
 	private:
 		std::vector<std::shared_ptr<IProperty>> _properties;
 	};
 
 	template <typename type_t>
-	std::shared_ptr<type_t> const &Properties::get_property(Key<Property> const &key)
+	std::shared_ptr<type_t> Properties::get_property(Key<Property> const &key)
 	{
 		return (std::static_pointer_cast<type_t>(_properties[key.getId()]));
 	}

@@ -20,7 +20,7 @@ namespace AGE
 		return (Key<Properties>::createKey(_properties_array.size() - 1));
 	}
 
-	std::shared_ptr<Properties> const &PropertyManager::get_properties(Key<Properties> const &key)
+	std::shared_ptr<Properties> PropertyManager::get_properties(Key<Properties> const &key)
 	{
 		return (_properties_array[key.getId()]);
 	}

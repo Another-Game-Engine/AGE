@@ -14,7 +14,8 @@ namespace AGE
 		};
 
 	public:
-		BasicPipeline(std::shared_ptr<PaintingManager> const &painter_manager);
+		BasicPipeline(std::shared_ptr<PaintingManager> const &painter_manager,
+			std::shared_ptr<PropertyManager> const &property_manager);
 		BasicPipeline(BasicPipeline &&move);
 		virtual ~BasicPipeline() = default;
 

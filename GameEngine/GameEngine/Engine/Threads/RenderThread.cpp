@@ -43,7 +43,7 @@ namespace AGE
 				msg.setValue(false);
 				return;
 			}
-			pipelines[0] = std::make_unique<BasicPipeline>(paintingManager);
+			pipelines[0] = std::make_unique<BasicPipeline>(paintingManager, properties);
 			msg.setValue(true);
 		});
 
