@@ -1,5 +1,5 @@
 #include "AssetsDatabase.hpp"
-#include <Utils/FileSystemHelpers.hpp>
+#include <Utils/FileSystem.hpp>
 
 namespace AGE
 {
@@ -17,15 +17,15 @@ namespace AGE
 		bool AssetsDatabase::init(const std::string &rawFolder, const std::string &cookedFolder, const std::string &saveFile)
 		{
 			reset();
-			if (!AGE::FileSystemHelpers::CreateFolder(rawFolder))
+			if (!AGE::FileSystem::CreateFolder(rawFolder))
 			{
 				return false;
 			}
-			if (!AGE::FileSystemHelpers::CreateFolder(cookedFolder))
+			if (!AGE::FileSystem::CreateFolder(cookedFolder))
 			{
 				return false;
 			}
-			if (AGE::FileSystemHelpers::Exists(saveFile))
+			if (AGE::FileSystem::Exists(saveFile))
 			{
 				// load database
 			}
@@ -36,7 +36,7 @@ namespace AGE
 		bool AssetsDatabase::init(const std::string &saveFile)
 		{
 			reset();
-			if (AGE::FileSystemHelpers::Exists(saveFile))
+			if (AGE::FileSystem::Exists(saveFile))
 			{
 				// load database
 			}

@@ -4,7 +4,7 @@
 #include <regex>
 
 #include "AssetFileManager.hpp"
-#include <Utils/FileSystemHelpers.hpp>
+#include <Utils/FileSystem.hpp>
 #include <iostream>
 
 namespace AGE
@@ -61,7 +61,7 @@ namespace AGE
 					fileCount++;
 					if (_files.find(file.relative_path().string()) == std::end(_files))
 					{
-						auto n = AssetFileManager::OldCreateFile(file.relative_path(), this);
+						auto n = AssetFileManager::CreateFile(file.relative_path(), this);
 						if (n)
 						{
 							_files.insert(std::make_pair(file.relative_path().string(), n));
@@ -163,7 +163,7 @@ namespace AGE
 
 		void Folder::find(const std::string &path, std::shared_ptr<AssetFile> &result)
 		{
-			_internalFind(FileSystemHelpers::CleanPath(path), result);
+			_internalFind(FileSystem::CleanPath(path), result);
 		}
 	}
 }
