@@ -245,11 +245,12 @@ namespace AGE
 					commands.pop();
 				}
 				_drawlist.clear();
+
+				workEnd = std::chrono::high_resolution_clock::now();
+				GetThreadManager()->updateThreadStatistics(this->_id
+					, std::chrono::duration_cast<std::chrono::microseconds>(workEnd - workStart).count()
+					, std::chrono::duration_cast<std::chrono::microseconds>(waitEnd - waitStart).count());
 			}
-			workEnd = std::chrono::high_resolution_clock::now();
-			GetThreadManager()->updateThreadStatistics(this->_id
-				, std::chrono::duration_cast<std::chrono::microseconds>(workEnd - workStart).count()
-				, std::chrono::duration_cast<std::chrono::microseconds>(waitEnd - waitStart).count());
 		}
 		return true;
 	}
