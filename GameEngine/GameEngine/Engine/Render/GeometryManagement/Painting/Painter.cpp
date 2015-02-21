@@ -97,7 +97,7 @@ namespace AGE
 		int index = 0;
 		for (auto &draw_element : drawList) {
 			if (draw_element) {
-				_properties.get(propertiesList[index])->update_properties(program);
+				_properties.get(propertiesList[index].getId())->update_properties(program);
 				program->update();
 				_vertices[draw_element.getId()].draw(mode);
 			}
