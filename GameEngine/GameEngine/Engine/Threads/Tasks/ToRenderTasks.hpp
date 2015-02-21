@@ -60,7 +60,6 @@ namespace AGE
 			{
 				Key<Painter> meshPainter;
 				Key<Properties> toRemove;
-				int notNull;
 
 				RemoveMeshProperty(Key<Painter> const &painter, Key<Properties> const &pToRemove);
 			};

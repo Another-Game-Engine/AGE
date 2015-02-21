@@ -152,7 +152,7 @@ namespace AGE
 	void RenderScene::removeDrawableObject(DRAWABLE_ID id)
 	{
 		Drawable &toRm = _drawables.get(id);
-		//AGE::GetRenderThread()->getQueue()->emplaceTask<AGE::Tasks::Render::RemoveMeshProperty>(toRm.mesh.painter, toRm.mesh.properties);
+		AGE::GetRenderThread()->getQueue()->emplaceTask<AGE::Tasks::Render::RemoveMeshProperty>(toRm.mesh.painter, toRm.mesh.properties);
 		if (toRm.hasMoved)
 		{
 			uint32_t idxMoveBuffer = toRm.moveBufferIdx;

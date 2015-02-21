@@ -71,8 +71,9 @@ namespace AGE
 
 	Painter &Painter::remove_properties(Key<Properties> &key)
 	{
-		key.destroy();
-		_properties.dealloc(key.getId());
+		// to be sure that this function is only called in render thread
+		AGE_ASSERT(GetThreadManager()->getCurrentThread() == (AGE::Thread*)GetRenderThread());
+		_propertiesToRemove.push_back(key);
 		return (*this);
 	}
 
@@ -95,7 +96,8 @@ namespace AGE
 		_buffer.bind();
 		_buffer.update();
 		int index = 0;
-		for (auto &draw_element : drawList) {
+		for (auto &draw_element : drawList)
+		{
 			if (draw_element)
 			{
 				auto id = propertiesList[index].getId();
@@ -107,6 +109,15 @@ namespace AGE
 			++index;
 		}
 		_buffer.unbind();
+
+		for (auto &e : _propertiesToRemove)
+		{
+			_mutex.lock();
+			_properties.dealloc(e.getId());
+			_mutex.unlock();
+		}
+		_propertiesToRemove.clear();
+
 		return (*this);
 	}
 

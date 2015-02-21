@@ -44,5 +44,6 @@ namespace AGE
 		std::vector<Vertices> _vertices;
 		MemoryPool<std::shared_ptr<Properties>> _properties;
 		AGE::SpinLock _mutex;
+		std::vector<Key<Properties>> _propertiesToRemove;
 	};
 }

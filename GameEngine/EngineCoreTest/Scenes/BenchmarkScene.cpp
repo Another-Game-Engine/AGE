@@ -200,7 +200,7 @@ namespace AGE
 		std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
 
 #ifdef PHYSIC_SIMULATION
-		//addSystem<AGE::BulletDynamicSystem>(0);
+		addSystem<AGE::BulletDynamicSystem>(0);
 		//		addSystem<CollisionAdder>(1);
 		//		addSystem<CollisionCleaner>(1000);
 #endif //!PHYSIC

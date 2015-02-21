@@ -121,7 +121,7 @@ namespace AGE
 
 		registerCallback <Tasks::Render::RemoveMeshProperty>([&](Tasks::Render::RemoveMeshProperty &msg)
 		{
-//			paintingManager->get_painter(msg.meshPainter)->remove_properties(msg.toRemove);
+			paintingManager->get_painter(msg.meshPainter)->remove_properties(msg.toRemove);
 		});
 
 		registerCallback<Tasks::Render::SetMeshMaterial>([&](Tasks::Render::SetMeshMaterial& msg)
