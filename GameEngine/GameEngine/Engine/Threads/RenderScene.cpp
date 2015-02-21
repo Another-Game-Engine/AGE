@@ -16,7 +16,7 @@
 #include <SpacePartitioning/Ouptut/RenderLight.hh>
 #include <SpacePartitioning/Ouptut/RenderPainter.hh>
 #include <SpacePartitioning/Ouptut/RenderPipeline.hh>
-
+#include <Utils/Debug.hpp>
 
 namespace AGE
 {
@@ -402,7 +402,8 @@ namespace AGE
 					_octree.addElement(&e);
 				else
 					_octree.moveElement(&e);
-				AGE::GetRenderThread()->getQueue()->emplaceCommand<AGE::Tasks::Render::SetMeshTransform>(e.mesh.painter, e.mesh.properties, e.transformationProperty, e.transformation);
+				AGE::GetRenderThread()->getQueue()->emplaceCommand<AGE::Commands::ToRender::SetMeshTransform>(e.mesh.painter, e.mesh.properties, e.transformationProperty, e.transformation);
+
 				assert(e.currentNode != UNDEFINED_IDX);
 			}
 			for (uint32_t idx : _pointLightsToMove)

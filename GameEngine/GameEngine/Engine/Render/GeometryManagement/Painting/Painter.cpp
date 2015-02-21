@@ -49,7 +49,7 @@ namespace AGE
 		// to be sure that this function is only called in render thread
 		AGE_ASSERT(GetThreadManager()->getCurrentThread() == (AGE::Thread*)GetRenderThread());
 		std::lock_guard<SpinLock> lock(_mutex);
-		_properties.allocPreparated(key, properties);
+		_properties.allocPreparated(key.getId(), properties);
 	}
 
 	Painter & Painter::remove_vertices(Key<Vertices> &key)

@@ -17,15 +17,5 @@ namespace AGE
 			toRemove(pToRemove)
 		{
 		}
-
-		Render::SetMeshTransform::SetMeshTransform(Key<Painter> pPainter, Key<Properties> pMeshProperties,
-			Key<Property> pTransformProperty,
-			glm::mat4 pTransformMat) :
-			meshPainter(pPainter),
-			meshProperties(pMeshProperties),
-			transformProperty(pTransformProperty),
-			transformMat(pTransformMat)
-		{ }
-
 	}
 }

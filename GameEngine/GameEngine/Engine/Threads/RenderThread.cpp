@@ -52,7 +52,7 @@ namespace AGE
 			glClear(GL_COLOR_BUFFER_BIT);
 		});
 
-		registerCallback<Tasks::Render::SetMeshTransform>([&](Tasks::Render::SetMeshTransform &msg)
+		registerCallback<Commands::ToRender::SetMeshTransform>([&](Commands::ToRender::SetMeshTransform &msg)
 		{
 			auto meshProperties = paintingManager->get_painter(msg.meshPainter)->get_properties(msg.meshProperties);
 			auto transformProperty = meshProperties->get_property<Transformation>(msg.transformProperty);
@@ -116,11 +116,6 @@ namespace AGE
 
 		registerCallback <Commands::ToRender::SetMeshProperties>([&](Commands::ToRender::SetMeshProperties &msg)
 		{
-			std::shared_ptr<Transformation> transformProperty = std::make_shared<Transformation>(glm::mat4(1));
-			std::shared_ptr<Properties> addedProperties = std::make_shared<Properties>();
-
-			Key<Property> transformKey = addedProperties->add_property(transformProperty);
-			Key<Properties> meshPropertiesKey = paintingManager->get_painter(msg.meshPainter)->add_properties(addedProperties);
 			paintingManager->get_painter(msg.meshPainter)->alloc_reserved_properties(msg.properties, msg.propertiesPtr);
 		});
 

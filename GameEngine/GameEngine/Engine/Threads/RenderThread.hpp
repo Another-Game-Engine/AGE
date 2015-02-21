@@ -29,7 +29,6 @@ namespace AGE
 
 		// used by render scene, maybe should be protected
 		void createMeshProperty(const Key<Painter> &painter, Key<Properties> &properties, Key<Property> &transformation);
-
 	public:
 		std::shared_ptr<PaintingManager> paintingManager;
 		std::vector<std::unique_ptr<IRenderingPipeline>> pipelines;

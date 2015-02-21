@@ -61,6 +61,26 @@ namespace AGE
 					, propertiesPtr(_propertiesPtr)
 				{ }
 			};
+
+
+			struct SetMeshTransform
+			{
+				Key<Painter> meshPainter;
+				Key<Properties> meshProperties;
+				Key<Property> transformProperty;
+				glm::mat4 transformMat;
+
+				SetMeshTransform(Key<Painter> pPainter,
+					Key<Properties> pMeshProperties,
+					Key<Property> pTransformProperty,
+					glm::mat4 pTransformMat) :
+					meshPainter(pPainter),
+					meshProperties(pMeshProperties),
+					transformProperty(pTransformProperty),
+					transformMat(pTransformMat)
+				{ }
+
+			};
 		};
 	}
 }
