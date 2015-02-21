@@ -96,8 +96,11 @@ namespace AGE
 		_buffer.update();
 		int index = 0;
 		for (auto &draw_element : drawList) {
-			if (draw_element) {
-				_properties.get(propertiesList[index].getId())->update_properties(program);
+			if (draw_element)
+			{
+				auto id = propertiesList[index].getId();
+				auto propertyPtr = _properties.get(id);
+				propertyPtr->update_properties(program);
 				program->update();
 				_vertices[draw_element.getId()].draw(mode);
 			}

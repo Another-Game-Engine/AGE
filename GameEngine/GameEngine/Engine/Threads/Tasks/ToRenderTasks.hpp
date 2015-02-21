@@ -64,6 +64,39 @@ namespace AGE
 
 				RemoveMeshProperty(Key<Painter> const &painter, Key<Properties> const &pToRemove);
 			};
+
+			struct SetMeshProperties
+			{
+				Key<Painter> meshPainter;
+				Key<Properties> properties;
+				std::shared_ptr<Properties> propertiesPtr;
+
+				SetMeshProperties(Key<Painter> const &_meshPainter
+					, Key<Properties> const &_properties
+					, std::shared_ptr<Properties> const &_propertiesPtr) :
+					meshPainter(_meshPainter)
+					, properties(_properties)
+					, propertiesPtr(_propertiesPtr)
+				{ }
+			};
+
+			struct SetMeshTransform
+			{
+				Key<Painter> meshPainter;
+				Key<Properties> meshProperties;
+				Key<Property> transformProperty;
+				glm::mat4 transformMat;
+
+				SetMeshTransform(Key<Painter> pPainter,
+					Key<Properties> pMeshProperties,
+					Key<Property> pTransformProperty,
+					glm::mat4 pTransformMat) :
+					meshPainter(pPainter),
+					meshProperties(pMeshProperties),
+					transformProperty(pTransformProperty),
+					transformMat(pTransformMat)
+				{ }
+			};
 		};
 	}
 }

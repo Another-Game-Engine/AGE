@@ -152,7 +152,7 @@ namespace AGE
 	void RenderScene::removeDrawableObject(DRAWABLE_ID id)
 	{
 		Drawable &toRm = _drawables.get(id);
-		AGE::GetRenderThread()->getQueue()->emplaceTask<AGE::Tasks::Render::RemoveMeshProperty>(toRm.mesh.painter, toRm.mesh.properties);
+		//AGE::GetRenderThread()->getQueue()->emplaceTask<AGE::Tasks::Render::RemoveMeshProperty>(toRm.mesh.painter, toRm.mesh.properties);
 		if (toRm.hasMoved)
 		{
 			uint32_t idxMoveBuffer = toRm.moveBufferIdx;
@@ -402,7 +402,7 @@ namespace AGE
 					_octree.addElement(&e);
 				else
 					_octree.moveElement(&e);
-				AGE::GetRenderThread()->getQueue()->emplaceCommand<AGE::Commands::ToRender::SetMeshTransform>(e.mesh.painter, e.mesh.properties, e.transformationProperty, e.transformation);
+				AGE::GetRenderThread()->getQueue()->emplaceTask<AGE::Tasks::Render::SetMeshTransform>(e.mesh.painter, e.mesh.properties, e.transformationProperty, e.transformation);
 
 				assert(e.currentNode != UNDEFINED_IDX);
 			}
