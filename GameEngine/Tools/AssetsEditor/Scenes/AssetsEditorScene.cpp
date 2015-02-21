@@ -28,12 +28,28 @@
 #include <AssetFiles/AssetsTypes.hpp>
 
 #include <Utils/FileSystem.hpp>
+#include <Utils/Directory.hpp>
+#include <Utils/Path.hpp>
+#include <Utils/Debug.hpp>
+#include <Utils/FileSystemHelpers.hpp>
 
 namespace AGE
 {
 	const std::string AssetsEditorScene::Name = "AssetsEditor";
 	AE::Folder AssetsEditorScene::_raw = AE::Folder();
 	AE::Folder AssetsEditorScene::_cook = AE::Folder();
+
+	std::vector<AssetsEditorScene::AssetsEditorFileDescriptor> AssetsEditorScene::_cookedFiles
+		= std::vector<AssetsEditorScene::AssetsEditorFileDescriptor>();
+
+	std::vector<const char *> AssetsEditorScene::_cookedMeshsFullPath = std::vector<const char *>();
+	std::vector<const char *> AssetsEditorScene::_cookedMeshFiles = std::vector<const char *>();
+
+	std::vector<const char *> AssetsEditorScene::_cookedBulletFullPath = std::vector<const char *>();
+	std::vector<const char *> AssetsEditorScene::_cookedBulletFiles = std::vector<const char *>();
+
+	std::vector<const char *> AssetsEditorScene::_cookedMaterialFullPath = std::vector<const char *>();
+	std::vector<const char *> AssetsEditorScene::_cookedMaterialFiles = std::vector<const char *>();
 
 	AssetsEditorScene::AssetsEditorScene(std::weak_ptr<AGE::Engine> engine)
 		: AScene(engine)
@@ -55,22 +71,54 @@ namespace AGE
 
 	bool AssetsEditorScene::userUpdateBegin(double time)
 	{
-		//check dirty for test
+		// dirty ! We list files
+		static float refreshCounter = 1.0f;
+		if (refreshCounter >= 1.0f)
 		{
-			static double counter = 0;
-			counter += time;
-			if (counter > 1)
-			{
-				_raw.list();
-				std::set<std::shared_ptr<AE::RawFile>> dirty;
-				AE::AssetFileManager::CheckIfRawModified(&_raw, dirty);
-				for (auto &e : dirty)
-				{
+			auto currentDir = Directory::GetCurrentDirectory();
+			auto absPath = Path::AbsoluteName(currentDir, "../../Assets/Serialized");
+			auto dir = Directory();
+			AGE_ASSERT(dir.open("../../Assets/Serialized"));
+			auto it = dir.recursive_begin();
 
+			_cookedBulletFiles.clear();
+			_cookedBulletFullPath.clear();
+			_cookedMaterialFiles.clear();
+			_cookedMaterialFullPath.clear();
+			_cookedMeshFiles.clear();
+			_cookedMeshsFullPath.clear();
+			_cookedFiles.clear();
+
+			while (it != dir.recursive_end())
+			{
+				if (Directory::IsFile(it.get()))
+				{
+					_cookedFiles.push_back(AssetsEditorFileDescriptor(it.get(), Path::BaseName(it.get())));
+
+					auto extension = AGE::FileSystemHelpers::GetExtension(it.get());
+					if (extension == "sage")
+					{
+						_cookedMeshFiles.push_back(_cookedFiles.back().fileName.c_str());
+						_cookedMeshsFullPath.push_back(_cookedFiles.back().fullPath.c_str());
+					}
+					else if (extension == "mage")
+					{
+						_cookedMaterialFiles.push_back(_cookedFiles.back().fileName.c_str());
+						_cookedMaterialFullPath.push_back(_cookedFiles.back().fullPath.c_str());
+					}
+					else if (extension == "bullet")
+					{
+						_cookedBulletFiles.push_back(_cookedFiles.back().fileName.c_str());
+						_cookedBulletFullPath.push_back(_cookedFiles.back().fullPath.c_str());
+					}
 				}
-				counter = 0;
+				it++;
 			}
+
+			dir.close();
+			refreshCounter = 0;
 		}
+		refreshCounter += time;
 
 		ImGui::BeginChild("Assets browser", ImVec2(ImGui::GetWindowWidth() * 0.333333f, 0), true);
 		{

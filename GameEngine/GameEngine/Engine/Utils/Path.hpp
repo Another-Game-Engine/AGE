@@ -14,11 +14,11 @@ namespace AGE
 		Path &operator=(Path &&other) = delete;
 		~Path(void) = delete;
 
-		static std::string Path::DirectoryName(const char *str);
+		static std::string DirectoryName(const char *str);
 		static std::string BaseName(const char *str);
 		static std::string PathName(const char *str);
-		static std::string Path::AbsoluteName(const char *path, const char *str);
-		static std::string Path::RelativeName(const char *path, const char *str);
-		static std::string Path::Extension(const char *str, const char *ext);
+		static std::string AbsoluteName(const char *path, const char *str);
+		static std::string RelativeName(const char *path, const char *str);
+		static std::string Extension(const char *str, const char *ext);
 	};
 }

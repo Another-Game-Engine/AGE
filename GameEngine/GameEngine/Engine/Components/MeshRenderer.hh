@@ -37,8 +37,10 @@ namespace AGE
 
 #ifdef EDITOR_ENABLED
 		std::vector<const char*> *meshFileList = nullptr;
+		std::vector<const char*> *meshPathList = nullptr;
 		std::size_t selectedMeshIndex = 0;
 		std::string selectedMeshName = "";
+		std::string selectedMeshPath = "";
 
 		virtual void editorCreate(AScene *scene);
 		virtual void editorDelete(AScene *scene);
@@ -75,6 +77,7 @@ namespace AGE
 	template <typename Archive>
 	void MeshRenderer::save(Archive &ar) const
 	{
+#ifndef EDITOR_ENABLED
 		auto serializationInfos = std::make_unique<SerializationInfos>();
 		if (_material)
 		{
@@ -86,11 +89,18 @@ namespace AGE
 		}
 		//todo with animations
 		ar(serializationInfos);
+#else
+		ar(cereal::make_nvp("mesh path", selectedMeshPath));
+#endif
 	}
 
 	template <typename Archive>
 	void MeshRenderer::load(Archive &ar)
 	{
+#ifndef EDITOR_ENABLED
 		ar(_serializationInfos);
+#else
+		ar(selectedMeshPath);
+#endif
 	}
 }

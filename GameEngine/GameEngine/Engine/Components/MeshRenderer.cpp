@@ -115,14 +115,14 @@ namespace AGE
 
 	void MeshRenderer::editorUpdate(AScene *scene)
 	{
-		if (meshFileList && selectedMeshIndex < meshFileList->size())
+		if (meshPathList->size() && selectedMeshIndex < meshPathList->size())
 		{
-			if ((*meshFileList)[selectedMeshIndex] != selectedMeshName)
+			if ((*meshPathList)[selectedMeshIndex] != selectedMeshPath)
 			{
 				std::size_t i = 0;
-				for (auto &e : *meshFileList)
+				for (auto &e : *meshPathList)
 				{
-					if (e == selectedMeshName)
+					if (e == selectedMeshPath)
 					{
 						selectedMeshIndex = i;
 						break;
@@ -130,16 +130,18 @@ namespace AGE
 					++i;
 				}
 			}
-			ImGui::PushItemWidth(-1);
-			//ImGui::ListBoxHeader("##empty");
-			if (ImGui::ListBox("##empty", (int*)&selectedMeshIndex, &(meshFileList->front()), (int)(meshFileList->size())))
-			{
-				selectedMeshName = (*meshFileList)[selectedMeshIndex];
-			}
-			//ImGui::ListBoxFooter();
-			ImGui::PopItemWidth();
-			//const std::string &path
 		}
+
+		ImGui::PushItemWidth(-1);
+		//ImGui::ListBoxHeader("##empty");
+		if (ImGui::ListBox("##empty", (int*)&selectedMeshIndex, &(meshFileList->front()), (int)(meshFileList->size())))
+		{
+			selectedMeshName = (*meshFileList)[selectedMeshIndex];
+			selectedMeshPath = (*meshPathList)[selectedMeshIndex];
+		}
+		//ImGui::ListBoxFooter();
+		ImGui::PopItemWidth();
+		//const std::string &path
 	}
 #endif
 }

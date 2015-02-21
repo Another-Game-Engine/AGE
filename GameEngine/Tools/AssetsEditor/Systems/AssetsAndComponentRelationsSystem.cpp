@@ -26,17 +26,10 @@ namespace AGE
 
 		void AssetsAndComponentRelationsSystem::mainUpdate(double time)
 		{
-			auto &rawList = AssetsEditorScene::getRawList();
-			rawList.list();
-
-			_assetRenderMeshList.clear();
-			rawList.update(std::function<void(AE::RawFile*)>([&](AE::RawFile* file) {
-				_assetRenderMeshList.push_back(file->getPath().c_str());
-			}));
-
 			for (auto e : _meshRenderer.getCollection())
 			{
-				e.getComponent<MeshRenderer>()->meshFileList = &_assetRenderMeshList;
+				e.getComponent<MeshRenderer>()->meshFileList = &AssetsEditorScene::getCookedMeshsList();
+				e.getComponent<MeshRenderer>()->meshPathList = &AssetsEditorScene::getCookedMeshsListFullPath();
 			}
 		}
 
