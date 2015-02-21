@@ -5,11 +5,23 @@
 #include <Utils/OpenGL.hh>
 #include <Utils/DependenciesInjector.hpp>
 #include <vector>
+#include <SDL/SDL.h>
 
 namespace AGE
 {
 	class Engine;
 
+	struct ImGuiKeyEvent
+	{
+		SDL_Keysym key;
+		bool down;
+		ImGuiKeyEvent(SDL_Keysym _key, bool _down)
+			: key(_key)
+			, down(_down)
+		{}
+	};
+
+	
 	struct Age_ImDrawList
 	{
 		std::vector<ImDrawCmd>     commands;

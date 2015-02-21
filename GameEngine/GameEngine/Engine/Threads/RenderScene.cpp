@@ -272,6 +272,10 @@ namespace AGE
 
 				added.mesh = msg.submeshInstances[i];
 
+				//@Paul from @Cesar :
+				//This is disgusting to use a task and future for that.
+				//We'll need to do another way
+
 				auto addedProperty = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<AGE::Tasks::Render::CreateMeshProperty, std::pair<Key<Properties>, Key<Property>>>(added.mesh.painter);
 
 				added.position = uo->position;
@@ -405,7 +409,7 @@ namespace AGE
 					_octree.addElement(&e);
 				else
 					_octree.moveElement(&e);
-				AGE::GetRenderThread()->getQueue()->emplaceTask<AGE::Tasks::Render::SetMeshTransform>(e.mesh.painter, e.mesh.properties, e.transformationProperty, e.transformation);
+				AGE::GetRenderThread()->getQueue()->emplaceCommand<AGE::Tasks::Render::SetMeshTransform>(e.mesh.painter, e.mesh.properties, e.transformationProperty, e.transformation);
 				assert(e.currentNode != UNDEFINED_IDX);
 			}
 			for (uint32_t idx : _pointLightsToMove)

@@ -3,7 +3,7 @@
 #include <memory>
 #include <Utils/Dependency.hpp>
 #include <Utils/DependenciesInjector.hpp>
-#include <Utils/File.hpp>
+#include <Utils/OldFile.hpp>
 #include <bitset>
 #include <AssetManagement/Data/MeshData.hh>
 #include <Render/GeometryManagement/Painting/Painter.hh>
@@ -110,16 +110,16 @@ static std::pair<GLenum, std::function<void(Vertices &vertices, size_t index, Su
 		};
 
 	public:
-		bool loadAnimation(const File &filePath, const std::string &loadingChannel = "");
-		std::shared_ptr<AnimationData> getAnimation(const File &filePath);
-		bool loadSkeleton(const File &filePath, const std::string &loadingChannel = "");
-		std::shared_ptr<Skeleton> getSkeleton(const File &filePath);
-		bool loadMaterial(const File &filePath, const std::string &loadingChannel = "");
-		std::shared_ptr<MaterialSetInstance> getMaterial(const File &filePath);
-		std::shared_ptr<MeshInstance> loadMesh(const File &filePath);
-		std::shared_ptr<MeshInstance> getMesh(const File &filePath);
-		bool loadTexture(const File &filepath, const std::string &loadingChannel, std::function<void(std::shared_ptr<ITexture> &texture)> &callback);
-		bool loadMesh(const File &filePath, const std::vector<MeshInfos> &loadOrder, const std::string &loadingChannel = "");
+		bool loadAnimation(const OldFile &filePath, const std::string &loadingChannel = "");
+		std::shared_ptr<AnimationData> getAnimation(const OldFile &filePath);
+		bool loadSkeleton(const OldFile &filePath, const std::string &loadingChannel = "");
+		std::shared_ptr<Skeleton> getSkeleton(const OldFile &filePath);
+		bool loadMaterial(const OldFile &filePath, const std::string &loadingChannel = "");
+		std::shared_ptr<MaterialSetInstance> getMaterial(const OldFile &filePath);
+		std::shared_ptr<MeshInstance> loadMesh(const OldFile &filePath);
+		std::shared_ptr<MeshInstance> getMesh(const OldFile &filePath);
+		bool loadTexture(const OldFile &filepath, const std::string &loadingChannel, std::function<void(std::shared_ptr<ITexture> &texture)> &callback);
+		bool loadMesh(const OldFile &filePath, const std::vector<MeshInfos> &loadOrder, const std::string &loadingChannel = "");
 		void setAssetsDirectory(const std::string &path) { _assetsDirectory = path; }
 		void updateLoadingChannel(const std::string &channelName, std::size_t &total, std::size_t &to_load, std::string &error);
 

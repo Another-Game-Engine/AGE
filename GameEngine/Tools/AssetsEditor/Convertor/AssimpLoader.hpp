@@ -9,7 +9,7 @@
 
 #include <iostream>
 
-#include <Utils/File.hpp>
+#include <Utils/OldFile.hpp>
 
 #include "AssetdataSet.hpp"
 #include "ConvertorStatusManager.hpp"
@@ -53,7 +53,7 @@ namespace AGE
 		static bool Load(std::shared_ptr<CookingTask> cookingTask)
 		{
 			auto path = cookingTask->rawDirectory.path().string() + "\\" + cookingTask->dataSet->filePath.getFullName();
-			if (!File(path).exists())
+			if (!OldFile(path).exists())
 			{
 				std::cerr << "File [" << path << "] does not exists." << std::endl;
 				return false;

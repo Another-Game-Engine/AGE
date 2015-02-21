@@ -9,13 +9,15 @@
 #include <Threads/PrepareRenderThread.hpp>
 #include <Threads/RenderThread.hpp>
 #include <Threads/Tasks/ToRenderTasks.hpp>
+#ifdef EDITOR_ENABLED
+#include <imgui/imgui.h>
+#endif
 
 namespace AGE
 {
-
 	MeshRenderer::MeshRenderer() :
-		ComponentBase(),
-		_scene(nullptr)
+		ComponentBase()
+		, _scene(nullptr)
 		, _serializationInfos(nullptr)
 	{
 	}
@@ -59,7 +61,7 @@ namespace AGE
 	MeshRenderer &MeshRenderer::setMaterial(const std::shared_ptr<AGE::MaterialSetInstance> &material)
 	{
 		_material = material;
-		AGE::GetRenderThread()->getQueue()->emplaceTask<Tasks::Render::SetMeshMaterial>(_material, _mesh);
+		AGE::GetPrepareThread()->getQueue()->emplaceCommand<Tasks::Render::SetMeshMaterial>(_material, _mesh);
 		updateGeometry();
 		return (*this);
 	}
@@ -104,4 +106,42 @@ namespace AGE
 		}
 	}
 
+#ifdef EDITOR_ENABLED
+	void MeshRenderer::editorCreate(AScene *scene)
+	{}
+
+	void MeshRenderer::editorDelete(AScene *scene)
+	{}
+
+	void MeshRenderer::editorUpdate(AScene *scene)
+	{
+		if (meshPathList->size() && selectedMeshIndex < meshPathList->size())
+		{
+			if ((*meshPathList)[selectedMeshIndex] != selectedMeshPath)
+			{
+				std::size_t i = 0;
+				for (auto &e : *meshPathList)
+				{
+					if (e == selectedMeshPath)
+					{
+						selectedMeshIndex = i;
+						break;
+					}
+					++i;
+				}
+			}
+		}
+
+		ImGui::PushItemWidth(-1);
+		//ImGui::ListBoxHeader("##empty");
+		if (ImGui::ListBox("##empty", (int*)&selectedMeshIndex, &(meshFileList->front()), (int)(meshFileList->size())))
+		{
+			selectedMeshName = (*meshFileList)[selectedMeshIndex];
+			selectedMeshPath = (*meshPathList)[selectedMeshIndex];
+		}
+		//ImGui::ListBoxFooter();
+		ImGui::PopItemWidth();
+		//const std::string &path
+	}
+#endif
 }

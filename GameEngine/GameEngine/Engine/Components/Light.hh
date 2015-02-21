@@ -40,6 +40,9 @@ namespace AGE
 		glm::vec3 _color;
 		glm::vec3 _range;
 
+#ifdef EDITOR_ENABLED
+#endif
+
 		static float computePointLightRange(float minValue, glm::vec3 const &attenuation);
 	};
 

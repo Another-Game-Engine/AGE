@@ -6,6 +6,7 @@
 #include <Threads/Tasks/ToRenderTasks.hpp>
 #include <Threads/PrepareRenderThread.hpp>
 #include <Threads/Tasks/BasicTasks.hpp>
+#include <Utils/Debug.hpp>
 
 
 namespace AGE
@@ -21,13 +22,13 @@ namespace AGE
 
 		return true;
 	}
-	
+
 	bool MainThread::release()
 	{
 		_insideRun = false;
 		return true;
 	}
-	
+
 	bool MainThread::update()
 	{
 		std::chrono::system_clock::time_point waitStart;
@@ -36,52 +37,46 @@ namespace AGE
 		std::chrono::system_clock::time_point workEnd;
 		std::size_t workCount = 0;
 
+		workStart = std::chrono::high_resolution_clock::now();
 
-		if (!getQueue()->getTaskQueue(taskQueue, TMQ::HybridQueue::NoWait))
+		if (!_engine->update())
+			return false;
+		workEnd = std::chrono::high_resolution_clock::now();
+		workCount += std::chrono::duration_cast<std::chrono::microseconds>(workEnd - workStart).count();
+		waitStart = std::chrono::high_resolution_clock::now();
+		while (!_next->getQueue()->releaseCommandReadability(TMQ::HybridQueue::WaitType::Wait))
 		{
-			workStart = std::chrono::high_resolution_clock::now();
-			if (!_engine->update())
-				return false;
-			workEnd = std::chrono::high_resolution_clock::now();
-			workCount += std::chrono::duration_cast<std::chrono::microseconds>(workEnd - workStart).count();
-			waitStart = std::chrono::high_resolution_clock::now();
-			while (!_next->getQueue()->releaseCommandReadability(TMQ::HybridQueue::WaitType::Wait))
+			if (getQueue()->getTaskQueue(taskQueue, TMQ::HybridQueue::NoWait))
 			{
-				if (getQueue()->getTaskQueue(taskQueue, TMQ::HybridQueue::NoWait))
+				workStart = std::chrono::high_resolution_clock::now();
+				while (!taskQueue.empty())
 				{
-					workStart = std::chrono::high_resolution_clock::now();
-					while (!taskQueue.empty())
-					{
-						auto task = taskQueue.front();
-						assert(execute(task)); // we receive a task that we cannot handle
-						taskQueue.pop();
-						taskCounter--;
-					}
-					workEnd = std::chrono::high_resolution_clock::now();
-					workCount += std::chrono::duration_cast<std::chrono::microseconds>(workEnd - workStart).count();
+					auto task = taskQueue.front();
+					assert(execute(task)); // we receive a task that we cannot handle
+					taskQueue.pop();
+					taskCounter--;
 				}
+				workEnd = std::chrono::high_resolution_clock::now();
+				workCount += std::chrono::duration_cast<std::chrono::microseconds>(workEnd - workStart).count();
 			}
-			waitEnd = std::chrono::high_resolution_clock::now();
-			GetThreadManager()->updateThreadStatistics(this->_id
-				, workCount
-				, std::chrono::duration_cast<std::chrono::microseconds>(waitEnd - waitStart).count());
 		}
-		else
+		waitEnd = std::chrono::high_resolution_clock::now();
+
+		bool hasCommand = getQueue()->getTaskQueue(taskQueue, TMQ::HybridQueue::NoWait);
+		workStart = std::chrono::high_resolution_clock::now();
+		while (!taskQueue.empty())
 		{
-			waitEnd = std::chrono::high_resolution_clock::now();
-			workStart = std::chrono::high_resolution_clock::now();
-			while (!taskQueue.empty())
-			{
-				auto task = taskQueue.front();
-				assert(execute(task)); // we receive a task that we cannot handle
-				taskQueue.pop();
-				taskCounter--;
-			}
-			workEnd = std::chrono::high_resolution_clock::now();
-			GetThreadManager()->updateThreadStatistics(this->_id
-				, std::chrono::duration_cast<std::chrono::microseconds>(workEnd - workStart).count()
-				, std::chrono::duration_cast<std::chrono::microseconds>(waitEnd - waitStart).count());
+			auto task = taskQueue.front();
+			assert(execute(task)); // we receive a task that we cannot handle
+			taskQueue.pop();
+			taskCounter--;
 		}
+		workEnd = std::chrono::high_resolution_clock::now();
+		workCount += std::chrono::duration_cast<std::chrono::microseconds>(workEnd - workStart).count();
+
+		GetThreadManager()->updateThreadStatistics(this->_id
+			, workCount
+			, std::chrono::duration_cast<std::chrono::microseconds>(waitEnd - waitStart).count());
 
 		return true;
 	}
@@ -106,22 +101,28 @@ namespace AGE
 		, _activeScene(nullptr)
 	{
 	}
-	
+
 	MainThread::~MainThread()
 	{}
 
-	std::weak_ptr<AGE::Engine> MainThread::createEngine()
+	std::shared_ptr<AGE::Engine> MainThread::createEngine()
 	{
 		static bool unique = true;
 		if (unique)
 		{
-			_engine = std::make_shared<AGE::Engine>();
-			auto engine = std::weak_ptr<AGE::Engine>(_engine);
-			auto futur = GetRenderThread()->getQueue()->emplaceFutureTask<Tasks::Render::CreateRenderContext, bool>(engine);
+			Singleton<Engine>::setInstance();
+			_engine = std::shared_ptr<AGE::Engine>(Singleton<Engine>::getInstance());
+			auto futur = GetRenderThread()->getQueue()->emplaceFutureTask<Tasks::Render::CreateRenderContext, bool>(_engine);
 			auto success = futur.get();
 			assert(success);
 		}
 		unique = false;
+		return _engine;
+	}
+
+	std::shared_ptr<AGE::Engine> MainThread::getEngine()
+	{
+		AGE_ASSERT(_engine != nullptr && "Engine has not been created. Use 'CreateEngine()'.");
 		return _engine;
 	}
 

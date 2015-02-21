@@ -8,6 +8,7 @@ namespace AGE
 	{
 	public:
 		virtual void destroy(void *ptr) = 0;
+		virtual void *allocateObject() = 0;
 	};
 
 	template <typename T, std::size_t Alignement = 16, std::size_t ObjectNumberPerChunk = 1024>
@@ -21,22 +22,22 @@ namespace AGE
 		}
 		virtual ~ObjectPool()
 		{
-			assert(_objectNumber == 0 && "All object has not been destroyed ! Memory Leak !");
+			//assert(_objectNumber == 0 && "All object has not been destroyed ! Memory Leak !");
 		}
 
-		T *create()
+		// Allocate object space but do not call new()
+		virtual void *allocateObject()
 		{
 			void *res;
-			_allocateObject(res);
-			T *tRes = new (res)T();
-			return tRes;
+			auto error = _allocateObject(res);
+			assert(error);
+			return res;
 		}
 
 		template <typename ...Args>
 		T *create(Args &&...args)
 		{
-			void *res;
-			_allocateObject(res);
+			void *res = allocateObject();
 			T *tRes = new (res)T(args...);
 			return tRes;
 		}

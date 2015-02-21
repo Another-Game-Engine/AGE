@@ -4,7 +4,7 @@
 #include <regex>
 
 #include "AssetFileManager.hpp"
-#include <Utils/FileSystem.hpp>
+#include <Utils/FileSystemHelpers.hpp>
 #include <iostream>
 
 namespace AGE
@@ -38,8 +38,16 @@ namespace AGE
 			}
 		}
 
-		void Folder::list()
+		void Folder::list(const std::string &path)
 		{
+			if (path.size() != 0)
+			{
+				auto strPath = path;
+				if (strPath.back() == '/')
+					strPath.pop_back();
+				_path = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>(strPath);
+			}
+
 			int dirCount = 0;
 			int fileCount = 0;
 			for (auto it = std::tr2::sys::directory_iterator(_path)
@@ -53,7 +61,7 @@ namespace AGE
 					fileCount++;
 					if (_files.find(file.relative_path().string()) == std::end(_files))
 					{
-						auto n = AssetFileManager::CreateFile(file.relative_path(), this);
+						auto n = AssetFileManager::AgeCreateFile(file.relative_path(), this);
 						if (n)
 						{
 							_files.insert(std::make_pair(file.relative_path().string(), n));
@@ -155,7 +163,7 @@ namespace AGE
 
 		void Folder::find(const std::string &path, std::shared_ptr<AssetFile> &result)
 		{
-			_internalFind(FileSystem::CleanPath(path), result);
+			_internalFind(FileSystemHelpers::CleanPath(path), result);
 		}
 	}
 }

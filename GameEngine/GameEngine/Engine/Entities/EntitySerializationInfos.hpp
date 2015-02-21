@@ -8,51 +8,52 @@ namespace AGE
 {
 	struct EntitySerializationInfos
 	{
-		AGE::Link link;
-		ENTITY_FLAGS flags;
-		std::vector <std::size_t> componentsHash;
 		std::vector <ComponentBase*> components;
+		std::vector <ComponentType> componentTypes;
+		Entity &entity;
+		std::map<ComponentType, std::size_t> *typesMap; // used to unserialize
 
-		EntitySerializationInfos(const EntityData& e)
-			: link(e.getLink())
-			, flags(e.getEntity().getFlags())
+		EntitySerializationInfos(EntityData *e)
+			: entity(e->entity)
+			, typesMap(nullptr)
 		{}
 
 		template < typename Archive >
 		void save(Archive &ar) const
 		{
-			auto componentSize = components.size();
-			ar(
-				cereal::make_nvp("link", link)
+			AGE::Link link = entity.getLink();
+			ENTITY_FLAGS flags = entity.getFlags();
+			ar(cereal::make_nvp("link", link)
 				, cereal::make_nvp("flags", flags)
-				, cereal::make_nvp("components_hash", componentsHash)
+				, cereal::make_nvp("components_number", componentTypes)
 				);
-		}
-
-		void serializeComponentsToJson(cereal::JSONOutputArchive &ar) const
-		{
 			for (auto &e : components)
 			{
 				ComponentRegistrar::getInstance().serializeJson(e, ar);
-				//e->saveComponent(ar);
 			}
-		}
-
-		void serializeComponentsToBinary(cereal::PortableBinaryOutputArchive &ar) const
-		{
-			//for (auto &e : components)
-			//	e->serializeBaseToBinary(ar);
 		}
 
 		template < typename Archive >
 		void load(Archive &ar)
 		{
 			std::size_t cptNbr = 0;
+			Link l;
+			ENTITY_FLAGS f;
+
+			assert(typesMap != nullptr);
 			ar(
-				link
-				, flags
-				, componentsHash
-				);
+				l
+				, f
+				, componentTypes);
+			entity.getLink().setPosition(l.getPosition());
+			entity.getLink().setOrientation(l.getOrientation());
+			entity.getLink().setScale(l.getScale());
+			//entity.setFlags(f);
+			for (auto &e : componentTypes)
+			{
+				auto hashType = (*typesMap)[e];
+				ComponentRegistrar::getInstance().loadJson(hashType, entity, ar);
+			}
 		}
 	};
 }

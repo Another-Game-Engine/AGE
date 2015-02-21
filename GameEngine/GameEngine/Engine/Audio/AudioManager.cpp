@@ -102,7 +102,7 @@ void AudioManager::update()
 	_system->update();
 }
 
-std::shared_ptr<Audio> AudioManager::loadSound(const File &file, Audio::AudioSpatialType spacialType, const std::string &name)
+std::shared_ptr<Audio> AudioManager::loadSound(const OldFile &file, Audio::AudioSpatialType spacialType, const std::string &name)
 {
 	std::string tname = name.empty() ? file.getShortFileName() : name;
 	if (_audios.find(tname) != std::end(_audios))
@@ -118,7 +118,7 @@ std::shared_ptr<Audio> AudioManager::loadSound(const File &file, Audio::AudioSpa
 	return audio;
 }
 
-std::shared_ptr<Audio> AudioManager::loadStream(const File &file, Audio::AudioSpatialType spacialType, const std::string &name)
+std::shared_ptr<Audio> AudioManager::loadStream(const OldFile &file, Audio::AudioSpatialType spacialType, const std::string &name)
 {
 	std::string tname = name.empty() ? file.getShortFileName() : name;
 	if (_audios.find(tname) != std::end(_audios))

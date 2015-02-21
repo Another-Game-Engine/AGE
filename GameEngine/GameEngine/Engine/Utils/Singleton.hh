@@ -13,11 +13,10 @@ private:
 protected:
   Singleton();
   virtual ~Singleton();
-  static void 		freeMemory();
+  static void freeMemory();
 public:
   	static T           *getInstance();
   	static void        setInstance();
-
 };
 
 #include "Singleton.hpp"

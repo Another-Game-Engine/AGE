@@ -20,9 +20,7 @@ namespace AGE
 		BufferPool()
 			: _objectPerChunk(0)
 			, _objectSize(0)
-			, _chunksNumber(0)
 			, _freeObjectNumber(0)
-			, _objectNumber(0)
 			, _chunkAlignement(0)
 			, _objectAlignement(0)
 		{}
@@ -60,23 +58,20 @@ namespace AGE
 		std::list<Chunk*> _chunks;
 		std::size_t _objectPerChunk;
 		std::size_t _objectSize;
-		std::size_t _chunksNumber;
 		std::size_t _freeObjectNumber;
-		std::size_t _objectNumber;
 		std::size_t _chunkAlignement;
 		std::size_t _objectAlignement;
 
 		bool _allocateChunk()
 		{
 			auto chunkSize = _getChunkSize();
-			auto newChunk = (Chunk*)(new unsigned char[chunkSize]);
+			auto newChunk = (Chunk*)malloc(chunkSize);
 			if (!newChunk)
 				return false;
 			newChunk->emptySlotsNumber = _objectPerChunk;
 			newChunk->emptySlotsList.init();
 			_chunks.push_front(newChunk);
 			_freeObjectNumber += _objectPerChunk;
-			++_chunksNumber;
 
 			auto data = (unsigned char*)(newChunk + 1);
 			data += _chunkAlignement;
@@ -106,9 +101,8 @@ namespace AGE
 				if (e->emptySlotsNumber != 0)
 				{
 					auto ptr = e->emptySlotsList.pop();
-					--e->emptySlotsNumber;
+					--(e->emptySlotsNumber);
 					--_freeObjectNumber;
-					++_objectNumber;
 
 					addr = ptr;
 					return true;
@@ -123,22 +117,15 @@ namespace AGE
 			data -= sizeof(ChunkHeader);
 
 			auto chunk = (Chunk*)(data - (((ChunkHeader*)(data))->index * (sizeof(ChunkHeader) + _objectSize + _objectAlignement)) - _chunkAlignement) - 1;
-			++chunk->emptySlotsNumber;
+			++(chunk->emptySlotsNumber);
 			chunk->emptySlotsList.push((Link*)(addr));
 			++_freeObjectNumber;
-			--_objectNumber;
-
-			if (chunk != _chunks.front())
-			{
-				_chunks.remove(chunk);
-				_chunks.push_front(chunk);
-			}
 
 			if (chunk->emptySlotsNumber == _objectPerChunk)
 			{
-				delete[](unsigned char *)(chunk);
-				_chunks.pop_front();
 				_freeObjectNumber -= _objectPerChunk;
+				free(chunk);
+				_chunks.remove(chunk);
 			}
 
 			return false;
@@ -148,7 +135,7 @@ namespace AGE
 		{
 			for (auto &e : _chunks)
 			{
-				delete[](unsigned char *)e;
+				free(e);
 			}
 		}
 		inline std::size_t _getChunkSize() const { return _chunkAlignement + sizeof(Chunk) + _objectPerChunk * (_objectSize + _objectAlignement + sizeof(ChunkHeader)); }

@@ -36,7 +36,7 @@ namespace AGE
 	{
 		registerCallback<Tasks::Render::CreateRenderContext>([this](Tasks::Render::CreateRenderContext &msg)
 		{
-			_context = msg.engine.lock()->setInstance<SdlContext, IRenderContext>();
+			_context = msg.engine->setInstance<SdlContext, IRenderContext>();
 			if (!_context->init(0, 1920, 1000, "~AGE~ V0.00001 Demo"))
 			{
 				msg.setValue(false);
@@ -103,7 +103,7 @@ namespace AGE
 
 		registerCallback<AGE::Tasks::Basic::Exit>([&](AGE::Tasks::Basic::Exit& msg)
 		{
-			AGE::CreateEngine().lock()->deleteInstance<IRenderContext>();
+			AGE::CreateEngine()->deleteInstance<IRenderContext>();
 			this->_insideRun = false;
 		});
 

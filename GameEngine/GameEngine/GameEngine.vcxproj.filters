@@ -64,7 +64,6 @@
     <ClCompile Include="Engine\Physic\DynamicMotionState.cpp" />
     <ClCompile Include="Engine\Skinning\Bone.cpp" />
     <ClCompile Include="Engine\Utils\File.cpp" />
-    <ClCompile Include="Engine\Utils\FileSystem.cpp" />
     <ClCompile Include="Engine\Utils\ObjectPool.cpp" />
     <ClCompile Include="Engine\Entities\Entity.cpp" />
     <ClCompile Include="Engine\Utils\UniqueTypeId.cpp" />
@@ -123,8 +122,24 @@
     <ClCompile Include="Engine\SpacePartitioning\LooseOctree.cpp" />
     <ClCompile Include="Engine\SpacePartitioning\LooseOctreeNode.cpp" />
     <ClCompile Include="Engine\Threads\RenderThread.cpp" />
-    <ClCompile Include="Engine\Render\Properties\Properties.cpp" />
-    <ClCompile Include="Engine\Render\PropertyManager.cpp" />
+    <ClCompile Include="Engine\Utils\Encoding.cpp" />
+    <ClCompile Include="Engine\Utils\OldFile.cpp" />
+    <ClCompile Include="Engine\Utils\Directory.cpp" />
+    <ClCompile Include="Engine\Utils\Stream.cpp" />
+    <ClCompile Include="Engine\Utils\FileCommand.cpp" />
+    <ClCompile Include="Engine\Utils\FileMap.cpp" />
+    <ClCompile Include="Engine\Utils\FileMemory.cpp" />
+    <ClCompile Include="Engine\Utils\FileStdio.cpp" />
+    <ClCompile Include="Engine\Utils\FileSystemHelpers.cpp" />
+    <ClCompile Include="Engine\Utils\FileSystem.cpp" />
+    <ClCompile Include="Engine\Utils\Path.cpp" />
+    <ClCompile Include="Engine\Utils\FileSystemThread.cpp" />
+    <ClCompile Include="Engine\Utils\FSThreadBase.cpp" />
+    <ClCompile Include="Engine\Utils\SpinLock.cpp" />
+    <ClCompile Include="Engine\Utils\Logger.cpp" />
+    <ClCompile Include="Engine\Utils\CRC32.cpp" />
+    <ClCompile Include="Engine\Utils\Library.cpp" />
+    <ClCompile Include="Engine\Utils\StreamBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -244,7 +259,6 @@
     <ClInclude Include="Engine\Utils\Serialization\MatrixSerialization.hpp" />
     <ClInclude Include="Engine\Utils\Serialization\SerializationArchives.hpp" />
     <ClInclude Include="Engine\Utils\Serialization\SerializationMacros.hpp" />
-    <ClInclude Include="Engine\Utils\FileSystem.hpp" />
     <ClInclude Include="Engine\Utils\ObjectPool.hpp" />
     <ClInclude Include="Engine\Components\ComponentManager.hpp" />
     <ClInclude Include="Engine\Entities\EntityData.hh" />
@@ -338,7 +352,30 @@
     <ClInclude Include="Engine\Render\UnitProg.hh" />
     <ClInclude Include="Engine\AssetManagement\Data\AnimationData.hpp" />
     <ClInclude Include="Engine\AssetManagement\Instance\AnimationInstance.hh" />
-    <ClInclude Include="Engine\Render\Properties\Properties.hh" />
+    <ClInclude Include="Engine\Utils\Encoding.hpp" />
+    <ClInclude Include="Engine\Utils\OldFile.hpp" />
+    <ClInclude Include="Engine\Utils\Directory.hpp" />
+    <ClInclude Include="Engine\Utils\Platform.hpp" />
+    <ClInclude Include="Engine\Utils\Stream.hpp" />
+    <ClInclude Include="Engine\Utils\Endianness.hpp" />
+    <ClInclude Include="Engine\Utils\FileCommand.hpp" />
+    <ClInclude Include="Engine\Utils\FileInterface.hpp" />
+    <ClInclude Include="Engine\Utils\FileMap.hpp" />
+    <ClInclude Include="Engine\Utils\FileMemory.hpp" />
+    <ClInclude Include="Engine\Utils\FileStdio.hpp" />
+    <ClInclude Include="Engine\Utils\Compiler.hpp" />
+    <ClInclude Include="Engine\Utils\FileSystemHelpers.hpp" />
+    <ClInclude Include="Engine\Utils\FileSystem.hpp" />
+    <ClInclude Include="Engine\Utils\Path.hpp" />
+    <ClInclude Include="Engine\Utils\FileSystemThread.hpp" />
+    <ClInclude Include="Engine\Utils\FSThreadBase.hpp" />
+    <ClInclude Include="Engine\Utils\SpinLock.hpp" />
+    <ClInclude Include="Engine\Utils\Logger.hpp" />
+    <ClInclude Include="Engine\Utils\Architecture.hpp" />
+    <ClInclude Include="Engine\Utils\CRC32.hpp" />
+    <ClInclude Include="Engine\Utils\Library.hpp" />
+    <ClInclude Include="Engine\Utils\Visibility.hpp" />
+    <ClInclude Include="Engine\Utils\StreamBuffer.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

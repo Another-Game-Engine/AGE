@@ -48,14 +48,14 @@ int			main(int ac, char **av)
 	AGE::InitAGE();
 	auto engine = AGE::CreateEngine();
 
-	engine.lock()->launch(std::function<bool()>([&]()
+	engine->launch(std::function<bool()>([&]()
 	{
 		AGE::GetThreadManager()->setAsWorker(false, false, false);
-		engine.lock().get()->setInstance<AGE::Timer>();
-		engine.lock().get()->setInstance<AGE::AssetsManager>();
+		engine.get()->setInstance<AGE::Timer>();
+		engine.get()->setInstance<AGE::AssetsManager>();
 
 		AGE::GetRenderThread()->getQueue()->emplaceFutureTask<AGE::Tasks::Basic::BoolFunction, bool>([=](){
-			AGE::Imgui::getInstance()->init(engine.lock().get());
+			AGE::Imgui::getInstance()->init(engine.get());
 			return true;
 		}).get();
 
@@ -68,19 +68,20 @@ int			main(int ac, char **av)
 		REGISTER_COMPONENT_TYPE(AGE::RigidBody);
 		REGISTER_COMPONENT_TYPE(AGE::PointLightComponent);
 		REGISTER_COMPONENT_TYPE(AGE::CameraComponent);
+		REGISTER_COMPONENT_TYPE(AGE::WE::EntityRepresentation);
 
-		engine.lock()->addScene(std::make_shared<AGE::AssetsEditorScene>(engine), AGE::AssetsEditorScene::Name);
-		engine.lock()->addScene(std::make_shared<AGE::SceneSelectorScene>(engine), AGE::SceneSelectorScene::Name);
-		engine.lock()->addScene(std::make_shared<AGE::WorldEditorScene>(engine), AGE::WorldEditorScene::Name);
+		engine->addScene(std::make_shared<AGE::AssetsEditorScene>(engine), AGE::AssetsEditorScene::Name);
+		engine->addScene(std::make_shared<AGE::SceneSelectorScene>(engine), AGE::SceneSelectorScene::Name);
+		engine->addScene(std::make_shared<AGE::WorldEditorScene>(engine), AGE::WorldEditorScene::Name);
 
-		if (!engine.lock()->initScene(AGE::AssetsEditorScene::Name))
+		if (!engine->initScene(AGE::AssetsEditorScene::Name))
 			return false;
-		if (!engine.lock()->initScene(AGE::SceneSelectorScene::Name))
+		if (!engine->initScene(AGE::SceneSelectorScene::Name))
 			return false;
-		if (!engine.lock()->initScene(AGE::WorldEditorScene::Name))
+		if (!engine->initScene(AGE::WorldEditorScene::Name))
 			return false;
-		engine.lock()->enableScene(AGE::AssetsEditorScene::Name, 1000);
-		engine.lock()->enableScene(AGE::SceneSelectorScene::Name, 1);
+		engine->enableScene(AGE::AssetsEditorScene::Name, 1000);
+		engine->enableScene(AGE::SceneSelectorScene::Name, 1);
 		return true;
 	}));
 

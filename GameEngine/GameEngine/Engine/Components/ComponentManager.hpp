@@ -32,6 +32,13 @@ namespace AGE
 			return ptr;
 		}
 
+		void *allocateComponent(ComponentType id)
+		{
+			assert(_pools.size() > id);
+			assert(_pools[id] != nullptr);
+			return _pools[id]->allocateObject();
+		}
+
 		void deleteComponent(ComponentBase *component)
 		{
 			auto id = component->getType();

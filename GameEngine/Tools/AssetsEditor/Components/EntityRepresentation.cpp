@@ -1,6 +1,7 @@
 #include "EntityRepresentation.hpp"
 #include <Core/AScene.hh>
 
+
 namespace AGE
 {
 	namespace WE
@@ -22,13 +23,10 @@ namespace AGE
 #ifdef EDITOR_ENABLED
 			exposedInEditor = false;
 #endif
-			if (_name)
-			{
-				auto i = 0;
-				for (; i < name.size() - 1 && _name[i] != '\0'; ++i)
-					name[i] = _name[i];
-				name[i] = '\0';
-			}
+			auto len = strlen(_name);
+			if (len >= ENTITY_NAME_LENGTH)
+				len = ENTITY_NAME_LENGTH;
+			memcpy(name, _name, len);
 			auto &link = entity.getLink();
 			position = link.getPosition();
 			rotation = glm::eulerAngles(link.getOrientation());
@@ -37,12 +35,12 @@ namespace AGE
 
 		void EntityRepresentation::reset(AScene *)
 		{
-			name.fill(0);
+			memset(name, 0, ENTITY_NAME_LENGTH);
 		}
 
 		EntityRepresentation &EntityRepresentation::operator=(EntityRepresentation &&o)
 		{
- 			name = std::move(o.name);
+			memcpy(name, o.name, ENTITY_NAME_LENGTH);
 			position = std::move(o.position);
 			rotation = std::move(o.rotation);
 			scale = std::move(o.scale);
@@ -52,10 +50,21 @@ namespace AGE
 		EntityRepresentation::EntityRepresentation(EntityRepresentation &&o)
 			: ComponentBase(std::move(o))
 		{
-			name = std::move(o.name);
+			memcpy(name, o.name, ENTITY_NAME_LENGTH);
 			position = std::move(o.position);
 			rotation = std::move(o.rotation);
 			scale = std::move(o.scale);
+		}
+
+		void EntityRepresentation::postUnserialization(AScene *scene)
+		{
+			position = entity.getLink().getPosition();
+			rotation = glm::eulerAngles(entity.getLink().getOrientation());
+			scale = entity.getLink().getScale();
+			if (strlen(name) == 0)
+			{
+				memcpy(name, "NoName", strlen("NoName"));
+			}
 		}
 	}
 }

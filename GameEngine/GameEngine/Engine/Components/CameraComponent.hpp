@@ -23,6 +23,12 @@ namespace AGE
 		template <typename Archive> void save(Archive &ar) const;
 		template <typename Archive> void load(Archive &ar);
 		virtual void postUnserialization(AScene *scene);
+
+#ifdef EDITOR_ENABLED
+		virtual void editorCreate(AScene *scene);
+		virtual void editorDelete(AScene *scene);
+		virtual void editorUpdate(AScene *scene);
+#endif
 	private:
 		AScene *_scene = nullptr;
 		glm::mat4 _projection;

@@ -5,6 +5,7 @@
 #include <Threads/PrepareRenderThread.hpp>
 #include <Context/SdlContext.hh>
 #include <Core/AScene.hh>
+#include <imgui/imgui.h>
 
 namespace AGE
 {
@@ -65,6 +66,19 @@ namespace AGE
 		init(scene);
 		setProjection(_projection);
 	}
+
+#ifdef EDITOR_ENABLED
+	void CameraComponent::editorCreate(AScene *scene)
+	{}
+
+	void CameraComponent::editorDelete(AScene *scene)
+	{}
+
+	void CameraComponent::editorUpdate(AScene *scene)
+	{
+
+	}
+#endif
 
 };
 

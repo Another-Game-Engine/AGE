@@ -14,6 +14,7 @@ namespace AGE
 			EntityManager::EntityManager(std::weak_ptr<AScene> &&scene)
 				: System(std::move(scene))
 				, _filter(std::move(scene))
+				, _selectedEntity(0)
 			{
 				_name = "we_entity_manager";
 			}
@@ -27,86 +28,138 @@ namespace AGE
 
 			void EntityManager::mainUpdate(double time)
 			{
+				ImGui::BeginChild("Entity list", ImVec2(ImGui::GetWindowWidth() * 0.25f, 0));
+
 				float t = static_cast<float>(time);
 				auto scene = _scene.lock();
 				EntityFilter::Lock lock(_filter);
+
+				// Disgusting but fuck it ! :)
+				_entityNames.clear();
+				_entities.clear();
 				for (auto e : _filter.getCollection())
 				{
-					auto cpt = e.getComponent<AGE::WE::EntityRepresentation>();
-					if (ImGui::TreeNode((void*)(cpt), cpt->name.data()))
-					{
-						ImGui::InputText("Name", cpt->name.data(), cpt->name.size());
-						if (ImGui::SliderFloat3("Position", glm::value_ptr(cpt->position), -1000000, 1000000))
-						{
-							e.getLink().setPosition(cpt->position);
-						}
-						if (ImGui::SliderFloat3("Rotation", glm::value_ptr(cpt->rotation), -360, 360))
-						{
-							// temporary TODO
-							//cpt->rotation.x = std::fmod(cpt->rotation.x, 360); cpt->rotation.y = std::fmod(cpt->rotation.y, 360); cpt->rotation.z = std::fmod(cpt->rotation.z, 360);
-							e.getLink().setOrientation(glm::quat(cpt->rotation));
-						}
-						if (ImGui::SliderFloat3("Scale", glm::value_ptr(cpt->scale), 0.0f, 1000000))
-						{
-							e.getLink().setScale(cpt->scale);
-						}
-
-						auto &components = e.getComponentList();
-						for (ComponentType i = 0; i < components.size(); ++i)
-						{
-							if (e.haveComponent(i))
-							{
-								auto ptr = e.getComponent(i);
-								if (ptr->exposedInEditor)
-								{
-									if (ImGui::TreeNode(ComponentRegistrar::getInstance().getComponentName(ptr->getType()).c_str()))
-									{
-										ptr->editorUpdate(scene.get());
-										if (ptr->deletableInEditor)
-										{
-											ImGui::PushID(i);
-											if (ImGui::Button("Delete"))
-											{
-												ptr->editorDelete(scene.get());
-												e.removeComponent(i);
-											}
-											ImGui::PopID();
-										}
-										ImGui::TreePop();
-									}
-								}
-							}
-						}
-
-						auto &types = ComponentRegistrar::getInstance().getComponentsTypesMap();
-						auto &creationFn = ComponentRegistrar::getInstance().getCreationFunctions();
-
-						for (auto &t : types)
-						{
-							if (!e.haveComponent(t.second))
-							{
-								if (ImGui::Button(std::string("Add : " + ComponentRegistrar::getInstance().getComponentName(t.second)).c_str()))
-								{
-									creationFn.at(t.first)(&e);
-								}
-							}
-						}
-
-						ImGui::TreePop();
-					}
-					//ImGui::TreeNode(e)
-					//ImGui::TreeNode()
-					//ImGui::TreePop()
+					_entityNames.push_back(e.getComponent<AGE::WE::EntityRepresentation>()->name);
+					_entities.push_back(e);
 				}
+				if (_selectedEntity >= _entities.size())
+					_selectedEntity = 0;
+
+				if (_entities.size() > 0)
+				{
+					ImGui::PushItemWidth(-1);
+					//ImGui::ListBoxHeader("##empty");
+					ImGui::ListBox("##empty", &_selectedEntity, &(_entityNames.front()), (int)(_entityNames.size()));
+					//ImGui::ListBoxFooter();
+					ImGui::PopItemWidth();
+
+					ImGui::Separator();
+				}
+
+				ImGui::BeginChild("Edit entity");
+
+				if (_entities.size() > 0 && _selectedEntity < _entities.size())
+				{
+					auto e = _entities[_selectedEntity];
+					auto cpt = e.getComponent<AGE::WE::EntityRepresentation>();
+
+					ImGui::InputText("Name", cpt->name, ENTITY_NAME_LENGTH);
+					if (ImGui::InputFloat3("Position", glm::value_ptr(cpt->position)))
+					{
+						e.getLink().setPosition(cpt->position);
+					}
+					if (ImGui::InputFloat3("Rotation", glm::value_ptr(cpt->rotation)))
+					{
+						e.getLink().setOrientation(glm::quat(cpt->rotation));
+					}
+					if (ImGui::InputFloat3("Scale", glm::value_ptr(cpt->scale)))
+					{
+						e.getLink().setScale(cpt->scale);
+					}
+
+					ImGui::Separator();
+
+					auto &components = e.getComponentList();
+					for (ComponentType i = 0; i < components.size(); ++i)
+					{
+						if (e.haveComponent(i))
+						{
+							auto ptr = e.getComponent(i);
+							if (ptr->exposedInEditor)
+							{
+								if (ImGui::TreeNode(ComponentRegistrar::getInstance().getComponentName(ptr->getType()).c_str()))
+								{
+									ptr->editorUpdate(scene.get());
+									if (ptr->deletableInEditor)
+									{
+										ImGui::PushID(i);
+										if (ImGui::Button("Delete"))
+										{
+											ptr->editorDelete(scene.get());
+											e.removeComponent(i);
+										}
+										ImGui::PopID();
+									}
+									ImGui::TreePop();
+								}
+							}
+						}
+					}
+
+					ImGui::Separator();
+
+					auto &types = ComponentRegistrar::getInstance().getSystemIdToAgeIdMap();
+					auto &creationFn = ComponentRegistrar::getInstance().getCreationFunctions();
+
+					for (auto &t : types)
+					{
+						if (!e.haveComponent(t.second))
+						{
+							if (ImGui::Button(std::string("Add : " + ComponentRegistrar::getInstance().getComponentName(t.second)).c_str()))
+							{
+								creationFn.at(t.first)(&e);
+							}
+						}
+					}
+
+					ImGui::Separator();
+
+					if (ImGui::Button("Delete entity"))
+					{
+						_scene.lock()->destroy(e);
+					}
+				}
+
+				
+				if (ImGui::Button("Create entity"))
+				{
+					_scene.lock()->createEntity();
+				}
+
+				if (ImGui::Button("Save scene"))
+				{
+					scene->saveToJson("WorldEditorSceneTest.json");
+				}
+				if (ImGui::Button("Load scene"))
+				{
+					scene->loadFromJson("WorldEditorSceneTest.json");
+				}
+
+				ImGui::EndChild();
+
+				ImGui::EndChild(); // Entity List
 			}
 
 			bool EntityManager::initialize()
 			{
-				_filter.setOnAdd(std::function<void(Entity e)>([&](Entity e){
-					e.addComponent<AGE::WE::EntityRepresentation>(std::string("Entity " + std::to_string(e.getId()) + "\0").c_str());
+				_filter.setOnAdd(std::function<void(Entity e)>([this](Entity en){
+					en.addComponent<AGE::WE::EntityRepresentation>(std::string("Entity " + std::to_string(en.getId()) + "\0").c_str());
 				}));
 
-				for (auto i = 0; i < 30; ++i)
+				_filter.setOnRemove(std::function<void(Entity e)>([this](Entity en){
+				}));
+
+				for (auto i = 0; i < 2; ++i)
 				{
 					auto e = _scene.lock()->createEntity();
 					e.addComponent<PointLightComponent>()->set(glm::vec3((float)(rand() % 1000) / 1000.0f, (float)(rand() % 1000) / 1000.0f, (float)(rand() % 1000) / 1000.0f), glm::vec3(1.f, 0.1f, 0.0f));

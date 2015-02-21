@@ -26,7 +26,7 @@ void Link::unregisterOctreeObject(const PrepareKey &key)
 		if (b == key)
 		{
 			_octree->removeElement(b);
-			if (i != _octreeObjects.size() - 1);
+			if (i != _octreeObjects.size() - 1)
 			{
 				std::swap(b, _octreeObjects.back());
 			}

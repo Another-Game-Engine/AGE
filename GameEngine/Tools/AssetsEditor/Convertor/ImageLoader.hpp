@@ -38,7 +38,7 @@ namespace AGE
 					for (auto material : cookingTask->materials)
 					{
 						if (!t->rawPath.empty() &&
-							File(material->bumpTexPath).getShortFileName() == File(t->rawPath).getShortFileName())
+							OldFile(material->bumpTexPath).getShortFileName() == OldFile(t->rawPath).getShortFileName())
 						{
 							convertBump = true;
 							break;
@@ -105,7 +105,7 @@ namespace AGE
 
 				t->data.assign(imgData, imgData + dataSize);
 
-				auto folderPath = std::tr2::sys::path(cookingTask->serializedDirectory.path().directory_string() + "\\" + File(t->rawPath).getFolder());
+				auto folderPath = std::tr2::sys::path(cookingTask->serializedDirectory.path().directory_string() + "\\" + OldFile(t->rawPath).getFolder());
 
 				if (!std::tr2::sys::exists(folderPath) && !std::tr2::sys::create_directories(folderPath))
 				{
@@ -113,7 +113,7 @@ namespace AGE
 					std::cerr << "Material convertor error : creating directory" << std::endl;
 					return false;
 				}
-				auto name = cookingTask->serializedDirectory.path().directory_string() + "\\" + File(t->rawPath).getFolder() + "\\" + File(t->rawPath).getShortFileName() + ".tage";
+				auto name = cookingTask->serializedDirectory.path().directory_string() + "\\" + OldFile(t->rawPath).getFolder() + "\\" + OldFile(t->rawPath).getShortFileName() + ".tage";
 				std::ofstream ofs(name, std::ios::trunc | std::ios::binary);
 				cereal::PortableBinaryOutputArchive ar(ofs);
 				ar(*t);
