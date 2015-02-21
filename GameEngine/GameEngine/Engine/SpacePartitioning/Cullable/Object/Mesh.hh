@@ -22,7 +22,6 @@ namespace AGE
 	struct Drawable : public CullableShape<AABoundingBox>
 	{
 		SubMeshInstance mesh;
-		Key<Properties> instanceProperties;
 		Key<Property> transformationProperty;
 		glm::mat4 transformation;
 		Key<AnimationInstance> animation;

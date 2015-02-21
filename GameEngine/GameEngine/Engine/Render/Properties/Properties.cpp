@@ -21,7 +21,8 @@ namespace AGE
 
 	void Properties::update_properties(std::shared_ptr<Program> const &p) const
 	{
-		for (auto property : _properties)
+		for (auto property : _properties) {
 			property->update(p);
+		}
 	}
 }
