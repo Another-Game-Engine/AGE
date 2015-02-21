@@ -1,6 +1,9 @@
 #include <Render/GeometryManagement/Painting/Painter.hh>
 #include <Render/Properties/Properties.hh>
 
+#include <Utils/Debug.hpp>
+#include <Threads/ThreadManager.hpp>
+
 namespace AGE
 {
 
@@ -29,7 +32,24 @@ namespace AGE
 
 	Key<Properties> Painter::add_properties(std::shared_ptr<Properties> const &properties)
 	{
+		// to be sure that this function is only called in render thread
+		AGE_ASSERT(GetThreadManager()->getCurrentThread() == (AGE::Thread*)GetRenderThread());
+		std::lock_guard<SpinLock> lock(_mutex);
 		return (Key<Properties>::createKey(_properties.alloc(properties)));
+	}
+
+	Key<Properties> Painter::reserve_properties()
+	{
+		std::lock_guard<SpinLock> lock(_mutex);
+		return (Key<Properties>::createKey(_properties.prepareAlloc()));
+	}
+
+	void Painter::alloc_reserved_properties(const Key<Properties> &key, std::shared_ptr<Properties> const &properties)
+	{
+		// to be sure that this function is only called in render thread
+		AGE_ASSERT(GetThreadManager()->getCurrentThread() == (AGE::Thread*)GetRenderThread());
+		std::lock_guard<SpinLock> lock(_mutex);
+		_properties.allocPreparated(key, properties);
 	}
 
 	Painter & Painter::remove_vertices(Key<Vertices> &key)

@@ -47,6 +47,20 @@ namespace AGE
 				{ }
 			};
 
+			struct SetMeshProperties
+			{
+				Key<Painter> meshPainter;
+				Key<Properties> properties;
+				std::shared_ptr<Properties> propertiesPtr;
+
+				SetMeshProperties(Key<Painter> const &_meshPainter
+					, Key<Properties> const &_properties
+					, std::shared_ptr<Properties> const &_propertiesPtr) :
+					meshPainter(_meshPainter)
+					, properties(_properties)
+					, propertiesPtr(_propertiesPtr)
+				{ }
+			};
 		};
 	}
 }

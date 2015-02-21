@@ -272,12 +272,6 @@ namespace AGE
 
 				added.mesh = msg.submeshInstances[i];
 
-				//@Paul from @Cesar :
-				//This is disgusting to use a task and future for that.
-				//We'll need to do another way
-
-				auto addedProperty = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<AGE::Tasks::Render::CreateMeshProperty, std::pair<Key<Properties>, Key<Property>>>(added.mesh.painter);
-
 				added.position = uo->position;
 				added.orientation = uo->orientation;
 				added.scale = uo->scale;
@@ -285,9 +279,8 @@ namespace AGE
 				added.currentNode = UNDEFINED_IDX;
 				_drawablesToMove.push_back(id);
 				added.hasMoved = true;
-				auto propertyInfos = addedProperty.get();
-				added.mesh.properties = propertyInfos.first;
-				added.transformationProperty = propertyInfos.second;
+
+				AGE::GetRenderThread()->createMeshProperty(added.mesh.painter, added.mesh.properties, added.transformationProperty);
 			}
 		}
 

@@ -1,5 +1,6 @@
 #include <Render/GeometryManagement/Painting/PaintingManager.hh>
 # include <Render/GeometryManagement/Painting/Painter.hh>
+#include <mutex>
 
 namespace AGE
 {
@@ -17,17 +18,24 @@ namespace AGE
 
 	Key<Painter> PaintingManager::add_painter(std::vector<GLenum> &&types)
 	{
-		_painters.emplace_back(std::make_shared<Painter>(types));
-		return (Key<Painter>::createKey(int(_painters.size()) - 1));
+		int sizeOfArray;
+		{
+			std::lock_guard<AGE::SpinLock> lock(_mutex);
+			_painters.emplace_back(std::make_shared<Painter>(types));
+			sizeOfArray = int(_painters.size()) - 1;
+		}
+		return (Key<Painter>::createKey(sizeOfArray));
 	}
 
-	std::shared_ptr<Painter> const & PaintingManager::get_painter(Key<Painter> const &key) const
+	std::shared_ptr<Painter> const & PaintingManager::get_painter(Key<Painter> const &key)
 	{
+		std::lock_guard<AGE::SpinLock> lock(_mutex);
 		return (_painters[key.getId()]);
 	}
 
-	Key<Painter> PaintingManager::get_painter(std::vector<GLenum> const &types) const
+	Key<Painter> PaintingManager::get_painter(std::vector<GLenum> const &types)
 	{
+		std::lock_guard<AGE::SpinLock> lock(_mutex);
 		for (auto index = 0; index < int(_painters.size()); ++index) {
 			if (_painters[index]->coherent(types)) {
 				return (Key<Painter>::createKey(index));
@@ -36,8 +44,9 @@ namespace AGE
 		return (Key<Painter>::createKey(-1));
 	}
 
-	bool PaintingManager::has_painter(std::vector<GLenum> const types) const
+	bool PaintingManager::has_painter(std::vector<GLenum> const types)
 	{
+		std::lock_guard<AGE::SpinLock> lock(_mutex);
 		for (auto &painter : _painters) {
 			if (painter->coherent(types)) {
 				return (true);

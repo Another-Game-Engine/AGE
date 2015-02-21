@@ -4,6 +4,7 @@
 # include <vector>
 # include <memory>
 # include <Render/Key.hh>
+# include <Utils/SpinLock.hpp>
 
 namespace AGE
 {
@@ -19,11 +20,12 @@ namespace AGE
 
 	public:
 		Key<Painter> add_painter(std::vector<GLenum> &&types);
-		std::shared_ptr<Painter> const &get_painter(Key<Painter> const &key) const;
-		Key<Painter> get_painter(std::vector<GLenum> const &types) const;
-		bool has_painter(std::vector<GLenum> const types) const;
+		std::shared_ptr<Painter> const &get_painter(Key<Painter> const &key);
+		Key<Painter> get_painter(std::vector<GLenum> const &types);
+		bool has_painter(std::vector<GLenum> const types);
 
 	private:
 		std::vector<std::shared_ptr<Painter>> _painters;
+		AGE::SpinLock _mutex;
 	};
 }

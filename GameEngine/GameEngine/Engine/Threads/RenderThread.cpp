@@ -114,14 +114,14 @@ namespace AGE
 		});
 #endif
 
-		registerCallback <Tasks::Render::CreateMeshProperty>([&](Tasks::Render::CreateMeshProperty &msg)
+		registerCallback <Commands::ToRender::SetMeshProperties>([&](Commands::ToRender::SetMeshProperties &msg)
 		{
 			std::shared_ptr<Transformation> transformProperty = std::make_shared<Transformation>(glm::mat4(1));
 			std::shared_ptr<Properties> addedProperties = std::make_shared<Properties>();
 
 			Key<Property> transformKey = addedProperties->add_property(transformProperty);
 			Key<Properties> meshPropertiesKey = paintingManager->get_painter(msg.meshPainter)->add_properties(addedProperties);
-			msg.setValue(std::make_pair(meshPropertiesKey, transformKey));
+			paintingManager->get_painter(msg.meshPainter)->alloc_reserved_properties(msg.properties, msg.propertiesPtr);
 		});
 
 		registerCallback <Tasks::Render::RemoveMeshProperty>([&](Tasks::Render::RemoveMeshProperty &msg)
@@ -257,5 +257,22 @@ namespace AGE
 				, std::chrono::duration_cast<std::chrono::microseconds>(waitEnd - waitStart).count());
 		}
 		return true;
+	}
+
+	// called by prepare render thread
+	void RenderThread::createMeshProperty(const Key<Painter> &painter, Key<Properties> &properties, Key<Property> &transformation)
+	{
+		std::shared_ptr<Transformation> transformProperty = std::make_shared<Transformation>(glm::mat4(1));
+		std::shared_ptr<Properties> addedProperties = std::make_shared<Properties>();
+
+		transformation = addedProperties->add_property(transformProperty);
+
+		// safe
+		auto painterPtr = paintingManager->get_painter(painter);
+
+		// safe
+		properties = painterPtr->reserve_properties();
+
+		GetRenderThread()->getQueue()->emplaceCommand<AGE::Commands::ToRender::SetMeshProperties>(painter, properties, addedProperties);
 	}
 }
