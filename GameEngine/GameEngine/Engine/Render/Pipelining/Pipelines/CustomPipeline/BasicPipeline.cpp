@@ -44,7 +44,7 @@ namespace AGE
 		_programs[RENDER]->use();
 		*_programs[RENDER]->get_resource<Mat4>("projection_matrix") = infos.projection;
 		*_programs[RENDER]->get_resource<Mat4>("view_matrix") = infos.view;
-		for (auto key : pipeline.keys) {
+		for (auto &key : pipeline.keys) {
 			_rendering_list[RENDER]->render(key.properties, key.vertices, _painter_manager->get_painter(key.painter));
 		}
 		return (*this);

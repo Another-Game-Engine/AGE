@@ -105,13 +105,13 @@ namespace AGE
 	MainThread::~MainThread()
 	{}
 
-	std::shared_ptr<AGE::Engine> MainThread::createEngine()
+	AGE::Engine *MainThread::createEngine()
 	{
 		static bool unique = true;
 		if (unique)
 		{
 			Singleton<Engine>::setInstance();
-			_engine = std::shared_ptr<AGE::Engine>(Singleton<Engine>::getInstance());
+			_engine = Singleton<Engine>::getInstance();
 			auto futur = GetRenderThread()->getQueue()->emplaceFutureTask<Tasks::Render::CreateRenderContext, bool>(_engine);
 			auto success = futur.get();
 			assert(success);
@@ -120,7 +120,7 @@ namespace AGE
 		return _engine;
 	}
 
-	std::shared_ptr<AGE::Engine> MainThread::getEngine()
+	AGE::Engine *MainThread::getEngine()
 	{
 		AGE_ASSERT(_engine != nullptr && "Engine has not been created. Use 'CreateEngine()'.");
 		return _engine;

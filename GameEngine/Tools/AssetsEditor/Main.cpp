@@ -51,16 +51,16 @@ int			main(int ac, char **av)
 	engine->launch(std::function<bool()>([&]()
 	{
 		AGE::GetThreadManager()->setAsWorker(false, false, false);
-		engine.get()->setInstance<AGE::Timer>();
-		engine.get()->setInstance<AGE::AssetsManager>();
+		engine->setInstance<AGE::Timer>();
+		engine->setInstance<AGE::AssetsManager>();
 
 		AGE::GetRenderThread()->getQueue()->emplaceFutureTask<AGE::Tasks::Basic::BoolFunction, bool>([=](){
-			AGE::Imgui::getInstance()->init(engine.get());
+			AGE::Imgui::getInstance()->init(engine);
 			return true;
 		}).get();
 
 #ifdef RENDERING_ACTIVATED
-		if (!loadAssets(engine.lock().get()))
+		if (!loadAssets(engine))
 			return false;
 #endif
 

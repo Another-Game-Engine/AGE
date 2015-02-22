@@ -63,7 +63,7 @@ namespace AGE
 	class LifetimeSystem : public AGE::System
 	{
 	public:
-		LifetimeSystem(std::weak_ptr<AScene> &&scene)
+		LifetimeSystem(AScene *scene)
 			: System(std::move(scene))
 			, _filter(std::move(scene))
 		{
@@ -82,7 +82,7 @@ namespace AGE
 		virtual void mainUpdate(double time)
 		{
 			float t = static_cast<float>(time);
-			auto scene = _scene.lock();
+			auto scene = _scene;
 			EntityFilter::Lock lock(_filter);
 			auto &collection = _filter.getCollection();
 			for (auto e : collection)

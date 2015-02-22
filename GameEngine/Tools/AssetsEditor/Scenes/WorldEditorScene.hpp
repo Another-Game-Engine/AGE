@@ -11,7 +11,7 @@ namespace AGE
 	public:
 		static const std::string Name;
 
-		WorldEditorScene(std::weak_ptr<AGE::Engine> engine);
+		WorldEditorScene(Engine *engine);
 
 		virtual ~WorldEditorScene(void);
 		virtual bool userStart();

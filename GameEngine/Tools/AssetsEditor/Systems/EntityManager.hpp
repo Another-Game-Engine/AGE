@@ -9,7 +9,7 @@ namespace AGE
 		class EntityManager : public System
 		{
 		public:
-			EntityManager(std::weak_ptr<AScene> &&scene);
+			EntityManager(AScene *scene);
 			virtual ~EntityManager();
 		private:
 			EntityFilter _filter;

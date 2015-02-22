@@ -2,12 +2,12 @@
 
 namespace AGE
 {
-	EntityFilter::EntityFilter(std::weak_ptr<AScene> &&scene)
+	EntityFilter::EntityFilter(AScene *scene)
 		: _scene(std::move(scene))
 		, _locked(false)
 	{
-		assert(_scene.lock() != nullptr && "System Scene is not valid.");
-		_scene.lock()->registerFilter(this);
+		assert(_scene != nullptr && "System Scene is not valid.");
+		_scene->registerFilter(this);
 	}
 
 	EntityFilter::~EntityFilter()

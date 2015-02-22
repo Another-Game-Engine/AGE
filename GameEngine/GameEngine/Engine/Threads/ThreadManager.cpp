@@ -97,13 +97,13 @@ namespace AGE
 		return nullptr;
 	}
 
-	std::shared_ptr<AGE::Engine> ThreadManager::createEngine()
+	Engine *ThreadManager::createEngine()
 	{
 		_engine = getMainThread()->createEngine();
 		return _engine;
 	}
 
-	std::shared_ptr<AGE::Engine> ThreadManager::getEngine()
+	AGE::Engine *ThreadManager::getEngine()
 	{
 		AGE_ASSERT(_engine != nullptr);
 		return _engine;
@@ -233,6 +233,7 @@ namespace AGE
 		bool res = true;
 		std::call_once(onceFlag, [&](){
 			Singleton<ThreadManager>::setInstance();
+			Singleton<AGE::Logger>::setInstance();
 			auto threadManager = Singleton<ThreadManager>::getInstance();
 			res = threadManager->initAndLaunch();
 			if (!res)

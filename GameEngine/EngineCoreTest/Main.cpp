@@ -54,7 +54,7 @@ int			main(int ac, char **av)
 
 #ifdef USE_IMGUI
 		AGE::GetRenderThread()->getQueue()->emplaceFutureTask<AGE::Tasks::Basic::BoolFunction, bool>([=](){
-			AGE::Imgui::getInstance()->init(engine.get());
+			AGE::Imgui::getInstance()->init(engine);
 			return true;
 		}).get();
 #endif

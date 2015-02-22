@@ -13,7 +13,7 @@
 
 namespace AGE
 {
-	AScene::AScene(std::weak_ptr<AGE::Engine> engine) :
+	AScene::AScene(Engine *engine) :
 		DependenciesInjector(std::move(engine))
 		, _entityNumber(0)
 		, _engine(engine)

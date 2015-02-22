@@ -9,7 +9,7 @@ namespace AGE
 		class AssetsAndComponentRelationsSystem : public System
 		{
 		public:
-			AssetsAndComponentRelationsSystem(std::weak_ptr<AScene> &&scene);
+			AssetsAndComponentRelationsSystem(AScene *scene);
 			virtual ~AssetsAndComponentRelationsSystem();
 		private:
 			EntityFilter _rigidBodies;

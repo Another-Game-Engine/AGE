@@ -7,7 +7,7 @@ namespace AGE
 {
 	const std::string WorldEditorScene::Name = "WorldEditor";
 
-	WorldEditorScene::WorldEditorScene(std::weak_ptr<AGE::Engine> engine)
+	WorldEditorScene::WorldEditorScene(AGE::Engine *engine)
 		: AScene(engine)
 	{
 	}

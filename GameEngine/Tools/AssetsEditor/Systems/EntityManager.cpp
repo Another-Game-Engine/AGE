@@ -11,7 +11,7 @@ namespace AGE
 {
 	namespace WE
 	{
-			EntityManager::EntityManager(std::weak_ptr<AScene> &&scene)
+			EntityManager::EntityManager(AScene *scene)
 				: System(std::move(scene))
 				, _filter(std::move(scene))
 				, _selectedEntity(0)
@@ -31,7 +31,7 @@ namespace AGE
 				ImGui::BeginChild("Entity list", ImVec2(ImGui::GetWindowWidth() * 0.25f, 0));
 
 				float t = static_cast<float>(time);
-				auto scene = _scene.lock();
+				auto scene = _scene;
 				EntityFilter::Lock lock(_filter);
 
 				// Disgusting but fuck it ! :)
@@ -89,13 +89,13 @@ namespace AGE
 							{
 								if (ImGui::TreeNode(ComponentRegistrar::getInstance().getComponentName(ptr->getType()).c_str()))
 								{
-									ptr->editorUpdate(scene.get());
+									ptr->editorUpdate(scene);
 									if (ptr->deletableInEditor)
 									{
 										ImGui::PushID(i);
 										if (ImGui::Button("Delete"))
 										{
-											ptr->editorDelete(scene.get());
+											ptr->editorDelete(scene);
 											e.removeComponent(i);
 										}
 										ImGui::PopID();
@@ -126,14 +126,14 @@ namespace AGE
 
 					if (ImGui::Button("Delete entity"))
 					{
-						_scene.lock()->destroy(e);
+						_scene->destroy(e);
 					}
 				}
 
 				
 				if (ImGui::Button("Create entity"))
 				{
-					_scene.lock()->createEntity();
+					_scene->createEntity();
 				}
 
 				if (ImGui::Button("Save scene"))
@@ -161,7 +161,7 @@ namespace AGE
 
 				for (auto i = 0; i < 2; ++i)
 				{
-					auto e = _scene.lock()->createEntity();
+					auto e = _scene->createEntity();
 					e.addComponent<PointLightComponent>()->set(glm::vec3((float)(rand() % 1000) / 1000.0f, (float)(rand() % 1000) / 1000.0f, (float)(rand() % 1000) / 1000.0f), glm::vec3(1.f, 0.1f, 0.0f));
 				}
 				return true;

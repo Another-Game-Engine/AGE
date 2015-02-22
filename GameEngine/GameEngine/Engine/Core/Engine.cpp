@@ -325,12 +325,12 @@ namespace AGE
 		return true;
 	}
 
-	std::shared_ptr<Engine> GetEngine()
+	Engine *GetEngine()
 	{
 		return GetThreadManager()->getEngine();
 	}
 
-	std::shared_ptr<Engine> CreateEngine()
+	Engine *CreateEngine()
 	{
 		return GetThreadManager()->createEngine();
 	}

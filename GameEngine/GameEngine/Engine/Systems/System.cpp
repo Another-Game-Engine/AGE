@@ -3,7 +3,7 @@
 
 namespace AGE
 {
-	System::System(std::weak_ptr<AScene> &&scene) :
+	System::System(AScene *scene) :
 		_scene(std::move(scene))
 		, _activated(false)
 	{}

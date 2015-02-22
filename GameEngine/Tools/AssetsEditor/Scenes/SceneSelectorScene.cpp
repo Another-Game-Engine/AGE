@@ -9,7 +9,7 @@ namespace AGE
 {
 	const std::string SceneSelectorScene::Name = "SceneSelector";
 
-	SceneSelectorScene::SceneSelectorScene(std::weak_ptr<AGE::Engine> engine)
+	SceneSelectorScene::SceneSelectorScene(AGE::Engine *engine)
 		: AScene(engine)
 	{
 	}
@@ -31,14 +31,14 @@ namespace AGE
 		ImGui::BeginChild("Global Options", ImVec2(ImGui::GetIO().DisplaySize.x, 30), false);
 		if (ImGui::Button("Asset Editor"))
 		{
-			getEngine().lock()->disableScene(WorldEditorScene::Name);
-			getEngine().lock()->enableScene(AssetsEditorScene::Name, 1000);
+			getEngine()->disableScene(WorldEditorScene::Name);
+			getEngine()->enableScene(AssetsEditorScene::Name, 1000);
 		}
 		ImGui::SameLine();
 		if (ImGui::Button("World Editor"))
 		{
-			getEngine().lock()->enableScene(WorldEditorScene::Name, 1000);
-			getEngine().lock()->disableScene(AssetsEditorScene::Name);
+			getEngine()->enableScene(WorldEditorScene::Name, 1000);
+			getEngine()->disableScene(AssetsEditorScene::Name);
 		}
 		ImGui::EndChild();
 		return true;

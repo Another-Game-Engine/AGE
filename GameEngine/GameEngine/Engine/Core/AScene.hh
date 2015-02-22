@@ -43,10 +43,10 @@ namespace AGE
 		friend class AGE::RenderScene;
 		friend class AGE::SceneManager;
 	protected:
-		std::weak_ptr<AGE::Engine>                                              _engine;
+		AGE::Engine *                                              _engine;
 		inline void setActive(bool tof) { _active = tof; }
 	public:
-		AScene(std::weak_ptr<AGE::Engine> engine);
+		AScene(AGE::Engine *engine);
 		virtual ~AScene();
 		inline std::size_t      getNumberOfEntities() const { return _entities.size(); }
 		virtual bool 			userStart() = 0;
@@ -54,7 +54,7 @@ namespace AGE
 		virtual bool            userUpdateEnd(double time) = 0;
 		void 					update(double time);
 		bool                    start();
-		inline std::weak_ptr<AGE::Engine> getEngine() { return _engine; }
+		inline AGE::Engine *getEngine() { return _engine; }
 		inline void setRenderScene(AGE::RenderScene *renderScene) { _renderScene = renderScene; }
 		inline bool isActive() const { return _active; }
 
@@ -76,7 +76,7 @@ namespace AGE
 		template <typename T>
 		std::shared_ptr<T> addSystem(std::size_t priority)
 		{
-			auto tmp = std::make_shared<T>(std::static_pointer_cast<AScene>(shared_from_this()));
+			auto tmp = std::make_shared<T>((AScene*)(this));
 			if (!tmp->init())
 				return nullptr;
 			_systems.insert(std::make_pair(priority, tmp));

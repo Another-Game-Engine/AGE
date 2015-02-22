@@ -264,7 +264,7 @@ namespace AGE
 
 	void PrepareRenderThread::_createRenderScene(AScene *scene)
 	{
-		_scenes.emplace_back(std::make_unique<RenderScene>(this, scene->getEngine().lock().get(), scene));
+		_scenes.emplace_back(std::make_unique<RenderScene>(this, scene->getEngine(), scene));
 		scene->setRenderScene(_scenes.back().get());
 	}
 

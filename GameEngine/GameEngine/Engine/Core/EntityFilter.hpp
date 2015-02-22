@@ -10,14 +10,14 @@ namespace AGE
 	class EntityFilter
 	{
 	public:
-		EntityFilter(std::weak_ptr<AScene> &&scene);
+		EntityFilter(AScene *scene);
 		virtual ~EntityFilter();
 
 		template <typename T>
 		void requireComponent()
 		{
 			_barcode.insert(Component<T>::getTypeId());
-			_scene.lock()->filterSubscribe(Component<T>::getTypeId(), this);
+			_scene->filterSubscribe(Component<T>::getTypeId(), this);
 		}
 
 		template <typename T>
@@ -70,7 +70,7 @@ namespace AGE
 	protected:
 		std::set<ComponentType> _barcode;
 		std::set<Entity> _collection;
-		std::weak_ptr<AScene> _scene;
+		AScene *_scene;
 
 		void lock();
 		void unlock();

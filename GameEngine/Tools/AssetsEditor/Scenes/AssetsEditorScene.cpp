@@ -51,7 +51,7 @@ namespace AGE
 	std::vector<const char *> AssetsEditorScene::_cookedMaterialFullPath = std::vector<const char *>();
 	std::vector<const char *> AssetsEditorScene::_cookedMaterialFiles = std::vector<const char *>();
 
-	AssetsEditorScene::AssetsEditorScene(std::weak_ptr<AGE::Engine> engine)
+	AssetsEditorScene::AssetsEditorScene(AGE::Engine *engine)
 		: AScene(engine)
 	{
 		_raw.list("../../Assets/Raw");
