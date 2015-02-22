@@ -35,7 +35,8 @@ namespace AGE
 
 	bool FileSystem::initialize(const char *p)
 	{
-		thread->run();
+		// @Jojo I stop your filesystem
+		//thread->run();
 		password = p;
 		auto engine = GetEngine();
 		dataPath = engine->getDataPath();
