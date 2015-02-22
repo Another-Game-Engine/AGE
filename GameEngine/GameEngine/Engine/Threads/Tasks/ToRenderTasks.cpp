@@ -10,7 +10,7 @@ namespace AGE
 		Render::SetWindowSize::SetWindowSize(const glm::uvec2 & _size)
 			: size(_size)
 		{}
-		Render::CreateRenderContext::CreateRenderContext(std::weak_ptr<Engine> _engine) : engine(_engine){}
+		Render::CreateRenderContext::CreateRenderContext(Engine *_engine) : engine(_engine){}
 
 		Render::RemoveMeshProperty::RemoveMeshProperty(Key<Painter> const &painter, Key<Properties> const &pToRemove) :
 			meshPainter(painter),

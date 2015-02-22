@@ -81,7 +81,7 @@ namespace AGE
 		_inertia = convertGLMVectorToBullet(inertia);
 	}
 
-	void RigidBody::setCollisionMesh(std::weak_ptr<AScene> scene
+	void RigidBody::setCollisionMesh(AScene *scene
 		, const Entity &entity
 		, const std::string &meshPath
 		, short filterGroup /*= 1*/
@@ -133,7 +133,7 @@ namespace AGE
 	}
 
 	void RigidBody::setCollisionShape(
-		std::weak_ptr<AScene> scene
+		AScene *scene
 		, const Entity &entity
 		, CollisionShape c
 		, short filterGroup /*= 1*/

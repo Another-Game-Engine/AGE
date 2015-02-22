@@ -62,6 +62,6 @@ namespace AGE
 		std::size_t frame = 0;
 	};
 
-	std::shared_ptr<Engine> CreateEngine();
-	std::shared_ptr<Engine> GetEngine();
+	Engine *CreateEngine();
+	Engine *GetEngine();
 }

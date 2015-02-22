@@ -38,8 +38,8 @@ public:
 		return id;
 	}
 
-	inline std::weak_ptr<DependenciesInjector> &&getDependencyManager() { return std::forward<std::weak_ptr<DependenciesInjector>>(_dependencyManager); }
+	inline DependenciesInjector *getDependencyManager() { return _dependencyManager; }
 protected:
-	std::weak_ptr<DependenciesInjector> _dependencyManager;
+	DependenciesInjector *_dependencyManager;
 	friend DependenciesInjector;
 };

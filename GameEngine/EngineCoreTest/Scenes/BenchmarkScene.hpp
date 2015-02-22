@@ -30,7 +30,7 @@ namespace AGE
 	class BenchmarkScene : public AGE::AScene
 	{
 	public:
-		BenchmarkScene(std::weak_ptr<AGE::Engine> engine);
+		BenchmarkScene(Engine *engine);
 
 		virtual ~BenchmarkScene(void);
 		void initRendering();

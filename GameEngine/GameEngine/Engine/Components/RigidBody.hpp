@@ -45,13 +45,13 @@ namespace AGE
 		void setMass(float mass);
 		int getMass() const;
 		void setInertia(const glm::vec3 &inertia);
-		void setCollisionMesh(std::weak_ptr<AScene> scene
+		void setCollisionMesh(AScene *scene
 			, const Entity &entity
 			, const std::string &meshPath
 			, short filterGroup = 1
 			, short filterMask = -1);
 		void setCollisionShape(
-			std::weak_ptr<AScene> scene
+			AScene *scene
 			, const Entity &entity
 			, CollisionShape c
 			, short filterGroup = 1

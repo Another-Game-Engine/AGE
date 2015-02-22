@@ -192,10 +192,10 @@ namespace AGE
 					}
 					commands.pop();
 				}
-				if (!_next->getQueue()->releaseCommandReadability(TMQ::HybridQueue::WaitType::NoWait))
-				{
-					_next->getQueue()->clear();
-				}
+				/*if (!*/_next->getQueue()->releaseCommandReadability(TMQ::HybridQueue::WaitType::Block)/*)*/;
+				//{
+				//	_next->getQueue()->clear();
+				//}
 
 			}
 			workEnd = std::chrono::high_resolution_clock::now();
@@ -264,7 +264,7 @@ namespace AGE
 
 	void PrepareRenderThread::_createRenderScene(AScene *scene)
 	{
-		_scenes.emplace_back(std::make_unique<RenderScene>(this, scene->getEngine().lock().get(), scene));
+		_scenes.emplace_back(std::make_unique<RenderScene>(this, scene->getEngine(), scene));
 		scene->setRenderScene(_scenes.back().get());
 	}
 

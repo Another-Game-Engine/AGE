@@ -34,8 +34,8 @@ namespace AGE
 
 			struct CreateRenderContext : TMQ::FutureData < bool >
 			{
-				CreateRenderContext(std::weak_ptr<Engine> _engine);
-				std::shared_ptr<Engine> engine;
+				CreateRenderContext(Engine *_engine);
+				Engine *engine;
 			};
 
 			struct LoadMesh : TMQ::FutureData < bool >
@@ -67,7 +67,6 @@ namespace AGE
 			{
 				Key<Painter> meshPainter;
 				Key<Properties> toRemove;
-				int notNull;
 
 				RemoveMeshProperty(Key<Painter> const &painter, Key<Properties> const &pToRemove);
 			};

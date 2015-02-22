@@ -38,7 +38,7 @@ namespace AGE
 {
 	bool BenchmarkScene::initRenderingJustOneTime = true;
 
-	BenchmarkScene::BenchmarkScene(std::weak_ptr<AGE::Engine> engine)
+	BenchmarkScene::BenchmarkScene(AGE::Engine *engine)
 		: AScene(engine)
 	{
 	}
@@ -50,7 +50,7 @@ namespace AGE
 	void BenchmarkScene::initRendering()
 	{
 		auto assetsManager = getInstance<AGE::AssetsManager>();
-		auto mainThread = getEngine().lock();
+		auto mainThread = getEngine();
 
 		////TODO
 		AGE::GetRenderThread()->getQueue()->emplaceTask<AGE::Tasks::Basic::VoidFunction>(std::function<void()>([&](){
@@ -197,8 +197,6 @@ namespace AGE
 		setInstance<AGE::BulletDynamicManager, AGE::BulletCollisionManager>()->init();
 #endif
 
-		std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
-
 #ifdef PHYSIC_SIMULATION
 		addSystem<AGE::BulletDynamicSystem>(0);
 		//		addSystem<CollisionAdder>(1);
@@ -287,9 +285,8 @@ namespace AGE
 					GLOBAL_SPONZA = createEntity();
 					auto& _l = GLOBAL_SPONZA.getLink();
 					//_l->setPosition(glm::vec3(-5, 0, 0));
-					std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
 					RigidBody *rb = GLOBAL_SPONZA.addComponent<RigidBody>(0.0f);
-					rb->setCollisionMesh(weakOnThis, GLOBAL_SPONZA, "../../Assets/Serialized/sponza/sponza_static.phage");
+					rb->setCollisionMesh(this, GLOBAL_SPONZA, "../../Assets/Serialized/sponza/sponza_static.phage");
 					_l.setScale(glm::vec3(10.f));
 					//_l->setOrientation(glm::quat(glm::vec3(Mathematic::degreeToRadian(-90), Mathematic::degreeToRadian(90), 0)));
 				
@@ -303,8 +300,7 @@ namespace AGE
 
 		static bool useOnce = false;
 		auto rigidBody = GLOBAL_CATWOMAN.addComponent<RigidBody>(0);
-		std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
-		rigidBody->setCollisionMesh(weakOnThis, GLOBAL_CATWOMAN, "../../Assets/Serialized/catwoman/catwoman_dynamic.phage");
+		rigidBody->setCollisionMesh((AScene*)(this), GLOBAL_CATWOMAN, "../../Assets/Serialized/catwoman/catwoman_dynamic.phage");
 		_l.setOrientation(glm::quat(glm::vec3(Mathematic::degreeToRadian(-90), Mathematic::degreeToRadian(90), 0)));
 		_l.setPosition(glm::vec3(-30, 0, 0));
 		_l.setScale(glm::vec3(8.5f));
@@ -328,9 +324,8 @@ namespace AGE
 
 
 #ifdef PHYSIC_SIMULATION
-	std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
 	auto rigidBody = GLOBAL_FLOOR.addComponent<RigidBody>(0.0f);
-	rigidBody->setCollisionShape(weakOnThis, GLOBAL_FLOOR, RigidBody::BOX);
+	rigidBody->setCollisionShape(this, GLOBAL_FLOOR, RigidBody::BOX);
 	rigidBody->getBody().setFriction(0.3f);
 #endif //PHYSIC_SIMULATION
 	return true;
@@ -378,8 +373,7 @@ namespace AGE
 			mesh = e.addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("cube/cube.sage"));
 			mesh->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(OldFile("cube/cube.mage")));
 			auto rigidBody = e.addComponent<RigidBody>(1.0f);
-			std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
-			rigidBody->setCollisionShape(weakOnThis, e, RigidBody::BOX);
+			rigidBody->setCollisionShape((AScene*)(this), e, RigidBody::BOX);
 			rigidBody->getBody().setFriction(0.5f);
 			rigidBody->getBody().setRestitution(0.5f);
 			rigidBody->getBody().applyCentralImpulse(convertGLMVectorToBullet(GLOBAL_CAMERA.getLink().getOrientation() * glm::vec3(0, 0, -10)));
@@ -389,7 +383,7 @@ namespace AGE
 
 		if (_chunkCounter >= _maxChunk)
 		{
-			std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
+			AScene *weakOnThis = (AScene*)(this);
 			for (auto i = 0; i < 10; ++i)
 			{
 				auto e = createEntity();
@@ -419,9 +413,9 @@ namespace AGE
 #ifdef PHYSIC_SIMULATION
 				auto rigidBody = e.addComponent<RigidBody>(1.0f);
 				if (i % 4 == 0)
-					rigidBody->setCollisionShape(weakOnThis, e, RigidBody::SPHERE);
+					rigidBody->setCollisionShape(this, e, RigidBody::SPHERE);
 				else
-					rigidBody->setCollisionShape(weakOnThis, e, RigidBody::BOX);
+					rigidBody->setCollisionShape(this, e, RigidBody::BOX);
 				rigidBody->getBody().setFriction(0.5f);
 				rigidBody->getBody().setRestitution(0.5f);
 				rigidBody->getBody().applyTorque(btVector3(float(rand() % 1000) / 300.0f, float(rand() % 1000) / 300.0f, float(rand() % 1000) / 300.0f));

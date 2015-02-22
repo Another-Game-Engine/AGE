@@ -35,9 +35,10 @@ namespace AGE
 
 	bool FileSystem::initialize(const char *p)
 	{
-		thread->run();
+		// @Jojo I stop your filesystem
+		//thread->run();
 		password = p;
-		std::shared_ptr<Engine> engine = GetEngine();
+		auto engine = GetEngine();
 		dataPath = engine->getDataPath();
 		// Set to true if you want to ignore case if data directory
 		dataICase = false;
@@ -47,7 +48,7 @@ namespace AGE
 
 	void FileSystem::finalize(void)
 	{
-		std::shared_ptr<Engine> engine = GetEngine();
+		auto engine = GetEngine();
 		while (true)
 		{
 			thread->lock();
@@ -81,7 +82,7 @@ namespace AGE
 
 	void FileSystem::update(void)
 	{
-		std::shared_ptr<Engine> engine = GetEngine();
+		auto engine = GetEngine();
 		bool suspend = true;
 		thread->lock();
 		if (!queuedFiles.empty())
@@ -207,7 +208,7 @@ namespace AGE
 
 	bool FileSystem::loadDirectory(const char *name)
 	{
-		std::shared_ptr<Engine> engine = GetEngine();
+		auto engine = GetEngine();
 		Directory directory;
 		if (directory.open(name) == false)
 		{
@@ -247,7 +248,7 @@ namespace AGE
 
 	bool FileSystem::loadFile(const char *n, int priority, float weight)
 	{
-		std::shared_ptr<Engine> engine = GetEngine();
+		auto engine = GetEngine();
 		std::string name(n);
 		if (name.empty())
 		{
@@ -436,7 +437,7 @@ namespace AGE
 
 	std::shared_ptr<FileInterface> FileSystem::getFile(const char *n, const char *mode)
 	{
-		std::shared_ptr<Engine> engine = GetEngine();
+		auto engine = GetEngine();
 		std::string name = std::string(n);
 		if (name.empty())
 		{
@@ -553,7 +554,7 @@ namespace AGE
 
 	bool FileSystem::forceFile(const char *n)
 	{
-		std::shared_ptr<Engine> engine = GetEngine();
+		auto engine = GetEngine();
 		std::string name(n);
 		if (name.empty())
 		{
@@ -578,7 +579,7 @@ namespace AGE
 
 	bool FileSystem::removeFile(const char *n)
 	{
-		std::shared_ptr<Engine> engine = GetEngine();
+		auto engine = GetEngine();
 		std::string name(n);
 		if (name.empty())
 		{
@@ -619,7 +620,7 @@ namespace AGE
 
 	bool FileSystem::checkFile(const char *n)
 	{
-		std::shared_ptr<Engine> engine = GetEngine();
+		auto engine = GetEngine();
 		std::string name(n);
 		if (name.empty())
 		{
@@ -653,7 +654,7 @@ namespace AGE
 
 	bool FileSystem::validateFile(const char *n) const
 	{
-		std::shared_ptr<Engine> engine = GetEngine();
+		auto engine = GetEngine();
 		std::string name(n);
 		if (name.empty())
 		{

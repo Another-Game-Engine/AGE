@@ -9,8 +9,8 @@ namespace AGE
 {
 	namespace WE
 	{
-		AssetsAndComponentRelationsSystem::AssetsAndComponentRelationsSystem(std::weak_ptr<AScene> &&scene)
-			: System(std::move(scene))
+		AssetsAndComponentRelationsSystem::AssetsAndComponentRelationsSystem(AScene *scene)
+			: System(scene)
 			, _rigidBodies(std::move(scene))
 			, _meshRenderer(std::move(scene))
 		{

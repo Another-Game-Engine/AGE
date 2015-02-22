@@ -7,9 +7,9 @@
 
 namespace AGE
 {
-	FPControllerSystem::FPControllerSystem(std::weak_ptr<AScene> &&scene)
+	FPControllerSystem::FPControllerSystem(AScene *scene)
 		: System(std::move(scene))
-		, _manager(scene.lock()->getInstance<BulletCollisionManager>())
+		, _manager(scene->getInstance<BulletCollisionManager>())
 		, _filter(std::move(scene))
 	{
 		_name = "FP_controller_system";

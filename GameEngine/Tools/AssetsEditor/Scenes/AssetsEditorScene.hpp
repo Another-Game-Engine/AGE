@@ -17,7 +17,7 @@ namespace AGE
 	{
 	public:
 		static const std::string Name;
-		AssetsEditorScene(std::weak_ptr<AGE::Engine> engine);
+		AssetsEditorScene(AGE::Engine *engine);
 
 		virtual ~AssetsEditorScene(void);
 		virtual bool userStart();

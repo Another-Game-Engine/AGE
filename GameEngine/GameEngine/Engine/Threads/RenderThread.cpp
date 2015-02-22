@@ -163,7 +163,7 @@ namespace AGE
 
 		registerCallback <Tasks::Render::RemoveMeshProperty>([&](Tasks::Render::RemoveMeshProperty &msg)
 		{
-//			paintingManager->get_painter(msg.meshPainter)->remove_properties(msg.toRemove);
+			paintingManager->get_painter(msg.meshPainter)->remove_properties(msg.toRemove);
 		});
 
 		registerCallback<Tasks::Render::SetMeshMaterial>([&](Tasks::Render::SetMeshMaterial& msg)
@@ -287,11 +287,12 @@ namespace AGE
 					commands.pop();
 				}
 				_drawlist.clear();
+
+				workEnd = std::chrono::high_resolution_clock::now();
+				GetThreadManager()->updateThreadStatistics(this->_id
+					, std::chrono::duration_cast<std::chrono::microseconds>(workEnd - workStart).count()
+					, std::chrono::duration_cast<std::chrono::microseconds>(waitEnd - waitStart).count());
 			}
-			workEnd = std::chrono::high_resolution_clock::now();
-			GetThreadManager()->updateThreadStatistics(this->_id
-				, std::chrono::duration_cast<std::chrono::microseconds>(workEnd - workStart).count()
-				, std::chrono::duration_cast<std::chrono::microseconds>(waitEnd - waitStart).count());
 		}
 		return true;
 	}
@@ -310,6 +311,6 @@ namespace AGE
 		// safe
 		properties = painterPtr->reserve_properties();
 
-		GetRenderThread()->getQueue()->emplaceTask<AGE::Tasks::Render::SetMeshProperties>(painter, properties, addedProperties);
+		GetRenderThread()->getQueue()->emplaceCommand<AGE::Tasks::Render::SetMeshProperties>(painter, properties, addedProperties);
 	}
 }

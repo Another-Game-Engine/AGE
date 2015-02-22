@@ -11,7 +11,7 @@ namespace AGE
 	public:
 		static const std::string Name;
 
-		SceneSelectorScene(std::weak_ptr<AGE::Engine> engine);
+		SceneSelectorScene(AGE::Engine *engine);
 
 		virtual ~SceneSelectorScene(void);
 		virtual bool userStart();

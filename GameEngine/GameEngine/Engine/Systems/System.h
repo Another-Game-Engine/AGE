@@ -7,7 +7,7 @@ namespace AGE
 	class	System
 	{
 	public:
-		System(std::weak_ptr<AScene> &&scene);
+		System(AScene *scene);
 		virtual ~System();
 		void update(double time);
 		bool init();
@@ -15,7 +15,7 @@ namespace AGE
 		bool isActivated() const;
 		inline const std::string &getName() const { return _name; }
 	protected:
-		std::weak_ptr<AScene> _scene;
+		AScene *_scene;
 		std::string _name;
 		bool _activated;
 	private:

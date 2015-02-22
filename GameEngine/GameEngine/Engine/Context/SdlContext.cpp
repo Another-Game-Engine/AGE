@@ -18,7 +18,7 @@ namespace AGE
 {
 	bool SdlContext::_init(int mode)
 	{
-		_dependencyManager.lock()->setInstance<Input>();
+		_dependencyManager->setInstance<Input>();
 
 		if (SDL_Init(SDL_INIT_VIDEO) != 0 ||
 			//SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1) != 0 ||
@@ -51,7 +51,7 @@ namespace AGE
 	void SdlContext::refreshInputs()
 	{
 		SDL_Event events;
-		auto input = _dependencyManager.lock()->getInstance<Input>();
+		auto input = _dependencyManager->getInstance<Input>();
 		std::lock_guard<std::mutex>(input->getMutex());
 		input->clearInputs();
 		const Uint8 *keys = SDL_GetKeyboardState(NULL);
