@@ -22,6 +22,7 @@ namespace AGE
 	class Engine;
 	class AScene;
 	struct SubMeshInstance;
+	struct Link;
 
 	class RenderScene
 	{
@@ -30,6 +31,7 @@ namespace AGE
 		~RenderScene(void);
 		bool init();
 		inline const AScene *getScene() const { return _scene; }
+		inline Link *getRootLink() { return _rootLink.get(); }
 	private:
 		void _setCameraInfos(AGE::Commands::MainToPrepare::CameraInfos &msg);
 		void _createCamera(AGE::Commands::MainToPrepare::CreateCamera &msg);
@@ -86,5 +88,7 @@ namespace AGE
 		AGE::Vector<uint32_t> _activePointLights;
 
 		AGE::Vector<RenderCamera> _octreeDrawList;
+
+		std::unique_ptr<Link> _rootLink;
 	};
 }

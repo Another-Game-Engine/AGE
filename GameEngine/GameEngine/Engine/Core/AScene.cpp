@@ -128,7 +128,7 @@ namespace AGE
 			e->entity.id = id;
 		}
 		e->link.reset();
-		e->link._octree = _renderScene;
+		e->link._renderScene = _renderScene;
 		e->entity.ptr = e;
 		e->scene = this;
 		informFiltersEntityCreation(*e);
