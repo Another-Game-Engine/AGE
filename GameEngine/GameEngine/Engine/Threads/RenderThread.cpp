@@ -269,6 +269,6 @@ namespace AGE
 		// safe
 		properties = painterPtr->reserve_properties();
 
-		GetRenderThread()->getQueue()->emplaceTask<AGE::Tasks::Render::SetMeshProperties>(painter, properties, addedProperties);
+		GetRenderThread()->getQueue()->emplaceCommand<AGE::Tasks::Render::SetMeshProperties>(painter, properties, addedProperties);
 	}
 }

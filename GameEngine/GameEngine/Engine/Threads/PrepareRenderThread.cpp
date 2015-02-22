@@ -192,10 +192,10 @@ namespace AGE
 					}
 					commands.pop();
 				}
-				if (!_next->getQueue()->releaseCommandReadability(TMQ::HybridQueue::WaitType::NoWait))
-				{
-					_next->getQueue()->clear();
-				}
+				/*if (!*/_next->getQueue()->releaseCommandReadability(TMQ::HybridQueue::WaitType::Block)/*)*/;
+				//{
+				//	_next->getQueue()->clear();
+				//}
 
 			}
 			workEnd = std::chrono::high_resolution_clock::now();

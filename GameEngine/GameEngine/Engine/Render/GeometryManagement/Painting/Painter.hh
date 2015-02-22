@@ -36,7 +36,7 @@ namespace AGE
 		Painter &remove_vertices(Key<Vertices> &key);
 		Painter &remove_properties(Key<Properties> &key);
 		Vertices *get_vertices(Key<Vertices> const &key);
-		std::shared_ptr<Properties> get_properties(Key<Properties> const &key) const;
+		std::shared_ptr<Properties> get_properties(Key<Properties> const &key);
 		Painter &draw(GLenum mode, std::shared_ptr<Program> const &p, std::vector<Key<Properties>> const &propertiesList, std::vector<Key<Vertices>> const &drawList);
 
 	private:
