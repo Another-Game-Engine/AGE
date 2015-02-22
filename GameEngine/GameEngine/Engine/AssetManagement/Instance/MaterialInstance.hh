@@ -1,13 +1,20 @@
 #pragma once
 
-# include <string>
-# include <vector>
-# include <memory>
-# include <Render/Properties/Properties.hh>
+#include <string>
+#include <vector>
+#include <memory>
+#include <map>
+#include <Render/Key.hh>
+#include <Threads/RenderThread.hpp>
+#include <Render/Properties/Properties.hh>
 
 namespace AGE
 {
-	typedef std::vector<Key<Properties>> MaterialInstance;
+	struct MaterialInstance
+	{
+		Key<Material> _material_key;
+		std::map<std::string, Key<Property>> _properties;
+	};
 
 	struct MaterialSetInstance
 	{
@@ -16,4 +23,6 @@ namespace AGE
 		std::string path;
 		std::vector<MaterialInstance> datas;
 	};
+
 }
+

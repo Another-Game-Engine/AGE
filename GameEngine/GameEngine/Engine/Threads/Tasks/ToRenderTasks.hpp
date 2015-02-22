@@ -4,7 +4,7 @@
 #include <Render/Properties/IProperty.hh>
 #include <AssetManagement/Instance/MaterialInstance.hh>
 #include <AssetManagement/Instance/MeshInstance.hh>
-
+#include <AssetManagement/Data/MaterialData.hh>
 #include <glm/fwd.hpp>
 #include <glm/glm.hpp>
 #include <TMQ/message.hpp>
@@ -41,6 +41,13 @@ namespace AGE
 			struct LoadMesh : TMQ::FutureData < bool >
 			{
 
+			};
+
+			struct AddMaterial : TMQ::FutureData<MaterialInstance>
+			{
+				MaterialData data;
+				AddMaterial(MaterialData const &pData) :
+						data(pData) {}
 			};
 
 			struct SetMeshMaterial

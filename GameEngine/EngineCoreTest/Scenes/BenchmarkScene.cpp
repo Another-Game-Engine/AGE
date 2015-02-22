@@ -200,7 +200,7 @@ namespace AGE
 		std::weak_ptr<AScene> weakOnThis = std::static_pointer_cast<AScene>(shared_from_this());
 
 #ifdef PHYSIC_SIMULATION
-		//addSystem<AGE::BulletDynamicSystem>(0);
+		addSystem<AGE::BulletDynamicSystem>(0);
 		//		addSystem<CollisionAdder>(1);
 		//		addSystem<CollisionCleaner>(1000);
 #endif //!PHYSIC
@@ -292,7 +292,7 @@ namespace AGE
 					rb->setCollisionMesh(weakOnThis, GLOBAL_SPONZA, "../../Assets/Serialized/sponza/sponza_static.phage");
 					_l.setScale(glm::vec3(10.f));
 					//_l->setOrientation(glm::quat(glm::vec3(Mathematic::degreeToRadian(-90), Mathematic::degreeToRadian(90), 0)));
-
+				
 					auto _m = GLOBAL_SPONZA.addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("Sponza/sponza.sage"));
 					_m->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(OldFile("Sponza/sponza.mage")));
 				}

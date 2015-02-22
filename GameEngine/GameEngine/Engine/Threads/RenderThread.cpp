@@ -12,12 +12,24 @@
 #include <Context/SdlContext.hh>
 #include <Render/GeometryManagement/Painting/Painter.hh>
 #include <Render/Pipelining/Pipelines/CustomPipeline/BasicPipeline.hh>
+#include <Render/Pipelining/Pipelines/CustomPipeline/DeferredShading.hh>
 #include <Utils/OpenGL.hh>
 #include <Utils/Age_Imgui.hpp>
 #include <Render/Properties/Transformation.hh>
 #include <SpacePartitioning/Ouptut/RenderCamera.hh>
 #include <SpacePartitioning/Ouptut/RenderLight.hh>
 #include <SpacePartitioning/Ouptut/RenderPipeline.hh>
+#include <Render/Properties/Materials/Color.hh>
+#include <Render/Properties/Materials/MapColor.hh>
+
+#define CREATE_MATERIAL_COLOR(memberName, uniformName)	tmpColor = std::make_shared<Color>(std::string(uniformName)); \
+	tmpColor->set(msg.data.memberName); \
+	instance._properties[uniformName] = properties.add_property(tmpColor);
+
+#define CREATE_MATERIAL_MAP(memberName, uniformName)	if (!msg.data.memberName.empty()) { \
+		tmpMap = std::make_shared<MapColor>(std::string(uniformName)); \
+		instance._properties[uniformName] = properties.add_property(tmpMap); \
+	}
 
 namespace AGE
 {
@@ -25,7 +37,7 @@ namespace AGE
 		: Thread(AGE::Thread::ThreadType::Render)
 		, _context(nullptr),
 		paintingManager(std::make_shared<PaintingManager>()),
-		pipelines(1)
+		pipelines(2)
 	{
 	}
 
@@ -42,7 +54,8 @@ namespace AGE
 				msg.setValue(false);
 				return;
 			}
-			pipelines[0] = std::make_unique<BasicPipeline>(paintingManager);
+			pipelines[DEFERRED] = std::make_unique<DeferredShading>(_context->getScreenSize(), paintingManager);
+			pipelines[BASIC] = std::make_unique<BasicPipeline>(paintingManager);
 			msg.setValue(true);
 		});
 
@@ -60,6 +73,35 @@ namespace AGE
 			assert(transformProperty != nullptr);
 			*transformProperty = msg.transformMat;
 		});
+
+		registerCallback<Tasks::Render::AddMaterial>([&](Tasks::Render::AddMaterial &msg)
+		{
+			MaterialInstance instance;
+			_materials.emplace_back();
+			Material &properties = _materials.back();
+
+			instance._material_key = Key<Material>::createKey(_materials.size() - 1);
+
+			std::shared_ptr<Color> tmpColor = nullptr;
+			std::shared_ptr<MapColor> tmpMap = nullptr;
+
+			CREATE_MATERIAL_COLOR(diffuse, "diffuseColor");
+			CREATE_MATERIAL_COLOR(ambient, "ambientColor");
+			CREATE_MATERIAL_COLOR(emissive, "emissiveColor");
+			CREATE_MATERIAL_COLOR(reflective, "reflectiveColor");
+			CREATE_MATERIAL_COLOR(specular, "specularColor");
+
+			CREATE_MATERIAL_MAP(diffuseTexPath, "diffuseMap");
+			CREATE_MATERIAL_MAP(ambientTexPath, "ambientMap");
+			CREATE_MATERIAL_MAP(emissiveTexPath, "emissiveMap");
+			CREATE_MATERIAL_MAP(reflectiveTexPath, "reflectiveMap");
+			CREATE_MATERIAL_MAP(specularTexPath, "specularMap");
+			CREATE_MATERIAL_MAP(normalTexPath, "normalMap");
+			CREATE_MATERIAL_MAP(bumpTexPath, "bumpMap");
+
+			msg.setValue(instance);
+		});
+
 
 		registerCallback<Tasks::Render::GetWindowSize>([&](Tasks::Render::GetWindowSize &msg)
 		{

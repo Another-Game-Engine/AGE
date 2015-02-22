@@ -16,6 +16,7 @@
 #include <SpacePartitioning/Ouptut/RenderLight.hh>
 #include <SpacePartitioning/Ouptut/RenderPainter.hh>
 #include <SpacePartitioning/Ouptut/RenderPipeline.hh>
+#include <Threads/RenderThread.hpp>
 #include <Utils/Debug.hpp>
 
 namespace AGE
@@ -434,7 +435,7 @@ namespace AGE
 				// update frustum infos for culling
 				camera.shape.setMatrix(camera.projection * view);
 				_octreeDrawList.emplace_back();
-				auto &renderCamera = _octreeDrawList.back();
+				auto &renderCamera = _octreeDrawList.back(); 
 				renderCamera.camInfos.view = view;
 				renderCamera.camInfos.projection = camera.projection;
 				// no culling for the lights for the moment (TODO)
@@ -448,7 +449,7 @@ namespace AGE
 				// Do the culling
 				_octree.getElementsCollide(&camera, toDraw);
 				// TODO: Remove that
-				renderCamera.pipelines.emplace_back();
+				renderCamera.pipelines.resize(2);
 				// iter on elements to draw
 				for (Cullable *e : toDraw)
 				{
@@ -458,7 +459,7 @@ namespace AGE
 						{
 							Drawable *currentDrawable = static_cast<Drawable*>(e);
 							// TODO: get the pipeline idx of the mesh to render, here we use 0
-							RenderPipeline *curRenderPipeline = &renderCamera.pipelines[0];
+							RenderPipeline *curRenderPipeline = &renderCamera.pipelines[RenderType::BASIC];
 							RenderPainter *curRenderPainter = nullptr;
 
 							for (auto &renderPainter : curRenderPipeline->keys)
