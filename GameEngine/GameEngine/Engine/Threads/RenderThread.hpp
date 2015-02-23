@@ -18,6 +18,14 @@ namespace AGE
 	struct DrawableCollection;
 	struct RenderCamera;
 
+	typedef Properties Material;
+
+	enum RenderType {
+		BASIC = 0,
+		DEFERRED,
+		TOTAL
+	};
+
 	class RenderThread : public Thread, public QueueOwner
 	{
 	public:
@@ -29,7 +37,9 @@ namespace AGE
 
 		// used by render scene, maybe should be protected
 		void createMeshProperty(const Key<Painter> &painter, Key<Properties> &properties, Key<Property> &transformation);
+	
 	public:
+		std::vector<Material> _materials;
 		std::shared_ptr<PaintingManager> paintingManager;
 		std::vector<std::unique_ptr<IRenderingPipeline>> pipelines;
 

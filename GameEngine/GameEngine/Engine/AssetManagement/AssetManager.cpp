@@ -14,6 +14,7 @@
 #include <Threads/TaskScheduler.hpp>
 #include <Threads/QueueOwner.hpp>
 #include <Threads/Thread.hpp>
+#include <Threads/Tasks/ToRenderTasks.hpp>
 #include <Render/Properties/Materials/Diffuse.hh>
 #include <Render/Textures/Texture2D.hh>
 #include <Render/GeometryManagement/Painting/Painter.hh>
@@ -72,22 +73,17 @@ namespace AGE
 			ar(*material_data_set.get());
 			material->name = material_data_set->name;
 			material->path = _filePath.getFullName();
-			auto i = 0;
 			material->datas.resize(material_data_set->collection.size());
+			auto material_set = std::make_shared<MaterialSetInstance>();
 			for (auto &material_data : material_data_set->collection) 
 			{
-				auto futureSubMaterial = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]()
-				{
-				//	material->datas[i].emplace_back(std::make_shared<Diffuse>());
-				//	std::static_pointer_cast<Diffuse>(material->datas[i].back())->set_color(material_data.diffuse);
-				//	std::static_pointer_cast<Diffuse>(material->datas[i].back())->set_ratio(1.0f);
-				//	loadTexture(material_data.diffuseTexPath, loadingChannel, std::function<void(std::shared_ptr<ITexture> &texture)>([=](std::shared_ptr<ITexture> &texture) {
-				//		std::static_pointer_cast<Diffuse>(material->datas[i].back())->set_map(std::static_pointer_cast<Texture2D>(texture));
-				//	}));
-					return AssetsLoadingResult(false);
-				});
-				pushNewAsset(loadingChannel, _filePath.getFullName() + std::to_string(i), futureSubMaterial);
-				++i;
+				auto futureSubMaterial = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<Tasks::Render::AddMaterial, MaterialInstance>(material_data);
+				auto subMaterial = futureSubMaterial.get();
+				material_set->datas.emplace_back(subMaterial);
+			}
+			{
+				std::lock_guard<std::mutex> lock(_mutex);
+				_materials[material->name] = material_set;
 			}
 			return AssetsLoadingResult(false);
 		});

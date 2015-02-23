@@ -289,7 +289,7 @@ namespace AGE
 					rb->setCollisionMesh(this, GLOBAL_SPONZA, "../../Assets/Serialized/sponza/sponza_static.phage");
 					_l.setScale(glm::vec3(10.f));
 					//_l->setOrientation(glm::quat(glm::vec3(Mathematic::degreeToRadian(-90), Mathematic::degreeToRadian(90), 0)));
-
+				
 					auto _m = GLOBAL_SPONZA.addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("Sponza/sponza.sage"));
 					_m->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(OldFile("Sponza/sponza.mage")));
 				}

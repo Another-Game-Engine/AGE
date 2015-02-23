@@ -6,11 +6,6 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GameEngine", "GameEngine\GameEngine.vcxproj", "{E24D022C-E33B-47A1-BBB4-33666C76DDA9}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shader", "Shader", "{6823E483-DFC6-4750-920C-35DA2E87B060}"
-	ProjectSection(SolutionItems) = preProject
-		Shaders\Deffered_shading\deffered_shading_lighting.vp = Shaders\Deffered_shading\deffered_shading_lighting.vp
-		Shaders\test_pipeline_1.fp = Shaders\test_pipeline_1.fp
-		Shaders\test_pipeline_1.vp = Shaders\test_pipeline_1.vp
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{B36A8443-1340-428D-AB0B-7AD47BC2531F}"
 EndProject
@@ -26,17 +21,23 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AssetsEditor", "Tools\Asset
 		{E24D022C-E33B-47A1-BBB4-33666C76DDA9} = {E24D022C-E33B-47A1-BBB4-33666C76DDA9}
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deffered_shading", "Deffered_shading", "{F584710B-8089-4D6B-801A-8A2354FCF28A}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UnitTests", "UnitTests\UnitTests.vcxproj", "{F9A50B77-ADB7-49C7-BAC2-E16B36293DFB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "deferred shading", "deferred shading", "{03E6B97B-B898-4A33-AB68-8455868D3A13}"
 	ProjectSection(SolutionItems) = preProject
-		Shaders\Deffered_shading\deferred_shading_merge.fp = Shaders\Deffered_shading\deferred_shading_merge.fp
-		Shaders\Deffered_shading\deferred_shading_merge.vp = Shaders\Deffered_shading\deferred_shading_merge.vp
-		Shaders\Deffered_shading\deffered_shading_get_buffer.fp = Shaders\Deffered_shading\deffered_shading_get_buffer.fp
-		Shaders\Deffered_shading\deffered_shading_get_buffer.vp = Shaders\Deffered_shading\deffered_shading_get_buffer.vp
-		Shaders\Deffered_shading\deffered_shading_lighting.fp = Shaders\Deffered_shading\deffered_shading_lighting.fp
-		Shaders\Deffered_shading\deffered_shading_lighting.vp = Shaders\Deffered_shading\deffered_shading_lighting.vp
+		Shaders\deferred_shading\deferred_shading_get_buffer.fp = Shaders\deferred_shading\deferred_shading_get_buffer.fp
+		Shaders\deferred_shading\deferred_shading_get_buffer.vp = Shaders\deferred_shading\deferred_shading_get_buffer.vp
+		Shaders\deferred_shading\deferred_shading_lighting.fp = Shaders\deferred_shading\deferred_shading_lighting.fp
+		Shaders\deferred_shading\deferred_shading_lighting.vp = Shaders\deferred_shading\deferred_shading_lighting.vp
+		Shaders\deferred_shading\deferred_shading_merge.fp = Shaders\deferred_shading\deferred_shading_merge.fp
+		Shaders\deferred_shading\deferred_shading_merge.vp = Shaders\deferred_shading\deferred_shading_merge.vp
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UnitTests", "UnitTests\UnitTests.vcxproj", "{F9A50B77-ADB7-49C7-BAC2-E16B36293DFB}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "basic", "basic", "{6DD3E825-06AD-46C8-B671-745D01D240D0}"
+	ProjectSection(SolutionItems) = preProject
+		Shaders\test_pipeline_1.fp = Shaders\test_pipeline_1.fp
+		Shaders\test_pipeline_1.vp = Shaders\test_pipeline_1.vp
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -64,7 +65,8 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{CB955D69-5F17-4705-BE34-81FBE92E26EB} = {B36A8443-1340-428D-AB0B-7AD47BC2531F}
-		{F584710B-8089-4D6B-801A-8A2354FCF28A} = {6823E483-DFC6-4750-920C-35DA2E87B060}
 		{F9A50B77-ADB7-49C7-BAC2-E16B36293DFB} = {4F71FD1A-92D4-4EE1-A02A-3C30682405B3}
+		{03E6B97B-B898-4A33-AB68-8455868D3A13} = {6823E483-DFC6-4750-920C-35DA2E87B060}
+		{6DD3E825-06AD-46C8-B671-745D01D240D0} = {6823E483-DFC6-4750-920C-35DA2E87B060}
 	EndGlobalSection
 EndGlobal
