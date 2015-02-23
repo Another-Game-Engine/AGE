@@ -43,6 +43,7 @@ namespace AGE
 		}
 		~RenderCameraListContainerHandle()
 		{
+			container.cameras.clear();
 			container.used = false;
 		}
 	};

@@ -128,7 +128,6 @@ namespace AGE
 				}
 				++pipelineIdx;
 			}
-			_drawlistPtr->container.cameras.clear();
 			_drawlistPtr = nullptr;
 		});
 
