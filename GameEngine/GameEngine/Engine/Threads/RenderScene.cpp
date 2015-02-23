@@ -18,6 +18,7 @@
 #include <SpacePartitioning/Ouptut/RenderPipeline.hh>
 #include <Threads/RenderThread.hpp>
 #include <Utils/Debug.hpp>
+#include <Core/Link.hpp>
 
 namespace AGE
 {
@@ -28,6 +29,7 @@ namespace AGE
 		, _octree(_drawables, _pointLights)
 	{
 		assert(prepareThread && engine && scene);
+		_rootLink = std::make_unique<Link>();
 	}
 
 	RenderScene::~RenderScene(void)

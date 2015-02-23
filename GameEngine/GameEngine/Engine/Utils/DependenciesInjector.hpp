@@ -5,11 +5,12 @@
 #include <memory>
 #include <Utils/Containers/Vector.hpp>
 #include <mutex>
+#include <Utils/SpinLock.hpp>
 
 class DependenciesInjector
 {
 private:
-	std::mutex _mutex;
+	AGE::SpinLock _mutex;
 	DependenciesInjector(DependenciesInjector const &) = delete;
 	DependenciesInjector &operator=(DependenciesInjector const &) = delete;
 
@@ -38,7 +39,7 @@ public:
 	template <typename T>
 	T *getInstance()
 	{
-		std::unique_lock<std::mutex> lock(_mutex);
+		std::unique_lock<AGE::SpinLock> lock(_mutex);
 
 		std::uint16_t id = T::getTypeId();
 		if (!hasInstance<T>())
@@ -58,7 +59,7 @@ public:
 	template <typename T>
 	void deleteInstance()
 	{
-		std::unique_lock<std::mutex> lock(_mutex);
+		std::unique_lock<AGE::SpinLock> lock(_mutex);
 
 		std::uint16_t id = T::getTypeId();
 		if (!hasInstance<T>())
@@ -79,7 +80,7 @@ public:
 	template <typename T, typename TypeSelector = T, typename ...Args>
 	T *setInstance(Args ...args)
 	{
-		std::lock_guard<std::mutex> lock(_mutex);
+		std::lock_guard<AGE::SpinLock> lock(_mutex);
 		std::uint16_t id = TypeSelector::getTypeId();
 		if (_instances.size() <= id || _instances[id] == nullptr)
 		{

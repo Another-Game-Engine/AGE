@@ -52,7 +52,7 @@ namespace AGE
 	{
 		SDL_Event events;
 		auto input = _dependencyManager->getInstance<Input>();
-		std::lock_guard<std::mutex>(input->getMutex());
+		std::lock_guard<AGE::SpinLock>(input->getMutex());
 		input->clearInputs();
 		const Uint8 *keys = SDL_GetKeyboardState(NULL);
 		while (SDL_PollEvent(&events))

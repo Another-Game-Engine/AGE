@@ -3,6 +3,7 @@
 #include <glm/gtx/quaternion.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <Threads/RenderScene.hpp>
+#include <Utils/Debug.hpp>
 
 using namespace AGE;
 
@@ -10,12 +11,12 @@ void Link::registerOctreeObject(const PrepareKey &key)
 {
 	_octreeObjects.resize(_octreeObjects.size() + 1);
 	auto &b = _octreeObjects.back();
-	assert(b.invalid());
+	AGE_ASSERT(b.invalid());
 
 	b = key;
-	_octree->setPosition(_position, key);
-	_octree->setScale(_scale, key);
-	_octree->setOrientation(_orientation, key);
+	_renderScene->setPosition(_position, key);
+	_renderScene->setScale(_scale, key);
+	_renderScene->setOrientation(_orientation, key);
 }
 
 void Link::unregisterOctreeObject(const PrepareKey &key)
@@ -25,7 +26,7 @@ void Link::unregisterOctreeObject(const PrepareKey &key)
 		auto &b = _octreeObjects[i];
 		if (b == key)
 		{
-			_octree->removeElement(b);
+			_renderScene->removeElement(b);
 			if (i != _octreeObjects.size() - 1)
 			{
 				std::swap(b, _octreeObjects.back());
@@ -62,10 +63,10 @@ void Link::internalSetPosition(const glm::vec3 &v)
 {
 	_computeTrans = true;
 	_position = v;
-	auto ot = static_cast<RenderScene*>(_octree);
+	auto ot = static_cast<RenderScene*>(_renderScene);
 	for (auto &e : _octreeObjects)
 	{
-		assert(!e.invalid());
+		AGE_ASSERT(!e.invalid());
 		ot->setPosition(_position, e);
 	}
 }
@@ -77,33 +78,33 @@ void Link::internalSetForward(const glm::vec3 &v)
 	_position.x = _position.x + get.x;
 	_position.y = _position.y + get.y;
 	_position.z = _position.z + get.z;
-	auto ot = static_cast<RenderScene*>(_octree);
+
 	for (auto &e : _octreeObjects)
 	{
-		assert(!e.invalid());
-		ot->setPosition(_position, e);
+		AGE_ASSERT(!e.invalid());
+		_renderScene->setPosition(_position, e);
 	}
 }
 
 void Link::internalSetScale(const glm::vec3 &v) {
 	_computeTrans = true;
 	_scale = v;
-	auto ot = static_cast<RenderScene*>(_octree);
+
 	for (auto &e : _octreeObjects)
 	{
-		assert(!e.invalid());
-		ot->setScale(_scale, e);
+		AGE_ASSERT(!e.invalid());
+		_renderScene->setScale(_scale, e);
 	}
 }
 
 void Link::internalSetOrientation(const glm::quat &v) {
 	_computeTrans = true;
 	_orientation = v;
-	auto ot = static_cast<RenderScene*>(_octree);
+
 	for (auto &e : _octreeObjects)
 	{
-		assert(!e.invalid());
-		ot->setOrientation(_orientation, e);
+		AGE_ASSERT(!e.invalid());
+		_renderScene->setOrientation(_orientation, e);
 	}
 }
 
@@ -146,40 +147,143 @@ void Link::reset()
 	_trans = glm::mat4(1);
 	_computeTrans = true;
 	_parent = nullptr;
-	_children.fill(nullptr);
-	_lastChildrenIndex = 0;
+}
+
+void Link::attachChild(Link *child)
+{
+	if (child->hasParent(this))
+	{
+		// already linked
+		return;
+	}
+
+	if (child->_parent != nullptr)
+	{
+		// detach from previous parent
+		child->_parent->_removeChild(child);
+	}
+	child->_setParent(this);
+	_setChild(child);
+}
+
+void Link::detachChild(Link *child)
+{
+	if (!child->hasParent(this))
+	{
+		// are not connected
+		return;
+	}
+	child->_removeParent();
+	_removeChild(child);
+}
+
+void Link::detachChildren()
+{
+	for (auto &e : _children)
+	{
+		e->_removeParent();
+	}
+	_children.clear();
+	if (hasParent())
+	{
+		_detachFromRoot();
+	}
+}
+
+bool Link::hasChild(const Link *child) const
+{
+	return child->hasParent(this);
+}
+
+void Link::attachParent(Link *parent)
+{
+	if (hasParent(parent))
+	{
+		// already linked
+		return;
+	}
+
+	if (_parent != nullptr)
+	{
+		// detach from previous parent
+		_parent->_removeChild(this);
+	}
+	_setParent(_parent);
+	_parent->_setChild(this);
+}
+
+void Link::detachParent()
+{
+	if (hasParent())
+	{
+		// are not connected
+		return;
+	}
+	_parent->_removeChild(this);
+	_removeParent();
 }
 
 void Link::_setChild(Link *ptr)
 {
-	_children[_lastChildrenIndex++] = ptr;
+	if (!hasParent())
+	{
+		_attachToRoot();
+	}
+	_children.push_back(ptr);
 }
 
 void Link::_setParent(Link *ptr)
 {
+	_detachFromRoot();
 	_parent = ptr;
 }
 
 void Link::_removeChild(Link *ptr)
 {
-	// TODO
+	auto lastIndex = _children.size() - 1;
+	for (std::size_t i = 0; i <= lastIndex; ++i)
+	{
+		if (_children[i] == ptr)
+		{
+			if (i != lastIndex)
+			{
+				std::swap(_children[i], _children[lastIndex]);
+			}
+			_children.resize(lastIndex);
+			break;
+		}
+	}
+	if (hasChildren() == false)
+		_detachFromRoot();
+}
 
-	//assert(_lastChildrenIndex != 0);
-	//for (auto &e : _octreeObjects)
-	//{
-	//	if (e == ptr)
-	//	{
-	//		if (_lastOctreeObjectIndex - 1 != i)
-	//		{
-	//			std::swap(b, _children[_lastChildrenIndex - 1]);
-	//		}
-	//		--_lastChildrenIndex;
-	//		return;
-	//	}
-	//}
+void Link::_detachFromRoot()
+{
+	if (!_renderScene || !_parent)
+		return; // because it's root
+	auto root = _renderScene->getRootLink();
+	if (_parent == root)
+	{
+		root->_removeChild(this);
+		_removeParent();
+	}
+}
+
+void Link::_attachToRoot()
+{
+	if (!_renderScene)
+		return; // because it's root
+	if (!hasParent())
+	{
+		auto root = _renderScene->getRootLink();
+
+		root->_children.push_back(this);
+		this->_parent = root;
+	}
 }
 
 void Link::_removeParent()
 {
+	_detachFromRoot();
 	_parent = nullptr;
 }

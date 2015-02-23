@@ -5,6 +5,7 @@
 #include "glm/gtc/type_precision.hpp"
 #include <mutex>
 #include <atomic>
+#include <Utils/SpinLock.hpp>
 
 namespace AGE
 {
@@ -22,7 +23,7 @@ namespace AGE
 		std::atomic_int32_t _mouseWheelX;
 		std::atomic_int32_t _mouseWheelY;
 
-		std::mutex      _mutex;
+		AGE::SpinLock      _mutex;
 	public:
 		Input();
 		virtual ~Input() { }
@@ -38,7 +39,7 @@ namespace AGE
 		glm::i8vec2      	getMouseWheel();
 		bool 				getInput(int input, bool handled = false);
 		bool 				getKey(int input, bool handled = false);
-		inline std::mutex   &getMutex(){ return _mutex; }
+		inline AGE::SpinLock &getMutex(){ return _mutex; }
 	};
 
 }

@@ -247,10 +247,13 @@ namespace AGE
 
 		while (_run && _insideRun)
 		{
-			if (_context)
-				_context->refreshInputs();
 			waitStart = std::chrono::high_resolution_clock::now();
-			getQueue()->getTaskAndCommandQueue(tasks, taskSuccess, commands, commandSuccess, TMQ::HybridQueue::Block);
+			taskSuccess = commandSuccess = false;
+			do {
+				if (_context)
+					_context->refreshInputs();
+				getQueue()->getTaskAndCommandQueue(tasks, taskSuccess, commands, commandSuccess, TMQ::HybridQueue::Block);
+			} while (!taskSuccess && !commandSuccess);
 			waitEnd = std::chrono::high_resolution_clock::now();
 			workStart = std::chrono::high_resolution_clock::now();
 			if (taskSuccess)
