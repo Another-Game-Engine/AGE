@@ -17,11 +17,11 @@ namespace AGE
 		Transformation &operator=(Transformation const &other) = delete;
 		Transformation &operator=(glm::mat4 const &value);
 
-	public:
-		virtual IProperty &update(std::shared_ptr<Program> const &p) override final;
+	private:
+		virtual void _update(std::shared_ptr<Program> const &p) override final;
 
 	public:
-		glm::mat4 const &get() const;
+		glm::mat4 const &get();
 		Transformation &set(glm::mat4 const &mat);
 
 	private:

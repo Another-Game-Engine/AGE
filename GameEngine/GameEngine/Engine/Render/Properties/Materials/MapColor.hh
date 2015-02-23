@@ -12,11 +12,11 @@ namespace AGE
 		MapColor(std::string const &add_name);
 		MapColor(MapColor &&move);
 
-	public:
-		virtual IProperty & update(std::shared_ptr<Program> const &p) override;
+	private:
+		virtual void _update(std::shared_ptr<Program> const &p) override;
 
 	public:
-		std::shared_ptr<Texture2D> const &get() const;
+		std::shared_ptr<Texture2D> const &get();
 		MapColor &set(std::shared_ptr<Texture2D> const &map);
 
 	private:

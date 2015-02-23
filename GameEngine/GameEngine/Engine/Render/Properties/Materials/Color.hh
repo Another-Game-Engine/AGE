@@ -10,11 +10,11 @@ namespace AGE
 		Color(std::string const &add_name);
 		Color(Color &&move);
 
-	public:
-		virtual IProperty &update(std::shared_ptr<Program> const &program) override final;
+	private:
+		virtual void _update(std::shared_ptr<Program> const &program) override final;
 
 	public:
-		glm::vec4 const &get() const;
+		glm::vec4 const &get();
 		Color &set(glm::vec4 const &color);
 
 	private:

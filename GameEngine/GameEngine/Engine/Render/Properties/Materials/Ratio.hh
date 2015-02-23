@@ -11,11 +11,11 @@ namespace AGE
 		Ratio(std::string const &add_name);
 		Ratio(Ratio &&move);
 
-	public:
-		virtual IProperty &update(std::shared_ptr<Program> const &p) override final;
+	private:
+		virtual void _update(std::shared_ptr<Program> const &p) override final;
 
 	public:
-		float get() const;
+		float get();
 		Ratio &set(float ratio);
 
 	private:

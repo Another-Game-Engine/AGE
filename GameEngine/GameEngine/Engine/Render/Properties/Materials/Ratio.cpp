@@ -17,22 +17,23 @@ namespace AGE
 
 	}
 
-	IProperty & Ratio::update(std::shared_ptr<Program> const &p)
+	void Ratio::_update(std::shared_ptr<Program> const &p)
 	{
 		auto resource = std::static_pointer_cast<Vec1>(get_resource(p));
 		if (resource) {
 			*resource = _ratio;
 		}
-		return (*this);
 	}
 
-	float Ratio::get() const
+	float Ratio::get()
 	{
+		std::lock_guard<AGE::SpinLock> lock(_mutex);
 		return (_ratio);
 	}
 
 	Ratio & Ratio::set(float ratio)
 	{
+		std::lock_guard<AGE::SpinLock> lock(_mutex);
 		_ratio = ratio;
 		return (*this);
 	}

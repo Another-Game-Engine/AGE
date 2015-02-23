@@ -21,38 +21,42 @@ namespace AGE
 
 	}
 
-	IProperty & Diffuse::update(std::shared_ptr<Program> const &p)
+	void Diffuse::_update(std::shared_ptr<Program> const &p)
 	{
 		_ratio.update(p);
 		_color.update(p);
 		_mapColor.update(p);
-		return (*this);
 	}
 
-	float Diffuse::get_ratio() const
+	float Diffuse::get_ratio()
 	{
+		std::lock_guard<AGE::SpinLock> lock(_mutex);
 		return (_ratio.get());
 	}
 
 	Diffuse &Diffuse::set_ratio(float ratio)
 	{
+		std::lock_guard<AGE::SpinLock> lock(_mutex);
 		_ratio.set(ratio);
 		return (*this);
 	}
 
 	glm::vec4 const &Diffuse::get_color()
 	{
+		std::lock_guard<AGE::SpinLock> lock(_mutex);
 		return (_color.get());
 	}
 
 	Diffuse &Diffuse::set_color(glm::vec4 const &color)
 	{
+		std::lock_guard<AGE::SpinLock> lock(_mutex);
 		_color.set(color);
 		return (*this);
 	}
 
-	std::shared_ptr<Texture2D> const & Diffuse::get_map() const
+	std::shared_ptr<Texture2D> const & Diffuse::get_map()
 	{
+		std::lock_guard<AGE::SpinLock> lock(_mutex);
 		return (_mapColor.get());
 	}
 

@@ -15,15 +15,15 @@ namespace AGE
 		Diffuse();
 		Diffuse(Diffuse &&move);
 
-	public:
-		virtual IProperty &update(std::shared_ptr<Program> const &p) override final;
+	private:
+		virtual void _update(std::shared_ptr<Program> const &p) override final;
 
 	public:
-		float get_ratio() const;
+		float get_ratio();
 		Diffuse &set_ratio(float ratio);
 		glm::vec4 const &get_color();
 		Diffuse &set_color(glm::vec4 const &color);
-		std::shared_ptr<Texture2D> const &get_map() const;
+		std::shared_ptr<Texture2D> const &get_map();
 		Diffuse &set_map(std::shared_ptr<Texture2D> const &m);
 
 	private:
