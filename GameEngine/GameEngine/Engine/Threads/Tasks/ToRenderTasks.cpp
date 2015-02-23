@@ -11,11 +11,5 @@ namespace AGE
 			: size(_size)
 		{}
 		Render::CreateRenderContext::CreateRenderContext(Engine *_engine) : engine(_engine){}
-
-		Render::RemoveMeshProperty::RemoveMeshProperty(Key<Painter> const &painter, Key<Properties> const &pToRemove) :
-			meshPainter(painter),
-			toRemove(pToRemove)
-		{
-		}
 	}
 }

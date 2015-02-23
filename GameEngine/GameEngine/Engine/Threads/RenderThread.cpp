@@ -52,15 +52,6 @@ namespace AGE
 			glClear(GL_COLOR_BUFFER_BIT);
 		});
 
-		registerCallback<Tasks::Render::SetMeshTransform>([&](Tasks::Render::SetMeshTransform &msg)
-		{
-			auto meshProperties = paintingManager->get_painter(msg.meshPainter)->get_properties(msg.meshProperties);
-			auto transformProperty = meshProperties->get_property<Transformation>(msg.transformProperty);
-			
-			assert(transformProperty != nullptr);
-			*transformProperty = msg.transformMat;
-		});
-
 		registerCallback<Tasks::Render::GetWindowSize>([&](Tasks::Render::GetWindowSize &msg)
 		{
 			msg.setValue(_context->getScreenSize());
@@ -113,16 +104,6 @@ namespace AGE
 			AGE::Imgui::getInstance()->renderThreadRenderFn(msg.cmd_lists);
 		});
 #endif
-
-		registerCallback <Tasks::Render::SetMeshProperties>([&](Tasks::Render::SetMeshProperties &msg)
-		{
-			paintingManager->get_painter(msg.meshPainter)->alloc_reserved_properties(msg.properties, msg.propertiesPtr);
-		});
-
-		registerCallback <Tasks::Render::RemoveMeshProperty>([&](Tasks::Render::RemoveMeshProperty &msg)
-		{
-			paintingManager->get_painter(msg.meshPainter)->remove_properties(msg.toRemove);
-		});
 
 		registerCallback<Tasks::Render::SetMeshMaterial>([&](Tasks::Render::SetMeshMaterial& msg)
 		{
@@ -256,22 +237,5 @@ namespace AGE
 			}
 		}
 		return true;
-	}
-
-	// called by prepare render thread
-	void RenderThread::createMeshProperty(const Key<Painter> &painter, Key<Properties> &properties, Key<Property> &transformation)
-	{
-		std::shared_ptr<Transformation> transformProperty = std::make_shared<Transformation>(glm::mat4(1));
-		std::shared_ptr<Properties> addedProperties = std::make_shared<Properties>();
-
-		transformation = addedProperties->add_property(transformProperty);
-
-		// safe
-		auto painterPtr = paintingManager->get_painter(painter);
-
-		// safe
-		properties = painterPtr->reserve_properties();
-
-		GetRenderThread()->getQueue()->emplaceCommand<AGE::Tasks::Render::SetMeshProperties>(painter, properties, addedProperties);
 	}
 }

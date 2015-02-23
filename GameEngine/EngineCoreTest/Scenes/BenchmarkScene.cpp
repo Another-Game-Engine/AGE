@@ -198,7 +198,7 @@ namespace AGE
 #endif
 
 #ifdef PHYSIC_SIMULATION
-		//addSystem<AGE::BulletDynamicSystem>(0);
+		addSystem<AGE::BulletDynamicSystem>(0);
 		//		addSystem<CollisionAdder>(1);
 		//		addSystem<CollisionCleaner>(1000);
 #endif //!PHYSIC

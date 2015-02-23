@@ -36,32 +36,6 @@ namespace AGE
 		return (Key<Vertices>::createKey(int(_vertices.size()) - 1));
 	}
 
-	Key<Properties> Painter::add_properties(std::shared_ptr<Properties> const &properties)
-	{
-		// to be sure that this function is only called in render thread
-		AGE_ASSERT(GetThreadManager()->getCurrentThread() == (AGE::Thread*)GetRenderThread());
-		std::lock_guard<SpinLock> lock(_mutex);
-		return (Key<Properties>::createKey(_properties.alloc(properties)));
-	}
-
-	Key<Properties> Painter::reserve_properties()
-	{
-		// to be sure that this function is only called by other that render thread
-		AGE_ASSERT(GetThreadManager()->getCurrentThread() != (AGE::Thread*)GetRenderThread());
-
-		std::lock_guard<SpinLock> lock(_mutex);
-		return (Key<Properties>::createKey(_properties.prepareAlloc()));
-	}
-
-	void Painter::alloc_reserved_properties(const Key<Properties> &key, std::shared_ptr<Properties> const &properties)
-	{
-		// to be sure that this function is only called in render thread
-		AGE_ASSERT(GetThreadManager()->getCurrentThread() == (AGE::Thread*)GetRenderThread());
-
-		std::lock_guard<SpinLock> lock(_mutex);
-		_properties.allocPreparated(key.getId(), properties);
-	}
-
 	Painter & Painter::remove_vertices(Key<Vertices> &key)
 	{
 		// to be sure that this function is only called in render thread
@@ -102,16 +76,7 @@ namespace AGE
 		return (&_vertices[key.getId()]);
 	}
 
-	std::shared_ptr<Properties> Painter::get_properties(Key<Properties> const &key)
-	{
-		// to be sure that this function is only called in render thread
-		AGE_ASSERT(GetThreadManager()->getCurrentThread() == (AGE::Thread*)GetRenderThread());
-
-		std::lock_guard<SpinLock> lock(_mutex);
-		return (_properties.get(key.getId()));
-	}
-
-	Painter & Painter::draw(GLenum mode, std::shared_ptr<Program> const &program, std::vector<Key<Properties>> const &propertiesList, std::vector<Key<Vertices>> const &drawList)
+	Painter & Painter::draw(GLenum mode, std::shared_ptr<Program> const &program, std::vector<Properties> const &propertiesList, std::vector<Key<Vertices>> const &drawList)
 	{
 		// to be sure that this function is only called in render thread
 		AGE_ASSERT(GetThreadManager()->getCurrentThread() == (AGE::Thread*)GetRenderThread());
@@ -125,25 +90,16 @@ namespace AGE
 		{
 			if (draw_element)
 			{
-				auto id = propertiesList[index].getId();
+				auto &property = propertiesList[index];
 				_mutex.lock();
-				auto propertyPtr = _properties.get(id).get();
 				_mutex.unlock();
-				propertyPtr->update_properties(program);
+				property.update_properties(program);
 				program->update();
 				_vertices[draw_element.getId()].draw(mode);
 			}
 			++index;
 		}
 		_buffer.unbind();
-
-		for (auto &e : _propertiesToRemove)
-		{
-			_mutex.lock();
-			_properties.dealloc(e.getId());
-			_mutex.unlock();
-		}
-		_propertiesToRemove.clear();
 
 		return (*this);
 	}

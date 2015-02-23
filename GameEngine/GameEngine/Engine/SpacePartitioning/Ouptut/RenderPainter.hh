@@ -13,7 +13,7 @@ namespace AGE
 	struct RenderPainter
 	{
 		std::vector<Key<Vertices>> vertices;
-		std::vector<Key<Properties>> properties;
+		std::vector<Properties> properties;
 		Key<Painter> painter;
 	};
 

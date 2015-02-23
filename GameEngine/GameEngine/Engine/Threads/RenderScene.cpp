@@ -154,7 +154,7 @@ namespace AGE
 	void RenderScene::removeDrawableObject(DRAWABLE_ID id)
 	{
 		Drawable &toRm = _drawables.get(id);
-		AGE::GetRenderThread()->getQueue()->emplaceCommand<AGE::Tasks::Render::RemoveMeshProperty>(toRm.mesh.painter, toRm.mesh.properties);
+		_removeProperties(toRm.mesh.properties);
 		if (toRm.hasMoved)
 		{
 			uint32_t idxMoveBuffer = toRm.moveBufferIdx;
@@ -282,7 +282,10 @@ namespace AGE
 				_drawablesToMove.push_back(id);
 				added.hasMoved = true;
 
-				AGE::GetRenderThread()->createMeshProperty(added.mesh.painter, added.mesh.properties, added.transformationProperty);
+				added.mesh.properties = _createPropertiesContainer();
+				added.transformationProperty = _addTransformationProperty(added.mesh.properties, glm::mat4(1));
+
+				//AGE::GetRenderThread()->createMeshProperty(added.mesh.painter, added.mesh.properties, added.transformationProperty);
 			}
 		}
 
@@ -404,7 +407,11 @@ namespace AGE
 					_octree.addElement(&e);
 				else
 					_octree.moveElement(&e);
-				AGE::GetRenderThread()->getQueue()->emplaceCommand<AGE::Tasks::Render::SetMeshTransform>(e.mesh.painter, e.mesh.properties, e.transformationProperty, e.transformation);
+
+				auto &properties = _properties.get(e.mesh.properties.getId());
+
+				auto transformationProperty = properties.get_property<Transformation>(e.transformationProperty);
+				transformationProperty->set(e.transformation);
 
 				assert(e.currentNode != UNDEFINED_IDX);
 			}
@@ -478,7 +485,7 @@ namespace AGE
 								curRenderPainter->painter = currentDrawable->mesh.painter;
 							}
 							curRenderPainter->vertices.emplace_back(currentDrawable->mesh.vertices);
-							curRenderPainter->properties.emplace_back(currentDrawable->mesh.properties);
+							curRenderPainter->properties.emplace_back(_properties.get(currentDrawable->mesh.properties.getId()));
 						}
 						break;
 					case PrepareKey::Type::PointLight:
