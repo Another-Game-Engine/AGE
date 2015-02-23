@@ -7,7 +7,6 @@
 
 namespace AGE
 {
-
 	struct CameraInfos
 	{
 		glm::mat4 view;
@@ -21,4 +20,30 @@ namespace AGE
 		std::vector<RenderPipeline> pipelines;
 	};
 
+	struct RenderCameraListContainer
+	{
+		std::vector<RenderCamera> cameras;
+		std::atomic_bool used;
+
+		RenderCameraListContainer()
+		{
+			used = false;
+		}
+	};
+
+	struct RenderCameraListContainerHandle
+	{
+		RenderCameraListContainer &container;
+
+		RenderCameraListContainerHandle() = delete;
+		RenderCameraListContainerHandle(RenderCameraListContainer &ref)
+			: container(ref)
+		{
+			container.used = true;
+		}
+		~RenderCameraListContainerHandle()
+		{
+			container.used = false;
+		}
+	};
 }

@@ -434,7 +434,24 @@ namespace AGE
 
 			_moveElementsInOctree();
 			// Do culling for each camera
-			_octreeDrawList.clear();
+
+			RenderCameraListContainer *drawContainer = nullptr;
+
+			// We search an unused draw list
+			for (auto &e : _octreeDrawLists)
+			{
+				if (e.used == false)
+				{
+					drawContainer = &e;
+					break;
+				}
+			}
+
+			// id all draw lists are used by render thread
+			// we discard this draw
+			if (drawContainer == nullptr)
+				return;
+
 			// clean empty nodes
 			_octree.cleanOctree();
 			for (uint32_t cameraIdx : _activeCameras)
@@ -443,8 +460,11 @@ namespace AGE
 				auto view = glm::inverse(glm::scale(glm::translate(glm::mat4(1), camera.position) * glm::toMat4(camera.orientation), camera.scale));
 				// update frustum infos for culling
 				camera.shape.setMatrix(camera.projection * view);
-				_octreeDrawList.emplace_back();
-				auto &renderCamera = _octreeDrawList.back(); 
+
+				auto &drawList = drawContainer->cameras;
+
+				drawList.emplace_back();
+				auto &renderCamera = drawList.back(); 
 				renderCamera.camInfos.view = view;
 				renderCamera.camInfos.projection = camera.projection;
 				// no culling for the lights for the moment (TODO)
@@ -460,8 +480,6 @@ namespace AGE
 				// TODO: Remove that
 				renderCamera.pipelines.resize(2);
 				// iter on elements to draw
-
-				std::unordered_map<int, std::vector<Drawable*>> sameVertices;
 
 				for (Cullable *e : toDraw)
 				{
@@ -488,11 +506,11 @@ namespace AGE
 							//	curRenderPainter = &curRenderPipeline->keys.back();
 							//	curRenderPainter->painter = currentDrawable->mesh.painter;
 							//}
-							if (sameVertices.find(currentDrawable->mesh.vertices.getId()) == std::end(sameVertices))
+							if (_verticeSorter.find(currentDrawable->mesh.vertices.getId()) == std::end(_verticeSorter))
 							{
-								sameVertices.emplace(std::make_pair(currentDrawable->mesh.vertices.getId(), std::vector<Drawable*>()));
+								_verticeSorter.emplace(std::make_pair(currentDrawable->mesh.vertices.getId(), std::vector<Drawable*>()));
 							}
-							sameVertices[currentDrawable->mesh.vertices.getId()].push_back(currentDrawable);
+							_verticeSorter[currentDrawable->mesh.vertices.getId()].push_back(currentDrawable);
 							//curRenderPainter->vertices.emplace_back(currentDrawable->mesh.vertices);
 							//curRenderPainter->properties.emplace_back(_properties.get(currentDrawable->mesh.properties.getId()));
 						}
@@ -511,7 +529,7 @@ namespace AGE
 					}
 					
 				}
-				for (auto &e : sameVertices)
+				for (auto &e : _verticeSorter)
 				{
 					if (e.second.empty())
 					{
@@ -566,9 +584,11 @@ namespace AGE
 						//	instancied.transformations.push_back(m->transformation);
 						//}
 					}
+					e.second.clear();
 				}
 			}
-			GetRenderThread()->getQueue()->emplaceCommand<Commands::ToRender::CopyDrawLists>(this->_octreeDrawList);
+			drawContainer->used = true;
+			GetRenderThread()->getQueue()->emplaceCommand<Commands::ToRender::CopyDrawLists>(std::make_shared<RenderCameraListContainerHandle>(*drawContainer));
 		}
 
 }

@@ -9,6 +9,7 @@
 #include <memory>
 #include <vector>
 #include <Render/Properties/Properties.hh>
+#include <Engine/SpacePartitioning/Ouptut/RenderCamera.hh>
 
 namespace AGE
 {
@@ -56,7 +57,7 @@ namespace AGE
 		bool _run;
 
 		SdlContext *_context;
-		AGE::Vector<RenderCamera> _drawlist;
+		std::shared_ptr<RenderCameraListContainerHandle> _drawlistPtr;
 
 		friend class ThreadManager;
 	};

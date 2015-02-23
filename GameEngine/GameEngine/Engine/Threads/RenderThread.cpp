@@ -21,6 +21,7 @@
 #include <SpacePartitioning/Ouptut/RenderPipeline.hh>
 #include <Render/Properties/Materials/Color.hh>
 #include <Render/Properties/Materials/MapColor.hh>
+#include <Utils/Debug.hpp>
 
 #define CREATE_MATERIAL_COLOR(memberName, uniformName)	tmpColor = std::make_shared<Color>(std::string(uniformName)); \
 	tmpColor->set(msg.data.memberName); \
@@ -105,21 +106,30 @@ namespace AGE
 
 		registerCallback<Commands::ToRender::CopyDrawLists>([&](Commands::ToRender::CopyDrawLists& msg)
 		{
-			_drawlist = msg.list;
+			_drawlistPtr = msg.listContainer;
 		});
 
 		registerCallback<Commands::ToRender::RenderDrawLists>([&](Commands::ToRender::RenderDrawLists& msg)
 		{
 			uint32_t pipelineIdx = 0;
 
-			for (auto &curPipeline : pipelines) {
-				for (auto &curCamera : _drawlist) {
+			if (!_drawlistPtr) // nothing to draw
+				return;
+			AGE_ASSERT(_drawlistPtr != nullptr);
+
+			for (auto &curPipeline : pipelines)
+			{
+				auto &drawlist = _drawlistPtr->container.cameras;
+				for (auto &curCamera : drawlist)
+				{
 					if (pipelineIdx < curCamera.pipelines.size()) {
 						curPipeline->render(curCamera.pipelines[pipelineIdx], curCamera.lights, curCamera.camInfos);
 					}
 				}
 				++pipelineIdx;
 			}
+			_drawlistPtr->container.cameras.clear();
+			_drawlistPtr = nullptr;
 		});
 
 		registerSharedCallback<AGE::Tasks::Basic::BoolFunction>([&](AGE::Tasks::Basic::BoolFunction& msg)
@@ -269,7 +279,6 @@ namespace AGE
 					assert(execute(command));
 					commands.pop();
 				}
-				_drawlist.clear();
 
 				workEnd = std::chrono::high_resolution_clock::now();
 				GetThreadManager()->updateThreadStatistics(this->_id

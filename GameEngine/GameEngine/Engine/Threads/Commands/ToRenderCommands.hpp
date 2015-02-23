@@ -19,10 +19,10 @@ namespace AGE
 
 			struct CopyDrawLists
 			{
-				AGE::Vector<AGE::RenderCamera> list;
+				std::shared_ptr<RenderCameraListContainerHandle> listContainer;
 				
-				CopyDrawLists(AGE::Vector<AGE::RenderCamera> &c)
-					: list(std::move(c))
+				CopyDrawLists(std::shared_ptr<RenderCameraListContainerHandle> handle)
+					: listContainer(handle)
 				{}
 			};
 

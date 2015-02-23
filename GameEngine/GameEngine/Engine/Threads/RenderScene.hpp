@@ -83,6 +83,7 @@ namespace AGE
 		}
 
 		MemoryPool<Properties> _properties;
+		std::unordered_map<int, std::vector<Drawable*>> _verticeSorter;
 	public:
 		PrepareKey addMesh();
 		PrepareKey addCamera();
@@ -122,7 +123,7 @@ namespace AGE
 		// TODO: remove active point lights and put it in the octree
 		AGE::Vector<uint32_t> _activePointLights;
 
-		AGE::Vector<RenderCamera> _octreeDrawList;
+		std::array<RenderCameraListContainer, 3> _octreeDrawLists;
 
 		std::unique_ptr<Link> _rootLink;
 	};
