@@ -19,6 +19,9 @@
 #include <Threads/RenderThread.hpp>
 #include <Utils/Debug.hpp>
 #include <Core/Link.hpp>
+#include <Utils/MemoryPool.hpp>
+#include <Render/Properties/IProperty.hh>
+#include <Render/Properties/Transformation.hh>
 
 namespace AGE
 {
@@ -589,6 +592,28 @@ namespace AGE
 			}
 			drawContainer->used = true;
 			GetRenderThread()->getQueue()->emplaceCommand<Commands::ToRender::CopyDrawLists>(std::make_shared<RenderCameraListContainerHandle>(*drawContainer));
+		}
+
+		Key<Properties> RenderScene::_createPropertiesContainer()
+		{
+			return (Key<Properties>::createKey(_properties.alloc()));
+		}
+
+		void RenderScene::_removeProperties(const Key<Properties> &key)
+		{
+			_properties.dealloc(key.getId());
+		}
+
+		Key<Property> RenderScene::_attachProperty(const Key<Properties> &key, std::shared_ptr<IProperty> propertyPtr)
+		{
+			auto &properties = _properties.get(key.getId());
+
+			return properties.add_property(propertyPtr);
+		}
+
+		Key<Property> RenderScene::_addTransformationProperty(const Key<Properties> &propertiesKey, const glm::mat4 &value)
+		{
+			return _createAndAttachProperty<Transformation>(propertiesKey, value);
 		}
 
 }

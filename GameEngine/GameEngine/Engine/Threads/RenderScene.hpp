@@ -11,10 +11,6 @@
 #include <SpacePartitioning/Ouptut/RenderCamera.hh>
 #include <array>
 
-#include <Utils/MemoryPool.hpp>
-#include <Render/Properties/IProperty.hh>
-#include <Render/Properties/Transformation.hh> /* to remove*/ 
-
 namespace AGE
 {
 	struct Drawable;
@@ -52,22 +48,11 @@ namespace AGE
 		void _prepareDrawList(AGE::Commands::MainToPrepare::PrepareDrawLists &msg);
 		void _moveElementsInOctree();
 
-		Key<Properties> _createPropertiesContainer()
-		{
-			return (Key<Properties>::createKey(_properties.alloc()));
-		}
+		Key<Properties> _createPropertiesContainer();
 
-		void _removeProperties(const Key<Properties> &key)
-		{
-			_properties.dealloc(key.getId());
-		}
-
-		Key<Property> _attachProperty(const Key<Properties> &key, std::shared_ptr<IProperty> propertyPtr)
-		{
-			auto &properties = _properties.get(key.getId());
-
-			return properties.add_property(propertyPtr);
-		}
+		void _removeProperties(const Key<Properties> &key);
+		Key<Property> _attachProperty(const Key<Properties> &key, std::shared_ptr<IProperty> propertyPtr);
+		Key<Property> _addTransformationProperty(const Key<Properties> &propertiesKey, const glm::mat4 &value);
 
 		template <typename PropertyType, typename ValueType>
 		Key<Property> _createAndAttachProperty(const Key<Properties> &key, const ValueType &value)
@@ -77,13 +62,6 @@ namespace AGE
 			return _attachProperty(key, newProperty);
 		}
 
-		Key<Property> _addTransformationProperty(const Key<Properties> &propertiesKey, const glm::mat4 &value)
-		{
-			return _createAndAttachProperty<Transformation>(propertiesKey, value);
-		}
-
-		MemoryPool<Properties> _properties;
-		std::unordered_map<int, std::vector<Drawable*>> _verticeSorter;
 	public:
 		PrepareKey addMesh();
 		PrepareKey addCamera();
@@ -126,5 +104,8 @@ namespace AGE
 		std::array<RenderCameraListContainer, 3> _octreeDrawLists;
 
 		std::unique_ptr<Link> _rootLink;
+
+		MemoryPool<Properties> _properties;
+		std::unordered_map<int, std::vector<Drawable*>> _verticeSorter;
 	};
 }
