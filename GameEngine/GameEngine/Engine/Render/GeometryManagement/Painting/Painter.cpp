@@ -91,8 +91,6 @@ namespace AGE
 			if (draw_element)
 			{
 				auto &property = propertiesList[index];
-				_mutex.lock();
-				_mutex.unlock();
 				property.update_properties(program);
 				program->update();
 				_vertices[draw_element.getId()].draw(mode);

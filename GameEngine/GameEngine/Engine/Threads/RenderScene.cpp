@@ -460,6 +460,9 @@ namespace AGE
 				// TODO: Remove that
 				renderCamera.pipelines.resize(2);
 				// iter on elements to draw
+
+				std::unordered_map<int, std::vector<Drawable*>> sameVertices;
+
 				for (Cullable *e : toDraw)
 				{
 					switch (e->key.type)
@@ -468,25 +471,30 @@ namespace AGE
 						{
 							Drawable *currentDrawable = static_cast<Drawable*>(e);
 							// TODO: get the pipeline idx of the mesh to render, here we use 0
-							RenderPipeline *curRenderPipeline = &renderCamera.pipelines[RenderType::BASIC];
-							RenderPainter *curRenderPainter = nullptr;
+							//RenderPipeline *curRenderPipeline = &renderCamera.pipelines[RenderType::BASIC];
+							//RenderPainter *curRenderPainter = nullptr;
 
-							for (auto &renderPainter : curRenderPipeline->keys)
+							//for (auto &renderPainter : curRenderPipeline->keys)
+							//{
+							//	if (renderPainter.painter == currentDrawable->mesh.painter)
+							//	{
+							//		curRenderPainter = &renderPainter;
+							//		break;
+							//	}
+							//}
+							//if (curRenderPainter == NULL)
+							//{
+							//	curRenderPipeline->keys.emplace_back();
+							//	curRenderPainter = &curRenderPipeline->keys.back();
+							//	curRenderPainter->painter = currentDrawable->mesh.painter;
+							//}
+							if (sameVertices.find(currentDrawable->mesh.vertices.getId()) == std::end(sameVertices))
 							{
-								if (renderPainter.painter == currentDrawable->mesh.painter)
-								{
-									curRenderPainter = &renderPainter;
-									break;
-								}
+								sameVertices.emplace(std::make_pair(currentDrawable->mesh.vertices.getId(), std::vector<Drawable*>()));
 							}
-							if (curRenderPainter == NULL)
-							{
-								curRenderPipeline->keys.emplace_back();
-								curRenderPainter = &curRenderPipeline->keys.back();
-								curRenderPainter->painter = currentDrawable->mesh.painter;
-							}
-							curRenderPainter->vertices.emplace_back(currentDrawable->mesh.vertices);
-							curRenderPainter->properties.emplace_back(_properties.get(currentDrawable->mesh.properties.getId()));
+							sameVertices[currentDrawable->mesh.vertices.getId()].push_back(currentDrawable);
+							//curRenderPainter->vertices.emplace_back(currentDrawable->mesh.vertices);
+							//curRenderPainter->properties.emplace_back(_properties.get(currentDrawable->mesh.properties.getId()));
 						}
 						break;
 					case PrepareKey::Type::PointLight:
@@ -502,6 +510,62 @@ namespace AGE
 						break;
 					}
 					
+				}
+				for (auto &e : sameVertices)
+				{
+					if (e.second.empty())
+					{
+						continue;
+					}
+
+					RenderPipeline *curRenderPipeline = &renderCamera.pipelines[RenderType::BASIC];
+					RenderPainter *curRenderPainter = nullptr;
+					auto first = e.second.front();
+
+
+					for (auto &renderPainter : curRenderPipeline->keys)
+					{
+						if (renderPainter.painter == first->mesh.painter)
+						{
+							curRenderPainter = &renderPainter;
+							break;
+						}
+					}
+					if (curRenderPainter == NULL)
+					{
+						curRenderPipeline->keys.emplace_back();
+						curRenderPainter = &curRenderPipeline->keys.back();
+						curRenderPainter->painter = first->mesh.painter;
+					}
+
+					if (e.second.size() == 1)
+					{
+						curRenderPainter->vertices.emplace_back(first->mesh.vertices);
+						curRenderPainter->properties.emplace_back(_properties.get(first->mesh.properties.getId()));
+					}
+					else // multiple instance of same Vertice
+					{
+						// Comment this block if you implement instancied rendering
+
+						for (auto &m : e.second)
+						{
+							curRenderPainter->vertices.emplace_back(m->mesh.vertices);
+							curRenderPainter->properties.emplace_back(_properties.get(m->mesh.properties.getId()));
+						}
+
+						// Uncomment to use it for instancied rendering\
+
+						//curRenderPainter->instanciedVertices.emplace_back();
+						//
+						//auto &instancied = curRenderPainter->instanciedVertices.back();
+						//
+						//instancied.vertice = first->mesh.vertices;
+
+						//for (auto &m : e.second)
+						//{
+						//	instancied.transformations.push_back(m->transformation);
+						//}
+					}
 				}
 			}
 			GetRenderThread()->getQueue()->emplaceCommand<Commands::ToRender::CopyDrawLists>(this->_octreeDrawList);
