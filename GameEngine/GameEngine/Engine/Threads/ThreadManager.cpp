@@ -7,10 +7,12 @@
 #include "QueuePusher.hpp"
 #include <TMQ/queue.hpp>
 #include <limits>
+#include <Utils/Debug.hpp>
 
 namespace AGE
 {
 	ThreadManager::ThreadManager()
+		: _engine(nullptr)
 	{
 		// For old computer, we need at least 3 threads hahahahaha
 		// Yeah, we're like this :D
@@ -95,9 +97,16 @@ namespace AGE
 		return nullptr;
 	}
 
-	std::weak_ptr<AGE::Engine> ThreadManager::createEngine()
+	Engine *ThreadManager::createEngine()
 	{
-		return getMainThread()->createEngine();
+		_engine = getMainThread()->createEngine();
+		return _engine;
+	}
+
+	AGE::Engine *ThreadManager::getEngine()
+	{
+		AGE_ASSERT(_engine != nullptr);
+		return _engine;
 	}
 
 	MainThread *ThreadManager::getMainThread() const
@@ -218,17 +227,13 @@ namespace AGE
 		return Singleton<ThreadManager>::getInstance()->getPrepareThread();
 	}
 
-	std::weak_ptr<Engine> CreateEngine()
-	{
-		return Singleton<ThreadManager>::getInstance()->createEngine();
-	}
-
 	bool InitAGE()
 	{
 		static std::once_flag onceFlag;
 		bool res = true;
 		std::call_once(onceFlag, [&](){
 			Singleton<ThreadManager>::setInstance();
+			Singleton<AGE::Logger>::setInstance();
 			auto threadManager = Singleton<ThreadManager>::getInstance();
 			res = threadManager->initAndLaunch();
 			if (!res)

@@ -11,25 +11,25 @@ namespace AGE
 		enum ThreadType : std::size_t
 		{
 			Main = 0
-			, PrepareRender
-			, Render
-			, Worker1
-			, Worker2
-			, Worker3
-			, Worker4
-			, Worker5
-			, Worker6
-			, Worker7
-			, Worker8
-			, Worker9
-			, Worker10
-			, Worker11
-			, Worker12
-			, Worker13
-			, Worker14
-			, Worker15
-			, Worker16
-			, END
+			, PrepareRender = 1
+			, Render = 2
+			, Worker1 = 3
+			, Worker2 = 4
+			, Worker3 = 5
+			, Worker4 = 6
+			, Worker5 = 7
+			, Worker6 = 8
+			, Worker7 = 9
+			, Worker8 = 10
+			, Worker9 = 11
+			, Worker10 = 12
+			, Worker11 = 13
+			, Worker12 = 14
+			, Worker13 = 15
+			, Worker14 = 16
+			, Worker15 = 17
+			, Worker16 = 18
+			, END = 19
 		};
 
 		static std::string threadTypeToString(ThreadType t);

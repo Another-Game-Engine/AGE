@@ -20,8 +20,8 @@ namespace AGE
 		virtual bool stop();
 		bool run();
 		bool update();
-		std::weak_ptr<AGE::Engine> createEngine();
-		std::weak_ptr<AGE::Engine> getEngine();
+		AGE::Engine *createEngine();
+		AGE::Engine *getEngine();
 		void setSceneAsActive(AScene *scene);
 		inline const AScene *getActiveScene() const { return _activeScene; }
 	private:
@@ -36,7 +36,7 @@ namespace AGE
 
 		friend class ThreadManager;
 
-		std::shared_ptr<AGE::Engine> _engine;
+		AGE::Engine *_engine;
 		AScene *_activeScene;
 		TMQ::PtrQueue taskQueue;
 	};

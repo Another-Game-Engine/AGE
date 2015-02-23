@@ -1,11 +1,15 @@
 #include "SceneSelectorScene.hpp"
 #include <imgui\imgui.h>
+#include "AssetsEditorScene.hpp"
+#include "WorldEditorScene.hpp"
+#include <Core/Input.hh>
+#include <SDL/SDL.h>
 
 namespace AGE
 {
 	const std::string SceneSelectorScene::Name = "SceneSelector";
 
-	SceneSelectorScene::SceneSelectorScene(std::weak_ptr<AGE::Engine> engine)
+	SceneSelectorScene::SceneSelectorScene(AGE::Engine *engine)
 		: AScene(engine)
 	{
 	}
@@ -19,39 +23,31 @@ namespace AGE
 		return true;
 	}
 
-	bool SceneSelectorScene::userUpdate(double time)
+	bool SceneSelectorScene::userUpdateBegin(double time)
 	{
-		std::vector<std::string> scenes;
-		ImGui::Begin("Scene selector");
-		getEngine().lock()->getSceneList(scenes);
-		static int sceneIndex = 0;
-		std::string sceneStr;
-		for (auto i = 0; i < scenes.size(); ++i)
-		{
-			auto &e = scenes[i];
-			if (e == Name)
-			{
-				std::swap(scenes.back(), e);
-				scenes.pop_back();
-				continue;
-			}
-			sceneStr += e;
-			sceneStr += '\0';
-		}
-		if (ImGui::Combo("Select scene", &sceneIndex, sceneStr.c_str(), (int)(scenes.size())))
-		{
-			for (auto i = 0; i < scenes.size(); ++i)
-			{
-				if (i != sceneIndex)
-					getEngine().lock()->disableScene(scenes[sceneIndex]);
-			}
-			getEngine().lock()->enableScene(scenes[sceneIndex], 1);
-		}
+		ImGui::Begin("Assets Convertor", (bool*)1, ImGui::GetIO().DisplaySize, -1.0f, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoTitleBar);
 
-		//const char* items[] = { "AAAA", "BBBB", "CCCC", "DDDD", "EEEE", "FFFF", "GGGG", "HHHH", "IIII", "JJJJ", "KKKK" };
-		//static int item2 = -1;
-		//ImGui::Combo("combo scroll", &item2, items, (int)());
-		ImGui::End();
+
+		ImGui::BeginChild("Global Options", ImVec2(ImGui::GetIO().DisplaySize.x, 30), false);
+		if (ImGui::Button("Asset Editor"))
+		{
+			getEngine()->disableScene(WorldEditorScene::Name);
+			getEngine()->enableScene(AssetsEditorScene::Name, 1000);
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("World Editor"))
+		{
+			getEngine()->enableScene(WorldEditorScene::Name, 1000);
+			getEngine()->disableScene(AssetsEditorScene::Name);
+		}
+		ImGui::EndChild();
+		return true;
+	}
+
+	bool SceneSelectorScene::userUpdateEnd(double time)
+	{
+		if (getInstance<Input>()->getInput(SDLK_ESCAPE))
+			return (false);
 		return true;
 	}
 }

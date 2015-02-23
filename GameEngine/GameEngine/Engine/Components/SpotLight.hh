@@ -19,30 +19,27 @@ namespace AGE
 		SpotLightData &operator=(SpotLightData const &o);
 	};
 
-	namespace Component
+	struct SpotLight : public ComponentBase
 	{
-		struct SpotLight : public ComponentBase < SpotLight >
-		{
-			SpotLightData		lightData;
-			glm::mat4			projection;
+		SpotLightData		lightData;
+		glm::mat4			projection;
 
-			SpotLight();
+		SpotLight();
 
-			SpotLight(SpotLight const &o);
+		SpotLight(SpotLight const &o);
 
-			virtual ~SpotLight();
+		virtual ~SpotLight();
 
-			void		updateLightData(const glm::mat4 &globalTransform);
+		void		updateLightData(const glm::mat4 &globalTransform);
 
-			virtual void reset(AScene *);
+		virtual void reset(AScene *);
 
-			SpotLight &operator=(SpotLight const &o);
+		SpotLight &operator=(SpotLight const &o);
 
-			void	init(AScene *);
+		void	init(AScene *);
 
-			template <typename Archive>
-			void serialize(Archive &ar);
+		template <typename Archive>
+		void serialize(Archive &ar);
 
-		};
-	}
+	};
 }

@@ -9,7 +9,6 @@
 #include <stdlib.h>
 #include <Core/Engine.hh>
 
-#include <Render/RenderManager.hh>
 // SCENES
 #include <Scenes/BenchmarkScene.hpp>
 
@@ -19,7 +18,7 @@
 #include <Physic/BulletDynamicManager.hpp>
 #include <Core/Timer.hh>
 #include <Utils/PerformanceDebugger.hh>
-#include <Core/AssetsManager.hpp>
+#include <AssetManagement/AssetManager.hh>
 
 #include <Utils/Age_Imgui.hpp>
 #include <Skinning/AnimationManager.hpp>
@@ -32,7 +31,7 @@
 #include <Threads/MainThread.hpp>
 #include <Core/DefaultConfiguration.hpp>
 #include <Threads/RenderThread.hpp>
-#include <Core/Tasks/Basics.hpp>
+#include <Threads/Tasks/BasicTasks.hpp>
 ////////////////////////////////////////
 
 #include <chrono>
@@ -47,27 +46,27 @@ int			main(int ac, char **av)
 	AGE::InitAGE();
 	auto engine = AGE::CreateEngine();
 
-	engine.lock()->launch(std::function<bool()>([&]()
+	engine->launch(std::function<bool()>([&]()
 	{
 		AGE::GetThreadManager()->setAsWorker(true, true, false);
-		engine.lock().get()->setInstance<Timer>();
-		engine.lock().get()->setInstance<AGE::AssetsManager>();
+		engine->setInstance<Timer>();
+		engine->setInstance<AGE::AssetsManager>();
 
 #ifdef USE_IMGUI
 		AGE::GetRenderThread()->getQueue()->emplaceFutureTask<AGE::Tasks::Basic::BoolFunction, bool>([=](){
-			AGE::Imgui::getInstance()->init(engine.lock().get());
+			AGE::Imgui::getInstance()->init(engine);
 			return true;
 		}).get();
 #endif
 		// add main scene
-		engine.lock()->addScene(std::make_shared<BenchmarkScene>(engine), "BenchmarkScene");
-//		engine.lock()->addScene(std::make_shared<BenchmarkScene>(engine), "BenchmarkScene2");
+		engine->addScene(std::make_shared<BenchmarkScene>(engine), "BenchmarkScene");
+//		engine->addScene(std::make_shared<BenchmarkScene>(engine), "BenchmarkScene2");
 		// bind scene
-		if (!engine.lock()->initScene("BenchmarkScene"))
+		if (!engine->initScene("BenchmarkScene"))
 			return false;
 		//if (!engine.lock()->initScene("BenchmarkScene2"))
 		//	return false;
-		engine.lock()->enableScene("BenchmarkScene", 100);
+		engine->enableScene("BenchmarkScene", 100);
 //		engine.lock()->enableScene("BenchmarkScene2", 101);
 		return true;
 	}));

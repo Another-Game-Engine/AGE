@@ -14,14 +14,14 @@ namespace AGE
 	class BulletDynamicSystem : public System
 	{
 	public:
-		BulletDynamicSystem(std::weak_ptr<AScene> &&scene)
+		BulletDynamicSystem(AScene *scene)
 			: System(std::move(scene))
 			, _manager(nullptr)
 			, _filter(std::move(scene))
 		{
 			_name = "bullet_dynamic_system";
-			_manager = dynamic_cast<BulletDynamicManager*>(_scene.lock()->getInstance<BulletCollisionManager>());
-			_filter.requireComponent<Component::RigidBody>();
+			_manager = dynamic_cast<BulletDynamicManager*>(_scene->getInstance<BulletCollisionManager>());
+			_filter.requireComponent<RigidBody>();
 		}
 		virtual ~BulletDynamicSystem(){}
 	private:
@@ -30,16 +30,16 @@ namespace AGE
 
 		virtual void updateBegin(double time)
 		{
-			auto scene = _scene.lock();
+			auto scene = _scene;
 			for (auto e : _filter.getCollection())
 			{
-				if (scene->getLink(e)->isUserModified())
+				if (e.getLink().isUserModified())
 				{
-					auto rb = scene->getComponent<Component::RigidBody>(e);
+					auto rb = e.getComponent<RigidBody>();
 					if (rb->getMass() == 0)
 					{
-						rb->setTransformation(scene->getLink(e));
-						scene->getLink(e)->setUserModified(false);
+						rb->setTransformation(&e.getLink());
+						e.getLink().setUserModified(false);
 					}
 				}
 

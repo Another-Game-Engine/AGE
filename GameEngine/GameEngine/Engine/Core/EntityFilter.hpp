@@ -10,21 +10,21 @@ namespace AGE
 	class EntityFilter
 	{
 	public:
-		EntityFilter(std::weak_ptr<AScene> &&scene);
+		EntityFilter(AScene *scene);
 		virtual ~EntityFilter();
 
 		template <typename T>
 		void requireComponent()
 		{
-			_barcode.setComponent(COMPONENT_ID(T::getTypeId()));
-			_scene.lock()->filterSubscribe(COMPONENT_ID(T::getTypeId()), this);
+			_barcode.insert(Component<T>::getTypeId());
+			_scene->filterSubscribe(Component<T>::getTypeId(), this);
 		}
 
 		template <typename T>
 		void unRequireComponent()
 		{
-			_barcode.unsetComponent(T::getTypeId());
-			_scene.lock()->filterUnsubscribe(T::getTypeId(), this);
+			_barcode.erase(Component<T>::getTypeId());
+			_scene.lock()->filterUnsubscribe(Component<T>::getTypeId(), this);
 		}
 
 		void requireTag(TAG_ID tag);
@@ -34,10 +34,15 @@ namespace AGE
 
 		inline void clearCollection() { _collection.clear(); }
 
-		void virtual componentAdded(const EntityData &e, COMPONENT_ID typeId);
-		void virtual componentRemoved(const EntityData &e, COMPONENT_ID typeId);
+		void virtual componentAdded(const EntityData &e, ComponentType typeId);
+		void virtual componentRemoved(const EntityData &e, ComponentType typeId);
 		void virtual tagAdded(const EntityData &e, TAG_ID typeId);
 		void virtual tagRemoved(const EntityData &e, TAG_ID typeId);
+		void virtual entityAdded(const EntityData &e);
+		void virtual entityRemoved(const EntityData &e);
+
+		inline void setOnAdd(std::function<void(Entity e)> &onAdd) { _onAdd = onAdd; }
+		inline void setOnRemove(std::function<void(Entity e)> &onRm) { _onRemove = onRm; }
 
 		bool isLocked() const;
 
@@ -63,16 +68,20 @@ namespace AGE
 		};
 
 	protected:
-		Barcode _barcode;
+		std::set<ComponentType> _barcode;
 		std::set<Entity> _collection;
-		std::weak_ptr<AScene> _scene;
+		AScene *_scene;
 
 		void lock();
 		void unlock();
+
+		bool match(const EntityData &e);
 
 	private:
 		bool _locked;
 		std::set<Entity> _trash;
 		std::set<Entity> _toAdd;
+		std::function<void(Entity e)> _onAdd;
+		std::function<void(Entity e)> _onRemove;
 	};
 }

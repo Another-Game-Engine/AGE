@@ -4,7 +4,7 @@
 #include <string>
 #include <Utils/Containers/Vector.hpp>
 
-#include <Utils/File.hpp>
+#include <Utils/OldFile.hpp>
 #include <assimp/Importer.hpp>
 
 #include <filesystem>
@@ -20,7 +20,7 @@ class btTriangleMesh;
 namespace AGE
 {
 	struct Skeleton;
-	struct Animation;
+	struct AnimationData;
 	struct MeshData;
 	struct MaterialData;
 	struct TextureData;
@@ -34,14 +34,14 @@ namespace AGE
 		AssetDataSet() = delete;
 		AssetDataSet(const std::string &path)
 		{
-			filePath = File(path);
+			filePath = OldFile(path);
 			isConverting = false;
 		}
 
 		std::atomic_bool isConverting;
 
 		//Paths
-		File filePath = "";
+		OldFile filePath = "";
 
 		//Configurations
 		bool loadSkeleton = true;
@@ -64,5 +64,14 @@ namespace AGE
 		//Physic Options
 		bool staticConcave = true;
 		bool dynamicConcave = true;
+
+		// Textures options
+		bool compressTextures = false;
+		int textureCompressionQuality = 2;
+		bool generateMipmap = true;
+
+		// Material options
+		bool bumpToNormal = true;
+		float normalStrength = 2;
 	};
 }

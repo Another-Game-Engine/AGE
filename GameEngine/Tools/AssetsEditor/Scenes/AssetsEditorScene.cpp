@@ -4,13 +4,11 @@
 #include <Threads/ThreadManager.hpp>
 #include <Core/Engine.hh>
 #include <Core/Timer.hh>
-#include <Core/AssetsManager.hpp>
+#include <AssetManagement/AssetManager.hh>
 #include <Threads/RenderThread.hpp>
 #include <Utils/Age_Imgui.hpp>
-#include <Core/Tasks/Basics.hpp>
+#include <Threads/Tasks/BasicTasks.hpp>
 #include <Threads/TaskScheduler.hpp>
-#include <Core/Input.hh>
-#include <SDL/SDL.h>
 
 #include <string>
 
@@ -27,21 +25,37 @@
 #include <AssetFiles/RawFile.hpp>
 #include <AssetFiles/AssetFileManager.hpp>
 #include <AssetFiles/CookedFile.hpp>
-
 #include <AssetFiles/AssetsTypes.hpp>
 
 #include <Utils/FileSystem.hpp>
-
+#include <Utils/Directory.hpp>
+#include <Utils/Path.hpp>
+#include <Utils/Debug.hpp>
+#include <Utils/FileSystemHelpers.hpp>
 
 namespace AGE
 {
-	AssetsEditorScene::AssetsEditorScene(std::weak_ptr<AGE::Engine> engine)
+	const std::string AssetsEditorScene::Name = "AssetsEditor";
+	AE::Folder AssetsEditorScene::_raw = AE::Folder();
+	AE::Folder AssetsEditorScene::_cook = AE::Folder();
+
+	std::vector<AssetsEditorScene::AssetsEditorFileDescriptor> AssetsEditorScene::_cookedFiles
+		= std::vector<AssetsEditorScene::AssetsEditorFileDescriptor>();
+
+	std::vector<const char *> AssetsEditorScene::_cookedMeshsFullPath = std::vector<const char *>();
+	std::vector<const char *> AssetsEditorScene::_cookedMeshFiles = std::vector<const char *>();
+
+	std::vector<const char *> AssetsEditorScene::_cookedBulletFullPath = std::vector<const char *>();
+	std::vector<const char *> AssetsEditorScene::_cookedBulletFiles = std::vector<const char *>();
+
+	std::vector<const char *> AssetsEditorScene::_cookedMaterialFullPath = std::vector<const char *>();
+	std::vector<const char *> AssetsEditorScene::_cookedMaterialFiles = std::vector<const char *>();
+
+	AssetsEditorScene::AssetsEditorScene(AGE::Engine *engine)
 		: AScene(engine)
-		, _raw("../../Assets/AGE-Assets-For-Test/Raw")
-		, _cook("../../Assets/AGE-Assets-For-Test/Serialized")
 	{
-		_raw.list();
-		_cook.list();
+		_raw.list("../../Assets/Raw");
+		_cook.list("../../Assets/Serialized");
 		AE::AssetFileManager::LinkRawToCooked(&_raw, &_cook);
 	}
 
@@ -55,30 +69,61 @@ namespace AGE
 		return true;
 	}
 
-	bool AssetsEditorScene::userUpdate(double time)
+	bool AssetsEditorScene::userUpdateBegin(double time)
 	{
-		//check dirty for test
+		// dirty ! We list files
+		static float refreshCounter = 1.0f;
+		if (refreshCounter >= 1.0f)
 		{
-			static double counter = 0;
-			counter += time;
-			if (counter > 1)
+			auto currentDir = Directory::GetCurrentDirectory();
+			auto absPath = Path::AbsoluteName(currentDir, "../../Assets/Serialized");
+			auto dir = Directory();
+			AGE_ASSERT(dir.open("../../Assets/Serialized"));
+			auto it = dir.recursive_begin();
+
+			_cookedBulletFiles.clear();
+			_cookedBulletFullPath.clear();
+			_cookedMaterialFiles.clear();
+			_cookedMaterialFullPath.clear();
+			_cookedMeshFiles.clear();
+			_cookedMeshsFullPath.clear();
+			_cookedFiles.clear();
+
+			while (it != dir.recursive_end())
 			{
-				_raw.list();
-				std::set<std::shared_ptr<AE::RawFile>> dirty;
-				AE::AssetFileManager::CheckIfRawModified(&_raw, dirty);
-				for (auto &e : dirty)
+				if (Directory::IsFile(it.get()))
 				{
+					_cookedFiles.push_back(AssetsEditorFileDescriptor(it.get(), Path::BaseName(it.get())));
 
+					auto extension = AGE::FileSystemHelpers::GetExtension(it.get());
+					if (extension == "sage")
+					{
+						_cookedMeshFiles.push_back(_cookedFiles.back().fileName.c_str());
+						_cookedMeshsFullPath.push_back(_cookedFiles.back().fullPath.c_str());
+					}
+					else if (extension == "mage")
+					{
+						_cookedMaterialFiles.push_back(_cookedFiles.back().fileName.c_str());
+						_cookedMaterialFullPath.push_back(_cookedFiles.back().fullPath.c_str());
+					}
+					else if (extension == "bullet")
+					{
+						_cookedBulletFiles.push_back(_cookedFiles.back().fileName.c_str());
+						_cookedBulletFullPath.push_back(_cookedFiles.back().fullPath.c_str());
+					}
 				}
-				counter = 0;
+				it++;
 			}
-		}
 
-		ImGui::Begin("Assets Convertor", (bool*)1, ImGui::GetIO().DisplaySize, 1, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoTitleBar);
-		ImGui::BeginChild("Assets browser", ImVec2(ImGui::GetWindowWidth() * 0.3333333f, ImGui::GetIO().DisplaySize.y), true);
+			dir.close();
+			refreshCounter = 0;
+		}
+		refreshCounter += time;
+
+		ImGui::BeginChild("Assets browser", ImVec2(ImGui::GetWindowWidth() * 0.333333f, 0), true);
 		{
 			{
-				ImGui::BeginChild("Raw", ImVec2(0, ImGui::GetIO().DisplaySize.y /*/ 2 */- 10), false);
+				ImGui::BeginChild("Raw", ImVec2(0, 0), false);
 				_raw.update(
 				std::function<bool(AE::Folder*)>([](AE::Folder* folder) {
 					bool opened = ImGui::TreeNode((void*)(folder), folder->_path.path().filename().c_str());
@@ -106,7 +151,7 @@ namespace AGE
 		}
 		ImGui::EndChild();
 		ImGui::SameLine();
-		ImGui::BeginChild("Selected Raw", ImVec2(ImGui::GetWindowWidth() * 0.33333333f, ImGui::GetIO().DisplaySize.y), false);
+		ImGui::BeginChild("Selected Raw", ImVec2(ImGui::GetWindowWidth() * 0.33333333f, 0), false);
 		{
 			if (_selectedRaw != nullptr)
 			{
@@ -153,6 +198,11 @@ namespace AGE
 					ImGui::Checkbox("Material", &dataset->loadMaterials);
 					if (dataset->loadMaterials)
 					{
+						ImGui::Checkbox("Generate normal map from bump", &dataset->bumpToNormal);
+						if (dataset->bumpToNormal)
+						{
+							ImGui::SliderFloat("Normal strength", &dataset->normalStrength, 1.0f, 10.0f);
+						}
 					}
 					ImGui::Separator();
 
@@ -171,6 +221,12 @@ namespace AGE
 					ImGui::Checkbox("Textures", &dataset->loadTextures);
 					if (dataset->loadTextures)
 					{
+						ImGui::Checkbox("Compress textures", &dataset->compressTextures);
+						if (dataset->compressTextures)
+						{
+							ImGui::SliderInt("Compression quality", &dataset->textureCompressionQuality, 0, 4);
+							ImGui::Checkbox("Generate mipmaps", &dataset->generateMipmap);
+						}
 					}
 					ImGui::Separator();
 					if (ImGui::Button("Cook"))
@@ -178,8 +234,8 @@ namespace AGE
 						auto cookingTask = std::make_shared<CookingTask>(_selectedRaw->dataSet);
 						AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=]()
 						{
-							cookingTask->serializedDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>("../../Assets/AGE-Assets-For-Test/Serialized");
-							cookingTask->rawDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>("../../Assets/AGE-Assets-For-Test/Raw");
+							cookingTask->serializedDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>("../../Assets/Serialized");
+							cookingTask->rawDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>("../../Assets/Raw");
 
 							AGE::AssimpLoader::Load(cookingTask);
 
@@ -232,14 +288,15 @@ namespace AGE
 		}
 		ImGui::EndChild();
 		ImGui::SameLine();
-		ImGui::BeginChild("Todo", ImVec2(ImGui::GetWindowWidth() * 0.33333333f, ImGui::GetIO().DisplaySize.y), false);
+		ImGui::BeginChild("Todo", ImVec2(ImGui::GetWindowWidth() * 0.33333333f, 0), false);
 		Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->DisplayTasks();
 		ImGui::EndChild();
+		return true;
+	}
 
+	bool AssetsEditorScene::userUpdateEnd(double time)
+	{
 		ImGui::End();
-
-		if (getInstance<Input>()->getInput(SDLK_ESCAPE))
-			return (false);
 		return true;
 	}
 }

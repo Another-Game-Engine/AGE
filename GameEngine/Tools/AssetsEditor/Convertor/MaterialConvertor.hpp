@@ -4,10 +4,11 @@
 #include "ImageLoader.hpp"
 #include <map>
 
+#include <AssetManagement/Data/MaterialData.hh>
 #include "ConvertorStatusManager.hpp"
-#include <Geometry/MaterialData.hpp>
 #include "AssetDataSet.hpp"
 #include "CookingTask.hpp"
+
 namespace AGE
 {
 	class MaterialLoader
@@ -40,6 +41,7 @@ namespace AGE
 			Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PopTask(tid);
 			return true;
 		}
+
 		static bool load(std::shared_ptr<CookingTask> cookingTask)
 		{
 			if (!cookingTask->dataSet->loadMaterials)

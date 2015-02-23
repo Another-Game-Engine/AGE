@@ -53,17 +53,24 @@ public:
 			_freeIdx.pop();
 			return (ret);
 		}
-		return (_currentIdx++);
+		auto res = _currentIdx;
+		++_currentIdx;
+		return res;
 	}
 
 	template <class... param_t>
 	void allocPreparated(uint32_t idx, param_t... param)
 	{
-		assert(idx <= _pool.size());
 		if (idx == _pool.size())
 			_pool.emplace_back(param...);
 		else
+		{
+			if (idx >= _pool.size())
+			{
+				_pool.resize(idx + 1);
+			}
 			new (&_pool[idx]) T(param...);
+		}
 	}
 
 	void dealloc(uint32_t idx)
@@ -93,7 +100,7 @@ public:
 	}
 
 private:
-	std::vector<T>			_pool;
+	std::vector<T>	_pool;
 	std::queue<uint32_t>	_freeIdx;
 	uint32_t				_currentIdx;
 };

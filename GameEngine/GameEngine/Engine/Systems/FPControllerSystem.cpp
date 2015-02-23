@@ -7,9 +7,9 @@
 
 namespace AGE
 {
-	FPControllerSystem::FPControllerSystem(std::weak_ptr<AScene> &&scene)
+	FPControllerSystem::FPControllerSystem(AScene *scene)
 		: System(std::move(scene))
-		, _manager(scene.lock()->getInstance<BulletCollisionManager>())
+		, _manager(scene->getInstance<BulletCollisionManager>())
 		, _filter(std::move(scene))
 	{
 		_name = "FP_controller_system";
@@ -57,7 +57,7 @@ namespace AGE
 		//}
 	}
 
-	void FPControllerSystem::updateComponent(Entity &entity, Component::FPController *fp, double time)
+	void FPControllerSystem::updateComponent(Entity &entity, FPController *fp, double time)
 	{
 		//float ftime = static_cast<float>(time);
 		//fp->resetControls();

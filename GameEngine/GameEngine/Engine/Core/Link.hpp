@@ -2,6 +2,7 @@
 
 #include <Entities/EntityTypedef.hpp>
 #include <Core/PrepareKey.hpp>
+#include <vector>
 #include <array>
 #include <Utils/Serialization/QuaternionSerialization.hpp>
 #include <Utils/Serialization/VectorSerialization.hpp>
@@ -48,29 +49,40 @@ namespace AGE
 		void registerOctreeObject(const PrepareKey &key);
 		void unregisterOctreeObject(const PrepareKey &key);
 
-		inline bool hasChildren() const { return _lastChildrenIndex != 0; };
-	public:
+		inline bool hasChildren() const { return _children.size() > 0; };
+		inline bool hasParent() const { return _parent != nullptr; }
+		inline bool hasParent(const Link *parent) const { return _parent == parent; }
+
+		void attachChild(Link *child);
+		void detachChild(Link *child);
+		void detachChildren();
+		bool hasChild(const Link *child) const;
+		void attachParent(Link *parent);
+		void detachParent();
+
 		const glm::mat4 &getTransform() const;
 		const glm::mat4 &getTransform();
 	private:
 		bool _userModification = false;
+
 		glm::vec3 _position;
 		glm::vec3 _scale;
 		glm::quat _orientation;
 		glm::mat4 _trans;
+
 		bool _computeTrans;
-		std::array<PrepareKey, MAX_CPT_NUMBER> _octreeObjects;
+		std::vector<PrepareKey> _octreeObjects;
 		Link *_parent;
-		std::array<Link*, MAX_CHILDREN> _children;
-		std::size_t _lastOctreeObjectIndex;
-		std::size_t _lastChildrenIndex;
+		std::vector<Link*> _children;
 
 		void _setChild(Link *ptr);
 		void _setParent(Link *ptr);
 		void _removeChild(Link *ptr);
 		void _removeParent();
+		void _detachFromRoot();
+		void _attachToRoot();
 	public:
-		RenderScene *_octree;
+		RenderScene *_renderScene;
 	public:
 		Link();
 		void reset();

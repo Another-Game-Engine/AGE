@@ -1,5 +1,5 @@
 #include <AssetFiles/AssetFileManager.hpp>
-#include <Utils/FileSystem.hpp>
+#include <Utils/FileSystemHelpers.hpp>
 #include <AssetFiles/RawFile.hpp>
 #include <AssetFiles/CookedFile.hpp>
 #include <AssetFiles/AssetsTypes.hpp>
@@ -37,15 +37,15 @@ namespace AGE
 
 		bool AssetFileManager::IsValidFile(const std::tr2::sys::path &path)
 		{
-			auto extension = AGE::FileSystem::GetExtension(path);
+			auto extension = AGE::FileSystemHelpers::GetExtension(path);
 			if (extension == "obj" || extension == "fbx" || extension == "dae")
 				return true;
 			return false;
 		}
 
-		std::shared_ptr<AssetFile> AssetFileManager::CreateFile(const std::tr2::sys::path &path, Folder *parent)
+		std::shared_ptr<AssetFile> AssetFileManager::AgeCreateFile(const std::tr2::sys::path &path, Folder *parent)
 		{
-			auto extension = AGE::FileSystem::GetExtension(path);
+			auto extension = AGE::FileSystemHelpers::GetExtension(path);
 			std::shared_ptr<AssetFile> t = nullptr;
 			if (extension == "obj" || extension == "fbx" || extension == "dae")
 			{
@@ -83,15 +83,15 @@ namespace AGE
 
 			if (t)
 			{
-				t->_lastWriteTime = AGE::FileSystem::GetLastWriteTime(t->getPath());
-				t->_lastWriteTimeStr = AGE::FileSystem::GetDateStr(t->getPath());
+				t->_lastWriteTime = AGE::FileSystemHelpers::GetLastWriteTime(t->getPath());
+				t->_lastWriteTimeStr = AGE::FileSystemHelpers::GetDateStr(t->getPath());
 			}
 			return t;
 		}
 
-		std::shared_ptr<AssetFile> AssetFileManager::CreateFile(const std::string &path, Folder *parent)
+		std::shared_ptr<AssetFile> AssetFileManager::AgeCreateFile(const std::string &path, Folder *parent)
 		{
-			return CreateFile(std::tr2::sys::path(path), parent);
+			return AgeCreateFile(std::tr2::sys::path(path), parent);
 		}
 
 		void AssetFileManager::CheckIfRawModified(Folder *folder, std::set<std::shared_ptr<RawFile>> &list)
@@ -99,8 +99,8 @@ namespace AGE
 			folder->update(std::function<void(Folder*)>([](Folder*){}), std::function<void(RawFile*)>([&](RawFile* ptr) {
 				if (ptr->dataSet && ptr->dataSet->isConverting)
 					return;
-				auto lastWrite = FileSystem::GetLastWriteTime(ptr->getPath());
-				if (FileSystem::GetDiffTime(lastWrite, ptr->_lastWriteTime) > 0)
+				auto lastWrite = FileSystemHelpers::GetLastWriteTime(ptr->getPath());
+				if (FileSystemHelpers::GetDiffTime(lastWrite, ptr->_lastWriteTime) > 0)
 				{
 					ptr->_dirty = true;
 					list.insert(std::static_pointer_cast<RawFile>(ptr->getSharedPtrOnThis()));
@@ -228,15 +228,15 @@ namespace AGE
 				//if (!ptr->_cookedFile)
 				{
 					std::shared_ptr<AGE::AE::AssetFile> result = nullptr;
-					auto cookedPath = RawPathToCooked(FileSystem::CleanPath(ptr->getPath()));
+					auto cookedPath = RawPathToCooked(FileSystemHelpers::CleanPath(ptr->getPath()));
 					cooked->find(cookedPath, result);
 					if (result)
 					{
 						ptr->_cookedFile = std::static_pointer_cast<CookedFile>(result->getSharedPtrOnThis());
 						std::static_pointer_cast<CookedFile>(result)->_rawFile = std::static_pointer_cast<RawFile>(ptr->getSharedPtrOnThis());
-						if (FileSystem::GetDiffTime(ptr->_lastWriteTime, result->_lastWriteTime) > 0)
+						if (FileSystemHelpers::GetDiffTime(ptr->_lastWriteTime, result->_lastWriteTime) > 0)
 						{
-							std::cout << FileSystem::GetDateStr(ptr->getPath()) << " | " << FileSystem::GetDateStr(result->getPath()) << std::endl;
+							std::cout << FileSystemHelpers::GetDateStr(ptr->getPath()) << " | " << FileSystemHelpers::GetDateStr(result->getPath()) << std::endl;
 							//TODO push in dirty list
 							ptr->_dirty = true;
 						}
@@ -260,7 +260,7 @@ namespace AGE
 				return path;
 			auto res = path;
 			res.replace(index, 5, "/Serialized/");
-			auto extension = FileSystem::GetExtension(res);
+			auto extension = FileSystemHelpers::GetExtension(res);
 			if (extension == "obj" || extension == "fbx" || extension == "collada")
 			{
 				res.replace(res.find("." + extension), extension.size() + 1, ".sage");

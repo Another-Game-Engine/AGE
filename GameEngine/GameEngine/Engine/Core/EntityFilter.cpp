@@ -2,11 +2,12 @@
 
 namespace AGE
 {
-	EntityFilter::EntityFilter(std::weak_ptr<AScene> &&scene)
+	EntityFilter::EntityFilter(AScene *scene)
 		: _scene(std::move(scene))
 		, _locked(false)
 	{
-		assert(_scene.lock() != nullptr && "System Scene is not valid.");
+		assert(_scene != nullptr && "System Scene is not valid.");
+		_scene->registerFilter(this);
 	}
 
 	EntityFilter::~EntityFilter()
@@ -20,19 +21,34 @@ namespace AGE
 
 	void EntityFilter::requireTag(TAG_ID id)
 	{
-		_barcode.setTag(id);
-		_scene.lock()->filterSubscribe(id, this);
+		// @ECS TODO
+
+		//_barcode.setTag(id);
+		//_scene.lock()->filterSubscribe(id, this);
 	}
 
 	void EntityFilter::unRequireTag(TAG_ID id)
 	{
-		_barcode.unsetTag(id);
-		_scene.lock()->filterUnsubscribe(id, this);
+		// @ECS TODO
+
+		//_barcode.unsetTag(id);
+		//_scene.lock()->filterUnsubscribe(id, this);
 	}
 
-	void EntityFilter::componentAdded(const EntityData &e, COMPONENT_ID typeId)
+	bool EntityFilter::match(const EntityData &e)
 	{
-		if (e.barcode.match(_barcode))
+		for (auto &b : _barcode)
+		{
+			if (!e.haveComponent(b))
+				return false;
+		}
+		return true;
+	}
+
+	void EntityFilter::componentAdded(const EntityData &e, ComponentType typeId)
+	{
+
+		if (match(e))
 		{
 			if (_locked)
 			{
@@ -40,12 +56,14 @@ namespace AGE
 			}
 			else
 				_collection.insert(e.entity);
+			if (_onAdd)
+				_onAdd(e.entity);
 		}
 	}
 
-	void EntityFilter::componentRemoved(const EntityData &e, COMPONENT_ID typeId)
+	void EntityFilter::componentRemoved(const EntityData &e, ComponentType typeId)
 	{
-		if (!e.barcode.match(_barcode))
+		if (!match(e))
 		{
 			if (_locked)
 			{
@@ -53,12 +71,14 @@ namespace AGE
 			}
 			else
 				_collection.erase(e.entity);
+			if (_onRemove)
+				_onRemove(e.entity);
 		}
 	}
 
 	void EntityFilter::tagAdded(const EntityData &e, TAG_ID typeId)
 	{
-		if (e.barcode.match(_barcode))
+		if (match(e))
 		{
 			if (_locked)
 			{
@@ -66,12 +86,14 @@ namespace AGE
 			}
 			else
 				_collection.insert(e.entity);
+			if (_onAdd)
+				_onAdd(e.entity);
 		}
 	}
 
 	void EntityFilter::tagRemoved(const EntityData &e, TAG_ID typeId)
 	{
-		if (!e.barcode.match(_barcode))
+		if (!match(e))
 		{
 			if (_locked)
 			{
@@ -79,7 +101,36 @@ namespace AGE
 			}
 			else
 				_collection.erase(e.entity);
+			if (_onRemove)
+				_onRemove(e.entity);
 		}
+	}
+
+	void EntityFilter::entityAdded(const EntityData &e)
+	{
+		if (this->_barcode.empty())
+		{
+			if (_locked)
+			{
+				_toAdd.insert(e.entity);
+			}
+			else
+				_collection.insert(e.entity);
+			if (_onAdd)
+				_onAdd(e.entity);
+		}
+	}
+
+	void EntityFilter::entityRemoved(const EntityData &e)
+	{
+		if (_locked)
+		{
+			_trash.insert(e.entity);
+		}
+		else
+			_collection.erase(e.entity);
+		if (_onRemove)
+			_onRemove(e.entity);
 	}
 
 	void EntityFilter::lock()

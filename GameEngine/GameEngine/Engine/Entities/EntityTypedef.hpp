@@ -10,10 +10,10 @@ namespace AGE
 #define MAX_CHILDREN   (32)
 
 	typedef std::uint16_t ENTITY_ID;
-	typedef std::uint8_t  COMPONENT_ID;
 	typedef std::uint8_t  TAG_ID;
 	typedef std::uint8_t  ENTITY_VERSION;
 	typedef std::uint8_t  ENTITY_FLAGS;
+	typedef std::uint32_t ComponentType;
 
 	typedef std::uint8_t    uint8;
 	typedef std::uint16_t   uint16;

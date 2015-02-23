@@ -36,7 +36,7 @@ private:
 		for (auto e : _filter.getCollection())
 		{
 			btTransform transform;
-			auto &globalTrans = scene->getLink(e)->getTransform();
+			auto &globalTrans = e.getLink().getTransform();
 			glm::vec3 position = posFromMat4(globalTrans);
 			glm::vec3 scale = scaleFromMat4(globalTrans);
 			glm::vec3 rot = rotFromMat4(globalTrans, true);

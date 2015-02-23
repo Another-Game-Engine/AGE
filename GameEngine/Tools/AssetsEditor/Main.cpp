@@ -9,9 +9,9 @@
 #include <Convertor/ImageLoader.hpp>
 
 //SKINNING
-#include <Skinning/Animation.hpp>
+#include <AssetManagement/Data/AnimationData.hpp>
+#include <AssetManagement/Instance/AnimationInstance.hh>
 #include <Skinning/AnimationChannel.hpp>
-#include <Skinning/AnimationInstance.hpp>
 #include <Skinning/AnimationKey.hpp>
 #include <Skinning/Bone.hpp>
 #include <Skinning/Skeleton.hpp>
@@ -20,45 +20,68 @@
 #include <Threads/ThreadManager.hpp>
 #include <Core/Engine.hh>
 #include <Core/Timer.hh>
-#include <Core/AssetsManager.hpp>
+#include <AssetManagement/AssetManager.hh>
 #include <Threads/RenderThread.hpp>
 #include <Utils/Age_Imgui.hpp>
-#include <Core/Tasks/Basics.hpp>
+#include <Threads/Tasks/BasicTasks.hpp>
 #include <Threads/TaskScheduler.hpp>
 
 //SCENE
 #include <Scenes/AssetsEditorScene.hpp>
 #include <Scenes/SceneSelectorScene.hpp>
+#include <Scenes/WorldEditorScene.hpp>
+
+//COMPONENT REGISTRAR
+#include <Components/ComponentRegistrar.hpp>
+
+//COMPONENTS
+#include <Components/CameraComponent.hpp>
+#include <Components/FPController.hpp>
+#include <Components/MeshRenderer.hh>
+#include <Components/Light.hh>
+#include <Components/EntityRepresentation.hpp>
+#include <Components/RigidBody.hpp>
+#include <Components/SpotLight.hh>
 
 int			main(int ac, char **av)
 {
 	AGE::InitAGE();
 	auto engine = AGE::CreateEngine();
 
-	engine.lock()->launch(std::function<bool()>([&]()
+	engine->launch(std::function<bool()>([&]()
 	{
 		AGE::GetThreadManager()->setAsWorker(false, false, false);
-		engine.lock().get()->setInstance<AGE::Timer>();
-		engine.lock().get()->setInstance<AGE::AssetsManager>();
+		engine->setInstance<AGE::Timer>();
+		engine->setInstance<AGE::AssetsManager>();
 
 		AGE::GetRenderThread()->getQueue()->emplaceFutureTask<AGE::Tasks::Basic::BoolFunction, bool>([=](){
-			AGE::Imgui::getInstance()->init(engine.lock().get());
+			AGE::Imgui::getInstance()->init(engine);
 			return true;
 		}).get();
 
 #ifdef RENDERING_ACTIVATED
-		if (!loadAssets(engine.lock().get()))
+		if (!loadAssets(engine))
 			return false;
 #endif
-		engine.lock()->addScene(std::make_shared<AGE::AssetsEditorScene>(engine), "Assets Convertor");
-		engine.lock()->addScene(std::make_shared<AGE::SceneSelectorScene>(engine), "SceneSelector");
 
-		if (!engine.lock()->initScene("Assets Convertor"))
+		REGISTER_COMPONENT_TYPE(AGE::MeshRenderer);
+		REGISTER_COMPONENT_TYPE(AGE::RigidBody);
+		REGISTER_COMPONENT_TYPE(AGE::PointLightComponent);
+		REGISTER_COMPONENT_TYPE(AGE::CameraComponent);
+		REGISTER_COMPONENT_TYPE(AGE::WE::EntityRepresentation);
+
+		engine->addScene(std::make_shared<AGE::AssetsEditorScene>(engine), AGE::AssetsEditorScene::Name);
+		engine->addScene(std::make_shared<AGE::SceneSelectorScene>(engine), AGE::SceneSelectorScene::Name);
+		engine->addScene(std::make_shared<AGE::WorldEditorScene>(engine), AGE::WorldEditorScene::Name);
+
+		if (!engine->initScene(AGE::AssetsEditorScene::Name))
 			return false;
-		if (!engine.lock()->initScene(AGE::SceneSelectorScene::Name))
+		if (!engine->initScene(AGE::SceneSelectorScene::Name))
 			return false;
-		engine.lock()->enableScene("Assets Convertor", 1);
-		engine.lock()->enableScene(AGE::SceneSelectorScene::Name, 1000);
+		if (!engine->initScene(AGE::WorldEditorScene::Name))
+			return false;
+		engine->enableScene(AGE::AssetsEditorScene::Name, 1000);
+		engine->enableScene(AGE::SceneSelectorScene::Name, 1);
 		return true;
 	}));
 

@@ -18,7 +18,7 @@ namespace AGE
 			Folder();
 			Folder(const std::string &path, Folder* parent = nullptr);
 			Folder(const std::tr2::sys::basic_directory_entry<std::tr2::sys::path> &path, Folder *parent = nullptr);
-			void list();
+			void list(const std::string &path = "");
 			void filesFilter(std::function<bool(const std::tr2::sys::path& file)> &filter);
 			void foldersFilter(std::function<bool(const std::tr2::sys::path& file)> &filter);
 			void clearFileFilter();

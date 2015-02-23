@@ -3,11 +3,11 @@
 #include <iostream>
 #include <Utils/DependenciesInjector.hpp>
 #include <Core/Input.hh>
-#include <Render/RenderManager.hh>
 #include <SDL/SDL.h>
 #include <Core/Input.hh>
 #include <Configuration.hpp>
-
+#include <Threads/ThreadManager.hpp>
+#include <Threads/MainThread.hpp>
 
 #ifdef USE_IMGUI
 #include <Utils/Age_Imgui.hpp>
@@ -18,7 +18,7 @@ namespace AGE
 {
 	bool SdlContext::_init(int mode)
 	{
-		_dependencyManager.lock()->setInstance<Input>();
+		_dependencyManager->setInstance<Input>();
 
 		if (SDL_Init(SDL_INIT_VIDEO) != 0 ||
 			//SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1) != 0 ||
@@ -51,28 +51,26 @@ namespace AGE
 	void SdlContext::refreshInputs()
 	{
 		SDL_Event events;
-		auto input = _dependencyManager.lock()->getInstance<Input>();
-		std::lock_guard<std::mutex>(input->getMutex());
+		auto input = _dependencyManager->getInstance<Input>();
+		std::lock_guard<AGE::SpinLock>(input->getMutex());
 		input->clearInputs();
+		const Uint8 *keys = SDL_GetKeyboardState(NULL);
 		while (SDL_PollEvent(&events))
 		{
+
 			if (events.type == SDL_KEYDOWN)
 			{
 				input->addKeyInput(events.key.keysym.sym);
 #ifdef USE_IMGUI
-				ImGuiIO& io = ImGui::GetIO();
-				io.KeysDown[events.key.keysym.scancode] = true;
-				io.KeyCtrl = false;// (mods & GLFW_MOD_CONTROL) != 0;
-				io.KeyShift = false;// (mods & GLFW_MOD_SHIFT) != 0;
+				events.key.keysym.mod = SDL_GetModState();
+				GetMainThread()->getQueue()->emplaceTask<ImGuiKeyEvent>(events.key.keysym, true);
 #endif
 			}
 			else if (events.type == SDL_KEYUP)
 			{
 #ifdef USE_IMGUI
-				ImGuiIO& io = ImGui::GetIO();
-				io.KeysDown[events.key.keysym.scancode] = false;
-				//io.KeyCtrl = (mods & GLFW_MOD_CONTROL) != 0;
-				//io.KeyShift = (mods & GLFW_MOD_SHIFT) != 0;
+				events.key.keysym.mod = SDL_GetModState();
+				GetMainThread()->getQueue()->emplaceTask<ImGuiKeyEvent>(events.key.keysym, false);
 #endif
 				input->removeKeyInput(events.key.keysym.sym);
 			}

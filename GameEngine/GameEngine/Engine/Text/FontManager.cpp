@@ -18,7 +18,7 @@ FontManager::~FontManager()
 
 bool FontManager::init()
 {
-	_pubSub = std::make_unique<PubSub>(_dependencyManager.lock()->getInstance<PubSub::Manager>());
+	_pubSub = std::make_unique<PubSub>(_dependencyManager->getInstance<PubSub::Manager>());
 	_pubSub->globalSub(std::string("endOfFrame"), [&](){
 		_drawList();
 	});
@@ -33,7 +33,7 @@ bool FontManager::init()
 	return (true);
 }
 
-bool FontManager::loadFont(const File &file, const std::string &name)
+bool FontManager::loadFont(const OldFile &file, const std::string &name)
 {
 	if (!name.empty())
 	{
@@ -95,7 +95,7 @@ void FontManager::_draw2DString(const std::string &text,
 	const glm::vec4 &color,
 	const std::string &shader)
 {
-	auto s = _dependencyManager.lock()->getInstance<Renderer>()->getShader(shader);
+	auto s = _dependencyManager->getInstance<Renderer>()->getShader(shader);
 	if (!s)
 		return;
 	s->use();
@@ -130,7 +130,7 @@ void FontManager::_draw2DString(const std::string &text,
 
 	glUniform1i(glGetUniformLocation(s->getId(), "fTexture0"), 0);
 	glUniform4f(glGetUniformLocation(s->getId(), "color"), color.x, color.y, color.z, color.a);
-	auto screen = _dependencyManager.lock()->getInstance<IRenderContext>()->getScreenSize();
+	auto screen = _dependencyManager->getInstance<IRenderContext>()->getScreenSize();
 	glm::mat4 Projection = glm::mat4(1);
 	Projection *= glm::ortho(0.0f, (float)screen.x, (float)screen.y, 0.0f, -1.0f, 1.0f);
 	glUniformMatrix4fv(glGetUniformLocation(s->getId(), "projection"), 1, GL_FALSE, glm::value_ptr(Projection));

@@ -5,20 +5,20 @@
 #include <memory>
 #include <Utils/Containers/Vector.hpp>
 #include <mutex>
+#include <Utils/SpinLock.hpp>
 
-class DependenciesInjector : public std::enable_shared_from_this<DependenciesInjector>
+class DependenciesInjector
 {
 private:
-	std::mutex _mutex;
+	AGE::SpinLock _mutex;
 	DependenciesInjector(DependenciesInjector const &) = delete;
 	DependenciesInjector &operator=(DependenciesInjector const &) = delete;
 
 	AGE::Vector<IDependency*>             _instances;
-	std::weak_ptr<DependenciesInjector>                   _parent;
+	DependenciesInjector                   *_parent;
 public:
-	DependenciesInjector(std::weak_ptr<DependenciesInjector> &&parent = std::weak_ptr<DependenciesInjector>())
-		: std::enable_shared_from_this<DependenciesInjector>()
-		, _parent(std::move(parent))
+	DependenciesInjector(DependenciesInjector *parent = nullptr)
+		: _parent(std::move(parent))
 	{}
 
 	virtual ~DependenciesInjector()
@@ -31,20 +31,20 @@ public:
 		_instances.clear();
 	}
 
-	std::weak_ptr<DependenciesInjector> &&getDependenciesInjectorParent()
+	DependenciesInjector *getDependenciesInjectorParent()
 	{
-		return std::forward<std::weak_ptr<DependenciesInjector>>(_parent);
+		return _parent;
 	}
 
 	template <typename T>
 	T *getInstance()
 	{
-		std::unique_lock<std::mutex> lock(_mutex);
+		std::unique_lock<AGE::SpinLock> lock(_mutex);
 
 		std::uint16_t id = T::getTypeId();
 		if (!hasInstance<T>())
 		{
-			auto p = _parent.lock();
+			auto p = _parent;
 			if (p)
 			{
 				lock.unlock();
@@ -59,12 +59,12 @@ public:
 	template <typename T>
 	void deleteInstance()
 	{
-		std::unique_lock<std::mutex> lock(_mutex);
+		std::unique_lock<AGE::SpinLock> lock(_mutex);
 
 		std::uint16_t id = T::getTypeId();
 		if (!hasInstance<T>())
 		{
-			auto p = _parent.lock();
+			auto p = _parent;
 			if (p)
 			{
 				lock.unlock();
@@ -80,7 +80,7 @@ public:
 	template <typename T, typename TypeSelector = T, typename ...Args>
 	T *setInstance(Args ...args)
 	{
-		std::lock_guard<std::mutex> lock(_mutex);
+		std::lock_guard<AGE::SpinLock> lock(_mutex);
 		std::uint16_t id = TypeSelector::getTypeId();
 		if (_instances.size() <= id || _instances[id] == nullptr)
 		{
@@ -88,7 +88,7 @@ public:
 				_instances.resize(id + 1, nullptr);
 			assert(_instances[id] == nullptr); // instance already defined
 			auto n = new T(args...);
-			n->_dependencyManager = shared_from_this();
+			n->_dependencyManager = this;
 			_instances[id] = n;
 		}
 		return static_cast<T*>(_instances[id]);

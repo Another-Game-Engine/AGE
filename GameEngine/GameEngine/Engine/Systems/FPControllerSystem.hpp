@@ -16,7 +16,7 @@ namespace AGE
 	class FPControllerSystem : public System
 	{
 	public:
-		FPControllerSystem(std::weak_ptr<AScene> &&scene);
+		FPControllerSystem(AScene *scene);
 		virtual ~FPControllerSystem();
 	private:
 		std::shared_ptr<BulletCollisionManager> _manager;
@@ -25,7 +25,7 @@ namespace AGE
 		virtual void updateBegin(double time);
 		virtual void updateEnd(double time);
 		virtual void mainUpdate(double time);
-		void updateComponent(Entity &entity, Component::FPController *fp, double time);
+		void updateComponent(Entity &entity, FPController *fp, double time);
 		virtual bool initialize();
 	};
 }

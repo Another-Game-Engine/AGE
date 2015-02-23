@@ -2,52 +2,58 @@
 #include <Components/Component.hh>
 #include <vector>
 #include <cereal/types/vector.hpp>
+#include <Entities/EntityData.hh>
 
 namespace AGE
 {
 	struct EntitySerializationInfos
 	{
-		AGE::Link link;
-		Barcode barcode;
-		ENTITY_FLAGS flags;
-		std::vector <std::size_t> componentsHash;
-		std::vector <Component::Base*> components;
+		std::vector <ComponentBase*> components;
+		std::vector <ComponentType> componentTypes;
+		Entity &entity;
+		std::map<ComponentType, std::size_t> *typesMap; // used to unserialize
 
-		EntitySerializationInfos(const EntityData& e)
-			: link(e.getLink())
-			, barcode(e.getBarcode())
-			, flags(e.getEntity().getFlags())
+		EntitySerializationInfos(EntityData *e)
+			: entity(e->entity)
+			, typesMap(nullptr)
 		{}
 
 		template < typename Archive >
 		void save(Archive &ar) const
 		{
-			auto componentSize = components.size();
-			ar(
-				cereal::make_nvp("link", link)
-				, cereal::make_nvp("barcode", barcode)
+			AGE::Link link = entity.getLink();
+			ENTITY_FLAGS flags = entity.getFlags();
+			ar(cereal::make_nvp("link", link)
 				, cereal::make_nvp("flags", flags)
-				, cereal::make_nvp("components_hash", componentsHash)
+				, cereal::make_nvp("components_number", componentTypes)
 				);
-		}
-
-		template < typename Archive >
-		void serializeComponents(Archive &ar, AScene *scene) const
-		{
 			for (auto &e : components)
-				e->serializeBase(ar, scene);
+			{
+				ComponentRegistrar::getInstance().serializeJson(e, ar);
+			}
 		}
 
 		template < typename Archive >
 		void load(Archive &ar)
 		{
 			std::size_t cptNbr = 0;
+			Link l;
+			ENTITY_FLAGS f;
+
+			assert(typesMap != nullptr);
 			ar(
-				link
-				, barcode
-				, flags
-				, componentsHash
-				);
+				l
+				, f
+				, componentTypes);
+			entity.getLink().setPosition(l.getPosition());
+			entity.getLink().setOrientation(l.getOrientation());
+			entity.getLink().setScale(l.getScale());
+			//entity.setFlags(f);
+			for (auto &e : componentTypes)
+			{
+				auto hashType = (*typesMap)[e];
+				ComponentRegistrar::getInstance().loadJson(hashType, entity, ar);
+			}
 		}
 	};
 }
