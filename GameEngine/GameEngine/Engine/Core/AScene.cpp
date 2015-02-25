@@ -145,7 +145,7 @@ namespace AGE
 		++data->entity.version;
 		data->entity.flags = 0;
 		_freeEntityId.push(e.id);
-		for (ComponentType i = 0, mi = data->components.size(); i < mi; ++i)
+		for (ComponentType i = 0, mi = (ComponentType)data->components.size(); i < mi; ++i)
 		{
 			if (data->components[i])
 			{

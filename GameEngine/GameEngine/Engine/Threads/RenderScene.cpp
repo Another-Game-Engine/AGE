@@ -317,7 +317,7 @@ namespace AGE
 					if (_drawables.get(e).hasMoved == false)
 					{
 						_drawables.get(e).hasMoved = true;
-						_drawables.get(e).moveBufferIdx = _drawablesToMove.size();
+						_drawables.get(e).moveBufferIdx = (size_t)_drawablesToMove.size();
 						_drawablesToMove.push_back(e);
 					}
 				}
