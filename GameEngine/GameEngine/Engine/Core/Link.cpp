@@ -61,7 +61,8 @@ void Link::setForward(const glm::vec3 &v)
 
 void Link::internalSetPosition(const glm::vec3 &v)
 {
-	_computeTrans = true;
+	_localDirty = true;
+	_globalDirty = true;
 	_position = v;
 	auto ot = static_cast<RenderScene*>(_renderScene);
 	for (auto &e : _octreeObjects)
@@ -73,7 +74,8 @@ void Link::internalSetPosition(const glm::vec3 &v)
 
 void Link::internalSetForward(const glm::vec3 &v)
 {
-	_computeTrans = true;
+	_localDirty = true;
+	_globalDirty = true;
 	glm::vec4 get = glm::mat4(glm::toMat4(_orientation) * glm::translate(glm::mat4(1), v))[3];
 	_position.x = _position.x + get.x;
 	_position.y = _position.y + get.y;
@@ -87,7 +89,8 @@ void Link::internalSetForward(const glm::vec3 &v)
 }
 
 void Link::internalSetScale(const glm::vec3 &v) {
-	_computeTrans = true;
+	_localDirty = true;
+	_globalDirty = true;
 	_scale = v;
 
 	for (auto &e : _octreeObjects)
@@ -98,7 +101,8 @@ void Link::internalSetScale(const glm::vec3 &v) {
 }
 
 void Link::internalSetOrientation(const glm::quat &v) {
-	_computeTrans = true;
+	_localDirty = true;
+	_globalDirty = true;
 	_orientation = v;
 
 	for (auto &e : _octreeObjects)
@@ -108,31 +112,72 @@ void Link::internalSetOrientation(const glm::quat &v) {
 	}
 }
 
-const glm::mat4 &Link::getTransform()
+const glm::mat4 Link::getLocalTransform() const
 {
-	if (_computeTrans)
-	{
-		_trans = glm::mat4(1);
-		_trans = glm::translate(_trans, _position);
-		_trans = _trans * glm::toMat4(_orientation);
-		_trans = glm::scale(_trans, _scale);
-		_computeTrans = false;
-	}
-	return _trans;
-}
-
-const glm::mat4 &Link::getTransform() const
-{
-	if (_computeTrans)
+	if (_localDirty)
 	{
 		auto trans = glm::mat4(1);
-		trans = glm::translate(_trans, _position);
-		trans = _trans * glm::toMat4(_orientation);
-		trans = glm::scale(_trans, _scale);
+		trans = glm::translate(_localTransformation, _position);
+		trans = _localTransformation * glm::toMat4(_orientation);
+		trans = glm::scale(_localTransformation, _scale);
 		return trans;
 	}
-	return _trans;
+	return _localTransformation;
 }
+
+const glm::mat4 &Link::getLocalTransform()
+{
+	if (_localDirty)
+	{
+		_localTransformation = glm::mat4(1);
+		_localTransformation = glm::translate(_localTransformation, _position);
+		_localTransformation = _localTransformation * glm::toMat4(_orientation);
+		_localTransformation = glm::scale(_localTransformation, _scale);
+		_localDirty = false;
+	}
+	return _localTransformation;
+}
+
+const glm::mat4 Link::getGlobalTransform() const
+{
+	if (_globalDirty)
+	{
+		auto localT = getLocalTransform();
+		if (hasParent())
+		{
+			return _parent->_globalTransformation * localT;
+		}
+		else
+		{
+			return localT;
+		}
+	}
+	return _globalTransformation;
+}
+
+
+const glm::mat4 &Link::getGlobalTransform()
+{
+	if (_globalDirty)
+	{
+		getLocalTransform();
+		if (hasParent())
+		{
+			_globalTransformation = _parent->_globalTransformation * _localTransformation;
+		}
+		else
+		{
+			_globalTransformation = _localTransformation;
+		}
+		_globalDirty = false;
+		for (auto &e : _children)
+		{
+			e->getGlobalTransform();
+		}
+	}
+	return _localTransformation;
+}
+
 
 Link::Link()
 {
@@ -144,8 +189,10 @@ void Link::reset()
 	_position = glm::vec3(0);
 	_scale = glm::vec3(1);
 	_orientation = glm::quat(glm::mat4(1));
-	_trans = glm::mat4(1);
-	_computeTrans = true;
+	_localTransformation = glm::mat4(1);
+	_globalTransformation = glm::mat4(1);
+	_localDirty = true;
+	_globalDirty = true;
 	_parent = nullptr;
 }
 
@@ -208,7 +255,7 @@ void Link::attachParent(Link *parent)
 		// detach from previous parent
 		_parent->_removeChild(this);
 	}
-	_setParent(_parent);
+	_setParent(parent);
 	_parent->_setChild(this);
 }
 
