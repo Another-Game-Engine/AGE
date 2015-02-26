@@ -4,12 +4,22 @@
 
 namespace AGE
 {
+
 	namespace Tasks
 	{
-		Render::GetWindowSize::GetWindowSize(){}
+		Render::GetWindowSize::GetWindowSize()
+		{
+		}
+		
 		Render::SetWindowSize::SetWindowSize(const glm::uvec2 & _size)
 			: size(_size)
-		{}
-		Render::CreateRenderContext::CreateRenderContext(Engine *_engine) : engine(_engine){}
+		{
+		}
+
+		Render::CreateRenderContext::CreateRenderContext(Engine *_engine) : engine(_engine)
+		{
+		}
+
 	}
+
 }

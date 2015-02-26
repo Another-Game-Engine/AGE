@@ -22,6 +22,18 @@
 #include <Utils/MemoryPool.hpp>
 #include <Render/Properties/IProperty.hh>
 #include <Render/Properties/Transformation.hh>
+#include <Render/Properties/Materials/Color.hh>
+#include <Render/Properties/Materials/MapColor.hh>
+
+#define CREATE_MATERIAL_COLOR(memberName, uniformName)	tmpColor = std::make_shared<Color>(std::string(uniformName)); \
+	tmpColor->set(msg.data.memberName); \
+	instance._properties[uniformName] = properties.add_property(tmpColor);
+
+#define CREATE_MATERIAL_MAP(memberName, uniformName)	if (!msg.data.memberName.empty()) { \
+		tmpMap = std::make_shared<MapColor>(std::string(uniformName)); \
+		instance._properties[uniformName] = properties.add_property(tmpMap); \
+																}
+
 
 namespace AGE
 {
@@ -291,6 +303,32 @@ namespace AGE
 
 				//AGE::GetRenderThread()->createMeshProperty(added.mesh.painter, added.mesh.properties, added.transformationProperty);
 			}
+		}
+
+		void RenderScene::_addMaterial(AGE::Tasks::MainToPrepare::AddMaterial &msg)
+		{
+			MaterialInstance instance;
+			Material properties;
+
+			instance._material_key = _createPropertiesContainer();
+
+			//std::shared_ptr<Color> tmpColor = nullptr;
+			//std::shared_ptr<MapColor> tmpMap = nullptr;
+			//
+			//CREATE_MATERIAL_COLOR(diffuse, "diffuseColor");
+			//CREATE_MATERIAL_COLOR(ambient, "ambientColor");
+			//CREATE_MATERIAL_COLOR(emissive, "emissiveColor");
+			//CREATE_MATERIAL_COLOR(reflective, "reflectiveColor");
+			//CREATE_MATERIAL_COLOR(specular, "specularColor");
+			//
+			//CREATE_MATERIAL_MAP(diffuseTexPath, "diffuseMap");
+			//CREATE_MATERIAL_MAP(ambientTexPath, "ambientMap");
+			//CREATE_MATERIAL_MAP(emissiveTexPath, "emissiveMap");
+			//CREATE_MATERIAL_MAP(reflectiveTexPath, "reflectiveMap");
+			//CREATE_MATERIAL_MAP(specularTexPath, "specularMap");
+			//CREATE_MATERIAL_MAP(normalTexPath, "normalMap");
+			//CREATE_MATERIAL_MAP(bumpTexPath, "bumpMap");
+
 		}
 
 		void RenderScene::_setPosition(AGE::Commands::MainToPrepare::SetPosition &msg)

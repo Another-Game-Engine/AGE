@@ -4,6 +4,7 @@
 #include <Utils/Containers/Vector.hpp>
 #include <Utils/MemoryPool.hpp>
 #include <Threads/Commands/MainToPrepareCommands.hpp>
+#include <Threads/Tasks/MainToPrepareTasks.hpp>
 #include <Core/PrepareKey.hpp>
 #include <Entities/EntityTypedef.hpp>
 #include <SpacePartitioning/LooseOctree.hh>
@@ -46,6 +47,7 @@ namespace AGE
 		void _setScale(AGE::Commands::MainToPrepare::SetScale &msg);
 		void _setOrientation(AGE::Commands::MainToPrepare::SetOrientation &msg);
 		void _prepareDrawList(AGE::Commands::MainToPrepare::PrepareDrawLists &msg);
+		void _addMaterial(AGE::Tasks::MainToPrepare::AddMaterial &msg);
 		void _moveElementsInOctree();
 
 		Key<Properties> _createPropertiesContainer();
@@ -58,7 +60,6 @@ namespace AGE
 		Key<Property> _createAndAttachProperty(const Key<Properties> &key, const ValueType &value)
 		{
 			std::shared_ptr<PropertyType> newProperty = std::make_shared<PropertyType>(value);
-
 			return _attachProperty(key, newProperty);
 		}
 
