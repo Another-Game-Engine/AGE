@@ -140,6 +140,9 @@
     <ClCompile Include="Engine\Utils\CRC32.cpp" />
     <ClCompile Include="Engine\Utils\Library.cpp" />
     <ClCompile Include="Engine\Utils\StreamBuffer.cpp" />
+    <ClCompile Include="Engine\Render\Properties\Properties.cpp" />
+    <ClCompile Include="Engine\Render\PropertyManager.cpp" />
+    <ClCompile Include="Engine\Render\ProgramResources\Types\Uniform\Mat4Array255.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -376,6 +379,8 @@
     <ClInclude Include="Engine\Utils\Library.hpp" />
     <ClInclude Include="Engine\Utils\Visibility.hpp" />
     <ClInclude Include="Engine\Utils\StreamBuffer.hpp" />
+    <ClInclude Include="Engine\Render\Properties\Properties.hh" />
+    <ClInclude Include="Engine\Render\ProgramResources\Types\Uniform\Mat4Array255.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />
