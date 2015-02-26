@@ -6,10 +6,12 @@ in vec3 inter_tangent;
 
 uniform vec4 diffuse_color;
 uniform float diffuse_ratio;
+uniform sampler2D diffuse_texture;
 uniform vec4 specular_color;
 uniform float specular_ratio;
+uniform sampler2D specular_texture;
 uniform float shininess;
-uniform sampler2D diffuse_texture;
+
 uniform sampler2D normal_texture;
 
 layout (location = 0) out vec4 diffuse_frag;
