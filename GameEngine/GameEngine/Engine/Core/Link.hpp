@@ -74,7 +74,6 @@ namespace AGE
 		glm::mat4 _globalTransformation;
 
 		bool _localDirty;
-		bool _globalDirty;
 		std::vector<PrepareKey> _octreeObjects;
 		Link *_parent;
 		std::vector<Link*> _children;
@@ -85,6 +84,7 @@ namespace AGE
 		void _removeParent();
 		void _detachFromRoot();
 		void _attachToRoot();
+		void _updateGlobalTransform();
 	public:
 		RenderScene *_renderScene;
 	public:

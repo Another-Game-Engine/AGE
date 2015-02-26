@@ -198,7 +198,7 @@ namespace AGE
 #endif
 
 #ifdef PHYSIC_SIMULATION
-		//addSystem<AGE::BulletDynamicSystem>(0);
+		addSystem<AGE::BulletDynamicSystem>(0);
 		//		addSystem<CollisionAdder>(1);
 		//		addSystem<CollisionCleaner>(1000);
 #endif //!PHYSIC
@@ -327,7 +327,7 @@ namespace AGE
 		auto e = GLOBAL_LIGHTS[i];
 		auto &_l = e.getLink();
 		_l.setPosition(glm::vec3(i, 1.0f, i));
-		_l.setScale(glm::vec3(0.05f));
+		//_l.setScale(glm::vec3(0.05f));
 		auto _m = e.addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage"));
 		_m->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial("ball/ball.mage"));
 		e.getLink().setPosition(glm::vec3(i, 5.0f, 0));
@@ -446,7 +446,7 @@ namespace AGE
 				auto e = GLOBAL_LIGHTS[i];
 				auto &link = e.getLink();
 
-				if (ImGui::SliderFloat3(std::string("Light " + std::to_string(i) + " position").c_str(), link.getPositionPtr(), -50, 50))
+				if (ImGui::SliderFloat3(std::string("Light " + std::to_string(i) + " position").c_str(), link.getPositionPtr(), -2, 2))
 				{
 					auto &l = e.getLink();
 					l.setPosition(l.getPosition());

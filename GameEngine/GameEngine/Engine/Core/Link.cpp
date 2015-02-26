@@ -14,9 +14,10 @@ void Link::registerOctreeObject(const PrepareKey &key)
 	AGE_ASSERT(b.invalid());
 
 	b = key;
-	_renderScene->setPosition(_position, key);
-	_renderScene->setScale(_scale, key);
-	_renderScene->setOrientation(_orientation, key);
+	//_renderScene->setPosition(_position, key);
+	//_renderScene->setScale(_scale, key);
+	//_renderScene->setOrientation(_orientation, key);
+	_renderScene->setTransform(getGlobalTransform(), key);
 }
 
 void Link::unregisterOctreeObject(const PrepareKey &key)
@@ -62,54 +63,34 @@ void Link::setForward(const glm::vec3 &v)
 void Link::internalSetPosition(const glm::vec3 &v)
 {
 	_localDirty = true;
-	_globalDirty = true;
 	_position = v;
-	auto ot = static_cast<RenderScene*>(_renderScene);
-	for (auto &e : _octreeObjects)
-	{
-		AGE_ASSERT(!e.invalid());
-		ot->setPosition(_position, e);
-	}
+
+	_updateGlobalTransform();
 }
 
 void Link::internalSetForward(const glm::vec3 &v)
 {
 	_localDirty = true;
-	_globalDirty = true;
 	glm::vec4 get = glm::mat4(glm::toMat4(_orientation) * glm::translate(glm::mat4(1), v))[3];
 	_position.x = _position.x + get.x;
 	_position.y = _position.y + get.y;
 	_position.z = _position.z + get.z;
 
-	for (auto &e : _octreeObjects)
-	{
-		AGE_ASSERT(!e.invalid());
-		_renderScene->setPosition(_position, e);
-	}
+	_updateGlobalTransform();
 }
 
 void Link::internalSetScale(const glm::vec3 &v) {
 	_localDirty = true;
-	_globalDirty = true;
 	_scale = v;
 
-	for (auto &e : _octreeObjects)
-	{
-		AGE_ASSERT(!e.invalid());
-		_renderScene->setScale(_scale, e);
-	}
+	_updateGlobalTransform();
 }
 
 void Link::internalSetOrientation(const glm::quat &v) {
 	_localDirty = true;
-	_globalDirty = true;
 	_orientation = v;
 
-	for (auto &e : _octreeObjects)
-	{
-		AGE_ASSERT(!e.invalid());
-		_renderScene->setOrientation(_orientation, e);
-	}
+	_updateGlobalTransform();
 }
 
 const glm::mat4 Link::getLocalTransform() const
@@ -140,42 +121,13 @@ const glm::mat4 &Link::getLocalTransform()
 
 const glm::mat4 Link::getGlobalTransform() const
 {
-	if (_globalDirty)
-	{
-		auto localT = getLocalTransform();
-		if (hasParent())
-		{
-			return _parent->_globalTransformation * localT;
-		}
-		else
-		{
-			return localT;
-		}
-	}
 	return _globalTransformation;
 }
 
 
 const glm::mat4 &Link::getGlobalTransform()
 {
-	if (_globalDirty)
-	{
-		getLocalTransform();
-		if (hasParent())
-		{
-			_globalTransformation = _parent->_globalTransformation * _localTransformation;
-		}
-		else
-		{
-			_globalTransformation = _localTransformation;
-		}
-		_globalDirty = false;
-		for (auto &e : _children)
-		{
-			e->getGlobalTransform();
-		}
-	}
-	return _localTransformation;
+	return _globalTransformation;
 }
 
 
@@ -192,7 +144,6 @@ void Link::reset()
 	_localTransformation = glm::mat4(1);
 	_globalTransformation = glm::mat4(1);
 	_localDirty = true;
-	_globalDirty = true;
 	_parent = nullptr;
 }
 
@@ -211,6 +162,7 @@ void Link::attachChild(Link *child)
 	}
 	child->_setParent(this);
 	_setChild(child);
+	child->_updateGlobalTransform();
 }
 
 void Link::detachChild(Link *child)
@@ -221,6 +173,7 @@ void Link::detachChild(Link *child)
 		return;
 	}
 	child->_removeParent();
+	child->_updateGlobalTransform();
 	_removeChild(child);
 }
 
@@ -229,6 +182,7 @@ void Link::detachChildren()
 	for (auto &e : _children)
 	{
 		e->_removeParent();
+		e->_updateGlobalTransform();
 	}
 	_children.clear();
 	if (hasParent())
@@ -257,6 +211,7 @@ void Link::attachParent(Link *parent)
 	}
 	_setParent(parent);
 	_parent->_setChild(this);
+	_parent->_updateGlobalTransform();
 }
 
 void Link::detachParent()
@@ -268,6 +223,7 @@ void Link::detachParent()
 	}
 	_parent->_removeChild(this);
 	_removeParent();
+	_updateGlobalTransform();
 }
 
 void Link::_setChild(Link *ptr)
@@ -333,4 +289,23 @@ void Link::_removeParent()
 {
 	_detachFromRoot();
 	_parent = nullptr;
+}
+
+void Link::_updateGlobalTransform()
+{
+	glm::mat4 p = glm::mat4(1);
+	if (hasParent())
+	{
+		p = _parent->getGlobalTransform();
+	}
+	_globalTransformation = p * getLocalTransform();
+	for (auto &e : _octreeObjects)
+	{
+		AGE_ASSERT(!e.invalid());
+		_renderScene->setTransform(_globalTransformation, e);
+	}
+	for (auto &e : _children)
+	{
+		e->_updateGlobalTransform(); 
+	}
 }

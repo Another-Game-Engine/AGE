@@ -100,21 +100,27 @@ namespace AGE
 		return (*this);
 	}
 
-	RenderScene &RenderScene::setPosition(const glm::vec3 &v, const PrepareKey &id)
-	{
-		_prepareThread->getQueue()->emplaceCommand<Commands::MainToPrepare::SetPosition>(id, v);
-		return (*this);
-	}
+	//RenderScene &RenderScene::setPosition(const glm::vec3 &v, const PrepareKey &id)
+	//{
+	//	_prepareThread->getQueue()->emplaceCommand<Commands::MainToPrepare::SetPosition>(id, v);
+	//	return (*this);
+	//}
 
-	RenderScene &RenderScene::setOrientation(const glm::quat &v, const PrepareKey &id)
-	{
-		_prepareThread->getQueue()->emplaceCommand<Commands::MainToPrepare::SetOrientation>(id, v);
-		return (*this);
-	}
+	//RenderScene &RenderScene::setOrientation(const glm::quat &v, const PrepareKey &id)
+	//{
+	//	_prepareThread->getQueue()->emplaceCommand<Commands::MainToPrepare::SetOrientation>(id, v);
+	//	return (*this);
+	//}
 
-	RenderScene &RenderScene::setScale(const glm::vec3 &v, const PrepareKey &id)
+	//RenderScene &RenderScene::setScale(const glm::vec3 &v, const PrepareKey &id)
+	//{
+	//	_prepareThread->getQueue()->emplaceCommand<Commands::MainToPrepare::SetScale>(id, v);
+	//	return (*this);
+	//}
+
+	RenderScene &RenderScene::setTransform(const glm::mat4 &v, const PrepareKey &id)
 	{
-		_prepareThread->getQueue()->emplaceCommand<Commands::MainToPrepare::SetScale>(id, v);
+		_prepareThread->getQueue()->emplaceCommand<Commands::MainToPrepare::SetTransform>(id, v);
 		return (*this);
 	}
 
@@ -125,24 +131,31 @@ namespace AGE
 		return (*this);
 	}
 
-	RenderScene &RenderScene::setPosition(const glm::vec3 &v, const std::array<PrepareKey, MAX_CPT_NUMBER> &ids)
-	{
-		for (auto &e : ids)
-			setPosition(v, e);
-		return (*this);
-	}
+	//RenderScene &RenderScene::setPosition(const glm::vec3 &v, const std::array<PrepareKey, MAX_CPT_NUMBER> &ids)
+	//{
+	//	for (auto &e : ids)
+	//		setPosition(v, e);
+	//	return (*this);
+	//}
 
-	RenderScene &RenderScene::setOrientation(const glm::quat &v, const std::array<PrepareKey, MAX_CPT_NUMBER> &ids)
-	{
-		for (auto &e : ids)
-			setOrientation(v, e);
-		return (*this);
-	}
+	//RenderScene &RenderScene::setOrientation(const glm::quat &v, const std::array<PrepareKey, MAX_CPT_NUMBER> &ids)
+	//{
+	//	for (auto &e : ids)
+	//		setOrientation(v, e);
+	//	return (*this);
+	//}
 
-	RenderScene &RenderScene::setScale(const glm::vec3 &v, const std::array<PrepareKey, MAX_CPT_NUMBER> &ids)
+	//RenderScene &RenderScene::setScale(const glm::vec3 &v, const std::array<PrepareKey, MAX_CPT_NUMBER> &ids)
+	//{
+	//	for (auto &e : ids)
+	//		setScale(v, e);
+	//	return (*this);
+	//}
+
+	RenderScene &RenderScene::setTransform(const glm::mat4 &v, const std::array<PrepareKey, MAX_CPT_NUMBER> &ids)
 	{
 		for (auto &e : ids)
-			setScale(v, e);
+			setTransform(v, e);
 		return (*this);
 	}
 
@@ -278,9 +291,11 @@ namespace AGE
 
 				added.mesh = msg.submeshInstances[i];
 
-				added.position = uo->position;
-				added.orientation = uo->orientation;
-				added.scale = uo->scale;
+				//added.position = uo->position;
+				//added.orientation = uo->orientation;
+				//added.scale = uo->scale;
+				added.transformation = uo->transformation;
+
 //				added.animation = msg.animation;
 				added.currentNode = UNDEFINED_IDX;
 				_drawablesToMove.push_back(id);
@@ -293,7 +308,8 @@ namespace AGE
 			}
 		}
 
-		void RenderScene::_setPosition(AGE::Commands::MainToPrepare::SetPosition &msg)
+
+		void RenderScene::_setTransform(AGE::Commands::MainToPrepare::SetTransform &msg)
 		{
 			Camera *co = nullptr;
 			Mesh *uo = nullptr;
@@ -304,15 +320,15 @@ namespace AGE
 
 			case(PrepareKey::Type::Camera) :
 				co = &_cameras.get(msg.key.id);
-				co->position = msg.position;
+				co->transformation = msg.transform;
 				co->hasMoved = true;
 				break;
 			case(PrepareKey::Type::Mesh) :
 				uo = &_meshs.get(msg.key.id);
-				uo->position = msg.position;
+				uo->transformation = msg.transform;
 				for (uint32_t e : uo->drawableCollection)
 				{
-					_drawables.get(e).position = uo->position;
+					_drawables.get(e).transformation = uo->transformation;
 					//assert(_drawables.get(e).currentNode != UNDEFINED_IDX);
 					if (_drawables.get(e).hasMoved == false)
 					{
@@ -324,7 +340,7 @@ namespace AGE
 				break;
 			case(PrepareKey::Type::PointLight) :
 				l = &_pointLights.get(msg.key.id);
-				l->position = msg.position;
+				l->transformation = msg.transform;
 				if (l->hasMoved == false)
 				{
 					l->hasMoved = true;
@@ -337,67 +353,111 @@ namespace AGE
 			}
 		}
 
-		void RenderScene::_setScale(AGE::Commands::MainToPrepare::SetScale &msg)
-		{
-			Mesh *uo = nullptr;
-			Camera *co = nullptr;
-			switch (msg.key.type)
-			{
-			case(PrepareKey::Type::Camera) :
-				co = &_cameras.get(msg.key.id);
-				co->scale = msg.scale;
-				co->hasMoved = true;
-				break;
-			case(PrepareKey::Type::Mesh) :
-				uo = &_meshs.get(msg.key.id);
-				uo->scale = msg.scale;
-				for (auto &e : uo->drawableCollection)
-				{
-					_drawables.get(e).scale = uo->scale;
-					//assert(_drawables.get(e).currentNode != UNDEFINED_IDX);
-					if (_drawables.get(e).hasMoved == false)
-					{
-						_drawables.get(e).hasMoved = true;
-						_drawables.get(e).moveBufferIdx = _drawablesToMove.size();
-						_drawablesToMove.push_back(e);
-					}
-				}
-				break;
-			default:
-				break;
-			}
-		}
+		//void RenderScene::_setPosition(AGE::Commands::MainToPrepare::SetPosition &msg)
+		//{
+		//	Camera *co = nullptr;
+		//	Mesh *uo = nullptr;
+		//	PointLight *l = nullptr;
 
-		void RenderScene::_setOrientation(AGE::Commands::MainToPrepare::SetOrientation &msg)
-		{
-			Mesh *uo = nullptr;
-			Camera *co = nullptr;
-			switch (msg.key.type)
-			{
-			case(PrepareKey::Type::Camera) :
-				co = &_cameras.get(msg.key.id);
-				co->orientation = msg.orientation;
-				co->hasMoved = true;
-				break;
-			case(PrepareKey::Type::Mesh) :
-				uo = &_meshs.get(msg.key.id);
-				uo->orientation = msg.orientation;
-				for (auto &e : uo->drawableCollection)
-				{
-					_drawables.get(e).orientation = uo->orientation;
-					//assert(_drawables.get(e).currentNode != UNDEFINED_IDX);
-					if (_drawables.get(e).hasMoved == false)
-					{
-						_drawables.get(e).hasMoved = true;
-						_drawables.get(e).moveBufferIdx = _drawablesToMove.size();
-						_drawablesToMove.push_back(e);
-					}
-				}
-				break;
-			default:
-				break;
-			}
-		}
+		//	switch (msg.key.type)
+		//	{
+
+		//	case(PrepareKey::Type::Camera) :
+		//		co = &_cameras.get(msg.key.id);
+		//		co->position = msg.position;
+		//		co->hasMoved = true;
+		//		break;
+		//	case(PrepareKey::Type::Mesh) :
+		//		uo = &_meshs.get(msg.key.id);
+		//		uo->position = msg.position;
+		//		for (uint32_t e : uo->drawableCollection)
+		//		{
+		//			_drawables.get(e).position = uo->position;
+		//			//assert(_drawables.get(e).currentNode != UNDEFINED_IDX);
+		//			if (_drawables.get(e).hasMoved == false)
+		//			{
+		//				_drawables.get(e).hasMoved = true;
+		//				_drawables.get(e).moveBufferIdx = (size_t)_drawablesToMove.size();
+		//				_drawablesToMove.push_back(e);
+		//			}
+		//		}
+		//		break;
+		//	case(PrepareKey::Type::PointLight) :
+		//		l = &_pointLights.get(msg.key.id);
+		//		l->position = msg.position;
+		//		if (l->hasMoved == false)
+		//		{
+		//			l->hasMoved = true;
+		//			l->moveBufferIdx = _pointLightsToMove.size();
+		//			_pointLightsToMove.push_back(msg.key.id);
+		//		}
+		//		break;
+		//	default:
+		//		break;
+		//	}
+		//}
+
+		//void RenderScene::_setScale(AGE::Commands::MainToPrepare::SetScale &msg)
+		//{
+		//	Mesh *uo = nullptr;
+		//	Camera *co = nullptr;
+		//	switch (msg.key.type)
+		//	{
+		//	case(PrepareKey::Type::Camera) :
+		//		co = &_cameras.get(msg.key.id);
+		//		co->scale = msg.scale;
+		//		co->hasMoved = true;
+		//		break;
+		//	case(PrepareKey::Type::Mesh) :
+		//		uo = &_meshs.get(msg.key.id);
+		//		uo->scale = msg.scale;
+		//		for (auto &e : uo->drawableCollection)
+		//		{
+		//			_drawables.get(e).scale = uo->scale;
+		//			//assert(_drawables.get(e).currentNode != UNDEFINED_IDX);
+		//			if (_drawables.get(e).hasMoved == false)
+		//			{
+		//				_drawables.get(e).hasMoved = true;
+		//				_drawables.get(e).moveBufferIdx = _drawablesToMove.size();
+		//				_drawablesToMove.push_back(e);
+		//			}
+		//		}
+		//		break;
+		//	default:
+		//		break;
+		//	}
+		//}
+
+		//void RenderScene::_setOrientation(AGE::Commands::MainToPrepare::SetOrientation &msg)
+		//{
+		//	Mesh *uo = nullptr;
+		//	Camera *co = nullptr;
+		//	switch (msg.key.type)
+		//	{
+		//	case(PrepareKey::Type::Camera) :
+		//		co = &_cameras.get(msg.key.id);
+		//		co->orientation = msg.orientation;
+		//		co->hasMoved = true;
+		//		break;
+		//	case(PrepareKey::Type::Mesh) :
+		//		uo = &_meshs.get(msg.key.id);
+		//		uo->orientation = msg.orientation;
+		//		for (auto &e : uo->drawableCollection)
+		//		{
+		//			_drawables.get(e).orientation = uo->orientation;
+		//			//assert(_drawables.get(e).currentNode != UNDEFINED_IDX);
+		//			if (_drawables.get(e).hasMoved == false)
+		//			{
+		//				_drawables.get(e).hasMoved = true;
+		//				_drawables.get(e).moveBufferIdx = _drawablesToMove.size();
+		//				_drawablesToMove.push_back(e);
+		//			}
+		//		}
+		//		break;
+		//	default:
+		//		break;
+		//	}
+		//}
 
 		void RenderScene::_moveElementsInOctree()
 		{
@@ -405,7 +465,6 @@ namespace AGE
 			{
 				Drawable &e = _drawables.get(idx);
 				e.hasMoved = false;
-				e.transformation = glm::scale(glm::translate(glm::mat4(1), e.position) * glm::toMat4(e.orientation), e.scale);
 				e.shape.fromTransformedBox(e.mesh.boundingBox, e.transformation);
 				if (e.currentNode == UNDEFINED_IDX)
 					_octree.addElement(&e);
@@ -460,7 +519,9 @@ namespace AGE
 			for (uint32_t cameraIdx : _activeCameras)
 			{
 				Camera &camera = _cameras.get(cameraIdx);
-				auto view = glm::inverse(glm::scale(glm::translate(glm::mat4(1), camera.position) * glm::toMat4(camera.orientation), camera.scale));
+				//				auto view = glm::inverse(glm::scale(glm::translate(glm::mat4(1), camera.position) * glm::toMat4(camera.orientation), camera.scale));
+				auto view = glm::inverse(camera.transformation);
+
 				// update frustum infos for culling
 				camera.shape.setMatrix(camera.projection * view);
 

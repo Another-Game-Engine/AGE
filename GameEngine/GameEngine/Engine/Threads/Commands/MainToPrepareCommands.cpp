@@ -9,20 +9,25 @@ namespace AGE
 	{
 		namespace MainToPrepare
 		{
-			SetPosition::SetPosition(const PrepareKey &_key, const glm::vec3 &_position)
+			SetTransform::SetTransform(const PrepareKey &_key, const glm::mat4 &_transform)
 				: key(_key)
-				, position(_position)
+				, transform(_transform)
 			{}
 
-			SetScale::SetScale(const PrepareKey &_key, const glm::vec3 &_scale)
-				: key(_key)
-				, scale(_scale)
-			{}
+			//SetPosition::SetPosition(const PrepareKey &_key, const glm::vec3 &_position)
+			//	: key(_key)
+			//	, position(_position)
+			//{}
 
-			SetOrientation::SetOrientation(const PrepareKey &_key, const glm::quat &_orientation)
-				: key(_key)
-				, orientation(_orientation)
-			{}
+			//SetScale::SetScale(const PrepareKey &_key, const glm::vec3 &_scale)
+			//	: key(_key)
+			//	, scale(_scale)
+			//{}
+
+			//SetOrientation::SetOrientation(const PrepareKey &_key, const glm::quat &_orientation)
+			//	: key(_key)
+			//	, orientation(_orientation)
+			//{}
 
 
 			SetGeometry::SetGeometry(const PrepareKey &_key
