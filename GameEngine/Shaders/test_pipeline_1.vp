@@ -19,12 +19,11 @@ void main(void)
 {
 	vec4 newPosition = position;
 
-	if (skinned != 0.0f)
+	if (skinned == 0.0f)
 	{
-		newPosition = vec4(0.0f);
-
-	//if (blendWeight.x > 0.0f)
-	//	newPosition = vec4(1.0f);
+		newPosition = blendWeight * blendIndice + tangent + vec4(texCoord.x, texCoord.y, 1.0f, 1.0f);
+	//
+	//	if (blendWeight.x > 0.0f)
 	//		newPosition = (bones[int(blendIndice.x)] * position) * blendWeight.x;
 	//	if (blendWeight.y > 0.0f)
 	//		newPosition += (bones[int(blendIndice.y)] * position) * blendWeight.y;
