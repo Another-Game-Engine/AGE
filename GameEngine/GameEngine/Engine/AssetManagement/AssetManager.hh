@@ -26,14 +26,14 @@ namespace AGE
 
 static std::pair<GLenum, std::function<void(Vertices &vertices, size_t index, SubMeshData const &data)>> g_InfosTypes[MeshInfos::END] =
 {
-	std::make_pair(GL_FLOAT_VEC4, LAMBDA_FUNCTION{ vertices.set_data<glm::vec4>(data.positions, index); }),
-	std::make_pair(GL_FLOAT_VEC4, LAMBDA_FUNCTION{ vertices.set_data<glm::vec4>(data.normals, index); }),
-	std::make_pair(GL_FLOAT_VEC4, LAMBDA_FUNCTION{ vertices.set_data<glm::vec4>(data.tangents, index); }),
-	std::make_pair(GL_FLOAT_VEC4, LAMBDA_FUNCTION{ vertices.set_data<glm::vec4>(data.biTangents, index); }),
-	std::make_pair(GL_FLOAT_VEC2, LAMBDA_FUNCTION{ vertices.set_data<glm::vec2>(data.uvs[0], index); }),
-	std::make_pair(GL_FLOAT_VEC4, LAMBDA_FUNCTION{ vertices.set_data<glm::vec4>(data.weights, index); }),
-	std::make_pair(GL_FLOAT_VEC4, LAMBDA_FUNCTION{ vertices.set_data<glm::vec4>(data.boneIndices, index); }),
-	std::make_pair(GL_FLOAT_VEC4, LAMBDA_FUNCTION{ vertices.set_data<glm::vec4>(data.colors, index); })
+	std::make_pair(GL_FLOAT_VEC4, LAMBDA_FUNCTION{ vertices.set_data<glm::vec4>(data.positions, std::string("positions")); }),
+	std::make_pair(GL_FLOAT_VEC4, LAMBDA_FUNCTION{ vertices.set_data<glm::vec4>(data.normals, std::string("normals")); }),
+	std::make_pair(GL_FLOAT_VEC4, LAMBDA_FUNCTION{ vertices.set_data<glm::vec4>(data.tangents, std::string("tangents")); }),
+	std::make_pair(GL_FLOAT_VEC4, LAMBDA_FUNCTION{ vertices.set_data<glm::vec4>(data.biTangents, std::string("bi_tangents")); }),
+	std::make_pair(GL_FLOAT_VEC2, LAMBDA_FUNCTION{ vertices.set_data<glm::vec2>(data.uvs[0], std::string("uv_0")); }),
+	std::make_pair(GL_FLOAT_VEC4, LAMBDA_FUNCTION{ vertices.set_data<glm::vec4>(data.weights, std::string("weights")); }),
+	std::make_pair(GL_FLOAT_VEC4, LAMBDA_FUNCTION{ vertices.set_data<glm::vec4>(data.boneIndices, std::string("bone_indices")); }),
+	std::make_pair(GL_FLOAT_VEC4, LAMBDA_FUNCTION{ vertices.set_data<glm::vec4>(data.colors, std::string("colors")); })
 };
 
 	struct Skeleton;

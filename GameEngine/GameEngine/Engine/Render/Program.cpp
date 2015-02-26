@@ -124,7 +124,7 @@ namespace AGE
 		for (auto &resource : _program_resources) {
 			auto index = resource->id();
 			if (resource->type() == GL_PROGRAM_INPUT && *static_cast<Attribute *>(resource.get()) != p[index]) {
-				return (false);
+				return (true);
 			}
 		}
 		return (true);

@@ -5,7 +5,7 @@
 
 namespace AGE
 {
-	Vertices::Vertices(std::vector<GLenum> const &types, size_t nbrVertex, size_t nbrIndices, size_t offset) :
+	Vertices::Vertices(std::vector<std::pair<GLenum, std::string>> const &types, size_t nbrVertex, size_t nbrIndices, size_t offset) :
 		_offset(offset),
 		_nbr_indices(nbrIndices),
 		_nbr_vertex(nbrVertex),
@@ -14,12 +14,15 @@ namespace AGE
 		_indices_data(nbrIndices * sizeof(unsigned int), 0),
 		_block_memories(_types.size())
 	{
-		for (auto index = 0ull; index < _types.size(); ++index) {
-			auto &iterator = available_types.find(_types[index]);
+		auto index = 0ull;
+		for (auto &type : _types) {
+			auto const &iterator = available_types.find(type.first);
 			if (iterator != available_types.end()) {
-				auto &t = iterator->second;
-				_data[index].resize(t.size * nbrVertex, 0);
+				auto const &available_type = iterator->second;
+				_data[index].first = type.second;
+				_data[index].second.resize(available_type.size * nbrVertex, 0);
 			}
+			++index;
 		}
 	}
 
@@ -65,9 +68,14 @@ namespace AGE
 		return (_data.size());
 	}
 
-	std::vector<uint8_t> &&Vertices::transfer_data(size_t index)
+	std::vector<uint8_t> &&Vertices::transfer_data(std::string const &attribute)
 	{
-		return (std::move(_data[index]));
+		for (auto &data : _data) {
+			if (data.first == attribute) {
+				return std::move(data.second);
+			}
+		}
+		return std::move(_data.begin()->second);
 	}
 
 	std::vector<uint8_t> &&Vertices::transfer_indices_data()
@@ -75,14 +83,19 @@ namespace AGE
 		return (std::move(_indices_data));
 	}
 
-	GLenum Vertices::get_type(size_t index) const
+	std::pair<GLenum, std::string> Vertices::get_type(size_t index) const
 	{
 		return (_types[index]);
 	}
 
-	Vertices & Vertices::set_block_memory(std::shared_ptr<BlockMemory> const &blockMemory, size_t index)
+	Vertices & Vertices::set_block_memory(std::shared_ptr<BlockMemory> const &blockMemory, std::string const &attribute)
 	{
-		_block_memories[index] = blockMemory;
+		for (auto &block_memory : _block_memories) {
+			if (block_memory.first == attribute) {
+				block_memory.second = blockMemory;
+				return *this;
+			}
+		}
 		return (*this);
 	}
 
@@ -94,15 +107,15 @@ namespace AGE
 
 	Vertices & Vertices::remove()
 	{
-		auto index = 0ull;
+		auto &data = _data.begin();
 		for (auto &block : _block_memories) {
-			if (block.lock()) {
-				block.lock()->remove();
+			if (block.second.lock()) {
+				block.second.lock()->remove();
 			}
 			else {
-				_data[index].clear();
+				data->second.clear();
 			}
-			++index;
+			++data;
 		}
 		if (_indices_block_memory.lock()) {
 			_indices_block_memory.lock()->remove();
