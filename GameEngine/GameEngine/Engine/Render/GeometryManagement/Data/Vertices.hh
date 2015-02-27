@@ -70,14 +70,14 @@ namespace AGE
 		for (auto &block_memory : _block_memories) {
 			if (block_memory.first == attribute) {
 				if (block_memory.second.lock()) {
-					block_memory.second.lock() = tmp;
+					*block_memory.second.lock() = tmp;
 					return true;
 				}
 			}
 		}
 		for (auto &data : _data) {
 			if (data.first == attribute) {
-				data = tmp;
+				data.second = tmp;
 				return true;
 			}
 		}

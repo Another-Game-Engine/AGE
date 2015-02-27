@@ -1,6 +1,6 @@
 #pragma once
 
-# include <Render/Buffer/ABuffer.hh>
+#include <Render/Buffer/ABuffer.hh>
 
 class VertexBuffer : public ABuffer
 {

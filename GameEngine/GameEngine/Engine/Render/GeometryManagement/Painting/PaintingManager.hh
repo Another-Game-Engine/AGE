@@ -19,10 +19,10 @@ namespace AGE
 		PaintingManager &operator=(PaintingManager const &p) = delete;
 
 	public:
-		Key<Painter> add_painter(std::vector<GLenum> &&types);
+		Key<Painter> add_painter(std::vector<std::pair<GLenum, std::string>> &&types);
 		std::shared_ptr<Painter> const &get_painter(Key<Painter> const &key);
-		Key<Painter> get_painter(std::vector<GLenum> const &types);
-		bool has_painter(std::vector<GLenum> const types);
+		Key<Painter> get_painter(std::vector<std::pair<GLenum, std::string>> const &types);
+		bool has_painter(std::vector<std::pair<GLenum, std::string>> const &types);
 
 	private:
 		std::vector<std::shared_ptr<Painter>> _painters;

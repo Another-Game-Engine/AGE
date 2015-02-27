@@ -7,7 +7,7 @@
 namespace AGE
 {
 
-	Painter::Painter(std::vector<GLenum>  const &types) :
+	Painter::Painter(std::vector<std::pair<GLenum, std::string>>  const &types) :
 		_buffer(types)
 	{
 		// to be sure that this function is only called in render thread
@@ -100,7 +100,7 @@ namespace AGE
 		return (*this);
 	}
 
-	bool Painter::coherent(std::vector<GLenum> const &types) const
+	bool Painter::coherent(std::vector<std::pair<GLenum, std::string>> const &types) const
 	{
 		// to be sure that this function is only called in render thread
 		AGE_ASSERT(GetThreadManager()->getCurrentThread() == (AGE::Thread*)GetRenderThread());

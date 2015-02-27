@@ -15,8 +15,8 @@ namespace AGE
 		Attribute(Attribute const &copy);
 		Attribute &operator=(Attribute const &a) = delete;
 		template <typename type_t> Attribute &operator+=(std::vector<type_t> const &data);
-		bool operator==(GLenum p) const;
-		bool operator!=(GLenum p) const;
+		bool operator==(std::pair<GLenum, std::string> const &p) const;
+		bool operator!=(std::pair<GLenum, std::string> const &p) const;
 
 	public:
 		virtual IProgramResources &update() override final;

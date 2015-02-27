@@ -15,7 +15,7 @@ namespace AGE
 	class BufferPrograms
 	{
 	public:
-		BufferPrograms(std::vector<GLenum> const &types);
+		BufferPrograms(std::vector<std::pair<GLenum, std::string>> const &types);
 		BufferPrograms(BufferPrograms &&move);
 
 	public:
@@ -25,10 +25,10 @@ namespace AGE
 		BufferPrograms &bind();
 		BufferPrograms &unbind();
 		BufferPrograms &update();
-		std::vector<GLenum> const &get_types() const;
+		std::vector<std::pair<GLenum, std::string>> const &get_types() const;
 
 	private:
-		std::vector<GLenum> _types;
+		std::vector<std::pair<GLenum, std::string>> _types;
 		std::vector<Buffer> _buffers;
 		Buffer _indices_buffer;
 		VertexArray _vertex_array;

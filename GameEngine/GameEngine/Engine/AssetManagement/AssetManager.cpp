@@ -270,7 +270,7 @@ namespace AGE
 		mesh->defaultMaterialIndex = data.defaultMaterialIndex;
 		auto future = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]() {
 			auto &paintingManager = GetRenderThread()->paintingManager;
-			std::vector<GLenum> types;
+			std::vector<std::pair<GLenum, std::string>> types;
 			for (auto &e : loadOrder)
 			{
 				if (!fileData->subMeshs[index].infos.test(e))

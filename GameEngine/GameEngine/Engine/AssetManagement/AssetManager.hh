@@ -12,6 +12,7 @@
 #include <future>
 #include <TMQ/message.hpp>
 #include <functional>
+#include <string>
 
 namespace AGE
 {
@@ -24,16 +25,16 @@ namespace AGE
 
 # define LAMBDA_FUNCTION [](Vertices &vertices, size_t index, SubMeshData const &data)
 
-static std::pair<GLenum, std::function<void(Vertices &vertices, size_t index, SubMeshData const &data)>> g_InfosTypes[MeshInfos::END] =
+static std::pair<std::pair<GLenum, std::string>, std::function<void(Vertices &vertices, size_t index, SubMeshData const &data)>> g_InfosTypes[MeshInfos::END] =
 {
-	std::make_pair(GL_FLOAT_VEC4, LAMBDA_FUNCTION{ vertices.set_data<glm::vec4>(data.positions, std::string("positions")); }),
-	std::make_pair(GL_FLOAT_VEC4, LAMBDA_FUNCTION{ vertices.set_data<glm::vec4>(data.normals, std::string("normals")); }),
-	std::make_pair(GL_FLOAT_VEC4, LAMBDA_FUNCTION{ vertices.set_data<glm::vec4>(data.tangents, std::string("tangents")); }),
-	std::make_pair(GL_FLOAT_VEC4, LAMBDA_FUNCTION{ vertices.set_data<glm::vec4>(data.biTangents, std::string("bi_tangents")); }),
-	std::make_pair(GL_FLOAT_VEC2, LAMBDA_FUNCTION{ vertices.set_data<glm::vec2>(data.uvs[0], std::string("uv_0")); }),
-	std::make_pair(GL_FLOAT_VEC4, LAMBDA_FUNCTION{ vertices.set_data<glm::vec4>(data.weights, std::string("weights")); }),
-	std::make_pair(GL_FLOAT_VEC4, LAMBDA_FUNCTION{ vertices.set_data<glm::vec4>(data.boneIndices, std::string("bone_indices")); }),
-	std::make_pair(GL_FLOAT_VEC4, LAMBDA_FUNCTION{ vertices.set_data<glm::vec4>(data.colors, std::string("colors")); })
+	std::make_pair(std::make_pair(GL_FLOAT_VEC4, std::string("positions")), LAMBDA_FUNCTION{ vertices.set_data<glm::vec4>(data.positions, std::string("positions")); }),
+	std::make_pair(std::make_pair(GL_FLOAT_VEC4, std::string("normals")), LAMBDA_FUNCTION{ vertices.set_data<glm::vec4>(data.normals, std::string("normals")); }),
+	std::make_pair(std::make_pair(GL_FLOAT_VEC4, std::string("tangents")), LAMBDA_FUNCTION{ vertices.set_data<glm::vec4>(data.tangents, std::string("tangents")); }),
+	std::make_pair(std::make_pair(GL_FLOAT_VEC4, std::string("bi_tangents")), LAMBDA_FUNCTION{ vertices.set_data<glm::vec4>(data.biTangents, std::string("bi_tangents")); }),
+	std::make_pair(std::make_pair(GL_FLOAT_VEC2, std::string("uv_0")), LAMBDA_FUNCTION{ vertices.set_data<glm::vec2>(data.uvs[0], std::string("uv_0")); }),
+	std::make_pair(std::make_pair(GL_FLOAT_VEC4, std::string("weights")), LAMBDA_FUNCTION{ vertices.set_data<glm::vec4>(data.weights, std::string("weights")); }),
+	std::make_pair(std::make_pair(GL_FLOAT_VEC4, std::string("bone_indices")), LAMBDA_FUNCTION{ vertices.set_data<glm::vec4>(data.boneIndices, std::string("bone_indices")); }),
+	std::make_pair(std::make_pair(GL_FLOAT_VEC4, std::string("colors")), LAMBDA_FUNCTION{ vertices.set_data<glm::vec4>(data.colors, std::string("colors")); })
 };
 
 	struct Skeleton;

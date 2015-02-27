@@ -1,7 +1,7 @@
 #include <Render/Buffer/VertexBuffer.hh>
 
 VertexBuffer::VertexBuffer() :
-ABuffer()
+	ABuffer()
 {
 
 }

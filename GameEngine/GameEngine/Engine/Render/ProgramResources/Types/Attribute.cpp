@@ -45,13 +45,13 @@ namespace AGE
 		std::cout << std::endl;
 	}
 
-	bool Attribute::operator==(GLenum p) const
+	bool Attribute::operator==(std::pair<GLenum, std::string> const &p) const
 	{
-		return (_available_type == p);
+		return (_available_type == p.first && _name == p.second);
 	}
 
-	bool Attribute::operator!=(GLenum p) const
+	bool Attribute::operator!=(std::pair<GLenum, std::string> const &p) const
 	{
-		return (!(_available_type == p));
+		return (!(*this == p));
 	}
 }

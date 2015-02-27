@@ -33,7 +33,7 @@ namespace AGE
 		Program &update();
 		Program const &print_resources() const;
 		size_t nbr_resources() const;
-		bool coherent_attribute(std::vector<GLenum> const &p) const;
+		bool coherent_attribute(std::vector<std::pair<GLenum, std::string>> const &p) const;
 
 	private:
 		void _get_resources();

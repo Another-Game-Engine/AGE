@@ -119,12 +119,12 @@ namespace AGE
 		return (_program_resources.size());
 	}
 
-	bool Program::coherent_attribute(std::vector<GLenum> const &p) const
+	bool Program::coherent_attribute(std::vector<std::pair<GLenum, std::string>> const &p) const
 	{
 		for (auto &resource : _program_resources) {
 			auto index = resource->id();
 			if (resource->type() == GL_PROGRAM_INPUT && *static_cast<Attribute *>(resource.get()) != p[index]) {
-				return (true);
+				return (false);
 			}
 		}
 		return (true);
