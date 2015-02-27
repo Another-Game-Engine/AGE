@@ -14,9 +14,10 @@ void Link::registerOctreeObject(const PrepareKey &key)
 	AGE_ASSERT(b.invalid());
 
 	b = key;
-	_renderScene->setPosition(_position, key);
-	_renderScene->setScale(_scale, key);
-	_renderScene->setOrientation(_orientation, key);
+	//_renderScene->setPosition(_position, key);
+	//_renderScene->setScale(_scale, key);
+	//_renderScene->setOrientation(_orientation, key);
+	_renderScene->setTransform(getGlobalTransform(), key);
 }
 
 void Link::unregisterOctreeObject(const PrepareKey &key)
@@ -61,78 +62,74 @@ void Link::setForward(const glm::vec3 &v)
 
 void Link::internalSetPosition(const glm::vec3 &v)
 {
-	_computeTrans = true;
+	_localDirty = true;
 	_position = v;
-	auto ot = static_cast<RenderScene*>(_renderScene);
-	for (auto &e : _octreeObjects)
-	{
-		AGE_ASSERT(!e.invalid());
-		ot->setPosition(_position, e);
-	}
+
+	_updateGlobalTransform();
 }
 
 void Link::internalSetForward(const glm::vec3 &v)
 {
-	_computeTrans = true;
+	_localDirty = true;
 	glm::vec4 get = glm::mat4(glm::toMat4(_orientation) * glm::translate(glm::mat4(1), v))[3];
 	_position.x = _position.x + get.x;
 	_position.y = _position.y + get.y;
 	_position.z = _position.z + get.z;
 
-	for (auto &e : _octreeObjects)
-	{
-		AGE_ASSERT(!e.invalid());
-		_renderScene->setPosition(_position, e);
-	}
+	_updateGlobalTransform();
 }
 
 void Link::internalSetScale(const glm::vec3 &v) {
-	_computeTrans = true;
+	_localDirty = true;
 	_scale = v;
 
-	for (auto &e : _octreeObjects)
-	{
-		AGE_ASSERT(!e.invalid());
-		_renderScene->setScale(_scale, e);
-	}
+	_updateGlobalTransform();
 }
 
 void Link::internalSetOrientation(const glm::quat &v) {
-	_computeTrans = true;
+	_localDirty = true;
 	_orientation = v;
 
-	for (auto &e : _octreeObjects)
-	{
-		AGE_ASSERT(!e.invalid());
-		_renderScene->setOrientation(_orientation, e);
-	}
+	_updateGlobalTransform();
 }
 
-const glm::mat4 &Link::getTransform()
+const glm::mat4 Link::getLocalTransform() const
 {
-	if (_computeTrans)
-	{
-		_trans = glm::mat4(1);
-		_trans = glm::translate(_trans, _position);
-		_trans = _trans * glm::toMat4(_orientation);
-		_trans = glm::scale(_trans, _scale);
-		_computeTrans = false;
-	}
-	return _trans;
-}
-
-const glm::mat4 &Link::getTransform() const
-{
-	if (_computeTrans)
+	if (_localDirty)
 	{
 		auto trans = glm::mat4(1);
-		trans = glm::translate(_trans, _position);
-		trans = _trans * glm::toMat4(_orientation);
-		trans = glm::scale(_trans, _scale);
+		trans = glm::translate(_localTransformation, _position);
+		trans = _localTransformation * glm::toMat4(_orientation);
+		trans = glm::scale(_localTransformation, _scale);
 		return trans;
 	}
-	return _trans;
+	return _localTransformation;
 }
+
+const glm::mat4 &Link::getLocalTransform()
+{
+	if (_localDirty)
+	{
+		_localTransformation = glm::mat4(1);
+		_localTransformation = glm::translate(_localTransformation, _position);
+		_localTransformation = _localTransformation * glm::toMat4(_orientation);
+		_localTransformation = glm::scale(_localTransformation, _scale);
+		_localDirty = false;
+	}
+	return _localTransformation;
+}
+
+const glm::mat4 Link::getGlobalTransform() const
+{
+	return _globalTransformation;
+}
+
+
+const glm::mat4 &Link::getGlobalTransform()
+{
+	return _globalTransformation;
+}
+
 
 Link::Link()
 {
@@ -144,8 +141,9 @@ void Link::reset()
 	_position = glm::vec3(0);
 	_scale = glm::vec3(1);
 	_orientation = glm::quat(glm::mat4(1));
-	_trans = glm::mat4(1);
-	_computeTrans = true;
+	_localTransformation = glm::mat4(1);
+	_globalTransformation = glm::mat4(1);
+	_localDirty = true;
 	_parent = nullptr;
 }
 
@@ -164,6 +162,7 @@ void Link::attachChild(Link *child)
 	}
 	child->_setParent(this);
 	_setChild(child);
+	child->_updateGlobalTransform();
 }
 
 void Link::detachChild(Link *child)
@@ -174,6 +173,7 @@ void Link::detachChild(Link *child)
 		return;
 	}
 	child->_removeParent();
+	child->_updateGlobalTransform();
 	_removeChild(child);
 }
 
@@ -182,6 +182,7 @@ void Link::detachChildren()
 	for (auto &e : _children)
 	{
 		e->_removeParent();
+		e->_updateGlobalTransform();
 	}
 	_children.clear();
 	if (hasParent())
@@ -208,8 +209,9 @@ void Link::attachParent(Link *parent)
 		// detach from previous parent
 		_parent->_removeChild(this);
 	}
-	_setParent(_parent);
+	_setParent(parent);
 	_parent->_setChild(this);
+	_parent->_updateGlobalTransform();
 }
 
 void Link::detachParent()
@@ -221,6 +223,7 @@ void Link::detachParent()
 	}
 	_parent->_removeChild(this);
 	_removeParent();
+	_updateGlobalTransform();
 }
 
 void Link::_setChild(Link *ptr)
@@ -286,4 +289,23 @@ void Link::_removeParent()
 {
 	_detachFromRoot();
 	_parent = nullptr;
+}
+
+void Link::_updateGlobalTransform()
+{
+	glm::mat4 p = glm::mat4(1);
+	if (hasParent())
+	{
+		p = _parent->getGlobalTransform();
+	}
+	_globalTransformation = p * getLocalTransform();
+	for (auto &e : _octreeObjects)
+	{
+		AGE_ASSERT(!e.invalid());
+		_renderScene->setTransform(_globalTransformation, e);
+	}
+	for (auto &e : _children)
+	{
+		e->_updateGlobalTransform(); 
+	}
 }

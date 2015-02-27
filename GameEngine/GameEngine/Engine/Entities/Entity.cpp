@@ -136,6 +136,16 @@ namespace AGE
 		return ptr->getLink();
 	}
 
+	AGE::Link *Entity::getLinkPtr()
+	{
+		return &ptr->getLink();
+	}
+
+	const AGE::Link *Entity::getLinkPtr() const
+	{
+		return &ptr->getLink();
+	}
+
 	ComponentBase *Entity::getComponent(ComponentType id)
 	{
 		return ptr->getComponent(id);
