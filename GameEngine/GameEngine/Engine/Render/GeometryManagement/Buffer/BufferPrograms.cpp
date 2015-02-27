@@ -19,6 +19,9 @@ namespace AGE
 			if (iterator != available_types.end()) {
 				auto &a = iterator->second;
 				_buffers.emplace_back(Buffer(std::string(type.second), std::make_unique<VertexBuffer>()));
+			//	_buffers.back().bind();
+			//	glEnableVertexAttribArray(index);
+			//	glV	ertexAttribPointer(index++, a.nbr_component, a.type_component, GL_FALSE, 0, 0);
 			}
 		}
 		_indices_buffer.bind();
