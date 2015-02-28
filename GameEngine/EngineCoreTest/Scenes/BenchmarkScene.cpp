@@ -304,8 +304,9 @@ namespace AGE
 		_l.setOrientation(glm::quat(glm::vec3(Mathematic::degreeToRadian(-90), Mathematic::degreeToRadian(90), 0)));
 		_l.setPosition(glm::vec3(-30, 0, 0));
 		_l.setScale(glm::vec3(8.5f));
-		auto _m = GLOBAL_CATWOMAN.addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("catwoman/catwoman.sage"));
-		_m->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial("catwoman/catwoman.mage"));
+		auto _m = GLOBAL_CATWOMAN.addComponent<MeshRenderer>(
+			getInstance<AGE::AssetsManager>()->getMesh("catwoman/catwoman.sage")
+			, getInstance<AGE::AssetsManager>()->getMaterial("catwoman/catwoman.mage"));
 	}
 
 	for (int i = 0; i < 1; ++i)
@@ -384,8 +385,8 @@ namespace AGE
 			link.setPosition(GLOBAL_CAMERA.getLink().getPosition() + glm::vec3(0, 0, -2) * GLOBAL_CAMERA.getLink().getOrientation());
 			link.setScale(glm::vec3(0.2f));
 			MeshRenderer *mesh;
-			mesh = e.addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("cube/cube.sage"));
-			mesh->setMaterial(getInstance<AGE::AssetsManager>()->getMaterial(OldFile("cube/cube.mage")));
+			mesh = e.addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("cube/cube.sage")
+				, getInstance<AGE::AssetsManager>()->getMaterial(OldFile("cube/cube.mage")));
 			auto rigidBody = e.addComponent<RigidBody>(1.0f);
 			rigidBody->setCollisionShape((AScene*)(this), e, RigidBody::BOX);
 			rigidBody->getBody().setFriction(0.5f);

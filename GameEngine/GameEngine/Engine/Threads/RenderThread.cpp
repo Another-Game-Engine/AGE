@@ -155,31 +155,6 @@ namespace AGE
 		});
 #endif
 
-		registerCallback<Tasks::Render::SetMeshMaterial>([&](Tasks::Render::SetMeshMaterial& msg)
-		{
-//			for (auto &subMesh : msg.mesh->subMeshs)
-//			{
-//				auto vertices = paintingManager->get_painter(subMesh.painter)->get_vertices(subMesh.vertices);
-//				assert(vertices != nullptr);
-//				if (subMesh.defaultMaterialIndex >= msg.material->datas.size())
-//				{
-//					for (auto &prop : msg.material->datas[0])
-//					{
-//						prop->set_program(pipelines[0]->get_programs());
-//						vertices->add_property(prop);
-//					}
-//				}
-//				else
-//				{
-//					for (auto &prop : msg.material->datas[subMesh.defaultMaterialIndex])
-//					{
-//						prop->set_program(pipelines[0]->get_programs());
-//						vertices->add_property(prop);
-//					}
-//				}
-//			}
-		});
-
 		return true;
 	}
 
