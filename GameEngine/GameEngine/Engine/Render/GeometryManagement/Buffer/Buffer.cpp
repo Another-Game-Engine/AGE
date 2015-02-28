@@ -60,7 +60,8 @@ namespace AGE
 		}
 		if (_request_transfer) {
 			_buffer->bind();
-			for (auto &memory : _block_memories) {
+			for (auto &memory : _block_memories)
+			{
 				if (!memory->is_update()) {
 					memory->update_buffer(*_buffer.get());
 				}

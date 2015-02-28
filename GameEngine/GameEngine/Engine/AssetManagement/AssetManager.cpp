@@ -34,6 +34,8 @@ namespace AGE
 	std::shared_ptr<MeshInstance> AssetsManager::getMesh(const OldFile &_filePath)
 	{
 		OldFile filePath(_assetsDirectory + _filePath.getFullName());
+		std::lock_guard<std::mutex> lock(_mutex);
+
 		if (_meshs.find(filePath.getFullName()) != std::end(_meshs))
 			return _meshs[filePath.getFullName()];
 		return nullptr;
@@ -42,6 +44,8 @@ namespace AGE
 	std::shared_ptr<MaterialSetInstance> AssetsManager::getMaterial(const OldFile &_filePath)
 	{
 		OldFile filePath(_assetsDirectory + _filePath.getFullName());
+		std::lock_guard<std::mutex> lock(_mutex);
+
 		if (_materials.find(filePath.getFullName()) != std::end(_materials)) 
 		{
 			return _materials[filePath.getFullName()];

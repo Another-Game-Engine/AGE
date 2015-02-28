@@ -186,13 +186,13 @@ namespace AGE
 
 			if (!_mesh)
 			{
-				scene->getInstance<AGE::AssetsManager>()->loadMesh(OldFile(selectedMeshPath), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents }, "WE_MESH_LOADING");
+				scene->getInstance<AGE::AssetsManager>()->loadMesh(OldFile(selectedMeshPath), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents }, selectedMeshPath);
 
 				std::size_t totalToLoad = 0;
 				std::size_t	toLoad = 0;
 				std::string loadingError;
 				do {
-					scene->getInstance<AGE::AssetsManager>()->updateLoadingChannel("WE_MESH_LOADING", totalToLoad, toLoad, loadingError);
+					scene->getInstance<AGE::AssetsManager>()->updateLoadingChannel(selectedMeshPath, totalToLoad, toLoad, loadingError);
 				} while
 					(toLoad != 0 && loadingError.size() == 0);
 			}
@@ -214,13 +214,13 @@ namespace AGE
 
 			if (!_material)
 			{
-				scene->getInstance<AGE::AssetsManager>()->loadMaterial(OldFile(selectedMaterialPath), "WE_MESH_LOADING");
+				scene->getInstance<AGE::AssetsManager>()->loadMaterial(OldFile(selectedMaterialPath), selectedMaterialPath);
 
 				std::size_t totalToLoad = 0;
 				std::size_t	toLoad = 0;
 				std::string loadingError;
 				do {
-					scene->getInstance<AGE::AssetsManager>()->updateLoadingChannel("WE_MESH_LOADING", totalToLoad, toLoad, loadingError);
+					scene->getInstance<AGE::AssetsManager>()->updateLoadingChannel(selectedMaterialPath, totalToLoad, toLoad, loadingError);
 				} while
 					(toLoad != 0 && loadingError.size() == 0);
 			}
