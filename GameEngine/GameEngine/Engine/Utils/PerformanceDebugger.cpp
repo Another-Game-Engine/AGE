@@ -139,7 +139,7 @@ bool PerformanceDebugger::logAverage(std::string const &counterName, std::string
 						<< ") average on "
 						<< it->second.averageTime
 						<< " -> "
-						<< (sum / it->second.averageTime).count() * 1000.f
+						<< (float)((sum / it->second.averageTime).count()) * 1000.f
 						<< " ms : "
 						<< comment
 						<< std::endl;

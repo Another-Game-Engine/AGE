@@ -42,6 +42,8 @@ namespace AGE
 
 		const AGE::Link &getLink() const;
 		AGE::Link &getLink();
+		const AGE::Link *getLinkPtr() const;
+		AGE::Link *getLinkPtr();
 		const AGE::Entity *getPtr() const;
 		AGE::Entity *getPtr();
 		AScene *getScene();

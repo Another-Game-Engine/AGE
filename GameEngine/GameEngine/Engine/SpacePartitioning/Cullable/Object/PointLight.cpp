@@ -15,7 +15,7 @@ namespace AGE
 		attenuation(pAttenuation),
 		color(pColor)
 	{
-		PreparableObject::position = pPosition;
+		PreparableObject::transformation = glm::translate(glm::mat4(1), pPosition);
 	}
 
 	void PointLight::computeSphereTransform()
@@ -28,7 +28,7 @@ namespace AGE
 		equation.x -= 256;
 		if (attenuation.z == 0) // first degree
 		{
-			// infinite range if theire is no distance attenuation
+			// infinite range if there is no distance attenuation
 			assert(attenuation.y != 0);
 			lightRange = glm::vec3(-equation.x / equation.y);
 		}
@@ -39,7 +39,7 @@ namespace AGE
 			lightRange = glm::vec3(glm::max(res.x, res.y));
 		}
 		assert(lightRange.x > 0);
-		sphereTransform = glm::scale(glm::translate(glm::mat4(1), position), lightRange);
+		sphereTransform = glm::scale(transformation, lightRange);
 	}
 
 }

@@ -43,11 +43,13 @@ namespace AGE
 		void _deletePointLight(AGE::Commands::MainToPrepare::DeletePointLight &msg);
 		void _deleteDrawable(AGE::Commands::MainToPrepare::DeleteMesh &msg);
 		void _setGeometry(AGE::Commands::MainToPrepare::SetGeometry &msg);
-		void _setPosition(AGE::Commands::MainToPrepare::SetPosition &msg);
-		void _setScale(AGE::Commands::MainToPrepare::SetScale &msg);
-		void _setOrientation(AGE::Commands::MainToPrepare::SetOrientation &msg);
-		void _prepareDrawList(AGE::Commands::MainToPrepare::PrepareDrawLists &msg);
+		//void _setPosition(AGE::Commands::MainToPrepare::SetPosition &msg);
+		//void _setScale(AGE::Commands::MainToPrepare::SetScale &msg);
+		//void _setOrientation(AGE::Commands::MainToPrepare::SetOrientation &msg);
+		void _setTransform(AGE::Commands::MainToPrepare::SetTransform &msg);
 		void _addMaterial(AGE::Tasks::MainToPrepare::AddMaterial &msg);
+
+		void _prepareDrawList(AGE::Commands::MainToPrepare::PrepareDrawLists &msg);
 		void _moveElementsInOctree();
 
 		Key<Properties> _createPropertiesContainer();
@@ -69,14 +71,18 @@ namespace AGE
 		PrepareKey addPointLight();
 		RenderScene &removeElement(const PrepareKey &key);
 		RenderScene &setPointLight(glm::vec3 const &color, glm::vec3 const &range, const PrepareKey &id);
-		RenderScene &setPosition(const glm::vec3 &v, const PrepareKey &id);
-		RenderScene &setOrientation(const glm::quat &v, const PrepareKey &id);
-		RenderScene &setScale(const glm::vec3 &v, const PrepareKey &id);
+		//RenderScene &setPosition(const glm::vec3 &v, const PrepareKey &id);
+		//RenderScene &setOrientation(const glm::quat &v, const PrepareKey &id);
+		//RenderScene &setScale(const glm::vec3 &v, const PrepareKey &id);
+		RenderScene &setTransform(const glm::mat4 &v, const PrepareKey &id);
+
 		RenderScene &setCameraInfos(const PrepareKey &id
 			, const glm::mat4 &projection);
-		RenderScene &setPosition(const glm::vec3 &v, const std::array<PrepareKey, MAX_CPT_NUMBER> &ids);
-		RenderScene &setOrientation(const glm::quat &v, const std::array<PrepareKey, MAX_CPT_NUMBER> &ids);
-		RenderScene &setScale(const glm::vec3 &v, const std::array<PrepareKey, MAX_CPT_NUMBER> &ids);
+		//RenderScene &setPosition(const glm::vec3 &v, const std::array<PrepareKey, MAX_CPT_NUMBER> &ids);
+		//RenderScene &setOrientation(const glm::quat &v, const std::array<PrepareKey, MAX_CPT_NUMBER> &ids);
+		//RenderScene &setScale(const glm::vec3 &v, const std::array<PrepareKey, MAX_CPT_NUMBER> &ids);
+		RenderScene &setTransform(const glm::mat4&v, const std::array<PrepareKey, MAX_CPT_NUMBER> &ids);
+
 		RenderScene &updateGeometry(
 			const PrepareKey &key
 			, const AGE::Vector<SubMeshInstance> &meshs);

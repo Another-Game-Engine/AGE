@@ -60,17 +60,20 @@ namespace AGE
 		void attachParent(Link *parent);
 		void detachParent();
 
-		const glm::mat4 &getTransform() const;
-		const glm::mat4 &getTransform();
+		const glm::mat4 getGlobalTransform() const;
+		const glm::mat4 &getGlobalTransform();
+		const glm::mat4 getLocalTransform() const;
+		const glm::mat4 &getLocalTransform();
 	private:
 		bool _userModification = false;
 
 		glm::vec3 _position;
 		glm::vec3 _scale;
 		glm::quat _orientation;
-		glm::mat4 _trans;
+		glm::mat4 _localTransformation;
+		glm::mat4 _globalTransformation;
 
-		bool _computeTrans;
+		bool _localDirty;
 		std::vector<PrepareKey> _octreeObjects;
 		Link *_parent;
 		std::vector<Link*> _children;
@@ -81,6 +84,7 @@ namespace AGE
 		void _removeParent();
 		void _detachFromRoot();
 		void _attachToRoot();
+		void _updateGlobalTransform();
 	public:
 		RenderScene *_renderScene;
 	public:

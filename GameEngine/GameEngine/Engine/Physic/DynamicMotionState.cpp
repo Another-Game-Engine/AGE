@@ -10,7 +10,7 @@ namespace AGE
 	DynamicMotionState::DynamicMotionState(AGE::Link *link)
 		: _link(link)
 	{
-		mInitialPosition.setFromOpenGLMatrix(glm::value_ptr(link->getTransform()));
+		mInitialPosition.setFromOpenGLMatrix(glm::value_ptr(link->getGlobalTransform()));
 	}
 
 	DynamicMotionState::~DynamicMotionState()
@@ -19,14 +19,14 @@ namespace AGE
 
 	void DynamicMotionState::getWorldTransform(btTransform &worldTrans) const
 	{
-		worldTrans.setFromOpenGLMatrix(glm::value_ptr(_link->getTransform()));
+		worldTrans.setFromOpenGLMatrix(glm::value_ptr(_link->getGlobalTransform()));
 	}
 
 	void DynamicMotionState::setWorldTransform(const btTransform &worldTrans)
 	{
 		if (_link->isUserModified())
 		{
-			mInitialPosition.setFromOpenGLMatrix(glm::value_ptr(_link->getTransform()));
+			mInitialPosition.setFromOpenGLMatrix(glm::value_ptr(_link->getGlobalTransform()));
 			_link->setUserModified(false);
 			return;
 		}

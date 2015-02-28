@@ -3,6 +3,8 @@
 
 #include <TMQ/message.hpp>
 #include <AssetManagement/Data/MaterialData.hh>
+#include <AssetManagement/Instance/MaterialInstance.hh>
+#include <AssetManagement/Instance/MeshInstance.hh>
 
 namespace AGE
 {
