@@ -1,5 +1,7 @@
 #include <Render/Pipelining/Pipelines/CustomPipeline/BasicPipeline.hh>
 #include <Render/ProgramResources/Types/Uniform/Mat4.hh>
+#include <Render/ProgramResources/Types/Uniform/Mat4Array255.hh>
+#include <Render/ProgramResources/Types/Uniform/Vec1.hh>
 #include <Render/Program.hh>
 #include <Render/Pipelining/Render/Rendering.hh>
 #include <Render/OpenGLTask/Tasks.hh>
@@ -44,6 +46,9 @@ namespace AGE
 		_programs[RENDER]->use();
 		*_programs[RENDER]->get_resource<Mat4>("projection_matrix") = infos.projection;
 		*_programs[RENDER]->get_resource<Mat4>("view_matrix") = infos.view;
+		//*_programs[RENDER]->get_resource<Mat4Array255>("bones") = &(infos.view);
+		//*_programs[RENDER]->get_resource<Vec1>("skinned") = 0.0f;
+
 		for (auto key : pipeline.keys) {
 			_rendering_list[RENDER]->render(key.properties, key.vertices, _painter_manager->get_painter(key.painter));
 		}
