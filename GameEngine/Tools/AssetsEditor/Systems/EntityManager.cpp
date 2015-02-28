@@ -158,12 +158,6 @@ namespace AGE
 
 				_filter.setOnRemove(std::function<void(Entity e)>([this](Entity en){
 				}));
-
-				for (auto i = 0; i < 2; ++i)
-				{
-					auto e = _scene->createEntity();
-					e.addComponent<PointLightComponent>()->set(glm::vec3((float)(rand() % 1000) / 1000.0f, (float)(rand() % 1000) / 1000.0f, (float)(rand() % 1000) / 1000.0f), glm::vec3(1.f, 0.1f, 0.0f));
-				}
 				return true;
 			}
 	}

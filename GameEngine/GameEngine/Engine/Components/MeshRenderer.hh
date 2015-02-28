@@ -86,8 +86,8 @@ namespace AGE
 	template <typename Archive>
 	void MeshRenderer::save(Archive &ar) const
 	{
-#ifndef EDITOR_ENABLED
 		auto serializationInfos = std::make_unique<SerializationInfos>();
+#ifndef EDITOR_ENABLED
 		if (_material)
 		{
 			serializationInfos->material = _material->path;
@@ -96,20 +96,16 @@ namespace AGE
 		{
 			serializationInfos->mesh = _mesh->path;
 		}
-		//todo with animations
-		ar(serializationInfos);
 #else
-		ar(cereal::make_nvp("mesh path", selectedMeshPath));
+		serializationInfos->material = selectedMaterialPath;
+		serializationInfos->mesh = selectedMeshPath;
 #endif
+		ar(serializationInfos);
 	}
 
 	template <typename Archive>
 	void MeshRenderer::load(Archive &ar)
 	{
-#ifndef EDITOR_ENABLED
 		ar(_serializationInfos);
-#else
-		ar(selectedMeshPath);
-#endif
 	}
 }

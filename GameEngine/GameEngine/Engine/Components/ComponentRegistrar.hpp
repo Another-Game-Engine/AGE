@@ -16,6 +16,7 @@ namespace AGE
 	{
 		typedef std::function<void(ComponentBase *, cereal::JSONOutputArchive &)> RegisterJsonFn;
 		typedef std::function<void(void *, cereal::JSONInputArchive &)> LoadJsonFn;
+		typedef std::function<void(AScene *)> CreateComponentPoolFn;
 
 		typedef std::function<void(ComponentBase *, cereal::PortableBinaryOutputArchive &)> RegisterBinaryFn;
 
@@ -28,6 +29,16 @@ namespace AGE
 		{
 			static ComponentRegistrar instance;
 			return instance;
+		}
+
+		// This function is called at scene creation, so that pool are already created
+		// and we can deserialize components without knowing their types
+		void createComponentPool(AScene *scene)
+		{
+			for (auto &e : _createComponentPoolMap)
+			{
+				e.second(scene);
+			}
 		}
 
 		template <class T>
@@ -46,15 +57,20 @@ namespace AGE
 			{
 				ar(cereal::make_nvp(name,*(static_cast<T*>(c))));
 			})));
+
 			_jsonLoadMap.insert(std::make_pair(ageId, LoadJsonFn([=](void *ptr, cereal::JSONInputArchive &ar){
 				T *c = new(ptr)T();
 				ar(*c);
 			})));
 
-
 			_binarySaveMap.insert(std::make_pair(ageId, RegisterBinaryFn([](ComponentBase *c, cereal::PortableBinaryOutputArchive &ar)
 			{
 				ar(*(static_cast<T*>(c)));
+			})));
+
+			_createComponentPoolMap.insert(std::make_pair(ageId, CreateComponentPoolFn([](AScene *scene)
+			{
+				scene->createComponentPool<T>();
 			})));
 
 			_componentNames.insert(std::make_pair(ageId, name));
@@ -76,6 +92,7 @@ namespace AGE
 		std::map < ComponentType, RegisterJsonFn> _jsonSaveMap;
 		std::map < ComponentType, LoadJsonFn> _jsonLoadMap;
 		std::map < ComponentType, RegisterBinaryFn> _binarySaveMap;
+		std::map < ComponentType, CreateComponentPoolFn> _createComponentPoolMap;
 		std::map < ComponentType, std::string> _componentNames;
 	};
 }

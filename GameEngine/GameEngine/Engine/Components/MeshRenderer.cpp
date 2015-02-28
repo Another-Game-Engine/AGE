@@ -100,11 +100,34 @@ namespace AGE
 		{
 			if (!_serializationInfos->mesh.empty())
 			{
-				auto _mesh = _scene->getInstance<AGE::AssetsManager>()->getMesh(_serializationInfos->mesh);
+				scene->getInstance<AGE::AssetsManager>()->loadMesh(_serializationInfos->mesh
+					, { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents }
+				, "WE_MESH_LOADING");
+
+				std::size_t totalToLoad = 0;
+				std::size_t	toLoad = 0;
+				std::string loadingError;
+				do {
+					scene->getInstance<AGE::AssetsManager>()->updateLoadingChannel("WE_MESH_LOADING", totalToLoad, toLoad, loadingError);
+				} while
+					(toLoad != 0 && loadingError.size() == 0);
+
+				_mesh = _scene->getInstance<AGE::AssetsManager>()->getMesh(_serializationInfos->mesh);
 			}
 			if (!_serializationInfos->material.empty())
 			{
-				auto _material = _scene->getInstance<AGE::AssetsManager>()->getMaterial(_serializationInfos->material);
+				scene->getInstance<AGE::AssetsManager>()->loadMaterial(_serializationInfos->material
+				, "WE_MESH_LOADING");
+
+				std::size_t totalToLoad = 0;
+				std::size_t	toLoad = 0;
+				std::string loadingError;
+				do {
+					scene->getInstance<AGE::AssetsManager>()->updateLoadingChannel("WE_MESH_LOADING", totalToLoad, toLoad, loadingError);
+				} while
+					(toLoad != 0 && loadingError.size() == 0);
+
+				_material = _scene->getInstance<AGE::AssetsManager>()->getMaterial(_serializationInfos->material);
 			}
 			if (_mesh && _material)
 			{
