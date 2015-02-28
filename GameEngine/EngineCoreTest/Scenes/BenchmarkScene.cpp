@@ -283,9 +283,13 @@ namespace AGE
 					RigidBody *rb = GLOBAL_SPONZA.addComponent<RigidBody>(0.0f);
 					rb->setCollisionMesh(this, GLOBAL_SPONZA, "../../Assets/Serialized/sponza/sponza_static.phage");
 					_l.setScale(glm::vec3(10.f));
-					//_l->setOrientation(glm::quat(glm::vec3(Mathematic::degreeToRadian(-90), Mathematic::degreeToRadian(90), 0)));
 				
-					auto _m = GLOBAL_SPONZA.addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("Sponza/sponza.sage"), getInstance<AGE::AssetsManager>()->getMaterial(OldFile("Sponza/sponza.mage")));
+					///////@paul first we set a mesh with only 1 submesh
+					GLOBAL_SPONZA.addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("cube/cube.sage")
+						, getInstance<AGE::AssetsManager>()->getMaterial("cube/cube.mage"));
+					///////@paul then we replace it with a mesh with a lot of submesh
+					//GLOBAL_SPONZA.getComponent<MeshRenderer>()->setMeshAndMaterial(getInstance<AGE::AssetsManager>()->getMesh("Sponza/sponza.sage")
+					//	, getInstance<AGE::AssetsManager>()->getMaterial("Sponza/sponza.mage"));
 				}
 
 	{
