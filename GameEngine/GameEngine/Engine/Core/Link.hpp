@@ -30,7 +30,9 @@ namespace AGE
 		void internalSetOrientation(const glm::quat &v);
 		// Used by modules like physic, do not use it to set object forward, use setForward instead
 		void internalSetForward(const glm::vec3 &v);
-
+		// Used by modules like physic, do not use it to set object transform, use setTransform instead
+		void internalSetTransform(const glm::mat4 &t);
+	
 		inline bool isUserModified() const
 		{
 			return _userModification;
@@ -45,6 +47,7 @@ namespace AGE
 		void setForward(const glm::vec3 &v);
 		void setScale(const glm::vec3 &v);
 		void setOrientation(const glm::quat &v);
+		void setTransform(const glm::mat4 &t);
 
 		void registerOctreeObject(const PrepareKey &key);
 		void unregisterOctreeObject(const PrepareKey &key);

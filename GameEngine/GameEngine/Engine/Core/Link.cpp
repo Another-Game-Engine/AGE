@@ -4,6 +4,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <Threads/RenderScene.hpp>
 #include <Utils/Debug.hpp>
+#include <Utils/MatrixConversion.hpp>
 
 using namespace AGE;
 
@@ -60,6 +61,14 @@ void Link::setForward(const glm::vec3 &v)
 	internalSetForward(v);
 }
 
+void Link::setTransform(const glm::mat4 &t)
+{
+	_userModification = true;
+	internalSetTransform(t);
+
+}
+
+
 void Link::internalSetPosition(const glm::vec3 &v)
 {
 	_localDirty = true;
@@ -78,6 +87,21 @@ void Link::internalSetForward(const glm::vec3 &v)
 
 	_updateGlobalTransform();
 }
+
+void Link::internalSetTransform(const glm::mat4 &t)
+{
+	_localDirty = true;
+	//auto p = t * glm::vec4(_position.x, _position.y, _position.z, 0);
+	//_position = glm::vec3(p.x, p.y, p.z);
+	_scale = scaleFromMat4(t);
+	//_localTransformation = t;
+	auto rot = rotFromMat4(t, true);
+	_orientation = glm::quat(rot);
+	_position = posFromMat4(t);
+
+	_updateGlobalTransform();
+}
+
 
 void Link::internalSetScale(const glm::vec3 &v) {
 	_localDirty = true;
