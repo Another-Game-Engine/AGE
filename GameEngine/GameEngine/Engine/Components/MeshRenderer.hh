@@ -23,16 +23,19 @@ namespace AGE
 		MeshRenderer();
 		virtual ~MeshRenderer();
 
-		void init(AScene *, std::shared_ptr<AGE::MeshInstance> file = nullptr);
+		void init(AScene *
+			, std::shared_ptr<AGE::MeshInstance> mesh = nullptr
+			, std::shared_ptr<AGE::MaterialSetInstance> material = nullptr);
 		virtual void reset(AScene *);
 
 		template <typename Archive> void save(Archive &ar) const;
 		template <typename Archive> void load(Archive &ar);
 
 
-		MeshRenderer &setMesh(const std::shared_ptr<AGE::MeshInstance> &_mesh);
+		bool setMeshAndMaterial(
+			const std::shared_ptr<AGE::MeshInstance> &_mesh,
+			const std::shared_ptr<AGE::MaterialSetInstance> &_material);
 		std::shared_ptr<AGE::MeshInstance> getMesh();
-		MeshRenderer &setMaterial(const std::shared_ptr<AGE::MaterialSetInstance> &_mesh);
 		std::shared_ptr<AGE::MaterialSetInstance> getMaterial();
 
 #ifdef EDITOR_ENABLED
@@ -42,6 +45,12 @@ namespace AGE
 		std::string selectedMeshName = "";
 		std::string selectedMeshPath = "";
 
+		std::vector<const char*> *materialFileList = nullptr;
+		std::vector<const char*> *materialPathList = nullptr;
+		std::size_t selectedMaterialIndex = 0;
+		std::string selectedMaterialName = "";
+		std::string selectedMaterialPath = "";
+
 		virtual void editorCreate(AScene *scene);
 		virtual void editorDelete(AScene *scene);
 		virtual void editorUpdate(AScene *scene);
@@ -49,11 +58,11 @@ namespace AGE
 
 		virtual void postUnserialization(AScene *scene);
 
-		private:
-			AGE::PrepareKey _key;
-			AScene *_scene;
-			std::shared_ptr<AGE::MeshInstance> _mesh;
-			std::shared_ptr<AGE::MaterialSetInstance> _material;
+	private:
+		AGE::PrepareKey _key;
+		AScene *_scene;
+		std::shared_ptr<AGE::MeshInstance> _mesh;
+		std::shared_ptr<AGE::MaterialSetInstance> _material;
 
 		struct SerializationInfos
 		{
@@ -69,7 +78,7 @@ namespace AGE
 
 		std::unique_ptr<SerializationInfos> _serializationInfos;
 
-		void updateGeometry();
+		void _updateGeometry();
 		MeshRenderer(MeshRenderer const &) = delete;
 		MeshRenderer &operator=(MeshRenderer const &) = delete;
 	};

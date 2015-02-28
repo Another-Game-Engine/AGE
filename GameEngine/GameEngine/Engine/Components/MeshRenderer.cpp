@@ -11,6 +11,8 @@
 #include <Threads/Tasks/ToRenderTasks.hpp>
 #ifdef EDITOR_ENABLED
 #include <imgui/imgui.h>
+#include <AssetManagement/AssetManager.hh>
+#include <Utils/Debug.hpp>
 #endif
 
 namespace AGE
@@ -27,30 +29,48 @@ namespace AGE
 	}
 
 
-	void MeshRenderer::init(AScene *scene, std::shared_ptr<AGE::MeshInstance> r /* = nullptr */)
+	void MeshRenderer::init(AScene *scene
+		, std::shared_ptr<AGE::MeshInstance> mesh /* = nullptr */
+		, std::shared_ptr<AGE::MaterialSetInstance> material /*= nullptr*/)
 	{
 		_scene = scene;
-		setMesh(r);
+		if (mesh && material)
+		{
+			setMeshAndMaterial(mesh, material);
+		}
 	}
 
 	void MeshRenderer::reset(AScene *scene)
 	{
 		if (!_key.invalid())
+		{
 			entity.getLink().unregisterOctreeObject(_key);
+		}
 		//scene->getInstance<AGE::Threads::Prepare>()->removeElement(_key);
 		_key = AGE::PrepareKey();
 	}
 
-	MeshRenderer &MeshRenderer::setMesh(const std::shared_ptr<AGE::MeshInstance> &mesh)
+	bool MeshRenderer::setMeshAndMaterial(
+		const std::shared_ptr<AGE::MeshInstance> &mesh,
+		const std::shared_ptr<AGE::MaterialSetInstance> &material)
 	{
-		if (!mesh)
-			return (*this);
-		_mesh = mesh;
+		if (!mesh || !material)
+		{
+			return false;
+		}
+		if (!_key.invalid())
+		{
+			entity.getLink().unregisterOctreeObject(_key);
+		}
+
+		//create key
 		_key = AGE::GetPrepareThread()->addMesh();
 		entity.getLink().registerOctreeObject(_key);
-		assert(!_key.invalid());
-		updateGeometry();
-		return (*this);
+
+		_mesh = mesh;
+		_material = material;
+		_updateGeometry();
+		AGE::GetPrepareThread()->getQueue()->emplaceCommand<Tasks::MainToPrepare::SetMeshMaterial>(_material, _mesh);
 	}
 
 	std::shared_ptr<AGE::MeshInstance> MeshRenderer::getMesh()
@@ -58,26 +78,18 @@ namespace AGE
 		return _mesh;
 	}
 
-	MeshRenderer &MeshRenderer::setMaterial(const std::shared_ptr<AGE::MaterialSetInstance> &material)
-	{
-		_material = material;
-		AGE::GetPrepareThread()->getQueue()->emplaceCommand<Tasks::MainToPrepare::SetMeshMaterial>(_material, _mesh);
-		updateGeometry();
-		return (*this);
-	}
-
 	std::shared_ptr<AGE::MaterialSetInstance> MeshRenderer::getMaterial()
 	{
 		return _material;
 	}
 
-
-
-	void MeshRenderer::updateGeometry()
+	void MeshRenderer::_updateGeometry()
 	{
-		assert(_scene != nullptr);
-		if (this->_mesh == nullptr || this->_material == nullptr)
+		if (_mesh == nullptr
+			|| _material == nullptr)
+		{
 			return;
+		}
 		AGE::GetPrepareThread()->updateGeometry(_key, _mesh->subMeshs);
 	}
 
@@ -88,20 +100,15 @@ namespace AGE
 		{
 			if (!_serializationInfos->mesh.empty())
 			{
-				auto mesh = _scene->getInstance<AGE::AssetsManager>()->getMesh(_serializationInfos->mesh);
-				if (mesh)
-				{
-					init(_scene, mesh);
-				}
+				auto _mesh = _scene->getInstance<AGE::AssetsManager>()->getMesh(_serializationInfos->mesh);
 			}
 			if (!_serializationInfos->material.empty())
 			{
-				auto material = _scene->getInstance<AGE::AssetsManager>()->getMaterial(_serializationInfos->material);
-				if (material)
-				{
-					setMaterial(material);
-				}
-				// todo with animations
+				auto _material = _scene->getInstance<AGE::AssetsManager>()->getMaterial(_serializationInfos->material);
+			}
+			if (_mesh && _material)
+			{
+				setMeshAndMaterial(_mesh, _material);
 			}
 		}
 	}
@@ -133,15 +140,63 @@ namespace AGE
 		}
 
 		ImGui::PushItemWidth(-1);
-		//ImGui::ListBoxHeader("##empty");
-		if (ImGui::ListBox("##empty", (int*)&selectedMeshIndex, &(meshFileList->front()), (int)(meshFileList->size())))
+		if (ImGui::ListBox("Meshs", (int*)&selectedMeshIndex, &(meshFileList->front()), (int)(meshFileList->size())))
 		{
 			selectedMeshName = (*meshFileList)[selectedMeshIndex];
 			selectedMeshPath = (*meshPathList)[selectedMeshIndex];
+
+			_mesh = scene->getInstance<AGE::AssetsManager>()->getMesh(selectedMeshPath);
+
+			if (!_mesh)
+			{
+				scene->getInstance<AGE::AssetsManager>()->loadMesh(OldFile(selectedMeshPath), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents }, "WE_MESH_LOADING");
+
+				std::size_t totalToLoad = 0;
+				std::size_t	toLoad = 0;
+				std::string loadingError;
+				do {
+					scene->getInstance<AGE::AssetsManager>()->updateLoadingChannel("WE_MESH_LOADING", totalToLoad, toLoad, loadingError);
+				} while
+					(toLoad != 0 && loadingError.size() == 0);
+			}
+			_mesh = scene->getInstance<AGE::AssetsManager>()->getMesh(selectedMeshPath);
+			AGE_ASSERT(_mesh != nullptr);
+			if (_material)
+			{
+				setMeshAndMaterial(_mesh, _material);
+			}
+		}
+		ImGui::PopItemWidth();
+		ImGui::PushItemWidth(-1);
+		if (!materialFileList->empty() && ImGui::ListBox("Material", (int*)&selectedMaterialIndex, &(materialFileList->front()), (int)(materialFileList->size())))
+		{
+			selectedMaterialName = (*materialFileList)[selectedMaterialIndex];
+			selectedMaterialPath = (*materialPathList)[selectedMaterialIndex];
+
+			_material = scene->getInstance<AGE::AssetsManager>()->getMaterial(selectedMaterialPath);
+
+			if (!_material)
+			{
+				scene->getInstance<AGE::AssetsManager>()->loadMaterial(OldFile(selectedMaterialPath), "WE_MESH_LOADING");
+
+				std::size_t totalToLoad = 0;
+				std::size_t	toLoad = 0;
+				std::string loadingError;
+				do {
+					scene->getInstance<AGE::AssetsManager>()->updateLoadingChannel("WE_MESH_LOADING", totalToLoad, toLoad, loadingError);
+				} while
+					(toLoad != 0 && loadingError.size() == 0);
+			}
+			_material = scene->getInstance<AGE::AssetsManager>()->getMaterial(selectedMaterialPath);
+			AGE_ASSERT(_material != nullptr);
+			if (_mesh)
+			{
+				setMeshAndMaterial(_mesh, _material);
+			}
 		}
 		//ImGui::ListBoxFooter();
 		ImGui::PopItemWidth();
-		//const std::string &path
+
 	}
 #endif
 }

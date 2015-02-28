@@ -300,6 +300,7 @@ namespace AGE
 				added.currentNode = UNDEFINED_IDX;
 				_drawablesToMove.push_back(id);
 				added.hasMoved = true;
+				added.moveBufferIdx = _drawablesToMove.size() - 1;
 
 				added.mesh.properties = _createPropertiesContainer();
 				added.transformationProperty = _addTransformationProperty(added.mesh.properties, glm::mat4(1));

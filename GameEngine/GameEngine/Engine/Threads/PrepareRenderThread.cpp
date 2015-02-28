@@ -298,6 +298,7 @@ namespace AGE
 		scene->setPointLight(color, range, id);
 	}
 
+
 	void PrepareRenderThread::_createRenderScene(AScene *scene)
 	{
 		_scenes.emplace_back(std::make_unique<RenderScene>(this, scene->getEngine(), scene));

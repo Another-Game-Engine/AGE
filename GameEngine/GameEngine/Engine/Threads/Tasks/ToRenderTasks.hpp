@@ -43,6 +43,15 @@ namespace AGE
 
 			};
 
+//<<<<<<< HEAD
+//=======
+//			struct AddMaterial : TMQ::FutureData<MaterialInstance>
+//			{
+//				MaterialData data;
+//				AddMaterial(MaterialData const &pData) :
+//						data(pData) {}
+//			};
+//>>>>>>> world_editor_mesh_and_materials
 
 			struct RemoveMeshProperty
 			{
