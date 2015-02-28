@@ -89,6 +89,13 @@ namespace AGE
 			_cookedMeshsFullPath.clear();
 			_cookedFiles.clear();
 
+			_cookedBulletFiles.push_back("NONE");
+			_cookedBulletFullPath.push_back("NONE");
+			_cookedMaterialFiles.push_back("NONE");
+			_cookedMaterialFullPath.push_back("NONE");
+			_cookedMeshFiles.push_back("NONE");
+			_cookedMeshsFullPath.push_back("NONE");
+
 			while (it != dir.recursive_end())
 			{
 				if (Directory::IsFile(it.get()))
@@ -106,7 +113,7 @@ namespace AGE
 						_cookedMaterialFiles.push_back(_cookedFiles.back().fileName.c_str());
 						_cookedMaterialFullPath.push_back(_cookedFiles.back().fullPath.c_str());
 					}
-					else if (extension == "bullet")
+					else if (extension == "phage")
 					{
 						_cookedBulletFiles.push_back(_cookedFiles.back().fileName.c_str());
 						_cookedBulletFullPath.push_back(_cookedFiles.back().fullPath.c_str());
