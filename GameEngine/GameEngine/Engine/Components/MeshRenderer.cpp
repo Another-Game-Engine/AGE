@@ -133,6 +133,10 @@ namespace AGE
 			{
 				setMeshAndMaterial(_mesh, _material);
 			}
+#ifdef EDITOR_ENABLED
+			selectedMaterialPath = _serializationInfos->material;
+			selectedMeshPath = _serializationInfos->mesh;
+#endif
 		}
 	}
 
@@ -145,20 +149,30 @@ namespace AGE
 
 	void MeshRenderer::editorUpdate(AScene *scene)
 	{
-		if (meshPathList->size() && selectedMeshIndex < meshPathList->size())
+		if ((*meshPathList)[selectedMeshIndex] != selectedMeshPath)
 		{
-			if ((*meshPathList)[selectedMeshIndex] != selectedMeshPath)
+			std::size_t i = 0;
+			for (auto &e : *meshPathList)
 			{
-				std::size_t i = 0;
-				for (auto &e : *meshPathList)
+				if (e == selectedMeshPath)
 				{
-					if (e == selectedMeshPath)
-					{
-						selectedMeshIndex = i;
-						break;
-					}
-					++i;
+					selectedMeshIndex = i;
+					break;
 				}
+				++i;
+			}
+		}
+		if ((*materialPathList)[selectedMaterialIndex] != selectedMaterialPath)
+		{
+			std::size_t i = 0;
+			for (auto &e : *materialPathList)
+			{
+				if (e == selectedMaterialPath)
+				{
+					selectedMaterialIndex = i;
+					break;
+				}
+				++i;
 			}
 		}
 
