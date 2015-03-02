@@ -20,6 +20,7 @@ namespace AGE
 			if (iterator != available_types.end()) {
 				auto const &available_type = iterator->second;
 				_data[index].first = type.second;
+				_block_memories[index].first = type.second;
 				_data[index].second.resize(available_type.size * nbrVertex, 0);
 			}
 			++index;
