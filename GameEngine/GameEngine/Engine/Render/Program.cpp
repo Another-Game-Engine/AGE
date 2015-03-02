@@ -17,6 +17,20 @@ namespace AGE
 			glAttachShader(_id, element->getId());
 		}
 		glLinkProgram(_id);
+
+		GLint isLinked = 0;
+		glGetProgramiv(_id, GL_LINK_STATUS, (int *)&isLinked);
+		if (isLinked == GL_FALSE)
+		{
+			GLint maxLength = 0;
+			glGetProgramiv(_id, GL_INFO_LOG_LENGTH, &maxLength);
+
+			//The maxLength includes the NULL character
+			std::vector<GLchar> infoLog(maxLength);
+			glGetProgramInfoLog(_id, maxLength, &maxLength, &infoLog[0]);
+			std::cout << infoLog.data() << std::endl;
+			assert(false);
+		}
 		_get_resources();
 	}
 

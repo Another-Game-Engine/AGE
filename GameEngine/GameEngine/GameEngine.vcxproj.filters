@@ -142,7 +142,11 @@
     <ClCompile Include="Engine\Utils\StreamBuffer.cpp" />
     <ClCompile Include="Engine\Render\Properties\Properties.cpp" />
     <ClCompile Include="Engine\Render\PropertyManager.cpp" />
+<<<<<<< HEAD
+    <ClCompile Include="Engine\Render\Properties\Materials\Specular.cpp" />
+=======
     <ClCompile Include="Engine\Render\ProgramResources\Types\Uniform\Mat4Array255.cpp" />
+>>>>>>> world_editor_mesh_and_materials
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -380,7 +384,11 @@
     <ClInclude Include="Engine\Utils\Visibility.hpp" />
     <ClInclude Include="Engine\Utils\StreamBuffer.hpp" />
     <ClInclude Include="Engine\Render\Properties\Properties.hh" />
+<<<<<<< HEAD
+    <ClInclude Include="Engine\Render\Properties\Materials\Specular.hh" />
+=======
     <ClInclude Include="Engine\Render\ProgramResources\Types\Uniform\Mat4Array255.hh" />
+>>>>>>> world_editor_mesh_and_materials
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

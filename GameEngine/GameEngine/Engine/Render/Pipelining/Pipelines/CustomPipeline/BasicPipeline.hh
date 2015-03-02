@@ -7,9 +7,10 @@ namespace AGE
 	class BasicPipeline : public ARenderingPipeline
 	{
 	public:
-		enum Step
+		enum Steps
 		{
-			RENDER = 0,
+			RENDER_SKINNED = 0,
+			RENDER_BASIC,
 			TOTAL
 		};
 

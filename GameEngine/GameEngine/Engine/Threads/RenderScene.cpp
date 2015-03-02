@@ -300,6 +300,7 @@ namespace AGE
 				added.currentNode = UNDEFINED_IDX;
 				_drawablesToMove.push_back(id);
 				added.hasMoved = true;
+				added.moveBufferIdx = _drawablesToMove.size() - 1;
 
 				added.mesh.properties = _createPropertiesContainer();
 				added.transformationProperty = _addTransformationProperty(added.mesh.properties, glm::mat4(1));
@@ -459,6 +460,11 @@ namespace AGE
 		//	}
 		//}
 
+		void RenderScene::_addMaterial(AGE::Tasks::MainToPrepare::AddMaterial &msg)
+		{
+			
+		}
+
 		void RenderScene::_moveElementsInOctree()
 		{
 			for (uint32_t idx : _drawablesToMove)
@@ -542,7 +548,7 @@ namespace AGE
 				// Do the culling
 				_octree.getElementsCollide(&camera, toDraw);
 				// TODO: Remove that
-				renderCamera.pipelines.resize(2);
+				renderCamera.pipelines.resize(1);
 				// iter on elements to draw
 
 				for (Cullable *e : toDraw)
@@ -607,7 +613,7 @@ namespace AGE
 
 					for (auto &renderPainter : curRenderPipeline->keys)
 					{
-						if (renderPainter.painter == first->mesh.painter)
+						if (renderPainter.painter.getId() == first->mesh.painter.getId())
 						{
 							curRenderPainter = &renderPainter;
 							break;

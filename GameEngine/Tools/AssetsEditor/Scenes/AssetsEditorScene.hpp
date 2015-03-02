@@ -31,8 +31,8 @@ namespace AGE
 		static std::vector<const char *> &getCookedMeshsListFullPath() { return _cookedMeshsFullPath; }
 		static std::vector<const char *> &getCookedBulletList() { return _cookedBulletFiles; }
 		static std::vector<const char *> &getCookedBulletListFullPath() { return _cookedBulletFullPath; }
-		static std::vector<const char *> &getCookedMaterialList() { return _cookedBulletFiles; }
-		static std::vector<const char *> &getCookedMaterialListFullPath() { return _cookedBulletFullPath; }
+		static std::vector<const char *> &getCookedMaterialList() { return _cookedMaterialFiles; }
+		static std::vector<const char *> &getCookedMaterialListFullPath() { return _cookedMaterialFullPath; }
 	private:
 		static AE::Folder _raw;
 	 	static AE::Folder _cook;
