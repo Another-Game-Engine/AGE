@@ -198,7 +198,7 @@ namespace AGE
 #endif
 
 #ifdef PHYSIC_SIMULATION
-		addSystem<AGE::BulletDynamicSystem>(0);
+		//addSystem<AGE::BulletDynamicSystem>(0);
 		//		addSystem<CollisionAdder>(1);
 		//		addSystem<CollisionCleaner>(1000);
 #endif //!PHYSIC
@@ -285,11 +285,11 @@ namespace AGE
 					_l.setScale(glm::vec3(10.f));
 				
 					///////@paul first we set a mesh with only 1 submesh
-					GLOBAL_SPONZA.addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("cube/cube.sage")
-						, getInstance<AGE::AssetsManager>()->getMaterial("cube/cube.mage"));
+					//GLOBAL_SPONZA.addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("cube/cube.sage")
+					//	, getInstance<AGE::AssetsManager>()->getMaterial("cube/cube.mage"));
 					///////@paul then we replace it with a mesh with a lot of submesh
-					//GLOBAL_SPONZA.getComponent<MeshRenderer>()->setMeshAndMaterial(getInstance<AGE::AssetsManager>()->getMesh("Sponza/sponza.sage")
-					//	, getInstance<AGE::AssetsManager>()->getMaterial("Sponza/sponza.mage"));
+					GLOBAL_SPONZA.addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("Sponza/sponza.sage")
+						, getInstance<AGE::AssetsManager>()->getMaterial("Sponza/sponza.mage"));
 				}
 
 	{

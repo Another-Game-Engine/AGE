@@ -11,7 +11,7 @@
 namespace AGE
 {
 
-	struct MeshInstance;
+	struct MeshInstance; 
 	struct MaterialSetInstance;
 	struct PrepareKey;
 	struct AnimationInstance;
