@@ -548,7 +548,7 @@ namespace AGE
 				// Do the culling
 				_octree.getElementsCollide(&camera, toDraw);
 				// TODO: Remove that
-				renderCamera.pipelines.resize(2);
+				renderCamera.pipelines.resize(1);
 				// iter on elements to draw
 
 				for (Cullable *e : toDraw)
