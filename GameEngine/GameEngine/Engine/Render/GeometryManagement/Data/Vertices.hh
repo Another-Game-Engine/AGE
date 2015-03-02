@@ -67,19 +67,19 @@ namespace AGE
 	{
 		std::vector<uint8_t> tmp(data.size() * sizeof(type_t));
 		std::memcpy(tmp.data(), data.data(), tmp.size());
+		auto index = 0;
 		for (auto &block_memory : _block_memories) {
 			if (block_memory.first == attribute) {
 				if (block_memory.second.lock()) {
 					*block_memory.second.lock() = tmp;
 					return true;
 				}
+				else {
+					_data[index].second = tmp;
+					return true;
+				}
 			}
-		}
-		for (auto &data : _data) {
-			if (data.first == attribute) {
-				data.second = tmp;
-				return true;
-			}
+			index++;
 		}
 		return false;
 	}

@@ -45,7 +45,7 @@ namespace AGE
 		}
 		for (auto &buffer_targeted : _buffers) {
 			vertices.set_block_memory(buffer_targeted->push_back(vertices.transfer_data(buffer_targeted->name())), buffer_targeted->name());
-			}
+		}
 		vertices.set_indices_block_memory(_indices_buffer.push_back(vertices.transfer_indices_data()));
 		return (true);
 	}
