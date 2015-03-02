@@ -368,7 +368,8 @@ namespace AGE
 			getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage")
 			, getInstance<AGE::AssetsManager>()->getMaterial("ball/ball.mage"));
 		bonesEntities.push_back(entity);
-		bonesEntities.back().getLink().setPosition(posFromMat4(e.transformation));
+		auto p = e.transformation * glm::vec4(0, 0, 0, 1);
+		bonesEntities.back().getLink().setPosition(glm::vec3(p.x, p.y, p.z));
 	}
 
 	////////////////////////////////////
@@ -501,7 +502,7 @@ namespace AGE
 		auto &bones = getInstance<AGE::AnimationManager>()->getBones(animationTestInstance);
 		for (std::size_t i = 0; i < bones.size(); ++i)
 		{
-			bonesEntities[i].getLink().setTransform(bones[i]);
+	//		bonesEntities[i].getLink().setTransform(bones[i]);
 		}
 		return true;
 	}
