@@ -59,9 +59,13 @@ namespace AGE
 			auto &curPainter = _painter_manager->get_painter(key.painter);
 			int currentRenderIdx = -1;
 			if (curPainter->coherent(_programs[RENDER_SKINNED]))
+			{ 
 				currentRenderIdx = RENDER_SKINNED;
+			}
 			else if (curPainter->coherent(_programs[RENDER_BASIC]))
+			{
 				currentRenderIdx = RENDER_BASIC;
+			}
 			assert(currentRenderIdx != -1);
 
 			_programs[currentRenderIdx]->use();
