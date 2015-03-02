@@ -1,11 +1,12 @@
 #pragma once
 
-# include <Utils/OpenGL.hh>
-# include <Render/Key.hh>
-# include <stdint.h>
-# include <vector>
-# include <memory>
-# include <Render/Properties/IProperty.hh>
+#include <Utils/OpenGL.hh>
+#include <Render/Key.hh>
+#include <utility>
+#include <stdint.h>
+#include <vector>
+#include <memory>
+#include <Render/Properties/IProperty.hh>
 
 namespace AGE
 {
@@ -14,7 +15,7 @@ namespace AGE
 	class Vertices
 	{
 	public:
-		Vertices(std::vector<GLenum> const &types, size_t nbrVertex, size_t nbrIndices, size_t offset);
+		Vertices(std::vector<std::pair<GLenum, std::string>> const &types, size_t nbrVertex, size_t nbrIndices, size_t offset);
 		Vertices(Vertices const &copy);
 		Vertices(Vertices &&move);
 
@@ -22,14 +23,14 @@ namespace AGE
 		size_t nbr_indices() const;
 		size_t nbr_vertex() const;
 		size_t nbr_buffer() const;
-		GLenum get_type(size_t index) const;
-		std::vector<uint8_t> &&transfer_data(size_t index);
+		std::pair<GLenum, std::string> get_type(size_t index) const;
+		std::vector<uint8_t> &&transfer_data(std::string const &attribute);
 		std::vector<uint8_t> &&transfer_indices_data();
 		template <typename type_t> type_t const *get_data(size_t index, size_t &size) const;
-		template <typename type_t> Vertices &set_data(std::vector<type_t> const &data, size_t index);
+		template <typename type_t> bool set_data(std::vector<type_t> const &data, std::string const &attribute);
 		unsigned int const *get_indices(size_t &size) const;
 		Vertices &set_indices(std::vector<unsigned int> const &data);
-		Vertices &set_block_memory(std::shared_ptr<BlockMemory> const &blockMemory, size_t index);
+		Vertices &set_block_memory(std::shared_ptr<BlockMemory> const &blockMemory, std::string const &attribute);
 		Vertices &set_indices_block_memory(std::shared_ptr<BlockMemory> const &blockMemory);
 		Vertices &remove();
 		Vertices &reset(size_t o);
@@ -39,10 +40,10 @@ namespace AGE
 		size_t _offset;
 		size_t _nbr_indices;
 		size_t _nbr_vertex;
-		std::vector<GLenum> _types;
-		std::vector<std::vector<uint8_t>> _data;
+		std::vector<std::pair<GLenum, std::string>> _types;
+		std::vector<std::pair<std::string, std::vector<uint8_t>>> _data;
 		std::vector<uint8_t> _indices_data;
-		std::vector<std::weak_ptr<BlockMemory>> _block_memories;
+		std::vector<std::pair<std::string, std::weak_ptr<BlockMemory>>> _block_memories;
 		std::weak_ptr<BlockMemory> _indices_block_memory;
 		std::vector<std::shared_ptr<IProperty>> _properties;
 	};
@@ -62,19 +63,25 @@ namespace AGE
 	}
 
 	template <typename type_t>
-	Vertices &Vertices::set_data(std::vector<type_t> const &data, size_t index)
+	bool Vertices::set_data(std::vector<type_t> const &data, std::string const &attribute)
 	{
 		std::vector<uint8_t> tmp(data.size() * sizeof(type_t));
 		std::memcpy(tmp.data(), data.data(), tmp.size());
-		if (_block_memories[index].lock()) {
-			*_block_memories[index].lock() = tmp;
-			return (*this);
+		auto index = 0;
+		for (auto &block_memory : _block_memories) {
+			if (block_memory.first == attribute) {
+				if (block_memory.second.lock()) {
+					*block_memory.second.lock() = tmp;
+					return true;
+				}
+				else {
+					_data[index].second = tmp;
+					return true;
+				}
+			}
+			index++;
 		}
-		if (tmp.size() != _data[index].size()) {
-			return (*this);
-		}
-		_data[index] = tmp;
-		return (*this);
+		return false;
 	}
 
 }

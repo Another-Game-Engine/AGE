@@ -1,6 +1,7 @@
 #pragma once
 
-# include <Render/Buffer/IBuffer.hh>
+#include <Render/Buffer/IBuffer.hh>
+#include <string>
 
 class ABuffer : public IBuffer
 {

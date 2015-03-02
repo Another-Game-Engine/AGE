@@ -16,7 +16,7 @@ namespace AGE
 	}
 
 
-	Key<Painter> PaintingManager::add_painter(std::vector<GLenum> &&types)
+	Key<Painter> PaintingManager::add_painter(std::vector<std::pair<GLenum, std::string>> &&types)
 	{
 		int sizeOfArray;
 		{
@@ -33,7 +33,7 @@ namespace AGE
 		return (_painters[key.getId()]);
 	}
 
-	Key<Painter> PaintingManager::get_painter(std::vector<GLenum> const &types)
+	Key<Painter> PaintingManager::get_painter(std::vector<std::pair<GLenum, std::string>> const &types)
 	{
 		std::lock_guard<AGE::SpinLock> lock(_mutex);
 		for (auto index = 0; index < int(_painters.size()); ++index) {
@@ -44,7 +44,7 @@ namespace AGE
 		return (Key<Painter>::createKey(-1));
 	}
 
-	bool PaintingManager::has_painter(std::vector<GLenum> const types)
+	bool PaintingManager::has_painter(std::vector<std::pair<GLenum, std::string>> const &types)
 	{
 		std::lock_guard<AGE::SpinLock> lock(_mutex);
 		for (auto &painter : _painters) {
