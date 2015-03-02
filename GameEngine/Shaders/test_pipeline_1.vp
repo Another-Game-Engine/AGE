@@ -12,7 +12,7 @@ out vec4 interpolated_color;
 uniform mat4 projection_matrix;
 uniform mat4 view_matrix;
 uniform mat4 model_matrix;
-uniform mat4 bones[255];
+uniform mat4 bones[127];
 uniform float skinned;
 
 void main(void)

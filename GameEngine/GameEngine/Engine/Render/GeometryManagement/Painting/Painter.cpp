@@ -109,7 +109,7 @@ namespace AGE
 
 		auto &types_buffer = _buffer.get_types();
 		if (types.size() != types_buffer.size()) {
-			return (true);
+			return (false);
 		}
 		for (auto index = 0ull; index < types_buffer.size(); ++index) {
 			if (types[index] != types_buffer[index]) {
@@ -119,4 +119,8 @@ namespace AGE
 		return (true);
 	}
 
+	bool Painter::coherent(std::shared_ptr<Program> const &prog) const
+	{
+		return (prog->coherent_attribute(_buffer.get_types()));
+	}
 }
