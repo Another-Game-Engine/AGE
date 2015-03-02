@@ -502,7 +502,7 @@ namespace AGE
 		auto &bones = getInstance<AGE::AnimationManager>()->getBones(animationTestInstance);
 		for (std::size_t i = 0; i < bones.size(); ++i)
 		{
-	//		bonesEntities[i].getLink().setTransform(bones[i]);
+			bonesEntities[i].getLink().setTransform(bones[i]);
 		}
 		return true;
 	}
