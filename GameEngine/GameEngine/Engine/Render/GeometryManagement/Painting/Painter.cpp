@@ -119,6 +119,6 @@ namespace AGE
 
 	bool Painter::coherent(std::shared_ptr<Program> const &prog) const
 	{
-		return (prog->coherent_attribute(_buffer.get_types()));
+		return (prog->coherent_attributes(_buffer.get_types()));
 	}
 }

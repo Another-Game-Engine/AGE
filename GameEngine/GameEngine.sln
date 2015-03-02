@@ -37,6 +37,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "basic", "basic", "{6DD3E825
 	ProjectSection(SolutionItems) = preProject
 		Shaders\test_pipeline_1.fp = Shaders\test_pipeline_1.fp
 		Shaders\test_pipeline_1.vp = Shaders\test_pipeline_1.vp
+		Shaders\test_pipeline_1_skinning.vp = Shaders\test_pipeline_1_skinning.vp
 	EndProjectSection
 EndProject
 Global

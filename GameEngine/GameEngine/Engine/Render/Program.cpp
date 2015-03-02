@@ -146,6 +146,17 @@ namespace AGE
 		return *this;
 	}
 
+	bool Program::coherent_attributes(std::vector<std::pair<GLenum, std::string>> const &coherent)
+	{
+		for (auto &attribute : coherent) {
+			auto resource = Program::get_resource<Attribute>(attribute.second);
+			if (!resource) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 	std::string const & Program::name() const
 	{
 		return (_name);

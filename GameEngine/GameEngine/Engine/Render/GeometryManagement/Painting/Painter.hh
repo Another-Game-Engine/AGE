@@ -23,6 +23,7 @@ namespace AGE
 		Painter(Painter const &) = default;
 
 	public:
+		bool coherent(std::shared_ptr<Program> const &prog) const;
 		bool coherent(std::vector<std::pair<GLenum, std::string>> const &types) const;
 		Key<Vertices> add_vertices(size_t nbrVertex, size_t nbrIndices);
 
