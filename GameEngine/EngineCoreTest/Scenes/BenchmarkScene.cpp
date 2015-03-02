@@ -33,6 +33,8 @@
 # include <Render/Pipelining/Pipelines/IRenderingPipeline.hh>
 # include <Render/GeometryManagement/Painting/PaintingManager.hh>
 
+#include <Skinning/Skeleton.hpp>
+#include <Utils/MatrixConversion.hpp>
 
 namespace AGE
 {
@@ -357,13 +359,16 @@ namespace AGE
 	animationTestInstance = getInstance<AGE::AnimationManager>()->createAnimationInstance(skeleton, animation);
 
 	auto &bones = getInstance<AGE::AnimationManager>()->getBones(animationTestInstance);
-	for (auto &e : bones)
+	
+	auto i = 0;
+	for (auto &e : skeleton->bones)
 	{
 		auto entity = createEntity();
 		entity.addComponent<MeshRenderer>(
 			getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage")
 			, getInstance<AGE::AssetsManager>()->getMaterial("ball/ball.mage"));
 		bonesEntities.push_back(entity);
+		bonesEntities.back().getLink().setPosition(posFromMat4(e.transformation));
 	}
 
 	////////////////////////////////////

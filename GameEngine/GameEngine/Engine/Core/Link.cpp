@@ -90,14 +90,15 @@ void Link::internalSetForward(const glm::vec3 &v)
 
 void Link::internalSetTransform(const glm::mat4 &t)
 {
-	_localDirty = true;
-	//auto p = t * glm::vec4(_position.x, _position.y, _position.z, 0);
+	//_localDirty = true;
+	//auto p = t * glm::vec4(1,1,1,1);
 	//_position = glm::vec3(p.x, p.y, p.z);
-	_scale = scaleFromMat4(t);
-	//_localTransformation = t;
-	auto rot = rotFromMat4(t, true);
-	_orientation = glm::quat(rot);
-	_position = posFromMat4(t);
+	//_scale = scaleFromMat4(t);
+	//_localTransformation = p;
+	//auto rot = rotFromMat4(t, true);
+	//_orientation = glm::quat(rot);
+	//_position = posFromMat4(t);
+	_localTransformation = glm::translate(t, _position);
 
 	_updateGlobalTransform();
 }
