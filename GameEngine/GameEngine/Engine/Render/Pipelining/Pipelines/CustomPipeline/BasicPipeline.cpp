@@ -28,7 +28,7 @@ namespace AGE
 	{
 		_programs.resize(TOTAL);
 		std::vector<std::shared_ptr<UnitProg>> unitsBasic = { std::make_shared<UnitProg>(VERTEX_SHADER_BASIC), std::make_shared<UnitProg>(FRAGMENT_SHADER_BASIC) };
-		std::vector<std::shared_ptr<UnitProg>> unitsSkin = { std::make_shared<UnitProg>(VERTEX_SHADER_BASIC), std::make_shared<UnitProg>(FRAGMENT_SHADER_BASIC) };
+		std::vector<std::shared_ptr<UnitProg>> unitsSkin = { std::make_shared<UnitProg>(VERTEX_SHADER_SKIN), std::make_shared<UnitProg>(FRAGMENT_SHADER_SKIN) };
 		_programs[RENDER_SKINNED] = std::make_shared<Program>(Program(std::string("basic program skin"), unitsSkin));
 		_programs[RENDER_BASIC] = std::make_shared<Program>(Program(std::string("basic program"), unitsBasic));
 		_rendering_list.resize(TOTAL);
