@@ -613,7 +613,7 @@ namespace AGE
 
 					for (auto &renderPainter : curRenderPipeline->keys)
 					{
-						if (renderPainter.painter == first->mesh.painter)
+						if (renderPainter.painter.getId() == first->mesh.painter.getId())
 						{
 							curRenderPainter = &renderPainter;
 							break;
