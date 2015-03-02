@@ -10,7 +10,7 @@ namespace AGE
 	class Buffer
 	{
 	public:
-		Buffer(std::unique_ptr<IBuffer> &&buffer);
+		Buffer(std::string &&name, std::unique_ptr<IBuffer> &&buffer);
 		Buffer(Buffer const &copy) = delete;
 		Buffer(Buffer &&move);
 
@@ -25,6 +25,7 @@ namespace AGE
 		Buffer &require_resize();
 		Buffer &require_transfer();
 		std::shared_ptr<BlockMemory> const &operator[](size_t index);
+		std::string const &name() const { return _name; }
 
 	private:
 		bool _request_resize;
@@ -32,5 +33,6 @@ namespace AGE
 		size_t _size_alloc;
 		std::vector<std::shared_ptr<BlockMemory>> _block_memories;
 		std::unique_ptr<IBuffer> _buffer;
+		std::string _name;
 	};
 }

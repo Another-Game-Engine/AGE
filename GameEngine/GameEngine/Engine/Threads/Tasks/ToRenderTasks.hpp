@@ -4,7 +4,6 @@
 #include <Render/Properties/IProperty.hh>
 #include <AssetManagement/Instance/MaterialInstance.hh>
 #include <AssetManagement/Instance/MeshInstance.hh>
-#include <AssetManagement/Data/MaterialData.hh>
 #include <glm/fwd.hpp>
 #include <glm/glm.hpp>
 #include <TMQ/message.hpp>
@@ -18,6 +17,7 @@ namespace AGE
 
 	namespace Tasks
 	{
+
 		class Render
 		{
 		public:
@@ -43,25 +43,15 @@ namespace AGE
 
 			};
 
-			struct AddMaterial : TMQ::FutureData<MaterialInstance>
-			{
-				MaterialData data;
-				AddMaterial(MaterialData const &pData) :
-						data(pData) {}
-			};
-
-			struct SetMeshMaterial
-			{
-				std::shared_ptr<MaterialSetInstance> material;
-				std::shared_ptr<MeshInstance> mesh;
-
-				SetMeshMaterial(std::shared_ptr<MaterialSetInstance> pMaterial,
-					std::shared_ptr<MeshInstance> pMesh) :
-					material(pMaterial),
-					mesh(pMesh)
-				{ }
-
-			};
+//<<<<<<< HEAD
+//=======
+//			struct AddMaterial : TMQ::FutureData<MaterialInstance>
+//			{
+//				MaterialData data;
+//				AddMaterial(MaterialData const &pData) :
+//						data(pData) {}
+//			};
+//>>>>>>> world_editor_mesh_and_materials
 
 			struct RemoveMeshProperty
 			{
@@ -86,5 +76,6 @@ namespace AGE
 				{ }
 			};
 		};
+	
 	}
 }

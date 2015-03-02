@@ -3,6 +3,8 @@
 #include <fstream>
 #include <vector>
 
+#include <direct.h>
+
 UnitProg::UnitProg(std::string const &filename, GLenum type):
 _filename(filename),
 _type(type)
@@ -27,6 +29,8 @@ UnitProg::~UnitProg()
 bool UnitProg::compileUnitProg(char const *fileName)
 {
 	std::ifstream file(fileName, std::ios_base::binary);
+	char toto[512];
+	_getcwd(toto, 512);
 	assert(!file.fail());
 	size_t fileSize;
 	file.seekg(0, file.end);

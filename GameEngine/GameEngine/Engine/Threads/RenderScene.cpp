@@ -186,428 +186,385 @@ namespace AGE
 		assert(id != (std::size_t)(-1));
 	}
 
-		void RenderScene::_setCameraInfos(AGE::Commands::MainToPrepare::CameraInfos &msg)
+	void RenderScene::_setCameraInfos(AGE::Commands::MainToPrepare::CameraInfos &msg)
+	{
+		Camera *co = nullptr;
+		co = &_cameras.get(msg.key.id);
+		co->hasMoved = true;
+		co->projection = msg.projection;
+	}
+
+	void RenderScene::_createCamera(AGE::Commands::MainToPrepare::CreateCamera &msg)
+	{
+		_cameras.allocPreparated(msg.key.id);
+		Camera &toAdd = _cameras.get(msg.key.id);
+
+		toAdd.activeCameraIdx = _activeCameras.size();
+		_activeCameras.push_back(msg.key.id);
+
+		toAdd.key.id = msg.key.id;
+	}
+
+	void RenderScene::_createPointLight(AGE::Commands::MainToPrepare::CreatePointLight &msg)
+	{
+		_pointLights.allocPreparated(msg.key.id);
+		PointLight &toAdd = _pointLights.get(msg.key.id);
+
+		// TODO: remove this
+		toAdd.activePointLightIdx = _activePointLights.size();
+		_activePointLights.push_back(msg.key.id);
+		// ---
+		toAdd.key.id = msg.key.id;
+	}
+
+	void RenderScene::_createMesh(AGE::Commands::MainToPrepare::CreateMesh &msg)
+	{
+		_meshs.allocPreparated(msg.key.id);
+		Mesh &toAdd = _meshs.get(msg.key.id);
+		toAdd.key.id = msg.key.id;
+	}
+
+	void RenderScene::_setPointLight(AGE::Commands::MainToPrepare::SetPointLight &msg)
+	{
+		PointLight *l = &_pointLights.get(msg.key.id);
+		l->color = msg.color;
+		l->attenuation = msg.attenuation;
+		l->hasMoved = true;
+	}
+
+	void RenderScene::_deleteCamera(AGE::Commands::MainToPrepare::DeleteCamera &msg)
+	{
+		Camera &toRm = _cameras.get(msg.key.id);
+
+		_activeCameras[toRm.activeCameraIdx] = _activeCameras[_activeCameras.size() - 1];
+		_cameras.get(_activeCameras[toRm.activeCameraIdx]).activeCameraIdx = toRm.activeCameraIdx;
+		_activeCameras.pop_back();
+
+		_cameras.deallocPreparated(msg.key.id);
+	}
+
+	void RenderScene::_deletePointLight(AGE::Commands::MainToPrepare::DeletePointLight &msg)
+	{
+		PointLight &toRm = _pointLights.get(msg.key.id);
+
+		// TODO: remove when point lights will be in octree
+		_activePointLights[toRm.activePointLightIdx] = _activePointLights[_activePointLights.size() - 1];
+		_pointLights.get(_activePointLights[toRm.activePointLightIdx]).activePointLightIdx = toRm.activePointLightIdx;
+		_activePointLights.pop_back();
+		// ---
+		if (toRm.hasMoved)
 		{
-			Camera *co = nullptr;
+			_pointLightsToMove[toRm.moveBufferIdx] = _pointLightsToMove[_pointLightsToMove.size() - 1];
+			_pointLights.get(_pointLightsToMove[toRm.moveBufferIdx]).moveBufferIdx = toRm.moveBufferIdx;
+			_pointLightsToMove.pop_back();
+		}
+
+		_pointLights.deallocPreparated(msg.key.id);
+	}
+
+	void RenderScene::_deleteDrawable(AGE::Commands::MainToPrepare::DeleteMesh &msg)
+	{
+		Mesh &toRm = _meshs.get(msg.key.id);
+		for (auto &e : toRm.drawableCollection)
+		{
+			removeDrawableObject(e);
+		}
+		_meshs.deallocPreparated(msg.key.id);
+	}
+
+	void RenderScene::_setGeometry(AGE::Commands::MainToPrepare::SetGeometry &msg)
+	{
+		Mesh *uo = &_meshs.get(msg.key.id);
+
+		for (auto &e : uo->drawableCollection)
+			removeDrawableObject(e);
+		uo->drawableCollection.clear();
+		for (std::size_t i = 0; i < msg.submeshInstances.size(); ++i)
+		{
+			uint32_t id = _drawables.alloc();
+			Drawable &added = _drawables.get(id);
+
+			uo->drawableCollection.push_back(id);
+
+			added.key.type = PrepareKey::Type::Drawable;
+			added.key.id = id;
+
+			added.mesh = msg.submeshInstances[i];
+
+			//added.position = uo->position;
+			//added.orientation = uo->orientation;
+			//added.scale = uo->scale;
+			added.transformation = uo->transformation;
+
+			//				added.animation = msg.animation;
+			added.currentNode = UNDEFINED_IDX;
+			_drawablesToMove.push_back(id);
+			added.hasMoved = true;
+			added.moveBufferIdx = _drawablesToMove.size() - 1;
+
+			added.mesh.properties = _createPropertiesContainer();
+			added.transformationProperty = _addTransformationProperty(added.mesh.properties, glm::mat4(1));
+
+			//AGE::GetRenderThread()->createMeshProperty(added.mesh.painter, added.mesh.properties, added.transformationProperty);
+		}
+	}
+
+
+	void RenderScene::_setTransform(AGE::Commands::MainToPrepare::SetTransform &msg)
+	{
+		Camera *co = nullptr;
+		Mesh *uo = nullptr;
+		PointLight *l = nullptr;
+
+		switch (msg.key.type)
+		{
+
+		case(PrepareKey::Type::Camera) :
 			co = &_cameras.get(msg.key.id);
+			co->transformation = msg.transform;
 			co->hasMoved = true;
-			co->projection = msg.projection;
-		}
-
-		void RenderScene::_createCamera(AGE::Commands::MainToPrepare::CreateCamera &msg)
-		{
-			_cameras.allocPreparated(msg.key.id);
-			Camera &toAdd = _cameras.get(msg.key.id);
-
-			toAdd.activeCameraIdx = _activeCameras.size();
-			_activeCameras.push_back(msg.key.id);
-
-			toAdd.key.id = msg.key.id;
-		}
-
-		void RenderScene::_createPointLight(AGE::Commands::MainToPrepare::CreatePointLight &msg)
-		{
-			_pointLights.allocPreparated(msg.key.id);
-			PointLight &toAdd = _pointLights.get(msg.key.id);
-
-			// TODO: remove this
-			toAdd.activePointLightIdx = _activePointLights.size();
-			_activePointLights.push_back(msg.key.id);
-			// ---
-			toAdd.key.id = msg.key.id;
-		}
-
-		void RenderScene::_createMesh(AGE::Commands::MainToPrepare::CreateMesh &msg)
-		{
-			_meshs.allocPreparated(msg.key.id);
-			Mesh &toAdd = _meshs.get(msg.key.id);
-			toAdd.key.id = msg.key.id;
-		}
-
-		void RenderScene::_setPointLight(AGE::Commands::MainToPrepare::SetPointLight &msg)
-		{
-			PointLight *l = &_pointLights.get(msg.key.id);
-			l->color = msg.color;
-			l->attenuation = msg.attenuation;
-			l->hasMoved = true;
-		}
-		
-		void RenderScene::_deleteCamera(AGE::Commands::MainToPrepare::DeleteCamera &msg)
-		{
-			Camera &toRm = _cameras.get(msg.key.id);
-
-			_activeCameras[toRm.activeCameraIdx] = _activeCameras[_activeCameras.size() - 1];
-			_cameras.get(_activeCameras[toRm.activeCameraIdx]).activeCameraIdx = toRm.activeCameraIdx;
-			_activeCameras.pop_back();
-
-			_cameras.deallocPreparated(msg.key.id);
-		}
-
-		void RenderScene::_deletePointLight(AGE::Commands::MainToPrepare::DeletePointLight &msg)
-		{
-			PointLight &toRm = _pointLights.get(msg.key.id);
-
-			// TODO: remove when point lights will be in octree
-			_activePointLights[toRm.activePointLightIdx] = _activePointLights[_activePointLights.size() - 1];
-			_pointLights.get(_activePointLights[toRm.activePointLightIdx]).activePointLightIdx = toRm.activePointLightIdx;
-			_activePointLights.pop_back();
-			// ---
-			if (toRm.hasMoved)
+			break;
+		case(PrepareKey::Type::Mesh) :
+			uo = &_meshs.get(msg.key.id);
+			uo->transformation = msg.transform;
+			for (uint32_t e : uo->drawableCollection)
 			{
-				_pointLightsToMove[toRm.moveBufferIdx] = _pointLightsToMove[_pointLightsToMove.size() - 1];
-				_pointLights.get(_pointLightsToMove[toRm.moveBufferIdx]).moveBufferIdx = toRm.moveBufferIdx;
-				_pointLightsToMove.pop_back();
+				_drawables.get(e).transformation = uo->transformation;
+				//assert(_drawables.get(e).currentNode != UNDEFINED_IDX);
+				if (_drawables.get(e).hasMoved == false)
+				{
+					_drawables.get(e).hasMoved = true;
+					_drawables.get(e).moveBufferIdx = (size_t)_drawablesToMove.size();
+					_drawablesToMove.push_back(e);
+				}
 			}
-
-			_pointLights.deallocPreparated(msg.key.id);
-		}
-
-		void RenderScene::_deleteDrawable(AGE::Commands::MainToPrepare::DeleteMesh &msg)
-		{
-			Mesh &toRm = _meshs.get(msg.key.id);
-			for (auto &e : toRm.drawableCollection)
+			break;
+		case(PrepareKey::Type::PointLight) :
+			l = &_pointLights.get(msg.key.id);
+			l->transformation = msg.transform;
+			if (l->hasMoved == false)
 			{
-				removeDrawableObject(e);
+				l->hasMoved = true;
+				l->moveBufferIdx = _pointLightsToMove.size();
+				_pointLightsToMove.push_back(msg.key.id);
 			}
-			_meshs.deallocPreparated(msg.key.id);
+			break;
+		default:
+			break;
 		}
+	}
 
-		void RenderScene::_setGeometry(AGE::Commands::MainToPrepare::SetGeometry &msg)
+	//void RenderScene::_setPosition(AGE::Commands::MainToPrepare::SetPosition &msg)
+	//{
+	//	Camera *co = nullptr;
+	//	Mesh *uo = nullptr;
+	//	PointLight *l = nullptr;
+
+	//	switch (msg.key.type)
+	//	{
+
+	//	case(PrepareKey::Type::Camera) :
+	//		co = &_cameras.get(msg.key.id);
+	//		co->position = msg.position;
+	//		co->hasMoved = true;
+	//		break;
+	//	case(PrepareKey::Type::Mesh) :
+	//		uo = &_meshs.get(msg.key.id);
+	//		uo->position = msg.position;
+	//		for (uint32_t e : uo->drawableCollection)
+	//		{
+	//			_drawables.get(e).position = uo->position;
+	//			//assert(_drawables.get(e).currentNode != UNDEFINED_IDX);
+	//			if (_drawables.get(e).hasMoved == false)
+	//			{
+	//				_drawables.get(e).hasMoved = true;
+	//				_drawables.get(e).moveBufferIdx = (size_t)_drawablesToMove.size();
+	//				_drawablesToMove.push_back(e);
+	//			}
+	//		}
+	//		break;
+	//	case(PrepareKey::Type::PointLight) :
+	//		l = &_pointLights.get(msg.key.id);
+	//		l->position = msg.position;
+	//		if (l->hasMoved == false)
+	//		{
+	//			l->hasMoved = true;
+	//			l->moveBufferIdx = _pointLightsToMove.size();
+	//			_pointLightsToMove.push_back(msg.key.id);
+	//		}
+	//		break;
+	//	default:
+	//		break;
+	//	}
+	//}
+
+	//void RenderScene::_setScale(AGE::Commands::MainToPrepare::SetScale &msg)
+	//{
+	//	Mesh *uo = nullptr;
+	//	Camera *co = nullptr;
+	//	switch (msg.key.type)
+	//	{
+	//	case(PrepareKey::Type::Camera) :
+	//		co = &_cameras.get(msg.key.id);
+	//		co->scale = msg.scale;
+	//		co->hasMoved = true;
+	//		break;
+	//	case(PrepareKey::Type::Mesh) :
+	//		uo = &_meshs.get(msg.key.id);
+	//		uo->scale = msg.scale;
+	//		for (auto &e : uo->drawableCollection)
+	//		{
+	//			_drawables.get(e).scale = uo->scale;
+	//			//assert(_drawables.get(e).currentNode != UNDEFINED_IDX);
+	//			if (_drawables.get(e).hasMoved == false)
+	//			{
+	//				_drawables.get(e).hasMoved = true;
+	//				_drawables.get(e).moveBufferIdx = _drawablesToMove.size();
+	//				_drawablesToMove.push_back(e);
+	//			}
+	//		}
+	//		break;
+	//	default:
+	//		break;
+	//	}
+	//}
+
+	//void RenderScene::_setOrientation(AGE::Commands::MainToPrepare::SetOrientation &msg)
+	//{
+	//	Mesh *uo = nullptr;
+	//	Camera *co = nullptr;
+	//	switch (msg.key.type)
+	//	{
+	//	case(PrepareKey::Type::Camera) :
+	//		co = &_cameras.get(msg.key.id);
+	//		co->orientation = msg.orientation;
+	//		co->hasMoved = true;
+	//		break;
+	//	case(PrepareKey::Type::Mesh) :
+	//		uo = &_meshs.get(msg.key.id);
+	//		uo->orientation = msg.orientation;
+	//		for (auto &e : uo->drawableCollection)
+	//		{
+	//			_drawables.get(e).orientation = uo->orientation;
+	//			//assert(_drawables.get(e).currentNode != UNDEFINED_IDX);
+	//			if (_drawables.get(e).hasMoved == false)
+	//			{
+	//				_drawables.get(e).hasMoved = true;
+	//				_drawables.get(e).moveBufferIdx = _drawablesToMove.size();
+	//				_drawablesToMove.push_back(e);
+	//			}
+	//		}
+	//		break;
+	//	default:
+	//		break;
+	//	}
+	//}
+
+	void RenderScene::_addMaterial(AGE::Tasks::MainToPrepare::AddMaterial &msg)
+	{
+
+	}
+
+	void RenderScene::_moveElementsInOctree()
+	{
+		for (uint32_t idx : _drawablesToMove)
 		{
-			Mesh *uo = &_meshs.get(msg.key.id);
+			Drawable &e = _drawables.get(idx);
+			e.hasMoved = false;
+			e.shape.fromTransformedBox(e.mesh.boundingBox, e.transformation);
+			if (e.currentNode == UNDEFINED_IDX)
+				_octree.addElement(&e);
+			else
+				_octree.moveElement(&e);
 
-			for (auto &e : uo->drawableCollection)
-				removeDrawableObject(e);
-			uo->drawableCollection.clear();
-			for (std::size_t i = 0; i < msg.submeshInstances.size(); ++i)
-			{
-				uint32_t id = _drawables.alloc();
-				Drawable &added = _drawables.get(id);
+			auto &properties = _properties.get(e.mesh.properties.getId());
 
-				uo->drawableCollection.push_back(id);
-				
-				added.key.type = PrepareKey::Type::Drawable;
-				added.key.id = id;
+			auto transformationProperty = properties.get_property<Transformation>(e.transformationProperty);
+			transformationProperty->set(e.transformation);
 
-				added.mesh = msg.submeshInstances[i];
-
-				//added.position = uo->position;
-				//added.orientation = uo->orientation;
-				//added.scale = uo->scale;
-				added.transformation = uo->transformation;
-
-//				added.animation = msg.animation;
-				added.currentNode = UNDEFINED_IDX;
-				_drawablesToMove.push_back(id);
-				added.hasMoved = true;
-
-				added.mesh.properties = _createPropertiesContainer();
-				added.transformationProperty = _addTransformationProperty(added.mesh.properties, glm::mat4(1));
-
-				//AGE::GetRenderThread()->createMeshProperty(added.mesh.painter, added.mesh.properties, added.transformationProperty);
-			}
+			assert(e.currentNode != UNDEFINED_IDX);
 		}
-
-
-		void RenderScene::_setTransform(AGE::Commands::MainToPrepare::SetTransform &msg)
+		for (uint32_t idx : _pointLightsToMove)
 		{
-			Camera *co = nullptr;
-			Mesh *uo = nullptr;
-			PointLight *l = nullptr;
+			PointLight &e = _pointLights.get(idx);
 
-			switch (msg.key.type)
+			e.hasMoved = false;
+			e.computeSphereTransform();
+			// TODO: move in octree
+		}
+		_drawablesToMove.clear();
+		_pointLightsToMove.clear();
+	}
+
+	void RenderScene::_prepareDrawList(AGE::Commands::MainToPrepare::PrepareDrawLists &msg)
+	{
+		AGE::Vector<Cullable*> toDraw;
+
+		_moveElementsInOctree();
+		// Do culling for each camera
+
+		RenderCameraListContainer *drawContainer = nullptr;
+
+		// We search an unused draw list
+		for (auto &e : _octreeDrawLists)
+		{
+			if (e.used == false)
 			{
-
-			case(PrepareKey::Type::Camera) :
-				co = &_cameras.get(msg.key.id);
-				co->transformation = msg.transform;
-				co->hasMoved = true;
+				drawContainer = &e;
 				break;
-			case(PrepareKey::Type::Mesh) :
-				uo = &_meshs.get(msg.key.id);
-				uo->transformation = msg.transform;
-				for (uint32_t e : uo->drawableCollection)
-				{
-					_drawables.get(e).transformation = uo->transformation;
-					//assert(_drawables.get(e).currentNode != UNDEFINED_IDX);
-					if (_drawables.get(e).hasMoved == false)
-					{
-						_drawables.get(e).hasMoved = true;
-						_drawables.get(e).moveBufferIdx = (size_t)_drawablesToMove.size();
-						_drawablesToMove.push_back(e);
-					}
-				}
-				break;
-			case(PrepareKey::Type::PointLight) :
-				l = &_pointLights.get(msg.key.id);
-				l->transformation = msg.transform;
-				if (l->hasMoved == false)
-				{
-					l->hasMoved = true;
-					l->moveBufferIdx = _pointLightsToMove.size();
-					_pointLightsToMove.push_back(msg.key.id);
-				}
-				break;
-			default:
-				break;
 			}
 		}
 
-		//void RenderScene::_setPosition(AGE::Commands::MainToPrepare::SetPosition &msg)
-		//{
-		//	Camera *co = nullptr;
-		//	Mesh *uo = nullptr;
-		//	PointLight *l = nullptr;
+		// id all draw lists are used by render thread
+		// we discard this draw
+		if (drawContainer == nullptr)
+			return;
 
-		//	switch (msg.key.type)
-		//	{
-
-		//	case(PrepareKey::Type::Camera) :
-		//		co = &_cameras.get(msg.key.id);
-		//		co->position = msg.position;
-		//		co->hasMoved = true;
-		//		break;
-		//	case(PrepareKey::Type::Mesh) :
-		//		uo = &_meshs.get(msg.key.id);
-		//		uo->position = msg.position;
-		//		for (uint32_t e : uo->drawableCollection)
-		//		{
-		//			_drawables.get(e).position = uo->position;
-		//			//assert(_drawables.get(e).currentNode != UNDEFINED_IDX);
-		//			if (_drawables.get(e).hasMoved == false)
-		//			{
-		//				_drawables.get(e).hasMoved = true;
-		//				_drawables.get(e).moveBufferIdx = (size_t)_drawablesToMove.size();
-		//				_drawablesToMove.push_back(e);
-		//			}
-		//		}
-		//		break;
-		//	case(PrepareKey::Type::PointLight) :
-		//		l = &_pointLights.get(msg.key.id);
-		//		l->position = msg.position;
-		//		if (l->hasMoved == false)
-		//		{
-		//			l->hasMoved = true;
-		//			l->moveBufferIdx = _pointLightsToMove.size();
-		//			_pointLightsToMove.push_back(msg.key.id);
-		//		}
-		//		break;
-		//	default:
-		//		break;
-		//	}
-		//}
-
-		//void RenderScene::_setScale(AGE::Commands::MainToPrepare::SetScale &msg)
-		//{
-		//	Mesh *uo = nullptr;
-		//	Camera *co = nullptr;
-		//	switch (msg.key.type)
-		//	{
-		//	case(PrepareKey::Type::Camera) :
-		//		co = &_cameras.get(msg.key.id);
-		//		co->scale = msg.scale;
-		//		co->hasMoved = true;
-		//		break;
-		//	case(PrepareKey::Type::Mesh) :
-		//		uo = &_meshs.get(msg.key.id);
-		//		uo->scale = msg.scale;
-		//		for (auto &e : uo->drawableCollection)
-		//		{
-		//			_drawables.get(e).scale = uo->scale;
-		//			//assert(_drawables.get(e).currentNode != UNDEFINED_IDX);
-		//			if (_drawables.get(e).hasMoved == false)
-		//			{
-		//				_drawables.get(e).hasMoved = true;
-		//				_drawables.get(e).moveBufferIdx = _drawablesToMove.size();
-		//				_drawablesToMove.push_back(e);
-		//			}
-		//		}
-		//		break;
-		//	default:
-		//		break;
-		//	}
-		//}
-
-		//void RenderScene::_setOrientation(AGE::Commands::MainToPrepare::SetOrientation &msg)
-		//{
-		//	Mesh *uo = nullptr;
-		//	Camera *co = nullptr;
-		//	switch (msg.key.type)
-		//	{
-		//	case(PrepareKey::Type::Camera) :
-		//		co = &_cameras.get(msg.key.id);
-		//		co->orientation = msg.orientation;
-		//		co->hasMoved = true;
-		//		break;
-		//	case(PrepareKey::Type::Mesh) :
-		//		uo = &_meshs.get(msg.key.id);
-		//		uo->orientation = msg.orientation;
-		//		for (auto &e : uo->drawableCollection)
-		//		{
-		//			_drawables.get(e).orientation = uo->orientation;
-		//			//assert(_drawables.get(e).currentNode != UNDEFINED_IDX);
-		//			if (_drawables.get(e).hasMoved == false)
-		//			{
-		//				_drawables.get(e).hasMoved = true;
-		//				_drawables.get(e).moveBufferIdx = _drawablesToMove.size();
-		//				_drawablesToMove.push_back(e);
-		//			}
-		//		}
-		//		break;
-		//	default:
-		//		break;
-		//	}
-		//}
-
-		void RenderScene::_moveElementsInOctree()
+		// clean empty nodes
+		_octree.cleanOctree();
+		for (uint32_t cameraIdx : _activeCameras)
 		{
-			for (uint32_t idx : _drawablesToMove)
+			Camera &camera = _cameras.get(cameraIdx);
+			//				auto view = glm::inverse(glm::scale(glm::translate(glm::mat4(1), camera.position) * glm::toMat4(camera.orientation), camera.scale));
+			auto view = glm::inverse(camera.transformation);
+
+			// update frustum infos for culling
+			camera.shape.setMatrix(camera.projection * view);
+
+			auto &drawList = drawContainer->cameras;
+
+			drawList.emplace_back();
+			auto &renderCamera = drawList.back();
+			renderCamera.camInfos.view = view;
+			renderCamera.camInfos.projection = camera.projection;
+			// no culling for the lights for the moment (TODO)
+			for (uint32_t pointLightIdx : _activePointLights)
 			{
-				Drawable &e = _drawables.get(idx);
-				e.hasMoved = false;
-				e.shape.fromTransformedBox(e.mesh.boundingBox, e.transformation);
-				if (e.currentNode == UNDEFINED_IDX)
-					_octree.addElement(&e);
-				else
-					_octree.moveElement(&e);
-
-				auto &properties = _properties.get(e.mesh.properties.getId());
-
-				auto transformationProperty = properties.get_property<Transformation>(e.transformationProperty);
-				transformationProperty->set(e.transformation);
-
-				assert(e.currentNode != UNDEFINED_IDX);
+				auto &p = _pointLights.get(pointLightIdx);
+				renderCamera.lights.pointLight.emplace_back();
+				renderCamera.lights.pointLight.back().light = p;
+				// TODO: Cull the shadows
 			}
-			for (uint32_t idx : _pointLightsToMove)
+			// Do the culling
+			_octree.getElementsCollide(&camera, toDraw);
+			// TODO: Remove that
+			renderCamera.pipelines.resize(1);
+			// iter on elements to draw
+
+			for (Cullable *e : toDraw)
 			{
-				PointLight &e = _pointLights.get(idx);
-
-				e.hasMoved = false;
-				e.computeSphereTransform();
-				// TODO: move in octree
-			}
-			_drawablesToMove.clear();
-			_pointLightsToMove.clear();
-		}
-		
-		void RenderScene::_prepareDrawList(AGE::Commands::MainToPrepare::PrepareDrawLists &msg)
-		{
-			AGE::Vector<Cullable*> toDraw;
-
-			_moveElementsInOctree();
-			// Do culling for each camera
-
-			RenderCameraListContainer *drawContainer = nullptr;
-
-			// We search an unused draw list
-			for (auto &e : _octreeDrawLists)
-			{
-				if (e.used == false)
+				switch (e->key.type)
 				{
-					drawContainer = &e;
-					break;
-				}
-			}
-
-			// id all draw lists are used by render thread
-			// we discard this draw
-			if (drawContainer == nullptr)
-				return;
-
-			// clean empty nodes
-			_octree.cleanOctree();
-			for (uint32_t cameraIdx : _activeCameras)
-			{
-				Camera &camera = _cameras.get(cameraIdx);
-				//				auto view = glm::inverse(glm::scale(glm::translate(glm::mat4(1), camera.position) * glm::toMat4(camera.orientation), camera.scale));
-				auto view = glm::inverse(camera.transformation);
-
-				// update frustum infos for culling
-				camera.shape.setMatrix(camera.projection * view);
-
-				auto &drawList = drawContainer->cameras;
-
-				drawList.emplace_back();
-				auto &renderCamera = drawList.back(); 
-				renderCamera.camInfos.view = view;
-				renderCamera.camInfos.projection = camera.projection;
-				// no culling for the lights for the moment (TODO)
-				for (uint32_t pointLightIdx : _activePointLights)
+				case PrepareKey::Type::Drawable:
 				{
-					auto &p = _pointLights.get(pointLightIdx);
-					renderCamera.lights.pointLight.emplace_back();
-					renderCamera.lights.pointLight.back().light = p;
-					// TODO: Cull the shadows
-				}
-				// Do the culling
-				_octree.getElementsCollide(&camera, toDraw);
-				// TODO: Remove that
-				renderCamera.pipelines.resize(2);
-				// iter on elements to draw
-
-				for (Cullable *e : toDraw)
-				{
-					switch (e->key.type)
-					{
-					case PrepareKey::Type::Drawable:
-						{
-							Drawable *currentDrawable = static_cast<Drawable*>(e);
-							// TODO: get the pipeline idx of the mesh to render, here we use 0
-							//RenderPipeline *curRenderPipeline = &renderCamera.pipelines[RenderType::BASIC];
-							//RenderPainter *curRenderPainter = nullptr;
-
-							//for (auto &renderPainter : curRenderPipeline->keys)
-							//{
-							//	if (renderPainter.painter == currentDrawable->mesh.painter)
-							//	{
-							//		curRenderPainter = &renderPainter;
-							//		break;
-							//	}
-							//}
-							//if (curRenderPainter == NULL)
-							//{
-							//	curRenderPipeline->keys.emplace_back();
-							//	curRenderPainter = &curRenderPipeline->keys.back();
-							//	curRenderPainter->painter = currentDrawable->mesh.painter;
-							//}
-							if (_verticeSorter.find(currentDrawable->mesh.vertices.getId()) == std::end(_verticeSorter))
-							{
-								_verticeSorter.emplace(std::make_pair(currentDrawable->mesh.vertices.getId(), std::vector<Drawable*>()));
-							}
-							_verticeSorter[currentDrawable->mesh.vertices.getId()].push_back(currentDrawable);
-							//curRenderPainter->vertices.emplace_back(currentDrawable->mesh.vertices);
-							//curRenderPainter->properties.emplace_back(_properties.get(currentDrawable->mesh.properties.getId()));
-						}
-						break;
-					case PrepareKey::Type::PointLight:
-						{
-							PointLight *currentPointLight = static_cast<PointLight*>(e);
-							renderCamera.lights.pointLight.emplace_back();
-							renderCamera.lights.pointLight.back().light = *currentPointLight;
-							// TODO: Cull the shadows
-						}
-						break;
-					default:
-						assert(!"Type cannot be added to the ");
-						break;
-					}
-					
-				}
-				for (auto &e : _verticeSorter)
-				{
-					if (e.second.empty())
-					{
-						continue;
-					}
+					Drawable *currentDrawable = static_cast<Drawable*>(e);
 
 					RenderPipeline *curRenderPipeline = &renderCamera.pipelines[RenderType::BASIC];
 					RenderPainter *curRenderPainter = nullptr;
-					auto first = e.second.front();
-
 
 					for (auto &renderPainter : curRenderPipeline->keys)
 					{
-						if (renderPainter.painter == first->mesh.painter)
+						if (renderPainter.painter.getId() == currentDrawable->mesh.painter.getId())
 						{
 							curRenderPainter = &renderPainter;
 							break;
@@ -617,64 +574,53 @@ namespace AGE
 					{
 						curRenderPipeline->keys.emplace_back();
 						curRenderPainter = &curRenderPipeline->keys.back();
-						curRenderPainter->painter = first->mesh.painter;
+						curRenderPainter->painter = currentDrawable->mesh.painter;
 					}
 
-					if (e.second.size() == 1)
-					{
-						curRenderPainter->vertices.emplace_back(first->mesh.vertices);
-						curRenderPainter->properties.emplace_back(_properties.get(first->mesh.properties.getId()));
-					}
-					else // multiple instance of same Vertice
-					{
-						// Comment this block if you implement instancied rendering
+					curRenderPainter->vertices.emplace_back(currentDrawable->mesh.vertices);
+					curRenderPainter->properties.emplace_back(_properties.get(currentDrawable->mesh.properties.getId()));
 
-						for (auto &m : e.second)
-						{
-							curRenderPainter->vertices.emplace_back(m->mesh.vertices);
-							curRenderPainter->properties.emplace_back(_properties.get(m->mesh.properties.getId()));
-						}
-
-						// Uncomment to use it for instancied rendering\
-
-						//curRenderPainter->instanciedVertices.emplace_back();
-						//
-						//auto &instancied = curRenderPainter->instanciedVertices.back();
-						//
-						//instancied.vertice = first->mesh.vertices;
-
-						//for (auto &m : e.second)
-						//{
-						//	instancied.transformations.push_back(m->transformation);
-						//}
-					}
-					e.second.clear();
 				}
+				break;
+				case PrepareKey::Type::PointLight:
+				{
+					PointLight *currentPointLight = static_cast<PointLight*>(e);
+					renderCamera.lights.pointLight.emplace_back();
+					renderCamera.lights.pointLight.back().light = *currentPointLight;
+					// TODO: Cull the shadows
+				}
+				break;
+				default:
+					assert(!"Type cannot be added to the ");
+					break;
+				}
+
 			}
-			drawContainer->used = true;
-			GetRenderThread()->getQueue()->emplaceCommand<Commands::ToRender::CopyDrawLists>(std::make_shared<RenderCameraListContainerHandle>(*drawContainer));
 		}
+		drawContainer->used = true;
+		GetRenderThread()->getQueue()->emplaceCommand<Commands::ToRender::CopyDrawLists>(std::make_shared<RenderCameraListContainerHandle>(*drawContainer));
+	}
 
-		Key<Properties> RenderScene::_createPropertiesContainer()
-		{
-			return (Key<Properties>::createKey(_properties.alloc()));
-		}
+	Key<Properties> RenderScene::_createPropertiesContainer()
+	{
+		return (Key<Properties>::createKey(_properties.alloc()));
+	}
 
-		void RenderScene::_removeProperties(const Key<Properties> &key)
-		{
-			_properties.dealloc(key.getId());
-		}
+	void RenderScene::_removeProperties(const Key<Properties> &key)
+	{
+		_properties.dealloc(key.getId());
+	}
 
-		Key<Property> RenderScene::_attachProperty(const Key<Properties> &key, std::shared_ptr<IProperty> propertyPtr)
-		{
-			auto &properties = _properties.get(key.getId());
+	Key<Property> RenderScene::_attachProperty(const Key<Properties> &key, std::shared_ptr<IProperty> propertyPtr)
+	{
+		auto &properties = _properties.get(key.getId());
 
-			return properties.add_property(propertyPtr);
-		}
+		return properties.add_property(propertyPtr);
+	}
 
-		Key<Property> RenderScene::_addTransformationProperty(const Key<Properties> &propertiesKey, const glm::mat4 &value)
-		{
-			return _createAndAttachProperty<Transformation>(propertiesKey, value);
-		}
+	Key<Property> RenderScene::_addTransformationProperty(const Key<Properties> &propertiesKey, const glm::mat4 &value)
+	{
+		return _createAndAttachProperty<Transformation>(propertiesKey, value);
+	}
 
 }

@@ -2,6 +2,7 @@
 #include <assert.h>
 #include <Utils/OpenGL.hh>
 #include <Render/ProgramResources/Types/ProgramResourcesType.hh>
+#include <Render/GeometryManagement/Buffer/BufferPrograms.hh>
 #include <Render/ProgramResources/Types/Attribute.hh>
 
 namespace AGE
@@ -16,6 +17,20 @@ namespace AGE
 			glAttachShader(_id, element->getId());
 		}
 		glLinkProgram(_id);
+
+		GLint isLinked = 0;
+		glGetProgramiv(_id, GL_LINK_STATUS, (int *)&isLinked);
+		if (isLinked == GL_FALSE)
+		{
+			GLint maxLength = 0;
+			glGetProgramiv(_id, GL_INFO_LOG_LENGTH, &maxLength);
+
+			//The maxLength includes the NULL character
+			std::vector<GLchar> infoLog(maxLength);
+			glGetProgramInfoLog(_id, maxLength, &maxLength, &infoLog[0]);
+			std::cout << infoLog.data() << std::endl;
+			assert(false);
+		}
 		_get_resources();
 	}
 
@@ -119,12 +134,35 @@ namespace AGE
 		return (_program_resources.size());
 	}
 
-	bool Program::coherent_attribute(std::vector<GLenum> const &p) const
+	Program &Program::set_attributes(BufferPrograms const &buffers)
 	{
+		for (auto &buffer : buffers.get_buffers()) {
+			auto resource = Program::get_resource<Attribute>(buffer->name());
+			if (resource)
+			{
+				*resource = buffer;
+			}
+		}
+		return *this;
+	}
+
+	bool Program::coherent_attributes(std::vector<std::pair<GLenum, std::string>> const &coherent)
+	{
+
 		for (auto &resource : _program_resources) {
-			auto index = resource->id();
-			if (resource->type() == GL_PROGRAM_INPUT && *static_cast<Attribute *>(resource.get()) != p[index]) {
-				return (false);
+			if (resource->type() == GL_PROGRAM_INPUT) {
+				bool attribFound = false;
+
+				for (auto &attrib : coherent) {
+					if (*static_cast<Attribute *>(resource.get()) == attrib)
+					{
+						attribFound = true;
+						break;
+					}
+				}
+
+				if (attribFound == false)
+					return (false);
 			}
 		}
 		return (true);

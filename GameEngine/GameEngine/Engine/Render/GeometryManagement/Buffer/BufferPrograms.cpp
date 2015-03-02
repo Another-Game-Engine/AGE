@@ -7,21 +7,18 @@
 
 namespace AGE
 {
-	BufferPrograms::BufferPrograms(std::vector<GLenum> const &types) :
+	BufferPrograms::BufferPrograms(std::vector<std::pair<GLenum, std::string>> const &types) :
 		_types(types),
-		_indices_buffer(std::make_unique<IndexBuffer>())
+		_indices_buffer(std::string("indices"), std::make_unique<IndexBuffer>())
 	{
 		_buffers.reserve(_types.size());
 		_vertex_array.bind();
 		auto index = 0ull;
 		for (auto &type : _types) {
-			auto &iterator = available_types.find(type);
+			auto &iterator = available_types.find(type.first);
 			if (iterator != available_types.end()) {
 				auto &a = iterator->second;
-				_buffers.emplace_back(std::make_unique<VertexBuffer>());
-				_buffers.back().bind();
-				glEnableVertexAttribArray(index);
-				glVertexAttribPointer(index++, a.nbr_component, a.type_component, GL_FALSE, 0, 0);
+				_buffers.emplace_back(std::make_shared<Buffer>(std::string(type.second), std::make_unique<VertexBuffer>()));
 			}
 		}
 		_indices_buffer.bind();
@@ -46,8 +43,8 @@ namespace AGE
 				return (false);
 			}
 		}
-		for (auto index = 0ull; index < vertices.nbr_buffer(); ++index) {
-			vertices.set_block_memory(_buffers[index].push_back(vertices.transfer_data(index)), index);
+		for (auto &buffer_targeted : _buffers) {
+			vertices.set_block_memory(buffer_targeted->push_back(vertices.transfer_data(buffer_targeted->name())), buffer_targeted->name());
 		}
 		vertices.set_indices_block_memory(_indices_buffer.push_back(vertices.transfer_indices_data()));
 		return (true);
@@ -73,7 +70,7 @@ namespace AGE
 	BufferPrograms & BufferPrograms::update()
 	{
 		for (auto &buffer : _buffers) {
-			buffer.update();
+			buffer->update();
 		}
 		_indices_buffer.update();
 		return (*this);
@@ -82,13 +79,13 @@ namespace AGE
 	BufferPrograms & BufferPrograms::clear()
 	{
 		for (auto &buffer : _buffers) {
-			buffer.clear();
+			buffer->clear();
 		}
 		_indices_buffer.clear();
 		return (*this);
 	}
 
-	std::vector<GLenum> const & BufferPrograms::get_types() const
+	std::vector<std::pair<GLenum, std::string>> const & BufferPrograms::get_types() const
 	{
 		return (_types);
 	}

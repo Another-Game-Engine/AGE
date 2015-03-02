@@ -77,9 +77,9 @@ namespace AGE
 			auto material_set = std::make_shared<MaterialSetInstance>();
 			for (auto &material_data : material_data_set->collection) 
 			{
-				auto futureSubMaterial = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<Tasks::Render::AddMaterial, MaterialInstance>(material_data);
-				auto subMaterial = futureSubMaterial.get();
-				material_set->datas.emplace_back(subMaterial);
+//				auto futureSubMaterial = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<Tasks::Render::AddMaterial, MaterialInstance>(material_data);
+//				auto subMaterial = futureSubMaterial.get();
+//				material_set->datas.emplace_back(subMaterial);
 			}
 			{
 				std::lock_guard<std::mutex> lock(_mutex);
@@ -270,7 +270,7 @@ namespace AGE
 		mesh->defaultMaterialIndex = data.defaultMaterialIndex;
 		auto future = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]() {
 			auto &paintingManager = GetRenderThread()->paintingManager;
-			std::vector<GLenum> types;
+			std::vector<std::pair<GLenum, std::string>> types;
 			for (auto &e : loadOrder)
 			{
 				if (!fileData->subMeshs[index].infos.test(e))

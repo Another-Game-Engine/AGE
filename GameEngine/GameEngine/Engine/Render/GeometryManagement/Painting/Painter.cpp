@@ -7,7 +7,7 @@
 namespace AGE
 {
 
-	Painter::Painter(std::vector<GLenum>  const &types) :
+	Painter::Painter(std::vector<std::pair<GLenum, std::string>>  const &types) :
 		_buffer(types)
 	{
 		// to be sure that this function is only called in render thread
@@ -80,9 +80,7 @@ namespace AGE
 	{
 		// to be sure that this function is only called in render thread
 		AGE_ASSERT(GetThreadManager()->getCurrentThread() == (AGE::Thread*)GetRenderThread());
-
-		AGE_ASSERT(program->coherent_attribute(_buffer.get_types()));
-
+		program->set_attributes(_buffer);
 		_buffer.bind();
 		_buffer.update();
 		int index = 0;
@@ -102,14 +100,14 @@ namespace AGE
 		return (*this);
 	}
 
-	bool Painter::coherent(std::vector<GLenum> const &types) const
+	bool Painter::coherent(std::vector<std::pair<GLenum, std::string>> const &types) const
 	{
 		// to be sure that this function is only called in render thread
 		AGE_ASSERT(GetThreadManager()->getCurrentThread() == (AGE::Thread*)GetRenderThread());
 
 		auto &types_buffer = _buffer.get_types();
 		if (types.size() != types_buffer.size()) {
-			return (true);
+			return (false);
 		}
 		for (auto index = 0ull; index < types_buffer.size(); ++index) {
 			if (types[index] != types_buffer[index]) {
@@ -119,4 +117,8 @@ namespace AGE
 		return (true);
 	}
 
+	bool Painter::coherent(std::shared_ptr<Program> const &prog) const
+	{
+		return (prog->coherent_attributes(_buffer.get_types()));
+	}
 }
