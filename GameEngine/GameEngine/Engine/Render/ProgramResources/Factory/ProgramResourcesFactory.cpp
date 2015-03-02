@@ -59,7 +59,7 @@ std::make_pair(GL_PROGRAM_INPUT, LAMBDA_PROTO																																			
 																																															  \
 		return (std::shared_ptr<IProgramResources>(nullptr));																																  \
 	}																																														  \
-	auto tmp = std::make_shared<Attribute>(id, std::move(name), available_type->second);																									  \
+	auto tmp = std::make_shared<Attribute>(id, glGetAttribLocation(_program.id(), name.c_str()), std::move(name), available_type->second);																									  \
 	return (std::static_pointer_cast<IProgramResources>(tmp));																																	\
 })																																															 
 

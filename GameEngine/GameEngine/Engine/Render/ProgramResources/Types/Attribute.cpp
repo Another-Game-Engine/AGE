@@ -4,8 +4,9 @@
 
 namespace AGE
 {
-	Attribute::Attribute(GLint index, std::string &&name, GlType const &type) :
+	Attribute::Attribute(GLint index, GLuint location, std::string &&name, GlType const &type) :
 		AProgramResources(index, std::move(name), GL_PROGRAM_INPUT),
+		_location(location),
 		_available_type(type)
 	{
 
@@ -28,8 +29,8 @@ namespace AGE
 	IProgramResources & Attribute::update()
 	{
 		_buffer->bind();
-		glEnableVertexAttribArray(_id);
-		glVertexAttribPointer(_id, _available_type.nbr_component, _available_type.type_component, GL_FALSE, 0, 0);
+		glEnableVertexAttribArray(_location);
+		glVertexAttribPointer(_location, _available_type.nbr_component, _available_type.type_component, GL_FALSE, 0, 0);
 		return (*this);
 	}
 
