@@ -17,21 +17,7 @@ uniform float skinned;
 
 void main(void)
 {
-	vec4 newPosition = vec4(0.0f, 0.0f, 0.0f, 1.0f);
-
-	if (skinned == 0.0f)
-	{		
-		if (blendWeight.x > 0.0f)
-			newPosition = (bones[int(blendIndice.x)] * position) * blendWeight.x;
-		if (blendWeight.y > 0.0f)
-			newPosition += (bones[int(blendIndice.y)] * position) * blendWeight.y;
-		if (blendWeight.z > 0.0f)
-			newPosition += (bones[int(blendIndice.z)] * position) * blendWeight.z;
-		if (blendWeight.w > 0.0f)
-			newPosition += (bones[int(blendIndice.w)] * position) * blendWeight.w;
-	}
-
 	mat4 model_view = view_matrix * model_matrix;
 	interpolated_color = normal;
-	gl_Position = vec4(projection_matrix * model_view * newPosition);
+	gl_Position = vec4(projection_matrix * model_view * position);
 }
