@@ -53,7 +53,6 @@ namespace AGE
 		OpenGLTasks::clear_buffer();
 
 		//*_programs[RENDER]->get_resource<Mat4Array255>("bones") = &(infos.view);
-		//*_programs[RENDER]->get_resource<Vec1>("skinned") = 0.0f;
 
 		for (auto key : pipeline.keys) {
 			auto &curPainter = _painter_manager->get_painter(key.painter);
@@ -69,6 +68,10 @@ namespace AGE
 			assert(currentRenderIdx != -1);
 
 			_programs[currentRenderIdx]->use();
+			if (currentRenderIdx == RENDER_SKINNED)
+			{
+				*_programs[RENDER_SKINNED]->get_resource<Vec1>("skinned") = 1.0f;
+			}
 			*_programs[currentRenderIdx]->get_resource<Mat4>("projection_matrix") = infos.projection;
 			*_programs[currentRenderIdx]->get_resource<Mat4>("view_matrix") = infos.view;
 
