@@ -9,6 +9,7 @@
 namespace AGE
 {
 	class Attribute;
+	class BufferPrograms;
 
 	class Program
 	{
@@ -33,7 +34,7 @@ namespace AGE
 		Program &update();
 		Program const &print_resources() const;
 		size_t nbr_resources() const;
-		bool coherent_attribute(std::vector<std::pair<GLenum, std::string>> const &p) const;
+		Program &set_attributes(BufferPrograms const &buffers);
 
 	private:
 		void _get_resources();

@@ -1,4 +1,5 @@
 #include <Render/ProgramResources/Types/Attribute.hh>
+#include <Render/GeometryManagement/Buffer/Buffer.hh>
 #include <iostream>
 
 namespace AGE
@@ -26,6 +27,9 @@ namespace AGE
 
 	IProgramResources & Attribute::update()
 	{
+		_buffer->bind();
+		glEnableVertexAttribArray(_id);
+		glVertexAttribPointer(_id, _available_type.nbr_component, _available_type.type_component, GL_FALSE, 0, 0);
 		return (*this);
 	}
 
@@ -43,6 +47,12 @@ namespace AGE
 	{
 		std::cout << "attribute (location = " << _id << ") " << _available_type.name << " " << _name << ";";
 		std::cout << std::endl;
+	}
+
+	Attribute &Attribute::operator=(std::shared_ptr<Buffer> const &buffer)
+	{
+		_buffer = buffer;
+		return *this;
 	}
 
 	bool Attribute::operator==(std::pair<GLenum, std::string> const &p) const

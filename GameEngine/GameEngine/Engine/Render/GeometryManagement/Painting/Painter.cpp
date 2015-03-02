@@ -80,7 +80,7 @@ namespace AGE
 	{
 		// to be sure that this function is only called in render thread
 		AGE_ASSERT(GetThreadManager()->getCurrentThread() == (AGE::Thread*)GetRenderThread());
-		AGE_ASSERT(program->coherent_attribute(_buffer.get_types()));
+		program->set_attributes(_buffer);
 		_buffer.bind();
 		_buffer.update();
 		int index = 0;

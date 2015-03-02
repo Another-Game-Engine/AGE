@@ -2,6 +2,7 @@
 #include <assert.h>
 #include <Utils/OpenGL.hh>
 #include <Render/ProgramResources/Types/ProgramResourcesType.hh>
+#include <Render/GeometryManagement/Buffer/BufferPrograms.hh>
 #include <Render/ProgramResources/Types/Attribute.hh>
 
 namespace AGE
@@ -119,15 +120,16 @@ namespace AGE
 		return (_program_resources.size());
 	}
 
-	bool Program::coherent_attribute(std::vector<std::pair<GLenum, std::string>> const &p) const
+	Program &Program::set_attributes(BufferPrograms const &buffers)
 	{
-		for (auto &resource : _program_resources) {
-			auto index = resource->id();
-			if (resource->type() == GL_PROGRAM_INPUT && *static_cast<Attribute *>(resource.get()) != p[index]) {
-				return (false);
+		for (auto &buffer : buffers.get_buffers()) {
+			auto resource = Program::get_resource<Attribute>(buffer->name());
+			if (!resource) {
+				assert(false);
 			}
+			*resource = buffer;
 		}
-		return (true);
+		return *this;
 	}
 
 	std::string const & Program::name() const

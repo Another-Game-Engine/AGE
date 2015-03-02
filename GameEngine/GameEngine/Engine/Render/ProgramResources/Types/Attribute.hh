@@ -7,6 +7,8 @@
 
 namespace AGE
 {
+	class Buffer;
+
 	class Attribute : public AProgramResources
 	{
 	public:
@@ -14,7 +16,7 @@ namespace AGE
 		Attribute(Attribute &&move);
 		Attribute(Attribute const &copy);
 		Attribute &operator=(Attribute const &a) = delete;
-		template <typename type_t> Attribute &operator+=(std::vector<type_t> const &data);
+		Attribute &operator=(std::shared_ptr<Buffer> const &buffer);
 		bool operator==(std::pair<GLenum, std::string> const &p) const;
 		bool operator!=(std::pair<GLenum, std::string> const &p) const;
 
@@ -29,5 +31,6 @@ namespace AGE
 
 	private:
 		GlType _available_type;
+		std::shared_ptr<Buffer> _buffer;
 	};
 }
