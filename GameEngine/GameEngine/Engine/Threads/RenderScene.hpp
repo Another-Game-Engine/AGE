@@ -113,6 +113,5 @@ namespace AGE
 		std::unique_ptr<Link> _rootLink;
 
 		MemoryPool<Properties> _properties;
-		std::unordered_map<int, std::vector<Drawable*>> _verticeSorter;
 	};
 }
