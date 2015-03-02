@@ -154,7 +154,8 @@ namespace AGE
 				bool attribFound = false;
 
 				for (auto &attrib : coherent) {
-					if (*static_cast<Attribute *>(resource.get()) != attrib) {
+					if (*static_cast<Attribute *>(resource.get()) == attrib)
+					{
 						attribFound = true;
 						break;
 					}
