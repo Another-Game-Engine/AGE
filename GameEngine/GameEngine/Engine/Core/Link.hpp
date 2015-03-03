@@ -46,6 +46,7 @@ namespace AGE
 		void setPosition(const glm::vec3 &v);
 		void setForward(const glm::vec3 &v);
 		void setScale(const glm::vec3 &v);
+		void setScale(float v);
 		void setOrientation(const glm::quat &v);
 		void setTransform(const glm::mat4 &t);
 

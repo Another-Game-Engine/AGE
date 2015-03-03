@@ -311,7 +311,7 @@ namespace AGE
 		//_l.setOrientation(glm::quat(glm::vec3(Mathematic::degreeToRadian(-90), Mathematic::degreeToRadian(90), 0)));
 		_l.setPosition(glm::vec3(0, 0, 0));
 		//_l.setPosition(glm::vec3(-30, 0, 0));
-		_l.setScale(glm::vec3(0.1f));
+		//_l.setScale(glm::vec3(0.1f));
 		auto _m = GLOBAL_CATWOMAN.addComponent<MeshRenderer>(
 			getInstance<AGE::AssetsManager>()->getMesh("catwoman/catwoman.sage")
 			, getInstance<AGE::AssetsManager>()->getMaterial("catwoman/catwoman.mage"));
@@ -367,9 +367,13 @@ namespace AGE
 	for (auto &e : skeleton->bones)
 	{
 		auto entity = createEntity();
-		entity.addComponent<MeshRenderer>(
+		auto child = createEntity();
+		child.addComponent<MeshRenderer>(
 			getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage")
 			, getInstance<AGE::AssetsManager>()->getMaterial("ball/ball.mage"));
+		child.getLink().setScale(1.0f);
+		entity.getLink().setPosition(posFromMat4(e.transformation));
+		entity.getLink().attachChild(child.getLinkPtr());
 		bonesEntities.push_back(entity);
 	}
 
@@ -508,7 +512,7 @@ namespace AGE
 		for (std::size_t i = 0; i < bones.size(); ++i)
 		{
 		//	bones[i] = glm::mat4(1);
-		//	bonesEntities[i].getLink().setTransform(bones[i]);
+			//bonesEntities[i].getLink().setPosition(posFromMat4(bones[i]));
 		}
 		DirtyBoneContainer::setBones(bones);
 		return true;

@@ -50,6 +50,12 @@ void Link::setScale(const glm::vec3 &v) {
 	internalSetScale(v);
 }
 
+void Link::setScale(float v) {
+	_userModification = true;
+	internalSetScale(glm::vec3(v));
+}
+
+
 void Link::setOrientation(const glm::quat &v) {
 	_userModification = true;
 	internalSetOrientation(v);
@@ -99,7 +105,7 @@ void Link::internalSetTransform(const glm::mat4 &t)
 	//_orientation = glm::quat(rot);
 	//_position = posFromMat4(t);
 	//_localTransformation = glm::translate(t, _position);
-	_localTransformation = t;
+	//_localTransformation = t;
 	_updateGlobalTransform();
 }
 
