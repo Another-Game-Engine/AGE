@@ -306,12 +306,12 @@ namespace AGE
 		auto &_l = GLOBAL_CATWOMAN.getLink();
 
 		static bool useOnce = false;
-		auto rigidBody = GLOBAL_CATWOMAN.addComponent<RigidBody>(0);
-		rigidBody->setCollisionMesh((AScene*)(this), GLOBAL_CATWOMAN, "../../Assets/Serialized/catwoman/catwoman_dynamic.phage");
-		_l.setOrientation(glm::quat(glm::vec3(Mathematic::degreeToRadian(-90), Mathematic::degreeToRadian(90), 0)));
+		//auto rigidBody = GLOBAL_CATWOMAN.addComponent<RigidBody>(0);
+		//rigidBody->setCollisionMesh((AScene*)(this), GLOBAL_CATWOMAN, "../../Assets/Serialized/catwoman/catwoman_dynamic.phage");
+		//_l.setOrientation(glm::quat(glm::vec3(Mathematic::degreeToRadian(-90), Mathematic::degreeToRadian(90), 0)));
 		_l.setPosition(glm::vec3(0, 0, 0));
 		//_l.setPosition(glm::vec3(-30, 0, 0));
-		_l.setScale(glm::vec3(3.0f));
+		_l.setScale(glm::vec3(0.1f));
 		auto _m = GLOBAL_CATWOMAN.addComponent<MeshRenderer>(
 			getInstance<AGE::AssetsManager>()->getMesh("catwoman/catwoman.sage")
 			, getInstance<AGE::AssetsManager>()->getMaterial("catwoman/catwoman.mage"));
@@ -498,7 +498,9 @@ namespace AGE
 		AGE::GetPrepareThread()->getQueue()->emplaceCommand<AGE::Commands::ToRender::RenderDrawLists>();
 
 		static float ttime = 0;
-		getInstance<AGE::AnimationManager>()->update(ttime);
+		static float timeMultiplier = 0.0f;
+		ImGui::SliderFloat("Animation time", &timeMultiplier, 0.0f, 200.0f);
+		getInstance<AGE::AnimationManager>()->update(timeMultiplier);
 		ttime += time;
 		auto &bones = getInstance<AGE::AnimationManager>()->getBones(animationTestInstance);
 		auto skeleton = getInstance<AssetsManager>()->getSkeleton("catwoman/catwoman.skage");
