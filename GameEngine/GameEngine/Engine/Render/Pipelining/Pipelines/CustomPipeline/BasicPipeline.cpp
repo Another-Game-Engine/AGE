@@ -84,6 +84,9 @@ namespace AGE
 					glUniformMatrix4fv(bonesId, bones.size(), GL_FALSE, (GLfloat *)(glm::value_ptr(bones[0])));
 				}
 			}
+
+			auto test = glGetUniformLocation(_programs[currentRenderIdx]->id(), "projection_matrix");
+				
 			*_programs[currentRenderIdx]->get_resource<Mat4>("projection_matrix") = infos.projection;
 			*_programs[currentRenderIdx]->get_resource<Mat4>("view_matrix") = infos.view;
 

@@ -52,8 +52,10 @@ namespace AGE
 	template <typename type_t>
 	std::shared_ptr<type_t> Program::get_resource(std::string const &name)
 	{
-		for (size_t index = 0; index < _program_resources.size(); ++index) {
-			if (name == _program_resources[index]->name()) {
+		for (size_t index = 0; index < _program_resources.size(); ++index)
+		{
+			if (name == _program_resources[index]->name())
+			{
 				auto &resource = _program_resources[index];
 				return (resource->safe(sizeof(type_t::type_t)) ? std::static_pointer_cast<type_t>(resource) : nullptr);
 			}
