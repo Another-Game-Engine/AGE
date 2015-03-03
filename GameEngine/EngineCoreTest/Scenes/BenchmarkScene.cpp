@@ -297,8 +297,8 @@ namespace AGE
 					//GLOBAL_SPONZA.addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("cube/cube.sage")
 						//, getInstance<AGE::AssetsManager>()->getMaterial("cube/cube.mage"));
 					///////@paul then we replace it with a mesh with a lot of submesh
-					//GLOBAL_SPONZA.addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("Sponza/sponza.sage")
-					//	, getInstance<AGE::AssetsManager>()->getMaterial("Sponza/sponza.mage"));
+					GLOBAL_SPONZA.addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("Sponza/sponza.sage")
+						, getInstance<AGE::AssetsManager>()->getMaterial("Sponza/sponza.mage"));
 				}
 
 	{
@@ -311,7 +311,7 @@ namespace AGE
 		_l.setOrientation(glm::quat(glm::vec3(Mathematic::degreeToRadian(-90), Mathematic::degreeToRadian(90), 0)));
 		_l.setPosition(glm::vec3(0, 0, 0));
 		//_l.setPosition(glm::vec3(-30, 0, 0));
-		_l.setScale(glm::vec3(8.5f));
+		_l.setScale(glm::vec3(3.0f));
 		auto _m = GLOBAL_CATWOMAN.addComponent<MeshRenderer>(
 			getInstance<AGE::AssetsManager>()->getMesh("catwoman/catwoman.sage")
 			, getInstance<AGE::AssetsManager>()->getMaterial("catwoman/catwoman.mage"));
@@ -324,7 +324,7 @@ namespace AGE
 		auto &_l = e.getLink();
 		_l.setPosition(glm::vec3(i, 1.0f, i));
 		_l.setScale(glm::vec3(0.05f));
-		//auto _m = e.addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage"), getInstance<AGE::AssetsManager>()->getMaterial("ball/ball.mage"));
+		auto _m = e.addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage"), getInstance<AGE::AssetsManager>()->getMaterial("ball/ball.mage"));
 		e.getLink().setPosition(glm::vec3(i, 5.0f, 0));
 		e.addComponent<PointLightComponent>()->set(glm::vec3((float)(rand() % 1000) / 1000.0f, (float)(rand() % 1000) / 1000.0f, (float)(rand() % 1000) / 1000.0f), glm::vec3(1.f, 0.1f, 0.0f));
 	}
@@ -335,10 +335,10 @@ namespace AGE
 		auto e = GLOBAL_LIGHTS[i];
 		auto &_l = e.getLink();
 		_l.setPosition(glm::vec3(i, 1.0f, i));
-		//_l.setScale(glm::vec3(0.05f));
-		//auto _m = e.addComponent<MeshRenderer>(
-		//	getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage")
-		//	, getInstance<AGE::AssetsManager>()->getMaterial("ball/ball.mage"));
+		_l.setScale(glm::vec3(0.05f));
+		auto _m = e.addComponent<MeshRenderer>(
+			getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage")
+			, getInstance<AGE::AssetsManager>()->getMaterial("ball/ball.mage"));
 		e.getLink().setPosition(glm::vec3(i, 5.0f, 0));
 		e.addComponent<PointLightComponent>()->set(glm::vec3((float)(rand() % 1000) / 1000.0f, (float)(rand() % 1000) / 1000.0f, (float)(rand() % 1000) / 1000.0f), glm::vec3(1.f, 0.1f, 0.0f));
 		e.getLink().attachParent(GLOBAL_LIGHTS[0].getLinkPtr());
@@ -366,13 +366,11 @@ namespace AGE
 	auto i = 0;
 	for (auto &e : skeleton->bones)
 	{
-		//auto entity = createEntity();
-		//entity.addComponent<MeshRenderer>(
-		//	getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage")
-		//	, getInstance<AGE::AssetsManager>()->getMaterial("ball/ball.mage"));
-		//bonesEntities.push_back(entity);
-		//auto p = e.transformation * glm::vec4(0, 0, 0, 1);
-		//bonesEntities.back().getLink().setPosition(glm::vec3(p.x, p.y, p.z));
+		auto entity = createEntity();
+		entity.addComponent<MeshRenderer>(
+			getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage")
+			, getInstance<AGE::AssetsManager>()->getMaterial("ball/ball.mage"));
+		bonesEntities.push_back(entity);
 	}
 
 	////////////////////////////////////
@@ -450,12 +448,12 @@ namespace AGE
 				MeshRenderer *mesh;
 				if (i % 4 == 0)
 				{
-					//mesh = e.addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage"), getInstance<AGE::AssetsManager>()->getMaterial(OldFile("ball/ball.mage")));
+					mesh = e.addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage"), getInstance<AGE::AssetsManager>()->getMaterial(OldFile("ball/ball.mage")));
 					link.setScale(glm::vec3(0.5f));
 				}
 				else
 				{
-					//mesh = e.addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("cube/cube.sage"), getInstance<AGE::AssetsManager>()->getMaterial(OldFile("cube/cube.mage")));
+					mesh = e.addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("cube/cube.sage"), getInstance<AGE::AssetsManager>()->getMaterial(OldFile("cube/cube.mage")));
 				}
 
 #ifdef PHYSIC_SIMULATION
@@ -503,10 +501,12 @@ namespace AGE
 		getInstance<AGE::AnimationManager>()->update(ttime);
 		ttime += time;
 		auto &bones = getInstance<AGE::AnimationManager>()->getBones(animationTestInstance);
+		auto skeleton = getInstance<AssetsManager>()->getSkeleton("catwoman/catwoman.skage");
+		skeleton->updateSkinning();
 		for (std::size_t i = 0; i < bones.size(); ++i)
 		{
-			bones[i] = glm::mat4(1);
-			//bonesEntities[i].getLink().setTransform(bones[i]);
+		//	bones[i] = glm::mat4(1);
+		//	bonesEntities[i].getLink().setTransform(bones[i]);
 		}
 		DirtyBoneContainer::setBones(bones);
 		return true;

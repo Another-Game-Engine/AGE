@@ -98,8 +98,8 @@ void Link::internalSetTransform(const glm::mat4 &t)
 	//auto rot = rotFromMat4(t, true);
 	//_orientation = glm::quat(rot);
 	//_position = posFromMat4(t);
-	_localTransformation = glm::translate(t, _position);
-
+	//_localTransformation = glm::translate(t, _position);
+	_localTransformation = t;
 	_updateGlobalTransform();
 }
 

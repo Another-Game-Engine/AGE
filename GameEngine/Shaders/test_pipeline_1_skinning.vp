@@ -22,7 +22,7 @@ void main(void)
 
 	if (skinned > 0)
 	{
-		newPosition = vec4(0, 0, 0, 1);
+		newPosition = vec4(0);
 		if (blendWeight.x > 0.0f)
 			newPosition = (bones[int(blendIndice.x)] * position) * blendWeight.x;
 		if (blendWeight.y > 0.0f)
@@ -31,9 +31,10 @@ void main(void)
 			newPosition += (bones[int(blendIndice.z)] * position) * blendWeight.z;
 		if (blendWeight.w > 0.0f)
 			newPosition += (bones[int(blendIndice.w)] * position) * blendWeight.w;
-		interpolated_color = vec4(1, 0, 1, 1);
+		interpolated_color = blendIndice / vec4(166);
+		interpolated_color.w = 1.0f;
 	}
 
 	mat4 model_view = view_matrix * model_matrix;
-	gl_Position = vec4(projection_matrix * model_view * newPosition);
+	gl_Position = vec4(projection_matrix * model_view * vec4(newPosition.xyz, 1));
 }

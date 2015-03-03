@@ -6,6 +6,7 @@
 #include <AssetManagement/Data/AnimationData.hpp>
 #include <AssetManagement/Instance/AnimationInstance.hh>
 #include <mutex>
+#include <Skinning/Skeleton.hpp>
 
 namespace AGE
 {
@@ -22,10 +23,10 @@ namespace AGE
 		{
 			std::lock_guard<std::mutex> lock(_mutex); //dirty lock not definitive, to test purpose
 
-			auto instance = AnimationInstance(skeleton, animation);
-			_list.emplace_back(instance);
-			instance.key = Key<AnimationInstance>::createKey(_list.size() - 1);
-			return instance.key;
+			auto instance = std::make_shared<AnimationInstance>(skeleton, animation);
+			_list.push_back(instance);
+			instance->key = Key<AnimationInstance>::createKey(_list.size() - 1);
+			return instance->key;
 		}
 
 		void update(float time)
@@ -34,17 +35,17 @@ namespace AGE
 
 			for (auto &e : _list)
 			{
-				e.update(time);
+				e->update(time);
 			}
 		}
 
 		std::vector<glm::mat4> &getBones(const Key<AnimationInstance> &key)
 		{
-			return _list[key.getId()].bindPoses;
+			return _list[key.getId()]->transformations;
 		}
 
 	private:
-		std::vector<AGE::AnimationInstance> _list;
+		std::vector<std::shared_ptr<AGE::AnimationInstance>> _list;
 		std::mutex _mutex;
 	};
 }
