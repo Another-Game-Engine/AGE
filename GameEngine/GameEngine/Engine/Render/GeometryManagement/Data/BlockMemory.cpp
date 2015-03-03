@@ -4,7 +4,7 @@
 namespace AGE
 {
 	BlockMemory::BlockMemory(Buffer &parent, size_t index, size_t offset, std::vector<uint8_t> const &data) :
-		_is_update(false),
+		_is_up_to_date(false),
 		_index(index),
 		_offset(offset),
 		_data(data.size()),
@@ -17,7 +17,7 @@ namespace AGE
 
 
 	BlockMemory::BlockMemory(BlockMemory const &copy) :
-		_is_update(copy._is_update),
+		_is_up_to_date(copy._is_up_to_date),
 		_index(copy._index),
 		_offset(copy._offset),
 		_data(copy._data),
@@ -26,7 +26,7 @@ namespace AGE
 	}
 
 	BlockMemory::BlockMemory(BlockMemory &&move) :
-		_is_update(move._is_update),
+		_is_up_to_date(move._is_up_to_date),
 		_index(move._index),
 		_offset(move._offset),
 		_data(std::move(move._data)),
@@ -34,21 +34,21 @@ namespace AGE
 	{
 	}
 
-	BlockMemory & BlockMemory::operator=(std::vector<uint8_t> const &data)
+	BlockMemory & BlockMemory::setDatas(std::vector<uint8_t> const &data)
 	{
 		if (_data.size() < data.size()) {
 			return (*this);
 		}
 		std::memcpy(_data.data(), data.data(), _data.size());
 		_parent.require_transfer();
-		_is_update = false;
+		_is_up_to_date = false;
 		return (*this);
 	}
 
 	BlockMemory & BlockMemory::update_buffer(IBuffer const &buffer)
 	{
 		buffer.sub(_offset, _data.size(), _data.data());
-		_is_update = true;
+		_is_up_to_date = true;
 		return (*this);
 	}
 
@@ -66,8 +66,13 @@ namespace AGE
 	{
 		_offset = offset;
 		_index = index;
-		_is_update = false;
+		needUpdate();
 		return (*this);
+	}
+
+	void BlockMemory::needUpdate()
+	{
+		_is_up_to_date = false;
 	}
 
 	BlockMemory & BlockMemory::remove()
@@ -83,8 +88,8 @@ namespace AGE
 		return (_data);
 	}
 
-	bool BlockMemory::is_update() const
+	bool BlockMemory::is_up_to_date() const
 	{
-		return (_is_update);
+		return (_is_up_to_date);
 	}
 }
