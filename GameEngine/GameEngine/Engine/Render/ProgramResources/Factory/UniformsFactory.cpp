@@ -42,5 +42,11 @@ namespace AGE
 		}
 		return (std::shared_ptr<IProgramResources>(nullptr));
 	}
+	
+	std::shared_ptr<IProgramResources> UniformsFactory::build_array(GLenum mode, size_t size, size_t stride, GLint id, std::string &&name)
+	{
+
+		return (std::shared_ptr<IProgramResources>(nullptr));
+	}
 
 }

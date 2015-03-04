@@ -5,6 +5,8 @@
 #include <Render/ProgramResources/Types/ProgramResourcesType.hh>
 #include <Render/Program.hh>
 #include <array>
+#include <iostream>
+#include <string>
 
 namespace AGE
 {
@@ -25,7 +27,6 @@ namespace AGE
 		return (std::unique_ptr<IProgramResources>(nullptr));
 	}
 
-
 	ProgramResourcesFactory::create_type_t ProgramResourcesFactory::_create_uniform()
 	{
 		return (std::make_pair(GL_UNIFORM, LAMBDA_PROTO {
@@ -34,7 +35,14 @@ namespace AGE
 			std::array<GLint, nbr_prop> params;
 			glGetProgramResourceiv(_program.id(), GL_UNIFORM, id, nbr_prop, prop.data(), nbr_prop, nullptr, params.data());
 			if (params[1] == -1) {
-				return (_uniformsFactory.build(params[0], id, std::move(name)));
+				auto location = glGetUniformLocation(_program.id(), name.c_str());
+				if (name.find("[0]") != std::string::npos) {
+					std::cout << name << std::endl;
+					return (_uniformsFactory.build_array(params[0], params[3], params[4], location, std::move(name)));
+				}
+				else {
+					return (_uniformsFactory.build(params[0], location, std::move(name)));
+				}
 			}
 			_block_resources.emplace_back(std::make_unique<BlockResources>(id, std::move(name), params[0], glm::vec3(params[2], params[3], params[4])));
 			return (std::shared_ptr<IProgramResources>(nullptr));
