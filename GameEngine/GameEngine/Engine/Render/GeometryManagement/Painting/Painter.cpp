@@ -100,7 +100,6 @@ namespace AGE
 	{
 		// to be sure that this function is only called in render thread
 		AGE_ASSERT(GetThreadManager()->getCurrentThread() == (AGE::Thread*)GetRenderThread());
-
 		auto &types_buffer = _buffer.get_types();
 		if (types.size() != types_buffer.size()) {
 			return (false);

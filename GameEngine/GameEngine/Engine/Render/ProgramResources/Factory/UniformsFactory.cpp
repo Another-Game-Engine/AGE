@@ -3,6 +3,7 @@
 #include <Render/ProgramResources/Types/Uniform/Mat4.hh>
 #include <Render/ProgramResources/Types/Uniform/Vec1.hh>
 #include <Render/ProgramResources/Types/Uniform/Sampler/Sampler2D.hh>
+#include <Render/ProgramResources/Types/Uniform/Array/Mat4Array.hh>
 
 #define LAMBDA_PROTO [this](GLint id, std::string &&name)
 #define LAMBDA_PROTO_ARRAY [this](GLint id, size_t size, size_t stride, std::string &&name)
@@ -82,7 +83,7 @@ namespace AGE
 	UniformsFactory::create_type_array_t UniformsFactory::_create_mat4_array() const
 	{
 		return  std::make_pair(GL_FLOAT_MAT4, LAMBDA_PROTO_ARRAY{
-			return (nullptr);
+			return (std::make_shared<Mat4Array>(id, size, stride, std::move(name)));
 		});
 	}
 }
