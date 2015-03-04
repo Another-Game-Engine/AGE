@@ -40,7 +40,6 @@ namespace AGE
 	{
 		// to be sure that this function is only called in render thread
 		AGE_ASSERT(GetThreadManager()->getCurrentThread() == (AGE::Thread*)GetRenderThread());
-
 		if (!key) {
 			return (*this);
 		}
@@ -84,10 +83,8 @@ namespace AGE
 		_buffer.bind();
 		_buffer.update();
 		int index = 0;
-		for (auto &draw_element : drawList)
-		{
-			if (draw_element)
-			{
+		for (auto &draw_element : drawList) {
+			if (draw_element) {
 				auto &property = propertiesList[index];
 				property.update_properties(program);
 				program->update();
@@ -96,7 +93,6 @@ namespace AGE
 			++index;
 		}
 		_buffer.unbind();
-
 		return (*this);
 	}
 

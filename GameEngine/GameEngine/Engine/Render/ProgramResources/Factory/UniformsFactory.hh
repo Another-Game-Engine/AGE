@@ -15,7 +15,7 @@ namespace AGE
 	{
 	public:
 		typedef std::pair<GLenum, std::function<std::shared_ptr<IProgramResources>(GLuint id, std::string &&name)>> create_type_t;
-		typedef std::pair<GLenum, std::function<std::shared_ptr<IProgramResources>(GLenum mode, size_t size, size_t stride, GLint id, std::string &&name)>> create_type_array_t;
+		typedef std::pair<GLenum, std::function<std::shared_ptr<IProgramResources>(GLint id, size_t size, size_t stride, std::string &&name)>> create_type_array_t;
 	
 	public:
 		UniformsFactory();

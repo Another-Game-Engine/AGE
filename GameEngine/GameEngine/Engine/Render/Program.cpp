@@ -138,8 +138,7 @@ namespace AGE
 	{
 		for (auto &buffer : buffers.get_buffers()) {
 			auto resource = Program::get_resource<Attribute>(buffer->name());
-			if (resource)
-			{
+			if (resource) {
 				*resource = buffer;
 			}
 		}
@@ -148,21 +147,18 @@ namespace AGE
 
 	bool Program::coherent_attributes(std::vector<std::pair<GLenum, std::string>> const &coherent)
 	{
-
 		for (auto &resource : _program_resources) {
 			if (resource->type() == GL_PROGRAM_INPUT) {
 				bool attribFound = false;
-
 				for (auto &attrib : coherent) {
-					if (*static_cast<Attribute *>(resource.get()) == attrib)
-					{
+					if (*static_cast<Attribute *>(resource.get()) == attrib) {
 						attribFound = true;
 						break;
 					}
 				}
-
-				if (attribFound == false)
+				if (attribFound == false) {
 					return (false);
+				}
 			}
 		}
 		return (true);

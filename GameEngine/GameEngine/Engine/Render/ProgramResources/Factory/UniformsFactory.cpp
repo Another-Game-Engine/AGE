@@ -5,14 +5,14 @@
 #include <Render/ProgramResources/Types/Uniform/Sampler/Sampler2D.hh>
 
 #define LAMBDA_PROTO [this](GLint id, std::string &&name)
-#define LAMBDA_PROTO_ARRAY [this](GLenum mode, size_t size, size_t stride, GLint id, std::string &&name)
+#define LAMBDA_PROTO_ARRAY [this](GLint id, size_t size, size_t stride, std::string &&name)
 
 namespace AGE
 {
 
 	UniformsFactory::UniformsFactory() :
-		_blue_prints({ _create_vec4(), _create_mat4(), _create_float(), _create_sampler(),
-					_create_vec4_array(), _create_mat4_array(), _create_float_array() })
+		_blue_prints({ _create_vec4(), _create_mat4(), _create_float(), _create_sampler() }),
+		_blue_prints_array({ _create_vec4_array(), _create_mat4_array(), _create_float_array() })
 	{
 
 	}
@@ -29,7 +29,11 @@ namespace AGE
 	
 	std::shared_ptr<IProgramResources> UniformsFactory::build_array(GLenum mode, size_t size, size_t stride, GLint id, std::string &&name)
 	{
-
+		for (auto &blue_print_array : _blue_prints_array) {
+			if (mode == blue_print_array.first) {
+				return (blue_print_array.second(id, size, stride, std::move(name)));
+			}
+		}
 		return (std::shared_ptr<IProgramResources>(nullptr));
 	}
 
@@ -64,21 +68,21 @@ namespace AGE
 	UniformsFactory::create_type_array_t UniformsFactory::_create_float_array() const
 	{
 		return  std::make_pair(GL_FLOAT, LAMBDA_PROTO_ARRAY {
-			return (std::make_shared<IProgramResources>(nullptr));
+			return (nullptr);
 		});
 	}
 
 	UniformsFactory::create_type_array_t UniformsFactory::_create_vec4_array() const
 	{
 		return  std::make_pair(GL_FLOAT_VEC4, LAMBDA_PROTO_ARRAY{
-			return (std::make_shared<IProgramResources>(nullptr));
+			return (nullptr);
 		});
 	}
 
 	UniformsFactory::create_type_array_t UniformsFactory::_create_mat4_array() const
 	{
 		return  std::make_pair(GL_FLOAT_MAT4, LAMBDA_PROTO_ARRAY{
-			return (std::make_shared<IProgramResources>(nullptr));
+			return (nullptr);
 		});
 	}
 }
