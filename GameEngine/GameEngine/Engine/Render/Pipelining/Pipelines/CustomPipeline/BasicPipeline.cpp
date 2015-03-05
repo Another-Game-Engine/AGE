@@ -20,6 +20,12 @@
 #define VERTEX_SHADER_SKIN "../../Shaders/test_pipeline_1_skinning.vp", GL_VERTEX_SHADER
 #define FRAGMENT_SHADER_SKIN "../../Shaders/test_pipeline_1.fp", GL_FRAGMENT_SHADER
 
+//DIRTY
+#include <glm/gtc/type_ptr.hpp>
+
+std::vector<glm::mat4> DirtyBoneContainer::BONES = std::vector<glm::mat4>();
+std::mutex DirtyBoneContainer::BONES_MUTEX = std::mutex();
+
 namespace AGE
 {
 
@@ -53,7 +59,6 @@ namespace AGE
 		OpenGLTasks::clear_buffer();
 
 		//*_programs[RENDER]->get_resource<Mat4Array255>("bones") = &(infos.view);
-		//*_programs[RENDER]->get_resource<Vec1>("skinned") = 0.0f;
 
 		for (auto key : pipeline.keys) {
 			auto &curPainter = _painter_manager->get_painter(key.painter);
@@ -69,6 +74,19 @@ namespace AGE
 			assert(currentRenderIdx != -1);
 
 			_programs[currentRenderIdx]->use();
+			if (currentRenderIdx == RENDER_SKINNED)
+			{
+				*_programs[RENDER_SKINNED]->get_resource<Vec1>("skinned") = 1.0f;
+				auto bones = DirtyBoneContainer::getBones();
+				if (bones.size() > 0)
+				{
+					auto bonesId = _programs[RENDER_SKINNED]->get_resource<Mat4>("bones[0]")->id();
+					glUniformMatrix4fv(bonesId, bones.size(), GL_FALSE, (GLfloat *)(glm::value_ptr(bones[0])));
+				}
+			}
+
+			auto test = glGetUniformLocation(_programs[currentRenderIdx]->id(), "projection_matrix");
+				
 			*_programs[currentRenderIdx]->get_resource<Mat4>("projection_matrix") = infos.projection;
 			*_programs[currentRenderIdx]->get_resource<Mat4>("view_matrix") = infos.view;
 

@@ -5,8 +5,6 @@
 #include <Render/ProgramResources/Types/ProgramResourcesType.hh>
 #include <Render/Program.hh>
 #include <array>
-#include <iostream>
-#include <string>
 
 namespace AGE
 {
