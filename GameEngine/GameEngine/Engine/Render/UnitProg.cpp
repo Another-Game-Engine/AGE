@@ -29,8 +29,6 @@ UnitProg::~UnitProg()
 bool UnitProg::compileUnitProg(char const *fileName)
 {
 	std::ifstream file(fileName, std::ios_base::binary);
-	char toto[512];
-	_getcwd(toto, 512);
 	assert(!file.fail());
 	size_t fileSize;
 	file.seekg(0, file.end);
