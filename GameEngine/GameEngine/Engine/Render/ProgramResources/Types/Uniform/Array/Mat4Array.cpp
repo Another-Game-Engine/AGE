@@ -1,5 +1,4 @@
-#include <Render/ProgramResources//Types/Uniform/Array/Mat4Array.hh>
-#include <glm/gtc/type_ptr.hpp>
+#include <Render/ProgramResources/Types/Uniform/Array/Mat4Array.hh>
 #include <iostream>
 
 namespace AGE
@@ -10,7 +9,6 @@ namespace AGE
 		_stride(stride),
 		_value(size)
 	{
-
 	}
 
 	Mat4Array::Mat4Array(Mat4Array &&move) :
@@ -18,7 +16,6 @@ namespace AGE
 		_stride(move._stride),
 		_value(std::move(move._value))
 	{
-
 	}
 
 	Mat4Array::Mat4Array(Mat4Array const &copy) :
@@ -26,7 +23,6 @@ namespace AGE
 		_stride(copy._stride),
 		_value(copy._value)
 	{
-
 	}
 
 	Mat4Array &Mat4Array::operator=(std::vector<glm::mat4> const &m)
