@@ -274,9 +274,6 @@ namespace AGE
 
 			added.mesh = msg.submeshInstances[i];
 
-			//added.position = uo->position;
-			//added.orientation = uo->orientation;
-			//added.scale = uo->scale;
 			added.transformation = uo->transformation;
 
 			//				added.animation = msg.animation;
