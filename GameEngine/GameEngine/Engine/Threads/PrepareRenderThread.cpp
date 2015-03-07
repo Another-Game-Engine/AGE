@@ -272,30 +272,33 @@ namespace AGE
 		const PrepareKey &key
 		, const Vector<SubMeshInstance> &meshs)
 	{
-		auto scene = _getRenderScene(GetMainThread()->getActiveScene());
-		assert(scene != nullptr);
-		scene->updateGeometry(key, meshs);
+		assert(!key.invalid() || key.type != PrepareKey::Type::Mesh);
+		getQueue()->emplaceCommand<Commands::MainToPrepare::SetGeometry>(key, meshs);
 	}
 
 	PrepareKey PrepareRenderThread::addMesh()
 	{
 		auto scene = _getRenderScene(GetMainThread()->getActiveScene());
 		assert(scene != nullptr);
-		return scene->addMesh();
+		auto key = scene->addMesh();
+		getQueue()->emplaceCommand<Commands::MainToPrepare::CreateMesh>(key);
+		return key;
 	}
 
 	PrepareKey PrepareRenderThread::addPointLight()
 	{
 		auto scene = _getRenderScene(GetMainThread()->getActiveScene());
 		assert(scene != nullptr);
-		return scene->addPointLight();
+		auto key = scene->addPointLight();
+		getQueue()->emplaceCommand<Commands::MainToPrepare::CreatePointLight>(key);
+		return key;
 	}
 
-	void PrepareRenderThread::setPointLight(glm::vec3 const &color, glm::vec3 const &range, const PrepareKey &id)
+	void PrepareRenderThread::setPointLight(glm::vec3 const &color, glm::vec3 const &range, const PrepareKey &key)
 	{
 		auto scene = _getRenderScene(GetMainThread()->getActiveScene());
 		assert(scene != nullptr);
-		scene->setPointLight(color, range, id);
+		getQueue()->emplaceCommand<Commands::MainToPrepare::SetPointLight>(color, range, key);
 	}
 
 

@@ -49,7 +49,6 @@ namespace AGE
 		PrepareKey res;
 		res.type = PrepareKey::Type::Mesh;
 		res.id = _meshs.prepareAlloc();
-		_prepareThread->getQueue()->emplaceCommand<Commands::MainToPrepare::CreateMesh>(res);
 		return res;
 	}
 
@@ -67,7 +66,6 @@ namespace AGE
 		PrepareKey res;
 		res.type = PrepareKey::Type::PointLight;
 		res.id = _pointLights.prepareAlloc();
-		_prepareThread->getQueue()->emplaceCommand<Commands::MainToPrepare::CreatePointLight>(res);
 		return res;
 	}
 
@@ -91,12 +89,6 @@ namespace AGE
 		default:
 			break;
 		}
-		return (*this);
-	}
-
-	RenderScene &RenderScene::setPointLight(glm::vec3 const &color, glm::vec3 const &range, const PrepareKey &id)
-	{
-		_prepareThread->getQueue()->emplaceCommand<Commands::MainToPrepare::SetPointLight>(color, range, id);
 		return (*this);
 	}
 
@@ -156,15 +148,6 @@ namespace AGE
 	{
 		for (auto &e : ids)
 			setTransform(v, e);
-		return (*this);
-	}
-
-	RenderScene &RenderScene::updateGeometry(
-		const PrepareKey &key
-		, const AGE::Vector<SubMeshInstance> &meshs)
-	{
-		assert(!key.invalid() || key.type != PrepareKey::Type::Mesh);
-		_prepareThread->getQueue()->emplaceCommand<Commands::MainToPrepare::SetGeometry>(key, meshs);
 		return (*this);
 	}
 
