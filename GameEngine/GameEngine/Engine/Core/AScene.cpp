@@ -19,6 +19,7 @@ namespace AGE
 		, _engine(engine)
 		, _renderScene(nullptr)
 	{
+		ComponentRegistrar::getInstance().createComponentPool(this);
 	}
 
 	AScene::~AScene()

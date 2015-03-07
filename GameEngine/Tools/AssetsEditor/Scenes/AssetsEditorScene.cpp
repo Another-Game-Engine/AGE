@@ -75,11 +75,7 @@ namespace AGE
 		static float refreshCounter = 1.0f;
 		if (refreshCounter >= 1.0f)
 		{
-			auto currentDir = Directory::GetCurrentDirectory();
-			auto absPath = Path::AbsoluteName(currentDir, "../../Assets/Serialized");
-			auto dir = Directory();
-			AGE_ASSERT(dir.open("../../Assets/Serialized"));
-			auto it = dir.recursive_begin();
+			_cook.list("../../Assets/Serialized");
 
 			_cookedBulletFiles.clear();
 			_cookedBulletFullPath.clear();
@@ -89,10 +85,56 @@ namespace AGE
 			_cookedMeshsFullPath.clear();
 			_cookedFiles.clear();
 
+			_cookedBulletFiles.push_back("NONE");
+			_cookedBulletFullPath.push_back("NONE");
+			_cookedMaterialFiles.push_back("NONE");
+			_cookedMaterialFullPath.push_back("NONE");
+			_cookedMeshFiles.push_back("NONE");
+			_cookedMeshsFullPath.push_back("NONE");
+
+			_cook.update(
+				std::function<bool(AE::Folder*)>([](AE::Folder* folder) {
+				return true;
+			}),
+				std::function<bool(AE::Folder*)>([](AE::Folder* folder) {
+				return true;
+			}),
+				std::function<void(AE::RawFile*)>([&](AE::RawFile* file) {
+
+				_cookedFiles.push_back(AssetsEditorFileDescriptor(file->getPath().c_str(), Path::BaseName(file->getPath().c_str())));
+
+				auto extension = AGE::FileSystemHelpers::GetExtension(file->getPath());
+				if (extension == "sage")
+				{
+					_cookedMeshFiles.push_back(_cookedFiles.back().fileName.c_str());
+					_cookedMeshsFullPath.push_back(_cookedFiles.back().fullPath.c_str());
+				}
+				else if (extension == "mage")
+				{
+					_cookedMaterialFiles.push_back(_cookedFiles.back().fileName.c_str());
+					_cookedMaterialFullPath.push_back(_cookedFiles.back().fullPath.c_str());
+				}
+				else if (extension == "phage")
+				{
+					_cookedBulletFiles.push_back(_cookedFiles.back().fileName.c_str());
+					_cookedBulletFullPath.push_back(_cookedFiles.back().fullPath.c_str());
+				}
+			}));
+
+			// @Jojo ! Do not work !
+
+			/*auto currentDir = Directory::GetCurrentDirectory();
+			auto absPath = Path::AbsoluteName(currentDir, "../../Assets/Serialized");
+			auto dir = Directory();
+			auto succeed = dir.open("../../Assets/Serialized");
+			AGE_ASSERT(succeed);
+			auto it = dir.recursive_begin();
+
 			while (it != dir.recursive_end())
 			{
 				if (Directory::IsFile(it.get()))
 				{
+					std::cout << it.get() << std::endl;
 					_cookedFiles.push_back(AssetsEditorFileDescriptor(it.get(), Path::BaseName(it.get())));
 
 					auto extension = AGE::FileSystemHelpers::GetExtension(it.get());
@@ -106,7 +148,7 @@ namespace AGE
 						_cookedMaterialFiles.push_back(_cookedFiles.back().fileName.c_str());
 						_cookedMaterialFullPath.push_back(_cookedFiles.back().fullPath.c_str());
 					}
-					else if (extension == "bullet")
+					else if (extension == "phage")
 					{
 						_cookedBulletFiles.push_back(_cookedFiles.back().fileName.c_str());
 						_cookedBulletFullPath.push_back(_cookedFiles.back().fullPath.c_str());
@@ -115,7 +157,7 @@ namespace AGE
 				it++;
 			}
 
-			dir.close();
+			dir.close();*/
 			refreshCounter = 0;
 		}
 		refreshCounter += time;
@@ -239,29 +281,27 @@ namespace AGE
 
 							AGE::AssimpLoader::Load(cookingTask);
 
-							AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=](){
+							//AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=](){
 								AGE::MaterialLoader::load(cookingTask);
 								AGE::MaterialLoader::save(cookingTask);
 								AGE::ImageLoader::load(cookingTask);
 								AGE::ImageLoader::save(cookingTask);
-							});
+							//});
 							if ((cookingTask->dataSet->loadMesh || cookingTask->dataSet->loadAnimations) && cookingTask->dataSet->loadSkeleton)
 							{
 								AGE::SkeletonLoader::load(cookingTask);
-								AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=](){
-									AGE::AnimationsLoader::load(cookingTask);
-									AGE::AnimationsLoader::save(cookingTask);
-								});
-								AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=](){
-									AGE::MeshLoader::load(cookingTask);
-									AGE::MeshLoader::save(cookingTask);
-									AGE::BulletLoader::load(cookingTask);
-									AGE::BulletLoader::save(cookingTask);
-								});
+								AGE::AnimationsLoader::load(cookingTask);
+								AGE::MeshLoader::load(cookingTask);
+								AGE::BulletLoader::load(cookingTask);
+								AGE::BulletLoader::save(cookingTask);
+								AGE::MeshLoader::save(cookingTask);
+								AGE::AnimationsLoader::save(cookingTask);
 								AGE::SkeletonLoader::save(cookingTask);
+
 							}
 							else
 							{
+								assert(false);
 								AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=](){
 									AGE::AnimationsLoader::load(cookingTask);
 									AGE::AnimationsLoader::save(cookingTask);

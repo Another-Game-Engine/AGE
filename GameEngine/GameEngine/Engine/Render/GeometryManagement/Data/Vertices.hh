@@ -66,15 +66,20 @@ namespace AGE
 	bool Vertices::set_data(std::vector<type_t> const &data, std::string const &attribute)
 	{
 		std::vector<uint8_t> tmp(data.size() * sizeof(type_t));
+
 		std::memcpy(tmp.data(), data.data(), tmp.size());
 		auto index = 0;
-		for (auto &block_memory : _block_memories) {
-			if (block_memory.first == attribute) {
-				if (block_memory.second.lock()) {
-					*block_memory.second.lock() = tmp;
+		for (auto &block_memory : _block_memories)
+		{
+			if (block_memory.first == attribute)
+			{
+				if (block_memory.second.lock())
+				{
+					block_memory.second.lock()->setDatas(tmp);
 					return true;
 				}
-				else {
+				else
+				{
 					_data[index].second = tmp;
 					return true;
 				}

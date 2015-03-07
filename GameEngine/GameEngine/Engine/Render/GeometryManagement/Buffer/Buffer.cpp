@@ -54,15 +54,21 @@ namespace AGE
 
 	Buffer & Buffer::update()
 	{
-		if (_request_resize) {
+		if (_request_resize)
+		{
 			_buffer->bind();
 			_buffer->alloc(_size_alloc);
 			_request_resize = false;
+			_request_transfer = true;
+
 		}
-		if (_request_transfer) {
+		if (_request_transfer)
+		{
 			_buffer->bind();
-			for (auto &memory : _block_memories) {
-				if (!memory->is_update()) {
+			for (auto &memory : _block_memories)
+			{
+				if (!memory->is_up_to_date())
+				{
 					memory->update_buffer(*_buffer.get());
 				}
 			}
@@ -88,6 +94,10 @@ namespace AGE
 		auto offset = _size_alloc;
 		_block_memories.emplace_back(std::make_shared<BlockMemory>(*this, _block_memories.size(), offset, data));
 		_size_alloc += _block_memories.back()->size();
+		for (auto index = 0; index < _block_memories.size(); ++index)
+		{
+			_block_memories[index]->needUpdate();
+		}
 		return (_block_memories.back());
 	}
 
@@ -97,7 +107,8 @@ namespace AGE
 		_size_alloc -= iterator->get()->size();
 		_block_memories.erase(iterator);
 		auto offset = 0ull;
-		for (auto index = 0; index < _block_memories.size(); ++index) {
+		for (auto index = 0; index < _block_memories.size(); ++index)
+		{
 			_block_memories[index]->reset(index, offset);
 			offset += _block_memories[index]->size();
 		}

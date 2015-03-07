@@ -133,11 +133,13 @@ namespace AGE
 	{
 		std::vector<uint8_t> tmp(data.size() * sizeof(unsigned int));
 		std::memcpy(tmp.data(), data.data(), tmp.size());
-		if (_indices_block_memory.lock()) {
-			*_indices_block_memory.lock() = tmp;
+		if (_indices_block_memory.lock())
+		{
+			_indices_block_memory.lock()->setDatas(tmp);
 			return (*this);
 		}
-		if (tmp.size() != _indices_data.size()) {
+		if (tmp.size() != _indices_data.size())
+		{
 			return (*this);
 		}
 		_indices_data = tmp;
@@ -146,11 +148,13 @@ namespace AGE
 
 	Vertices & Vertices::draw(GLenum mode)
 	{
-		if (_indices_block_memory.lock()) {
+		if (_indices_block_memory.lock())
+		{
 			auto offset = _indices_block_memory.lock()->offset();
 			glDrawElementsBaseVertex(mode, GLsizei(_nbr_indices), GL_UNSIGNED_INT, (GLvoid *)offset, GLint(_offset));
 		}
-		else {
+		else
+		{
 			glDrawArrays(mode, _offset, _nbr_vertex);
 		}
 		return (*this);

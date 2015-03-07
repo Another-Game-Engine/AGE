@@ -34,12 +34,15 @@ namespace AGE
 		setInstance<AssetsManager>();
 		getInstance<AGE::AssetsManager>()->setAssetsDirectory("../../Assets/Serialized/");
 
-
-		addSystem<WE::AssetsAndComponentRelationsSystem>(0);
-		addSystem<WE::EntityManager>(1);
+		// Add entity used by editor (camera etc here)
 
 		auto camera = createEntity();
 		auto cam = camera.addComponent<CameraComponent>();
+		camera.getLink().setPosition(glm::vec3(0, 3, 5));
+		camera.getLink().setForward(glm::vec3(0, 0, 0));
+
+		addSystem<WE::AssetsAndComponentRelationsSystem>(0);
+		addSystem<WE::EntityManager>(1);
 
 		return true;
 	}

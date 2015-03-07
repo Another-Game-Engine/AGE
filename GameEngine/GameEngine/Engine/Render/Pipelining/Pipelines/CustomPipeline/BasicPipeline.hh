@@ -2,6 +2,33 @@
 
 #include <Render/Pipelining/Pipelines/ARenderingPipeline.hh>
 
+/// dirty dirty for test
+#include <glm/glm.hpp>
+#include <mutex>
+#include <vector>
+
+struct DirtyBoneContainer
+{
+	static std::vector<glm::mat4> BONES;
+	static std::mutex BONES_MUTEX;
+
+	static void setBones(const std::vector<glm::mat4> &bones)
+	{
+		std::lock_guard<std::mutex> lock(BONES_MUTEX);
+		BONES = bones;
+	}
+
+	static std::vector<glm::mat4> getBones()
+	{
+		std::lock_guard<std::mutex> lock(BONES_MUTEX);
+		return BONES;
+	}
+private:
+	DirtyBoneContainer();
+};
+
+
+
 namespace AGE
 {
 	class BasicPipeline : public ARenderingPipeline

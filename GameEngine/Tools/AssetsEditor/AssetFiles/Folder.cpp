@@ -56,7 +56,7 @@ namespace AGE
 			{
 				const auto& file = it->path();
 
-				if (!std::tr2::sys::is_directory(file) && AssetFileManager::IsValidFile(file))
+				if (!std::tr2::sys::is_directory(file) /*&& AssetFileManager::IsValidFile(file)*/)
 				{
 					fileCount++;
 					if (_files.find(file.relative_path().string()) == std::end(_files))

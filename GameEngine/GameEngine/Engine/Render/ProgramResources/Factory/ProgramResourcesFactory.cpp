@@ -17,7 +17,7 @@ std::make_pair(GL_UNIFORM, LAMBDA_PROTO																																						  \
 	glGetProgramResourceiv(_program.id(), GL_UNIFORM, id, nbr_prop, prop.data(), nbr_prop, nullptr, params.data());																			  \
 	if (params[1] == -1) {																																									  \
 																																															  \
-		return (_uniformsFactory.build(params[0], id, std::move(name)));																													  \
+		return (_uniformsFactory.build(params[0], glGetUniformLocation(_program.id(), name.c_str()), std::move(name)));																											  \
 	}																																														  \
 	_block_resources.emplace_back(std::make_unique<BlockResources>(id, std::move(name), params[0], glm::vec3(params[2], params[3], params[4])));											  \
 	return (std::shared_ptr<IProgramResources>(nullptr));																																	  \

@@ -17,9 +17,6 @@ namespace AGE
 	template <class Archive>
 	void serialize(Archive &ar, AnimationData &value)
 	{
-		ar(cereal::make_nvp("name", value.name));
-		ar(cereal::make_nvp("channels", value.channels));
-		ar(cereal::make_nvp("duration", value.duration));
-		ar(cereal::make_nvp("id", value.id));
+		ar(value.name, value.channels, value.duration, value.id);
 	}
 }
