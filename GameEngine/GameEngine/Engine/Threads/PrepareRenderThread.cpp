@@ -80,21 +80,6 @@ namespace AGE
 			_activeScene->_setPointLight(msg);
 		});
 
-		//registerCallback<Commands::MainToPrepare::SetOrientation>([this](Commands::MainToPrepare::SetOrientation &msg){
-		//	assert(this->_activeScene != nullptr);
-		//	_activeScene->_setOrientation(msg);
-		//});
-
-		//registerCallback<Commands::MainToPrepare::SetPosition>([this](Commands::MainToPrepare::SetPosition &msg){
-		//	assert(this->_activeScene != nullptr);
-		//	_activeScene->_setPosition(msg);
-		//});
-
-		//registerCallback<Commands::MainToPrepare::SetScale>([this](Commands::MainToPrepare::SetScale &msg){
-		//	assert(this->_activeScene != nullptr);
-		//	_activeScene->_setScale(msg);
-		//});
-
 		registerCallback<Commands::MainToPrepare::SetTransform>([this](Commands::MainToPrepare::SetTransform &msg){
 			assert(this->_activeScene != nullptr);
 			_activeScene->_setTransform(msg);
@@ -263,10 +248,11 @@ namespace AGE
 
 	void PrepareRenderThread::updateGeometry(
 		const PrepareKey &key
-		, const Vector<SubMeshInstance> &meshs)
+		, const Vector<SubMeshInstance> &meshs
+		, const AGE::Vector<MaterialInstance> &materials)
 	{
 		assert(!key.invalid() || key.type != PrepareKey::Type::Mesh);
-		getQueue()->emplaceCommand<Commands::MainToPrepare::SetGeometry>(key, meshs);
+		getQueue()->emplaceCommand<Commands::MainToPrepare::SetGeometry>(key, meshs, materials);
 	}
 
 	PrepareKey PrepareRenderThread::addMesh()

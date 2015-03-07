@@ -92,24 +92,6 @@ namespace AGE
 		return (*this);
 	}
 
-	//RenderScene &RenderScene::setPosition(const glm::vec3 &v, const PrepareKey &id)
-	//{
-	//	_prepareThread->getQueue()->emplaceCommand<Commands::MainToPrepare::SetPosition>(id, v);
-	//	return (*this);
-	//}
-
-	//RenderScene &RenderScene::setOrientation(const glm::quat &v, const PrepareKey &id)
-	//{
-	//	_prepareThread->getQueue()->emplaceCommand<Commands::MainToPrepare::SetOrientation>(id, v);
-	//	return (*this);
-	//}
-
-	//RenderScene &RenderScene::setScale(const glm::vec3 &v, const PrepareKey &id)
-	//{
-	//	_prepareThread->getQueue()->emplaceCommand<Commands::MainToPrepare::SetScale>(id, v);
-	//	return (*this);
-	//}
-
 	RenderScene &RenderScene::setTransform(const glm::mat4 &v, const PrepareKey &id)
 	{
 		_prepareThread->getQueue()->emplaceCommand<Commands::MainToPrepare::SetTransform>(id, v);
@@ -122,27 +104,6 @@ namespace AGE
 		_prepareThread->getQueue()->emplaceCommand<Commands::MainToPrepare::CameraInfos>(id, projection);
 		return (*this);
 	}
-
-	//RenderScene &RenderScene::setPosition(const glm::vec3 &v, const std::array<PrepareKey, MAX_CPT_NUMBER> &ids)
-	//{
-	//	for (auto &e : ids)
-	//		setPosition(v, e);
-	//	return (*this);
-	//}
-
-	//RenderScene &RenderScene::setOrientation(const glm::quat &v, const std::array<PrepareKey, MAX_CPT_NUMBER> &ids)
-	//{
-	//	for (auto &e : ids)
-	//		setOrientation(v, e);
-	//	return (*this);
-	//}
-
-	//RenderScene &RenderScene::setScale(const glm::vec3 &v, const std::array<PrepareKey, MAX_CPT_NUMBER> &ids)
-	//{
-	//	for (auto &e : ids)
-	//		setScale(v, e);
-	//	return (*this);
-	//}
 
 	RenderScene &RenderScene::setTransform(const glm::mat4 &v, const std::array<PrepareKey, MAX_CPT_NUMBER> &ids)
 	{
@@ -260,12 +221,27 @@ namespace AGE
 		Mesh *uo = &_meshs.get(msg.key.id);
 
 		for (auto &e : uo->drawableCollection)
+		{
 			removeDrawableObject(e);
+		}
 		uo->drawableCollection.clear();
+		
 		for (std::size_t i = 0; i < msg.submeshInstances.size(); ++i)
 		{
 			uint32_t id = _drawables.alloc();
 			Drawable &added = _drawables.get(id);
+			auto &submesh = msg.submeshInstances[i];
+			MaterialInstance *material = nullptr;
+			if (submesh.defaultMaterialIndex < msg.submeshInstances.size())
+			{
+				// correct material
+				material = &(msg.submaterialInstances[submesh.defaultMaterialIndex]);
+			}
+			else
+			{
+				// material not found, first one
+				material = &(msg.submaterialInstances[0]);
+			}
 
 			uo->drawableCollection.push_back(id);
 
@@ -284,6 +260,10 @@ namespace AGE
 
 			added.mesh.properties = _createPropertiesContainer();
 			added.transformationProperty = _addTransformationProperty(added.mesh.properties, glm::mat4(1));
+			for (auto &e : material->_properties)
+			{
+				_attachProperty(added.mesh.properties, e);
+			}
 		}
 	}
 

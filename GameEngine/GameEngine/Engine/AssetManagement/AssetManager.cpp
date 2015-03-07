@@ -81,7 +81,6 @@ namespace AGE
 			ar(*material_data_set.get());
 			material->name = material_data_set->name;
 			material->path = _filePath.getFullName();
-			material->datas.resize(material_data_set->collection.size());
 			for (auto &material_data : material_data_set->collection) 
 			{
 //#include <Render/Properties/Materials/Color.hh>

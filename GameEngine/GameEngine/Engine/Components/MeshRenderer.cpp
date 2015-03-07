@@ -90,7 +90,7 @@ namespace AGE
 		{
 			return;
 		}
-		AGE::GetPrepareThread()->updateGeometry(_key, _mesh->subMeshs);
+		AGE::GetPrepareThread()->updateGeometry(_key, _mesh->subMeshs, _material->datas);
 	}
 
 	void MeshRenderer::postUnserialization(AScene *scene)

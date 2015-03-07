@@ -14,26 +14,12 @@ namespace AGE
 				, transform(_transform)
 			{}
 
-			//SetPosition::SetPosition(const PrepareKey &_key, const glm::vec3 &_position)
-			//	: key(_key)
-			//	, position(_position)
-			//{}
-
-			//SetScale::SetScale(const PrepareKey &_key, const glm::vec3 &_scale)
-			//	: key(_key)
-			//	, scale(_scale)
-			//{}
-
-			//SetOrientation::SetOrientation(const PrepareKey &_key, const glm::quat &_orientation)
-			//	: key(_key)
-			//	, orientation(_orientation)
-			//{}
-
-
 			SetGeometry::SetGeometry(const PrepareKey &_key
-				, const AGE::Vector<SubMeshInstance> &_submeshInstances)
+				, const AGE::Vector<SubMeshInstance> &_submeshInstances
+				, const std::vector<MaterialInstance> &_submaterialInstances)
 				: key(_key)
 				, submeshInstances(_submeshInstances)
+				, submaterialInstances(_submaterialInstances)
 			{
 			}
 
