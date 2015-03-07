@@ -78,16 +78,11 @@ namespace AGE
 			material->name = material_data_set->name;
 			material->path = _filePath.getFullName();
 			material->datas.resize(material_data_set->collection.size());
-			auto material_set = std::make_shared<MaterialSetInstance>();
 			for (auto &material_data : material_data_set->collection) 
 			{
 //				auto futureSubMaterial = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<Tasks::Render::AddMaterial, MaterialInstance>(material_data);
 //				auto subMaterial = futureSubMaterial.get();
 //				material_set->datas.emplace_back(subMaterial);
-			}
-			{
-				std::lock_guard<std::mutex> lock(_mutex);
-				_materials[material->name] = material_set;
 			}
 			return AssetsLoadingResult(false);
 		});
