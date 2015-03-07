@@ -39,7 +39,7 @@ namespace AGE
 		registerCallback<Tasks::Render::CreateRenderContext>([this](Tasks::Render::CreateRenderContext &msg)
 		{
 			_context = msg.engine->setInstance<SdlContext, IRenderContext>();
-			if (!_context->init(0, 1920, 1000, "~AGE~ V0.00001 Demo"))
+			if (!_context->init(0, 1280, 720, "~AGE~ V0.00001 Demo"))
 			{
 				msg.setValue(false);
 				return;
