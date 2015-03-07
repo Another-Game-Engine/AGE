@@ -1,10 +1,13 @@
 #version 430
 
-in vec4 interpolated_color;
+uniform sampler2D diffuse_map;
+
+in vec2 vTexCoord;
 
 layout (location = 0) out vec4 fragcolor;
 
 void main(void)
 {
-	fragcolor = vec4(interpolated_color.rgb, 1.f) + vec4(0.1f, 0.1f, 0.1f, 0.0f);
+	vec4 texColor = texture(diffuse_map, vTexCoord);
+	fragcolor = texColor;
 }

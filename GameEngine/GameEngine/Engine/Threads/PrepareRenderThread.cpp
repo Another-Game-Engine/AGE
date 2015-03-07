@@ -80,21 +80,6 @@ namespace AGE
 			_activeScene->_setPointLight(msg);
 		});
 
-		//registerCallback<Commands::MainToPrepare::SetOrientation>([this](Commands::MainToPrepare::SetOrientation &msg){
-		//	assert(this->_activeScene != nullptr);
-		//	_activeScene->_setOrientation(msg);
-		//});
-
-		//registerCallback<Commands::MainToPrepare::SetPosition>([this](Commands::MainToPrepare::SetPosition &msg){
-		//	assert(this->_activeScene != nullptr);
-		//	_activeScene->_setPosition(msg);
-		//});
-
-		//registerCallback<Commands::MainToPrepare::SetScale>([this](Commands::MainToPrepare::SetScale &msg){
-		//	assert(this->_activeScene != nullptr);
-		//	_activeScene->_setScale(msg);
-		//});
-
 		registerCallback<Commands::MainToPrepare::SetTransform>([this](Commands::MainToPrepare::SetTransform &msg){
 			assert(this->_activeScene != nullptr);
 			_activeScene->_setTransform(msg);
@@ -111,37 +96,30 @@ namespace AGE
 			GetRenderThread()->stop();
 		});
 
-		registerCallback<Tasks::MainToPrepare::AddMaterial>([&](Tasks::MainToPrepare::AddMaterial &msg)
-		{
-			assert(this->_activeScene != nullptr);
-			_activeScene->_addMaterial(msg);
-			
-		});
-
-		registerCallback<Tasks::MainToPrepare::SetMeshMaterial>([&](Tasks::MainToPrepare::SetMeshMaterial& msg)
-		{
-			//			for (auto &subMesh : msg.mesh->subMeshs)
-			//			{
-			//				auto vertices = paintingManager->get_painter(subMesh.painter)->get_vertices(subMesh.vertices);
-			//				assert(vertices != nullptr);
-			//				if (subMesh.defaultMaterialIndex >= msg.material->datas.size())
-			//				{
-			//					for (auto &prop : msg.material->datas[0])
-			//					{
-			//						prop->set_program(pipelines[0]->get_programs());
-			//						vertices->add_property(prop);
-			//					}
-			//				}
-			//				else
-			//				{
-			//					for (auto &prop : msg.material->datas[subMesh.defaultMaterialIndex])
-			//					{
-			//						prop->set_program(pipelines[0]->get_programs());
-			//						vertices->add_property(prop);
-			//					}
-			//				}
-			//			}
-		});
+		//registerCallback<Tasks::MainToPrepare::SetMeshMaterial>([&](Tasks::MainToPrepare::SetMeshMaterial& msg)
+		//{
+		//	//			for (auto &subMesh : msg.mesh->subMeshs)
+		//	//			{
+		//	//				auto vertices = paintingManager->get_painter(subMesh.painter)->get_vertices(subMesh.vertices);
+		//	//				assert(vertices != nullptr);
+		//	//				if (subMesh.defaultMaterialIndex >= msg.material->datas.size())
+		//	//				{
+		//	//					for (auto &prop : msg.material->datas[0])
+		//	//					{
+		//	//						prop->set_program(pipelines[0]->get_programs());
+		//	//						vertices->add_property(prop);
+		//	//					}
+		//	//				}
+		//	//				else
+		//	//				{
+		//	//					for (auto &prop : msg.material->datas[subMesh.defaultMaterialIndex])
+		//	//					{
+		//	//						prop->set_program(pipelines[0]->get_programs());
+		//	//						vertices->add_property(prop);
+		//	//					}
+		//	//				}
+		//	//			}
+		//});
 
 		return true;
 	}
@@ -270,32 +248,36 @@ namespace AGE
 
 	void PrepareRenderThread::updateGeometry(
 		const PrepareKey &key
-		, const Vector<SubMeshInstance> &meshs)
+		, const Vector<SubMeshInstance> &meshs
+		, const AGE::Vector<MaterialInstance> &materials)
 	{
-		auto scene = _getRenderScene(GetMainThread()->getActiveScene());
-		assert(scene != nullptr);
-		scene->updateGeometry(key, meshs);
+		assert(!key.invalid() || key.type != PrepareKey::Type::Mesh);
+		getQueue()->emplaceCommand<Commands::MainToPrepare::SetGeometry>(key, meshs, materials);
 	}
 
 	PrepareKey PrepareRenderThread::addMesh()
 	{
 		auto scene = _getRenderScene(GetMainThread()->getActiveScene());
 		assert(scene != nullptr);
-		return scene->addMesh();
+		auto key = scene->addMesh();
+		getQueue()->emplaceCommand<Commands::MainToPrepare::CreateMesh>(key);
+		return key;
 	}
 
 	PrepareKey PrepareRenderThread::addPointLight()
 	{
 		auto scene = _getRenderScene(GetMainThread()->getActiveScene());
 		assert(scene != nullptr);
-		return scene->addPointLight();
+		auto key = scene->addPointLight();
+		getQueue()->emplaceCommand<Commands::MainToPrepare::CreatePointLight>(key);
+		return key;
 	}
 
-	void PrepareRenderThread::setPointLight(glm::vec3 const &color, glm::vec3 const &range, const PrepareKey &id)
+	void PrepareRenderThread::setPointLight(glm::vec3 const &color, glm::vec3 const &range, const PrepareKey &key)
 	{
 		auto scene = _getRenderScene(GetMainThread()->getActiveScene());
 		assert(scene != nullptr);
-		scene->setPointLight(color, range, id);
+		getQueue()->emplaceCommand<Commands::MainToPrepare::SetPointLight>(color, range, key);
 	}
 
 

@@ -11,7 +11,8 @@ namespace AGE
 	class Texture2D : public ATexture, public AFramebufferStorage
 	{
 	public:
-		Texture2D(GLint weight, GLint height, GLenum internal_format, bool is_mip_mapping);
+		Texture2D();
+		virtual bool init(GLint weight, GLint height, GLenum internal_format, bool is_mip_mapping);
 		Texture2D(Texture2D &&move);
 
 	public:
@@ -24,5 +25,6 @@ namespace AGE
 		virtual ITexture const &unbind() const override final;
 		virtual ITexture const &parameter(GLenum mode, GLint param) const override final;
 		virtual IFramebufferStorage const &attachment(Framebuffer const &framebuffer, GLenum attach) const override final;
+		virtual void generateMipmaps() const override final;
 	};
 }

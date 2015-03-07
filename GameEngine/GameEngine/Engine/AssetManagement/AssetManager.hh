@@ -119,7 +119,7 @@ static std::pair<std::pair<GLenum, std::string>, std::function<void(Vertices &ve
 		std::shared_ptr<MaterialSetInstance> getMaterial(const OldFile &filePath);
 		std::shared_ptr<MeshInstance> loadMesh(const OldFile &filePath);
 		std::shared_ptr<MeshInstance> getMesh(const OldFile &filePath);
-		bool loadTexture(const OldFile &filepath, const std::string &loadingChannel, std::function<void(std::shared_ptr<ITexture> &texture)> &callback);
+		std::shared_ptr<ITexture> loadTexture(const OldFile &filepath, const std::string &loadingChannel);
 		bool loadMesh(const OldFile &filePath, const std::vector<MeshInfos> &loadOrder, const std::string &loadingChannel = "");
 		void setAssetsDirectory(const std::string &path) { _assetsDirectory = path; }
 		void updateLoadingChannel(const std::string &channelName, std::size_t &total, std::size_t &to_load, std::string &error);

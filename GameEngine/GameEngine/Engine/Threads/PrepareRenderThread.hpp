@@ -23,10 +23,11 @@ namespace AGE
 		PrepareKey addCamera();
 		void updateGeometry(
 			const PrepareKey &key
-			, const std::vector<SubMeshInstance> &meshs);
+			, const std::vector<SubMeshInstance> &meshs
+			, const std::vector<MaterialInstance> &materials);
 		PrepareKey addMesh();
 		PrepareKey addPointLight();
-		void setPointLight(glm::vec3 const &color, glm::vec3 const &range, const PrepareKey &id);
+		void setPointLight(glm::vec3 const &color, glm::vec3 const &range, const PrepareKey &key);
 	private:
 		PrepareRenderThread();
 		virtual ~PrepareRenderThread();

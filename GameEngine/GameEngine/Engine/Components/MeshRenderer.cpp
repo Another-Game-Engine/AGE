@@ -70,7 +70,7 @@ namespace AGE
 		_mesh = mesh;
 		_material = material;
 		_updateGeometry();
-		AGE::GetPrepareThread()->getQueue()->emplaceCommand<Tasks::MainToPrepare::SetMeshMaterial>(_material, _mesh);
+		//AGE::GetPrepareThread()->getQueue()->emplaceCommand<Tasks::MainToPrepare::SetMeshMaterial>(_material, _mesh);
 	}
 
 	std::shared_ptr<AGE::MeshInstance> MeshRenderer::getMesh()
@@ -90,7 +90,7 @@ namespace AGE
 		{
 			return;
 		}
-		AGE::GetPrepareThread()->updateGeometry(_key, _mesh->subMeshs);
+		AGE::GetPrepareThread()->updateGeometry(_key, _mesh->subMeshs, _material->datas);
 	}
 
 	void MeshRenderer::postUnserialization(AScene *scene)

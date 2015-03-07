@@ -4,11 +4,26 @@
 
 namespace AGE
 {
-	Texture2D::Texture2D(GLint width, GLint height, GLenum internal_format, bool is_mip_mapping) :
-		ATexture(width, height, internal_format, is_mip_mapping ? (uint8_t(glm::floor(glm::log2(glm::max(float(width), float(height))) + 1))) : 1)
+	Texture2D::Texture2D() :
+		ATexture()
 	{
+	}
+
+	bool Texture2D::init(GLint width, GLint height, GLenum internal_format, bool is_mip_mapping)
+	{
+		auto success = ATexture::init(
+			width
+			, height
+			, internal_format
+			, is_mip_mapping ? (uint8_t(glm::floor(glm::log2(glm::max(float(width), float(height))) + 1))) : 1);
+		if (success == false)
+		{
+			return false;
+		}
 		glBindTexture(GL_TEXTURE_2D, _id);
 		glTexStorage2D(GL_TEXTURE_2D, _nbr_mip_map, _internal_format, _width, _height);
+
+		return true;
 	}
 
 	Texture2D::Texture2D(Texture2D &&move) :
@@ -58,4 +73,10 @@ namespace AGE
 		glFramebufferTexture2D(framebuffer.type(), attach, GL_TEXTURE_2D, _id, 0);
 		return (*this);
 	}
+
+	void Texture2D::generateMipmaps() const
+	{
+		glGenerateMipmap(GL_TEXTURE_2D);
+	}
+
 }

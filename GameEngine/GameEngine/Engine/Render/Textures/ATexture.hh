@@ -7,9 +7,9 @@ namespace AGE
 	class ATexture : public ITexture
 	{
 	protected:
-		ATexture(GLint width, GLint height, GLenum internal_format, GLint nbr_mip_map);
+		ATexture();
 		ATexture(ATexture &&move);
-
+		virtual bool init(GLint width, GLint height, GLenum internal_format, GLint nbr_mip_map);
 	public:
 		virtual ~ATexture();
 

@@ -2,14 +2,28 @@
 
 namespace AGE
 {
-	ATexture::ATexture(GLint width, GLint height, GLenum internal_format, GLint nbr_mip_map) :
-		_id(0),
-		_width(width),
-		_height(height),
-		_internal_format(internal_format),
-		_nbr_mip_map(nbr_mip_map)
+	ATexture::ATexture() :
+		_id(-1),
+		_width(0),
+		_height(0),
+		_internal_format(0),
+		_nbr_mip_map(0)
 	{
+
+	}
+
+	bool ATexture::init(GLint width, GLint height, GLenum internal_format, GLint nbr_mip_map)
+	{
+		_width = width;
+		_height = height;
+		_internal_format = internal_format;
+		_nbr_mip_map = nbr_mip_map;
 		glGenTextures(1, &_id);
+		if (_id < 0)
+		{
+			return false;
+		}
+		return true;
 	}
 
 	ATexture::ATexture(ATexture &&move) :
