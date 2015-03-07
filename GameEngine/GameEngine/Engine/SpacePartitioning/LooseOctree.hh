@@ -3,7 +3,7 @@
 #include <SpacePartitioning/LooseOctreeNode.hh>
 #include <Utils/MemoryPool.hpp>
 
-#define DEBUG_OCTREE 1
+#define DEBUG_OCTREE 0
 
 namespace AGE
 {
