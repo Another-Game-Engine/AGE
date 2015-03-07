@@ -25,5 +25,6 @@ namespace AGE
 		virtual ITexture const &unbind() const override final;
 		virtual ITexture const &parameter(GLenum mode, GLint param) const override final;
 		virtual IFramebufferStorage const &attachment(Framebuffer const &framebuffer, GLenum attach) const override final;
+		virtual void generateMipmaps() const override final;
 	};
 }

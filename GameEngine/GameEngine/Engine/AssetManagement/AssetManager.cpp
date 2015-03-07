@@ -200,11 +200,12 @@ namespace AGE
 			{
 				return AssetsLoadingResult(false, "Texture loading error");
 			}
+			texture->set(data->data, 0, color, GL_UNSIGNED_BYTE);
 			texture->parameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 			texture->parameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 			texture->parameter(GL_TEXTURE_WRAP_T, GL_REPEAT);
 			texture->parameter(GL_TEXTURE_WRAP_S, GL_REPEAT);
-			texture->set(data->data, 0, color, GL_UNSIGNED_BYTE);
+			texture->generateMipmaps();
 			return AssetsLoadingResult(true);
 		});
 		pushNewAsset(loadingChannel, _filePath.getFullName(), future);

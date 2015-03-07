@@ -22,6 +22,7 @@ namespace AGE
 		}
 		glBindTexture(GL_TEXTURE_2D, _id);
 		glTexStorage2D(GL_TEXTURE_2D, _nbr_mip_map, _internal_format, _width, _height);
+
 		return true;
 	}
 
@@ -72,4 +73,10 @@ namespace AGE
 		glFramebufferTexture2D(framebuffer.type(), attach, GL_TEXTURE_2D, _id, 0);
 		return (*this);
 	}
+
+	void Texture2D::generateMipmaps() const
+	{
+		glGenerateMipmap(GL_TEXTURE_2D);
+	}
+
 }
