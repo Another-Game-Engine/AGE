@@ -3,6 +3,8 @@
 #include <SpacePartitioning/LooseOctreeNode.hh>
 #include <Utils/MemoryPool.hpp>
 
+#define DEBUG_OCTREE 1
+
 namespace AGE
 {
 	struct PointLight;

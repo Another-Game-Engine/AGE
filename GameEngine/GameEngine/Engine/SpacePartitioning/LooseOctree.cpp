@@ -22,11 +22,17 @@ namespace AGE
 	void LooseOctree::addElement(CullableShape<AABoundingBox> *toAdd)
 	{
 		_root = LooseOctreeNode::addElement(_root, *this, toAdd);
+#if DEBUG_OCTREE
+		_nodesPool.get(_root).checkOctreeIntegrity(*this, _root);
+#endif
 	}
 
 	void LooseOctree::removeElement(CullableShape<AABoundingBox> *toRm)
 	{
 		LooseOctreeNode::removeElementFromNode(toRm->currentNode, *this, toRm);
+#if DEBUG_OCTREE
+		_nodesPool.get(_root).checkOctreeIntegrity(*this, _root);
+#endif
 	}
 
 	void LooseOctree::moveElement(CullableShape<AABoundingBox> *toMv)
@@ -35,11 +41,17 @@ namespace AGE
 
 		if (newRoot != UNDEFINED_IDX)
 			_root = newRoot;
+#if DEBUG_OCTREE
+		_nodesPool.get(_root).checkOctreeIntegrity(*this, _root);
+#endif
 	}
 
 	void LooseOctree::getElementsCollide(CullableShape<Frustum> *toTest, AGE::Vector<Cullable *> &toFill)
 	{
 		_nodesPool.get(_root).getElementsCollide(*this, toTest, toFill);
+#if DEBUG_OCTREE
+		_nodesPool.get(_root).checkOctreeIntegrity(*this, _root);
+#endif
 	}
 
 	void LooseOctree::cleanOctree()
@@ -51,6 +63,9 @@ namespace AGE
 			_root = newRoot;
 			newRoot = LooseOctreeNode::tryChangeRoot(_root, *this);
 		}
+#if DEBUG_OCTREE
+		_nodesPool.get(_root).checkOctreeIntegrity(*this, _root);
+#endif
 	}
 
 	MemoryPool<LooseOctreeNode> &LooseOctree::getNodePool()
