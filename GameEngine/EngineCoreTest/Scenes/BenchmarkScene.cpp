@@ -284,7 +284,7 @@ namespace AGE
 				auto &link = GLOBAL_FLOOR.getLink();
 				link.setPosition(glm::vec3(0, -0.532, 0));
 				link.setScale(glm::vec3(100, 1, 100));
-				//auto mesh = GLOBAL_FLOOR.addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("cube/cube.sage"), getInstance<AGE::AssetsManager>()->getMaterial("cube/cube.mage"));
+				auto mesh = GLOBAL_FLOOR.addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("cube/cube.sage"), getInstance<AGE::AssetsManager>()->getMaterial("cube/cube.mage"));
 				{
 					GLOBAL_SPONZA = createEntity();
 					auto& _l = GLOBAL_SPONZA.getLink();
