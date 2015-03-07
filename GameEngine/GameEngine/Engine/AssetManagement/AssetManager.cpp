@@ -83,10 +83,6 @@ namespace AGE
 			material->path = _filePath.getFullName();
 			for (auto &material_data : material_data_set->collection) 
 			{
-//#include <Render/Properties/Materials/Color.hh>
-//#include <Render/Properties/Materials/Diffuse.hh>
-//#include <Render/Properties/Materials/MapColor.hh>
-//#include <Render/Properties/Materials/Specular.hh>
 				material->datas.push_back(MaterialInstance());
 				auto &materialSubset = material->datas.back();
 
@@ -110,6 +106,31 @@ namespace AGE
 				materialSubset._properties.push_back(specular);
 				specular->set(material_data.specular);
 
+				auto diffuseTex = std::make_shared<MapColor>("diffuse");
+				materialSubset._properties.push_back(diffuseTex);
+				auto diffuseTexPtr = std::static_pointer_cast<Texture2D>(loadTexture(material_data.diffuseTexPath, loadingChannel));
+				diffuseTex->set(diffuseTexPtr);
+
+				auto ambientTex = std::make_shared<MapColor>("ambient");
+				materialSubset._properties.push_back(ambientTex);
+				auto ambientTexPtr = std::static_pointer_cast<Texture2D>(loadTexture(material_data.ambientTexPath, loadingChannel));
+				ambientTex->set(ambientTexPtr);
+
+				auto emissiveTex = std::make_shared<MapColor>("emissive");
+				materialSubset._properties.push_back(emissiveTex);
+				auto emissiveTexPtr = std::static_pointer_cast<Texture2D>(loadTexture(material_data.emissiveTexPath, loadingChannel));
+				emissiveTex->set(emissiveTexPtr);
+
+				auto reflectiveTex = std::make_shared<MapColor>("reflective");
+				materialSubset._properties.push_back(reflectiveTex);
+				auto reflectiveTexPtr = std::static_pointer_cast<Texture2D>(loadTexture(material_data.reflectiveTexPath, loadingChannel));
+				reflectiveTex->set(reflectiveTexPtr);
+
+				auto specularTex = std::make_shared<MapColor>("specular");
+				materialSubset._properties.push_back(specularTex);
+				auto specularTexPtr = std::static_pointer_cast<Texture2D>(loadTexture(material_data.specularTexPath, loadingChannel));
+				specularTex->set(specularTexPtr);
+
 //				auto futureSubMaterial = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<Tasks::Render::AddMaterial, MaterialInstance>(material_data);
 //				auto subMaterial = futureSubMaterial.get();
 //				material_set->datas.emplace_back(subMaterial);
@@ -120,24 +141,37 @@ namespace AGE
 		return (true);
 	}
 
-	bool AssetsManager::loadTexture(const OldFile &_filePath, const std::string &loadingChannel, std::function<void(std::shared_ptr<ITexture> &texture)> &callback)
+	std::shared_ptr<ITexture> AssetsManager::loadTexture(
+		const OldFile &_filePath
+		, const std::string &loadingChannel)
 	{
-		std::shared_ptr<TextureData> data = std::make_shared<TextureData>();
 		OldFile filePath(_assetsDirectory + _filePath.getFullName());
+
+		{
+			std::lock_guard<std::mutex> lock(_mutex);
+			if (_textures.find(filePath.getFullName()) != std::end(_textures))
+			{
+				return _textures[filePath.getFullName()];
+			}
+		}
+
+		if (!filePath.exists())
+		{
+			return nullptr;
+		}
+
+		auto texture = std::make_shared<Texture2D>();
+
+		{
+			std::lock_guard<std::mutex> lock(_mutex);
+			std::shared_ptr<ITexture> textureInterface = std::static_pointer_cast<ITexture>(texture);
+			_textures.insert(std::make_pair(filePath.getFullName(), textureInterface));
+		}
 
 		auto future = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]()
 		{
-			{
-				std::lock_guard<std::mutex> lock(_mutex);
-				if (_textures.find(filePath.getFullName()) != std::end(_textures)) 
-				{
-					return AssetsLoadingResult(true);
-				}
-			}
-			if (!filePath.exists()) 
-			{
-				return AssetsLoadingResult(false);
-			}
+			std::shared_ptr<TextureData> data = std::make_shared<TextureData>();
+
 			std::ifstream ifs(filePath.getFullName(), std::ios::binary);
 			cereal::PortableBinaryInputArchive ar(ifs);
 			ar(*data.get());
@@ -161,19 +195,20 @@ namespace AGE
 				return AssetsLoadingResult(true, "Image format not found.\n");
 				break;
 			}
-			auto texture = std::make_shared<Texture2D>(data->width, data->height, ct, true);
+			auto success = texture->init(data->width, data->height, ct, true);
+			if (success == false)
+			{
+				return AssetsLoadingResult(false, "Texture loading error");
+			}
 			texture->parameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 			texture->parameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 			texture->parameter(GL_TEXTURE_WRAP_T, GL_REPEAT);
 			texture->parameter(GL_TEXTURE_WRAP_S, GL_REPEAT);
 			texture->set(data->data, 0, color, GL_UNSIGNED_BYTE);
-			std::shared_ptr<ITexture> textureInterface = std::static_pointer_cast<ITexture>(texture);
-			callback(textureInterface);
-			_textures.insert(std::make_pair(filePath.getFullName(), textureInterface));
 			return AssetsLoadingResult(true);
 		});
 		pushNewAsset(loadingChannel, _filePath.getFullName(), future);
-		return (true);
+		return texture;
 	}
 
 	bool AssetsManager::loadAnimation(const OldFile &_filePath, const std::string &loadingChannel)

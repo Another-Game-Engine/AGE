@@ -11,10 +11,11 @@ uniform mat4 projection_matrix;
 uniform mat4 view_matrix;
 uniform mat4 model_matrix;
 uniform vec4 diffusecolor;
+uniform sampler2D diffuse_map;
 
 void main(void)
 {
 	mat4 model_view = view_matrix * model_matrix;
-	interpolated_color = diffusecolor;
+	interpolated_color = texture(diffuse_map, texCoord);
 	gl_Position = vec4(projection_matrix * model_view * position);
 }

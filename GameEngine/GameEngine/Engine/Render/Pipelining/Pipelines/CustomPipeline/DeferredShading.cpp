@@ -11,6 +11,7 @@
 #include <SpacePartitioning/Ouptut/RenderPipeline.hh>
 #include <SpacePartitioning/Ouptut/RenderPainter.hh>
 #include <SpacePartitioning/Ouptut/RenderCamera.hh>
+#include <Utils/Debug.hpp>
 
 #define DEFERRED_SHADING_MERGING_VERTEX "../../Shaders/deferred_shading/deferred_shading_merge.vp"
 #define DEFERRED_SHADING_MERGING_FRAG "../../Shaders/deferred_shading/deferred_shading_merge.fp"
@@ -44,10 +45,29 @@ namespace AGE
 		});
 		_rendering_list[MERGING] = std::make_shared<RenderingPass>([&](FUNCTION_ARGS){
 		});
-		std::static_pointer_cast<RenderingPass>(_rendering_list[BUFFERING])->push_storage_output(GL_COLOR_ATTACHMENT0, std::make_shared<Texture2D>(Texture2D(screen_size.x, screen_size.y, GL_RGBA8, true)));
-		std::static_pointer_cast<RenderingPass>(_rendering_list[BUFFERING])->push_storage_output(GL_COLOR_ATTACHMENT1, std::make_shared<Texture2D>(Texture2D(screen_size.x, screen_size.y, GL_RGBA8, true)));
-		std::static_pointer_cast<RenderingPass>(_rendering_list[BUFFERING])->push_storage_output(GL_COLOR_ATTACHMENT2, std::make_shared<Texture2D>(Texture2D(screen_size.x, screen_size.y, GL_RGBA8, true)));
-		std::static_pointer_cast<RenderingPass>(_rendering_list[BUFFERING])->push_storage_output(GL_DEPTH_ATTACHMENT, std::make_shared<Texture2D>(Texture2D(screen_size.x, screen_size.y, GL_RGBA8, true)));
+
+		bool textureError = false;
+		std::shared_ptr<Texture2D> texture = nullptr;
+		
+		texture = std::make_shared<Texture2D>();
+		textureError = texture->init(screen_size.x, screen_size.y, GL_RGBA8, true);
+		AGE_ASSERT(textureError != false && "Texture generation error.");
+		std::static_pointer_cast<RenderingPass>(_rendering_list[BUFFERING])->push_storage_output(GL_COLOR_ATTACHMENT0, texture);
+
+		texture = std::make_shared<Texture2D>();
+		textureError = texture->init(screen_size.x, screen_size.y, GL_RGBA8, true);
+		AGE_ASSERT(textureError != false && "Texture generation error.");
+		std::static_pointer_cast<RenderingPass>(_rendering_list[BUFFERING])->push_storage_output(GL_COLOR_ATTACHMENT1, texture);
+
+		texture = std::make_shared<Texture2D>();
+		textureError = texture->init(screen_size.x, screen_size.y, GL_RGBA8, true);
+		AGE_ASSERT(textureError != false && "Texture generation error.");
+		std::static_pointer_cast<RenderingPass>(_rendering_list[BUFFERING])->push_storage_output(GL_COLOR_ATTACHMENT2, texture);
+
+		texture = std::make_shared<Texture2D>();
+		textureError = texture->init(screen_size.x, screen_size.y, GL_RGBA8, true);
+		AGE_ASSERT(textureError != false && "Texture generation error.");
+		std::static_pointer_cast<RenderingPass>(_rendering_list[BUFFERING])->push_storage_output(GL_DEPTH_ATTACHMENT, texture);
 	}
 
 	DeferredShading::DeferredShading(DeferredShading &&move) :
