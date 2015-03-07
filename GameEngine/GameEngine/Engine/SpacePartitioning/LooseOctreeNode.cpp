@@ -288,7 +288,7 @@ namespace AGE
 			LooseOctreeNode *current = &manager.getNodePool().get(currentIdx);
 
 			--current->_uniqueSubElements;
-			if (current->_uniqueSubElements == 0)
+			if (current->_uniqueSubElements == 0 && current->_father != UNDEFINED_IDX)
 				toCleanIdx = currentIdx;
 		}
 		if (toCleanIdx != UNDEFINED_IDX)
@@ -336,11 +336,9 @@ namespace AGE
 		// remove the element from the node
 		thisPtr->removeElementFromList(manager, toMv);
 
-		uint32_t toCleanIdx = (thisPtr->_uniqueSubElements == 0) ? thisIdx : UNDEFINED_IDX;
-
 		uint32_t prevNodeIdx = thisIdx;
-
 		uint32_t currentNodeIdx = thisPtr->_father;
+		uint32_t toCleanIdx = (thisPtr->_uniqueSubElements == 0 && currentNodeIdx != UNDEFINED_IDX) ? thisIdx : UNDEFINED_IDX;
 
 		while (currentNodeIdx != UNDEFINED_IDX)
 		{
@@ -441,7 +439,7 @@ namespace AGE
 		toRm->currentElementInNode = UNDEFINED_IDX;
 	}
 
-	void LooseOctreeNode::checkOctreeIntegrity(LooseOctree &manager) const
+	void LooseOctreeNode::checkOctreeIntegrity(LooseOctree &manager, uint32_t thisIdx) const
 	{
 		assert(_uniqueSubElements != 0 || _father == UNDEFINED_IDX);
 		if (!isLeaf())
@@ -449,8 +447,9 @@ namespace AGE
 			for (uint32_t i = 0; i < 8; ++i)
 			{
 				assert(_sons[i] != UNDEFINED_IDX);
+				assert(_sons[i] != thisIdx);
 				if (_sons[i] != LEAF_NODE_IDX)
-					manager.getNodePool().get(_sons[i]).checkOctreeIntegrity(manager);
+					manager.getNodePool().get(_sons[i]).checkOctreeIntegrity(manager, _sons[i]);
 			}
 		}
 	}
