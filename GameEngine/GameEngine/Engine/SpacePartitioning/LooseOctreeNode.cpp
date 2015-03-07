@@ -336,11 +336,9 @@ namespace AGE
 		// remove the element from the node
 		thisPtr->removeElementFromList(manager, toMv);
 
-		uint32_t toCleanIdx = (thisPtr->_uniqueSubElements == 0) ? thisIdx : UNDEFINED_IDX;
-
 		uint32_t prevNodeIdx = thisIdx;
-
 		uint32_t currentNodeIdx = thisPtr->_father;
+		uint32_t toCleanIdx = (thisPtr->_uniqueSubElements == 0 && currentNodeIdx != UNDEFINED_IDX) ? thisIdx : UNDEFINED_IDX;
 
 		while (currentNodeIdx != UNDEFINED_IDX)
 		{
