@@ -284,11 +284,13 @@ namespace AGE
 
 			added.mesh.properties = _createPropertiesContainer();
 			added.transformationProperty = _addTransformationProperty(added.mesh.properties, glm::mat4(1));
-
-			//AGE::GetRenderThread()->createMeshProperty(added.mesh.painter, added.mesh.properties, added.transformationProperty);
 		}
 	}
 
+	void RenderScene::_addMaterial(AGE::Tasks::MainToPrepare::AddMaterial &msg)
+	{
+
+	}
 
 	void RenderScene::_setTransform(AGE::Commands::MainToPrepare::SetTransform &msg)
 	{
@@ -332,117 +334,6 @@ namespace AGE
 		default:
 			break;
 		}
-	}
-
-	//void RenderScene::_setPosition(AGE::Commands::MainToPrepare::SetPosition &msg)
-	//{
-	//	Camera *co = nullptr;
-	//	Mesh *uo = nullptr;
-	//	PointLight *l = nullptr;
-
-	//	switch (msg.key.type)
-	//	{
-
-	//	case(PrepareKey::Type::Camera) :
-	//		co = &_cameras.get(msg.key.id);
-	//		co->position = msg.position;
-	//		co->hasMoved = true;
-	//		break;
-	//	case(PrepareKey::Type::Mesh) :
-	//		uo = &_meshs.get(msg.key.id);
-	//		uo->position = msg.position;
-	//		for (uint32_t e : uo->drawableCollection)
-	//		{
-	//			_drawables.get(e).position = uo->position;
-	//			//assert(_drawables.get(e).currentNode != UNDEFINED_IDX);
-	//			if (_drawables.get(e).hasMoved == false)
-	//			{
-	//				_drawables.get(e).hasMoved = true;
-	//				_drawables.get(e).moveBufferIdx = (size_t)_drawablesToMove.size();
-	//				_drawablesToMove.push_back(e);
-	//			}
-	//		}
-	//		break;
-	//	case(PrepareKey::Type::PointLight) :
-	//		l = &_pointLights.get(msg.key.id);
-	//		l->position = msg.position;
-	//		if (l->hasMoved == false)
-	//		{
-	//			l->hasMoved = true;
-	//			l->moveBufferIdx = _pointLightsToMove.size();
-	//			_pointLightsToMove.push_back(msg.key.id);
-	//		}
-	//		break;
-	//	default:
-	//		break;
-	//	}
-	//}
-
-	//void RenderScene::_setScale(AGE::Commands::MainToPrepare::SetScale &msg)
-	//{
-	//	Mesh *uo = nullptr;
-	//	Camera *co = nullptr;
-	//	switch (msg.key.type)
-	//	{
-	//	case(PrepareKey::Type::Camera) :
-	//		co = &_cameras.get(msg.key.id);
-	//		co->scale = msg.scale;
-	//		co->hasMoved = true;
-	//		break;
-	//	case(PrepareKey::Type::Mesh) :
-	//		uo = &_meshs.get(msg.key.id);
-	//		uo->scale = msg.scale;
-	//		for (auto &e : uo->drawableCollection)
-	//		{
-	//			_drawables.get(e).scale = uo->scale;
-	//			//assert(_drawables.get(e).currentNode != UNDEFINED_IDX);
-	//			if (_drawables.get(e).hasMoved == false)
-	//			{
-	//				_drawables.get(e).hasMoved = true;
-	//				_drawables.get(e).moveBufferIdx = _drawablesToMove.size();
-	//				_drawablesToMove.push_back(e);
-	//			}
-	//		}
-	//		break;
-	//	default:
-	//		break;
-	//	}
-	//}
-
-	//void RenderScene::_setOrientation(AGE::Commands::MainToPrepare::SetOrientation &msg)
-	//{
-	//	Mesh *uo = nullptr;
-	//	Camera *co = nullptr;
-	//	switch (msg.key.type)
-	//	{
-	//	case(PrepareKey::Type::Camera) :
-	//		co = &_cameras.get(msg.key.id);
-	//		co->orientation = msg.orientation;
-	//		co->hasMoved = true;
-	//		break;
-	//	case(PrepareKey::Type::Mesh) :
-	//		uo = &_meshs.get(msg.key.id);
-	//		uo->orientation = msg.orientation;
-	//		for (auto &e : uo->drawableCollection)
-	//		{
-	//			_drawables.get(e).orientation = uo->orientation;
-	//			//assert(_drawables.get(e).currentNode != UNDEFINED_IDX);
-	//			if (_drawables.get(e).hasMoved == false)
-	//			{
-	//				_drawables.get(e).hasMoved = true;
-	//				_drawables.get(e).moveBufferIdx = _drawablesToMove.size();
-	//				_drawablesToMove.push_back(e);
-	//			}
-	//		}
-	//		break;
-	//	default:
-	//		break;
-	//	}
-	//}
-
-	void RenderScene::_addMaterial(AGE::Tasks::MainToPrepare::AddMaterial &msg)
-	{
-
 	}
 
 	void RenderScene::_moveElementsInOctree()

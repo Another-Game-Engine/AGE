@@ -18,8 +18,12 @@
 #include <Render/Properties/Materials/Diffuse.hh>
 #include <Render/Textures/Texture2D.hh>
 #include <Render/GeometryManagement/Painting/Painter.hh>
-#include <Render/Properties/Transformation.hh>
 
+#include <Render/Properties/Transformation.hh>
+#include <Render/Properties/Materials/Color.hh>
+#include <Render/Properties/Materials/Diffuse.hh>
+#include <Render/Properties/Materials/MapColor.hh>
+#include <Render/Properties/Materials/Specular.hh>
 namespace AGE
 {
 	AssetsManager::AssetsManager()
@@ -80,6 +84,33 @@ namespace AGE
 			material->datas.resize(material_data_set->collection.size());
 			for (auto &material_data : material_data_set->collection) 
 			{
+//#include <Render/Properties/Materials/Color.hh>
+//#include <Render/Properties/Materials/Diffuse.hh>
+//#include <Render/Properties/Materials/MapColor.hh>
+//#include <Render/Properties/Materials/Specular.hh>
+				material->datas.push_back(MaterialInstance());
+				auto &materialSubset = material->datas.back();
+
+				auto diffuse = std::make_shared<Color>("diffuse");
+				materialSubset._properties.push_back(diffuse);
+				diffuse->set(material_data.diffuse);
+
+				auto ambient = std::make_shared<Color>("ambient");
+				materialSubset._properties.push_back(ambient);
+				ambient->set(material_data.ambient);
+
+				auto emissive = std::make_shared<Color>("emissive");
+				materialSubset._properties.push_back(emissive);
+				emissive->set(material_data.emissive);
+
+				auto reflective = std::make_shared<Color>("reflective");
+				materialSubset._properties.push_back(reflective);
+				reflective->set(material_data.reflective);
+
+				auto specular = std::make_shared<Color>("specular");
+				materialSubset._properties.push_back(specular);
+				specular->set(material_data.specular);
+
 //				auto futureSubMaterial = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<Tasks::Render::AddMaterial, MaterialInstance>(material_data);
 //				auto subMaterial = futureSubMaterial.get();
 //				material_set->datas.emplace_back(subMaterial);
