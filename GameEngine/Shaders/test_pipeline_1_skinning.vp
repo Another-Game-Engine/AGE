@@ -14,11 +14,12 @@ uniform mat4 view_matrix;
 uniform mat4 model_matrix;
 uniform mat4 bones[166];
 uniform float skinned;
+uniform vec4 diffuse;
 
 void main(void)
 {
 	vec4 newPosition = position;
-	interpolated_color = normal;
+	interpolated_color = diffuse;
 
 	if (skinned > 0)
 	{

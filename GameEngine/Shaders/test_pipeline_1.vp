@@ -10,10 +10,11 @@ out vec4 interpolated_color;
 uniform mat4 projection_matrix;
 uniform mat4 view_matrix;
 uniform mat4 model_matrix;
+uniform vec4 diffusecolor;
 
 void main(void)
 {
 	mat4 model_view = view_matrix * model_matrix;
-	interpolated_color = normal;
+	interpolated_color = diffusecolor;
 	gl_Position = vec4(projection_matrix * model_view * position);
 }
