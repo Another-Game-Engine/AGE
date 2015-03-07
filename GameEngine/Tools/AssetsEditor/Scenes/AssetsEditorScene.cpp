@@ -75,12 +75,7 @@ namespace AGE
 		static float refreshCounter = 1.0f;
 		if (refreshCounter >= 1.0f)
 		{
-			auto currentDir = Directory::GetCurrentDirectory();
-			auto absPath = Path::AbsoluteName(currentDir, "../../Assets/Serialized");
-			auto dir = Directory();
-			auto succeed = dir.open("../../Assets/Serialized");
-			AGE_ASSERT(succeed);
-			auto it = dir.recursive_begin();
+			_cook.list("../../Assets/Serialized");
 
 			_cookedBulletFiles.clear();
 			_cookedBulletFullPath.clear();
@@ -97,10 +92,49 @@ namespace AGE
 			_cookedMeshFiles.push_back("NONE");
 			_cookedMeshsFullPath.push_back("NONE");
 
+			_cook.update(
+				std::function<bool(AE::Folder*)>([](AE::Folder* folder) {
+				return true;
+			}),
+				std::function<bool(AE::Folder*)>([](AE::Folder* folder) {
+				return true;
+			}),
+				std::function<void(AE::RawFile*)>([&](AE::RawFile* file) {
+
+				_cookedFiles.push_back(AssetsEditorFileDescriptor(file->getPath().c_str(), Path::BaseName(file->getPath().c_str())));
+
+				auto extension = AGE::FileSystemHelpers::GetExtension(file->getPath());
+				if (extension == "sage")
+				{
+					_cookedMeshFiles.push_back(_cookedFiles.back().fileName.c_str());
+					_cookedMeshsFullPath.push_back(_cookedFiles.back().fullPath.c_str());
+				}
+				else if (extension == "mage")
+				{
+					_cookedMaterialFiles.push_back(_cookedFiles.back().fileName.c_str());
+					_cookedMaterialFullPath.push_back(_cookedFiles.back().fullPath.c_str());
+				}
+				else if (extension == "phage")
+				{
+					_cookedBulletFiles.push_back(_cookedFiles.back().fileName.c_str());
+					_cookedBulletFullPath.push_back(_cookedFiles.back().fullPath.c_str());
+				}
+			}));
+
+			// @Jojo ! Do not work !
+
+			/*auto currentDir = Directory::GetCurrentDirectory();
+			auto absPath = Path::AbsoluteName(currentDir, "../../Assets/Serialized");
+			auto dir = Directory();
+			auto succeed = dir.open("../../Assets/Serialized");
+			AGE_ASSERT(succeed);
+			auto it = dir.recursive_begin();
+
 			while (it != dir.recursive_end())
 			{
 				if (Directory::IsFile(it.get()))
 				{
+					std::cout << it.get() << std::endl;
 					_cookedFiles.push_back(AssetsEditorFileDescriptor(it.get(), Path::BaseName(it.get())));
 
 					auto extension = AGE::FileSystemHelpers::GetExtension(it.get());
@@ -123,7 +157,7 @@ namespace AGE
 				it++;
 			}
 
-			dir.close();
+			dir.close();*/
 			refreshCounter = 0;
 		}
 		refreshCounter += time;

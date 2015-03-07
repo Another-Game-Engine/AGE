@@ -52,6 +52,11 @@ namespace AGE
 				t = std::make_shared<RawFile>(path, parent);
 				t->_type = AssetType::Raw | AssetType::Mesh;
 			}
+			else // temporary
+			{
+				t = std::make_shared<RawFile>(path, parent);
+				t->_type = AssetType::Raw;
+			}
 			/*else if (extension == "bmp" || extension == "jpg" || extension == "jpeg" || extension == "tga" || extension == "png")
 			{
 				t = std::make_shared<RawFile>(path, parent);
