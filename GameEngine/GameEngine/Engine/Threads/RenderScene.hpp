@@ -43,11 +43,7 @@ namespace AGE
 		void _deletePointLight(AGE::Commands::MainToPrepare::DeletePointLight &msg);
 		void _deleteDrawable(AGE::Commands::MainToPrepare::DeleteMesh &msg);
 		void _setGeometry(AGE::Commands::MainToPrepare::SetGeometry &msg);
-		//void _setPosition(AGE::Commands::MainToPrepare::SetPosition &msg);
-		//void _setScale(AGE::Commands::MainToPrepare::SetScale &msg);
-		//void _setOrientation(AGE::Commands::MainToPrepare::SetOrientation &msg);
 		void _setTransform(AGE::Commands::MainToPrepare::SetTransform &msg);
-		void _addMaterial(AGE::Tasks::MainToPrepare::AddMaterial &msg);
 
 		void _prepareDrawList(AGE::Commands::MainToPrepare::PrepareDrawLists &msg);
 		void _moveElementsInOctree();

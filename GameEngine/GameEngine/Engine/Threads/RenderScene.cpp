@@ -287,11 +287,6 @@ namespace AGE
 		}
 	}
 
-	void RenderScene::_addMaterial(AGE::Tasks::MainToPrepare::AddMaterial &msg)
-	{
-
-	}
-
 	void RenderScene::_setTransform(AGE::Commands::MainToPrepare::SetTransform &msg)
 	{
 		Camera *co = nullptr;
