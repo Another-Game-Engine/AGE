@@ -3,6 +3,7 @@
 #include <Render/Program.hh>
 #include <Render/Pipelining/Render/RenderingPass.hh>
 #include <Render/Pipelining/Render/Rendering.hh>
+#include <Render/Pipelining/Buffer/Renderbuffer.hh>
 #include <Render/ProgramResources/Types/UniformBlock.hh>
 #include <Render/Textures/Texture2D.hh>
 #include <Render/OpenGLTask/Tasks.hh>
@@ -63,10 +64,8 @@ namespace AGE
 		AGE_ASSERT(textureError != false && "Texture generation error.");
 		std::static_pointer_cast<RenderingPass>(_rendering_list[BUFFERING])->push_storage_output(GL_COLOR_ATTACHMENT2, texture);
 
-		texture = std::make_shared<Texture2D>();
-		textureError = texture->init(screen_size.x, screen_size.y, GL_DEPTH_COMPONENT16, true);
-		AGE_ASSERT(textureError != false && "Texture generation error.");
-		std::static_pointer_cast<RenderingPass>(_rendering_list[BUFFERING])->push_storage_output(GL_DEPTH_ATTACHMENT, texture);
+		auto depthRenderbuffer = std::make_shared<Renderbuffer>(screen_size.x, screen_size.y, GL_DEPTH_COMPONENT16);
+		std::static_pointer_cast<RenderingPass>(_rendering_list[BUFFERING])->push_storage_output(GL_DEPTH_ATTACHMENT, depthRenderbuffer);
 	}
 
 	DeferredShading::DeferredShading(DeferredShading &&move) :
@@ -80,7 +79,8 @@ namespace AGE
 		_programs[BUFFERING]->use();
 		*_programs[BUFFERING]->get_resource<Mat4>("projection_matrix") = infos.projection;
 		*_programs[BUFFERING]->get_resource<Mat4>("view_matrix") = infos.view;
-		for (auto key : pipeline.keys) {
+		for (auto key : pipeline.keys)
+		{
 			_rendering_list[BUFFERING]->render(key.properties, key.vertices, _painter_manager->get_painter(key.painter));
 		}
 		return (*this);
