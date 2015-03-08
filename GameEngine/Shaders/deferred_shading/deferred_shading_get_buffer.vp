@@ -10,6 +10,7 @@ uniform mat4 view_matrix;
 uniform mat4 model_matrix;
 
 uniform sampler2D diffuse_map;
+uniform sampler2D normal_map;
 
 out vec3 inter_normal;
 out vec3 inter_tangent;

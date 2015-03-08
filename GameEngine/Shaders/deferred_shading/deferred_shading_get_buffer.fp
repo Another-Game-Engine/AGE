@@ -9,10 +9,9 @@ uniform float diffuse_ratio;
 uniform sampler2D diffuse_map;
 uniform vec4 specular_color;
 uniform float specular_ratio;
-uniform sampler2D specular_texture;
+uniform sampler2D specular_map;
 uniform float shininess;
-
-uniform sampler2D normal_texture;
+uniform sampler2D normal_map;
 
 layout (location = 0) out vec4 diffuse_frag;
 layout (location = 1) out vec4 normal_frag;
@@ -20,7 +19,7 @@ layout (location = 2) out vec4 specular_frag;
 
 vec3 perturb_normal()
 {
-	vec3 perturbated_normal_ts = texture(normal_texture, vTexCoord).xyz;
+	vec3 perturbated_normal_ts = texture(normal_map, vTexCoord).xyz;
 	vec3 perturbated_normal = perturbated_normal_ts * 2.f - vec3(1.f);
 	vec3 bitangent = cross(inter_tangent, inter_normal);
 	mat3 TBN = mat3(inter_tangent, bitangent, inter_normal);
@@ -31,6 +30,6 @@ void main(void)
 {
 	diffuse_frag = texture(diffuse_map, vTexCoord); // diffuse_color * diffuse_ratio
 	vec3 normal = perturb_normal() * 0.5f + 0.5f;
-	normal_frag = vec4(0,1,0,1);//vec4(normal, 1.0f);
-	specular_frag = vec4(0.5,0.8,0.2,1);//vec4(vec3(specular_color) * specular_ratio, shininess);
+	normal_frag = vec4(normal, 1.0f);
+	specular_frag = vec4(vec3(specular_color) * specular_ratio, shininess);
 }
