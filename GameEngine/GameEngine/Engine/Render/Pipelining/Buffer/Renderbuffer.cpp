@@ -13,6 +13,7 @@ namespace AGE
 		glGenRenderbuffers(1, &_id);
 		bind();
 		glRenderbufferStorage(GL_RENDERBUFFER, _internal_format, _width, _height);
+		unbind();
 	}
 
 	Renderbuffer::Renderbuffer(Renderbuffer &&move) :
