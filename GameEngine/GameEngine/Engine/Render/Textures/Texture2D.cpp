@@ -70,6 +70,7 @@ namespace AGE
 
 	IFramebufferStorage const & Texture2D::attachment(Framebuffer const &framebuffer, GLenum attach) const
 	{
+		bind();
 		glFramebufferTexture2D(framebuffer.type(), attach, GL_TEXTURE_2D, _id, 0);
 		return (*this);
 	}

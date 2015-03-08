@@ -49,6 +49,7 @@ namespace AGE
 
 	IFramebufferStorage const & Renderbuffer::attachment(Framebuffer const &framebuffer, GLenum attach) const
 	{
+		bind();
 		glFramebufferRenderbuffer(framebuffer.type(), attach, GL_RENDERBUFFER, _id);
 		return (*this);
 	}

@@ -33,8 +33,6 @@ namespace AGE
 		_programs[LIGHTNING] = std::make_shared<Program>(Program(std::string("program lightning"), { std::make_shared<UnitProg>(DEFERRED_SHADING_LIGHTNING_VERTEX, GL_VERTEX_SHADER), std::make_shared<UnitProg>(DEFERRED_SHADING_LIGHTNING_FRAG, GL_FRAGMENT_SHADER) }));
 		_programs[MERGING] = std::make_shared<Program>(Program(std::string("program_merging"), { std::make_shared<UnitProg>(DEFERRED_SHADING_MERGING_VERTEX, GL_VERTEX_SHADER), std::make_shared<UnitProg>(DEFERRED_SHADING_MERGING_FRAG, GL_FRAGMENT_SHADER) }));
 		_rendering_list[BUFFERING] = std::make_shared<RenderingPass>([&](FUNCTION_ARGS) {
-			OpenGLTasks::set_depth_test(true);
-			OpenGLTasks::set_clear_color(glm::vec4(1.f, 0.0f, 0.0f, 1.0f));
 			//OpenGLTasks::set_blend_test(false, 0);
 			//OpenGLTasks::set_blend_test(false, 1);
 			//OpenGLTasks::set_blend_test(false, 2);
@@ -76,6 +74,9 @@ namespace AGE
 
 	IRenderingPipeline & DeferredShading::render(ARGS_FUNCTION_RENDER)
 	{
+		OpenGLTasks::set_depth_test(true);
+		OpenGLTasks::set_clear_color(glm::vec4(1.f, 0.0f, 0.0f, 1.0f));
+		OpenGLTasks::clear_buffer();
 		_programs[BUFFERING]->use();
 		*_programs[BUFFERING]->get_resource<Mat4>("projection_matrix") = infos.projection;
 		*_programs[BUFFERING]->get_resource<Mat4>("view_matrix") = infos.view;
