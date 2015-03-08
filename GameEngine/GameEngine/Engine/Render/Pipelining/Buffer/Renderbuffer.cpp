@@ -54,7 +54,6 @@ namespace AGE
 	{
 		bind();
 		glFramebufferRenderbuffer(framebuffer.type(), attach, GL_RENDERBUFFER, _id);
-		unbind();
 		return (*this);
 	}
 
