@@ -394,7 +394,7 @@ namespace AGE
 			// Do the culling
 			_octree.getElementsCollide(&camera, toDraw);
 			// TODO: Remove that
-			renderCamera.pipelines.resize(1);
+			renderCamera.pipelines.resize(RenderType::TOTAL);
 			// iter on elements to draw
 
 			for (Cullable *e : toDraw)
@@ -405,7 +405,7 @@ namespace AGE
 				{
 					Drawable *currentDrawable = static_cast<Drawable*>(e);
 
-					RenderPipeline *curRenderPipeline = &renderCamera.pipelines[RenderType::BASIC];
+					RenderPipeline *curRenderPipeline = &renderCamera.pipelines[RenderType::DEFERRED];
 					RenderPainter *curRenderPainter = nullptr;
 
 					for (auto &renderPainter : curRenderPipeline->keys)
