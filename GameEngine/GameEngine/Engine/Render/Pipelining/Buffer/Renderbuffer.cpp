@@ -11,6 +11,7 @@ namespace AGE
 		_internal_format(internal_format)
 	{
 		glGenRenderbuffers(1, &_id);
+		bind();
 		glRenderbufferStorage(GL_RENDERBUFFER, _internal_format, _width, _height);
 	}
 
@@ -25,7 +26,8 @@ namespace AGE
 
 	Renderbuffer::~Renderbuffer()
 	{
-		if (_id) {
+		if (_id)
+		{
 			glDeleteRenderbuffers(1, &_id);
 		}
 	}
@@ -49,7 +51,9 @@ namespace AGE
 
 	IFramebufferStorage const & Renderbuffer::attachment(Framebuffer const &framebuffer, GLenum attach) const
 	{
+		bind();
 		glFramebufferRenderbuffer(framebuffer.type(), attach, GL_RENDERBUFFER, _id);
+		unbind();
 		return (*this);
 	}
 

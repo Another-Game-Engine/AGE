@@ -38,7 +38,7 @@ namespace AGE
 			//OpenGLTasks::set_blend_test(false, 0);
 			//OpenGLTasks::set_blend_test(false, 1);
 			//OpenGLTasks::set_blend_test(false, 2);
-			//OpenGLTasks::clear_buffer();
+			OpenGLTasks::clear_buffer();
 			painter->draw(GL_TRIANGLES, _programs[BUFFERING], properties, vertices);
 		});
 		_rendering_list[LIGHTNING] = std::make_shared<RenderingPass>([&](FUNCTION_ARGS){
