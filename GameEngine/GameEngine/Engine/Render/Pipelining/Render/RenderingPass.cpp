@@ -24,6 +24,7 @@ namespace AGE
 			for (auto &storage : _frame_output) {
 				_frame_buffer.attachment(*storage.second.get(), storage.first);
 			}
+			glDrawBuffers(GLint(_drawing_attach.size()), _drawing_attach.data());
 			_is_update = true;
 		}
 		_render_function(properties, vertices, painter);
