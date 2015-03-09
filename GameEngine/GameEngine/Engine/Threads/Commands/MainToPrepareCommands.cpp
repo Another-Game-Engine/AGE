@@ -53,9 +53,12 @@ namespace AGE
 				: key(_key)
 			{}
 
-			CameraInfos::CameraInfos(const PrepareKey &_key, const glm::mat4 &_projection)
+			CameraInfos::CameraInfos(const PrepareKey &_key
+				, const glm::mat4 &_projection
+				, const std::set<RenderType> &_pipelines)
 				: key(_key)
 				, projection(_projection)
+				, pipelines(_pipelines)
 			{}
 
 			SceneUpdateBegin::SceneUpdateBegin(AScene *_scene)

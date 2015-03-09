@@ -274,6 +274,7 @@ namespace AGE
 				auto camera = createEntity();
 				GLOBAL_CAMERA = camera;
 				auto cam = camera.addComponent<CameraComponent>();
+				cam->addPipeline(RenderType::BASIC);
 
 				auto screeSize = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<AGE::Tasks::Render::GetWindowSize, glm::uvec2>().get();
 
@@ -495,6 +496,34 @@ namespace AGE
 			}
 		}
 #endif
+
+		auto camComponent = GLOBAL_CAMERA.getComponent<CameraComponent>();
+		static bool cameraPipelines[2] = {false, false};
+		cameraPipelines[RenderType::BASIC] = camComponent->havePipeline(RenderType::BASIC);
+		cameraPipelines[RenderType::DEFERRED] = camComponent->havePipeline(RenderType::DEFERRED);
+
+		if (ImGui::Checkbox("Basic rendering", &cameraPipelines[RenderType::BASIC]))
+		{
+			if (cameraPipelines[RenderType::BASIC])
+			{
+				camComponent->addPipeline(RenderType::BASIC);
+			}
+			else
+			{
+				camComponent->removePipeline(RenderType::BASIC);
+			}
+		}
+		if (ImGui::Checkbox("Deferred rendering", &cameraPipelines[RenderType::DEFERRED]))
+		{
+			if (cameraPipelines[RenderType::DEFERRED])
+			{
+				camComponent->addPipeline(RenderType::DEFERRED);
+			}
+			else
+			{
+				camComponent->removePipeline(RenderType::DEFERRED);
+			}
+		}
 
 		// TODO
 		AGE::GetPrepareThread()->getQueue()->emplaceCommand<AGE::Commands::MainToPrepare::PrepareDrawLists>();

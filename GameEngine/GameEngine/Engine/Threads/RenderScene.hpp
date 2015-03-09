@@ -68,9 +68,6 @@ namespace AGE
 		PrepareKey addPointLight();
 		RenderScene &removeElement(const PrepareKey &key);
 		RenderScene &setTransform(const glm::mat4 &v, const PrepareKey &id);
-
-		RenderScene &setCameraInfos(const PrepareKey &id
-			, const glm::mat4 &projection);
 		RenderScene &setTransform(const glm::mat4&v, const std::array<PrepareKey, MAX_CPT_NUMBER> &ids);
 
 		void removeDrawableObject(DRAWABLE_ID id);

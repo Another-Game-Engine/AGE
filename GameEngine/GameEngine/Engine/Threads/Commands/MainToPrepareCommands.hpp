@@ -6,6 +6,7 @@
 #include <AssetManagement/Instance/MeshInstance.hh>
 #include <Core/PrepareKey.hpp>
 #include <vector>
+#include <set>
 
 namespace AGE
 {
@@ -100,9 +101,10 @@ namespace AGE
 
 			struct CameraInfos
 			{
-				CameraInfos(const PrepareKey &_key, const glm::mat4 &_projection);
+				CameraInfos(const PrepareKey &_key, const glm::mat4 &_projection, const std::set<RenderType> &_pipelines);
 				PrepareKey key;
 				glm::mat4 projection;
+				std::set<RenderType> pipelines;
 			};
 
 			struct PrepareDrawLists

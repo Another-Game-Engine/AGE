@@ -98,13 +98,6 @@ namespace AGE
 		return (*this);
 	}
 
-	RenderScene &RenderScene::setCameraInfos(const PrepareKey &id
-		, const glm::mat4 &projection)
-	{
-		_prepareThread->getQueue()->emplaceCommand<Commands::MainToPrepare::CameraInfos>(id, projection);
-		return (*this);
-	}
-
 	RenderScene &RenderScene::setTransform(const glm::mat4 &v, const std::array<PrepareKey, MAX_CPT_NUMBER> &ids)
 	{
 		for (auto &e : ids)
@@ -136,6 +129,11 @@ namespace AGE
 		co = &_cameras.get(msg.key.id);
 		co->hasMoved = true;
 		co->projection = msg.projection;
+		co->pipelines.clear();
+		for (auto &e : msg.pipelines)
+		{
+			co->pipelines.push_back(e);
+		}
 	}
 
 	void RenderScene::_createCamera(AGE::Commands::MainToPrepare::CreateCamera &msg)
@@ -405,58 +403,57 @@ namespace AGE
 			}
 			// Do the culling
 			_octree.getElementsCollide(&camera, toDraw);
-			// TODO: Remove that
-			// cleblic RenderType::TOTAL for DEFERED
-			renderCamera.pipelines.resize(1);
-			// iter on elements to draw
 
-			for (Cullable *e : toDraw)
+			// for each render pipeline of camera
+			for (auto &pipelineId : camera.pipelines)
 			{
-				switch (e->key.type)
-				{
-				case PrepareKey::Type::Drawable:
-				{
-					Drawable *currentDrawable = static_cast<Drawable*>(e);
+				renderCamera.pipelines.resize(pipelineId + 1);
+				RenderPipeline *curRenderPipeline = &renderCamera.pipelines[pipelineId];
 
-					// cleblic FOR DEFERED
-					// RenderPipeline *curRenderPipeline = &renderCamera.pipelines[RenderType::DEFERRED];
-					// cleblic FOR BASIC
-					RenderPipeline *curRenderPipeline = &renderCamera.pipelines[RenderType::BASIC];
-					RenderPainter *curRenderPainter = nullptr;
-
-					for (auto &renderPainter : curRenderPipeline->keys)
+				// iter on elements to draw
+				for (Cullable *e : toDraw)
+				{
+					switch (e->key.type)
 					{
-						if (renderPainter.painter.getId() == currentDrawable->mesh.painter.getId())
+					case PrepareKey::Type::Drawable:
+					{
+						Drawable *currentDrawable = static_cast<Drawable*>(e);
+
+						RenderPainter *curRenderPainter = nullptr;
+
+						for (auto &renderPainter : curRenderPipeline->keys)
 						{
-							curRenderPainter = &renderPainter;
-							break;
+							if (renderPainter.painter.getId() == currentDrawable->mesh.painter.getId())
+							{
+								curRenderPainter = &renderPainter;
+								break;
+							}
 						}
-					}
-					if (curRenderPainter == NULL)
-					{
-						curRenderPipeline->keys.emplace_back();
-						curRenderPainter = &curRenderPipeline->keys.back();
-						curRenderPainter->painter = currentDrawable->mesh.painter;
-					}
+						if (curRenderPainter == NULL)
+						{
+							curRenderPipeline->keys.emplace_back();
+							curRenderPainter = &curRenderPipeline->keys.back();
+							curRenderPainter->painter = currentDrawable->mesh.painter;
+						}
 
-					curRenderPainter->vertices.emplace_back(currentDrawable->mesh.vertices);
-					curRenderPainter->properties.emplace_back(_properties.get(currentDrawable->mesh.properties.getId()));
+						curRenderPainter->vertices.emplace_back(currentDrawable->mesh.vertices);
+						curRenderPainter->properties.emplace_back(_properties.get(currentDrawable->mesh.properties.getId()));
 
-				}
-				break;
-				case PrepareKey::Type::PointLight:
-				{
-					PointLight *currentPointLight = static_cast<PointLight*>(e);
-					renderCamera.lights.pointLight.emplace_back();
-					renderCamera.lights.pointLight.back().light = *currentPointLight;
-					// TODO: Cull the shadows
-				}
-				break;
-				default:
-					assert(!"Type cannot be added to the ");
+					}
 					break;
+					case PrepareKey::Type::PointLight:
+					{
+						PointLight *currentPointLight = static_cast<PointLight*>(e);
+						renderCamera.lights.pointLight.emplace_back();
+						renderCamera.lights.pointLight.back().light = *currentPointLight;
+						// TODO: Cull the shadows
+					}
+					break;
+					default:
+						assert(!"Type cannot be added to the ");
+						break;
+					}
 				}
-
 			}
 		}
 		drawContainer->used = true;

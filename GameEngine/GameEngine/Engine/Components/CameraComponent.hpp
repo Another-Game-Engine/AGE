@@ -3,6 +3,8 @@
 #include <Components/Component.hh>
 #include <Utils/Serialization/MatrixSerialization.hpp>
 #include <Core/PrepareKey.hpp>
+#include <Render/PipelineTypes.hpp>
+#include <set>
 
 namespace AGE
 {
@@ -19,6 +21,9 @@ namespace AGE
 
 		void setProjection(const glm::mat4 &);
 		const glm::mat4 &getProjection() const;
+		void addPipeline(RenderType pipeline);
+		void removePipeline(RenderType pipeline);
+		bool havePipeline(RenderType pipeline) const;
 
 		template <typename Archive> void save(Archive &ar) const;
 		template <typename Archive> void load(Archive &ar);
@@ -33,6 +38,7 @@ namespace AGE
 		AScene *_scene = nullptr;
 		glm::mat4 _projection;
 		AGE::PrepareKey _key;
+		std::set < RenderType > _pipelines;
 	};
 
 	template <typename Archive>
