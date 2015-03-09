@@ -33,9 +33,12 @@ namespace AGE
 		_programs[LIGHTNING] = std::make_shared<Program>(Program(std::string("program lightning"), { std::make_shared<UnitProg>(DEFERRED_SHADING_LIGHTNING_VERTEX, GL_VERTEX_SHADER), std::make_shared<UnitProg>(DEFERRED_SHADING_LIGHTNING_FRAG, GL_FRAGMENT_SHADER) }));
 		_programs[MERGING] = std::make_shared<Program>(Program(std::string("program_merging"), { std::make_shared<UnitProg>(DEFERRED_SHADING_MERGING_VERTEX, GL_VERTEX_SHADER), std::make_shared<UnitProg>(DEFERRED_SHADING_MERGING_FRAG, GL_FRAGMENT_SHADER) }));
 		_rendering_list[BUFFERING] = std::make_shared<RenderingPass>([&](FUNCTION_ARGS) {
-			//OpenGLTasks::set_blend_test(false, 0);
-			//OpenGLTasks::set_blend_test(false, 1);
-			//OpenGLTasks::set_blend_test(false, 2);
+			OpenGLTasks::set_depth_test(true);
+			OpenGLTasks::set_clear_color(glm::vec4(1.f, 0.0f, 0.0f, 1.0f));
+			OpenGLTasks::clear_buffer();
+			OpenGLTasks::set_blend_test(false, 0);
+			OpenGLTasks::set_blend_test(false, 1);
+			OpenGLTasks::set_blend_test(false, 2);
 			//OpenGLTasks::clear_buffer();
 			painter->draw(GL_TRIANGLES, _programs[BUFFERING], properties, vertices);
 		});
@@ -62,7 +65,9 @@ namespace AGE
 		AGE_ASSERT(textureError != false && "Texture generation error.");
 		std::static_pointer_cast<RenderingPass>(_rendering_list[BUFFERING])->push_storage_output(GL_COLOR_ATTACHMENT2, texture);
 
-		auto depthRenderbuffer = std::make_shared<Renderbuffer>(screen_size.x, screen_size.y, GL_DEPTH_COMPONENT16);
+		auto depthRenderbuffer = std::make_shared<Renderbuffer>();
+		auto depthRenderbufferError = depthRenderbuffer->init(screen_size.x, screen_size.y, GL_DEPTH_COMPONENT16);
+		AGE_ASSERT(depthRenderbufferError != false && "Texture generation error.");
 		std::static_pointer_cast<RenderingPass>(_rendering_list[BUFFERING])->push_storage_output(GL_DEPTH_ATTACHMENT, depthRenderbuffer);
 	}
 
@@ -74,9 +79,6 @@ namespace AGE
 
 	IRenderingPipeline & DeferredShading::render(ARGS_FUNCTION_RENDER)
 	{
-		OpenGLTasks::set_depth_test(true);
-		OpenGLTasks::set_clear_color(glm::vec4(1.f, 0.0f, 0.0f, 1.0f));
-		OpenGLTasks::clear_buffer();
 		_programs[BUFFERING]->use();
 		*_programs[BUFFERING]->get_resource<Mat4>("projection_matrix") = infos.projection;
 		*_programs[BUFFERING]->get_resource<Mat4>("view_matrix") = infos.view;

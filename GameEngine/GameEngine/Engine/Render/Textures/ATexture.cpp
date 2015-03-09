@@ -19,8 +19,7 @@ namespace AGE
 		_internal_format = internal_format;
 		_nbr_mip_map = nbr_mip_map;
 		glGenTextures(1, &_id);
-		if (_id < 0)
-		{
+		if (_id < 0) {
 			return false;
 		}
 		return true;

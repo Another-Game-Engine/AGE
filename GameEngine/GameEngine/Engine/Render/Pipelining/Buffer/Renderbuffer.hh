@@ -19,6 +19,7 @@ namespace AGE
 		Renderbuffer const &unbind() const;
 		GLint width() const;
 		GLint height() const;
+		bool init(GLint width, GLint height, GLenum internal_format);
 
 	public:
 		virtual IFramebufferStorage const &attachment(Framebuffer const &framebuffer, GLenum attach) const override;
