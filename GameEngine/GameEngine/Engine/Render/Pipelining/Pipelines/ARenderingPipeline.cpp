@@ -36,4 +36,12 @@ namespace AGE
 		return (_programs);
 	}
 
+	void ARenderingPipeline::recompileShaders()
+	{
+		for (auto &e : _programs)
+		{
+			e->recompile();
+		}
+	}
+
 }

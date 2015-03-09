@@ -36,7 +36,7 @@ namespace AGE
 		size_t nbr_resources() const;
 		Program &set_attributes(BufferPrograms const &buffers);
 		bool coherent_attributes(std::vector<std::pair<GLenum, std::string>> const &coherent);
-
+		bool compile();
 	private:
 		void _get_resources();
 		void _get_resource(size_t index, GLenum resource, std::string const & buffer);

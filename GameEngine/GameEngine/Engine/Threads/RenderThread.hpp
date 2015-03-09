@@ -33,13 +33,16 @@ namespace AGE
 
 		// used by render scene, maybe should be protected
 		void createMeshProperty(const Key<Painter> &painter, Key<Properties> &properties, Key<Property> &transformation);
-	
+
 	public:
 		std::vector<Material> _materials;
 		std::shared_ptr<PaintingManager> paintingManager;
 		std::vector<std::unique_ptr<IRenderingPipeline>> pipelines;
 
 	private:
+
+		void _recompileShaders();
+
 		RenderThread();
 		virtual ~RenderThread();
 		RenderThread(const RenderThread &) = delete;
