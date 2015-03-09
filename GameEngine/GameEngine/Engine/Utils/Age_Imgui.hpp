@@ -4,8 +4,9 @@
 #include <imgui/imgui.h>
 #include <Utils/OpenGL.hh>
 #include <Utils/DependenciesInjector.hpp>
+#include <Core/AgeInputs.hh>
+#include <glm/glm.hpp>
 #include <vector>
-#include <SDL/SDL.h>
 
 namespace AGE
 {
@@ -13,15 +14,36 @@ namespace AGE
 
 	struct ImGuiKeyEvent
 	{
-		SDL_Keysym key;
+		AgeKeys key;
 		bool down;
-		ImGuiKeyEvent(SDL_Keysym _key, bool _down)
+		ImGuiKeyEvent(AgeKeys _key, bool _down)
 			: key(_key)
 			, down(_down)
 		{}
 	};
-
 	
+	struct ImGuiMouseStateEvent
+	{
+		glm::ivec2 mousePosition;
+		bool mouseState[3];
+
+		ImGuiMouseStateEvent() :
+			mousePosition(0)
+		{
+			mouseState[0] = false;
+			mouseState[1] = false;
+			mouseState[2] = false;
+		}
+
+		ImGuiMouseStateEvent(glm::ivec2 const &_mousePosition, bool leftClic, bool wheelClic, bool rightClic)
+			: mousePosition(_mousePosition)
+		{
+			mouseState[0] = leftClic;
+			mouseState[1] = wheelClic;
+			mouseState[2] = rightClic;
+		}
+	};
+
 	struct Age_ImDrawList
 	{
 		std::vector<ImDrawCmd>     commands;
@@ -104,6 +126,7 @@ namespace AGE
 		Engine *_engine = nullptr;
 		bool _releaseWork = false;
 		bool _launched = false;
+		ImGuiMouseStateEvent _lastMouseState;
 	public:
 		Imgui();
 		bool init(Engine *en);

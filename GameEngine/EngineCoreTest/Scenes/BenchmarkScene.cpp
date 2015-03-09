@@ -11,7 +11,6 @@
 #include <Threads/Tasks/BasicTasks.hpp>
 #include <Threads/Tasks/ToRenderTasks.hpp>
 #include <glm/glm.hpp>
-#include <SDL/SDL.h>
 #include <Threads/TaskScheduler.hpp>
 #include <Core/Input.hh>
 
@@ -386,32 +385,32 @@ namespace AGE
 
 		auto &lc = GLOBAL_CAMERA.getLink();
 		float c = 5.f;
-		if (getInstance<Input>()->getInput(SDLK_LSHIFT))
+		if (getInstance<Input>()->getKey(AGE_LSHIFT))
 			c = c * 3.0f;
-		if (getInstance<Input>()->getInput(SDLK_z))
+		if (getInstance<Input>()->getKey(AGE_z))
 			lc.setForward(glm::vec3(0.f, 0.f, -c * time));
-		if (getInstance<Input>()->getInput(SDLK_s))
+		if (getInstance<Input>()->getKey(AGE_s))
 			lc.setForward(glm::vec3(0.f, 0.f, c * time));
-		if (getInstance<Input>()->getInput(SDLK_q))
+		if (getInstance<Input>()->getKey(AGE_q))
 			lc.setForward(glm::vec3(-c * time, 0.f, 0.f));
-		if (getInstance<Input>()->getInput(SDLK_d))
+		if (getInstance<Input>()->getKey(AGE_d))
 			lc.setForward(glm::vec3(c * time, 0.f, 0.f));
-		if (getInstance<Input>()->getInput(SDLK_RIGHT))
+		if (getInstance<Input>()->getKey(AGE_RIGHT))
 			lc.setOrientation(glm::rotate(lc.getOrientation(), -50.f * (float)time, glm::vec3(0.f, 1.f, 0.f)));
-		if (getInstance<Input>()->getInput(SDLK_LEFT))
+		if (getInstance<Input>()->getKey(AGE_LEFT))
 			lc.setOrientation(glm::rotate(lc.getOrientation(), 50.f * (float)time, glm::vec3(0.f, 1.f, 0.f)));
-		if (getInstance<Input>()->getInput(SDLK_UP))
+		if (getInstance<Input>()->getKey(AGE_UP))
 			lc.setOrientation(glm::rotate(lc.getOrientation(), 50.f * (float)time, glm::vec3(1.f, 0.f, 0.f)));
-		if (getInstance<Input>()->getInput(SDLK_DOWN))
+		if (getInstance<Input>()->getKey(AGE_DOWN))
 			lc.setOrientation(glm::rotate(lc.getOrientation(), -50.f * (float)time, glm::vec3(1.0f, 0.f, 0.f)));
-		if (getInstance<Input>()->getInput(SDLK_a))
+		if (getInstance<Input>()->getKey(AGE_a))
 			lc.setOrientation(glm::rotate(lc.getOrientation(), 50.f * (float)time, glm::vec3(0.f, 0.f, 1.f)));
-		if (getInstance<Input>()->getInput(SDLK_e))
+		if (getInstance<Input>()->getKey(AGE_e))
 			lc.setOrientation(glm::rotate(lc.getOrientation(), -50.f * (float)time, glm::vec3(0.f, 0.f, 1.f)));
-		if (getInstance<Input>()->getInput(SDLK_ESCAPE))
+		if (getInstance<Input>()->getKey(AGE_ESCAPE))
 			return (false);
 		static float trigger = 0.0f;
-		if (getInstance<Input>()->getInput(SDLK_SPACE) && trigger == 0.0f)
+		if (getInstance<Input>()->getKey(AGE_SPACE) && trigger == 0.0f)
 		{
 			trigger += time;
 			if (trigger >= 1.0f)

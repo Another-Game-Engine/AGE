@@ -1,5 +1,12 @@
 
-#include "Input.hh"
+#include <Core/Input.hh>
+#include <Configuration.hpp>
+#include <Threads/ThreadManager.hpp>
+#include <Threads/MainThread.hpp>
+
+#ifdef USE_IMGUI
+#include <Utils/Age_Imgui.hpp>
+#endif
 
 namespace AGE
 {
@@ -14,88 +21,94 @@ namespace AGE
 	{
 	}
 
-	void 	Input::clearInputs()
-	{
-		std::lock_guard<AGE::SpinLock> lock(_mutex);
-		_inputs.clear();
-		_mousePosX = _mousePosY = _mouseWheelX = _mouseWheelY = _mouseDelX = _mouseDelY = 0;
-	}
-
-	void 	Input::addInput(int input)
+	void 	Input::addInput(AgeInputs input)
 	{
 		std::lock_guard<AGE::SpinLock> lock(_mutex);
 		_inputs.push_back(input);
 	}
 
-	void 	Input::addKeyInput(int input)
+	void 	Input::removeInput(AgeInputs input)
 	{
 		std::lock_guard<AGE::SpinLock> lock(_mutex);
+		_inputs.remove(input);
+	}
+
+	void 	Input::addKeyInput(AgeKeys input)
+	{
+		_mutex.lock();
 		_keyInputs.push_back(input);
+		_mutex.unlock();
+#ifdef USE_IMGUI
+		GetMainThread()->getQueue()->emplaceTask<ImGuiKeyEvent>(input, true);
+#endif
 	}
 
-	void 	Input::removeKeyInput(int input)
+	void 	Input::removeKeyInput(AgeKeys input)
 	{
-		std::lock_guard<AGE::SpinLock> lock(_mutex);
+		_mutex.lock();
 		_keyInputs.remove(input);
+		_mutex.unlock();
+#ifdef USE_IMGUI
+		GetMainThread()->getQueue()->emplaceTask<ImGuiKeyEvent>(input, false);
+#endif
 	}
 
-	void 				Input::setMousePosition(glm::i8vec2 const &pos, glm::i8vec2 const &rel)
+	void 				Input::setMousePosition(glm::ivec2 const &pos, glm::ivec2 const &rel)
 	{
 		std::lock_guard<AGE::SpinLock> lock(_mutex);
 		_mouseDelX = rel.x;
 		_mouseDelY = rel.y;
-		_mousePosX = rel.x;
-		_mousePosY = rel.y;
+		_mousePosX = pos.x;
+		_mousePosY = pos.y;
 	}
 
-	void				Input::setMouseWheel(glm::i8vec2 const &delta)
+	void				Input::setMouseWheel(glm::ivec2 const &delta)
 	{
 		std::lock_guard<AGE::SpinLock> lock(_mutex);
 		_mouseWheelX = delta.x;
 		_mouseWheelY = delta.y;
 	}
 
-	glm::i8vec2   	    Input::getMouseWheel()
+	glm::ivec2   	    Input::getMouseWheel()
 	{
 		std::lock_guard<AGE::SpinLock> lock(_mutex);
-		return glm::i8vec2(_mouseWheelX, _mouseWheelY);
+		return glm::ivec2(_mouseWheelX, _mouseWheelY);
 	}
 
-	glm::i8vec2      	Input::getMousePosition()
+	glm::ivec2      	Input::getMousePosition()
 	{
 		std::lock_guard<AGE::SpinLock> lock(_mutex);
-		return glm::i8vec2(_mousePosX, _mousePosY);
+		return glm::ivec2(_mousePosX, _mousePosY);
 	}
 
-	glm::i8vec2       	Input::getMouseDelta()
+	glm::ivec2       	Input::getMouseDelta()
 	{
 		std::lock_guard<AGE::SpinLock> lock(_mutex);
-		return glm::i8vec2(_mouseDelX, _mouseDelY);
+		return glm::ivec2(_mouseDelX, _mouseDelY);
 	}
 
-	bool 	Input::getInput(int input, bool handled)
+	bool 	Input::getInput(AgeInputs input, bool handled)
 	{
+		std::lock_guard<AGE::SpinLock> lock(_mutex);
+		std::list<AgeInputs>::iterator it = _inputs.begin();
+
+		while (it != _inputs.end())
 		{
-			std::lock_guard<AGE::SpinLock> lock(_mutex);
-			std::list<int>::iterator		it = _inputs.begin();
-			while (it != _inputs.end())
+			if (*it == input)
 			{
-				if (*it == input)
-				{
-					if (handled)
-						_inputs.erase(it);
-					return (true);
-				}
-				++it;
+				if (handled)
+					_inputs.erase(it);
+				return (true);
 			}
+			++it;
 		}
-		return (getKey(input, handled));
+		return (false);
 	}
 
-	bool 	Input::getKey(int input, bool handled)
+	bool 	Input::getKey(AgeKeys input, bool handled)
 	{
 		std::lock_guard<AGE::SpinLock> lock(_mutex);
-		std::list<int>::iterator		it = _keyInputs.begin();
+		std::list<AgeKeys>::iterator it = _keyInputs.begin();
 
 		while (it != _keyInputs.end())
 		{
@@ -108,6 +121,17 @@ namespace AGE
 			++it;
 		}
 		return (false);
+	}
+
+	void Input::sendMouseStateToIMGUI()
+	{
+#ifdef USE_IMGUI
+		glm::ivec2 mousePosition(_mousePosX, _mousePosY);
+		GetMainThread()->getQueue()->emplaceTask<ImGuiMouseStateEvent>(mousePosition,
+			getInput(AGE_MOUSE_LEFT),
+			getInput(AGE_MOUSE_MIDDLE),
+			getInput(AGE_MOUSE_RIGHT));
+#endif
 	}
 
 }

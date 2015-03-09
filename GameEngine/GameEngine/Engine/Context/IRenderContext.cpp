@@ -25,5 +25,26 @@ namespace AGE
 		return _init(mode);
 	}
 
-	const glm::uvec2 &IRenderContext::getScreenSize() const { return _screenSize; }
+	glm::uvec2 IRenderContext::getScreenSize() const
+	{
+		return _screenSize;
+	}
+
+	AgeKeys IRenderContext::findAgeKey(int contextKey) const
+	{
+		auto it = _toAgeKey.find(contextKey);
+
+		if (it == _toAgeKey.end())
+			return (AGE_KEY_UNKNOWN);
+		return (it->second);
+	}
+
+	AgeInputs IRenderContext::findAgeInput(int contextInput) const
+	{
+		auto it = _toAgeInput.find(contextInput);
+
+		if (it == _toAgeInput.end())
+			return (AGE_INPUT_UNKNOWN);
+		return (it->second);
+	}
 }

@@ -125,6 +125,7 @@
     <ClCompile Include="Engine\Components\Light.cpp" />
     <ClCompile Include="Engine\Components\RigidBody.cpp" />
     <ClCompile Include="Engine\Context\IRenderContext.cpp" />
+    <ClCompile Include="Engine\Context\SDL\SdlToAgeInputs.cpp" />
     <ClCompile Include="Engine\Entities\Entity.cpp" />
     <ClCompile Include="Engine\Render\Properties\Materials\Specular.cpp" />
     <ClCompile Include="Engine\Render\ProgramResources\Types\Uniform\Mat4Array255.cpp" />
@@ -218,7 +219,7 @@
     <ClCompile Include="Engine\Core\EntityFilter.cpp" />
     <ClCompile Include="Engine\Core\EntityIdRegistrar.cpp" />
     <ClCompile Include="Engine\Core\SceneManager.cpp" />
-    <ClCompile Include="Engine\Context\SdlContext.cpp" />
+    <ClCompile Include="Engine\Context\SDL\SdlContext.cpp" />
     <ClCompile Include="Engine\Core\AScene.cpp" />
     <ClCompile Include="Engine\Core\Engine.cpp" />
     <ClCompile Include="Engine\Core\Input.cpp" />
@@ -277,6 +278,7 @@
     <ClInclude Include="Engine\Components\ComponentManager.hpp" />
     <ClInclude Include="Engine\Components\Light.hh" />
     <ClInclude Include="Engine\Configuration.hpp" />
+    <ClInclude Include="Engine\Core\AgeInputs.hh" />
     <ClInclude Include="Engine\Entities\EntityData.hh" />
     <ClInclude Include="Engine\Render\Properties\Materials\Specular.hh" />
     <ClInclude Include="Engine\Render\ProgramResources\Types\Uniform\Mat4Array255.hh" />
@@ -505,7 +507,7 @@
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />
     <None Include="Engine\Context\IRenderContext.hh" />
-    <None Include="Engine\Context\SdlContext.hh" />
+    <None Include="Engine\Context\SDL\SdlContext.hh" />
     <None Include="Engine\Core\AScene.hh" />
     <None Include="Engine\Core\Engine.hh" />
     <None Include="Engine\Core\Input.hh" />

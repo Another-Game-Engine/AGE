@@ -11,8 +11,6 @@
 #include <ctime>
 #endif
 
-#include <SDL/SDL.h>
-
 namespace AGE
 {
 	Timer::Timer() :
@@ -36,6 +34,6 @@ namespace AGE
 
 	double 		Timer::getNow() const
 	{
-		return static_cast<double>(SDL_GetTicks()) / 1000.0f;
+		return (std::chrono::duration_cast<std::chrono::milliseconds>(_curTime.time_since_epoch()).count() / 1000.0l);
 	}
 }

@@ -1,15 +1,13 @@
 #include "RenderThread.hpp"
 #include <Core/Engine.hh>
-#include <Context/SdlContext.hh>
+#include <Context/SDL/SdlContext.hh>
 #include <Utils/ThreadName.hpp>
 #include <Threads/Tasks/ToRenderTasks.hpp>
 #include <Threads/Commands/ToRenderCommands.hpp>
 #include <Threads/Tasks/BasicTasks.hpp>
-#include <Context/SdlContext.hh>
 #include <Utils/Containers/Vector.hpp>
 #include <Threads/ThreadManager.hpp>
 #include <Core/Engine.hh>
-#include <Context/SdlContext.hh>
 #include <Render/GeometryManagement/Painting/Painter.hh>
 #include <Render/Pipelining/Pipelines/CustomPipeline/BasicPipeline.hh>
 #include <Render/Pipelining/Pipelines/CustomPipeline/DeferredShading.hh>

@@ -3,7 +3,6 @@
 #include "AssetsEditorScene.hpp"
 #include "WorldEditorScene.hpp"
 #include <Core/Input.hh>
-#include <SDL/SDL.h>
 
 namespace AGE
 {
@@ -46,7 +45,7 @@ namespace AGE
 
 	bool SceneSelectorScene::userUpdateEnd(double time)
 	{
-		if (getInstance<Input>()->getInput(SDLK_ESCAPE))
+		if (getInstance<Input>()->getInput(AGE_ESCAPE))
 			return (false);
 		return true;
 	}

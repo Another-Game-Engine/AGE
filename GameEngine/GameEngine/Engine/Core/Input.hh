@@ -2,7 +2,8 @@
 
 #include <list>
 #include <Utils/Dependency.hpp>
-#include "glm/gtc/type_precision.hpp"
+#include <glm/gtc/type_precision.hpp>
+#include <Core/AgeInputs.hh>
 #include <mutex>
 #include <atomic>
 #include <Utils/SpinLock.hpp>
@@ -13,8 +14,8 @@ namespace AGE
 	class Input : public Dependency < Input >
 	{
 	private:
-		std::list<int>	_inputs;
-		std::list<int>	_keyInputs;
+		std::list<AgeInputs>	_inputs;
+		std::list<AgeKeys>		_keyInputs;
 
 		std::atomic_int32_t _mousePosX;
 		std::atomic_int32_t _mousePosY;
@@ -28,18 +29,19 @@ namespace AGE
 		Input();
 		virtual ~Input() { }
 
-		void 				clearInputs();
-		void 				addInput(int input);
-		void 				addKeyInput(int input);
-		void 				removeKeyInput(int input);
-		void 				setMousePosition(glm::i8vec2 const &pos, glm::i8vec2 const &rel);
-		void				setMouseWheel(glm::i8vec2 const &delta);
-		glm::i8vec2  	    getMousePosition();
-		glm::i8vec2      	getMouseDelta();
-		glm::i8vec2      	getMouseWheel();
-		bool 				getInput(int input, bool handled = false);
-		bool 				getKey(int input, bool handled = false);
-		inline AGE::SpinLock &getMutex(){ return _mutex; }
+		void 				addInput(AgeInputs input);
+		void 				removeInput(AgeInputs input);
+		void 				addKeyInput(AgeKeys input);
+		void 				removeKeyInput(AgeKeys input);
+		void 				setMousePosition(glm::ivec2 const &pos, glm::ivec2 const &rel);
+		void				setMouseWheel(glm::ivec2 const &delta);
+		glm::ivec2  	    getMousePosition();
+		glm::ivec2      	getMouseDelta();
+		glm::ivec2      	getMouseWheel();
+		bool 				getInput(AgeInputs input, bool handled = false);
+		bool 				getKey(AgeKeys input, bool handled = false);
+
+		void				sendMouseStateToIMGUI();
 	};
 
 }
