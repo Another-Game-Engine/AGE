@@ -16,7 +16,7 @@ public:
 
 public:
 	size_t getId() const;
-	operator bool() const;
+	bool isValid() const;
 	void destroy();
 
 private:
@@ -31,12 +31,9 @@ size_t Key<type_t>::getId() const
 }
 
 template <typename type_t>
-Key<type_t>::operator bool() const
+bool Key<type_t>::isValid () const
 {
-	if (_id == -1) {
-		return (false);
-	}
-	return (true);
+	return (_id != -1);
 }
 
 template <typename type_t>
