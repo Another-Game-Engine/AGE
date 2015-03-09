@@ -4,7 +4,7 @@
 namespace AGE
 {
 	Color::Color(std::string const &add_name) :
-		AProperty(add_name + "color"),
+		AProperty(add_name + "_color"),
 		_color(glm::vec4(1.0f))
 	{
 
