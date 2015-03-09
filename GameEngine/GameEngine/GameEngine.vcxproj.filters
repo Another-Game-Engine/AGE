@@ -144,6 +144,7 @@
     <ClCompile Include="Engine\Utils\Stream.cpp" />
     <ClCompile Include="Engine\Utils\ThreadName.cpp" />
     <ClCompile Include="Engine\Utils\UniqueTypeId.cpp" />
+    <ClCompile Include="Engine\Render\GeometryManagement\SimpleGeometry.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -383,6 +384,7 @@
     <ClInclude Include="Engine\Utils\Visibility.hpp" />
     <ClInclude Include="Engine\Utils\Worker.hpp" />
     <ClInclude Include="Engine\Render\PipelineTypes.hpp" />
+    <ClInclude Include="Engine\Render\GeometryManagement\SimpleGeometry.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

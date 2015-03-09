@@ -11,6 +11,7 @@
 #include <Render/Properties/Properties.hh>
 #include <Engine/SpacePartitioning/Ouptut/RenderCamera.hh>
 #include <Render/PipelineTypes.hpp>
+#include <Render/GeometryManagement/SimpleGeometry.hpp>
 
 namespace AGE
 {
@@ -42,6 +43,7 @@ namespace AGE
 	private:
 
 		void _recompileShaders();
+		void _getQuadGeometry(Key<Vertices> &vertices, Key<Painter> &painter);
 
 		RenderThread();
 		virtual ~RenderThread();
