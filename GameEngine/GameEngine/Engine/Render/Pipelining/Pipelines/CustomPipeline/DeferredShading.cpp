@@ -5,14 +5,16 @@
 #include <Render/Pipelining/Render/Rendering.hh>
 #include <Render/Pipelining/Buffer/Renderbuffer.hh>
 #include <Render/ProgramResources/Types/UniformBlock.hh>
-#include <Render/Textures/Texture2D.hh>
 #include <Render/OpenGLTask/Tasks.hh>
 #include <Render/GeometryManagement/Painting/Painter.hh>
 #include <Render/ProgramResources/Types/Uniform/Mat4.hh>
+#include <Render/ProgramResources/Types/Uniform/Sampler/Sampler2D.hh>
 #include <SpacePartitioning/Ouptut/RenderPipeline.hh>
 #include <SpacePartitioning/Ouptut/RenderPainter.hh>
 #include <SpacePartitioning/Ouptut/RenderCamera.hh>
 #include <Utils/Debug.hpp>
+#include <Threads/RenderThread.hpp>
+#include <Threads/ThreadManager.hpp>
 
 #define DEFERRED_SHADING_MERGING_VERTEX "../../Shaders/deferred_shading/deferred_shading_merge.vp"
 #define DEFERRED_SHADING_MERGING_FRAG "../../Shaders/deferred_shading/deferred_shading_merge.fp"
@@ -45,25 +47,31 @@ namespace AGE
 		_rendering_list[LIGHTNING] = std::make_shared<RenderingPass>([&](FUNCTION_ARGS){
 		});
 		_rendering_list[MERGING] = std::make_shared<RenderingPass>([&](FUNCTION_ARGS){
+			Key<Painter> quadPainterKey;
+			Key<Vertices> quadVerticesKey;
+			GetRenderThread()->getQuadGeometry(quadVerticesKey, quadPainterKey);
+
+			auto myPainter = painter_manager->get_painter(quadPainterKey);
+			myPainter->uniqueDraw(GL_TRIANGLES, _programs[MERGING], Properties(), quadVerticesKey);
 		});
 
 		bool textureError = false;
 		std::shared_ptr<Texture2D> texture = nullptr;
 		
-		texture = std::make_shared<Texture2D>();
-		textureError = texture->init(screen_size.x, screen_size.y, GL_RGBA8, true);
+		_diffuseTexture = std::make_shared<Texture2D>();
+		textureError = _diffuseTexture->init(screen_size.x, screen_size.y, GL_RGBA8, true);
 		AGE_ASSERT(textureError != false && "Texture generation error.");
-		std::static_pointer_cast<RenderingPass>(_rendering_list[BUFFERING])->push_storage_output(GL_COLOR_ATTACHMENT0, texture);
+		std::static_pointer_cast<RenderingPass>(_rendering_list[BUFFERING])->push_storage_output(GL_COLOR_ATTACHMENT0, _diffuseTexture);
 
-		texture = std::make_shared<Texture2D>();
-		textureError = texture->init(screen_size.x, screen_size.y, GL_RGBA8, true);
+		_normalTexture = std::make_shared<Texture2D>();
+		textureError = _normalTexture->init(screen_size.x, screen_size.y, GL_RGBA8, true);
 		AGE_ASSERT(textureError != false && "Texture generation error.");
-		std::static_pointer_cast<RenderingPass>(_rendering_list[BUFFERING])->push_storage_output(GL_COLOR_ATTACHMENT1, texture);
+		std::static_pointer_cast<RenderingPass>(_rendering_list[BUFFERING])->push_storage_output(GL_COLOR_ATTACHMENT1, _normalTexture);
 
-		texture = std::make_shared<Texture2D>();
-		textureError = texture->init(screen_size.x, screen_size.y, GL_RGBA8, true);
+		_diffuseTexture = std::make_shared<Texture2D>();
+		textureError = _diffuseTexture->init(screen_size.x, screen_size.y, GL_RGBA8, true);
 		AGE_ASSERT(textureError != false && "Texture generation error.");
-		std::static_pointer_cast<RenderingPass>(_rendering_list[BUFFERING])->push_storage_output(GL_COLOR_ATTACHMENT2, texture);
+		std::static_pointer_cast<RenderingPass>(_rendering_list[BUFFERING])->push_storage_output(GL_COLOR_ATTACHMENT2, _diffuseTexture);
 
 		auto depthRenderbuffer = std::make_shared<Renderbuffer>();
 		auto depthRenderbufferError = depthRenderbuffer->init(screen_size.x, screen_size.y, GL_DEPTH_COMPONENT16);
@@ -91,6 +99,14 @@ namespace AGE
 		for (auto key : pipeline.keys)
 		{
 			_rendering_list[BUFFERING]->render(key.properties, key.vertices, _painter_manager->get_painter(key.painter));
+		}
+
+		_programs[MERGING]->use();
+		auto &mapColor = _programs[MERGING]->get_resource<Sampler2D>("diffuse_buffer");
+		*mapColor = _diffuseTexture;
+		for (auto key : pipeline.keys)
+		{
+			_rendering_list[MERGING]->render(key.properties, key.vertices, _painter_manager->get_painter(key.painter));
 		}
 		return (*this);
 	}

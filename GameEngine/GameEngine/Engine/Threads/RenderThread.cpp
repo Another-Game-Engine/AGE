@@ -50,8 +50,11 @@ namespace AGE
 		}
 	}
 
-	void RenderThread::_getQuadGeometry(Key<Vertices> &v, Key<Painter> &p)
+	void RenderThread::getQuadGeometry(Key<Vertices> &v, Key<Painter> &p)
 	{
+		// to be sure that this function is only called in render thread
+		AGE_ASSERT(GetThreadManager()->getCurrentThread() == (AGE::Thread*)GetRenderThread());
+
 		if (Quad::VerticesKey.isValid())
 		{
 			v = Quad::VerticesKey;

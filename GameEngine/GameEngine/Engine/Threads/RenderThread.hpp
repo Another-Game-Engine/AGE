@@ -34,7 +34,7 @@ namespace AGE
 
 		// used by render scene, maybe should be protected
 		void createMeshProperty(const Key<Painter> &painter, Key<Properties> &properties, Key<Property> &transformation);
-
+		void getQuadGeometry(Key<Vertices> &vertices, Key<Painter> &painter);
 	public:
 		std::vector<Material> _materials;
 		std::shared_ptr<PaintingManager> paintingManager;
@@ -43,7 +43,6 @@ namespace AGE
 	private:
 
 		void _recompileShaders();
-		void _getQuadGeometry(Key<Vertices> &vertices, Key<Painter> &painter);
 
 		RenderThread();
 		virtual ~RenderThread();
