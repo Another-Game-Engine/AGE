@@ -144,7 +144,6 @@
     <ClCompile Include="Engine\Utils\Stream.cpp" />
     <ClCompile Include="Engine\Utils\ThreadName.cpp" />
     <ClCompile Include="Engine\Utils\UniqueTypeId.cpp" />
-    <ClCompile Include="Engine\Render\GeometryManagement\SimpleGeometry.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />

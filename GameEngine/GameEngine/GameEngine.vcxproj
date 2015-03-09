@@ -126,7 +126,6 @@
     <ClCompile Include="Engine\Components\RigidBody.cpp" />
     <ClCompile Include="Engine\Context\IRenderContext.cpp" />
     <ClCompile Include="Engine\Entities\Entity.cpp" />
-    <ClCompile Include="Engine\Render\GeometryManagement\SimpleGeometry.cpp" />
     <ClCompile Include="Engine\Render\Properties\Materials\Specular.cpp" />
     <ClCompile Include="Engine\Render\ProgramResources\Types\Uniform\Mat4Array255.cpp" />
     <ClCompile Include="Engine\Render\Properties\Properties.cpp" />
