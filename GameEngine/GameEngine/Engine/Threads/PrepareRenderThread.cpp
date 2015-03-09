@@ -164,7 +164,8 @@ namespace AGE
 				while (!tasks.empty())
 				{
 					auto task = tasks.front();
-					assert(execute(task)); // we receive a task that we cannot treat
+					auto success = execute(task); // we receive a task that we cannot treat
+					AGE_ASSERT(success);
 					tasks.pop();
 					taskCounter--;
 				}

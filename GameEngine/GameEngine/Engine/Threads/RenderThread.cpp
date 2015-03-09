@@ -36,7 +36,9 @@ namespace AGE
 
 	void RenderThread::_recompileShaders()
 	{
-#ifdef AGE_DEBUG
+		// to be sure that this function is only called in render thread
+		AGE_ASSERT(GetThreadManager()->getCurrentThread() == (AGE::Thread*)GetRenderThread());
+
 		for (auto &e : pipelines)
 		{
 			if (!e)
@@ -45,9 +47,6 @@ namespace AGE
 			}
 			e->recompileShaders();
 		}
-#else
-		std::cerr << "Error : You cannot recompile shader at runtime. This feature is enabled only in debug mode\n";
-#endif
 	}
 
 	bool RenderThread::init()
@@ -74,7 +73,11 @@ namespace AGE
 
 		registerCallback<Tasks::Render::ReloadShaders>([&](Tasks::Render::ReloadShaders& msg)
 		{
+#ifdef AGE_DEBUG
 			_recompileShaders();
+#else
+			std::cerr << "Error : You cannot recompile shader at runtime. This feature is enabled only in debug mode\n";
+#endif
 		});
 
 		registerCallback<Tasks::Render::GetWindowSize>([&](Tasks::Render::GetWindowSize &msg)
@@ -209,7 +212,8 @@ namespace AGE
 				{
 					//pop all tasks
 					auto task = tasks.front();
-					assert(execute(task)); // we receive a task that we cannot treat
+					auto success = execute(task); // we receive a task that we cannot treat
+					AGE_ASSERT(success);
 					tasks.pop();
 					taskCounter--;
 					workEnd = std::chrono::high_resolution_clock::now();
@@ -233,7 +237,8 @@ namespace AGE
 				while (!commands.empty() && _insideRun)
 				{
 					auto command = commands.front();
-					assert(execute(command));
+					auto success = execute(command);
+					AGE_ASSERT(success);
 					commands.pop();
 				}
 
