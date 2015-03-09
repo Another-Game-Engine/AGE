@@ -258,11 +258,23 @@ namespace AGE
 			added.hasMoved = true;
 			added.moveBufferIdx = _drawablesToMove.size() - 1;
 
+			//if (added.mesh.properties.invalu)
 			added.mesh.properties = _createPropertiesContainer();
 			added.transformationProperty = _addTransformationProperty(added.mesh.properties, glm::mat4(1));
+
+			// we remove old material properties
+			for (auto &e : added.materialKeys)
+			{
+				_detachProperty(added.mesh.properties, e);
+			}
+			// we clear the old material key array
+			added.materialKeys.clear();
+
+			// we create new material properties and push keys in oldmaterial property array
 			for (auto &e : material->_properties)
 			{
-				_attachProperty(added.mesh.properties, e);
+				auto materialKey = _attachProperty(added.mesh.properties, e);
+				added.materialKeys.push_back(materialKey);
 			}
 		}
 	}
@@ -466,6 +478,13 @@ namespace AGE
 		auto &properties = _properties.get(key.getId());
 
 		return properties.add_property(propertyPtr);
+	}
+
+	void RenderScene::_detachProperty(const Key<Properties> &key, const Key<Property> &prop)
+	{
+		auto &properties = _properties.get(key.getId());
+
+		properties.remove_property(prop);
 	}
 
 	Key<Property> RenderScene::_addTransformationProperty(const Key<Properties> &propertiesKey, const glm::mat4 &value)

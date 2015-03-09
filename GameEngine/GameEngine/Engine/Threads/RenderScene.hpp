@@ -52,6 +52,7 @@ namespace AGE
 
 		void _removeProperties(const Key<Properties> &key);
 		Key<Property> _attachProperty(const Key<Properties> &key, std::shared_ptr<IProperty> propertyPtr);
+		void _detachProperty(const Key<Properties> &key, const Key<Property> &property);
 		Key<Property> _addTransformationProperty(const Key<Properties> &propertiesKey, const glm::mat4 &value);
 
 		template <typename PropertyType, typename ValueType>
