@@ -10,6 +10,7 @@
 #include <vector>
 #include <Render/Properties/Properties.hh>
 #include <Engine/SpacePartitioning/Ouptut/RenderCamera.hh>
+#include <Render/PipelineTypes.hpp>
 
 namespace AGE
 {
@@ -20,12 +21,6 @@ namespace AGE
 	struct RenderCamera;
 
 	typedef Properties Material;
-
-	enum RenderType {
-		BASIC = 0,
-		DEFERRED,
-		TOTAL
-	};
 
 	class RenderThread : public Thread, public QueueOwner
 	{
@@ -38,13 +33,16 @@ namespace AGE
 
 		// used by render scene, maybe should be protected
 		void createMeshProperty(const Key<Painter> &painter, Key<Properties> &properties, Key<Property> &transformation);
-	
+
 	public:
 		std::vector<Material> _materials;
 		std::shared_ptr<PaintingManager> paintingManager;
 		std::vector<std::unique_ptr<IRenderingPipeline>> pipelines;
 
 	private:
+
+		void _recompileShaders();
+
 		RenderThread();
 		virtual ~RenderThread();
 		RenderThread(const RenderThread &) = delete;

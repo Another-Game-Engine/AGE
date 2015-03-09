@@ -73,9 +73,18 @@ namespace AGE
 			}
 			assert(currentRenderIdx != -1);
 
+			if (!_programs[currentRenderIdx]->isCompiled())
+			{
+				continue;
+			}
+
 			_programs[currentRenderIdx]->use();
 			if (currentRenderIdx == RENDER_SKINNED)
 			{
+				if (!_programs[RENDER_SKINNED]->isCompiled())
+				{
+					continue;
+				}
 				*_programs[RENDER_SKINNED]->get_resource<Vec1>("skinned") = 1.0f;
 				auto bones = DirtyBoneContainer::getBones();
 				if (bones.size() > 0)

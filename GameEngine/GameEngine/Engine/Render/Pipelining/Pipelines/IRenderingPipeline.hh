@@ -25,6 +25,7 @@ namespace AGE
 		virtual std::string const &name() const = 0;
 		virtual std::vector<std::shared_ptr<Program>> const &get_programs() const = 0;
 		virtual IRenderingPipeline &render(ARGS_FUNCTION_RENDER) = 0;
+		virtual bool recompileShaders() = 0;
 	};
 
 }

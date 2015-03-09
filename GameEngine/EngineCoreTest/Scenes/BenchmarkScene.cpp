@@ -274,6 +274,7 @@ namespace AGE
 				auto camera = createEntity();
 				GLOBAL_CAMERA = camera;
 				auto cam = camera.addComponent<CameraComponent>();
+				cam->addPipeline(RenderType::BASIC);
 
 				auto screeSize = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<AGE::Tasks::Render::GetWindowSize, glm::uvec2>().get();
 
@@ -433,7 +434,7 @@ namespace AGE
 		else
 			trigger = 0.0f;
 
-		if (_chunkCounter >= _maxChunk)
+		/*if (_chunkCounter >= _maxChunk)
 		{
 			AScene *weakOnThis = (AScene*)(this);
 			for (auto i = 0; i < 10; ++i)
@@ -472,7 +473,7 @@ namespace AGE
 #endif
 			}
 			_chunkCounter = 0;
-		}
+		}*/
 
 #ifdef USE_IMGUI
 		if (ImGui::CollapsingHeader("Light settings"))
@@ -495,6 +496,39 @@ namespace AGE
 			}
 		}
 #endif
+
+		if (ImGui::Button("Reload shaders or type R") || getInstance<Input>()->getInput(SDLK_r))
+		{
+			GetRenderThread()->getQueue()->emplaceTask<Tasks::Render::ReloadShaders>();
+		}
+
+		auto camComponent = GLOBAL_CAMERA.getComponent<CameraComponent>();
+		static bool cameraPipelines[2] = {false, false};
+		cameraPipelines[RenderType::BASIC] = camComponent->havePipeline(RenderType::BASIC);
+		cameraPipelines[RenderType::DEFERRED] = camComponent->havePipeline(RenderType::DEFERRED);
+
+		if (ImGui::Checkbox("Basic rendering", &cameraPipelines[RenderType::BASIC]))
+		{
+			if (cameraPipelines[RenderType::BASIC])
+			{
+				camComponent->addPipeline(RenderType::BASIC);
+			}
+			else
+			{
+				camComponent->removePipeline(RenderType::BASIC);
+			}
+		}
+		if (ImGui::Checkbox("Deferred rendering", &cameraPipelines[RenderType::DEFERRED]))
+		{
+			if (cameraPipelines[RenderType::DEFERRED])
+			{
+				camComponent->addPipeline(RenderType::DEFERRED);
+			}
+			else
+			{
+				camComponent->removePipeline(RenderType::DEFERRED);
+			}
+		}
 
 		// TODO
 		AGE::GetPrepareThread()->getQueue()->emplaceCommand<AGE::Commands::MainToPrepare::PrepareDrawLists>();

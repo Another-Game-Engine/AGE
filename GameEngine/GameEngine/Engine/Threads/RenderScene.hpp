@@ -44,7 +44,7 @@ namespace AGE
 		void _deleteDrawable(AGE::Commands::MainToPrepare::DeleteMesh &msg);
 		void _setGeometry(AGE::Commands::MainToPrepare::SetGeometry &msg);
 		void _setTransform(AGE::Commands::MainToPrepare::SetTransform &msg);
-
+		
 		void _prepareDrawList(AGE::Commands::MainToPrepare::PrepareDrawLists &msg);
 		void _moveElementsInOctree();
 
@@ -52,6 +52,7 @@ namespace AGE
 
 		void _removeProperties(const Key<Properties> &key);
 		Key<Property> _attachProperty(const Key<Properties> &key, std::shared_ptr<IProperty> propertyPtr);
+		void _detachProperty(const Key<Properties> &key, const Key<Property> &property);
 		Key<Property> _addTransformationProperty(const Key<Properties> &propertiesKey, const glm::mat4 &value);
 
 		template <typename PropertyType, typename ValueType>
@@ -67,9 +68,6 @@ namespace AGE
 		PrepareKey addPointLight();
 		RenderScene &removeElement(const PrepareKey &key);
 		RenderScene &setTransform(const glm::mat4 &v, const PrepareKey &id);
-
-		RenderScene &setCameraInfos(const PrepareKey &id
-			, const glm::mat4 &projection);
 		RenderScene &setTransform(const glm::mat4&v, const std::array<PrepareKey, MAX_CPT_NUMBER> &ids);
 
 		void removeDrawableObject(DRAWABLE_ID id);

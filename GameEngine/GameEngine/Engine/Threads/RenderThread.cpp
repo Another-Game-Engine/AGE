@@ -34,6 +34,21 @@ namespace AGE
 	RenderThread::~RenderThread()
 	{}
 
+	void RenderThread::_recompileShaders()
+	{
+		// to be sure that this function is only called in render thread
+		AGE_ASSERT(GetThreadManager()->getCurrentThread() == (AGE::Thread*)GetRenderThread());
+
+		for (auto &e : pipelines)
+		{
+			if (!e)
+			{
+				continue;
+			}
+			e->recompileShaders();
+		}
+	}
+
 	bool RenderThread::init()
 	{
 		registerCallback<Tasks::Render::CreateRenderContext>([this](Tasks::Render::CreateRenderContext &msg)
@@ -44,9 +59,9 @@ namespace AGE
 				msg.setValue(false);
 				return;
 			}
-			//pipelines[DEFERRED] = std::make_unique<DeferredShading>(_context->getScreenSize(), paintingManager);
-			pipelines[DEFERRED] = std::make_unique<DeferredShading>(glm::uvec2(1280, 720), paintingManager); 
+			pipelines[DEFERRED] = std::make_unique<DeferredShading>(_context->getScreenSize(), paintingManager);
 			pipelines[BASIC] = std::make_unique<BasicPipeline>(paintingManager);
+			_recompileShaders();
 			msg.setValue(true);
 		});
 
@@ -56,6 +71,14 @@ namespace AGE
 			glClear(GL_COLOR_BUFFER_BIT);
 		});
 
+		registerCallback<Tasks::Render::ReloadShaders>([&](Tasks::Render::ReloadShaders& msg)
+		{
+#ifdef AGE_DEBUG
+			_recompileShaders();
+#else
+			std::cerr << "Error : You cannot recompile shader at runtime. This feature is enabled only in debug mode\n";
+#endif
+		});
 
 		registerCallback<Tasks::Render::GetWindowSize>([&](Tasks::Render::GetWindowSize &msg)
 		{
@@ -189,7 +212,8 @@ namespace AGE
 				{
 					//pop all tasks
 					auto task = tasks.front();
-					assert(execute(task)); // we receive a task that we cannot treat
+					auto success = execute(task); // we receive a task that we cannot treat
+					AGE_ASSERT(success);
 					tasks.pop();
 					taskCounter--;
 					workEnd = std::chrono::high_resolution_clock::now();
@@ -213,7 +237,8 @@ namespace AGE
 				while (!commands.empty() && _insideRun)
 				{
 					auto command = commands.front();
-					assert(execute(command));
+					auto success = execute(command);
+					AGE_ASSERT(success);
 					commands.pop();
 				}
 

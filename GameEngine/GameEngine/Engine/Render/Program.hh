@@ -1,10 +1,11 @@
 #pragma once
 
-# include <memory>
-# include <Render/UnitProg.hh>
-# include <Render/ProgramResources/IProgramResources.hh>
-# include <Render/Key.hh>
-# include <Render/ProgramResources/Factory/ProgramResourcesFactory.hh>
+#include <memory>
+#include <Render/UnitProg.hh>
+#include <Render/ProgramResources/IProgramResources.hh>
+#include <Render/Key.hh>
+#include <Render/ProgramResources/Factory/ProgramResourcesFactory.hh>
+#include <Utils/Debug.hpp>
 
 namespace AGE
 {
@@ -36,7 +37,9 @@ namespace AGE
 		size_t nbr_resources() const;
 		Program &set_attributes(BufferPrograms const &buffers);
 		bool coherent_attributes(std::vector<std::pair<GLenum, std::string>> const &coherent);
-
+		bool compile();
+		void destroy();
+		inline bool isCompiled() { return _compiled; }
 	private:
 		void _get_resources();
 		void _get_resource(size_t index, GLenum resource, std::string const & buffer);
@@ -47,6 +50,13 @@ namespace AGE
 		ProgramResourcesFactory _resources_factory;
 		GLuint _id;
 		std::string const _name;
+		bool _compiled;
+
+#ifdef AGE_DEBUG
+		std::size_t _version; //used for shader recompilation
+	public:
+		inline std::size_t getVersion() const { return _version; }
+#endif
 	};
 
 	template <typename type_t>

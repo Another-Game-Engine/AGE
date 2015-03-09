@@ -98,13 +98,6 @@ namespace AGE
 		return (*this);
 	}
 
-	RenderScene &RenderScene::setCameraInfos(const PrepareKey &id
-		, const glm::mat4 &projection)
-	{
-		_prepareThread->getQueue()->emplaceCommand<Commands::MainToPrepare::CameraInfos>(id, projection);
-		return (*this);
-	}
-
 	RenderScene &RenderScene::setTransform(const glm::mat4 &v, const std::array<PrepareKey, MAX_CPT_NUMBER> &ids)
 	{
 		for (auto &e : ids)
@@ -136,6 +129,11 @@ namespace AGE
 		co = &_cameras.get(msg.key.id);
 		co->hasMoved = true;
 		co->projection = msg.projection;
+		co->pipelines.clear();
+		for (auto &e : msg.pipelines)
+		{
+			co->pipelines.push_back(e);
+		}
 	}
 
 	void RenderScene::_createCamera(AGE::Commands::MainToPrepare::CreateCamera &msg)
@@ -232,7 +230,7 @@ namespace AGE
 			Drawable &added = _drawables.get(id);
 			auto &submesh = msg.submeshInstances[i];
 			MaterialInstance *material = nullptr;
-			if (submesh.defaultMaterialIndex < msg.submeshInstances.size())
+			if (submesh.defaultMaterialIndex < msg.submaterialInstances.size())
 			{
 				// correct material
 				material = &(msg.submaterialInstances[submesh.defaultMaterialIndex]);
@@ -258,11 +256,23 @@ namespace AGE
 			added.hasMoved = true;
 			added.moveBufferIdx = _drawablesToMove.size() - 1;
 
+			//if (added.mesh.properties.invalu)
 			added.mesh.properties = _createPropertiesContainer();
 			added.transformationProperty = _addTransformationProperty(added.mesh.properties, glm::mat4(1));
+
+			// we remove old material properties
+			for (auto &e : added.materialKeys)
+			{
+				_detachProperty(added.mesh.properties, e);
+			}
+			// we clear the old material key array
+			added.materialKeys.clear();
+
+			// we create new material properties and push keys in oldmaterial property array
 			for (auto &e : material->_properties)
 			{
-				_attachProperty(added.mesh.properties, e);
+				auto materialKey = _attachProperty(added.mesh.properties, e);
+				added.materialKeys.push_back(materialKey);
 			}
 		}
 	}
@@ -393,54 +403,57 @@ namespace AGE
 			}
 			// Do the culling
 			_octree.getElementsCollide(&camera, toDraw);
-			// TODO: Remove that
-			renderCamera.pipelines.resize(RenderType::TOTAL);
-			// iter on elements to draw
 
-			for (Cullable *e : toDraw)
+			// for each render pipeline of camera
+			for (auto &pipelineId : camera.pipelines)
 			{
-				switch (e->key.type)
-				{
-				case PrepareKey::Type::Drawable:
-				{
-					Drawable *currentDrawable = static_cast<Drawable*>(e);
+				renderCamera.pipelines.resize(pipelineId + 1);
+				RenderPipeline *curRenderPipeline = &renderCamera.pipelines[pipelineId];
 
-					RenderPipeline *curRenderPipeline = &renderCamera.pipelines[RenderType::DEFERRED];
-					RenderPainter *curRenderPainter = nullptr;
-
-					for (auto &renderPainter : curRenderPipeline->keys)
+				// iter on elements to draw
+				for (Cullable *e : toDraw)
+				{
+					switch (e->key.type)
 					{
-						if (renderPainter.painter.getId() == currentDrawable->mesh.painter.getId())
+					case PrepareKey::Type::Drawable:
+					{
+						Drawable *currentDrawable = static_cast<Drawable*>(e);
+
+						RenderPainter *curRenderPainter = nullptr;
+
+						for (auto &renderPainter : curRenderPipeline->keys)
 						{
-							curRenderPainter = &renderPainter;
-							break;
+							if (renderPainter.painter.getId() == currentDrawable->mesh.painter.getId())
+							{
+								curRenderPainter = &renderPainter;
+								break;
+							}
 						}
-					}
-					if (curRenderPainter == NULL)
-					{
-						curRenderPipeline->keys.emplace_back();
-						curRenderPainter = &curRenderPipeline->keys.back();
-						curRenderPainter->painter = currentDrawable->mesh.painter;
-					}
+						if (curRenderPainter == NULL)
+						{
+							curRenderPipeline->keys.emplace_back();
+							curRenderPainter = &curRenderPipeline->keys.back();
+							curRenderPainter->painter = currentDrawable->mesh.painter;
+						}
 
-					curRenderPainter->vertices.emplace_back(currentDrawable->mesh.vertices);
-					curRenderPainter->properties.emplace_back(_properties.get(currentDrawable->mesh.properties.getId()));
+						curRenderPainter->vertices.emplace_back(currentDrawable->mesh.vertices);
+						curRenderPainter->properties.emplace_back(_properties.get(currentDrawable->mesh.properties.getId()));
 
-				}
-				break;
-				case PrepareKey::Type::PointLight:
-				{
-					PointLight *currentPointLight = static_cast<PointLight*>(e);
-					renderCamera.lights.pointLight.emplace_back();
-					renderCamera.lights.pointLight.back().light = *currentPointLight;
-					// TODO: Cull the shadows
-				}
-				break;
-				default:
-					assert(!"Type cannot be added to the ");
+					}
 					break;
+					case PrepareKey::Type::PointLight:
+					{
+						PointLight *currentPointLight = static_cast<PointLight*>(e);
+						renderCamera.lights.pointLight.emplace_back();
+						renderCamera.lights.pointLight.back().light = *currentPointLight;
+						// TODO: Cull the shadows
+					}
+					break;
+					default:
+						assert(!"Type cannot be added to the ");
+						break;
+					}
 				}
-
 			}
 		}
 		drawContainer->used = true;
@@ -462,6 +475,13 @@ namespace AGE
 		auto &properties = _properties.get(key.getId());
 
 		return properties.add_property(propertyPtr);
+	}
+
+	void RenderScene::_detachProperty(const Key<Properties> &key, const Key<Property> &prop)
+	{
+		auto &properties = _properties.get(key.getId());
+
+		properties.remove_property(prop);
 	}
 
 	Key<Property> RenderScene::_addTransformationProperty(const Key<Properties> &propertiesKey, const glm::mat4 &value)

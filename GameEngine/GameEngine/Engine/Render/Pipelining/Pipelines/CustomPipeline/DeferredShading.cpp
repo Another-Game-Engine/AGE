@@ -77,6 +77,10 @@ namespace AGE
 		OpenGLTasks::set_depth_test(true);
 		OpenGLTasks::set_clear_color(glm::vec4(1.f, 0.0f, 0.0f, 1.0f));
 		OpenGLTasks::clear_buffer();
+		if (!_programs[BUFFERING]->isCompiled())
+		{
+			return (*this);
+		}
 		_programs[BUFFERING]->use();
 		*_programs[BUFFERING]->get_resource<Mat4>("projection_matrix") = infos.projection;
 		*_programs[BUFFERING]->get_resource<Mat4>("view_matrix") = infos.view;

@@ -16,11 +16,10 @@ public:
 public:
 	GLenum getType() const;
 	GLuint getId() const;
-
+	bool compile();
+	void destroy();
 private:
 	bool compileUnitProg(char const *fileName);
-	void create();
-	void destroy() const;
 
 private:
 	std::string _filename;
