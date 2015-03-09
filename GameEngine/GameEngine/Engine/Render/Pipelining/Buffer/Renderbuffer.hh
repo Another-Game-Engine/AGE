@@ -9,7 +9,7 @@ namespace AGE
 	class Renderbuffer : public AFramebufferStorage
 	{
 	public:
-		Renderbuffer(GLint width, GLint height, GLenum internal_format);
+		Renderbuffer();
 		Renderbuffer(Renderbuffer &&move);
 		~Renderbuffer();
 

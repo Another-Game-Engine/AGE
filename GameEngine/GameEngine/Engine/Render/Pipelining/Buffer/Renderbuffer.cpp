@@ -4,7 +4,7 @@
 namespace AGE
 {
 
-	Renderbuffer::Renderbuffer(GLint width, GLint height, GLenum internal_format) :
+	Renderbuffer::Renderbuffer() :
 		_id(-1),
 		_width(0),
 		_height(0),
