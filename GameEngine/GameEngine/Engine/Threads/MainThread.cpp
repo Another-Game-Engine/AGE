@@ -67,7 +67,8 @@ namespace AGE
 		while (!taskQueue.empty())
 		{
 			auto task = taskQueue.front();
-			assert(execute(task)); // we receive a task that we cannot handle
+			auto success  = execute(task); // we receive a task that we cannot handle
+			AGE_ASSERT(success);
 			taskQueue.pop();
 			taskCounter--;
 		}

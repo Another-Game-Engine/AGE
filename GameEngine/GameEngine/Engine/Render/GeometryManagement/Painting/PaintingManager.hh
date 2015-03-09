@@ -23,7 +23,6 @@ namespace AGE
 		std::shared_ptr<Painter> const &get_painter(Key<Painter> const &key);
 		Key<Painter> get_painter(std::vector<std::pair<GLenum, std::string>> const &types);
 		bool has_painter(std::vector<std::pair<GLenum, std::string>> const &types);
-
 	private:
 		std::vector<std::shared_ptr<Painter>> _painters;
 		AGE::SpinLock _mutex;

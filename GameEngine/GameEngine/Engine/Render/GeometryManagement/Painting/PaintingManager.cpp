@@ -54,6 +54,5 @@ namespace AGE
 		}
 		return (false);
 	}
-
 }
 

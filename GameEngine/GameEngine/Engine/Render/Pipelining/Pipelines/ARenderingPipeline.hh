@@ -15,7 +15,7 @@ namespace AGE
 	{
 	public:
 		virtual ~ARenderingPipeline() {}
-
+		virtual bool recompileShaders();
 	protected:
 		ARenderingPipeline(std::string &&name, std::shared_ptr<PaintingManager> const &painter_manager);
 		ARenderingPipeline(ARenderingPipeline &&move);
