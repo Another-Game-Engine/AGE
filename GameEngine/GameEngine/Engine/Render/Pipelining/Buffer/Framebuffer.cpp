@@ -1,5 +1,6 @@
 #include <Render/Pipelining/Buffer/Framebuffer.hh>
 #include <Render/Pipelining/Buffer/IFramebufferStorage.hh>
+#include <Utils/Debug.hpp>
 
 namespace AGE
 {
@@ -50,6 +51,10 @@ namespace AGE
 	Framebuffer const &Framebuffer::attachment(IFramebufferStorage const &storage, GLenum attach) const
 	{
 		storage.attachment(*this, attach);
+		if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+		{
+			AGE_ASSERT(false);
+		}
 		return (*this);
 	}
 

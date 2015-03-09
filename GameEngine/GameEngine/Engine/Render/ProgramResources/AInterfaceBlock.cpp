@@ -56,7 +56,8 @@ namespace AGE
 
 	BlockResources * AInterfaceBlock::get_resource(Key<ProgramResource> const &key)
 	{
-		if (key) {
+		if (key.isValid())
+		{
 			return (nullptr);
 		}
 		return (_block_resources[key.getId()].get());

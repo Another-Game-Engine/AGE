@@ -11,6 +11,7 @@ namespace AGE
 	struct PointLight;
 	class Properties;
 
+
 	typedef std::uint64_t DRAWABLE_ID;
 	typedef std::uint64_t USER_OBJECT_ID;
 
@@ -26,6 +27,7 @@ namespace AGE
 		glm::mat4 transformation;
 		Key<AnimationInstance> animation;
 		std::vector<glm::mat4> bones; // we'll have to find a optimized solution than copy vector of mat4 oO
+		std::vector < Key<Property> > materialKeys;
 		void reset();
 
 		Drawable();

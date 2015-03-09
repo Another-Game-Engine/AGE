@@ -19,7 +19,7 @@ namespace AGE
 		virtual bool launch();
 		virtual bool stop();
 
-		void setCameraProjection(const glm::mat4& projection, const PrepareKey &key);
+		void setCameraInfos(const glm::mat4& projection, const PrepareKey &key, const std::set<RenderType> &_pipelines);
 		PrepareKey addCamera();
 		void updateGeometry(
 			const PrepareKey &key

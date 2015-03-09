@@ -232,11 +232,9 @@ namespace AGE
 		return nullptr;
 	}
 
-	void PrepareRenderThread::setCameraProjection(const glm::mat4& projection, const PrepareKey &key)
+	void PrepareRenderThread::setCameraInfos(const glm::mat4& projection, const PrepareKey &key, const std::set<RenderType> &pipelines)
 	{
-		auto scene = _getRenderScene(GetMainThread()->getActiveScene());
-		assert(scene != nullptr);
-		scene->setCameraInfos(key, projection);
+		getQueue()->emplaceCommand<Commands::MainToPrepare::CameraInfos>(key, projection, pipelines);
 	}
 
 	PrepareKey PrepareRenderThread::addCamera()
