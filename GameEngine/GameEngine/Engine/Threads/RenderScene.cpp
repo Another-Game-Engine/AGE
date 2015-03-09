@@ -232,7 +232,7 @@ namespace AGE
 			Drawable &added = _drawables.get(id);
 			auto &submesh = msg.submeshInstances[i];
 			MaterialInstance *material = nullptr;
-			if (submesh.defaultMaterialIndex < msg.submeshInstances.size())
+			if (submesh.defaultMaterialIndex < msg.submaterialInstances.size())
 			{
 				// correct material
 				material = &(msg.submaterialInstances[submesh.defaultMaterialIndex]);
@@ -394,7 +394,8 @@ namespace AGE
 			// Do the culling
 			_octree.getElementsCollide(&camera, toDraw);
 			// TODO: Remove that
-			renderCamera.pipelines.resize(RenderType::TOTAL);
+			// cleblic RenderType::TOTAL for DEFERED
+			renderCamera.pipelines.resize(1);
 			// iter on elements to draw
 
 			for (Cullable *e : toDraw)
@@ -405,7 +406,10 @@ namespace AGE
 				{
 					Drawable *currentDrawable = static_cast<Drawable*>(e);
 
-					RenderPipeline *curRenderPipeline = &renderCamera.pipelines[RenderType::DEFERRED];
+					// cleblic FOR DEFERED
+					// RenderPipeline *curRenderPipeline = &renderCamera.pipelines[RenderType::DEFERRED];
+					// cleblic FOR BASIC
+					RenderPipeline *curRenderPipeline = &renderCamera.pipelines[RenderType::BASIC];
 					RenderPainter *curRenderPainter = nullptr;
 
 					for (auto &renderPainter : curRenderPipeline->keys)

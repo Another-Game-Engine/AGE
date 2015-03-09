@@ -380,11 +380,11 @@ namespace AGE
 
 	bool AssetsManager::AssetsLoadingChannel::updateList(std::size_t &noLoaded, std::size_t &total)
 	{
-		std::lock_guard<std::mutex> lock(_mutex);
 		if (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - _lastUpdate).count() > 33)
 		{
 			_lastUpdate = std::chrono::high_resolution_clock::now();
 			std::size_t i = 0;
+			std::lock_guard<std::mutex> lock(_mutex);
 			_list.remove_if([&](AssetsManager::AssetsLoadingStatus &e){
 				if (i > 30)
 					return false;

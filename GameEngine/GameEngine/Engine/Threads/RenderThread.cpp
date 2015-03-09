@@ -45,7 +45,7 @@ namespace AGE
 				return;
 			}
 			//pipelines[DEFERRED] = std::make_unique<DeferredShading>(_context->getScreenSize(), paintingManager);
-			pipelines[DEFERRED] = std::make_unique<DeferredShading>(glm::uvec2(1280, 720), paintingManager); 
+			//pipelines[DEFERRED] = std::make_unique<DeferredShading>(glm::uvec2(1280, 720), paintingManager); 
 			pipelines[BASIC] = std::make_unique<BasicPipeline>(paintingManager);
 			msg.setValue(true);
 		});
