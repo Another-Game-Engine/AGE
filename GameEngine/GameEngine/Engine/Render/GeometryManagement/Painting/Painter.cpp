@@ -41,7 +41,8 @@ namespace AGE
 		// to be sure that this function is only called in render thread
 		AGE_ASSERT(GetThreadManager()->getCurrentThread() == (AGE::Thread*)GetRenderThread());
 
-		if (!key) {
+		if (!key.isValid())
+		{
 			return (*this);
 		}
 		auto iterator = _vertices.begin() + key.getId();
@@ -70,7 +71,8 @@ namespace AGE
 		// to be sure that this function is only called in render thread
 		AGE_ASSERT(GetThreadManager()->getCurrentThread() == (AGE::Thread*)GetRenderThread());
 
-		if (!key) {
+		if (!key.isValid())
+		{
 			return (nullptr);
 		}
 		return (&_vertices[key.getId()]);
@@ -86,7 +88,7 @@ namespace AGE
 		int index = 0;
 		for (auto &draw_element : drawList)
 		{
-			if (draw_element)
+			if (draw_element.isValid())
 			{
 				auto &property = propertiesList[index];
 				property.update_properties(program);

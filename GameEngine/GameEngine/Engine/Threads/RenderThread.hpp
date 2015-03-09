@@ -10,6 +10,7 @@
 #include <vector>
 #include <Render/Properties/Properties.hh>
 #include <Engine/SpacePartitioning/Ouptut/RenderCamera.hh>
+#include <Render/PipelineTypes.hpp>
 
 namespace AGE
 {
@@ -20,12 +21,6 @@ namespace AGE
 	struct RenderCamera;
 
 	typedef Properties Material;
-
-	enum RenderType {
-		BASIC = 0,
-		DEFERRED,
-		TOTAL
-	};
 
 	class RenderThread : public Thread, public QueueOwner
 	{
