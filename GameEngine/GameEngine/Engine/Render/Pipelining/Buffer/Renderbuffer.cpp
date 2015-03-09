@@ -4,15 +4,12 @@
 namespace AGE
 {
 
-	Renderbuffer::Renderbuffer(GLint width, GLint height, GLenum internal_format) :
-		_id(0),
-		_width(width),
-		_height(height),
-		_internal_format(internal_format)
+	Renderbuffer::Renderbuffer() :
+		_id(-1),
+		_width(0),
+		_height(0),
+		_internal_format(GL_DEPTH_COMPONENT16)
 	{
-		glGenRenderbuffers(1, &_id);
-		glBindRenderbuffer(GL_RENDERBUFFER, _id);
-		glRenderbufferStorage(GL_RENDERBUFFER, _internal_format, _width, _height);
 	}
 
 	Renderbuffer::Renderbuffer(Renderbuffer &&move) :
@@ -22,6 +19,20 @@ namespace AGE
 		_internal_format(move._internal_format)
 	{
 		move._id = 0;
+	}
+
+	bool Renderbuffer::init(GLint width, GLint height, GLenum internal_format)
+	{
+		_width = width;
+		_height = height;
+		_internal_format = internal_format;
+		glGenRenderbuffers(1, &_id);
+		if (_id == -1) {
+			return false;
+		}
+		glBindRenderbuffer(GL_RENDERBUFFER, _id);
+		glRenderbufferStorage(GL_RENDERBUFFER, _internal_format, _width, _height);
+		return true;
 	}
 
 	Renderbuffer::~Renderbuffer()
