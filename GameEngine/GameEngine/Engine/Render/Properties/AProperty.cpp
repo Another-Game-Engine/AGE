@@ -5,6 +5,9 @@ namespace AGE
 {
 	AProperty::AProperty(std::string &&name) :
 		_name(std::move(name))
+#if AGE_DEBUG
+		, _shaderVersion(0)
+#endif
 	{
 
 	}
@@ -23,8 +26,18 @@ namespace AGE
 
 	std::shared_ptr<IProgramResources> AProperty::get_resource(std::shared_ptr<Program> const &program)
 	{
-		for (auto &resource : _registered_resources) {
-			if (*program == *resource.first) {
+#ifdef AGE_DEBUG
+		auto version = program->getVersion();
+		if (version != _shaderVersion)
+		{
+			_shaderVersion = version;
+			_registered_resources.clear();
+		}
+#endif
+		for (auto &resource : _registered_resources)
+		{
+			if (*program == *resource.first)
+			{
 				return resource.second;
 			}
 		}

@@ -43,4 +43,7 @@ namespace AGE
 		return (std::shared_ptr<IProgramResources>(nullptr));
 	}
 
+	void UniformsFactory::reset()
+	{
+	}
 }

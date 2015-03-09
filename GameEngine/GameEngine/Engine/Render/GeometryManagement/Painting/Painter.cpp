@@ -57,15 +57,6 @@ namespace AGE
 		return (*this);
 	}
 
-	Painter &Painter::remove_properties(Key<Properties> &key)
-	{
-		// to be sure that this function is only called in render thread
-		AGE_ASSERT(GetThreadManager()->getCurrentThread() == (AGE::Thread*)GetRenderThread());
-
-		_propertiesToRemove.push_back(key);
-		return (*this);
-	}
-
 	Vertices * Painter::get_vertices(Key<Vertices> const &key)
 	{
 		// to be sure that this function is only called in render thread

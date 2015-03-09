@@ -434,7 +434,7 @@ namespace AGE
 		else
 			trigger = 0.0f;
 
-		if (_chunkCounter >= _maxChunk)
+		/*if (_chunkCounter >= _maxChunk)
 		{
 			AScene *weakOnThis = (AScene*)(this);
 			for (auto i = 0; i < 10; ++i)
@@ -473,7 +473,7 @@ namespace AGE
 #endif
 			}
 			_chunkCounter = 0;
-		}
+		}*/
 
 #ifdef USE_IMGUI
 		if (ImGui::CollapsingHeader("Light settings"))
@@ -496,6 +496,11 @@ namespace AGE
 			}
 		}
 #endif
+
+		if (ImGui::Button("Reload shaders or type R") || getInstance<Input>()->getInput(SDLK_r))
+		{
+			GetRenderThread()->getQueue()->emplaceTask<Tasks::Render::ReloadShaders>();
+		}
 
 		auto camComponent = GLOBAL_CAMERA.getComponent<CameraComponent>();
 		static bool cameraPipelines[2] = {false, false};

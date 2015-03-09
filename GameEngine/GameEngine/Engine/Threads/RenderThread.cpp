@@ -36,6 +36,7 @@ namespace AGE
 
 	void RenderThread::_recompileShaders()
 	{
+#ifdef AGE_DEBUG
 		for (auto &e : pipelines)
 		{
 			if (!e)
@@ -44,6 +45,9 @@ namespace AGE
 			}
 			e->recompileShaders();
 		}
+#else
+		std::cerr << "Error : You cannot recompile shader at runtime. This feature is enabled only in debug mode\n";
+#endif
 	}
 
 	bool RenderThread::init()
@@ -58,6 +62,7 @@ namespace AGE
 			}
 			pipelines[DEFERRED] = std::make_unique<DeferredShading>(_context->getScreenSize(), paintingManager);
 			pipelines[BASIC] = std::make_unique<BasicPipeline>(paintingManager);
+			_recompileShaders();
 			msg.setValue(true);
 		});
 
@@ -67,6 +72,10 @@ namespace AGE
 			glClear(GL_COLOR_BUFFER_BIT);
 		});
 
+		registerCallback<Tasks::Render::ReloadShaders>([&](Tasks::Render::ReloadShaders& msg)
+		{
+			_recompileShaders();
+		});
 
 		registerCallback<Tasks::Render::GetWindowSize>([&](Tasks::Render::GetWindowSize &msg)
 		{
