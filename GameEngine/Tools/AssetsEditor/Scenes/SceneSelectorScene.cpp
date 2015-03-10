@@ -2,8 +2,7 @@
 #include <imgui\imgui.h>
 #include "AssetsEditorScene.hpp"
 #include "WorldEditorScene.hpp"
-#include <Core/Input.hh>
-#include <SDL/SDL.h>
+#include <Core/Inputs/Input.hh>
 
 namespace AGE
 {
@@ -46,7 +45,7 @@ namespace AGE
 
 	bool SceneSelectorScene::userUpdateEnd(double time)
 	{
-		if (getInstance<Input>()->getInput(SDLK_ESCAPE))
+		if (getInstance<Input>()->getMappedKey(AGE_ESCAPE))
 			return (false);
 		return true;
 	}

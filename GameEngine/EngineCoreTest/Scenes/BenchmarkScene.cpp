@@ -11,9 +11,8 @@
 #include <Threads/Tasks/BasicTasks.hpp>
 #include <Threads/Tasks/ToRenderTasks.hpp>
 #include <glm/glm.hpp>
-#include <SDL/SDL.h>
 #include <Threads/TaskScheduler.hpp>
-#include <Core/Input.hh>
+#include <Core/Inputs/Input.hh>
 
 #include <Components/CameraComponent.hpp>
 #include <Components/Light.hh>
@@ -387,32 +386,57 @@ namespace AGE
 
 		auto &lc = GLOBAL_CAMERA.getLink();
 		float c = 5.f;
-		if (getInstance<Input>()->getInput(SDLK_LSHIFT))
+
+		if (getInstance<Input>()->getPhysicalKey(AGE_LSHIFT))
 			c = c * 3.0f;
-		if (getInstance<Input>()->getInput(SDLK_z))
-			lc.setForward(glm::vec3(0.f, 0.f, -c * time));
-		if (getInstance<Input>()->getInput(SDLK_s))
-			lc.setForward(glm::vec3(0.f, 0.f, c * time));
-		if (getInstance<Input>()->getInput(SDLK_q))
-			lc.setForward(glm::vec3(-c * time, 0.f, 0.f));
-		if (getInstance<Input>()->getInput(SDLK_d))
-			lc.setForward(glm::vec3(c * time, 0.f, 0.f));
-		if (getInstance<Input>()->getInput(SDLK_RIGHT))
-			lc.setOrientation(glm::rotate(lc.getOrientation(), -50.f * (float)time, glm::vec3(0.f, 1.f, 0.f)));
-		if (getInstance<Input>()->getInput(SDLK_LEFT))
-			lc.setOrientation(glm::rotate(lc.getOrientation(), 50.f * (float)time, glm::vec3(0.f, 1.f, 0.f)));
-		if (getInstance<Input>()->getInput(SDLK_UP))
-			lc.setOrientation(glm::rotate(lc.getOrientation(), 50.f * (float)time, glm::vec3(1.f, 0.f, 0.f)));
-		if (getInstance<Input>()->getInput(SDLK_DOWN))
-			lc.setOrientation(glm::rotate(lc.getOrientation(), -50.f * (float)time, glm::vec3(1.0f, 0.f, 0.f)));
-		if (getInstance<Input>()->getInput(SDLK_a))
-			lc.setOrientation(glm::rotate(lc.getOrientation(), 50.f * (float)time, glm::vec3(0.f, 0.f, 1.f)));
-		if (getInstance<Input>()->getInput(SDLK_e))
-			lc.setOrientation(glm::rotate(lc.getOrientation(), -50.f * (float)time, glm::vec3(0.f, 0.f, 1.f)));
-		if (getInstance<Input>()->getInput(SDLK_ESCAPE))
+
+		// XBOX CONTROLLER INPUTS
+		Joystick controller;
+		if (getInstance<Input>()->getJoystick(0, controller))
+		{
+			if (glm::abs(controller.axis[AGE_JOYSTICK_AXIS_LEFTY]) > 0.3)
+				lc.setForward(glm::vec3(0.f, 0.f, controller.axis[AGE_JOYSTICK_AXIS_LEFTY] * c * time));
+			if (glm::abs(controller.axis[AGE_JOYSTICK_AXIS_LEFTX]) > 0.3)
+				lc.setForward(glm::vec3(controller.axis[AGE_JOYSTICK_AXIS_LEFTX] * c * time, 0.f, 0.f));
+			if (glm::abs(controller.axis[AGE_JOYSTICK_AXIS_RIGHTX]) > 0.3)
+				lc.setOrientation(glm::rotate(lc.getOrientation(), -controller.axis[AGE_JOYSTICK_AXIS_RIGHTX] * 50.f * (float)time, glm::vec3(0.f, 1.f, 0.f)));
+			if (glm::abs(controller.axis[AGE_JOYSTICK_AXIS_RIGHTY]) > 0.3)
+				lc.setOrientation(glm::rotate(lc.getOrientation(), -controller.axis[AGE_JOYSTICK_AXIS_RIGHTY] * 50.f * (float)time, glm::vec3(1.0f, 0.f, 0.f)));
+			float leftTrigger = controller.axis[AGE_JOYSTICK_AXIS_TRIGGERLEFT] * 0.5f + 0.5f;
+			float rightTrigger = controller.axis[AGE_JOYSTICK_AXIS_TRIGGERRIGHT] * 0.5f + 0.5f;
+			if (leftTrigger > 0.4)
+				lc.setOrientation(glm::rotate(lc.getOrientation(), leftTrigger * 50.f * (float)time, glm::vec3(0.f, 0.f, 1.f)));
+			if (rightTrigger > 0.4)
+				lc.setOrientation(glm::rotate(lc.getOrientation(), -rightTrigger * 50.f * (float)time, glm::vec3(0.f, 0.f, 1.f)));
+		}
+		else // KEYBOARD INPUT
+		{
+			if (getInstance<Input>()->getPhysicalKey(AGE_w))
+				lc.setForward(glm::vec3(0.f, 0.f, -c * time));
+			if (getInstance<Input>()->getPhysicalKey(AGE_s))
+				lc.setForward(glm::vec3(0.f, 0.f, c * time));
+			if (getInstance<Input>()->getPhysicalKey(AGE_a))
+				lc.setForward(glm::vec3(-c * time, 0.f, 0.f));
+			if (getInstance<Input>()->getPhysicalKey(AGE_d))
+				lc.setForward(glm::vec3(c * time, 0.f, 0.f));
+			if (getInstance<Input>()->getPhysicalKey(AGE_RIGHT))
+				lc.setOrientation(glm::rotate(lc.getOrientation(), -50.f * (float)time, glm::vec3(0.f, 1.f, 0.f)));
+			if (getInstance<Input>()->getPhysicalKey(AGE_LEFT))
+				lc.setOrientation(glm::rotate(lc.getOrientation(), 50.f * (float)time, glm::vec3(0.f, 1.f, 0.f)));
+			if (getInstance<Input>()->getPhysicalKey(AGE_UP))
+				lc.setOrientation(glm::rotate(lc.getOrientation(), 50.f * (float)time, glm::vec3(1.f, 0.f, 0.f)));
+			if (getInstance<Input>()->getPhysicalKey(AGE_DOWN))
+				lc.setOrientation(glm::rotate(lc.getOrientation(), -50.f * (float)time, glm::vec3(1.0f, 0.f, 0.f)));
+			if (getInstance<Input>()->getPhysicalKey(AGE_q))
+				lc.setOrientation(glm::rotate(lc.getOrientation(), 50.f * (float)time, glm::vec3(0.f, 0.f, 1.f)));
+			if (getInstance<Input>()->getPhysicalKey(AGE_e))
+				lc.setOrientation(glm::rotate(lc.getOrientation(), -50.f * (float)time, glm::vec3(0.f, 0.f, 1.f)));
+		}
+
+		if (getInstance<Input>()->getMappedKey(AGE_ESCAPE))
 			return (false);
 		static float trigger = 0.0f;
-		if (getInstance<Input>()->getInput(SDLK_SPACE) && trigger == 0.0f)
+		if (getInstance<Input>()->getMappedKey(AGE_SPACE) && trigger == 0.0f)
 		{
 			trigger += time;
 			if (trigger >= 1.0f)
@@ -497,7 +521,7 @@ namespace AGE
 		}
 #endif
 
-		if (ImGui::Button("Reload shaders or type R") || getInstance<Input>()->getInput(SDLK_r))
+		if (ImGui::Button("Reload shaders or type R") || getInstance<Input>()->getPhysicalKey(AGE_r))
 		{
 			GetRenderThread()->getQueue()->emplaceTask<Tasks::Render::ReloadShaders>();
 		}

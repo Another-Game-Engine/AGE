@@ -5,8 +5,6 @@
 #include <Entities/Entity.hh>
 #include <Core/AScene.hh>
 #include <Physic/BulletDynamicManager.hpp>
-#include <SDL/SDL.h>
-
 
 namespace AGE
 {
@@ -100,12 +98,12 @@ namespace AGE
 	{
 		_entity = entity;
 		_manager = dynamic_cast<BulletDynamicManager*>(scene->getInstance<BulletCollisionManager>());
-		setKey(LEFT, SDLK_a);
-		setKey(RIGHT, SDLK_d);
-		setKey(FORWARD, SDLK_w);
-		setKey(BACKWARD, SDLK_s);
-		setKey(JUMP, SDLK_SPACE);
-		setKey(RUN, SDLK_LSHIFT);
+		setKey(LEFT, AGE_a);
+		setKey(RIGHT, AGE_d);
+		setKey(FORWARD, AGE_w);
+		setKey(BACKWARD, AGE_s);
+		setKey(JUMP, AGE_SPACE);
+		setKey(RUN, AGE_LSHIFT);
 		controls.fill(false);
 
 		btTransform transform;

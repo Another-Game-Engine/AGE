@@ -20,7 +20,7 @@
 #include <AssetManagement/AssetManager.hh>
 #include <Core/SceneManager.hh>
 #include <Context/IRenderContext.hh>
-#include <Core/Input.hh>
+#include <Core/Inputs/Input.hh>
 #include <Skinning/AnimationManager.hpp>
 
 #endif

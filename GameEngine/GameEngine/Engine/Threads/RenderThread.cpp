@@ -1,15 +1,13 @@
 #include "RenderThread.hpp"
 #include <Core/Engine.hh>
-#include <Context/SdlContext.hh>
+#include <Context/SDL/SdlContext.hh>
 #include <Utils/ThreadName.hpp>
 #include <Threads/Tasks/ToRenderTasks.hpp>
 #include <Threads/Commands/ToRenderCommands.hpp>
 #include <Threads/Tasks/BasicTasks.hpp>
-#include <Context/SdlContext.hh>
 #include <Utils/Containers/Vector.hpp>
 #include <Threads/ThreadManager.hpp>
 #include <Core/Engine.hh>
-#include <Context/SdlContext.hh>
 #include <Render/GeometryManagement/Painting/Painter.hh>
 #include <Render/Pipelining/Pipelines/CustomPipeline/BasicPipeline.hh>
 #include <Render/Pipelining/Pipelines/CustomPipeline/DeferredShading.hh>
@@ -91,7 +89,7 @@ namespace AGE
 		registerCallback<Tasks::Render::CreateRenderContext>([this](Tasks::Render::CreateRenderContext &msg)
 		{
 			_context = msg.engine->setInstance<SdlContext, IRenderContext>();
-			if (!_context->init(0, 1280, 720, "~AGE~ V0.00001 Demo"))
+			if (!_context->init(1280, 720, "~AGE~ V0.00001 Demo"))
 			{
 				msg.setValue(false);
 				return;
