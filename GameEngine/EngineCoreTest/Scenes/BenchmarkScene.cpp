@@ -290,7 +290,7 @@ namespace AGE
 					auto& _l = GLOBAL_SPONZA.getLink();
 					//_l->setPosition(glm::vec3(-5, 0, 0));
 					RigidBody *rb = GLOBAL_SPONZA.addComponent<RigidBody>(0.0f);
-					rb->setCollisionMesh(this, GLOBAL_SPONZA, "../../Assets/Serialized/sponza/sponza_static.phage");
+					rb->setCollisionMesh("../../Assets/Serialized/sponza/sponza_static.phage");
 					_l.setScale(glm::vec3(10.f));
 				
 					///////@paul first we set a mesh with only 1 submesh
@@ -348,7 +348,7 @@ namespace AGE
 
 #ifdef PHYSIC_SIMULATION
 	auto rigidBody = GLOBAL_FLOOR.addComponent<RigidBody>(0.0f);
-	rigidBody->setCollisionShape(this, GLOBAL_FLOOR, RigidBody::BOX);
+	rigidBody->setCollisionShape(RigidBody::BOX);
 	rigidBody->getBody().setFriction(0.3f);
 #endif //PHYSIC_SIMULATION
 
@@ -450,7 +450,7 @@ namespace AGE
 			mesh = e.addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("cube/cube.sage")
 				, getInstance<AGE::AssetsManager>()->getMaterial(OldFile("cube/cube.mage")));
 			auto rigidBody = e.addComponent<RigidBody>(1.0f);
-			rigidBody->setCollisionShape((AScene*)(this), e, RigidBody::BOX);
+			rigidBody->setCollisionShape(RigidBody::BOX);
 			rigidBody->getBody().setFriction(0.5f);
 			rigidBody->getBody().setRestitution(0.5f);
 			rigidBody->getBody().applyCentralImpulse(convertGLMVectorToBullet(GLOBAL_CAMERA.getLink().getOrientation() * glm::vec3(0, 0, -10)));
@@ -488,9 +488,9 @@ namespace AGE
 #ifdef PHYSIC_SIMULATION
 				auto rigidBody = e.addComponent<RigidBody>(1.0f);
 				if (i % 4 == 0)
-					rigidBody->setCollisionShape(this, e, RigidBody::SPHERE);
+					rigidBody->setCollisionShape(RigidBody::SPHERE);
 				else
-					rigidBody->setCollisionShape(this, e, RigidBody::BOX);
+					rigidBody->setCollisionShape(RigidBody::BOX);
 				rigidBody->getBody().setFriction(0.5f);
 				rigidBody->getBody().setRestitution(0.5f);
 				rigidBody->getBody().applyTorque(btVector3(float(rand() % 1000) / 300.0f, float(rand() % 1000) / 300.0f, float(rand() % 1000) / 300.0f));

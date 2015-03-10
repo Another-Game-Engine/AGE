@@ -47,15 +47,12 @@ namespace AGE
 		void setMass(float mass);
 		int getMass() const;
 		void setInertia(const glm::vec3 &inertia);
-		void setCollisionMesh(AScene *scene
-			, const Entity &entity
-			, const std::string &meshPath
+		void setCollisionMesh(
+			const std::string &meshPath
 			, short filterGroup = 1
 			, short filterMask = -1);
 		void setCollisionShape(
-			AScene *scene
-			, const Entity &entity
-			, CollisionShape c
+			CollisionShape c
 			, short filterGroup = 1
 			, short filterMask = -1);
 		void setRotationConstraint(bool x, bool y, bool z);
@@ -90,6 +87,7 @@ namespace AGE
 		std::size_t selectedShapeIndex = 0;
 		std::string selectedShapeName = "";
 		std::string selectedShapePath = "";
+		bool simpleShapes = true;
 
 		virtual void editorCreate(AScene *scene);
 		virtual void editorDelete(AScene *scene);

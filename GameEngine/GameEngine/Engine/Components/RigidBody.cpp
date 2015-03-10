@@ -82,9 +82,8 @@ namespace AGE
 		_inertia = convertGLMVectorToBullet(inertia);
 	}
 
-	void RigidBody::setCollisionMesh(AScene *scene
-		, const Entity &entity
-		, const std::string &meshPath
+	void RigidBody::setCollisionMesh(
+		const std::string &meshPath
 		, short filterGroup /*= 1*/
 		, short filterMask /*= -1*/)
 	{
@@ -134,9 +133,7 @@ namespace AGE
 	}
 
 	void RigidBody::setCollisionShape(
-		AScene *scene
-		, const Entity &entity
-		, CollisionShape c
+		CollisionShape c
 		, short filterGroup /*= 1*/
 		, short filterMask /* = -1*/)
 	{
@@ -260,63 +257,67 @@ namespace AGE
 		//	}
 		//}
 
-		//ImGui::PushItemWidth(-1);
-		//if (ImGui::ListBox("Shapes", (int*)&selectedShapeIndex, &(shapeFileList->front()), (int)(shapeFileList->size())))
+		//ImGui::Checkbox("Simple shape", &simpleShapes)
 		//{
-		//	selectedShapeName= (*shapeFileList)[selectedShapeIndex];
-		//	selectedShapePath= (*shapePathList)[selectedShapeIndex];
-
-		//	_mesh = _manager->loadShape(selectedShapePath);
-
-		//	if (!_mesh)
+		//	if (simpleShapes)
 		//	{
-		//		scene->getInstance<AGE::AssetsManager>()->loadMesh(OldFile(selectedMeshPath), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents }, selectedMeshPath);
-
-		//		std::size_t totalToLoad = 0;
-		//		std::size_t	toLoad = 0;
-		//		std::string loadingError;
-		//		do {
-		//			scene->getInstance<AGE::AssetsManager>()->updateLoadingChannel(selectedMeshPath, totalToLoad, toLoad, loadingError);
-		//		} while
-		//			(toLoad != 0 && loadingError.size() == 0);
+		//		reset();
+		//		selectedShapeName = "";
+		//		selectedShapePath = "";
+		//		selectedShapeIndex = 0;
 		//	}
-		//	_mesh = scene->getInstance<AGE::AssetsManager>()->getMesh(selectedMeshPath);
-		//	AGE_ASSERT(_mesh != nullptr);
-		//	if (_material)
+		//	else
 		//	{
-		//		setMeshAndMaterial(_mesh, _material);
+		//		reset();
+		//		_collisionShapeType = UNDEFINED;
 		//	}
 		//}
-		//ImGui::PopItemWidth();
-		//ImGui::PushItemWidth(-1);
-		//if (!materialFileList->empty() && ImGui::ListBox("Material", (int*)&selectedMaterialIndex, &(materialFileList->front()), (int)(materialFileList->size())))
+
+		//if (!simpleShapes) // if mesh
 		//{
-		//	selectedMaterialName = (*materialFileList)[selectedMaterialIndex];
-		//	selectedMaterialPath = (*materialPathList)[selectedMaterialIndex];
-
-		//	_material = scene->getInstance<AGE::AssetsManager>()->getMaterial(selectedMaterialPath);
-
-		//	if (!_material)
+		//	ImGui::PushItemWidth(-1);
+		//	if (ImGui::ListBox("Shapes", (int*)&selectedShapeIndex, &(shapeFileList->front()), (int)(shapeFileList->size())))
 		//	{
-		//		scene->getInstance<AGE::AssetsManager>()->loadMaterial(OldFile(selectedMaterialPath), selectedMaterialPath);
+		//		selectedShapeName = (*shapeFileList)[selectedShapeIndex];
+		//		selectedShapePath = (*shapePathList)[selectedShapeIndex];
 
-		//		std::size_t totalToLoad = 0;
-		//		std::size_t	toLoad = 0;
-		//		std::string loadingError;
-		//		do {
-		//			scene->getInstance<AGE::AssetsManager>()->updateLoadingChannel(selectedMaterialPath, totalToLoad, toLoad, loadingError);
-		//		} while
-		//			(toLoad != 0 && loadingError.size() == 0);
+		//		set
 		//	}
-		//	_material = scene->getInstance<AGE::AssetsManager>()->getMaterial(selectedMaterialPath);
-		//	AGE_ASSERT(_material != nullptr);
-		//	if (_mesh)
+		//	ImGui::PopItemWidth();
+		//	ImGui::PushItemWidth(-1);
+		//	if (!materialFileList->empty() && ImGui::ListBox("Material", (int*)&selectedMaterialIndex, &(materialFileList->front()), (int)(materialFileList->size())))
 		//	{
-		//		setMeshAndMaterial(_mesh, _material);
+		//		selectedMaterialName = (*materialFileList)[selectedMaterialIndex];
+		//		selectedMaterialPath = (*materialPathList)[selectedMaterialIndex];
+
+		//		_material = scene->getInstance<AGE::AssetsManager>()->getMaterial(selectedMaterialPath);
+
+		//		if (!_material)
+		//		{
+		//			scene->getInstance<AGE::AssetsManager>()->loadMaterial(OldFile(selectedMaterialPath), selectedMaterialPath);
+
+		//			std::size_t totalToLoad = 0;
+		//			std::size_t	toLoad = 0;
+		//			std::string loadingError;
+		//			do {
+		//				scene->getInstance<AGE::AssetsManager>()->updateLoadingChannel(selectedMaterialPath, totalToLoad, toLoad, loadingError);
+		//			} while
+		//				(toLoad != 0 && loadingError.size() == 0);
+		//		}
+		//		_material = scene->getInstance<AGE::AssetsManager>()->getMaterial(selectedMaterialPath);
+		//		AGE_ASSERT(_material != nullptr);
+		//		if (_mesh)
+		//		{
+		//			setMeshAndMaterial(_mesh, _material);
+		//		}
 		//	}
+		//	//ImGui::ListBoxFooter();
+		//	ImGui::PopItemWidth();
 		//}
-		////ImGui::ListBoxFooter();
-		//ImGui::PopItemWidth();
+		//else
+		//{
+
+		//}
 	}
 #endif
 }
