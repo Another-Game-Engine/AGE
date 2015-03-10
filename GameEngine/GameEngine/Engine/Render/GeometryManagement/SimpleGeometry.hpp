@@ -11,12 +11,12 @@ namespace AGE
 	namespace Quad
 	{
 		static const std::size_t PositionsNumber = 4;
-		static const std::vector<glm::vec4> Positions =
+		static const std::vector<glm::vec4> Positions = // position x,y - UVs z,w
 		{
 			glm::vec4(-1.0f, 1.0f, 0.0f, 1.0f)
-			, glm::vec4(1.0f, 1.0f, 0.0f, 1.0f)
-			, glm::vec4(1.0f, -1.0f, 0.0f, 1.0f)
-			, glm::vec4(-1.0f, -1.0f, 0.0f, 1.0f)
+			, glm::vec4(-1.0f, -1.0f, 0.0f, 0.0f)
+			, glm::vec4(1.0f, -1.0f, 1.0f, 0.0f)
+			, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f)
 		};
 
 		static const std::size_t IndicesNumber = 6;

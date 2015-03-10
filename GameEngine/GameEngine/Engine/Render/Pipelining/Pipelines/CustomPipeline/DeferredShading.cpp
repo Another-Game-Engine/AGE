@@ -47,12 +47,12 @@ namespace AGE
 		_rendering_list[LIGHTNING] = std::make_shared<RenderingPass>([&](FUNCTION_ARGS){
 		});
 		_rendering_list[MERGING] = std::make_shared<Rendering>([&](FUNCTION_ARGS){
+			//OpenGLTasks::set_stencil_test(false);
+			//OpenGLTasks::set_clear_depth(0);
+			//OpenGLTasks::set_scissor_test(false);
 			OpenGLTasks::set_depth_test(false);
-			OpenGLTasks::set_clear_color(glm::vec4(0.f, 1.0f, 0.0f, 1.0f));
-			OpenGLTasks::clear_buffer();
-			OpenGLTasks::set_blend_test(false, 0);
-			OpenGLTasks::set_blend_test(false, 1);
-			OpenGLTasks::set_blend_test(false, 2);
+			//OpenGLTasks::set_clear_color(glm::vec4(0.f, 0.0f, 0.0f, 1.0f));
+			//OpenGLTasks::clear_buffer();
 			Key<Painter> quadPainterKey;
 			Key<Vertices> quadVerticesKey;
 			GetRenderThread()->getQuadGeometry(quadVerticesKey, quadPainterKey);
