@@ -53,10 +53,13 @@ namespace AGE
 
 			auto myPainter = painter_manager->get_painter(quadPainterKey);
 			myPainter->uniqueDraw(GL_TRIANGLES, _programs[MERGING], Properties(), quadVerticesKey);
+
+			//auto myPainter = painter_manager->get_painter(quadPainterKey);
+			//painter->uniqueDraw(GL_TRIANGLES, _programs[MERGING], properties[0], vertices[0]);
 		});
-		addRenderPassOutput<Texture2D, RenderingPass>(_rendering_list[BUFFERING], GL_COLOR_ATTACHMENT0, screen_size.x, screen_size.y, GL_RGBA8, true);
-		addRenderPassOutput<Texture2D, RenderingPass>(_rendering_list[BUFFERING], GL_COLOR_ATTACHMENT1, screen_size.x, screen_size.y, GL_RGBA8, true);
-		addRenderPassOutput<Texture2D, RenderingPass>(_rendering_list[BUFFERING], GL_COLOR_ATTACHMENT2, screen_size.x, screen_size.y, GL_RGBA8, true);
+		_diffuseTexture = addRenderPassOutput<Texture2D, RenderingPass>(_rendering_list[BUFFERING], GL_COLOR_ATTACHMENT0, screen_size.x, screen_size.y, GL_RGBA8, true);
+		_normalTexture = addRenderPassOutput<Texture2D, RenderingPass>(_rendering_list[BUFFERING], GL_COLOR_ATTACHMENT1, screen_size.x, screen_size.y, GL_RGBA8, true);
+		_specularTexture = addRenderPassOutput<Texture2D, RenderingPass>(_rendering_list[BUFFERING], GL_COLOR_ATTACHMENT2, screen_size.x, screen_size.y, GL_RGBA8, true);
 		addRenderPassOutput<Renderbuffer, RenderingPass>(_rendering_list[BUFFERING], GL_DEPTH_ATTACHMENT, screen_size.x, screen_size.y, GL_DEPTH_COMPONENT16);
 	}
 
@@ -83,7 +86,7 @@ namespace AGE
 		}
 
 		_programs[MERGING]->use();
-		auto &mapColor = _programs[MERGING]->get_resource<Sampler2D>("diffuse_buffer");
+		auto &mapColor = _programs[MERGING]->get_resource<Sampler2D>("diffuse_map");
 		*mapColor = _diffuseTexture;
 		for (auto key : pipeline.keys)
 		{

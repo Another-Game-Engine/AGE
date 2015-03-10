@@ -38,12 +38,13 @@ namespace AGE
 
 
 	template <typename OUTPUT, typename RENDER, typename ...Params>
-	void addRenderPassOutput(std::shared_ptr<IRendering> const &render, GLenum attachment, Params... params)
+	std::shared_ptr<OUTPUT> addRenderPassOutput(std::shared_ptr<IRendering> const &render, GLenum attachment, Params... params)
 	{
 		auto const &output = std::make_shared<OUTPUT>();
 		auto error = output->init(std::forward<Params>(params)...);
 		AGE_ASSERT(error != false && "Texture generation error.");
 		std::static_pointer_cast<RENDER>(render)->push_storage_output<OUTPUT>(attachment, output);
+		return output;
 	}
 
 }
