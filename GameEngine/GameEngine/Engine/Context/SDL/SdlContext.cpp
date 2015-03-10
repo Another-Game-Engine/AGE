@@ -45,6 +45,7 @@ namespace AGE
 		SDL_Event events;
 		auto input = _dependencyManager->getInstance<Input>();
 
+		input->frameUpdate();
 		if (_firstCall)
 		{
 			_initJoysticks(*input);

@@ -146,6 +146,7 @@
     <ClCompile Include="Engine\Context\SDL\SdlToAgeInputs.cpp" />
     <ClCompile Include="Engine\Core\Inputs\Input.cpp" />
     <ClCompile Include="Engine\Core\Inputs\Joystick.cpp" />
+    <ClCompile Include="Engine\Core\Inputs\ActionManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -386,6 +387,7 @@
     <ClInclude Include="Engine\Utils\Worker.hpp" />
     <ClInclude Include="Engine\Core\Inputs\AgeInputs.hh" />
     <ClInclude Include="Engine\Core\Inputs\Joystick.hh" />
+    <ClInclude Include="Engine\Core\Inputs\ActionManager.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

@@ -16,8 +16,7 @@ namespace AGE
 	private:
 		Joystick _joysticks[AGE_JOYSTICK_MAX_NUMBER];
 		bool _inputs[AGE_INPUT_NUMBER];
-		bool _keyPhysicalInputs[AGE_KEY_NUMBER];
-		bool _keyMappedInputs[AGE_KEY_NUMBER];
+		uint8_t _keyInputs[AGE_KEY_NUMBER];
 
 		std::atomic_int32_t _mousePosX;
 		std::atomic_int32_t _mousePosY;
@@ -32,6 +31,8 @@ namespace AGE
 		virtual ~Input() { }
 
 		// Function called by the context
+		void				frameUpdate();
+
 		void 				addInput(AgeInputs input);
 		void 				removeInput(AgeInputs input);
 		void 				keyInputPressed(AgeKeys mappedInput, AgeKeys physicalInput);
@@ -53,9 +54,13 @@ namespace AGE
 		glm::ivec2  	    getMousePosition();
 		glm::ivec2      	getMouseDelta();
 		glm::ivec2      	getMouseWheel();
-		bool 				getInput(AgeInputs input, bool handled = false);
-		bool 				getPhysicalKey(AgeKeys input, bool handled = false);
-		bool 				getMappedKey(AgeKeys input, bool handled = false);
+		bool 				getInput(AgeInputs input);
+		bool 				getPhysicalKeyPressed(AgeKeys input);
+		bool 				getMappedKeyPressed(AgeKeys input);
+		bool 				getPhysicalKeyJustPressed(AgeKeys input);
+		bool 				getMappedKeyJustPressed(AgeKeys input);
+		bool 				getPhysicalKeyJustReleased(AgeKeys input);
+		bool 				getMappedKeyJustReleased(AgeKeys input);
 		bool				getJoystick(uint32_t joyId);
 		bool				getJoystick(uint32_t joyId, Joystick &joystickInfos);
 	};
