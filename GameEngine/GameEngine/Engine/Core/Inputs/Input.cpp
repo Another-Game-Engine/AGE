@@ -19,10 +19,7 @@ namespace AGE
 		_mouseWheelX(0),
 		_mouseWheelY(0)
 	{
-		for (int i = 0; i < AGE_INPUT_NUMBER; ++i)
-			_inputs[i] = false;
-		for (int i = 0; i < AGE_KEY_NUMBER; ++i)
-			_keyInputs[i] = 0;
+		resetInputs();
 	}
 
 	void	Input::frameUpdate()
@@ -52,6 +49,14 @@ namespace AGE
 		}
 	}
 
+	void	Input::resetInputs()
+	{
+		for (int i = 0; i < AGE_INPUT_NUMBER; ++i)
+			_inputs[i] = false;
+		for (int i = 0; i < AGE_KEY_NUMBER; ++i)
+			_keyInputs[i] = 0;
+	}
+
 	void 	Input::addInput(AgeInputs input)
 	{
 		std::lock_guard<AGE::SpinLock> lock(_mutex);
@@ -71,7 +76,7 @@ namespace AGE
 		_mutex.lock();
 		_keyInputs[mappedInput] = AGE_RESET_MAPPED_STATE(_keyInputs[mappedInput]);
 		_keyInputs[mappedInput] = AGE_SET_MAPPED_KEY_JUST_PRESSED(_keyInputs[mappedInput]);
-		_keyInputs[physicalInput] = AGE_RESET_MAPPED_STATE(_keyInputs[physicalInput]);
+		_keyInputs[physicalInput] = AGE_RESET_PHYSICAL_STATE(_keyInputs[physicalInput]);
 		_keyInputs[physicalInput] = AGE_SET_PHYSICAL_KEY_JUST_PRESSED(_keyInputs[physicalInput]);
 		_mutex.unlock();
 #ifdef USE_IMGUI
@@ -84,7 +89,7 @@ namespace AGE
 		_mutex.lock();
 		_keyInputs[mappedInput] = AGE_RESET_MAPPED_STATE(_keyInputs[mappedInput]);
 		_keyInputs[mappedInput] = AGE_SET_MAPPED_KEY_JUST_RELEASED(_keyInputs[mappedInput]);
-		_keyInputs[physicalInput] = AGE_RESET_MAPPED_STATE(_keyInputs[physicalInput]);
+		_keyInputs[physicalInput] = AGE_RESET_PHYSICAL_STATE(_keyInputs[physicalInput]);
 		_keyInputs[physicalInput] = AGE_SET_PHYSICAL_KEY_JUST_RELEASED(_keyInputs[physicalInput]);
 		_mutex.unlock();
 #ifdef USE_IMGUI

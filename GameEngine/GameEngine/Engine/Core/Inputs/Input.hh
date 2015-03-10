@@ -32,6 +32,7 @@ namespace AGE
 
 		// Function called by the context
 		void				frameUpdate();
+		void				resetInputs();
 
 		void 				addInput(AgeInputs input);
 		void 				removeInput(AgeInputs input);

@@ -115,6 +115,9 @@ namespace AGE
 				input->setJoystickHat(joyId, events.jhat.hat, joyHatDir);
 			}
 			break;
+			case SDL_WINDOWEVENT:
+				// handle windows events
+				break;
 			default:
 				input->addInput(findAgeInput(events.type));
 				break;
