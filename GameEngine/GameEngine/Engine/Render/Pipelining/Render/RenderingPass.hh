@@ -43,13 +43,15 @@ namespace AGE
 	{
 		_is_update = false;
 		_frame_output[attach] = storage;
-		for (auto &it = _drawing_attach.begin(); it != _drawing_attach.end(); ++it) {
-			if (*it == attach) {
-				_drawing_attach.erase(it);
-				break;
+		if (attach != GL_DEPTH_ATTACHMENT) {
+			for (auto &it = _drawing_attach.begin(); it != _drawing_attach.end(); ++it) {
+				if (*it == attach) {
+					_drawing_attach.erase(it);
+					break;
+				}
 			}
+			_drawing_attach.emplace_back(attach);
 		}
-		_drawing_attach.emplace_back(attach);
 		return (*this);
 	}
 

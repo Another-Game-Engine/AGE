@@ -8,6 +8,7 @@ layout(location = 4) in vec4 blendWeight;
 layout(location = 5) in vec4 blendIndice;
 
 out vec4 interpolated_color;
+out vec2 vTexCoord;
 
 uniform mat4 projection_matrix;
 uniform mat4 view_matrix;
@@ -18,6 +19,7 @@ uniform vec4 diffuse;
 
 void main(void)
 {
+	vTexCoord = texCoord;
 	vec4 newPosition = position;
 	interpolated_color = diffuse;
 

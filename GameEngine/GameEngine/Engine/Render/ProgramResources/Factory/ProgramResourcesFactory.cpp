@@ -81,4 +81,10 @@ namespace AGE
 		}
 		return (std::unique_ptr<IProgramResources>(nullptr));
 	}
+
+	void ProgramResourcesFactory::reset()
+	{
+		_block_resources.clear();
+		_uniformsFactory.reset();
+	}
 }

@@ -28,7 +28,6 @@ namespace AGE
 		Key<Vertices> add_vertices(size_t nbrVertex, size_t nbrIndices);
 
 		Painter &remove_vertices(Key<Vertices> &key);
-		Painter &remove_properties(Key<Properties> &key);
 		Vertices *get_vertices(Key<Vertices> const &key);
 		Painter &draw(GLenum mode, std::shared_ptr<Program> const &p, std::vector<Properties> const &propertiesList, std::vector<Key<Vertices>> const &drawList);
 

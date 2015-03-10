@@ -22,7 +22,7 @@ namespace AGE
 
 	public:
 		std::shared_ptr<IProgramResources> build(GLenum mode, GLint id, std::string &&name);
-
+		void reset();
 	private:
 		Program const &_program;
 		std::vector<std::pair<GLenum, std::function<std::shared_ptr<IProgramResources>(GLint, std::string &&)>>> _blue_prints;

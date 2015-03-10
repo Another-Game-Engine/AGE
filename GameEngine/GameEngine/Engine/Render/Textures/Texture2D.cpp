@@ -16,13 +16,11 @@ namespace AGE
 			, height
 			, internal_format
 			, is_mip_mapping ? (uint8_t(glm::floor(glm::log2(glm::max(float(width), float(height))) + 1))) : 1);
-		if (success == false)
-		{
+		if (success == false) {
 			return false;
 		}
 		glBindTexture(GL_TEXTURE_2D, _id);
 		glTexStorage2D(GL_TEXTURE_2D, _nbr_mip_map, _internal_format, _width, _height);
-
 		return true;
 	}
 
@@ -70,6 +68,7 @@ namespace AGE
 
 	IFramebufferStorage const & Texture2D::attachment(Framebuffer const &framebuffer, GLenum attach) const
 	{
+		bind();
 		glFramebufferTexture2D(framebuffer.type(), attach, GL_TEXTURE_2D, _id, 0);
 		return (*this);
 	}

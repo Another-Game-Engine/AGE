@@ -7,9 +7,9 @@
 
 UnitProg::UnitProg(std::string const &filename, GLenum type):
 _filename(filename),
-_type(type)
+_type(type),
+_id(0)
 {
-	create();
 }
 
 UnitProg::UnitProg(UnitProg &&move):
@@ -67,17 +67,22 @@ GLuint UnitProg::getId() const
 	return _id;
 }
 
-void UnitProg::create()
+bool UnitProg::compile()
 {
-	_id = glCreateShader(_type);
+	if (_id == 0)
+	{
+		_id = glCreateShader(_type);
+	}
 	auto ret = compileUnitProg(_filename.c_str());
-	assert(ret);
+	return ret;
 }
 
-void UnitProg::destroy() const
+void UnitProg::destroy()
 {
-	if (_id != 0) {
+	if (_id != 0)
+	{
 		glDeleteShader(_id);
+		_id = 0;
 	}
 }
 

@@ -10,35 +10,29 @@ namespace AGE
 	Program::Program(std::string &&name, std::vector<std::shared_ptr<UnitProg>> const &u) :
 		_unitsProg(u),
 		_resources_factory(*this),
-		_name(std::move(name))
+		_name(std::move(name)),
+		_compiled(false),
+		_id(0)
 	{
-		_id = glCreateProgram();
-		for (auto &element : _unitsProg) {
-			glAttachShader(_id, element->getId());
-		}
-		glLinkProgram(_id);
-
-		GLint isLinked = 0;
-		glGetProgramiv(_id, GL_LINK_STATUS, (int *)&isLinked);
-		if (isLinked == GL_FALSE)
-		{
-			GLint maxLength = 0;
-			glGetProgramiv(_id, GL_INFO_LOG_LENGTH, &maxLength);
-
-			//The maxLength includes the NULL character
-			std::vector<GLchar> infoLog(maxLength);
-			glGetProgramInfoLog(_id, maxLength, &maxLength, &infoLog[0]);
-			std::cout << infoLog.data() << std::endl;
-			assert(false);
-		}
-		_get_resources();
+#ifdef AGE_DEBUG
+		_version = 0;
+#endif
 	}
 
 	Program::~Program()
 	{
-		if (_id > 0) {
+
+	}
+
+	void Program::destroy()
+	{
+		if (_id > 0)
+		{
 			glDeleteProgram(_id);
+			_id = 0;
 		}
+		_program_resources.clear();
+		_resources_factory.reset();
 	}
 
 	Program::Program(Program &&move) :
@@ -58,11 +52,6 @@ namespace AGE
 
 	Program const & Program::use() const
 	{
-		//static auto currentProgram = -1;
-		//if (currentProgram == _id) {
-		//	return (*this);
-		//}
-		//currentProgram = _id;
 		glUseProgram(_id);
 		return (*this);
 	}
@@ -96,7 +85,8 @@ namespace AGE
 	void Program::_get_resources()
 	{
 		use();
-		for (auto &resource : available_resources) {
+		for (auto &resource : available_resources)
+		{
 			auto nbr_active_resources = 0;
 			auto max_name_lenght = 0;
 			glGetProgramInterfaceiv(_id, resource, GL_ACTIVE_RESOURCES, &nbr_active_resources);
@@ -105,7 +95,8 @@ namespace AGE
 			}
 			glGetProgramInterfaceiv(_id, resource, GL_MAX_NAME_LENGTH, &max_name_lenght);
 			auto buffer = std::string(max_name_lenght, 0);
-			for (size_t index = 0; index < nbr_active_resources; ++index) {
+			for (size_t index = 0; index < nbr_active_resources; ++index)
+			{
 				_get_resource(index, resource, buffer);
 			}
 		}
@@ -148,7 +139,6 @@ namespace AGE
 
 	bool Program::coherent_attributes(std::vector<std::pair<GLenum, std::string>> const &coherent)
 	{
-
 		for (auto &resource : _program_resources) {
 			if (resource->type() == GL_PROGRAM_INPUT) {
 				bool attribFound = false;
@@ -166,6 +156,51 @@ namespace AGE
 			}
 		}
 		return (true);
+	}
+
+	bool Program::compile()
+	{
+		_compiled = false;
+		destroy();
+		_id = glCreateProgram();
+
+		if (_id == 0)
+		{
+			std::cerr << "Error glCreateProgram()\n";
+			return false;
+		}
+
+		for (auto &element : _unitsProg)
+		{
+			element->destroy();
+			auto success = element->compile();
+			if (!success)
+			{
+				return false;
+			}
+			glAttachShader(_id, element->getId());
+		}
+		glLinkProgram(_id);
+
+		GLint isLinked = 0;
+		glGetProgramiv(_id, GL_LINK_STATUS, (int *)&isLinked);
+		if (isLinked == GL_FALSE)
+		{
+			GLint maxLength = 0;
+			glGetProgramiv(_id, GL_INFO_LOG_LENGTH, &maxLength);
+
+			std::vector<GLchar> infoLog(maxLength);
+			glGetProgramInfoLog(_id, maxLength, &maxLength, &infoLog[0]);
+			std::cerr << infoLog.data() << std::endl;
+			return false;
+		}
+
+		_get_resources();
+		_compiled = true;
+#ifdef AGE_DEBUG
+		++_version;
+#endif
+		return true;
 	}
 
 	std::string const & Program::name() const

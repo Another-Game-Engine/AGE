@@ -20,6 +20,7 @@ namespace AGE
 
 	public:
 		Key<Property> add_property(std::shared_ptr<IProperty> const &prop);
+		void remove_property(Key<Property> const &prop);
 		void update_properties(std::shared_ptr<Program> const &p) const;
 
 	public:

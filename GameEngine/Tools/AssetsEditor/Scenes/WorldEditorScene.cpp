@@ -40,6 +40,7 @@ namespace AGE
 		auto cam = camera.addComponent<CameraComponent>();
 		camera.getLink().setPosition(glm::vec3(0, 3, 5));
 		camera.getLink().setForward(glm::vec3(0, 0, 0));
+		cam->addPipeline(RenderType::BASIC);
 
 		addSystem<WE::AssetsAndComponentRelationsSystem>(0);
 		addSystem<WE::EntityManager>(1);

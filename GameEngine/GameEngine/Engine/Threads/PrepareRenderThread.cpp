@@ -96,31 +96,6 @@ namespace AGE
 			GetRenderThread()->stop();
 		});
 
-		//registerCallback<Tasks::MainToPrepare::SetMeshMaterial>([&](Tasks::MainToPrepare::SetMeshMaterial& msg)
-		//{
-		//	//			for (auto &subMesh : msg.mesh->subMeshs)
-		//	//			{
-		//	//				auto vertices = paintingManager->get_painter(subMesh.painter)->get_vertices(subMesh.vertices);
-		//	//				assert(vertices != nullptr);
-		//	//				if (subMesh.defaultMaterialIndex >= msg.material->datas.size())
-		//	//				{
-		//	//					for (auto &prop : msg.material->datas[0])
-		//	//					{
-		//	//						prop->set_program(pipelines[0]->get_programs());
-		//	//						vertices->add_property(prop);
-		//	//					}
-		//	//				}
-		//	//				else
-		//	//				{
-		//	//					for (auto &prop : msg.material->datas[subMesh.defaultMaterialIndex])
-		//	//					{
-		//	//						prop->set_program(pipelines[0]->get_programs());
-		//	//						vertices->add_property(prop);
-		//	//					}
-		//	//				}
-		//	//			}
-		//});
-
 		return true;
 	}
 
@@ -189,7 +164,8 @@ namespace AGE
 				while (!tasks.empty())
 				{
 					auto task = tasks.front();
-					assert(execute(task)); // we receive a task that we cannot treat
+					auto success = execute(task); // we receive a task that we cannot treat
+					AGE_ASSERT(success);
 					tasks.pop();
 					taskCounter--;
 				}
@@ -232,11 +208,9 @@ namespace AGE
 		return nullptr;
 	}
 
-	void PrepareRenderThread::setCameraProjection(const glm::mat4& projection, const PrepareKey &key)
+	void PrepareRenderThread::setCameraInfos(const glm::mat4& projection, const PrepareKey &key, const std::set<RenderType> &pipelines)
 	{
-		auto scene = _getRenderScene(GetMainThread()->getActiveScene());
-		assert(scene != nullptr);
-		scene->setCameraInfos(key, projection);
+		getQueue()->emplaceCommand<Commands::MainToPrepare::CameraInfos>(key, projection, pipelines);
 	}
 
 	PrepareKey PrepareRenderThread::addCamera()
