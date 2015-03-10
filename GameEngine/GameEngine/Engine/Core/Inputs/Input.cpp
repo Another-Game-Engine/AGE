@@ -19,6 +19,7 @@ namespace AGE
 		_mouseWheelX(0),
 		_mouseWheelY(0)
 	{
+		std::lock_guard<AGE::SpinLock> lock(_mutex);
 	}
 
 	void 	Input::addInput(AgeInputs input)
@@ -37,10 +38,9 @@ namespace AGE
 
 	void	Input::keyInputPressed(AgeKeys mappedInput, AgeKeys hardwareInput)
 	{
-		_mutex.lock();
+		std::lock_guard<AGE::SpinLock> lock(_mutex);
 		_keyMappedInputs[mappedInput] = true;
 		_keyPhysicalInputs[hardwareInput] = true;
-		_mutex.unlock();
 #ifdef USE_IMGUI
 		GetMainThread()->getQueue()->emplaceTask<ImGuiKeyEvent>(mappedInput, true);
 #endif
@@ -48,10 +48,9 @@ namespace AGE
 
 	void 	Input::keyInputReleased(AgeKeys mappedInput, AgeKeys hardwareInput)
 	{
-		_mutex.lock();
+		std::lock_guard<AGE::SpinLock> lock(_mutex);
 		_keyMappedInputs[mappedInput] = false;
 		_keyPhysicalInputs[hardwareInput] = false;
-		_mutex.unlock();
 #ifdef USE_IMGUI
 		GetMainThread()->getQueue()->emplaceTask<ImGuiKeyEvent>(mappedInput, false);
 #endif
@@ -132,7 +131,11 @@ namespace AGE
 	void Input::sendMouseStateToIMGUI()
 	{
 #ifdef USE_IMGUI
-		glm::ivec2 mousePosition(_mousePosX, _mousePosY);
+		glm::ivec2 mousePosition;
+		{
+			std::lock_guard<AGE::SpinLock> lock(_mutex);
+			mousePosition = glm::ivec2(_mousePosX, _mousePosY);
+		}
 		GetMainThread()->getQueue()->emplaceTask<ImGuiMouseStateEvent>(mousePosition,
 			getInput(AGE_MOUSE_LEFT),
 			getInput(AGE_MOUSE_MIDDLE),
@@ -204,7 +207,6 @@ namespace AGE
 			joystickInfos = _joysticks[joyId];
 			return (true);
 		}
-		else
-			return (false);
+		return (false);
 	}
 }
