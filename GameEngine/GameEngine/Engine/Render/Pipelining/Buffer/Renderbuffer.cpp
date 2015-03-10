@@ -37,7 +37,7 @@ namespace AGE
 
 	Renderbuffer::~Renderbuffer()
 	{
-		if (_id) {
+		if (_id == -1) {
 			glDeleteRenderbuffers(1, &_id);
 		}
 	}

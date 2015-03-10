@@ -37,7 +37,7 @@ namespace AGE
 
 	ATexture::~ATexture()
 	{
-		if (_id) {
+		if (_id == -1) {
 			glDeleteTextures(1, &_id);
 		}
 	}
