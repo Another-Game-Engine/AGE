@@ -16,7 +16,8 @@ namespace AGE
 		_rotationConstraint(glm::vec3(1, 1, 1)),
 		_transformConstraint(glm::vec3(1, 1, 1)),
 		_shapeType(UndefinedTypeId),
-		_shapeName("")
+		_shapePath(""),
+		_collisionShapeType(UNDEFINED)
 	{
 	}
 
@@ -89,7 +90,7 @@ namespace AGE
 	{
 		_clearBulletObjects();
 
-		_shapeName = meshPath;
+		_shapePath = meshPath;
 
 		auto e = entity;
 		_motionState = _manager->getObjectPool().create<DynamicMotionState>(&this->entity.getLink());
@@ -141,6 +142,7 @@ namespace AGE
 	{
 		if (c == UNDEFINED)
 			return;
+		_shapePath = "";
 		_clearBulletObjects();
 
 		auto e = entity;
@@ -229,4 +231,106 @@ namespace AGE
 	RigidBody::~RigidBody(void)
 	{
 	}
+
+	void RigidBody::postUnserialization(AScene *scene)
+	{
+		_manager = dynamic_cast<BulletDynamicManager*>(scene->getInstance<BulletCollisionManager>());
+	}
+
+#ifdef EDITOR_ENABLED
+	void RigidBody::editorCreate(AScene *scene)
+	{}
+
+	void RigidBody::editorDelete(AScene *scene)
+	{}
+
+	void RigidBody::editorUpdate(AScene *scene)
+	{
+		//if ((*meshPathList)[selectedMeshIndex] != selectedMeshPath)
+		//{
+		//	std::size_t i = 0;
+		//	for (auto &e : *meshPathList)
+		//	{
+		//		if (e == selectedMeshPath)
+		//		{
+		//			selectedMeshIndex = i;
+		//			break;
+		//		}
+		//		++i;
+		//	}
+		//}
+		//if ((*materialPathList)[selectedMaterialIndex] != selectedMaterialPath)
+		//{
+		//	std::size_t i = 0;
+		//	for (auto &e : *materialPathList)
+		//	{
+		//		if (e == selectedMaterialPath)
+		//		{
+		//			selectedMaterialIndex = i;
+		//			break;
+		//		}
+		//		++i;
+		//	}
+		//}
+
+		//ImGui::PushItemWidth(-1);
+		//if (ImGui::ListBox("Meshs", (int*)&selectedMeshIndex, &(meshFileList->front()), (int)(meshFileList->size())))
+		//{
+		//	selectedMeshName = (*meshFileList)[selectedMeshIndex];
+		//	selectedMeshPath = (*meshPathList)[selectedMeshIndex];
+
+		//	_mesh = scene->getInstance<AGE::AssetsManager>()->getMesh(selectedMeshPath);
+
+		//	if (!_mesh)
+		//	{
+		//		scene->getInstance<AGE::AssetsManager>()->loadMesh(OldFile(selectedMeshPath), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents }, selectedMeshPath);
+
+		//		std::size_t totalToLoad = 0;
+		//		std::size_t	toLoad = 0;
+		//		std::string loadingError;
+		//		do {
+		//			scene->getInstance<AGE::AssetsManager>()->updateLoadingChannel(selectedMeshPath, totalToLoad, toLoad, loadingError);
+		//		} while
+		//			(toLoad != 0 && loadingError.size() == 0);
+		//	}
+		//	_mesh = scene->getInstance<AGE::AssetsManager>()->getMesh(selectedMeshPath);
+		//	AGE_ASSERT(_mesh != nullptr);
+		//	if (_material)
+		//	{
+		//		setMeshAndMaterial(_mesh, _material);
+		//	}
+		//}
+		//ImGui::PopItemWidth();
+		//ImGui::PushItemWidth(-1);
+		//if (!materialFileList->empty() && ImGui::ListBox("Material", (int*)&selectedMaterialIndex, &(materialFileList->front()), (int)(materialFileList->size())))
+		//{
+		//	selectedMaterialName = (*materialFileList)[selectedMaterialIndex];
+		//	selectedMaterialPath = (*materialPathList)[selectedMaterialIndex];
+
+		//	_material = scene->getInstance<AGE::AssetsManager>()->getMaterial(selectedMaterialPath);
+
+		//	if (!_material)
+		//	{
+		//		scene->getInstance<AGE::AssetsManager>()->loadMaterial(OldFile(selectedMaterialPath), selectedMaterialPath);
+
+		//		std::size_t totalToLoad = 0;
+		//		std::size_t	toLoad = 0;
+		//		std::string loadingError;
+		//		do {
+		//			scene->getInstance<AGE::AssetsManager>()->updateLoadingChannel(selectedMaterialPath, totalToLoad, toLoad, loadingError);
+		//		} while
+		//			(toLoad != 0 && loadingError.size() == 0);
+		//	}
+		//	_material = scene->getInstance<AGE::AssetsManager>()->getMaterial(selectedMaterialPath);
+		//	AGE_ASSERT(_material != nullptr);
+		//	if (_mesh)
+		//	{
+		//		setMeshAndMaterial(_mesh, _material);
+		//	}
+		//}
+		////ImGui::ListBoxFooter();
+		//ImGui::PopItemWidth();
+
+	}
+#endif
 }
