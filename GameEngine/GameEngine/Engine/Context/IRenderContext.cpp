@@ -30,11 +30,20 @@ namespace AGE
 		return _screenSize;
 	}
 
-	AgeKeys IRenderContext::findAgeKey(int contextKey) const
+	AgeKeys IRenderContext::findAgeMappedKey(int contextKey) const
 	{
-		auto it = _toAgeKey.find(contextKey);
+		auto it = _toAgeMappedKey.find(contextKey);
 
-		if (it == _toAgeKey.end())
+		if (it == _toAgeMappedKey.end())
+			return (AGE_KEY_UNKNOWN);
+		return (it->second);
+	}
+
+	AgeKeys IRenderContext::findAgePhysicalKey(int contextKey) const
+	{
+		auto it = _toAgePhysicalKey.find(contextKey);
+
+		if (it == _toAgePhysicalKey.end())
 			return (AGE_KEY_UNKNOWN);
 		return (it->second);
 	}

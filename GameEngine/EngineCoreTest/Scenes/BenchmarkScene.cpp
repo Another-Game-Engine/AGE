@@ -386,7 +386,7 @@ namespace AGE
 		auto &lc = GLOBAL_CAMERA.getLink();
 		float c = 5.f;
 
-		if (getInstance<Input>()->getKey(AGE_LSHIFT))
+		if (getInstance<Input>()->getPhysicalKey(AGE_LSHIFT))
 			c = c * 3.0f;
 
 		// XBOX CONTROLLER INPUTS
@@ -410,32 +410,32 @@ namespace AGE
 		}
 		else // KEYBOARD INPUT
 		{
-			if (getInstance<Input>()->getKey(AGE_z))
+			if (getInstance<Input>()->getPhysicalKey(AGE_w))
 				lc.setForward(glm::vec3(0.f, 0.f, -c * time));
-			if (getInstance<Input>()->getKey(AGE_s))
+			if (getInstance<Input>()->getPhysicalKey(AGE_s))
 				lc.setForward(glm::vec3(0.f, 0.f, c * time));
-			if (getInstance<Input>()->getKey(AGE_q))
+			if (getInstance<Input>()->getPhysicalKey(AGE_a))
 				lc.setForward(glm::vec3(-c * time, 0.f, 0.f));
-			if (getInstance<Input>()->getKey(AGE_d))
+			if (getInstance<Input>()->getPhysicalKey(AGE_d))
 				lc.setForward(glm::vec3(c * time, 0.f, 0.f));
-			if (getInstance<Input>()->getKey(AGE_RIGHT))
+			if (getInstance<Input>()->getPhysicalKey(AGE_RIGHT))
 				lc.setOrientation(glm::rotate(lc.getOrientation(), -50.f * (float)time, glm::vec3(0.f, 1.f, 0.f)));
-			if (getInstance<Input>()->getKey(AGE_LEFT))
+			if (getInstance<Input>()->getPhysicalKey(AGE_LEFT))
 				lc.setOrientation(glm::rotate(lc.getOrientation(), 50.f * (float)time, glm::vec3(0.f, 1.f, 0.f)));
-			if (getInstance<Input>()->getKey(AGE_UP))
+			if (getInstance<Input>()->getPhysicalKey(AGE_UP))
 				lc.setOrientation(glm::rotate(lc.getOrientation(), 50.f * (float)time, glm::vec3(1.f, 0.f, 0.f)));
-			if (getInstance<Input>()->getKey(AGE_DOWN))
+			if (getInstance<Input>()->getPhysicalKey(AGE_DOWN))
 				lc.setOrientation(glm::rotate(lc.getOrientation(), -50.f * (float)time, glm::vec3(1.0f, 0.f, 0.f)));
-			if (getInstance<Input>()->getKey(AGE_a))
+			if (getInstance<Input>()->getPhysicalKey(AGE_q))
 				lc.setOrientation(glm::rotate(lc.getOrientation(), 50.f * (float)time, glm::vec3(0.f, 0.f, 1.f)));
-			if (getInstance<Input>()->getKey(AGE_e))
+			if (getInstance<Input>()->getPhysicalKey(AGE_e))
 				lc.setOrientation(glm::rotate(lc.getOrientation(), -50.f * (float)time, glm::vec3(0.f, 0.f, 1.f)));
 		}
 
-		if (getInstance<Input>()->getKey(AGE_ESCAPE))
+		if (getInstance<Input>()->getMappedKey(AGE_ESCAPE))
 			return (false);
 		static float trigger = 0.0f;
-		if (getInstance<Input>()->getKey(AGE_SPACE) && trigger == 0.0f)
+		if (getInstance<Input>()->getMappedKey(AGE_SPACE) && trigger == 0.0f)
 		{
 			trigger += time;
 			if (trigger >= 1.0f)

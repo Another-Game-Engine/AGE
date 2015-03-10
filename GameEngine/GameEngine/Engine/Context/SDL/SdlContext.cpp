@@ -55,10 +55,10 @@ namespace AGE
 			switch (events.type)
 			{
 			case SDL_KEYDOWN:
-				input->keyInputPressed(findAgeKey(events.key.keysym.sym));
+				input->keyInputPressed(findAgeMappedKey(events.key.keysym.sym), findAgePhysicalKey(events.key.keysym.scancode));
 				break;
 			case SDL_KEYUP:
-				input->keyInputReleased(findAgeKey(events.key.keysym.sym));
+				input->keyInputReleased(findAgeMappedKey(events.key.keysym.sym), findAgePhysicalKey(events.key.keysym.scancode));
 				break;
 			case SDL_MOUSEBUTTONDOWN:
 				input->addInput(findAgeInput(events.button.button));

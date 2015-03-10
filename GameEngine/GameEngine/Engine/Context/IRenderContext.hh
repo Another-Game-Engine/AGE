@@ -25,13 +25,15 @@ namespace AGE
 		glm::uvec2 _screenSize;
 		std::string _windowName;
 
-		static std::map<int, AgeKeys> _toAgeKey;
+		static std::map<int, AgeKeys> _toAgeMappedKey;
+		static std::map<int, AgeKeys> _toAgePhysicalKey;
 		static std::map<int, AgeInputs> _toAgeInput;
 		static std::map<int, AgeJoystickAxis> _toAgeJoystickAxis;
 		static std::map<int, AgeJoystickButtons> _toAgeJoystickButtons;
 		static std::map<int, AgeJoystickHatDirections> _toAgeJoystickHatDirections;
 
-		AgeKeys findAgeKey(int contextKey) const;
+		AgeKeys findAgeMappedKey(int contextKey) const;
+		AgeKeys findAgePhysicalKey(int contextKey) const;
 		AgeInputs findAgeInput(int contextInput) const;
 		AgeJoystickAxis findAgeJoystickAxis(int contextInput) const;
 		AgeJoystickButtons findAgeJoystickButton(int contextInput) const;
