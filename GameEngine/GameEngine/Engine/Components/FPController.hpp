@@ -31,8 +31,8 @@ namespace AGE
 		BT_DECLARE_ALIGNED_ALLOCATOR();
 		FPController();
 		virtual ~FPController();
-		void init(AScene *scene, const Entity &entity, short filterGroup = 1, short filterMask = -1);
-		virtual void reset(AScene *);
+		void init(short filterGroup = 1, short filterMask = -1);
+		virtual void reset();
 		void clear();
 		btKinematicCharacterController &getController();
 		btGhostObject &getGhost();
@@ -110,7 +110,6 @@ namespace AGE
 		////
 		//////
 
-		Entity _entity;
 		float yOrientation;
 		float forwardWalkSpeed;
 		float backwardWalkSpeed;

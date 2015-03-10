@@ -16,8 +16,8 @@ namespace AGE
 		CameraComponent(CameraComponent const &o);
 		CameraComponent	&operator=(CameraComponent const &o);
 
-		void init(AScene *scene);
-		virtual void reset(AScene *scene);
+		void init();
+		virtual void reset();
 
 		void setProjection(const glm::mat4 &);
 		const glm::mat4 &getProjection() const;
@@ -27,7 +27,7 @@ namespace AGE
 
 		template <typename Archive> void save(Archive &ar) const;
 		template <typename Archive> void load(Archive &ar);
-		virtual void postUnserialization(AScene *scene);
+		virtual void postUnserialization();
 
 #ifdef EDITOR_ENABLED
 		virtual void editorCreate(AScene *scene);
@@ -35,7 +35,6 @@ namespace AGE
 		virtual void editorUpdate(AScene *scene);
 #endif
 	private:
-		AScene *_scene = nullptr;
 		glm::mat4 _projection;
 		AGE::PrepareKey _key;
 		std::set < RenderType > _pipelines;

@@ -38,8 +38,8 @@ namespace AGE
 		void _clearBulletObjects();
 	public:
 		RigidBody();
-		void init(AScene *scene, float mass = 1.0f);
-		virtual void reset(AScene *scene);
+		void init(float mass = 1.0f);
+		virtual void reset();
 		void setTransformation(const AGE::Link *link);
 		btMotionState &getMotionState();
 		btCollisionShape &getShape();
@@ -82,7 +82,7 @@ namespace AGE
 		////
 		//////
 
-		virtual void postUnserialization(AScene *scene);
+		virtual void postUnserialization();
 
 #ifdef EDITOR_ENABLED
 		std::vector<const char*> *shapeFileList = nullptr;

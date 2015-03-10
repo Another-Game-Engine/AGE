@@ -35,7 +35,6 @@ namespace AGE
 
 	FPController::FPController(const FPController &o)
 	{
-		_entity = o._entity;
 		yOrientation = o.yOrientation;
 		forwardWalkSpeed = o.forwardWalkSpeed;
 		backwardWalkSpeed = o.backwardWalkSpeed;
@@ -63,7 +62,6 @@ namespace AGE
 
 	FPController& FPController::operator=(const FPController &o)
 	{
-		_entity = o._entity;
 		yOrientation = o.yOrientation;
 		forwardWalkSpeed = o.forwardWalkSpeed;
 		backwardWalkSpeed = o.backwardWalkSpeed;
@@ -94,10 +92,9 @@ namespace AGE
 	{
 	}
 
-	void FPController::init(AScene *scene, const Entity &entity, short filterGroup, short filterMask)
+	void FPController::init(short filterGroup, short filterMask)
 	{
-		_entity = entity;
-		_manager = dynamic_cast<BulletDynamicManager*>(scene->getInstance<BulletCollisionManager>());
+		_manager = dynamic_cast<BulletDynamicManager*>(entity.getScene()->getInstance<BulletCollisionManager>());
 		setKey(LEFT, AGE_a);
 		setKey(RIGHT, AGE_d);
 		setKey(FORWARD, AGE_w);
@@ -128,7 +125,7 @@ namespace AGE
 		_ghost->setWorldTransform(transform);
 		_ghost->setRestitution(0);
 		_ghost->setActivationState(DISABLE_DEACTIVATION);
-		_ghost->setUserPointer(&(_entity));
+		_ghost->setUserPointer(&(entity));
 		_controller = new btKinematicCharacterController(_ghost, _shape, btScalar(0.1));
 		_manager->getWorld()->addCollisionObject(_ghost, filterGroup, filterMask);
 		_manager->getWorld()->addAction(_controller);
@@ -138,7 +135,7 @@ namespace AGE
 		wasOnGround = true;
 	}
 
-	void FPController::reset(AScene *)
+	void FPController::reset()
 	{
 		if (_controller)
 		{

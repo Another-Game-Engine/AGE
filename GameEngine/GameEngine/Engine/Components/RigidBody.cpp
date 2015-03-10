@@ -21,14 +21,14 @@ namespace AGE
 	{
 	}
 
-	void RigidBody::init(AScene *scene, float mass/* = 1.0f*/)
+	void RigidBody::init(float mass/* = 1.0f*/)
 	{
-		_manager = dynamic_cast<BulletDynamicManager*>(scene->getInstance<BulletCollisionManager>());
+		_manager = dynamic_cast<BulletDynamicManager*>(entity.getScene()->getInstance<BulletCollisionManager>());
 		assert(_manager != nullptr);
 		_mass = mass;
 	}
 
-	void RigidBody::reset(AScene *scene)
+	void RigidBody::reset()
 	{
 		_clearBulletObjects();
 
@@ -232,9 +232,9 @@ namespace AGE
 	{
 	}
 
-	void RigidBody::postUnserialization(AScene *scene)
+	void RigidBody::postUnserialization()
 	{
-		_manager = dynamic_cast<BulletDynamicManager*>(scene->getInstance<BulletCollisionManager>());
+		_manager = dynamic_cast<BulletDynamicManager*>(entity.getScene()->getInstance<BulletCollisionManager>());
 	}
 
 #ifdef EDITOR_ENABLED
@@ -246,27 +246,14 @@ namespace AGE
 
 	void RigidBody::editorUpdate(AScene *scene)
 	{
-		//if ((*meshPathList)[selectedMeshIndex] != selectedMeshPath)
+		//if ((*shapePathList)[selectedShapeIndex] != selectedShapePath)
 		//{
 		//	std::size_t i = 0;
-		//	for (auto &e : *meshPathList)
+		//	for (auto &e : *shapePathList)
 		//	{
-		//		if (e == selectedMeshPath)
+		//		if (e == selectedShapePath)
 		//		{
-		//			selectedMeshIndex = i;
-		//			break;
-		//		}
-		//		++i;
-		//	}
-		//}
-		//if ((*materialPathList)[selectedMaterialIndex] != selectedMaterialPath)
-		//{
-		//	std::size_t i = 0;
-		//	for (auto &e : *materialPathList)
-		//	{
-		//		if (e == selectedMaterialPath)
-		//		{
-		//			selectedMaterialIndex = i;
+		//			selectedShapeIndex = i;
 		//			break;
 		//		}
 		//		++i;
@@ -274,12 +261,12 @@ namespace AGE
 		//}
 
 		//ImGui::PushItemWidth(-1);
-		//if (ImGui::ListBox("Meshs", (int*)&selectedMeshIndex, &(meshFileList->front()), (int)(meshFileList->size())))
+		//if (ImGui::ListBox("Shapes", (int*)&selectedShapeIndex, &(shapeFileList->front()), (int)(shapeFileList->size())))
 		//{
-		//	selectedMeshName = (*meshFileList)[selectedMeshIndex];
-		//	selectedMeshPath = (*meshPathList)[selectedMeshIndex];
+		//	selectedShapeName= (*shapeFileList)[selectedShapeIndex];
+		//	selectedShapePath= (*shapePathList)[selectedShapeIndex];
 
-		//	_mesh = scene->getInstance<AGE::AssetsManager>()->getMesh(selectedMeshPath);
+		//	_mesh = _manager->loadShape(selectedShapePath);
 
 		//	if (!_mesh)
 		//	{
@@ -330,7 +317,6 @@ namespace AGE
 		//}
 		////ImGui::ListBoxFooter();
 		//ImGui::PopItemWidth();
-
 	}
 #endif
 }

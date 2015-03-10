@@ -152,11 +152,13 @@ namespace AGE
 
 			bool EntityManager::initialize()
 			{
-				_filter.setOnAdd(std::function<void(Entity e)>([this](Entity en){
+				_filter.setOnAdd(std::function<void(Entity e)>([this](Entity en)
+				{
 					en.addComponent<AGE::WE::EntityRepresentation>(std::string("Entity " + std::to_string(en.getId()) + "\0").c_str());
 				}));
 
-				_filter.setOnRemove(std::function<void(Entity e)>([this](Entity en){
+				_filter.setOnRemove(std::function<void(Entity e)>([this](Entity en)
+				{
 				}));
 				return true;
 			}

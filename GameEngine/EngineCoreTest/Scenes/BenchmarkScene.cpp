@@ -206,7 +206,7 @@ namespace AGE
 #endif
 
 #ifdef PHYSIC_SIMULATION
-		//addSystem<AGE::BulletDynamicSystem>(0);
+		addSystem<AGE::BulletDynamicSystem>(0);
 		//		addSystem<CollisionAdder>(1);
 		//		addSystem<CollisionCleaner>(1000);
 #endif //!PHYSIC
@@ -363,19 +363,19 @@ namespace AGE
 
 	auto &bones = getInstance<AGE::AnimationManager>()->getBones(animationTestInstance);
 	
-	auto i = 0;
-	for (auto &e : skeleton->bones)
-	{
-		auto entity = createEntity();
-		auto child = createEntity();
-		child.addComponent<MeshRenderer>(
-			getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage")
-			, getInstance<AGE::AssetsManager>()->getMaterial("ball/ball.mage"));
-		child.getLink().setScale(1.0f);
-		entity.getLink().setPosition(posFromMat4(e.transformation));
-		entity.getLink().attachChild(child.getLinkPtr());
-		bonesEntities.push_back(entity);
-	}
+	//auto i = 0;
+	//for (auto &e : skeleton->bones)
+	//{
+	//	auto entity = createEntity();
+	//	auto child = createEntity();
+	//	child.addComponent<MeshRenderer>(
+	//		getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage")
+	//		, getInstance<AGE::AssetsManager>()->getMaterial("ball/ball.mage"));
+	//	child.getLink().setScale(1.0f);
+	//	entity.getLink().setPosition(posFromMat4(e.transformation));
+	//	entity.getLink().attachChild(child.getLinkPtr());
+	//	bonesEntities.push_back(entity);
+	//}
 
 	////////////////////////////////////
 
@@ -458,7 +458,7 @@ namespace AGE
 		else
 			trigger = 0.0f;
 
-		/*if (_chunkCounter >= _maxChunk)
+		if (_chunkCounter >= _maxChunk)
 		{
 			AScene *weakOnThis = (AScene*)(this);
 			for (auto i = 0; i < 10; ++i)
@@ -497,7 +497,7 @@ namespace AGE
 #endif
 			}
 			_chunkCounter = 0;
-		}*/
+		}
 
 #ifdef USE_IMGUI
 		if (ImGui::CollapsingHeader("Light settings"))

@@ -13,8 +13,7 @@
 namespace AGE
 {
 	PointLightComponent::PointLightComponent()
-		: _scene(nullptr)
-		, _range(1)
+		: _range(1)
 		, _color(1)
 	{
 	}
@@ -25,8 +24,7 @@ namespace AGE
 	}
 
 	PointLightComponent::PointLightComponent(PointLightComponent const &o)
-		: _scene(o._scene)
-		, _key(o._key)
+		: _key(o._key)
 		, _range(o._range)
 		, _color(o._color)
 	{
@@ -35,25 +33,25 @@ namespace AGE
 
 	PointLightComponent &PointLightComponent::operator=(PointLightComponent const &p)
 	{
-		_scene = p._scene;
 		_key = p._key;
 		_range = p._range;
 		_color = p._color;
 		return (*this);
 	}
 
-	void PointLightComponent::reset(AScene *scene)
+	void PointLightComponent::reset()
 	{
 		if (!_key.invalid())
+		{
 			entity.getLink().unregisterOctreeObject(_key);
+		}
 		_key = AGE::PrepareKey();
 		_color = glm::vec3(1);
 		_range = glm::vec3(1);
 	}
 
-	void PointLightComponent::init(AScene *scene)
+	void PointLightComponent::init()
 	{
-		_scene = scene;
 		_key = AGE::GetPrepareThread()->addPointLight();
 		entity.getLink().registerOctreeObject(_key);
 		assert(!_key.invalid());
@@ -73,7 +71,9 @@ namespace AGE
 		glm::vec3 equation(attenuation.z, attenuation.y, attenuation.x - minValue);
 		float discriminant = Mathematic::secondDegreeDiscriminant(equation);
 		if (discriminant == 0)
+		{
 			return (Mathematic::resolveSecondDegree(equation));
+		}
 		else if (discriminant > 0)
 		{
 			glm::vec2	results = Mathematic::resolveSecondDegree(equation, discriminant);
@@ -87,9 +87,9 @@ namespace AGE
 	}
 
 
-	void PointLightComponent::postUnserialization(AScene *scene)
+	void PointLightComponent::postUnserialization()
 	{
-		init(scene);
+		init();
 		set(_color, _range);
 	}
 

@@ -39,7 +39,7 @@ namespace AGE
 
 		cpt->_typeId = id;
 		cpt->entity = e;
-		cpt->postUnserialization(e.getScene());
+		cpt->postUnserialization();
 
 		e.addComponentPtr(cpt);
 	}

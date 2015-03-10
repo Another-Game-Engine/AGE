@@ -18,7 +18,7 @@ namespace AGE
 
 		}
 
-		void EntityRepresentation::init(AScene *s, const char *_name)
+		void EntityRepresentation::init(const char *_name)
 		{
 #ifdef EDITOR_ENABLED
 			exposedInEditor = false;
@@ -33,7 +33,7 @@ namespace AGE
 			scale = link.getScale();
 		}
 
-		void EntityRepresentation::reset(AScene *)
+		void EntityRepresentation::reset()
 		{
 			memset(name, 0, ENTITY_NAME_LENGTH);
 		}
@@ -56,7 +56,7 @@ namespace AGE
 			scale = std::move(o.scale);
 		}
 
-		void EntityRepresentation::postUnserialization(AScene *scene)
+		void EntityRepresentation::postUnserialization()
 		{
 			position = entity.getLink().getPosition();
 			rotation = glm::eulerAngles(entity.getLink().getOrientation());
