@@ -20,6 +20,7 @@
 #include <SpacePartitioning/Ouptut/RenderLight.hh>
 #include <SpacePartitioning/Ouptut/RenderPipeline.hh>
 #include <Utils/Debug.hpp>
+#include <Render/GeometryManagement/SimpleGeometry.hpp>
 
 namespace AGE
 {
@@ -47,6 +48,42 @@ namespace AGE
 			}
 			e->recompileShaders();
 		}
+	}
+
+	void RenderThread::getQuadGeometry(Key<Vertices> &v, Key<Painter> &p)
+	{
+		// to be sure that this function is only called in render thread
+		AGE_ASSERT(GetThreadManager()->getCurrentThread() == (AGE::Thread*)GetRenderThread());
+
+		if (Quad::VerticesKey.isValid())
+		{
+			v = Quad::VerticesKey;
+			p = Quad::PainterKey;
+			return;
+		}
+
+		auto type = std::make_pair<GLenum, std::string>(GL_FLOAT_VEC4, "position");
+		std::vector<std::pair < GLenum, std::string > > types;
+		types.push_back(type);
+
+		if (!paintingManager->has_painter(types))
+		{
+			Quad::PainterKey = paintingManager->add_painter(std::move(types));
+		}
+		else
+		{
+			Quad::PainterKey = paintingManager->get_painter(types);
+		}
+		auto &painterPtr = paintingManager->get_painter(Quad::PainterKey);
+
+		Quad::VerticesKey = painterPtr->add_vertices(Quad::PositionsNumber, Quad::IndicesNumber);
+		auto vertices = painterPtr->get_vertices(Quad::VerticesKey);
+
+		vertices->set_data<glm::vec4>(Quad::Positions, std::string("position"));
+		vertices->set_indices(Quad::Indices);
+
+		v = Quad::VerticesKey;
+		p = Quad::PainterKey;
 	}
 
 	bool RenderThread::init()

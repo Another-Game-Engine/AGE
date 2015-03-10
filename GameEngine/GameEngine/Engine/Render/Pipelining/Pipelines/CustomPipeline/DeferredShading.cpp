@@ -5,14 +5,16 @@
 #include <Render/Pipelining/Render/Rendering.hh>
 #include <Render/Pipelining/Buffer/Renderbuffer.hh>
 #include <Render/ProgramResources/Types/UniformBlock.hh>
-#include <Render/Textures/Texture2D.hh>
 #include <Render/OpenGLTask/Tasks.hh>
 #include <Render/GeometryManagement/Painting/Painter.hh>
 #include <Render/ProgramResources/Types/Uniform/Mat4.hh>
+#include <Render/ProgramResources/Types/Uniform/Sampler/Sampler2D.hh>
 #include <SpacePartitioning/Ouptut/RenderPipeline.hh>
 #include <SpacePartitioning/Ouptut/RenderPainter.hh>
 #include <SpacePartitioning/Ouptut/RenderCamera.hh>
 #include <Utils/Debug.hpp>
+#include <Threads/RenderThread.hpp>
+#include <Threads/ThreadManager.hpp>
 
 #define DEFERRED_SHADING_MERGING_VERTEX "../../Shaders/deferred_shading/deferred_shading_merge.vp"
 #define DEFERRED_SHADING_MERGING_FRAG "../../Shaders/deferred_shading/deferred_shading_merge.fp"
@@ -45,6 +47,12 @@ namespace AGE
 		_rendering_list[LIGHTNING] = std::make_shared<RenderingPass>([&](FUNCTION_ARGS){
 		});
 		_rendering_list[MERGING] = std::make_shared<RenderingPass>([&](FUNCTION_ARGS){
+			Key<Painter> quadPainterKey;
+			Key<Vertices> quadVerticesKey;
+			GetRenderThread()->getQuadGeometry(quadVerticesKey, quadPainterKey);
+
+			auto myPainter = painter_manager->get_painter(quadPainterKey);
+			myPainter->uniqueDraw(GL_TRIANGLES, _programs[MERGING], Properties(), quadVerticesKey);
 		});
 		addRenderPassOutput<Texture2D, RenderingPass>(_rendering_list[BUFFERING], GL_COLOR_ATTACHMENT0, screen_size.x, screen_size.y, GL_RGBA8, true);
 		addRenderPassOutput<Texture2D, RenderingPass>(_rendering_list[BUFFERING], GL_COLOR_ATTACHMENT1, screen_size.x, screen_size.y, GL_RGBA8, true);
@@ -72,6 +80,14 @@ namespace AGE
 		for (auto key : pipeline.keys)
 		{
 			_rendering_list[BUFFERING]->render(key.properties, key.vertices, _painter_manager->get_painter(key.painter));
+		}
+
+		_programs[MERGING]->use();
+		auto &mapColor = _programs[MERGING]->get_resource<Sampler2D>("diffuse_buffer");
+		*mapColor = _diffuseTexture;
+		for (auto key : pipeline.keys)
+		{
+			_rendering_list[MERGING]->render(key.properties, key.vertices, _painter_manager->get_painter(key.painter));
 		}
 		return (*this);
 	}
