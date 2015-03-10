@@ -432,7 +432,7 @@ namespace AGE
 				lc.setOrientation(glm::rotate(lc.getOrientation(), -50.f * (float)time, glm::vec3(0.f, 0.f, 1.f)));
 		}
 
-		if (getInstance<Input>()->getPhysicalKeyJustPressed(AGE_ESCAPE))
+		if (getInstance<Input>()->getPhysicalKeyJustReleased(AGE_ESCAPE))
 			return (false);
 		static float trigger = 0.0f;
 		if (getInstance<Input>()->getPhysicalKeyPressed(AGE_SPACE) && trigger == 0.0f)
