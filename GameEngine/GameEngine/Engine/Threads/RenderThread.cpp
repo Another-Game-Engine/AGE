@@ -55,7 +55,7 @@ namespace AGE
 		// to be sure that this function is only called in render thread
 		AGE_ASSERT(GetThreadManager()->getCurrentThread() == (AGE::Thread*)GetRenderThread());
 
-		if (Quad::VerticesKey.isValid())
+		if (Quad::VerticesKey.isValid() && Quad::PainterKey.isValid())
 		{
 			v = Quad::VerticesKey;
 			p = Quad::PainterKey;
@@ -76,7 +76,7 @@ namespace AGE
 		}
 		auto &painterPtr = paintingManager->get_painter(Quad::PainterKey);
 
-		Quad::VerticesKey = painterPtr->add_vertices(Quad::PositionsNumber, Quad::IndicesNumber);
+		Quad::VerticesKey = painterPtr->add_vertices(Quad::Positions.size(), Quad::Indices.size());
 		auto vertices = painterPtr->get_vertices(Quad::VerticesKey);
 
 		vertices->set_data<glm::vec4>(Quad::Positions, std::string("position"));
