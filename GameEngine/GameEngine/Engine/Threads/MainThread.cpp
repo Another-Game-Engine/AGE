@@ -40,7 +40,9 @@ namespace AGE
 		workStart = std::chrono::high_resolution_clock::now();
 
 		if (!_engine->update())
+		{
 			return false;
+		}
 		workEnd = std::chrono::high_resolution_clock::now();
 		workCount += std::chrono::duration_cast<std::chrono::microseconds>(workEnd - workStart).count();
 		waitStart = std::chrono::high_resolution_clock::now();
@@ -85,7 +87,7 @@ namespace AGE
 	bool MainThread::run()
 	{
 		_run = true;
-		_insideRun.store(true);
+		_insideRun = true;
 		_next->getQueue()->releaseCommandReadability(TMQ::HybridQueue::WaitType::Block);
 
 		while (_run && _insideRun)
