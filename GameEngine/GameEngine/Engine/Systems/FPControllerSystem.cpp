@@ -1,7 +1,7 @@
 #include "FPControllerSystem.hpp"
 #include <glm/glm.hpp>
 #include <Core/AScene.hh>
-#include <Core/Input.hh>
+#include <Core/Inputs/Input.hh>
 #include <glm/gtc/matrix_transform.hpp>
 #include <Physic/Utils/BtConversion.hpp>
 

@@ -4,7 +4,7 @@
 #include <imgui/imgui.h>
 #include <Utils/OpenGL.hh>
 #include <Utils/DependenciesInjector.hpp>
-#include <Core/AgeInputs.hh>
+#include <Core/Inputs/AgeInputs.hh>
 #include <glm/glm.hpp>
 #include <vector>
 

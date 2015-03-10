@@ -7,7 +7,7 @@
 #include <Threads/ThreadManager.hpp>
 #include <Threads/MainThread.hpp>
 #include <Core/Engine.hh>
-#include <Core/Input.hh>
+#include <Core/Inputs/Input.hh>
 #include <Core/Timer.hh>
 
 #define STB_TRUETYPE_IMPLEMENTATION
