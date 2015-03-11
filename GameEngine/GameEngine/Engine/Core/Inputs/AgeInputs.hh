@@ -11,7 +11,6 @@
 #define AGE_SET_KEY_JUST_PRESSED(k)		((k) | 0x2)
 #define AGE_SET_KEY_JUST_RELEASED(k)	((k) | 0x4)
 
-#define AGE_UNSET_KEY_PRESSED(k)		(((k) | 0x1) ^ 0x1)
 #define AGE_UNSET_KEY_JUST_PRESSED(k)	(((k) | 0x2) ^ 0x2)
 #define AGE_UNSET_KEY_JUST_RELEASED(k)	(((k) | 0x4) ^ 0x4)
 
@@ -25,7 +24,6 @@
 #define AGE_SET_PHYSICAL_KEY_JUST_PRESSED(k)	((k) | 0x20)
 #define AGE_SET_PHYSICAL_KEY_JUST_RELEASED(k)	((k) | 0x40)
 
-#define AGE_UNSET_PHYSICAL_KEY_PRESSED(k)		(((k) | 0x10) ^ 0x10)
 #define AGE_UNSET_PHYSICAL_KEY_JUST_PRESSED(k)	(((k) | 0x20) ^ 0x20)
 #define AGE_UNSET_PHYSICAL_KEY_JUST_RELEASED(k)	(((k) | 0x40) ^ 0x40)
 
