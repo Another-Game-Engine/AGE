@@ -409,29 +409,27 @@ namespace AGE
 			if (rightTrigger > 0.4)
 				lc.setOrientation(glm::rotate(lc.getOrientation(), -rightTrigger * 50.f * (float)time, glm::vec3(0.f, 0.f, 1.f)));
 		}
-		else // KEYBOARD INPUT
-		{
-			if (getInstance<Input>()->getPhysicalKeyPressed(AGE_w))
-				lc.setForward(glm::vec3(0.f, 0.f, -c * time));
-			if (getInstance<Input>()->getPhysicalKeyPressed(AGE_s))
-				lc.setForward(glm::vec3(0.f, 0.f, c * time));
-			if (getInstance<Input>()->getPhysicalKeyPressed(AGE_a))
-				lc.setForward(glm::vec3(-c * time, 0.f, 0.f));
-			if (getInstance<Input>()->getPhysicalKeyPressed(AGE_d))
-				lc.setForward(glm::vec3(c * time, 0.f, 0.f));
-			if (getInstance<Input>()->getPhysicalKeyPressed(AGE_RIGHT))
-				lc.setOrientation(glm::rotate(lc.getOrientation(), -50.f * (float)time, glm::vec3(0.f, 1.f, 0.f)));
-			if (getInstance<Input>()->getPhysicalKeyPressed(AGE_LEFT))
-				lc.setOrientation(glm::rotate(lc.getOrientation(), 50.f * (float)time, glm::vec3(0.f, 1.f, 0.f)));
-			if (getInstance<Input>()->getPhysicalKeyPressed(AGE_UP))
-				lc.setOrientation(glm::rotate(lc.getOrientation(), 50.f * (float)time, glm::vec3(1.f, 0.f, 0.f)));
-			if (getInstance<Input>()->getPhysicalKeyPressed(AGE_DOWN))
-				lc.setOrientation(glm::rotate(lc.getOrientation(), -50.f * (float)time, glm::vec3(1.0f, 0.f, 0.f)));
-			if (getInstance<Input>()->getPhysicalKeyPressed(AGE_q))
-				lc.setOrientation(glm::rotate(lc.getOrientation(), 50.f * (float)time, glm::vec3(0.f, 0.f, 1.f)));
-			if (getInstance<Input>()->getPhysicalKeyPressed(AGE_e))
-				lc.setOrientation(glm::rotate(lc.getOrientation(), -50.f * (float)time, glm::vec3(0.f, 0.f, 1.f)));
-		}
+		// KEYBOARD INPUTS
+		if (getInstance<Input>()->getPhysicalKeyPressed(AGE_w))
+			lc.setForward(glm::vec3(0.f, 0.f, -c * time));
+		if (getInstance<Input>()->getPhysicalKeyPressed(AGE_s))
+			lc.setForward(glm::vec3(0.f, 0.f, c * time));
+		if (getInstance<Input>()->getPhysicalKeyPressed(AGE_a))
+			lc.setForward(glm::vec3(-c * time, 0.f, 0.f));
+		if (getInstance<Input>()->getPhysicalKeyPressed(AGE_d))
+			lc.setForward(glm::vec3(c * time, 0.f, 0.f));
+		if (getInstance<Input>()->getPhysicalKeyPressed(AGE_RIGHT))
+			lc.setOrientation(glm::rotate(lc.getOrientation(), -50.f * (float)time, glm::vec3(0.f, 1.f, 0.f)));
+		if (getInstance<Input>()->getPhysicalKeyPressed(AGE_LEFT))
+			lc.setOrientation(glm::rotate(lc.getOrientation(), 50.f * (float)time, glm::vec3(0.f, 1.f, 0.f)));
+		if (getInstance<Input>()->getPhysicalKeyPressed(AGE_UP))
+			lc.setOrientation(glm::rotate(lc.getOrientation(), 50.f * (float)time, glm::vec3(1.f, 0.f, 0.f)));
+		if (getInstance<Input>()->getPhysicalKeyPressed(AGE_DOWN))
+			lc.setOrientation(glm::rotate(lc.getOrientation(), -50.f * (float)time, glm::vec3(1.0f, 0.f, 0.f)));
+		if (getInstance<Input>()->getPhysicalKeyPressed(AGE_q))
+			lc.setOrientation(glm::rotate(lc.getOrientation(), 50.f * (float)time, glm::vec3(0.f, 0.f, 1.f)));
+		if (getInstance<Input>()->getPhysicalKeyPressed(AGE_e))
+			lc.setOrientation(glm::rotate(lc.getOrientation(), -50.f * (float)time, glm::vec3(0.f, 0.f, 1.f)));
 
 		if (getInstance<Input>()->getPhysicalKeyJustReleased(AGE_ESCAPE))
 			return (false);
