@@ -19,10 +19,42 @@ namespace AGE
 		_mouseWheelX(0),
 		_mouseWheelY(0)
 	{
+		resetInputs();
+	}
+
+	void	Input::frameUpdate()
+	{
 		std::lock_guard<AGE::SpinLock> lock(_mutex);
-		_inputs.fill(false);
-		_keyPhysicalInputs.fill(false);
-		_keyMappedInputs.fill(false);
+
+		for (int i = 0; i < AGE_KEY_NUMBER; ++i)
+		{
+			if (AGE_MAPPED_KEY_JUST_PRESSED(_keyInputs[i]))
+			{
+				_keyInputs[i] = AGE_RESET_MAPPED_STATE(_keyInputs[i]);
+				_keyInputs[i] = AGE_SET_MAPPED_KEY_PRESSED(_keyInputs[i]);
+			}
+			else if (AGE_MAPPED_KEY_JUST_RELEASED(_keyInputs[i]))
+			{
+				_keyInputs[i] = AGE_RESET_MAPPED_STATE(_keyInputs[i]);
+			}
+			if (AGE_PHYSICAL_KEY_JUST_PRESSED(_keyInputs[i]))
+			{
+				_keyInputs[i] = AGE_RESET_PHYSICAL_STATE(_keyInputs[i]);
+				_keyInputs[i] = AGE_SET_PHYSICAL_KEY_PRESSED(_keyInputs[i]);
+			}
+			else if (AGE_PHYSICAL_KEY_JUST_RELEASED(_keyInputs[i]))
+			{
+				_keyInputs[i] = AGE_RESET_PHYSICAL_STATE(_keyInputs[i]);
+			}
+		}
+	}
+
+	void	Input::resetInputs()
+	{
+		for (int i = 0; i < AGE_INPUT_NUMBER; ++i)
+			_inputs[i] = false;
+		for (int i = 0; i < AGE_KEY_NUMBER; ++i)
+			_keyInputs[i] = 0;
 	}
 
 	void 	Input::addInput(AgeInputs input)
@@ -39,21 +71,25 @@ namespace AGE
 		_inputs[input] = false;
 	}
 
-	void	Input::keyInputPressed(AgeKeys mappedInput, AgeKeys hardwareInput)
+	void	Input::keyInputPressed(AgeKeys mappedInput, AgeKeys physicalInput)
 	{
 		std::lock_guard<AGE::SpinLock> lock(_mutex);
-		_keyMappedInputs[mappedInput] = true;
-		_keyPhysicalInputs[hardwareInput] = true;
+		_keyInputs[mappedInput] = AGE_RESET_MAPPED_STATE(_keyInputs[mappedInput]);
+		_keyInputs[mappedInput] = AGE_SET_MAPPED_KEY_JUST_PRESSED(_keyInputs[mappedInput]);
+		_keyInputs[physicalInput] = AGE_RESET_PHYSICAL_STATE(_keyInputs[physicalInput]);
+		_keyInputs[physicalInput] = AGE_SET_PHYSICAL_KEY_JUST_PRESSED(_keyInputs[physicalInput]);
 #ifdef USE_IMGUI
 		GetMainThread()->getQueue()->emplaceTask<ImGuiKeyEvent>(mappedInput, true);
 #endif
 	}
 
-	void 	Input::keyInputReleased(AgeKeys mappedInput, AgeKeys hardwareInput)
+	void 	Input::keyInputReleased(AgeKeys mappedInput, AgeKeys physicalInput)
 	{
 		std::lock_guard<AGE::SpinLock> lock(_mutex);
-		_keyMappedInputs[mappedInput] = false;
-		_keyPhysicalInputs[hardwareInput] = false;
+		_keyInputs[mappedInput] = AGE_RESET_MAPPED_STATE(_keyInputs[mappedInput]);
+		_keyInputs[mappedInput] = AGE_SET_MAPPED_KEY_JUST_RELEASED(_keyInputs[mappedInput]);
+		_keyInputs[physicalInput] = AGE_RESET_PHYSICAL_STATE(_keyInputs[physicalInput]);
+		_keyInputs[physicalInput] = AGE_SET_PHYSICAL_KEY_JUST_RELEASED(_keyInputs[physicalInput]);
 #ifdef USE_IMGUI
 		GetMainThread()->getQueue()->emplaceTask<ImGuiKeyEvent>(mappedInput, false);
 #endif
@@ -167,31 +203,52 @@ namespace AGE
 		return glm::ivec2(_mouseDelX, _mouseDelY);
 	}
 
-	bool 	Input::getInput(AgeInputs input, bool handled)
+	bool 	Input::getInput(AgeInputs input)
 	{
 		std::lock_guard<AGE::SpinLock> lock(_mutex);
 
-		if (handled)
-			_inputs[input] = false;
 		return (_inputs[input]);
 	}
 
-	bool 	Input::getPhysicalKey(AgeKeys input, bool handled)
+	bool 	Input::getPhysicalKeyPressed(AgeKeys input)
 	{
 		std::lock_guard<AGE::SpinLock> lock(_mutex);
 
-		if (handled)
-			_keyPhysicalInputs[input] = false;
-		return (_keyPhysicalInputs[input]);
+		return (AGE_PHYSICAL_KEY_PRESSED(_keyInputs[input]));
+	}
+	bool 	Input::getMappedKeyPressed(AgeKeys input)
+	{
+		std::lock_guard<AGE::SpinLock> lock(_mutex);
+
+		return (AGE_MAPPED_KEY_PRESSED(_keyInputs[input]));
 	}
 
-	bool 	Input::getMappedKey(AgeKeys input, bool handled)
+	bool 	Input::getPhysicalKeyJustPressed(AgeKeys input)
 	{
 		std::lock_guard<AGE::SpinLock> lock(_mutex);
 
-		if (handled)
-			_keyMappedInputs[input] = false;
-		return (_keyMappedInputs[input]);
+		return (AGE_PHYSICAL_KEY_JUST_PRESSED(_keyInputs[input]));
+	}
+
+	bool 	Input::getMappedKeyJustPressed(AgeKeys input)
+	{
+		std::lock_guard<AGE::SpinLock> lock(_mutex);
+
+		return (AGE_MAPPED_KEY_JUST_PRESSED(_keyInputs[input]));
+	}
+
+	bool 	Input::getPhysicalKeyJustReleased(AgeKeys input)
+	{
+		std::lock_guard<AGE::SpinLock> lock(_mutex);
+
+		return (AGE_PHYSICAL_KEY_JUST_RELEASED(_keyInputs[input]));
+	}
+
+	bool 	Input::getMappedKeyJustReleased(AgeKeys input)
+	{
+		std::lock_guard<AGE::SpinLock> lock(_mutex);
+
+		return (AGE_MAPPED_KEY_JUST_RELEASED(_keyInputs[input]));
 	}
 
 	bool	Input::getJoystick(uint32_t joyId)

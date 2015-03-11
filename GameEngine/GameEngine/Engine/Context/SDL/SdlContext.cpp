@@ -45,6 +45,7 @@ namespace AGE
 		SDL_Event events;
 		auto input = _dependencyManager->getInstance<Input>();
 
+		input->frameUpdate();
 		if (_firstCall)
 		{
 			_initJoysticks(*input);
@@ -114,6 +115,9 @@ namespace AGE
 				input->setJoystickHat(joyId, events.jhat.hat, joyHatDir);
 			}
 			break;
+			case SDL_WINDOWEVENT:
+				// handle windows events
+				break;
 			default:
 				input->addInput(findAgeInput(events.type));
 				break;
