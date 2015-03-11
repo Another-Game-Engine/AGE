@@ -14,43 +14,11 @@ namespace AGE
 {
 	class Input : public Dependency < Input >
 	{
-	private:
-		Joystick _joysticks[AGE_JOYSTICK_MAX_NUMBER];
-		bool _inputs[AGE_INPUT_NUMBER];
-		uint8_t _keyInputs[AGE_KEY_NUMBER];
-
-		std::atomic_int32_t _mousePosX;
-		std::atomic_int32_t _mousePosY;
-		std::atomic_int32_t _mouseDelX;
-		std::atomic_int32_t _mouseDelY;
-		std::atomic_int32_t _mouseWheelX;
-		std::atomic_int32_t _mouseWheelY;
-
-		AGE::SpinLock      _mutex;
+		friend class Joystick;
 	public:
 		Input();
-		virtual ~Input() { }
-
-		// Function called by the context
-		void				frameUpdate();
-		void				resetInputs();
-
-		void 				addInput(AgeInputs input);
-		void 				removeInput(AgeInputs input);
-		void 				keyInputPressed(AgeKeys mappedInput, AgeKeys physicalInput);
-		void 				keyInputReleased(AgeKeys mappedInput, AgeKeys physicalInput);
-		void 				setMousePosition(glm::ivec2 const &pos, glm::ivec2 const &rel);
-		void				setMouseWheel(glm::ivec2 const &delta);
-		void				addJoystick(std::string const &name, uint32_t joyId);
-		void				removeJoystick(uint32_t joyId);
-		void				setJoystickAxis(uint32_t joyId, AgeJoystickAxis joyAxis, float value);
-		void				setJoystickTrackBall(uint32_t joyId, glm::ivec2 const &pos);
-		void				setJoystickHat(uint32_t joyId, uint32_t joyHat, AgeJoystickHatDirections dir);
-		void				joystickButtonPressed(uint32_t joyId, AgeJoystickButtons joyButton);
-		void				joystickButtonReleased(uint32_t joyId, AgeJoystickButtons joyButton);
-
-		// If IMGUI is activated, send the current state of the mouse to the render thread
-		void				sendMouseStateToIMGUI();
+		Input(Input const &oth) = delete;
+		virtual ~Input() = default;
 
 		// Functions called by the user
 		glm::ivec2  	    getMousePosition();
@@ -65,6 +33,41 @@ namespace AGE
 		bool 				getMappedKeyJustReleased(AgeKeys input);
 		bool				getJoystick(uint32_t joyId);
 		bool				getJoystick(uint32_t joyId, Joystick &joystickInfos);
+
+		// Function called by the context
+		void				frameUpdate();
+		void				resetInputs();
+
+		void 				addInput(AgeInputs input);
+		void 				removeInput(AgeInputs input);
+		void 				keyInputPressed(AgeKeys mappedInput, AgeKeys physicalInput);
+		void 				keyInputReleased(AgeKeys mappedInput, AgeKeys physicalInput);
+		void 				setMousePosition(glm::ivec2 const &pos, glm::ivec2 const &rel);
+		void				setMouseWheel(glm::ivec2 const &delta);
+		void				addJoystick(std::string const &name, uint32_t joyId);
+		void				removeJoystick(uint32_t joyId);
+		void				setJoystickAxis(uint32_t joyId, AgeJoystickAxis joyAxis, float value);
+		void				setJoystickTrackBall(uint32_t joyId, uint32_t trackBallIdx, glm::ivec2 const &pos);
+		void				setJoystickHat(uint32_t joyId, uint32_t joyHat, AgeJoystickHatDirections dir);
+		void				joystickButtonPressed(uint32_t joyId, AgeJoystickButtons joyButton);
+		void				joystickButtonReleased(uint32_t joyId, AgeJoystickButtons joyButton);
+
+		// If IMGUI is activated, send the current state of the mouse to the render thread
+		void				sendMouseStateToIMGUI();
+
+	private:
+		Joystick _joysticks[AGE_JOYSTICK_MAX_NUMBER];
+		bool _inputs[AGE_INPUT_NUMBER];
+		uint8_t _keyInputs[AGE_KEY_NUMBER];
+
+		std::atomic_int32_t _mousePosX;
+		std::atomic_int32_t _mousePosY;
+		std::atomic_int32_t _mouseDelX;
+		std::atomic_int32_t _mouseDelY;
+		std::atomic_int32_t _mouseWheelX;
+		std::atomic_int32_t _mouseWheelY;
+
+		AGE::SpinLock      _mutex;
 	};
 
 }

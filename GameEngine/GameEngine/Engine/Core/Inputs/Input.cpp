@@ -22,166 +22,6 @@ namespace AGE
 		resetInputs();
 	}
 
-	void	Input::frameUpdate()
-	{
-		std::lock_guard<AGE::SpinLock> lock(_mutex);
-
-		for (int i = 0; i < AGE_KEY_NUMBER; ++i)
-		{
-			if (AGE_MAPPED_KEY_JUST_PRESSED(_keyInputs[i]))
-			{
-				_keyInputs[i] = AGE_RESET_MAPPED_STATE(_keyInputs[i]);
-				_keyInputs[i] = AGE_SET_MAPPED_KEY_PRESSED(_keyInputs[i]);
-			}
-			else if (AGE_MAPPED_KEY_JUST_RELEASED(_keyInputs[i]))
-			{
-				_keyInputs[i] = AGE_RESET_MAPPED_STATE(_keyInputs[i]);
-			}
-			if (AGE_PHYSICAL_KEY_JUST_PRESSED(_keyInputs[i]))
-			{
-				_keyInputs[i] = AGE_RESET_PHYSICAL_STATE(_keyInputs[i]);
-				_keyInputs[i] = AGE_SET_PHYSICAL_KEY_PRESSED(_keyInputs[i]);
-			}
-			else if (AGE_PHYSICAL_KEY_JUST_RELEASED(_keyInputs[i]))
-			{
-				_keyInputs[i] = AGE_RESET_PHYSICAL_STATE(_keyInputs[i]);
-			}
-		}
-	}
-
-	void	Input::resetInputs()
-	{
-		for (int i = 0; i < AGE_INPUT_NUMBER; ++i)
-			_inputs[i] = false;
-		for (int i = 0; i < AGE_KEY_NUMBER; ++i)
-			_keyInputs[i] = 0;
-	}
-
-	void 	Input::addInput(AgeInputs input)
-	{
-		std::lock_guard<AGE::SpinLock> lock(_mutex);
-
-		_inputs[input] = true;
-	}
-
-	void 	Input::removeInput(AgeInputs input)
-	{
-		std::lock_guard<AGE::SpinLock> lock(_mutex);
-
-		_inputs[input] = false;
-	}
-
-	void	Input::keyInputPressed(AgeKeys mappedInput, AgeKeys physicalInput)
-	{
-		std::lock_guard<AGE::SpinLock> lock(_mutex);
-		_keyInputs[mappedInput] = AGE_RESET_MAPPED_STATE(_keyInputs[mappedInput]);
-		_keyInputs[mappedInput] = AGE_SET_MAPPED_KEY_JUST_PRESSED(_keyInputs[mappedInput]);
-		_keyInputs[physicalInput] = AGE_RESET_PHYSICAL_STATE(_keyInputs[physicalInput]);
-		_keyInputs[physicalInput] = AGE_SET_PHYSICAL_KEY_JUST_PRESSED(_keyInputs[physicalInput]);
-#ifdef USE_IMGUI
-		GetMainThread()->getQueue()->emplaceTask<ImGuiKeyEvent>(mappedInput, true);
-#endif
-	}
-
-	void 	Input::keyInputReleased(AgeKeys mappedInput, AgeKeys physicalInput)
-	{
-		std::lock_guard<AGE::SpinLock> lock(_mutex);
-		_keyInputs[mappedInput] = AGE_RESET_MAPPED_STATE(_keyInputs[mappedInput]);
-		_keyInputs[mappedInput] = AGE_SET_MAPPED_KEY_JUST_RELEASED(_keyInputs[mappedInput]);
-		_keyInputs[physicalInput] = AGE_RESET_PHYSICAL_STATE(_keyInputs[physicalInput]);
-		_keyInputs[physicalInput] = AGE_SET_PHYSICAL_KEY_JUST_RELEASED(_keyInputs[physicalInput]);
-#ifdef USE_IMGUI
-		GetMainThread()->getQueue()->emplaceTask<ImGuiKeyEvent>(mappedInput, false);
-#endif
-	}
-
-	void 				Input::setMousePosition(glm::ivec2 const &pos, glm::ivec2 const &rel)
-	{
-		std::lock_guard<AGE::SpinLock> lock(_mutex);
-
-		_mouseDelX = rel.x;
-		_mouseDelY = rel.y;
-		_mousePosX = pos.x;
-		_mousePosY = pos.y;
-	}
-
-	void				Input::setMouseWheel(glm::ivec2 const &delta)
-	{
-		std::lock_guard<AGE::SpinLock> lock(_mutex);
-
-		_mouseWheelX = delta.x;
-		_mouseWheelY = delta.y;
-	}
-
-	void				Input::addJoystick(std::string const &name, uint32_t joyId)
-	{
-		std::lock_guard<AGE::SpinLock> lock(_mutex);
-
-		_joysticks[joyId].connected = true;
-	}
-
-	void				Input::removeJoystick(uint32_t joyId)
-	{
-		std::lock_guard<AGE::SpinLock> lock(_mutex);
-
-		_joysticks[joyId].disconnect();
-	}
-
-	void	Input::setJoystickAxis(uint32_t joyId, AgeJoystickAxis joyAxis, float value)
-	{
-		std::lock_guard<AGE::SpinLock> lock(_mutex);
-
-		assert(_joysticks[joyId].connected);
-		_joysticks[joyId].axis[joyAxis] = value;
-	}
-
-	void	Input::setJoystickTrackBall(uint32_t joyId, glm::ivec2 const &pos)
-	{
-		std::lock_guard<AGE::SpinLock> lock(_mutex);
-
-		assert(_joysticks[joyId].connected);
-		_joysticks[joyId].trackBall = pos;
-	}
-
-	void	Input::setJoystickHat(uint32_t joyId, uint32_t joyHat, AgeJoystickHatDirections dir)
-	{
-		std::lock_guard<AGE::SpinLock> lock(_mutex);
-
-		assert(_joysticks[joyId].connected);
-		_joysticks[joyId].hats[joyHat] = dir;
-	}
-
-	void	Input::joystickButtonPressed(uint32_t joyId, AgeJoystickButtons joyButton)
-	{
-		std::lock_guard<AGE::SpinLock> lock(_mutex);
-
-		assert(_joysticks[joyId].connected);
-		_joysticks[joyId].buttons[joyButton] = true;
-	}
-
-	void	Input::joystickButtonReleased(uint32_t joyId, AgeJoystickButtons joyButton)
-	{
-		std::lock_guard<AGE::SpinLock> lock(_mutex);
-
-		assert(_joysticks[joyId].connected);
-		_joysticks[joyId].buttons[joyButton] = false;
-	}
-
-	void Input::sendMouseStateToIMGUI()
-	{
-#ifdef USE_IMGUI
-		glm::ivec2 mousePosition;
-		{
-			std::lock_guard<AGE::SpinLock> lock(_mutex);
-			mousePosition = glm::ivec2(_mousePosX, _mousePosY);
-		}
-		GetMainThread()->getQueue()->emplaceTask<ImGuiMouseStateEvent>(mousePosition,
-			getInput(AGE_MOUSE_LEFT),
-			getInput(AGE_MOUSE_MIDDLE),
-			getInput(AGE_MOUSE_RIGHT));
-#endif
-	}
-
 	glm::ivec2   	    Input::getMouseWheel()
 	{
 		std::lock_guard<AGE::SpinLock> lock(_mutex);
@@ -220,7 +60,7 @@ namespace AGE
 	{
 		std::lock_guard<AGE::SpinLock> lock(_mutex);
 
-		return (AGE_MAPPED_KEY_PRESSED(_keyInputs[input]));
+		return (AGE_KEY_PRESSED(_keyInputs[input]));
 	}
 
 	bool 	Input::getPhysicalKeyJustPressed(AgeKeys input)
@@ -234,7 +74,7 @@ namespace AGE
 	{
 		std::lock_guard<AGE::SpinLock> lock(_mutex);
 
-		return (AGE_MAPPED_KEY_JUST_PRESSED(_keyInputs[input]));
+		return (AGE_KEY_JUST_PRESSED(_keyInputs[input]));
 	}
 
 	bool 	Input::getPhysicalKeyJustReleased(AgeKeys input)
@@ -248,25 +88,191 @@ namespace AGE
 	{
 		std::lock_guard<AGE::SpinLock> lock(_mutex);
 
-		return (AGE_MAPPED_KEY_JUST_RELEASED(_keyInputs[input]));
+		return (AGE_KEY_JUST_RELEASED(_keyInputs[input]));
 	}
 
 	bool	Input::getJoystick(uint32_t joyId)
 	{
 		std::lock_guard<AGE::SpinLock> lock(_mutex);
 
-		return (_joysticks[joyId].connected);
+		return (_joysticks[joyId]._connected);
 	}
 
 	bool	Input::getJoystick(uint32_t joyId, Joystick &joystickInfos)
 	{
 		std::lock_guard<AGE::SpinLock> lock(_mutex);
 
-		if (_joysticks[joyId].connected)
+		if (_joysticks[joyId]._connected)
 		{
 			joystickInfos = _joysticks[joyId];
 			return (true);
 		}
 		return (false);
 	}
+
+	void	Input::frameUpdate()
+	{
+		std::lock_guard<AGE::SpinLock> lock(_mutex);
+
+		for (int i = 0; i < AGE_KEY_NUMBER; ++i)
+		{
+			if (AGE_KEY_JUST_PRESSED(_keyInputs[i]))
+			{
+				_keyInputs[i] = AGE_RESET_MAPPED_KEY_STATE(_keyInputs[i]);
+				_keyInputs[i] = AGE_SET_KEY_PRESSED(_keyInputs[i]);
+			}
+			else if (AGE_KEY_JUST_RELEASED(_keyInputs[i]))
+			{
+				_keyInputs[i] = AGE_RESET_MAPPED_KEY_STATE(_keyInputs[i]);
+			}
+			if (AGE_PHYSICAL_KEY_JUST_PRESSED(_keyInputs[i]))
+			{
+				_keyInputs[i] = AGE_RESET_PHYSICAL_KEY_STATE(_keyInputs[i]);
+				_keyInputs[i] = AGE_SET_PHYSICAL_KEY_PRESSED(_keyInputs[i]);
+			}
+			else if (AGE_PHYSICAL_KEY_JUST_RELEASED(_keyInputs[i]))
+			{
+				_keyInputs[i] = AGE_RESET_PHYSICAL_KEY_STATE(_keyInputs[i]);
+			}
+		}
+		for (int i = 0; i < AGE_JOYSTICK_MAX_NUMBER; ++i)
+		{
+			if (_joysticks[i]._connected)
+				_joysticks[i]._frameUpdate();
+		}
+	}
+
+	void	Input::resetInputs()
+	{
+		for (int i = 0; i < AGE_INPUT_NUMBER; ++i)
+			_inputs[i] = false;
+		for (int i = 0; i < AGE_KEY_NUMBER; ++i)
+			_keyInputs[i] = 0;
+	}
+
+	void 	Input::addInput(AgeInputs input)
+	{
+		std::lock_guard<AGE::SpinLock> lock(_mutex);
+
+		_inputs[input] = true;
+	}
+
+	void 	Input::removeInput(AgeInputs input)
+	{
+		std::lock_guard<AGE::SpinLock> lock(_mutex);
+
+		_inputs[input] = false;
+	}
+
+	void	Input::keyInputPressed(AgeKeys mappedInput, AgeKeys physicalInput)
+	{
+		std::lock_guard<AGE::SpinLock> lock(_mutex);
+		_keyInputs[mappedInput] = AGE_RESET_MAPPED_KEY_STATE(_keyInputs[mappedInput]);
+		_keyInputs[mappedInput] = AGE_SET_KEY_JUST_PRESSED(_keyInputs[mappedInput]);
+		_keyInputs[physicalInput] = AGE_RESET_PHYSICAL_KEY_STATE(_keyInputs[physicalInput]);
+		_keyInputs[physicalInput] = AGE_SET_PHYSICAL_KEY_JUST_PRESSED(_keyInputs[physicalInput]);
+#ifdef USE_IMGUI
+		GetMainThread()->getQueue()->emplaceTask<ImGuiKeyEvent>(mappedInput, true);
+#endif
+	}
+
+	void 	Input::keyInputReleased(AgeKeys mappedInput, AgeKeys physicalInput)
+	{
+		std::lock_guard<AGE::SpinLock> lock(_mutex);
+		_keyInputs[mappedInput] = AGE_RESET_MAPPED_KEY_STATE(_keyInputs[mappedInput]);
+		_keyInputs[mappedInput] = AGE_SET_KEY_JUST_RELEASED(_keyInputs[mappedInput]);
+		_keyInputs[physicalInput] = AGE_RESET_PHYSICAL_KEY_STATE(_keyInputs[physicalInput]);
+		_keyInputs[physicalInput] = AGE_SET_PHYSICAL_KEY_JUST_RELEASED(_keyInputs[physicalInput]);
+#ifdef USE_IMGUI
+		GetMainThread()->getQueue()->emplaceTask<ImGuiKeyEvent>(mappedInput, false);
+#endif
+	}
+
+	void 				Input::setMousePosition(glm::ivec2 const &pos, glm::ivec2 const &rel)
+	{
+		std::lock_guard<AGE::SpinLock> lock(_mutex);
+
+		_mouseDelX = rel.x;
+		_mouseDelY = rel.y;
+		_mousePosX = pos.x;
+		_mousePosY = pos.y;
+	}
+
+	void				Input::setMouseWheel(glm::ivec2 const &delta)
+	{
+		std::lock_guard<AGE::SpinLock> lock(_mutex);
+
+		_mouseWheelX = delta.x;
+		_mouseWheelY = delta.y;
+	}
+
+	void				Input::addJoystick(std::string const &name, uint32_t joyId)
+	{
+		std::lock_guard<AGE::SpinLock> lock(_mutex);
+
+		_joysticks[joyId]._connected = true;
+	}
+
+	void				Input::removeJoystick(uint32_t joyId)
+	{
+		std::lock_guard<AGE::SpinLock> lock(_mutex);
+
+		_joysticks[joyId]._disconnect();
+	}
+
+	void	Input::setJoystickAxis(uint32_t joyId, AgeJoystickAxis joyAxis, float value)
+	{
+		std::lock_guard<AGE::SpinLock> lock(_mutex);
+
+		assert(_joysticks[joyId]._connected);
+		_joysticks[joyId]._axis[joyAxis] = value;
+	}
+
+	void	Input::setJoystickTrackBall(uint32_t joyId, uint32_t trackBallIdx, glm::ivec2 const &pos)
+	{
+		std::lock_guard<AGE::SpinLock> lock(_mutex);
+
+		assert(_joysticks[joyId]._connected && trackBallIdx < AGE_JOYSTICK_TRACKBALL_MAX_NUMBER);
+		_joysticks[joyId]._trackBalls[trackBallIdx] = pos;
+	}
+
+	void	Input::setJoystickHat(uint32_t joyId, uint32_t joyHat, AgeJoystickHatDirections dir)
+	{
+		std::lock_guard<AGE::SpinLock> lock(_mutex);
+
+		assert(_joysticks[joyId]._connected && joyHat < AGE_JOYSTICK_HAT_MAX_NUMBER);
+		_joysticks[joyId]._hats[joyHat] = dir;
+	}
+
+	void	Input::joystickButtonPressed(uint32_t joyId, AgeJoystickButtons joyButton)
+	{
+		std::lock_guard<AGE::SpinLock> lock(_mutex);
+
+		assert(_joysticks[joyId]._connected);
+		_joysticks[joyId]._setButtonPressed(joyButton);
+	}
+
+	void	Input::joystickButtonReleased(uint32_t joyId, AgeJoystickButtons joyButton)
+	{
+		std::lock_guard<AGE::SpinLock> lock(_mutex);
+
+		assert(_joysticks[joyId]._connected);
+		_joysticks[joyId]._setButtonReleased(joyButton);
+	}
+
+	void Input::sendMouseStateToIMGUI()
+	{
+#ifdef USE_IMGUI
+		glm::ivec2 mousePosition;
+		{
+			std::lock_guard<AGE::SpinLock> lock(_mutex);
+			mousePosition = glm::ivec2(_mousePosX, _mousePosY);
+		}
+		GetMainThread()->getQueue()->emplaceTask<ImGuiMouseStateEvent>(mousePosition,
+			getInput(AGE_MOUSE_LEFT),
+			getInput(AGE_MOUSE_MIDDLE),
+			getInput(AGE_MOUSE_RIGHT));
+#endif
+	}
+
 }
