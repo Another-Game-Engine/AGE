@@ -29,11 +29,14 @@ namespace AGE
 		DeferredShading &operator=(DeferredShading const &) = delete;
 
 	public:
-		virtual IRenderingPipeline &render(ARGS_FUNCTION_RENDER) override final;
+		virtual IRenderingPipeline &render(RenderPipeline const &pipeline, RenderLightList const &lights, CameraInfos const &camera) override final;
+
 	private:
 		std::shared_ptr<Texture2D> _diffuseTexture;
 		std::shared_ptr<Texture2D> _normalTexture;
 		std::shared_ptr<Texture2D> _specularTexture;
+		std::shared_ptr<Texture2D> _lightMap;
+		RenderLightList const *_lights;
 	};
 
 

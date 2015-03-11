@@ -45,24 +45,25 @@ namespace AGE
 			painter->draw(GL_TRIANGLES, _programs[BUFFERING], properties, vertices);
 		});
 		_rendering_list[LIGHTNING] = std::make_shared<RenderingPass>([&](FUNCTION_ARGS){
+			for (auto &light : _lights->pointLight) {
+				Key<Painter> quadPainterKey;
+				Key<Vertices> quadVerticesKey;
+				GetRenderThread()->getQuadGeometry(quadVerticesKey, quadPainterKey);
+				auto myPainter = painter_manager->get_painter(quadPainterKey);
+				myPainter->uniqueDraw(GL_TRIANGLES, _programs[MERGING], Properties(), quadVerticesKey);
+			}
 		});
 		_rendering_list[MERGING] = std::make_shared<Rendering>([&](FUNCTION_ARGS){
-			//OpenGLTasks::set_stencil_test(false);
-			//OpenGLTasks::set_clear_depth(0);
-			//OpenGLTasks::set_scissor_test(false);
-			OpenGLTasks::set_depth_test(false);
-			//OpenGLTasks::set_clear_color(glm::vec4(0.f, 0.0f, 0.0f, 1.0f));
-			//OpenGLTasks::clear_buffer();
 			Key<Painter> quadPainterKey;
 			Key<Vertices> quadVerticesKey;
 			GetRenderThread()->getQuadGeometry(quadVerticesKey, quadPainterKey);
-
 			auto myPainter = painter_manager->get_painter(quadPainterKey);
 			myPainter->uniqueDraw(GL_TRIANGLES, _programs[MERGING], Properties(), quadVerticesKey);
 		});
 		_diffuseTexture = addRenderPassOutput<Texture2D, RenderingPass>(_rendering_list[BUFFERING], GL_COLOR_ATTACHMENT0, screen_size.x, screen_size.y, GL_RGBA8, true);
 		_normalTexture = addRenderPassOutput<Texture2D, RenderingPass>(_rendering_list[BUFFERING], GL_COLOR_ATTACHMENT1, screen_size.x, screen_size.y, GL_RGBA8, true);
 		_specularTexture = addRenderPassOutput<Texture2D, RenderingPass>(_rendering_list[BUFFERING], GL_COLOR_ATTACHMENT2, screen_size.x, screen_size.y, GL_RGBA8, true);
+		_lightMap = addRenderPassOutput<Texture2D, RenderingPass>(_rendering_list[LIGHTNING], GL_COLOR_ATTACHMENT0, screen_size.x, screen_size.y, GL_RGBA8, false);
 		addRenderPassOutput<Renderbuffer, RenderingPass>(_rendering_list[BUFFERING], GL_DEPTH_ATTACHMENT, screen_size.x, screen_size.y, GL_DEPTH_COMPONENT16);
 	}
 
@@ -72,8 +73,9 @@ namespace AGE
 
 	}
 
-	IRenderingPipeline & DeferredShading::render(ARGS_FUNCTION_RENDER)
+	IRenderingPipeline & DeferredShading::render(RenderPipeline const &pipeline, RenderLightList const &lights, CameraInfos const &infos)
 	{
+		_lights = &lights;
 		OpenGLTasks::set_depth_test(true);
 		OpenGLTasks::set_clear_color(glm::vec4(1.f, 0.0f, 0.0f, 1.0f));
 		OpenGLTasks::clear_buffer();

@@ -52,7 +52,7 @@ namespace AGE
 	{
 	}
 
-	IRenderingPipeline &BasicPipeline::render(ARGS_FUNCTION_RENDER)
+	IRenderingPipeline &BasicPipeline::render(RenderPipeline const &pipeline, RenderLightList const &lights, CameraInfos const &camera)
 	{
 		OpenGLTasks::set_depth_test(true);
 		OpenGLTasks::set_clear_color(glm::vec4(0, 0, 0.2, 1));
