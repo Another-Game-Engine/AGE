@@ -128,7 +128,6 @@ namespace AGE
 #endif
 			stream.str("");
 			stream.clear();
-			mutex.unlock();
 		}
 
 		void formatLogFatal(const char *format, va_list argptr);
