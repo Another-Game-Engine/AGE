@@ -11,12 +11,8 @@ namespace AGE
 
 	bool Texture2D::init(GLint width, GLint height, GLenum internal_format, bool is_mip_mapping)
 	{
-		auto success = ATexture::init(
-			width
-			, height
-			, internal_format
-			, is_mip_mapping ? (uint8_t(glm::floor(glm::log2(glm::max(float(width), float(height))) + 1))) : 1);
-		if (success == false) {
+		auto nbr_mip_mapping = is_mip_mapping ? (uint8_t(glm::floor(glm::log2(glm::max(float(width), float(height))) + 1))) : 1;
+		if (!ATexture::init(width, height, internal_format, nbr_mip_mapping)) {
 			return false;
 		}
 		glBindTexture(GL_TEXTURE_2D, _id);
