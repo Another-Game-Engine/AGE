@@ -521,7 +521,7 @@ namespace AGE
 		}
 #endif
 
-		if (ImGui::Button("Reload shaders or type R") || getInstance<Input>()->getPhysicalKey(AGE_r))
+		if (ImGui::Button("Reload shaders or type R") || getInstance<Input>()->getPhysicalKeyPressed(AGE_r))
 		{
 			GetRenderThread()->getQueue()->emplaceTask<Tasks::Render::ReloadShaders>();
 		}
