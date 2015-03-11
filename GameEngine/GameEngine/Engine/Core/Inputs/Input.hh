@@ -8,6 +8,7 @@
 #include <atomic>
 #include <Utils/SpinLock.hpp>
 #include <Core/Inputs/Joystick.hh>
+#include <array>
 
 namespace AGE
 {
@@ -15,9 +16,9 @@ namespace AGE
 	{
 	private:
 		Joystick _joysticks[AGE_JOYSTICK_MAX_NUMBER];
-		bool _inputs[AGE_INPUT_NUMBER];
-		bool _keyPhysicalInputs[AGE_KEY_NUMBER];
-		bool _keyMappedInputs[AGE_KEY_NUMBER];
+		std::array<bool, AGE_INPUT_NUMBER> _inputs;
+		std::array<bool, AGE_KEY_NUMBER> _keyPhysicalInputs;
+		std::array<bool, AGE_KEY_NUMBER> _keyMappedInputs;
 
 		std::atomic_int32_t _mousePosX;
 		std::atomic_int32_t _mousePosY;

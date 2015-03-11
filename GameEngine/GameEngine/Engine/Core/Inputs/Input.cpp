@@ -20,6 +20,9 @@ namespace AGE
 		_mouseWheelY(0)
 	{
 		std::lock_guard<AGE::SpinLock> lock(_mutex);
+		_inputs.fill(false);
+		_keyPhysicalInputs.fill(false);
+		_keyMappedInputs.fill(false);
 	}
 
 	void 	Input::addInput(AgeInputs input)
