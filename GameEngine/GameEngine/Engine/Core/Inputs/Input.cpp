@@ -116,24 +116,10 @@ namespace AGE
 
 		for (int i = 0; i < AGE_KEY_NUMBER; ++i)
 		{
-			if (AGE_KEY_JUST_PRESSED(_keyInputs[i]))
-			{
-				_keyInputs[i] = AGE_RESET_MAPPED_KEY_STATE(_keyInputs[i]);
-				_keyInputs[i] = AGE_SET_KEY_PRESSED(_keyInputs[i]);
-			}
-			else if (AGE_KEY_JUST_RELEASED(_keyInputs[i]))
-			{
-				_keyInputs[i] = AGE_RESET_MAPPED_KEY_STATE(_keyInputs[i]);
-			}
-			if (AGE_PHYSICAL_KEY_JUST_PRESSED(_keyInputs[i]))
-			{
-				_keyInputs[i] = AGE_RESET_PHYSICAL_KEY_STATE(_keyInputs[i]);
-				_keyInputs[i] = AGE_SET_PHYSICAL_KEY_PRESSED(_keyInputs[i]);
-			}
-			else if (AGE_PHYSICAL_KEY_JUST_RELEASED(_keyInputs[i]))
-			{
-				_keyInputs[i] = AGE_RESET_PHYSICAL_KEY_STATE(_keyInputs[i]);
-			}
+			_keyInputs[i] = AGE_UNSET_KEY_JUST_PRESSED(_keyInputs[i]);
+			_keyInputs[i] = AGE_UNSET_KEY_JUST_RELEASED(_keyInputs[i]);
+			_keyInputs[i] = AGE_UNSET_PHYSICAL_KEY_JUST_PRESSED(_keyInputs[i]);
+			_keyInputs[i] = AGE_UNSET_PHYSICAL_KEY_JUST_RELEASED(_keyInputs[i]);
 		}
 		for (int i = 0; i < AGE_JOYSTICK_MAX_NUMBER; ++i)
 		{
@@ -169,8 +155,10 @@ namespace AGE
 		std::lock_guard<AGE::SpinLock> lock(_mutex);
 		_keyInputs[mappedInput] = AGE_RESET_MAPPED_KEY_STATE(_keyInputs[mappedInput]);
 		_keyInputs[mappedInput] = AGE_SET_KEY_JUST_PRESSED(_keyInputs[mappedInput]);
+		_keyInputs[mappedInput] = AGE_SET_KEY_PRESSED(_keyInputs[mappedInput]);
 		_keyInputs[physicalInput] = AGE_RESET_PHYSICAL_KEY_STATE(_keyInputs[physicalInput]);
 		_keyInputs[physicalInput] = AGE_SET_PHYSICAL_KEY_JUST_PRESSED(_keyInputs[physicalInput]);
+		_keyInputs[physicalInput] = AGE_SET_PHYSICAL_KEY_PRESSED(_keyInputs[physicalInput]);
 #ifdef USE_IMGUI
 		GetMainThread()->getQueue()->emplaceTask<ImGuiKeyEvent>(mappedInput, true);
 #endif

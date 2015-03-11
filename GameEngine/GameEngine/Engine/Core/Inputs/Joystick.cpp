@@ -51,15 +51,8 @@ namespace AGE
 	{
 		for (int i = 0; i < AGE_JOYSTICK_BUTTON_NUMBER; ++i)
 		{
-			if (AGE_KEY_JUST_PRESSED(_buttons[i]))
-			{
-				_buttons[i] = 0;
-				_buttons[i] = AGE_SET_KEY_PRESSED(_buttons[i]);
-			}
-			else if (AGE_KEY_JUST_RELEASED(_buttons[i]))
-			{
-				_buttons[i] = 0;
-			}
+			_buttons[i] = AGE_UNSET_KEY_JUST_PRESSED(_buttons[i]);
+			_buttons[i] = AGE_UNSET_KEY_JUST_RELEASED(_buttons[i]);
 		}
 	}
 
@@ -79,6 +72,7 @@ namespace AGE
 	{
 		_buttons[button] = 0;
 		_buttons[button] = AGE_SET_KEY_JUST_PRESSED(_buttons[button]);
+		_buttons[button] = AGE_SET_KEY_PRESSED(_buttons[button]);
 	}
 
 	void Joystick::_setButtonReleased(AgeJoystickButtons button)
