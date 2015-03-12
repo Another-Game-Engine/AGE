@@ -104,14 +104,13 @@ namespace AGE
 			case SDL_JOYBALLMOTION:
 			{
 				uint32_t joyId = _fromSdlJoystickIdToAge(events.jball.which);
-				input->setJoystickTrackBall(joyId, glm::ivec2(events.jball.xrel, events.jball.yrel));
+				input->setJoystickTrackBall(joyId, events.jball.ball, glm::ivec2(events.jball.xrel, events.jball.yrel));
 			}
 			break;
 			case SDL_JOYHATMOTION:
 			{
 				uint32_t joyId = _fromSdlJoystickIdToAge(events.jhat.which);
 				AgeJoystickHatDirections joyHatDir = findAgeJoystickHatDirection(events.jhat.value);
-				assert(events.jhat.hat < AGE_JOYSTICK_HAT_MAX_NUMBER);
 				input->setJoystickHat(joyId, events.jhat.hat, joyHatDir);
 			}
 			break;

@@ -3,19 +3,18 @@
 #include <map>
 #include <cstdint>
 
-#define AGE_MAPPED_KEY_PRESSED(k)				(((k) & 0x1) == 0x1)
-#define AGE_MAPPED_KEY_JUST_PRESSED(k)			(((k) & 0x2) == 0x2)
-#define AGE_MAPPED_KEY_JUST_RELEASED(k)			(((k) & 0x4) == 0x4)
+#define AGE_KEY_PRESSED(k)				(((k) & 0x1) == 0x1)
+#define AGE_KEY_JUST_PRESSED(k)			(((k) & 0x2) == 0x2)
+#define AGE_KEY_JUST_RELEASED(k)		(((k) & 0x4) == 0x4)
 
-#define AGE_SET_MAPPED_KEY_PRESSED(k)			((k) | 0x1)
-#define AGE_SET_MAPPED_KEY_JUST_PRESSED(k)		((k) | 0x2)
-#define AGE_SET_MAPPED_KEY_JUST_RELEASED(k)		((k) | 0x4)
+#define AGE_SET_KEY_PRESSED(k)			((k) | 0x1)
+#define AGE_SET_KEY_JUST_PRESSED(k)		((k) | 0x2)
+#define AGE_SET_KEY_JUST_RELEASED(k)	((k) | 0x4)
 
-#define AGE_UNSET_MAPPED_KEY_PRESSED(k)			(((k) | 0x1) ^ 0x1)
-#define AGE_UNSET_MAPPED_KEY_JUST_PRESSED(k)	(((k) | 0x2) ^ 0x2)
-#define AGE_UNSET_MAPPED_KEY_JUST_RELEASED(k)	(((k) | 0x4) ^ 0x4)
+#define AGE_UNSET_KEY_JUST_PRESSED(k)	(((k) | 0x2) ^ 0x2)
+#define AGE_UNSET_KEY_JUST_RELEASED(k)	(((k) | 0x4) ^ 0x4)
 
-#define AGE_RESET_MAPPED_STATE(k)				(((k) | 0xF) ^ 0xF)
+#define AGE_RESET_MAPPED_KEY_STATE(k)	(((k) | 0xF) ^ 0xF)
 
 #define AGE_PHYSICAL_KEY_PRESSED(k)				(((k) & 0x10) == 0x10)
 #define AGE_PHYSICAL_KEY_JUST_PRESSED(k)		(((k) & 0x20) == 0x20)
@@ -25,11 +24,10 @@
 #define AGE_SET_PHYSICAL_KEY_JUST_PRESSED(k)	((k) | 0x20)
 #define AGE_SET_PHYSICAL_KEY_JUST_RELEASED(k)	((k) | 0x40)
 
-#define AGE_UNSET_PHYSICAL_KEY_PRESSED(k)		(((k) | 0x10) ^ 0x10)
 #define AGE_UNSET_PHYSICAL_KEY_JUST_PRESSED(k)	(((k) | 0x20) ^ 0x20)
 #define AGE_UNSET_PHYSICAL_KEY_JUST_RELEASED(k)	(((k) | 0x40) ^ 0x40)
 
-#define AGE_RESET_PHYSICAL_STATE(k)				(((k) | 0xF0) ^ 0xF0)
+#define AGE_RESET_PHYSICAL_KEY_STATE(k)				(((k) | 0xF0) ^ 0xF0)
 
 namespace AGE
 {
@@ -246,6 +244,7 @@ namespace AGE
 
 	static const uint32_t AGE_JOYSTICK_MAX_NUMBER = 8;
 	static const uint32_t AGE_JOYSTICK_HAT_MAX_NUMBER = 4;
+	static const uint32_t AGE_JOYSTICK_TRACKBALL_MAX_NUMBER = 4;
 
 	// Joystick axis
 	enum AgeJoystickAxis

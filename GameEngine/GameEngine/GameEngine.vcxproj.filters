@@ -147,6 +147,7 @@
     <ClCompile Include="Engine\Core\Inputs\Input.cpp" />
     <ClCompile Include="Engine\Core\Inputs\Joystick.cpp" />
     <ClCompile Include="Engine\Core\Inputs\ActionManager.cpp" />
+    <ClCompile Include="Engine\Render\GeometryManagement\IcoSphere.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -390,6 +391,7 @@
     <ClInclude Include="Engine\Core\Inputs\AgeInputs.hh" />
     <ClInclude Include="Engine\Core\Inputs\Joystick.hh" />
     <ClInclude Include="Engine\Core\Inputs\ActionManager.hh" />
+    <ClInclude Include="Engine\Render\GeometryManagement\IcoSphere.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />
