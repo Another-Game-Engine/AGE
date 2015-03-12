@@ -15,7 +15,7 @@ namespace AGE
 {
 	class AScene;
 	class ComponentManager;
-	class ComponentRegistrar;
+	class RegisterComponent;
 
 	struct ComponentBase
 	{
@@ -45,7 +45,7 @@ namespace AGE
 		ComponentType _typeId;
 
 		friend class ComponentManager;
-		friend class ComponentRegistrar;
+		friend class RegisterComponent;
 	};
 
 

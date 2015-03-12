@@ -29,7 +29,7 @@ namespace AGE
 				);
 			for (auto &e : components)
 			{
-				ComponentRegistrar::getInstance().serializeJson(e, ar);
+				RegisterComponent::getInstance().serializeJson(e, ar);
 			}
 		}
 
@@ -52,7 +52,7 @@ namespace AGE
 			for (auto &e : componentTypes)
 			{
 				auto hashType = (*typesMap)[e];
-				ComponentRegistrar::getInstance().loadJson(hashType, entity, ar);
+				RegisterComponent::getInstance().loadJson(hashType, entity, ar);
 			}
 		}
 	};

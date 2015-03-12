@@ -216,7 +216,7 @@
     <ClCompile Include="Engine\Audio\FmodError.cpp" />
     <ClCompile Include="Engine\Components\CameraComponent.cpp" />
     <ClCompile Include="Engine\Components\Component.cpp" />
-    <ClCompile Include="Engine\Components\ComponentRegistrar.cpp" />
+    <ClCompile Include="Engine\Components\RegisterComponent.cpp" />
     <ClCompile Include="Engine\Components\FPController.cpp" />
     <ClCompile Include="Engine\Core\EntityFilter.cpp" />
     <ClCompile Include="Engine\Core\EntityIdRegistrar.cpp" />
@@ -431,7 +431,7 @@
     <ClInclude Include="Engine\Components\CameraComponent.hpp" />
     <ClInclude Include="Engine\Components\CameraComponentTemplates.hpp" />
     <ClInclude Include="Engine\Components\CollisionLayers.hpp" />
-    <ClInclude Include="Engine\Components\ComponentRegistrar.hpp" />
+    <ClInclude Include="Engine\Components\RegisterComponent.hpp" />
     <ClInclude Include="Engine\Components\FPController.hpp" />
     <ClInclude Include="Engine\Components\GraphNode.hpp" />
     <ClInclude Include="Engine\Components\RigidBody.hpp" />
