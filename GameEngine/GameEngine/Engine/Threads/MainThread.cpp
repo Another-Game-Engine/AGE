@@ -44,7 +44,7 @@ namespace AGE
 		workEnd = std::chrono::high_resolution_clock::now();
 		workCount += std::chrono::duration_cast<std::chrono::microseconds>(workEnd - workStart).count();
 		waitStart = std::chrono::high_resolution_clock::now();
-		while (!_next->getQueue()->releaseCommandReadability(TMQ::HybridQueue::WaitType::Wait))
+		while (!_next->getQueue()->releaseCommandReadability(TMQ::HybridQueue::WaitType::Block))
 		{
 			if (getQueue()->getTaskQueue(taskQueue, TMQ::HybridQueue::NoWait))
 			{

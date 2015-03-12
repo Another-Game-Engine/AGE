@@ -242,24 +242,6 @@ bool HybridQueue::getTaskQueue(TMQ::PtrQueue &q, WaitType waitType)
 		lock.unlock();
 		return true;
 	}
-	else if (waitType == WaitType::Wait)
-	{
-		std::unique_lock<std::mutex> lock(_mutex);
-		if (!_readCondition.wait_for(lock, std::chrono::milliseconds(_millisecondToWait), [this]()
-		{
-			return (_releasable || !_taskQueue.empty());
-		}))
-		{
-			return false;
-		}
-		if (_taskQueue.empty() && !_releasable)
-			return false;
-		q = std::move(_taskQueue);
-		_taskQueue.clear();
-		_releasable = false;
-		lock.unlock();
-		return true;
-	}
 	return true;
 }
 
@@ -312,28 +294,6 @@ void HybridQueue::getTaskAndCommandQueue(
 			_writeCondition.notify_one();
 		return;
 	}
-	else if (waitType == WaitType::Wait)
-	{
-		std::unique_lock<std::mutex> lock(_mutex);
-		if (_readCondition.wait_for(lock, std::chrono::milliseconds(_millisecondToWait), [this]()
-		{
-			return (!(_releasable || !_taskQueue.empty() || !_commandQueueCopy.empty()));
-		}))
-		{
-			commandQueueSuccess = taskQueueSuccess = false;
-			return;
-		}
-		taskQueue = std::move(_taskQueue);
-		commandQueue = std::move(_commandQueueCopy);
-		_taskQueue.clear();
-		_commandQueueCopy.clear();
-		_releasable = false;
-		lock.unlock();
-		taskQueueSuccess = !taskQueue.empty();
-		commandQueueSuccess = !commandQueue.empty();
-		if (commandQueueSuccess)
-			_writeCondition.notify_one();
-	}
 }
 
 bool HybridQueue::releaseTaskReadability()
@@ -368,25 +328,6 @@ bool HybridQueue::releaseCommandReadability(WaitType waitType)
 		});
 		if (!_commandQueueCopy.empty())
 			return false;
-		_commandQueueCopy = std::move(_commandQueue);
-		_commandQueue.clear();
-		_releasable = true;
-		lock.unlock();
-		_readCondition.notify_one();
-		return true;
-	}
-	else if (waitType == WaitType::Wait)
-	{
-		std::unique_lock<std::mutex> lock(_mutex);
-		if (!_writeCondition.wait_for(lock, std::chrono::milliseconds(_millisecondToWait), [this]()
-		{
-			return (_commandQueueCopy.empty());
-		}))
-		{
-			return false;
-		}
-		if (!lock.owns_lock())
-			assert(false);
 		_commandQueueCopy = std::move(_commandQueue);
 		_commandQueue.clear();
 		_releasable = true;
