@@ -267,6 +267,7 @@
     <ClCompile Include="Engine\Utils\UniqueTypeId.cpp" />
     <ClCompile Include="Engine\Core\Inputs\Joystick.cpp" />
     <ClCompile Include="Engine\Render\GeometryManagement\IcoSphere.cpp" />
+    <ClCompile Include="Engine\Systems\FreeFlyCamera.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -511,6 +512,7 @@
     <ClInclude Include="Engine\Utils\Worker.hpp" />
     <ClInclude Include="Engine\Core\Inputs\Joystick.hh" />
     <ClInclude Include="Engine\Render\GeometryManagement\IcoSphere.hh" />
+    <ClInclude Include="Engine\Systems\FreeFlyCamera.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />
