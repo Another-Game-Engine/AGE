@@ -9,7 +9,7 @@
 #include <Threads/ThreadManager.hpp>
 #include <Threads/MainThread.hpp>
 #include <Threads/PrepareRenderThread.hpp>
-#include <Components/RegisterComponent.hpp>
+#include <Components/ComponentRegistrar.hpp>
 
 namespace AGE
 {
@@ -19,7 +19,7 @@ namespace AGE
 		, _engine(engine)
 		, _renderScene(nullptr)
 	{
-		RegisterComponent::getInstance().createComponentPool(this);
+		ComponentRegistrar::getInstance().createComponentPool(this);
 	}
 
 	AScene::~AScene()
@@ -186,7 +186,7 @@ namespace AGE
 
 			ar(cereal::make_nvp("Number_of_serialized_entities", entityNbr));
 
-			auto &typesMap = RegisterComponent::getInstance().getAgeIdToSystemIdMap();
+			auto &typesMap = ComponentRegistrar::getInstance().getAgeIdToSystemIdMap();
 			ar(cereal::make_nvp("Component type map", typesMap));
 
 			std::vector<EntitySerializationInfos> entities;
