@@ -18,7 +18,8 @@ namespace AGE
 	public:
 		std::shared_ptr<Texture2D> const &get();
 		MapColor &set(std::shared_ptr<Texture2D> const &map);
-
+		
+		typedef std::shared_ptr<Texture2D> type_t;
 	private:
 		std::shared_ptr<Texture2D> _texture;
 	};

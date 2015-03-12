@@ -248,8 +248,7 @@ namespace TMQ
 		enum WaitType
 		{
 			Block = 0
-			, Wait = 1
-			, NoWait = 2
+			, NoWait = 1
 		};
 
 		HybridQueue();
