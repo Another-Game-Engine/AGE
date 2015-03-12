@@ -48,7 +48,7 @@ namespace AGE
 			if (camIndex == _cameraAngles.size())
 			{
 				glm::quat camRotation = camLink.getOrientation();
-				_cameraAngles.emplace_back(glm::vec3(glm::eulerAngles(camRotation)));
+				_cameraAngles.emplace_back(glm::vec2(glm::eulerAngles(camRotation)));
 			}
 
 			if (inputs->getPhysicalKeyPressed(AGE_UP))
@@ -62,7 +62,7 @@ namespace AGE
 
 			_cameraAngles[camIndex].x = glm::clamp(_cameraAngles[camIndex].x, -verticalAngleLimit, verticalAngleLimit);
 
-			camLink.setOrientation(glm::quat(_cameraAngles[camIndex]));
+			camLink.setOrientation(glm::quat(glm::vec3(_cameraAngles[camIndex], 0)));
 			++camIndex;
 		}
 	}

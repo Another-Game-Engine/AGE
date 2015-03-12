@@ -15,7 +15,7 @@ namespace AGE
 
 	private:
 		EntityFilter _cameras;
-		std::vector<glm::vec3> _cameraAngles;
+		std::vector<glm::vec2> _cameraAngles;
 
 		virtual bool initialize();
 		virtual void updateBegin(double time);
