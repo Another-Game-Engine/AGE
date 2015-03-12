@@ -1,23 +1,23 @@
-#include <Components/ComponentRegistrar.hpp>
+#include <Components/ComponentRegistrationManager.hpp>
 #include <Core/AScene.hh>
 
 namespace AGE
 {
-	ComponentRegistrar::ComponentRegistrar()
+	ComponentRegistrationManager::ComponentRegistrationManager()
 	{}
 
-	ComponentRegistrar::~ComponentRegistrar()
+	ComponentRegistrationManager::~ComponentRegistrationManager()
 	{
 		_creationFunctions.clear();
 		_typeIds.clear();
 	}
 
-	const std::string &ComponentRegistrar::getComponentName(ComponentType type)
+	const std::string &ComponentRegistrationManager::getComponentName(ComponentType type)
 	{
 		return _componentNames[type];
 	}
 
-	void ComponentRegistrar::serializeJson(ComponentBase *c, cereal::JSONOutputArchive &ar)
+	void ComponentRegistrationManager::serializeJson(ComponentBase *c, cereal::JSONOutputArchive &ar)
 	{
 		auto id = c->getType();
 		auto find = _jsonSaveMap.find(id);
@@ -25,7 +25,7 @@ namespace AGE
 		find->second(c, ar);
 	}
 
-	void ComponentRegistrar::loadJson(std::size_t componentHashId, Entity &e, cereal::JSONInputArchive &ar)
+	void ComponentRegistrationManager::loadJson(std::size_t componentHashId, Entity &e, cereal::JSONInputArchive &ar)
 	{
 		auto id = _typeIds[componentHashId];
 
@@ -44,7 +44,7 @@ namespace AGE
 		e.addComponentPtr(cpt);
 	}
 
-	std::size_t ComponentRegistrar::getSystemIdForAgeId(ComponentType id)
+	std::size_t ComponentRegistrationManager::getSystemIdForAgeId(ComponentType id)
 	{
 		auto f = _ageTypeIds.find(id);
 		if (f == std::end(_ageTypeIds))
