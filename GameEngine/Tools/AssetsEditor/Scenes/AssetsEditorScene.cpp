@@ -133,7 +133,7 @@ namespace AGE
 			{
 				if (Directory::IsFile(*it))
 				{
-					_cookedFiles.push_back(AssetsEditorFileDescriptor(*it, Path::BaseName(*it)));
+					_cookedFiles.push_back(AssetsEditorFileDescriptor(Path::RelativeName(absPath.c_str(), *it), Path::BaseName(*it)));
 
 					auto extension = AGE::FileSystemHelpers::GetExtension(*it);
 					if (extension == "sage")
