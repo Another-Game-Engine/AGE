@@ -2,7 +2,7 @@
 #include <imgui/imgui.h>
 #include <Components/EntityRepresentation.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include <Components/ComponentRegistrar.hpp>
+#include <Components/ComponentRegistrationManager.hpp>
 
 //FOR TEST ! TO REMOVE
 #include <Components/Light.hh>
@@ -87,7 +87,7 @@ namespace AGE
 							auto ptr = e.getComponent(i);
 							if (ptr->exposedInEditor)
 							{
-								if (ImGui::TreeNode(ComponentRegistrar::getInstance().getComponentName(ptr->getType()).c_str()))
+								if (ImGui::TreeNode(ComponentRegistrationManager::getInstance().getComponentName(ptr->getType()).c_str()))
 								{
 									ptr->editorUpdate(scene);
 									if (ptr->deletableInEditor)
@@ -108,14 +108,14 @@ namespace AGE
 
 					ImGui::Separator();
 
-					auto &types = ComponentRegistrar::getInstance().getSystemIdToAgeIdMap();
-					auto &creationFn = ComponentRegistrar::getInstance().getCreationFunctions();
+					auto &types = ComponentRegistrationManager::getInstance().getSystemIdToAgeIdMap();
+					auto &creationFn = ComponentRegistrationManager::getInstance().getCreationFunctions();
 
 					for (auto &t : types)
 					{
 						if (!e.haveComponent(t.second))
 						{
-							if (ImGui::Button(std::string("Add : " + ComponentRegistrar::getInstance().getComponentName(t.second)).c_str()))
+							if (ImGui::Button(std::string("Add : " + ComponentRegistrationManager::getInstance().getComponentName(t.second)).c_str()))
 							{
 								creationFn.at(t.first)(&e);
 							}

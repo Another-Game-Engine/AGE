@@ -32,7 +32,7 @@
 #include <Scenes/WorldEditorScene.hpp>
 
 //COMPONENT REGISTRAR
-#include <Components/ComponentRegistrar.hpp>
+#include <Components/ComponentRegistrationManager.hpp>
 
 //COMPONENTS
 #include <Components/CameraComponent.hpp>
