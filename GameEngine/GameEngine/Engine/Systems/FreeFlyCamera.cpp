@@ -93,7 +93,7 @@ namespace AGE
 
 	void FreeFlyCamera::_handleMouse(double time, Link &camLink, size_t camIdx)
 	{
-		float camMouseRotationSpeed = 0.001f;
+		float camMouseRotationSpeed = 0.0005f;
 		Input *inputs = _scene->getInstance<Input>();
 
 		// On click, the context grab the mouse
