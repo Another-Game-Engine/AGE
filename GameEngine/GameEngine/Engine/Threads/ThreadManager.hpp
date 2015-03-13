@@ -6,6 +6,7 @@
 #include <memory>
 #include <atomic>
 #include <array>
+#include <Utils/SpinLock.hpp>
 
 namespace TMQ
 {
@@ -68,6 +69,9 @@ namespace AGE
 	private:
 		std::array<ThreadStatistics, Thread::END> _threadsStatistics;
 		Engine *_engine;
+		SpinLock _mutex;
+		std::size_t _iterator = Thread::Main;
+
 		
 		ThreadManager();
 		virtual ~ThreadManager();
