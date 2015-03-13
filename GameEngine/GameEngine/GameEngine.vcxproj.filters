@@ -96,7 +96,6 @@
     <ClCompile Include="Engine\Components\Component.cpp" />
     <ClCompile Include="Engine\Components\FPController.cpp" />
     <ClCompile Include="Engine\Core\EntityFilter.cpp" />
-    <ClCompile Include="Engine\Core\EntityIdRegistrar.cpp" />
     <ClCompile Include="Engine\Core\SceneManager.cpp" />
     <ClCompile Include="Engine\Core\AScene.cpp" />
     <ClCompile Include="Engine\Core\Engine.cpp" />
@@ -149,6 +148,7 @@
     <ClCompile Include="Engine\Render\GeometryManagement\SimpleGeometry.cpp" />
     <ClCompile Include="Engine\Components\ComponentRegistrationManager.cpp" />
     <ClCompile Include="Engine\Systems\FreeFlyCamera.cpp" />
+    <ClCompile Include="Engine\Core\EntityIdRegistrationManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -238,7 +238,6 @@
     <ClInclude Include="Engine\Entities\EntityTypedef.hpp" />
     <ClInclude Include="Engine\Geometry\MeshManager.hpp" />
     <ClInclude Include="Engine\Core\ConfigurationManager.hpp" />
-    <ClInclude Include="Engine\Core\EntityIdRegistrar.hh" />
     <ClInclude Include="Engine\Entities\BitsetManipulation.hpp" />
     <ClInclude Include="Engine\Entities\EntityFlags.hh" />
     <ClInclude Include="Engine\Physic\DynamicMotionState.hpp" />
@@ -393,6 +392,7 @@
     <ClInclude Include="Engine\Render\GeometryManagement\SimpleGeometry.hh" />
     <ClInclude Include="Engine\Components\ComponentRegistrationManager.hpp" />
     <ClInclude Include="Engine\Systems\FreeFlyCamera.hh" />
+    <ClInclude Include="Engine\Core\EntityIdRegistrationManager.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

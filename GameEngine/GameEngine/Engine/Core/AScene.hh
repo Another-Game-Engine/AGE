@@ -3,7 +3,7 @@
 #include <Utils/DependenciesInjector.hpp>
 #include <memory>
 #include <Components/ComponentRegistrationManager.hpp>
-#include <Core/EntityIdRegistrar.hh>
+#include <Core/EntityIdRegistrationManager.hh>
 #include <list>
 #include <array>
 #include <glm/fwd.hpp>
@@ -27,7 +27,7 @@ namespace AGE
 	class System;
 	class SceneManager;
 
-	class AScene : public DependenciesInjector, public EntityIdRegistrar, public ComponentManager
+	class AScene : public DependenciesInjector, public EntityIdRegistrationManager, public ComponentManager
 	{
 	private:
 		std::multimap<std::size_t, std::shared_ptr<System> >                    _systems;

@@ -1,21 +1,21 @@
-#include <Core/EntityIdRegistrar.hh>
+#include <Core/EntityIdRegistrationManager.hh>
 #include <cassert>
 
 namespace AGE
 {
-	EntityIdRegistrar::EntityIdRegistrar()
+	EntityIdRegistrationManager::EntityIdRegistrationManager()
 	{}
 
-	EntityIdRegistrar::~EntityIdRegistrar()
+	EntityIdRegistrationManager::~EntityIdRegistrationManager()
 	{}
 
 
-	void EntityIdRegistrar::registrarUnserializedEntity(Entity e, std::size_t id)
+	void EntityIdRegistrationManager::registrarUnserializedEntity(Entity e, std::size_t id)
 	{
 		_unser.insert(std::make_pair(id, e));
 	}
 
-	std::size_t EntityIdRegistrar::registrarSerializedEntity(std::size_t id)
+	std::size_t EntityIdRegistrationManager::registrarSerializedEntity(std::size_t id)
 	{
 		static std::size_t counter = 0;
 		if (_ser.find(id) != std::end(_ser))
@@ -24,12 +24,12 @@ namespace AGE
 		return counter;
 	}
 
-	void EntityIdRegistrar::entityHandle(std::size_t id, Entity *e)
+	void EntityIdRegistrationManager::entityHandle(std::size_t id, Entity *e)
 	{
 		_toUpdate.insert(std::make_pair(id, e));
 	}
 
-	void EntityIdRegistrar::updateEntityHandles()
+	void EntityIdRegistrationManager::updateEntityHandles()
 	{
 		//TODO
 		//std::stack<Entity> stack;
@@ -48,7 +48,7 @@ namespace AGE
 		//_unser.clear();
 	}
 
-	void EntityIdRegistrar::updateEntityHandle(Entity e, std::size_t id)
+	void EntityIdRegistrationManager::updateEntityHandle(Entity e, std::size_t id)
 	{
 		//TODO
 		//auto ret = _toUpdate.equal_range(id);
@@ -83,7 +83,7 @@ namespace AGE
 		//_graphNode.erase(id);
 	}
 
-	void EntityIdRegistrar::registrarGraphNode(std::size_t e, GraphNodeUnserialize g)
+	void EntityIdRegistrationManager::registrarGraphNode(std::size_t e, GraphNodeUnserialize g)
 	{
 
 		//TODO
