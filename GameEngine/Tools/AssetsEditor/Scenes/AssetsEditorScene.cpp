@@ -92,7 +92,7 @@ namespace AGE
 			_cookedMeshFiles.push_back("NONE");
 			_cookedMeshsFullPath.push_back("NONE");
 
-			_cook.update(
+			/*_cook.update(
 				std::function<bool(AE::Folder*)>([](AE::Folder* folder) {
 				return true;
 			}),
@@ -119,25 +119,23 @@ namespace AGE
 					_cookedBulletFiles.push_back(_cookedFiles.back().fileName.c_str());
 					_cookedBulletFullPath.push_back(_cookedFiles.back().fullPath.c_str());
 				}
-			}));
+			}));*/
 
 			// @Jojo ! Do not work !
+			// @Cesar! Does work!
 
-			/*auto currentDir = Directory::GetCurrentDirectory();
-			auto absPath = Path::AbsoluteName(currentDir, "../../Assets/Serialized");
-			auto dir = Directory();
-			auto succeed = dir.open("../../Assets/Serialized");
-			AGE_ASSERT(succeed);
-			auto it = dir.recursive_begin();
-
-			while (it != dir.recursive_end())
+			const std::string currentDir = Directory::GetCurrentDirectory();
+			const std::string absPath = Path::AbsoluteName(currentDir.c_str(), "../../Assets/Serialized");
+			Directory dir;
+			const bool succeed = dir.open(absPath.c_str());
+			AGE_ASSERT(succeed && "Impossible to open directory");
+			for (auto it = dir.recursive_begin(); it != dir.recursive_end(); ++it)
 			{
-				if (Directory::IsFile(it.get()))
+				if (Directory::IsFile(*it))
 				{
-					std::cout << it.get() << std::endl;
-					_cookedFiles.push_back(AssetsEditorFileDescriptor(it.get(), Path::BaseName(it.get())));
+					_cookedFiles.push_back(AssetsEditorFileDescriptor(Path::RelativeName(absPath.c_str(), *it), Path::BaseName(*it)));
 
-					auto extension = AGE::FileSystemHelpers::GetExtension(it.get());
+					auto extension = AGE::FileSystemHelpers::GetExtension(*it);
 					if (extension == "sage")
 					{
 						_cookedMeshFiles.push_back(_cookedFiles.back().fileName.c_str());
@@ -154,10 +152,8 @@ namespace AGE
 						_cookedBulletFullPath.push_back(_cookedFiles.back().fullPath.c_str());
 					}
 				}
-				it++;
 			}
-
-			dir.close();*/
+			dir.close();
 			refreshCounter = 0;
 		}
 		refreshCounter += time;
