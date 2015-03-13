@@ -21,6 +21,7 @@ namespace AGE
 		virtual void refreshInputs();
 		virtual const glm::uvec2 &getScreenSize();
 		virtual void setScreenSize(const glm::uvec2 &screenSize);
+		virtual void grabMouse(bool grabMouse);
 
 	protected:
 		virtual bool _init();

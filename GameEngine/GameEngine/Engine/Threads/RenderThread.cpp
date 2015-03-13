@@ -231,6 +231,11 @@ namespace AGE
 		});
 #endif
 
+		registerCallback<AGE::Tasks::Render::ContextGrabMouse>([&](AGE::Tasks::Render::ContextGrabMouse &msg)
+		{
+			_context->grabMouse(msg.grabMouse == 1 ? true : false);
+		});
+
 		return true;
 	}
 
