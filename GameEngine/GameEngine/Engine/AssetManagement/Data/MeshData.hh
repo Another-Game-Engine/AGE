@@ -31,10 +31,10 @@ namespace AGE
 	public:
 		std::string name;
 		std::bitset<MeshInfos::END> infos;
-		std::vector<glm::vec4> positions;
-		std::vector<glm::vec4> normals;
-		std::vector<glm::vec4> tangents;
-		std::vector<glm::vec4> biTangents;
+		std::vector<glm::vec3> positions;
+		std::vector<glm::vec3> normals;
+		std::vector<glm::vec3> tangents;
+		std::vector<glm::vec3> biTangents;
 		std::vector<std::vector<glm::vec2>> uvs;
 		std::vector<std::uint32_t> indices;
 		std::vector<glm::vec4> weights;

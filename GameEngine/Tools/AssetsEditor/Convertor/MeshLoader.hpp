@@ -75,13 +75,13 @@ namespace AGE
 						meshs[meshIndex].boundingBox.minPoint = glm::min(meshs[meshIndex].boundingBox.minPoint,
 							glm::vec3(aiPositions.x, aiPositions.y, aiPositions.z));
 
-						meshs[meshIndex].positions.push_back(glm::vec4(aiPositions.x, aiPositions.y, aiPositions.z, 1));
+						meshs[meshIndex].positions.push_back(glm::vec3(aiPositions.x, aiPositions.y, aiPositions.z));
 						meshs[meshIndex].infos.set(MeshInfos::Positions);
 					}
 					if (mesh->HasNormals() && cookingTask->dataSet->normals)
 					{
 						auto &aiNormals = mesh->mNormals[i];
-						meshs[meshIndex].normals.push_back(glm::vec4(aiNormals.x, aiNormals.y, aiNormals.z, 1));
+						meshs[meshIndex].normals.push_back(glm::vec3(aiNormals.x, aiNormals.y, aiNormals.z));
 						meshs[meshIndex].infos.set(MeshInfos::Normals);
 					}
 					for (unsigned int texCoordIndex = 0; texCoordIndex < 1 /*AI_MAX_NUMBER_OF_TEXTURECOORDS*/; ++texCoordIndex)
@@ -98,10 +98,10 @@ namespace AGE
 					{
 						auto &aiTangents = mesh->mTangents[i];
 						if (cookingTask->dataSet->tangents)
-							meshs[meshIndex].tangents.push_back(glm::vec4(aiTangents.x, aiTangents.y, aiTangents.z, 1));
+							meshs[meshIndex].tangents.push_back(glm::vec3(aiTangents.x, aiTangents.y, aiTangents.z));
 						auto &aiBiTangents = mesh->mBitangents[i];
 						if (cookingTask->dataSet->biTangents)
-							meshs[meshIndex].biTangents.push_back(glm::vec4(aiBiTangents.x, aiBiTangents.y, aiBiTangents.z, 1));
+							meshs[meshIndex].biTangents.push_back(glm::vec3(aiBiTangents.x, aiBiTangents.y, aiBiTangents.z));
 						if (cookingTask->dataSet->tangents)
 							meshs[meshIndex].infos.set(MeshInfos::Tangents);
 						if (cookingTask->dataSet->biTangents)
@@ -195,7 +195,6 @@ namespace AGE
 						//f += center4;
 						f /= t;
 						f *= cookingTask->dataSet->maxSideLength;
-						f.w = 1.0f;
 					}
 					glm::vec3 dist = e.boundingBox.maxPoint - e.boundingBox.minPoint;
 					e.boundingBox.center = e.boundingBox.minPoint + (dist / 2.0f);
