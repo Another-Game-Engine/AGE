@@ -14,6 +14,7 @@
 #include <Threads/TaskScheduler.hpp>
 #include <Core/Inputs/Input.hh>
 
+#include <Components/FreeFlyComponent.hh>
 #include <Components/CameraComponent.hpp>
 #include <Components/Light.hh>
 #include <Components/RigidBody.hpp>
@@ -148,6 +149,7 @@ namespace AGE
 				auto camera = createEntity();
 				GLOBAL_CAMERA = camera;
 				auto cam = camera.addComponent<CameraComponent>();
+				camera.addComponent<FreeFlyComponent>();
 				cam->addPipeline(RenderType::BASIC);
 
 				auto screeSize = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<AGE::Tasks::Render::GetWindowSize, glm::uvec2>().get();

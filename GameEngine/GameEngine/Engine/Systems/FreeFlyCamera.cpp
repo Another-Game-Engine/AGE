@@ -4,6 +4,7 @@
 #include <Context/IRenderContext.hh>
 #include <Threads/ThreadManager.hpp>
 #include <Threads/Tasks/ToRenderTasks.hpp>
+#include <Components/FreeFlyComponent.hh>
 
 namespace AGE
 {
@@ -17,6 +18,7 @@ namespace AGE
 	bool FreeFlyCamera::initialize()
 	{
 		_cameras.requireComponent<CameraComponent>();
+		_cameras.requireComponent<FreeFlyComponent>();
 		return (true);
 	}
 

@@ -268,6 +268,7 @@
     <ClCompile Include="Engine\Utils\ThreadName.cpp" />
     <ClCompile Include="Engine\Utils\UniqueTypeId.cpp" />
     <ClCompile Include="Engine\Core\Inputs\Joystick.cpp" />
+    <ClCompile Include="Engine\Components\FreeFlyComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -512,6 +513,7 @@
     <ClInclude Include="Engine\Utils\Visibility.hpp" />
     <ClInclude Include="Engine\Utils\Worker.hpp" />
     <ClInclude Include="Engine\Core\Inputs\Joystick.hh" />
+    <ClInclude Include="Engine\Components\FreeFlyComponent.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />
