@@ -133,7 +133,6 @@ namespace AGE
 			{
 				if (Directory::IsFile(*it))
 				{
-					std::cout << *it << std::endl;
 					_cookedFiles.push_back(AssetsEditorFileDescriptor(*it, Path::BaseName(*it)));
 
 					auto extension = AGE::FileSystemHelpers::GetExtension(*it);
