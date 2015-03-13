@@ -914,7 +914,7 @@ namespace AGE
 		else if (datas.size() > 1)
 		{
 			datas.pop();
-			while (true)
+			while (datas.size() > 1)
 			{
 				StackData &data = datas.top();
 				if (data.index >= data.data->numberOfDirectories + data.data->numberOfFiles)

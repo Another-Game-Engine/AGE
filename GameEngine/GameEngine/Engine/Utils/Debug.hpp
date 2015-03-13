@@ -22,6 +22,8 @@
 
 #define AGE_EXIT(ErrorCode) std::exit(ErrorCode)
 
+#define AGE_ABORT() std::abort()
+
 #if defined(_DEBUG) || defined(DEBUG)
 # define AGE_DEBUG
 #endif
@@ -82,7 +84,7 @@
 		{ \
 	Singleton<AGE::Logger>::getInstance()->log(AGE::Logger::Level::Fatal, "Function \"", AGE_FUNCTION, "\" in file \"", AGE_FILE, "\" (line ", AGE_LINE, "): ", __VA_ARGS__); \
 	AGE_BREAK(); \
-	AGE_EXIT(AGE_FAILURE); \
+	AGE_ABORT(); \
 		} \
 			while (false);
 
@@ -109,6 +111,7 @@
 # define AGE_FATAL(...) do \
 		{ \
 	Singleton<AGE::Logger>::getInstance()->log(AGE::Logger::Level::Fatal, __VA_ARGS__); \
+	AGE_ABORT(); \
 		} \
 			while (false);
 
