@@ -6,6 +6,8 @@
 
 namespace AGE
 {
+	class Link;
+
 	class FreeFlyCamera : public System
 	{
 	public:
@@ -21,5 +23,9 @@ namespace AGE
 		virtual void updateBegin(double time);
 		virtual void mainUpdate(double time);
 		virtual void updateEnd(double time);
+
+		void _handleKeyboard(double time, Link &camLink, size_t camIdx);
+		void _handleMouse(double time, Link &camLink, size_t camIdx);
+		void _handleController(double time, Link &camLink, size_t camIdx);
 	};
 }

@@ -24,7 +24,10 @@ namespace AGE
 		glm::ivec2  	    getMousePosition();
 		glm::ivec2      	getMouseDelta();
 		glm::ivec2      	getMouseWheel();
-		bool 				getInput(AgeInputs input);
+		bool 				getWindowInput(AgeWindowInputs input);
+		bool 				getMouseButtonPressed(AgeMouseButtons input);
+		bool 				getMouseButtonJustPressed(AgeMouseButtons input);
+		bool 				getMouseButtonJustReleased(AgeMouseButtons input);
 		bool 				getPhysicalKeyPressed(AgeKeys input);
 		bool 				getMappedKeyPressed(AgeKeys input);
 		bool 				getPhysicalKeyJustPressed(AgeKeys input);
@@ -38,8 +41,9 @@ namespace AGE
 		void				frameUpdate();
 		void				resetInputs();
 
-		void 				addInput(AgeInputs input);
-		void 				removeInput(AgeInputs input);
+		void 				mouseButtonPressed(AgeMouseButtons input);
+		void 				mouseButtonReleased(AgeMouseButtons input);
+		void				addWindowInput(AgeWindowInputs input);
 		void 				keyInputPressed(AgeKeys mappedInput, AgeKeys physicalInput);
 		void 				keyInputReleased(AgeKeys mappedInput, AgeKeys physicalInput);
 		void 				setMousePosition(glm::ivec2 const &pos, glm::ivec2 const &rel);
@@ -57,7 +61,8 @@ namespace AGE
 
 	private:
 		Joystick _joysticks[AGE_JOYSTICK_MAX_NUMBER];
-		bool _inputs[AGE_INPUT_NUMBER];
+		bool _windowInputs[AGE_WINDOW_INPUT_NUMBER];
+		uint8_t _mouseInputs[AGE_MOUSE_BUTTONS_NUMBER];
 		uint8_t _keyInputs[AGE_KEY_NUMBER];
 
 		std::atomic_int32_t _mousePosX;
