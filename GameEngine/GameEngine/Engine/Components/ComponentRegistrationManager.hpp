@@ -12,7 +12,7 @@ namespace AGE
 	class AScene;
 	struct ComponentBase;
 
-	class ComponentRegistrar
+	class ComponentRegistrationManager
 	{
 		typedef std::function<void(ComponentBase *, cereal::JSONOutputArchive &)> RegisterJsonFn;
 		typedef std::function<void(void *, cereal::JSONInputArchive &)> LoadJsonFn;
@@ -21,13 +21,13 @@ namespace AGE
 		typedef std::function<void(ComponentBase *, cereal::PortableBinaryOutputArchive &)> RegisterBinaryFn;
 
 	private:
-		ComponentRegistrar();
+		ComponentRegistrationManager();
 
 	public:
-		~ComponentRegistrar();
-		static ComponentRegistrar &getInstance()
+		~ComponentRegistrationManager();
+		static ComponentRegistrationManager &getInstance()
 		{
-			static ComponentRegistrar instance;
+			static ComponentRegistrationManager instance;
 			return instance;
 		}
 
@@ -97,4 +97,4 @@ namespace AGE
 	};
 }
 
-#define REGISTER_COMPONENT_TYPE(T)(AGE::ComponentRegistrar::getInstance().registerComponentType<T>(#T));
+#define REGISTER_COMPONENT_TYPE(T)(AGE::ComponentRegistrationManager::getInstance().registerComponentType<T>(#T));

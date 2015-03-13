@@ -62,10 +62,10 @@ namespace AGE
 				input->keyInputReleased(findAgeMappedKey(events.key.keysym.sym), findAgePhysicalKey(events.key.keysym.scancode));
 				break;
 			case SDL_MOUSEBUTTONDOWN:
-				input->addInput(findAgeInput(events.button.button));
+				input->mouseButtonPressed(findAgeMouseButton(events.button.button));
 				break;
 			case SDL_MOUSEBUTTONUP:
-				input->removeInput(findAgeInput(events.button.button));
+				input->mouseButtonReleased(findAgeMouseButton(events.button.button));
 				break;
 			case SDL_MOUSEWHEEL:
 				input->setMouseWheel(glm::ivec2(events.wheel.x, events.wheel.y));
@@ -115,10 +115,10 @@ namespace AGE
 			}
 			break;
 			case SDL_WINDOWEVENT:
-				// handle windows events
+				input->addWindowInput(findAgeWindowInput(events.window.event));
 				break;
 			default:
-				input->addInput(findAgeInput(events.type));
+				input->addWindowInput(findAgeWindowInput(events.type));
 				break;
 			}
 		}
@@ -135,6 +135,11 @@ namespace AGE
 		_screenSize = screenSize;
 		SDL_SetWindowSize(_window, _screenSize.x, _screenSize.y);
 		SDL_SetWindowPosition(_window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
+	}
+
+	void SdlContext::grabMouse(bool grabMouse)
+	{
+		SDL_SetRelativeMouseMode((SDL_bool)grabMouse);
 	}
 
 	uint32_t SdlContext::_fromSdlJoystickIdToAge(SDL_JoystickID id)

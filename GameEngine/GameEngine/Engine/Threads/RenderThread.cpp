@@ -18,7 +18,7 @@
 #include <SpacePartitioning/Ouptut/RenderLight.hh>
 #include <SpacePartitioning/Ouptut/RenderPipeline.hh>
 #include <Utils/Debug.hpp>
-#include <Render/GeometryManagement/SimpleGeometry.hpp>
+#include <Render/GeometryManagement/SimpleGeometry.hh>
 
 namespace AGE
 {
@@ -50,38 +50,93 @@ namespace AGE
 
 	void RenderThread::getQuadGeometry(Key<Vertices> &v, Key<Painter> &p)
 	{
+		static const std::vector<glm::vec2> positions =
+		{
+			glm::vec2(-1.0f, 1.0f),
+			glm::vec2(-1.0f, -1.0f),
+			glm::vec2(1.0f, -1.0f),
+			glm::vec2(1.0f, 1.0f)
+		};
+		static const std::vector<unsigned int> indices =
+		{
+			0, 1, 2, 0, 3, 2
+		};
+
 		// to be sure that this function is only called in render thread
 		AGE_ASSERT(GetThreadManager()->getCurrentThread() == (AGE::Thread*)GetRenderThread());
 
-		if (Quad::VerticesKey.isValid() && Quad::PainterKey.isValid())
+		if (SimpleGeometry::quadMesh.verticesKey.isValid() &&
+			SimpleGeometry::quadMesh.painterKey.isValid())
 		{
-			v = Quad::VerticesKey;
-			p = Quad::PainterKey;
+			v = SimpleGeometry::quadMesh.verticesKey;
+			p = SimpleGeometry::quadMesh.painterKey;
 			return;
 		}
 
-		auto type = std::make_pair<GLenum, std::string>(GL_FLOAT_VEC4, "position");
+		auto type = std::make_pair<GLenum, std::string>(GL_FLOAT_VEC2, "position");
 		std::vector<std::pair < GLenum, std::string > > types;
 		types.push_back(type);
 
 		if (!paintingManager->has_painter(types))
 		{
-			Quad::PainterKey = paintingManager->add_painter(std::move(types));
+			SimpleGeometry::quadMesh.painterKey = paintingManager->add_painter(std::move(types));
 		}
 		else
 		{
-			Quad::PainterKey = paintingManager->get_painter(types);
+			SimpleGeometry::quadMesh.painterKey = paintingManager->get_painter(types);
 		}
-		auto &painterPtr = paintingManager->get_painter(Quad::PainterKey);
+		auto &painterPtr = paintingManager->get_painter(SimpleGeometry::quadMesh.painterKey);
 
-		Quad::VerticesKey = painterPtr->add_vertices(Quad::Positions.size(), Quad::Indices.size());
-		auto vertices = painterPtr->get_vertices(Quad::VerticesKey);
+		SimpleGeometry::quadMesh.verticesKey = painterPtr->add_vertices(positions.size(), indices.size());
+		auto vertices = painterPtr->get_vertices(SimpleGeometry::quadMesh.verticesKey);
 
-		vertices->set_data<glm::vec4>(Quad::Positions, std::string("position"));
-		vertices->set_indices(Quad::Indices);
+		vertices->set_data<glm::vec2>(positions, std::string("position"));
+		vertices->set_indices(indices);
 
-		v = Quad::VerticesKey;
-		p = Quad::PainterKey;
+		v = SimpleGeometry::quadMesh.verticesKey;
+		p = SimpleGeometry::quadMesh.painterKey;
+	}
+
+	void RenderThread::getIcoSphereGeometry(Key<Vertices> &v, Key<Painter> &p, uint32_t recursion)
+	{
+		std::vector<glm::vec3> positions;
+		std::vector<unsigned int> indices;
+
+		// to be sure that this function is only called in render thread
+		AGE_ASSERT(GetThreadManager()->getCurrentThread() == (AGE::Thread*)GetRenderThread());
+
+		if (SimpleGeometry::icosphereMeshes[recursion].verticesKey.isValid() &&
+			SimpleGeometry::icosphereMeshes[recursion].painterKey.isValid())
+		{
+			v = SimpleGeometry::icosphereMeshes[recursion].verticesKey;
+			p = SimpleGeometry::icosphereMeshes[recursion].painterKey;
+			return;
+		}
+		
+		SimpleGeometry::generateIcoSphere(recursion, positions, indices);
+
+		auto type = std::make_pair<GLenum, std::string>(GL_FLOAT_VEC3, "position");
+		std::vector<std::pair < GLenum, std::string > > types;
+		types.push_back(type);
+
+		if (!paintingManager->has_painter(types))
+		{
+			SimpleGeometry::icosphereMeshes[recursion].painterKey = paintingManager->add_painter(std::move(types));
+		}
+		else
+		{
+			SimpleGeometry::icosphereMeshes[recursion].painterKey = paintingManager->get_painter(types);
+		}
+		auto &painterPtr = paintingManager->get_painter(SimpleGeometry::icosphereMeshes[recursion].painterKey);
+
+		SimpleGeometry::icosphereMeshes[recursion].verticesKey = painterPtr->add_vertices(positions.size(), indices.size());
+		auto vertices = painterPtr->get_vertices(SimpleGeometry::icosphereMeshes[recursion].verticesKey);
+
+		vertices->set_data<glm::vec3>(positions, std::string("position"));
+		vertices->set_indices(indices);
+
+		v = SimpleGeometry::icosphereMeshes[recursion].verticesKey;
+		p = SimpleGeometry::icosphereMeshes[recursion].painterKey;
 	}
 
 	bool RenderThread::init()
@@ -175,6 +230,11 @@ namespace AGE
 			AGE::Imgui::getInstance()->renderThreadRenderFn(msg.cmd_lists);
 		});
 #endif
+
+		registerCallback<AGE::Tasks::Render::ContextGrabMouse>([&](AGE::Tasks::Render::ContextGrabMouse &msg)
+		{
+			_context->grabMouse(msg.grabMouse == 1 ? true : false);
+		});
 
 		return true;
 	}

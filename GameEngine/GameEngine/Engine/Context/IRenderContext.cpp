@@ -48,12 +48,21 @@ namespace AGE
 		return (it->second);
 	}
 
-	AgeInputs IRenderContext::findAgeInput(int contextInput) const
+	AgeWindowInputs IRenderContext::findAgeWindowInput(int contextInput) const
 	{
-		auto it = _toAgeInput.find(contextInput);
+		auto it = _toAgeWindowInput.find(contextInput);
 
-		if (it == _toAgeInput.end())
-			return (AGE_INPUT_UNKNOWN);
+		if (it == _toAgeWindowInput.end())
+			return (AGE_WINDOW_UNKNOWN);
+		return (it->second);
+	}
+
+	AgeMouseButtons IRenderContext::findAgeMouseButton(int contextInput) const
+	{
+		auto it = _toAgeMouseButton.find(contextInput);
+
+		if (it == _toAgeMouseButton.end())
+			return (AGE_MOUSE_UNKNOWN);
 		return (it->second);
 	}
 

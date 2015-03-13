@@ -43,11 +43,32 @@ namespace AGE
 		return glm::ivec2(_mouseDelX, _mouseDelY);
 	}
 
-	bool 	Input::getInput(AgeInputs input)
+	bool 	Input::getWindowInput(AgeWindowInputs input)
 	{
 		std::lock_guard<AGE::SpinLock> lock(_mutex);
 
-		return (_inputs[input]);
+		return (_windowInputs[input]);
+	}
+
+	bool 	Input::getMouseButtonPressed(AgeMouseButtons input)
+	{
+		std::lock_guard<AGE::SpinLock> lock(_mutex);
+
+		return (AGE_KEY_PRESSED(_mouseInputs[input]));
+	}
+
+	bool 	Input::getMouseButtonJustPressed(AgeMouseButtons input)
+	{
+		std::lock_guard<AGE::SpinLock> lock(_mutex);
+
+		return (AGE_KEY_JUST_PRESSED(_mouseInputs[input]));
+	}
+
+	bool 	Input::getMouseButtonJustReleased(AgeMouseButtons input)
+	{
+		std::lock_guard<AGE::SpinLock> lock(_mutex);
+
+		return (AGE_KEY_JUST_RELEASED(_mouseInputs[input]));
 	}
 
 	bool 	Input::getPhysicalKeyPressed(AgeKeys input)
@@ -114,6 +135,16 @@ namespace AGE
 	{
 		std::lock_guard<AGE::SpinLock> lock(_mutex);
 
+		_mouseDelY = _mouseDelX = 0;
+		for (int i = 0; i < AGE_WINDOW_INPUT_NUMBER; ++i)
+		{
+			_windowInputs[i] = false;
+		}
+		for (int i = 0; i < AGE_MOUSE_BUTTONS_NUMBER; ++i)
+		{
+			_mouseInputs[i] = AGE_UNSET_KEY_JUST_PRESSED(_mouseInputs[i]);
+			_mouseInputs[i] = AGE_UNSET_KEY_JUST_RELEASED(_mouseInputs[i]);
+		}
 		for (int i = 0; i < AGE_KEY_NUMBER; ++i)
 		{
 			_keyInputs[i] = AGE_UNSET_KEY_JUST_PRESSED(_keyInputs[i]);
@@ -130,24 +161,38 @@ namespace AGE
 
 	void	Input::resetInputs()
 	{
-		for (int i = 0; i < AGE_INPUT_NUMBER; ++i)
-			_inputs[i] = false;
+		std::lock_guard<AGE::SpinLock> lock(_mutex);
+
+		for (int i = 0; i < AGE_WINDOW_INPUT_NUMBER; ++i)
+			_windowInputs[i] = false;
+		for (int i = 0; i < AGE_MOUSE_BUTTONS_NUMBER; ++i)
+			_mouseInputs[i] = 0;
 		for (int i = 0; i < AGE_KEY_NUMBER; ++i)
 			_keyInputs[i] = 0;
 	}
 
-	void 	Input::addInput(AgeInputs input)
+	void 	Input::mouseButtonPressed(AgeMouseButtons input)
 	{
 		std::lock_guard<AGE::SpinLock> lock(_mutex);
 
-		_inputs[input] = true;
+		_mouseInputs[input] = 0;
+		_mouseInputs[input] = AGE_SET_KEY_PRESSED(_mouseInputs[input]);
+		_mouseInputs[input] = AGE_SET_KEY_JUST_PRESSED(_mouseInputs[input]);
 	}
 
-	void 	Input::removeInput(AgeInputs input)
+	void 	Input::mouseButtonReleased(AgeMouseButtons input)
 	{
 		std::lock_guard<AGE::SpinLock> lock(_mutex);
 
-		_inputs[input] = false;
+		_mouseInputs[input] = 0;
+		_mouseInputs[input] = AGE_SET_KEY_JUST_RELEASED(_mouseInputs[input]);
+	}
+
+	void	Input::addWindowInput(AgeWindowInputs input)
+	{
+		std::lock_guard<AGE::SpinLock> lock(_mutex);
+
+		_windowInputs[input] = true;
 	}
 
 	void	Input::keyInputPressed(AgeKeys mappedInput, AgeKeys physicalInput)
@@ -257,9 +302,9 @@ namespace AGE
 			mousePosition = glm::ivec2(_mousePosX, _mousePosY);
 		}
 		GetMainThread()->getQueue()->emplaceTask<ImGuiMouseStateEvent>(mousePosition,
-			getInput(AGE_MOUSE_LEFT),
-			getInput(AGE_MOUSE_MIDDLE),
-			getInput(AGE_MOUSE_RIGHT));
+			getMouseButtonPressed(AGE_MOUSE_LEFT),
+			getMouseButtonPressed(AGE_MOUSE_MIDDLE),
+			getMouseButtonPressed(AGE_MOUSE_RIGHT));
 #endif
 	}
 

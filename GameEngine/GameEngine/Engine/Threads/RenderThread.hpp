@@ -11,7 +11,6 @@
 #include <Render/Properties/Properties.hh>
 #include <Engine/SpacePartitioning/Ouptut/RenderCamera.hh>
 #include <Render/PipelineTypes.hpp>
-#include <Render/GeometryManagement/SimpleGeometry.hpp>
 
 namespace AGE
 {
@@ -35,6 +34,7 @@ namespace AGE
 		// used by render scene, maybe should be protected
 		void createMeshProperty(const Key<Painter> &painter, Key<Properties> &properties, Key<Property> &transformation);
 		void getQuadGeometry(Key<Vertices> &vertices, Key<Painter> &painter);
+		void getIcoSphereGeometry(Key<Vertices> &vertices, Key<Painter> &painter, uint32_t recursion);
 	public:
 		std::vector<Material> _materials;
 		std::shared_ptr<PaintingManager> paintingManager;

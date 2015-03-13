@@ -128,10 +128,12 @@
     <ClCompile Include="Engine\Context\IRenderContext.cpp" />
     <ClCompile Include="Engine\Context\SDL\SdlToAgeInputs.cpp" />
     <ClCompile Include="Engine\Entities\Entity.cpp" />
+    <ClCompile Include="Engine\Render\GeometryManagement\SimpleGeometry.cpp" />
     <ClCompile Include="Engine\Render\Properties\Materials\Specular.cpp" />
     <ClCompile Include="Engine\Render\ProgramResources\Types\Uniform\Mat4Array255.cpp" />
     <ClCompile Include="Engine\Render\Properties\Properties.cpp" />
     <ClCompile Include="Engine\Render\PropertyManager.cpp" />
+    <ClCompile Include="Engine\Systems\FreeFlyCamera.cpp" />
     <ClCompile Include="Engine\Threads\Commands\MainToPrepareCommands.cpp" />
     <ClCompile Include="Engine\Core\ConfigurationManager.cpp" />
     <ClCompile Include="Engine\Core\DefaultConfiguration.cpp" />
@@ -215,10 +217,10 @@
     <ClCompile Include="Engine\Audio\FmodError.cpp" />
     <ClCompile Include="Engine\Components\CameraComponent.cpp" />
     <ClCompile Include="Engine\Components\Component.cpp" />
-    <ClCompile Include="Engine\Components\ComponentRegistrar.cpp" />
+    <ClCompile Include="Engine\Components\ComponentRegistrationManager.cpp" />
     <ClCompile Include="Engine\Components\FPController.cpp" />
     <ClCompile Include="Engine\Core\EntityFilter.cpp" />
-    <ClCompile Include="Engine\Core\EntityIdRegistrar.cpp" />
+    <ClCompile Include="Engine\Core\EntityIdRegistrationManager.cpp" />
     <ClCompile Include="Engine\Core\SceneManager.cpp" />
     <ClCompile Include="Engine\Context\SDL\SdlContext.cpp" />
     <ClCompile Include="Engine\Core\AScene.cpp" />
@@ -266,7 +268,7 @@
     <ClCompile Include="Engine\Utils\ThreadName.cpp" />
     <ClCompile Include="Engine\Utils\UniqueTypeId.cpp" />
     <ClCompile Include="Engine\Core\Inputs\Joystick.cpp" />
-    <ClCompile Include="Engine\Render\GeometryManagement\IcoSphere.cpp" />
+    <ClCompile Include="Engine\Components\FreeFlyComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -284,11 +286,12 @@
     <ClInclude Include="Engine\Configuration.hpp" />
     <ClInclude Include="Engine\Core\Inputs\AgeInputs.hh" />
     <ClInclude Include="Engine\Entities\EntityData.hh" />
-    <ClInclude Include="Engine\Render\GeometryManagement\SimpleGeometry.hpp" />
+    <ClInclude Include="Engine\Render\GeometryManagement\SimpleGeometry.hh" />
     <ClInclude Include="Engine\Render\PipelineTypes.hpp" />
     <ClInclude Include="Engine\Render\Properties\Materials\Specular.hh" />
     <ClInclude Include="Engine\Render\ProgramResources\Types\Uniform\Mat4Array255.hh" />
     <ClInclude Include="Engine\Render\Properties\Properties.hh" />
+    <ClInclude Include="Engine\Systems\FreeFlyCamera.hh" />
     <ClInclude Include="Engine\Threads\Commands\ToRenderCommands.hpp" />
     <ClInclude Include="Engine\Threads\Commands\MainToPrepareCommands.hpp" />
     <ClInclude Include="Engine\Core\Instance\MaterialInstance.hh" />
@@ -360,7 +363,7 @@
     <ClInclude Include="Engine\Entities\EntityTypedef.hpp" />
     <ClInclude Include="Engine\Geometry\MeshManager.hpp" />
     <ClInclude Include="Engine\Core\ConfigurationManager.hpp" />
-    <ClInclude Include="Engine\Core\EntityIdRegistrar.hh" />
+    <ClInclude Include="Engine\Core\EntityIdRegistrationManager.hh" />
     <ClInclude Include="Engine\Entities\BitsetManipulation.hpp" />
     <ClInclude Include="Engine\Entities\EntityFlags.hh" />
     <ClInclude Include="Engine\Physic\DynamicMotionState.hpp" />
@@ -431,7 +434,7 @@
     <ClInclude Include="Engine\Components\CameraComponent.hpp" />
     <ClInclude Include="Engine\Components\CameraComponentTemplates.hpp" />
     <ClInclude Include="Engine\Components\CollisionLayers.hpp" />
-    <ClInclude Include="Engine\Components\ComponentRegistrar.hpp" />
+    <ClInclude Include="Engine\Components\ComponentRegistrationManager.hpp" />
     <ClInclude Include="Engine\Components\FPController.hpp" />
     <ClInclude Include="Engine\Components\GraphNode.hpp" />
     <ClInclude Include="Engine\Components\RigidBody.hpp" />
@@ -510,7 +513,7 @@
     <ClInclude Include="Engine\Utils\Visibility.hpp" />
     <ClInclude Include="Engine\Utils\Worker.hpp" />
     <ClInclude Include="Engine\Core\Inputs\Joystick.hh" />
-    <ClInclude Include="Engine\Render\GeometryManagement\IcoSphere.hh" />
+    <ClInclude Include="Engine\Components\FreeFlyComponent.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

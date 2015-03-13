@@ -6,7 +6,7 @@
 
 namespace AGE
 {
-	class EntityIdRegistrar
+	class EntityIdRegistrationManager
 	{
 	public:
 
@@ -17,8 +17,8 @@ namespace AGE
 			std::set<std::size_t> childs;
 		};
 
-		EntityIdRegistrar();
-		virtual ~EntityIdRegistrar();
+		EntityIdRegistrationManager();
+		virtual ~EntityIdRegistrationManager();
 		void registrarUnserializedEntity(Entity e, std::size_t id);
 		std::size_t registrarSerializedEntity(std::size_t id);
 		void entityHandle(std::size_t id, Entity *e);

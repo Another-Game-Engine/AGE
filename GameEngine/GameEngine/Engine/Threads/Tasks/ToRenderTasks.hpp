@@ -70,6 +70,15 @@ namespace AGE
 					, propertiesPtr(_propertiesPtr)
 				{ }
 			};
+
+			struct ContextGrabMouse
+			{
+				uint32_t grabMouse;
+
+				ContextGrabMouse(bool _grabMouse) :
+					grabMouse(_grabMouse == true ? 1 : 0)
+				{ }
+			};
 		};
 	
 	}
