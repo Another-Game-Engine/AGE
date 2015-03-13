@@ -47,7 +47,7 @@ namespace AGE
 		virtual ~BasicPipeline() = default;
 
 	public:
-		virtual IRenderingPipeline &render(ARGS_FUNCTION_RENDER) override final;
+		virtual IRenderingPipeline &render(RenderPipeline const &pipeline, RenderLightList const &lights, CameraInfos const &camera) override final;
 
 	};
 }

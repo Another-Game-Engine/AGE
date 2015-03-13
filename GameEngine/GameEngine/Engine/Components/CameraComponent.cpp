@@ -3,7 +3,7 @@
 #include <Threads/ThreadManager.hpp>
 #include <Threads/MainThread.hpp>
 #include <Threads/PrepareRenderThread.hpp>
-#include <Context/SdlContext.hh>
+#include <Context/SDL/SdlContext.hh>
 #include <Core/AScene.hh>
 #include <imgui/imgui.h>
 

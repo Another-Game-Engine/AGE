@@ -7,7 +7,9 @@
 #include <Threads/ThreadManager.hpp>
 #include <Threads/MainThread.hpp>
 #include <Core/Engine.hh>
-#include <Core/Input.hh>
+#include <Core/Inputs/Input.hh>
+#include <Core/Timer.hh>
+
 #define STB_TRUETYPE_IMPLEMENTATION
 #include <imgui/stb_truetype.h>
 #ifdef _MSC_VER
@@ -28,18 +30,25 @@ namespace AGE
 	{
 #ifdef USE_IMGUI
 
-
 		GetMainThread()->registerCallback<ImGuiKeyEvent>([this](ImGuiKeyEvent &msg)
 		{
 			ImGuiIO& io = ImGui::GetIO();
-			io.KeysDown[msg.key.scancode] = msg.down;
-			if (msg.down)
+			io.KeysDown[msg.key] = msg.down;
+			if (msg.key == AGE_LCTRL || msg.key == AGE_RCTRL)
+				io.KeyCtrl = msg.down;
+			else if (msg.key == AGE_LSHIFT || msg.key == AGE_RSHIFT)
+				io.KeyShift = msg.down;
+			else if (msg.down)
 			{
-				if ((msg.key.sym >= 33 && msg.key.sym <= 126))
-					io.AddInputCharacter(msg.key.sym);
+				char character = keyToAscii.find(msg.key)->second;
+				if (character != UNDEFINED_CHARACTER)
+					io.AddInputCharacter(character);
 			}
-			io.KeyCtrl = msg.down && ((msg.key.mod & KMOD_LCTRL || msg.key.mod & KMOD_RCTRL));
-			io.KeyShift = msg.down && ((msg.key.mod & KMOD_SHIFT));
+		});
+
+		GetMainThread()->registerCallback<ImGuiMouseStateEvent>([this](ImGuiMouseStateEvent &msg)
+		{
+			_lastMouseState = msg;
 		});
 
 		_engine = en;
@@ -51,23 +60,23 @@ namespace AGE
 		auto screenSize = en->getInstance<IRenderContext>()->getScreenSize();
 		io.DisplaySize = ImVec2((float)screenSize.x, (float)screenSize.y);        // Display size, in pixels. For clamping windows positions.
 		io.DeltaTime = 1.0f / 60.0f;                          // Time elapsed since last frame, in seconds (in this sample app we'll override this every frame because our timestep is variable)
-		io.KeyMap[ImGuiKey_Tab] = SDL_SCANCODE_TAB;             // Keyboard mapping. ImGui will use those indices to peek into the io.KeyDown[] array.
-		io.KeyMap[ImGuiKey_LeftArrow] = SDL_SCANCODE_LEFT;
-		io.KeyMap[ImGuiKey_RightArrow] = SDL_SCANCODE_RIGHT;
-		io.KeyMap[ImGuiKey_UpArrow] = SDL_SCANCODE_UP;
-		io.KeyMap[ImGuiKey_DownArrow] = SDL_SCANCODE_DOWN;
-		io.KeyMap[ImGuiKey_Home] = SDL_SCANCODE_HOME;
-		io.KeyMap[ImGuiKey_End] = SDL_SCANCODE_END;
-		io.KeyMap[ImGuiKey_Delete] = SDL_SCANCODE_DELETE;
-		io.KeyMap[ImGuiKey_Backspace] = SDL_SCANCODE_BACKSPACE;
-		io.KeyMap[ImGuiKey_Enter] = SDL_SCANCODE_RETURN;
-		io.KeyMap[ImGuiKey_Escape] = SDL_SCANCODE_ESCAPE;
-		io.KeyMap[ImGuiKey_A] = SDL_SCANCODE_A;
-		io.KeyMap[ImGuiKey_C] = SDL_SCANCODE_C;
-		io.KeyMap[ImGuiKey_V] = SDL_SCANCODE_V;
-		io.KeyMap[ImGuiKey_X] = SDL_SCANCODE_X;
-		io.KeyMap[ImGuiKey_Y] = SDL_SCANCODE_Y;
-		io.KeyMap[ImGuiKey_Z] = SDL_SCANCODE_Z;
+		io.KeyMap[ImGuiKey_Tab] = AGE_TAB;             // Keyboard mapping. ImGui will use those indices to peek into the io.KeyDown[] array.
+		io.KeyMap[ImGuiKey_LeftArrow] = AGE_LEFT;
+		io.KeyMap[ImGuiKey_RightArrow] = AGE_RIGHT;
+		io.KeyMap[ImGuiKey_UpArrow] = AGE_UP;
+		io.KeyMap[ImGuiKey_DownArrow] = AGE_DOWN;
+		io.KeyMap[ImGuiKey_Home] = AGE_HOME;
+		io.KeyMap[ImGuiKey_End] = AGE_END;
+		io.KeyMap[ImGuiKey_Delete] = AGE_DELETE;
+		io.KeyMap[ImGuiKey_Backspace] = AGE_BACKSPACE;
+		io.KeyMap[ImGuiKey_Enter] = AGE_RETURN;
+		io.KeyMap[ImGuiKey_Escape] = AGE_ESCAPE;
+		io.KeyMap[ImGuiKey_A] = AGE_a;
+		io.KeyMap[ImGuiKey_C] = AGE_c;
+		io.KeyMap[ImGuiKey_V] = AGE_v;
+		io.KeyMap[ImGuiKey_X] = AGE_x;
+		io.KeyMap[ImGuiKey_Y] = AGE_y;
+		io.KeyMap[ImGuiKey_Z] = AGE_z;
 
 		io.RenderDrawListsFn = renderDrawLists;
 
@@ -164,18 +173,15 @@ namespace AGE
 		auto input = this->_engine->getInstance<AGE::Input>();
 
 		// Setup timestep
-		static double time = 0.0f;
-		const double current_time = SDL_GetTicks();
-		float dif = (float)(current_time - time);
-		io.DeltaTime = dif == 0.0f ? 0.000000001f : dif / 1000.0f;
-		time = current_time;
+		static Timer timer;
+		timer.update();
+		double elapsedTime = timer.getElapsed();
 
-		int mx, my;
-		auto mouseState = SDL_GetMouseState(&mx, &my);
-		io.MousePos = ImVec2((float)mx, (float)my);
-		io.MouseDown[0] = (mouseState & SDL_BUTTON(SDL_BUTTON_LEFT)) != 0;
-		io.MouseDown[1] = (mouseState & SDL_BUTTON(SDL_BUTTON_RIGHT)) != 0;
-		io.MouseDown[2] = (mouseState & SDL_BUTTON(SDL_BUTTON_MIDDLE)) != 0;
+		io.DeltaTime = elapsedTime == 0.0 ? 0.000000001f : elapsedTime;
+		io.MouseDown[0] = _lastMouseState.mouseState[0];
+		io.MouseDown[1] = _lastMouseState.mouseState[1];
+		io.MouseDown[2] = _lastMouseState.mouseState[2];
+		io.MousePos = ImVec2(_lastMouseState.mousePosition.x, _lastMouseState.mousePosition.y);
 
 		// Start the frame
 		ImGui::NewFrame();

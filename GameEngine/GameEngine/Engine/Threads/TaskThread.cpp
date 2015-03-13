@@ -67,7 +67,7 @@ namespace AGE
 		while (_run && _insideRun)
 		{
 			waitStart = std::chrono::high_resolution_clock::now();
-			getQueue()->getTaskQueue(tasks, TMQ::HybridQueue::Wait);
+			getQueue()->getTaskQueue(tasks, TMQ::HybridQueue::Block);
 			waitEnd = std::chrono::high_resolution_clock::now();
 			workStart = std::chrono::high_resolution_clock::now();
 			while (!tasks.empty())

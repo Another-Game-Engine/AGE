@@ -13,7 +13,7 @@
 #include <Scenes/BenchmarkScene.hpp>
 
 // DEPENDENCIES
-#include <Context/SdlContext.hh>
+#include <Context/SDL/SdlContext.hh>
 #include <Core/ConfigurationManager.hpp>
 #include <Physic/BulletDynamicManager.hpp>
 #include <Core/Timer.hh>

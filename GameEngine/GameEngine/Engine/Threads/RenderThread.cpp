@@ -1,15 +1,13 @@
 #include "RenderThread.hpp"
 #include <Core/Engine.hh>
-#include <Context/SdlContext.hh>
+#include <Context/SDL/SdlContext.hh>
 #include <Utils/ThreadName.hpp>
 #include <Threads/Tasks/ToRenderTasks.hpp>
 #include <Threads/Commands/ToRenderCommands.hpp>
 #include <Threads/Tasks/BasicTasks.hpp>
-#include <Context/SdlContext.hh>
 #include <Utils/Containers/Vector.hpp>
 #include <Threads/ThreadManager.hpp>
 #include <Core/Engine.hh>
-#include <Context/SdlContext.hh>
 #include <Render/GeometryManagement/Painting/Painter.hh>
 #include <Render/Pipelining/Pipelines/CustomPipeline/BasicPipeline.hh>
 #include <Render/Pipelining/Pipelines/CustomPipeline/DeferredShading.hh>
@@ -20,6 +18,7 @@
 #include <SpacePartitioning/Ouptut/RenderLight.hh>
 #include <SpacePartitioning/Ouptut/RenderPipeline.hh>
 #include <Utils/Debug.hpp>
+#include <Render/GeometryManagement/SimpleGeometry.hpp>
 
 namespace AGE
 {
@@ -49,12 +48,48 @@ namespace AGE
 		}
 	}
 
+	void RenderThread::getQuadGeometry(Key<Vertices> &v, Key<Painter> &p)
+	{
+		// to be sure that this function is only called in render thread
+		AGE_ASSERT(GetThreadManager()->getCurrentThread() == (AGE::Thread*)GetRenderThread());
+
+		if (Quad::VerticesKey.isValid() && Quad::PainterKey.isValid())
+		{
+			v = Quad::VerticesKey;
+			p = Quad::PainterKey;
+			return;
+		}
+
+		auto type = std::make_pair<GLenum, std::string>(GL_FLOAT_VEC4, "position");
+		std::vector<std::pair < GLenum, std::string > > types;
+		types.push_back(type);
+
+		if (!paintingManager->has_painter(types))
+		{
+			Quad::PainterKey = paintingManager->add_painter(std::move(types));
+		}
+		else
+		{
+			Quad::PainterKey = paintingManager->get_painter(types);
+		}
+		auto &painterPtr = paintingManager->get_painter(Quad::PainterKey);
+
+		Quad::VerticesKey = painterPtr->add_vertices(Quad::Positions.size(), Quad::Indices.size());
+		auto vertices = painterPtr->get_vertices(Quad::VerticesKey);
+
+		vertices->set_data<glm::vec4>(Quad::Positions, std::string("position"));
+		vertices->set_indices(Quad::Indices);
+
+		v = Quad::VerticesKey;
+		p = Quad::PainterKey;
+	}
+
 	bool RenderThread::init()
 	{
 		registerCallback<Tasks::Render::CreateRenderContext>([this](Tasks::Render::CreateRenderContext &msg)
 		{
 			_context = msg.engine->setInstance<SdlContext, IRenderContext>();
-			if (!_context->init(0, 1280, 720, "~AGE~ V0.00001 Demo"))
+			if (!_context->init(1280, 720, "~AGE~ V0.00001 Demo"))
 			{
 				msg.setValue(false);
 				return;

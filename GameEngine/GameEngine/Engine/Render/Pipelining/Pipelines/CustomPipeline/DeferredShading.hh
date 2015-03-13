@@ -1,7 +1,11 @@
 #pragma once
 
+#include <Utils/Debug.hpp>
+#include <Utils/OpenGL.hh>
 #include <Render/Pipelining/Pipelines/ARenderingPipeline.hh>
 #include <glm/glm.hpp>
+#include <Render/Textures/Texture2D.hh>
+#include <memory>
 
 namespace AGE
 {
@@ -25,7 +29,25 @@ namespace AGE
 		DeferredShading &operator=(DeferredShading const &) = delete;
 
 	public:
-		virtual IRenderingPipeline &render(ARGS_FUNCTION_RENDER) override final;
+		virtual IRenderingPipeline &render(RenderPipeline const &pipeline, RenderLightList const &lights, CameraInfos const &camera) override final;
 
+	private:
+		std::shared_ptr<Texture2D> _diffuseTexture;
+		std::shared_ptr<Texture2D> _normalTexture;
+		std::shared_ptr<Texture2D> _specularTexture;
+		std::shared_ptr<Texture2D> _lightMap;
+		RenderLightList const *_lights;
 	};
+
+
+	template <typename OUTPUT, typename RENDER, typename ...Params>
+	std::shared_ptr<OUTPUT> addRenderPassOutput(std::shared_ptr<IRendering> const &render, GLenum attachment, Params... params)
+	{
+		auto const &output = std::make_shared<OUTPUT>();
+		auto error = output->init(std::forward<Params>(params)...);
+		AGE_ASSERT(error != false && "Texture generation error.");
+		std::static_pointer_cast<RENDER>(render)->push_storage_output<OUTPUT>(attachment, output);
+		return output;
+	}
+
 }

@@ -5,7 +5,6 @@ namespace AGE
 {
 	AProperty::AProperty(std::string &&name) :
 		_name(std::move(name))
-		, _shaderVersion(0)
 	{
 #ifdef AGE_DEBUG
 		_shaderVersion = 0;
