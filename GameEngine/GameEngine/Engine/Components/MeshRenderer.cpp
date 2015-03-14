@@ -102,7 +102,6 @@ namespace AGE
 			if (!_serializationInfos->mesh.empty())
 			{
 				scene->getInstance<AGE::AssetsManager>()->loadMesh(_serializationInfos->mesh
-					, { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents }
 				, "WE_MESH_LOADING");
 
 				std::size_t totalToLoad = 0;
@@ -111,7 +110,7 @@ namespace AGE
 				do {
 					scene->getInstance<AGE::AssetsManager>()->updateLoadingChannel("WE_MESH_LOADING", totalToLoad, toLoad, loadingError);
 				} while
-					(toLoad != 0 && loadingError.size() == 0);
+					(toLoad > 0 && loadingError.size() == 0);
 
 				_mesh = _scene->getInstance<AGE::AssetsManager>()->getMesh(_serializationInfos->mesh);
 			}
@@ -187,7 +186,7 @@ namespace AGE
 
 			if (!_mesh)
 			{
-				scene->getInstance<AGE::AssetsManager>()->loadMesh(OldFile(selectedMeshPath), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents }, selectedMeshPath);
+				scene->getInstance<AGE::AssetsManager>()->loadMesh(OldFile(selectedMeshPath), selectedMeshPath);
 
 				std::size_t totalToLoad = 0;
 				std::size_t	toLoad = 0;

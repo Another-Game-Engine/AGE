@@ -117,10 +117,9 @@ static std::pair<std::pair<GLenum, std::string>, std::function<void(Vertices &ve
 		std::shared_ptr<Skeleton> getSkeleton(const OldFile &filePath);
 		bool loadMaterial(const OldFile &filePath, const std::string &loadingChannel = "");
 		std::shared_ptr<MaterialSetInstance> getMaterial(const OldFile &filePath);
-		std::shared_ptr<MeshInstance> loadMesh(const OldFile &filePath);
 		std::shared_ptr<MeshInstance> getMesh(const OldFile &filePath);
 		std::shared_ptr<ITexture> loadTexture(const OldFile &filepath, const std::string &loadingChannel);
-		bool loadMesh(const OldFile &filePath, const std::vector<MeshInfos> &loadOrder, const std::string &loadingChannel = "");
+		bool loadMesh(const OldFile &filePath, const std::string &loadingChannel = "");
 		void setAssetsDirectory(const std::string &path) { _assetsDirectory = path; }
 		void updateLoadingChannel(const std::string &channelName, std::size_t &total, std::size_t &to_load, std::string &error);
 
@@ -137,6 +136,6 @@ static std::pair<std::pair<GLenum, std::string>, std::function<void(Vertices &ve
 
 	private:
 		void pushNewAsset(const std::string &loadingChannel, const std::string &filename, std::future<AssetsLoadingResult> &future);
-		void loadSubmesh(std::shared_ptr<MeshData> data, std::size_t index, SubMeshInstance *mesh, const std::vector<MeshInfos> loadOrder, const std::string &loadingChannel);
+		void loadSubmesh(std::shared_ptr<MeshData> data, std::size_t index, SubMeshInstance *mesh, const std::string &loadingChannel);
 	};
 }
