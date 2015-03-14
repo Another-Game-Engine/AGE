@@ -65,12 +65,12 @@ namespace AGE
 			glStencilOp(GL_KEEP, GL_KEEP, GL_INCR);
 			glCullFace(GL_FRONT);
 
-			painter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_STENCIL_BASIC], properties.back(), vertices.back());
+			painter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_STENCIL_BASIC], Properties(), vertices.back());
 
 			glStencilOp(GL_KEEP, GL_KEEP, GL_DECR);
 			glCullFace(GL_BACK);
 
-			painter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_STENCIL_BASIC], properties.back(), vertices.back());
+			painter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_STENCIL_BASIC], Properties(), vertices.back());
 
 			glStencilFunc(GL_EQUAL, 1, 1);
 
