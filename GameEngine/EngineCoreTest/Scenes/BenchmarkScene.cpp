@@ -92,10 +92,10 @@ namespace AGE
 		}
 
 		getInstance<AGE::AssetsManager>()->setAssetsDirectory("../../Assets/Serialized/");
-		getInstance<AGE::AssetsManager>()->loadMesh(OldFile("catwoman/catwoman.sage"), { MeshInfos::Positions, MeshInfos::Normals, MeshInfos::Uvs, MeshInfos::Tangents, MeshInfos::Weights, MeshInfos::BoneIndices }, "DEMO_SCENE_ASSETS");
-		getInstance<AGE::AssetsManager>()->loadMesh(OldFile("cube/cube.sage"), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents, MeshInfos::Weights, MeshInfos::BoneIndices }, "DEMO_SCENE_ASSETS");
-		getInstance<AGE::AssetsManager>()->loadMesh(OldFile("ball/ball.sage"), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents, MeshInfos::Weights, MeshInfos::BoneIndices }, "DEMO_SCENE_ASSETS");
-		getInstance<AGE::AssetsManager>()->loadMesh(OldFile("Sponza/sponza.sage"), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents, MeshInfos::Weights, MeshInfos::BoneIndices }, "DEMO_SCENE_ASSETS");
+		getInstance<AGE::AssetsManager>()->loadMesh(OldFile("catwoman/catwoman.sage"), "DEMO_SCENE_ASSETS");
+		getInstance<AGE::AssetsManager>()->loadMesh(OldFile("cube/cube.sage"), "DEMO_SCENE_ASSETS");
+		getInstance<AGE::AssetsManager>()->loadMesh(OldFile("ball/ball.sage"), "DEMO_SCENE_ASSETS");
+		getInstance<AGE::AssetsManager>()->loadMesh(OldFile("Sponza/sponza.sage"), "DEMO_SCENE_ASSETS");
 		getInstance<AGE::AssetsManager>()->loadMaterial(OldFile("cube/cube.mage"), "DEMO_SCENE_ASSETS");
 		getInstance<AGE::AssetsManager>()->loadMaterial(OldFile("ball/ball.mage"), "DEMO_SCENE_ASSETS");
 		getInstance<AGE::AssetsManager>()->loadMaterial(OldFile("catwoman/catwoman.mage"), "DEMO_SCENE_ASSETS");
