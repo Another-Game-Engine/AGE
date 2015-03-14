@@ -19,7 +19,6 @@ namespace AGE
 {
 	MeshRenderer::MeshRenderer() :
 		ComponentBase()
-		, _scene(nullptr)
 		, _serializationInfos(nullptr)
 	{
 	}
@@ -29,18 +28,16 @@ namespace AGE
 	}
 
 
-	void MeshRenderer::init(AScene *scene
-		, std::shared_ptr<AGE::MeshInstance> mesh /* = nullptr */
+	void MeshRenderer::init(std::shared_ptr<AGE::MeshInstance> mesh /* = nullptr */
 		, std::shared_ptr<AGE::MaterialSetInstance> material /*= nullptr*/)
 	{
-		_scene = scene;
 		if (mesh && material)
 		{
 			setMeshAndMaterial(mesh, material);
 		}
 	}
 
-	void MeshRenderer::reset(AScene *scene)
+	void MeshRenderer::reset()
 	{
 		if (!_key.invalid())
 		{
@@ -94,9 +91,9 @@ namespace AGE
 		AGE::GetPrepareThread()->updateGeometry(_key, _mesh->subMeshs, _material->datas);
 	}
 
-	void MeshRenderer::postUnserialization(AScene *scene)
+	void MeshRenderer::postUnserialization()
 	{
-		_scene = scene;
+		auto scene = entity.getScene();
 		if (_serializationInfos)
 		{
 			if (!_serializationInfos->mesh.empty())
@@ -112,7 +109,7 @@ namespace AGE
 				} while
 					(toLoad > 0 && loadingError.size() == 0);
 
-				_mesh = _scene->getInstance<AGE::AssetsManager>()->getMesh(_serializationInfos->mesh);
+				_mesh = scene->getInstance<AGE::AssetsManager>()->getMesh(_serializationInfos->mesh);
 			}
 			if (!_serializationInfos->material.empty())
 			{
@@ -127,7 +124,7 @@ namespace AGE
 				} while
 					(toLoad != 0 && loadingError.size() == 0);
 
-				_material = _scene->getInstance<AGE::AssetsManager>()->getMaterial(_serializationInfos->material);
+				_material = scene->getInstance<AGE::AssetsManager>()->getMaterial(_serializationInfos->material);
 			}
 			if (_mesh && _material)
 			{

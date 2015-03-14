@@ -34,7 +34,7 @@ namespace AGE
 	{
 		if (!haveComponent(id))
 			return;
-		components[id]->reset(scene);
+		components[id]->reset();
 		scene->deleteComponent(components[id]);
 		components[id] = nullptr;
 		scene->informFiltersComponentDeletion(id, *this);

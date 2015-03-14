@@ -34,8 +34,8 @@ namespace AGE
 			T *ptr = scene->createComponent<T>(entity, args...);
 			components[id] = ptr;
 			scene->informFiltersComponentAddition(id, *this);
-			ptr->reset(scene);
-			ptr->init(scene, args...);
+			ptr->reset();
+			ptr->init(args...);
 			return ptr;
 		}
 

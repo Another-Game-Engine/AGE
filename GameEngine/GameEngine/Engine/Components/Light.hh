@@ -16,8 +16,8 @@ namespace AGE
 		PointLightComponent(PointLightComponent const &o);
 		PointLightComponent &operator=(PointLightComponent const &o);
 
-		virtual void reset(AScene *);
-		void init(AScene *);
+		virtual void reset();
+		void init();
 
 		PointLightComponent &set(glm::vec3 const &color = glm::vec3(1.0f), glm::vec3 const &range = glm::vec3(1.0f, 0.1f, 0.01f));
 
@@ -26,7 +26,7 @@ namespace AGE
 		inline const glm::vec3 &getRange() const { return _range; }
 		inline float *getColorPtr() { return &_color.x; }
 		inline float *getRangePtr() { return &_range.x; }
-		virtual void postUnserialization(AScene *scene);
+		virtual void postUnserialization();
 
 #ifdef EDITOR_ENABLED
 		virtual void editorCreate(AScene *scene);

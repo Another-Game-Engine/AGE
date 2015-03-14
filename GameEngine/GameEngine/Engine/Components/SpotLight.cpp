@@ -46,7 +46,7 @@ namespace AGE
 		lightData.positionPower.z = globalTransform[3].z;
 	}
 
-	void SpotLight::reset(AScene *)
+	void SpotLight::reset()
 	{
 	}
 
@@ -56,7 +56,7 @@ namespace AGE
 		return (*this);
 	}
 
-	void	SpotLight::init(AScene *)
+	void	SpotLight::init()
 	{
 	}
 

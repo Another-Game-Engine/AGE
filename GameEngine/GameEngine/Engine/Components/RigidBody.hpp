@@ -36,8 +36,8 @@ namespace AGE
 		void _clearBulletObjects();
 	public:
 		RigidBody();
-		void init(AScene *scene, float mass = 1.0f);
-		virtual void reset(AScene *scene);
+		void init(float mass = 1.0f);
+		virtual void reset();
 		void setTransformation(const AGE::Link *link);
 		btMotionState &getMotionState();
 		btCollisionShape &getShape();
@@ -45,15 +45,12 @@ namespace AGE
 		void setMass(float mass);
 		int getMass() const;
 		void setInertia(const glm::vec3 &inertia);
-		void setCollisionMesh(AScene *scene
-			, const Entity &entity
-			, const std::string &meshPath
+		void setCollisionMesh(
+			const std::string &meshPath
 			, short filterGroup = 1
 			, short filterMask = -1);
 		void setCollisionShape(
-			AScene *scene
-			, const Entity &entity
-			, CollisionShape c
+			CollisionShape c
 			, short filterGroup = 1
 			, short filterMask = -1);
 		void setRotationConstraint(bool x, bool y, bool z);

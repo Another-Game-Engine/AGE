@@ -18,9 +18,9 @@ namespace AGE
 
 			virtual ~EntityRepresentation(void);
 
-			void init(AScene *, const char* name = "NoName");
+			void init(const char* name = "NoName");
 
-			virtual void reset(AScene *);
+			virtual void reset();
 
 			template <typename Archive>
 			void serialize(Archive &ar)
@@ -32,7 +32,7 @@ namespace AGE
 				name[ENTITY_NAME_LENGTH - 1] = 0;
 			}
 
-			virtual void postUnserialization(AScene *scene);
+			virtual void postUnserialization();
 
 			char name[ENTITY_NAME_LENGTH];
 			glm::vec3 position;

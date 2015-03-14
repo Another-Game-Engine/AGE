@@ -21,8 +21,8 @@ namespace AGE
 	{
 		ComponentBase();
 		virtual ~ComponentBase();
-		virtual void reset(AScene *){};
-		virtual void postUnserialization(AScene *scene){}
+		virtual void reset(){};
+		virtual void postUnserialization(){}
 
 		Entity entity;
 
