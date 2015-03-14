@@ -54,9 +54,17 @@ namespace AGE
 			painter->draw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], properties, vertices);
 		});
 
+		_rendering_list[RENDER_CLEAR_STEP] = std::make_shared<RenderingPass>([&](std::vector<Properties> const &properties, std::vector<Key<Vertices>> const &vertices, std::shared_ptr<Painter> const &painter){
+			OpenGLTasks::clear_buffer(true, false, false);
+		});
+
 		_rendering_list[RENDER_LIGHTNING] = std::make_shared<RenderingPass>([&](std::vector<Properties> const &properties, std::vector<Key<Vertices>> const &vertices, std::shared_ptr<Painter> const &painter){
 
-			OpenGLTasks::set_blend_test(true, 0);
+			OpenGLTasks::set_depth_test(false);
+			glEnable(GL_BLEND);
+			glBlendFunc(GL_ONE, GL_ONE);
+
+			glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
 			OpenGLTasks::set_clear_stencil(0);
 			OpenGLTasks::set_stencil_test(true);
 
@@ -72,6 +80,8 @@ namespace AGE
 			glCullFace(GL_BACK);
 
 			painter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_STENCIL_BASIC], Properties(), vertices.back());
+
+			glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
 
 			glStencilFunc(GL_EQUAL, 1, 1);
 
@@ -94,8 +104,12 @@ namespace AGE
 		_specularTexture = addRenderPassOutput<Texture2D, RenderingPass>(_rendering_list[RENDER_BUFFERING], GL_COLOR_ATTACHMENT2, screen_size.x, screen_size.y, GL_RGBA8, true);
 		_depthTexture = addRenderPassOutput<Texture2D, RenderingPass>(_rendering_list[RENDER_BUFFERING], GL_DEPTH_STENCIL_ATTACHMENT, screen_size.x, screen_size.y, GL_DEPTH24_STENCIL8, true);
 
+		std::static_pointer_cast<RenderingPass>(_rendering_list[RENDER_LIGHTNING])->push_storage_output(GL_DEPTH_STENCIL_ATTACHMENT, _depthTexture);
+
 		// RGB = light color, A = specular power
 		_lightAccumulationTexture = addRenderPassOutput<Texture2D, RenderingPass>(_rendering_list[RENDER_LIGHTNING], GL_COLOR_ATTACHMENT0, screen_size.x, screen_size.y, GL_RGBA8, true);
+
+		std::static_pointer_cast<RenderingPass>(_rendering_list[RENDER_CLEAR_STEP])->push_storage_output(GL_COLOR_ATTACHMENT0, _lightAccumulationTexture);
 	}
 
 	DeferredShading::DeferredShading(DeferredShading &&move) :
@@ -120,6 +134,8 @@ namespace AGE
 		{
 			_rendering_list[RENDER_BUFFERING]->render(key.properties, key.vertices, _painter_manager->get_painter(key.painter));
 		}
+
+		_rendering_list[RENDER_CLEAR_STEP]->render(std::vector<Properties>(), std::vector<Key<Vertices>>(), nullptr);
 
 		_programs[PROGRAM_LIGHTNING]->use();
 		*_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("projection_matrix") = infos.projection;

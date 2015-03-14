@@ -25,6 +25,7 @@ namespace AGE
 		enum RenderStep
 		{
 			RENDER_BUFFERING = 0,
+			RENDER_CLEAR_STEP,
 			RENDER_LIGHTNING,
 			RENDER_MERGING,
 			TOTAL_RENDER
