@@ -55,7 +55,6 @@ namespace AGE
 		: AScene(engine)
 	{
 		_raw.list("../../Assets/Raw");
-		_cook.list("../../Assets/Serialized");
 		AE::AssetFileManager::LinkRawToCooked(&_raw, &_cook);
 	}
 
@@ -75,8 +74,6 @@ namespace AGE
 		static float refreshCounter = 1.0f;
 		if (refreshCounter >= 1.0f)
 		{
-			_cook.list("../../Assets/Serialized");
-
 			_cookedBulletFiles.clear();
 			_cookedBulletFullPath.clear();
 			_cookedMaterialFiles.clear();
@@ -91,38 +88,6 @@ namespace AGE
 			_cookedMaterialFullPath.push_back("NONE");
 			_cookedMeshFiles.push_back("NONE");
 			_cookedMeshsFullPath.push_back("NONE");
-
-			/*_cook.update(
-				std::function<bool(AE::Folder*)>([](AE::Folder* folder) {
-				return true;
-			}),
-				std::function<bool(AE::Folder*)>([](AE::Folder* folder) {
-				return true;
-			}),
-				std::function<void(AE::RawFile*)>([&](AE::RawFile* file) {
-
-				_cookedFiles.push_back(AssetsEditorFileDescriptor(file->getPath().c_str(), Path::BaseName(file->getPath().c_str())));
-
-				auto extension = AGE::FileSystemHelpers::GetExtension(file->getPath());
-				if (extension == "sage")
-				{
-					_cookedMeshFiles.push_back(_cookedFiles.back().fileName.c_str());
-					_cookedMeshsFullPath.push_back(_cookedFiles.back().fullPath.c_str());
-				}
-				else if (extension == "mage")
-				{
-					_cookedMaterialFiles.push_back(_cookedFiles.back().fileName.c_str());
-					_cookedMaterialFullPath.push_back(_cookedFiles.back().fullPath.c_str());
-				}
-				else if (extension == "phage")
-				{
-					_cookedBulletFiles.push_back(_cookedFiles.back().fileName.c_str());
-					_cookedBulletFullPath.push_back(_cookedFiles.back().fullPath.c_str());
-				}
-			}));*/
-
-			// @Jojo ! Do not work !
-			// @Cesar! Does work!
 
 			const std::string currentDir = Directory::GetCurrentDirectory();
 			const std::string absPath = Path::AbsoluteName(currentDir.c_str(), "../../Assets/Serialized");
