@@ -8,11 +8,11 @@ namespace AGE
 	class Rendering : public ARendering
 	{
 	public:
-		Rendering(std::function<void(FUNCTION_ARGS)> const &function);
+		Rendering(std::function<void(std::vector<Properties> const &properties, std::vector<Key<Vertices>> const &vertices, std::shared_ptr<Painter> const &painter)> const &function);
 		Rendering(Rendering &&move);
 		virtual ~Rendering() {}
 
 	public:
-		virtual IRendering &render(FUNCTION_ARGS) override final;
+		virtual IRendering &render(std::vector<Properties> const &properties, std::vector<Key<Vertices>> const &vertices, std::shared_ptr<Painter> const &painter) override final;
 	};
 }

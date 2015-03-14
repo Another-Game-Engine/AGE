@@ -2,11 +2,8 @@
 
 layout (location = 0) out vec4 color;
 
-uniform global_state
-{
-	mat4 projection_matrix;
-	mat4 view_matrix;
-};
+uniform mat4 projection_matrix;
+uniform mat4 view_matrix;
 
 uniform vec3 position_light;
 uniform vec3 attenuation_light;

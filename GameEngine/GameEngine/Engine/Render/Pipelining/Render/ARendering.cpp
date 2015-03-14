@@ -3,7 +3,7 @@
 namespace AGE
 {
 
-	ARendering::ARendering(std::function<void(FUNCTION_ARGS)> const &function) :
+	ARendering::ARendering(std::function<void(std::vector<Properties> const &properties, std::vector<Key<Vertices>> const &vertices, std::shared_ptr<Painter> const &painter)> const &function) :
 		_render_function(function)
 	{
 

@@ -4,7 +4,7 @@
 namespace AGE
 {
 
-	RenderingPass::RenderingPass(std::function<void(FUNCTION_ARGS)> const &function) :
+	RenderingPass::RenderingPass(std::function<void(std::vector<Properties> const &properties, std::vector<Key<Vertices>> const &vertices, std::shared_ptr<Painter> const &painter)> const &function) :
 		ARendering(function)
 	{
 	}
@@ -16,12 +16,14 @@ namespace AGE
 	{
 	}
 
-	IRendering & RenderingPass::render(FUNCTION_ARGS)
+	IRendering & RenderingPass::render(std::vector<Properties> const &properties, std::vector<Key<Vertices>> const &vertices, std::shared_ptr<Painter> const &painter)
 	{
 		_frame_buffer.bind();
-		if (!_is_update) {
+		if (!_is_update)
+		{
 			glDrawBuffers(GLint(_drawing_attach.size()), _drawing_attach.data());
-			for (auto &storage : _frame_output) {
+			for (auto &storage : _frame_output)
+			{
 				_frame_buffer.attachment(*storage.second.get(), storage.first);
 			}
 			_is_update = true;

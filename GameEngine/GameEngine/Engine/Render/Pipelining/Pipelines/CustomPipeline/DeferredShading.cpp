@@ -35,7 +35,7 @@ namespace AGE
 		_programs[LIGHTNING] = std::make_shared<Program>(Program(std::string("program lightning"), { std::make_shared<UnitProg>(DEFERRED_SHADING_LIGHTNING_VERTEX, GL_VERTEX_SHADER), std::make_shared<UnitProg>(DEFERRED_SHADING_LIGHTNING_FRAG, GL_FRAGMENT_SHADER) }));
 		_programs[MERGING] = std::make_shared<Program>(Program(std::string("program_merging"), { std::make_shared<UnitProg>(DEFERRED_SHADING_MERGING_VERTEX, GL_VERTEX_SHADER), std::make_shared<UnitProg>(DEFERRED_SHADING_MERGING_FRAG, GL_FRAGMENT_SHADER) }));
 
-		_rendering_list[BUFFERING] = std::make_shared<RenderingPass>([&](FUNCTION_ARGS) {
+		_rendering_list[BUFFERING] = std::make_shared<RenderingPass>([&](std::vector<Properties> const &properties, std::vector<Key<Vertices>> const &vertices, std::shared_ptr<Painter> const &painter) {
 			OpenGLTasks::set_depth_test(true);
 			OpenGLTasks::set_clear_color(glm::vec4(1.f, 0.0f, 0.0f, 1.0f));
 			OpenGLTasks::clear_buffer();
@@ -44,7 +44,7 @@ namespace AGE
 			OpenGLTasks::set_blend_test(false, 2);
 			painter->draw(GL_TRIANGLES, _programs[BUFFERING], properties, vertices);
 		});
-		_rendering_list[LIGHTNING] = std::make_shared<RenderingPass>([&](FUNCTION_ARGS){
+		_rendering_list[LIGHTNING] = std::make_shared<RenderingPass>([&](std::vector<Properties> const &properties, std::vector<Key<Vertices>> const &vertices, std::shared_ptr<Painter> const &painter){
 			for (auto &light : _lights->pointLight) {
 				Key<Painter> quadPainterKey;
 				Key<Vertices> quadVerticesKey;
@@ -53,7 +53,7 @@ namespace AGE
 				myPainter->uniqueDraw(GL_TRIANGLES, _programs[MERGING], Properties(), quadVerticesKey);
 			}
 		});
-		_rendering_list[MERGING] = std::make_shared<Rendering>([&](FUNCTION_ARGS){
+		_rendering_list[MERGING] = std::make_shared<Rendering>([&](std::vector<Properties> const &properties, std::vector<Key<Vertices>> const &vertices, std::shared_ptr<Painter> const &painter){
 			Key<Painter> quadPainterKey;
 			Key<Vertices> quadVerticesKey;
 			GetRenderThread()->getQuadGeometry(quadVerticesKey, quadPainterKey);
@@ -63,10 +63,9 @@ namespace AGE
 		_diffuseTexture = addRenderPassOutput<Texture2D, RenderingPass>(_rendering_list[BUFFERING], GL_COLOR_ATTACHMENT0, screen_size.x, screen_size.y, GL_RGBA8, true);
 		_normalTexture = addRenderPassOutput<Texture2D, RenderingPass>(_rendering_list[BUFFERING], GL_COLOR_ATTACHMENT1, screen_size.x, screen_size.y, GL_RGBA8, true);
 		_specularTexture = addRenderPassOutput<Texture2D, RenderingPass>(_rendering_list[BUFFERING], GL_COLOR_ATTACHMENT2, screen_size.x, screen_size.y, GL_RGBA8, true);
-		_lightAccumulationTexture = addRenderPassOutput<Texture2D, RenderingPass>(_rendering_list[LIGHTNING], GL_COLOR_ATTACHMENT0, screen_size.x, screen_size.y, GL_RGB, true);
+		_depthTexture = addRenderPassOutput<Texture2D, RenderingPass>(_rendering_list[BUFFERING], GL_DEPTH_STENCIL_ATTACHMENT, screen_size.x, screen_size.y, GL_DEPTH24_STENCIL8, true);
 
-		_lightMap = addRenderPassOutput<Texture2D, RenderingPass>(_rendering_list[LIGHTNING], GL_COLOR_ATTACHMENT0, screen_size.x, screen_size.y, GL_RGBA8, false);
-		addRenderPassOutput<Renderbuffer, RenderingPass>(_rendering_list[BUFFERING], GL_DEPTH_STENCIL_ATTACHMENT, screen_size.x, screen_size.y, GL_DEPTH24_STENCIL8);
+		_lightAccumulationTexture = addRenderPassOutput<Texture2D, RenderingPass>(_rendering_list[LIGHTNING], GL_COLOR_ATTACHMENT0, screen_size.x, screen_size.y, GL_RGB, true);
 	}
 
 	DeferredShading::DeferredShading(DeferredShading &&move) :
@@ -84,12 +83,31 @@ namespace AGE
 		if (!_programs[BUFFERING]->isCompiled()) {
 			return (*this);
 		}
+
 		_programs[BUFFERING]->use();
 		*_programs[BUFFERING]->get_resource<Mat4>("projection_matrix") = infos.projection;
 		*_programs[BUFFERING]->get_resource<Mat4>("view_matrix") = infos.view;
 		for (auto key : pipeline.keys)
 		{
 			_rendering_list[BUFFERING]->render(key.properties, key.vertices, _painter_manager->get_painter(key.painter));
+		}
+
+		_programs[LIGHTNING]->use();
+		*_programs[LIGHTNING]->get_resource<Mat4>("projection_matrix") = infos.projection;
+		*_programs[LIGHTNING]->get_resource<Mat4>("view_matrix") = infos.view;
+		auto &normalMap = _programs[LIGHTNING]->get_resource<Sampler2D>("normal_buffer");
+		auto &depthMap = _programs[LIGHTNING]->get_resource<Sampler2D>("depth_buffer");
+		if (normalMap)
+		{
+			*normalMap = _normalTexture;
+		}
+		if (depthMap)
+		{
+			*depthMap = _depthTexture;
+		}
+		for (auto key : pipeline.keys)
+		{
+			_rendering_list[LIGHTNING]->render(key.properties, key.vertices, _painter_manager->get_painter(key.painter));
 		}
 
 		_programs[MERGING]->use();
