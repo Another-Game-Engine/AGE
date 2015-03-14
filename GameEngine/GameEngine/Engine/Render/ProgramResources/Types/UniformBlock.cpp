@@ -34,7 +34,7 @@ namespace AGE
 	{
 		if (_update_resource) {
 			_buffer->bind();
-			glBindBufferBase(_buffer->mode(), _binding_point, (GLuint)_buffer->id());
+			glBindBufferBase(_buffer->mode(), (GLuint)_binding_point, (GLuint)_buffer->id());
 			for (auto &blockResource : _block_resources) {
 				blockResource->update();
 			}

@@ -23,7 +23,7 @@ public:
 
 	}
 
-	MemoryPool(uint32_t maxSize) :
+	MemoryPool(std::size_t maxSize) :
 		_currentIdx(0)
 	{
 		_pool.reserve(maxSize);
@@ -32,11 +32,11 @@ public:
 	~MemoryPool() { }
 
 	template <class... param_t>
-	uint32_t alloc(param_t... param)
+	std::size_t alloc(param_t... param)
 	{
 		if (_freeIdx.empty() == false)
 		{
-			uint32_t ret = _freeIdx.front();
+			std::size_t ret = _freeIdx.front();
 			_freeIdx.pop();
 			new (&_pool[ret]) T(param...);
 			return (ret);
@@ -45,11 +45,11 @@ public:
 		return (_currentIdx++);
 	}
 
-	uint32_t prepareAlloc()
+	std::size_t prepareAlloc()
 	{
 		if (_freeIdx.empty() == false)
 		{
-			uint32_t ret = _freeIdx.front();
+			std::size_t ret = _freeIdx.front();
 			_freeIdx.pop();
 			return (ret);
 		}
@@ -59,7 +59,7 @@ public:
 	}
 
 	template <class... param_t>
-	void allocPreparated(uint32_t idx, param_t... param)
+	void allocPreparated(std::size_t idx, param_t... param)
 	{
 		if (idx == _pool.size())
 			_pool.emplace_back(param...);
@@ -73,34 +73,34 @@ public:
 		}
 	}
 
-	void dealloc(uint32_t idx)
+	void dealloc(std::size_t idx)
 	{
 		_pool[idx].~T();
 		_freeIdx.push(idx);
 	}
 
-	void prepareDealloc(uint32_t idx)
+	void prepareDealloc(std::size_t idx)
 	{
 		_freeIdx.push(idx);
 	}
 
-	void deallocPreparated(uint32_t idx)
+	void deallocPreparated(std::size_t idx)
 	{
 		_pool[idx].~T();
 	}
 
-	T &get(uint32_t idx)
+	T &get(std::size_t idx)
 	{
 		return (_pool[idx]);
 	}
 
-	T const &get(uint32_t idx) const
+	T const &get(std::size_t idx) const
 	{
 		return (_pool[idx]);
 	}
 
 private:
 	std::vector<T>	_pool;
-	std::queue<uint32_t>	_freeIdx;
-	uint32_t				_currentIdx;
+	std::queue<std::size_t>	_freeIdx;
+	std::size_t				_currentIdx;
 };
