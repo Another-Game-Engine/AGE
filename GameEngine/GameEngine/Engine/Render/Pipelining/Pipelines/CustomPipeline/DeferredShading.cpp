@@ -117,7 +117,7 @@ namespace AGE
 		*_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("view_matrix") = infos.view;
 		for (auto key : pipeline.keys)
 		{
-			_rendering_list[PROGRAM_BUFFERING]->render(key.properties, key.vertices, _painter_manager->get_painter(key.painter));
+			_rendering_list[RENDER_BUFFERING]->render(key.properties, key.vertices, _painter_manager->get_painter(key.painter));
 		}
 
 		_programs[PROGRAM_LIGHTNING]->use();
@@ -146,7 +146,7 @@ namespace AGE
 			sphereVertices.emplace_back();
 			GetRenderThread()->getIcoSphereGeometry(sphereVertices.back(), spherePainter, 3);
 
-			_rendering_list[PROGRAM_LIGHTNING]->render(std::vector<Properties>(), sphereVertices, _painter_manager->get_painter(spherePainter));
+			_rendering_list[RENDER_LIGHTNING]->render(std::vector<Properties>(), sphereVertices, _painter_manager->get_painter(spherePainter));
 		}
 
 		_programs[PROGRAM_MERGING]->use();
@@ -157,7 +157,7 @@ namespace AGE
 		}
 		for (auto key : pipeline.keys)
 		{
-			_rendering_list[PROGRAM_MERGING]->render(key.properties, key.vertices, _painter_manager->get_painter(key.painter));
+			_rendering_list[RENDER_MERGING]->render(key.properties, key.vertices, _painter_manager->get_painter(key.painter));
 		}
 		return (*this);
 	}
