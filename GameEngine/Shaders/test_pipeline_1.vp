@@ -5,10 +5,10 @@ uniform mat4 view_matrix;
 uniform mat4 model_matrix;
 uniform vec4 diffuse_color;
 
-layout(location = 0) in vec4 position;
-layout(location = 1) in vec4 normal;
+layout(location = 0) in vec3 position;
+layout(location = 1) in vec3 normal;
 layout(location = 2) in vec2 texCoord;
-layout(location = 3) in vec4 tangent;
+layout(location = 3) in vec3 tangent;
 
 out vec2 vTexCoord;
 
@@ -16,5 +16,5 @@ void main(void)
 {
 	mat4 model_view = view_matrix * model_matrix;
 	vTexCoord = texCoord;
-	gl_Position = vec4(projection_matrix * model_view * position);
+	gl_Position = vec4(projection_matrix * model_view * vec4(position, 1));
 }

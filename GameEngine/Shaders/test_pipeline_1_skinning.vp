@@ -1,9 +1,9 @@
 #version 430
 
-layout(location = 0) in vec4 position;
-layout(location = 1) in vec4 normal;
+layout(location = 0) in vec3 position;
+layout(location = 1) in vec3 normal;
 layout(location = 2) in vec2 texCoord;
-layout(location = 3) in vec4 tangent;
+layout(location = 3) in vec3 tangent;
 layout(location = 4) in vec4 blendWeight;
 layout(location = 5) in vec4 blendIndice;
 
@@ -20,20 +20,20 @@ uniform vec4 diffuse;
 void main(void)
 {
 	vTexCoord = texCoord;
-	vec4 newPosition = position;
+	vec4 newPosition = vec4(position, 1);
 	interpolated_color = diffuse;
 
 	if (skinned > 0)
 	{
 		newPosition = vec4(0);
 		if (blendWeight.x > 0.0f)
-			newPosition = (bones[int(blendIndice.x)] * position) * blendWeight.x;
+			newPosition = (bones[int(blendIndice.x)] * vec4(position, 1)) * blendWeight.x;
 		if (blendWeight.y > 0.0f)
-			newPosition += (bones[int(blendIndice.y)] * position) * blendWeight.y;
+			newPosition += (bones[int(blendIndice.y)] * vec4(position, 1)) * blendWeight.y;
 		if (blendWeight.z > 0.0f)
-			newPosition += (bones[int(blendIndice.z)] * position) * blendWeight.z;
+			newPosition += (bones[int(blendIndice.z)] * vec4(position, 1)) * blendWeight.z;
 		if (blendWeight.w > 0.0f)
-			newPosition += (bones[int(blendIndice.w)] * position) * blendWeight.w;
+			newPosition += (bones[int(blendIndice.w)] * vec4(position, 1)) * blendWeight.w;
 		interpolated_color = blendIndice / vec4(166);
 		interpolated_color.w = 1.0f;
 	}
