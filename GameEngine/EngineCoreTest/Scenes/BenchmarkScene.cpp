@@ -194,7 +194,7 @@ namespace AGE
 			, getInstance<AGE::AssetsManager>()->getMaterial("catwoman/catwoman.mage"));
 	}
 
-	for (int i = 0; i < 1; ++i)
+	for (int i = 0; i < GLOBAL_LIGHTS.size(); ++i)
 	{
 		GLOBAL_LIGHTS[i] = createEntity();
 		auto e = GLOBAL_LIGHTS[i];

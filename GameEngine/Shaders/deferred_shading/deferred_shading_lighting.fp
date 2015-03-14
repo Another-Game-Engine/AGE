@@ -5,7 +5,7 @@ layout (location = 0) out vec4 color;
 uniform mat4 projection_matrix;
 uniform mat4 view_matrix;
 
-uniform vec3 position_light;
+uniform vec4 position_light;
 uniform vec3 attenuation_light;
 uniform vec3 color_light;
 uniform vec3 ambiant_color;
@@ -31,7 +31,7 @@ void main()
 	mat4 viewProj = projection_matrix * view_matrix;
 	float depth = texture(depth_buffer, interpolated_texCoord).x;
 	vec3 worldPos = getWorldPosition(depth, interpolated_texCoord, viewProj);
-	vec3 lightDir = position_light - worldPos;
+	vec3 lightDir = vec3(position_light) - worldPos;
 	float dist = length(lightDir);
 	vec3 normal = normalize(vec3(texture(normal_buffer, interpolated_texCoord).xyz) * 2.0f - 1.0f);
 	float attenuation = attenuation_light.x + attenuation_light.y * dist + attenuation_light.z * dist * dist; 
