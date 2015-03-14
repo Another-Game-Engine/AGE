@@ -43,7 +43,9 @@ namespace AGE
 	{
 		_is_update = false;
 		_frame_output[attach] = storage;
-		if (attach != GL_DEPTH_ATTACHMENT) {
+		if (attach != GL_DEPTH_ATTACHMENT &&
+			attach != GL_STENCIL_ATTACHMENT && 
+			attach != GL_DEPTH_STENCIL_ATTACHMENT) {
 			for (auto &it = _drawing_attach.begin(); it != _drawing_attach.end(); ++it) {
 				if (*it == attach) {
 					_drawing_attach.erase(it);

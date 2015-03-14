@@ -90,7 +90,6 @@ namespace AGE
 			_cameraAngles[camIdx].y -= camRotationSpeed * time;
 		if (inputs->getPhysicalKeyPressed(AGE_LEFT))
 			_cameraAngles[camIdx].y += camRotationSpeed * time;
-
 	}
 
 	void FreeFlyCamera::_handleMouse(double time, Link &camLink, size_t camIdx)

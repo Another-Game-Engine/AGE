@@ -65,7 +65,7 @@ namespace AGE
 		_diffuseTexture = addRenderPassOutput<Texture2D, RenderingPass>(_rendering_list[BUFFERING], GL_COLOR_ATTACHMENT0, screen_size.x, screen_size.y, GL_RGBA8, true);
 		_normalTexture = addRenderPassOutput<Texture2D, RenderingPass>(_rendering_list[BUFFERING], GL_COLOR_ATTACHMENT1, screen_size.x, screen_size.y, GL_RGBA8, true);
 		_specularTexture = addRenderPassOutput<Texture2D, RenderingPass>(_rendering_list[BUFFERING], GL_COLOR_ATTACHMENT2, screen_size.x, screen_size.y, GL_RGBA8, true);
-		_depthTexture = addRenderPassOutput<Texture2D, RenderingPass>(_rendering_list[BUFFERING], GL_DEPTH_ATTACHMENT, screen_size.x, screen_size.y, GL_DEPTH24_STENCIL8, true);
+		_depthTexture = addRenderPassOutput<Texture2D, RenderingPass>(_rendering_list[BUFFERING], GL_DEPTH_STENCIL_ATTACHMENT, screen_size.x, screen_size.y, GL_DEPTH24_STENCIL8, true);
 
 		_lightAccumulationTexture = addRenderPassOutput<Texture2D, RenderingPass>(_rendering_list[LIGHTNING], GL_COLOR_ATTACHMENT0, screen_size.x, screen_size.y, GL_RGB8, true);
 	}
