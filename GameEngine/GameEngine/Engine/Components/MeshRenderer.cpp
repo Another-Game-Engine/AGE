@@ -111,7 +111,7 @@ namespace AGE
 				do {
 					scene->getInstance<AGE::AssetsManager>()->updateLoadingChannel("WE_MESH_LOADING", totalToLoad, toLoad, loadingError);
 				} while
-					(toLoad != 0 && loadingError.size() == 0);
+					(toLoad > 0 && loadingError.size() == 0);
 
 				_mesh = _scene->getInstance<AGE::AssetsManager>()->getMesh(_serializationInfos->mesh);
 			}
