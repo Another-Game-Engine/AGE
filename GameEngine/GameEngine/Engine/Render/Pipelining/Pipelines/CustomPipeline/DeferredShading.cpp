@@ -46,7 +46,7 @@ namespace AGE
 		_rendering_list[RENDER_BUFFERING] = std::make_shared<RenderingPass>([&](std::vector<Properties> const &properties, std::vector<Key<Vertices>> const &vertices, std::shared_ptr<Painter> const &painter) {
 			OpenGLTasks::set_stencil_test(false);
 			OpenGLTasks::set_depth_test(true);
-			OpenGLTasks::set_clear_color(glm::vec4(1.f, 0.0f, 0.0f, 1.0f));
+			OpenGLTasks::set_clear_color(glm::vec4(0.f, 1.0f, 0.0f, 1.0f));
 			OpenGLTasks::clear_buffer();
 			OpenGLTasks::set_blend_test(false, 0);
 			OpenGLTasks::set_blend_test(false, 1);
@@ -55,12 +55,14 @@ namespace AGE
 		});
 
 		_rendering_list[RENDER_CLEAR_STEP] = std::make_shared<RenderingPass>([&](std::vector<Properties> const &properties, std::vector<Key<Vertices>> const &vertices, std::shared_ptr<Painter> const &painter){
-			OpenGLTasks::clear_buffer(true, false, false);
+			OpenGLTasks::set_clear_color(glm::vec4(0,0,0,1));
+			OpenGLTasks::clear_buffer(true, true, false);
 		});
 
 		_rendering_list[RENDER_LIGHTNING] = std::make_shared<RenderingPass>([&](std::vector<Properties> const &properties, std::vector<Key<Vertices>> const &vertices, std::shared_ptr<Painter> const &painter){
 
 			OpenGLTasks::set_depth_test(false);
+			glDepthMask(GL_FALSE);
 			glEnable(GL_BLEND);
 			glBlendFunc(GL_ONE, GL_ONE);
 
@@ -84,6 +86,8 @@ namespace AGE
 			glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
 
 			glStencilFunc(GL_EQUAL, 1, 1);
+			glCullFace(GL_FRONT);
+			glDepthMask(GL_TRUE);
 
 			Key<Painter> quadPainterKey;
 			Key<Vertices> quadVerticesKey;
@@ -104,7 +108,7 @@ namespace AGE
 		_specularTexture = addRenderPassOutput<Texture2D, RenderingPass>(_rendering_list[RENDER_BUFFERING], GL_COLOR_ATTACHMENT2, screen_size.x, screen_size.y, GL_RGBA8, true);
 		_depthTexture = addRenderPassOutput<Texture2D, RenderingPass>(_rendering_list[RENDER_BUFFERING], GL_DEPTH_STENCIL_ATTACHMENT, screen_size.x, screen_size.y, GL_DEPTH24_STENCIL8, true);
 
-		std::static_pointer_cast<RenderingPass>(_rendering_list[RENDER_LIGHTNING])->push_storage_output(GL_DEPTH_STENCIL_ATTACHMENT, _depthTexture);
+		//std::static_pointer_cast<RenderingPass>(_rendering_list[RENDER_LIGHTNING])->push_storage_output(GL_DEPTH_STENCIL_ATTACHMENT, _depthTexture);
 
 		// RGB = light color, A = specular power
 		_lightAccumulationTexture = addRenderPassOutput<Texture2D, RenderingPass>(_rendering_list[RENDER_LIGHTNING], GL_COLOR_ATTACHMENT0, screen_size.x, screen_size.y, GL_RGBA8, true);
@@ -121,8 +125,7 @@ namespace AGE
 	IRenderingPipeline & DeferredShading::render(RenderPipeline const &pipeline, RenderLightList const &lights, CameraInfos const &infos)
 	{
 		OpenGLTasks::set_depth_test(true);
-		OpenGLTasks::set_clear_color(glm::vec4(1.f, 0.0f, 0.0f, 1.0f));
-		OpenGLTasks::clear_buffer();
+
 		if (!_programs[PROGRAM_BUFFERING]->isCompiled()) {
 			return (*this);
 		}
@@ -167,7 +170,7 @@ namespace AGE
 		}
 
 		_programs[PROGRAM_MERGING]->use();
-//		*_programs[PROGRAM_MERGING]->get_resource<Sampler2D>("diffuse_map") = _diffuseTexture;;
+		*_programs[PROGRAM_MERGING]->get_resource<Sampler2D>("diffuse_map") = _diffuseTexture;;
 		*_programs[PROGRAM_MERGING]->get_resource<Sampler2D>("light_buffer") = _lightAccumulationTexture;;
 		for (auto key : pipeline.keys)
 		{

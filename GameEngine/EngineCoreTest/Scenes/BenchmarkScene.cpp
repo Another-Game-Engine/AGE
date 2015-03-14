@@ -150,7 +150,7 @@ namespace AGE
 				GLOBAL_CAMERA = camera;
 				auto cam = camera.addComponent<CameraComponent>();
 				camera.addComponent<FreeFlyComponent>();
-				cam->addPipeline(RenderType::BASIC);
+				cam->addPipeline(RenderType::DEFERRED);
 
 				auto screeSize = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<AGE::Tasks::Render::GetWindowSize, glm::uvec2>().get();
 
@@ -335,7 +335,7 @@ namespace AGE
 				auto e = GLOBAL_LIGHTS[i];
 				auto &link = e.getLink();
 
-				if (ImGui::SliderFloat3(std::string("Light " + std::to_string(i) + " position").c_str(), link.getPositionPtr(), -2, 2))
+				if (ImGui::SliderFloat3(std::string("Light " + std::to_string(i) + " position").c_str(), link.getPositionPtr(), -30, 30))
 				{
 					auto &l = e.getLink();
 					l.setPosition(l.getPosition());
