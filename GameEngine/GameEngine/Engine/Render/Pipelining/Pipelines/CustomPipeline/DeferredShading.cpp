@@ -44,13 +44,14 @@ namespace AGE
 			OpenGLTasks::set_blend_test(false, 2);
 			painter->draw(GL_TRIANGLES, _programs[BUFFERING], properties, vertices);
 		});
+
 		_rendering_list[LIGHTNING] = std::make_shared<RenderingPass>([&](std::vector<Properties> const &properties, std::vector<Key<Vertices>> const &vertices, std::shared_ptr<Painter> const &painter){
 			for (auto &light : _lights->pointLight) {
 				Key<Painter> quadPainterKey;
 				Key<Vertices> quadVerticesKey;
 				GetRenderThread()->getQuadGeometry(quadVerticesKey, quadPainterKey);
 				auto myPainter = painter_manager->get_painter(quadPainterKey);
-				myPainter->uniqueDraw(GL_TRIANGLES, _programs[MERGING], Properties(), quadVerticesKey);
+				myPainter->uniqueDraw(GL_TRIANGLES, _programs[LIGHTNING], Properties(), quadVerticesKey);
 			}
 		});
 		_rendering_list[MERGING] = std::make_shared<Rendering>([&](std::vector<Properties> const &properties, std::vector<Key<Vertices>> const &vertices, std::shared_ptr<Painter> const &painter){
@@ -60,12 +61,13 @@ namespace AGE
 			auto myPainter = painter_manager->get_painter(quadPainterKey);
 			myPainter->uniqueDraw(GL_TRIANGLES, _programs[MERGING], Properties(), quadVerticesKey);
 		});
+
 		_diffuseTexture = addRenderPassOutput<Texture2D, RenderingPass>(_rendering_list[BUFFERING], GL_COLOR_ATTACHMENT0, screen_size.x, screen_size.y, GL_RGBA8, true);
 		_normalTexture = addRenderPassOutput<Texture2D, RenderingPass>(_rendering_list[BUFFERING], GL_COLOR_ATTACHMENT1, screen_size.x, screen_size.y, GL_RGBA8, true);
 		_specularTexture = addRenderPassOutput<Texture2D, RenderingPass>(_rendering_list[BUFFERING], GL_COLOR_ATTACHMENT2, screen_size.x, screen_size.y, GL_RGBA8, true);
-		_depthTexture = addRenderPassOutput<Texture2D, RenderingPass>(_rendering_list[BUFFERING], GL_DEPTH_STENCIL_ATTACHMENT, screen_size.x, screen_size.y, GL_DEPTH24_STENCIL8, true);
+		_depthTexture = addRenderPassOutput<Texture2D, RenderingPass>(_rendering_list[BUFFERING], GL_DEPTH_ATTACHMENT, screen_size.x, screen_size.y, GL_DEPTH24_STENCIL8, true);
 
-		_lightAccumulationTexture = addRenderPassOutput<Texture2D, RenderingPass>(_rendering_list[LIGHTNING], GL_COLOR_ATTACHMENT0, screen_size.x, screen_size.y, GL_RGB, true);
+		_lightAccumulationTexture = addRenderPassOutput<Texture2D, RenderingPass>(_rendering_list[LIGHTNING], GL_COLOR_ATTACHMENT0, screen_size.x, screen_size.y, GL_RGB8, true);
 	}
 
 	DeferredShading::DeferredShading(DeferredShading &&move) :
