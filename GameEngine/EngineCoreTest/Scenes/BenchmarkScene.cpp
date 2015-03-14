@@ -80,7 +80,7 @@ namespace AGE
 #endif
 
 #ifdef PHYSIC_SIMULATION
-		//addSystem<AGE::BulletDynamicSystem>(0);
+		addSystem<AGE::BulletDynamicSystem>(0);
 		//		addSystem<CollisionAdder>(1);
 		//		addSystem<CollisionCleaner>(1000);
 #endif //!PHYSIC
@@ -286,7 +286,7 @@ namespace AGE
 		else
 			trigger = 0.0f;
 
-		/*if (_chunkCounter >= _maxChunk)
+		if (_chunkCounter >= _maxChunk)
 		{
 			AScene *weakOnThis = (AScene*)(this);
 			for (auto i = 0; i < 10; ++i)
@@ -313,19 +313,24 @@ namespace AGE
 					mesh = e.addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("cube/cube.sage"), getInstance<AGE::AssetsManager>()->getMaterial(OldFile("cube/cube.mage")));
 				}
 
+				if (i % 13 == 0)
+				{
+					e.addComponent<PointLightComponent>()->set(glm::vec3((float)(rand() % 1000) / 1000.0f, (float)(rand() % 1000) / 1000.0f, (float)(rand() % 1000) / 1000.0f), glm::vec3(1.f, 0.1f, 0.005f));
+				}
+
 #ifdef PHYSIC_SIMULATION
 				auto rigidBody = e.addComponent<RigidBody>(1.0f);
 				if (i % 4 == 0)
-					rigidBody->setCollisionShape(this, e, RigidBody::SPHERE);
+					rigidBody->setCollisionShape(RigidBody::SPHERE);
 				else
-					rigidBody->setCollisionShape(this, e, RigidBody::BOX);
+					rigidBody->setCollisionShape(RigidBody::BOX);
 				rigidBody->getBody().setFriction(0.5f);
 				rigidBody->getBody().setRestitution(0.5f);
 				rigidBody->getBody().applyTorque(btVector3(float(rand() % 1000) / 300.0f, float(rand() % 1000) / 300.0f, float(rand() % 1000) / 300.0f));
 #endif
 			}
 			_chunkCounter = 0;
-		}*/
+		}
 
 #ifdef USE_IMGUI
 		if (ImGui::CollapsingHeader("Light settings"))
