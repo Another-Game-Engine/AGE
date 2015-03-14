@@ -56,6 +56,7 @@ namespace AGE
 
 		_rendering_list[RENDER_LIGHTNING] = std::make_shared<RenderingPass>([&](std::vector<Properties> const &properties, std::vector<Key<Vertices>> const &vertices, std::shared_ptr<Painter> const &painter){
 
+			OpenGLTasks::set_blend_test(true, 0);
 			OpenGLTasks::set_clear_stencil(0);
 			OpenGLTasks::set_stencil_test(true);
 
@@ -150,11 +151,8 @@ namespace AGE
 		}
 
 		_programs[PROGRAM_MERGING]->use();
-		auto &mapColor = _programs[PROGRAM_MERGING]->get_resource<Sampler2D>("diffuse_map");
-		if (mapColor)
-		{
-			*mapColor = _diffuseTexture;
-		}
+//		*_programs[PROGRAM_MERGING]->get_resource<Sampler2D>("diffuse_map") = _diffuseTexture;;
+		*_programs[PROGRAM_MERGING]->get_resource<Sampler2D>("light_buffer") = _lightAccumulationTexture;;
 		for (auto key : pipeline.keys)
 		{
 			_rendering_list[RENDER_MERGING]->render(key.properties, key.vertices, _painter_manager->get_painter(key.painter));
