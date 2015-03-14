@@ -35,6 +35,9 @@ namespace AGE
 		std::shared_ptr<Texture2D> _diffuseTexture;
 		std::shared_ptr<Texture2D> _normalTexture;
 		std::shared_ptr<Texture2D> _specularTexture;
+
+		std::shared_ptr<Texture2D> _lightAccumulationTexture;
+
 		std::shared_ptr<Texture2D> _lightMap;
 		RenderLightList const *_lights;
 	};
