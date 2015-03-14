@@ -41,9 +41,6 @@ namespace AGE
 		void setKey(CONTROLS k, unsigned int key);
 		void resetControls();
 
-		FPController(const FPController &o);
-		FPController& operator=(const FPController &o);
-
 		//////
 		////
 		// Serialization

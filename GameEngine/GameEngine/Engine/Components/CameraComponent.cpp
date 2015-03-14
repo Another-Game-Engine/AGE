@@ -72,6 +72,7 @@ namespace AGE
 
 	void CameraComponent::init()
 	{
+		auto scene = entity.getScene();
 		_key = AGE::GetPrepareThread()->addCamera();
 		entity.getLink().registerOctreeObject(_key);
 		auto screenSize = entity.getScene()->getInstance<IRenderContext>()->getScreenSize();

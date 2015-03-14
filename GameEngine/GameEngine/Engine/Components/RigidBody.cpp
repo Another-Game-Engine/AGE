@@ -26,7 +26,8 @@ namespace AGE
 
 	void RigidBody::init(float mass/* = 1.0f*/)
 	{
-		_manager = dynamic_cast<BulletDynamicManager*>(entity.getScene()->getInstance<BulletCollisionManager>());
+		auto scene = entity.getScene();
+		_manager = dynamic_cast<BulletDynamicManager*>(scene->getInstance<BulletCollisionManager>());
 		assert(_manager != nullptr);
 		_mass = mass;
 	}

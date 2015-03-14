@@ -33,68 +33,14 @@ namespace AGE
 
 	}
 
-	FPController::FPController(const FPController &o)
-	{
-		yOrientation = o.yOrientation;
-		forwardWalkSpeed = o.forwardWalkSpeed;
-		backwardWalkSpeed = o.backwardWalkSpeed;
-		forwardRunSpeed = o.forwardRunSpeed;
-		backwardRunSpeed = o.backwardRunSpeed;
-		sideWalkSpeed = o.sideWalkSpeed;
-		sideRunSpeed = o.sideRunSpeed;
-		rotateXSpeed = o.rotateXSpeed;
-		rotateYSpeed = o.rotateYSpeed;
-		jumpSpeed = o.jumpSpeed;
-		jumpHeight = o.jumpHeight;
-		canJump = o.canJump;
-		canRun = o.canRun;
-		justJump = o.justJump;
-		justArriveOnFloor = o.justArriveOnFloor;
-		wasOnGround = o.wasOnGround;
-		keys = o.keys;
-		controls = o.controls;
-
-		_controller = o._controller;
-		_ghost = o._ghost;
-		_shape = o._shape;
-		_manager = o._manager;
-	}
-
-	FPController& FPController::operator=(const FPController &o)
-	{
-		yOrientation = o.yOrientation;
-		forwardWalkSpeed = o.forwardWalkSpeed;
-		backwardWalkSpeed = o.backwardWalkSpeed;
-		forwardRunSpeed = o.forwardRunSpeed;
-		backwardRunSpeed = o.backwardRunSpeed;
-		sideWalkSpeed = o.sideWalkSpeed;
-		sideRunSpeed = o.sideRunSpeed;
-		rotateXSpeed = o.rotateXSpeed;
-		rotateYSpeed = o.rotateYSpeed;
-		jumpSpeed = o.jumpSpeed;
-		jumpHeight = o.jumpHeight;
-		canJump = o.canJump;
-		canRun = o.canRun;
-		justJump = o.justJump;
-		justArriveOnFloor = o.justArriveOnFloor;
-		wasOnGround = o.wasOnGround;
-		keys = o.keys;
-		controls = o.controls;
-
-		_controller = o._controller;
-		_ghost = o._ghost;
-		_shape = o._shape;
-		_manager = o._manager;
-		return *this;
-	}
-
 	FPController::~FPController()
 	{
 	}
 
 	void FPController::init(short filterGroup, short filterMask)
 	{
-		_manager = dynamic_cast<BulletDynamicManager*>(entity.getScene()->getInstance<BulletCollisionManager>());
+		auto scene = entity.getScene();
+		_manager = dynamic_cast<BulletDynamicManager*>(scene->getInstance<BulletCollisionManager>());
 		setKey(LEFT, AGE_a);
 		setKey(RIGHT, AGE_d);
 		setKey(FORWARD, AGE_w);

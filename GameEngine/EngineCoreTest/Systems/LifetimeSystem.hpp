@@ -18,17 +18,6 @@ namespace AGE
 
 		}
 
-		Lifetime(Lifetime &&o)
-			: ComponentBase(std::move(o))
-		{
-			_t = std::move(o._t);
-		}
-
-		Lifetime &operator=(Lifetime &&o)
-		{
-			_t = std::move(o._t);
-			return *this;
-		}
 
 		void init(float t = 1.0f)
 		{
