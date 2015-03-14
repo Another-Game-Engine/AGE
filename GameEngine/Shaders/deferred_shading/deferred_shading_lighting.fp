@@ -5,7 +5,7 @@ layout (location = 0) out vec4 color;
 uniform mat4 projection_matrix;
 uniform mat4 view_matrix;
 
-uniform vec4 position_light;
+uniform vec3 position_light;
 uniform vec3 attenuation_light;
 uniform vec3 color_light;
 uniform vec3 ambiant_color;
