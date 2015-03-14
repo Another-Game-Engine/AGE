@@ -32,11 +32,11 @@ namespace AGE
 
 		void		updateLightData(const glm::mat4 &globalTransform);
 
-		virtual void reset(AScene *);
+		virtual void reset();
 
 		SpotLight &operator=(SpotLight const &o);
 
-		void	init(AScene *);
+		void	init();
 
 		template <typename Archive>
 		void serialize(Archive &ar);

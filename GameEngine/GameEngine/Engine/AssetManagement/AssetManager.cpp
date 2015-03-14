@@ -283,7 +283,7 @@ namespace AGE
 		return nullptr;
 	}
 
-	bool AssetsManager::loadMesh(const OldFile &_filePath, const std::vector<MeshInfos> &loadOrder, const std::string &loadingChannel)
+	bool AssetsManager::loadMesh(const OldFile &_filePath, const std::string &loadingChannel)
 	{
 		auto meshInstance = std::make_shared<MeshInstance>();
 		OldFile filePath(_assetsDirectory + _filePath.getFullName());
@@ -311,7 +311,7 @@ namespace AGE
 			for (std::size_t i = 0; i < data->subMeshs.size(); ++i)
 			{
 				auto future = AGE::EmplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=](){
-					loadSubmesh(data, i, &meshInstance->subMeshs[i], loadOrder, loadingChannel);
+					loadSubmesh(data, i, &meshInstance->subMeshs[i], loadingChannel);
 					return AssetsLoadingResult(false);
 				});
 				pushNewAsset(loadingChannel, data->subMeshs[i].name, future);
@@ -322,7 +322,7 @@ namespace AGE
 		return (true);
 	}
 
-	void AssetsManager::loadSubmesh(std::shared_ptr<MeshData> fileData, std::size_t index, SubMeshInstance *mesh, const std::vector<MeshInfos> loadOrder, const std::string &loadingChannel)
+	void AssetsManager::loadSubmesh(std::shared_ptr<MeshData> fileData, std::size_t index, SubMeshInstance *mesh, const std::string &loadingChannel)
 	{
 		auto &data = fileData->subMeshs[index];
 		std::size_t size = data.infos.count();
@@ -336,11 +336,12 @@ namespace AGE
 		auto future = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]() {
 			auto &paintingManager = GetRenderThread()->paintingManager;
 			std::vector<std::pair<GLenum, std::string>> types;
-			for (auto &e : loadOrder)
+			for (auto i = 0ull; i < data.infos.size(); ++i)
 			{
-				if (!fileData->subMeshs[index].infos.test(e))
-					continue;
-				types.emplace_back(g_InfosTypes[e].first);
+				if (data.infos.test(i))
+				{
+					types.emplace_back(g_InfosTypes[i].first);
+				}
 			}
 			if (!paintingManager->has_painter(types))
 			{
@@ -353,9 +354,12 @@ namespace AGE
 			auto &painter = paintingManager->get_painter(mesh->painter);
 			mesh->vertices = painter->add_vertices(data.positions.size(), data.indices.size());
 			auto vertices = painter->get_vertices(mesh->vertices);
-			for (auto i = 0ull; i < vertices->nbr_buffer(); ++i)
+			for (auto i = 0ull; i < data.infos.size(); ++i)
 			{
-				g_InfosTypes[loadOrder[i]].second(*vertices, i, data);
+				if (data.infos.test(i))
+				{
+					g_InfosTypes[i].second(*vertices, i, data);
+				}
 			}
 			vertices->set_indices(data.indices);
 			return AssetsLoadingResult(false);

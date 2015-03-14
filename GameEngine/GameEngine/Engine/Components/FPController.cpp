@@ -33,70 +33,13 @@ namespace AGE
 
 	}
 
-	FPController::FPController(const FPController &o)
-	{
-		_entity = o._entity;
-		yOrientation = o.yOrientation;
-		forwardWalkSpeed = o.forwardWalkSpeed;
-		backwardWalkSpeed = o.backwardWalkSpeed;
-		forwardRunSpeed = o.forwardRunSpeed;
-		backwardRunSpeed = o.backwardRunSpeed;
-		sideWalkSpeed = o.sideWalkSpeed;
-		sideRunSpeed = o.sideRunSpeed;
-		rotateXSpeed = o.rotateXSpeed;
-		rotateYSpeed = o.rotateYSpeed;
-		jumpSpeed = o.jumpSpeed;
-		jumpHeight = o.jumpHeight;
-		canJump = o.canJump;
-		canRun = o.canRun;
-		justJump = o.justJump;
-		justArriveOnFloor = o.justArriveOnFloor;
-		wasOnGround = o.wasOnGround;
-		keys = o.keys;
-		controls = o.controls;
-
-		_controller = o._controller;
-		_ghost = o._ghost;
-		_shape = o._shape;
-		_manager = o._manager;
-	}
-
-	FPController& FPController::operator=(const FPController &o)
-	{
-		_entity = o._entity;
-		yOrientation = o.yOrientation;
-		forwardWalkSpeed = o.forwardWalkSpeed;
-		backwardWalkSpeed = o.backwardWalkSpeed;
-		forwardRunSpeed = o.forwardRunSpeed;
-		backwardRunSpeed = o.backwardRunSpeed;
-		sideWalkSpeed = o.sideWalkSpeed;
-		sideRunSpeed = o.sideRunSpeed;
-		rotateXSpeed = o.rotateXSpeed;
-		rotateYSpeed = o.rotateYSpeed;
-		jumpSpeed = o.jumpSpeed;
-		jumpHeight = o.jumpHeight;
-		canJump = o.canJump;
-		canRun = o.canRun;
-		justJump = o.justJump;
-		justArriveOnFloor = o.justArriveOnFloor;
-		wasOnGround = o.wasOnGround;
-		keys = o.keys;
-		controls = o.controls;
-
-		_controller = o._controller;
-		_ghost = o._ghost;
-		_shape = o._shape;
-		_manager = o._manager;
-		return *this;
-	}
-
 	FPController::~FPController()
 	{
 	}
 
-	void FPController::init(AScene *scene, const Entity &entity, short filterGroup, short filterMask)
+	void FPController::init(short filterGroup, short filterMask)
 	{
-		_entity = entity;
+		auto scene = entity.getScene();
 		_manager = dynamic_cast<BulletDynamicManager*>(scene->getInstance<BulletCollisionManager>());
 		setKey(LEFT, AGE_a);
 		setKey(RIGHT, AGE_d);
@@ -128,7 +71,7 @@ namespace AGE
 		_ghost->setWorldTransform(transform);
 		_ghost->setRestitution(0);
 		_ghost->setActivationState(DISABLE_DEACTIVATION);
-		_ghost->setUserPointer(&(_entity));
+		_ghost->setUserPointer(&(entity));
 		_controller = new btKinematicCharacterController(_ghost, _shape, btScalar(0.1));
 		_manager->getWorld()->addCollisionObject(_ghost, filterGroup, filterMask);
 		_manager->getWorld()->addAction(_controller);
@@ -138,7 +81,7 @@ namespace AGE
 		wasOnGround = true;
 	}
 
-	void FPController::reset(AScene *)
+	void FPController::reset()
 	{
 		if (_controller)
 		{

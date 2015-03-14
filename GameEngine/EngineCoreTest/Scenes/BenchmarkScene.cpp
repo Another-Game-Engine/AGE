@@ -92,10 +92,10 @@ namespace AGE
 		}
 
 		getInstance<AGE::AssetsManager>()->setAssetsDirectory("../../Assets/Serialized/");
-		getInstance<AGE::AssetsManager>()->loadMesh(OldFile("catwoman/catwoman.sage"), { MeshInfos::Positions, MeshInfos::Normals, MeshInfos::Uvs, MeshInfos::Tangents, MeshInfos::Weights, MeshInfos::BoneIndices }, "DEMO_SCENE_ASSETS");
-		getInstance<AGE::AssetsManager>()->loadMesh(OldFile("cube/cube.sage"), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents, MeshInfos::Weights, MeshInfos::BoneIndices }, "DEMO_SCENE_ASSETS");
-		getInstance<AGE::AssetsManager>()->loadMesh(OldFile("ball/ball.sage"), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents, MeshInfos::Weights, MeshInfos::BoneIndices }, "DEMO_SCENE_ASSETS");
-		getInstance<AGE::AssetsManager>()->loadMesh(OldFile("Sponza/sponza.sage"), { AGE::MeshInfos::Positions, AGE::MeshInfos::Normals, AGE::MeshInfos::Uvs, AGE::MeshInfos::Tangents, MeshInfos::Weights, MeshInfos::BoneIndices }, "DEMO_SCENE_ASSETS");
+		getInstance<AGE::AssetsManager>()->loadMesh(OldFile("catwoman/catwoman.sage"), "DEMO_SCENE_ASSETS");
+		getInstance<AGE::AssetsManager>()->loadMesh(OldFile("cube/cube.sage"), "DEMO_SCENE_ASSETS");
+		getInstance<AGE::AssetsManager>()->loadMesh(OldFile("ball/ball.sage"), "DEMO_SCENE_ASSETS");
+		getInstance<AGE::AssetsManager>()->loadMesh(OldFile("Sponza/sponza.sage"), "DEMO_SCENE_ASSETS");
 		getInstance<AGE::AssetsManager>()->loadMaterial(OldFile("cube/cube.mage"), "DEMO_SCENE_ASSETS");
 		getInstance<AGE::AssetsManager>()->loadMaterial(OldFile("ball/ball.mage"), "DEMO_SCENE_ASSETS");
 		getInstance<AGE::AssetsManager>()->loadMaterial(OldFile("catwoman/catwoman.mage"), "DEMO_SCENE_ASSETS");
@@ -167,7 +167,7 @@ namespace AGE
 					auto& _l = GLOBAL_SPONZA.getLink();
 					//_l->setPosition(glm::vec3(-5, 0, 0));
 					RigidBody *rb = GLOBAL_SPONZA.addComponent<RigidBody>(0.0f);
-					rb->setCollisionMesh(this, GLOBAL_SPONZA, "../../Assets/Serialized/sponza/sponza_static.phage");
+					rb->setCollisionMesh("../../Assets/Serialized/sponza/sponza_static.phage");
 					_l.setScale(glm::vec3(10.f));
 				
 					///////@paul first we set a mesh with only 1 submesh
@@ -184,7 +184,7 @@ namespace AGE
 
 		static bool useOnce = false;
 		//auto rigidBody = GLOBAL_CATWOMAN.addComponent<RigidBody>(0);
-		//rigidBody->setCollisionMesh((AScene*)(this), GLOBAL_CATWOMAN, "../../Assets/Serialized/catwoman/catwoman_dynamic.phage");
+		//rigidBody->setCollisionMesh("../../Assets/Serialized/catwoman/catwoman_dynamic.phage");
 		//_l.setOrientation(glm::quat(glm::vec3(Mathematic::degreeToRadian(-90), Mathematic::degreeToRadian(90), 0)));
 		_l.setPosition(glm::vec3(0, 0, 0));
 		//_l.setPosition(glm::vec3(-30, 0, 0));
@@ -225,7 +225,7 @@ namespace AGE
 
 #ifdef PHYSIC_SIMULATION
 	auto rigidBody = GLOBAL_FLOOR.addComponent<RigidBody>(0.0f);
-	rigidBody->setCollisionShape(this, GLOBAL_FLOOR, RigidBody::BOX);
+	rigidBody->setCollisionShape(RigidBody::BOX);
 	rigidBody->getBody().setFriction(0.3f);
 #endif //PHYSIC_SIMULATION
 
@@ -278,7 +278,7 @@ namespace AGE
 			mesh = e.addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("cube/cube.sage")
 				, getInstance<AGE::AssetsManager>()->getMaterial(OldFile("cube/cube.mage")));
 			auto rigidBody = e.addComponent<RigidBody>(1.0f);
-			rigidBody->setCollisionShape((AScene*)(this), e, RigidBody::BOX);
+			rigidBody->setCollisionShape(RigidBody::BOX);
 			rigidBody->getBody().setFriction(0.5f);
 			rigidBody->getBody().setRestitution(0.5f);
 			rigidBody->getBody().applyCentralImpulse(convertGLMVectorToBullet(GLOBAL_CAMERA.getLink().getOrientation() * glm::vec3(0, 0, -10)));

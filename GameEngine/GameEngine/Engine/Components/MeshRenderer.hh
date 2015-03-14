@@ -23,10 +23,9 @@ namespace AGE
 		MeshRenderer();
 		virtual ~MeshRenderer();
 
-		void init(AScene *
-			, std::shared_ptr<AGE::MeshInstance> mesh = nullptr
+		void init(std::shared_ptr<AGE::MeshInstance> mesh = nullptr
 			, std::shared_ptr<AGE::MaterialSetInstance> material = nullptr);
-		virtual void reset(AScene *);
+		virtual void reset();
 
 		template <typename Archive> void save(Archive &ar) const;
 		template <typename Archive> void load(Archive &ar);
@@ -56,11 +55,10 @@ namespace AGE
 		virtual void editorUpdate(AScene *scene);
 #endif
 
-		virtual void postUnserialization(AScene *scene);
+		virtual void postUnserialization();
 
 	private:
 		AGE::PrepareKey _key;
-		AScene *_scene;
 		std::shared_ptr<AGE::MeshInstance> _mesh;
 		std::shared_ptr<AGE::MaterialSetInstance> _material;
 
