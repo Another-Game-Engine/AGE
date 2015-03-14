@@ -6,6 +6,7 @@
     <ClCompile Include="Engine\Components\Light.cpp" />
     <ClCompile Include="Engine\Components\RigidBody.cpp" />
     <ClCompile Include="Engine\Context\IRenderContext.cpp" />
+    <ClCompile Include="Engine\Context\SDL\SdlToAgeInputs.cpp" />
     <ClCompile Include="Engine\Entities\Entity.cpp" />
     <ClCompile Include="Engine\Render\Properties\Materials\Specular.cpp" />
     <ClCompile Include="Engine\Render\ProgramResources\Types\Uniform\Mat4Array255.cpp" />
@@ -97,8 +98,10 @@
     <ClCompile Include="Engine\Components\FPController.cpp" />
     <ClCompile Include="Engine\Core\EntityFilter.cpp" />
     <ClCompile Include="Engine\Core\SceneManager.cpp" />
+    <ClCompile Include="Engine\Context\SDL\SdlContext.cpp" />
     <ClCompile Include="Engine\Core\AScene.cpp" />
     <ClCompile Include="Engine\Core\Engine.cpp" />
+    <ClCompile Include="Engine\Core\Inputs\Input.cpp" />
     <ClCompile Include="Engine\Core\Timer.cpp" />
     <ClCompile Include="Engine\Components\MeshRenderer.cpp" />
     <ClCompile Include="Engine\Physic\Utils\BtConversion.cpp" />
@@ -140,16 +143,17 @@
     <ClCompile Include="Engine\Utils\Stream.cpp" />
     <ClCompile Include="Engine\Utils\ThreadName.cpp" />
     <ClCompile Include="Engine\Utils\UniqueTypeId.cpp" />
-    <ClCompile Include="Engine\Context\SDL\SdlContext.cpp" />
-    <ClCompile Include="Engine\Context\SDL\SdlToAgeInputs.cpp" />
-    <ClCompile Include="Engine\Core\Inputs\Input.cpp" />
     <ClCompile Include="Engine\Core\Inputs\Joystick.cpp" />
+<<<<<<< HEAD
     <ClCompile Include="Engine\Core\Inputs\ActionManager.cpp" />
     <ClCompile Include="Engine\Render\GeometryManagement\SimpleGeometry.cpp" />
     <ClCompile Include="Engine\Components\ComponentRegistrationManager.cpp" />
     <ClCompile Include="Engine\Systems\FreeFlyCamera.cpp" />
     <ClCompile Include="Engine\Core\EntityIdRegistrationManager.cpp" />
     <ClCompile Include="Engine\Components\FreeFlyComponent.cpp" />
+=======
+    <ClCompile Include="Engine\Utils\Serialization\btSerialization.cpp" />
+>>>>>>> bf6f5f874c8141cb70f469bb11cf5d9919b5ace2
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -164,7 +168,10 @@
     <ClInclude Include="Engine\Components\ComponentManager.hpp" />
     <ClInclude Include="Engine\Components\Light.hh" />
     <ClInclude Include="Engine\Configuration.hpp" />
+    <ClInclude Include="Engine\Core\Inputs\AgeInputs.hh" />
     <ClInclude Include="Engine\Entities\EntityData.hh" />
+    <ClInclude Include="Engine\Render\GeometryManagement\SimpleGeometry.hpp" />
+    <ClInclude Include="Engine\Render\PipelineTypes.hpp" />
     <ClInclude Include="Engine\Render\Properties\Materials\Specular.hh" />
     <ClInclude Include="Engine\Render\ProgramResources\Types\Uniform\Mat4Array255.hh" />
     <ClInclude Include="Engine\Render\Properties\Properties.hh" />
@@ -386,6 +393,7 @@
     <ClInclude Include="Engine\Utils\UniqueTypeId.hpp" />
     <ClInclude Include="Engine\Utils\Visibility.hpp" />
     <ClInclude Include="Engine\Utils\Worker.hpp" />
+<<<<<<< HEAD
     <ClInclude Include="Engine\Render\PipelineTypes.hpp" />
     <ClInclude Include="Engine\Core\Inputs\AgeInputs.hh" />
     <ClInclude Include="Engine\Core\Inputs\Joystick.hh" />
@@ -395,12 +403,18 @@
     <ClInclude Include="Engine\Systems\FreeFlyCamera.hh" />
     <ClInclude Include="Engine\Core\EntityIdRegistrationManager.hh" />
     <ClInclude Include="Engine\Components\FreeFlyComponent.hh" />
+=======
+    <ClInclude Include="Engine\Core\Inputs\Joystick.hh" />
+    <ClInclude Include="Engine\Utils\Serialization\btSerialization.hpp" />
+>>>>>>> bf6f5f874c8141cb70f469bb11cf5d9919b5ace2
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />
     <None Include="Engine\Context\IRenderContext.hh" />
+    <None Include="Engine\Context\SDL\SdlContext.hh" />
     <None Include="Engine\Core\AScene.hh" />
     <None Include="Engine\Core\Engine.hh" />
+    <None Include="Engine\Core\Inputs\Input.hh" />
     <None Include="Engine\Core\MaterialManager.hh" />
     <None Include="Engine\Core\MaterialPass.hh" />
     <None Include="Engine\Core\Timer.hh" />
@@ -412,7 +426,5 @@
     <None Include="Engine\ResourceManager\SharedMesh.hh" />
     <None Include="Engine\ResourceManager\Texture.hh" />
     <None Include="Engine\Components\MeshRenderer.hh" />
-    <None Include="Engine\Context\SDL\SdlContext.hh" />
-    <None Include="Engine\Core\Inputs\Input.hh" />
   </ItemGroup>
 </Project>

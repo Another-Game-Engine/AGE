@@ -3,6 +3,7 @@
 #include <btBulletDynamicsCommon.h>
 #include <Components/Component.hh>
 #include <Utils/UniqueTypeId.hpp>
+#include <Utils/Serialization/btSerialization.hpp>
 
 class btCollisionShape;
 class btMotionState;
@@ -31,13 +32,14 @@ namespace AGE
 		glm::vec3 _rotationConstraint;
 		glm::vec3 _transformConstraint;
 		UniqueTypeId _shapeType;
-		std::string _shapeName;
+		std::string _shapePath;
+		CollisionShape _collisionShapeType;
 
 		void _clearBulletObjects();
 	public:
 		RigidBody();
-		void init(AScene *scene, float mass = 1.0f);
-		virtual void reset(AScene *scene);
+		void init(float mass = 1.0f);
+		virtual void reset();
 		void setTransformation(const AGE::Link *link);
 		btMotionState &getMotionState();
 		btCollisionShape &getShape();
@@ -45,15 +47,12 @@ namespace AGE
 		void setMass(float mass);
 		int getMass() const;
 		void setInertia(const glm::vec3 &inertia);
-		void setCollisionMesh(AScene *scene
-			, const Entity &entity
-			, const std::string &meshPath
+		void setCollisionMesh(
+			const std::string &meshPath
 			, short filterGroup = 1
 			, short filterMask = -1);
 		void setCollisionShape(
-			AScene *scene
-			, const Entity &entity
-			, CollisionShape c
+			CollisionShape c
 			, short filterGroup = 1
 			, short filterMask = -1);
 		void setRotationConstraint(bool x, bool y, bool z);
@@ -66,22 +65,34 @@ namespace AGE
 		// Serialization
 
 		template <typename Archive>
-		void save(Archive &ar) const
+		void serialize(Archive &ar)
 		{
-			std::string TODO = "todo";
-			ar(TODO);
-		}
-
-		template <typename Archive>
-		void load(Archive &ar)
-		{
-			std::string TODO;
-			ar(TODO);
+			ar(cereal::make_nvp("Mass", _mass));
+			ar(cereal::make_nvp("Inertia", _inertia));
+			ar(cereal::make_nvp("Rotation constraint", _rotationConstraint));
+			ar(cereal::make_nvp("Transform constraint", _transformConstraint));
+			ar(cereal::make_nvp("Collision shape path", _shapePath));
+			ar(cereal::make_nvp("Collision shape type", _collisionShapeType));
 		}
 
 		// !Serialization
 		////
 		//////
+
+		virtual void postUnserialization();
+
+#ifdef EDITOR_ENABLED
+		std::vector<const char*> *shapeFileList = nullptr;
+		std::vector<const char*> *shapePathList = nullptr;
+		std::size_t selectedShapeIndex = 0;
+		std::string selectedShapeName = "";
+		std::string selectedShapePath = "";
+		bool simpleShapes = true;
+
+		virtual void editorCreate(AScene *scene);
+		virtual void editorDelete(AScene *scene);
+		virtual void editorUpdate(AScene *scene);
+#endif
 
 	private:
 		RigidBody &operator=(RigidBody const &o);

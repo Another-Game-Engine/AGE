@@ -30,12 +30,12 @@ namespace AGE
 			return *this;
 		}
 
-		void init(AScene *, float t = 1.0f)
+		void init(float t = 1.0f)
 		{
 			_t = t;
 		}
 
-		virtual void reset(AScene *)
+		virtual void reset()
 		{
 			_t = 0.0f;
 		}

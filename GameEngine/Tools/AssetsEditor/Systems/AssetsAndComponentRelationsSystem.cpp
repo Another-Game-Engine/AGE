@@ -33,6 +33,11 @@ namespace AGE
 				e.getComponent<MeshRenderer>()->materialFileList = &AssetsEditorScene::getCookedMaterialList();
 				e.getComponent<MeshRenderer>()->materialPathList = &AssetsEditorScene::getCookedMaterialListFullPath();
 			}
+			for (auto e : _rigidBodies.getCollection())
+			{
+				e.getComponent<RigidBody>()->shapeFileList = &AssetsEditorScene::getCookedBulletList();
+				e.getComponent<RigidBody>()->shapePathList = &AssetsEditorScene::getCookedBulletListFullPath();
+			}
 		}
 
 		bool AssetsAndComponentRelationsSystem::initialize()
