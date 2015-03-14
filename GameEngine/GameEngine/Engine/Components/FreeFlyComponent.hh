@@ -10,7 +10,7 @@ namespace AGE
 	{
 		size_t notEmpty;
 
-		void init(AScene *scene);
+		void init();
 	};
 }
 

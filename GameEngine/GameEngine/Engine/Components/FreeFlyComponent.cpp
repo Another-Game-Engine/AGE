@@ -2,8 +2,7 @@
 
 namespace AGE
 {
-	void FreeFlyComponent::init(AScene *scene)
+	void FreeFlyComponent::init()
 	{
-		(void)scene;
 	}
 }

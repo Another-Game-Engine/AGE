@@ -20,14 +20,15 @@ namespace AGE
 	{
 	}
 
-	void RigidBody::init(AScene *scene, float mass/* = 1.0f*/)
+	void RigidBody::init(float mass/* = 1.0f*/)
 	{
+		auto scene = entity.getScene();
 		_manager = dynamic_cast<BulletDynamicManager*>(scene->getInstance<BulletCollisionManager>());
 		assert(_manager != nullptr);
 		_mass = mass;
 	}
 
-	void RigidBody::reset(AScene *scene)
+	void RigidBody::reset()
 	{
 		_clearBulletObjects();
 
@@ -81,9 +82,8 @@ namespace AGE
 		_inertia = convertGLMVectorToBullet(inertia);
 	}
 
-	void RigidBody::setCollisionMesh(AScene *scene
-		, const Entity &entity
-		, const std::string &meshPath
+	void RigidBody::setCollisionMesh(
+		const std::string &meshPath
 		, short filterGroup /*= 1*/
 		, short filterMask /*= -1*/)
 	{
@@ -133,9 +133,7 @@ namespace AGE
 	}
 
 	void RigidBody::setCollisionShape(
-		AScene *scene
-		, const Entity &entity
-		, CollisionShape c
+		CollisionShape c
 		, short filterGroup /*= 1*/
 		, short filterMask /* = -1*/)
 	{

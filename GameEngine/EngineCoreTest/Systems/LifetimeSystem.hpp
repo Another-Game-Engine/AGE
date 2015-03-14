@@ -18,24 +18,12 @@ namespace AGE
 
 		}
 
-		Lifetime(Lifetime &&o)
-			: ComponentBase(std::move(o))
-		{
-			_t = std::move(o._t);
-		}
-
-		Lifetime &operator=(Lifetime &&o)
-		{
-			_t = std::move(o._t);
-			return *this;
-		}
-
-		void init(AScene *, float t = 1.0f)
+		void init(float t = 1.0f)
 		{
 			_t = t;
 		}
 
-		virtual void reset(AScene *)
+		virtual void reset()
 		{
 			_t = 0.0f;
 		}
