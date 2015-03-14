@@ -20,13 +20,13 @@ namespace AGE
 			}
 			EntityManager::~EntityManager(){}
 
-			void EntityManager::updateBegin(double time)
+			void EntityManager::updateBegin(float time)
 			{}
 
-			void EntityManager::updateEnd(double time)
+			void EntityManager::updateEnd(float time)
 			{}
 
-			void EntityManager::mainUpdate(double time)
+			void EntityManager::mainUpdate(float time)
 			{
 				ImGui::BeginChild("Entity list", ImVec2(ImGui::GetWindowWidth() * 0.25f, 0));
 

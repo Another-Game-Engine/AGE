@@ -27,7 +27,7 @@ namespace AGE
 		_systems.clear();
 	}
 
-	void 							AScene::update(double time)
+	void 							AScene::update(float time)
 	{
 		//static double reorderingTime = 0.0f;
 		for (auto &e : _systems)

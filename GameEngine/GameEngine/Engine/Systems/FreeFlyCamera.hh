@@ -20,12 +20,12 @@ namespace AGE
 		std::vector<glm::vec2> _cameraAngles;
 
 		virtual bool initialize();
-		virtual void updateBegin(double time);
-		virtual void mainUpdate(double time);
-		virtual void updateEnd(double time);
+		virtual void updateBegin(float time);
+		virtual void mainUpdate(float time);
+		virtual void updateEnd(float time);
 
-		void _handleKeyboard(double time, Link &camLink, size_t camIdx);
-		void _handleMouse(double time, Link &camLink, size_t camIdx);
-		void _handleController(double time, Link &camLink, size_t camIdx);
+		void _handleKeyboard(float time, Link &camLink, size_t camIdx);
+		void _handleMouse(float time, Link &camLink, size_t camIdx);
+		void _handleController(float time, Link &camLink, size_t camIdx);
 	};
 }

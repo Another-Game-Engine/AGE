@@ -13,7 +13,7 @@ namespace AGE
 	}
 
 
-	void System::update(double time)
+	void System::update(float time)
 	{
 		updateBegin(time);
 		mainUpdate(time);

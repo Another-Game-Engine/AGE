@@ -68,7 +68,7 @@ namespace AGE
 		return true;
 	}
 
-	bool AssetsEditorScene::userUpdateBegin(double time)
+	bool AssetsEditorScene::userUpdateBegin(float time)
 	{
 		// dirty ! We list files
 		static float refreshCounter = 1.0f;
@@ -295,7 +295,7 @@ namespace AGE
 		return true;
 	}
 
-	bool AssetsEditorScene::userUpdateEnd(double time)
+	bool AssetsEditorScene::userUpdateEnd(float time)
 	{
 		ImGui::End();
 		return true;

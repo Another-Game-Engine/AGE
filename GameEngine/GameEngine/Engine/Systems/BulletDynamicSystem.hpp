@@ -28,7 +28,7 @@ namespace AGE
 		BulletDynamicManager* _manager;
 		EntityFilter _filter;
 
-		virtual void updateBegin(double time)
+		virtual void updateBegin(float time)
 		{
 			auto scene = _scene;
 			for (auto e : _filter.getCollection())
@@ -47,10 +47,10 @@ namespace AGE
 			_manager->getWorld()->stepSimulation(static_cast<btScalar>(time), 10);
 		}
 
-		virtual void updateEnd(double time)
+		virtual void updateEnd(float time)
 		{}
 
-		virtual void mainUpdate(double time)
+		virtual void mainUpdate(float time)
 		{
 		}
 

@@ -18,13 +18,13 @@ namespace AGE
 		}
 		AssetsAndComponentRelationsSystem::~AssetsAndComponentRelationsSystem(){}
 
-		void AssetsAndComponentRelationsSystem::updateBegin(double time)
+		void AssetsAndComponentRelationsSystem::updateBegin(float time)
 		{}
 
-		void AssetsAndComponentRelationsSystem::updateEnd(double time)
+		void AssetsAndComponentRelationsSystem::updateEnd(float time)
 		{}
 
-		void AssetsAndComponentRelationsSystem::mainUpdate(double time)
+		void AssetsAndComponentRelationsSystem::mainUpdate(float time)
 		{
 			for (auto e : _meshRenderer.getCollection())
 			{

@@ -109,7 +109,7 @@ namespace AGE
 		return true;
 	}
 
-	bool BenchmarkScene::userUpdateBegin(double time)
+	bool BenchmarkScene::userUpdateBegin(float time)
 	{
 		++_frameCounter;
 		++_chunkFrame;
@@ -394,7 +394,7 @@ namespace AGE
 	}
 
 
-	bool BenchmarkScene::userUpdateEnd(double time)
+	bool BenchmarkScene::userUpdateEnd(float time)
 	{
 		return true;
 	}

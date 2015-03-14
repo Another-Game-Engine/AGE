@@ -54,13 +54,13 @@ namespace AGE
 		return true;
 	}
 
-	bool WorldEditorScene::userUpdateBegin(double time)
+	bool WorldEditorScene::userUpdateBegin(float time)
 	{
 		ImGui::BeginChild("Assets browser", ImVec2(0, 0), true);
 		return true;
 	}
 
-	bool WorldEditorScene::userUpdateEnd(double time)
+	bool WorldEditorScene::userUpdateEnd(float time)
 	{
 		ImGui::EndChild();
 		ImGui::End();
