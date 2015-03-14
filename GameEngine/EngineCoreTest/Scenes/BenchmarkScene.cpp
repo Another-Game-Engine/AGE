@@ -203,7 +203,7 @@ namespace AGE
 		_l.setScale(glm::vec3(0.05f));
 		auto _m = e.addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage"), getInstance<AGE::AssetsManager>()->getMaterial("ball/ball.mage"));
 		e.getLink().setPosition(glm::vec3(i, 5.0f, 0));
-		e.addComponent<PointLightComponent>()->set(glm::vec3((float)(rand() % 1000) / 1000.0f, (float)(rand() % 1000) / 1000.0f, (float)(rand() % 1000) / 1000.0f), glm::vec3(1.f, 0.1f, 0.0f));
+		e.addComponent<PointLightComponent>()->set(glm::vec3((float)(rand() % 1000) / 1000.0f, (float)(rand() % 1000) / 1000.0f, (float)(rand() % 1000) / 1000.0f), glm::vec3(1.f, 0.1f, 0.01f));
 	}
 
 	for (int i = 1; i < GLOBAL_LIGHTS.size(); ++i)
