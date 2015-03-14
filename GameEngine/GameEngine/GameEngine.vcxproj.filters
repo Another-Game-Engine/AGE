@@ -150,6 +150,7 @@
     <ClCompile Include="Engine\Systems\FreeFlyCamera.cpp" />
     <ClCompile Include="Engine\Core\EntityIdRegistrationManager.cpp" />
     <ClCompile Include="Engine\Components\FreeFlyComponent.cpp" />
+    <ClCompile Include="Engine\Render\ProgramResources\Types\Uniform\Vec3.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -395,6 +396,7 @@
     <ClInclude Include="Engine\Systems\FreeFlyCamera.hh" />
     <ClInclude Include="Engine\Core\EntityIdRegistrationManager.hh" />
     <ClInclude Include="Engine\Components\FreeFlyComponent.hh" />
+    <ClInclude Include="Engine\Render\ProgramResources\Types\Uniform\Vec3.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />
