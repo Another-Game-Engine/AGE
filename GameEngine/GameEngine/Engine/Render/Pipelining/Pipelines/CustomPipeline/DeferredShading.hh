@@ -13,12 +13,21 @@ namespace AGE
 	class DeferredShading : public ARenderingPipeline
 	{
 	public:
-		enum Step
+		enum ProgramsStep
+		{
+			BUFFERING = 0,
+			STENCIL_BASIC,
+			LIGHTNING,
+			MERGING,
+			TOTAL_PROGRAMS
+		};
+
+		enum RenderStep
 		{
 			BUFFERING = 0,
 			LIGHTNING,
 			MERGING,
-			TOTAL
+			TOTAL_RENDER
 		};
 
 	public:
@@ -38,8 +47,6 @@ namespace AGE
 		std::shared_ptr<Texture2D> _depthTexture;
 
 		std::shared_ptr<Texture2D> _lightAccumulationTexture;
-
-		RenderLightList const *_lights;
 	};
 
 
