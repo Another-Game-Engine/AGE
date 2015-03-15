@@ -78,7 +78,7 @@ namespace AGE
 			// We get the sphere geometry
 			Key<Vertices> sphereVertices;
 			Key<Painter> spherePainter;
-			GetRenderThread()->getIcoSphereGeometry(sphereVertices, spherePainter, 3);
+			GetRenderThread()->getIcoSphereGeometry(sphereVertices, spherePainter, 2);
 			auto spherePainterPtr = _painter_manager->get_painter(spherePainter);
 			// Iterate throught each light
 			for (auto &pl : _lights.pointLight)
