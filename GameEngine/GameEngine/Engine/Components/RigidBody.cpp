@@ -76,7 +76,7 @@ namespace AGE
 		_mass = btScalar(mass);
 	}
 
-	int RigidBody::getMass() const
+	float RigidBody::getMass() const
 	{
 		return _mass;
 	}

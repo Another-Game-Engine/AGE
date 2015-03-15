@@ -45,7 +45,7 @@ namespace AGE
 		btCollisionShape &getShape();
 		btRigidBody &getBody();
 		void setMass(float mass);
-		int getMass() const;
+		float getMass() const;
 		void setInertia(const glm::vec3 &inertia);
 		void setCollisionMesh(
 			const std::string &meshPath
