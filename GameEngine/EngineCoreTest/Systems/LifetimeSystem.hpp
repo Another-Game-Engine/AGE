@@ -18,6 +18,7 @@ namespace AGE
 
 		}
 
+
 		void init(float t = 1.0f)
 		{
 			_t = t;
@@ -61,13 +62,13 @@ namespace AGE
 	private:
 		EntityFilter _filter;
 
-		virtual void updateBegin(double time)
+		virtual void updateBegin(float time)
 		{}
 
-		virtual void updateEnd(double time)
+		virtual void updateEnd(float time)
 		{}
 
-		virtual void mainUpdate(double time)
+		virtual void mainUpdate(float time)
 		{
 			float t = static_cast<float>(time);
 			auto scene = _scene;

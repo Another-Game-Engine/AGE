@@ -22,11 +22,11 @@ namespace AGE
 		void getElementsCollide(CullableShape<Frustum> *toTest, AGE::Vector<Cullable *> &toFill);
 		void cleanOctree();
 
-		MemoryPool<LooseOctreeNode> &getNodePool();
-		MemoryPool<LooseOctreeNode> const &getNodePool() const;
+		MemoryPool<LooseOctreeNode, uint32_t> &getNodePool();
+		MemoryPool<LooseOctreeNode, uint32_t> const &getNodePool() const;
 
-		MemoryPool<SOctreeElement> &getElementPool();
-		MemoryPool<SOctreeElement> const &getElementPool() const;
+		MemoryPool<SOctreeElement, uint32_t> &getElementPool();
+		MemoryPool<SOctreeElement, uint32_t> const &getElementPool() const;
 
 		Cullable *getElementFromPool(PrepareKey const &key) const;
 
@@ -35,8 +35,8 @@ namespace AGE
 
 		uint32_t	_root;
 
-		MemoryPool<LooseOctreeNode> _nodesPool;
-		MemoryPool<SOctreeElement> _elementsPool;
+		MemoryPool<LooseOctreeNode, uint32_t> _nodesPool;
+		MemoryPool<SOctreeElement, uint32_t> _elementsPool;
 
 		MemoryPool<Drawable> &_drawablesPool;
 		MemoryPool<PointLight> &_pointLightsPool;

@@ -9,7 +9,7 @@ namespace AGE
 	public:
 		System(AScene *scene);
 		virtual ~System();
-		void update(double time);
+		void update(float time);
 		bool init();
 		bool setActivation(bool tof);
 		bool isActivated() const;
@@ -19,9 +19,9 @@ namespace AGE
 		std::string _name;
 		bool _activated;
 	private:
-		virtual void updateBegin(double time) = 0;
-		virtual void updateEnd(double time) = 0;
-		virtual void mainUpdate(double time) = 0;
+		virtual void updateBegin(float time) = 0;
+		virtual void updateEnd(float time) = 0;
+		virtual void mainUpdate(float time) = 0;
 		virtual bool initialize() = 0;
 		virtual bool activate(){ return true; };
 		virtual bool deactivate(){ return true; };

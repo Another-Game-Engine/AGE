@@ -90,7 +90,7 @@ namespace AGE
 		return t->second->start();
 	}
 
-	bool            SceneManager::updateScenes(double time)
+	bool            SceneManager::updateScenes(float time)
 	{
 		for (auto &e : _actives)
 		{

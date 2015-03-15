@@ -50,9 +50,9 @@ namespace AGE
 		virtual ~AScene();
 		inline std::size_t      getNumberOfEntities() const { return _entities.size(); }
 		virtual bool 			userStart() = 0;
-		virtual bool 			userUpdateBegin(double time) = 0;
-		virtual bool            userUpdateEnd(double time) = 0;
-		void 					update(double time);
+		virtual bool 			userUpdateBegin(float time) = 0;
+		virtual bool            userUpdateEnd(float time) = 0;
+		void 					update(float time);
 		bool                    start();
 		inline AGE::Engine *getEngine() { return _engine; }
 		inline void setRenderScene(AGE::RenderScene *renderScene) { _renderScene = renderScene; }

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Components/Component.hh>
+#include <Utils/Serialization/SerializationArchives.hpp>
 
 namespace AGE
 {
@@ -11,6 +12,19 @@ namespace AGE
 		size_t notEmpty;
 
 		void init();
+
+		//////
+		////
+		// Serialization
+
+		template <typename Archive>
+		void serialize(Archive &ar)
+		{
+		}
+
+		// !Serialization
+		////
+		//////
 	};
 }
 

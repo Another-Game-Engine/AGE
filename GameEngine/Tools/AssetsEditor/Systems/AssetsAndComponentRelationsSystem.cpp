@@ -18,13 +18,13 @@ namespace AGE
 		}
 		AssetsAndComponentRelationsSystem::~AssetsAndComponentRelationsSystem(){}
 
-		void AssetsAndComponentRelationsSystem::updateBegin(double time)
+		void AssetsAndComponentRelationsSystem::updateBegin(float time)
 		{}
 
-		void AssetsAndComponentRelationsSystem::updateEnd(double time)
+		void AssetsAndComponentRelationsSystem::updateEnd(float time)
 		{}
 
-		void AssetsAndComponentRelationsSystem::mainUpdate(double time)
+		void AssetsAndComponentRelationsSystem::mainUpdate(float time)
 		{
 			for (auto e : _meshRenderer.getCollection())
 			{
@@ -32,6 +32,11 @@ namespace AGE
 				e.getComponent<MeshRenderer>()->meshPathList = &AssetsEditorScene::getCookedMeshsListFullPath();
 				e.getComponent<MeshRenderer>()->materialFileList = &AssetsEditorScene::getCookedMaterialList();
 				e.getComponent<MeshRenderer>()->materialPathList = &AssetsEditorScene::getCookedMaterialListFullPath();
+			}
+			for (auto e : _rigidBodies.getCollection())
+			{
+				e.getComponent<RigidBody>()->shapeFileList = &AssetsEditorScene::getCookedBulletList();
+				e.getComponent<RigidBody>()->shapePathList = &AssetsEditorScene::getCookedBulletListFullPath();
 			}
 		}
 

@@ -20,6 +20,8 @@
 #include <Components/RigidBody.hpp>
 #include <Components/MeshRenderer.hh>
 
+#include <Systems/DebugSystem.hpp>
+
 #include <Render/Program.hh>
 //#include <Render/GeometryManagement/Vertices.hh>
 //#include <Render/GeometryManagement/BufferPrograms.hh>
@@ -59,8 +61,6 @@ namespace AGE
 
 	void BenchmarkScene::initRendering()
 	{
-		auto assetsManager = getInstance<AGE::AssetsManager>();
-		auto mainThread = getEngine();
 	}
 
 	bool BenchmarkScene::userStart()
@@ -78,6 +78,8 @@ namespace AGE
 		setInstance<AGE::BulletDynamicManager, AGE::BulletCollisionManager>()->init();
 
 #endif
+
+		addSystem<AGE::DebugSystem>(0);
 
 #ifdef PHYSIC_SIMULATION
 		addSystem<AGE::BulletDynamicSystem>(0);
@@ -113,7 +115,7 @@ namespace AGE
 		return true;
 	}
 
-	bool BenchmarkScene::userUpdateBegin(double time)
+	bool BenchmarkScene::userUpdateBegin(float time)
 	{
 		++_frameCounter;
 		++_chunkFrame;
@@ -165,33 +167,27 @@ namespace AGE
 				{
 					GLOBAL_SPONZA = createEntity();
 					auto& _l = GLOBAL_SPONZA.getLink();
-					//_l->setPosition(glm::vec3(-5, 0, 0));
 					RigidBody *rb = GLOBAL_SPONZA.addComponent<RigidBody>(0.0f);
 					rb->setCollisionMesh("../../Assets/Serialized/sponza/sponza_static.phage");
 					_l.setScale(glm::vec3(10.f));
 				
-					///////@paul first we set a mesh with only 1 submesh
-					//GLOBAL_SPONZA.addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("cube/cube.sage")
-						//, getInstance<AGE::AssetsManager>()->getMaterial("cube/cube.mage"));
-					///////@paul then we replace it with a mesh with a lot of submesh
 					GLOBAL_SPONZA.addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("Sponza/sponza.sage")
 						, getInstance<AGE::AssetsManager>()->getMaterial("Sponza/sponza.mage"));
 				}
 
 	{
-		GLOBAL_CATWOMAN = createEntity();
-		auto &_l = GLOBAL_CATWOMAN.getLink();
+		//GLOBAL_CATWOMAN = createEntity();
+		//auto &_l = GLOBAL_CATWOMAN.getLink();
 
-		static bool useOnce = false;
+		//static bool useOnce = false;
 		//auto rigidBody = GLOBAL_CATWOMAN.addComponent<RigidBody>(0);
 		//rigidBody->setCollisionMesh("../../Assets/Serialized/catwoman/catwoman_dynamic.phage");
-		//_l.setOrientation(glm::quat(glm::vec3(Mathematic::degreeToRadian(-90), Mathematic::degreeToRadian(90), 0)));
-		_l.setPosition(glm::vec3(0, 0, 0));
+		////_l.setOrientation(glm::quat(glm::vec3(Mathematic::degreeToRadian(-90), Mathematic::degreeToRadian(90), 0)));
 		//_l.setPosition(glm::vec3(-30, 0, 0));
-		//_l.setScale(glm::vec3(0.1f));
-		auto _m = GLOBAL_CATWOMAN.addComponent<MeshRenderer>(
-			getInstance<AGE::AssetsManager>()->getMesh("catwoman/catwoman.sage")
-			, getInstance<AGE::AssetsManager>()->getMaterial("catwoman/catwoman.mage"));
+		//_l.setScale(glm::vec3(0.01f));
+		//auto _m = GLOBAL_CATWOMAN.addComponent<MeshRenderer>(
+		//	getInstance<AGE::AssetsManager>()->getMesh("catwoman/catwoman.sage")
+		//	, getInstance<AGE::AssetsManager>()->getMaterial("catwoman/catwoman.mage"));
 	}
 
 	for (int i = 0; i < GLOBAL_LIGHTS.size(); ++i)
@@ -223,19 +219,19 @@ namespace AGE
 
 	auto &bones = getInstance<AGE::AnimationManager>()->getBones(animationTestInstance);
 	
-	auto i = 0;
-	for (auto &e : skeleton->bones)
-	{
-		auto entity = createEntity();
-		auto child = createEntity();
-		child.addComponent<MeshRenderer>(
-			getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage")
-			, getInstance<AGE::AssetsManager>()->getMaterial("ball/ball.mage"));
-		child.getLink().setScale(1.0f);
-		entity.getLink().setPosition(posFromMat4(e.transformation));
-		entity.getLink().attachChild(child.getLinkPtr());
-		bonesEntities.push_back(entity);
-	}
+	//auto i = 0;
+	//for (auto &e : skeleton->bones)
+	//{
+	//	auto entity = createEntity();
+	//	auto child = createEntity();
+	//	child.addComponent<MeshRenderer>(
+	//		getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage")
+	//		, getInstance<AGE::AssetsManager>()->getMaterial("ball/ball.mage"));
+	//	child.getLink().setScale(1.0f);
+	//	entity.getLink().setPosition(posFromMat4(e.transformation));
+	//	entity.getLink().attachChild(child.getLinkPtr());
+	//	bonesEntities.push_back(entity);
+	//}
 
 	////////////////////////////////////
 
@@ -271,7 +267,6 @@ namespace AGE
 
 		if (_chunkCounter >= _maxChunk)
 		{
-			AScene *weakOnThis = (AScene*)(this);
 			for (auto i = 0; i < 10; ++i)
 			{
 				auto e = createEntity();
@@ -379,25 +374,25 @@ namespace AGE
 		// TODO
 		AGE::GetPrepareThread()->getQueue()->emplaceCommand<AGE::Commands::ToRender::RenderDrawLists>();
 
-		static float ttime = 0;
-		static float timeMultiplier = 0.0f;
-		ImGui::SliderFloat("Animation time", &timeMultiplier, 0.0f, 200.0f);
-		getInstance<AGE::AnimationManager>()->update(timeMultiplier);
-		ttime += time;
-		auto &bones = getInstance<AGE::AnimationManager>()->getBones(animationTestInstance);
-		auto skeleton = getInstance<AssetsManager>()->getSkeleton("catwoman/catwoman.skage");
-		skeleton->updateSkinning();
-		for (std::size_t i = 0; i < bones.size(); ++i)
-		{
-		//	bones[i] = glm::mat4(1);
-			//bonesEntities[i].getLink().setPosition(posFromMat4(bones[i]));
-		}
-		DirtyBoneContainer::setBones(bones);
+		//static float ttime = 0;
+		//static float timeMultiplier = 0.0f;
+		//ImGui::SliderFloat("Animation time", &timeMultiplier, 0.0f, 200.0f);
+		//getInstance<AGE::AnimationManager>()->update(timeMultiplier);
+		//ttime += time;
+		//auto &bones = getInstance<AGE::AnimationManager>()->getBones(animationTestInstance);
+		//auto skeleton = getInstance<AssetsManager>()->getSkeleton("catwoman/catwoman.skage");
+		//skeleton->updateSkinning();
+		//for (std::size_t i = 0; i < bones.size(); ++i)
+		//{
+		////	bones[i] = glm::mat4(1);
+		//	//bonesEntities[i].getLink().setPosition(posFromMat4(bones[i]));
+		//}
+		//DirtyBoneContainer::setBones(bones);
 		return true;
 	}
 
 
-	bool BenchmarkScene::userUpdateEnd(double time)
+	bool BenchmarkScene::userUpdateEnd(float time)
 	{
 		return true;
 	}

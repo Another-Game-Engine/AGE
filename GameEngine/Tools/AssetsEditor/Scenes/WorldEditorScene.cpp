@@ -14,6 +14,9 @@
 #include <Threads/Commands/ToRenderCommands.hpp>
 #include <Threads/Tasks/BasicTasks.hpp>
 #include <Threads/Tasks/ToRenderTasks.hpp>
+#include <Components/FreeFlyComponent.hh>
+#include <Systems/FreeFlyCamera.hh>
+#include <Systems/BulletDynamicSystem.hpp>
 
 namespace AGE
 {
@@ -34,6 +37,10 @@ namespace AGE
 		setInstance<AssetsManager>();
 		getInstance<AGE::AssetsManager>()->setAssetsDirectory("../../Assets/Serialized/");
 
+		addSystem<WE::AssetsAndComponentRelationsSystem>(0);
+		addSystem<WE::EntityManager>(1);
+		addSystem<FreeFlyCamera>(2);
+		addSystem<BulletDynamicSystem>(3);
 		// Add entity used by editor (camera etc here)
 
 		auto camera = createEntity();
@@ -41,20 +48,19 @@ namespace AGE
 		camera.getLink().setPosition(glm::vec3(0, 3, 5));
 		camera.getLink().setForward(glm::vec3(0, 0, 0));
 		cam->addPipeline(RenderType::BASIC);
+		camera.addComponent<FreeFlyComponent>();
 
-		addSystem<WE::AssetsAndComponentRelationsSystem>(0);
-		addSystem<WE::EntityManager>(1);
 
 		return true;
 	}
 
-	bool WorldEditorScene::userUpdateBegin(double time)
+	bool WorldEditorScene::userUpdateBegin(float time)
 	{
 		ImGui::BeginChild("Assets browser", ImVec2(0, 0), true);
 		return true;
 	}
 
-	bool WorldEditorScene::userUpdateEnd(double time)
+	bool WorldEditorScene::userUpdateEnd(float time)
 	{
 		ImGui::EndChild();
 		ImGui::End();

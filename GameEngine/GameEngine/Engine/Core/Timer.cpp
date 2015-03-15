@@ -24,16 +24,16 @@ namespace AGE
 	{
 		_oldTime = _curTime;
 		_curTime = std::chrono::system_clock::now();
-		_elapsed = (double)(std::chrono::duration_cast<std::chrono::milliseconds>(_curTime - _oldTime).count()) / 1000.0l;
+		_elapsed = (float)(std::chrono::duration_cast<std::chrono::milliseconds>(_curTime - _oldTime).count()) / 1000.0f;
 	}
 
-	double 		Timer::getElapsed() const
+	float 		Timer::getElapsed() const
 	{
 		return _elapsed;
 	}
 
-	double 		Timer::getNow() const
+	float 		Timer::getNow() const
 	{
-		return (std::chrono::duration_cast<std::chrono::milliseconds>(_curTime.time_since_epoch()).count() / 1000.0l);
+		return (std::chrono::duration_cast<std::chrono::milliseconds>(_curTime.time_since_epoch()).count() / 1000.0f);
 	}
 }

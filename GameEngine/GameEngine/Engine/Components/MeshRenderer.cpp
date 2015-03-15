@@ -94,6 +94,7 @@ namespace AGE
 	void MeshRenderer::postUnserialization()
 	{
 		auto scene = entity.getScene();
+		
 		if (_serializationInfos)
 		{
 			if (!_serializationInfos->mesh.empty())

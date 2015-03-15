@@ -42,6 +42,7 @@
 #include <Components/EntityRepresentation.hpp>
 #include <Components/RigidBody.hpp>
 #include <Components/SpotLight.hh>
+#include <Components/FreeFlyComponent.hh>
 
 int			main(int ac, char **av)
 {
@@ -69,6 +70,7 @@ int			main(int ac, char **av)
 		REGISTER_COMPONENT_TYPE(AGE::PointLightComponent);
 		REGISTER_COMPONENT_TYPE(AGE::CameraComponent);
 		REGISTER_COMPONENT_TYPE(AGE::WE::EntityRepresentation);
+		REGISTER_COMPONENT_TYPE(AGE::FreeFlyComponent);
 
 		engine->addScene(std::make_shared<AGE::AssetsEditorScene>(engine), AGE::AssetsEditorScene::Name);
 		engine->addScene(std::make_shared<AGE::SceneSelectorScene>(engine), AGE::SceneSelectorScene::Name);

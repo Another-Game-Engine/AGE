@@ -48,7 +48,7 @@ namespace AGE
 	{
 		PrepareKey res;
 		res.type = PrepareKey::Type::Mesh;
-		res.id = _meshs.prepareAlloc();
+		res.id = (AGE::PrepareKey::OctreeObjectId)(_meshs.prepareAlloc());
 		return res;
 	}
 
@@ -56,7 +56,7 @@ namespace AGE
 	{
 		PrepareKey res;
 		res.type = PrepareKey::Type::Camera;
-		res.id = _cameras.prepareAlloc();
+		res.id = (AGE::PrepareKey::OctreeObjectId)(_cameras.prepareAlloc());
 		_prepareThread->getQueue()->emplaceCommand<Commands::MainToPrepare::CreateCamera>(res);
 		return res;
 	}
@@ -65,7 +65,7 @@ namespace AGE
 	{
 		PrepareKey res;
 		res.type = PrepareKey::Type::PointLight;
-		res.id = _pointLights.prepareAlloc();
+		res.id = (AGE::PrepareKey::OctreeObjectId)(_pointLights.prepareAlloc());
 		return res;
 	}
 
@@ -119,7 +119,7 @@ namespace AGE
 		}
 		// remove drawable from octree
 		_octree.removeElement(&toRm);
-		_drawables.dealloc(id);
+		_drawables.dealloc((uint32_t)(id));
 		assert(id != (std::size_t)(-1));
 	}
 
@@ -141,7 +141,7 @@ namespace AGE
 		_cameras.allocPreparated(msg.key.id);
 		Camera &toAdd = _cameras.get(msg.key.id);
 
-		toAdd.activeCameraIdx = _activeCameras.size();
+		toAdd.activeCameraIdx = (uint32_t)(_activeCameras.size());
 		_activeCameras.push_back(msg.key.id);
 
 		toAdd.key.id = msg.key.id;
@@ -153,7 +153,7 @@ namespace AGE
 		PointLight &toAdd = _pointLights.get(msg.key.id);
 
 		// TODO: remove this
-		toAdd.activePointLightIdx = _activePointLights.size();
+		toAdd.activePointLightIdx = (uint32_t)(_activePointLights.size());
 		_activePointLights.push_back(msg.key.id);
 		// ---
 		toAdd.key.id = msg.key.id;
@@ -231,7 +231,7 @@ namespace AGE
 		
 		for (std::size_t i = 0; i < msg.submeshInstances.size(); ++i)
 		{
-			uint32_t id = _drawables.alloc();
+			auto id = _drawables.alloc();
 			Drawable &added = _drawables.get(id);
 			auto &submesh = msg.submeshInstances[i];
 			MaterialInstance *material = nullptr;
@@ -249,7 +249,7 @@ namespace AGE
 			uo->drawableCollection.push_back(id);
 
 			added.key.type = PrepareKey::Type::Drawable;
-			added.key.id = id;
+			added.key.id = (PrepareKey::OctreeObjectId)(id);
 
 			added.mesh = msg.submeshInstances[i];
 
@@ -257,9 +257,9 @@ namespace AGE
 
 			//				added.animation = msg.animation;
 			added.currentNode = UNDEFINED_IDX;
-			_drawablesToMove.push_back(id);
+			_drawablesToMove.push_back((PrepareKey::OctreeObjectId)(id));
 			added.hasMoved = true;
-			added.moveBufferIdx = _drawablesToMove.size() - 1;
+			added.moveBufferIdx = (uint32_t)(_drawablesToMove.size() - 1);
 
 			//if (added.mesh.properties.invalu)
 			added.mesh.properties = _createPropertiesContainer();
@@ -299,15 +299,15 @@ namespace AGE
 		case(PrepareKey::Type::Mesh) :
 			uo = &_meshs.get(msg.key.id);
 			uo->transformation = msg.transform;
-			for (uint32_t e : uo->drawableCollection)
+			for (auto e : uo->drawableCollection)
 			{
 				_drawables.get(e).transformation = uo->transformation;
 				//assert(_drawables.get(e).currentNode != UNDEFINED_IDX);
 				if (_drawables.get(e).hasMoved == false)
 				{
 					_drawables.get(e).hasMoved = true;
-					_drawables.get(e).moveBufferIdx = (size_t)_drawablesToMove.size();
-					_drawablesToMove.push_back(e);
+					_drawables.get(e).moveBufferIdx = (uint32_t)_drawablesToMove.size();
+					_drawablesToMove.push_back((uint32_t)e);
 				}
 			}
 			break;
@@ -317,7 +317,7 @@ namespace AGE
 			if (l->hasMoved == false)
 			{
 				l->hasMoved = true;
-				l->moveBufferIdx = _pointLightsToMove.size();
+				l->moveBufferIdx = (uint32_t)_pointLightsToMove.size();
 				_pointLightsToMove.push_back(msg.key.id);
 			}
 			break;

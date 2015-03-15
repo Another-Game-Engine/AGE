@@ -229,10 +229,12 @@ namespace AGE
 		AGE::Imgui::getInstance()->startUpdate();
 #endif
 		_timer->update();
-		res = updateScenes(_timer->getElapsed());
+		res = updateScenes(_timer->getElapsed() * _timeMultiplier);
 		if (!res)
+		{
 			return false;
-		static double refreshStats = 0.0;
+		}
+		static float refreshStats = 0.0;
 		refreshStats += _timer->getElapsed();
 		auto &stats = GetThreadManager()->getStatistics();
 		if (refreshStats >= 1.0)

@@ -8,33 +8,33 @@ namespace AGE
 	namespace SimpleGeometry
 	{
 		// Generate an icosphere
-		typedef std::pair<uint32_t, uint32_t>				idxPair_t;
+		typedef std::pair<std::size_t, std::size_t>				idxPair_t;
 
 		class IndexPairHash
 		{
 		public:
 			std::size_t operator ()(const idxPair_t &idxpair) const
 			{
-				uint32_t a = idxpair.first;
-				uint32_t b = idxpair.second;
+				std::size_t a = idxpair.first;
+				std::size_t b = idxpair.second;
 				return (a >= b ? a * a + a + b : a + b * b);
 			}
 		};
 
-		typedef std::unordered_map<idxPair_t, uint32_t, IndexPairHash> idxHash_t;
+		typedef std::unordered_map<idxPair_t, std::size_t, IndexPairHash> idxHash_t;
 
-		static uint32_t getMiddlePoint(std::vector<glm::vec3> &vertexTab, idxHash_t &middlePoints, uint32_t p1, uint32_t p2)
+		static std::size_t getMiddlePoint(std::vector<glm::vec3> &vertexTab, idxHash_t &middlePoints, std::size_t p1, std::size_t p2)
 		{
 			// first check if we have it already
 			bool firstIsSmaller = p1 < p2;
-			uint32_t smallerIndex = firstIsSmaller ? p1 : p2;
-			uint32_t greaterIndex = firstIsSmaller ? p2 : p1;
+			std::size_t smallerIndex = firstIsSmaller ? p1 : p2;
+			std::size_t greaterIndex = firstIsSmaller ? p2 : p1;
 			idxPair_t key;
 
 			key.first = smallerIndex;
 			key.second = greaterIndex;
 
-			uint32_t ret;
+			std::size_t ret;
 
 			idxHash_t::iterator it = middlePoints.find(key);
 			if (it != middlePoints.end())
@@ -57,13 +57,13 @@ namespace AGE
 			return (ret);
 		}
 
-		void generateIcoSphere(uint32_t recursion, std::vector<glm::vec3> &vertex, std::vector<unsigned int> &indices)
+		void generateIcoSphere(std::size_t recursion, std::vector<glm::vec3> &vertex, std::vector<unsigned int> &indices)
 		{
 			idxHash_t					middlePoints;
-			uint32_t					currentIdx = 0;
+			std::size_t					currentIdx = 0;
 
 			// create 12 vertices of a icosahedron
-			const float t = (1.0 + std::sqrt(5.0)) / 2.0;
+			const float t = (1.0f + (float)std::sqrt(5.0f)) / 2.0f;
 
 			vertex =
 			{
@@ -113,6 +113,7 @@ namespace AGE
 				for (int i = 0; i < indices.size(); i += 3)
 				{
 					// replace triangle by 4 triangles
+
 					uint32_t a = getMiddlePoint(vertex, middlePoints, indices[i + 0], indices[i + 1]);
 					uint32_t b = getMiddlePoint(vertex, middlePoints, indices[i + 1], indices[i + 2]);
 					uint32_t c = getMiddlePoint(vertex, middlePoints, indices[i + 2], indices[i + 0]);

@@ -155,7 +155,7 @@ namespace AGE
 		}
 		else
 		{
-			glDrawArrays(mode, _offset, _nbr_vertex);
+			glDrawArrays(mode, (GLint)_offset, (GLsizei)_nbr_vertex);
 		}
 		return (*this);
 	}

@@ -75,7 +75,7 @@ namespace AGE
 		auto scene = entity.getScene();
 		_key = AGE::GetPrepareThread()->addCamera();
 		entity.getLink().registerOctreeObject(_key);
-		auto screenSize = scene->getInstance<IRenderContext>()->getScreenSize();
+		auto screenSize = entity.getScene()->getInstance<IRenderContext>()->getScreenSize();
 		setProjection(glm::perspective(60.0f, (float)screenSize.x / (float)screenSize.y, 0.1f, 2000.0f));
 	}
 

@@ -22,12 +22,12 @@ namespace AGE
 		return (true);
 	}
 
-	void FreeFlyCamera::updateBegin(double time)
+	void FreeFlyCamera::updateBegin(float time)
 	{
 
 	}
 
-	void FreeFlyCamera::mainUpdate(double time)
+	void FreeFlyCamera::mainUpdate(float time)
 	{
 		const float verticalAngleLimit = glm::pi<float>();
 		size_t camIndex = 0;
@@ -57,12 +57,12 @@ namespace AGE
 		}
 	}
 
-	void FreeFlyCamera::updateEnd(double time)
+	void FreeFlyCamera::updateEnd(float time)
 	{
 
 	}
 
-	void FreeFlyCamera::_handleKeyboard(double time, Link &camLink, size_t camIdx)
+	void FreeFlyCamera::_handleKeyboard(float time, Link &camLink, size_t camIdx)
 	{
 		float camTranslationSpeed = 5.0f;
 		float maxAcceleration = 10.0f;
@@ -92,7 +92,7 @@ namespace AGE
 			_cameraAngles[camIdx].y += camRotationSpeed * time;
 	}
 
-	void FreeFlyCamera::_handleMouse(double time, Link &camLink, size_t camIdx)
+	void FreeFlyCamera::_handleMouse(float time, Link &camLink, size_t camIdx)
 	{
 		float camMouseRotationSpeed = 0.0005f;
 		Input *inputs = _scene->getInstance<Input>();
@@ -114,7 +114,7 @@ namespace AGE
 		}
 	}
 
-	void FreeFlyCamera::_handleController(double time, Link &camLink, size_t camIdx)
+	void FreeFlyCamera::_handleController(float time, Link &camLink, size_t camIdx)
 	{
 		float camTranslationSpeed = 5.0f;
 		float maxAcceleration = 10.0f;
