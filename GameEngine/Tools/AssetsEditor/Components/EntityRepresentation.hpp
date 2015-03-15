@@ -5,6 +5,7 @@
 #include <glm/fwd.hpp>
 #include <cereal/archives/json.hpp>
 #include <cereal/types/array.hpp>
+#include <WorldEditor/Managers/LayerManager.hpp>
 
 #define ENTITY_NAME_LENGTH 128
 
@@ -38,11 +39,7 @@ namespace AGE
 			glm::vec3 position;
 			glm::vec3 rotation;
 			glm::vec3 scale;
-			
-			//EntityRepresentation &operator=(EntityRepresentation const &o) = delete;
-			//EntityRepresentation(EntityRepresentation const &o) = delete;
-			EntityRepresentation &operator=(EntityRepresentation &&o);
-			EntityRepresentation(EntityRepresentation &&o);
+			std::shared_ptr<WE::Layer> layer;
 		};
 	}
 }

@@ -130,6 +130,7 @@
     <ClInclude Include="Scenes\WorldEditorScene.hpp" />
     <ClInclude Include="Systems\AssetsAndComponentRelationsSystem.hpp" />
     <ClInclude Include="Systems\EntityManager.hpp" />
+    <ClInclude Include="WorldEditor\Managers\LayerManager.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\GameEngine\GameEngine.vcxproj">
