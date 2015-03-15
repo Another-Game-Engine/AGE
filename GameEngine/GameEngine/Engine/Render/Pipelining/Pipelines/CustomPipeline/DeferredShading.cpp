@@ -58,37 +58,60 @@ namespace AGE
 			painter->draw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], properties, vertices);
 		});
 
-		_rendering_list[RENDER_CLEAR_STEP] = std::make_shared<RenderingPass>([&](std::vector<Properties> const &properties, std::vector<Key<Vertices>> const &vertices, std::shared_ptr<Painter> const &painter){
-			glDisable(GL_BLEND);
-			OpenGLTasks::set_clear_color(glm::vec4(0, 0, 0, 0));
-			OpenGLTasks::clear_buffer(true, false, false);
-		});
-
 		_rendering_list[RENDER_LIGHTNING] = std::make_shared<RenderingPass>([&](std::vector<Properties> const &properties, std::vector<Key<Vertices>> const &vertices, std::shared_ptr<Painter> const &painter){
 
+			// Disable blending to clear the color buffer
+			glDisable(GL_BLEND);
+			// clear the light accumulation to zero
+			OpenGLTasks::set_clear_color(glm::vec4(0));
+			OpenGLTasks::clear_buffer(true, false, false);
+			// activate depth test and func to check if sphere_depth > current_depth (normal zfail)
 			OpenGLTasks::set_depth_test(true);
 			glDepthFunc(GL_GEQUAL);
+			// We activate the stencil test
+			OpenGLTasks::set_stencil_test(true);
+			// We do not write on the depth buffer
 			glDepthMask(GL_FALSE);
+			// And we set the blend mode to additive
 			glEnable(GL_BLEND);
 			glBlendFunc(GL_ONE, GL_ONE);
-			OpenGLTasks::set_clear_stencil(0);
-			OpenGLTasks::clear_buffer(false, false, true);
-			OpenGLTasks::set_stencil_test(true);
+			// We get the sphere geometry
+			Key<Vertices> sphereVertices;
+			Key<Painter> spherePainter;
+			GetRenderThread()->getIcoSphereGeometry(sphereVertices, spherePainter, 3);
+			auto spherePainterPtr = _painter_manager->get_painter(spherePainter);
+			// Iterate throught each light
+			for (auto &pl : _lights.pointLight)
+			{
+				_programs[PROGRAM_STENCIL_BASIC]->use();
+				*_programs[PROGRAM_STENCIL_BASIC]->get_resource<Mat4>("model_matrix") = pl.light.sphereTransform;
 
-			glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+				_programs[PROGRAM_LIGHTNING]->use();
+				*_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("model_matrix") = pl.light.sphereTransform;
+				*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("position_light") = glm::vec3(pl.light.sphereTransform[3]);
+				*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("attenuation_light") = pl.light.attenuation;
+				*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("color_light") = pl.light.color;
+				*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("ambiant_color") = glm::vec3(0);
 
-			glStencilFunc(GL_ALWAYS, 0, 0xFF);
-			glStencilOp(GL_KEEP, GL_KEEP, GL_INCR);
-			glCullFace(GL_BACK);
+				// We clear the stencil buffer
+				OpenGLTasks::set_clear_stencil(0);
+				OpenGLTasks::clear_buffer(false, false, true);
 
-			painter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_STENCIL_BASIC], Properties(), vertices.back());
+				glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
 
-			glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
-			glStencilFunc(GL_EQUAL, 0, 0xFF);
-			glCullFace(GL_FRONT);
-			glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
+				glStencilFunc(GL_ALWAYS, 0, 0xFF);
+				glStencilOp(GL_KEEP, GL_KEEP, GL_INCR);
+				glCullFace(GL_BACK);
 
-			painter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_LIGHTNING], Properties(), vertices.back());
+				spherePainterPtr->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_STENCIL_BASIC], Properties(), sphereVertices);
+
+				glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+				glStencilFunc(GL_EQUAL, 0, 0xFF);
+				glCullFace(GL_FRONT);
+				glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
+
+				spherePainterPtr->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_LIGHTNING], Properties(), sphereVertices);
+			}
 		});
 		_rendering_list[RENDER_MERGING] = std::make_shared<Rendering>([&](std::vector<Properties> const &properties, std::vector<Key<Vertices>> const &vertices, std::shared_ptr<Painter> const &painter){
 			Key<Painter> quadPainterKey;
@@ -109,11 +132,8 @@ namespace AGE
 		_depthTexture = addRenderPassOutput<Texture2D, RenderingPass>(_rendering_list[RENDER_BUFFERING], GL_DEPTH_STENCIL_ATTACHMENT, screen_size.x, screen_size.y, GL_DEPTH24_STENCIL8, true);
 
 		std::static_pointer_cast<RenderingPass>(_rendering_list[RENDER_LIGHTNING])->push_storage_output(GL_DEPTH_STENCIL_ATTACHMENT, _depthTexture);
-
 		// RGB = light color, A = specular power
 		_lightAccumulationTexture = addRenderPassOutput<Texture2D, RenderingPass>(_rendering_list[RENDER_LIGHTNING], GL_COLOR_ATTACHMENT0, screen_size.x, screen_size.y, GL_RGBA8, true);
-
-		std::static_pointer_cast<RenderingPass>(_rendering_list[RENDER_CLEAR_STEP])->push_storage_output(GL_COLOR_ATTACHMENT0, _lightAccumulationTexture);
 	}
 
 	DeferredShading::DeferredShading(DeferredShading &&move) :
@@ -140,8 +160,6 @@ namespace AGE
 			_rendering_list[RENDER_BUFFERING]->render(key.properties, key.vertices, _painter_manager->get_painter(key.painter));
 		}
 
-		_rendering_list[RENDER_CLEAR_STEP]->render(std::vector<Properties>(), std::vector<Key<Vertices>>(), nullptr);
-
 		_programs[PROGRAM_LIGHTNING]->use();
 		*_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("projection_matrix") = infos.projection;
 		*_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("view_matrix") = infos.view;
@@ -153,26 +171,9 @@ namespace AGE
 		*_programs[PROGRAM_STENCIL_BASIC]->get_resource<Mat4>("projection_matrix") = infos.projection;
 		*_programs[PROGRAM_STENCIL_BASIC]->get_resource<Mat4>("view_matrix") = infos.view;
 
-		for (auto &pl : lights.pointLight)
-		{
-			_programs[PROGRAM_STENCIL_BASIC]->use();
-			*_programs[PROGRAM_STENCIL_BASIC]->get_resource<Mat4>("model_matrix") = pl.light.sphereTransform;
+		_lights = lights;
 
-			_programs[PROGRAM_LIGHTNING]->use();
-			*_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("model_matrix") = pl.light.sphereTransform;
-			*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("position_light") = glm::vec3(pl.light.sphereTransform[3]);
-			*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("attenuation_light") = pl.light.attenuation;
-			*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("color_light") = pl.light.color;
-			*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("ambiant_color") = glm::vec3(0);
-
-			std::vector<Key<Vertices>> sphereVertices;
-			Key<Painter> spherePainter;
-			
-			sphereVertices.emplace_back();
-			GetRenderThread()->getIcoSphereGeometry(sphereVertices.back(), spherePainter, 3);
-
-			_rendering_list[RENDER_LIGHTNING]->render(std::vector<Properties>(), sphereVertices, _painter_manager->get_painter(spherePainter));
-		}
+		_rendering_list[RENDER_LIGHTNING]->render(std::vector<Properties>(), std::vector<Key<Vertices>>(), nullptr);
 
 		_programs[PROGRAM_MERGING]->use();
 		*_programs[PROGRAM_MERGING]->get_resource<Sampler2D>("diffuse_map") = _diffuseTexture;

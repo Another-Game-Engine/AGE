@@ -3,6 +3,7 @@
 #include <Utils/Debug.hpp>
 #include <Utils/OpenGL.hh>
 #include <Render/Pipelining/Pipelines/ARenderingPipeline.hh>
+#include <SpacePartitioning/Ouptut/RenderLight.hh>
 #include <glm/glm.hpp>
 #include <Render/Textures/Texture2D.hh>
 #include <memory>
@@ -25,7 +26,6 @@ namespace AGE
 		enum RenderStep
 		{
 			RENDER_BUFFERING = 0,
-			RENDER_CLEAR_STEP,
 			RENDER_LIGHTNING,
 			RENDER_MERGING,
 			TOTAL_RENDER
@@ -48,6 +48,8 @@ namespace AGE
 		std::shared_ptr<Texture2D> _depthTexture;
 
 		std::shared_ptr<Texture2D> _lightAccumulationTexture;
+
+		RenderLightList _lights;
 	};
 
 
