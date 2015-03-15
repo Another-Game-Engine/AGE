@@ -33,6 +33,8 @@ namespace AGE
 		const std::string &getCachePath(void) const;
 
 		std::size_t getFrameNumber(void) const;
+		inline float getTimeMultiplier() const { return _timeMultiplier; }
+		inline void setTimeMultiplier(float multiplier) { if (multiplier < 0.0f) return; _timeMultiplier = multiplier; }
 	private:
 		friend class Singleton < Engine > ;
 
@@ -60,6 +62,7 @@ namespace AGE
 		std::string savePath;
 		std::string cachePath;
 		std::size_t frame = 0;
+		float _timeMultiplier = 1.0f;
 	};
 
 	Engine *CreateEngine();

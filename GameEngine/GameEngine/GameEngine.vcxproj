@@ -134,6 +134,7 @@
     <ClCompile Include="Engine\Render\ProgramResources\Types\Uniform\Mat4Array255.cpp" />
     <ClCompile Include="Engine\Render\Properties\Properties.cpp" />
     <ClCompile Include="Engine\Render\PropertyManager.cpp" />
+    <ClCompile Include="Engine\Systems\DebugSystem.cpp" />
     <ClCompile Include="Engine\Systems\FreeFlyCamera.cpp" />
     <ClCompile Include="Engine\Threads\Commands\MainToPrepareCommands.cpp" />
     <ClCompile Include="Engine\Core\ConfigurationManager.cpp" />
@@ -294,6 +295,7 @@
     <ClInclude Include="Engine\Render\Properties\Materials\Specular.hh" />
     <ClInclude Include="Engine\Render\ProgramResources\Types\Uniform\Mat4Array255.hh" />
     <ClInclude Include="Engine\Render\Properties\Properties.hh" />
+    <ClInclude Include="Engine\Systems\DebugSystem.hpp" />
     <ClInclude Include="Engine\Systems\FreeFlyCamera.hh" />
     <ClInclude Include="Engine\Threads\Commands\ToRenderCommands.hpp" />
     <ClInclude Include="Engine\Threads\Commands\MainToPrepareCommands.hpp" />
