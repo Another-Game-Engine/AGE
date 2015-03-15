@@ -3,6 +3,7 @@
 #include <Utils/Debug.hpp>
 #include <Utils/OpenGL.hh>
 #include <Render/Pipelining/Pipelines/ARenderingPipeline.hh>
+#include <SpacePartitioning/Ouptut/RenderLight.hh>
 #include <glm/glm.hpp>
 #include <Render/Textures/Texture2D.hh>
 #include <memory>
@@ -13,12 +14,21 @@ namespace AGE
 	class DeferredShading : public ARenderingPipeline
 	{
 	public:
-		enum Step
+		enum ProgramsStep
 		{
-			BUFFERING = 0,
-			LIGHTNING,
-			MERGING,
-			TOTAL
+			PROGRAM_BUFFERING = 0,
+			PROGRAM_STENCIL_BASIC,
+			PROGRAM_LIGHTNING,
+			PROGRAM_MERGING,
+			TOTAL_PROGRAMS
+		};
+
+		enum RenderStep
+		{
+			RENDER_BUFFERING = 0,
+			RENDER_LIGHTNING,
+			RENDER_MERGING,
+			TOTAL_RENDER
 		};
 
 	public:
@@ -35,8 +45,11 @@ namespace AGE
 		std::shared_ptr<Texture2D> _diffuseTexture;
 		std::shared_ptr<Texture2D> _normalTexture;
 		std::shared_ptr<Texture2D> _specularTexture;
-		std::shared_ptr<Texture2D> _lightMap;
-		RenderLightList const *_lights;
+		std::shared_ptr<Texture2D> _depthTexture;
+
+		std::shared_ptr<Texture2D> _lightAccumulationTexture;
+
+		RenderLightList _lights;
 	};
 
 

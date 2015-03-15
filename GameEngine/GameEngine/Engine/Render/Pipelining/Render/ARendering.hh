@@ -12,11 +12,11 @@ namespace AGE
 		virtual ~ARendering() {}
 
 	protected:
-		ARendering(std::function<void(FUNCTION_ARGS)> const & function);
+		ARendering(std::function<void(std::vector<Properties> const &properties, std::vector<Key<Vertices>> const &vertices, std::shared_ptr<Painter> const &painter)> const & function);
 		ARendering(ARendering &&move);
 
 	protected:
-		std::function<void(FUNCTION_ARGS)> _render_function;
+		std::function<void(std::vector<Properties> const &properties, std::vector<Key<Vertices>> const &vertices, std::shared_ptr<Painter> const &painter)> _render_function;
 	};
 
 }

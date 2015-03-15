@@ -38,10 +38,10 @@ namespace AGE
 		_programs[RENDER_SKINNED] = std::make_shared<Program>(Program(std::string("basic program skin"), unitsSkin));
 		_programs[RENDER_BASIC] = std::make_shared<Program>(Program(std::string("basic program"), unitsBasic));
 		_rendering_list.resize(TOTAL);
-		_rendering_list[RENDER_SKINNED] = std::make_shared<Rendering>([&](FUNCTION_ARGS) {
+		_rendering_list[RENDER_SKINNED] = std::make_shared<Rendering>([&](std::vector<Properties> const &properties, std::vector<Key<Vertices>> const &vertices, std::shared_ptr<Painter> const &painter) {
 			painter->draw(GL_TRIANGLES, _programs[RENDER_SKINNED], properties, vertices);
 		});
-		_rendering_list[RENDER_BASIC] = std::make_shared<Rendering>([&](FUNCTION_ARGS) {
+		_rendering_list[RENDER_BASIC] = std::make_shared<Rendering>([&](std::vector<Properties> const &properties, std::vector<Key<Vertices>> const &vertices, std::shared_ptr<Painter> const &painter) {
 			painter->draw(GL_TRIANGLES, _programs[RENDER_BASIC], properties, vertices);
 		});
 //		auto &rendering = std::static_pointer_cast<Rendering>(_rendering_list[RENDER]);
