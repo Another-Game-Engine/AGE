@@ -14,7 +14,7 @@ protected:
 	ABuffer();
 	ABuffer(ABuffer &&move);
 	virtual void _bind() = 0;
-	virtual void _unbind() = 0;
+	virtual void _unbind(bool reset) = 0;
 public:
 	GLuint id() const;
 	size_t size() const;
@@ -22,7 +22,7 @@ public:
 	virtual ABuffer const &alloc(size_t size) = 0;
 	virtual ABuffer const &sub(size_t offset, size_t size, void const *buffer) const = 0;
 	void bind();
-	void unbind();
+	void unbind(bool reset = false);
 	bool isBinded() const;
 protected:
 	GLuint _id;

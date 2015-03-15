@@ -23,14 +23,17 @@ void VertexBuffer::_bind()
 	glBindBuffer(GL_ARRAY_BUFFER, _id);
 }
 
-void VertexBuffer::_unbind()
+void VertexBuffer::_unbind(bool reset)
 {
 	if (_lastBinded != this)
 	{
 		return;
 	}
 	_lastBinded = nullptr;
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	if (reset)
+	{
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+	}
 }
 
 GLenum VertexBuffer::mode() const

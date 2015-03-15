@@ -19,14 +19,17 @@ namespace AGE
 		glBindBuffer(GL_UNIFORM_BUFFER, _id);
 	}
 
-	void UniformBuffer::_unbind()
+	void UniformBuffer::_unbind(bool reset)
 	{
 		if (_lastBinded != this)
 		{
 			return;
 		}
 		_lastBinded = nullptr;
-		glBindBuffer(GL_UNIFORM_BUFFER, 0);
+		if (reset)
+		{
+			glBindBuffer(GL_UNIFORM_BUFFER, 0);
+		}
 	}
 
 	GLenum UniformBuffer::mode() const

@@ -42,14 +42,14 @@ void ABuffer::bind()
 	_bind();
 }
 
-void ABuffer::unbind()
+void ABuffer::unbind(bool reset /*= false*/)
 {
 	if (!_binded)
 	{
 		return;
 	}
 	_binded = false;
-	_unbind();
+	_unbind(reset);
 }
 
 bool ABuffer::isBinded() const

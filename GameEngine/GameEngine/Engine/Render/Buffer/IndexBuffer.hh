@@ -6,7 +6,7 @@ class IndexBuffer : public ABuffer
 {
 protected:
 	virtual void _bind() override final;
-	virtual void _unbind() override final;
+	virtual void _unbind(bool reset) override final;
 	static IndexBuffer *_lastBinded;
 public:
 	virtual GLenum mode() const override final;

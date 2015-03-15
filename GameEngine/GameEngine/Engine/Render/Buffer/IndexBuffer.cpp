@@ -18,14 +18,17 @@ void IndexBuffer::_bind()
 }
 
 
-void IndexBuffer::_unbind()
+void IndexBuffer::_unbind(bool reset)
 {
 	if (_lastBinded != this)
 	{
 		return;
 	}
 	_lastBinded = nullptr;
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	if (reset)
+	{
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	}
 }
 
 GLenum IndexBuffer::mode() const
