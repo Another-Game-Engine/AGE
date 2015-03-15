@@ -171,7 +171,12 @@ namespace AGE
 		PointLight *l = &_pointLights.get(msg.key.id);
 		l->color = msg.color;
 		l->attenuation = msg.attenuation;
-		l->hasMoved = true;
+		if (l->hasMoved == false)
+		{
+			l->hasMoved = true;
+			l->moveBufferIdx = _pointLightsToMove.size();
+			_pointLightsToMove.push_back(msg.key.id);
+		}
 	}
 
 	void RenderScene::_deleteCamera(AGE::Commands::MainToPrepare::DeleteCamera &msg)

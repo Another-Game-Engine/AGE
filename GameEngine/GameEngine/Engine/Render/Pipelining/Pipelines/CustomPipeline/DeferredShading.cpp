@@ -44,9 +44,13 @@ namespace AGE
 		_programs[PROGRAM_MERGING] = std::make_shared<Program>(Program(std::string("program_merging"), { std::make_shared<UnitProg>(DEFERRED_SHADING_MERGING_VERTEX, GL_VERTEX_SHADER), std::make_shared<UnitProg>(DEFERRED_SHADING_MERGING_FRAG, GL_FRAGMENT_SHADER) }));
 
 		_rendering_list[RENDER_BUFFERING] = std::make_shared<RenderingPass>([&](std::vector<Properties> const &properties, std::vector<Key<Vertices>> const &vertices, std::shared_ptr<Painter> const &painter) {
+			glEnable(GL_CULL_FACE);
+			glCullFace(GL_BACK);
+			glDepthMask(GL_TRUE);
+			glDepthFunc(GL_LEQUAL);
 			OpenGLTasks::set_stencil_test(false);
 			OpenGLTasks::set_depth_test(true);
-			OpenGLTasks::set_clear_color(glm::vec4(0.f, 1.0f, 0.0f, 1.0f));
+			OpenGLTasks::set_clear_color(glm::vec4(0.f, 0.0f, 0.0f, 1.0f));
 			OpenGLTasks::clear_buffer();
 			OpenGLTasks::set_blend_test(false, 0);
 			OpenGLTasks::set_blend_test(false, 1);
@@ -55,49 +59,45 @@ namespace AGE
 		});
 
 		_rendering_list[RENDER_CLEAR_STEP] = std::make_shared<RenderingPass>([&](std::vector<Properties> const &properties, std::vector<Key<Vertices>> const &vertices, std::shared_ptr<Painter> const &painter){
-			OpenGLTasks::set_clear_color(glm::vec4(0,0,0,1));
-			OpenGLTasks::clear_buffer(true, true, false);
+			glDisable(GL_BLEND);
+			OpenGLTasks::set_clear_color(glm::vec4(0, 0, 0, 0));
+			OpenGLTasks::clear_buffer(true, false, false);
 		});
 
 		_rendering_list[RENDER_LIGHTNING] = std::make_shared<RenderingPass>([&](std::vector<Properties> const &properties, std::vector<Key<Vertices>> const &vertices, std::shared_ptr<Painter> const &painter){
 
-			OpenGLTasks::set_depth_test(false);
+			OpenGLTasks::set_depth_test(true);
+			glDepthFunc(GL_GEQUAL);
 			glDepthMask(GL_FALSE);
 			glEnable(GL_BLEND);
 			glBlendFunc(GL_ONE, GL_ONE);
-
-			glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
 			OpenGLTasks::set_clear_stencil(0);
+			OpenGLTasks::clear_buffer(false, false, true);
 			OpenGLTasks::set_stencil_test(true);
 
-			OpenGLTasks::clear_buffer(false, false, true);
+			glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
 
-			glStencilFunc(GL_ALWAYS, 0, 0);
+			glStencilFunc(GL_ALWAYS, 0, 0xFF);
 			glStencilOp(GL_KEEP, GL_KEEP, GL_INCR);
-			glCullFace(GL_FRONT);
-
-			painter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_STENCIL_BASIC], Properties(), vertices.back());
-
-			glStencilOp(GL_KEEP, GL_KEEP, GL_DECR);
 			glCullFace(GL_BACK);
 
 			painter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_STENCIL_BASIC], Properties(), vertices.back());
 
 			glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
-
-			glStencilFunc(GL_EQUAL, 1, 1);
+			glStencilFunc(GL_EQUAL, 0, 0xFF);
 			glCullFace(GL_FRONT);
-			glDepthMask(GL_TRUE);
+			glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
 
-			Key<Painter> quadPainterKey;
-			Key<Vertices> quadVerticesKey;
-			GetRenderThread()->getQuadGeometry(quadVerticesKey, quadPainterKey);
-			auto myPainter = painter_manager->get_painter(quadPainterKey);
-			myPainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_LIGHTNING], Properties(), quadVerticesKey);
+			painter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_LIGHTNING], Properties(), vertices.back());
 		});
 		_rendering_list[RENDER_MERGING] = std::make_shared<Rendering>([&](std::vector<Properties> const &properties, std::vector<Key<Vertices>> const &vertices, std::shared_ptr<Painter> const &painter){
 			Key<Painter> quadPainterKey;
 			Key<Vertices> quadVerticesKey;
+	
+			glDisable(GL_BLEND);
+			glDisable(GL_CULL_FACE);
+			OpenGLTasks::set_depth_test(false);
+			OpenGLTasks::set_stencil_test(false);
 			GetRenderThread()->getQuadGeometry(quadVerticesKey, quadPainterKey);
 			auto myPainter = painter_manager->get_painter(quadPainterKey);
 			myPainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_MERGING], Properties(), quadVerticesKey);
@@ -108,7 +108,7 @@ namespace AGE
 		_specularTexture = addRenderPassOutput<Texture2D, RenderingPass>(_rendering_list[RENDER_BUFFERING], GL_COLOR_ATTACHMENT2, screen_size.x, screen_size.y, GL_RGBA8, true);
 		_depthTexture = addRenderPassOutput<Texture2D, RenderingPass>(_rendering_list[RENDER_BUFFERING], GL_DEPTH_STENCIL_ATTACHMENT, screen_size.x, screen_size.y, GL_DEPTH24_STENCIL8, true);
 
-		//std::static_pointer_cast<RenderingPass>(_rendering_list[RENDER_LIGHTNING])->push_storage_output(GL_DEPTH_STENCIL_ATTACHMENT, _depthTexture);
+		std::static_pointer_cast<RenderingPass>(_rendering_list[RENDER_LIGHTNING])->push_storage_output(GL_DEPTH_STENCIL_ATTACHMENT, _depthTexture);
 
 		// RGB = light color, A = specular power
 		_lightAccumulationTexture = addRenderPassOutput<Texture2D, RenderingPass>(_rendering_list[RENDER_LIGHTNING], GL_COLOR_ATTACHMENT0, screen_size.x, screen_size.y, GL_RGBA8, true);
@@ -130,6 +130,8 @@ namespace AGE
 			return (*this);
 		}
 
+		glm::vec3 cameraPosition = -glm::transpose(glm::mat3(infos.view)) * glm::vec3(infos.view[3]);
+
 		_programs[PROGRAM_BUFFERING]->use();
 		*_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("projection_matrix") = infos.projection;
 		*_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("view_matrix") = infos.view;
@@ -143,18 +145,21 @@ namespace AGE
 		_programs[PROGRAM_LIGHTNING]->use();
 		*_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("projection_matrix") = infos.projection;
 		*_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("view_matrix") = infos.view;
-
 		*_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("normal_buffer") = _normalTexture;
 		*_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("depth_buffer") = _depthTexture;
+		*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("eye_pos") = cameraPosition;
+
+		_programs[PROGRAM_STENCIL_BASIC]->use();
+		*_programs[PROGRAM_STENCIL_BASIC]->get_resource<Mat4>("projection_matrix") = infos.projection;
+		*_programs[PROGRAM_STENCIL_BASIC]->get_resource<Mat4>("view_matrix") = infos.view;
 
 		for (auto &pl : lights.pointLight)
 		{
 			_programs[PROGRAM_STENCIL_BASIC]->use();
-			*_programs[PROGRAM_STENCIL_BASIC]->get_resource<Mat4>("projection_matrix") = infos.projection;
-			*_programs[PROGRAM_STENCIL_BASIC]->get_resource<Mat4>("view_matrix") = infos.view;
 			*_programs[PROGRAM_STENCIL_BASIC]->get_resource<Mat4>("model_matrix") = pl.light.sphereTransform;
 
 			_programs[PROGRAM_LIGHTNING]->use();
+			*_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("model_matrix") = pl.light.sphereTransform;
 			*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("position_light") = glm::vec3(pl.light.sphereTransform[3]);
 			*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("attenuation_light") = pl.light.attenuation;
 			*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("color_light") = pl.light.color;
@@ -170,8 +175,9 @@ namespace AGE
 		}
 
 		_programs[PROGRAM_MERGING]->use();
-		*_programs[PROGRAM_MERGING]->get_resource<Sampler2D>("diffuse_map") = _diffuseTexture;;
-		*_programs[PROGRAM_MERGING]->get_resource<Sampler2D>("light_buffer") = _lightAccumulationTexture;;
+		*_programs[PROGRAM_MERGING]->get_resource<Sampler2D>("diffuse_map") = _diffuseTexture;
+		*_programs[PROGRAM_MERGING]->get_resource<Sampler2D>("light_buffer") = _lightAccumulationTexture;
+//		*_programs[PROGRAM_MERGING]->get_resource<Sampler2D>("specular_map") = _specularTexture;
 		for (auto key : pipeline.keys)
 		{
 			_rendering_list[RENDER_MERGING]->render(key.properties, key.vertices, _painter_manager->get_painter(key.painter));

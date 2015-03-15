@@ -21,21 +21,21 @@ namespace AGE
 	void PointLight::computeSphereTransform()
 	{
 		glm::vec3 lightRange;
-		glm::vec3 equation(attenuation);
+		glm::vec3 equation(attenuation.z, attenuation.y, attenuation.x);
 
-		// if the value of attenuation.x + attenuation.y * dist + attenuation.z * dist * dist == 256
+		// if the value of equation.z + equation.y * dist + equation.x * dist * dist == 256
 		// then the pixels are not lighted anymore (pxlColor = final_color / attenuation)
-		equation.x -= 256;
-		if (attenuation.z == 0) // first degree
+		equation.z -= 256;
+		if (equation.x == 0) // first degree
 		{
 			// infinite range if there is no distance attenuation
-			assert(attenuation.y != 0);
-			lightRange = glm::vec3(-equation.x / equation.y);
+			assert(equation.y != 0);
+			lightRange = glm::vec3(-equation.z / equation.y);
 		}
 		else // second degree
 		{
 			float d = Mathematic::secondDegreeDiscriminant(equation);
-			glm::vec2 res = Mathematic::resolveSecondDegree(attenuation, d);
+			glm::vec2 res = Mathematic::resolveSecondDegree(equation, d);
 			lightRange = glm::vec3(glm::max(res.x, res.y));
 		}
 		assert(lightRange.x > 0);

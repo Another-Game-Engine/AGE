@@ -10,13 +10,14 @@ uniform vec3 attenuation_light;
 uniform vec3 color_light;
 uniform vec3 ambiant_color;
 
+uniform vec3 eye_pos;
+
 uniform sampler2D depth_buffer;
 uniform sampler2D normal_buffer;
 
 uniform float shininess;
 
-in vec2 interpolated_texCoord;
-flat in vec3 eyes_pos;
+noperspective in vec2 interpolated_texCoord;
 
 vec3 getWorldPosition(float depth, vec2 screenPos, mat4 viewProj)
 {
@@ -36,7 +37,7 @@ void main()
 	vec3 normal = normalize(vec3(texture(normal_buffer, interpolated_texCoord).xyz) * 2.0f - 1.0f);
 	float attenuation = attenuation_light.x + attenuation_light.y * dist + attenuation_light.z * dist * dist; 
 	float lambert = max(0.0f, dot(normal, normalize(lightDir)));
-	vec3 worldPosToEyes = normalize(eyes_pos - worldPos);
+	vec3 worldPosToEyes = normalize(eye_pos - worldPos);
 	vec3 reflection = reflect(normalize(-lightDir), normal);
 //	vec4 specular = texture(specular_buffer, interpolated_texCoord);
 	float specularRatio = clamp(pow(max(dot(reflection, worldPosToEyes), 0.0f), 100.f), 0.0f, 1.0f);
