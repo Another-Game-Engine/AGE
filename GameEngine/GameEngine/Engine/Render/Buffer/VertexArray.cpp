@@ -1,6 +1,6 @@
 #include <Render/Buffer/VertexArray.hh>
 
-GLuint VertexArray::_current_id = -1;
+VertexArray *VertexArray::_lastBinded = nullptr;
 
 VertexArray::VertexArray() :
 _id(0)
@@ -21,18 +21,28 @@ _id(move._id)
 	move._id = 0;
 }
 
-void VertexArray::bind() const
+void VertexArray::bind()
 {
-//	if (_current_id != _id) {
-//		_current_id = _id;
-//	}
+	if (_lastBinded == this)
+	{
+		return;
+	}
+	_lastBinded = this;
 	glBindVertexArray(_id);
 
 }
 
-void VertexArray::unbind() const
+void VertexArray::unbind()
 {
-	_current_id = 0;
+	if (_lastBinded != this)
+	{
+		return;
+	}
+	_lastBinded = nullptr;
+}
+
+static void Unbind()
+{
 	glBindVertexArray(0);
 }
 

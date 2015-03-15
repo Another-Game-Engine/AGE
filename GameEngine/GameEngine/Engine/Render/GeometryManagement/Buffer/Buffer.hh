@@ -1,7 +1,7 @@
 #pragma once
 
 # include <Render/GeometryManagement/Data/BlockMemory.hh>
-# include <Render/Buffer/IBuffer.hh>
+# include <Render/Buffer/ABuffer.hh>
 # include <Render/ProgramResources/Types/ProgramResourcesType.hh>
 # include <memory>
 
@@ -10,7 +10,7 @@ namespace AGE
 	class Buffer
 	{
 	public:
-		Buffer(std::string &&name, std::unique_ptr<IBuffer> &&buffer);
+		Buffer(std::string &&name, std::unique_ptr<ABuffer> &&buffer);
 		Buffer(Buffer const &copy) = delete;
 		Buffer(Buffer &&move);
 
@@ -32,7 +32,7 @@ namespace AGE
 		bool _request_transfer;
 		size_t _size_alloc;
 		std::vector<std::shared_ptr<BlockMemory>> _block_memories;
-		std::unique_ptr<IBuffer> _buffer;
+		std::unique_ptr<ABuffer> _buffer;
 		std::string _name;
 	};
 }

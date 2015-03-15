@@ -12,12 +12,12 @@ public:
 	VertexArray &operator=(VertexArray const &vertexarray) = delete;
 
 public:
-	void bind() const;
-	void unbind() const;
+	void bind();
+	void unbind();
 	GLuint getId() const;
-
+	static void Unbind();
 private:
 	GLuint _id;
-	static GLuint _current_id;
+	static VertexArray *_lastBinded;
 };
 

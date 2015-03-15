@@ -2,16 +2,31 @@
 
 namespace AGE
 {
-	IBuffer const & UniformBuffer::bind() const
+	UniformBuffer *UniformBuffer::_lastBinded = nullptr;
+
+	void UniformBuffer::_bind()
 	{
+		if (_lastBinded == this)
+		{
+			return;
+		}
+		if (_lastBinded)
+		{
+			_lastBinded->unbind();
+		}
+
+		_lastBinded = this;
 		glBindBuffer(GL_UNIFORM_BUFFER, _id);
-		return (*this);
 	}
 
-	IBuffer const & UniformBuffer::unbind() const
+	void UniformBuffer::_unbind()
 	{
+		if (_lastBinded != this)
+		{
+			return;
+		}
+		_lastBinded = nullptr;
 		glBindBuffer(GL_UNIFORM_BUFFER, 0);
-		return (*this);
 	}
 
 	GLenum UniformBuffer::mode() const
@@ -19,14 +34,14 @@ namespace AGE
 		return (GL_UNIFORM_BUFFER);
 	}
 
-	IBuffer const & UniformBuffer::alloc(size_t size)
+	ABuffer const & UniformBuffer::alloc(size_t size)
 	{
 		glBufferData(GL_UNIFORM_BUFFER, size, NULL, GL_STATIC_DRAW);
 		_size = size;
 		return (*this);
 	}
 
-	IBuffer const & UniformBuffer::sub(size_t offset, size_t size, void const *buffer) const
+	ABuffer const & UniformBuffer::sub(size_t offset, size_t size, void const *buffer) const
 	{
 		glBufferSubData(GL_UNIFORM_BUFFER, offset, size, buffer);
 		return (*this);
