@@ -63,7 +63,7 @@ namespace AGE
 			std::size_t					currentIdx = 0;
 
 			// create 12 vertices of a icosahedron
-			const float t = (1.0 + (float)std::sqrt(5.0)) / 2.0;
+			const float t = (1.0f + (float)std::sqrt(5.0f)) / 2.0f;
 
 			vertex =
 			{
