@@ -26,13 +26,14 @@ namespace AGE
 
 	void DebugSystem::mainUpdate(float time)
 	{
-		ImGui::Text("Point light number : ", _pointLights.getCollection().size());
+		ImGui::Text("Point light number : %i", _pointLights.getCollection().size());
 
 		if (ImGui::SliderFloat("Time multiplier", &_timeMultiplier, 0.0f, 10.0f))
 		{
 			GetEngine()->setTimeMultiplier(_timeMultiplier);
 		}
 
+		
 	}
 
 	void DebugSystem::updateEnd(float time)
