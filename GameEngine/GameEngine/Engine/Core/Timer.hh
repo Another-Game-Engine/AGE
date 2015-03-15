@@ -10,14 +10,14 @@ namespace AGE
 	private:
 		std::chrono::system_clock::time_point 		_oldTime;
 		std::chrono::system_clock::time_point		_curTime;
-		double _elapsed;
+		float _elapsed;
 
 	public:
 		Timer();
 		virtual ~Timer() { }
 
 		void 		update();
-		double 		getElapsed() const;
-		double 		getNow() const;
+		float       getElapsed() const;
+		float 		getNow() const;
 	};
 }

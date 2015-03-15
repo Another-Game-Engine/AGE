@@ -35,16 +35,16 @@ namespace AGE
 		virtual ~BenchmarkScene(void);
 		void initRendering();
 		virtual bool userStart();
-		virtual bool userUpdateBegin(double time);
-		virtual bool userUpdateEnd(double time);
+		virtual bool userUpdateBegin(float time);
+		virtual bool userUpdateEnd(float time);
 
 	private:
 
 		std::size_t _frameCounter = 0;
-		double _timeCounter = 0.0;
-		double _maxTime = 10000000005.0f;
-		double _chunkCounter = 0.0;
-		double _maxChunk = 0.25f;
+		float _timeCounter = 0.0;
+		float _maxTime = 10000000005.0f;
+		float _chunkCounter = 0.0;
+		float _maxChunk = 0.25f;
 		std::size_t _chunkFrame = 0;
 		std::ofstream _logFile;
 		AGE::Entity GLOBAL_CAMERA;

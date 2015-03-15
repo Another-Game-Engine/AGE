@@ -41,6 +41,6 @@ namespace AGE
 		bool        initScene(std::string const &name);
 		void        getSceneList(std::vector<std::string> &list) const;
 
-		bool        updateScenes(double time);
+		bool        updateScenes(float time);
 	};
 }

@@ -36,7 +36,6 @@ namespace AGE
 
 	private:
 		AGE::PrepareKey _key;
-		AScene *_scene;
 		glm::vec3 _color;
 		glm::vec3 _range;
 

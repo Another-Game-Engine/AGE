@@ -22,14 +22,14 @@ private:
 	std::shared_ptr<BulletCollisionManager> _manager;
 	EntityFilter _filter;
 
-	virtual void updateBegin(double time)
+	virtual void updateBegin(float time)
 	{
 	}
 
-	virtual void updateEnd(double time)
+	virtual void updateEnd(float time)
 	{}
 
-	virtual void mainUpdate(double time)
+	virtual void mainUpdate(float time)
 	{
 		// UPDATE POSITION OF CollisionBodies
 		auto scene = _scene.lock();

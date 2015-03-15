@@ -181,7 +181,7 @@ namespace AGE
 
 	uint32_t LooseOctreeNode::extendNode(POOL_NODE_ARGS, CullableShape<AABoundingBox> *toAdd, glm::i8vec3 const &direction)
 	{
-		uint32_t newRootIdx = manager.getNodePool().alloc();
+		uint32_t newRootIdx = (std::size_t)(manager.getNodePool().alloc());
 		LooseOctreeNode	*newRoot = &manager.getNodePool().get(newRootIdx);
 		// here we create thisPtr after the pool resize
 		CREATE_THIS_PTR
@@ -245,7 +245,7 @@ namespace AGE
 	void		LooseOctreeNode::generateSon(POOL_NODE_ARGS, uint32_t toGenIdx)
 	{
 		glm::u8vec3	currentSon((toGenIdx & 4) ? 1 : 0, (toGenIdx & 2) ? 1 : 0, toGenIdx & 1);
-		uint32_t newSonIdx = manager.getNodePool().alloc();
+		uint32_t newSonIdx = (std::size_t)(manager.getNodePool().alloc());
 		LooseOctreeNode	*newSon = &manager.getNodePool().get(newSonIdx);
 		// here we create thisPtr after the pool resize
 		CREATE_THIS_PTR
@@ -413,7 +413,7 @@ namespace AGE
 	void LooseOctreeNode::addElementToList(LooseOctree &manager, Cullable *toAdd)
 	{
 		++_nbrElements;
-		uint32_t elementIdx = manager.getElementPool().alloc();
+		uint32_t elementIdx = (std::size_t)(manager.getElementPool().alloc());
 		SOctreeElement &added = manager.getElementPool().get(elementIdx);
 
 		added.object = toAdd->key;

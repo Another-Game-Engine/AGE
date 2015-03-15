@@ -2,6 +2,9 @@
 #include <Core/AScene.hh>
 #include <Physic/BulletDynamicManager.hpp>
 #include <Physic/DynamicMotionState.hpp>
+#ifdef EDITOR_ENABLED
+#include <imgui/imgui.h>
+#endif
 
 namespace AGE
 {
@@ -16,7 +19,8 @@ namespace AGE
 		_rotationConstraint(glm::vec3(1, 1, 1)),
 		_transformConstraint(glm::vec3(1, 1, 1)),
 		_shapeType(UndefinedTypeId),
-		_shapeName("")
+		_shapePath(""),
+		_collisionShapeType(UNDEFINED)
 	{
 	}
 
@@ -72,7 +76,7 @@ namespace AGE
 		_mass = btScalar(mass);
 	}
 
-	int RigidBody::getMass() const
+	float RigidBody::getMass() const
 	{
 		return _mass;
 	}
@@ -89,7 +93,7 @@ namespace AGE
 	{
 		_clearBulletObjects();
 
-		_shapeName = meshPath;
+		_shapePath = meshPath;
 
 		auto e = entity;
 		_motionState = _manager->getObjectPool().create<DynamicMotionState>(&this->entity.getLink());
@@ -139,6 +143,7 @@ namespace AGE
 	{
 		if (c == UNDEFINED)
 			return;
+		_shapePath = "";
 		_clearBulletObjects();
 
 		auto e = entity;
@@ -227,4 +232,73 @@ namespace AGE
 	RigidBody::~RigidBody(void)
 	{
 	}
+
+	void RigidBody::postUnserialization()
+	{
+		_manager = dynamic_cast<BulletDynamicManager*>(entity.getScene()->getInstance<BulletCollisionManager>());
+	}
+
+#ifdef EDITOR_ENABLED
+	void RigidBody::editorCreate(AScene *scene)
+	{}
+
+	void RigidBody::editorDelete(AScene *scene)
+	{}
+
+	void RigidBody::editorUpdate(AScene *scene)
+	{
+		if ((*shapePathList)[selectedShapeIndex] != selectedShapePath)
+		{
+			std::size_t i = 0;
+			for (auto &e : *shapePathList)
+			{
+				if (e == selectedShapePath)
+				{
+					selectedShapeIndex = i;
+					break;
+				}
+				++i;
+			}
+		}
+
+		if(ImGui::Checkbox("Simple shape", &simpleShapes))
+		{
+			if (simpleShapes)
+			{
+				reset();
+				selectedShapeName = "";
+				selectedShapePath = "";
+				selectedShapeIndex = 0;
+			}
+			else
+			{
+				reset();
+				_collisionShapeType = UNDEFINED;
+			}
+		}
+
+		if (!simpleShapes) // if mesh
+		{
+			ImGui::PushItemWidth(-1);
+			if (ImGui::ListBox("Shapes", (int*)&selectedShapeIndex, &(shapeFileList->front()), (int)(shapeFileList->size())))
+			{
+				selectedShapeName = (*shapeFileList)[selectedShapeIndex];
+				selectedShapePath = (*shapePathList)[selectedShapeIndex];
+
+				setCollisionMesh(selectedShapePath);
+			}
+			ImGui::PopItemWidth();
+		}
+		else
+		{
+			static const char *CollisionShapeStr[] = { "Sphere", "Box" };
+			ImGui::PushItemWidth(-1);
+			if (ImGui::ListBox("Shapes", (int*)&selectedShapeIndex, CollisionShapeStr, CollisionShape::UNDEFINED))
+			{
+				setCollisionShape((CollisionShape)selectedShapeIndex);
+			}
+			ImGui::PopItemWidth();
+		}
+	}
+#endif
 }

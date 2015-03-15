@@ -175,13 +175,13 @@ namespace AGE
 		// Setup timestep
 		static Timer timer;
 		timer.update();
-		double elapsedTime = timer.getElapsed();
+		float elapsedTime = timer.getElapsed();
 
 		io.DeltaTime = elapsedTime == 0.0 ? 0.000000001f : elapsedTime;
 		io.MouseDown[0] = _lastMouseState.mouseState[0];
 		io.MouseDown[1] = _lastMouseState.mouseState[1];
 		io.MouseDown[2] = _lastMouseState.mouseState[2];
-		io.MousePos = ImVec2(_lastMouseState.mousePosition.x, _lastMouseState.mousePosition.y);
+		io.MousePos = ImVec2((float)_lastMouseState.mousePosition.x, (float)_lastMouseState.mousePosition.y);
 
 		// Start the frame
 		ImGui::NewFrame();

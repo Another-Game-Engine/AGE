@@ -25,7 +25,9 @@ namespace AGE
 			removeComponent(id);
 		}
 		if (components.size() <= id)
+		{
 			components.resize(id + 1, nullptr);
+		}
 		components[id] = cpt;
 		scene->informFiltersComponentAddition(id, *this);
 	}

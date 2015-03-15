@@ -22,10 +22,10 @@ namespace AGE
 		std::shared_ptr<BulletCollisionManager> _manager;
 		EntityFilter _filter;
 
-		virtual void updateBegin(double time);
-		virtual void updateEnd(double time);
-		virtual void mainUpdate(double time);
-		void updateComponent(Entity &entity, FPController *fp, double time);
+		virtual void updateBegin(float time);
+		virtual void updateEnd(float time);
+		virtual void mainUpdate(float time);
+		void updateComponent(Entity &entity, FPController *fp, float time);
 		virtual bool initialize();
 	};
 }

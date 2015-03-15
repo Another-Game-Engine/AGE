@@ -16,14 +16,14 @@ namespace AGE
 	}
 	FPControllerSystem::~FPControllerSystem(){}
 
-	void FPControllerSystem::updateBegin(double time)
+	void FPControllerSystem::updateBegin(float time)
 	{
 	}
 
-	void FPControllerSystem::updateEnd(double time)
+	void FPControllerSystem::updateEnd(float time)
 	{}
 
-	void FPControllerSystem::mainUpdate(double time)
+	void FPControllerSystem::mainUpdate(float time)
 	{
 		//auto scene = _scene.lock();
 		//for (auto e : _filter.getCollection())
@@ -57,7 +57,7 @@ namespace AGE
 		//}
 	}
 
-	void FPControllerSystem::updateComponent(Entity &entity, FPController *fp, double time)
+	void FPControllerSystem::updateComponent(Entity &entity, FPController *fp, float time)
 	{
 		//float ftime = static_cast<float>(time);
 		//fp->resetControls();

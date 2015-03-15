@@ -68,22 +68,22 @@ namespace AGE
 #endif
 	}
 
-	MemoryPool<LooseOctreeNode> &LooseOctree::getNodePool()
+	MemoryPool<LooseOctreeNode, uint32_t> &LooseOctree::getNodePool()
 	{
 		return (_nodesPool);
 	}
 
-	MemoryPool<LooseOctreeNode> const &LooseOctree::getNodePool() const
+	MemoryPool<LooseOctreeNode, uint32_t> const &LooseOctree::getNodePool() const
 	{
 		return (_nodesPool);
 	}
 
-	MemoryPool<SOctreeElement> &LooseOctree::getElementPool()
+	MemoryPool<SOctreeElement, uint32_t> &LooseOctree::getElementPool()
 	{
 		return (_elementsPool);
 	}
 
-	MemoryPool<SOctreeElement> const &LooseOctree::getElementPool() const
+	MemoryPool<SOctreeElement, uint32_t> const &LooseOctree::getElementPool() const
 	{
 		return (_elementsPool);
 	}

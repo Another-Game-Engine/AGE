@@ -90,7 +90,7 @@ namespace AGE
 				if (bones.size() > 0)
 				{
 					auto bonesId = _programs[RENDER_SKINNED]->get_resource<Mat4>("bones[0]")->id();
-					glUniformMatrix4fv(bonesId, bones.size(), GL_FALSE, (GLfloat *)(glm::value_ptr(bones[0])));
+					glUniformMatrix4fv(bonesId, (GLsizei)bones.size(), GL_FALSE, (GLfloat *)(glm::value_ptr(bones[0])));
 				}
 			}
 
