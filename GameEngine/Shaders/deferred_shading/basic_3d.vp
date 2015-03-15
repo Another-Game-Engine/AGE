@@ -6,11 +6,7 @@ uniform mat4 projection_matrix;
 uniform mat4 view_matrix;
 uniform mat4 model_matrix;
 
-noperspective out vec2 interpolated_texCoord;
-
 void main()
 {
 	gl_Position = projection_matrix * view_matrix * model_matrix * vec4(position, 1);
-	vec2 screenPos = gl_Position.xy / gl_Position.w;
-	interpolated_texCoord = screenPos * 0.5f + 0.5f; 
 }
