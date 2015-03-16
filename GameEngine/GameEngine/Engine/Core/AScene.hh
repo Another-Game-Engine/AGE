@@ -20,6 +20,9 @@
 #include <Components/ComponentManager.hpp>
 #include <Utils/Debug.hpp>
 #include <fstream>
+#ifdef EDITOR_ENABLED
+#include <WorldEditorGlobal.hpp>
+#endif
 
 namespace AGE
 {
