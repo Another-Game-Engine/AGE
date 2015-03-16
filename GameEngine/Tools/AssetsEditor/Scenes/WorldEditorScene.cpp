@@ -37,6 +37,7 @@ namespace AGE
 		setInstance<AGE::BulletDynamicManager, AGE::BulletCollisionManager>()->init();
 		setInstance<AssetsManager>();
 		getInstance<AGE::AssetsManager>()->setAssetsDirectory("../../Assets/Serialized/");
+		getInstance<AGE::BulletCollisionManager>()->setAssetsDirectory("../../Assets/Serialized/");
 
 		addSystem<WE::AssetsAndComponentRelationsSystem>(0);
 		addSystem<WE::EntityManager>(1);

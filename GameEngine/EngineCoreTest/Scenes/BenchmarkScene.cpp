@@ -88,6 +88,7 @@ namespace AGE
 		}
 
 		getInstance<AGE::AssetsManager>()->setAssetsDirectory("../../Assets/Serialized/");
+		getInstance<AGE::BulletCollisionManager>()->setAssetsDirectory("../../Assets/Serialized/");
 		getInstance<AGE::AssetsManager>()->loadMesh(OldFile("catwoman/catwoman.sage"), "DEMO_SCENE_ASSETS");
 		getInstance<AGE::AssetsManager>()->loadMesh(OldFile("cube/cube.sage"), "DEMO_SCENE_ASSETS");
 		getInstance<AGE::AssetsManager>()->loadMesh(OldFile("ball/ball.sage"), "DEMO_SCENE_ASSETS");
@@ -162,27 +163,27 @@ namespace AGE
 					GLOBAL_SPONZA = createEntity();
 					auto& _l = GLOBAL_SPONZA.getLink();
 					RigidBody *rb = GLOBAL_SPONZA.addComponent<RigidBody>(0.0f);
-					rb->setCollisionMesh("../../Assets/Serialized/sponza/sponza_static.phage");
+					rb->setCollisionMesh("sponza/sponza_static.phage");
 					_l.setScale(glm::vec3(10.f));
 				
 					GLOBAL_SPONZA.addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("Sponza/sponza.sage")
 						, getInstance<AGE::AssetsManager>()->getMaterial("Sponza/sponza.mage"));
 				}
 
-	{
-		GLOBAL_CATWOMAN = createEntity();
-		auto &_l = GLOBAL_CATWOMAN.getLink();
+	//{
+	//	GLOBAL_CATWOMAN = createEntity();
+	//	auto &_l = GLOBAL_CATWOMAN.getLink();
 
-		static bool useOnce = false;
-		auto rigidBody = GLOBAL_CATWOMAN.addComponent<RigidBody>(0);
-		rigidBody->setCollisionMesh("../../Assets/Serialized/catwoman/catwoman_dynamic.phage");
-		//_l.setOrientation(glm::quat(glm::vec3(Mathematic::degreeToRadian(-90), Mathematic::degreeToRadian(90), 0)));
-		_l.setPosition(glm::vec3(-30, 0, 0));
-		_l.setScale(glm::vec3(0.01f));
-		auto _m = GLOBAL_CATWOMAN.addComponent<MeshRenderer>(
-			getInstance<AGE::AssetsManager>()->getMesh("catwoman/catwoman.sage")
-			, getInstance<AGE::AssetsManager>()->getMaterial("catwoman/catwoman.mage"));
-	}
+	//	static bool useOnce = false;
+	//	auto rigidBody = GLOBAL_CATWOMAN.addComponent<RigidBody>(0);
+	//	rigidBody->setCollisionMesh("catwoman/catwoman_dynamic.phage");
+	//	//_l.setOrientation(glm::quat(glm::vec3(Mathematic::degreeToRadian(-90), Mathematic::degreeToRadian(90), 0)));
+	//	_l.setPosition(glm::vec3(-30, 0, 0));
+	//	_l.setScale(glm::vec3(0.01f));
+	//	auto _m = GLOBAL_CATWOMAN.addComponent<MeshRenderer>(
+	//		getInstance<AGE::AssetsManager>()->getMesh("catwoman/catwoman.sage")
+	//		, getInstance<AGE::AssetsManager>()->getMaterial("catwoman/catwoman.mage"));
+	//}
 
 	for (int i = 0; i < 1; ++i)
 	{
@@ -376,20 +377,20 @@ namespace AGE
 		// TODO
 		AGE::GetPrepareThread()->getQueue()->emplaceCommand<AGE::Commands::ToRender::RenderDrawLists>();
 
-		static float ttime = 0;
-		static float timeMultiplier = 0.0f;
-		ImGui::SliderFloat("Animation time", &timeMultiplier, 0.0f, 200.0f);
-		getInstance<AGE::AnimationManager>()->update(timeMultiplier);
-		ttime += time;
-		auto &bones = getInstance<AGE::AnimationManager>()->getBones(animationTestInstance);
-		auto skeleton = getInstance<AssetsManager>()->getSkeleton("catwoman/catwoman.skage");
-		skeleton->updateSkinning();
-		for (std::size_t i = 0; i < bones.size(); ++i)
-		{
-		//	bones[i] = glm::mat4(1);
-			//bonesEntities[i].getLink().setPosition(posFromMat4(bones[i]));
-		}
-		DirtyBoneContainer::setBones(bones);
+		//static float ttime = 0;
+		//static float timeMultiplier = 0.0f;
+		//ImGui::SliderFloat("Animation time", &timeMultiplier, 0.0f, 200.0f);
+		//getInstance<AGE::AnimationManager>()->update(timeMultiplier);
+		//ttime += time;
+		//auto &bones = getInstance<AGE::AnimationManager>()->getBones(animationTestInstance);
+		//auto skeleton = getInstance<AssetsManager>()->getSkeleton("catwoman/catwoman.skage");
+		//skeleton->updateSkinning();
+		//for (std::size_t i = 0; i < bones.size(); ++i)
+		//{
+		////	bones[i] = glm::mat4(1);
+		//	//bonesEntities[i].getLink().setPosition(posFromMat4(bones[i]));
+		//}
+		//DirtyBoneContainer::setBones(bones);
 		return true;
 	}
 
