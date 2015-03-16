@@ -147,7 +147,7 @@ namespace AGE
 
 				if (ImGui::Button("Save scene"))
 				{
-					scene->saveToJson("WorldEditorSceneTest.json");
+					scene->saveSelectionToJson("WorldEditorSceneTest.json", _filter.getCollection());
 				}
 				if (ImGui::Button("Load scene"))
 				{

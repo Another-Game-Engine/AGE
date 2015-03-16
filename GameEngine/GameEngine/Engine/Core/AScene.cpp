@@ -176,35 +176,7 @@ namespace AGE
 
 	void AScene::saveToJson(const std::string &fileName)
 	{
-		std::ofstream file(fileName, std::ios::binary);
-		assert(file.is_open());
-
-		{
-			auto ar = cereal::JSONOutputArchive(file);
-
-			std::size_t entityNbr = getNumberOfEntities();
-
-			ar(cereal::make_nvp("Number_of_serialized_entities", entityNbr));
-
-			auto &typesMap = ComponentRegistrationManager::getInstance().getAgeIdToSystemIdMap();
-			ar(cereal::make_nvp("Component type map", typesMap));
-
-			std::vector<EntitySerializationInfos> entities;
-			for (auto &e : _entities)
-			{
-				EntitySerializationInfos es(e.ptr);
-				for (auto &c : e.ptr->components)
-				{
-					if (c)
-					{
-						es.componentTypes.push_back(c->getType());
-						es.components.push_back(c);
-					}
-				}
-				ar(cereal::make_nvp("Entity_" + std::to_string(e.ptr->getEntity().getId()), es));
-			}
-		}
-		file.close();
+		saveSelectionToJson<std::unordered_set<Entity>>(fileName, _entities);
 	}
 
 	void AScene::loadFromJson(const std::string &fileName)
