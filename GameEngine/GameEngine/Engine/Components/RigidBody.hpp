@@ -4,6 +4,9 @@
 #include <Components/Component.hh>
 #include <Utils/UniqueTypeId.hpp>
 #include <Utils/Serialization/btSerialization.hpp>
+#ifdef EDITOR_ENABLED
+#include <WorldEditorGlobal.hpp>
+#endif
 
 class btCollisionShape;
 class btMotionState;
@@ -74,12 +77,15 @@ namespace AGE
 			ar(cereal::make_nvp("Collision shape path", _shapePath));
 			ar(cereal::make_nvp("Collision shape type", _collisionShapeType));
 #ifdef EDITOR_ENABLED
-			if (version > 0)
+			if (WESerialization::SerializeForEditor() == true)
 			{
-				ar(cereal::make_nvp("Selected mesh shape index", selectedShapeIndex));
-				ar(cereal::make_nvp("Selected mesh shape path", selectedShapePath));
-				ar(cereal::make_nvp("Selected mesh shape name", selectedShapeName));
-				ar(cereal::make_nvp("Simple shape", simpleShapes));
+				if (version > 0)
+				{
+					ar(cereal::make_nvp("Selected mesh shape index", selectedShapeIndex));
+					ar(cereal::make_nvp("Selected mesh shape path", selectedShapePath));
+					ar(cereal::make_nvp("Selected mesh shape name", selectedShapeName));
+					ar(cereal::make_nvp("Simple shape", simpleShapes));
+				}
 			}
 #endif
 		}

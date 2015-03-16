@@ -159,6 +159,12 @@ namespace AGE
 					{
 						if (c)
 						{
+#ifdef EDITOR_ENABLED
+							if (WESerialization::SerializeForEditor() == false && !c->serializeInExport())
+							{
+								continue;
+							}
+#endif
 							es.componentTypes.push_back(c->getType());
 							es.components.push_back(c);
 						}

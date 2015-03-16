@@ -257,7 +257,17 @@ namespace AGE
 		{
 			setCollisionMesh(selectedShapePath);
 		}
+#else
+		if (_collisionShapeType != UNDEFINED)
+		{
+			setCollisionShape((CollisionShape)_collisionShapeType);
+		}
+		else if (!selectedShapePath.empty())
+		{
+			setCollisionMesh(_shapePath);
+		}
 #endif
+
 	}
 
 #ifdef EDITOR_ENABLED

@@ -156,6 +156,7 @@ namespace AGE
 
 				if (ImGui::Button("Save scene"))
 				{
+					WESerialization::SetSerializeForEditor(true);
 					// we list all assets dependencies
 					{
 						AssetsManager::AssetsPackage package;
@@ -175,9 +176,35 @@ namespace AGE
 					}
 
 					scene->saveSelectionToJson(std::string(_sceneName) + ".json", _filter.getCollection());
+					WESerialization::SetSerializeForEditor(false);
+				}
+				if (ImGui::Button("Export scene"))
+				{
+					WESerialization::SetSerializeForEditor(false);
+					// we list all assets dependencies
+					{
+						AssetsManager::AssetsPackage package;
+						for (auto e : _meshRenderers.getCollection())
+						{
+							auto cpt = e.getComponent<MeshRenderer>();
+							if (!cpt->selectedMeshPath.empty())
+							{
+								package.meshs.insert(cpt->selectedMeshPath);
+							}
+							if (!cpt->selectedMaterialPath.empty())
+							{
+								package.materials.insert(cpt->selectedMaterialPath);
+							}
+						}
+						_scene->getInstance<AssetsManager>()->savePackage(package, std::string(_sceneName) + "_assets.json");
+					}
+
+					scene->saveSelectionToJson(std::string(_sceneName) + "_export.json", _filter.getCollection());
 				}
 				if (ImGui::Button("Load scene"))
 				{
+					WESerialization::SetSerializeForEditor(true);
+
 					auto sceneFileName = std::string(_sceneName) + ".json";
 					auto assetPackageFileName = std::string(_sceneName) + "_assets.json";
 
@@ -196,6 +223,7 @@ namespace AGE
 						(toLoad > 0 && loadingError.size() == 0);
 					std::cout << std::endl;
 					scene->loadFromJson(sceneFileName);
+					WESerialization::SetSerializeForEditor(false);
 				}
 
 				ImGui::EndChild();

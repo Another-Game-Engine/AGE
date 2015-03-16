@@ -38,6 +38,8 @@ namespace AGE
 		virtual void editorUpdate(AScene *scene){}
 		bool exposedInEditor = true;
 		bool deletableInEditor = true;
+		// if serialized in final export
+		virtual bool serializeInExport() { return true; }
 #endif
 	protected:
 		static ComponentType _typeCounter;

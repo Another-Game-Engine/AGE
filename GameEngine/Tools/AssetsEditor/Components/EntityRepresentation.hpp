@@ -39,8 +39,12 @@ namespace AGE
 			glm::vec3 position;
 			glm::vec3 rotation;
 			glm::vec3 scale;
-			// entity is not displayed in list and not serialized
-			bool editorOnly;
+			// component is not serialized in export
+#ifdef EDITOR_ENABLED
+			virtual bool serializeInExport() { return false; }
+#endif
+			// entity is not displayed in entity list
+			bool editorOnly = false;
 		};
 	}
 }
