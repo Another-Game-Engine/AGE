@@ -3,9 +3,8 @@
 #include <Components/EntityRepresentation.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <Components/ComponentRegistrationManager.hpp>
-
-//FOR TEST ! TO REMOVE
-#include <Components/Light.hh>
+#include <Components/MeshRenderer.hh>
+#include <AssetManagement/AssetManager.hh>
 
 namespace AGE
 {
@@ -14,9 +13,11 @@ namespace AGE
 			EntityManager::EntityManager(AScene *scene)
 				: System(std::move(scene))
 				, _filter(std::move(scene))
+				, _meshRenderers(std::move(scene))
 				, _selectedEntity(0)
 			{
-				_name = "we_entity_manager";
+				memcpy(_sceneName, "MyScene\0", 8);
+				_meshRenderers.requireComponent<MeshRenderer>();
 			}
 			EntityManager::~EntityManager(){}
 
@@ -145,13 +146,32 @@ namespace AGE
 					_scene->createEntity();
 				}
 
+				ImGui::InputText("Scene file name", _sceneName, MAX_SCENE_NAME_LENGTH);
+
 				if (ImGui::Button("Save scene"))
 				{
-					scene->saveSelectionToJson("WorldEditorSceneTest.json", _filter.getCollection());
+					// we list all assets dependencies
+					{
+						AssetsManager::AssetsPackage package;
+						for (auto e : _meshRenderers.getCollection())
+						{
+							auto cpt = e.getComponent<MeshRenderer>();
+							if (!cpt->selectedMeshPath.empty())
+							{
+								package.meshs.insert(cpt->selectedMeshPath);
+							}
+							if (!cpt->selectedMaterialPath.empty())
+							{
+								package.materials.insert(cpt->selectedMaterialPath);
+							}
+						}
+					}
+
+					scene->saveSelectionToJson(std::string(_sceneName) + ".json", _filter.getCollection());
 				}
 				if (ImGui::Button("Load scene"))
 				{
-					scene->loadFromJson("WorldEditorSceneTest.json");
+					scene->loadFromJson(std::string(_sceneName) + ".json");
 				}
 
 				ImGui::EndChild();

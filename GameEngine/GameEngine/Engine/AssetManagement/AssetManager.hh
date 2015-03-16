@@ -42,6 +42,19 @@ static std::pair<std::pair<GLenum, std::string>, std::function<void(Vertices &ve
 
 	class AssetsManager : public Dependency<AssetsManager>
 	{
+	public:
+		// collection of assets
+		struct AssetsPackage
+		{
+			std::unordered_set<std::string> meshs;
+			std::unordered_set<std::string> materials;
+
+			template <typename Archive>
+			void serialize(Archive &ar)
+			{
+				ar(meshs, materials);
+			}
+		};
 	private:
 		struct BitsetComparer {
 			bool operator() (const std::bitset<MeshInfos::END> &b1, const std::bitset<MeshInfos::END> &b2) const
