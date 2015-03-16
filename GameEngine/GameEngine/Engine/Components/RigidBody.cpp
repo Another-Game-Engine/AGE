@@ -76,6 +76,11 @@ namespace AGE
 
 	void RigidBody::setMass(float mass)
 	{
+		if (_rigidBody)
+		{
+			_rigidBody->setMassProps(mass, _inertia);
+			_rigidBody->activate(true);
+		}
 		_mass = btScalar(mass);
 	}
 
@@ -87,6 +92,10 @@ namespace AGE
 	void RigidBody::setInertia(const glm::vec3 &inertia)
 	{
 		_inertia = convertGLMVectorToBullet(inertia);
+		if (_rigidBody)
+		{
+			_rigidBody->setMassProps(_mass, _inertia);
+		}
 	}
 
 	void RigidBody::setCollisionMesh(
@@ -239,12 +248,22 @@ namespace AGE
 	void RigidBody::postUnserialization()
 	{
 		_manager = dynamic_cast<BulletDynamicManager*>(entity.getScene()->getInstance<BulletCollisionManager>());
+#ifdef EDITOR_ENABLED
+		if (_collisionShapeType != UNDEFINED)
+		{
+			setCollisionShape((CollisionShape)_collisionShapeType);
+		}
+		else if (!selectedShapePath.empty())
+		{
+			setCollisionMesh(selectedShapePath);
+		}
+#endif
 	}
 
 #ifdef EDITOR_ENABLED
 	void RigidBody::editorCreate(AScene *scene)
 	{
-		_mass = 0.0f;
+		setMass(0.0f);
 	}
 
 	void RigidBody::editorDelete(AScene *scene)
@@ -252,23 +271,38 @@ namespace AGE
 
 	void RigidBody::editorUpdate(AScene *scene)
 	{
-		ImGui::InputFloat("Mass", &_mass);
+		if (ImGui::InputFloat("Mass", &_mass))
+		{
+			setMass(_mass);
+		}
 
 		ImGui::Text("Rotation constraint");
 		ImGui::SameLine();
-		ImGui::CheckboxFlags("x", &(_rotationConstraint.x), _rotationConstraint.x);
+		bool rotationConstraint = false;
+		rotationConstraint ^= ImGui::CheckboxFlags("x", &(_rotationConstraint.x), _rotationConstraint.x);
 		ImGui::SameLine();
-		ImGui::CheckboxFlags("y", &(_rotationConstraint.y), _rotationConstraint.y);
+		rotationConstraint ^= ImGui::CheckboxFlags("y", &(_rotationConstraint.y), _rotationConstraint.y);
 		ImGui::SameLine();
-		ImGui::CheckboxFlags("z", &(_rotationConstraint.z), _rotationConstraint.z);
+		rotationConstraint ^= ImGui::CheckboxFlags("z", &(_rotationConstraint.z), _rotationConstraint.z);
+
+		if (rotationConstraint)
+		{
+			setRotationConstraint(_rotationConstraint.x == 1, _rotationConstraint.y == 1, _rotationConstraint.z == 1);
+		}
 
 		ImGui::Text("Transformation constraint");
 		ImGui::SameLine();
-		ImGui::CheckboxFlags("x", &(_transformConstraint.x), _transformConstraint.x);
+		bool transformConstraint = false;
+		transformConstraint ^= ImGui::CheckboxFlags("x", &(_transformConstraint.x), _transformConstraint.x);
 		ImGui::SameLine();
-		ImGui::CheckboxFlags("y", &(_transformConstraint.y), _transformConstraint.y);
+		transformConstraint ^= ImGui::CheckboxFlags("y", &(_transformConstraint.y), _transformConstraint.y);
 		ImGui::SameLine();
-		ImGui::CheckboxFlags("z", &(_transformConstraint.z), _transformConstraint.z);
+		transformConstraint ^= ImGui::CheckboxFlags("z", &(_transformConstraint.z), _transformConstraint.z);
+
+		if (transformConstraint)
+		{
+			setTransformConstraint(_transformConstraint.x == 1, _transformConstraint.y == 1, _transformConstraint.z == 1);
+		}
 
 		//ImGui::InputFloat3("Rotation constraint", glm::value_ptr(_rotationConstraint));
 		//ImGui::InputFloat3("Transform constraint", glm::value_ptr(_transformConstraint));
@@ -322,6 +356,7 @@ namespace AGE
 			ImGui::PushItemWidth(-1);
 			if (ImGui::ListBox("Shapes", (int*)&selectedShapeIndex, CollisionShapeStr, CollisionShape::UNDEFINED))
 			{
+				_collisionShapeType = (CollisionShape)selectedShapeIndex;
 				setCollisionShape((CollisionShape)selectedShapeIndex);
 			}
 			ImGui::PopItemWidth();

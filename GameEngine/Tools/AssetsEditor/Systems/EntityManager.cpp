@@ -16,7 +16,8 @@ namespace AGE
 				, _meshRenderers(std::move(scene))
 				, _selectedEntity(0)
 			{
-				memcpy(_sceneName, "MyScene\0", 8);
+				auto name = "../../MyScene\0";
+				memcpy(_sceneName, name, strlen(name) + 1);
 				_meshRenderers.requireComponent<MeshRenderer>();
 			}
 			EntityManager::~EntityManager(){}

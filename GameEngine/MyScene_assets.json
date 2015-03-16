@@ -1,0 +1,14 @@
+{
+    "value0": {
+        "value0": [
+            "ball/ball.sage",
+            "cube/cube.sage",
+            "sponza/sponza.sage"
+        ],
+        "value1": [
+            "ball/ball.mage",
+            "cube/cube.mage",
+            "sponza/sponza.mage"
+        ]
+    }
+}

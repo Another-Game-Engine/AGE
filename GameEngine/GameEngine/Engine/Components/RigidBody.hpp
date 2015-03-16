@@ -65,7 +65,7 @@ namespace AGE
 		// Serialization
 
 		template <typename Archive>
-		void serialize(Archive &ar)
+		void serialize(Archive &ar, std::uint32_t const version)
 		{
 			ar(cereal::make_nvp("Mass", _mass));
 			ar(cereal::make_nvp("Inertia", _inertia));
@@ -73,6 +73,15 @@ namespace AGE
 			ar(cereal::make_nvp("Transform constraint", _transformConstraint));
 			ar(cereal::make_nvp("Collision shape path", _shapePath));
 			ar(cereal::make_nvp("Collision shape type", _collisionShapeType));
+#ifdef EDITOR_ENABLED
+			if (version > 0)
+			{
+				ar(cereal::make_nvp("Selected mesh shape index", selectedShapeIndex));
+				ar(cereal::make_nvp("Selected mesh shape path", selectedShapePath));
+				ar(cereal::make_nvp("Selected mesh shape name", selectedShapeName));
+				ar(cereal::make_nvp("Simple shape", simpleShapes));
+			}
+#endif
 		}
 
 		// !Serialization
@@ -99,3 +108,5 @@ namespace AGE
 		RigidBody(RigidBody const &o);
 	};
 }
+
+CEREAL_CLASS_VERSION(AGE::RigidBody, 1);
