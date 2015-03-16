@@ -151,9 +151,13 @@
     <ClCompile Include="Engine\Systems\FreeFlyCamera.cpp" />
     <ClCompile Include="Engine\Core\EntityIdRegistrationManager.cpp" />
     <ClCompile Include="Engine\Components\FreeFlyComponent.cpp" />
+<<<<<<< HEAD
 =======
     <ClCompile Include="Engine\Utils\Serialization\btSerialization.cpp" />
 >>>>>>> bf6f5f874c8141cb70f469bb11cf5d9919b5ace2
+=======
+    <ClCompile Include="Engine\Render\ProgramResources\Types\Uniform\Vec3.cpp" />
+>>>>>>> facd29c7261501d3c27114384b113f5ff54ab4bc
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -403,10 +407,14 @@
     <ClInclude Include="Engine\Systems\FreeFlyCamera.hh" />
     <ClInclude Include="Engine\Core\EntityIdRegistrationManager.hh" />
     <ClInclude Include="Engine\Components\FreeFlyComponent.hh" />
+<<<<<<< HEAD
 =======
     <ClInclude Include="Engine\Core\Inputs\Joystick.hh" />
     <ClInclude Include="Engine\Utils\Serialization\btSerialization.hpp" />
 >>>>>>> bf6f5f874c8141cb70f469bb11cf5d9919b5ace2
+=======
+    <ClInclude Include="Engine\Render\ProgramResources\Types\Uniform\Vec3.hh" />
+>>>>>>> facd29c7261501d3c27114384b113f5ff54ab4bc
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

@@ -79,6 +79,8 @@ namespace AGE
 
 #ifdef PHYSIC_SIMULATION
 		addSystem<AGE::BulletDynamicSystem>(0);
+		//		addSystem<CollisionAdder>(1);
+		//		addSystem<CollisionCleaner>(1000);
 #endif //!PHYSIC
 
 		if (initRenderingJustOneTime)
@@ -147,7 +149,7 @@ namespace AGE
 				GLOBAL_CAMERA = camera;
 				auto cam = camera.addComponent<CameraComponent>();
 				camera.addComponent<FreeFlyComponent>();
-				cam->addPipeline(RenderType::BASIC);
+				cam->addPipeline(RenderType::DEFERRED);
 
 				auto screeSize = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<AGE::Tasks::Render::GetWindowSize, glm::uvec2>().get();
 
@@ -185,7 +187,7 @@ namespace AGE
 	//		, getInstance<AGE::AssetsManager>()->getMaterial("catwoman/catwoman.mage"));
 	//}
 
-	for (int i = 0; i < 1; ++i)
+	for (int i = 0; i < GLOBAL_LIGHTS.size(); ++i)
 	{
 		GLOBAL_LIGHTS[i] = createEntity();
 		auto e = GLOBAL_LIGHTS[i];
@@ -194,25 +196,8 @@ namespace AGE
 		_l.setScale(glm::vec3(0.05f));
 		auto _m = e.addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage"), getInstance<AGE::AssetsManager>()->getMaterial("ball/ball.mage"));
 		e.getLink().setPosition(glm::vec3(i, 5.0f, 0));
-		e.addComponent<PointLightComponent>()->set(glm::vec3((float)(rand() % 1000) / 1000.0f, (float)(rand() % 1000) / 1000.0f, (float)(rand() % 1000) / 1000.0f), glm::vec3(1.f, 0.1f, 0.0f));
+		e.addComponent<PointLightComponent>()->set(glm::vec3((float)(rand() % 1000) / 1000.0f, (float)(rand() % 1000) / 1000.0f, (float)(rand() % 1000) / 1000.0f), glm::vec3(1.f, 5.0f, 0));
 	}
-
-	for (int i = 1; i < GLOBAL_LIGHTS.size(); ++i)
-	{
-		GLOBAL_LIGHTS[i] = createEntity();
-		auto e = GLOBAL_LIGHTS[i];
-		auto &_l = e.getLink();
-		_l.setPosition(glm::vec3(i, 1.0f, i));
-		_l.setScale(glm::vec3(0.05f));
-		auto _m = e.addComponent<MeshRenderer>(
-			getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage")
-			, getInstance<AGE::AssetsManager>()->getMaterial("ball/ball.mage"));
-		e.getLink().setPosition(glm::vec3(i, 5.0f, 0));
-		e.addComponent<PointLightComponent>()->set(glm::vec3((float)(rand() % 1000) / 1000.0f, (float)(rand() % 1000) / 1000.0f, (float)(rand() % 1000) / 1000.0f), glm::vec3(1.f, 0.1f, 0.0f));
-		e.getLink().attachParent(GLOBAL_LIGHTS[0].getLinkPtr());
-	}
-
-
 
 #ifdef PHYSIC_SIMULATION
 	auto rigidBody = GLOBAL_FLOOR.addComponent<RigidBody>(0.0f);
@@ -303,6 +288,11 @@ namespace AGE
 					mesh = e.addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("cube/cube.sage"), getInstance<AGE::AssetsManager>()->getMaterial(OldFile("cube/cube.mage")));
 				}
 
+				if (i % 13 == 0)
+				{
+					e.addComponent<PointLightComponent>()->set(glm::vec3((float)(rand() % 1000) / 1000.0f, (float)(rand() % 1000) / 1000.0f, (float)(rand() % 1000) / 1000.0f), glm::vec3(1.f, 0.1f, 0.005f));
+				}
+
 #ifdef PHYSIC_SIMULATION
 				auto rigidBody = e.addComponent<RigidBody>(1.0f);
 				if (i % 4 == 0)
@@ -325,13 +315,17 @@ namespace AGE
 				auto e = GLOBAL_LIGHTS[i];
 				auto &link = e.getLink();
 
-				if (ImGui::SliderFloat3(std::string("Light " + std::to_string(i) + " position").c_str(), link.getPositionPtr(), -2, 2))
+				if (ImGui::SliderFloat3(std::string("Light " + std::to_string(i) + " position").c_str(), link.getPositionPtr(), -30, 30))
 				{
 					auto &l = e.getLink();
 					l.setPosition(l.getPosition());
 				}
 				auto lightComponent = e.getComponent<AGE::PointLightComponent>();
 				if (ImGui::ColorEdit3(std::string("Light " + std::to_string(i) + " color").c_str(), lightComponent->getColorPtr()))
+				{
+					lightComponent->set(lightComponent->getColor(), lightComponent->getRange());
+				}
+				if (ImGui::SliderFloat3(std::string("Light " + std::to_string(i) + " attenuation").c_str(), lightComponent->getRangePtr(), 0.001, 1.0))
 				{
 					lightComponent->set(lightComponent->getColor(), lightComponent->getRange());
 				}

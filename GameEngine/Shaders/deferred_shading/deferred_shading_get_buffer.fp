@@ -7,7 +7,7 @@ in vec3 inter_tangent;
 uniform vec4 diffuse_color;
 uniform float diffuse_ratio;
 uniform sampler2D diffuse_map;
-uniform vec4 specular_color;
+uniform vec3 specular_color;
 uniform float specular_ratio;
 uniform sampler2D specular_map;
 uniform float shininess;
@@ -31,5 +31,6 @@ void main(void)
 	diffuse_frag = texture(diffuse_map, vTexCoord); // diffuse_color * diffuse_ratio
 	vec3 normal = perturb_normal() * 0.5f + 0.5f;
 	normal_frag = vec4(normal, 1.0f);
-	specular_frag = vec4(vec3(specular_color) * specular_ratio, shininess);
+	// To replace with the real specular of the object
+	specular_frag = vec4(vec3(1), shininess);
 }

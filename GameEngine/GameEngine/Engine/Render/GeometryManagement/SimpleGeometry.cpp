@@ -113,13 +113,14 @@ namespace AGE
 				for (int i = 0; i < indices.size(); i += 3)
 				{
 					// replace triangle by 4 triangles
-					std::size_t a = getMiddlePoint(vertex, middlePoints, indices[i] + 0, indices[i] + 1);
-					std::size_t b = getMiddlePoint(vertex, middlePoints, indices[i] + 1, indices[i] + 2);
-					std::size_t c = getMiddlePoint(vertex, middlePoints, indices[i] + 2, indices[i] + 0);
 
-					idTab2.push_back(glm::u32vec3(indices[i] + 0, a, c));
-					idTab2.push_back(glm::u32vec3(indices[i] + 1, b, a));
-					idTab2.push_back(glm::u32vec3(indices[i] + 2, c, b));
+					uint32_t a = getMiddlePoint(vertex, middlePoints, indices[i + 0], indices[i + 1]);
+					uint32_t b = getMiddlePoint(vertex, middlePoints, indices[i + 1], indices[i + 2]);
+					uint32_t c = getMiddlePoint(vertex, middlePoints, indices[i + 2], indices[i + 0]);
+
+					idTab2.push_back(glm::u32vec3(indices[i + 0], a, c));
+					idTab2.push_back(glm::u32vec3(indices[i + 1], b, a));
+					idTab2.push_back(glm::u32vec3(indices[i + 2], c, b));
 					idTab2.push_back(glm::u32vec3(a, b, c));
 				}
 				indices.resize(idTab2.size() * 3);

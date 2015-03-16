@@ -18,12 +18,12 @@ namespace AGE
 	class RenderingPass : public ARendering
 	{
 	public:
-		RenderingPass(std::function<void(FUNCTION_ARGS)> const &function);
+		RenderingPass(std::function<void(std::vector<Properties> const &properties, std::vector<Key<Vertices>> const &vertices, std::shared_ptr<Painter> const &painter)> const &function);
 		RenderingPass(RenderingPass &&move);
 		virtual ~RenderingPass(){}
 
 	public:
-		virtual IRendering &render(FUNCTION_ARGS) override final;
+		virtual IRendering &render(std::vector<Properties> const &properties, std::vector<Key<Vertices>> const &vertices, std::shared_ptr<Painter> const &painter) override final;
 
 	public:
 		template <typename type_t> RenderingPass &push_storage_output(GLenum attach, std::shared_ptr<type_t> storage);
@@ -43,7 +43,9 @@ namespace AGE
 	{
 		_is_update = false;
 		_frame_output[attach] = storage;
-		if (attach != GL_DEPTH_ATTACHMENT) {
+		if (attach != GL_DEPTH_ATTACHMENT &&
+			attach != GL_STENCIL_ATTACHMENT && 
+			attach != GL_DEPTH_STENCIL_ATTACHMENT) {
 			for (auto &it = _drawing_attach.begin(); it != _drawing_attach.end(); ++it) {
 				if (*it == attach) {
 					_drawing_attach.erase(it);

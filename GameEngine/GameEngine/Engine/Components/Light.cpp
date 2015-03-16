@@ -59,7 +59,6 @@ namespace AGE
 
 	PointLightComponent &PointLightComponent::set(glm::vec3 const &color, glm::vec3 const &range)
 	{
-		float	maxRange = computePointLightRange(256, range);
 		_color = color;
 		_range = range;
 		AGE::GetPrepareThread()->setPointLight(color, range, _key);

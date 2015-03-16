@@ -3,7 +3,7 @@
 namespace AGE
 {
 
-	Rendering::Rendering(std::function<void(FUNCTION_ARGS)> const &function) :
+	Rendering::Rendering(std::function<void(std::vector<Properties> const &properties, std::vector<Key<Vertices>> const &vertices, std::shared_ptr<Painter> const &painter)> const &function) :
 		ARendering(function)
 	{
 
@@ -15,7 +15,7 @@ namespace AGE
 
 	}
 
-	IRendering & Rendering::render(FUNCTION_ARGS)
+	IRendering & Rendering::render(std::vector<Properties> const &properties, std::vector<Key<Vertices>> const &vertices, std::shared_ptr<Painter> const &painter)
 	{
 		_render_function(properties, vertices, painter);
 		return (*this);
