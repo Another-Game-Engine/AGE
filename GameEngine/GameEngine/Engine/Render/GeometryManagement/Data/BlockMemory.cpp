@@ -45,7 +45,7 @@ namespace AGE
 		return (*this);
 	}
 
-	BlockMemory & BlockMemory::update_buffer(IBuffer const &buffer)
+	BlockMemory & BlockMemory::update_buffer(ABuffer const &buffer)
 	{
 		buffer.sub(_offset, _data.size(), _data.data());
 		_is_up_to_date = true;

@@ -3,7 +3,7 @@
 # include <vector>
 # include <stdint.h>
 # include <memory>
-# include <Render/Buffer/IBuffer.hh>
+# include <Render/Buffer/ABuffer.hh>
 
 namespace AGE
 {
@@ -19,7 +19,7 @@ namespace AGE
 
 	public:
 		bool is_up_to_date() const;
-		BlockMemory &update_buffer(IBuffer const &buffer);
+		BlockMemory &update_buffer(ABuffer const &buffer);
 		BlockMemory &reset(size_t index, size_t offset);
 		BlockMemory &remove();
 		std::vector<uint8_t> const &get() const;

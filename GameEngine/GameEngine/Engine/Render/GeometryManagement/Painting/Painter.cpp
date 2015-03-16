@@ -104,8 +104,6 @@ namespace AGE
 		properties.update_properties(program);
 		program->update();
 		_vertices[vertice.getId()].draw(mode);
-
-		_buffer.unbind();
 	}
 
 	bool Painter::coherent(std::vector<std::pair<GLenum, std::string>> const &types) const

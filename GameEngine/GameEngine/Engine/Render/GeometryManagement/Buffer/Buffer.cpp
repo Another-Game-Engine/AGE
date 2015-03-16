@@ -2,7 +2,7 @@
 
 namespace AGE
 {
-	Buffer::Buffer(std::string &&name, std::unique_ptr<IBuffer> &&buffer) :
+	Buffer::Buffer(std::string &&name, std::unique_ptr<ABuffer> &&buffer) :
 		_request_resize(false),
 		_request_transfer(false),
 		_size_alloc(0),

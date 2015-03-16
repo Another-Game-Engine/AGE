@@ -2,13 +2,15 @@
 
 ABuffer::ABuffer() :
 _size(0)
+, _binded(false)
 {
 	glGenBuffers(1, &_id);
 }
 
 ABuffer::ABuffer(ABuffer &&move) :
 _id(move._id),
-_size(move._size)
+_size(move._size),
+_binded(move._binded)
 {
 	move._id = 0;
 }
@@ -28,4 +30,29 @@ GLuint ABuffer::id() const
 size_t ABuffer::size() const
 {
 	return (_size);
+}
+
+void ABuffer::bind()
+{
+	if (_binded)
+	{
+		return;
+	}
+	_binded = true;
+	_bind();
+}
+
+void ABuffer::unbind(bool reset /*= false*/)
+{
+	if (!_binded)
+	{
+		return;
+	}
+	_binded = false;
+	_unbind(reset);
+}
+
+bool ABuffer::isBinded() const
+{
+	return _binded;
 }
