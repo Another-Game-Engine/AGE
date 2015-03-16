@@ -2,16 +2,20 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="..\Vendors\imgui\imgui.cpp" />
+    <ClCompile Include="Engine\Core\Inputs\ActionManager.cpp" />
     <ClCompile Include="Engine\AssetManagement\AssetManager.cpp" />
     <ClCompile Include="Engine\Components\Light.cpp" />
     <ClCompile Include="Engine\Components\RigidBody.cpp" />
     <ClCompile Include="Engine\Context\IRenderContext.cpp" />
     <ClCompile Include="Engine\Context\SDL\SdlToAgeInputs.cpp" />
     <ClCompile Include="Engine\Entities\Entity.cpp" />
+    <ClCompile Include="Engine\Render\GeometryManagement\SimpleGeometry.cpp" />
+    <ClCompile Include="Engine\Render\ProgramResources\Types\Uniform\Vec3.cpp" />
     <ClCompile Include="Engine\Render\Properties\Materials\Specular.cpp" />
     <ClCompile Include="Engine\Render\ProgramResources\Types\Uniform\Mat4Array255.cpp" />
     <ClCompile Include="Engine\Render\Properties\Properties.cpp" />
     <ClCompile Include="Engine\Render\PropertyManager.cpp" />
+    <ClCompile Include="Engine\Systems\FreeFlyCamera.cpp" />
     <ClCompile Include="Engine\Threads\Commands\MainToPrepareCommands.cpp" />
     <ClCompile Include="Engine\Core\ConfigurationManager.cpp" />
     <ClCompile Include="Engine\Core\DefaultConfiguration.cpp" />
@@ -95,8 +99,10 @@
     <ClCompile Include="Engine\Audio\FmodError.cpp" />
     <ClCompile Include="Engine\Components\CameraComponent.cpp" />
     <ClCompile Include="Engine\Components\Component.cpp" />
+    <ClCompile Include="Engine\Components\ComponentRegistrationManager.cpp" />
     <ClCompile Include="Engine\Components\FPController.cpp" />
     <ClCompile Include="Engine\Core\EntityFilter.cpp" />
+    <ClCompile Include="Engine\Core\EntityIdRegistrationManager.cpp" />
     <ClCompile Include="Engine\Core\SceneManager.cpp" />
     <ClCompile Include="Engine\Context\SDL\SdlContext.cpp" />
     <ClCompile Include="Engine\Core\AScene.cpp" />
@@ -109,6 +115,7 @@
     <ClCompile Include="Engine\Text\Font.cpp" />
     <ClCompile Include="Engine\Text\FontGlyph.cpp" />
     <ClCompile Include="Engine\Text\FontManager.cpp" />
+    <ClCompile Include="Engine\Utils\Serialization\btSerialization.cpp" />
     <ClCompile Include="Engine\Utils\StreamBuffer.cpp" />
     <ClCompile Include="Engine\Utils\CRC32.cpp" />
     <ClCompile Include="Engine\Utils\Directory.cpp" />
@@ -144,25 +151,14 @@
     <ClCompile Include="Engine\Utils\ThreadName.cpp" />
     <ClCompile Include="Engine\Utils\UniqueTypeId.cpp" />
     <ClCompile Include="Engine\Core\Inputs\Joystick.cpp" />
-<<<<<<< HEAD
-    <ClCompile Include="Engine\Core\Inputs\ActionManager.cpp" />
-    <ClCompile Include="Engine\Render\GeometryManagement\SimpleGeometry.cpp" />
-    <ClCompile Include="Engine\Components\ComponentRegistrationManager.cpp" />
-    <ClCompile Include="Engine\Systems\FreeFlyCamera.cpp" />
-    <ClCompile Include="Engine\Core\EntityIdRegistrationManager.cpp" />
     <ClCompile Include="Engine\Components\FreeFlyComponent.cpp" />
-<<<<<<< HEAD
-=======
-    <ClCompile Include="Engine\Utils\Serialization\btSerialization.cpp" />
->>>>>>> bf6f5f874c8141cb70f469bb11cf5d9919b5ace2
-=======
-    <ClCompile Include="Engine\Render\ProgramResources\Types\Uniform\Vec3.cpp" />
->>>>>>> facd29c7261501d3c27114384b113f5ff54ab4bc
+    <ClCompile Include="Engine\Systems\DebugSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
     <ClInclude Include="..\Vendors\imgui\imgui.h" />
     <ClInclude Include="..\Vendors\imgui\stb_textedit.h" />
+    <ClInclude Include="Engine\Core\Inputs\ActionManager.hh" />
     <ClInclude Include="Engine\AssetManagement\AssetManager.hh" />
     <ClInclude Include="Engine\AssetManagement\Data\MaterialData.hh" />
     <ClInclude Include="Engine\AssetManagement\Data\MeshData.hh" />
@@ -174,11 +170,13 @@
     <ClInclude Include="Engine\Configuration.hpp" />
     <ClInclude Include="Engine\Core\Inputs\AgeInputs.hh" />
     <ClInclude Include="Engine\Entities\EntityData.hh" />
-    <ClInclude Include="Engine\Render\GeometryManagement\SimpleGeometry.hpp" />
+    <ClInclude Include="Engine\Render\GeometryManagement\SimpleGeometry.hh" />
     <ClInclude Include="Engine\Render\PipelineTypes.hpp" />
+    <ClInclude Include="Engine\Render\ProgramResources\Types\Uniform\Vec3.hh" />
     <ClInclude Include="Engine\Render\Properties\Materials\Specular.hh" />
     <ClInclude Include="Engine\Render\ProgramResources\Types\Uniform\Mat4Array255.hh" />
     <ClInclude Include="Engine\Render\Properties\Properties.hh" />
+    <ClInclude Include="Engine\Systems\FreeFlyCamera.hh" />
     <ClInclude Include="Engine\Threads\Commands\ToRenderCommands.hpp" />
     <ClInclude Include="Engine\Threads\Commands\MainToPrepareCommands.hpp" />
     <ClInclude Include="Engine\Core\Instance\MaterialInstance.hh" />
@@ -250,6 +248,7 @@
     <ClInclude Include="Engine\Entities\EntityTypedef.hpp" />
     <ClInclude Include="Engine\Geometry\MeshManager.hpp" />
     <ClInclude Include="Engine\Core\ConfigurationManager.hpp" />
+    <ClInclude Include="Engine\Core\EntityIdRegistrationManager.hh" />
     <ClInclude Include="Engine\Entities\BitsetManipulation.hpp" />
     <ClInclude Include="Engine\Entities\EntityFlags.hh" />
     <ClInclude Include="Engine\Physic\DynamicMotionState.hpp" />
@@ -303,6 +302,7 @@
     <ClInclude Include="Engine\Utils\Architecture.hpp" />
     <ClInclude Include="Engine\Utils\BitOperations.hpp" />
     <ClInclude Include="Engine\Utils\BoundingInfos.hpp" />
+    <ClInclude Include="Engine\Utils\Serialization\btSerialization.hpp" />
     <ClInclude Include="Engine\Utils\StreamBuffer.hpp" />
     <ClInclude Include="Engine\Utils\BufferPool.hpp" />
     <ClInclude Include="Engine\Utils\Compiler.hpp" />
@@ -320,6 +320,7 @@
     <ClInclude Include="Engine\Components\CameraComponent.hpp" />
     <ClInclude Include="Engine\Components\CameraComponentTemplates.hpp" />
     <ClInclude Include="Engine\Components\CollisionLayers.hpp" />
+    <ClInclude Include="Engine\Components\ComponentRegistrationManager.hpp" />
     <ClInclude Include="Engine\Components\FPController.hpp" />
     <ClInclude Include="Engine\Components\GraphNode.hpp" />
     <ClInclude Include="Engine\Components\RigidBody.hpp" />
@@ -397,24 +398,9 @@
     <ClInclude Include="Engine\Utils\UniqueTypeId.hpp" />
     <ClInclude Include="Engine\Utils\Visibility.hpp" />
     <ClInclude Include="Engine\Utils\Worker.hpp" />
-<<<<<<< HEAD
-    <ClInclude Include="Engine\Render\PipelineTypes.hpp" />
-    <ClInclude Include="Engine\Core\Inputs\AgeInputs.hh" />
     <ClInclude Include="Engine\Core\Inputs\Joystick.hh" />
-    <ClInclude Include="Engine\Core\Inputs\ActionManager.hh" />
-    <ClInclude Include="Engine\Render\GeometryManagement\SimpleGeometry.hh" />
-    <ClInclude Include="Engine\Components\ComponentRegistrationManager.hpp" />
-    <ClInclude Include="Engine\Systems\FreeFlyCamera.hh" />
-    <ClInclude Include="Engine\Core\EntityIdRegistrationManager.hh" />
     <ClInclude Include="Engine\Components\FreeFlyComponent.hh" />
-<<<<<<< HEAD
-=======
-    <ClInclude Include="Engine\Core\Inputs\Joystick.hh" />
-    <ClInclude Include="Engine\Utils\Serialization\btSerialization.hpp" />
->>>>>>> bf6f5f874c8141cb70f469bb11cf5d9919b5ace2
-=======
-    <ClInclude Include="Engine\Render\ProgramResources\Types\Uniform\Vec3.hh" />
->>>>>>> facd29c7261501d3c27114384b113f5ff54ab4bc
+    <ClInclude Include="Engine\Systems\DebugSystem.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

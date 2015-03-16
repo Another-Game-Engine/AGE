@@ -20,6 +20,8 @@
 #include <Components/RigidBody.hpp>
 #include <Components/MeshRenderer.hh>
 
+#include <Systems/DebugSystem.hpp>
+
 #include <Render/Program.hh>
 //#include <Render/GeometryManagement/Vertices.hh>
 //#include <Render/GeometryManagement/BufferPrograms.hh>
@@ -76,6 +78,8 @@ namespace AGE
 		setInstance<AGE::BulletDynamicManager, AGE::BulletCollisionManager>()->init();
 
 #endif
+
+		addSystem<AGE::DebugSystem>(0);
 
 #ifdef PHYSIC_SIMULATION
 		addSystem<AGE::BulletDynamicSystem>(0);
