@@ -45,6 +45,8 @@ namespace AGE
 
 	void RigidBody::setTransformation(const AGE::Link *link)
 	{
+		if (_shapeType == UNDEFINED || !_rigidBody)
+			return;
 		btTransform tt = _rigidBody->getCenterOfMassTransform();
 		tt.setOrigin(convertGLMVectorToBullet(link->getPosition()));
 		glm::quat rot = link->getOrientation();
