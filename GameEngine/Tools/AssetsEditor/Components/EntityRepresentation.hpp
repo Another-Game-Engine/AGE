@@ -6,6 +6,7 @@
 #include <cereal/archives/json.hpp>
 #include <cereal/types/array.hpp>
 #include <WorldEditor/Managers/LayerManager.hpp>
+#include <Core/AScene.hh>
 
 #define ENTITY_NAME_LENGTH 128
 
@@ -19,7 +20,19 @@ namespace AGE
 
 			virtual ~EntityRepresentation(void);
 
-			void init(const char* name = "NoName");
+			void init(const char* name = "NoName", const std::string &layerName = "");
+
+			void setLayer(const std::string &layerName)
+			{
+				auto layerManager = entity.getScene()->getInstance<LayerManager>();
+				auto layerPtr = layerManager->getLayer(layerName);
+				if (layerPtr == nullptr)
+				{
+					layerPtr = layerManager->getLayer(WE::ApplicationReservedLayerName);
+				}
+				layer = layerPtr;
+				layer->addEntity(entity);
+			}
 
 			virtual void reset();
 

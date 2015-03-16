@@ -18,10 +18,20 @@ namespace AGE
 
 		}
 
-		void EntityRepresentation::init(const char *_name)
+		void EntityRepresentation::init(const char *_name, const std::string &layerName /*= ""*/)
 		{
 #ifdef EDITOR_ENABLED
 			exposedInEditor = false;
+			auto layerManager = entity.getScene()->getInstance<LayerManager>();
+
+			if (layerName.empty())
+			{
+				layer = layerManager->getLayer(WE::ApplicationReservedLayerName);
+			}
+			else
+			{
+				layer = layerManager->getLayer(layerName);
+			}
 #endif
 			auto len = strlen(_name);
 			if (len >= ENTITY_NAME_LENGTH)

@@ -31,6 +31,16 @@ namespace AGE
 			{
 				return _id == ApplicationReservedLayerId;
 			}
+
+			void addEntity(const Entity &e)
+			{
+				_entities.insert(e);
+			}
+
+			void removeEntity(const Entity &e)
+			{
+				_entities.erase(e);
+			}
 		private:
 			Layer() = delete;
 			Layer(const std::string &name, std::size_t id)
@@ -74,6 +84,15 @@ namespace AGE
 				return _names;
 			}
 
+			std::shared_ptr<Layer> getLayer(const std::string &name)
+			{
+				auto it = _layers.find(name);
+				if (it == std::end(_layers))
+				{
+					return nullptr;
+				}
+				return it->second;
+			}
 
 
 		private:
