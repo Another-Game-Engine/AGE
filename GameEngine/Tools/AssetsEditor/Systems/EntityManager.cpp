@@ -37,10 +37,19 @@ namespace AGE
 				// Disgusting but fuck it ! :)
 				_entityNames.clear();
 				_entities.clear();
-				for (auto e : _filter.getCollection())
 				{
-					_entityNames.push_back(e.getComponent<AGE::WE::EntityRepresentation>()->name);
-					_entities.push_back(e);
+					EntityFilter::Lock lock(_filter);
+					for (auto e : _filter.getCollection())
+					{
+						auto representation = e.getComponent<AGE::WE::EntityRepresentation>();
+						if (representation->editorOnly)
+						{
+							_filter.manuallyRemoveEntity(e);
+							continue;
+						}
+						_entityNames.push_back(representation->name);
+						_entities.push_back(e);
+					}
 				}
 				if (_selectedEntity >= _entities.size())
 					_selectedEntity = 0;

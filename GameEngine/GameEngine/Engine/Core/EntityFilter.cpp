@@ -133,6 +133,18 @@ namespace AGE
 			_onRemove(e.entity);
 	}
 
+	void EntityFilter::manuallyRemoveEntity(const Entity &e)
+	{
+		if (_locked)
+		{
+			_trash.insert(e);
+		}
+		else
+			_collection.erase(e);
+		if (_onRemove)
+			_onRemove(e);
+	}
+
 	void EntityFilter::lock()
 	{
 		if (_locked)

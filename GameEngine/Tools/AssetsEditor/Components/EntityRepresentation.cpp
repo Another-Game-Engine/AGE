@@ -8,9 +8,8 @@ namespace AGE
 	{
 		EntityRepresentation::EntityRepresentation()
 		{
-#ifdef EDITOR_ENABLED
 			exposedInEditor = false;
-#endif
+			editorOnly = false;
 		}
 
 		EntityRepresentation::~EntityRepresentation()
@@ -20,19 +19,8 @@ namespace AGE
 
 		void EntityRepresentation::init(const char *_name, const std::string &layerName /*= ""*/)
 		{
-#ifdef EDITOR_ENABLED
 			exposedInEditor = false;
-			auto layerManager = entity.getScene()->getInstance<LayerManager>();
-
-			if (layerName.empty())
-			{
-				layer = layerManager->getLayer(WE::ApplicationReservedLayerName);
-			}
-			else
-			{
-				layer = layerManager->getLayer(layerName);
-			}
-#endif
+			editorOnly = false;
 			auto len = strlen(_name);
 			if (len >= ENTITY_NAME_LENGTH)
 				len = ENTITY_NAME_LENGTH;
@@ -41,7 +29,6 @@ namespace AGE
 			position = link.getPosition();
 			rotation = glm::eulerAngles(link.getOrientation());
 			scale = link.getScale();
-			layer = 0;
 		}
 
 		void EntityRepresentation::reset()
