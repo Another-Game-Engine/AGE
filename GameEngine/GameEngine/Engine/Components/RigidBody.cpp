@@ -4,6 +4,7 @@
 #include <Physic/DynamicMotionState.hpp>
 #ifdef EDITOR_ENABLED
 #include <imgui/imgui.h>
+#include <glm/gtc/type_ptr.hpp>
 #endif
 
 namespace AGE
@@ -16,8 +17,8 @@ namespace AGE
 		_manager(nullptr),
 		_mass(0.0f),
 		_inertia(btVector3(0.0f, 0.0f, 0.0f)),
-		_rotationConstraint(glm::vec3(1, 1, 1)),
-		_transformConstraint(glm::vec3(1, 1, 1)),
+		_rotationConstraint(glm::uvec3(1, 1, 1)),
+		_transformConstraint(glm::uvec3(1, 1, 1)),
 		_shapeType(UndefinedTypeId),
 		_shapePath(""),
 		_collisionShapeType(UNDEFINED)
@@ -38,8 +39,8 @@ namespace AGE
 
 		_shapeType = UNDEFINED;
 		_mass = 0.0f;
-		_rotationConstraint = glm::vec3(1, 1, 1);
-		_transformConstraint = glm::vec3(1, 1, 1);
+		_rotationConstraint = glm::uvec3(1, 1, 1);
+		_transformConstraint = glm::uvec3(1, 1, 1);
 		_inertia.setValue(0, 0, 0);
 	}
 
@@ -182,7 +183,7 @@ namespace AGE
 
 	void RigidBody::setRotationConstraint(bool x, bool y, bool z)
 	{
-		_rotationConstraint = glm::vec3(static_cast<unsigned int>(x),
+		_rotationConstraint = glm::uvec3(static_cast<unsigned int>(x),
 			static_cast<unsigned int>(y),
 			static_cast<unsigned int>(z));
 		if (!_rigidBody)
@@ -223,7 +224,7 @@ namespace AGE
 
 	void RigidBody::setTransformConstraint(bool x, bool y, bool z)
 	{
-		_transformConstraint = glm::vec3(static_cast<unsigned int>(x),
+		_transformConstraint = glm::uvec3(static_cast<unsigned int>(x),
 			static_cast<unsigned int>(y),
 			static_cast<unsigned int>(z));
 		if (!_rigidBody)
@@ -242,13 +243,37 @@ namespace AGE
 
 #ifdef EDITOR_ENABLED
 	void RigidBody::editorCreate(AScene *scene)
-	{}
+	{
+		_mass = 0.0f;
+	}
 
 	void RigidBody::editorDelete(AScene *scene)
 	{}
 
 	void RigidBody::editorUpdate(AScene *scene)
 	{
+		ImGui::InputFloat("Mass", &_mass);
+
+		ImGui::Text("Rotation constraint");
+		ImGui::SameLine();
+		ImGui::CheckboxFlags("x", &(_rotationConstraint.x), _rotationConstraint.x);
+		ImGui::SameLine();
+		ImGui::CheckboxFlags("y", &(_rotationConstraint.y), _rotationConstraint.y);
+		ImGui::SameLine();
+		ImGui::CheckboxFlags("z", &(_rotationConstraint.z), _rotationConstraint.z);
+
+		ImGui::Text("Transformation constraint");
+		ImGui::SameLine();
+		ImGui::CheckboxFlags("x", &(_transformConstraint.x), _transformConstraint.x);
+		ImGui::SameLine();
+		ImGui::CheckboxFlags("y", &(_transformConstraint.y), _transformConstraint.y);
+		ImGui::SameLine();
+		ImGui::CheckboxFlags("z", &(_transformConstraint.z), _transformConstraint.z);
+
+		//ImGui::InputFloat3("Rotation constraint", glm::value_ptr(_rotationConstraint));
+		//ImGui::InputFloat3("Transform constraint", glm::value_ptr(_transformConstraint));
+
+
 		if ((*shapePathList)[selectedShapeIndex] != selectedShapePath)
 		{
 			std::size_t i = 0;

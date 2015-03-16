@@ -24,6 +24,12 @@ btVector3 convertGLMVectorToBullet(const glm::vec3 &vector)
 {
 	return btVector3(vector.x, vector.y, vector.z);
 }
+
+btVector3 convertGLMVectorToBullet(const glm::uvec3 &vector)
+{
+	return btVector3(vector.x, vector.y, vector.z);
+}
+
 glm::vec3 convertBulletVectorToGLM(const btVector3& vector)
 {
 	return glm::vec3(vector.getX(), vector.getY(), vector.getZ());

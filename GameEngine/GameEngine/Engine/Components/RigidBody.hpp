@@ -29,8 +29,8 @@ namespace AGE
 		BulletDynamicManager *_manager;
 		btScalar _mass;
 		btVector3 _inertia;
-		glm::vec3 _rotationConstraint;
-		glm::vec3 _transformConstraint;
+		glm::uvec3 _rotationConstraint;
+		glm::uvec3 _transformConstraint;
 		UniqueTypeId _shapeType;
 		std::string _shapePath;
 		CollisionShape _collisionShapeType;
