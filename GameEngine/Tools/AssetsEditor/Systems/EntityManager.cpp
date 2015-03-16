@@ -75,14 +75,19 @@ namespace AGE
 					auto cpt = e.getComponent<AGE::WE::EntityRepresentation>();
 
 					ImGui::InputText("Name", cpt->name, ENTITY_NAME_LENGTH);
+					cpt->position = e.getLink().getPosition();
 					if (ImGui::InputFloat3("Position", glm::value_ptr(cpt->position)))
 					{
 						e.getLink().setPosition(cpt->position);
 					}
+
+					cpt->rotation = glm::eulerAngles(e.getLink().getOrientation());
 					if (ImGui::InputFloat3("Rotation", glm::value_ptr(cpt->rotation)))
 					{
 						e.getLink().setOrientation(glm::quat(cpt->rotation));
 					}
+
+					cpt->scale = e.getLink().getScale();
 					if (ImGui::InputFloat3("Scale", glm::value_ptr(cpt->scale)))
 					{
 						e.getLink().setScale(cpt->scale);

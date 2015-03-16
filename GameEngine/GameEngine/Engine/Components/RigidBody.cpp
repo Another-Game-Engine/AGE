@@ -167,7 +167,7 @@ namespace AGE
 		}
 		else if (c == SPHERE)
 		{
-			_collisionShape = _manager->getObjectPool().create<btSphereShape>(btSphereShape(1));
+			_collisionShape = _manager->getObjectPool().create<btSphereShape>(btSphereShape(0.5));
 			_shapeType = TypeID::Get<btSphereShape>();
 		}
 		else
@@ -279,11 +279,11 @@ namespace AGE
 		ImGui::Text("Rotation constraint");
 		ImGui::SameLine();
 		bool rotationConstraint = false;
-		rotationConstraint ^= ImGui::CheckboxFlags("x", &(_rotationConstraint.x), _rotationConstraint.x);
+		rotationConstraint ^= ImGui::CheckboxFlags("x", &(_rotationConstraint.x), 0);
 		ImGui::SameLine();
-		rotationConstraint ^= ImGui::CheckboxFlags("y", &(_rotationConstraint.y), _rotationConstraint.y);
+		rotationConstraint ^= ImGui::CheckboxFlags("y", &(_rotationConstraint.y), 0);
 		ImGui::SameLine();
-		rotationConstraint ^= ImGui::CheckboxFlags("z", &(_rotationConstraint.z), _rotationConstraint.z);
+		rotationConstraint ^= ImGui::CheckboxFlags("z", &(_rotationConstraint.z), 0);
 
 		if (rotationConstraint)
 		{
@@ -293,11 +293,11 @@ namespace AGE
 		ImGui::Text("Transformation constraint");
 		ImGui::SameLine();
 		bool transformConstraint = false;
-		transformConstraint ^= ImGui::CheckboxFlags("x", &(_transformConstraint.x), _transformConstraint.x);
+		transformConstraint ^= ImGui::CheckboxFlags("x", &(_transformConstraint.x), 0);
 		ImGui::SameLine();
-		transformConstraint ^= ImGui::CheckboxFlags("y", &(_transformConstraint.y), _transformConstraint.y);
+		transformConstraint ^= ImGui::CheckboxFlags("y", &(_transformConstraint.y), 0);
 		ImGui::SameLine();
-		transformConstraint ^= ImGui::CheckboxFlags("z", &(_transformConstraint.z), _transformConstraint.z);
+		transformConstraint ^= ImGui::CheckboxFlags("z", &(_transformConstraint.z), 0);
 
 		if (transformConstraint)
 		{
