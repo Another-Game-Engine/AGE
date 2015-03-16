@@ -102,8 +102,8 @@ namespace AGE
 				scene->getInstance<AGE::AssetsManager>()->loadMesh(_serializationInfos->mesh
 				, "WE_MESH_LOADING");
 
-				std::size_t totalToLoad = 0;
-				std::size_t	toLoad = 0;
+				int totalToLoad = 0;
+				int toLoad = 0;
 				std::string loadingError;
 				do {
 					scene->getInstance<AGE::AssetsManager>()->updateLoadingChannel("WE_MESH_LOADING", totalToLoad, toLoad, loadingError);
@@ -117,13 +117,13 @@ namespace AGE
 				scene->getInstance<AGE::AssetsManager>()->loadMaterial(_serializationInfos->material
 				, "WE_MESH_LOADING");
 
-				std::size_t totalToLoad = 0;
-				std::size_t	toLoad = 0;
+				int totalToLoad = 0;
+				int toLoad = 0;
 				std::string loadingError;
 				do {
 					scene->getInstance<AGE::AssetsManager>()->updateLoadingChannel("WE_MESH_LOADING", totalToLoad, toLoad, loadingError);
 				} while
-					(toLoad != 0 && loadingError.size() == 0);
+					(toLoad > 0 && loadingError.size() == 0);
 
 				_material = scene->getInstance<AGE::AssetsManager>()->getMaterial(_serializationInfos->material);
 			}
@@ -186,13 +186,13 @@ namespace AGE
 			{
 				scene->getInstance<AGE::AssetsManager>()->loadMesh(OldFile(selectedMeshPath), selectedMeshPath);
 
-				std::size_t totalToLoad = 0;
-				std::size_t	toLoad = 0;
+				int totalToLoad = 0;
+				int toLoad = 0;
 				std::string loadingError;
 				do {
 					scene->getInstance<AGE::AssetsManager>()->updateLoadingChannel(selectedMeshPath, totalToLoad, toLoad, loadingError);
 				} while
-					(toLoad != 0 && loadingError.size() == 0);
+					(toLoad > 0 && loadingError.size() == 0);
 			}
 			_mesh = scene->getInstance<AGE::AssetsManager>()->getMesh(selectedMeshPath);
 			AGE_ASSERT(_mesh != nullptr);
@@ -214,13 +214,13 @@ namespace AGE
 			{
 				scene->getInstance<AGE::AssetsManager>()->loadMaterial(OldFile(selectedMaterialPath), selectedMaterialPath);
 
-				std::size_t totalToLoad = 0;
-				std::size_t	toLoad = 0;
+				int totalToLoad = 0;
+				int toLoad = 0;
 				std::string loadingError;
 				do {
 					scene->getInstance<AGE::AssetsManager>()->updateLoadingChannel(selectedMaterialPath, totalToLoad, toLoad, loadingError);
 				} while
-					(toLoad != 0 && loadingError.size() == 0);
+					(toLoad > 0 && loadingError.size() == 0);
 			}
 			_material = scene->getInstance<AGE::AssetsManager>()->getMaterial(selectedMaterialPath);
 			AGE_ASSERT(_material != nullptr);

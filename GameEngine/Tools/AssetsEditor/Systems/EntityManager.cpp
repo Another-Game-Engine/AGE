@@ -165,13 +165,31 @@ namespace AGE
 								package.materials.insert(cpt->selectedMaterialPath);
 							}
 						}
+						_scene->getInstance<AssetsManager>()->savePackage(package, std::string(_sceneName) + "_assets.json");
 					}
 
 					scene->saveSelectionToJson(std::string(_sceneName) + ".json", _filter.getCollection());
 				}
 				if (ImGui::Button("Load scene"))
 				{
-					scene->loadFromJson(std::string(_sceneName) + ".json");
+					auto sceneFileName = std::string(_sceneName) + ".json";
+					auto assetPackageFileName = std::string(_sceneName) + "_assets.json";
+
+					_scene->getInstance<AssetsManager>()->loadPackage(assetPackageFileName, assetPackageFileName);
+
+					int totalToLoad = 0;
+					int toLoad = 0;
+					std::string loadingError;
+
+					std::cout << "Loading assets";
+					do {
+						scene->getInstance<AGE::AssetsManager>()->updateLoadingChannel(assetPackageFileName, totalToLoad, toLoad, loadingError);
+						std::this_thread::sleep_for(std::chrono::milliseconds(300));
+						std::cout << ".";
+					} while
+						(toLoad > 0 && loadingError.size() == 0);
+					std::cout << std::endl;
+					scene->loadFromJson(sceneFileName);
 				}
 
 				ImGui::EndChild();

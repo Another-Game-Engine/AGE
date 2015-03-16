@@ -382,7 +382,7 @@ namespace AGE
 		channel->pushNewAsset(filename, future);
 	}
 
-	bool AssetsManager::AssetsLoadingChannel::updateList(std::size_t &noLoaded, std::size_t &total)
+	bool AssetsManager::AssetsLoadingChannel::updateList(int &noLoaded, int &total)
 	{
 		if (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - _lastUpdate).count() > 33)
 		{
@@ -411,8 +411,8 @@ namespace AGE
 				return false;
 			});
 		}
-		noLoaded = _list.size();
-		total = _maxAssets;
+		noLoaded = (int)_list.size();
+		total = (int)_maxAssets;
 		return _errorMessages.empty();
 	}
 
@@ -424,7 +424,7 @@ namespace AGE
 			_maxAssets = _list.size();
 	}
 
-	void AssetsManager::updateLoadingChannel(const std::string &channelName, std::size_t &total, std::size_t &to_load, std::string &error)
+	void AssetsManager::updateLoadingChannel(const std::string &channelName, int &total, int &to_load, std::string &error)
 	{
 		std::shared_ptr<AssetsManager::AssetsLoadingChannel> channel = nullptr;
 		{
@@ -439,5 +439,43 @@ namespace AGE
 		}
 		if (!channel->updateList(to_load, total))
 			error = channel->getErrorMessages();
+	}
+
+	void AssetsManager::loadPackage(const OldFile &packagePath, const std::string &loadingChannel /*= ""*/)
+	{
+		if (!packagePath.exists())
+		{
+			return;
+		}
+		std::ifstream file(std::string(packagePath.getFullName()), std::ios::binary);
+		AGE_ASSERT(file.is_open());
+		{
+			AssetsPackage package;
+			auto ar = cereal::JSONInputArchive(file);
+			ar(package);
+			loadPackage(package, loadingChannel);
+		}
+	}
+
+	void AssetsManager::loadPackage(const AssetsPackage &package, const std::string &loadingChannel /*= ""*/)
+	{
+		for (auto &e : package.meshs)
+		{
+			loadMesh(OldFile(e), loadingChannel);
+		}
+		for (auto &e : package.materials)
+		{
+			loadMaterial(OldFile(e), loadingChannel);
+		}
+	}
+
+	void AssetsManager::savePackage(const AssetsPackage &package, const std::string filePath)
+	{
+		std::ofstream file(filePath, std::ios::binary);
+		AGE_ASSERT(file.is_open());
+		{
+			auto ar = cereal::JSONOutputArchive(file);
+			ar(package);
+		}
 	}
 }
