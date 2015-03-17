@@ -150,10 +150,25 @@ namespace AGE
 				if (ImGui::Button("Save as Archetype") && _selectedEntity < _entities.size())
 				{
 					Archetype archetype;
+					auto entity_representation = _entities[_selectedEntity].getComponent<AGE::WE::EntityRepresentation>(); // set the entity
 					archetype.name = _entityNames[_selectedEntity]; // set the name
+					archetype.position = entity_representation->position;
+					archetype.rotation = entity_representation->rotation;
+					archetype.scale = entity_representation->scale;
 					std::cout << archetype.name << std::endl;
 					_archetypes.emplace_back(archetype);
 					_archetypeNames.emplace_back(nullptr);
+				}
+
+				if (_archetypes.size() > 0 && ImGui::Button("Create Entity by Archetype") && _selectedArchetype < _archetypes.size())
+				{
+					auto &entity = scene->createEntity();
+					auto component = entity.addComponent<AGE::WE::EntityRepresentation>();
+					auto const &archetype = _archetypes[_selectedArchetype];
+					memcpy(component->name, archetype.name.c_str(), archetype.name.size());
+					component->position = archetype.position;
+					component->rotation = archetype.rotation;
+					component->scale = archetype.scale;
 				}
 
 				if (_archetypes.size() > 0)

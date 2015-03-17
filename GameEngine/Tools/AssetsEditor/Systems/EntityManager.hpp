@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Systems/System.h>
+#include <glm/gtc/quaternion.hpp>
 #include <utility>
 
 namespace AGE
@@ -10,6 +11,9 @@ namespace AGE
 		struct Archetype
 		{
 			std::string name;
+			glm::vec3 position;
+			glm::vec3 rotation;
+			glm::vec3 scale;
 		};
 
 		class EntityManager : public System
