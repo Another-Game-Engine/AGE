@@ -294,18 +294,20 @@ namespace AGE
 			}
 		}
 		ImGui::End();
-		if (!ImGui::Begin("Example: Fixed OverlayFPS OVERLAY", (bool*)1, ImVec2(0, 0), 0.3f, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings))
+		if (_displayFps)
 		{
-			ImGui::End();
-		}
-		else
-		{
-			ImGui::SetWindowPos(ImVec2(10, 10));
+			if (!ImGui::Begin("Example: Fixed OverlayFPS OVERLAY", (bool*)1, ImVec2(0, 0), 0.3f, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings))
 			{
-				auto &e = GetThreadManager()->getStatistics()[Thread::Main];
-				if (e.averageWaitTimeCopy + e.averageWorkTimeCopy > 0)
-					ImGui::Text("Main : %i fps", (int)(1000 / (e.averageWaitTimeCopy + e.averageWorkTimeCopy)));
+				ImGui::End();
 			}
+			else
+			{
+				ImGui::SetWindowPos(ImVec2(10, 10));
+				{
+					auto &e = GetThreadManager()->getStatistics()[Thread::Main];
+					if (e.averageWaitTimeCopy + e.averageWorkTimeCopy > 0)
+						ImGui::Text("Main : %i fps", (int)(1000 / (e.averageWaitTimeCopy + e.averageWorkTimeCopy)));
+				}
 			{
 				auto &e = GetThreadManager()->getStatistics()[Thread::PrepareRender];
 				if (e.averageWaitTimeCopy + e.averageWorkTimeCopy > 0)
@@ -317,6 +319,7 @@ namespace AGE
 					ImGui::Text("Render : %i fps", (int)(1000 / (e.averageWaitTimeCopy + e.averageWorkTimeCopy)));
 			}
 			ImGui::End();
+			}
 		}
 #endif
 #ifdef USE_IMGUI

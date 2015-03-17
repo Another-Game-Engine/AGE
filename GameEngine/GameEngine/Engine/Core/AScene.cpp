@@ -161,17 +161,18 @@ namespace AGE
 		informFiltersEntityDeletion(*data);
 
 		auto children = e.getLink().getChildren();
-		for (auto &e : children)
+		for (auto &c : children)
 		{
 			if (deep)
 			{
-				destroy(e->getEntity()->getEntity(), deep);
+				destroy(c->getEntity()->getEntity(), deep);
 			}
 			else
 			{
-				e->detachParent();
+				c->detachParent();
 			}
 		}
+		data->getLink().detachParent();
 
 		_entityPool.destroy(e.ptr);
 	}

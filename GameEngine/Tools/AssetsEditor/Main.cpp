@@ -49,6 +49,7 @@ int			main(int ac, char **av)
 {
 	AGE::InitAGE();
 	auto engine = AGE::CreateEngine();
+	engine->displayFps(false);
 
 	engine->launch(std::function<bool()>([&]()
 	{
