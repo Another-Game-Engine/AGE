@@ -3,7 +3,7 @@
 # include <Utils/OpenGL.hh>
 # include <Render/Pipelining/Buffer/Framebuffer.hh>
 # include <Render/Pipelining/Buffer/IFramebufferStorage.hh>
-# include <Render/Pipelining/Render/ARendering.hh>
+# include <Render/Pipelining/Render/ARender.hh>
 # include <unordered_map>
 # include <utility>
 
@@ -14,22 +14,25 @@ namespace AGE
 	class Painter;
 	class Program;
 	class IRenderContext;
+	class ARenderingPipeline;
 
-	class RenderingPass : public ARendering
+	class FrameBufferRender : public ARender
 	{
 	public:
-		RenderingPass(std::function<void(std::vector<Properties> const &properties, std::vector<Key<Vertices>> const &vertices, std::shared_ptr<Painter> const &painter)> const &function);
-		RenderingPass(RenderingPass &&move);
-		virtual ~RenderingPass(){}
+		FrameBufferRender(FrameBufferRender &&move);
+		virtual ~FrameBufferRender(){}
 
 	public:
-		virtual IRendering &render(std::vector<Properties> const &properties, std::vector<Key<Vertices>> const &vertices, std::shared_ptr<Painter> const &painter) override final;
+		virtual IRender &render(RenderPipeline const &pipeline, RenderLightList const &lights, CameraInfos const &infos) override final;
 
 	public:
-		template <typename type_t> RenderingPass &push_storage_output(GLenum attach, std::shared_ptr<type_t> storage);
+		template <typename type_t> FrameBufferRender &push_storage_output(GLenum attach, std::shared_ptr<type_t> storage);
 		size_t nbr_output() const;
 		std::shared_ptr<IFramebufferStorage> operator[](GLenum attach) const;
 		std::vector<GLenum> const &drawing_attach() const;
+
+	protected:
+		FrameBufferRender(std::shared_ptr<PaintingManager> painterManager);
 
 	private:
 		Framebuffer _frame_buffer;
@@ -39,7 +42,7 @@ namespace AGE
 	};
 
 	template <typename type_t>
-	RenderingPass & RenderingPass::push_storage_output(GLenum attach, std::shared_ptr<type_t> storage)
+	FrameBufferRender & FrameBufferRender::push_storage_output(GLenum attach, std::shared_ptr<type_t> storage)
 	{
 		_is_update = false;
 		_frame_output[attach] = storage;

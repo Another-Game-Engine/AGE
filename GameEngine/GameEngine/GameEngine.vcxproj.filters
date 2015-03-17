@@ -42,11 +42,7 @@
     <ClCompile Include="Engine\Render\Pipelining\Buffer\Framebuffer.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Buffer\Renderbuffer.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\ARenderingPipeline.cpp" />
-    <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomPipeline\BasicPipeline.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomPipeline\DeferredShading.cpp" />
-    <ClCompile Include="Engine\Render\Pipelining\Render\ARendering.cpp" />
-    <ClCompile Include="Engine\Render\Pipelining\Render\Rendering.cpp" />
-    <ClCompile Include="Engine\Render\Pipelining\Render\RenderingPass.cpp" />
     <ClCompile Include="Engine\Render\ProgramResources\AInterfaceBlock.cpp" />
     <ClCompile Include="Engine\Render\ProgramResources\AProgramResources.cpp" />
     <ClCompile Include="Engine\Render\ProgramResources\Factory\ProgramResourcesFactory.cpp" />
@@ -153,6 +149,12 @@
     <ClCompile Include="Engine\Core\Inputs\Joystick.cpp" />
     <ClCompile Include="Engine\Components\FreeFlyComponent.cpp" />
     <ClCompile Include="Engine\Systems\DebugSystem.cpp" />
+    <ClCompile Include="Engine\Render\Pipelining\Render\ARender.cpp" />
+    <ClCompile Include="Engine\Render\Pipelining\Render\ScreenRender.cpp" />
+    <ClCompile Include="Engine\Render\Pipelining\Render\FrameBufferRender.cpp" />
+    <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredBasicBuffering.cpp" />
+    <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredPointLightning.cpp" />
+    <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredMerging.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -209,13 +211,8 @@
     <ClInclude Include="Engine\Render\Pipelining\Buffer\IFramebufferStorage.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Buffer\Renderbuffer.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\ARenderingPipeline.hh" />
-    <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomPipeline\BasicPipeline.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomPipeline\DeferredShading.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\IRenderingPipeline.hh" />
-    <ClInclude Include="Engine\Render\Pipelining\Render\ARendering.hh" />
-    <ClInclude Include="Engine\Render\Pipelining\Render\IRendering.hh" />
-    <ClInclude Include="Engine\Render\Pipelining\Render\Rendering.hh" />
-    <ClInclude Include="Engine\Render\Pipelining\Render\RenderingPass.hh" />
     <ClInclude Include="Engine\Render\ProgramResources\Types\Uniform\Sampler\Sampler2D.hh" />
     <ClInclude Include="Engine\Render\Properties\AProperty.hh" />
     <ClInclude Include="Engine\Render\Properties\IProperty.hh" />
@@ -401,6 +398,13 @@
     <ClInclude Include="Engine\Core\Inputs\Joystick.hh" />
     <ClInclude Include="Engine\Components\FreeFlyComponent.hh" />
     <ClInclude Include="Engine\Systems\DebugSystem.hpp" />
+    <ClInclude Include="Engine\Render\Pipelining\Render\IRender.hh" />
+    <ClInclude Include="Engine\Render\Pipelining\Render\ARender.hh" />
+    <ClInclude Include="Engine\Render\Pipelining\Render\ScreenRender.hh" />
+    <ClInclude Include="Engine\Render\Pipelining\Render\FrameBufferRender.hh" />
+    <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredBasicBuffering.hh" />
+    <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredPointLightning.hh" />
+    <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredMerging.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

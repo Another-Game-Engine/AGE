@@ -1,6 +1,7 @@
 #include <Render/Pipelining/Pipelines/ARenderingPipeline.hh>
 #include <Render/GeometryManagement/Painting/Painter.hh>
 #include <Render/Program.hh>
+#include <Render/Pipelining/Render/ARender.hh>
 
 namespace AGE
 {
@@ -14,16 +15,14 @@ namespace AGE
 
 	ARenderingPipeline::ARenderingPipeline(ARenderingPipeline &&move) :
 		_name(std::move(move._name)),
-		_painter_manager(std::move(move._painter_manager)),
-		_rendering_list(std::move(move._rendering_list)),
-		_programs(std::move(move._programs))
+		_painter_manager(std::move(move._painter_manager))
 	{
 
 	}
 
-	std::vector<std::shared_ptr<IRendering>> const & ARenderingPipeline::get_rendering() const
+	std::shared_ptr<PaintingManager> ARenderingPipeline::getPainterManager() const
 	{
-		return (_rendering_list);
+		return (_painter_manager);
 	}
 
 	std::string const & ARenderingPipeline::name() const
@@ -31,16 +30,11 @@ namespace AGE
 		return (_name);
 	}
 
-	std::vector<std::shared_ptr<Program>> const & ARenderingPipeline::get_programs() const
-	{
-		return (_programs);
-	}
-
 	bool ARenderingPipeline::recompileShaders()
 	{
-		for (auto &e : _programs)
+		for (auto &e : _rendering_list)
 		{
-			auto success = e->compile();
+			auto success = e->recompilePrograms();
 			if (!success)
 			{
 				return false;

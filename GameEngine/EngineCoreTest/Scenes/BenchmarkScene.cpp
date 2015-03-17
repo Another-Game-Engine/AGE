@@ -31,7 +31,6 @@
 # include <Render/ProgramResources/Types/UniformBlock.hh>
 # include <Render/ProgramResources/Types/Attribute.hh>
 # include <Render/GeometryManagement/Painting/Painter.hh>
-# include <Render/Pipelining/Render/RenderingPass.hh>
 # include <Render/Pipelining/Pipelines/IRenderingPipeline.hh>
 # include <Render/GeometryManagement/Painting/PaintingManager.hh>
 
@@ -343,20 +342,8 @@ namespace AGE
 
 		auto camComponent = GLOBAL_CAMERA.getComponent<CameraComponent>();
 		static bool cameraPipelines[2] = {false, false};
-		cameraPipelines[RenderType::BASIC] = camComponent->havePipeline(RenderType::BASIC);
 		cameraPipelines[RenderType::DEFERRED] = camComponent->havePipeline(RenderType::DEFERRED);
 
-		if (ImGui::Checkbox("Basic rendering", &cameraPipelines[RenderType::BASIC]))
-		{
-			if (cameraPipelines[RenderType::BASIC])
-			{
-				camComponent->addPipeline(RenderType::BASIC);
-			}
-			else
-			{
-				camComponent->removePipeline(RenderType::BASIC);
-			}
-		}
 		if (ImGui::Checkbox("Deferred rendering", &cameraPipelines[RenderType::DEFERRED]))
 		{
 			if (cameraPipelines[RenderType::DEFERRED])

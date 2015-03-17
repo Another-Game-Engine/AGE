@@ -150,7 +150,6 @@ namespace AGE
 				return;
 			}
 			pipelines[DEFERRED] = std::make_unique<DeferredShading>(_context->getScreenSize(), paintingManager);
-			pipelines[BASIC] = std::make_unique<BasicPipeline>(paintingManager);
 			_recompileShaders();
 			msg.setValue(true);
 		});
@@ -199,7 +198,7 @@ namespace AGE
 				for (auto &curCamera : drawlist)
 				{
 					if (pipelineIdx < curCamera.pipelines.size()) {
-						curPipeline->render(curCamera.pipelines[pipelineIdx], curCamera.lights, curCamera.camInfos);
+						pipelines[0]->render(curCamera.pipelines[pipelineIdx], curCamera.lights, curCamera.camInfos);
 					}
 				}
 				++pipelineIdx;

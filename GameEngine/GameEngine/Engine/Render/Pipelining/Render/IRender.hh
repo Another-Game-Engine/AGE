@@ -9,12 +9,15 @@ namespace AGE
 {
 	class Properties;
 	class IRenderingPipeline;
+	struct RenderLightList;
+	struct RenderPipeline;
+	struct CameraInfos;
 
-	class IRendering
+	class IRender
 	{
 	public:
-		virtual ~IRendering() {}
-		virtual IRendering &render(std::vector<Properties> const &properties, std::vector<Key<Vertices>> const &vertices, std::shared_ptr<Painter> const &painter) = 0;
+		virtual ~IRender() {}
+		virtual IRender &render(RenderPipeline const &pipeline, RenderLightList const &lights, CameraInfos const &infos) = 0;
 	};
 
 }
