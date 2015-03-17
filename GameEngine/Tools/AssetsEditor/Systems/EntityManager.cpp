@@ -126,6 +126,7 @@ namespace AGE
 					if (ImGui::Button("Delete entity"))
 					{
 						_scene->destroy(entity);
+						_selectedEntity = nullptr;
 					}
 				}
 
@@ -276,10 +277,6 @@ namespace AGE
 				auto cpt = entity.getComponent<AGE::WE::EntityRepresentation>();
 				bool opened = false;
 				opened = ImGui::TreeNode(cpt->name);
-				if (ImGui::IsItemActive())
-				{
-					auto i = "caca";
-				}
 				ImGui::PushID(entity.getPtr());
 				if (_selectedEntity != entity.getPtr())
 				{
