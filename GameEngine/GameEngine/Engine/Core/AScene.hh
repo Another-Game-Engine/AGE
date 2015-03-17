@@ -76,7 +76,10 @@ namespace AGE
 		void                    informFiltersEntityDeletion(const EntityData &entity);
 
 		Entity &createEntity();
-		void destroy(const Entity &e);
+
+		// deep will destroy all children recursively
+		// if not deep children will be set as root level
+		void destroy(const Entity &e, bool deep = false);
 		void clearAllEntities();
 
 		template <typename T>
@@ -145,9 +148,10 @@ namespace AGE
 		{
 			vector.push_back(e.ptr);
 			auto &children = e.getLink().getChildren();
+			auto parentId = vector.size() - 1;
 			for (auto &c : children)
 			{
-				vector.back().children.push_back(vector.size());
+				vector[parentId].children.push_back(vector.size());
 				auto child = c->getEntity()->getEntity();
 				graphnodeToFlatVector(vector, child);
 			}

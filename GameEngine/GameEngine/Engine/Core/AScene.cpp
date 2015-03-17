@@ -135,7 +135,7 @@ namespace AGE
 		return e->entity;
 	}
 
-	void AScene::destroy(const Entity &e)
+	void AScene::destroy(const Entity &e, bool deep /*= false*/)
 	{
 		auto &data = e.ptr;
 		auto find = _entities.find(e);
@@ -159,6 +159,20 @@ namespace AGE
 			//}
 		}
 		informFiltersEntityDeletion(*data);
+
+		auto children = e.getLink().getChildren();
+		for (auto &e : children)
+		{
+			if (deep)
+			{
+				destroy(e->getEntity()->getEntity(), deep);
+			}
+			else
+			{
+				e->detachParent();
+			}
+		}
+
 		_entityPool.destroy(e.ptr);
 	}
 
