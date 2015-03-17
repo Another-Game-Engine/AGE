@@ -49,7 +49,7 @@ namespace AGE
 		auto cam = camera.addComponent<CameraComponent>();
 		camera.getLink().setPosition(glm::vec3(0, 3, 5));
 		camera.getLink().setForward(glm::vec3(0, 0, 0));
-		cam->addPipeline(RenderType::BASIC);
+		//cam->addPipeline(RenderType::DEFERRED);
 		camera.addComponent<FreeFlyComponent>();
 		camera.getComponent<AGE::WE::EntityRepresentation>()->editorOnly = true;
 

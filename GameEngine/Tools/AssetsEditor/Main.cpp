@@ -61,11 +61,6 @@ int			main(int ac, char **av)
 			return true;
 		}).get();
 
-#ifdef RENDERING_ACTIVATED
-		if (!loadAssets(engine))
-			return false;
-#endif
-
 		REGISTER_COMPONENT_TYPE(AGE::MeshRenderer);
 		REGISTER_COMPONENT_TYPE(AGE::RigidBody);
 		REGISTER_COMPONENT_TYPE(AGE::PointLightComponent);
