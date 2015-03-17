@@ -97,6 +97,8 @@ namespace AGE
 										{
 											ptr->editorDelete(scene);
 											e.removeComponent(i);
+											auto &components = e.getComponent<AGE::WE::EntityRepresentation>()->components;
+									//		components.erase(std::find(components.begin(), components.end(), i));
 										}
 										ImGui::PopID();
 									}
@@ -118,6 +120,7 @@ namespace AGE
 							if (ImGui::Button(std::string("Add : " + ComponentRegistrationManager::getInstance().getComponentName(t.second)).c_str()))
 							{
 								creationFn.at(t.first)(&e);
+								e.getComponent<AGE::WE::EntityRepresentation>()->components.emplace_back(t.first);
 							}
 						}
 					}
@@ -155,7 +158,7 @@ namespace AGE
 					archetype.position = entity_representation->position;
 					archetype.rotation = entity_representation->rotation;
 					archetype.scale = entity_representation->scale;
-					std::cout << archetype.name << std::endl;
+					archetype.components = entity_representation->components;
 					_archetypes.emplace_back(archetype);
 					_archetypeNames.emplace_back(nullptr);
 				}
@@ -163,12 +166,15 @@ namespace AGE
 				if (_archetypes.size() > 0 && ImGui::Button("Create Entity by Archetype") && _selectedArchetype < _archetypes.size())
 				{
 					auto &entity = scene->createEntity();
-					auto component = entity.addComponent<AGE::WE::EntityRepresentation>();
+					auto representation = entity.addComponent<AGE::WE::EntityRepresentation>();
 					auto const &archetype = _archetypes[_selectedArchetype];
-					memcpy(component->name, archetype.name.c_str(), archetype.name.size());
-					component->position = archetype.position;
-					component->rotation = archetype.rotation;
-					component->scale = archetype.scale;
+					memcpy(representation->name, archetype.name.c_str(), archetype.name.size());
+					representation->position = archetype.position;
+					representation->rotation = archetype.rotation;
+					representation->scale = archetype.scale;
+					representation->components = archetype.components;
+					for (auto &cmp : representation->components)
+						ComponentRegistrationManager::getInstance().getCreationFunctions().at(cmp)(&entity);
 				}
 
 				if (_archetypes.size() > 0)
