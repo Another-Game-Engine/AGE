@@ -145,6 +145,25 @@ namespace AGE
 					scene->loadFromJson("WorldEditorSceneTest.json");
 				}
 
+				ImGui::Separator();
+
+				if (ImGui::Button("Save as Archetype") && _selectedEntity < _entities.size())
+				{
+					Archetype archetype;
+					archetype.name = _entityNames[_selectedEntity]; // set the name
+					std::cout << archetype.name << std::endl;
+					_archetypes.emplace_back(archetype);
+					_archetypeNames.emplace_back(nullptr);
+				}
+
+				if (_archetypes.size() > 0)
+				{
+					for (auto index = 0ul; index < _archetypes.size(); ++index) //reset all name char ptr because of the vector resize
+						_archetypeNames[index] = _archetypes[index].name.c_str();
+					ImGui::ListBox("##empty", &_selectedArchetype, &(_archetypeNames.front()), (int)(_archetypeNames.size()));
+					ImGui::Separator();
+				}
+
 				ImGui::EndChild();
 
 				ImGui::EndChild(); // Entity List
