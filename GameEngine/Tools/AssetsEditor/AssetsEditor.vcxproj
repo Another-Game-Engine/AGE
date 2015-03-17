@@ -40,13 +40,15 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>D:\git\AGE\GameEngine\Vendors\ResIL\include;$(SolutionDir)/Vendors/assimp/include;$(SolutionDir)Vendors/OpenGL/include;$(SolutionDir)GameEngine/Engine;$(SolutionDir)GameEngine;$(ProjectDir);$(SolutionDir)Vendors;$(SolutionDir)Vendors/TinyObjLoader;$(IncludePath);$(SolutionDir)Vendors/boost_1_55_0;$(SolutionDir)Vendors\bullet\src;$(SolutionDir)Vendors\fmod\inc;$(SolutionDir)Vendors/FreeImage/include;;$(SolutionDir)Vendors/FreeImagePlus/include</IncludePath>
+    <IncludePath>$(SolutionDir)/Vendors/assimp/include;$(SolutionDir)Vendors/OpenGL/include;$(SolutionDir)GameEngine/Engine;$(SolutionDir)GameEngine;$(ProjectDir);$(SolutionDir)Vendors;$(SolutionDir)Vendors/TinyObjLoader;$(IncludePath);$(SolutionDir)Vendors/boost_1_55_0;$(SolutionDir)Vendors\bullet\src;$(SolutionDir)Vendors\fmod\inc;$(SolutionDir)Vendors/FreeImage/include;$(SolutionDir)EngineCoreTest/Systems;$(SolutionDir)EngineCoreTest/Components;$(SolutionDir)Vendors/FreeImagePlus/include</IncludePath>
     <LibraryPath>$(SolutionDir)/Vendors/assimp/x64/Debug;$(SolutionDir)Vendors/OpenGL/lib/x64;$(SolutionDir)Vendors\fmod\lib;$(SolutionDir)Vendors/bullet\lib\x64Debug;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(SolutionDir)Vendors/FreeImage/Debug/;$(SolutionDir)Vendors/FreeImagePlus/Debug/;$(SolutionDir)Vendors\crunch\crnlib\lib\VC9\Debug\x64</LibraryPath>
+    <SourcePath>$(VC_SourcePath);$(SolutionDir)EngineCoreTest/Systems;$(SolutionDir)EngineCoreTest/Components</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(SolutionDir)/Vendors/assimp/include;$(SolutionDir)Vendors/OpenGL/include;$(SolutionDir)GameEngine/Engine;$(SolutionDir)GameEngine;$(ProjectDir);$(SolutionDir)Vendors;$(SolutionDir)Vendors/TinyObjLoader;$(IncludePath);$(SolutionDir)Vendors/boost_1_55_0;$(SolutionDir)Vendors\bullet\src;$(SolutionDir)Vendors\fmod\inc;$(SolutionDir)Vendors/FreeImage/include;;$(SolutionDir)Vendors/FreeImagePlus/include</IncludePath>
+    <IncludePath>$(SolutionDir)/Vendors/assimp/include;$(SolutionDir)Vendors/OpenGL/include;$(SolutionDir)GameEngine/Engine;$(SolutionDir)GameEngine;$(ProjectDir);$(SolutionDir)Vendors;$(SolutionDir)Vendors/TinyObjLoader;$(IncludePath);$(SolutionDir)Vendors/boost_1_55_0;$(SolutionDir)Vendors\bullet\src;$(SolutionDir)Vendors\fmod\inc;$(SolutionDir)Vendors/FreeImage/include;$(SolutionDir)EngineCoreTest/Systems;$(SolutionDir)EngineCoreTest/Components;;$(SolutionDir)Vendors/FreeImagePlus/include</IncludePath>
     <LibraryPath>$(SolutionDir)/Vendors/assimp/x64/Release;$(SolutionDir)Vendors/OpenGL/lib/x64;$(SolutionDir)Vendors\fmod\lib;$(SolutionDir)Vendors/bullet\lib\x64Release;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(SolutionDir)Vendors/FreeImage/Release;$(SolutionDir)Vendors/FreeImagePlus/Release;$(SolutionDir)vendors\crunch\crnlib\lib\VC9\Release\x64</LibraryPath>
+    <SourcePath>$(VC_SourcePath);$(SolutionDir)EngineCoreTest/Systems;$(SolutionDir)EngineCoreTest/Components</SourcePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -88,6 +90,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\EngineCoreTest\Components\Lifetime.cpp" />
     <ClCompile Include="AssetFiles\AssetFileManager.cpp" />
     <ClCompile Include="AssetFiles\CookedFile.cpp" />
     <ClCompile Include="AssetFiles\RawFile.cpp" />

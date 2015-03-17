@@ -4,11 +4,13 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Scenes\BenchmarkScene.cpp" />
     <ClCompile Include="Systems\LifetimeSystem.cpp" />
+    <ClCompile Include="Components\Lifetime.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Components\lifetimeComponent.hh" />
     <ClInclude Include="CONFIGS.hh" />
     <ClInclude Include="Scenes\BenchmarkScene.hpp" />
     <ClInclude Include="Systems\LifetimeSystem.hpp" />
+    <ClInclude Include="Components\Lifetime.hpp" />
   </ItemGroup>
 </Project>

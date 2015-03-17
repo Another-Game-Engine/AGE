@@ -19,6 +19,7 @@
 #include <Components/Light.hh>
 #include <Components/RigidBody.hpp>
 #include <Components/MeshRenderer.hh>
+#include <Components/Lifetime.hpp>
 
 #include <Systems/DebugSystem.hpp>
 
