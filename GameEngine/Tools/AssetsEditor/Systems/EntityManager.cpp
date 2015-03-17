@@ -14,7 +14,9 @@ namespace AGE
 				: System(std::move(scene))
 				, _filter(std::move(scene))
 				, _meshRenderers(std::move(scene))
-				, _selectedEntity(0)
+				, _selectedEntity(nullptr)
+				, _selectedEntityIndex(0)
+				, _graphNodeDisplay(false)
 			{
 				auto name = "../../MyScene\0";
 				memcpy(_sceneName, name, strlen(name) + 1);
@@ -32,8 +34,8 @@ namespace AGE
 			{
 				ImGui::BeginChild("Entity list", ImVec2(ImGui::GetWindowWidth() * 0.25f, 0));
 
-				float t = static_cast<float>(time);
-				auto scene = _scene;
+				ImGui::Checkbox("Graphnode display", &_graphNodeDisplay);
+
 				EntityFilter::Lock lock(_filter);
 
 				// Disgusting but fuck it ! :)
@@ -49,78 +51,58 @@ namespace AGE
 							_filter.manuallyRemoveEntity(e);
 							continue;
 						}
+
+						if (_graphNodeDisplay)
+						{
+							// if it's root
+							if (e.getLink().hasParent())
+							{
+								continue;
+							}
+						}
 						_entityNames.push_back(representation->name);
 						_entities.push_back(e);
 					}
 				}
-				if (_selectedEntity >= _entities.size())
-					_selectedEntity = 0;
+				if (_selectedEntityIndex >= _entities.size())
+				{
+					_selectedEntityIndex = 0;
+				}
 
-				if (_entities.size() > 0)
+				if (_entities.size() > 0 && !_graphNodeDisplay)
 				{
 					ImGui::PushItemWidth(-1);
 					//ImGui::ListBoxHeader("##empty");
-					ImGui::ListBox("##empty", &_selectedEntity, &(_entityNames.front()), (int)(_entityNames.size()));
+					if (ImGui::ListBox("##empty", &_selectedEntityIndex, &(_entityNames.front()), (int)(_entityNames.size())))
+					{
+						if (_entities.size() > 0 && _selectedEntityIndex < _entities.size())
+						{
+							_selectedEntity = _entities[_selectedEntityIndex].getPtr();
+						}
+						else
+						{
+							_selectedEntity = nullptr;
+						}
+					}
 					//ImGui::ListBoxFooter();
 					ImGui::PopItemWidth();
-
-					ImGui::Separator();
 				}
+				else
+				{
+					for (auto &e : _entities)
+					{
+						recursiveDisplayList(e);
+					}
+				}
+
+				ImGui::Separator();
 
 				ImGui::BeginChild("Edit entity");
 
-				if (_entities.size() > 0 && _selectedEntity < _entities.size())
+				if (_entities.size() > 0 && _selectedEntity != nullptr)
 				{
-					auto e = _entities[_selectedEntity];
-					auto cpt = e.getComponent<AGE::WE::EntityRepresentation>();
-
-					ImGui::InputText("Name", cpt->name, ENTITY_NAME_LENGTH);
-					cpt->position = e.getLink().getPosition();
-					if (ImGui::InputFloat3("Position", glm::value_ptr(cpt->position)))
-					{
-						e.getLink().setPosition(cpt->position);
-					}
-
-					cpt->rotation = glm::eulerAngles(e.getLink().getOrientation());
-					if (ImGui::InputFloat3("Rotation", glm::value_ptr(cpt->rotation)))
-					{
-						e.getLink().setOrientation(glm::quat(cpt->rotation));
-					}
-
-					cpt->scale = e.getLink().getScale();
-					if (ImGui::InputFloat3("Scale", glm::value_ptr(cpt->scale)))
-					{
-						e.getLink().setScale(cpt->scale);
-					}
-
-					ImGui::Separator();
-
-					auto &components = e.getComponentList();
-					for (ComponentType i = 0; i < components.size(); ++i)
-					{
-						if (e.haveComponent(i))
-						{
-							auto ptr = e.getComponent(i);
-							if (ptr->exposedInEditor)
-							{
-								if (ImGui::TreeNode(ComponentRegistrationManager::getInstance().getComponentName(ptr->getType()).c_str()))
-								{
-									ptr->editorUpdate(scene);
-									if (ptr->deletableInEditor)
-									{
-										ImGui::PushID(i);
-										if (ImGui::Button("Delete"))
-										{
-											ptr->editorDelete(scene);
-											e.removeComponent(i);
-										}
-										ImGui::PopID();
-									}
-									ImGui::TreePop();
-								}
-							}
-						}
-					}
+					auto entity = *_selectedEntity;
+					displayEntity(entity);
 
 					ImGui::Separator();
 
@@ -129,11 +111,11 @@ namespace AGE
 
 					for (auto &t : types)
 					{
-						if (!e.haveComponent(t.second))
+						if (!entity.haveComponent(t.second))
 						{
-							if (ImGui::Button(std::string("Add : " + ComponentRegistrationManager::getInstance().getComponentName(t.second)).c_str()))
+							if (ImGui::SmallButton(std::string("Add : " + ComponentRegistrationManager::getInstance().getComponentName(t.second)).c_str()))
 							{
-								creationFn.at(t.first)(&e);
+								creationFn.at(t.first)(&entity);
 							}
 						}
 					}
@@ -142,7 +124,7 @@ namespace AGE
 
 					if (ImGui::Button("Delete entity"))
 					{
-						_scene->destroy(e);
+						_scene->destroy(entity);
 					}
 				}
 
@@ -175,7 +157,7 @@ namespace AGE
 						_scene->getInstance<AssetsManager>()->savePackage(package, std::string(_sceneName) + "_assets.json");
 					}
 
-					scene->saveSelectionToJson(std::string(_sceneName) + ".json", _filter.getCollection());
+					_scene->saveSelectionToJson(std::string(_sceneName) + ".json", _filter.getCollection());
 					WESerialization::SetSerializeForEditor(false);
 				}
 				if (ImGui::Button("Export scene"))
@@ -199,7 +181,7 @@ namespace AGE
 						_scene->getInstance<AssetsManager>()->savePackage(package, std::string(_sceneName) + "_assets.json");
 					}
 
-					scene->saveSelectionToJson(std::string(_sceneName) + "_export.json", _filter.getCollection());
+					_scene->saveSelectionToJson(std::string(_sceneName) + "_export.json", _filter.getCollection());
 				}
 				if (ImGui::Button("Load scene"))
 				{
@@ -216,13 +198,13 @@ namespace AGE
 
 					std::cout << "Loading assets";
 					do {
-						scene->getInstance<AGE::AssetsManager>()->updateLoadingChannel(assetPackageFileName, totalToLoad, toLoad, loadingError);
+						_scene->getInstance<AGE::AssetsManager>()->updateLoadingChannel(assetPackageFileName, totalToLoad, toLoad, loadingError);
 						std::this_thread::sleep_for(std::chrono::milliseconds(300));
 						std::cout << ".";
 					} while
 						(toLoad > 0 && loadingError.size() == 0);
 					std::cout << std::endl;
-					scene->loadFromJson(sceneFileName);
+					_scene->loadFromJson(sceneFileName);
 					WESerialization::SetSerializeForEditor(false);
 				}
 
@@ -230,6 +212,89 @@ namespace AGE
 
 				ImGui::EndChild(); // Entity List
 			}
+
+			void EntityManager::displayEntity(Entity &entity)
+			{
+				auto cpt = entity.getComponent<AGE::WE::EntityRepresentation>();
+
+				ImGui::InputText("Name", cpt->name, ENTITY_NAME_LENGTH);
+				cpt->position = entity.getLink().getPosition();
+				if (ImGui::InputFloat3("Position", glm::value_ptr(cpt->position)))
+				{
+					entity.getLink().setPosition(cpt->position);
+				}
+
+				cpt->rotation = glm::eulerAngles(entity.getLink().getOrientation());
+				if (ImGui::InputFloat3("Rotation", glm::value_ptr(cpt->rotation)))
+				{
+					entity.getLink().setOrientation(glm::quat(cpt->rotation));
+				}
+
+				cpt->scale = entity.getLink().getScale();
+				if (ImGui::InputFloat3("Scale", glm::value_ptr(cpt->scale)))
+				{
+					entity.getLink().setScale(cpt->scale);
+				}
+
+				ImGui::Separator();
+
+				auto &components = entity.getComponentList();
+				for (ComponentType i = 0; i < components.size(); ++i)
+				{
+					if (entity.haveComponent(i))
+					{
+						auto ptr = entity.getComponent(i);
+						if (ptr->exposedInEditor)
+						{
+							bool opened = ImGui::TreeNode(ComponentRegistrationManager::getInstance().getComponentName(ptr->getType()).c_str());
+							if (ptr->deletableInEditor)
+							{
+								ImGui::SameLine();
+								ImGui::PushID(i);
+								if (ImGui::SmallButton("Delete"))
+								{
+									ptr->editorDelete(_scene);
+									entity.removeComponent(i);
+								}
+								ImGui::PopID();
+							}
+							if (opened)
+							{
+								ptr->editorUpdate(_scene);
+								ImGui::TreePop();
+							}
+						}
+					}
+				}
+			}
+
+			void EntityManager::recursiveDisplayList(Entity &entity)
+			{
+				auto cpt = entity.getComponent<AGE::WE::EntityRepresentation>();
+				bool opened = false;
+				opened = ImGui::TreeNode(cpt->name);
+				ImGui::SameLine();
+				ImGui::PushID(entity.getPtr());
+				if (ImGui::SmallButton("Select"))
+				{
+					_selectedEntity = entity.getPtr();
+				}
+				ImGui::PopID();
+				if (opened)
+				{
+
+					if (entity.getLink().hasChildren())
+					{
+						auto children = entity.getLink().getChildren();
+						for (auto &e : children)
+						{
+							recursiveDisplayList(e->getEntity()->getEntity());
+						}
+					}
+					ImGui::TreePop();
+				}
+			}
+
 
 			bool EntityManager::initialize()
 			{

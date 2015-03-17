@@ -167,6 +167,12 @@ Link::Link()
 	reset();
 }
 
+Link::Link(EntityData *entity)
+{
+	reset();
+	_entityPtr = entity;
+}
+
 void Link::reset()
 {
 	_position = glm::vec3(0);

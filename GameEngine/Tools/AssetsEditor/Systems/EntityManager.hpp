@@ -16,16 +16,20 @@ namespace AGE
 		private:
 			EntityFilter _filter;
 			EntityFilter _meshRenderers;
+			bool _graphNodeDisplay;
 
 			std::vector<const char*> _entityNames;
 			std::vector<Entity> _entities;
-			int _selectedEntity;
+			Entity *_selectedEntity;
+			int _selectedEntityIndex;
 			char _sceneName[MAX_SCENE_NAME_LENGTH];
 
 			virtual void updateBegin(float time);
 			virtual void updateEnd(float time);
 			virtual void mainUpdate(float time);
 			virtual bool initialize();
+			void displayEntity(Entity &entity);
+			void recursiveDisplayList(Entity &entity);
 		};
 	}
 }

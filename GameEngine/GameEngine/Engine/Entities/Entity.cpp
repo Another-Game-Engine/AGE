@@ -3,6 +3,11 @@
 
 namespace AGE
 {
+	EntityData::EntityData()
+		: link(this)
+	{
+	}
+
 	const Entity &EntityData::getEntity() const { return entity; }
 	Entity &EntityData::getEntity() { return entity; }
 	const AGE::Link &EntityData::getLink() const { return link; }
