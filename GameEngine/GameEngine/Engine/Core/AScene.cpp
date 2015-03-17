@@ -115,7 +115,7 @@ namespace AGE
 
 	Entity &AScene::createEntity()
 	{
-		auto e = _entityPool.create();
+		auto e = _entityPool.create(this);
 
 		if (_freeEntityId.empty())
 		{
@@ -128,10 +128,8 @@ namespace AGE
 			_freeEntityId.pop();
 			e->entity.id = id;
 		}
-		e->link.reset();
-		e->link._renderScene = _renderScene;
+		//e->link._renderScene = _renderScene;
 		e->entity.ptr = e;
-		e->scene = this;
 		informFiltersEntityCreation(*e);
 		_entities.insert(e->entity);
 		return e->entity;

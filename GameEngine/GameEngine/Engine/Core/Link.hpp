@@ -96,7 +96,7 @@ namespace AGE
 		RenderScene *_renderScene;
 	public:
 		Link();
-		Link(EntityData *entity);
+		Link(EntityData *entity, AScene *_scene);
 
 		inline EntityData *getEntity() { return _entityPtr; }
 

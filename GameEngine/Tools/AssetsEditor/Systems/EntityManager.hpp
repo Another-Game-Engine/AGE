@@ -17,6 +17,7 @@ namespace AGE
 			EntityFilter _filter;
 			EntityFilter _meshRenderers;
 			bool _graphNodeDisplay;
+			bool _selectParent;
 
 			std::vector<const char*> _entityNames;
 			std::vector<Entity> _entities;

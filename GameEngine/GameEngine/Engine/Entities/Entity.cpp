@@ -3,8 +3,9 @@
 
 namespace AGE
 {
-	EntityData::EntityData()
-		: link(this)
+	EntityData::EntityData(AScene *_scene)
+		: link(this, _scene)
+		, scene(_scene)
 	{
 	}
 

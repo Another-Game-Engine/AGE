@@ -5,6 +5,7 @@
 #include <Threads/RenderScene.hpp>
 #include <Utils/Debug.hpp>
 #include <Utils/MatrixConversion.hpp>
+#include <Core/AScene.hh>
 
 using namespace AGE;
 
@@ -167,10 +168,11 @@ Link::Link()
 	reset();
 }
 
-Link::Link(EntityData *entity)
+Link::Link(EntityData *entity, AScene *scene)
 {
-	reset();
+	_renderScene = scene->getRenderScene();
 	_entityPtr = entity;
+	reset();
 }
 
 void Link::reset()
@@ -253,7 +255,7 @@ void Link::attachParent(Link *parent)
 
 void Link::detachParent()
 {
-	if (hasParent())
+	if (!hasParent())
 	{
 		// are not connected
 		return;

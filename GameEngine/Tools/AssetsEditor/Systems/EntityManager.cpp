@@ -17,6 +17,7 @@ namespace AGE
 				, _selectedEntity(nullptr)
 				, _selectedEntityIndex(0)
 				, _graphNodeDisplay(false)
+				, _selectParent(false)
 			{
 				auto name = "../../MyScene\0";
 				memcpy(_sceneName, name, strlen(name) + 1);
@@ -273,16 +274,59 @@ namespace AGE
 				auto cpt = entity.getComponent<AGE::WE::EntityRepresentation>();
 				bool opened = false;
 				opened = ImGui::TreeNode(cpt->name);
-				ImGui::SameLine();
-				ImGui::PushID(entity.getPtr());
-				if (ImGui::SmallButton("Select"))
+				if (ImGui::IsItemActive())
 				{
-					_selectedEntity = entity.getPtr();
+					auto i = "caca";
+				}
+				ImGui::PushID(entity.getPtr());
+				if (_selectedEntity != entity.getPtr())
+				{
+					if (!_selectParent)
+					{
+						ImGui::SameLine();
+						if (ImGui::SmallButton("Select"))
+						{
+							_selectedEntity = entity.getPtr();
+						}
+					}
+					else/* (_selectedEntity != nullptr)*/
+					{
+						ImGui::SameLine();
+						if (ImGui::SmallButton("Set as parent"))
+						{
+							_selectedEntity->getLink().attachParent(entity.getLinkPtr());
+							_selectParent = false;
+						}
+					}
+				}
+				else
+				{
+					if (!_selectParent)
+					{
+						ImGui::SameLine();
+						if (ImGui::SmallButton("Set parent"))
+						{
+							_selectParent = true;
+						}
+					}
+					else
+					{
+						ImGui::SameLine();
+						if (ImGui::SmallButton("Root"))
+						{
+							_selectedEntity->getLink().detachParent();
+							_selectParent = false;
+						}
+						ImGui::SameLine();
+						if (ImGui::SmallButton("Cancel"))
+						{
+							_selectParent = false;
+						}
+					}
 				}
 				ImGui::PopID();
 				if (opened)
 				{
-
 					if (entity.getLink().hasChildren())
 					{
 						auto children = entity.getLink().getChildren();

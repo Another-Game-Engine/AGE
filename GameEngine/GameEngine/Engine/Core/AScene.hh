@@ -62,6 +62,7 @@ namespace AGE
 		inline AGE::Engine *getEngine() { return _engine; }
 		inline void setRenderScene(AGE::RenderScene *renderScene) { _renderScene = renderScene; }
 		inline bool isActive() const { return _active; }
+		inline RenderScene *getRenderScene() { return _renderScene; }
 
 		void                    registerFilter(EntityFilter *filter);
 		void                    filterSubscribe(ComponentType id, EntityFilter* filter);
