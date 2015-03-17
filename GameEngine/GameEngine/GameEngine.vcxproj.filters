@@ -153,6 +153,7 @@
     <ClCompile Include="Engine\Core\Inputs\Joystick.cpp" />
     <ClCompile Include="Engine\Components\FreeFlyComponent.cpp" />
     <ClCompile Include="Engine\Systems\DebugSystem.cpp" />
+    <ClCompile Include="Engine\WorldEditorGlobal.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -401,6 +402,7 @@
     <ClInclude Include="Engine\Core\Inputs\Joystick.hh" />
     <ClInclude Include="Engine\Components\FreeFlyComponent.hh" />
     <ClInclude Include="Engine\Systems\DebugSystem.hpp" />
+    <ClInclude Include="Engine\WorldEditorGlobal.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

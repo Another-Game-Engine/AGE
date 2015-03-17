@@ -7,6 +7,9 @@
 #include <Render/Key.hh>
 #include <AssetManagement/Instance/MaterialInstance.hh>
 #include <AssetManagement/Instance/MeshInstance.hh>
+#ifdef EDITOR_ENABLED
+#include <WorldEditorGlobal.hpp>
+#endif
 
 namespace AGE
 {
@@ -85,7 +88,7 @@ namespace AGE
 	void MeshRenderer::save(Archive &ar) const
 	{
 		auto serializationInfos = std::make_unique<SerializationInfos>();
-#ifndef EDITOR_ENABLED
+
 		if (_material)
 		{
 			serializationInfos->material = _material->path;
@@ -94,9 +97,12 @@ namespace AGE
 		{
 			serializationInfos->mesh = _mesh->path;
 		}
-#else
-		serializationInfos->material = selectedMaterialPath;
-		serializationInfos->mesh = selectedMeshPath;
+#ifdef EDITOR_ENABLED
+		if (WESerialization::SerializeForEditor() == true)
+		{
+			serializationInfos->material = selectedMaterialPath;
+			serializationInfos->mesh = selectedMeshPath;
+		}
 #endif
 		ar(serializationInfos);
 	}

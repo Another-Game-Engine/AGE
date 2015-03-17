@@ -17,6 +17,7 @@
 #include <Components/FreeFlyComponent.hh>
 #include <Systems/FreeFlyCamera.hh>
 #include <Systems/BulletDynamicSystem.hpp>
+#include <Components/EntityRepresentation.hpp>
 
 namespace AGE
 {
@@ -36,6 +37,7 @@ namespace AGE
 		setInstance<AGE::BulletDynamicManager, AGE::BulletCollisionManager>()->init();
 		setInstance<AssetsManager>();
 		getInstance<AGE::AssetsManager>()->setAssetsDirectory("../../Assets/Serialized/");
+		getInstance<AGE::BulletCollisionManager>()->setAssetsDirectory("../../Assets/Serialized/");
 
 		addSystem<WE::AssetsAndComponentRelationsSystem>(0);
 		addSystem<WE::EntityManager>(1);
@@ -49,7 +51,7 @@ namespace AGE
 		camera.getLink().setForward(glm::vec3(0, 0, 0));
 		cam->addPipeline(RenderType::BASIC);
 		camera.addComponent<FreeFlyComponent>();
-
+		camera.getComponent<AGE::WE::EntityRepresentation>()->editorOnly = true;
 
 		return true;
 	}

@@ -3,9 +3,8 @@
 #include <Components/EntityRepresentation.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <Components/ComponentRegistrationManager.hpp>
-
-//FOR TEST ! TO REMOVE
-#include <Components/Light.hh>
+#include <Components/MeshRenderer.hh>
+#include <AssetManagement/AssetManager.hh>
 
 namespace AGE
 {
@@ -14,9 +13,12 @@ namespace AGE
 			EntityManager::EntityManager(AScene *scene)
 				: System(std::move(scene))
 				, _filter(std::move(scene))
+				, _meshRenderers(std::move(scene))
 				, _selectedEntity(0)
 			{
-				_name = "we_entity_manager";
+				auto name = "../../MyScene\0";
+				memcpy(_sceneName, name, strlen(name) + 1);
+				_meshRenderers.requireComponent<MeshRenderer>();
 			}
 			EntityManager::~EntityManager(){}
 
@@ -37,10 +39,19 @@ namespace AGE
 				// Disgusting but fuck it ! :)
 				_entityNames.clear();
 				_entities.clear();
-				for (auto e : _filter.getCollection())
 				{
-					_entityNames.push_back(e.getComponent<AGE::WE::EntityRepresentation>()->name);
-					_entities.push_back(e);
+					EntityFilter::Lock lock(_filter);
+					for (auto e : _filter.getCollection())
+					{
+						auto representation = e.getComponent<AGE::WE::EntityRepresentation>();
+						if (representation->editorOnly)
+						{
+							_filter.manuallyRemoveEntity(e);
+							continue;
+						}
+						_entityNames.push_back(representation->name);
+						_entities.push_back(e);
+					}
 				}
 				if (_selectedEntity >= _entities.size())
 					_selectedEntity = 0;
@@ -64,14 +75,19 @@ namespace AGE
 					auto cpt = e.getComponent<AGE::WE::EntityRepresentation>();
 
 					ImGui::InputText("Name", cpt->name, ENTITY_NAME_LENGTH);
+					cpt->position = e.getLink().getPosition();
 					if (ImGui::InputFloat3("Position", glm::value_ptr(cpt->position)))
 					{
 						e.getLink().setPosition(cpt->position);
 					}
+
+					cpt->rotation = glm::eulerAngles(e.getLink().getOrientation());
 					if (ImGui::InputFloat3("Rotation", glm::value_ptr(cpt->rotation)))
 					{
 						e.getLink().setOrientation(glm::quat(cpt->rotation));
 					}
+
+					cpt->scale = e.getLink().getScale();
 					if (ImGui::InputFloat3("Scale", glm::value_ptr(cpt->scale)))
 					{
 						e.getLink().setScale(cpt->scale);
@@ -139,13 +155,78 @@ namespace AGE
 					_scene->createEntity();
 				}
 
+				ImGui::InputText("Scene file name", _sceneName, MAX_SCENE_NAME_LENGTH);
+
 				if (ImGui::Button("Save scene"))
 				{
-					scene->saveToJson("WorldEditorSceneTest.json");
+					WESerialization::SetSerializeForEditor(true);
+					// we list all assets dependencies
+					{
+						AssetsManager::AssetsPackage package;
+						for (auto e : _meshRenderers.getCollection())
+						{
+							auto cpt = e.getComponent<MeshRenderer>();
+							if (!cpt->selectedMeshPath.empty())
+							{
+								package.meshs.insert(cpt->selectedMeshPath);
+							}
+							if (!cpt->selectedMaterialPath.empty())
+							{
+								package.materials.insert(cpt->selectedMaterialPath);
+							}
+						}
+						_scene->getInstance<AssetsManager>()->savePackage(package, std::string(_sceneName) + "_assets.json");
+					}
+
+					scene->saveSelectionToJson(std::string(_sceneName) + ".json", _filter.getCollection());
+					WESerialization::SetSerializeForEditor(false);
+				}
+				if (ImGui::Button("Export scene"))
+				{
+					WESerialization::SetSerializeForEditor(false);
+					// we list all assets dependencies
+					{
+						AssetsManager::AssetsPackage package;
+						for (auto e : _meshRenderers.getCollection())
+						{
+							auto cpt = e.getComponent<MeshRenderer>();
+							if (!cpt->selectedMeshPath.empty())
+							{
+								package.meshs.insert(cpt->selectedMeshPath);
+							}
+							if (!cpt->selectedMaterialPath.empty())
+							{
+								package.materials.insert(cpt->selectedMaterialPath);
+							}
+						}
+						_scene->getInstance<AssetsManager>()->savePackage(package, std::string(_sceneName) + "_assets.json");
+					}
+
+					scene->saveSelectionToJson(std::string(_sceneName) + "_export.json", _filter.getCollection());
 				}
 				if (ImGui::Button("Load scene"))
 				{
-					scene->loadFromJson("WorldEditorSceneTest.json");
+					WESerialization::SetSerializeForEditor(true);
+
+					auto sceneFileName = std::string(_sceneName) + ".json";
+					auto assetPackageFileName = std::string(_sceneName) + "_assets.json";
+
+					_scene->getInstance<AssetsManager>()->loadPackage(assetPackageFileName, assetPackageFileName);
+
+					int totalToLoad = 0;
+					int toLoad = 0;
+					std::string loadingError;
+
+					std::cout << "Loading assets";
+					do {
+						scene->getInstance<AGE::AssetsManager>()->updateLoadingChannel(assetPackageFileName, totalToLoad, toLoad, loadingError);
+						std::this_thread::sleep_for(std::chrono::milliseconds(300));
+						std::cout << ".";
+					} while
+						(toLoad > 0 && loadingError.size() == 0);
+					std::cout << std::endl;
+					scene->loadFromJson(sceneFileName);
+					WESerialization::SetSerializeForEditor(false);
 				}
 
 				ImGui::Separator();

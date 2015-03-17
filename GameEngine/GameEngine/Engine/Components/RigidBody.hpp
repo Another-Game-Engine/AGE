@@ -4,6 +4,9 @@
 #include <Components/Component.hh>
 #include <Utils/UniqueTypeId.hpp>
 #include <Utils/Serialization/btSerialization.hpp>
+#ifdef EDITOR_ENABLED
+#include <WorldEditorGlobal.hpp>
+#endif
 
 class btCollisionShape;
 class btMotionState;
@@ -29,8 +32,8 @@ namespace AGE
 		BulletDynamicManager *_manager;
 		btScalar _mass;
 		btVector3 _inertia;
-		glm::vec3 _rotationConstraint;
-		glm::vec3 _transformConstraint;
+		glm::uvec3 _rotationConstraint;
+		glm::uvec3 _transformConstraint;
 		UniqueTypeId _shapeType;
 		std::string _shapePath;
 		CollisionShape _collisionShapeType;
@@ -65,7 +68,7 @@ namespace AGE
 		// Serialization
 
 		template <typename Archive>
-		void serialize(Archive &ar)
+		void serialize(Archive &ar, std::uint32_t const version)
 		{
 			ar(cereal::make_nvp("Mass", _mass));
 			ar(cereal::make_nvp("Inertia", _inertia));
@@ -73,6 +76,18 @@ namespace AGE
 			ar(cereal::make_nvp("Transform constraint", _transformConstraint));
 			ar(cereal::make_nvp("Collision shape path", _shapePath));
 			ar(cereal::make_nvp("Collision shape type", _collisionShapeType));
+#ifdef EDITOR_ENABLED
+			if (WESerialization::SerializeForEditor() == true)
+			{
+				if (version > 0)
+				{
+					ar(cereal::make_nvp("Selected mesh shape index", selectedShapeIndex));
+					ar(cereal::make_nvp("Selected mesh shape path", selectedShapePath));
+					ar(cereal::make_nvp("Selected mesh shape name", selectedShapeName));
+					ar(cereal::make_nvp("Simple shape", simpleShapes));
+				}
+			}
+#endif
 		}
 
 		// !Serialization
@@ -99,3 +114,5 @@ namespace AGE
 		RigidBody(RigidBody const &o);
 	};
 }
+
+CEREAL_CLASS_VERSION(AGE::RigidBody, 1);

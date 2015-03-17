@@ -5,6 +5,7 @@
 #include <glm/fwd.hpp>
 #include <cereal/archives/json.hpp>
 #include <cereal/types/array.hpp>
+#include <Core/AScene.hh>
 
 #define ENTITY_NAME_LENGTH 128
 
@@ -18,7 +19,7 @@ namespace AGE
 
 			virtual ~EntityRepresentation(void);
 
-			void init(const char* name = "NoName");
+			void init(const char* name = "NoName", const std::string &layerName = "");
 
 			virtual void reset();
 
@@ -44,6 +45,12 @@ namespace AGE
 			//EntityRepresentation(EntityRepresentation const &o) = delete;
 			EntityRepresentation &operator=(EntityRepresentation &&o);
 			EntityRepresentation(EntityRepresentation &&o);
+			// component is not serialized in export
+#ifdef EDITOR_ENABLED
+			virtual bool serializeInExport() { return false; }
+#endif
+			// entity is not displayed in entity list
+			bool editorOnly = false;
 		};
 	}
 }

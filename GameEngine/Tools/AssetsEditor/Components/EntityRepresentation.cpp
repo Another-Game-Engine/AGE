@@ -8,9 +8,8 @@ namespace AGE
 	{
 		EntityRepresentation::EntityRepresentation()
 		{
-#ifdef EDITOR_ENABLED
 			exposedInEditor = false;
-#endif
+			editorOnly = false;
 		}
 
 		EntityRepresentation::~EntityRepresentation()
@@ -18,11 +17,10 @@ namespace AGE
 
 		}
 
-		void EntityRepresentation::init(const char *_name)
+		void EntityRepresentation::init(const char *_name, const std::string &layerName /*= ""*/)
 		{
-#ifdef EDITOR_ENABLED
 			exposedInEditor = false;
-#endif
+			editorOnly = false;
 			auto len = strlen(_name);
 			if (len >= ENTITY_NAME_LENGTH)
 				len = ENTITY_NAME_LENGTH;
@@ -36,24 +34,6 @@ namespace AGE
 		void EntityRepresentation::reset()
 		{
 			memset(name, 0, ENTITY_NAME_LENGTH);
-		}
-
-		EntityRepresentation &EntityRepresentation::operator=(EntityRepresentation &&o)
-		{
-			memcpy(name, o.name, ENTITY_NAME_LENGTH);
-			position = std::move(o.position);
-			rotation = std::move(o.rotation);
-			scale = std::move(o.scale);
-			return *this;
-		}
-
-		EntityRepresentation::EntityRepresentation(EntityRepresentation &&o)
-			: ComponentBase(std::move(o))
-		{
-			memcpy(name, o.name, ENTITY_NAME_LENGTH);
-			position = std::move(o.position);
-			rotation = std::move(o.rotation);
-			scale = std::move(o.scale);
 		}
 
 		void EntityRepresentation::postUnserialization()

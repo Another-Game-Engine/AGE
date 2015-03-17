@@ -19,6 +19,7 @@
 #include <Components/Light.hh>
 #include <Components/RigidBody.hpp>
 #include <Components/MeshRenderer.hh>
+#include <Components/Lifetime.hpp>
 
 #include <Systems/DebugSystem.hpp>
 
@@ -94,6 +95,7 @@ namespace AGE
 		}
 
 		getInstance<AGE::AssetsManager>()->setAssetsDirectory("../../Assets/Serialized/");
+		getInstance<AGE::BulletCollisionManager>()->setAssetsDirectory("../../Assets/Serialized/");
 		getInstance<AGE::AssetsManager>()->loadMesh(OldFile("catwoman/catwoman.sage"), "DEMO_SCENE_ASSETS");
 		getInstance<AGE::AssetsManager>()->loadMesh(OldFile("cube/cube.sage"), "DEMO_SCENE_ASSETS");
 		getInstance<AGE::AssetsManager>()->loadMesh(OldFile("ball/ball.sage"), "DEMO_SCENE_ASSETS");
@@ -122,13 +124,13 @@ namespace AGE
 		_timeCounter += time;
 		_chunkCounter += time;
 
-		std::size_t totalToLoad = 0;
-		std::size_t	toLoad = 0;
+		int totalToLoad = 0;
+		int toLoad = 0;
 		std::string loadingError;
 		getInstance<AGE::AssetsManager>()->updateLoadingChannel("DEMO_SCENE_ASSETS", totalToLoad, toLoad, loadingError);
 		if (loadingError.size() != 0)
 			std::cout << loadingError << std::endl;
-		if (toLoad != 0)
+		if (toLoad > 0)
 		{
 			if (!ImGui::Begin("ASSETS LOADING", (bool*)1, ImVec2(0, 0), 0.3f, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings))
 			{
@@ -168,27 +170,27 @@ namespace AGE
 					GLOBAL_SPONZA = createEntity();
 					auto& _l = GLOBAL_SPONZA.getLink();
 					RigidBody *rb = GLOBAL_SPONZA.addComponent<RigidBody>(0.0f);
-					rb->setCollisionMesh("../../Assets/Serialized/sponza/sponza_static.phage");
+					rb->setCollisionMesh("sponza/sponza_static.phage");
 					_l.setScale(glm::vec3(10.f));
 				
 					GLOBAL_SPONZA.addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("Sponza/sponza.sage")
 						, getInstance<AGE::AssetsManager>()->getMaterial("Sponza/sponza.mage"));
 				}
 
-	{
-		//GLOBAL_CATWOMAN = createEntity();
-		//auto &_l = GLOBAL_CATWOMAN.getLink();
+	//{
+	//	GLOBAL_CATWOMAN = createEntity();
+	//	auto &_l = GLOBAL_CATWOMAN.getLink();
 
-		//static bool useOnce = false;
-		//auto rigidBody = GLOBAL_CATWOMAN.addComponent<RigidBody>(0);
-		//rigidBody->setCollisionMesh("../../Assets/Serialized/catwoman/catwoman_dynamic.phage");
-		////_l.setOrientation(glm::quat(glm::vec3(Mathematic::degreeToRadian(-90), Mathematic::degreeToRadian(90), 0)));
-		//_l.setPosition(glm::vec3(-30, 0, 0));
-		//_l.setScale(glm::vec3(0.01f));
-		//auto _m = GLOBAL_CATWOMAN.addComponent<MeshRenderer>(
-		//	getInstance<AGE::AssetsManager>()->getMesh("catwoman/catwoman.sage")
-		//	, getInstance<AGE::AssetsManager>()->getMaterial("catwoman/catwoman.mage"));
-	}
+	//	static bool useOnce = false;
+	//	auto rigidBody = GLOBAL_CATWOMAN.addComponent<RigidBody>(0);
+	//	rigidBody->setCollisionMesh("catwoman/catwoman_dynamic.phage");
+	//	//_l.setOrientation(glm::quat(glm::vec3(Mathematic::degreeToRadian(-90), Mathematic::degreeToRadian(90), 0)));
+	//	_l.setPosition(glm::vec3(-30, 0, 0));
+	//	_l.setScale(glm::vec3(0.01f));
+	//	auto _m = GLOBAL_CATWOMAN.addComponent<MeshRenderer>(
+	//		getInstance<AGE::AssetsManager>()->getMesh("catwoman/catwoman.sage")
+	//		, getInstance<AGE::AssetsManager>()->getMaterial("catwoman/catwoman.mage"));
+	//}
 
 	for (int i = 0; i < GLOBAL_LIGHTS.size(); ++i)
 	{

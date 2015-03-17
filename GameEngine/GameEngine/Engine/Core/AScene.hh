@@ -18,6 +18,11 @@
 #include <Utils/ObjectPool.hpp>
 #include <unordered_set>
 #include <Components/ComponentManager.hpp>
+#include <Utils/Debug.hpp>
+#include <fstream>
+#ifdef EDITOR_ENABLED
+#include <WorldEditorGlobal.hpp>
+#endif
 
 namespace AGE
 {
@@ -134,6 +139,44 @@ namespace AGE
 		void loadFromJson(const std::string &fileName);
 		void saveToBinary(const std::string &fileName);
 		void loadFromBinary(const std::string &fileName);
+
+		template <typename Container>
+		void saveSelectionToJson(const std::string &fileName, Container &selection)
+		{
+			std::ofstream file(fileName.c_str(), std::ios::binary);
+			AGE_ASSERT(file.is_open());
+			{
+				auto ar = cereal::JSONOutputArchive(file);
+
+				std::size_t entityNbr = selection.size();
+
+				ar(cereal::make_nvp("Number_of_serialized_entities", entityNbr));
+
+				auto &typesMap = ComponentRegistrationManager::getInstance().getAgeIdToSystemIdMap();
+				ar(cereal::make_nvp("Component type map", typesMap));
+
+				for (auto &e : selection)
+				{
+					EntitySerializationInfos es(e.ptr);
+					for (auto &c : e.ptr->components)
+					{
+						if (c)
+						{
+#ifdef EDITOR_ENABLED
+							if (WESerialization::SerializeForEditor() == false && !c->serializeInExport())
+							{
+								continue;
+							}
+#endif
+							es.componentTypes.push_back(c->getType());
+							es.components.push_back(c);
+						}
+					}
+					ar(cereal::make_nvp("Entity_" + std::to_string(e.ptr->getEntity().getId()), es));
+				}
+			}
+			file.close();
+		}
 
 		template <typename Archive>
 		void load(std::ifstream &s)
