@@ -55,7 +55,7 @@ namespace AGE
 
 						if (_graphNodeDisplay)
 						{
-							// if it's root
+							// if it's not attached to root
 							if (e.getLink().hasParent())
 							{
 								continue;
@@ -248,18 +248,20 @@ namespace AGE
 						if (ptr->exposedInEditor)
 						{
 							bool opened = ImGui::TreeNode(ComponentRegistrationManager::getInstance().getComponentName(ptr->getType()).c_str());
+							bool deleted = false;
 							if (ptr->deletableInEditor)
 							{
 								ImGui::SameLine();
 								ImGui::PushID(i);
-								if (ImGui::SmallButton("Delete"))
+								deleted = ImGui::SmallButton("Delete");
+								if (deleted)
 								{
 									ptr->editorDelete(_scene);
 									entity.removeComponent(i);
 								}
 								ImGui::PopID();
 							}
-							if (opened)
+							if (opened && !deleted)
 							{
 								ptr->editorUpdate(_scene);
 								ImGui::TreePop();

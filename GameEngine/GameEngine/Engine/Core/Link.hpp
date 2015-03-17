@@ -54,10 +54,11 @@ namespace AGE
 		void registerOctreeObject(const PrepareKey &key);
 		void unregisterOctreeObject(const PrepareKey &key);
 
-		inline bool hasChildren() const { return _children.size() > 0; };
-		inline bool hasParent() const { return _parent != nullptr; }
-		inline bool hasParent(const Link *parent) const { return _parent == parent; }
-		inline const std::vector<Link*> &getChildren() { return _children; }
+		bool hasChildren() const;
+		bool hasParent() const;
+		bool hasParent(const Link *parent) const;
+		bool isAttachedToRoot() const;
+		const std::vector<Link*> &getChildren() const;
 
 		void attachChild(Link *child);
 		void detachChild(Link *child);

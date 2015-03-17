@@ -40,6 +40,11 @@ void Link::unregisterOctreeObject(const PrepareKey &key)
 	}
 }
 
+bool Link::hasChildren() const { return _children.size() > 0; };
+bool Link::hasParent() const { return _parent != nullptr && _parent != _renderScene->getRootLink(); }
+bool Link::hasParent(const Link *parent) const { return _parent == parent; }
+const std::vector<Link*> &Link::getChildren() const { return _children; }
+
 void Link::setPosition(const glm::vec3 &v)
 {
 	_userModification = true;
@@ -164,6 +169,8 @@ const glm::mat4 &Link::getGlobalTransform()
 
 
 Link::Link()
+	:_renderScene(nullptr)
+	, _entityPtr(nullptr)
 {
 	reset();
 }
@@ -282,6 +289,8 @@ void Link::_setParent(Link *ptr)
 
 void Link::_removeChild(Link *ptr)
 {
+	if (_children.size() == 0)
+		return;
 	auto lastIndex = _children.size() - 1;
 	for (std::size_t i = 0; i <= lastIndex; ++i)
 	{
@@ -318,9 +327,7 @@ void Link::_attachToRoot()
 	if (!hasParent())
 	{
 		auto root = _renderScene->getRootLink();
-
-		root->_children.push_back(this);
-		this->_parent = root;
+		root->_setChild(this);
 	}
 }
 
