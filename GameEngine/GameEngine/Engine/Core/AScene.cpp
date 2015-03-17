@@ -191,13 +191,25 @@ namespace AGE
 			std::map<ComponentType, std::size_t> typesMap;
 			ar(typesMap);
 
+			std::vector<EntitySerializationInfos> list;
+
 			for (std::size_t i = 0; i < entityNbr; ++i)
 			{
 				auto entity = createEntity();
-				EntitySerializationInfos es(entity.ptr);
+				list.push_back(entity.ptr);
+				auto &es = list.back();
 				es.typesMap = &typesMap;
 				ar(es);
 			}
+
+			for (auto &e : list)
+			{
+				for (auto &c : e.children)
+				{
+					e.entity.getLink().attachChild(list[c].entity.getLinkPtr());
+				}
+			}
+
 		}
 		file.close();
 	}

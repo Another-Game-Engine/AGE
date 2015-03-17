@@ -138,6 +138,19 @@ namespace AGE
 
 				ImGui::InputText("Scene file name", _sceneName, MAX_SCENE_NAME_LENGTH);
 
+				_entities.clear();
+				{
+					EntityFilter::Lock lock(_filter);
+					for (auto e : _filter.getCollection())
+					{
+						// if it's not attached to root
+						if (e.getLink().hasParent())
+						{
+							continue;
+						}
+						_entities.push_back(e);
+					}
+				}
 				if (ImGui::Button("Save scene"))
 				{
 					WESerialization::SetSerializeForEditor(true);
@@ -159,7 +172,7 @@ namespace AGE
 						_scene->getInstance<AssetsManager>()->savePackage(package, std::string(_sceneName) + "_assets.json");
 					}
 
-					_scene->saveSelectionToJson(std::string(_sceneName) + ".json", _filter.getCollection());
+					_scene->saveSelectionToJson(std::string(_sceneName) + ".json", _entities);
 					WESerialization::SetSerializeForEditor(false);
 				}
 				if (ImGui::Button("Export scene"))
@@ -183,7 +196,7 @@ namespace AGE
 						_scene->getInstance<AssetsManager>()->savePackage(package, std::string(_sceneName) + "_assets.json");
 					}
 
-					_scene->saveSelectionToJson(std::string(_sceneName) + "_export.json", _filter.getCollection());
+					_scene->saveSelectionToJson(std::string(_sceneName) + "_export.json", _entities);
 				}
 				if (ImGui::Button("Load scene"))
 				{

@@ -141,6 +141,18 @@ namespace AGE
 		void saveToBinary(const std::string &fileName);
 		void loadFromBinary(const std::string &fileName);
 
+		void graphnodeToFlatVector(std::vector<EntitySerializationInfos> &vector, const Entity &e)
+		{
+			vector.push_back(e.ptr);
+			auto &children = e.getLink().getChildren();
+			for (auto &c : children)
+			{
+				vector.back().children.push_back(vector.size());
+				auto child = c->getEntity()->getEntity();
+				graphnodeToFlatVector(vector, child);
+			}
+		}
+
 		template <typename Container>
 		void saveSelectionToJson(const std::string &fileName, Container &selection)
 		{
@@ -149,17 +161,25 @@ namespace AGE
 			{
 				auto ar = cereal::JSONOutputArchive(file);
 
-				std::size_t entityNbr = selection.size();
+				std::vector<EntitySerializationInfos> list;
+
+				for (auto &e : selection)
+				{
+					graphnodeToFlatVector(list, e);
+				}
+
+				std::size_t entityNbr = list.size();
 
 				ar(cereal::make_nvp("Number_of_serialized_entities", entityNbr));
 
 				auto &typesMap = ComponentRegistrationManager::getInstance().getAgeIdToSystemIdMap();
 				ar(cereal::make_nvp("Component type map", typesMap));
 
-				for (auto &e : selection)
+
+				for (auto &e : list)
 				{
-					EntitySerializationInfos es(e.ptr);
-					for (auto &c : e.ptr->components)
+					auto &components = e.entity.getComponentList();
+					for (auto &c : components)
 					{
 						if (c)
 						{
@@ -169,11 +189,11 @@ namespace AGE
 								continue;
 							}
 #endif
-							es.componentTypes.push_back(c->getType());
-							es.components.push_back(c);
+							e.componentTypes.push_back(c->getType());
+							e.components.push_back(c);
 						}
 					}
-					ar(cereal::make_nvp("Entity_" + std::to_string(e.ptr->getEntity().getId()), es));
+					ar(cereal::make_nvp("Entity_" + std::to_string(e.entity.getId()), e));
 				}
 			}
 			file.close();
