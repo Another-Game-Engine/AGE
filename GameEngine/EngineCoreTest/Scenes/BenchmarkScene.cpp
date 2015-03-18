@@ -124,24 +124,8 @@ namespace AGE
 		_timeCounter += time;
 		_chunkCounter += time;
 
-		int totalToLoad = 0;
-		int toLoad = 0;
-		std::string loadingError;
-		getInstance<AGE::AssetsManager>()->updateLoadingChannel("DEMO_SCENE_ASSETS", totalToLoad, toLoad, loadingError);
-		if (loadingError.size() != 0)
-			std::cout << loadingError << std::endl;
-		if (toLoad > 0)
+		if (getInstance<AGE::AssetsManager>()->isLoading())
 		{
-			if (!ImGui::Begin("ASSETS LOADING", (bool*)1, ImVec2(0, 0), 0.3f, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings))
-			{
-				ImGui::End();
-			}
-			else
-			{
-				ImGui::SetWindowPos(ImVec2(getInstance<IRenderContext>()->getScreenSize().x / 2, getInstance<IRenderContext>()->getScreenSize().y / 2));
-				ImGui::Text("Assets loading : %s / %s", std::to_string(toLoad).c_str(), std::to_string(totalToLoad).c_str());
-				ImGui::End();
-			}
 			return true;
 		}
 		else

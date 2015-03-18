@@ -206,22 +206,11 @@ namespace AGE
 					auto sceneFileName = std::string(_sceneName) + ".json";
 					auto assetPackageFileName = std::string(_sceneName) + "_assets.json";
 
+					_scene->getInstance<AssetsManager>()->pushNewCallback(assetPackageFileName, std::function<void()>([=](){
+						_scene->loadFromJson(sceneFileName);
+						WESerialization::SetSerializeForEditor(false);
+					}));
 					_scene->getInstance<AssetsManager>()->loadPackage(assetPackageFileName, assetPackageFileName);
-
-					int totalToLoad = 0;
-					int toLoad = 0;
-					std::string loadingError;
-
-					std::cout << "Loading assets";
-					do {
-						_scene->getInstance<AGE::AssetsManager>()->updateLoadingChannel(assetPackageFileName, totalToLoad, toLoad, loadingError);
-						std::this_thread::sleep_for(std::chrono::milliseconds(300));
-						std::cout << ".";
-					} while
-						(toLoad > 0 && loadingError.size() == 0);
-					std::cout << std::endl;
-					_scene->loadFromJson(sceneFileName);
-					WESerialization::SetSerializeForEditor(false);
 				}
 
 				ImGui::EndChild();

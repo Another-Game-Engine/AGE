@@ -103,7 +103,6 @@ namespace AGE
 
 	void CameraComponent::editorUpdate(AScene *scene)
 	{
-
 	}
 #endif
 

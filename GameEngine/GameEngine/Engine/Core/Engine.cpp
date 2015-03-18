@@ -229,6 +229,12 @@ namespace AGE
 		AGE::Imgui::getInstance()->startUpdate();
 #endif
 		_timer->update();
+
+#ifdef USE_DEFAULT_ENGINE_CONFIGURATION
+		auto assetsManager = getInstance<AGE::AssetsManager>();
+		assetsManager->update();
+#endif //USE_DEFAULT_ENGINE_CONFIGURATION
+
 		res = updateScenes(_timer->getElapsed() * _timeMultiplier);
 		if (!res)
 		{
