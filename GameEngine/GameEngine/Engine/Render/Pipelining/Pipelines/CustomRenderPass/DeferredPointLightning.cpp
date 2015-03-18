@@ -53,73 +53,73 @@ namespace AGE
 			std::make_shared<UnitProg>(DEFERRED_SHADING_POINT_LIGHT_VERTEX, GL_VERTEX_SHADER),
 			std::make_shared<UnitProg>(DEFERRED_SHADING_POINT_LIGHT_FRAG, GL_FRAGMENT_SHADER)
 		}));
+	}
 
-		setRenderFunction([&](RenderPipeline const &pipeline, RenderLightList const &lights, CameraInfos const &infos){
+	void DeferredPointLightning::renderPass(RenderPipeline const &, RenderLightList const &lights, CameraInfos const &infos)
+	{
+		glm::vec3 cameraPosition = -glm::transpose(glm::mat3(infos.view)) * glm::vec3(infos.view[3]);
 
-			glm::vec3 cameraPosition = -glm::transpose(glm::mat3(infos.view)) * glm::vec3(infos.view[3]);
+		_programs[PROGRAM_LIGHTNING]->use();
+		*_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("projection_matrix") = infos.projection;
+		*_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("view_matrix") = infos.view;
+		*_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("normal_buffer") = _normalInput;
+		*_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("depth_buffer") = _depthInput;
+		*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("eye_pos") = cameraPosition;
+
+		_programs[PROGRAM_STENCIL]->use();
+		*_programs[PROGRAM_STENCIL]->get_resource<Mat4>("projection_matrix") = infos.projection;
+		*_programs[PROGRAM_STENCIL]->get_resource<Mat4>("view_matrix") = infos.view;
+		// Disable blending to clear the color buffer
+		glDisable(GL_BLEND);
+		// clear the light accumulation to zero
+		OpenGLTasks::set_clear_color(glm::vec4(0));
+		OpenGLTasks::clear_buffer(true, false, false);
+		// activate depth test and func to check if sphere_depth > current_depth (normal zfail)
+		OpenGLTasks::set_depth_test(true);
+		glDepthFunc(GL_GEQUAL);
+		// We activate the stencil test
+		OpenGLTasks::set_stencil_test(true);
+		// We do not write on the depth buffer
+		glDepthMask(GL_FALSE);
+		// And we set the blend mode to additive
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_ONE, GL_ONE);
+		// We get the sphere geometry
+		Key<Vertices> sphereVertices;
+		Key<Painter> spherePainter;
+		GetRenderThread()->getIcoSphereGeometry(sphereVertices, spherePainter, 2);
+		auto spherePainterPtr = _painterManager->get_painter(spherePainter);
+		// Iterate throught each light
+		for (auto &pl : lights.pointLight)
+		{
+			_programs[PROGRAM_STENCIL]->use();
+			*_programs[PROGRAM_STENCIL]->get_resource<Mat4>("model_matrix") = pl.light.sphereTransform;
 
 			_programs[PROGRAM_LIGHTNING]->use();
-			*_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("projection_matrix") = infos.projection;
-			*_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("view_matrix") = infos.view;
-			*_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("normal_buffer") = _normalInput;
-			*_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("depth_buffer") = _depthInput;
-			*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("eye_pos") = cameraPosition;
+			*_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("model_matrix") = pl.light.sphereTransform;
+			*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("position_light") = glm::vec3(pl.light.sphereTransform[3]);
+			*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("attenuation_light") = pl.light.attenuation;
+			*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("color_light") = pl.light.color;
+			*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("ambiant_color") = glm::vec3(0);
 
-			_programs[PROGRAM_STENCIL]->use();
-			*_programs[PROGRAM_STENCIL]->get_resource<Mat4>("projection_matrix") = infos.projection;
-			*_programs[PROGRAM_STENCIL]->get_resource<Mat4>("view_matrix") = infos.view;
-			// Disable blending to clear the color buffer
-			glDisable(GL_BLEND);
-			// clear the light accumulation to zero
-			OpenGLTasks::set_clear_color(glm::vec4(0));
-			OpenGLTasks::clear_buffer(true, false, false);
-			// activate depth test and func to check if sphere_depth > current_depth (normal zfail)
-			OpenGLTasks::set_depth_test(true);
-			glDepthFunc(GL_GEQUAL);
-			// We activate the stencil test
-			OpenGLTasks::set_stencil_test(true);
-			// We do not write on the depth buffer
-			glDepthMask(GL_FALSE);
-			// And we set the blend mode to additive
-			glEnable(GL_BLEND);
-			glBlendFunc(GL_ONE, GL_ONE);
-			// We get the sphere geometry
-			Key<Vertices> sphereVertices;
-			Key<Painter> spherePainter;
-			GetRenderThread()->getIcoSphereGeometry(sphereVertices, spherePainter, 2);
-			auto spherePainterPtr = _painterManager->get_painter(spherePainter);
-			// Iterate throught each light
-			for (auto &pl : lights.pointLight)
-			{
-				_programs[PROGRAM_STENCIL]->use();
-				*_programs[PROGRAM_STENCIL]->get_resource<Mat4>("model_matrix") = pl.light.sphereTransform;
+			// We clear the stencil buffer
+			OpenGLTasks::set_clear_stencil(0);
+			OpenGLTasks::clear_buffer(false, false, true);
 
-				_programs[PROGRAM_LIGHTNING]->use();
-				*_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("model_matrix") = pl.light.sphereTransform;
-				*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("position_light") = glm::vec3(pl.light.sphereTransform[3]);
-				*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("attenuation_light") = pl.light.attenuation;
-				*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("color_light") = pl.light.color;
-				*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("ambiant_color") = glm::vec3(0);
+			glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
 
-				// We clear the stencil buffer
-				OpenGLTasks::set_clear_stencil(0);
-				OpenGLTasks::clear_buffer(false, false, true);
+			glStencilFunc(GL_ALWAYS, 0, 0xFF);
+			glStencilOp(GL_KEEP, GL_KEEP, GL_INCR);
+			glCullFace(GL_BACK);
 
-				glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+			spherePainterPtr->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_STENCIL], Properties(), sphereVertices);
 
-				glStencilFunc(GL_ALWAYS, 0, 0xFF);
-				glStencilOp(GL_KEEP, GL_KEEP, GL_INCR);
-				glCullFace(GL_BACK);
+			glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+			glStencilFunc(GL_EQUAL, 0, 0xFF);
+			glCullFace(GL_FRONT);
+			glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
 
-				spherePainterPtr->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_STENCIL], Properties(), sphereVertices);
-
-				glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
-				glStencilFunc(GL_EQUAL, 0, 0xFF);
-				glCullFace(GL_FRONT);
-				glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
-
-				spherePainterPtr->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_LIGHTNING], Properties(), sphereVertices);
-			}
-		});
+			spherePainterPtr->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_LIGHTNING], Properties(), sphereVertices);
+		}
 	}
 }

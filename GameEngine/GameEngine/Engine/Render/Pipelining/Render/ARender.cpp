@@ -10,15 +10,9 @@ namespace AGE
 
 	}
 
-	ARender::ARender(ARender &&move) :
-		_render_function(std::move(move._render_function))
+	ARender::ARender(ARender &&move)
 	{
 
-	}
-
-	void ARender::setRenderFunction(std::function<void(RenderPipeline const &, RenderLightList const &, CameraInfos const &)> const &function)
-	{
-		_render_function = function;
 	}
 
 	bool ARender::recompilePrograms()

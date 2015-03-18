@@ -15,5 +15,8 @@ namespace AGE
 								std::shared_ptr<Texture2D> specular,
 								std::shared_ptr<Texture2D> depth);
 		virtual ~DeferredBasicBuffering() = default;
+
+	protected:
+		virtual void renderPass(RenderPipeline const &, RenderLightList const &, CameraInfos const &);
 	};
 }

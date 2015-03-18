@@ -16,6 +16,9 @@ namespace AGE
 							std::shared_ptr<Texture2D> lightAccumulation);
 		virtual ~DeferredPointLightning() = default;
 
+	protected:
+		virtual void renderPass(RenderPipeline const &, RenderLightList const &, CameraInfos const &);
+
 	private:
 		std::shared_ptr<Texture2D> _normalInput;
 		std::shared_ptr<Texture2D> _depthInput;

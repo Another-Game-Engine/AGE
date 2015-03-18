@@ -42,28 +42,29 @@ namespace AGE
 			std::make_shared<UnitProg>(DEFERRED_SHADING_BUFFERING_VERTEX, GL_VERTEX_SHADER), 
 			std::make_shared<UnitProg>(DEFERRED_SHADING_BUFFERING_FRAG, GL_FRAGMENT_SHADER) 
 		}));
-
-		setRenderFunction([&](RenderPipeline const &pipeline, RenderLightList const &lights, CameraInfos const &infos) {
-			glEnable(GL_CULL_FACE);
-			glCullFace(GL_BACK);
-			glDepthMask(GL_TRUE);
-			glDepthFunc(GL_LEQUAL);
-			glDisable(GL_BLEND);
-			OpenGLTasks::set_stencil_test(false);
-			OpenGLTasks::set_depth_test(true);
-			OpenGLTasks::set_clear_color(glm::vec4(0.f, 0.0f, 0.0f, 0.0f));
-			OpenGLTasks::clear_buffer();
-
-			_programs[PROGRAM_BUFFERING]->use();
-			*_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("projection_matrix") = infos.projection;
-			*_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("view_matrix") = infos.view;
-
-			for (auto key : pipeline.keys)
-			{
-				auto painter = _painterManager->get_painter(key.painter);
-				painter->draw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], key.properties, key.vertices);
-			}
-		});
-
 	}
+
+	void DeferredBasicBuffering::renderPass(RenderPipeline const &pipeline, RenderLightList const &, CameraInfos const &infos)
+	{
+		glEnable(GL_CULL_FACE);
+		glCullFace(GL_BACK);
+		glDepthMask(GL_TRUE);
+		glDepthFunc(GL_LEQUAL);
+		glDisable(GL_BLEND);
+		OpenGLTasks::set_stencil_test(false);
+		OpenGLTasks::set_depth_test(true);
+		OpenGLTasks::set_clear_color(glm::vec4(0.f, 0.0f, 0.0f, 0.0f));
+		OpenGLTasks::clear_buffer();
+
+		_programs[PROGRAM_BUFFERING]->use();
+		*_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("projection_matrix") = infos.projection;
+		*_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("view_matrix") = infos.view;
+
+		for (auto key : pipeline.keys)
+		{
+			auto painter = _painterManager->get_painter(key.painter);
+			painter->draw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], key.properties, key.vertices);
+		}
+	}
+
 }

@@ -16,6 +16,9 @@ namespace AGE
 							std::shared_ptr<Texture2D> lightAccumulation);
 		virtual ~DeferredMerging() = default;
 
+	protected:
+		virtual void renderPass(RenderPipeline const &, RenderLightList const &, CameraInfos const &);
+
 	private:
 		std::shared_ptr<Texture2D> _diffuseInput;
 		std::shared_ptr<Texture2D> _specularInput;

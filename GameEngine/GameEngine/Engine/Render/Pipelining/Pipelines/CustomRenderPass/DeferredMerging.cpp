@@ -41,23 +41,24 @@ namespace AGE
 			std::make_shared<UnitProg>(DEFERRED_SHADING_MERGING_VERTEX, GL_VERTEX_SHADER),
 			std::make_shared<UnitProg>(DEFERRED_SHADING_MERGING_FRAG, GL_FRAGMENT_SHADER)
 		}));
-
-		setRenderFunction([&](RenderPipeline const &pipeline, RenderLightList const &lights, CameraInfos const &infos){
-
-			_programs[PROGRAM_MERGING]->use();
-			*_programs[PROGRAM_MERGING]->get_resource<Sampler2D>("diffuse_map") = _diffuseInput;
-			*_programs[PROGRAM_MERGING]->get_resource<Sampler2D>("light_buffer") = _lightAccuInput;
-
-			Key<Painter> quadPainterKey;
-			Key<Vertices> quadVerticesKey;
-
-			glDisable(GL_BLEND);
-			glDisable(GL_CULL_FACE);
-			OpenGLTasks::set_depth_test(false);
-			OpenGLTasks::set_stencil_test(false);
-			GetRenderThread()->getQuadGeometry(quadVerticesKey, quadPainterKey);
-			auto myPainter = _painterManager->get_painter(quadPainterKey);
-			myPainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_MERGING], Properties(), quadVerticesKey);
-		});
 	}
+
+	void DeferredMerging::renderPass(RenderPipeline const &, RenderLightList const &, CameraInfos const &)
+	{
+		_programs[PROGRAM_MERGING]->use();
+		*_programs[PROGRAM_MERGING]->get_resource<Sampler2D>("diffuse_map") = _diffuseInput;
+		*_programs[PROGRAM_MERGING]->get_resource<Sampler2D>("light_buffer") = _lightAccuInput;
+
+		Key<Painter> quadPainterKey;
+		Key<Vertices> quadVerticesKey;
+
+		glDisable(GL_BLEND);
+		glDisable(GL_CULL_FACE);
+		OpenGLTasks::set_depth_test(false);
+		OpenGLTasks::set_stencil_test(false);
+		GetRenderThread()->getQuadGeometry(quadVerticesKey, quadPainterKey);
+		auto myPainter = _painterManager->get_painter(quadPainterKey);
+		myPainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_MERGING], Properties(), quadVerticesKey);
+	}
+
 }

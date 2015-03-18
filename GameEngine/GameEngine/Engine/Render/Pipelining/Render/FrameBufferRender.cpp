@@ -28,7 +28,7 @@ namespace AGE
 			}
 			_is_update = true;
 		}
-		_render_function(pipeline, lights, infos);
+		renderPass(pipeline, lights, infos);
 		_frame_buffer.unbind();
 		return (*this);
 	}

@@ -14,5 +14,8 @@ namespace AGE
 
 	public:
 		virtual IRender &render(RenderPipeline const &pipeline, RenderLightList const &lights, CameraInfos const &infos) override final;
+	
+	protected:
+		virtual void renderPass(RenderPipeline const &, RenderLightList const &, CameraInfos const &) = 0;
 	};
 }

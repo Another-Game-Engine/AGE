@@ -33,6 +33,7 @@ namespace AGE
 
 	protected:
 		FrameBufferRender(std::shared_ptr<PaintingManager> painterManager);
+		virtual void renderPass(RenderPipeline const &, RenderLightList const &, CameraInfos const &) = 0;
 
 	private:
 		Framebuffer _frame_buffer;
