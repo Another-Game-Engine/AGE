@@ -94,9 +94,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Components\Lifetime.cpp" />
+    <ClCompile Include="Components\RotationComponent.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Scenes\BenchmarkScene.cpp" />
     <ClCompile Include="Systems\LifetimeSystem.cpp" />
+    <ClCompile Include="Systems\RotationSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GameEngine\GameEngine.vcxproj">
@@ -106,9 +108,11 @@
   <ItemGroup>
     <ClInclude Include="Components\Lifetime.hpp" />
     <ClInclude Include="Components\lifetimeComponent.hh" />
+    <ClInclude Include="Components\RotationComponent.hpp" />
     <ClInclude Include="CONFIGS.hh" />
     <ClInclude Include="Scenes\BenchmarkScene.hpp" />
     <ClInclude Include="Systems\LifetimeSystem.hpp" />
+    <ClInclude Include="Systems\RotationSystem.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

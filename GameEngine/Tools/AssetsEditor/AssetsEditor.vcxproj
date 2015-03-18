@@ -91,6 +91,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\EngineCoreTest\Components\Lifetime.cpp" />
+    <ClCompile Include="..\..\EngineCoreTest\Components\RotationComponent.cpp" />
     <ClCompile Include="AssetFiles\AssetFileManager.cpp" />
     <ClCompile Include="AssetFiles\CookedFile.cpp" />
     <ClCompile Include="AssetFiles\RawFile.cpp" />

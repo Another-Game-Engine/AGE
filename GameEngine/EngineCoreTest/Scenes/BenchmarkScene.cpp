@@ -20,6 +20,9 @@
 #include <Components/RigidBody.hpp>
 #include <Components/MeshRenderer.hh>
 #include <Components/Lifetime.hpp>
+#include <Components/RotationComponent.hpp>
+
+#include <Systems/RotationSystem.hpp>
 
 #include <Systems/DebugSystem.hpp>
 
@@ -52,7 +55,7 @@ namespace AGE
 	BenchmarkScene::BenchmarkScene(AGE::Engine *engine)
 		: AScene(engine)
 	{
-		_scenes = { "../../MyScene" };
+		_scenes = { "../../MyScene", "../../graphnode" };
 
 	}
 
@@ -75,12 +78,14 @@ namespace AGE
 		REGISTER_COMPONENT_TYPE(AGE::RigidBody);
 		REGISTER_COMPONENT_TYPE(AGE::PointLightComponent);
 		REGISTER_COMPONENT_TYPE(AGE::FreeFlyComponent);
+		REGISTER_COMPONENT_TYPE(AGE::RotationComponent);
 
 		setInstance<AGE::BulletDynamicManager, AGE::BulletCollisionManager>()->init();
 		addSystem<AGE::DebugSystem>(0);
 		addSystem<AGE::BulletDynamicSystem>(0);
 		addSystem<AGE::LifetimeSystem>(2);
 		addSystem<AGE::FreeFlyCamera>(0);
+		addSystem<AGE::RotationSystem>(0);
 
 		auto camera = createEntity();
 		GLOBAL_CAMERA = camera;

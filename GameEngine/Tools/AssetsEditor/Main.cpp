@@ -43,6 +43,8 @@
 #include <Components/RigidBody.hpp>
 #include <Components/SpotLight.hh>
 #include <Components/FreeFlyComponent.hh>
+
+#include <RotationComponent.hpp>
 #include <Lifetime.hpp>
 
 int			main(int ac, char **av)
@@ -69,6 +71,7 @@ int			main(int ac, char **av)
 		REGISTER_COMPONENT_TYPE(AGE::WE::EntityRepresentation);
 		REGISTER_COMPONENT_TYPE(AGE::FreeFlyComponent);
 		REGISTER_COMPONENT_TYPE(AGE::Lifetime);
+		REGISTER_COMPONENT_TYPE(AGE::RotationComponent);
 
 		engine->addScene(std::make_shared<AGE::AssetsEditorScene>(engine), AGE::AssetsEditorScene::Name);
 		engine->addScene(std::make_shared<AGE::SceneSelectorScene>(engine), AGE::SceneSelectorScene::Name);
