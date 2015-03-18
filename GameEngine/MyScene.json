@@ -30,7 +30,7 @@
             "value": 10104511821648614695
         }
     ],
-    "Entity_2": {
+    "Entity_1": {
         "link": {
             "Position": {
                 "value0": 0,
@@ -97,7 +97,7 @@
             "name": "floor"
         }
     },
-    "Entity_3": {
+    "Entity_2": {
         "link": {
             "Position": {
                 "value0": 0.10776261240243912,
@@ -154,7 +154,7 @@
             },
             "Collision shape path": "sponza/sponza_static.phage",
             "Collision shape type": 2,
-            "Selected mesh shape index": 10,
+            "Selected mesh shape index": 12,
             "Selected mesh shape path": "sponza/sponza_static.phage",
             "Selected mesh shape name": "sponza_static.phage",
             "Simple shape": false
@@ -163,11 +163,11 @@
             "name": "sponza"
         }
     },
-    "Entity_4": {
+    "Entity_3": {
         "link": {
             "Position": {
-                "value0": 0.37826400995254517,
-                "value1": 5.1527514457702637,
+                "value0": 0,
+                "value1": 20,
                 "value2": -10.100305557250977
             },
             "Scale": {
@@ -176,10 +176,10 @@
                 "value2": 2
             },
             "Orientation": {
-                "value0": -0.14802917838096619,
-                "value1": 0.36442229151725769,
-                "value2": 0.55466389656066895,
-                "value3": 0.7332337498664856
+                "value0": -0.55808740854263306,
+                "value1": -0.42903417348861694,
+                "value2": 0.41583293676376343,
+                "value3": -0.57580471038818359
             }
         },
         "children": [
@@ -231,7 +231,7 @@
             "name": "ball"
         }
     },
-    "Entity_5": {
+    "Entity_4": {
         "link": {
             "Position": {
                 "value0": 1,

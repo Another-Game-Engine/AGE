@@ -41,8 +41,7 @@ namespace AGE
 		addSystem<WE::AssetsAndComponentRelationsSystem>(0);
 		addSystem<WE::EntityManager>(1);
 		addSystem<FreeFlyCamera>(2);
-		addSystem<BulletDynamicSystem>(3);
-		// Add entity used by editor (camera etc here)
+		//addSystem<BulletDynamicSystem>(3);
 
 		auto camera = createEntity();
 		auto cam = camera.addComponent<CameraComponent>();

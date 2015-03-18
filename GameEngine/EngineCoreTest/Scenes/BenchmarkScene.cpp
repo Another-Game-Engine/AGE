@@ -87,8 +87,10 @@ namespace AGE
 		auto cam = camera.addComponent<CameraComponent>();
 		camera.addComponent<FreeFlyComponent>();
 		cam->addPipeline(RenderType::DEFERRED);
+		camera.getLink().setPosition(glm::vec3(0, 5, 0));
 
 		getInstance<AGE::AssetsManager>()->setAssetsDirectory("../../Assets/Serialized/");
+		getInstance<AGE::BulletCollisionManager>()->setAssetsDirectory("../../Assets/Serialized/");
 
 		getInstance<AGE::AssetsManager>()->loadMesh(OldFile("cube/cube.sage"), "DEMO_SCENE_BASIC_ASSETS");
 		getInstance<AGE::AssetsManager>()->loadMesh(OldFile("ball/ball.sage"), "DEMO_SCENE_BASIC_ASSETS");
@@ -225,6 +227,7 @@ namespace AGE
 			auto cam = camera.addComponent<CameraComponent>();
 			camera.addComponent<FreeFlyComponent>();
 			cam->addPipeline(RenderType::DEFERRED);
+			camera.getLink().setPosition(glm::vec3(0, 5, 0));
 
 			auto sceneFileName = std::string(_scenes[_selectedScene]) + "_export.json";
 			auto assetPackageFileName = std::string(_scenes[_selectedScene]) + "_assets.json";

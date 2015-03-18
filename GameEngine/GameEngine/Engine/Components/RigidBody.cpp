@@ -249,20 +249,34 @@ namespace AGE
 	{
 		_manager = dynamic_cast<BulletDynamicManager*>(entity.getScene()->getInstance<BulletCollisionManager>());
 #ifdef EDITOR_ENABLED
-		if (_collisionShapeType != UNDEFINED)
+		if (WESerialization::SerializeForEditor())
 		{
-			setCollisionShape((CollisionShape)_collisionShapeType);
+			if (_collisionShapeType != UNDEFINED)
+			{
+				setCollisionShape((CollisionShape)_collisionShapeType);
+			}
+			else if (!selectedShapePath.empty())
+			{
+				setCollisionMesh(selectedShapePath);
+			}
 		}
-		else if (!selectedShapePath.empty())
+		else		
 		{
-			setCollisionMesh(selectedShapePath);
+			if (_collisionShapeType != UNDEFINED)
+			{
+				setCollisionShape((CollisionShape)_collisionShapeType);
+			}
+			else if (!_shapePath.empty())
+			{
+				setCollisionMesh(_shapePath);
+			}
 		}
 #else
 		if (_collisionShapeType != UNDEFINED)
 		{
 			setCollisionShape((CollisionShape)_collisionShapeType);
 		}
-		else if (!selectedShapePath.empty())
+		else if (!_shapePath.empty())
 		{
 			setCollisionMesh(_shapePath);
 		}

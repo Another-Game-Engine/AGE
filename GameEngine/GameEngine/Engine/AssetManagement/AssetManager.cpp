@@ -484,7 +484,7 @@ namespace AGE
 				{
 					AGE_ERROR(channel->getErrorMessages());
 				}
-				if (channelToLoad == 0 && channelTotal != 0)
+				if (channelToLoad == 0)
 				{
 					toErase.push_back(it->first);
 				}
