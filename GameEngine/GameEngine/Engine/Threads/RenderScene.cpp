@@ -186,6 +186,7 @@ namespace AGE
 		_activeCameras[toRm.activeCameraIdx] = _activeCameras[_activeCameras.size() - 1];
 		_cameras.get(_activeCameras[toRm.activeCameraIdx]).activeCameraIdx = toRm.activeCameraIdx;
 		_activeCameras.pop_back();
+		toRm.pipelines.clear();
 
 		_cameras.deallocPreparated(msg.key.id);
 	}
