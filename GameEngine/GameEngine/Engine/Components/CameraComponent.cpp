@@ -81,7 +81,7 @@ namespace AGE
 
 	void CameraComponent::reset()
 	{
-		if (_key.invalid())
+		if (!_key.invalid())
 		{
 			entity.getLink().unregisterOctreeObject(_key);
 		}
