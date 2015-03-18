@@ -9,6 +9,7 @@
 #include <Core/Engine.hh>
 #include <Core/Inputs/Input.hh>
 #include <Core/Timer.hh>
+#include <Render/OpenGLTask/OpenGLState.hh>
 
 #define STB_TRUETYPE_IMPLEMENTATION
 #include <imgui/stb_truetype.h>
@@ -229,12 +230,12 @@ namespace AGE
 
 		if (cmd_lists.empty())
 			return;
-		glEnable(GL_BLEND);
-		glBlendEquation(GL_FUNC_ADD);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		glDisable(GL_CULL_FACE);
-		glDisable(GL_DEPTH_TEST);
-		glEnable(GL_SCISSOR_TEST);
+		OpenGLState::glEnable(GL_BLEND);
+		OpenGLState::glBlendEquation(GL_FUNC_ADD);
+		OpenGLState::glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		OpenGLState::glDisable(GL_CULL_FACE);
+		OpenGLState::glDisable(GL_DEPTH_TEST);
+		OpenGLState::glEnable(GL_SCISSOR_TEST);
 
 		// Setup texture
 		glActiveTexture(GL_TEXTURE0);
@@ -298,7 +299,7 @@ namespace AGE
 		// Restore modified state
 		glBindVertexArray(0);
 		glUseProgram(0);
-		glDisable(GL_SCISSOR_TEST);
+		OpenGLState::glDisable(GL_SCISSOR_TEST);
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 

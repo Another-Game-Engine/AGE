@@ -1,7 +1,7 @@
 #include <Render/Pipelining/Pipelines/CustomRenderPass/DeferredPointLightning.hh>
 
 #include <Render/Textures/Texture2D.hh>
-#include <Render/OpenGLTask/Tasks.hh>
+#include <Render/OpenGLTask/OpenGLState.hh>
 #include <Render/GeometryManagement/Painting/Painter.hh>
 #include <SpacePartitioning/Ouptut/RenderLight.hh>
 #include <SpacePartitioning/Ouptut/RenderPipeline.hh>
@@ -70,20 +70,20 @@ namespace AGE
 		*_programs[PROGRAM_STENCIL]->get_resource<Mat4>("projection_matrix") = infos.projection;
 		*_programs[PROGRAM_STENCIL]->get_resource<Mat4>("view_matrix") = infos.view;
 		// Disable blending to clear the color buffer
-		glDisable(GL_BLEND);
+		OpenGLState::glDisable(GL_BLEND);
 		// clear the light accumulation to zero
-		OpenGLTasks::set_clear_color(glm::vec4(0));
-		OpenGLTasks::clear_buffer(true, false, false);
+		OpenGLState::glClearColor(glm::vec4(0));
+		glClear(GL_COLOR_BUFFER_BIT);
 		// activate depth test and func to check if sphere_depth > current_depth (normal zfail)
-		OpenGLTasks::set_depth_test(true);
-		glDepthFunc(GL_GEQUAL);
+		OpenGLState::glEnable(GL_DEPTH_TEST);
+		OpenGLState::glDepthFunc(GL_GEQUAL);
 		// We activate the stencil test
-		OpenGLTasks::set_stencil_test(true);
+		OpenGLState::glEnable(GL_STENCIL_TEST);
 		// We do not write on the depth buffer
-		glDepthMask(GL_FALSE);
+		OpenGLState::glDepthMask(GL_FALSE);
 		// And we set the blend mode to additive
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_ONE, GL_ONE);
+		OpenGLState::glEnable(GL_BLEND);
+		OpenGLState::glBlendFunc(GL_ONE, GL_ONE);
 		// We get the sphere geometry
 		Key<Vertices> sphereVertices;
 		Key<Painter> spherePainter;
@@ -103,21 +103,22 @@ namespace AGE
 			*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("ambiant_color") = glm::vec3(0);
 
 			// We clear the stencil buffer
-			OpenGLTasks::set_clear_stencil(0);
-			OpenGLTasks::clear_buffer(false, false, true);
+			OpenGLState::glClearStencil(0);
+			glClear(GL_STENCIL_BUFFER_BIT);
 
-			glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+			OpenGLState::glColorMask(glm::bvec4(false));
 
-			glStencilFunc(GL_ALWAYS, 0, 0xFF);
-			glStencilOp(GL_KEEP, GL_KEEP, GL_INCR);
-			glCullFace(GL_BACK);
+			OpenGLState::glStencilFunc(GL_ALWAYS, 0, 0xFFFFFFFF);
+			OpenGLState::glStencilOp(GL_KEEP, GL_KEEP, GL_INCR);
+			OpenGLState::glCullFace(GL_BACK);
 
 			spherePainterPtr->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_STENCIL], Properties(), sphereVertices);
 
-			glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
-			glStencilFunc(GL_EQUAL, 0, 0xFF);
-			glCullFace(GL_FRONT);
-			glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
+			OpenGLState::glColorMask(glm::bvec4(true));
+
+			OpenGLState::glStencilFunc(GL_EQUAL, 0, 0xFFFFFFFF);
+			OpenGLState::glCullFace(GL_FRONT);
+			OpenGLState::glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
 
 			spherePainterPtr->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_LIGHTNING], Properties(), sphereVertices);
 		}

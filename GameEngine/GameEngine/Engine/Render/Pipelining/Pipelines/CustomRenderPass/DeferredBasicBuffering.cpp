@@ -4,7 +4,7 @@
 #include <memory>
 
 #include <Render/Textures/Texture2D.hh>
-#include <Render/OpenGLTask/Tasks.hh>
+#include <Render/OpenGLTask/OpenGLState.hh>
 #include <Render/GeometryManagement/Painting/Painter.hh>
 #include <SpacePartitioning/Ouptut/RenderLight.hh>
 #include <SpacePartitioning/Ouptut/RenderPipeline.hh>
@@ -46,15 +46,15 @@ namespace AGE
 
 	void DeferredBasicBuffering::renderPass(RenderPipeline const &pipeline, RenderLightList const &, CameraInfos const &infos)
 	{
-		glEnable(GL_CULL_FACE);
-		glCullFace(GL_BACK);
-		glDepthMask(GL_TRUE);
-		glDepthFunc(GL_LEQUAL);
-		glDisable(GL_BLEND);
-		OpenGLTasks::set_stencil_test(false);
-		OpenGLTasks::set_depth_test(true);
-		OpenGLTasks::set_clear_color(glm::vec4(0.f, 0.0f, 0.0f, 0.0f));
-		OpenGLTasks::clear_buffer();
+		OpenGLState::glEnable(GL_CULL_FACE);
+		OpenGLState::glCullFace(GL_BACK);
+		OpenGLState::glDepthMask(GL_TRUE);
+		OpenGLState::glDepthFunc(GL_LEQUAL);
+		OpenGLState::glDisable(GL_BLEND);
+		OpenGLState::glDisable(GL_STENCIL_TEST);
+		OpenGLState::glEnable(GL_DEPTH_TEST);
+		OpenGLState::glClearColor(glm::vec4(0.f, 0.0f, 0.0f, 0.0f));
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		_programs[PROGRAM_BUFFERING]->use();
 		*_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("projection_matrix") = infos.projection;

@@ -1,7 +1,7 @@
 #include <Render/Pipelining/Pipelines/CustomRenderPass/DeferredMerging.hh>
 
 #include <Render/Textures/Texture2D.hh>
-#include <Render/OpenGLTask/Tasks.hh>
+#include <Render/OpenGLTask/OpenGLState.hh>
 #include <Render/GeometryManagement/Painting/Painter.hh>
 #include <SpacePartitioning/Ouptut/RenderLight.hh>
 #include <SpacePartitioning/Ouptut/RenderPipeline.hh>
@@ -52,10 +52,10 @@ namespace AGE
 		Key<Painter> quadPainterKey;
 		Key<Vertices> quadVerticesKey;
 
-		glDisable(GL_BLEND);
-		glDisable(GL_CULL_FACE);
-		OpenGLTasks::set_depth_test(false);
-		OpenGLTasks::set_stencil_test(false);
+		OpenGLState::glDisable(GL_BLEND);
+		OpenGLState::glDisable(GL_CULL_FACE);
+		OpenGLState::glEnable(GL_DEPTH_TEST);
+		OpenGLState::glEnable(GL_STENCIL_TEST);
 		GetRenderThread()->getQuadGeometry(quadVerticesKey, quadPainterKey);
 		auto myPainter = _painterManager->get_painter(quadPainterKey);
 		myPainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_MERGING], Properties(), quadVerticesKey);
