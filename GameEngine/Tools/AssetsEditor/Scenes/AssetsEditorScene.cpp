@@ -262,7 +262,6 @@ namespace AGE
 							}
 							else
 							{
-								assert(false);
 								AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=](){
 									AGE::AnimationsLoader::load(cookingTask);
 									AGE::AnimationsLoader::save(cookingTask);
