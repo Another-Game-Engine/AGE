@@ -50,9 +50,4 @@ namespace AGE
 		return (element->second);
 	}
 
-	void setRenderFunction(std::function<void(void)> const &function)
-	{
-
-	}
-
 }

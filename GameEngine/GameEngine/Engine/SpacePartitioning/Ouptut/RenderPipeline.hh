@@ -1,6 +1,7 @@
 #pragma once
 
-#include <vector>
+#include <Render/Key.hh>
+#include <unordered_map>
 
 namespace AGE
 {
@@ -8,7 +9,7 @@ namespace AGE
 
 	struct RenderPipeline
 	{
-		std::vector<RenderPainter> keys;
+		std::unordered_map<size_t, RenderPainter> keys;
 	};
 
 }

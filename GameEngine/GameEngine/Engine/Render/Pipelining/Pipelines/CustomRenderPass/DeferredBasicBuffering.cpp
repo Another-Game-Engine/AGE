@@ -42,6 +42,7 @@ namespace AGE
 			std::make_shared<UnitProg>(DEFERRED_SHADING_BUFFERING_VERTEX, GL_VERTEX_SHADER), 
 			std::make_shared<UnitProg>(DEFERRED_SHADING_BUFFERING_FRAG, GL_FRAGMENT_SHADER) 
 		}));
+		_forbidden[AGE_OPAQUE] = true;
 	}
 
 	void DeferredBasicBuffering::renderPass(RenderPipeline const &pipeline, RenderLightList const &, CameraInfos const &infos)
@@ -60,10 +61,16 @@ namespace AGE
 		*_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("projection_matrix") = infos.projection;
 		*_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("view_matrix") = infos.view;
 
-		for (auto key : pipeline.keys)
+		for (auto meshPaint : pipeline.keys)
 		{
-			auto painter = _painterManager->get_painter(key.painter);
-			painter->draw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], key.properties, key.vertices);
+			auto painter = _painterManager->get_painter(Key<Painter>::createKey(meshPaint.first));
+			for (auto mode : meshPaint.second.drawables)
+			{
+				if (renderModeCompatible(mode.renderMode))
+				{
+					painter->draw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], mode.properties, mode.vertices);
+				}
+			}
 		}
 	}
 

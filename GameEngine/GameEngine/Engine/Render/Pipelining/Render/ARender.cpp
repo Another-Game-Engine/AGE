@@ -35,4 +35,9 @@ namespace AGE
 		_nextPass = nextPass;
 	}
 
+	bool ARender::renderModeCompatible(std::bitset<RENDER_MODE_NUMBER> const &renderMode)
+	{
+		return ((_mandatory & renderMode) == _mandatory && (_forbidden & renderMode).to_ulong() == 0);
+	}
+
 }

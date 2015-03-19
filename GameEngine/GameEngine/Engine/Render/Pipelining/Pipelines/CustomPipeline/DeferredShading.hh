@@ -21,7 +21,6 @@ namespace AGE
 		DeferredShading &operator=(DeferredShading const &) = delete;
 
 	public:
-		virtual IRenderingPipeline &render(RenderPipeline const &pipeline, RenderLightList const &lights, CameraInfos const &camera) override final;
 
 	private:
 		std::shared_ptr<Texture2D> _depthStencil;

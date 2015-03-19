@@ -33,15 +33,4 @@ namespace AGE
 	{
 
 	}
-
-	IRenderingPipeline & DeferredShading::render(RenderPipeline const &pipeline, RenderLightList const &lights, CameraInfos const &infos)
-	{
-		// We iterate over the entry points
-		for (auto &renderPass : _rendering_list)
-		{
-			renderPass->render(pipeline, lights, infos);
-		}
-		return (*this);
-	}
-
 }
