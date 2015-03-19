@@ -455,7 +455,7 @@ namespace AGE
 					}
 					break;
 					default:
-						assert(!"Type cannot be added to the ");
+						assert(!"Type cannot be added to the render queue.");
 						break;
 					}
 				}

@@ -22,10 +22,17 @@ namespace AGE
 			bool success = prog->compile();
 			if (!success)
 			{
-				return false;
+				return (false);
 			}
 		}
+		if (_nextPass)
+			return (_nextPass->recompilePrograms());
 		return (true);
+	}
+
+	void ARender::setNextPass(std::shared_ptr<ARender> nextPass)
+	{
+		_nextPass = nextPass;
 	}
 
 }

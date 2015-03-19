@@ -22,6 +22,9 @@ namespace AGE
 	private:
 		std::shared_ptr<Texture2D> _normalInput;
 		std::shared_ptr<Texture2D> _depthInput;
+
+		Key<Vertices> _sphereVertices;
+		std::shared_ptr<Painter> _spherePainter;
 	};
 }
 

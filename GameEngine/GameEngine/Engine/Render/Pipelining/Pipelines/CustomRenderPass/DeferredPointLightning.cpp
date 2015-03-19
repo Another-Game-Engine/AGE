@@ -53,6 +53,11 @@ namespace AGE
 			std::make_shared<UnitProg>(DEFERRED_SHADING_POINT_LIGHT_VERTEX, GL_VERTEX_SHADER),
 			std::make_shared<UnitProg>(DEFERRED_SHADING_POINT_LIGHT_FRAG, GL_FRAGMENT_SHADER)
 		}));
+
+		// We get the sphere geometry
+		Key<Painter> spherePainterkey;
+		GetRenderThread()->getIcoSphereGeometry(_sphereVertices, spherePainterkey, 2);
+		_spherePainter = _painterManager->get_painter(spherePainterkey);
 	}
 
 	void DeferredPointLightning::renderPass(RenderPipeline const &, RenderLightList const &lights, CameraInfos const &infos)
@@ -84,11 +89,8 @@ namespace AGE
 		// And we set the blend mode to additive
 		OpenGLState::glEnable(GL_BLEND);
 		OpenGLState::glBlendFunc(GL_ONE, GL_ONE);
-		// We get the sphere geometry
-		Key<Vertices> sphereVertices;
-		Key<Painter> spherePainter;
-		GetRenderThread()->getIcoSphereGeometry(sphereVertices, spherePainter, 2);
-		auto spherePainterPtr = _painterManager->get_painter(spherePainter);
+		// Set stencil clear value to 0
+		OpenGLState::glClearStencil(0);
 		// Iterate throught each light
 		for (auto &pl : lights.pointLight)
 		{
@@ -103,7 +105,6 @@ namespace AGE
 			*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("ambiant_color") = glm::vec3(0);
 
 			// We clear the stencil buffer
-			OpenGLState::glClearStencil(0);
 			glClear(GL_STENCIL_BUFFER_BIT);
 
 			OpenGLState::glColorMask(glm::bvec4(false));
@@ -112,15 +113,15 @@ namespace AGE
 			OpenGLState::glStencilOp(GL_KEEP, GL_KEEP, GL_INCR);
 			OpenGLState::glCullFace(GL_BACK);
 
-			spherePainterPtr->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_STENCIL], Properties(), sphereVertices);
+			_spherePainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_STENCIL], Properties(), _sphereVertices);
 
 			OpenGLState::glColorMask(glm::bvec4(true));
 
 			OpenGLState::glStencilFunc(GL_EQUAL, 0, 0xFFFFFFFF);
-			OpenGLState::glCullFace(GL_FRONT);
 			OpenGLState::glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
+			OpenGLState::glCullFace(GL_FRONT);
 
-			spherePainterPtr->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_LIGHTNING], Properties(), sphereVertices);
+			_spherePainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_LIGHTNING], Properties(), _sphereVertices);
 		}
 	}
 }

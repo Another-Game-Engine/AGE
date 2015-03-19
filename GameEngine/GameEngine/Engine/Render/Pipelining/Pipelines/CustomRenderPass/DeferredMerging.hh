@@ -23,6 +23,9 @@ namespace AGE
 		std::shared_ptr<Texture2D> _diffuseInput;
 		std::shared_ptr<Texture2D> _specularInput;
 		std::shared_ptr<Texture2D> _lightAccuInput;
+
+		Key<Vertices> _quadVertices;
+		std::shared_ptr<Painter> _quadPainter;
 	};
 }
 

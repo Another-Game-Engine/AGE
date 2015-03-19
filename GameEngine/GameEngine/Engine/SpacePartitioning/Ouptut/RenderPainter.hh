@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <Render/Key.hh>
+#include <glm/glm.hpp>
 
 namespace AGE
 {
@@ -20,7 +21,7 @@ namespace AGE
 	{
 		std::vector<Key<Vertices>> vertices;
 		std::vector<Properties> properties;
-		std::vector<InstanciedVertice> instanciedVertices;
+//		std::vector<InstanciedVertice> instanciedVertices;
 		Key<Painter> painter;
 	};
 

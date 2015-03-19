@@ -405,6 +405,7 @@
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredPointLightning.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredMerging.hh" />
     <ClInclude Include="Engine\Render\OpenGLTask\OpenGLState.hh" />
+    <ClInclude Include="Engine\Render\Pipelining\Render\RenderModes.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

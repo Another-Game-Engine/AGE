@@ -7,6 +7,7 @@ namespace AGE
 	FrameBufferRender::FrameBufferRender(std::shared_ptr<PaintingManager> painterManager) :
 		ARender(painterManager)
 	{
+		_nextPass = nullptr;
 	}
 
 	FrameBufferRender::FrameBufferRender(FrameBufferRender &&move) :
@@ -30,6 +31,8 @@ namespace AGE
 		}
 		renderPass(pipeline, lights, infos);
 		_frame_buffer.unbind();
+		if (_nextPass != nullptr)
+			_nextPass->render(pipeline, lights, infos);
 		return (*this);
 	}
 

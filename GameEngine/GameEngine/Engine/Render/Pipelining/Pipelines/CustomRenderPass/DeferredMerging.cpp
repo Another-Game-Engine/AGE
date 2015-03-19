@@ -41,6 +41,11 @@ namespace AGE
 			std::make_shared<UnitProg>(DEFERRED_SHADING_MERGING_VERTEX, GL_VERTEX_SHADER),
 			std::make_shared<UnitProg>(DEFERRED_SHADING_MERGING_FRAG, GL_FRAGMENT_SHADER)
 		}));
+
+		Key<Painter> quadPainterKey;
+
+		GetRenderThread()->getQuadGeometry(_quadVertices, quadPainterKey);
+		_quadPainter = _painterManager->get_painter(quadPainterKey);
 	}
 
 	void DeferredMerging::renderPass(RenderPipeline const &, RenderLightList const &, CameraInfos const &)
@@ -49,16 +54,11 @@ namespace AGE
 		*_programs[PROGRAM_MERGING]->get_resource<Sampler2D>("diffuse_map") = _diffuseInput;
 		*_programs[PROGRAM_MERGING]->get_resource<Sampler2D>("light_buffer") = _lightAccuInput;
 
-		Key<Painter> quadPainterKey;
-		Key<Vertices> quadVerticesKey;
-
 		OpenGLState::glDisable(GL_BLEND);
 		OpenGLState::glDisable(GL_CULL_FACE);
 		OpenGLState::glEnable(GL_DEPTH_TEST);
 		OpenGLState::glEnable(GL_STENCIL_TEST);
-		GetRenderThread()->getQuadGeometry(quadVerticesKey, quadPainterKey);
-		auto myPainter = _painterManager->get_painter(quadPainterKey);
-		myPainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_MERGING], Properties(), quadVerticesKey);
+		_quadPainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_MERGING], Properties(), _quadVertices);
 	}
 
 }
