@@ -18,12 +18,12 @@ namespace AGE
 	{
 	}
 
-	bool SceneSelectorScene::userStart()
+	bool SceneSelectorScene::_userStart()
 	{
 		return true;
 	}
 
-	bool SceneSelectorScene::userUpdateBegin(float time)
+	bool SceneSelectorScene::_userUpdateBegin(float time)
 	{
 		ImGui::Begin("Assets Convertor", (bool*)1, ImGui::GetIO().DisplaySize, 0, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoTitleBar);
 
@@ -44,7 +44,7 @@ namespace AGE
 		return true;
 	}
 
-	bool SceneSelectorScene::userUpdateEnd(float time)
+	bool SceneSelectorScene::_userUpdateEnd(float time)
 	{
 		if (getInstance<Input>()->getPhysicalKeyJustReleased(AGE_ESCAPE))
 			return (false);

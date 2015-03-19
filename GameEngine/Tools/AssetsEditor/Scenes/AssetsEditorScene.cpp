@@ -62,13 +62,13 @@ namespace AGE
 	{
 	}
 
-	bool AssetsEditorScene::userStart()
+	bool AssetsEditorScene::_userStart()
 	{
 		Singleton<AGE::AE::ConvertorStatusManager>::setInstance();
 		return true;
 	}
 
-	bool AssetsEditorScene::userUpdateBegin(float time)
+	bool AssetsEditorScene::_userUpdateBegin(float time)
 	{
 		// dirty ! We list files
 		static float refreshCounter = 1.0f;
@@ -295,7 +295,7 @@ namespace AGE
 		return true;
 	}
 
-	bool AssetsEditorScene::userUpdateEnd(float time)
+	bool AssetsEditorScene::_userUpdateEnd(float time)
 	{
 		ImGui::End();
 		return true;

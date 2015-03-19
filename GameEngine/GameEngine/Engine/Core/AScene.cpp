@@ -19,7 +19,6 @@ namespace AGE
 		, _engine(engine)
 		, _renderScene(nullptr)
 	{
-		ComponentRegistrationManager::getInstance().createComponentPool(this);
 	}
 
 	AScene::~AScene()
@@ -29,18 +28,32 @@ namespace AGE
 
 	void 							AScene::update(float time)
 	{
-		//static double reorderingTime = 0.0f;
 		for (auto &e : _systems)
 		{
 			if (e.second->isActivated())
 				e.second->update(time);
 		}
-		//reorderingTime += time;
-		//if (reorderingTime > 0.4)
-		//{
-		//	reorganizeComponents();
-		//	reorderingTime = 0;
-		//}
+	}
+
+	bool                    AScene::userStart()
+	{
+		auto succes = _userStart();
+		if (!succes)
+		{
+			return false;
+		}
+		ComponentRegistrationManager::getInstance().createComponentPool(this);
+		return true;
+	}
+
+	bool                    AScene::userUpdateBegin(float time)
+	{
+		return _userUpdateBegin(time);
+	}
+
+	bool                    AScene::userUpdateEnd(float time)
+	{
+		return _userUpdateEnd(time);
 	}
 
 	bool                           AScene::start()

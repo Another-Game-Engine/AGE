@@ -32,7 +32,7 @@ namespace AGE
 	{
 	}
 
-	bool WorldEditorScene::userStart()
+	bool WorldEditorScene::_userStart()
 	{
 		setInstance<AGE::BulletDynamicManager, AGE::BulletCollisionManager>()->init();
 		getInstance<AGE::AssetsManager>()->setAssetsDirectory("../../Assets/Serialized/");
@@ -54,13 +54,13 @@ namespace AGE
 		return true;
 	}
 
-	bool WorldEditorScene::userUpdateBegin(float time)
+	bool WorldEditorScene::_userUpdateBegin(float time)
 	{
 		ImGui::BeginChild("Assets browser", ImVec2(0, 0), true);
 		return true;
 	}
 
-	bool WorldEditorScene::userUpdateEnd(float time)
+	bool WorldEditorScene::_userUpdateEnd(float time)
 	{
 		ImGui::EndChild();
 		ImGui::End();

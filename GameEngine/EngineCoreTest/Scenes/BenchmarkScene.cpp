@@ -67,7 +67,7 @@ namespace AGE
 	{
 	}
 
-	bool BenchmarkScene::userStart()
+	bool BenchmarkScene::_userStart()
 	{
 		// We register component types so that we can load components from file
 		// It'll create the component manager for the scene and
@@ -106,7 +106,7 @@ namespace AGE
 		return true;
 	}
 
-	bool BenchmarkScene::userUpdateBegin(float time)
+	bool BenchmarkScene::_userUpdateBegin(float time)
 	{
 		++_chunkFrame;
 		_chunkCounter += time;
@@ -221,7 +221,7 @@ namespace AGE
 	}
 
 
-	bool BenchmarkScene::userUpdateEnd(float time)
+	bool BenchmarkScene::_userUpdateEnd(float time)
 	{
 		if (ImGui::ListBox("Scenes", &_selectedScene, _scenes.data(), _scenes.size()))
 		{
