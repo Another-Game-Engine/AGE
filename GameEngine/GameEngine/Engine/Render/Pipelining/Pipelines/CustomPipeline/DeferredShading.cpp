@@ -40,4 +40,5 @@ namespace AGE
 	{
 		_deferredMerging->setAmbient(ambient);
 	}
+
 }
