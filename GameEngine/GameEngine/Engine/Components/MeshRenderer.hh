@@ -7,6 +7,7 @@
 #include <Render/Key.hh>
 #include <AssetManagement/Instance/MaterialInstance.hh>
 #include <AssetManagement/Instance/MeshInstance.hh>
+#include <Render/Pipelining/Render/RenderModes.hh>
 
 namespace AGE
 {
@@ -36,6 +37,9 @@ namespace AGE
 			const std::shared_ptr<AGE::MaterialSetInstance> &_material);
 		std::shared_ptr<AGE::MeshInstance> getMesh();
 		std::shared_ptr<AGE::MaterialSetInstance> getMaterial();
+
+		void enableMode(RenderModes mode);
+		void disableMode(RenderModes mode);
 
 #ifdef EDITOR_ENABLED
 		std::vector<const char*> *meshFileList = nullptr;

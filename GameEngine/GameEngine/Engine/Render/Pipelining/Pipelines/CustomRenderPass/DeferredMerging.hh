@@ -2,6 +2,8 @@
 
 #include <Render/Pipelining/Render/ScreenRender.hh>
 
+#include <glm/glm.hpp>
+
 namespace AGE
 {
 	class Texture2D;
@@ -16,6 +18,8 @@ namespace AGE
 							std::shared_ptr<Texture2D> lightAccumulation);
 		virtual ~DeferredMerging() = default;
 
+		void setAmbient(glm::vec3 const &ambient);
+
 	protected:
 		virtual void renderPass(RenderPipeline const &, RenderLightList const &, CameraInfos const &);
 
@@ -26,6 +30,8 @@ namespace AGE
 
 		Key<Vertices> _quadVertices;
 		std::shared_ptr<Painter> _quadPainter;
+
+		glm::vec3 _ambientColor;
 	};
 }
 

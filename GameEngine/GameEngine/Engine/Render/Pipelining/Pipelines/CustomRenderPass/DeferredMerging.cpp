@@ -48,11 +48,17 @@ namespace AGE
 		_quadPainter = _painterManager->get_painter(quadPainterKey);
 	}
 
+	void DeferredMerging::setAmbient(glm::vec3 const &ambient)
+	{
+		_ambientColor = ambient;
+	}
+
 	void DeferredMerging::renderPass(RenderPipeline const &, RenderLightList const &, CameraInfos const &)
 	{
 		_programs[PROGRAM_MERGING]->use();
-		*_programs[PROGRAM_MERGING]->get_resource<Sampler2D>("diffuse_map") = _diffuseInput;
+//		*_programs[PROGRAM_MERGING]->get_resource<Sampler2D>("diffuse_map") = _diffuseInput;
 		*_programs[PROGRAM_MERGING]->get_resource<Sampler2D>("light_buffer") = _lightAccuInput;
+//		*_programs[PROGRAM_MERGING]->get_resource<Vec3>("ambient_color") = _ambientColor;
 
 		OpenGLState::glDisable(GL_BLEND);
 		OpenGLState::glDisable(GL_CULL_FACE);

@@ -30,6 +30,10 @@ namespace AGE
 												std::shared_ptr<Texture2D> depth) :
 		FrameBufferRender(painterManager)
 	{
+		// We dont want to take the skinned or transparent meshes
+		_forbidden[AGE_SKINNED] = true;
+		_forbidden[AGE_SEMI_TRANSPARENT] = true;
+
 		push_storage_output(GL_COLOR_ATTACHMENT0, diffuse);
 		push_storage_output(GL_COLOR_ATTACHMENT1, normal);
 		push_storage_output(GL_COLOR_ATTACHMENT2, specular);
@@ -60,10 +64,16 @@ namespace AGE
 		*_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("projection_matrix") = infos.projection;
 		*_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("view_matrix") = infos.view;
 
-		for (auto key : pipeline.keys)
+		for (auto meshPaint : pipeline.keys)
 		{
-			auto painter = _painterManager->get_painter(key.painter);
-			painter->draw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], key.properties, key.vertices);
+			auto painter = _painterManager->get_painter(Key<Painter>::createKey(meshPaint.first));
+			for (auto mode : meshPaint.second.drawables)
+			{
+				if (renderModeCompatible(mode.renderMode))
+				{
+					painter->draw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], mode.properties, mode.vertices);
+				}
+			}
 		}
 	}
 

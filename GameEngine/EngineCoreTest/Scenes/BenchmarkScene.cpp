@@ -172,6 +172,7 @@ namespace AGE
 				
 					GLOBAL_SPONZA.addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("Sponza/sponza.sage")
 						, getInstance<AGE::AssetsManager>()->getMaterial("Sponza/sponza.mage"));
+					GLOBAL_SPONZA.getComponent<MeshRenderer>()->enableMode(AGE_OPAQUE);
 				}
 
 	{

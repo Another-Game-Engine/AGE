@@ -102,7 +102,6 @@ namespace AGE
 			*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("position_light") = glm::vec3(pl.light.sphereTransform[3]);
 			*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("attenuation_light") = pl.light.attenuation;
 			*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("color_light") = pl.light.color;
-			*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("ambiant_color") = glm::vec3(0);
 
 			// We clear the stencil buffer
 			glClear(GL_STENCIL_BUFFER_BIT);

@@ -6,10 +6,13 @@
 #include <SpacePartitioning/Ouptut/RenderLight.hh>
 #include <glm/glm.hpp>
 #include <Render/Textures/Texture2D.hh>
+
 #include <memory>
 
 namespace AGE
 {
+
+	class DeferredMerging;
 
 	class DeferredShading : public ARenderingPipeline
 	{
@@ -21,7 +24,7 @@ namespace AGE
 		DeferredShading &operator=(DeferredShading const &) = delete;
 
 	public:
-		virtual IRenderingPipeline &render(RenderPipeline const &pipeline, RenderLightList const &lights, CameraInfos const &camera) override final;
+		void setAmbient(glm::vec3 const &ambient);
 
 	private:
 		std::shared_ptr<Texture2D> _depthStencil;
@@ -29,6 +32,8 @@ namespace AGE
 		std::shared_ptr<Texture2D> _normal;
 		std::shared_ptr<Texture2D> _specular;
 		std::shared_ptr<Texture2D> _lightAccumulation;
+		
+		std::shared_ptr<DeferredMerging> _deferredMerging;
 	};
 
 
