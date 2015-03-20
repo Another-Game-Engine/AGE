@@ -34,7 +34,7 @@
             "value": 16479542503635362968
         }
     ],
-    "Entity_1": {
+    "Entity_0": {
         "link": {
             "Position": {
                 "value0": 0,
@@ -101,7 +101,7 @@
             "name": "floor"
         }
     },
-    "Entity_2": {
+    "Entity_1": {
         "link": {
             "Position": {
                 "value0": 0.10776261240243912,
@@ -167,7 +167,7 @@
             "name": "sponza"
         }
     },
-    "Entity_3": {
+    "Entity_2": {
         "link": {
             "Position": {
                 "value0": 0,
@@ -235,7 +235,7 @@
             "name": "ball"
         }
     },
-    "Entity_4": {
+    "Entity_3": {
         "link": {
             "Position": {
                 "value0": 1,

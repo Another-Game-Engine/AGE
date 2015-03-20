@@ -34,7 +34,7 @@
             "value": 16479542503635362968
         }
     ],
-    "Entity_1": {
+    "Entity_0": {
         "link": {
             "Position": {
                 "value0": 0,
@@ -93,7 +93,7 @@
             "Collision shape type": 1
         }
     },
-    "Entity_2": {
+    "Entity_1": {
         "link": {
             "Position": {
                 "value0": 0.10776261240243912,
@@ -151,7 +151,7 @@
             "Collision shape type": 2
         }
     },
-    "Entity_3": {
+    "Entity_2": {
         "link": {
             "Position": {
                 "value0": 0,
@@ -211,7 +211,7 @@
             "Collision shape type": 0
         }
     },
-    "Entity_4": {
+    "Entity_3": {
         "link": {
             "Position": {
                 "value0": 1,

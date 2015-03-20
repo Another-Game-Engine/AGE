@@ -36,6 +36,7 @@ namespace AGE
 
 	bool WorldEditorScene::_userStart()
 	{
+		WE::EditorConfiguration::RefreshScenesDirectoryListing();
 		setInstance<AGE::BulletDynamicManager, AGE::BulletCollisionManager>()->init();
 		getInstance<AGE::AssetsManager>()->setAssetsDirectory(WE::EditorConfiguration::GetCookedDirectory());
 		getInstance<AGE::BulletCollisionManager>()->setAssetsDirectory(WE::EditorConfiguration::GetCookedDirectory());
@@ -45,20 +46,12 @@ namespace AGE
 		addSystem<FreeFlyCamera>(2);
 		//addSystem<BulletDynamicSystem>(3);
 
-		auto camera = createEntity();
-		auto cam = camera.addComponent<CameraComponent>();
-		camera.getLink().setPosition(glm::vec3(0, 3, 5));
-		camera.getLink().setForward(glm::vec3(0, 0, 0));
-		cam->addPipeline(RenderType::BASIC);
-		camera.addComponent<FreeFlyComponent>();
-		camera.getComponent<AGE::WE::EntityRepresentation>()->editorOnly = true;
-
 		return true;
 	}
 
 	bool WorldEditorScene::_userUpdateBegin(float time)
 	{
-		ImGui::BeginChild("Assets browser", ImVec2(0, 0), true);
+		ImGui::BeginChild("World editor", ImVec2(0, 0), true);
 		return true;
 	}
 

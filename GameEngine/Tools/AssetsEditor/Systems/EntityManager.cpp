@@ -6,6 +6,8 @@
 #include <Components/MeshRenderer.hh>
 #include <AssetManagement/AssetManager.hh>
 #include <EditorConfiguration.hpp>
+#include <Components/CameraComponent.hpp>
+#include <Components/FreeFlyComponent.hh>
 
 namespace AGE
 {
@@ -21,9 +23,12 @@ namespace AGE
 				, _selectParent(false)
 			{
 				//
-				auto name = "MyScene\0";
-				memcpy(_sceneName, name, strlen(name) + 1);
+				auto name = "\0";
+				strcpy_s(_sceneName, name);
+				strcpy_s(_exportName, name);
 				_meshRenderers.requireComponent<MeshRenderer>();
+
+				generateBasicEntities();
 			}
 			EntityManager::~EntityManager(){}
 
@@ -35,7 +40,7 @@ namespace AGE
 
 			void EntityManager::mainUpdate(float time)
 			{
-				ImGui::BeginChild("Entity list", ImVec2(ImGui::GetWindowWidth() * 0.25f, 0));
+				ImGui::BeginChild("Entity list", ImVec2(ImGui::GetWindowWidth() * 0.35f, 0));
 
 				ImGui::Checkbox("Graphnode display", &_graphNodeDisplay);
 
@@ -138,7 +143,26 @@ namespace AGE
 					_scene->createEntity();
 				}
 
-				ImGui::InputText("Scene file name", _sceneName, MAX_SCENE_NAME_LENGTH);
+				if (ImGui::ListBox("Scenes", &WE::EditorConfiguration::getSelectedSceneIndex(), WE::EditorConfiguration::getScenesName().data(), WE::EditorConfiguration::getScenesName().size()))
+				{
+					_scene->clearAllEntities();
+
+					generateBasicEntities();
+
+					WESerialization::SetSerializeForEditor(true);
+
+					auto sceneFileName = WE::EditorConfiguration::getSelectedScenePath() + "_scene_description.json";
+					auto assetPackageFileName = WE::EditorConfiguration::getSelectedScenePath() + "_assets.json";
+
+					strcpy_s(_sceneName, WE::EditorConfiguration::getSelectedSceneName().c_str());
+					strcpy_s(_exportName, WE::EditorConfiguration::getSelectedSceneName().c_str());
+
+					_scene->getInstance<AssetsManager>()->pushNewCallback(assetPackageFileName, std::function<void()>([=](){
+						_scene->loadFromJson(sceneFileName);
+						WESerialization::SetSerializeForEditor(false);
+					}));
+					_scene->getInstance<AssetsManager>()->loadPackage(assetPackageFileName, assetPackageFileName);
+				}
 
 				_entities.clear();
 				{
@@ -153,7 +177,9 @@ namespace AGE
 						_entities.push_back(e);
 					}
 				}
-				if (ImGui::Button("Save scene"))
+				ImGui::InputText("File name", _sceneName, MAX_SCENE_NAME_LENGTH);
+				ImGui::SameLine();
+				if (ImGui::Button("Save"))
 				{
 					WESerialization::SetSerializeForEditor(true);
 					// we list all assets dependencies
@@ -177,6 +203,8 @@ namespace AGE
 					_scene->saveSelectionToJson(WE::EditorConfiguration::GetEditedSceneDirectory() + std::string(_sceneName) + "_scene_description.json", _entities);
 					WESerialization::SetSerializeForEditor(false);
 				}
+				ImGui::InputText("Export name", _exportName, MAX_SCENE_NAME_LENGTH);
+				ImGui::SameLine();
 				if (ImGui::Button("Export scene"))
 				{
 					WESerialization::SetSerializeForEditor(false);
@@ -195,23 +223,10 @@ namespace AGE
 								package.materials.insert(cpt->selectedMaterialPath);
 							}
 						}
-						_scene->getInstance<AssetsManager>()->savePackage(package, WE::EditorConfiguration::GetExportedSceneDirectory() + std::string(_sceneName) + "_assets.json");
+						_scene->getInstance<AssetsManager>()->savePackage(package, WE::EditorConfiguration::GetExportedSceneDirectory() + std::string(_exportName) + "_assets.json");
 					}
 
-					_scene->saveSelectionToJson(WE::EditorConfiguration::GetExportedSceneDirectory() + std::string(_sceneName) + "_export.json", _entities);
-				}
-				if (ImGui::Button("Load scene"))
-				{
-					WESerialization::SetSerializeForEditor(true);
-
-					auto sceneFileName = WE::EditorConfiguration::GetEditedSceneDirectory() + std::string(_sceneName) + "_scene_description.json";
-					auto assetPackageFileName = WE::EditorConfiguration::GetEditedSceneDirectory() + std::string(_sceneName) + "_assets.json";
-
-					_scene->getInstance<AssetsManager>()->pushNewCallback(assetPackageFileName, std::function<void()>([=](){
-						_scene->loadFromJson(sceneFileName);
-						WESerialization::SetSerializeForEditor(false);
-					}));
-					_scene->getInstance<AssetsManager>()->loadPackage(assetPackageFileName, assetPackageFileName);
+					_scene->saveSelectionToJson(WE::EditorConfiguration::GetExportedSceneDirectory() + std::string(_exportName) + "_export.json", _entities);
 				}
 
 				ImGui::EndChild();
@@ -354,6 +369,17 @@ namespace AGE
 				{
 				}));
 				return true;
+			}
+
+			void EntityManager::generateBasicEntities()
+			{
+				auto camera = _scene->createEntity();
+				auto cam = camera.addComponent<CameraComponent>();
+				camera.getLink().setPosition(glm::vec3(0, 3, 5));
+				camera.getLink().setForward(glm::vec3(0, 0, 0));
+				cam->addPipeline(RenderType::BASIC);
+				camera.addComponent<FreeFlyComponent>();
+				camera.addComponent<AGE::WE::EntityRepresentation>()->editorOnly = true;
 			}
 	}
 }
