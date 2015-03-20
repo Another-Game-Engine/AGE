@@ -382,7 +382,6 @@ namespace AGE
 			if (_loadingChannels.find(loadingChannel) == std::end(_loadingChannels))
 			{
 				_loadingChannels.insert(std::make_pair(loadingChannel, std::make_shared<AssetsManager::AssetsLoadingChannel>()));
-				_loadingChannels[loadingChannel]->_lastUpdate = std::chrono::high_resolution_clock::now();
 			}
 			channel = _loadingChannels[loadingChannel];
 		}
@@ -397,7 +396,6 @@ namespace AGE
 			if (_loadingChannels.find(loadingChannel) == std::end(_loadingChannels))
 			{
 				_loadingChannels.insert(std::make_pair(loadingChannel, std::make_shared<AssetsManager::AssetsLoadingChannel>()));
-				_loadingChannels[loadingChannel]->_lastUpdate = std::chrono::high_resolution_clock::now();
 			}
 			channel = _loadingChannels[loadingChannel];
 		}
@@ -407,32 +405,28 @@ namespace AGE
 	bool AssetsManager::AssetsLoadingChannel::updateList(int &noLoaded, int &total)
 	{
 		std::lock_guard<std::mutex> lock(_mutex);
-		if (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - _lastUpdate).count() > 300)
-		{
-			_lastUpdate = std::chrono::high_resolution_clock::now();
-			std::size_t i = 0;
-			_list.remove_if([&](AssetsManager::AssetsLoadingStatus &e){
-				if (i > 30)
-					return false;
-				++i;
-				if (!e.future.valid())
-				{
-					_errorMessages += "ERROR : Future is invalid !\n";
-					return true;
-				}
-				auto status = e.future.wait_for(std::chrono::microseconds(10));
-				if (status == std::future_status::ready)
-				{
-					e.result = e.future.get();
-					if (e.result.error)
-					{
-						_errorMessages += e.result.errorMessage;
-					}
-					return true;
-				}
+		std::size_t i = 0;
+		_list.remove_if([&](AssetsManager::AssetsLoadingStatus &e){
+			if (i > 30)
 				return false;
-			});
-		}
+			++i;
+			if (!e.future.valid())
+			{
+				_errorMessages += "ERROR : Future is invalid !\n";
+				return true;
+			}
+			auto status = e.future.wait_for(std::chrono::microseconds(10));
+			if (status == std::future_status::ready)
+			{
+				e.result = e.future.get();
+				if (e.result.error)
+				{
+					_errorMessages += e.result.errorMessage;
+				}
+				return true;
+			}
+			return false;
+		});
 		noLoaded = (int)_list.size();
 		total = (int)_maxAssets;
 		return _errorMessages.empty();

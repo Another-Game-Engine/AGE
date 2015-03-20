@@ -117,7 +117,6 @@ static std::pair<std::pair<GLenum, std::string>, std::function<void(Vertices &ve
 			void pushNewAsset(const std::string &filename, std::future<AssetsLoadingResult> &future);
 			void pushNewCallback(std::function<void()> &callback);
 			friend class AssetsManager;
-			std::chrono::system_clock::time_point _lastUpdate;
 		};
 
 	public:
