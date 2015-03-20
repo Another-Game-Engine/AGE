@@ -174,7 +174,7 @@ namespace AGE
 						_scene->getInstance<AssetsManager>()->savePackage(package, WE::EditorConfiguration::GetEditedSceneDirectory() + std::string(_sceneName) + "_assets.json");
 					}
 
-					_scene->saveSelectionToJson(WE::EditorConfiguration::GetEditedSceneDirectory() + std::string(_sceneName) + ".json", _entities);
+					_scene->saveSelectionToJson(WE::EditorConfiguration::GetEditedSceneDirectory() + std::string(_sceneName) + "_scene_description.json", _entities);
 					WESerialization::SetSerializeForEditor(false);
 				}
 				if (ImGui::Button("Export scene"))
@@ -204,7 +204,7 @@ namespace AGE
 				{
 					WESerialization::SetSerializeForEditor(true);
 
-					auto sceneFileName = WE::EditorConfiguration::GetEditedSceneDirectory() + std::string(_sceneName) + ".json";
+					auto sceneFileName = WE::EditorConfiguration::GetEditedSceneDirectory() + std::string(_sceneName) + "_scene_description.json";
 					auto assetPackageFileName = WE::EditorConfiguration::GetEditedSceneDirectory() + std::string(_sceneName) + "_assets.json";
 
 					_scene->getInstance<AssetsManager>()->pushNewCallback(assetPackageFileName, std::function<void()>([=](){
