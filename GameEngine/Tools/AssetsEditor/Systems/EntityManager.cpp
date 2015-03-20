@@ -5,6 +5,7 @@
 #include <Components/ComponentRegistrationManager.hpp>
 #include <Components/MeshRenderer.hh>
 #include <AssetManagement/AssetManager.hh>
+#include <EditorConfiguration.hpp>
 
 namespace AGE
 {
@@ -20,7 +21,7 @@ namespace AGE
 				, _selectParent(false)
 			{
 				//
-				auto name = "../../MyScene\0";
+				auto name = "MyScene\0";
 				memcpy(_sceneName, name, strlen(name) + 1);
 				_meshRenderers.requireComponent<MeshRenderer>();
 			}
@@ -170,10 +171,10 @@ namespace AGE
 								package.materials.insert(cpt->selectedMaterialPath);
 							}
 						}
-						_scene->getInstance<AssetsManager>()->savePackage(package, std::string(_sceneName) + "_assets.json");
+						_scene->getInstance<AssetsManager>()->savePackage(package, WE::EditorConfiguration::GetEditedSceneDirectory() + std::string(_sceneName) + "_assets.json");
 					}
 
-					_scene->saveSelectionToJson(std::string(_sceneName) + ".json", _entities);
+					_scene->saveSelectionToJson(WE::EditorConfiguration::GetEditedSceneDirectory() + std::string(_sceneName) + ".json", _entities);
 					WESerialization::SetSerializeForEditor(false);
 				}
 				if (ImGui::Button("Export scene"))
@@ -194,17 +195,17 @@ namespace AGE
 								package.materials.insert(cpt->selectedMaterialPath);
 							}
 						}
-						_scene->getInstance<AssetsManager>()->savePackage(package, std::string(_sceneName) + "_assets.json");
+						_scene->getInstance<AssetsManager>()->savePackage(package, WE::EditorConfiguration::GetExportedSceneDirectory() + std::string(_sceneName) + "_assets.json");
 					}
 
-					_scene->saveSelectionToJson(std::string(_sceneName) + "_export.json", _entities);
+					_scene->saveSelectionToJson(WE::EditorConfiguration::GetExportedSceneDirectory() + std::string(_sceneName) + "_export.json", _entities);
 				}
 				if (ImGui::Button("Load scene"))
 				{
 					WESerialization::SetSerializeForEditor(true);
 
-					auto sceneFileName = std::string(_sceneName) + ".json";
-					auto assetPackageFileName = std::string(_sceneName) + "_assets.json";
+					auto sceneFileName = WE::EditorConfiguration::GetEditedSceneDirectory() + std::string(_sceneName) + ".json";
+					auto assetPackageFileName = WE::EditorConfiguration::GetEditedSceneDirectory() + std::string(_sceneName) + "_assets.json";
 
 					_scene->getInstance<AssetsManager>()->pushNewCallback(assetPackageFileName, std::function<void()>([=](){
 						_scene->loadFromJson(sceneFileName);

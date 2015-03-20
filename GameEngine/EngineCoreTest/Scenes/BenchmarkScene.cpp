@@ -55,7 +55,7 @@ namespace AGE
 	BenchmarkScene::BenchmarkScene(AGE::Engine *engine)
 		: AScene(engine)
 	{
-		_scenes = { "../../MyScene", "../../graphnode" };
+		_scenes = { "../../EngineCoreTest/DemoScenes/MyScene", "../../EngineCoreTest/DemoScenes/graphnode" };
 
 	}
 
