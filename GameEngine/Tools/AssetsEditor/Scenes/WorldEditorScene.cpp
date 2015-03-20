@@ -19,6 +19,8 @@
 #include <Systems/BulletDynamicSystem.hpp>
 #include <Components/EntityRepresentation.hpp>
 
+#include <EditorConfiguration.hpp>
+
 namespace AGE
 {
 	const std::string WorldEditorScene::Name = "WorldEditor";
@@ -35,8 +37,8 @@ namespace AGE
 	bool WorldEditorScene::_userStart()
 	{
 		setInstance<AGE::BulletDynamicManager, AGE::BulletCollisionManager>()->init();
-		getInstance<AGE::AssetsManager>()->setAssetsDirectory("../../Assets/Serialized/");
-		getInstance<AGE::BulletCollisionManager>()->setAssetsDirectory("../../Assets/Serialized/");
+		getInstance<AGE::AssetsManager>()->setAssetsDirectory(WE::EditorConfiguration::GetCookedDirectory());
+		getInstance<AGE::BulletCollisionManager>()->setAssetsDirectory(WE::EditorConfiguration::GetCookedDirectory());
 
 		addSystem<WE::AssetsAndComponentRelationsSystem>(0);
 		addSystem<WE::EntityManager>(1);

@@ -66,6 +66,9 @@
     <ClCompile Include="..\..\EngineCoreTest\Components\RotationComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="EditorConfiguration.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Convertor\AssimpLoader.hpp">
@@ -141,6 +144,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EditorConfiguration.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

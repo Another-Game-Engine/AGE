@@ -33,6 +33,8 @@
 #include <Utils/Debug.hpp>
 #include <Utils/FileSystemHelpers.hpp>
 
+#include <EditorConfiguration.hpp>
+
 namespace AGE
 {
 	const std::string AssetsEditorScene::Name = "AssetsEditor";
@@ -54,7 +56,7 @@ namespace AGE
 	AssetsEditorScene::AssetsEditorScene(AGE::Engine *engine)
 		: AScene(engine)
 	{
-		_raw.list("../../Assets/Raw");
+		_raw.list(WE::EditorConfiguration::GetRawDirectory());
 		AE::AssetFileManager::LinkRawToCooked(&_raw, &_cook);
 	}
 
@@ -90,7 +92,7 @@ namespace AGE
 			_cookedMeshsFullPath.push_back("NONE");
 
 			const std::string currentDir = Directory::GetCurrentDirectory();
-			const std::string absPath = Path::AbsoluteName(currentDir.c_str(), "../../Assets/Serialized");
+			const std::string absPath = Path::AbsoluteName(currentDir.c_str(), WE::EditorConfiguration::GetCookedDirectory().c_str());
 			Directory dir;
 			const bool succeed = dir.open(absPath.c_str());
 			AGE_ASSERT(succeed && "Impossible to open directory");
@@ -237,8 +239,8 @@ namespace AGE
 						auto cookingTask = std::make_shared<CookingTask>(_selectedRaw->dataSet);
 						AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=]()
 						{
-							cookingTask->serializedDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>("../../Assets/Serialized");
-							cookingTask->rawDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>("../../Assets/Raw");
+							cookingTask->serializedDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>(WE::EditorConfiguration::GetCookedDirectory());
+							cookingTask->rawDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>(WE::EditorConfiguration::GetRawDirectory());
 
 							AGE::AssimpLoader::Load(cookingTask);
 
