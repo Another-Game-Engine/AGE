@@ -8,6 +8,7 @@ uniform mat4 view_matrix;
 uniform vec3 position_light;
 uniform vec3 attenuation_light;
 uniform vec3 color_light;
+uniform vec3 ambient_color;
 
 uniform vec3 eye_pos;
 
@@ -40,5 +41,5 @@ void main()
 	vec3 reflection = reflect(normalize(-lightDir), normal);
 //	vec4 specular = texture(specular_buffer, interpolated_texCoord);
 	float specularRatio = clamp(pow(max(dot(reflection, worldPosToEyes), 0.0f), 100.f), 0.0f, 1.0f);
-	color = vec4(vec3(lambert * color_light), specularRatio) / (attenuation); // * (1.f - step(1.0f, depth));
+	color = vec4(vec3(ambient_color + lambert * color_light), specularRatio) / (attenuation); // * (1.f - step(1.0f, depth));
 }
