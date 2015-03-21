@@ -27,7 +27,7 @@ namespace AGE
 		basicBuffering->setNextPass(pointLightning);
 		pointLightning->setNextPass(_deferredMerging);
 
-		setAmbient(glm::vec3(0));
+		setAmbient(glm::vec3(1));
 	}
 
 	DeferredShading::DeferredShading(DeferredShading &&move) :
