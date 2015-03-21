@@ -118,7 +118,8 @@ namespace AGE
 			_drawablesToMove.pop_back();
 		}
 		// remove drawable from octree
-		_octree.removeElement(&toRm);
+		if (toRm.currentNode != UNDEFINED_IDX)
+			_octree.removeElement(&toRm);
 		_drawables.dealloc((uint32_t)(id));
 		assert(id != (std::size_t)(-1));
 	}
@@ -426,24 +427,34 @@ namespace AGE
 						Drawable *currentDrawable = static_cast<Drawable*>(e);
 
 						RenderPainter *curRenderPainter = nullptr;
+						RenderDrawableList *curRenderDrawablelist = nullptr;
 
-						for (auto &renderPainter : curRenderPipeline->keys)
+						auto renderPainter = curRenderPipeline->keys.find(currentDrawable->mesh.painter.getId());
+						// We find the good render painter
+						if (renderPainter == curRenderPipeline->keys.end())
 						{
-							if (renderPainter.painter.getId() == currentDrawable->mesh.painter.getId())
+							curRenderPainter = &curRenderPipeline->keys[currentDrawable->mesh.painter.getId()];
+						}
+						else
+							curRenderPainter = &renderPainter->second;
+						// and the good render mode
+						for (auto &drawableList : curRenderPainter->drawables)
+						{
+							if (drawableList.renderMode == currentDrawable->mesh.renderMode)
 							{
-								curRenderPainter = &renderPainter;
+								curRenderDrawablelist = &drawableList;
 								break;
 							}
 						}
-						if (curRenderPainter == NULL)
+						if (curRenderDrawablelist == nullptr)
 						{
-							curRenderPipeline->keys.emplace_back();
-							curRenderPainter = &curRenderPipeline->keys.back();
-							curRenderPainter->painter = currentDrawable->mesh.painter;
+							curRenderPainter->drawables.emplace_back();
+							curRenderDrawablelist = &curRenderPainter->drawables.back();
+							curRenderDrawablelist->renderMode = currentDrawable->mesh.renderMode;
 						}
-
-						curRenderPainter->vertices.emplace_back(currentDrawable->mesh.vertices);
-						curRenderPainter->properties.emplace_back(_properties.get(currentDrawable->mesh.properties.getId()));
+						// We find the good render mode
+						curRenderDrawablelist->vertices.emplace_back(currentDrawable->mesh.vertices);
+						curRenderDrawablelist->properties.emplace_back(_properties.get(currentDrawable->mesh.properties.getId()));
 
 					}
 					break;
@@ -456,7 +467,7 @@ namespace AGE
 					}
 					break;
 					default:
-						assert(!"Type cannot be added to the ");
+						assert(!"Type cannot be added to the render queue.");
 						break;
 					}
 				}

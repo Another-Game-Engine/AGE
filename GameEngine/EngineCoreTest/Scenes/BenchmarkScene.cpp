@@ -32,7 +32,6 @@
 # include <Render/ProgramResources/Types/UniformBlock.hh>
 # include <Render/ProgramResources/Types/Attribute.hh>
 # include <Render/GeometryManagement/Painting/Painter.hh>
-# include <Render/Pipelining/Render/RenderingPass.hh>
 # include <Render/Pipelining/Pipelines/IRenderingPipeline.hh>
 # include <Render/GeometryManagement/Painting/PaintingManager.hh>
 
@@ -150,6 +149,7 @@ namespace AGE
 			MeshRenderer *mesh;
 			mesh = e.addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("cube/cube.sage")
 				, getInstance<AGE::AssetsManager>()->getMaterial(OldFile("cube/cube.mage")));
+			mesh->enableMode(RenderModes::AGE_OPAQUE);
 			auto rigidBody = e.addComponent<RigidBody>(1.0f);
 			rigidBody->setCollisionShape(RigidBody::BOX);
 			rigidBody->getBody().setFriction(0.5f);
@@ -188,6 +188,8 @@ namespace AGE
 					e.addComponent<PointLightComponent>()->set(glm::vec3((float)(rand() % 1000) / 1000.0f, (float)(rand() % 1000) / 1000.0f, (float)(rand() % 1000) / 1000.0f), glm::vec3(1.f, 0.1f, 0.005f));
 				}
 
+				mesh->enableMode(RenderModes::AGE_OPAQUE);
+
 				auto rigidBody = e.addComponent<RigidBody>(1.0f);
 				if (i % 4 == 0)
 					rigidBody->setCollisionShape(RigidBody::SPHERE);
@@ -207,20 +209,8 @@ namespace AGE
 
 		auto camComponent = GLOBAL_CAMERA.getComponent<CameraComponent>();
 		static bool cameraPipelines[2] = {false, false};
-		cameraPipelines[RenderType::BASIC] = camComponent->havePipeline(RenderType::BASIC);
 		cameraPipelines[RenderType::DEFERRED] = camComponent->havePipeline(RenderType::DEFERRED);
 
-		if (ImGui::Checkbox("Basic rendering", &cameraPipelines[RenderType::BASIC]))
-		{
-			if (cameraPipelines[RenderType::BASIC])
-			{
-				camComponent->addPipeline(RenderType::BASIC);
-			}
-			else
-			{
-				camComponent->removePipeline(RenderType::BASIC);
-			}
-		}
 		if (ImGui::Checkbox("Deferred rendering", &cameraPipelines[RenderType::DEFERRED]))
 		{
 			if (cameraPipelines[RenderType::DEFERRED])

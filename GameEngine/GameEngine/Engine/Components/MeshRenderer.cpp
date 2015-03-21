@@ -71,6 +71,26 @@ namespace AGE
 		return true;
 	}
 
+	void MeshRenderer::enableMode(RenderModes mode)
+	{
+		assert(_mesh != nullptr);
+		for (auto &subMesh : _mesh->subMeshs)
+		{
+			subMesh.renderMode[mode] = true;
+		}
+		_updateGeometry();
+	}
+
+	void MeshRenderer::disableMode(RenderModes mode)
+	{
+		assert(_mesh != nullptr);
+		for (auto &subMesh : _mesh->subMeshs)
+		{
+			subMesh.renderMode[mode] = false;
+		}
+		_updateGeometry();
+	}
+
 	std::shared_ptr<AGE::MeshInstance> MeshRenderer::getMesh()
 	{
 		return _mesh;

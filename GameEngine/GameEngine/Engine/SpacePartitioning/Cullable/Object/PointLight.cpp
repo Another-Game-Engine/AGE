@@ -20,6 +20,7 @@ namespace AGE
 
 	void PointLight::computeSphereTransform()
 	{
+		float errorRate = 0.01f;
 		glm::vec3 lightRange;
 		glm::vec3 equation(attenuation.z, attenuation.y, attenuation.x);
 
@@ -39,7 +40,7 @@ namespace AGE
 			lightRange = glm::vec3(glm::max(res.x, res.y));
 		}
 		assert(lightRange.x > 0);
-		sphereTransform = glm::scale(transformation, lightRange);
+		sphereTransform = glm::scale(transformation, lightRange + lightRange * errorRate);
 	}
 
 }
