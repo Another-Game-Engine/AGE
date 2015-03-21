@@ -34,26 +34,14 @@ namespace AGE
 
 		virtual ~BenchmarkScene(void);
 		void initRendering();
-		virtual bool userStart();
-		virtual bool userUpdateBegin(float time);
-		virtual bool userUpdateEnd(float time);
+		virtual bool _userStart();
+		virtual bool _userUpdateBegin(float time);
+		virtual bool _userUpdateEnd(float time);
 
 	private:
-
-		std::size_t _frameCounter = 0;
-		float _timeCounter = 0.0;
-		float _maxTime = 10000000005.0f;
 		float _chunkCounter = 0.0;
 		float _maxChunk = 0.25f;
 		std::size_t _chunkFrame = 0;
-		std::ofstream _logFile;
 		AGE::Entity GLOBAL_CAMERA;
-		AGE::Entity GLOBAL_CATWOMAN;
-		std::array<AGE::Entity, 3> GLOBAL_LIGHTS;
-		AGE::Entity GLOBAL_SPONZA;
-		AGE::Entity GLOBAL_FLOOR;
-		AGE::Entity GLOBAL_HEAD;
-		static bool initRenderingJustOneTime;
-		std::list<std::future<bool>> assetLoadingList;
 	};
 }

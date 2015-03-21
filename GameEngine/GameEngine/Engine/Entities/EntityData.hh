@@ -16,6 +16,7 @@ namespace AGE
 	class EntityData
 	{
 	public:
+		EntityData(AScene *scene);
 		const Entity &getEntity() const;
 		Entity &getEntity();
 		const AGE::Link &getLink() const;

@@ -97,40 +97,30 @@ namespace AGE
 		
 		if (_serializationInfos)
 		{
-			if (!_serializationInfos->mesh.empty())
+			_mesh = scene->getInstance<AGE::AssetsManager>()->getMesh(_serializationInfos->mesh);
+			if (!_serializationInfos->mesh.empty() && !_mesh)
 			{
+				scene->getInstance<AGE::AssetsManager>()->pushNewCallback(_serializationInfos->mesh,
+					std::function<void()>([=](){
+					_mesh = scene->getInstance<AGE::AssetsManager>()->getMesh(_serializationInfos->mesh);
+					setMeshAndMaterial(_mesh, _material);
+				}));
 				scene->getInstance<AGE::AssetsManager>()->loadMesh(_serializationInfos->mesh
-				, "WE_MESH_LOADING");
-
-				std::size_t totalToLoad = 0;
-				std::size_t	toLoad = 0;
-				std::string loadingError;
-				do {
-					scene->getInstance<AGE::AssetsManager>()->updateLoadingChannel("WE_MESH_LOADING", totalToLoad, toLoad, loadingError);
-				} while
-					(toLoad > 0 && loadingError.size() == 0);
-
-				_mesh = scene->getInstance<AGE::AssetsManager>()->getMesh(_serializationInfos->mesh);
+					, _serializationInfos->mesh);
 			}
-			if (!_serializationInfos->material.empty())
+
+			_material = scene->getInstance<AGE::AssetsManager>()->getMaterial(_serializationInfos->material);
+			if (!_serializationInfos->material.empty() && !_material)
 			{
-				scene->getInstance<AGE::AssetsManager>()->loadMaterial(_serializationInfos->material
-				, "WE_MESH_LOADING");
-
-				std::size_t totalToLoad = 0;
-				std::size_t	toLoad = 0;
-				std::string loadingError;
-				do {
-					scene->getInstance<AGE::AssetsManager>()->updateLoadingChannel("WE_MESH_LOADING", totalToLoad, toLoad, loadingError);
-				} while
-					(toLoad != 0 && loadingError.size() == 0);
-
-				_material = scene->getInstance<AGE::AssetsManager>()->getMaterial(_serializationInfos->material);
+				scene->getInstance<AGE::AssetsManager>()->pushNewCallback(_serializationInfos->material,
+					std::function<void()>([=](){
+					_material = scene->getInstance<AGE::AssetsManager>()->getMaterial(_serializationInfos->material);
+					setMeshAndMaterial(_mesh, _material);
+				}));
+				scene->getInstance<AGE::AssetsManager>()->loadMaterial(_serializationInfos->material, _serializationInfos->material);
 			}
-			if (_mesh && _material)
-			{
-				setMeshAndMaterial(_mesh, _material);
-			}
+
+			setMeshAndMaterial(_mesh, _material);
 #ifdef EDITOR_ENABLED
 			selectedMaterialPath = _serializationInfos->material;
 			selectedMeshPath = _serializationInfos->mesh;
@@ -184,21 +174,22 @@ namespace AGE
 
 			if (!_mesh)
 			{
+				scene->getInstance<AGE::AssetsManager>()->pushNewCallback(selectedMeshPath,
+					std::function<void()>([=](){
+					_mesh = scene->getInstance<AGE::AssetsManager>()->getMesh(selectedMeshPath);
+					if (_mesh && _material)
+					{
+						setMeshAndMaterial(_mesh, _material);
+					}
+				}));
 				scene->getInstance<AGE::AssetsManager>()->loadMesh(OldFile(selectedMeshPath), selectedMeshPath);
-
-				std::size_t totalToLoad = 0;
-				std::size_t	toLoad = 0;
-				std::string loadingError;
-				do {
-					scene->getInstance<AGE::AssetsManager>()->updateLoadingChannel(selectedMeshPath, totalToLoad, toLoad, loadingError);
-				} while
-					(toLoad != 0 && loadingError.size() == 0);
 			}
-			_mesh = scene->getInstance<AGE::AssetsManager>()->getMesh(selectedMeshPath);
-			AGE_ASSERT(_mesh != nullptr);
-			if (_material)
+			else
 			{
-				setMeshAndMaterial(_mesh, _material);
+				if (_mesh && _material)
+				{
+					setMeshAndMaterial(_mesh, _material);
+				}
 			}
 		}
 		ImGui::PopItemWidth();
@@ -212,21 +203,22 @@ namespace AGE
 
 			if (!_material)
 			{
+				scene->getInstance<AGE::AssetsManager>()->pushNewCallback(selectedMaterialPath,
+					std::function<void()>([=](){
+					_material = scene->getInstance<AGE::AssetsManager>()->getMaterial(selectedMaterialPath);
+					if (_mesh && _material)
+					{
+						setMeshAndMaterial(_mesh, _material);
+					}
+				}));
 				scene->getInstance<AGE::AssetsManager>()->loadMaterial(OldFile(selectedMaterialPath), selectedMaterialPath);
-
-				std::size_t totalToLoad = 0;
-				std::size_t	toLoad = 0;
-				std::string loadingError;
-				do {
-					scene->getInstance<AGE::AssetsManager>()->updateLoadingChannel(selectedMaterialPath, totalToLoad, toLoad, loadingError);
-				} while
-					(toLoad != 0 && loadingError.size() == 0);
 			}
-			_material = scene->getInstance<AGE::AssetsManager>()->getMaterial(selectedMaterialPath);
-			AGE_ASSERT(_material != nullptr);
-			if (_mesh)
+			else
 			{
-				setMeshAndMaterial(_mesh, _material);
+				if (_mesh && _material)
+				{
+					setMeshAndMaterial(_mesh, _material);
+				}
 			}
 		}
 		//ImGui::ListBoxFooter();

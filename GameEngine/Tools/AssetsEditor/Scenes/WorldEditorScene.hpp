@@ -14,8 +14,8 @@ namespace AGE
 		WorldEditorScene(Engine *engine);
 
 		virtual ~WorldEditorScene(void);
-		virtual bool userStart();
-		virtual bool userUpdateBegin(float time);
-		virtual bool userUpdateEnd(float time);
+		virtual bool _userStart();
+		virtual bool _userUpdateBegin(float time);
+		virtual bool _userUpdateEnd(float time);
 	};
 }

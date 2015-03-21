@@ -28,6 +28,7 @@ namespace AGE
 			: _world(nullptr)
 			, _dispatcher(nullptr)
 			, _broadphase(nullptr)
+			, _assetsDirectory("./")
 		{}
 
 		virtual bool init(bool init = true)
@@ -104,12 +105,15 @@ namespace AGE
 
 		std::shared_ptr<btCollisionShape> loadShape(const std::string &path);
 
+		void setAssetsDirectory(const std::string &path) { _assetsDirectory = path; }
+
 	protected:
 		std::shared_ptr<btCollisionWorld> _world;
 		btCollisionDispatcher *_dispatcher;
 		btBroadphaseInterface *_broadphase;
 		btCollisionConfiguration *_collisionConfiguration;
 		std::map<std::string, std::shared_ptr<btCollisionShape>> _collisionShapes;
+		std::string _assetsDirectory;
 	};
 }
 

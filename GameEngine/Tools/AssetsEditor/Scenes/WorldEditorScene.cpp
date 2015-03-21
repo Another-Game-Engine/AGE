@@ -17,6 +17,9 @@
 #include <Components/FreeFlyComponent.hh>
 #include <Systems/FreeFlyCamera.hh>
 #include <Systems/BulletDynamicSystem.hpp>
+#include <Components/EntityRepresentation.hpp>
+
+#include <EditorConfiguration.hpp>
 
 namespace AGE
 {
@@ -31,36 +34,28 @@ namespace AGE
 	{
 	}
 
-	bool WorldEditorScene::userStart()
+	bool WorldEditorScene::_userStart()
 	{
+		WE::EditorConfiguration::RefreshScenesDirectoryListing();
 		setInstance<AGE::BulletDynamicManager, AGE::BulletCollisionManager>()->init();
-		setInstance<AssetsManager>();
-		getInstance<AGE::AssetsManager>()->setAssetsDirectory("../../Assets/Serialized/");
+		getInstance<AGE::AssetsManager>()->setAssetsDirectory(WE::EditorConfiguration::GetCookedDirectory());
+		getInstance<AGE::BulletCollisionManager>()->setAssetsDirectory(WE::EditorConfiguration::GetCookedDirectory());
 
 		addSystem<WE::AssetsAndComponentRelationsSystem>(0);
 		addSystem<WE::EntityManager>(1);
 		addSystem<FreeFlyCamera>(2);
-		addSystem<BulletDynamicSystem>(3);
-		// Add entity used by editor (camera etc here)
-
-		auto camera = createEntity();
-		auto cam = camera.addComponent<CameraComponent>();
-		camera.getLink().setPosition(glm::vec3(0, 3, 5));
-		camera.getLink().setForward(glm::vec3(0, 0, 0));
-		cam->addPipeline(RenderType::BASIC);
-		camera.addComponent<FreeFlyComponent>();
-
+		//addSystem<BulletDynamicSystem>(3);
 
 		return true;
 	}
 
-	bool WorldEditorScene::userUpdateBegin(float time)
+	bool WorldEditorScene::_userUpdateBegin(float time)
 	{
-		ImGui::BeginChild("Assets browser", ImVec2(0, 0), true);
+		ImGui::BeginChild("World editor", ImVec2(0, 0), true);
 		return true;
 	}
 
-	bool WorldEditorScene::userUpdateEnd(float time)
+	bool WorldEditorScene::_userUpdateEnd(float time)
 	{
 		ImGui::EndChild();
 		ImGui::End();

@@ -3,6 +3,12 @@
 
 namespace AGE
 {
+	EntityData::EntityData(AScene *_scene)
+		: link(this, _scene)
+		, scene(_scene)
+	{
+	}
+
 	const Entity &EntityData::getEntity() const { return entity; }
 	Entity &EntityData::getEntity() { return entity; }
 	const AGE::Link &EntityData::getLink() const { return link; }

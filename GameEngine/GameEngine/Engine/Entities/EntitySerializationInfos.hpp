@@ -8,6 +8,7 @@ namespace AGE
 {
 	struct EntitySerializationInfos
 	{
+		std::vector <std::size_t> children;
 		std::vector <ComponentBase*> components;
 		std::vector <ComponentType> componentTypes;
 		Entity &entity;
@@ -24,6 +25,7 @@ namespace AGE
 			AGE::Link link = entity.getLink();
 			ENTITY_FLAGS flags = entity.getFlags();
 			ar(cereal::make_nvp("link", link)
+				, cereal::make_nvp("children", children)
 				, cereal::make_nvp("flags", flags)
 				, cereal::make_nvp("components_number", componentTypes)
 				);
@@ -43,6 +45,7 @@ namespace AGE
 			assert(typesMap != nullptr);
 			ar(
 				l
+				, children
 				, f
 				, componentTypes);
 			entity.getLink().setPosition(l.getPosition());

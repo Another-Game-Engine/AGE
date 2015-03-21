@@ -44,10 +44,14 @@
 #include <Components/SpotLight.hh>
 #include <Components/FreeFlyComponent.hh>
 
+#include <RotationComponent.hpp>
+#include <Lifetime.hpp>
+
 int			main(int ac, char **av)
 {
 	AGE::InitAGE();
 	auto engine = AGE::CreateEngine();
+	engine->displayFps(false);
 
 	engine->launch(std::function<bool()>([&]()
 	{
@@ -60,17 +64,14 @@ int			main(int ac, char **av)
 			return true;
 		}).get();
 
-#ifdef RENDERING_ACTIVATED
-		if (!loadAssets(engine))
-			return false;
-#endif
-
 		REGISTER_COMPONENT_TYPE(AGE::MeshRenderer);
 		REGISTER_COMPONENT_TYPE(AGE::RigidBody);
 		REGISTER_COMPONENT_TYPE(AGE::PointLightComponent);
 		REGISTER_COMPONENT_TYPE(AGE::CameraComponent);
 		REGISTER_COMPONENT_TYPE(AGE::WE::EntityRepresentation);
 		REGISTER_COMPONENT_TYPE(AGE::FreeFlyComponent);
+		REGISTER_COMPONENT_TYPE(AGE::Lifetime);
+		REGISTER_COMPONENT_TYPE(AGE::RotationComponent);
 
 		engine->addScene(std::make_shared<AGE::AssetsEditorScene>(engine), AGE::AssetsEditorScene::Name);
 		engine->addScene(std::make_shared<AGE::SceneSelectorScene>(engine), AGE::SceneSelectorScene::Name);

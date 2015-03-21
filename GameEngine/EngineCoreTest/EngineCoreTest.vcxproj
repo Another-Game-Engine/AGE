@@ -43,12 +43,14 @@
     <IntDir>$(Platform)\$(Configuration)\</IntDir>
     <IncludePath>$(SolutionDir)Vendors/OpenGL/include;$(SolutionDir)GameEngine/Engine;$(SolutionDir)GameEngine;$(ProjectDir);$(SolutionDir)Vendors;$(SolutionDir)Vendors/TinyObjLoader;$(IncludePath);$(SolutionDir)Vendors/boost_1_55_0;$(SolutionDir)Vendors\bullet\src;$(SolutionDir)Vendors\fmod\inc</IncludePath>
     <LibraryPath>$(SolutionDir)Vendors/OpenGL/lib/x64;$(SolutionDir)Vendors\fmod\lib;$(SolutionDir)Vendors/bullet\lib\x64Debug;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
+    <SourcePath>$(SolutionDir)/ResourcesForTests;</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(Platform)\$(Configuration)\</IntDir>
     <LibraryPath>$(SolutionDir)Vendors/OpenGL/lib/x64;$(SolutionDir)Vendors\fmod\lib;$(SolutionDir)Vendors/bullet\lib\x64Release;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(LibraryPath)</LibraryPath>
     <IncludePath>$(SolutionDir)Vendors/OpenGL/include;$(SolutionDir)GameEngine/Engine;$(SolutionDir)GameEngine;$(ProjectDir);$(SolutionDir)Vendors;$(SolutionDir)Vendors/TinyObjLoader;$(IncludePath);$(SolutionDir)Vendors/boost_1_55_0;$(SolutionDir)Vendors\bullet\src;$(SolutionDir)Vendors\fmod\inc</IncludePath>
+    <SourcePath>$(SolutionDir)/ResourcesForTests;</SourcePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -91,9 +93,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Components\Lifetime.cpp" />
+    <ClCompile Include="Components\RotationComponent.cpp" />
+    <ClCompile Include="EngineCoreTestConfiguration.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Scenes\BenchmarkScene.cpp" />
     <ClCompile Include="Systems\LifetimeSystem.cpp" />
+    <ClCompile Include="Systems\RotationSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GameEngine\GameEngine.vcxproj">
@@ -101,10 +107,14 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Components\Lifetime.hpp" />
     <ClInclude Include="Components\lifetimeComponent.hh" />
+    <ClInclude Include="Components\RotationComponent.hpp" />
     <ClInclude Include="CONFIGS.hh" />
+    <ClInclude Include="EngineCoreTestConfiguration.hpp" />
     <ClInclude Include="Scenes\BenchmarkScene.hpp" />
     <ClInclude Include="Systems\LifetimeSystem.hpp" />
+    <ClInclude Include="Systems\RotationSystem.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

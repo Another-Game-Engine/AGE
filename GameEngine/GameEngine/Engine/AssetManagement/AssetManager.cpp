@@ -24,6 +24,13 @@
 #include <Render/Properties/Materials/Diffuse.hh>
 #include <Render/Properties/Materials/MapColor.hh>
 #include <Render/Properties/Materials/Specular.hh>
+
+#include <Configuration.hpp>
+
+#ifdef USE_IMGUI
+#include <imgui/imgui.h>
+#endif
+
 namespace AGE
 {
 	AssetsManager::AssetsManager()
@@ -375,45 +382,66 @@ namespace AGE
 			if (_loadingChannels.find(loadingChannel) == std::end(_loadingChannels))
 			{
 				_loadingChannels.insert(std::make_pair(loadingChannel, std::make_shared<AssetsManager::AssetsLoadingChannel>()));
-				_loadingChannels[loadingChannel]->_lastUpdate = std::chrono::high_resolution_clock::now();
 			}
 			channel = _loadingChannels[loadingChannel];
 		}
 		channel->pushNewAsset(filename, future);
 	}
 
-	bool AssetsManager::AssetsLoadingChannel::updateList(std::size_t &noLoaded, std::size_t &total)
+	void AssetsManager::pushNewCallback(const std::string &loadingChannel, std::function<void()> &callback)
 	{
-		if (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - _lastUpdate).count() > 33)
+		std::shared_ptr<AssetsManager::AssetsLoadingChannel> channel = nullptr;
 		{
-			_lastUpdate = std::chrono::high_resolution_clock::now();
-			std::size_t i = 0;
 			std::lock_guard<std::mutex> lock(_mutex);
-			_list.remove_if([&](AssetsManager::AssetsLoadingStatus &e){
-				if (i > 30)
-					return false;
-				++i;
-				if (!e.future.valid())
-				{
-					_errorMessages += "ERROR : Future is invalid !\n";
-					return true;
-				}
-				auto status = e.future.wait_for(std::chrono::microseconds(10));
-				if (status == std::future_status::ready)
-				{
-					e.result = e.future.get();
-					if (e.result.error)
-					{
-						_errorMessages += e.result.errorMessage;
-					}
-					return true;
-				}
-				return false;
-			});
+			if (_loadingChannels.find(loadingChannel) == std::end(_loadingChannels))
+			{
+				_loadingChannels.insert(std::make_pair(loadingChannel, std::make_shared<AssetsManager::AssetsLoadingChannel>()));
+			}
+			channel = _loadingChannels[loadingChannel];
 		}
-		noLoaded = _list.size();
-		total = _maxAssets;
+		channel->pushNewCallback(callback);
+	}
+
+	bool AssetsManager::AssetsLoadingChannel::updateList(int &noLoaded, int &total)
+	{
+		std::lock_guard<std::mutex> lock(_mutex);
+		std::size_t i = 0;
+		_list.remove_if([&](AssetsManager::AssetsLoadingStatus &e){
+			if (i > 30)
+				return false;
+			++i;
+			if (!e.future.valid())
+			{
+				_errorMessages += "ERROR : Future is invalid !\n";
+				return true;
+			}
+			auto status = e.future.wait_for(std::chrono::microseconds(10));
+			if (status == std::future_status::ready)
+			{
+				e.result = e.future.get();
+				if (e.result.error)
+				{
+					_errorMessages += e.result.errorMessage;
+				}
+				return true;
+			}
+			return false;
+		});
+		noLoaded = (int)_list.size();
+		total = (int)_maxAssets;
 		return _errorMessages.empty();
+	}
+
+	void AssetsManager::AssetsLoadingChannel::callCallbacks()
+	{
+		for (auto &e : _callbacks)
+		{
+			if (e)
+			{
+				e();
+			}
+		}
+		_callbacks.clear();
 	}
 
 	void AssetsManager::AssetsLoadingChannel::pushNewAsset(const std::string &filename, std::future<AssetsLoadingResult> &future)
@@ -424,20 +452,110 @@ namespace AGE
 			_maxAssets = _list.size();
 	}
 
-	void AssetsManager::updateLoadingChannel(const std::string &channelName, std::size_t &total, std::size_t &to_load, std::string &error)
+	void AssetsManager::AssetsLoadingChannel::pushNewCallback(std::function<void()> &callback)
 	{
+		std::lock_guard<std::mutex> lock(_mutex);
+		_callbacks.push_back(callback);
+	}
+
+	// has to be called only once per frame
+	void AssetsManager::update()
+	{
+		std::vector<std::string> toErase;
+		int total = 0;
+		int toLoad = 0;
 		std::shared_ptr<AssetsManager::AssetsLoadingChannel> channel = nullptr;
 		{
 			std::lock_guard<std::mutex> lock(_mutex);
-			if (_loadingChannels.find(channelName) == std::end(_loadingChannels))
+			auto it = std::begin(_loadingChannels);
+			while (it != std::end(_loadingChannels))
 			{
-				total = -1;
-				to_load = -1;
-				return;
+				channel = it->second;
+				int channelToLoad = 0;
+				int channelTotal = 0;
+				auto success = channel->updateList(channelToLoad, channelTotal);
+				if (!success)
+				{
+					AGE_ERROR(channel->getErrorMessages());
+				}
+				if (channelToLoad == 0)
+				{
+					toErase.push_back(it->first);
+				}
+				++it;
+				total += channelTotal;
+				toLoad += channelToLoad;
 			}
-			channel = _loadingChannels[channelName];
 		}
-		if (!channel->updateList(to_load, total))
-			error = channel->getErrorMessages();
+
+		for (auto &e : toErase)
+		{
+			_loadingChannels[e]->callCallbacks();
+			_loadingChannels.erase(e);
+		}
+
+		if (toLoad != 0)
+		{
+#ifdef USE_IMGUI
+			if (!ImGui::Begin("ASSETS LOADING", (bool*)1, ImVec2(0, 0), 0.3f, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings))
+			{
+				ImGui::End();
+			}
+			else
+			{
+				ImGui::SetWindowPos(ImVec2(30, 30));
+				ImGui::Text("Assets loading : %s / %s", std::to_string(toLoad).c_str(), std::to_string(total).c_str());
+				ImGui::End();
+			}
+#endif
+			_isLoading = true;
+		}
+		else
+		{
+			_isLoading = false;
+		}
+	}
+
+	bool AssetsManager::isLoading()
+	{
+		return _isLoading;
+	}
+
+	void AssetsManager::loadPackage(const OldFile &packagePath, const std::string &loadingChannel /*= ""*/)
+	{
+		if (!packagePath.exists())
+		{
+			return;
+		}
+		std::ifstream file(std::string(packagePath.getFullName()), std::ios::binary);
+		AGE_ASSERT(file.is_open());
+		{
+			AssetsPackage package;
+			auto ar = cereal::JSONInputArchive(file);
+			ar(package);
+			loadPackage(package, loadingChannel);
+		}
+	}
+
+	void AssetsManager::loadPackage(const AssetsPackage &package, const std::string &loadingChannel /*= ""*/)
+	{
+		for (auto &e : package.meshs)
+		{
+			loadMesh(OldFile(e), loadingChannel);
+		}
+		for (auto &e : package.materials)
+		{
+			loadMaterial(OldFile(e), loadingChannel);
+		}
+	}
+
+	void AssetsManager::savePackage(const AssetsPackage &package, const std::string filePath)
+	{
+		std::ofstream file(filePath, std::ios::binary);
+		AGE_ASSERT(file.is_open());
+		{
+			auto ar = cereal::JSONOutputArchive(file);
+			ar(package);
+		}
 	}
 }

@@ -4,18 +4,18 @@
 
 namespace AGE
 {
-	std::shared_ptr<btCollisionShape> BulletCollisionManager::loadShape(const std::string &path)
+	std::shared_ptr<btCollisionShape> BulletCollisionManager::loadShape(const std::string &_path)
 	{
-		OldFile filePath(path);
+		OldFile filePath(_assetsDirectory + _path);
 		if (!filePath.exists())
 		{
 			std::cerr << "Bullet file not found" << std::endl;
 			return nullptr;
 		}
-		if (_collisionShapes.find(path) != std::end(_collisionShapes))
-			return _collisionShapes[path];
+		if (_collisionShapes.find(filePath.getFullName()) != std::end(_collisionShapes))
+			return _collisionShapes[filePath.getFullName()];
 		btBulletWorldImporter import(0);
-		auto loadStatus = import.loadFile(path.c_str());
+		auto loadStatus = import.loadFile(filePath.getFullName().c_str());
 		if (loadStatus != true)
 		{
 			std::cerr << "Bullet importer cannot open file." << std::endl;
@@ -29,7 +29,7 @@ namespace AGE
 		}
 		auto o = import.getCollisionShapeByIndex(0);
 		auto shape = std::shared_ptr<btCollisionShape>(static_cast<btCollisionShape*>(o));
-		_collisionShapes.insert(std::make_pair(path, shape));
+		_collisionShapes.insert(std::make_pair(filePath.getFullName(), shape));
 		return shape;
 	}
 }

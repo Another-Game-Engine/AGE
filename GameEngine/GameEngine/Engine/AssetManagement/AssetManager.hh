@@ -14,6 +14,9 @@
 #include <functional>
 #include <string>
 
+#include <cereal/archives/json.hpp>
+#include <cereal/types/unordered_set.hpp>
+
 namespace AGE
 {
 
@@ -42,6 +45,19 @@ static std::pair<std::pair<GLenum, std::string>, std::function<void(Vertices &ve
 
 	class AssetsManager : public Dependency<AssetsManager>
 	{
+	public:
+		// collection of assets
+		struct AssetsPackage
+		{
+			std::unordered_set<std::string> meshs;
+			std::unordered_set<std::string> materials;
+
+			template <typename Archive>
+			void serialize(Archive &ar)
+			{
+				ar(meshs, materials);
+			}
+		};
 	private:
 		struct BitsetComparer {
 			bool operator() (const std::bitset<MeshInfos::END> &b1, const std::bitset<MeshInfos::END> &b2) const
@@ -90,15 +106,17 @@ static std::pair<std::pair<GLenum, std::string>, std::function<void(Vertices &ve
 			std::list<AssetsLoadingStatus> _list;
 			std::string _errorMessages = "";
 			std::size_t _maxAssets = 0;
+			std::vector<std::function<void()>> _callbacks;
 		public:
 			// return false if error
-			bool updateList(std::size_t &noLoaded, std::size_t &total);
+			bool updateList(int &noLoaded, int &total);
 			inline const std::string &getErrorMessages() const { return _errorMessages; }
+			void callCallbacks();
 		private:
 			std::mutex _mutex;
 			void pushNewAsset(const std::string &filename, std::future<AssetsLoadingResult> &future);
+			void pushNewCallback(std::function<void()> &callback);
 			friend class AssetsManager;
-			std::chrono::system_clock::time_point _lastUpdate;
 		};
 
 	public:
@@ -111,6 +129,9 @@ static std::pair<std::pair<GLenum, std::string>, std::function<void(Vertices &ve
 		};
 
 	public:
+		void loadPackage(const OldFile &packagePath, const std::string &loadingChannel = "");
+		void loadPackage(const AssetsPackage &package, const std::string &loadingChannel = "");
+		void savePackage(const AssetsPackage &package, const std::string filePath);
 		bool loadAnimation(const OldFile &filePath, const std::string &loadingChannel = "");
 		std::shared_ptr<AnimationData> getAnimation(const OldFile &filePath);
 		bool loadSkeleton(const OldFile &filePath, const std::string &loadingChannel = "");
@@ -121,8 +142,9 @@ static std::pair<std::pair<GLenum, std::string>, std::function<void(Vertices &ve
 		std::shared_ptr<ITexture> loadTexture(const OldFile &filepath, const std::string &loadingChannel);
 		bool loadMesh(const OldFile &filePath, const std::string &loadingChannel = "");
 		void setAssetsDirectory(const std::string &path) { _assetsDirectory = path; }
-		void updateLoadingChannel(const std::string &channelName, std::size_t &total, std::size_t &to_load, std::string &error);
-
+		void update();
+		bool isLoading();
+		void pushNewCallback(const std::string &loadingChannel, std::function<void()> &callback);
 	private:
 		std::string _assetsDirectory;
 		std::map<std::bitset<MeshInfos::END>, Key<Painter>, BitsetComparer> _painters;
@@ -133,7 +155,7 @@ static std::pair<std::pair<GLenum, std::string>, std::function<void(Vertices &ve
 		std::map<std::string, std::shared_ptr<ITexture>> _textures;
 		std::map<std::string, std::shared_ptr<AssetsLoadingChannel>> _loadingChannels;
 		std::mutex _mutex;
-
+		std::atomic<bool> _isLoading;
 	private:
 		void pushNewAsset(const std::string &loadingChannel, const std::string &filename, std::future<AssetsLoadingResult> &future);
 		void loadSubmesh(std::shared_ptr<MeshData> data, std::size_t index, SubMeshInstance *mesh, const std::string &loadingChannel);

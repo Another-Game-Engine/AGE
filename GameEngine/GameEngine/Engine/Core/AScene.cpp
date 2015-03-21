@@ -19,7 +19,6 @@ namespace AGE
 		, _engine(engine)
 		, _renderScene(nullptr)
 	{
-		ComponentRegistrationManager::getInstance().createComponentPool(this);
 	}
 
 	AScene::~AScene()
@@ -29,18 +28,32 @@ namespace AGE
 
 	void 							AScene::update(float time)
 	{
-		//static double reorderingTime = 0.0f;
 		for (auto &e : _systems)
 		{
 			if (e.second->isActivated())
 				e.second->update(time);
 		}
-		//reorderingTime += time;
-		//if (reorderingTime > 0.4)
-		//{
-		//	reorganizeComponents();
-		//	reorderingTime = 0;
-		//}
+	}
+
+	bool                    AScene::userStart()
+	{
+		auto succes = _userStart();
+		if (!succes)
+		{
+			return false;
+		}
+		ComponentRegistrationManager::getInstance().createComponentPool(this);
+		return true;
+	}
+
+	bool                    AScene::userUpdateBegin(float time)
+	{
+		return _userUpdateBegin(time);
+	}
+
+	bool                    AScene::userUpdateEnd(float time)
+	{
+		return _userUpdateEnd(time);
 	}
 
 	bool                           AScene::start()
@@ -115,7 +128,7 @@ namespace AGE
 
 	Entity &AScene::createEntity()
 	{
-		auto e = _entityPool.create();
+		auto e = _entityPool.create(this);
 
 		if (_freeEntityId.empty())
 		{
@@ -128,16 +141,14 @@ namespace AGE
 			_freeEntityId.pop();
 			e->entity.id = id;
 		}
-		e->link.reset();
-		e->link._renderScene = _renderScene;
+		//e->link._renderScene = _renderScene;
 		e->entity.ptr = e;
-		e->scene = this;
 		informFiltersEntityCreation(*e);
 		_entities.insert(e->entity);
 		return e->entity;
 	}
 
-	void AScene::destroy(const Entity &e)
+	void AScene::destroy(const Entity &e, bool deep /*= false*/)
 	{
 		auto &data = e.ptr;
 		auto find = _entities.find(e);
@@ -161,6 +172,21 @@ namespace AGE
 			//}
 		}
 		informFiltersEntityDeletion(*data);
+
+		auto children = e.getLink().getChildren();
+		for (auto &c : children)
+		{
+			if (deep)
+			{
+				destroy(c->getEntity()->getEntity(), deep);
+			}
+			else
+			{
+				c->detachParent();
+			}
+		}
+		data->getLink().detachParent();
+
 		_entityPool.destroy(e.ptr);
 	}
 
@@ -176,35 +202,7 @@ namespace AGE
 
 	void AScene::saveToJson(const std::string &fileName)
 	{
-		std::ofstream file(fileName, std::ios::binary);
-		assert(file.is_open());
-
-		{
-			auto ar = cereal::JSONOutputArchive(file);
-
-			std::size_t entityNbr = getNumberOfEntities();
-
-			ar(cereal::make_nvp("Number_of_serialized_entities", entityNbr));
-
-			auto &typesMap = ComponentRegistrationManager::getInstance().getAgeIdToSystemIdMap();
-			ar(cereal::make_nvp("Component type map", typesMap));
-
-			std::vector<EntitySerializationInfos> entities;
-			for (auto &e : _entities)
-			{
-				EntitySerializationInfos es(e.ptr);
-				for (auto &c : e.ptr->components)
-				{
-					if (c)
-					{
-						es.componentTypes.push_back(c->getType());
-						es.components.push_back(c);
-					}
-				}
-				ar(cereal::make_nvp("Entity_" + std::to_string(e.ptr->getEntity().getId()), es));
-			}
-		}
-		file.close();
+		saveSelectionToJson<std::unordered_set<Entity>>(fileName, _entities);
 	}
 
 	void AScene::loadFromJson(const std::string &fileName)
@@ -221,13 +219,25 @@ namespace AGE
 			std::map<ComponentType, std::size_t> typesMap;
 			ar(typesMap);
 
+			std::vector<EntitySerializationInfos> list;
+
 			for (std::size_t i = 0; i < entityNbr; ++i)
 			{
 				auto entity = createEntity();
-				EntitySerializationInfos es(entity.ptr);
+				list.push_back(entity.ptr);
+				auto &es = list.back();
 				es.typesMap = &typesMap;
 				ar(es);
 			}
+
+			for (auto &e : list)
+			{
+				for (auto &c : e.children)
+				{
+					e.entity.getLink().attachChild(list[c].entity.getLinkPtr());
+				}
+			}
+
 		}
 		file.close();
 	}

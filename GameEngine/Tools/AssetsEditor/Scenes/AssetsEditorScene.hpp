@@ -20,9 +20,9 @@ namespace AGE
 		AssetsEditorScene(AGE::Engine *engine);
 
 		virtual ~AssetsEditorScene(void);
-		virtual bool userStart();
-		virtual bool userUpdateBegin(float time);
-		virtual bool userUpdateEnd(float time);
+		virtual bool _userStart();
+		virtual bool _userUpdateBegin(float time);
+		virtual bool _userUpdateEnd(float time);
 
 		static AE::Folder &getRawList() { return _raw; }
 		static AE::Folder &getCookedList() { return _cook; }

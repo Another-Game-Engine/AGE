@@ -35,6 +35,7 @@ namespace AGE
 		std::size_t getFrameNumber(void) const;
 		inline float getTimeMultiplier() const { return _timeMultiplier; }
 		inline void setTimeMultiplier(float multiplier) { if (multiplier < 0.0f) return; _timeMultiplier = multiplier; }
+		inline void displayFps(bool tof) { _displayFps = tof; }
 	private:
 		friend class Singleton < Engine > ;
 
@@ -63,6 +64,7 @@ namespace AGE
 		std::string cachePath;
 		std::size_t frame = 0;
 		float _timeMultiplier = 1.0f;
+		bool _displayFps = true;
 	};
 
 	Engine *CreateEngine();

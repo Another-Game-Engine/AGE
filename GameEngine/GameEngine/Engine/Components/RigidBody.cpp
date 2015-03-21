@@ -4,6 +4,7 @@
 #include <Physic/DynamicMotionState.hpp>
 #ifdef EDITOR_ENABLED
 #include <imgui/imgui.h>
+#include <glm/gtc/type_ptr.hpp>
 #endif
 
 namespace AGE
@@ -16,8 +17,8 @@ namespace AGE
 		_manager(nullptr),
 		_mass(0.0f),
 		_inertia(btVector3(0.0f, 0.0f, 0.0f)),
-		_rotationConstraint(glm::vec3(1, 1, 1)),
-		_transformConstraint(glm::vec3(1, 1, 1)),
+		_rotationConstraint(glm::uvec3(1, 1, 1)),
+		_transformConstraint(glm::uvec3(1, 1, 1)),
 		_shapeType(UndefinedTypeId),
 		_shapePath(""),
 		_collisionShapeType(UNDEFINED)
@@ -38,13 +39,15 @@ namespace AGE
 
 		_shapeType = UNDEFINED;
 		_mass = 0.0f;
-		_rotationConstraint = glm::vec3(1, 1, 1);
-		_transformConstraint = glm::vec3(1, 1, 1);
+		_rotationConstraint = glm::uvec3(1, 1, 1);
+		_transformConstraint = glm::uvec3(1, 1, 1);
 		_inertia.setValue(0, 0, 0);
 	}
 
 	void RigidBody::setTransformation(const AGE::Link *link)
 	{
+		if (_shapeType == UNDEFINED || !_rigidBody)
+			return;
 		btTransform tt = _rigidBody->getCenterOfMassTransform();
 		tt.setOrigin(convertGLMVectorToBullet(link->getPosition()));
 		glm::quat rot = link->getOrientation();
@@ -73,6 +76,11 @@ namespace AGE
 
 	void RigidBody::setMass(float mass)
 	{
+		if (_rigidBody)
+		{
+			_rigidBody->setMassProps(mass, _inertia);
+			_rigidBody->activate(true);
+		}
 		_mass = btScalar(mass);
 	}
 
@@ -84,6 +92,10 @@ namespace AGE
 	void RigidBody::setInertia(const glm::vec3 &inertia)
 	{
 		_inertia = convertGLMVectorToBullet(inertia);
+		if (_rigidBody)
+		{
+			_rigidBody->setMassProps(_mass, _inertia);
+		}
 	}
 
 	void RigidBody::setCollisionMesh(
@@ -155,7 +167,7 @@ namespace AGE
 		}
 		else if (c == SPHERE)
 		{
-			_collisionShape = _manager->getObjectPool().create<btSphereShape>(btSphereShape(1));
+			_collisionShape = _manager->getObjectPool().create<btSphereShape>(btSphereShape(0.5));
 			_shapeType = TypeID::Get<btSphereShape>();
 		}
 		else
@@ -180,7 +192,7 @@ namespace AGE
 
 	void RigidBody::setRotationConstraint(bool x, bool y, bool z)
 	{
-		_rotationConstraint = glm::vec3(static_cast<unsigned int>(x),
+		_rotationConstraint = glm::uvec3(static_cast<unsigned int>(x),
 			static_cast<unsigned int>(y),
 			static_cast<unsigned int>(z));
 		if (!_rigidBody)
@@ -221,7 +233,7 @@ namespace AGE
 
 	void RigidBody::setTransformConstraint(bool x, bool y, bool z)
 	{
-		_transformConstraint = glm::vec3(static_cast<unsigned int>(x),
+		_transformConstraint = glm::uvec3(static_cast<unsigned int>(x),
 			static_cast<unsigned int>(y),
 			static_cast<unsigned int>(z));
 		if (!_rigidBody)
@@ -236,17 +248,90 @@ namespace AGE
 	void RigidBody::postUnserialization()
 	{
 		_manager = dynamic_cast<BulletDynamicManager*>(entity.getScene()->getInstance<BulletCollisionManager>());
+#ifdef EDITOR_ENABLED
+		if (WESerialization::SerializeForEditor())
+		{
+			if (_collisionShapeType != UNDEFINED)
+			{
+				setCollisionShape((CollisionShape)_collisionShapeType);
+			}
+			else if (!selectedShapePath.empty())
+			{
+				setCollisionMesh(selectedShapePath);
+			}
+		}
+		else		
+		{
+			if (_collisionShapeType != UNDEFINED)
+			{
+				setCollisionShape((CollisionShape)_collisionShapeType);
+			}
+			else if (!_shapePath.empty())
+			{
+				setCollisionMesh(_shapePath);
+			}
+		}
+#else
+		if (_collisionShapeType != UNDEFINED)
+		{
+			setCollisionShape((CollisionShape)_collisionShapeType);
+		}
+		else if (!_shapePath.empty())
+		{
+			setCollisionMesh(_shapePath);
+		}
+#endif
+
 	}
 
 #ifdef EDITOR_ENABLED
 	void RigidBody::editorCreate(AScene *scene)
-	{}
+	{
+		setMass(0.0f);
+	}
 
 	void RigidBody::editorDelete(AScene *scene)
 	{}
 
 	void RigidBody::editorUpdate(AScene *scene)
 	{
+		if (ImGui::InputFloat("Mass", &_mass))
+		{
+			setMass(_mass);
+		}
+
+		ImGui::Text("Rotation constraint");
+		ImGui::SameLine();
+		bool rotationConstraint = false;
+		rotationConstraint ^= ImGui::CheckboxFlags("x", &(_rotationConstraint.x), 0);
+		ImGui::SameLine();
+		rotationConstraint ^= ImGui::CheckboxFlags("y", &(_rotationConstraint.y), 0);
+		ImGui::SameLine();
+		rotationConstraint ^= ImGui::CheckboxFlags("z", &(_rotationConstraint.z), 0);
+
+		if (rotationConstraint)
+		{
+			setRotationConstraint(_rotationConstraint.x == 1, _rotationConstraint.y == 1, _rotationConstraint.z == 1);
+		}
+
+		ImGui::Text("Transformation constraint");
+		ImGui::SameLine();
+		bool transformConstraint = false;
+		transformConstraint ^= ImGui::CheckboxFlags("x", &(_transformConstraint.x), 0);
+		ImGui::SameLine();
+		transformConstraint ^= ImGui::CheckboxFlags("y", &(_transformConstraint.y), 0);
+		ImGui::SameLine();
+		transformConstraint ^= ImGui::CheckboxFlags("z", &(_transformConstraint.z), 0);
+
+		if (transformConstraint)
+		{
+			setTransformConstraint(_transformConstraint.x == 1, _transformConstraint.y == 1, _transformConstraint.z == 1);
+		}
+
+		//ImGui::InputFloat3("Rotation constraint", glm::value_ptr(_rotationConstraint));
+		//ImGui::InputFloat3("Transform constraint", glm::value_ptr(_transformConstraint));
+
+
 		if ((*shapePathList)[selectedShapeIndex] != selectedShapePath)
 		{
 			std::size_t i = 0;
@@ -295,6 +380,7 @@ namespace AGE
 			ImGui::PushItemWidth(-1);
 			if (ImGui::ListBox("Shapes", (int*)&selectedShapeIndex, CollisionShapeStr, CollisionShape::UNDEFINED))
 			{
+				_collisionShapeType = (CollisionShape)selectedShapeIndex;
 				setCollisionShape((CollisionShape)selectedShapeIndex);
 			}
 			ImGui::PopItemWidth();

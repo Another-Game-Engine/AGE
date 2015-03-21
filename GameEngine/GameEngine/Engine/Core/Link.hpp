@@ -12,6 +12,7 @@ namespace AGE
 {
 	class RenderScene;
 	class AScene;
+	class EntityData;
 	struct Link
 	{
 		inline const glm::vec3 &getPosition() const { return _position; }
@@ -53,9 +54,11 @@ namespace AGE
 		void registerOctreeObject(const PrepareKey &key);
 		void unregisterOctreeObject(const PrepareKey &key);
 
-		inline bool hasChildren() const { return _children.size() > 0; };
-		inline bool hasParent() const { return _parent != nullptr; }
-		inline bool hasParent(const Link *parent) const { return _parent == parent; }
+		bool hasChildren() const;
+		bool hasParent() const;
+		bool hasParent(const Link *parent) const;
+		bool isAttachedToRoot() const;
+		const std::vector<Link*> &getChildren() const;
 
 		void attachChild(Link *child);
 		void detachChild(Link *child);
@@ -69,6 +72,7 @@ namespace AGE
 		const glm::mat4 getLocalTransform() const;
 		const glm::mat4 &getLocalTransform();
 	private:
+		EntityData *_entityPtr;
 		bool _userModification = false;
 
 		glm::vec3 _position;
@@ -93,6 +97,10 @@ namespace AGE
 		RenderScene *_renderScene;
 	public:
 		Link();
+		Link(EntityData *entity, AScene *_scene);
+
+		inline EntityData *getEntity() { return _entityPtr; }
+
 		void reset();
 
 		template < typename Archive >
