@@ -3,6 +3,7 @@
 #include <cereal/types/vector.hpp>
 #include <cereal/types/string.hpp>
 #include <Utils/Containers/Vector.hpp>
+#include <stdint.h>
 
 namespace AGE
 {
@@ -26,9 +27,11 @@ namespace AGE
 		AGE::Vector<unsigned char> data;
 
 		template <class Archive>
-		void serialize(Archive &ar)
+		void serialize(Archive &ar, const std::uint32_t version)
 		{
 			ar(rawPath, width, height, bpp, colorNumber, mipmapNbr, format, data);
 		}
 	};
 }
+
+CEREAL_CLASS_VERSION(AGE::TextureData, 0)

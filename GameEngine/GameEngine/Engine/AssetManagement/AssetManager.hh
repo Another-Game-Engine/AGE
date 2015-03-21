@@ -53,7 +53,7 @@ static std::pair<std::pair<GLenum, std::string>, std::function<void(Vertices &ve
 			std::unordered_set<std::string> materials;
 
 			template <typename Archive>
-			void serialize(Archive &ar)
+			void serialize(Archive &ar, const std::uint32_t version)
 			{
 				ar(meshs, materials);
 			}
@@ -161,3 +161,5 @@ static std::pair<std::pair<GLenum, std::string>, std::function<void(Vertices &ve
 		void loadSubmesh(std::shared_ptr<MeshData> data, std::size_t index, SubMeshInstance *mesh, const std::string &loadingChannel);
 	};
 }
+
+CEREAL_CLASS_VERSION(AGE::AssetsManager::AssetsPackage, 0)

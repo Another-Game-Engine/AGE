@@ -20,7 +20,7 @@ namespace AGE
 		{}
 
 		template < typename Archive >
-		void save(Archive &ar) const
+		void save(Archive &ar, const std::uint32_t version) const
 		{
 			AGE::Link link = entity.getLink();
 			ENTITY_FLAGS flags = entity.getFlags();
@@ -36,7 +36,7 @@ namespace AGE
 		}
 
 		template < typename Archive >
-		void load(Archive &ar)
+		void load(Archive &ar, const std::uint32_t version)
 		{
 			std::size_t cptNbr = 0;
 			Link l;
@@ -60,3 +60,5 @@ namespace AGE
 		}
 	};
 }
+
+CEREAL_CLASS_VERSION(AGE::EntitySerializationInfos, 0)

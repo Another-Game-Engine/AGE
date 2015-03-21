@@ -25,8 +25,8 @@ namespace AGE
 		void removePipeline(RenderType pipeline);
 		bool havePipeline(RenderType pipeline) const;
 
-		template <typename Archive> void save(Archive &ar) const;
-		template <typename Archive> void load(Archive &ar);
+		template <typename Archive> void save(Archive &ar, const std::uint32_t version) const;
+		template <typename Archive> void load(Archive &ar, const std::uint32_t version);
 		virtual void postUnserialization();
 
 #ifdef EDITOR_ENABLED
@@ -41,14 +41,16 @@ namespace AGE
 	};
 
 	template <typename Archive>
-	void CameraComponent::save(Archive &ar) const
+	void CameraComponent::save(Archive &ar, const std::uint32_t version) const
 	{
 		ar(cereal::make_nvp("projection", _projection));
 	}
 
 	template <typename Archive>
-	void CameraComponent::load(Archive &ar)
+	void CameraComponent::load(Archive &ar, const std::uint32_t version)
 	{
 		ar(_projection);
 	}
 }
+
+CEREAL_CLASS_VERSION(AGE::CameraComponent, 0)

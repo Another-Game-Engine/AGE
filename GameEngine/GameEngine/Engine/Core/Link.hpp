@@ -7,6 +7,7 @@
 #include <Utils/Serialization/QuaternionSerialization.hpp>
 #include <Utils/Serialization/VectorSerialization.hpp>
 #include <glm/gtc/quaternion.hpp>
+#include <cereal/cereal.hpp>
 
 namespace AGE
 {
@@ -104,7 +105,7 @@ namespace AGE
 		void reset();
 
 		template < typename Archive >
-		void serialize(Archive &ar)
+		void serialize(Archive &ar, const std::uint32_t version)
 		{
 			ar(
 				cereal::make_nvp("Position", _position)
@@ -116,3 +117,5 @@ namespace AGE
 		friend class AScene;
 	};
 }
+
+CEREAL_CLASS_VERSION(AGE::Link, 0)

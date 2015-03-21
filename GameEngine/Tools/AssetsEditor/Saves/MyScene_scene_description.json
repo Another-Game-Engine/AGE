@@ -1,5 +1,5 @@
 {
-    "Number_of_serialized_entities": 4,
+    "Number_of_serialized_entities": 3,
     "Component type map": [
         {
             "key": 0,
@@ -34,12 +34,14 @@
             "value": 16479542503635362968
         }
     ],
-    "Entity_0": {
+    "Entity_1": {
+        "cereal_class_version": 0,
         "link": {
+            "cereal_class_version": 0,
             "Position": {
                 "value0": 0,
                 "value1": 0,
-                "value2": -10
+                "value2": 0
             },
             "Scale": {
                 "value0": 100,
@@ -61,6 +63,7 @@
             4
         ],
         "AGE::MeshRenderer": {
+            "cereal_class_version": 0,
             "value0": {
                 "ptr_wrapper": {
                     "valid": 1,
@@ -76,9 +79,9 @@
             "cereal_class_version": 1,
             "Mass": 0,
             "Inertia": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 0
+                "value0": 0.1666666716337204,
+                "value1": 0.1666666716337204,
+                "value2": 0.1666666716337204
             },
             "Rotation constraint": {
                 "value0": 1,
@@ -98,26 +101,27 @@
             "Simple shape": true
         },
         "AGE::WE::EntityRepresentation": {
+            "cereal_class_version": 0,
             "name": "floor"
         }
     },
-    "Entity_1": {
+    "Entity_2": {
         "link": {
             "Position": {
-                "value0": 0.10776261240243912,
-                "value1": 0.80096781253814697,
-                "value2": -10.004328727722168
+                "value0": 0,
+                "value1": 1,
+                "value2": 0
             },
             "Scale": {
-                "value0": 10,
-                "value1": 10,
-                "value2": 10
+                "value0": 20,
+                "value1": 20,
+                "value2": 20
             },
             "Orientation": {
-                "value0": 0.00012705248082056642,
-                "value1": -0.0035780637990683317,
-                "value2": -0.001457687234506011,
-                "value3": 0.99999254941940308
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
             }
         },
         "children": [],
@@ -125,6 +129,7 @@
         "components_number": [
             0,
             1,
+            2,
             4
         ],
         "AGE::MeshRenderer": {
@@ -142,9 +147,9 @@
         "AGE::RigidBody": {
             "Mass": 0,
             "Inertia": {
-                "value0": 0.23650734126567841,
-                "value1": 0.43437620997428894,
-                "value2": 0.37949076294898987
+                "value0": 0,
+                "value1": 0,
+                "value2": 0
             },
             "Rotation constraint": {
                 "value0": 1,
@@ -163,36 +168,48 @@
             "Selected mesh shape name": "sponza_static.phage",
             "Simple shape": false
         },
+        "AGE::PointLightComponent": {
+            "cereal_class_version": 0,
+            "color": {
+                "value0": 0.34975782036781311,
+                "value1": 0.65926480293273926,
+                "value2": 0.67058825492858887
+            },
+            "range": {
+                "value0": 1,
+                "value1": 1,
+                "value2": 1
+            }
+        },
         "AGE::WE::EntityRepresentation": {
             "name": "sponza"
         }
     },
-    "Entity_2": {
+    "Entity_3": {
         "link": {
             "Position": {
-                "value0": 0,
-                "value1": 20,
-                "value2": -10.100305557250977
+                "value0": 10,
+                "value1": 30,
+                "value2": 20
             },
             "Scale": {
-                "value0": 2,
-                "value1": 2,
-                "value2": 2
+                "value0": 8,
+                "value1": 8,
+                "value2": 8
             },
             "Orientation": {
-                "value0": -0.55808740854263306,
-                "value1": -0.42903417348861694,
-                "value2": 0.41583293676376343,
-                "value3": -0.57580471038818359
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
             }
         },
-        "children": [
-            3
-        ],
+        "children": [],
         "flags": 0,
         "components_number": [
             0,
             1,
+            2,
             4
         ],
         "AGE::MeshRenderer": {
@@ -231,49 +248,20 @@
             "Selected mesh shape name": "",
             "Simple shape": true
         },
-        "AGE::WE::EntityRepresentation": {
-            "name": "ball"
-        }
-    },
-    "Entity_3": {
-        "link": {
-            "Position": {
+        "AGE::PointLightComponent": {
+            "color": {
+                "value0": 0.59607845544815063,
+                "value1": 1,
+                "value2": 0.49803921580314636
+            },
+            "range": {
                 "value0": 1,
                 "value1": 1,
                 "value2": 1
-            },
-            "Scale": {
-                "value0": 0.5,
-                "value1": 0.5,
-                "value2": 0.5
-            },
-            "Orientation": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 0,
-                "value3": 1
-            }
-        },
-        "children": [],
-        "flags": 0,
-        "components_number": [
-            0,
-            4
-        ],
-        "AGE::MeshRenderer": {
-            "value0": {
-                "ptr_wrapper": {
-                    "valid": 1,
-                    "data": {
-                        "value0": "cube/cube.sage",
-                        "value1": "cube/cube.mage",
-                        "value2": ""
-                    }
-                }
             }
         },
         "AGE::WE::EntityRepresentation": {
-            "name": "child"
+            "name": "ball"
         }
     }
 }

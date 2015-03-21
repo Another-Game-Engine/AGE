@@ -24,7 +24,7 @@ namespace AGE
 			virtual void reset();
 
 			template <typename Archive>
-			void serialize(Archive &ar)
+			void serialize(Archive &ar, const std::uint32_t version)
 			{
 				std::string sname = name;
 				ar(cereal::make_nvp("name", sname));
@@ -48,3 +48,5 @@ namespace AGE
 		};
 	}
 }
+
+CEREAL_CLASS_VERSION(AGE::WE::EntityRepresentation, 0)

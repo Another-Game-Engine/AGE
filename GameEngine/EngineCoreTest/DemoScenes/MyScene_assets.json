@@ -1,5 +1,6 @@
 {
     "value0": {
+        "cereal_class_version": 0,
         "value0": [
             "cube/cube.sage",
             "sponza/sponza.sage",

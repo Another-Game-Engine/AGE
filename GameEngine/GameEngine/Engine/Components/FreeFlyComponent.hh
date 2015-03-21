@@ -18,7 +18,7 @@ namespace AGE
 		// Serialization
 
 		template <typename Archive>
-		void serialize(Archive &ar)
+		void serialize(Archive &ar, const std::uint32_t version)
 		{
 		}
 
@@ -28,3 +28,4 @@ namespace AGE
 	};
 }
 
+CEREAL_CLASS_VERSION(AGE::FreeFlyComponent, 0)
