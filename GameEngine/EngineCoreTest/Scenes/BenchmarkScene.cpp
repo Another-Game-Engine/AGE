@@ -104,6 +104,11 @@ namespace AGE
 		++_chunkFrame;
 		_chunkCounter += time;
 
+		if (getInstance<AGE::AssetsManager>()->isLoading())
+		{
+			return true;
+		}
+
 		if (this->getNumberOfEntities() == 0
 			|| ImGui::ListBox("Scenes"
 			, &EngineCoreTestConfiguration::getSelectedSceneIndex()
@@ -128,13 +133,9 @@ namespace AGE
 			getInstance<AssetsManager>()->loadPackage(assetPackageFileName, assetPackageFileName);
 		}
 
-		if (getInstance<AGE::AssetsManager>()->isLoading())
-		{
-			return true;
-		}
-
 		if (getInstance<Input>()->getPhysicalKeyJustReleased(AGE_ESCAPE))
 			return (false);
+
 		static float trigger = 0.0f;
 		if (getInstance<Input>()->getPhysicalKeyPressed(AGE_SPACE) && trigger == 0.0f)
 		{

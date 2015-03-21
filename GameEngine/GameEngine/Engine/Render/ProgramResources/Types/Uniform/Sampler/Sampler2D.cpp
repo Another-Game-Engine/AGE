@@ -29,8 +29,13 @@ namespace AGE
 	{
 		if (!_update) {
 			glActiveTexture(GL_TEXTURE0 + _id);
-			if (_texture) {
+			if (_texture)
+			{
 				_texture->bind();
+			}
+			else
+			{
+				glBindTexture(GL_TEXTURE_2D, 0);
 			}
 			_update = true;
 		}
