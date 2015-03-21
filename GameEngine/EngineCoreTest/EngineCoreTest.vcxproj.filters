@@ -7,6 +7,7 @@
     <ClCompile Include="Components\Lifetime.cpp" />
     <ClCompile Include="Components\RotationComponent.cpp" />
     <ClCompile Include="Systems\RotationSystem.cpp" />
+    <ClCompile Include="EngineCoreTestConfiguration.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Components\lifetimeComponent.hh" />
@@ -16,5 +17,6 @@
     <ClInclude Include="Components\Lifetime.hpp" />
     <ClInclude Include="Components\RotationComponent.hpp" />
     <ClInclude Include="Systems\RotationSystem.hpp" />
+    <ClInclude Include="EngineCoreTestConfiguration.hpp" />
   </ItemGroup>
 </Project>

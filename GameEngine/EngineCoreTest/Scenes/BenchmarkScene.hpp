@@ -39,10 +39,6 @@ namespace AGE
 		virtual bool _userUpdateEnd(float time);
 
 	private:
-
-		std::vector<const char*> _scenes;
-		int _selectedScene = 0;
-
 		float _chunkCounter = 0.0;
 		float _maxChunk = 0.25f;
 		std::size_t _chunkFrame = 0;

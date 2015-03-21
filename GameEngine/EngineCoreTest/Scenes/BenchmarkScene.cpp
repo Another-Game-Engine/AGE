@@ -27,17 +27,16 @@
 #include <Systems/DebugSystem.hpp>
 
 #include <Render/Program.hh>
-//#include <Render/GeometryManagement/Vertices.hh>
-//#include <Render/GeometryManagement/BufferPrograms.hh>
 #include <Render/ProgramResources/Types/Uniform/Vec1.hh>
 #include <Render/ProgramResources/Types/Uniform/Vec4.hh>
-//#include <Render/ProgramResources/Types/Uniform/Mat4.hh>
 # include <Render/ProgramResources/Types/UniformBlock.hh>
 # include <Render/ProgramResources/Types/Attribute.hh>
 # include <Render/GeometryManagement/Painting/Painter.hh>
 # include <Render/Pipelining/Render/RenderingPass.hh>
 # include <Render/Pipelining/Pipelines/IRenderingPipeline.hh>
 # include <Render/GeometryManagement/Painting/PaintingManager.hh>
+
+#include <EngineCoreTestConfiguration.hpp>
 
 #include <Skinning/Skeleton.hpp>
 #include <Utils/MatrixConversion.hpp>
@@ -55,7 +54,6 @@ namespace AGE
 	BenchmarkScene::BenchmarkScene(AGE::Engine *engine)
 		: AScene(engine)
 	{
-		_scenes = { "../../EngineCoreTest/DemoScenes/MyScene", "../../EngineCoreTest/DemoScenes/graphnode" };
 
 	}
 
@@ -69,6 +67,8 @@ namespace AGE
 
 	bool BenchmarkScene::_userStart()
 	{
+		EngineCoreTestConfiguration::RefreshScenesDirectoryListing();
+
 		// We register component types so that we can load components from file
 		// It'll create the component manager for the scene and
 		// register the type in the global component register manager
@@ -87,15 +87,8 @@ namespace AGE
 		addSystem<AGE::FreeFlyCamera>(0);
 		addSystem<AGE::RotationSystem>(0);
 
-		auto camera = createEntity();
-		GLOBAL_CAMERA = camera;
-		auto cam = camera.addComponent<CameraComponent>();
-		camera.addComponent<FreeFlyComponent>();
-		cam->addPipeline(RenderType::DEFERRED);
-		camera.getLink().setPosition(glm::vec3(0, 5, 0));
-
-		getInstance<AGE::AssetsManager>()->setAssetsDirectory("../../Assets/Serialized/");
-		getInstance<AGE::BulletCollisionManager>()->setAssetsDirectory("../../Assets/Serialized/");
+		getInstance<AGE::AssetsManager>()->setAssetsDirectory(EngineCoreTestConfiguration::GetCookedDirectory());
+		getInstance<AGE::BulletCollisionManager>()->setAssetsDirectory(EngineCoreTestConfiguration::GetCookedDirectory());
 
 		getInstance<AGE::AssetsManager>()->loadMesh(OldFile("cube/cube.sage"), "DEMO_SCENE_BASIC_ASSETS");
 		getInstance<AGE::AssetsManager>()->loadMesh(OldFile("ball/ball.sage"), "DEMO_SCENE_BASIC_ASSETS");
@@ -103,6 +96,7 @@ namespace AGE
 		getInstance<AGE::AssetsManager>()->loadMaterial(OldFile("ball/ball.mage"), "DEMO_SCENE_BASIC_ASSETS");
 
 		srand(42);
+
 		return true;
 	}
 
@@ -110,6 +104,30 @@ namespace AGE
 	{
 		++_chunkFrame;
 		_chunkCounter += time;
+
+		if (this->getNumberOfEntities() == 0
+			|| ImGui::ListBox("Scenes"
+			, &EngineCoreTestConfiguration::getSelectedSceneIndex()
+			, EngineCoreTestConfiguration::getScenesName().data()
+			, EngineCoreTestConfiguration::getScenesName().size()))
+		{
+			clearAllEntities();
+
+			auto camera = createEntity();
+			GLOBAL_CAMERA = camera;
+			auto cam = camera.addComponent<CameraComponent>();
+			camera.addComponent<FreeFlyComponent>();
+			cam->addPipeline(RenderType::DEFERRED);
+			camera.getLink().setPosition(glm::vec3(0, 5, 0));
+
+			auto sceneFileName = EngineCoreTestConfiguration::getSelectedScenePath() + "_export.json";
+			auto assetPackageFileName = EngineCoreTestConfiguration::getSelectedScenePath() + "_assets.json";
+
+			getInstance<AssetsManager>()->pushNewCallback(assetPackageFileName, std::function<void()>([=](){
+				loadFromJson(sceneFileName);
+			}));
+			getInstance<AssetsManager>()->loadPackage(assetPackageFileName, assetPackageFileName);
+		}
 
 		if (getInstance<AGE::AssetsManager>()->isLoading())
 		{
@@ -223,25 +241,6 @@ namespace AGE
 
 	bool BenchmarkScene::_userUpdateEnd(float time)
 	{
-		if (ImGui::ListBox("Scenes", &_selectedScene, _scenes.data(), _scenes.size()))
-		{
-			this->clearAllEntities();
-
-			auto camera = createEntity();
-			GLOBAL_CAMERA = camera;
-			auto cam = camera.addComponent<CameraComponent>();
-			camera.addComponent<FreeFlyComponent>();
-			cam->addPipeline(RenderType::DEFERRED);
-			camera.getLink().setPosition(glm::vec3(0, 5, 0));
-
-			auto sceneFileName = std::string(_scenes[_selectedScene]) + "_export.json";
-			auto assetPackageFileName = std::string(_scenes[_selectedScene]) + "_assets.json";
-
-			getInstance<AssetsManager>()->pushNewCallback(assetPackageFileName, std::function<void()>([=](){
-				loadFromJson(sceneFileName);
-			}));
-			getInstance<AssetsManager>()->loadPackage(assetPackageFileName, assetPackageFileName);
-		}
 		return true;
 	}
 }

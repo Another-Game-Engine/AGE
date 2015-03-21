@@ -95,6 +95,7 @@
   <ItemGroup>
     <ClCompile Include="Components\Lifetime.cpp" />
     <ClCompile Include="Components\RotationComponent.cpp" />
+    <ClCompile Include="EngineCoreTestConfiguration.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Scenes\BenchmarkScene.cpp" />
     <ClCompile Include="Systems\LifetimeSystem.cpp" />
@@ -110,6 +111,7 @@
     <ClInclude Include="Components\lifetimeComponent.hh" />
     <ClInclude Include="Components\RotationComponent.hpp" />
     <ClInclude Include="CONFIGS.hh" />
+    <ClInclude Include="EngineCoreTestConfiguration.hpp" />
     <ClInclude Include="Scenes\BenchmarkScene.hpp" />
     <ClInclude Include="Systems\LifetimeSystem.hpp" />
     <ClInclude Include="Systems\RotationSystem.hpp" />
