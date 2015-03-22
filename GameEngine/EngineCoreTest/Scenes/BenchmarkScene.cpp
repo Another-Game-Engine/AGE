@@ -122,7 +122,7 @@ namespace AGE
 			auto cam = camera.addComponent<CameraComponent>();
 			camera.addComponent<FreeFlyComponent>();
 			cam->addPipeline(RenderType::DEFERRED);
-			camera.getLink().setPosition(glm::vec3(0, 5, 0));
+			camera.getLink().setPosition(glm::vec3(0, 5, 5));
 
 			auto sceneFileName = EngineCoreTestConfiguration::getSelectedScenePath() + "_export.json";
 			auto assetPackageFileName = EngineCoreTestConfiguration::getSelectedScenePath() + "_assets.json";
