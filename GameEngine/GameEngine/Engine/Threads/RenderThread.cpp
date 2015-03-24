@@ -9,7 +9,7 @@
 #include <Threads/ThreadManager.hpp>
 #include <Core/Engine.hh>
 #include <Render/GeometryManagement/Painting/Painter.hh>
-#include <Render/Pipelining/Pipelines/CustomPipeline/BasicPipeline.hh>
+#include <Render/Pipelining/Pipelines/CustomPipeline/DebugDeferredShading.hh>
 #include <Render/Pipelining/Pipelines/CustomPipeline/DeferredShading.hh>
 #include <Utils/OpenGL.hh>
 #include <Utils/Age_Imgui.hpp>
@@ -150,7 +150,7 @@ namespace AGE
 				return;
 			}
 			pipelines[RenderType::DEFERRED] = std::make_unique<DeferredShading>(_context->getScreenSize(), paintingManager);
-			pipelines[RenderType::DEBUG_DEFERRED] = nullptr;
+			pipelines[RenderType::DEBUG_DEFERRED] = std::make_unique<DebugDeferredShading>(_context->getScreenSize(), paintingManager);
 			_recompileShaders();
 			msg.setValue(true);
 		});
