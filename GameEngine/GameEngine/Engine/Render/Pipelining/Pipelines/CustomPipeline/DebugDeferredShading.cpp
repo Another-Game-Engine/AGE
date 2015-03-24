@@ -1,5 +1,6 @@
 #include <Render/Pipelining/Pipelines/CustomPipeline/DebugDeferredShading.hh>
 #include <Render/Pipelining/Pipelines/CustomRenderPass/DeferredBasicBuffering.hh>
+#include <Render/Pipelining/Pipelines/CustomRenderPass/DeferredDebugBuffering.hh>
 #include <Render/Pipelining/Pipelines/CustomRenderPass/DeferredPointLightning.hh>
 #include <Render/Pipelining/Pipelines/CustomRenderPass/DeferredMerging.hh>
 #include <Render/Pipelining/Pipelines/PipelineTools.hh>
@@ -14,19 +15,21 @@ namespace AGE
 		_normal = createRenderPassOutput<Texture2D>(screen_size.x, screen_size.y, GL_RGBA8, true);
 		_specular = createRenderPassOutput<Texture2D>(screen_size.x, screen_size.y, GL_RGBA8, true);
 		_depthStencil = createRenderPassOutput<Texture2D>(screen_size.x, screen_size.y, GL_DEPTH24_STENCIL8, true);
-		_lightItems = createRenderPassOutput<Texture2D>(screen_size.x, screen_size.y, GL_RGBA8, true);
+		_debugLights = createRenderPassOutput<Texture2D>(screen_size.x, screen_size.y, GL_RGBA8, true);
 		// RGB = light color, A = specular power
 		_lightAccumulation = createRenderPassOutput<Texture2D>(screen_size.x, screen_size.y, GL_RGBA8, true);
 
 		// We create the render pass
 		std::shared_ptr<DeferredBasicBuffering> basicBuffering = std::make_shared<DeferredBasicBuffering>(_painter_manager, _diffuse, _normal, _specular, _depthStencil);
+		std::shared_ptr<DeferredDebugBuffering> debugBuffering = std::make_shared<DeferredDebugBuffering>(_painter_manager, _debugLights, _depthStencil);
 		std::shared_ptr<DeferredPointLightning> pointLightning = std::make_shared<DeferredPointLightning>(_painter_manager, _normal, _depthStencil, _lightAccumulation);
 		_deferredMerging = std::make_shared<DeferredMerging>(_painter_manager, _diffuse, _specular, _lightAccumulation);
 
 		// The entry point is the basic buffering pass
 		_rendering_list.emplace_back(basicBuffering);
 		// We link the entry point with the other pass
-		basicBuffering->setNextPass(pointLightning);
+		basicBuffering->setNextPass(debugBuffering);
+		debugBuffering->setNextPass(pointLightning);
 		pointLightning->setNextPass(_deferredMerging);
 
 		setAmbient(glm::vec3(0.2));

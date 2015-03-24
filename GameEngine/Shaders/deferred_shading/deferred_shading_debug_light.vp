@@ -1,0 +1,15 @@
+#version 330
+
+layout (location = 0) in vec2 position;
+
+uniform mat4 projection_matrix;
+uniform mat4 view_matrix;
+uniform mat4 model_matrix;
+
+out vec2 interpolated_texCoord;
+
+void main()
+{
+	interpolated_texCoord = position * 0.5f + 0.5f; 
+	gl_Position = projection_matrix * view_matrix * model_matrix * vec4(position, 0.f, 1.f);
+}

@@ -30,11 +30,13 @@ namespace AGE
 			State();
 
 			std::bitset<NUMBER_OF_MODES> enabledModes;
+			
 			struct Depth
 			{
 				GLenum func;
 				GLenum mask;
 			} depth;
+			
 			struct Stencil
 			{
 				GLenum func;
@@ -47,12 +49,14 @@ namespace AGE
 					GLenum dppass;
 				} op;
 			} stencil;
+			
 			struct Blending
 			{
 				GLenum sfactor;
 				GLenum dfactor;
 				GLenum equation;
 			} blend;
+			
 			GLenum cullFace;
 			glm::bvec4 colorMask;
 			glm::vec4 clearColor;
