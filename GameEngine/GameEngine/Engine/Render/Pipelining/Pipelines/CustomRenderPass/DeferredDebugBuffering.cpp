@@ -59,7 +59,9 @@ namespace AGE
 		OpenGLState::glDisable(GL_STENCIL_TEST);
 		OpenGLState::glEnable(GL_DEPTH_TEST);
 		OpenGLState::glClearColor(glm::vec4(0.f, 0.0f, 0.0f, 0.0f));
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT);
+
+		OpenGLState::glDepthMask(GL_FALSE);
 
 		_programs[PROGRAM_BUFFERING_LIGHT]->use();
 		*_programs[PROGRAM_BUFFERING_LIGHT]->get_resource<Mat4>("projection_matrix") = infos.projection;
@@ -67,7 +69,7 @@ namespace AGE
 
 		for (auto &pl : renderLight.pointLight)
 		{
-			*_programs[PROGRAM_BUFFERING_LIGHT]->get_resource<Mat4>("model_matrix") = infos.view * pl.light.sphereTransform;
+			*_programs[PROGRAM_BUFFERING_LIGHT]->get_resource<Mat4>("model_matrix") = infos.view * pl.light.transformation;
 			_quadPainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING_LIGHT], Properties(), _quadVertices);
 		}
 	}
