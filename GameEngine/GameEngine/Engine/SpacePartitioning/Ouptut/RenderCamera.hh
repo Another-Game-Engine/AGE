@@ -3,12 +3,14 @@
 #include <vector>
 #include <SpacePartitioning/Ouptut/RenderLight.hh>
 #include <SpacePartitioning/Ouptut/RenderPipeline.hh>
+#include <Render/PipelineTypes.hpp>
 #include <glm/glm.hpp>
 
 namespace AGE
 {
 	struct CameraInfos
 	{
+		RenderType renderType;
 		glm::mat4 view;
 		glm::mat4 projection;
 	};
@@ -17,7 +19,7 @@ namespace AGE
 	{
 		CameraInfos camInfos;
 		RenderLightList lights;
-		std::vector<RenderPipeline> pipelines;
+		RenderPipeline pipeline;
 	};
 
 	struct RenderCameraListContainer

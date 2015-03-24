@@ -121,7 +121,7 @@ namespace AGE
 			GLOBAL_CAMERA = camera;
 			auto cam = camera.addComponent<CameraComponent>();
 			camera.addComponent<FreeFlyComponent>();
-			cam->addPipeline(RenderType::DEFERRED);
+			cam->setPipeline(RenderType::DEFERRED);
 			camera.getLink().setPosition(glm::vec3(0, 2.5f, 4.5f));
 
 			auto sceneFileName = EngineCoreTestConfiguration::getSelectedScenePath() + "_export.json";
@@ -209,20 +209,14 @@ namespace AGE
 		}
 
 		auto camComponent = GLOBAL_CAMERA.getComponent<CameraComponent>();
-		static bool cameraPipelines[2] = {false, false};
-		cameraPipelines[RenderType::DEFERRED] = camComponent->havePipeline(RenderType::DEFERRED);
-
+		static bool cameraPipelines[RenderType::TOTAL] = {false, false};
+		cameraPipelines[camComponent->getPipeline()] = true;
 		if (ImGui::Checkbox("Deferred rendering", &cameraPipelines[RenderType::DEFERRED]))
-		{
 			if (cameraPipelines[RenderType::DEFERRED])
-			{
-				camComponent->addPipeline(RenderType::DEFERRED);
-			}
-			else
-			{
-				camComponent->removePipeline(RenderType::DEFERRED);
-			}
-		}
+				camComponent->setPipeline(RenderType::DEFERRED);
+		if (ImGui::Checkbox("Debug deferred rendering", &cameraPipelines[RenderType::DEBUG_DEFERRED]))
+			if (cameraPipelines[RenderType::DEBUG_DEFERRED])
+				camComponent->setPipeline(RenderType::DEBUG_DEFERRED);
 
 		AGE::GetPrepareThread()->getQueue()->emplaceCommand<AGE::Commands::MainToPrepare::PrepareDrawLists>();
 		AGE::GetPrepareThread()->getQueue()->emplaceCommand<AGE::Commands::ToRender::RenderDrawLists>();

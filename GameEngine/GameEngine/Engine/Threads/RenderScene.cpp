@@ -130,11 +130,7 @@ namespace AGE
 		co = &_cameras.get(msg.key.id);
 		co->hasMoved = true;
 		co->projection = msg.projection;
-		co->pipelines.clear();
-		for (auto &e : msg.pipelines)
-		{
-			co->pipelines.push_back(e);
-		}
+		co->pipeline = msg.pipeline;
 	}
 
 	void RenderScene::_createCamera(AGE::Commands::MainToPrepare::CreateCamera &msg)
@@ -187,7 +183,6 @@ namespace AGE
 		_activeCameras[toRm.activeCameraIdx] = _activeCameras[_activeCameras.size() - 1];
 		_cameras.get(_activeCameras[toRm.activeCameraIdx]).activeCameraIdx = toRm.activeCameraIdx;
 		_activeCameras.pop_back();
-		toRm.pipelines.clear();
 
 		_cameras.deallocPreparated(msg.key.id);
 	}
@@ -400,6 +395,7 @@ namespace AGE
 			auto &renderCamera = drawList.back();
 			renderCamera.camInfos.view = view;
 			renderCamera.camInfos.projection = camera.projection;
+			renderCamera.camInfos.renderType = camera.pipeline;
 			// no culling for the lights for the moment (TODO)
 			for (uint32_t pointLightIdx : _activePointLights)
 			{
@@ -410,66 +406,59 @@ namespace AGE
 			}
 			// Do the culling
 			_octree.getElementsCollide(&camera, toDraw);
-
-			// for each render pipeline of camera
-			for (auto &pipelineId : camera.pipelines)
+			RenderPipeline *curRenderPipeline = &renderCamera.pipeline;
+			// iter on elements to draw
+			for (Cullable *e : toDraw)
 			{
-				renderCamera.pipelines.resize(pipelineId + 1);
-				RenderPipeline *curRenderPipeline = &renderCamera.pipelines[pipelineId];
-
-				// iter on elements to draw
-				for (Cullable *e : toDraw)
+				switch (e->key.type)
 				{
-					switch (e->key.type)
+				case PrepareKey::Type::Drawable:
+				{
+					Drawable *currentDrawable = static_cast<Drawable*>(e);
+
+					RenderPainter *curRenderPainter = nullptr;
+					RenderDrawableList *curRenderDrawablelist = nullptr;
+
+					auto renderPainter = curRenderPipeline->keys.find(currentDrawable->mesh.painter.getId());
+					// We find the good render painter
+					if (renderPainter == curRenderPipeline->keys.end())
 					{
-					case PrepareKey::Type::Drawable:
-					{
-						Drawable *currentDrawable = static_cast<Drawable*>(e);
-
-						RenderPainter *curRenderPainter = nullptr;
-						RenderDrawableList *curRenderDrawablelist = nullptr;
-
-						auto renderPainter = curRenderPipeline->keys.find(currentDrawable->mesh.painter.getId());
-						// We find the good render painter
-						if (renderPainter == curRenderPipeline->keys.end())
-						{
-							curRenderPainter = &curRenderPipeline->keys[currentDrawable->mesh.painter.getId()];
-						}
-						else
-							curRenderPainter = &renderPainter->second;
-						// and the good render mode
-						for (auto &drawableList : curRenderPainter->drawables)
-						{
-							if (drawableList.renderMode == currentDrawable->mesh.renderMode)
-							{
-								curRenderDrawablelist = &drawableList;
-								break;
-							}
-						}
-						if (curRenderDrawablelist == nullptr)
-						{
-							curRenderPainter->drawables.emplace_back();
-							curRenderDrawablelist = &curRenderPainter->drawables.back();
-							curRenderDrawablelist->renderMode = currentDrawable->mesh.renderMode;
-						}
-						// We find the good render mode
-						curRenderDrawablelist->vertices.emplace_back(currentDrawable->mesh.vertices);
-						curRenderDrawablelist->properties.emplace_back(_properties.get(currentDrawable->mesh.properties.getId()));
-
+						curRenderPainter = &curRenderPipeline->keys[currentDrawable->mesh.painter.getId()];
 					}
+					else
+						curRenderPainter = &renderPainter->second;
+					// and the good render mode
+					for (auto &drawableList : curRenderPainter->drawables)
+					{
+						if (drawableList.renderMode == currentDrawable->mesh.renderMode)
+						{
+							curRenderDrawablelist = &drawableList;
+							break;
+						}
+					}
+					if (curRenderDrawablelist == nullptr)
+					{
+						curRenderPainter->drawables.emplace_back();
+						curRenderDrawablelist = &curRenderPainter->drawables.back();
+						curRenderDrawablelist->renderMode = currentDrawable->mesh.renderMode;
+					}
+					// We find the good render mode
+					curRenderDrawablelist->vertices.emplace_back(currentDrawable->mesh.vertices);
+					curRenderDrawablelist->properties.emplace_back(_properties.get(currentDrawable->mesh.properties.getId()));
+
+				}
+				break;
+				case PrepareKey::Type::PointLight:
+				{
+					PointLight *currentPointLight = static_cast<PointLight*>(e);
+					renderCamera.lights.pointLight.emplace_back();
+					renderCamera.lights.pointLight.back().light = *currentPointLight;
+					// TODO: Cull the shadows
+				}
+				break;
+				default:
+					assert(!"Type cannot be added to the render queue.");
 					break;
-					case PrepareKey::Type::PointLight:
-					{
-						PointLight *currentPointLight = static_cast<PointLight*>(e);
-						renderCamera.lights.pointLight.emplace_back();
-						renderCamera.lights.pointLight.back().light = *currentPointLight;
-						// TODO: Cull the shadows
-					}
-					break;
-					default:
-						assert(!"Type cannot be added to the render queue.");
-						break;
-					}
 				}
 			}
 		}

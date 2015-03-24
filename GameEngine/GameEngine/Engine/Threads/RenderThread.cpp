@@ -26,7 +26,7 @@ namespace AGE
 		: Thread(AGE::Thread::ThreadType::Render)
 		, _context(nullptr),
 		paintingManager(std::make_shared<PaintingManager>()),
-		pipelines(2)
+		pipelines(RenderType::TOTAL)
 	{
 	}
 
@@ -149,7 +149,8 @@ namespace AGE
 				msg.setValue(false);
 				return;
 			}
-			pipelines[DEFERRED] = std::make_unique<DeferredShading>(_context->getScreenSize(), paintingManager);
+			pipelines[RenderType::DEFERRED] = std::make_unique<DeferredShading>(_context->getScreenSize(), paintingManager);
+			pipelines[RenderType::DEBUG_DEFERRED] = nullptr;
 			_recompileShaders();
 			msg.setValue(true);
 		});
@@ -186,22 +187,14 @@ namespace AGE
 
 		registerCallback<Commands::ToRender::RenderDrawLists>([&](Commands::ToRender::RenderDrawLists& msg)
 		{
-			uint32_t pipelineIdx = 0;
-
 			if (!_drawlistPtr) // nothing to draw
 				return;
 			AGE_ASSERT(_drawlistPtr != nullptr);
-
-			for (auto &curPipeline : pipelines)
+			auto &drawlist = _drawlistPtr->container.cameras;
+			for (auto &curCamera : drawlist)
 			{
-				auto &drawlist = _drawlistPtr->container.cameras;
-				for (auto &curCamera : drawlist)
-				{
-					if (pipelineIdx < curCamera.pipelines.size()) {
-						pipelines[0]->render(curCamera.pipelines[pipelineIdx], curCamera.lights, curCamera.camInfos);
-					}
-				}
-				++pipelineIdx;
+				AGE_ASSERT(!(pipelines[curCamera.camInfos.renderType] == nullptr));
+				pipelines[curCamera.camInfos.renderType]->render(curCamera.pipeline, curCamera.lights, curCamera.camInfos);
 			}
 			_drawlistPtr = nullptr;
 		});
