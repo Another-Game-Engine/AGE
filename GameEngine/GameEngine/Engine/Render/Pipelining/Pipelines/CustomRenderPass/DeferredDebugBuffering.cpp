@@ -70,7 +70,7 @@ namespace AGE
 		for (auto &pl : renderLight.pointLight)
 		{
 			*_programs[PROGRAM_BUFFERING_LIGHT]->get_resource<Mat4>("model_matrix") = infos.view * pl.light.transformation;
-			_quadPainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING_LIGHT], Properties(), _quadVertices);
+			_quadPainter->uniqueDraw(GL_QUADS, _programs[PROGRAM_BUFFERING_LIGHT], Properties(), _quadVertices);
 		}
 	}
 
