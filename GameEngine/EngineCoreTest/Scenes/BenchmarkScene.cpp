@@ -40,8 +40,6 @@
 #include <Skinning/Skeleton.hpp>
 #include <Utils/MatrixConversion.hpp>
 
-#include <Render/Pipelining/Pipelines/CustomPipeline/BasicPipeline.hh>
-
 #include <Systems/FreeFlyCamera.hh>
 
 namespace AGE
