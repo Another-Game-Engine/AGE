@@ -44,9 +44,9 @@
                 "value2": 0
             },
             "Scale": {
-                "value0": 100,
-                "value1": 1,
-                "value2": 100
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
             },
             "Orientation": {
                 "value0": 0,
@@ -55,11 +55,13 @@
                 "value3": 1
             }
         },
-        "children": [],
+        "children": [
+            1
+        ],
         "flags": 0,
         "components_number": [
             0,
-            1
+            7
         ],
         "AGE::MeshRenderer": {
             "cereal_class_version": 0,
@@ -67,118 +69,82 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "cube/cube.sage",
-                        "value1": "cube/cube.mage",
-                        "value2": ""
-                    }
-                }
-            }
-        },
-        "AGE::RigidBody": {
-            "cereal_class_version": 1,
-            "Mass": 0,
-            "Inertia": {
-                "value0": 0.1666666716337204,
-                "value1": 0.1666666716337204,
-                "value2": 0.1666666716337204
-            },
-            "Rotation constraint": {
-                "value0": 1,
-                "value1": 1,
-                "value2": 1
-            },
-            "Transform constraint": {
-                "value0": 1,
-                "value1": 1,
-                "value2": 1
-            },
-            "Collision shape path": "",
-            "Collision shape type": 1
-        }
-    },
-    "Entity_2": {
-        "link": {
-            "Position": {
-                "value0": 0,
-                "value1": 1,
-                "value2": 0
-            },
-            "Scale": {
-                "value0": 20,
-                "value1": 20,
-                "value2": 20
-            },
-            "Orientation": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 0,
-                "value3": 1
-            }
-        },
-        "children": [],
-        "flags": 0,
-        "components_number": [
-            0,
-            1,
-            2
-        ],
-        "AGE::MeshRenderer": {
-            "value0": {
-                "ptr_wrapper": {
-                    "valid": 1,
-                    "data": {
-                        "value0": "sponza/sponza.sage",
+                        "value0": "ball/ball.sage",
                         "value1": "sponza/sponza.mage",
                         "value2": ""
                     }
                 }
             }
         },
-        "AGE::RigidBody": {
-            "Mass": 0,
-            "Inertia": {
+        "AGE::RotationComponent": {
+            "cereal_class_version": 1,
+            "Angles": {
                 "value0": 0,
+                "value1": 1,
+                "value2": 0
+            },
+            "Speed": 30
+        }
+    },
+    "Entity_2": {
+        "link": {
+            "Position": {
+                "value0": 2,
                 "value1": 0,
                 "value2": 0
             },
-            "Rotation constraint": {
-                "value0": 1,
-                "value1": 1,
-                "value2": 1
+            "Scale": {
+                "value0": 0.5,
+                "value1": 0.5,
+                "value2": 0.5
             },
-            "Transform constraint": {
-                "value0": 1,
-                "value1": 1,
-                "value2": 1
-            },
-            "Collision shape path": "sponza/sponza_static.phage",
-            "Collision shape type": 2
-        },
-        "AGE::PointLightComponent": {
-            "cereal_class_version": 0,
-            "color": {
-                "value0": 0.34975782036781311,
-                "value1": 0.65926480293273926,
-                "value2": 0.67058825492858887
-            },
-            "range": {
-                "value0": 1,
-                "value1": 1,
-                "value2": 1
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
             }
+        },
+        "children": [
+            2
+        ],
+        "flags": 0,
+        "components_number": [
+            0,
+            7
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "ball/ball.sage",
+                        "value1": "sponza/banner.mage",
+                        "value2": ""
+                    }
+                }
+            }
+        },
+        "AGE::RotationComponent": {
+            "Angles": {
+                "value0": 0,
+                "value1": 1,
+                "value2": 0
+            },
+            "Speed": 60
         }
     },
     "Entity_3": {
         "link": {
             "Position": {
-                "value0": 10,
-                "value1": 30,
-                "value2": 20
+                "value0": 0,
+                "value1": 0,
+                "value2": 2
             },
             "Scale": {
-                "value0": 8,
-                "value1": 8,
-                "value2": 8
+                "value0": 0.69999998807907104,
+                "value1": 0.69999998807907104,
+                "value2": 0.69999998807907104
             },
             "Orientation": {
                 "value0": 0,
@@ -191,8 +157,7 @@
         "flags": 0,
         "components_number": [
             0,
-            1,
-            2
+            7
         ],
         "AGE::MeshRenderer": {
             "value0": {
@@ -206,37 +171,13 @@
                 }
             }
         },
-        "AGE::RigidBody": {
-            "Mass": 1,
-            "Inertia": {
-                "value0": 0.10000000149011612,
-                "value1": 0.10000000149011612,
-                "value2": 0.10000000149011612
+        "AGE::RotationComponent": {
+            "Angles": {
+                "value0": 0.44200003147125244,
+                "value1": 0.31200000643730164,
+                "value2": 0.72200006246566772
             },
-            "Rotation constraint": {
-                "value0": 1,
-                "value1": 1,
-                "value2": 1
-            },
-            "Transform constraint": {
-                "value0": 1,
-                "value1": 1,
-                "value2": 1
-            },
-            "Collision shape path": "",
-            "Collision shape type": 0
-        },
-        "AGE::PointLightComponent": {
-            "color": {
-                "value0": 0.59607845544815063,
-                "value1": 1,
-                "value2": 0.49803921580314636
-            },
-            "range": {
-                "value0": 1,
-                "value1": 1,
-                "value2": 1
-            }
+            "Speed": 100
         }
     }
 }

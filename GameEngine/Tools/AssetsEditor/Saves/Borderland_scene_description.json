@@ -40,120 +40,13 @@
             "cereal_class_version": 0,
             "Position": {
                 "value0": 0,
-                "value1": 0,
-                "value2": 0
+                "value1": 1,
+                "value2": 2
             },
             "Scale": {
                 "value0": 3,
                 "value1": 3,
                 "value2": 3
-            },
-            "Orientation": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 0,
-                "value3": 1
-            }
-        },
-        "children": [
-            1
-        ],
-        "flags": 0,
-        "components_number": [
-            0,
-            4,
-            7
-        ],
-        "AGE::MeshRenderer": {
-            "cereal_class_version": 0,
-            "value0": {
-                "ptr_wrapper": {
-                    "valid": 1,
-                    "data": {
-                        "value0": "ball/ball.sage",
-                        "value1": "sponza/sponza.mage",
-                        "value2": ""
-                    }
-                }
-            }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "cereal_class_version": 0,
-            "name": "sun"
-        },
-        "AGE::RotationComponent": {
-            "cereal_class_version": 1,
-            "Angles": {
-                "value0": 0,
-                "value1": 1,
-                "value2": 0
-            },
-            "Speed": 30
-        }
-    },
-    "Entity_2": {
-        "link": {
-            "Position": {
-                "value0": 2,
-                "value1": 0,
-                "value2": 0
-            },
-            "Scale": {
-                "value0": 0.5,
-                "value1": 0.5,
-                "value2": 0.5
-            },
-            "Orientation": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 0,
-                "value3": 1
-            }
-        },
-        "children": [
-            2
-        ],
-        "flags": 0,
-        "components_number": [
-            0,
-            4,
-            7
-        ],
-        "AGE::MeshRenderer": {
-            "value0": {
-                "ptr_wrapper": {
-                    "valid": 1,
-                    "data": {
-                        "value0": "ball/ball.sage",
-                        "value1": "sponza/banner.mage",
-                        "value2": ""
-                    }
-                }
-            }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "earth"
-        },
-        "AGE::RotationComponent": {
-            "Angles": {
-                "value0": 0,
-                "value1": 1,
-                "value2": 0
-            },
-            "Speed": 60
-        }
-    },
-    "Entity_3": {
-        "link": {
-            "Position": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 2
-            },
-            "Scale": {
-                "value0": 0.69999998807907104,
-                "value1": 0.69999998807907104,
-                "value2": 0.69999998807907104
             },
             "Orientation": {
                 "value0": 0,
@@ -170,27 +63,113 @@
             7
         ],
         "AGE::MeshRenderer": {
+            "cereal_class_version": 0,
             "value0": {
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "ball/ball.sage",
-                        "value1": "ball/ball.mage",
+                        "value0": "borderland_zero/zero.sage",
+                        "value1": "borderland_zero/zero.mage",
                         "value2": ""
                     }
                 }
             }
         },
         "AGE::WE::EntityRepresentation": {
-            "name": "moon"
+            "cereal_class_version": 0,
+            "name": "mesh"
         },
         "AGE::RotationComponent": {
+            "cereal_class_version": 1,
             "Angles": {
-                "value0": 0.44200003147125244,
-                "value1": 0.31200000643730164,
-                "value2": 0.72200006246566772
+                "value0": 0,
+                "value1": 1,
+                "value2": 0
             },
             "Speed": 100
+        }
+    },
+    "Entity_2": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": 3
+            },
+            "Scale": {
+                "value0": 1,
+                "value1": 1,
+                "value2": 1
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            2,
+            4
+        ],
+        "AGE::PointLightComponent": {
+            "cereal_class_version": 0,
+            "color": {
+                "value0": 1,
+                "value1": 1,
+                "value2": 1
+            },
+            "range": {
+                "value0": 0,
+                "value1": 0.091000005602836609,
+                "value2": 0.02500000037252903
+            }
+        },
+        "AGE::WE::EntityRepresentation": {
+            "name": "light1"
+        }
+    },
+    "Entity_3": {
+        "link": {
+            "Position": {
+                "value0": 4,
+                "value1": 4,
+                "value2": 3
+            },
+            "Scale": {
+                "value0": 1,
+                "value1": 1,
+                "value2": 1
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            2,
+            4
+        ],
+        "AGE::PointLightComponent": {
+            "color": {
+                "value0": 1,
+                "value1": 1,
+                "value2": 1
+            },
+            "range": {
+                "value0": 0.052000001072883606,
+                "value1": 0.091000005602836609,
+                "value2": 0.038000002503395081
+            }
+        },
+        "AGE::WE::EntityRepresentation": {
+            "name": "light2"
         }
     }
 }

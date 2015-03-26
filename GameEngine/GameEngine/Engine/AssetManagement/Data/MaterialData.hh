@@ -2,6 +2,9 @@
 
 # include <string>
 # include <glm/glm.hpp>
+#include <stdint.h>
+#include <Utils/Serialization/SerializationArchives.hpp>
+#include <cereal/types/string.hpp>
 
 namespace AGE
 {
@@ -23,7 +26,7 @@ namespace AGE
 		std::string bumpTexPath;
 
 	public:
-		template <class Archive> void serialize(Archive &ar);
+		template <class Archive> void serialize(Archive &ar, const std::uint32_t version);
 	};
 
 	struct MaterialDataSet
@@ -33,19 +36,21 @@ namespace AGE
 		std::string name;
 
 	public:
-		template <class Archive> void serialize(Archive &ar);
+		template <class Archive> void serialize(Archive &ar, const std::uint32_t version);
 	};
 
 	template <class Archive>
-	void MaterialDataSet::serialize(Archive &ar)
+	void MaterialDataSet::serialize(Archive &ar, const std::uint32_t version)
 	{
 		ar(collection, name);
 	}
 
 	template <class Archive>
-	void MaterialData::serialize(Archive &ar)
+	void MaterialData::serialize(Archive &ar, const std::uint32_t version)
 	{
 		ar(diffuse, ambient, emissive, reflective, specular, diffuseTexPath, ambientTexPath, emissiveTexPath, reflectiveTexPath, specularTexPath, normalTexPath, bumpTexPath);
 	}
-
 }
+
+CEREAL_CLASS_VERSION(AGE::MaterialData, 0)
+CEREAL_CLASS_VERSION(AGE::MaterialDataSet, 0)

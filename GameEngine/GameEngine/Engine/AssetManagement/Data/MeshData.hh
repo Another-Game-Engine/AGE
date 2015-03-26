@@ -9,6 +9,7 @@
 # include <bitset>
 # include <Utils/AABoundingBox.hh>
 # include <Utils/OpenGL.hh>
+#include <stdint.h>
 
 namespace AGE
 {
@@ -44,7 +45,7 @@ namespace AGE
 		uint16_t defaultMaterialIndex;
 
 	public:
-		template <class Archive> void serialize(Archive &ar);
+		template <class Archive> void serialize(Archive &ar, const std::uint32_t version);
 	};
 
 	struct MeshData
@@ -54,19 +55,21 @@ namespace AGE
 		std::vector<SubMeshData> subMeshs;
 
 	public:
-		template <class Archive> void serialize(Archive &ar);
+		template <class Archive> void serialize(Archive &ar, const std::uint32_t version);
 	};
 
 	template <class Archive>
-	void SubMeshData::serialize(Archive &ar)
+	void SubMeshData::serialize(Archive &ar, const std::uint32_t version)
 	{
 		ar(name, infos, positions, normals, tangents, biTangents, uvs, indices, weights, boneIndices, colors, boundingBox, defaultMaterialIndex);
 	}
 
 	template <class Archive>
-	void MeshData::serialize(Archive &ar)
+	void MeshData::serialize(Archive &ar, const std::uint32_t version)
 	{
 		ar(name, subMeshs);
 	}
-
 }
+
+CEREAL_CLASS_VERSION(AGE::MeshData, 0)
+CEREAL_CLASS_VERSION(AGE::SubMeshData, 0)

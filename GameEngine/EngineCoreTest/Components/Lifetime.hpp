@@ -18,7 +18,7 @@ namespace AGE
 		// Serialization
 
 		template <typename Archive>
-		void serialize(Archive &ar)
+		void serialize(Archive &ar, const std::uint32_t version)
 		{
 			ar(CEREAL_NVP(_t));
 		}
@@ -30,3 +30,5 @@ namespace AGE
 		float _t;
 	};
 }
+
+CEREAL_CLASS_VERSION(AGE::Lifetime, 0)

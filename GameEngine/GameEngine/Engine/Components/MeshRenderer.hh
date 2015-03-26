@@ -32,8 +32,8 @@ namespace AGE
 			, std::shared_ptr<AGE::MaterialSetInstance> material = nullptr);
 		virtual void reset();
 
-		template <typename Archive> void save(Archive &ar) const;
-		template <typename Archive> void load(Archive &ar);
+		template <typename Archive> void save(Archive &ar, const std::uint32_t version) const;
+		template <typename Archive> void load(Archive &ar, const std::uint32_t version);
 
 
 		bool setMeshAndMaterial(
@@ -66,6 +66,7 @@ namespace AGE
 		virtual void postUnserialization();
 
 	private:
+		friend class cereal::access;
 		AGE::PrepareKey _key;
 		std::shared_ptr<AGE::MeshInstance> _mesh;
 		std::shared_ptr<AGE::MaterialSetInstance> _material;
@@ -90,7 +91,7 @@ namespace AGE
 	};
 
 	template <typename Archive>
-	void MeshRenderer::save(Archive &ar) const
+	void MeshRenderer::save(Archive &ar, const std::uint32_t version) const
 	{
 		auto serializationInfos = std::make_unique<SerializationInfos>();
 
@@ -113,8 +114,10 @@ namespace AGE
 	}
 
 	template <typename Archive>
-	void MeshRenderer::load(Archive &ar)
+	void MeshRenderer::load(Archive &ar, const std::uint32_t version)
 	{
 		ar(_serializationInfos);
 	}
 }
+
+CEREAL_CLASS_VERSION(AGE::MeshRenderer, 0)

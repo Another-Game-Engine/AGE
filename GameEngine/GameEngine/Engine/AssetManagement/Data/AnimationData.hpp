@@ -3,6 +3,7 @@
 #include <Skinning/AnimationChannel.hpp>
 #include <cereal/types/vector.hpp>
 #include <cereal/types/string.hpp>
+#include <stdint.h>
 
 namespace AGE
 {
@@ -15,8 +16,10 @@ namespace AGE
 	};
 
 	template <class Archive>
-	void serialize(Archive &ar, AnimationData &value)
+	void serialize(Archive &ar, AnimationData &value, const std::uint32_t version)
 	{
 		ar(value.name, value.channels, value.duration, value.id);
 	}
 }
+
+CEREAL_CLASS_VERSION(AGE::AnimationData, 0)

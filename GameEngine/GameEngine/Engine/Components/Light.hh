@@ -21,7 +21,7 @@ namespace AGE
 
 		PointLightComponent &set(glm::vec3 const &color = glm::vec3(1.0f), glm::vec3 const &range = glm::vec3(1.0f, 0.1f, 0.01f));
 
-		template <typename Archive>void serialize(Archive &ar);
+		template <typename Archive>void serialize(Archive &ar, const std::uint32_t version);
 		inline const glm::vec3 &getColor() const { return _color; }
 		inline const glm::vec3 &getRange() const { return _range; }
 		inline float *getColorPtr() { return &_color.x; }
@@ -46,9 +46,10 @@ namespace AGE
 	};
 
 	template <typename Archive>
-	void PointLightComponent::serialize(Archive &ar)
+	void PointLightComponent::serialize(Archive &ar, const std::uint32_t version)
 	{
 		ar(cereal::make_nvp("color", _color), cereal::make_nvp("range", _range));
 	}
 }
 
+CEREAL_CLASS_VERSION(AGE::PointLightComponent, 0)
