@@ -6,6 +6,7 @@ namespace AGE
 	EntityData::EntityData(AScene *_scene)
 		: link(this, _scene)
 		, scene(_scene)
+		, outOfContext(false)
 	{
 	}
 

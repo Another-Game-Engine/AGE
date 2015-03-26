@@ -126,7 +126,7 @@ namespace AGE
 		}
 	}
 
-	Entity &AScene::createEntity()
+	Entity &AScene::createEntity(bool outContext /* = false */)
 	{
 		auto e = _entityPool.create(this);
 
@@ -143,8 +143,12 @@ namespace AGE
 		}
 		//e->link._renderScene = _renderScene;
 		e->entity.ptr = e;
-		informFiltersEntityCreation(*e);
-		_entities.insert(e->entity);
+		e->outOfContext = outContext;
+		if (!outContext)
+		{
+			informFiltersEntityCreation(*e);
+			_entities.insert(e->entity);
+		}
 		return e->entity;
 	}
 
@@ -161,7 +165,10 @@ namespace AGE
 		{
 			if (data->components[i])
 			{
-				informFiltersComponentDeletion(ComponentType(i), *data);
+				if (!data->outOfContext)
+				{
+					informFiltersComponentDeletion(ComponentType(i), *data);
+				}
 				data->removeComponent(i);
 			}
 
@@ -171,7 +178,10 @@ namespace AGE
 			//	informFiltersTagDeletion(TAG_ID(i - MAX_CPT_NUMBER), *data);
 			//}
 		}
-		informFiltersEntityDeletion(*data);
+		if (!data->outOfContext)
+		{
+			informFiltersEntityDeletion(*data);
+		}
 
 		auto children = e.getLink().getChildren();
 		for (auto &c : children)

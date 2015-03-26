@@ -78,7 +78,9 @@ namespace AGE
 		void                    informFiltersEntityCreation(const EntityData &entity);
 		void                    informFiltersEntityDeletion(const EntityData &entity);
 
-		Entity &createEntity();
+		// If `outContext` is true, entity will not be in the world and updated
+		// It's used for Archetypes, a priori, you don't need it anywhere else.
+		Entity &createEntity(bool outContext = false);
 
 		// deep will destroy all children recursively
 		// if not deep children will be set as root level
