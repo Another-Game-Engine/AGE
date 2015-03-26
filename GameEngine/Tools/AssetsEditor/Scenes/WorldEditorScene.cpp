@@ -44,8 +44,7 @@ namespace AGE
 		addSystem<WE::AssetsAndComponentRelationsSystem>(0);
 		addSystem<WE::EntityManager>(1);
 		addSystem<FreeFlyCamera>(2);
-		//addSystem<BulletDynamicSystem>(3);
-
+		
 		return true;
 	}
 

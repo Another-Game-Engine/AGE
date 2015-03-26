@@ -54,6 +54,14 @@ namespace AGE
 				{
 					std::ifstream file("EngineCoreTestConfiguration.json", std::ios::binary);
 					assert(file.is_open());
+					
+					// if file is empty
+					if (file.peek() == std::ifstream::traits_type::eof())
+					{
+						_configurations = std::make_shared<Configurations>();
+						_saveConfigurations();
+					}
+					else
 					{
 						auto ar = cereal::JSONInputArchive(file);
 						ar(_configurations);

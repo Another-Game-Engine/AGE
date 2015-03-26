@@ -113,6 +113,11 @@ namespace AGE
 				materialSubset._properties.push_back(specular);
 				specular->set(material_data.specular);
 
+				auto normalTex = std::make_shared<MapColor>("normal");
+				materialSubset._properties.push_back(normalTex);
+				auto normalTexPtr = std::static_pointer_cast<Texture2D>(loadTexture(material_data.normalTexPath, loadingChannel));
+				normalTex->set(normalTexPtr);
+
 				auto diffuseTex = std::make_shared<MapColor>("diffuse");
 				materialSubset._properties.push_back(diffuseTex);
 				auto diffuseTexPtr = std::static_pointer_cast<Texture2D>(loadTexture(material_data.diffuseTexPath, loadingChannel));

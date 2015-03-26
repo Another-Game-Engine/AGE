@@ -2,7 +2,7 @@
 
 namespace AGE
 {
-	static class WESerialization
+	class WESerialization
 	{
 	private:
 		static bool _forEditor;
