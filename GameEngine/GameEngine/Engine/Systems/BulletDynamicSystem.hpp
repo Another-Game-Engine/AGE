@@ -44,6 +44,10 @@ namespace AGE
 				}
 
 			}
+			if (time == 0.0f)
+			{
+				return;
+			}
 			_manager->getWorld()->stepSimulation(static_cast<btScalar>(time), 10);
 		}
 
