@@ -85,6 +85,9 @@ namespace AGE
 		// deep will destroy all children recursively
 		// if not deep children will be set as root level
 		void destroy(const Entity &e, bool deep = false);
+
+		bool copyEntity(const Entity &source, Entity &destination, bool deep = true, bool outContext = false);
+
 		void clearAllEntities();
 
 		template <typename T>

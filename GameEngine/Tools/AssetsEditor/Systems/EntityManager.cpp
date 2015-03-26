@@ -8,6 +8,7 @@
 #include <EditorConfiguration.hpp>
 #include <Components/CameraComponent.hpp>
 #include <Components/FreeFlyComponent.hh>
+#include <Entities/Archetype.hpp>
 
 namespace AGE
 {

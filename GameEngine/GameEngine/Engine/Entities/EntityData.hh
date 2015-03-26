@@ -34,13 +34,17 @@ namespace AGE
 				components.resize(id + 1, nullptr);
 			T *ptr = scene->createComponent<T>(entity, args...);
 			components[id] = ptr;
-			scene->informFiltersComponentAddition(id, *this);
+			if (!outOfContext)
+			{
+				scene->informFiltersComponentAddition(id, *this);
+			}
 			ptr->reset();
 			ptr->init(args...);
 			return ptr;
 		}
 
 		void addComponentPtr(ComponentBase *cpt);
+		void copyComponent(ComponentBase *cpt);
 		void removeComponent(ComponentType id);
 		bool haveComponent(ComponentType id) const;
 		const std::vector<ComponentBase*> &getComponentList() const

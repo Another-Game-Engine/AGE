@@ -165,10 +165,6 @@ namespace AGE
 		{
 			if (data->components[i])
 			{
-				if (!data->outOfContext)
-				{
-					informFiltersComponentDeletion(ComponentType(i), *data);
-				}
 				data->removeComponent(i);
 			}
 
@@ -198,6 +194,32 @@ namespace AGE
 		data->getLink().detachParent();
 
 		_entityPool.destroy(e.ptr);
+	}
+
+	bool AScene::copyEntity(const Entity &source, Entity &destination, bool deep /*= true*/, bool outContext /*= false*/)
+	{
+		if (!source.isValid())
+		{
+			return false;
+		}
+		if (!destination.isValid())
+		{
+			destination = createEntity(outContext);
+		}
+		if (deep)
+		{
+			auto link = source.getLink();
+			for (auto &e : link.getChildren())
+			{
+				Entity tmp;
+				if (!copyEntity(e->getEntity()->getEntity(), tmp, deep, outContext))
+				{
+					return false;
+				}
+				destination.getLink().attachChild(tmp.getLinkPtr());
+			}
+		}
+		return true;
 	}
 
 	void AScene::clearAllEntities()

@@ -36,7 +36,34 @@ namespace AGE
 			components.resize(id + 1, nullptr);
 		}
 		components[id] = cpt;
-		scene->informFiltersComponentAddition(id, *this);
+		if (!outOfContext)
+		{
+			scene->informFiltersComponentAddition(id, *this);
+		}
+	}
+
+	void EntityData::copyComponent(ComponentBase *cpt)
+	{
+		auto id = cpt->getType();
+		auto newCpt = static_cast<ComponentBase*>(scene->allocateComponent(id));
+
+		*newCpt = *cpt;
+
+		if (haveComponent(id))
+		{
+			// if already have component of this type, we remove the old one
+			removeComponent(id);
+		}
+
+		if (components.size() <= id)
+		{
+			components.resize(id + 1, nullptr);
+		}
+		components[id] = newCpt;
+		if (!outOfContext)
+		{
+			scene->informFiltersComponentAddition(id, *this);
+		}
 	}
 
 	void EntityData::removeComponent(ComponentType id)
@@ -46,7 +73,10 @@ namespace AGE
 		components[id]->reset();
 		scene->deleteComponent(components[id]);
 		components[id] = nullptr;
-		scene->informFiltersComponentDeletion(id, *this);
+		if (!outOfContext)
+		{
+			scene->informFiltersComponentDeletion(id, *this);
+		}
 	}
 
 	bool EntityData::haveComponent(ComponentType id) const
@@ -57,7 +87,7 @@ namespace AGE
 	/////////////////////////////////////
 
 	Entity::Entity()
-		: id(0)
+		: id(MAX_ENTITY_NUMBER)
 		, version(0)
 		, flags(0)
 	{}
@@ -173,6 +203,11 @@ namespace AGE
 	void Entity::addComponentPtr(ComponentBase *cpt)
 	{
 		ptr->addComponentPtr(cpt);
+	}
+
+	void Entity::copyComponent(ComponentBase *cpt)
+	{
+		ptr->copyComponent(cpt);
 	}
 
 	const std::vector<ComponentBase*> &Entity::getComponentList() const
