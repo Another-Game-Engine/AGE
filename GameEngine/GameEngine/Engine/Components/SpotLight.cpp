@@ -6,32 +6,13 @@ namespace AGE
 {
 	SpotLightData::SpotLightData() { }
 
-	SpotLightData::SpotLightData(SpotLightData const &o)
-	{
-		*this = o;
-	}
-
 	SpotLightData::~SpotLightData()
 	{
-	}
-
-	SpotLightData &SpotLightData::operator = (SpotLightData const &o)
-	{
-		lightVP = o.lightVP;
-		positionPower = o.positionPower;
-		colorRange = o.colorRange;
-		shadowId = o.shadowId;
-		return (*this);
 	}
 
 
 	SpotLight::SpotLight()
 	{
-	}
-
-	SpotLight::SpotLight(SpotLight const &o)
-	{
-		*this = o;
 	}
 
 	SpotLight::~SpotLight()
@@ -48,12 +29,6 @@ namespace AGE
 
 	void SpotLight::reset()
 	{
-	}
-
-	SpotLight &SpotLight::operator=(SpotLight const &o)
-	{
-		lightData = o.lightData;
-		return (*this);
 	}
 
 	void	SpotLight::init()

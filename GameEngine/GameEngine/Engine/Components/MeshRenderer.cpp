@@ -91,6 +91,23 @@ namespace AGE
 		_updateGeometry();
 	}
 
+	void MeshRenderer::_copyFrom(const ComponentBase *model)
+	{
+		auto o = static_cast<const MeshRenderer*>(model);
+
+		_material = _material;
+		_mesh = _mesh;
+#ifdef EDITOR_ENABLED
+		selectedMeshIndex = o->selectedMeshIndex;
+		selectedMeshName = o->selectedMeshName;
+		selectedMeshPath = o->selectedMeshPath;
+
+		selectedMaterialIndex = o->selectedMaterialIndex;
+		selectedMaterialName = o->selectedMaterialName;
+		selectedMaterialPath = o->selectedMaterialPath;
+#endif
+	}
+
 	std::shared_ptr<AGE::MeshInstance> MeshRenderer::getMesh()
 	{
 		return _mesh;

@@ -77,7 +77,6 @@ namespace AGE
 			_copyMap.insert(std::make_pair(ageId, CopyFn([](void *dest, ComponentBase *src)
 			{
 				T *c = new(dest)T();
-				*c = (*(T*)(src));
 			})));
 
 			_componentNames.insert(std::make_pair(ageId, name));

@@ -10,6 +10,8 @@ namespace AGE
 	{
 		RotationComponent();
 		virtual ~RotationComponent(void);
+		RotationComponent &operator=(const RotationComponent &o) = delete;
+		virtual void _copyFrom(const ComponentBase *model);
 
 		void init(const glm::vec3 &angles = glm::vec3(0), float speed = 100.0f);
 

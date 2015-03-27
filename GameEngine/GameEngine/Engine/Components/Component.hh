@@ -24,6 +24,13 @@ namespace AGE
 		virtual void reset(){};
 		virtual void postUnserialization(){}
 
+		void copyFrom(const ComponentBase *model)
+		{
+			entity = model->entity;
+			_typeId = model->_typeId;
+			_copyFrom(model);
+		}
+
 		Entity entity;
 
 		inline ComponentType getType() const
@@ -43,6 +50,12 @@ namespace AGE
 #endif
 	protected:
 		static ComponentType _typeCounter;
+
+		// override this method to enable copy of the component
+		virtual void _copyFrom(const ComponentBase *model)
+		{
+			(void)(model);
+		}
 	private:
 		ComponentType _typeId;
 

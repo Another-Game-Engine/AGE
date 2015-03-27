@@ -17,6 +17,21 @@ namespace AGE
 
 		}
 
+		void EntityRepresentation::_copyFrom(const ComponentBase *model)
+		{
+			auto o = static_cast<const EntityRepresentation*>(model);
+			exposedInEditor = o->exposedInEditor;
+			editorOnly = o->editorOnly;
+			auto len = strlen(o->name);
+			if (len >= ENTITY_NAME_LENGTH)
+				len = ENTITY_NAME_LENGTH;
+			memcpy(name, o->name, len);
+			auto &link = entity.getLink();
+			position = link.getPosition();
+			rotation = glm::eulerAngles(link.getOrientation());
+			scale = link.getScale();
+		}
+
 		void EntityRepresentation::init(const char *_name, const std::string &layerName /*= ""*/)
 		{
 			exposedInEditor = false;

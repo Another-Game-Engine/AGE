@@ -14,7 +14,8 @@ namespace AGE
 		PointLightComponent();
 		virtual ~PointLightComponent();
 		PointLightComponent(PointLightComponent const &o);
-		PointLightComponent &operator=(PointLightComponent const &o);
+
+		virtual void _copyFrom(const ComponentBase *model);
 
 		virtual void reset();
 		void init();

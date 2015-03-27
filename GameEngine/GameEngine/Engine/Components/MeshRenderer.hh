@@ -45,6 +45,8 @@ namespace AGE
 		void enableMode(RenderModes mode);
 		void disableMode(RenderModes mode);
 
+		virtual void _copyFrom(const ComponentBase *destination);
+
 #ifdef EDITOR_ENABLED
 		std::vector<const char*> *meshFileList = nullptr;
 		std::vector<const char*> *meshPathList = nullptr;
@@ -64,11 +66,7 @@ namespace AGE
 #endif
 
 		virtual void postUnserialization();
-		MeshRenderer &operator=(MeshRenderer const &)
-		{
-			//todo
-			return *this;
-		};
+		MeshRenderer &operator=(MeshRenderer const &) = delete;
 
 	private:
 		friend class cereal::access;

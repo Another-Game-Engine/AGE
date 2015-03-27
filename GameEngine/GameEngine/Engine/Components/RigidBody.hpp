@@ -41,7 +41,6 @@ namespace AGE
 		void _clearBulletObjects();
 	public:
 		RigidBody();
-		RigidBody &operator=(RigidBody const &o) = default;
 		void init(float mass = 1.0f);
 		virtual void reset();
 		void setTransformation(const AGE::Link *link);
@@ -108,9 +107,13 @@ namespace AGE
 		virtual void editorDelete(AScene *scene);
 		virtual void editorUpdate(AScene *scene);
 #endif
-
+	protected:
+		virtual void _copyFrom(const ComponentBase *model)
+		{
+			// !!! TODO TODO TODO
+		}
 	private:
-		RigidBody(RigidBody const &o);
+		RigidBody(RigidBody const &o) = delete;
 	};
 }
 

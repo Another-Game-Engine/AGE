@@ -206,6 +206,7 @@ namespace AGE
 		{
 			destination = createEntity(outContext);
 		}
+
 		if (deep)
 		{
 			auto link = source.getLink();

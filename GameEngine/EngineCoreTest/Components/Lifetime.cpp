@@ -12,6 +12,11 @@ namespace AGE
 
 	}
 
+	void Lifetime::_copyFrom(const ComponentBase *model)
+	{
+		auto o = static_cast<const Lifetime*>(model);
+		_t = o->_t;
+	}
 
 	void Lifetime::init(float t/* = 1.0f*/)
 	{
