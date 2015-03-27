@@ -29,6 +29,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "deferred shading", "deferre
 		Shaders\deferred_shading\deferred_shading_get_buffer.vp = Shaders\deferred_shading\deferred_shading_get_buffer.vp
 		Shaders\deferred_shading\deferred_shading_merge.fp = Shaders\deferred_shading\deferred_shading_merge.fp
 		Shaders\deferred_shading\deferred_shading_merge.vp = Shaders\deferred_shading\deferred_shading_merge.vp
+		Shaders\deferred_shading\deferred_shading_merge_debug.fp = Shaders\deferred_shading\deferred_shading_merge_debug.fp
+		Shaders\deferred_shading\deferred_shading_merge_debug.vp = Shaders\deferred_shading\deferred_shading_merge_debug.vp
 		Shaders\deferred_shading\deferred_shading_point_light.fp = Shaders\deferred_shading\deferred_shading_point_light.fp
 		Shaders\deferred_shading\deferred_shading_point_light.vp = Shaders\deferred_shading\deferred_shading_point_light.vp
 	EndProjectSection

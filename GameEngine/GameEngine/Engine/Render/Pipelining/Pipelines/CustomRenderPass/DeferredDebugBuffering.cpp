@@ -58,7 +58,7 @@ namespace AGE
 		OpenGLState::glDisable(GL_BLEND);
 		OpenGLState::glDisable(GL_STENCIL_TEST);
 		OpenGLState::glEnable(GL_DEPTH_TEST);
-		OpenGLState::glClearColor(glm::vec4(0.f, 0.0f, 0.0f, 0.0f));
+		OpenGLState::glClearColor(glm::vec4(0.f, 0.f, 0.f, 0.f));
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		OpenGLState::glDepthMask(GL_FALSE);

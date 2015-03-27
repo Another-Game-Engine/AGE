@@ -1,4 +1,4 @@
-#include <Render/Pipelining/Pipelines/CustomRenderPass/DeferredMergingOffScreen.hh>
+#include <Render/Pipelining/Pipelines/CustomRenderPass/DeferredMergingDebug.hh>
 
 #include <Render/Textures/Texture2D.hh>
 #include <Render/OpenGLTask/OpenGLState.hh>
@@ -13,8 +13,8 @@
 #include <Threads/RenderThread.hpp>
 #include <Threads/ThreadManager.hpp>
 
-#define DEFERRED_SHADING_MERGING_VERTEX "../../Shaders/deferred_shading/deferred_shading_merge.vp"
-#define DEFERRED_SHADING_MERGING_FRAG "../../Shaders/deferred_shading/deferred_shading_merge.fp"
+#define DEFERRED_SHADING_MERGING_VERTEX "../../Shaders/deferred_shading/deferred_shading_merge_debug.vp"
+#define DEFERRED_SHADING_MERGING_FRAG "../../Shaders/deferred_shading/deferred_shading_merge_debug.fp"
 
 namespace AGE
 {
@@ -24,16 +24,11 @@ namespace AGE
 		PROGRAM_NBR
 	};
 
-	DeferredMergingOffScreen::DeferredMergingOffScreen(std::shared_ptr<PaintingManager> painterManager,
-		std::shared_ptr<Texture2D> diffuse,
-		std::shared_ptr<Texture2D> specular,
-		std::shared_ptr<Texture2D> lightAccumulation) :
-		FrameBufferRender(painterManager)
+	DeferredMergingDebug::DeferredMergingDebug(std::shared_ptr<PaintingManager> painterManager,
+		std::shared_ptr<Texture2D> debugLightRender) :
+		ScreenRender(painterManager)
 	{
-		_diffuseInput = diffuse;
-		_specularInput = specular;
-		_lightAccuInput = lightAccumulation;
-
+		_debugLightRender = debugLightRender;
 		_programs.resize(PROGRAM_NBR);
 
 		_programs[PROGRAM_MERGING] = std::make_shared<Program>(Program(std::string("basic_3d_render"),
@@ -48,22 +43,15 @@ namespace AGE
 		_quadPainter = _painterManager->get_painter(quadPainterKey);
 	}
 
-	void DeferredMergingOffScreen::setAmbient(glm::vec3 const &ambient)
-	{
-		_ambientColor = ambient;
-	}
-
-	void DeferredMergingOffScreen::renderPass(RenderPipeline const &, RenderLightList const &, CameraInfos const &)
+	void DeferredMergingDebug::renderPass(RenderPipeline const &, RenderLightList const &, CameraInfos const &)
 	{
 		_programs[PROGRAM_MERGING]->use();
-		*_programs[PROGRAM_MERGING]->get_resource<Sampler2D>("diffuse_map") = _diffuseInput;
-		*_programs[PROGRAM_MERGING]->get_resource<Sampler2D>("light_buffer") = _lightAccuInput;
-		*_programs[PROGRAM_MERGING]->get_resource<Vec3>("ambient_color") = _ambientColor;
+		*_programs[PROGRAM_MERGING]->get_resource<Sampler2D>("debug_light_map") = _debugLightRender;
 
-		OpenGLState::glDisable(GL_BLEND);
-		OpenGLState::glDisable(GL_CULL_FACE);
+		OpenGLState::glEnable(GL_BLEND);
 		OpenGLState::glEnable(GL_DEPTH_TEST);
-		OpenGLState::glEnable(GL_STENCIL_TEST);
+		OpenGLState::glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	//	OpenGLState::glDisable(GL_CULL_FACE);
 		_quadPainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_MERGING], Properties(), _quadVertices);
 	}
 

@@ -12,7 +12,7 @@
 namespace AGE
 {
 
-	class DeferredMergingOffScreen;
+	class DeferredMerging;
 
 	class DebugDeferredShading : public ARenderingPipeline
 	{
@@ -33,7 +33,7 @@ namespace AGE
 		std::shared_ptr<Texture2D> _normal;
 		std::shared_ptr<Texture2D> _specular;
 		std::shared_ptr<Texture2D> _lightAccumulation;
-		std::shared_ptr<DeferredMergingOffScreen> _deferredMerging;
+		std::shared_ptr<DeferredMerging> _deferredMerging;
 	};
 
 }
