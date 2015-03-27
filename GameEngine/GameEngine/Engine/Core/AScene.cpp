@@ -218,6 +218,13 @@ namespace AGE
 				}
 				destination.getLink().attachChild(tmp.getLinkPtr());
 			}
+			for (auto e : source.getComponentList())
+			{
+				if (e != nullptr)
+				{
+					destination.copyComponent(e);
+				}
+			}
 		}
 		return true;
 	}

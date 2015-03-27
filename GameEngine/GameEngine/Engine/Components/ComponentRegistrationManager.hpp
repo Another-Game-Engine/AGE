@@ -17,6 +17,7 @@ namespace AGE
 		typedef std::function<void(ComponentBase *, cereal::JSONOutputArchive &)> RegisterJsonFn;
 		typedef std::function<void(void *, cereal::JSONInputArchive &)> LoadJsonFn;
 		typedef std::function<void(AScene *)> CreateComponentPoolFn;
+		typedef std::function<void(void *, ComponentBase *)> CopyFn;
 
 		typedef std::function<void(ComponentBase *, cereal::PortableBinaryOutputArchive &)> RegisterBinaryFn;
 
@@ -73,6 +74,12 @@ namespace AGE
 				scene->createComponentPool<T>();
 			})));
 
+			_copyMap.insert(std::make_pair(ageId, CopyFn([](void *dest, ComponentBase *src)
+			{
+				T *c = new(dest)T();
+				*c = (*(T*)(src));
+			})));
+
 			_componentNames.insert(std::make_pair(ageId, name));
 		}
 
@@ -80,6 +87,7 @@ namespace AGE
 		void serializeJson(ComponentBase *c, cereal::JSONOutputArchive &ar);
 		void loadJson(std::size_t componentHashId, Entity &e, cereal::JSONInputArchive &ar);
 		std::size_t getSystemIdForAgeId(ComponentType id);
+		ComponentBase *copyComponent(ComponentBase *c, AScene *scene);
 
 		inline const std::map<std::size_t, std::function<ComponentBase*(Entity *)>> &getCreationFunctions() { return _creationFunctions; }
 		inline const std::map<std::size_t, ComponentType> &getSystemIdToAgeIdMap() const { return _typeIds; }
@@ -92,6 +100,7 @@ namespace AGE
 		std::map < ComponentType, RegisterJsonFn> _jsonSaveMap;
 		std::map < ComponentType, LoadJsonFn> _jsonLoadMap;
 		std::map < ComponentType, RegisterBinaryFn> _binarySaveMap;
+		std::map < ComponentType, CopyFn> _copyMap;
 		std::map < ComponentType, CreateComponentPoolFn> _createComponentPoolMap;
 		std::map < ComponentType, std::string> _componentNames;
 	};

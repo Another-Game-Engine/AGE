@@ -64,6 +64,11 @@ namespace AGE
 #endif
 
 		virtual void postUnserialization();
+		MeshRenderer &operator=(MeshRenderer const &)
+		{
+			//todo
+			return *this;
+		};
 
 	private:
 		friend class cereal::access;
@@ -87,7 +92,6 @@ namespace AGE
 
 		void _updateGeometry();
 		MeshRenderer(MeshRenderer const &) = delete;
-		MeshRenderer &operator=(MeshRenderer const &) = delete;
 	};
 
 	template <typename Archive>

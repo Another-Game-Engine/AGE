@@ -45,9 +45,7 @@ namespace AGE
 	void EntityData::copyComponent(ComponentBase *cpt)
 	{
 		auto id = cpt->getType();
-		auto newCpt = static_cast<ComponentBase*>(scene->allocateComponent(id));
-
-		*newCpt = *cpt;
+		auto newCpt = ComponentRegistrationManager::getInstance().copyComponent(cpt, scene);
 
 		if (haveComponent(id))
 		{

@@ -135,6 +135,7 @@ namespace AGE
 					{
 						_scene->destroy(entity);
 						_selectedEntity = nullptr;
+						_selectedEntityIndex = 0;
 					}
 				}
 
@@ -237,6 +238,12 @@ namespace AGE
 
 			void EntityManager::displayEntity(Entity &entity)
 			{
+				if (ImGui::Button("Test archetype"))
+				{
+					Entity test;
+					_scene->copyEntity(entity, test, true, false);
+				}
+
 				auto cpt = entity.getComponent<AGE::WE::EntityRepresentation>();
 
 				ImGui::InputText("Name", cpt->name, ENTITY_NAME_LENGTH);

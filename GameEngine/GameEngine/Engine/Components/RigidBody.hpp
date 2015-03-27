@@ -41,6 +41,7 @@ namespace AGE
 		void _clearBulletObjects();
 	public:
 		RigidBody();
+		RigidBody &operator=(RigidBody const &o) = default;
 		void init(float mass = 1.0f);
 		virtual void reset();
 		void setTransformation(const AGE::Link *link);
@@ -62,7 +63,6 @@ namespace AGE
 		void setTransformConstraint(bool x, bool y, bool z);
 		virtual ~RigidBody(void);
 		RigidBody(RigidBody &&o) = delete;
-		RigidBody &operator=(RigidBody &&o) = delete;
 		//////
 		////
 		// Serialization
@@ -110,7 +110,6 @@ namespace AGE
 #endif
 
 	private:
-		RigidBody &operator=(RigidBody const &o);
 		RigidBody(RigidBody const &o);
 	};
 }

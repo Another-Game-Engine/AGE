@@ -44,6 +44,19 @@ namespace AGE
 		e.addComponentPtr(cpt);
 	}
 
+	ComponentBase *ComponentRegistrationManager::copyComponent(ComponentBase *src, AScene *scene)
+	{
+		AGE_ASSERT(scene != nullptr);
+		AGE_ASSERT(src != nullptr);
+
+		auto id = src->getType();
+		auto find = _copyMap.find(id);
+		assert(find != std::end(_copyMap));
+		auto voidCpt = scene->allocateComponent(id);
+		find->second(voidCpt, src);
+		return static_cast<ComponentBase*>(voidCpt);
+	}
+
 	std::size_t ComponentRegistrationManager::getSystemIdForAgeId(ComponentType id)
 	{
 		auto f = _ageTypeIds.find(id);
