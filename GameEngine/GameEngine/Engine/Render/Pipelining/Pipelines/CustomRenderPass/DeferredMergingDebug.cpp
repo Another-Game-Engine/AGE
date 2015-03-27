@@ -51,7 +51,6 @@ namespace AGE
 		OpenGLState::glEnable(GL_BLEND);
 		OpenGLState::glEnable(GL_DEPTH_TEST);
 		OpenGLState::glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	//	OpenGLState::glDisable(GL_CULL_FACE);
 		_quadPainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_MERGING], Properties(), _quadVertices);
 	}
 
