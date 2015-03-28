@@ -7,7 +7,6 @@
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredBasicBuffering.cpp" />
     <ClCompile Include="Engine\Core\Inputs\ActionManager.cpp" />
     <ClCompile Include="Engine\AssetManagement\AssetManager.cpp" />
-    <ClCompile Include="Engine\Components\Light.cpp" />
     <ClCompile Include="Engine\Components\RigidBody.cpp" />
     <ClCompile Include="Engine\Context\IRenderContext.cpp" />
     <ClCompile Include="Engine\Context\SDL\SdlToAgeInputs.cpp" />
@@ -159,6 +158,7 @@
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomPipeline\DebugDeferredShading.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredDebugBuffering.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredMergingDebug.cpp" />
+    <ClCompile Include="Engine\Components\Light.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -175,7 +175,6 @@
     <ClInclude Include="Engine\AssetManagement\Instance\MaterialInstance.hh" />
     <ClInclude Include="Engine\AssetManagement\Instance\MeshInstance.hh" />
     <ClInclude Include="Engine\Components\ComponentManager.hpp" />
-    <ClInclude Include="Engine\Components\Light.hh" />
     <ClInclude Include="Engine\Configuration.hpp" />
     <ClInclude Include="Engine\Core\Inputs\AgeInputs.hh" />
     <ClInclude Include="Engine\Entities\EntityData.hh" />
@@ -415,6 +414,7 @@
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\PipelineTools.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredDebugBuffering.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredMergingDebug.hh" />
+    <ClInclude Include="Engine\Components\Light.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />
