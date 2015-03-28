@@ -22,10 +22,12 @@ namespace AGE
 			auto o = static_cast<const EntityRepresentation*>(model);
 			exposedInEditor = o->exposedInEditor;
 			editorOnly = o->editorOnly;
-			auto len = strlen(o->name);
+			auto copyName = std::string(o->name);
+			copyName += "-Copy";
+			auto len = copyName.size();
 			if (len >= ENTITY_NAME_LENGTH)
 				len = ENTITY_NAME_LENGTH;
-			memcpy(name, o->name, len);
+			memcpy(name, copyName.c_str(), len);
 			auto &link = entity.getLink();
 			position = link.getPosition();
 			rotation = glm::eulerAngles(link.getOrientation());
