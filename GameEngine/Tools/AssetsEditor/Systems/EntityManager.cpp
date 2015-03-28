@@ -143,6 +143,33 @@ namespace AGE
 						Entity duplicate;
 						_scene->copyEntity(entity, duplicate, true, false);
 					}
+
+					ImGui::InputText("Archetype name", _archetypeName, MAX_SCENE_NAME_LENGTH);
+					ImGui::SameLine();
+					if (ImGui::Button("Save as archetype"))
+					{
+						WESerialization::SetSerializeForEditor(true);
+						// we list all assets dependencies
+						{
+							AssetsManager::AssetsPackage package;
+							for (auto e : _meshRenderers.getCollection())
+							{
+								auto cpt = e.getComponent<MeshRenderer>();
+								if (!cpt->selectedMeshPath.empty())
+								{
+									package.meshs.insert(cpt->selectedMeshPath);
+								}
+								if (!cpt->selectedMaterialPath.empty())
+								{
+									package.materials.insert(cpt->selectedMaterialPath);
+								}
+							}
+							_scene->getInstance<AssetsManager>()->savePackage(package, WE::EditorConfiguration::GetEditedSceneDirectory() + std::string(_archetypeName) + "_archetypeAssets.json");
+						}
+
+						_scene->saveSelectionToJson(WE::EditorConfiguration::GetEditedSceneDirectory() + std::string(_archetypeName) + "_archetype_description.json", _entities);
+						WESerialization::SetSerializeForEditor(false);
+					}
 				}
 
 				
