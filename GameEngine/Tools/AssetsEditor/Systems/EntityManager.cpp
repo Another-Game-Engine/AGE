@@ -164,10 +164,10 @@ namespace AGE
 									package.materials.insert(cpt->selectedMaterialPath);
 								}
 							}
-							_scene->getInstance<AssetsManager>()->savePackage(package, WE::EditorConfiguration::GetEditedSceneDirectory() + std::string(_archetypeName) + "_archetypeAssets.json");
+							_scene->getInstance<AssetsManager>()->savePackage(package, WE::EditorConfiguration::GetEditedArchetypeDirectory() + std::string(_archetypeName) + "_assets.json");
 						}
 
-						_scene->saveSelectionToJson(WE::EditorConfiguration::GetEditedSceneDirectory() + std::string(_archetypeName) + "_archetype_description.json", _entities);
+						_scene->saveSelectionToJson(WE::EditorConfiguration::GetEditedArchetypeDirectory() + std::string(_archetypeName) + "_archetype.json", _entities);
 						WESerialization::SetSerializeForEditor(false);
 					}
 				}

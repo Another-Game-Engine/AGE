@@ -21,6 +21,7 @@ namespace AGE
 		{
 			std::string _cookedAssetsDirectory = "../../Assets/Serialized/";
 			std::string _exportSceneFolder = "../../EngineCoreTest/DemoScenes/";
+			std::string _exportArchetypeFolder = "../../EngineCoreTest/Archetypes/";
 			int _selectedScene = 0;
 
 			// not serialized
@@ -36,6 +37,7 @@ namespace AGE
 				ar(cereal::make_nvp("Cooked assets directory", _cookedAssetsDirectory));
 				ar(cereal::make_nvp("Exported scenes directory", _exportSceneFolder));
 				ar(cereal::make_nvp("Selected scene index", _selectedScene));
+				ar(cereal::make_nvp("Archetypes directory", _exportArchetypeFolder));
 			}
 		};
 
@@ -85,6 +87,10 @@ namespace AGE
 		static const std::string &GetExportedSceneDirectory()
 		{
 			return _getConfigurations()->_exportSceneFolder;
+		}
+		static const std::string &GetExportedArchetypeDirectory()
+		{
+			return _getConfigurations()->_exportArchetypeFolder;
 		}
 		static std::vector<const char*> getScenesName()
 		{

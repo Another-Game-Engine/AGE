@@ -17,7 +17,7 @@ namespace AGE
 	{
 		class EditorConfiguration
 		{
-		private:
+		public:
 			friend class cereal::access;
 			struct Configurations
 			{
@@ -25,6 +25,9 @@ namespace AGE
 				std::string _cookedAssetsDirectory = "../../Assets/Serialized/";
 				std::string _saveSceneFolder = "../../Tools/AssetsEditor/Saves/";
 				std::string _exportSceneFolder = "../../EngineCoreTest/DemoScenes/";
+				std::string _saveArchetypeFolder = "../../Tools/AssetsEditor/Archetypes/";
+				std::string _exportArchetypeFolder = "../../EngineCoreTest/Archetypes/";
+
 				int _selectedScene = 0;
 
 				// not serialized
@@ -41,8 +44,12 @@ namespace AGE
 					ar(cereal::make_nvp("Cooked assets directory", _cookedAssetsDirectory));
 					ar(cereal::make_nvp("Edited scenes directory", _saveSceneFolder));
 					ar(cereal::make_nvp("Exported scenes directory", _exportSceneFolder));
+					ar(cereal::make_nvp("Saved archetypes directory", _saveArchetypeFolder));
+					ar(cereal::make_nvp("Exported archetypes directory", _exportArchetypeFolder));
 				}
 			};
+
+		private:
 
 			static std::shared_ptr<Configurations> _getConfigurations()
 			{
@@ -84,6 +91,14 @@ namespace AGE
 			static const std::string &GetExportedSceneDirectory()
 			{
 				return _getConfigurations()->_exportSceneFolder;
+			}
+			static const std::string &GetEditedArchetypeDirectory()
+			{
+				return _getConfigurations()->_saveArchetypeFolder;
+			}
+			static const std::string &GetExportedArchetypeDirectory()
+			{
+				return _getConfigurations()->_exportArchetypeFolder;
 			}
 			static std::vector<const char*> getScenesName()
 			{
@@ -162,3 +177,5 @@ namespace AGE
 		};
 	}
 }
+
+CEREAL_CLASS_VERSION(AGE::WE::EditorConfiguration::Configurations, 0)
