@@ -1,6 +1,6 @@
 #include <AssetFiles/AssetFileManager.hpp>
 #include <Utils/FileSystemHelpers.hpp>
-#include <AssetFiles/RawFile.hpp>
+#include <AssetFiles/MeshRawFile.hpp>
 #include <AssetFiles/CookedFile.hpp>
 #include <AssetFiles/AssetsTypes.hpp>
 #include <Utils/BitOperations.hpp>
@@ -49,20 +49,16 @@ namespace AGE
 			std::shared_ptr<AssetFile> t = nullptr;
 			if (extension == "obj" || extension == "fbx" || extension == "dae")
 			{
-				t = std::make_shared<RawFile>(path, parent);
+				t = std::make_shared<MeshRawFile>(path, parent);
 				t->_type = AssetType::Raw | AssetType::Mesh;
 			}
-			else // temporary
-			{
-				t = std::make_shared<RawFile>(path, parent);
-				t->_type = AssetType::Raw;
-			}
-			/*else if (extension == "bmp" || extension == "jpg" || extension == "jpeg" || extension == "tga" || extension == "png")
-			{
-				t = std::make_shared<RawFile>(path, parent);
-				t->_type = AssetType::Raw | AssetType::Texture;
+			//else if (extension == "bmp" || extension == "jpg" || extension == "jpeg" || extension == "tga" || extension == "png")
+			//{
+			//	t = std::make_shared<RawFile>(path, parent);
+			//	t->_type = AssetType::Raw | AssetType::Texture;
+			//}
 
-			}
+			/*
 			else if (extension == "mtl")
 			{
 				t =  std::make_shared<RawFile>(path, parent);

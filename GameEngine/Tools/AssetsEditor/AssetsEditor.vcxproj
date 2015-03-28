@@ -94,6 +94,7 @@
     <ClCompile Include="..\..\EngineCoreTest\Components\RotationComponent.cpp" />
     <ClCompile Include="AssetFiles\AssetFileManager.cpp" />
     <ClCompile Include="AssetFiles\CookedFile.cpp" />
+    <ClCompile Include="AssetFiles\MeshRawFile.cpp" />
     <ClCompile Include="AssetFiles\RawFile.cpp" />
     <ClCompile Include="AssetsDatabase.cpp" />
     <ClCompile Include="AssetFiles\File.cpp" />
@@ -112,10 +113,11 @@
   <ItemGroup>
     <ClInclude Include="AssetFiles\AssetFileManager.hpp" />
     <ClInclude Include="AssetFiles\AssetsTypes.hpp" />
+    <ClInclude Include="AssetFiles\MeshRawFile.hpp" />
+    <ClInclude Include="AssetFiles\RawFile.hpp" />
     <ClInclude Include="Components\EntityRepresentation.hpp" />
     <ClInclude Include="Convertor\ConvertorStatusManager.hpp" />
     <ClInclude Include="AssetFiles\CookedFile.hpp" />
-    <ClInclude Include="AssetFiles\RawFile.hpp" />
     <ClInclude Include="AssetsDatabase.hpp" />
     <ClInclude Include="Convertor\AnimationsLoader.hpp" />
     <ClInclude Include="Convertor\AssetDataSet.hpp" />
