@@ -1,12 +1,12 @@
 #pragma once
 
-#include <btBulletDynamicsCommon.h>
 #include <Components/Component.hh>
 #include <Utils/UniqueTypeId.hpp>
 #include <Utils/Serialization/btSerialization.hpp>
 #ifdef EDITOR_ENABLED
 #include <WorldEditorGlobal.hpp>
 #endif
+#include <Physic/ContactInformation.hpp>
 
 class btCollisionShape;
 class btMotionState;
@@ -18,14 +18,19 @@ namespace AGE
 
 	struct RigidBody : public ComponentBase
 	{
+		friend class BulletDynamicSystem;
+
+		using ContactInformationList = std::vector < ContactInformation >;
+		using ContactInformationsType = std::unordered_map < Entity, ContactInformationList > ;
+
 		enum CollisionShape
 		{
 			SPHERE = 0,
 			BOX = 1,
 			UNDEFINED = 2
 		};
-	private:
 
+	private:
 		btCollisionShape *_collisionShape;
 		btMotionState *_motionState;
 		btRigidBody *_rigidBody;
@@ -37,8 +42,11 @@ namespace AGE
 		UniqueTypeId _shapeType;
 		std::string _shapePath;
 		CollisionShape _collisionShapeType;
+		ContactInformationsType _contactInformations;
 
 		void _clearBulletObjects();
+		void _addContactInformation(const Entity &entity, const btVector3 &contactPoint, const btVector3 &contactNormal);
+
 	public:
 		RigidBody();
 		void init(float mass = 1.0f);
@@ -60,6 +68,7 @@ namespace AGE
 			, short filterMask = -1);
 		void setRotationConstraint(bool x, bool y, bool z);
 		void setTransformConstraint(bool x, bool y, bool z);
+		const ContactInformationsType &getContactInformations(void) const;
 		virtual ~RigidBody(void);
 		RigidBody(RigidBody &&o) = delete;
 		RigidBody &operator=(RigidBody &&o) = delete;

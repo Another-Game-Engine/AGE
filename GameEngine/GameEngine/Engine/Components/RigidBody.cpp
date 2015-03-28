@@ -231,6 +231,24 @@ namespace AGE
 		_collisionShape = nullptr;
 	}
 
+	void RigidBody::_addContactInformation(const Entity &entity, const btVector3 &contactPoint, const btVector3 &contactNormal)
+	{
+		ContactInformationsType::iterator found = _contactInformations.find(entity);
+		if (found != _contactInformations.end())
+		{
+			found->second.emplace_back(contactPoint, contactNormal);
+		}
+		else
+		{
+			_contactInformations.emplace(entity, ContactInformationList()).first->second.emplace_back(contactPoint, contactNormal);
+		}
+	}
+
+	const RigidBody::ContactInformationsType &RigidBody::getContactInformations(void) const
+	{
+		return _contactInformations;
+	}
+
 	void RigidBody::setTransformConstraint(bool x, bool y, bool z)
 	{
 		_transformConstraint = glm::uvec3(static_cast<unsigned int>(x),
