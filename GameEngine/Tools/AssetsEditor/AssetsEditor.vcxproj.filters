@@ -72,6 +72,9 @@
     <ClCompile Include="AssetFiles\RawFile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="AssetFiles\TextureRawFile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Convertor\AssimpLoader.hpp">
@@ -153,6 +156,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="AssetFiles\RawFile.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AssetFiles\TextureRawFile.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

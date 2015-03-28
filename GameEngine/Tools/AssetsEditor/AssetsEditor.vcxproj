@@ -96,6 +96,7 @@
     <ClCompile Include="AssetFiles\CookedFile.cpp" />
     <ClCompile Include="AssetFiles\MeshRawFile.cpp" />
     <ClCompile Include="AssetFiles\RawFile.cpp" />
+    <ClCompile Include="AssetFiles\TextureRawFile.cpp" />
     <ClCompile Include="AssetsDatabase.cpp" />
     <ClCompile Include="AssetFiles\File.cpp" />
     <ClCompile Include="AssetFiles\Folder.cpp" />
@@ -115,6 +116,7 @@
     <ClInclude Include="AssetFiles\AssetsTypes.hpp" />
     <ClInclude Include="AssetFiles\MeshRawFile.hpp" />
     <ClInclude Include="AssetFiles\RawFile.hpp" />
+    <ClInclude Include="AssetFiles\TextureRawFile.hpp" />
     <ClInclude Include="Components\EntityRepresentation.hpp" />
     <ClInclude Include="Convertor\ConvertorStatusManager.hpp" />
     <ClInclude Include="AssetFiles\CookedFile.hpp" />
