@@ -51,8 +51,7 @@ namespace AGE
 
 	void DeferredDebugBuffering::renderPass(RenderPipeline const &, RenderLightList const &renderLight, CameraInfos const &infos)
 	{
-		OpenGLState::glEnable(GL_CULL_FACE);
-		OpenGLState::glCullFace(GL_BACK);
+		OpenGLState::glDisable(GL_CULL_FACE);
 		OpenGLState::glDepthMask(GL_TRUE);
 		OpenGLState::glDepthFunc(GL_LEQUAL);
 		OpenGLState::glDisable(GL_BLEND);
@@ -70,7 +69,7 @@ namespace AGE
 		for (auto &pl : renderLight.pointLight)
 		{
 			*_programs[PROGRAM_BUFFERING_LIGHT]->get_resource<Mat4>("model_matrix") = pl.light.transformation;
-			_quadPainter->uniqueDraw(GL_QUADS, _programs[PROGRAM_BUFFERING_LIGHT], Properties(), _quadVertices);
+			_quadPainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING_LIGHT], Properties(), _quadVertices);
 		}
 	}
 
