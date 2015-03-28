@@ -37,12 +37,13 @@ namespace AGE
 
 		void TextureRawFile::cook()
 		{
+			dataSet->loadTextures = true;
 			auto cookingTask = std::make_shared<CookingTask>(dataSet);
 			AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=]()
 			{
+				cookingTask->texturesPath.insert(getFileName());
 				cookingTask->serializedDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>(WE::EditorConfiguration::GetCookedDirectory());
-				cookingTask->rawDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>(WE::EditorConfiguration::GetRawDirectory());
-
+				cookingTask->rawDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>(WE::EditorConfiguration::GetRawDirectory());				
 				AGE::ImageLoader::load(cookingTask);
 				AGE::ImageLoader::save(cookingTask);
 			});
