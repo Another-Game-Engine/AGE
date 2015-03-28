@@ -2,6 +2,7 @@
 #include <Utils/FileSystemHelpers.hpp>
 #include <AssetFiles/MeshRawFile.hpp>
 #include <AssetFiles/TextureRawFile.hpp>
+#include <AssetFiles/MaterialRawFile.hpp>
 #include <AssetFiles/CookedFile.hpp>
 #include <AssetFiles/AssetsTypes.hpp>
 #include <Utils/BitOperations.hpp>
@@ -43,6 +44,8 @@ namespace AGE
 				return true;
 			if (extension == "bmp" || extension == "jpg" || extension == "jpeg" || extension == "tga" || extension == "png")
 				return true;
+			if (extension == "mtl")
+				return true;
 			return false;
 		}
 
@@ -60,30 +63,11 @@ namespace AGE
 				t = std::make_shared<TextureRawFile>(path, parent);
 				t->_type = AssetType::Raw | AssetType::Texture;
 			}
-
-			/*
 			else if (extension == "mtl")
 			{
-				t =  std::make_shared<RawFile>(path, parent);
+				t =  std::make_shared<MaterialRawFile>(path, parent);
 				t->_type = AssetType::Raw | AssetType::Material;
-
 			}
-			else if (extension == "sage")
-			{
-				t = std::make_shared<CookedFile>(path, parent);
-				t->_type = AssetType::Cooked | AssetType::Texture;
-			}
-			else if (extension == "tage")
-			{
-				t = std::make_shared<CookedFile>(path, parent);
-				t->_type = AssetType::Cooked | AssetType::Texture;
-			}
-			else if (extension == "mage")
-			{
-				t = std::make_shared<CookedFile>(path, parent);
-				t->_type = AssetType::Cooked | AssetType::Texture;
-			}*/
-
 
 			if (t)
 			{

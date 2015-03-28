@@ -94,6 +94,7 @@
     <ClCompile Include="..\..\EngineCoreTest\Components\RotationComponent.cpp" />
     <ClCompile Include="AssetFiles\AssetFileManager.cpp" />
     <ClCompile Include="AssetFiles\CookedFile.cpp" />
+    <ClCompile Include="AssetFiles\MaterialRawFile.cpp" />
     <ClCompile Include="AssetFiles\MeshRawFile.cpp" />
     <ClCompile Include="AssetFiles\RawFile.cpp" />
     <ClCompile Include="AssetFiles\TextureRawFile.cpp" />
@@ -114,6 +115,7 @@
   <ItemGroup>
     <ClInclude Include="AssetFiles\AssetFileManager.hpp" />
     <ClInclude Include="AssetFiles\AssetsTypes.hpp" />
+    <ClInclude Include="AssetFiles\MaterialRawFile.hpp" />
     <ClInclude Include="AssetFiles\MeshRawFile.hpp" />
     <ClInclude Include="AssetFiles\RawFile.hpp" />
     <ClInclude Include="AssetFiles\TextureRawFile.hpp" />
