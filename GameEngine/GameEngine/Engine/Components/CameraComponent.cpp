@@ -10,7 +10,8 @@
 namespace AGE
 {
 	CameraComponent::CameraComponent()
-		: ComponentBase()
+		: ComponentBase(),
+		_pipeline(RenderType::DEFERRED)
 	{
 	}
 
@@ -35,34 +36,40 @@ namespace AGE
 	{
 		_projection = projection;
 
-		AGE::GetPrepareThread()->setCameraInfos(_projection, _key, _pipelines);
+		AGE::GetPrepareThread()->setCameraInfos(_projection, _key, _pipeline);
 	}
 
-	void CameraComponent::addPipeline(RenderType pipeline)
+	void CameraComponent::setPipeline(RenderType pipeline)
 	{
-		auto haveIt = havePipeline(pipeline);
-		if (haveIt == false)
-		{
-			_pipelines.insert(pipeline);
-			AGE::GetPrepareThread()->setCameraInfos(_projection, _key, _pipelines);
-		}
+		_pipeline = pipeline;
+		AGE::GetPrepareThread()->setCameraInfos(_projection, _key, _pipeline);
 	}
 
-	void CameraComponent::removePipeline(RenderType pipeline)
-	{
-		auto it = _pipelines.find(pipeline);
-		if (it  != std::end(_pipelines))
-		{
-			_pipelines.erase(it);
-			AGE::GetPrepareThread()->setCameraInfos(_projection, _key, _pipelines);
-		}
-	}
+	//void CameraComponent::addPipeline(RenderType pipeline)
+	//{
+	//	auto haveIt = havePipeline(pipeline);
+	//	if (haveIt == false)
+	//	{
+	//		_pipelines.insert(pipeline);
+	//		AGE::GetPrepareThread()->setCameraInfos(_projection, _key, _pipelines);
+	//	}
+	//}
 
-	bool CameraComponent::havePipeline(RenderType pipeline) const
-	{
-		auto it = _pipelines.find(pipeline);
-		return (it != std::end(_pipelines));
-	}
+	//void CameraComponent::removePipeline(RenderType pipeline)
+	//{
+	//	auto it = _pipelines.find(pipeline);
+	//	if (it  != std::end(_pipelines))
+	//	{
+	//		_pipelines.erase(it);
+	//		AGE::GetPrepareThread()->setCameraInfos(_projection, _key, _pipelines);
+	//	}
+	//}
+
+	//bool CameraComponent::havePipeline(RenderType pipeline) const
+	//{
+	//	auto it = _pipelines.find(pipeline);
+	//	return (it != std::end(_pipelines));
+	//}
 
 
 	const glm::mat4 &CameraComponent::getProjection() const

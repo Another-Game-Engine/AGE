@@ -11,7 +11,7 @@ namespace AGE
 	{
 		uint32_t activeCameraIdx;
 		glm::mat4 projection;
-		std::vector<RenderType> pipelines;
+		RenderType pipeline;
 	};
 
 }

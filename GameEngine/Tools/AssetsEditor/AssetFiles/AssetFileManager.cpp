@@ -1,6 +1,8 @@
 #include <AssetFiles/AssetFileManager.hpp>
 #include <Utils/FileSystemHelpers.hpp>
-#include <AssetFiles/RawFile.hpp>
+#include <AssetFiles/MeshRawFile.hpp>
+#include <AssetFiles/TextureRawFile.hpp>
+#include <AssetFiles/MaterialRawFile.hpp>
 #include <AssetFiles/CookedFile.hpp>
 #include <AssetFiles/AssetsTypes.hpp>
 #include <Utils/BitOperations.hpp>
@@ -40,6 +42,10 @@ namespace AGE
 			auto extension = AGE::FileSystemHelpers::GetExtension(path);
 			if (extension == "obj" || extension == "fbx" || extension == "dae")
 				return true;
+			if (extension == "bmp" || extension == "jpg" || extension == "jpeg" || extension == "tga" || extension == "png")
+				return true;
+			if (extension == "mtl")
+				return true;
 			return false;
 		}
 
@@ -49,42 +55,19 @@ namespace AGE
 			std::shared_ptr<AssetFile> t = nullptr;
 			if (extension == "obj" || extension == "fbx" || extension == "dae")
 			{
-				t = std::make_shared<RawFile>(path, parent);
+				t = std::make_shared<MeshRawFile>(path, parent);
 				t->_type = AssetType::Raw | AssetType::Mesh;
 			}
-			else // temporary
+			else if (extension == "bmp" || extension == "jpg" || extension == "jpeg" || extension == "tga" || extension == "png")
 			{
-				t = std::make_shared<RawFile>(path, parent);
-				t->_type = AssetType::Raw;
-			}
-			/*else if (extension == "bmp" || extension == "jpg" || extension == "jpeg" || extension == "tga" || extension == "png")
-			{
-				t = std::make_shared<RawFile>(path, parent);
+				t = std::make_shared<TextureRawFile>(path, parent);
 				t->_type = AssetType::Raw | AssetType::Texture;
-
 			}
 			else if (extension == "mtl")
 			{
-				t =  std::make_shared<RawFile>(path, parent);
+				t =  std::make_shared<MaterialRawFile>(path, parent);
 				t->_type = AssetType::Raw | AssetType::Material;
-
 			}
-			else if (extension == "sage")
-			{
-				t = std::make_shared<CookedFile>(path, parent);
-				t->_type = AssetType::Cooked | AssetType::Texture;
-			}
-			else if (extension == "tage")
-			{
-				t = std::make_shared<CookedFile>(path, parent);
-				t->_type = AssetType::Cooked | AssetType::Texture;
-			}
-			else if (extension == "mage")
-			{
-				t = std::make_shared<CookedFile>(path, parent);
-				t->_type = AssetType::Cooked | AssetType::Texture;
-			}*/
-
 
 			if (t)
 			{

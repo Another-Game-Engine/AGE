@@ -101,10 +101,10 @@ namespace AGE
 
 			struct CameraInfos
 			{
-				CameraInfos(const PrepareKey &_key, const glm::mat4 &_projection, const std::set<RenderType> &_pipelines);
+				CameraInfos(const PrepareKey &_key, const glm::mat4 &_projection, RenderType pipeline);
 				PrepareKey key;
 				glm::mat4 projection;
-				std::set<RenderType> pipelines;
+				RenderType pipeline;
 			};
 
 			struct PrepareDrawLists
