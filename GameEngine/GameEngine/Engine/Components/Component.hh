@@ -26,7 +26,6 @@ namespace AGE
 
 		void copyFrom(const ComponentBase *model)
 		{
-			entity = model->entity;
 			_typeId = model->_typeId;
 			_copyFrom(model);
 		}

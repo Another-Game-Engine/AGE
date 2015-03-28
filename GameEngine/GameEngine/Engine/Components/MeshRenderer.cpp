@@ -39,6 +39,8 @@ namespace AGE
 
 	void MeshRenderer::reset()
 	{
+		_mesh = nullptr;
+		_material = nullptr;
 		if (!_key.invalid())
 		{
 			entity.getLink().unregisterOctreeObject(_key);
@@ -95,8 +97,8 @@ namespace AGE
 	{
 		auto o = static_cast<const MeshRenderer*>(model);
 
-		_material = _material;
-		_mesh = _mesh;
+		_material = o->_material;
+		_mesh = o->_mesh;
 #ifdef EDITOR_ENABLED
 		selectedMeshIndex = o->selectedMeshIndex;
 		selectedMeshName = o->selectedMeshName;
@@ -106,6 +108,7 @@ namespace AGE
 		selectedMaterialName = o->selectedMaterialName;
 		selectedMaterialPath = o->selectedMaterialPath;
 #endif
+		setMeshAndMaterial(_mesh, _material);
 	}
 
 	std::shared_ptr<AGE::MeshInstance> MeshRenderer::getMesh()
