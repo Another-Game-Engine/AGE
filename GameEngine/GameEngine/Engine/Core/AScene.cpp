@@ -14,7 +14,7 @@
 namespace AGE
 {
 	AScene::AScene(Engine *engine) :
-		DependenciesInjector(std::move(engine))
+		DependenciesInjector(engine)
 		, _entityNumber(0)
 		, _engine(engine)
 		, _renderScene(nullptr)
