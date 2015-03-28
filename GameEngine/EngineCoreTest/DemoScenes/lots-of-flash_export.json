@@ -1,5 +1,5 @@
 {
-    "Number_of_serialized_entities": 162,
+    "Number_of_serialized_entities": 163,
     "Component type map": [
         {
             "key": 0,
@@ -34,7 +34,7 @@
             "value": 16479542503635362968
         }
     ],
-    "Entity_8": {
+    "Entity_1": {
         "cereal_class_version": 0,
         "link": {
             "cereal_class_version": 0,
@@ -74,7 +74,7 @@
             }
         }
     },
-    "Entity_38": {
+    "Entity_2": {
         "link": {
             "Position": {
                 "value0": 0,
@@ -111,7 +111,7 @@
             }
         }
     },
-    "Entity_42": {
+    "Entity_3": {
         "link": {
             "Position": {
                 "value0": 7,
@@ -138,7 +138,7 @@
         "flags": 0,
         "components_number": []
     },
-    "Entity_27": {
+    "Entity_4": {
         "link": {
             "Position": {
                 "value0": 0,
@@ -174,7 +174,7 @@
         "flags": 0,
         "components_number": []
     },
-    "Entity_28": {
+    "Entity_5": {
         "link": {
             "Position": {
                 "value0": 0,
@@ -222,1372 +222,12 @@
             "Speed": 100
         }
     },
-    "Entity_29": {
-        "link": {
-            "Position": {
-                "value0": 1,
-                "value1": 1,
-                "value2": 2
-            },
-            "Scale": {
-                "value0": 3,
-                "value1": 3,
-                "value2": 3
-            },
-            "Orientation": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 0,
-                "value3": 1
-            }
-        },
-        "children": [],
-        "flags": 0,
-        "components_number": [
-            0,
-            7
-        ],
-        "AGE::MeshRenderer": {
-            "value0": {
-                "ptr_wrapper": {
-                    "valid": 1,
-                    "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
-                        "value2": ""
-                    }
-                }
-            }
-        },
-        "AGE::RotationComponent": {
-            "Angles": {
-                "value0": 0,
-                "value1": 1,
-                "value2": 0
-            },
-            "Speed": 100
-        }
-    },
-    "Entity_30": {
-        "link": {
-            "Position": {
-                "value0": 2,
-                "value1": 1,
-                "value2": 2
-            },
-            "Scale": {
-                "value0": 3,
-                "value1": 3,
-                "value2": 3
-            },
-            "Orientation": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 0,
-                "value3": 1
-            }
-        },
-        "children": [],
-        "flags": 0,
-        "components_number": [
-            0,
-            7
-        ],
-        "AGE::MeshRenderer": {
-            "value0": {
-                "ptr_wrapper": {
-                    "valid": 1,
-                    "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
-                        "value2": ""
-                    }
-                }
-            }
-        },
-        "AGE::RotationComponent": {
-            "Angles": {
-                "value0": 0,
-                "value1": 1,
-                "value2": 0
-            },
-            "Speed": 100
-        }
-    },
-    "Entity_31": {
-        "link": {
-            "Position": {
-                "value0": -1,
-                "value1": 1,
-                "value2": 2
-            },
-            "Scale": {
-                "value0": 3,
-                "value1": 3,
-                "value2": 3
-            },
-            "Orientation": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 0,
-                "value3": 1
-            }
-        },
-        "children": [],
-        "flags": 0,
-        "components_number": [
-            0,
-            7
-        ],
-        "AGE::MeshRenderer": {
-            "value0": {
-                "ptr_wrapper": {
-                    "valid": 1,
-                    "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
-                        "value2": ""
-                    }
-                }
-            }
-        },
-        "AGE::RotationComponent": {
-            "Angles": {
-                "value0": 0,
-                "value1": 1,
-                "value2": 0
-            },
-            "Speed": 100
-        }
-    },
-    "Entity_32": {
-        "link": {
-            "Position": {
-                "value0": -2,
-                "value1": 1,
-                "value2": 2
-            },
-            "Scale": {
-                "value0": 3,
-                "value1": 3,
-                "value2": 3
-            },
-            "Orientation": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 0,
-                "value3": 1
-            }
-        },
-        "children": [],
-        "flags": 0,
-        "components_number": [
-            0,
-            7
-        ],
-        "AGE::MeshRenderer": {
-            "value0": {
-                "ptr_wrapper": {
-                    "valid": 1,
-                    "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
-                        "value2": ""
-                    }
-                }
-            }
-        },
-        "AGE::RotationComponent": {
-            "Angles": {
-                "value0": 0,
-                "value1": 1,
-                "value2": 0
-            },
-            "Speed": 100
-        }
-    },
-    "Entity_33": {
-        "link": {
-            "Position": {
-                "value0": 0,
-                "value1": 1,
-                "value2": 0
-            },
-            "Scale": {
-                "value0": 3,
-                "value1": 3,
-                "value2": 3
-            },
-            "Orientation": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 0,
-                "value3": 1
-            }
-        },
-        "children": [],
-        "flags": 0,
-        "components_number": [
-            0,
-            7
-        ],
-        "AGE::MeshRenderer": {
-            "value0": {
-                "ptr_wrapper": {
-                    "valid": 1,
-                    "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
-                        "value2": ""
-                    }
-                }
-            }
-        },
-        "AGE::RotationComponent": {
-            "Angles": {
-                "value0": 0,
-                "value1": 1,
-                "value2": 0
-            },
-            "Speed": 100
-        }
-    },
-    "Entity_34": {
-        "link": {
-            "Position": {
-                "value0": 1,
-                "value1": 1,
-                "value2": 0
-            },
-            "Scale": {
-                "value0": 3,
-                "value1": 3,
-                "value2": 3
-            },
-            "Orientation": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 0,
-                "value3": 1
-            }
-        },
-        "children": [],
-        "flags": 0,
-        "components_number": [
-            0,
-            7
-        ],
-        "AGE::MeshRenderer": {
-            "value0": {
-                "ptr_wrapper": {
-                    "valid": 1,
-                    "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
-                        "value2": ""
-                    }
-                }
-            }
-        },
-        "AGE::RotationComponent": {
-            "Angles": {
-                "value0": 0,
-                "value1": 1,
-                "value2": 0
-            },
-            "Speed": 100
-        }
-    },
-    "Entity_35": {
-        "link": {
-            "Position": {
-                "value0": 2,
-                "value1": 1,
-                "value2": 0
-            },
-            "Scale": {
-                "value0": 3,
-                "value1": 3,
-                "value2": 3
-            },
-            "Orientation": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 0,
-                "value3": 1
-            }
-        },
-        "children": [],
-        "flags": 0,
-        "components_number": [
-            0,
-            7
-        ],
-        "AGE::MeshRenderer": {
-            "value0": {
-                "ptr_wrapper": {
-                    "valid": 1,
-                    "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
-                        "value2": ""
-                    }
-                }
-            }
-        },
-        "AGE::RotationComponent": {
-            "Angles": {
-                "value0": 0,
-                "value1": 1,
-                "value2": 0
-            },
-            "Speed": 100
-        }
-    },
-    "Entity_36": {
-        "link": {
-            "Position": {
-                "value0": -1,
-                "value1": 1,
-                "value2": 0
-            },
-            "Scale": {
-                "value0": 3,
-                "value1": 3,
-                "value2": 3
-            },
-            "Orientation": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 0,
-                "value3": 1
-            }
-        },
-        "children": [],
-        "flags": 0,
-        "components_number": [
-            0,
-            7
-        ],
-        "AGE::MeshRenderer": {
-            "value0": {
-                "ptr_wrapper": {
-                    "valid": 1,
-                    "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
-                        "value2": ""
-                    }
-                }
-            }
-        },
-        "AGE::RotationComponent": {
-            "Angles": {
-                "value0": 0,
-                "value1": 1,
-                "value2": 0
-            },
-            "Speed": 100
-        }
-    },
-    "Entity_37": {
-        "link": {
-            "Position": {
-                "value0": -2,
-                "value1": 1,
-                "value2": 0
-            },
-            "Scale": {
-                "value0": 3,
-                "value1": 3,
-                "value2": 3
-            },
-            "Orientation": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 0,
-                "value3": 1
-            }
-        },
-        "children": [],
-        "flags": 0,
-        "components_number": [
-            0,
-            7
-        ],
-        "AGE::MeshRenderer": {
-            "value0": {
-                "ptr_wrapper": {
-                    "valid": 1,
-                    "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
-                        "value2": ""
-                    }
-                }
-            }
-        },
-        "AGE::RotationComponent": {
-            "Angles": {
-                "value0": 0,
-                "value1": 1,
-                "value2": 0
-            },
-            "Speed": 100
-        }
-    },
-    "Entity_39": {
-        "link": {
-            "Position": {
-                "value0": -3,
-                "value1": 1,
-                "value2": 0
-            },
-            "Scale": {
-                "value0": 3,
-                "value1": 3,
-                "value2": 3
-            },
-            "Orientation": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 0,
-                "value3": 1
-            }
-        },
-        "children": [],
-        "flags": 0,
-        "components_number": [
-            0,
-            7
-        ],
-        "AGE::MeshRenderer": {
-            "value0": {
-                "ptr_wrapper": {
-                    "valid": 1,
-                    "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
-                        "value2": ""
-                    }
-                }
-            }
-        },
-        "AGE::RotationComponent": {
-            "Angles": {
-                "value0": 0,
-                "value1": 1,
-                "value2": 0
-            },
-            "Speed": 100
-        }
-    },
-    "Entity_40": {
-        "link": {
-            "Position": {
-                "value0": -3,
-                "value1": 1,
-                "value2": 2
-            },
-            "Scale": {
-                "value0": 3,
-                "value1": 3,
-                "value2": 3
-            },
-            "Orientation": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 0,
-                "value3": 1
-            }
-        },
-        "children": [],
-        "flags": 0,
-        "components_number": [
-            0,
-            7
-        ],
-        "AGE::MeshRenderer": {
-            "value0": {
-                "ptr_wrapper": {
-                    "valid": 1,
-                    "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
-                        "value2": ""
-                    }
-                }
-            }
-        },
-        "AGE::RotationComponent": {
-            "Angles": {
-                "value0": 0,
-                "value1": 1,
-                "value2": 0
-            },
-            "Speed": 100
-        }
-    },
-    "Entity_14": {
-        "link": {
-            "Position": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 0
-            },
-            "Scale": {
-                "value0": 1,
-                "value1": 1,
-                "value2": 1
-            },
-            "Orientation": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 0,
-                "value3": 1
-            }
-        },
-        "children": [
-            17,
-            18,
-            19,
-            20,
-            21,
-            22,
-            23,
-            24,
-            25,
-            26,
-            27,
-            28
-        ],
-        "flags": 0,
-        "components_number": []
-    },
-    "Entity_15": {
-        "link": {
-            "Position": {
-                "value0": 0,
-                "value1": 1,
-                "value2": 2
-            },
-            "Scale": {
-                "value0": 3,
-                "value1": 3,
-                "value2": 3
-            },
-            "Orientation": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 0,
-                "value3": 1
-            }
-        },
-        "children": [],
-        "flags": 0,
-        "components_number": [
-            0,
-            7
-        ],
-        "AGE::MeshRenderer": {
-            "value0": {
-                "ptr_wrapper": {
-                    "valid": 1,
-                    "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
-                        "value2": ""
-                    }
-                }
-            }
-        },
-        "AGE::RotationComponent": {
-            "Angles": {
-                "value0": 0,
-                "value1": 1,
-                "value2": 0
-            },
-            "Speed": 100
-        }
-    },
-    "Entity_16": {
-        "link": {
-            "Position": {
-                "value0": 1,
-                "value1": 1,
-                "value2": 2
-            },
-            "Scale": {
-                "value0": 3,
-                "value1": 3,
-                "value2": 3
-            },
-            "Orientation": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 0,
-                "value3": 1
-            }
-        },
-        "children": [],
-        "flags": 0,
-        "components_number": [
-            0,
-            7
-        ],
-        "AGE::MeshRenderer": {
-            "value0": {
-                "ptr_wrapper": {
-                    "valid": 1,
-                    "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
-                        "value2": ""
-                    }
-                }
-            }
-        },
-        "AGE::RotationComponent": {
-            "Angles": {
-                "value0": 0,
-                "value1": 1,
-                "value2": 0
-            },
-            "Speed": 100
-        }
-    },
-    "Entity_17": {
-        "link": {
-            "Position": {
-                "value0": 2,
-                "value1": 1,
-                "value2": 2
-            },
-            "Scale": {
-                "value0": 3,
-                "value1": 3,
-                "value2": 3
-            },
-            "Orientation": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 0,
-                "value3": 1
-            }
-        },
-        "children": [],
-        "flags": 0,
-        "components_number": [
-            0,
-            7
-        ],
-        "AGE::MeshRenderer": {
-            "value0": {
-                "ptr_wrapper": {
-                    "valid": 1,
-                    "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
-                        "value2": ""
-                    }
-                }
-            }
-        },
-        "AGE::RotationComponent": {
-            "Angles": {
-                "value0": 0,
-                "value1": 1,
-                "value2": 0
-            },
-            "Speed": 100
-        }
-    },
-    "Entity_18": {
-        "link": {
-            "Position": {
-                "value0": -1,
-                "value1": 1,
-                "value2": 2
-            },
-            "Scale": {
-                "value0": 3,
-                "value1": 3,
-                "value2": 3
-            },
-            "Orientation": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 0,
-                "value3": 1
-            }
-        },
-        "children": [],
-        "flags": 0,
-        "components_number": [
-            0,
-            7
-        ],
-        "AGE::MeshRenderer": {
-            "value0": {
-                "ptr_wrapper": {
-                    "valid": 1,
-                    "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
-                        "value2": ""
-                    }
-                }
-            }
-        },
-        "AGE::RotationComponent": {
-            "Angles": {
-                "value0": 0,
-                "value1": 1,
-                "value2": 0
-            },
-            "Speed": 100
-        }
-    },
-    "Entity_19": {
-        "link": {
-            "Position": {
-                "value0": -2,
-                "value1": 1,
-                "value2": 2
-            },
-            "Scale": {
-                "value0": 3,
-                "value1": 3,
-                "value2": 3
-            },
-            "Orientation": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 0,
-                "value3": 1
-            }
-        },
-        "children": [],
-        "flags": 0,
-        "components_number": [
-            0,
-            7
-        ],
-        "AGE::MeshRenderer": {
-            "value0": {
-                "ptr_wrapper": {
-                    "valid": 1,
-                    "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
-                        "value2": ""
-                    }
-                }
-            }
-        },
-        "AGE::RotationComponent": {
-            "Angles": {
-                "value0": 0,
-                "value1": 1,
-                "value2": 0
-            },
-            "Speed": 100
-        }
-    },
-    "Entity_20": {
-        "link": {
-            "Position": {
-                "value0": 0,
-                "value1": 1,
-                "value2": 0
-            },
-            "Scale": {
-                "value0": 3,
-                "value1": 3,
-                "value2": 3
-            },
-            "Orientation": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 0,
-                "value3": 1
-            }
-        },
-        "children": [],
-        "flags": 0,
-        "components_number": [
-            0,
-            7
-        ],
-        "AGE::MeshRenderer": {
-            "value0": {
-                "ptr_wrapper": {
-                    "valid": 1,
-                    "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
-                        "value2": ""
-                    }
-                }
-            }
-        },
-        "AGE::RotationComponent": {
-            "Angles": {
-                "value0": 0,
-                "value1": 1,
-                "value2": 0
-            },
-            "Speed": 100
-        }
-    },
-    "Entity_21": {
-        "link": {
-            "Position": {
-                "value0": 1,
-                "value1": 1,
-                "value2": 0
-            },
-            "Scale": {
-                "value0": 3,
-                "value1": 3,
-                "value2": 3
-            },
-            "Orientation": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 0,
-                "value3": 1
-            }
-        },
-        "children": [],
-        "flags": 0,
-        "components_number": [
-            0,
-            7
-        ],
-        "AGE::MeshRenderer": {
-            "value0": {
-                "ptr_wrapper": {
-                    "valid": 1,
-                    "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
-                        "value2": ""
-                    }
-                }
-            }
-        },
-        "AGE::RotationComponent": {
-            "Angles": {
-                "value0": 0,
-                "value1": 1,
-                "value2": 0
-            },
-            "Speed": 100
-        }
-    },
-    "Entity_22": {
-        "link": {
-            "Position": {
-                "value0": 2,
-                "value1": 1,
-                "value2": 0
-            },
-            "Scale": {
-                "value0": 3,
-                "value1": 3,
-                "value2": 3
-            },
-            "Orientation": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 0,
-                "value3": 1
-            }
-        },
-        "children": [],
-        "flags": 0,
-        "components_number": [
-            0,
-            7
-        ],
-        "AGE::MeshRenderer": {
-            "value0": {
-                "ptr_wrapper": {
-                    "valid": 1,
-                    "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
-                        "value2": ""
-                    }
-                }
-            }
-        },
-        "AGE::RotationComponent": {
-            "Angles": {
-                "value0": 0,
-                "value1": 1,
-                "value2": 0
-            },
-            "Speed": 100
-        }
-    },
-    "Entity_23": {
-        "link": {
-            "Position": {
-                "value0": -1,
-                "value1": 1,
-                "value2": 0
-            },
-            "Scale": {
-                "value0": 3,
-                "value1": 3,
-                "value2": 3
-            },
-            "Orientation": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 0,
-                "value3": 1
-            }
-        },
-        "children": [],
-        "flags": 0,
-        "components_number": [
-            0,
-            7
-        ],
-        "AGE::MeshRenderer": {
-            "value0": {
-                "ptr_wrapper": {
-                    "valid": 1,
-                    "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
-                        "value2": ""
-                    }
-                }
-            }
-        },
-        "AGE::RotationComponent": {
-            "Angles": {
-                "value0": 0,
-                "value1": 1,
-                "value2": 0
-            },
-            "Speed": 100
-        }
-    },
-    "Entity_24": {
-        "link": {
-            "Position": {
-                "value0": -2,
-                "value1": 1,
-                "value2": 0
-            },
-            "Scale": {
-                "value0": 3,
-                "value1": 3,
-                "value2": 3
-            },
-            "Orientation": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 0,
-                "value3": 1
-            }
-        },
-        "children": [],
-        "flags": 0,
-        "components_number": [
-            0,
-            7
-        ],
-        "AGE::MeshRenderer": {
-            "value0": {
-                "ptr_wrapper": {
-                    "valid": 1,
-                    "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
-                        "value2": ""
-                    }
-                }
-            }
-        },
-        "AGE::RotationComponent": {
-            "Angles": {
-                "value0": 0,
-                "value1": 1,
-                "value2": 0
-            },
-            "Speed": 100
-        }
-    },
-    "Entity_25": {
-        "link": {
-            "Position": {
-                "value0": -3,
-                "value1": 1,
-                "value2": 0
-            },
-            "Scale": {
-                "value0": 3,
-                "value1": 3,
-                "value2": 3
-            },
-            "Orientation": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 0,
-                "value3": 1
-            }
-        },
-        "children": [],
-        "flags": 0,
-        "components_number": [
-            0,
-            7
-        ],
-        "AGE::MeshRenderer": {
-            "value0": {
-                "ptr_wrapper": {
-                    "valid": 1,
-                    "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
-                        "value2": ""
-                    }
-                }
-            }
-        },
-        "AGE::RotationComponent": {
-            "Angles": {
-                "value0": 0,
-                "value1": 1,
-                "value2": 0
-            },
-            "Speed": 100
-        }
-    },
-    "Entity_26": {
-        "link": {
-            "Position": {
-                "value0": -3,
-                "value1": 1,
-                "value2": 2
-            },
-            "Scale": {
-                "value0": 3,
-                "value1": 3,
-                "value2": 3
-            },
-            "Orientation": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 0,
-                "value3": 1
-            }
-        },
-        "children": [],
-        "flags": 0,
-        "components_number": [
-            0,
-            7
-        ],
-        "AGE::MeshRenderer": {
-            "value0": {
-                "ptr_wrapper": {
-                    "valid": 1,
-                    "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
-                        "value2": ""
-                    }
-                }
-            }
-        },
-        "AGE::RotationComponent": {
-            "Angles": {
-                "value0": 0,
-                "value1": 1,
-                "value2": 0
-            },
-            "Speed": 100
-        }
-    },
-    "Entity_0": {
-        "link": {
-            "Position": {
-                "value0": 0,
-                "value1": 0,
-                "value2": -6
-            },
-            "Scale": {
-                "value0": 1,
-                "value1": 1,
-                "value2": 1
-            },
-            "Orientation": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 0,
-                "value3": 1
-            }
-        },
-        "children": [
-            30,
-            31,
-            32,
-            33,
-            34,
-            35,
-            36,
-            37,
-            38,
-            39,
-            40,
-            41
-        ],
-        "flags": 0,
-        "components_number": []
-    },
-    "Entity_1": {
-        "link": {
-            "Position": {
-                "value0": 0,
-                "value1": 1,
-                "value2": 2
-            },
-            "Scale": {
-                "value0": 3,
-                "value1": 3,
-                "value2": 3
-            },
-            "Orientation": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 0,
-                "value3": 1
-            }
-        },
-        "children": [],
-        "flags": 0,
-        "components_number": [
-            0,
-            7
-        ],
-        "AGE::MeshRenderer": {
-            "value0": {
-                "ptr_wrapper": {
-                    "valid": 1,
-                    "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
-                        "value2": ""
-                    }
-                }
-            }
-        },
-        "AGE::RotationComponent": {
-            "Angles": {
-                "value0": 0,
-                "value1": 1,
-                "value2": 0
-            },
-            "Speed": 100
-        }
-    },
-    "Entity_2": {
-        "link": {
-            "Position": {
-                "value0": 1,
-                "value1": 1,
-                "value2": 2
-            },
-            "Scale": {
-                "value0": 3,
-                "value1": 3,
-                "value2": 3
-            },
-            "Orientation": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 0,
-                "value3": 1
-            }
-        },
-        "children": [],
-        "flags": 0,
-        "components_number": [
-            0,
-            7
-        ],
-        "AGE::MeshRenderer": {
-            "value0": {
-                "ptr_wrapper": {
-                    "valid": 1,
-                    "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
-                        "value2": ""
-                    }
-                }
-            }
-        },
-        "AGE::RotationComponent": {
-            "Angles": {
-                "value0": 0,
-                "value1": 1,
-                "value2": 0
-            },
-            "Speed": 100
-        }
-    },
-    "Entity_3": {
-        "link": {
-            "Position": {
-                "value0": 2,
-                "value1": 1,
-                "value2": 2
-            },
-            "Scale": {
-                "value0": 3,
-                "value1": 3,
-                "value2": 3
-            },
-            "Orientation": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 0,
-                "value3": 1
-            }
-        },
-        "children": [],
-        "flags": 0,
-        "components_number": [
-            0,
-            7
-        ],
-        "AGE::MeshRenderer": {
-            "value0": {
-                "ptr_wrapper": {
-                    "valid": 1,
-                    "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
-                        "value2": ""
-                    }
-                }
-            }
-        },
-        "AGE::RotationComponent": {
-            "Angles": {
-                "value0": 0,
-                "value1": 1,
-                "value2": 0
-            },
-            "Speed": 100
-        }
-    },
-    "Entity_4": {
-        "link": {
-            "Position": {
-                "value0": -1,
-                "value1": 1,
-                "value2": 2
-            },
-            "Scale": {
-                "value0": 3,
-                "value1": 3,
-                "value2": 3
-            },
-            "Orientation": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 0,
-                "value3": 1
-            }
-        },
-        "children": [],
-        "flags": 0,
-        "components_number": [
-            0,
-            7
-        ],
-        "AGE::MeshRenderer": {
-            "value0": {
-                "ptr_wrapper": {
-                    "valid": 1,
-                    "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
-                        "value2": ""
-                    }
-                }
-            }
-        },
-        "AGE::RotationComponent": {
-            "Angles": {
-                "value0": 0,
-                "value1": 1,
-                "value2": 0
-            },
-            "Speed": 100
-        }
-    },
-    "Entity_5": {
-        "link": {
-            "Position": {
-                "value0": -2,
-                "value1": 1,
-                "value2": 2
-            },
-            "Scale": {
-                "value0": 3,
-                "value1": 3,
-                "value2": 3
-            },
-            "Orientation": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 0,
-                "value3": 1
-            }
-        },
-        "children": [],
-        "flags": 0,
-        "components_number": [
-            0,
-            7
-        ],
-        "AGE::MeshRenderer": {
-            "value0": {
-                "ptr_wrapper": {
-                    "valid": 1,
-                    "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
-                        "value2": ""
-                    }
-                }
-            }
-        },
-        "AGE::RotationComponent": {
-            "Angles": {
-                "value0": 0,
-                "value1": 1,
-                "value2": 0
-            },
-            "Speed": 100
-        }
-    },
     "Entity_6": {
         "link": {
             "Position": {
-                "value0": 0,
+                "value0": 1,
                 "value1": 1,
-                "value2": 0
+                "value2": 2
             },
             "Scale": {
                 "value0": 3,
@@ -1631,9 +271,55 @@
     "Entity_7": {
         "link": {
             "Position": {
-                "value0": 1,
+                "value0": 2,
+                "value1": 1,
+                "value2": 2
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            0,
+            7
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "Flash/Flash.sage",
+                        "value1": "Flash/Flash.mage",
+                        "value2": ""
+                    }
+                }
+            }
+        },
+        "AGE::RotationComponent": {
+            "Angles": {
+                "value0": 0,
                 "value1": 1,
                 "value2": 0
+            },
+            "Speed": 100
+        }
+    },
+    "Entity_8": {
+        "link": {
+            "Position": {
+                "value0": -1,
+                "value1": 1,
+                "value2": 2
             },
             "Scale": {
                 "value0": 3,
@@ -1677,9 +363,9 @@
     "Entity_9": {
         "link": {
             "Position": {
-                "value0": 2,
+                "value0": -2,
                 "value1": 1,
-                "value2": 0
+                "value2": 2
             },
             "Scale": {
                 "value0": 3,
@@ -1723,7 +409,7 @@
     "Entity_10": {
         "link": {
             "Position": {
-                "value0": -1,
+                "value0": 0,
                 "value1": 1,
                 "value2": 0
             },
@@ -1769,7 +455,7 @@
     "Entity_11": {
         "link": {
             "Position": {
-                "value0": -2,
+                "value0": 1,
                 "value1": 1,
                 "value2": 0
             },
@@ -1815,7 +501,7 @@
     "Entity_12": {
         "link": {
             "Position": {
-                "value0": -3,
+                "value0": 2,
                 "value1": 1,
                 "value2": 0
             },
@@ -1859,6 +545,1320 @@
         }
     },
     "Entity_13": {
+        "link": {
+            "Position": {
+                "value0": -1,
+                "value1": 1,
+                "value2": 0
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            0,
+            7
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "Flash/Flash.sage",
+                        "value1": "Flash/Flash.mage",
+                        "value2": ""
+                    }
+                }
+            }
+        },
+        "AGE::RotationComponent": {
+            "Angles": {
+                "value0": 0,
+                "value1": 1,
+                "value2": 0
+            },
+            "Speed": 100
+        }
+    },
+    "Entity_14": {
+        "link": {
+            "Position": {
+                "value0": -2,
+                "value1": 1,
+                "value2": 0
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            0,
+            7
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "Flash/Flash.sage",
+                        "value1": "Flash/Flash.mage",
+                        "value2": ""
+                    }
+                }
+            }
+        },
+        "AGE::RotationComponent": {
+            "Angles": {
+                "value0": 0,
+                "value1": 1,
+                "value2": 0
+            },
+            "Speed": 100
+        }
+    },
+    "Entity_15": {
+        "link": {
+            "Position": {
+                "value0": -3,
+                "value1": 1,
+                "value2": 0
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            0,
+            7
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "Flash/Flash.sage",
+                        "value1": "Flash/Flash.mage",
+                        "value2": ""
+                    }
+                }
+            }
+        },
+        "AGE::RotationComponent": {
+            "Angles": {
+                "value0": 0,
+                "value1": 1,
+                "value2": 0
+            },
+            "Speed": 100
+        }
+    },
+    "Entity_16": {
+        "link": {
+            "Position": {
+                "value0": -3,
+                "value1": 1,
+                "value2": 2
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            0,
+            7
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "Flash/Flash.sage",
+                        "value1": "Flash/Flash.mage",
+                        "value2": ""
+                    }
+                }
+            }
+        },
+        "AGE::RotationComponent": {
+            "Angles": {
+                "value0": 0,
+                "value1": 1,
+                "value2": 0
+            },
+            "Speed": 100
+        }
+    },
+    "Entity_17": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0
+            },
+            "Scale": {
+                "value0": 1,
+                "value1": 1,
+                "value2": 1
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28
+        ],
+        "flags": 0,
+        "components_number": []
+    },
+    "Entity_18": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": 2
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            0,
+            7
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "Flash/Flash.sage",
+                        "value1": "Flash/Flash.mage",
+                        "value2": ""
+                    }
+                }
+            }
+        },
+        "AGE::RotationComponent": {
+            "Angles": {
+                "value0": 0,
+                "value1": 1,
+                "value2": 0
+            },
+            "Speed": 100
+        }
+    },
+    "Entity_19": {
+        "link": {
+            "Position": {
+                "value0": 1,
+                "value1": 1,
+                "value2": 2
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            0,
+            7
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "Flash/Flash.sage",
+                        "value1": "Flash/Flash.mage",
+                        "value2": ""
+                    }
+                }
+            }
+        },
+        "AGE::RotationComponent": {
+            "Angles": {
+                "value0": 0,
+                "value1": 1,
+                "value2": 0
+            },
+            "Speed": 100
+        }
+    },
+    "Entity_20": {
+        "link": {
+            "Position": {
+                "value0": 2,
+                "value1": 1,
+                "value2": 2
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            0,
+            7
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "Flash/Flash.sage",
+                        "value1": "Flash/Flash.mage",
+                        "value2": ""
+                    }
+                }
+            }
+        },
+        "AGE::RotationComponent": {
+            "Angles": {
+                "value0": 0,
+                "value1": 1,
+                "value2": 0
+            },
+            "Speed": 100
+        }
+    },
+    "Entity_21": {
+        "link": {
+            "Position": {
+                "value0": -1,
+                "value1": 1,
+                "value2": 2
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            0,
+            7
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "Flash/Flash.sage",
+                        "value1": "Flash/Flash.mage",
+                        "value2": ""
+                    }
+                }
+            }
+        },
+        "AGE::RotationComponent": {
+            "Angles": {
+                "value0": 0,
+                "value1": 1,
+                "value2": 0
+            },
+            "Speed": 100
+        }
+    },
+    "Entity_22": {
+        "link": {
+            "Position": {
+                "value0": -2,
+                "value1": 1,
+                "value2": 2
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            0,
+            7
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "Flash/Flash.sage",
+                        "value1": "Flash/Flash.mage",
+                        "value2": ""
+                    }
+                }
+            }
+        },
+        "AGE::RotationComponent": {
+            "Angles": {
+                "value0": 0,
+                "value1": 1,
+                "value2": 0
+            },
+            "Speed": 100
+        }
+    },
+    "Entity_23": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": 0
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            0,
+            7
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "Flash/Flash.sage",
+                        "value1": "Flash/Flash.mage",
+                        "value2": ""
+                    }
+                }
+            }
+        },
+        "AGE::RotationComponent": {
+            "Angles": {
+                "value0": 0,
+                "value1": 1,
+                "value2": 0
+            },
+            "Speed": 100
+        }
+    },
+    "Entity_24": {
+        "link": {
+            "Position": {
+                "value0": 1,
+                "value1": 1,
+                "value2": 0
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            0,
+            7
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "Flash/Flash.sage",
+                        "value1": "Flash/Flash.mage",
+                        "value2": ""
+                    }
+                }
+            }
+        },
+        "AGE::RotationComponent": {
+            "Angles": {
+                "value0": 0,
+                "value1": 1,
+                "value2": 0
+            },
+            "Speed": 100
+        }
+    },
+    "Entity_25": {
+        "link": {
+            "Position": {
+                "value0": 2,
+                "value1": 1,
+                "value2": 0
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            0,
+            7
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "Flash/Flash.sage",
+                        "value1": "Flash/Flash.mage",
+                        "value2": ""
+                    }
+                }
+            }
+        },
+        "AGE::RotationComponent": {
+            "Angles": {
+                "value0": 0,
+                "value1": 1,
+                "value2": 0
+            },
+            "Speed": 100
+        }
+    },
+    "Entity_26": {
+        "link": {
+            "Position": {
+                "value0": -1,
+                "value1": 1,
+                "value2": 0
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            0,
+            7
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "Flash/Flash.sage",
+                        "value1": "Flash/Flash.mage",
+                        "value2": ""
+                    }
+                }
+            }
+        },
+        "AGE::RotationComponent": {
+            "Angles": {
+                "value0": 0,
+                "value1": 1,
+                "value2": 0
+            },
+            "Speed": 100
+        }
+    },
+    "Entity_27": {
+        "link": {
+            "Position": {
+                "value0": -2,
+                "value1": 1,
+                "value2": 0
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            0,
+            7
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "Flash/Flash.sage",
+                        "value1": "Flash/Flash.mage",
+                        "value2": ""
+                    }
+                }
+            }
+        },
+        "AGE::RotationComponent": {
+            "Angles": {
+                "value0": 0,
+                "value1": 1,
+                "value2": 0
+            },
+            "Speed": 100
+        }
+    },
+    "Entity_28": {
+        "link": {
+            "Position": {
+                "value0": -3,
+                "value1": 1,
+                "value2": 0
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            0,
+            7
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "Flash/Flash.sage",
+                        "value1": "Flash/Flash.mage",
+                        "value2": ""
+                    }
+                }
+            }
+        },
+        "AGE::RotationComponent": {
+            "Angles": {
+                "value0": 0,
+                "value1": 1,
+                "value2": 0
+            },
+            "Speed": 100
+        }
+    },
+    "Entity_29": {
+        "link": {
+            "Position": {
+                "value0": -3,
+                "value1": 1,
+                "value2": 2
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            0,
+            7
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "Flash/Flash.sage",
+                        "value1": "Flash/Flash.mage",
+                        "value2": ""
+                    }
+                }
+            }
+        },
+        "AGE::RotationComponent": {
+            "Angles": {
+                "value0": 0,
+                "value1": 1,
+                "value2": 0
+            },
+            "Speed": 100
+        }
+    },
+    "Entity_30": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 0,
+                "value2": -6
+            },
+            "Scale": {
+                "value0": 1,
+                "value1": 1,
+                "value2": 1
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41
+        ],
+        "flags": 0,
+        "components_number": []
+    },
+    "Entity_31": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": 2
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            0,
+            7
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "Flash/Flash.sage",
+                        "value1": "Flash/Flash.mage",
+                        "value2": ""
+                    }
+                }
+            }
+        },
+        "AGE::RotationComponent": {
+            "Angles": {
+                "value0": 0,
+                "value1": 1,
+                "value2": 0
+            },
+            "Speed": 100
+        }
+    },
+    "Entity_32": {
+        "link": {
+            "Position": {
+                "value0": 1,
+                "value1": 1,
+                "value2": 2
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            0,
+            7
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "Flash/Flash.sage",
+                        "value1": "Flash/Flash.mage",
+                        "value2": ""
+                    }
+                }
+            }
+        },
+        "AGE::RotationComponent": {
+            "Angles": {
+                "value0": 0,
+                "value1": 1,
+                "value2": 0
+            },
+            "Speed": 100
+        }
+    },
+    "Entity_33": {
+        "link": {
+            "Position": {
+                "value0": 2,
+                "value1": 1,
+                "value2": 2
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            0,
+            7
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "Flash/Flash.sage",
+                        "value1": "Flash/Flash.mage",
+                        "value2": ""
+                    }
+                }
+            }
+        },
+        "AGE::RotationComponent": {
+            "Angles": {
+                "value0": 0,
+                "value1": 1,
+                "value2": 0
+            },
+            "Speed": 100
+        }
+    },
+    "Entity_34": {
+        "link": {
+            "Position": {
+                "value0": -1,
+                "value1": 1,
+                "value2": 2
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            0,
+            7
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "Flash/Flash.sage",
+                        "value1": "Flash/Flash.mage",
+                        "value2": ""
+                    }
+                }
+            }
+        },
+        "AGE::RotationComponent": {
+            "Angles": {
+                "value0": 0,
+                "value1": 1,
+                "value2": 0
+            },
+            "Speed": 100
+        }
+    },
+    "Entity_35": {
+        "link": {
+            "Position": {
+                "value0": -2,
+                "value1": 1,
+                "value2": 2
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            0,
+            7
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "Flash/Flash.sage",
+                        "value1": "Flash/Flash.mage",
+                        "value2": ""
+                    }
+                }
+            }
+        },
+        "AGE::RotationComponent": {
+            "Angles": {
+                "value0": 0,
+                "value1": 1,
+                "value2": 0
+            },
+            "Speed": 100
+        }
+    },
+    "Entity_36": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": 0
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            0,
+            7
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "Flash/Flash.sage",
+                        "value1": "Flash/Flash.mage",
+                        "value2": ""
+                    }
+                }
+            }
+        },
+        "AGE::RotationComponent": {
+            "Angles": {
+                "value0": 0,
+                "value1": 1,
+                "value2": 0
+            },
+            "Speed": 100
+        }
+    },
+    "Entity_37": {
+        "link": {
+            "Position": {
+                "value0": 1,
+                "value1": 1,
+                "value2": 0
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            0,
+            7
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "Flash/Flash.sage",
+                        "value1": "Flash/Flash.mage",
+                        "value2": ""
+                    }
+                }
+            }
+        },
+        "AGE::RotationComponent": {
+            "Angles": {
+                "value0": 0,
+                "value1": 1,
+                "value2": 0
+            },
+            "Speed": 100
+        }
+    },
+    "Entity_38": {
+        "link": {
+            "Position": {
+                "value0": 2,
+                "value1": 1,
+                "value2": 0
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            0,
+            7
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "Flash/Flash.sage",
+                        "value1": "Flash/Flash.mage",
+                        "value2": ""
+                    }
+                }
+            }
+        },
+        "AGE::RotationComponent": {
+            "Angles": {
+                "value0": 0,
+                "value1": 1,
+                "value2": 0
+            },
+            "Speed": 100
+        }
+    },
+    "Entity_39": {
+        "link": {
+            "Position": {
+                "value0": -1,
+                "value1": 1,
+                "value2": 0
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            0,
+            7
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "Flash/Flash.sage",
+                        "value1": "Flash/Flash.mage",
+                        "value2": ""
+                    }
+                }
+            }
+        },
+        "AGE::RotationComponent": {
+            "Angles": {
+                "value0": 0,
+                "value1": 1,
+                "value2": 0
+            },
+            "Speed": 100
+        }
+    },
+    "Entity_40": {
+        "link": {
+            "Position": {
+                "value0": -2,
+                "value1": 1,
+                "value2": 0
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            0,
+            7
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "Flash/Flash.sage",
+                        "value1": "Flash/Flash.mage",
+                        "value2": ""
+                    }
+                }
+            }
+        },
+        "AGE::RotationComponent": {
+            "Angles": {
+                "value0": 0,
+                "value1": 1,
+                "value2": 0
+            },
+            "Speed": 100
+        }
+    },
+    "Entity_41": {
+        "link": {
+            "Position": {
+                "value0": -3,
+                "value1": 1,
+                "value2": 0
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            0,
+            7
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "Flash/Flash.sage",
+                        "value1": "Flash/Flash.mage",
+                        "value2": ""
+                    }
+                }
+            }
+        },
+        "AGE::RotationComponent": {
+            "Angles": {
+                "value0": 0,
+                "value1": 1,
+                "value2": 0
+            },
+            "Speed": 100
+        }
+    },
+    "Entity_42": {
         "link": {
             "Position": {
                 "value0": -3,
@@ -7275,6 +7275,43 @@
                 "value2": 0
             },
             "Speed": 100
+        }
+    },
+    "Entity_163": {
+        "link": {
+            "Position": {
+                "value0": 3,
+                "value1": 0.5,
+                "value2": -12
+            },
+            "Scale": {
+                "value0": 30,
+                "value1": 1,
+                "value2": 30
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            0
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "cube/cube.sage",
+                        "value1": "cube/cube.mage",
+                        "value2": ""
+                    }
+                }
+            }
         }
     }
 }
