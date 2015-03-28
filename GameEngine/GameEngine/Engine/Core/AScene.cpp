@@ -205,6 +205,9 @@ namespace AGE
 		if (!destination.isValid())
 		{
 			destination = createEntity(outContext);
+			destination.getLink().setPosition(source.getLink().getPosition());
+			destination.getLink().setOrientation(source.getLink().getOrientation());
+			destination.getLink().setScale(source.getLink().getScale());
 		}
 
 		if (deep)
