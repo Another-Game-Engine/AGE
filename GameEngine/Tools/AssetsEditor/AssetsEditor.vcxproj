@@ -40,7 +40,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir)../../Vendors/assimp/include;$(ProjectDir)../../Vendors/OpenGL/include;$(ProjectDir)../../GameEngine/Engine;$(ProjectDir)../../GameEngine;$(ProjectDir);$(ProjectDir)../../Vendors;$(IncludePath);$(ProjectDir)../../Vendors\bullet\src;$(SolutionDir)Vendors\fmod\inc;$(ProjectDir)../../Vendors/FreeImage/include;$(ProjectDir)../../GameEngine/EngineCoreTest/Systems;$(ProjectDir)../../GameEngine/EngineCoreTest/Components;$(ProjectDir)../../Vendors/FreeImagePlus/include</IncludePath>
+    <IncludePath>$(ProjectDir)../../Vendors/assimp/include;$(ProjectDir)../../Vendors/OpenGL/include;$(ProjectDir)../../GameEngine/Engine;$(ProjectDir)../../GameEngine;$(ProjectDir);$(ProjectDir)../../Vendors;$(IncludePath);$(ProjectDir)../../Vendors\bullet\src;$(SolutionDir)Vendors\fmod\inc;$(ProjectDir)../../Vendors/FreeImage/include;$(ProjectDir)../../EngineCoreTest/Systems;$(ProjectDir)../../EngineCoreTest/Components;$(ProjectDir)../../Vendors/FreeImagePlus/include</IncludePath>
     <LibraryPath>$(ProjectDir)../../Vendors/assimp/x64/Debug;$(ProjectDir)../../Vendors/OpenGL/lib/x64;$(ProjectDir)../../Vendors\fmod\lib;$(ProjectDir)../../Vendors/bullet\lib\x64Debug;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(ProjectDir)../../Vendors/FreeImage/Debug/;$(ProjectDir)../../Vendors/FreeImagePlus/Debug/;$(ProjectDir)../../Vendors\crunch\crnlib\lib\VC9\Debug\x64</LibraryPath>
     <SourcePath>$(VC_SourcePath);$(SolutionDir)EngineCoreTest/Systems;$(SolutionDir)EngineCoreTest/Components</SourcePath>
   </PropertyGroup>
