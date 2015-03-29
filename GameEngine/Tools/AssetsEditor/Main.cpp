@@ -25,6 +25,7 @@
 #include <Utils/Age_Imgui.hpp>
 #include <Threads/Tasks/BasicTasks.hpp>
 #include <Threads/TaskScheduler.hpp>
+#include <Core/ConfigurationManager.hpp>
 
 //SCENE
 #include <Scenes/AssetsEditorScene.hpp>
@@ -55,6 +56,9 @@ int			main(int ac, char **av)
 
 	engine->launch(std::function<bool()>([&]()
 	{
+		auto configurationManager = engine->getInstance<AGE::ConfigurationManager>();
+		configurationManager->setConfiguration<std::string>(std::string("ShadersPath"), std::string(engine->getApplicationPath() + "/../../Shaders/"));
+
 		AGE::GetThreadManager()->setAsWorker(false, false, false);
 		engine->setInstance<AGE::Timer>();
 		engine->setInstance<AGE::AssetsManager>();

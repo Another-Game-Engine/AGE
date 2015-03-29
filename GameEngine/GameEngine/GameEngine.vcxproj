@@ -39,15 +39,15 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <SourcePath>$(SolutionDir)Vendors/TinyThread;$(SolutionDir)Vendors/TinyObjLoader;$(SourcePath);$(SolutionDir)Vendors/imgui/</SourcePath>
-    <IncludePath>$(ProjectDir)Engine;$(ProjectDir);$(SolutionDir)Vendors;$(SolutionDir)Vendors/TinyObjLoader;$(SolutionDir)Vendors/TinyThread;$(SolutionDir)Vendors/OpenGL/include;$(IncludePath);$(SolutionDir)Vendors/boost_1_55_0;$(SolutionDir)Vendors/bullet/src;$(SolutionDir)Vendors\fmod\inc;$(SolutionDir)Vendors/minizip/include/;$(SolutionDir)Vendors/zlib/include/</IncludePath>
+    <SourcePath>$(SourcePath);$(ProjectDir)../Vendors/imgui/</SourcePath>
+    <IncludePath>$(ProjectDir)Engine;$(ProjectDir);$(ProjectDir)../Vendors;$(ProjectDir)../Vendors/OpenGL/include;$(IncludePath);$(ProjectDir)../Vendors/bullet/src;$(ProjectDir)../Vendors\fmod\inc;$(ProjectDir)../Vendors/minizip/include/;$(ProjectDir)../Vendors/zlib/include/</IncludePath>
     <LibraryPath>$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(ProjectDir)Engine;$(ProjectDir);$(SolutionDir)Vendors;$(SolutionDir)Vendors/TinyObjLoader;$(SolutionDir)Vendors/TinyThread;$(SolutionDir)Vendors/OpenGL/include;$(IncludePath);$(SolutionDir)Vendors/boost_1_55_0;$(SolutionDir)Vendors/bullet/src;$(SolutionDir)Vendors\fmod\inc;$(SolutionDir)Vendors/minizip/include/;$(SolutionDir)Vendors/zlib/include/</IncludePath>
+    <IncludePath>$(ProjectDir)Engine;$(ProjectDir);$(ProjectDir)../Vendors;$(ProjectDir)../Vendors/OpenGL/include;$(IncludePath);$(ProjectDir)../Vendors/bullet/src;$(ProjectDir)../Vendors\fmod\inc;$(ProjectDir)../Vendors/minizip/include/;$(ProjectDir)../Vendors/zlib/include/</IncludePath>
     <LibraryPath>$(LibraryPath)</LibraryPath>
     <TargetExt>.lib</TargetExt>
-    <SourcePath>$(SolutionDir)Vendors/TinyThread;$(SolutionDir)Vendors/TinyObjLoader;$(SourcePath);$(SolutionDir)Vendors/imgui/</SourcePath>
+    <SourcePath>$(SourcePath);$(ProjectDir)../Vendors/imgui/</SourcePath>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

@@ -14,6 +14,8 @@
 #include <Threads/PrepareRenderThread.hpp>
 #include <Threads/RenderThread.hpp>
 #include <Threads/Commands/ToRenderCommands.hpp>
+#include <Threads/Tasks/ToRenderTasks.hpp>
+#include <Threads/Tasks/BasicTasks.hpp>
 
 #ifdef USE_DEFAULT_ENGINE_CONFIGURATION
 
@@ -22,6 +24,7 @@
 #include <Context/IRenderContext.hh>
 #include <Core/Inputs/Input.hh>
 #include <Skinning/AnimationManager.hpp>
+#include <Core/ConfigurationManager.hpp>
 
 #endif
 
@@ -125,6 +128,15 @@ namespace AGE
 	{
 		AGE_ASSERT(!_initialized && "Engine already initialized.");
 
+		{
+			auto futur = GetRenderThread()->getQueue()->emplaceFutureTask<Tasks::Render::CreateRenderContext, bool>(this);
+			auto success = futur.get();
+			if (!success)
+			{
+				return false;
+			}
+		}
+
 		_timer = setInstance<Timer>();
 
 		setInstance<FileSystem>();
@@ -132,6 +144,7 @@ namespace AGE
 #ifdef USE_DEFAULT_ENGINE_CONFIGURATION
 		setInstance<AGE::AssetsManager>();
 		setInstance<AGE::AnimationManager>();
+		setInstance<ConfigurationManager>("Configuration.json");
 #endif //USE_DEFAULT_ENGINE_CONFIGURATION
 
 		wchar_t buf[BufferSize];
@@ -208,10 +221,20 @@ namespace AGE
 			cachePath = dataPath;
 		}
 		getInstance<FileSystem>()->initialize(password.c_str());
-		_initialized = true;
 
 		if (!fn())
 			return false;
+		{
+			auto futur = GetRenderThread()->getQueue()->emplaceFutureTask<Tasks::Render::InitRenderPipelines, bool>(this);
+			auto success = futur.get();
+			if (!success)
+			{
+				return false;
+			}
+		}
+
+		_initialized = true;
+
 		return GetMainThread()->run();
 	}
 

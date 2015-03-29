@@ -12,9 +12,11 @@
 #include <Render/ProgramResources/Types/Uniform/Vec3.hh>
 #include <Threads/RenderThread.hpp>
 #include <Threads/ThreadManager.hpp>
+#include <Core/ConfigurationManager.hpp>
+#include <Core/Engine.hh>
 
-#define DEFERRED_SHADING_MERGING_VERTEX "../../Shaders/deferred_shading/deferred_shading_merge.vp"
-#define DEFERRED_SHADING_MERGING_FRAG "../../Shaders/deferred_shading/deferred_shading_merge.fp"
+#define DEFERRED_SHADING_MERGING_VERTEX "deferred_shading/deferred_shading_merge.vp"
+#define DEFERRED_SHADING_MERGING_FRAG "deferred_shading/deferred_shading_merge.fp"
 
 namespace AGE
 {
@@ -36,10 +38,20 @@ namespace AGE
 
 		_programs.resize(PROGRAM_NBR);
 
+		auto confManager = GetEngine()->getInstance<ConfigurationManager>();
+
+		auto shaderPath = confManager->getConfiguration<std::string>("ShadersPath");
+
+		// you have to set shader directory in configuration path
+		AGE_ASSERT(shaderPath != nullptr);
+
+		auto vertexShaderPath = shaderPath->getValue() + DEFERRED_SHADING_MERGING_VERTEX;
+		auto fragmentShaderPath = shaderPath->getValue() + DEFERRED_SHADING_MERGING_FRAG;
+
 		_programs[PROGRAM_MERGING] = std::make_shared<Program>(Program(std::string("basic_3d_render"),
 		{
-			std::make_shared<UnitProg>(DEFERRED_SHADING_MERGING_VERTEX, GL_VERTEX_SHADER),
-			std::make_shared<UnitProg>(DEFERRED_SHADING_MERGING_FRAG, GL_FRAGMENT_SHADER)
+			std::make_shared<UnitProg>(vertexShaderPath, GL_VERTEX_SHADER),
+			std::make_shared<UnitProg>(fragmentShaderPath, GL_FRAGMENT_SHADER)
 		}));
 
 		Key<Painter> quadPainterKey;
