@@ -144,7 +144,8 @@ namespace AGE
 #ifdef USE_DEFAULT_ENGINE_CONFIGURATION
 		setInstance<AGE::AssetsManager>();
 		setInstance<AGE::AnimationManager>();
-		setInstance<ConfigurationManager>("Configuration.json");
+		setInstance<ConfigurationManager>("../../Configuration.json");
+		getInstance<ConfigurationManager>()->loadFile();
 #endif //USE_DEFAULT_ENGINE_CONFIGURATION
 
 		wchar_t buf[BufferSize];
@@ -235,7 +236,10 @@ namespace AGE
 
 		_initialized = true;
 
-		return GetMainThread()->run();
+		GetMainThread()->run();
+
+		getInstance<ConfigurationManager>()->saveToFile();
+		return true;
 	}
 
 	void Engine::finalize()

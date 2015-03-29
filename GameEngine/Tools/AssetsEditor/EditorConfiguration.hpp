@@ -55,14 +55,14 @@ namespace AGE
 			{
 				if (_configurations == nullptr)
 				{
-					if (!AGE::FileSystemHelpers::AgeExists("EditorConfiguration.json"))
+					if (!AGE::FileSystemHelpers::AgeExists("../../EditorConfiguration.json"))
 					{
 						_configurations = std::make_shared<Configurations>();
 						_saveConfigurations();
 					}
 					else
 					{
-						std::ifstream file("EditorConfiguration.json", std::ios::binary);
+						std::ifstream file("../../EditorConfiguration.json", std::ios::binary);
 						assert(file.is_open());
 						{
 							auto ar = cereal::JSONInputArchive(file);
@@ -166,7 +166,7 @@ namespace AGE
 			{
 				RefreshScenesDirectoryListing();
 
-				std::ofstream file("EditorConfiguration.json", std::ios::binary);
+				std::ofstream file("../../EditorConfiguration.json", std::ios::binary);
 				assert(file.is_open());
 				{
 					auto ar = cereal::JSONOutputArchive(file);
