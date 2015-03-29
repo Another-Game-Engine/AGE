@@ -146,6 +146,15 @@ namespace AGE
 		setInstance<AGE::AnimationManager>();
 		setInstance<ConfigurationManager>("../../Configuration.json");
 		getInstance<ConfigurationManager>()->loadFile();
+		auto assetsFilePath = getInstance<ConfigurationManager>()->getConfiguration<std::string>("AssetsPath");
+		if (assetsFilePath != nullptr)
+		{
+			getInstance<AGE::AssetsManager>()->setAssetsDirectory(assetsFilePath->getValue());
+		}
+		else
+		{
+			AGE_BREAK("Assets file path is missing. Add it in configuration.json");
+		}
 #endif //USE_DEFAULT_ENGINE_CONFIGURATION
 
 		wchar_t buf[BufferSize];

@@ -221,7 +221,7 @@ namespace AGE
 			auto threadManager = Singleton<ThreadManager>::getInstance();
 			res = threadManager->initAndLaunch();
 			if (!res)
-				return;
+				return false;
 		});
 		return res;
 	}

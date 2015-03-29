@@ -251,7 +251,8 @@ namespace AGE
 	void AScene::loadFromJson(const std::string &fileName)
 	{
 		std::ifstream file(fileName, std::ios::binary);
-		assert(file.is_open());
+		auto success = file.is_open();
+		assert(success);
 
 		{
 			auto ar = cereal::JSONInputArchive(file);
