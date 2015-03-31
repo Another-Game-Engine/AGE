@@ -294,6 +294,12 @@ namespace AGE
 
 				ImGui::Separator();
 
+				if (cpt->isArchetype())
+				{
+					ImGui::TextColored(ImVec4(0.3, 0.4, 0.5, 1.0), "Entity is Archetype, edit the proper archetype.");
+					return;
+				}
+
 				auto &components = entity.getComponentList();
 				for (ComponentType i = 0; i < components.size(); ++i)
 				{
