@@ -23,21 +23,14 @@ namespace AGE
 
 	}
 
-	PointLightComponent::PointLightComponent(PointLightComponent const &o)
-		: _key(o._key)
-		, _range(o._range)
-		, _color(o._color)
+	void PointLightComponent::_copyFrom(const ComponentBase *model)
 	{
-
+		auto o = static_cast<const PointLightComponent*>(model);
+		_range = o->_range;
+		_color = o->_color;
+		postUnserialization();
 	}
 
-	PointLightComponent &PointLightComponent::operator=(PointLightComponent const &p)
-	{
-		_key = p._key;
-		_range = p._range;
-		_color = p._color;
-		return (*this);
-	}
 
 	void PointLightComponent::reset()
 	{

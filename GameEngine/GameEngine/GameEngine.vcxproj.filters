@@ -2,6 +2,9 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="..\Vendors\imgui\imgui.cpp" />
+    <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredMerging.cpp" />
+    <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredPointLightning.cpp" />
+    <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredBasicBuffering.cpp" />
     <ClCompile Include="Engine\Core\Inputs\ActionManager.cpp" />
     <ClCompile Include="Engine\AssetManagement\AssetManager.cpp" />
     <ClCompile Include="Engine\Components\Light.cpp" />
@@ -15,6 +18,7 @@
     <ClCompile Include="Engine\Render\ProgramResources\Types\Uniform\Mat4Array255.cpp" />
     <ClCompile Include="Engine\Render\Properties\Properties.cpp" />
     <ClCompile Include="Engine\Render\PropertyManager.cpp" />
+    <ClCompile Include="Engine\Systems\DebugSystem.cpp" />
     <ClCompile Include="Engine\Systems\FreeFlyCamera.cpp" />
     <ClCompile Include="Engine\Threads\Commands\MainToPrepareCommands.cpp" />
     <ClCompile Include="Engine\Core\ConfigurationManager.cpp" />
@@ -42,6 +46,9 @@
     <ClCompile Include="Engine\Render\Pipelining\Buffer\Renderbuffer.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\ARenderingPipeline.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomPipeline\DeferredShading.cpp" />
+    <ClCompile Include="Engine\Render\Pipelining\Render\ARender.cpp" />
+    <ClCompile Include="Engine\Render\Pipelining\Render\ScreenRender.cpp" />
+    <ClCompile Include="Engine\Render\Pipelining\Render\FrameBufferRender.cpp" />
     <ClCompile Include="Engine\Render\ProgramResources\AInterfaceBlock.cpp" />
     <ClCompile Include="Engine\Render\ProgramResources\AProgramResources.cpp" />
     <ClCompile Include="Engine\Render\ProgramResources\Factory\ProgramResourcesFactory.cpp" />
@@ -147,23 +154,16 @@
     <ClCompile Include="Engine\Utils\UniqueTypeId.cpp" />
     <ClCompile Include="Engine\Core\Inputs\Joystick.cpp" />
     <ClCompile Include="Engine\Components\FreeFlyComponent.cpp" />
-    <ClCompile Include="Engine\Systems\DebugSystem.cpp" />
-<<<<<<< HEAD
     <ClCompile Include="Engine\WorldEditorGlobal.cpp" />
-=======
-    <ClCompile Include="Engine\Render\Pipelining\Render\ARender.cpp" />
-    <ClCompile Include="Engine\Render\Pipelining\Render\ScreenRender.cpp" />
-    <ClCompile Include="Engine\Render\Pipelining\Render\FrameBufferRender.cpp" />
-    <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredBasicBuffering.cpp" />
-    <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredPointLightning.cpp" />
-    <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredMerging.cpp" />
     <ClCompile Include="Engine\Render\OpenGLTask\OpenGLState.cpp" />
->>>>>>> 25849e3af577b251c50d8b829d4ac15e2a1d2759
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
     <ClInclude Include="..\Vendors\imgui\imgui.h" />
     <ClInclude Include="..\Vendors\imgui\stb_textedit.h" />
+    <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredMerging.hh" />
+    <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredPointLightning.hh" />
+    <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredBasicBuffering.hh" />
     <ClInclude Include="Engine\Core\Inputs\ActionManager.hh" />
     <ClInclude Include="Engine\AssetManagement\AssetManager.hh" />
     <ClInclude Include="Engine\AssetManagement\Data\MaterialData.hh" />
@@ -178,10 +178,12 @@
     <ClInclude Include="Engine\Entities\EntityData.hh" />
     <ClInclude Include="Engine\Render\GeometryManagement\SimpleGeometry.hh" />
     <ClInclude Include="Engine\Render\PipelineTypes.hpp" />
+    <ClInclude Include="Engine\Render\Pipelining\Render\RenderModes.hh" />
     <ClInclude Include="Engine\Render\ProgramResources\Types\Uniform\Vec3.hh" />
     <ClInclude Include="Engine\Render\Properties\Materials\Specular.hh" />
     <ClInclude Include="Engine\Render\ProgramResources\Types\Uniform\Mat4Array255.hh" />
     <ClInclude Include="Engine\Render\Properties\Properties.hh" />
+    <ClInclude Include="Engine\Systems\DebugSystem.hpp" />
     <ClInclude Include="Engine\Systems\FreeFlyCamera.hh" />
     <ClInclude Include="Engine\Threads\Commands\ToRenderCommands.hpp" />
     <ClInclude Include="Engine\Threads\Commands\MainToPrepareCommands.hpp" />
@@ -216,6 +218,10 @@
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\ARenderingPipeline.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomPipeline\DeferredShading.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\IRenderingPipeline.hh" />
+    <ClInclude Include="Engine\Render\Pipelining\Render\ARender.hh" />
+    <ClInclude Include="Engine\Render\Pipelining\Render\IRender.hh" />
+    <ClInclude Include="Engine\Render\Pipelining\Render\ScreenRender.hh" />
+    <ClInclude Include="Engine\Render\Pipelining\Render\FrameBufferRender.hh" />
     <ClInclude Include="Engine\Render\ProgramResources\Types\Uniform\Sampler\Sampler2D.hh" />
     <ClInclude Include="Engine\Render\Properties\AProperty.hh" />
     <ClInclude Include="Engine\Render\Properties\IProperty.hh" />
@@ -400,20 +406,9 @@
     <ClInclude Include="Engine\Utils\Worker.hpp" />
     <ClInclude Include="Engine\Core\Inputs\Joystick.hh" />
     <ClInclude Include="Engine\Components\FreeFlyComponent.hh" />
-    <ClInclude Include="Engine\Systems\DebugSystem.hpp" />
-<<<<<<< HEAD
     <ClInclude Include="Engine\WorldEditorGlobal.hpp" />
-=======
-    <ClInclude Include="Engine\Render\Pipelining\Render\IRender.hh" />
-    <ClInclude Include="Engine\Render\Pipelining\Render\ARender.hh" />
-    <ClInclude Include="Engine\Render\Pipelining\Render\ScreenRender.hh" />
-    <ClInclude Include="Engine\Render\Pipelining\Render\FrameBufferRender.hh" />
-    <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredBasicBuffering.hh" />
-    <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredPointLightning.hh" />
-    <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredMerging.hh" />
     <ClInclude Include="Engine\Render\OpenGLTask\OpenGLState.hh" />
-    <ClInclude Include="Engine\Render\Pipelining\Render\RenderModes.hh" />
->>>>>>> 25849e3af577b251c50d8b829d4ac15e2a1d2759
+    <ClInclude Include="Engine\Entities\Archetype.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

@@ -13,8 +13,10 @@ namespace AGE
 	{
 		CameraComponent();
 		virtual ~CameraComponent();
-		CameraComponent(CameraComponent const &o);
-		CameraComponent	&operator=(CameraComponent const &o);
+		CameraComponent(CameraComponent const &o) = delete;
+		CameraComponent	&operator=(CameraComponent const &o) = delete;
+
+		virtual void _copyFrom(const ComponentBase *model);
 
 		void init();
 		virtual void reset();

@@ -11,9 +11,11 @@
 #include <SpacePartitioning/Ouptut/RenderPainter.hh>
 #include <SpacePartitioning/Ouptut/RenderCamera.hh>
 #include <Render/ProgramResources/Types/Uniform/Mat4.hh>
+#include <Core/ConfigurationManager.hpp>
+#include <Core/Engine.hh>
 
-#define DEFERRED_SHADING_BUFFERING_VERTEX "../../Shaders/deferred_shading/deferred_shading_get_buffer.vp"
-#define DEFERRED_SHADING_BUFFERING_FRAG "../../Shaders/deferred_shading/deferred_shading_get_buffer.fp"
+#define DEFERRED_SHADING_BUFFERING_VERTEX "deferred_shading/deferred_shading_get_buffer.vp"
+#define DEFERRED_SHADING_BUFFERING_FRAG "deferred_shading/deferred_shading_get_buffer.fp"
 
 namespace AGE
 {
@@ -41,10 +43,20 @@ namespace AGE
 
 		_programs.resize(PROGRAM_NBR);
 
+		auto confManager = GetEngine()->getInstance<ConfigurationManager>();
+
+		auto shaderPath = confManager->getConfiguration<std::string>("ShadersPath");
+
+		// you have to set shader directory in configuration path
+		AGE_ASSERT(shaderPath != nullptr);
+
+		auto vertexShaderPath = shaderPath->getValue() + DEFERRED_SHADING_BUFFERING_VERTEX;
+		auto fragmentShaderPath = shaderPath->getValue() + DEFERRED_SHADING_BUFFERING_FRAG;
+
 		_programs[PROGRAM_BUFFERING] = std::make_shared<Program>(Program(std::string("program_buffering"),
 		{ 
-			std::make_shared<UnitProg>(DEFERRED_SHADING_BUFFERING_VERTEX, GL_VERTEX_SHADER), 
-			std::make_shared<UnitProg>(DEFERRED_SHADING_BUFFERING_FRAG, GL_FRAGMENT_SHADER) 
+			std::make_shared<UnitProg>(vertexShaderPath, GL_VERTEX_SHADER),
+			std::make_shared<UnitProg>(fragmentShaderPath, GL_FRAGMENT_SHADER)
 		}));
 	}
 

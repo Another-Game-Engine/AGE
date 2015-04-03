@@ -18,17 +18,11 @@ namespace AGE
 	{
 	}
 
-	CameraComponent::CameraComponent(CameraComponent const &o)
-		: _projection(1)
-		, _key(o._key)
+	void CameraComponent::_copyFrom(const ComponentBase *model)
 	{
-	}
-
-	CameraComponent	&CameraComponent::operator=(CameraComponent const &o)
-	{
-		_key = o._key;
-		_projection = o._projection;
-		return *this;
+		auto o = static_cast<const CameraComponent*>(model);
+		_projection = o->_projection;
+		_pipelines = o->_pipelines;
 	}
 
 	void CameraComponent::setProjection(const glm::mat4 &projection)

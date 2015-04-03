@@ -161,7 +161,7 @@ namespace AGE
 		_findclose(handle);
 		data->name = new char[std::strlen(name) + 1];
 		std::strcpy(data->name, name);
-		return true;
+		return data->name != nullptr;
 	}
 
 	void Directory::close(void)

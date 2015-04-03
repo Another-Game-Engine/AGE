@@ -8,6 +8,7 @@
 #include <EditorConfiguration.hpp>
 #include <Components/CameraComponent.hpp>
 #include <Components/FreeFlyComponent.hh>
+#include <Entities/Archetype.hpp>
 
 namespace AGE
 {
@@ -134,6 +135,40 @@ namespace AGE
 					{
 						_scene->destroy(entity);
 						_selectedEntity = nullptr;
+						_selectedEntityIndex = 0;
+					}
+
+					if (ImGui::Button("Duplicate"))
+					{
+						Entity duplicate;
+						_scene->copyEntity(entity, duplicate, true, false);
+					}
+
+					ImGui::InputText("Archetype name", _archetypeName, MAX_SCENE_NAME_LENGTH);
+					ImGui::SameLine();
+					if (ImGui::Button("Save as archetype"))
+					{
+						WESerialization::SetSerializeForEditor(true);
+						// we list all assets dependencies
+						{
+							AssetsManager::AssetsPackage package;
+							for (auto e : _meshRenderers.getCollection())
+							{
+								auto cpt = e.getComponent<MeshRenderer>();
+								if (!cpt->selectedMeshPath.empty())
+								{
+									package.meshs.insert(cpt->selectedMeshPath);
+								}
+								if (!cpt->selectedMaterialPath.empty())
+								{
+									package.materials.insert(cpt->selectedMaterialPath);
+								}
+							}
+							_scene->getInstance<AssetsManager>()->savePackage(package, WE::EditorConfiguration::GetEditedArchetypeDirectory() + std::string(_archetypeName) + "_assets.json");
+						}
+
+						_scene->saveSelectionToJson(WE::EditorConfiguration::GetEditedArchetypeDirectory() + std::string(_archetypeName) + "_archetype.json", _entities);
+						WESerialization::SetSerializeForEditor(false);
 					}
 				}
 

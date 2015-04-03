@@ -62,7 +62,6 @@ namespace AGE
 		void setTransformConstraint(bool x, bool y, bool z);
 		virtual ~RigidBody(void);
 		RigidBody(RigidBody &&o) = delete;
-		RigidBody &operator=(RigidBody &&o) = delete;
 		//////
 		////
 		// Serialization
@@ -108,10 +107,13 @@ namespace AGE
 		virtual void editorDelete(AScene *scene);
 		virtual void editorUpdate(AScene *scene);
 #endif
-
+	protected:
+		virtual void _copyFrom(const ComponentBase *model)
+		{
+			// !!! TODO TODO TODO
+		}
 	private:
-		RigidBody &operator=(RigidBody const &o);
-		RigidBody(RigidBody const &o);
+		RigidBody(RigidBody const &o) = delete;
 	};
 }
 
