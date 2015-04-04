@@ -43,6 +43,8 @@ namespace AGE
 				auto &archetype = representation->archetype;
 				auto &destination = archetype.getEntity();
 
+
+				//we copy the original entity into the archetype entity
 				bool success = scene->copyEntity(entity, destination, true, false);
 				AGE_ASSERT(success);
 
@@ -53,6 +55,8 @@ namespace AGE
 				auto entityRepresentationComponent = entity.getComponent<EntityRepresentation>();
 				AGE_ASSERT(entityRepresentationComponent != nullptr);
 
+				//we remove original entity's components
+				//replacing them by archetypes ones
 				for (auto &e : componentsCopy)
 				{
 					if (e != nullptr && e != entityRepresentationComponent)

@@ -105,7 +105,7 @@ namespace AGE
 
 		virtual void editorCreate();
 		virtual void editorDelete();
-		virtual void editorUpdate();
+		virtual bool editorUpdate();
 #endif
 	protected:
 		virtual void _copyFrom(const ComponentBase *model)

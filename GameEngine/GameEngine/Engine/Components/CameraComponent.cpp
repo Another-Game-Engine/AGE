@@ -102,8 +102,9 @@ namespace AGE
 	void CameraComponent::editorDelete()
 	{}
 
-	void CameraComponent::editorUpdate()
+	bool CameraComponent::editorUpdate()
 	{
+		return false;
 	}
 #endif
 

@@ -34,7 +34,7 @@ namespace AGE
 #ifdef EDITOR_ENABLED
 		virtual void editorCreate();
 		virtual void editorDelete();
-		virtual void editorUpdate();
+		virtual bool editorUpdate();
 #endif
 
 	private:

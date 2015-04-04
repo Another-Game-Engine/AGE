@@ -174,8 +174,9 @@ namespace AGE
 	void MeshRenderer::editorDelete()
 	{}
 
-	void MeshRenderer::editorUpdate()
+	bool MeshRenderer::editorUpdate()
 	{
+		bool modified = false;
 		auto scene = entity.getScene();
 
 		if ((*meshPathList)[selectedMeshIndex] != selectedMeshPath)
@@ -186,6 +187,7 @@ namespace AGE
 				if (e == selectedMeshPath)
 				{
 					selectedMeshIndex = i;
+					modified = true;
 					break;
 				}
 				++i;
@@ -199,6 +201,7 @@ namespace AGE
 				if (e == selectedMaterialPath)
 				{
 					selectedMaterialIndex = i;
+					modified = true;
 					break;
 				}
 				++i;
@@ -208,6 +211,8 @@ namespace AGE
 		ImGui::PushItemWidth(-1);
 		if (ImGui::ListBox("Meshs", (int*)&selectedMeshIndex, &(meshFileList->front()), (int)(meshFileList->size())))
 		{
+			modified = true;
+
 			selectedMeshName = (*meshFileList)[selectedMeshIndex];
 			selectedMeshPath = (*meshPathList)[selectedMeshIndex];
 
@@ -237,6 +242,8 @@ namespace AGE
 		ImGui::PushItemWidth(-1);
 		if (!materialFileList->empty() && ImGui::ListBox("Material", (int*)&selectedMaterialIndex, &(materialFileList->front()), (int)(materialFileList->size())))
 		{
+			modified = true;
+
 			selectedMaterialName = (*materialFileList)[selectedMaterialIndex];
 			selectedMaterialPath = (*materialPathList)[selectedMaterialIndex];
 
@@ -264,7 +271,7 @@ namespace AGE
 		}
 		//ImGui::ListBoxFooter();
 		ImGui::PopItemWidth();
-
+		return modified;
 	}
 #endif
 }

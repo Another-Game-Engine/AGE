@@ -41,7 +41,8 @@ namespace AGE
 #ifdef EDITOR_ENABLED
 		virtual void editorCreate(){}
 		virtual void editorDelete(){}
-		virtual void editorUpdate(){}
+		// return true if modified
+		virtual bool editorUpdate(){ return false; }
 		bool exposedInEditor = true;
 		bool deletableInEditor = true;
 		// if serialized in final export

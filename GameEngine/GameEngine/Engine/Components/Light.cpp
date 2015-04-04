@@ -103,16 +103,20 @@ namespace AGE
 	void PointLightComponent::editorDelete()
 	{}
 
-	void PointLightComponent::editorUpdate()
+	bool PointLightComponent::editorUpdate()
 	{
+		bool modified = false;
 		if (ImGui::ColorEdit3("Color", getColorPtr()))
 		{
 			set(_color, _range);
+			modified = true;
 		}
 		if (ImGui::SliderFloat3("Range", glm::value_ptr(_range), 0.0f, 1.0f))
 		{
 			set(_color, _range);
+			modified = true;
 		}
+		return modified;
 	}
 #endif
 }
