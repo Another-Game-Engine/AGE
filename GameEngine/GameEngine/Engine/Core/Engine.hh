@@ -36,6 +36,7 @@ namespace AGE
 		inline float getTimeMultiplier() const { return _timeMultiplier; }
 		inline void setTimeMultiplier(float multiplier) { if (multiplier < 0.0f) return; _timeMultiplier = multiplier; }
 		inline void displayFps(bool tof) { _displayFps = tof; }
+		inline void displayThreadsStatistics(bool tof) { _displayThreadsStatistics = tof; }
 	private:
 		friend class Singleton < Engine > ;
 
@@ -51,6 +52,9 @@ namespace AGE
 	private:
 		static const std::size_t BufferSize = 1024;
 
+		void _renderThreadsStatistics();
+		void _renderFpsStatitstics();
+
 		Timer *_timer;
 		bool _initialized = false;
 		int numberOfArguments;
@@ -65,6 +69,7 @@ namespace AGE
 		std::size_t frame = 0;
 		float _timeMultiplier = 1.0f;
 		bool _displayFps = true;
+		bool _displayThreadsStatistics = true;
 	};
 
 	Engine *CreateEngine();

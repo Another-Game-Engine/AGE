@@ -299,6 +299,25 @@ namespace AGE
 			e.averageWaitTimeCopy = e.averageWaitTime;
 			e.averageWorkTimeCopy = e.averageWorkTime;
 		}
+
+		if (_displayThreadsStatistics)
+		{
+			_renderThreadsStatistics();
+		}
+		if (_displayFps)
+		{
+			_renderFpsStatitstics();
+		}
+#ifdef USE_IMGUI
+		ImGui::Render();
+#endif
+		GetPrepareThread()->getQueue()->emplaceCommand<Commands::ToRender::Flush>();
+		++frame;
+		return true;
+	}
+
+	void Engine::_renderThreadsStatistics()
+	{
 #ifdef USE_IMGUI
 		if (ImGui::Begin("Threads statistics", (bool*)0, ImVec2(0, 0), -1.0f, ImGuiWindowFlags_AlwaysAutoResize))
 		{
@@ -336,20 +355,24 @@ namespace AGE
 			}
 		}
 		ImGui::End();
-		if (_displayFps)
+#endif
+	}
+
+	void Engine::_renderFpsStatitstics()
+	{
+#ifdef USE_IMGUI
+		if (!ImGui::Begin("Example: Fixed OverlayFPS OVERLAY", (bool*)1, ImVec2(0, 0), 0.3f, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings))
 		{
-			if (!ImGui::Begin("Example: Fixed OverlayFPS OVERLAY", (bool*)1, ImVec2(0, 0), 0.3f, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings))
+			ImGui::End();
+		}
+		else
+		{
+			ImGui::SetWindowPos(ImVec2(10, 10));
 			{
-				ImGui::End();
+				auto &e = GetThreadManager()->getStatistics()[Thread::Main];
+				if (e.averageWaitTimeCopy + e.averageWorkTimeCopy > 0)
+					ImGui::Text("Main : %i fps", (int)(1000 / (e.averageWaitTimeCopy + e.averageWorkTimeCopy)));
 			}
-			else
-			{
-				ImGui::SetWindowPos(ImVec2(10, 10));
-				{
-					auto &e = GetThreadManager()->getStatistics()[Thread::Main];
-					if (e.averageWaitTimeCopy + e.averageWorkTimeCopy > 0)
-						ImGui::Text("Main : %i fps", (int)(1000 / (e.averageWaitTimeCopy + e.averageWorkTimeCopy)));
-				}
 			{
 				auto &e = GetThreadManager()->getStatistics()[Thread::PrepareRender];
 				if (e.averageWaitTimeCopy + e.averageWorkTimeCopy > 0)
@@ -361,15 +384,8 @@ namespace AGE
 					ImGui::Text("Render : %i fps", (int)(1000 / (e.averageWaitTimeCopy + e.averageWorkTimeCopy)));
 			}
 			ImGui::End();
-			}
 		}
 #endif
-#ifdef USE_IMGUI
-		ImGui::Render();
-#endif
-		GetPrepareThread()->getQueue()->emplaceCommand<Commands::ToRender::Flush>();
-		++frame;
-		return true;
 	}
 
 	Engine *GetEngine()
