@@ -149,8 +149,14 @@ namespace AGE
 				msg.setValue(false);
 				return;
 			}
-			pipelines[RenderType::DEFERRED] = std::make_unique<DeferredShading>(_context->getScreenSize(), paintingManager);
-			pipelines[RenderType::DEBUG_DEFERRED] = std::make_unique<DebugDeferredShading>(_context->getScreenSize(), paintingManager);
+			msg.setValue(true);
+		});
+
+		registerCallback<Tasks::Render::InitRenderPipelines>([this](Tasks::Render::InitRenderPipelines &msg)
+		{
+			_context = msg.engine->setInstance<SdlContext, IRenderContext>();
+			pipelines[DEFERRED] = std::make_unique<DeferredShading>(_context->getScreenSize(), paintingManager);
+			pipelines[DEBUG_DEFERRED] = std::make_unique<DebugDeferredShading>(_context->getScreenSize(), paintingManager);
 			_recompileShaders();
 			msg.setValue(true);
 		});

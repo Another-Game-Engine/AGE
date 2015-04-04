@@ -23,7 +23,7 @@ namespace AGE
 	{
 		auto o = static_cast<const CameraComponent*>(model);
 		_projection = o->_projection;
-		_pipelines = o->_pipelines;
+		_pipeline = o->_pipeline;
 	}
 
 	void CameraComponent::setProjection(const glm::mat4 &projection)
