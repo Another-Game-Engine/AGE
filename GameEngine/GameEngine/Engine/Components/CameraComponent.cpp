@@ -89,13 +89,13 @@ namespace AGE
 	}
 
 #ifdef EDITOR_ENABLED
-	void CameraComponent::editorCreate(AScene *scene)
+	void CameraComponent::editorCreate()
 	{}
 
-	void CameraComponent::editorDelete(AScene *scene)
+	void CameraComponent::editorDelete()
 	{}
 
-	void CameraComponent::editorUpdate(AScene *scene)
+	void CameraComponent::editorUpdate()
 	{
 	}
 #endif

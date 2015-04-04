@@ -86,13 +86,13 @@ namespace AGE
 	}
 
 #ifdef EDITOR_ENABLED
-	void PointLightComponent::editorCreate(AScene *scene)
+	void PointLightComponent::editorCreate()
 	{}
 
-	void PointLightComponent::editorDelete(AScene *scene)
+	void PointLightComponent::editorDelete()
 	{}
 
-	void PointLightComponent::editorUpdate(AScene *scene)
+	void PointLightComponent::editorUpdate()
 	{
 		if (ImGui::ColorEdit3("Color", getColorPtr()))
 		{

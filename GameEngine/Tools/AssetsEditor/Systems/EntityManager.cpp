@@ -10,6 +10,7 @@
 #include <Components/FreeFlyComponent.hh>
 #include <Entities/Archetype.hpp>
 #include <Managers/ArchetypesEditorManager.hpp>
+#include <EntityHelpers/EntityImgui.hpp>
 
 namespace AGE
 {
@@ -101,7 +102,7 @@ namespace AGE
 				{
 					for (auto &e : _entities)
 					{
-						recursiveDisplayList(e);
+						recursiveDisplayList(e, _selectedEntity, _selectParent);
 					}
 				}
 
@@ -112,7 +113,7 @@ namespace AGE
 				if (_entities.size() > 0 && _selectedEntity != nullptr)
 				{
 					auto entity = *_selectedEntity;
-					displayEntity(entity);
+					displayEntity(entity, _scene);
 
 					ImGui::Separator();
 
@@ -254,136 +255,6 @@ namespace AGE
 
 				ImGui::EndChild(); // Entity List
 			}
-
-			void EntityManager::displayEntity(Entity &entity)
-			{
-				auto cpt = entity.getComponent<AGE::WE::EntityRepresentation>();
-
-				ImGui::InputText("Name", cpt->name, ENTITY_NAME_LENGTH);
-				cpt->position = entity.getLink().getPosition();
-				if (ImGui::InputFloat3("Position", glm::value_ptr(cpt->position)))
-				{
-					entity.getLink().setPosition(cpt->position);
-				}
-
-				cpt->rotation = glm::eulerAngles(entity.getLink().getOrientation());
-				if (ImGui::InputFloat3("Rotation", glm::value_ptr(cpt->rotation)))
-				{
-					entity.getLink().setOrientation(glm::quat(cpt->rotation));
-				}
-
-				cpt->scale = entity.getLink().getScale();
-				if (ImGui::InputFloat3("Scale", glm::value_ptr(cpt->scale)))
-				{
-					entity.getLink().setScale(cpt->scale);
-				}
-
-				ImGui::Separator();
-
-				if (cpt->isArchetype())
-				{
-					ImGui::TextColored(ImVec4(0.3, 0.4, 0.5, 1.0), "Entity is Archetype, edit the proper archetype.");
-					return;
-				}
-
-				auto &components = entity.getComponentList();
-				for (ComponentType i = 0; i < components.size(); ++i)
-				{
-					if (entity.haveComponent(i))
-					{
-						auto ptr = entity.getComponent(i);
-						if (ptr->exposedInEditor)
-						{
-							bool opened = ImGui::TreeNode(ComponentRegistrationManager::getInstance().getComponentName(ptr->getType()).c_str());
-							bool deleted = false;
-							if (ptr->deletableInEditor)
-							{
-								ImGui::SameLine();
-								ImGui::PushID(i);
-								deleted = ImGui::SmallButton("Delete");
-								if (deleted)
-								{
-									ptr->editorDelete(_scene);
-									entity.removeComponent(i);
-								}
-								ImGui::PopID();
-							}
-							if (opened && !deleted)
-							{
-								ptr->editorUpdate(_scene);
-								ImGui::TreePop();
-							}
-						}
-					}
-				}
-			}
-
-			void EntityManager::recursiveDisplayList(Entity &entity)
-			{
-				auto cpt = entity.getComponent<AGE::WE::EntityRepresentation>();
-				bool opened = false;
-				opened = ImGui::TreeNode(cpt->name);
-				ImGui::PushID(entity.getPtr());
-				if (_selectedEntity != entity.getPtr())
-				{
-					if (!_selectParent)
-					{
-						ImGui::SameLine();
-						if (ImGui::SmallButton("Select"))
-						{
-							_selectedEntity = entity.getPtr();
-						}
-					}
-					else/* (_selectedEntity != nullptr)*/
-					{
-						ImGui::SameLine();
-						if (ImGui::SmallButton("Set as parent"))
-						{
-							_selectedEntity->getLink().attachParent(entity.getLinkPtr());
-							_selectParent = false;
-						}
-					}
-				}
-				else
-				{
-					if (!_selectParent)
-					{
-						ImGui::SameLine();
-						if (ImGui::SmallButton("Set parent"))
-						{
-							_selectParent = true;
-						}
-					}
-					else
-					{
-						ImGui::SameLine();
-						if (ImGui::SmallButton("Root"))
-						{
-							_selectedEntity->getLink().detachParent();
-							_selectParent = false;
-						}
-						ImGui::SameLine();
-						if (ImGui::SmallButton("Cancel"))
-						{
-							_selectParent = false;
-						}
-					}
-				}
-				ImGui::PopID();
-				if (opened)
-				{
-					if (entity.getLink().hasChildren())
-					{
-						auto children = entity.getLink().getChildren();
-						for (auto &e : children)
-						{
-							recursiveDisplayList(e->getEntity()->getEntity());
-						}
-					}
-					ImGui::TreePop();
-				}
-			}
-
 
 			bool EntityManager::initialize()
 			{

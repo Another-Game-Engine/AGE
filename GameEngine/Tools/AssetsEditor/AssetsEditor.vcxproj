@@ -129,6 +129,7 @@
     <ClInclude Include="AssetFiles\File.hpp" />
     <ClInclude Include="AssetFiles\Folder.hpp" />
     <ClInclude Include="EditorConfiguration.hpp" />
+    <ClInclude Include="EntityHelpers\EntityImgui.hpp" />
     <ClInclude Include="ImageUtils.hh" />
     <ClInclude Include="Managers\ArchetypesEditorManager.hpp" />
     <ClInclude Include="resource.h" />

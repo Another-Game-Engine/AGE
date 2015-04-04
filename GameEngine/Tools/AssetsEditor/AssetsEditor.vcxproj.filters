@@ -152,6 +152,9 @@
     <ClInclude Include="Managers\ArchetypesEditorManager.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="EntityHelpers\EntityImgui.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="AssetsEditor.rc">

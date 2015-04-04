@@ -32,9 +32,9 @@ namespace AGE
 		virtual void postUnserialization();
 
 #ifdef EDITOR_ENABLED
-		virtual void editorCreate(AScene *scene);
-		virtual void editorDelete(AScene *scene);
-		virtual void editorUpdate(AScene *scene);
+		virtual void editorCreate();
+		virtual void editorDelete();
+		virtual void editorUpdate();
 #endif
 	private:
 		glm::mat4 _projection;

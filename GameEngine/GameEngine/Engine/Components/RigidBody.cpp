@@ -285,15 +285,15 @@ namespace AGE
 	}
 
 #ifdef EDITOR_ENABLED
-	void RigidBody::editorCreate(AScene *scene)
+	void RigidBody::editorCreate()
 	{
 		setMass(0.0f);
 	}
 
-	void RigidBody::editorDelete(AScene *scene)
+	void RigidBody::editorDelete()
 	{}
 
-	void RigidBody::editorUpdate(AScene *scene)
+	void RigidBody::editorUpdate()
 	{
 		if (ImGui::InputFloat("Mass", &_mass))
 		{

@@ -168,14 +168,16 @@ namespace AGE
 	}
 
 #ifdef EDITOR_ENABLED
-	void MeshRenderer::editorCreate(AScene *scene)
+	void MeshRenderer::editorCreate()
 	{}
 
-	void MeshRenderer::editorDelete(AScene *scene)
+	void MeshRenderer::editorDelete()
 	{}
 
-	void MeshRenderer::editorUpdate(AScene *scene)
+	void MeshRenderer::editorUpdate()
 	{
+		auto scene = entity.getScene();
+
 		if ((*meshPathList)[selectedMeshIndex] != selectedMeshPath)
 		{
 			std::size_t i = 0;
