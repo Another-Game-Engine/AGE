@@ -38,6 +38,12 @@ namespace AGE
 				Engine *engine;
 			};
 
+			struct InitRenderPipelines: TMQ::FutureData < bool >
+			{
+				InitRenderPipelines(Engine *_engine);
+				Engine *engine;
+			};
+
 			struct LoadMesh : TMQ::FutureData < bool >
 			{
 

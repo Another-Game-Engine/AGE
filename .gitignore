@@ -225,3 +225,4 @@ Makefile*
 *.qmlproject.user.*
 *.cd
 /GameEngine/EngineCoreTest/*.nvuser
+RailShooter

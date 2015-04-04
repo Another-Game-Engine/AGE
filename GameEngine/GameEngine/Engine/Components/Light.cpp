@@ -31,16 +31,12 @@ namespace AGE
 		, _color(o._color),
 		_map(o._map)
 	{
-
+		auto o = static_cast<const PointLightComponent*>(model);
+		_range = o->_range;
+		_color = o->_color;
+		postUnserialization();
 	}
 
-	PointLightComponent &PointLightComponent::operator=(PointLightComponent const &p)
-	{
-		_key = p._key;
-		_range = p._range;
-		_color = p._color;
-		return (*this);
-	}
 
 	void PointLightComponent::reset()
 	{

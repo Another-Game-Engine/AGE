@@ -39,6 +39,8 @@ namespace AGE
 
 	void MeshRenderer::reset()
 	{
+		_mesh = nullptr;
+		_material = nullptr;
 		if (!_key.invalid())
 		{
 			entity.getLink().unregisterOctreeObject(_key);
@@ -67,7 +69,6 @@ namespace AGE
 		_mesh = mesh;
 		_material = material;
 		_updateGeometry();
-		//AGE::GetPrepareThread()->getQueue()->emplaceCommand<Tasks::MainToPrepare::SetMeshMaterial>(_material, _mesh);
 		return true;
 	}
 
@@ -89,6 +90,24 @@ namespace AGE
 			subMesh.renderMode[mode] = false;
 		}
 		_updateGeometry();
+	}
+
+	void MeshRenderer::_copyFrom(const ComponentBase *model)
+	{
+		auto o = static_cast<const MeshRenderer*>(model);
+
+		_material = o->_material;
+		_mesh = o->_mesh;
+#ifdef EDITOR_ENABLED
+		selectedMeshIndex = o->selectedMeshIndex;
+		selectedMeshName = o->selectedMeshName;
+		selectedMeshPath = o->selectedMeshPath;
+
+		selectedMaterialIndex = o->selectedMaterialIndex;
+		selectedMaterialName = o->selectedMaterialName;
+		selectedMaterialPath = o->selectedMaterialPath;
+#endif
+		setMeshAndMaterial(_mesh, _material);
 	}
 
 	std::shared_ptr<AGE::MeshInstance> MeshRenderer::getMesh()
