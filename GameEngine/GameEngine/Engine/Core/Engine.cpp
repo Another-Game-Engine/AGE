@@ -309,6 +309,7 @@ namespace AGE
 			_renderFpsStatitstics();
 		}
 #ifdef USE_IMGUI
+		ImGui::ShowTestWindow();
 		ImGui::Render();
 #endif
 		GetPrepareThread()->getQueue()->emplaceCommand<Commands::ToRender::Flush>();
