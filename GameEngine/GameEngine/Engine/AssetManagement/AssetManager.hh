@@ -145,7 +145,9 @@ static std::pair<std::pair<GLenum, std::string>, std::function<void(Vertices &ve
 		void update();
 		bool isLoading();
 		void pushNewCallback(const std::string &loadingChannel, std::function<void()> &callback);
-	private:
+		std::shared_ptr<ITexture> const &getPointLightTexture();
+
+private:
 		std::string _assetsDirectory;
 		std::map<std::bitset<MeshInfos::END>, Key<Painter>, BitsetComparer> _painters;
 		std::map<std::string, std::shared_ptr<MeshInstance>> _meshs;
@@ -154,6 +156,7 @@ static std::pair<std::pair<GLenum, std::string>, std::function<void(Vertices &ve
 		std::map<std::string, std::shared_ptr<MaterialSetInstance>> _materials;
 		std::map<std::string, std::shared_ptr<ITexture>> _textures;
 		std::map<std::string, std::shared_ptr<AssetsLoadingChannel>> _loadingChannels;
+		std::shared_ptr<ITexture> _pointLight;
 		std::mutex _mutex;
 		std::atomic<bool> _isLoading;
 	private:

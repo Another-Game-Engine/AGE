@@ -3,6 +3,8 @@
 #include <Components/Component.hh>
 #include <Render/Key.hh>
 #include <Utils/Serialization/VectorSerialization.hpp>
+#include <Render/Textures/ITexture.hh>
+#include <memory>
 
 namespace gl { class GeometryManager; class Vertices; class Indices; }
 
@@ -39,6 +41,7 @@ namespace AGE
 		AGE::PrepareKey _key;
 		glm::vec3 _color;
 		glm::vec3 _range;
+		std::shared_ptr<ITexture> _map;
 
 #ifdef EDITOR_ENABLED
 #endif

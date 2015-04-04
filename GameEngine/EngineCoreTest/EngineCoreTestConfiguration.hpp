@@ -34,10 +34,10 @@ namespace AGE
 			template <typename Archive>
 			void serialize(Archive &ar, std::uint32_t const version)
 			{
-				ar(cereal::make_nvp("Cooked assets directory", _cookedAssetsDirectory));
-				ar(cereal::make_nvp("Exported scenes directory", _exportSceneFolder));
-				ar(cereal::make_nvp("Selected scene index", _selectedScene));
-				ar(cereal::make_nvp("Archetypes directory", _exportArchetypeFolder));
+				//ar(cereal::make_nvp("Cooked assets directory", _cookedAssetsDirectory));
+				//ar(cereal::make_nvp("Exported scenes directory", _exportSceneFolder));
+				//ar(cereal::make_nvp("Selected scene index", _selectedScene));
+				//ar(cereal::make_nvp("Archetypes directory", _exportArchetypeFolder));
 			}
 		};
 

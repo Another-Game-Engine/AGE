@@ -27,16 +27,10 @@
     <ClCompile Include="AssetsDatabase.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="AssetFiles\RawFile.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="AssetFiles\File.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="AssetFiles\Folder.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="AssetFiles\AssetFileManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="AssetFiles\CookedFile.cpp">
@@ -67,6 +61,21 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="EditorConfiguration.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AssetFiles\AssetFileManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AssetFiles\MeshRawFile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AssetFiles\RawFile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AssetFiles\TextureRawFile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AssetFiles\MaterialRawFile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -102,9 +111,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="AssetsDatabase.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="AssetFiles\RawFile.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="AssetFiles\File.hpp">
@@ -153,6 +159,16 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="EntityHelpers\EntityImgui.hpp">
+    <ClInclude Include="AssetFiles\MeshRawFile.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AssetFiles\RawFile.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AssetFiles\TextureRawFile.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AssetFiles\MaterialRawFile.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

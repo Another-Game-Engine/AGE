@@ -14,14 +14,14 @@ namespace AGE
 
 	class DeferredMerging;
 
-	class DeferredShading : public ARenderingPipeline
+	class DebugDeferredShading : public ARenderingPipeline
 	{
 	public:
-		DeferredShading(glm::uvec2 const &screen_size, std::shared_ptr<PaintingManager> const &painter_manager);
-		DeferredShading(DeferredShading &&move);
-		virtual ~DeferredShading() {};
-		DeferredShading(DeferredShading const &) = delete;
-		DeferredShading &operator=(DeferredShading const &) = delete;
+		DebugDeferredShading(glm::uvec2 const &screen_size, std::shared_ptr<PaintingManager> const &painter_manager);
+		DebugDeferredShading(DebugDeferredShading &&move);
+		virtual ~DebugDeferredShading() {};
+		DebugDeferredShading(DebugDeferredShading const &) = delete;
+		DebugDeferredShading &operator=(DebugDeferredShading const &) = delete;
 
 	public:
 		void setAmbient(glm::vec3 const &ambient);
@@ -29,10 +29,10 @@ namespace AGE
 	private:
 		std::shared_ptr<Texture2D> _depthStencil;
 		std::shared_ptr<Texture2D> _diffuse;
+		std::shared_ptr<Texture2D> _debugLights;
 		std::shared_ptr<Texture2D> _normal;
 		std::shared_ptr<Texture2D> _specular;
 		std::shared_ptr<Texture2D> _lightAccumulation;
-		
 		std::shared_ptr<DeferredMerging> _deferredMerging;
 	};
 

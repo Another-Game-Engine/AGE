@@ -4,6 +4,7 @@
 #include <Threads/PrepareRenderThread.hpp>
 #include <Threads/ThreadManager.hpp>
 #include <glm/glm.hpp>
+#include <AssetManagement/AssetManager.hh>
 
 #ifdef EDITOR_ENABLED
 #include <imgui\imgui.h>
@@ -14,13 +15,23 @@ namespace AGE
 {
 	PointLightComponent::PointLightComponent()
 		: _range(1)
-		, _color(1)
+		, _color(1),
+		_map(nullptr)
 	{
 	}
 
 	PointLightComponent::~PointLightComponent()
 	{
 
+	}
+
+	PointLightComponent::PointLightComponent(PointLightComponent const &o)
+		: _key(o._key)
+		, _range(o._range)
+		, _color(o._color),
+		_map(o._map)
+	{
+		postUnserialization();
 	}
 
 	void PointLightComponent::_copyFrom(const ComponentBase *model)
@@ -30,7 +41,6 @@ namespace AGE
 		_color = o->_color;
 		postUnserialization();
 	}
-
 
 	void PointLightComponent::reset()
 	{
@@ -47,6 +57,7 @@ namespace AGE
 	{
 		_key = AGE::GetPrepareThread()->addPointLight();
 		entity.getLink().registerOctreeObject(_key);
+		_map = entity.getScene()->getInstance<AssetsManager>()->getPointLightTexture();
 		assert(!_key.invalid());
 	}
 
@@ -54,7 +65,7 @@ namespace AGE
 	{
 		_color = color;
 		_range = range;
-		AGE::GetPrepareThread()->setPointLight(color, range, _key);
+		AGE::GetPrepareThread()->setPointLight(color, range, _map, _key);
 		return (*this);
 	}
 
