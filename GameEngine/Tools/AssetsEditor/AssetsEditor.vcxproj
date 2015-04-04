@@ -130,6 +130,7 @@
     <ClInclude Include="AssetFiles\Folder.hpp" />
     <ClInclude Include="EditorConfiguration.hpp" />
     <ClInclude Include="ImageUtils.hh" />
+    <ClInclude Include="Managers\ArchetypesEditorManager.hpp" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Scenes\AssetsEditorScene.hpp" />
     <ClInclude Include="Scenes\SceneSelectorScene.hpp" />

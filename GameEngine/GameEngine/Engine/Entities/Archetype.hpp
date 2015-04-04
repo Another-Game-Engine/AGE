@@ -11,7 +11,7 @@ namespace AGE
 		static bool Load(const std::string &path, AScene *scene);
 		static std::shared_ptr<Archetype> &Create();
 
-		~Archetype();
+		~Archetype(){}
 
 		Entity spawn(AScene *scene)
 		{
@@ -35,23 +35,12 @@ namespace AGE
 			return _name;
 		}
 
-		void update(AScene *scene)
+		Entity &getEntity()
 		{
-			if (!_entityModel.isValid())
-			{
-				return;
-			}
-			if (!_archetype.isValid())
-			{
-				_archetype = scene->createEntity(true);
-			}
-			scene->copyEntity(_entityModel, _archetype, true, true);
+			return _entity;
 		}
 	private:
-		Archetype();
-		Archetype(const Archetype &);
-		Entity _entityModel;
-		Entity _archetype;
+		Entity _entity;
 		std::string _name;
 	};
 }

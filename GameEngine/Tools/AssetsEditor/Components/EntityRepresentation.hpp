@@ -11,11 +11,10 @@
 
 namespace AGE
 {
-
-	class Archetype;
-
 	namespace WE
 	{
+		class ArchetypeEditorRepresentation;
+
 		struct EntityRepresentation : public ComponentBase
 		{
 			EntityRepresentation();
@@ -42,14 +41,14 @@ namespace AGE
 
 			inline bool isArchetype()
 			{
-				return _archetype != nullptr;
+				return archetype != nullptr;
 			}
 
 			char name[ENTITY_NAME_LENGTH];
 			glm::vec3 position;
 			glm::vec3 rotation;
 			glm::vec3 scale;
-			std::shared_ptr<Archetype> _archetype;
+			std::shared_ptr<ArchetypeEditorRepresentation> archetype;
 			// component is not serialized in export
 #ifdef EDITOR_ENABLED
 			virtual bool serializeInExport() { return false; }

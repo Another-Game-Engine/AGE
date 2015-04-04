@@ -9,6 +9,7 @@
 #include <Components/CameraComponent.hpp>
 #include <Components/FreeFlyComponent.hh>
 #include <Entities/Archetype.hpp>
+#include <Managers/ArchetypesEditorManager.hpp>
 
 namespace AGE
 {
@@ -115,21 +116,26 @@ namespace AGE
 
 					ImGui::Separator();
 
-					auto &types = ComponentRegistrationManager::getInstance().getSystemIdToAgeIdMap();
-					auto &creationFn = ComponentRegistrationManager::getInstance().getCreationFunctions();
+					auto representation = entity.getComponent<AGE::WE::EntityRepresentation>();
 
-					for (auto &t : types)
+					if (representation->isArchetype() == false)
 					{
-						if (!entity.haveComponent(t.second))
+						auto &types = ComponentRegistrationManager::getInstance().getSystemIdToAgeIdMap();
+						auto &creationFn = ComponentRegistrationManager::getInstance().getCreationFunctions();
+
+						for (auto &t : types)
 						{
-							if (ImGui::SmallButton(std::string("Add : " + ComponentRegistrationManager::getInstance().getComponentName(t.second)).c_str()))
+							if (!entity.haveComponent(t.second))
 							{
-								creationFn.at(t.first)(&entity);
+								if (ImGui::SmallButton(std::string("Add : " + ComponentRegistrationManager::getInstance().getComponentName(t.second)).c_str()))
+								{
+									creationFn.at(t.first)(&entity);
+								}
 							}
 						}
-					}
 
-					ImGui::Separator();
+						ImGui::Separator();
+					}
 
 					if (ImGui::Button("Delete entity"))
 					{
@@ -142,6 +148,12 @@ namespace AGE
 					{
 						Entity duplicate;
 						_scene->copyEntity(entity, duplicate, true, false);
+					}
+
+					if (ImGui::Button("Transform to Archetype"))
+					{
+						auto manager = _scene->getInstance<AGE::WE::ArchetypesEditorManager>();
+						manager->transformToArchetype(*_selectedEntity, "Test");
 					}
 
 					ImGui::InputText("Archetype name", _archetypeName, MAX_SCENE_NAME_LENGTH);

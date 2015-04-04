@@ -46,6 +46,8 @@
 //COMPONENTS
 #include <Components/EntityRepresentation.hpp>
 
+#include <Managers/ArchetypesEditorManager.hpp>
+
 int			main(int ac, char **av)
 {
 	AGE::InitAGE();
@@ -60,6 +62,8 @@ int			main(int ac, char **av)
 		AGE::GetThreadManager()->setAsWorker(false, false, false);
 		engine->setInstance<AGE::Timer>();
 		engine->setInstance<AGE::AssetsManager>();
+
+		engine->setInstance<AGE::WE::ArchetypesEditorManager>();
 
 		AGE::GetRenderThread()->getQueue()->emplaceFutureTask<AGE::Tasks::Basic::BoolFunction, bool>([=](){
 			AGE::Imgui::getInstance()->init(engine);
