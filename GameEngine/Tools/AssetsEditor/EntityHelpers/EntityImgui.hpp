@@ -1,10 +1,14 @@
 #pragma once
 
+#include <imgui/imgui.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 namespace AGE
 {
 	namespace WE
 	{
-		void displayEntity(Entity &entity, AScene *scene)
+		static void displayEntity(Entity &entity, AScene *scene)
 		{
 			auto cpt = entity.getComponent<AGE::WE::EntityRepresentation>();
 
@@ -67,7 +71,7 @@ namespace AGE
 			}
 		}
 
-		void recursiveDisplayList(Entity &entity, Entity *selectedEntity, bool &selectParent)
+		static void recursiveDisplayList(Entity &entity, Entity *selectedEntity, bool &selectParent)
 		{
 			auto cpt = entity.getComponent<AGE::WE::EntityRepresentation>();
 			bool opened = false;
