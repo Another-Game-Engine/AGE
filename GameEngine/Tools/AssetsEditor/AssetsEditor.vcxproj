@@ -139,6 +139,7 @@
     <ClInclude Include="ImageUtils.hh" />
     <ClInclude Include="Managers\ArchetypesEditorManager.hpp" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="Scenes\ArchetypeScenes.hpp" />
     <ClInclude Include="Scenes\AssetsEditorScene.hpp" />
     <ClInclude Include="Scenes\SceneSelectorScene.hpp" />
     <ClInclude Include="Scenes\WorldEditorScene.hpp" />

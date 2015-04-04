@@ -113,9 +113,9 @@ namespace AGE
 				std::size_t alignement;
 			};
 
-			struct SceneUpdateBegin
+			struct SetCurrentScene
 			{
-				SceneUpdateBegin(AScene *_scene);
+				SetCurrentScene(AScene *_scene);
 				AScene *scene;
 			};
 		};

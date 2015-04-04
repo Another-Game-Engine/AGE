@@ -8,6 +8,10 @@
 #include <Entities/Entity.hh>
 #include <Core/AScene.hh>
 #include <EntityHelpers/EntityImgui.hpp>
+#include <Scenes/ArchetypeScenes.hpp>
+#include <Threads/PrepareRenderThread.hpp>
+#include <Threads/ThreadManager.hpp>
+#include <Threads/Commands/MainToPrepareCommands.hpp>
 
 namespace AGE
 {
@@ -24,7 +28,6 @@ namespace AGE
 		public:
 			ArchetypesEditorManager()
 			{
-
 			}
 
 			virtual ~ArchetypesEditorManager()
@@ -45,7 +48,12 @@ namespace AGE
 
 
 				//we copy the original entity into the archetype entity
-				bool success = scene->copyEntity(entity, destination, true, false);
+				//for that we set the ArchetypeScene as the current scene
+				//so that messages will be not passed to the renderScene of the WE's scene
+				//but to the ArchetypeScene.
+				GetPrepareThread()->getQueue()->emplaceCommand<Commands::MainToPrepare::SetCurrentScene>(_archetypesScene.get());
+				bool success = _archetypesScene->copyEntity(entity, destination, true, false);
+				GetPrepareThread()->getQueue()->emplaceCommand<Commands::MainToPrepare::SetCurrentScene>(scene);
 				AGE_ASSERT(success);
 
 				destination.getComponent<EntityRepresentation>()->editorOnly = true;
@@ -61,7 +69,7 @@ namespace AGE
 				{
 					if (e != nullptr && e != entityRepresentationComponent)
 					{
-						entity.removeComponent(e->getType());
+						entity.copyComponent(destination.getComponent(e->getType()));
 					}
 				}
 
@@ -75,6 +83,14 @@ namespace AGE
 
 			void update(AScene *scene)
 			{
+				if (_archetypesScene == nullptr)
+				{
+					_archetypesScene = std::make_shared<ArchetypeScene>(GetEngine());
+					GetEngine()->addScene(_archetypesScene, "ARCHETYPES_SCENE");
+					GetEngine()->initScene("ARCHETYPES_SCENE");
+					GetEngine()->enableScene("ARCHETYPES_SCENE", 0);
+				}
+
 				ImGui::SameLine();
 				ImGui::BeginChild("Archetypes", ImVec2(ImGui::GetWindowWidth() * 0.35f, 0));
 
@@ -101,14 +117,47 @@ namespace AGE
 					ImGui::Checkbox("Graphnode display", &_graphNodeDisplay);
 					
 					auto entity = _selectedArchetype->archetype.getEntity();
+					auto modified = true;
 
+					GetPrepareThread()->getQueue()->emplaceCommand<Commands::MainToPrepare::SetCurrentScene>(_archetypesScene.get());
 					if (_graphNodeDisplay)
 					{
-						recursiveDisplayList(entity, entity.getPtr(), _selectParent);
+						modified &= recursiveDisplayList(entity, entity.getPtr(), _selectParent);
 					}
 					else
 					{
-						displayEntity(entity, scene);
+						modified &= displayEntity(entity, scene);
+					}
+					GetPrepareThread()->getQueue()->emplaceCommand<Commands::MainToPrepare::SetCurrentScene>(scene);
+
+					if (modified)
+					{
+						auto &componentList = _selectedArchetype->archetype.getEntity().getComponentList();
+
+						for (auto e : _selectedArchetype->entities)
+						{
+							auto representation = e.getComponent<EntityRepresentation>();
+							auto &copyComponentList = e.getComponentList();
+
+							// we delete all existing components
+							for (auto c : copyComponentList)
+							{
+								if (c != nullptr && c != representation)
+								{
+									e.removeComponent(c->getType());
+								}
+							}
+
+							// and replace them by fresh copy
+							representation = _selectedArchetype->archetype.getEntity().getComponent<EntityRepresentation>();
+							for (auto c : componentList)
+							{
+								if (c != nullptr && c != representation)
+								{
+									e.copyComponent(c);
+								}
+							}
+						}
 					}
 				}
 
@@ -121,6 +170,7 @@ namespace AGE
 			std::shared_ptr<ArchetypeEditorRepresentation> _selectedArchetype = nullptr;
 			bool _graphNodeDisplay = false;
 			bool _selectParent = false;
+			std::shared_ptr<AScene> _archetypesScene = nullptr;
 
 			void _regenerateImGuiNamesList()
 			{

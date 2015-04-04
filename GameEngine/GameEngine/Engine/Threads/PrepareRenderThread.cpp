@@ -25,7 +25,7 @@ namespace AGE
 			msg.setValue(true);
 		});
 
-		registerCallback<Commands::MainToPrepare::SceneUpdateBegin>([this](Commands::MainToPrepare::SceneUpdateBegin &msg){
+		registerCallback<Commands::MainToPrepare::SetCurrentScene>([this](Commands::MainToPrepare::SetCurrentScene &msg){
 			this->_activeScene = _getRenderScene(msg.scene);
 			assert(this->_activeScene != nullptr);
 		});

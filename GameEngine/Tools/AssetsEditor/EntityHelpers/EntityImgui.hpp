@@ -8,26 +8,32 @@ namespace AGE
 {
 	namespace WE
 	{
-		static void displayEntity(Entity &entity, AScene *scene)
+		//return true if entity has been modified
+		static bool displayEntity(Entity &entity, AScene *scene)
 		{
+			bool modified = false;
+
 			auto cpt = entity.getComponent<AGE::WE::EntityRepresentation>();
 
 			ImGui::InputText("Name", cpt->name, ENTITY_NAME_LENGTH);
 			cpt->position = entity.getLink().getPosition();
 			if (ImGui::InputFloat3("Position", glm::value_ptr(cpt->position)))
 			{
+				modified = true;
 				entity.getLink().setPosition(cpt->position);
 			}
 
 			cpt->rotation = glm::eulerAngles(entity.getLink().getOrientation());
 			if (ImGui::InputFloat3("Rotation", glm::value_ptr(cpt->rotation)))
 			{
+				modified = true;
 				entity.getLink().setOrientation(glm::quat(cpt->rotation));
 			}
 
 			cpt->scale = entity.getLink().getScale();
 			if (ImGui::InputFloat3("Scale", glm::value_ptr(cpt->scale)))
 			{
+				modified = true;
 				entity.getLink().setScale(cpt->scale);
 			}
 
@@ -36,7 +42,7 @@ namespace AGE
 			if (cpt->isArchetype())
 			{
 				ImGui::TextColored(ImVec4(0.3, 0.4, 0.5, 1.0), "Entity is Archetype, edit the proper archetype.");
-				return;
+				return modified;
 			}
 
 			auto &components = entity.getComponentList();
@@ -56,6 +62,7 @@ namespace AGE
 							deleted = ImGui::SmallButton("Delete");
 							if (deleted)
 							{
+								modified = true;
 								ptr->editorDelete();
 								entity.removeComponent(i);
 							}
@@ -63,16 +70,23 @@ namespace AGE
 						}
 						if (opened && !deleted)
 						{
-							ptr->editorUpdate();
+							if (ptr->editorUpdate())
+							{
+								modified = true;
+							}
 							ImGui::TreePop();
 						}
 					}
 				}
 			}
+			return modified;
 		}
 
-		static void recursiveDisplayList(Entity &entity, Entity *selectedEntity, bool &selectParent)
+		//return true if entity has been modified
+		static bool recursiveDisplayList(Entity &entity, Entity *selectedEntity, bool &selectParent)
 		{
+			bool modified = false;
+
 			auto cpt = entity.getComponent<AGE::WE::EntityRepresentation>();
 			bool opened = false;
 			opened = ImGui::TreeNode(cpt->name);
@@ -87,10 +101,12 @@ namespace AGE
 						selectedEntity = entity.getPtr();
 					}
 				}
-				else					{
+				else
+				{
 					ImGui::SameLine();
 					if (ImGui::SmallButton("Set as parent"))
 					{
+						modified = true;
 						selectedEntity->getLink().attachParent(entity.getLinkPtr());
 						selectParent = false;
 					}
@@ -111,6 +127,7 @@ namespace AGE
 					ImGui::SameLine();
 					if (ImGui::SmallButton("Root"))
 					{
+						modified = true;
 						selectedEntity->getLink().detachParent();
 						selectParent = false;
 					}
@@ -129,11 +146,15 @@ namespace AGE
 					auto children = entity.getLink().getChildren();
 					for (auto &e : children)
 					{
-						recursiveDisplayList(e->getEntity()->getEntity(), selectedEntity, selectParent);
+						if (recursiveDisplayList(e->getEntity()->getEntity(), selectedEntity, selectParent))
+						{
+							modified = true;
+						}
 					}
 				}
 				ImGui::TreePop();
 			}
+			return modified;
 		}
 	}
 }

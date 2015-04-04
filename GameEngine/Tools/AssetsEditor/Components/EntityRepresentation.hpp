@@ -39,16 +39,16 @@ namespace AGE
 
 			virtual void postUnserialization();
 
-			inline bool isArchetype()
+			inline bool isLinkedToArchetype()
 			{
-				return archetype != nullptr;
+				return archetypeLinked != nullptr;
 			}
 
 			char name[ENTITY_NAME_LENGTH];
 			glm::vec3 position;
 			glm::vec3 rotation;
 			glm::vec3 scale;
-			std::shared_ptr<ArchetypeEditorRepresentation> archetype;
+			std::shared_ptr<ArchetypeEditorRepresentation> archetypeLinked;
 			// component is not serialized in export
 #ifdef EDITOR_ENABLED
 			virtual bool serializeInExport() { return false; }

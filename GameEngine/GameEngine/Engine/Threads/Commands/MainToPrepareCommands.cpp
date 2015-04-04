@@ -62,7 +62,7 @@ namespace AGE
 				, pipeline(pipeline)
 			{}
 
-			SceneUpdateBegin::SceneUpdateBegin(AScene *_scene)
+			SetCurrentScene::SetCurrentScene(AScene *_scene)
 				: scene(_scene)
 			{
 			}
