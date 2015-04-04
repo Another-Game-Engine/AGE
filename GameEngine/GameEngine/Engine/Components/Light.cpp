@@ -65,7 +65,7 @@ namespace AGE
 	{
 		_color = color;
 		_range = range;
-		AGE::GetPrepareThread()->setPointLight(color, range, _key);
+		AGE::GetPrepareThread()->setPointLight(color, range, _map, _key);
 		return (*this);
 	}
 

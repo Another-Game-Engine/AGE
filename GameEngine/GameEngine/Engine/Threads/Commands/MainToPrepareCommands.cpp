@@ -39,9 +39,10 @@ namespace AGE
 				: key(key)
 			{}
 
-			SetPointLight::SetPointLight(glm::vec3 const &color, glm::vec3 const &attenuation, PrepareKey &key)
+			SetPointLight::SetPointLight(glm::vec3 const &color, glm::vec3 const &attenuation, std::shared_ptr<ITexture> const &texture, PrepareKey &key)
 				: key(key),
 				color(color),
+				texture(texture),
 				attenuation(attenuation)
 			{}
 

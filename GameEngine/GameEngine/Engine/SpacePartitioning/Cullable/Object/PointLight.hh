@@ -15,7 +15,7 @@ namespace AGE
 		// To remove when light will be in octree
 		uint32_t activePointLightIdx;
 
-		std::shared_ptr<ITexture> _map;
+		std::shared_ptr<ITexture> map;
 		glm::vec3 attenuation;
 		glm::vec3 color;
 		glm::mat4 sphereTransform;

@@ -168,6 +168,7 @@ namespace AGE
 		PointLight *l = &_pointLights.get(msg.key.id);
 		l->color = msg.color;
 		l->attenuation = msg.attenuation;
+		l->map = msg.texture;
 		if (l->hasMoved == false)
 		{
 			l->hasMoved = true;
