@@ -150,37 +150,11 @@ namespace AGE
 						_scene->copyEntity(entity, duplicate, true, false);
 					}
 
-					if (ImGui::Button("Transform to Archetype"))
+					ImGui::InputText("Archetype name", _archetypeName, MAX_SCENE_NAME_LENGTH);
+					if (ImGui::Button("Convert to Archetype"))
 					{
 						auto manager = _scene->getInstance<AGE::WE::ArchetypesEditorManager>();
-						manager->transformToArchetype(*_selectedEntity, "Test");
-					}
-
-					ImGui::InputText("Archetype name", _archetypeName, MAX_SCENE_NAME_LENGTH);
-					ImGui::SameLine();
-					if (ImGui::Button("Save as archetype"))
-					{
-						WESerialization::SetSerializeForEditor(true);
-						// we list all assets dependencies
-						{
-							AssetsManager::AssetsPackage package;
-							for (auto e : _meshRenderers.getCollection())
-							{
-								auto cpt = e.getComponent<MeshRenderer>();
-								if (!cpt->selectedMeshPath.empty())
-								{
-									package.meshs.insert(cpt->selectedMeshPath);
-								}
-								if (!cpt->selectedMaterialPath.empty())
-								{
-									package.materials.insert(cpt->selectedMaterialPath);
-								}
-							}
-							_scene->getInstance<AssetsManager>()->savePackage(package, WE::EditorConfiguration::GetEditedArchetypeDirectory() + std::string(_archetypeName) + "_assets.json");
-						}
-
-						_scene->saveSelectionToJson(WE::EditorConfiguration::GetEditedArchetypeDirectory() + std::string(_archetypeName) + "_archetype.json", _entities);
-						WESerialization::SetSerializeForEditor(false);
+						manager->transformToArchetype(*_selectedEntity, _archetypeName);
 					}
 				}
 
