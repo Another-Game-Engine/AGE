@@ -9,9 +9,8 @@
 #include <Core/AScene.hh>
 #include <EntityHelpers/EntityImgui.hpp>
 #include <Scenes/ArchetypeScenes.hpp>
-#include <Threads/PrepareRenderThread.hpp>
+#include <Threads/MainThread.hpp>
 #include <Threads/ThreadManager.hpp>
-#include <Threads/Commands/MainToPrepareCommands.hpp>
 
 namespace AGE
 {
@@ -51,9 +50,9 @@ namespace AGE
 				//for that we set the ArchetypeScene as the current scene
 				//so that messages will be not passed to the renderScene of the WE's scene
 				//but to the ArchetypeScene.
-				GetPrepareThread()->getQueue()->emplaceCommand<Commands::MainToPrepare::SetCurrentScene>(_archetypesScene.get());
+				GetMainThread()->setSceneAsActive(_archetypesScene.get());
 				bool success = _archetypesScene->copyEntity(entity, destination, true, false);
-				GetPrepareThread()->getQueue()->emplaceCommand<Commands::MainToPrepare::SetCurrentScene>(scene);
+				GetMainThread()->setSceneAsActive(scene);
 				AGE_ASSERT(success);
 
 				destination.getComponent<EntityRepresentation>()->editorOnly = true;
@@ -118,8 +117,8 @@ namespace AGE
 					
 					auto entity = _selectedArchetype->archetype.getEntity();
 					auto modified = true;
-
-					GetPrepareThread()->getQueue()->emplaceCommand<Commands::MainToPrepare::SetCurrentScene>(_archetypesScene.get());
+					
+					GetMainThread()->setSceneAsActive(_archetypesScene.get());
 					if (_graphNodeDisplay)
 					{
 						modified &= recursiveDisplayList(entity, entity.getPtr(), _selectParent);
@@ -128,7 +127,7 @@ namespace AGE
 					{
 						modified &= displayEntity(entity, scene);
 					}
-					GetPrepareThread()->getQueue()->emplaceCommand<Commands::MainToPrepare::SetCurrentScene>(scene);
+					GetMainThread()->setSceneAsActive(scene);
 
 					if (modified)
 					{

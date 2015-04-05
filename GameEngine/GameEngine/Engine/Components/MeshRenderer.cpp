@@ -139,7 +139,7 @@ namespace AGE
 			_mesh = scene->getInstance<AGE::AssetsManager>()->getMesh(_serializationInfos->mesh);
 			if (!_serializationInfos->mesh.empty() && !_mesh)
 			{
-				scene->getInstance<AGE::AssetsManager>()->pushNewCallback(_serializationInfos->mesh,
+				scene->getInstance<AGE::AssetsManager>()->pushNewCallback(_serializationInfos->mesh, scene,
 					std::function<void()>([=](){
 					_mesh = scene->getInstance<AGE::AssetsManager>()->getMesh(_serializationInfos->mesh);
 					setMeshAndMaterial(_mesh, _material);
@@ -151,7 +151,7 @@ namespace AGE
 			_material = scene->getInstance<AGE::AssetsManager>()->getMaterial(_serializationInfos->material);
 			if (!_serializationInfos->material.empty() && !_material)
 			{
-				scene->getInstance<AGE::AssetsManager>()->pushNewCallback(_serializationInfos->material,
+				scene->getInstance<AGE::AssetsManager>()->pushNewCallback(_serializationInfos->material, scene,
 					std::function<void()>([=](){
 					_material = scene->getInstance<AGE::AssetsManager>()->getMaterial(_serializationInfos->material);
 					setMeshAndMaterial(_mesh, _material);
@@ -220,7 +220,7 @@ namespace AGE
 
 			if (!_mesh)
 			{
-				scene->getInstance<AGE::AssetsManager>()->pushNewCallback(selectedMeshPath,
+				scene->getInstance<AGE::AssetsManager>()->pushNewCallback(selectedMeshPath, scene,
 					std::function<void()>([=](){
 					_mesh = scene->getInstance<AGE::AssetsManager>()->getMesh(selectedMeshPath);
 					if (_mesh && _material)
@@ -251,7 +251,7 @@ namespace AGE
 
 			if (!_material)
 			{
-				scene->getInstance<AGE::AssetsManager>()->pushNewCallback(selectedMaterialPath,
+				scene->getInstance<AGE::AssetsManager>()->pushNewCallback(selectedMaterialPath, scene,
 					std::function<void()>([=](){
 					_material = scene->getInstance<AGE::AssetsManager>()->getMaterial(selectedMaterialPath);
 					if (_mesh && _material)

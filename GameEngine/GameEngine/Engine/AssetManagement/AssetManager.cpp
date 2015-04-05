@@ -11,6 +11,7 @@
 #include <Threads/ThreadManager.hpp>
 #include <Threads/Tasks/BasicTasks.hpp>
 #include <Threads/RenderThread.hpp>
+#include <Threads/MainThread.hpp>
 #include <Threads/TaskScheduler.hpp>
 #include <Threads/QueueOwner.hpp>
 #include <Threads/Thread.hpp>
@@ -393,7 +394,7 @@ namespace AGE
 		channel->pushNewAsset(filename, future);
 	}
 
-	void AssetsManager::pushNewCallback(const std::string &loadingChannel, std::function<void()> &callback)
+	void AssetsManager::pushNewCallback(const std::string &loadingChannel, AScene *currentScene, std::function<void()> &callback)
 	{
 		std::shared_ptr<AssetsManager::AssetsLoadingChannel> channel = nullptr;
 		{
@@ -404,7 +405,7 @@ namespace AGE
 			}
 			channel = _loadingChannels[loadingChannel];
 		}
-		channel->pushNewCallback(callback);
+		channel->pushNewCallback(callback, currentScene);
 	}
 
 	bool AssetsManager::AssetsLoadingChannel::updateList(int &noLoaded, int &total)
@@ -441,9 +442,10 @@ namespace AGE
 	{
 		for (auto &e : _callbacks)
 		{
-			if (e)
+			if (e.callback && e.scene != nullptr)
 			{
-				e();
+				GetMainThread()->setSceneAsActive(e.scene);
+				e.callback();
 			}
 		}
 		_callbacks.clear();
@@ -457,10 +459,12 @@ namespace AGE
 			_maxAssets = _list.size();
 	}
 
-	void AssetsManager::AssetsLoadingChannel::pushNewCallback(std::function<void()> &callback)
+	void AssetsManager::AssetsLoadingChannel::pushNewCallback(std::function<void()> &callback, AScene *scene)
 	{
 		std::lock_guard<std::mutex> lock(_mutex);
-		_callbacks.push_back(callback);
+		_callbacks.push_back(CallBackContainer());
+		_callbacks.back().callback = callback;
+		_callbacks.back().scene = scene;
 	}
 
 	// has to be called only once per frame

@@ -125,7 +125,7 @@ namespace AGE
 			auto sceneFileName = EngineCoreTestConfiguration::getSelectedScenePath() + "_export.json";
 			auto assetPackageFileName = EngineCoreTestConfiguration::getSelectedScenePath() + "_assets.json";
 
-			getInstance<AssetsManager>()->pushNewCallback(assetPackageFileName, std::function<void()>([=](){
+			getInstance<AssetsManager>()->pushNewCallback(assetPackageFileName, this, std::function<void()>([=](){
 				loadFromJson(sceneFileName);
 			}));
 			getInstance<AssetsManager>()->loadPackage(assetPackageFileName, assetPackageFileName);

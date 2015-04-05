@@ -86,7 +86,6 @@ namespace AGE
 			return false;
 		}
 		GetMainThread()->setSceneAsActive(t->second.get());
-		GetPrepareThread()->getQueue()->emplaceCommand<Commands::MainToPrepare::SetCurrentScene>(t->second.get());
 		return t->second->start();
 	}
 
@@ -95,7 +94,6 @@ namespace AGE
 		for (auto &e : _actives)
 		{
 			GetMainThread()->setSceneAsActive(e.second.get());
-			GetPrepareThread()->getQueue()->emplaceCommand<Commands::MainToPrepare::SetCurrentScene>(e.second.get());
 			if (!e.second->userUpdateBegin(time))
 				return false;
 			e.second->update(time);

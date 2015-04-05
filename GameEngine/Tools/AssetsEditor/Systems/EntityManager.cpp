@@ -179,7 +179,7 @@ namespace AGE
 					strcpy_s(_sceneName, WE::EditorConfiguration::getSelectedSceneName().c_str());
 					strcpy_s(_exportName, WE::EditorConfiguration::getSelectedSceneName().c_str());
 
-					_scene->getInstance<AssetsManager>()->pushNewCallback(assetPackageFileName, std::function<void()>([=](){
+					_scene->getInstance<AssetsManager>()->pushNewCallback(assetPackageFileName, _scene, std::function<void()>([=](){
 						_scene->loadFromJson(sceneFileName);
 						WESerialization::SetSerializeForEditor(false);
 					}));

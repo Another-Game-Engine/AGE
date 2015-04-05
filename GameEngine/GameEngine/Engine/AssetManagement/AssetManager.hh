@@ -42,6 +42,7 @@ static std::pair<std::pair<GLenum, std::string>, std::function<void(Vertices &ve
 
 	struct Skeleton;
 	struct AnimationData;
+	class AScene;
 
 	class AssetsManager : public Dependency<AssetsManager>
 	{
@@ -103,10 +104,16 @@ static std::pair<std::pair<GLenum, std::string>, std::function<void(Vertices &ve
 	public:
 		class AssetsLoadingChannel
 		{
+			struct CallBackContainer
+			{
+				AScene *scene;
+				std::function<void()> callback;
+			};
+
 			std::list<AssetsLoadingStatus> _list;
 			std::string _errorMessages = "";
 			std::size_t _maxAssets = 0;
-			std::vector<std::function<void()>> _callbacks;
+			std::vector<CallBackContainer> _callbacks;
 		public:
 			// return false if error
 			bool updateList(int &noLoaded, int &total);
@@ -115,7 +122,7 @@ static std::pair<std::pair<GLenum, std::string>, std::function<void(Vertices &ve
 		private:
 			std::mutex _mutex;
 			void pushNewAsset(const std::string &filename, std::future<AssetsLoadingResult> &future);
-			void pushNewCallback(std::function<void()> &callback);
+			void pushNewCallback(std::function<void()> &callback, AScene *currentScene);
 			friend class AssetsManager;
 		};
 
@@ -144,7 +151,7 @@ static std::pair<std::pair<GLenum, std::string>, std::function<void(Vertices &ve
 		void setAssetsDirectory(const std::string &path) { _assetsDirectory = path; }
 		void update();
 		bool isLoading();
-		void pushNewCallback(const std::string &loadingChannel, std::function<void()> &callback);
+		void pushNewCallback(const std::string &loadingChannel, AScene *currentScene, std::function<void()> &callback);
 		std::shared_ptr<ITexture> const &getPointLightTexture();
 
 private:
