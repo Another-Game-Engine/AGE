@@ -3,23 +3,23 @@
     "Component type map": [
         {
             "key": 0,
-            "value": 5355615174208623061
+            "value": 9818697393957024739
         },
         {
             "key": 1,
-            "value": 1713135011246741269
+            "value": 5355615174208623061
         },
         {
             "key": 2,
-            "value": 573189261411184160
+            "value": 1713135011246741269
         },
         {
             "key": 3,
-            "value": 4665681159133520176
+            "value": 573189261411184160
         },
         {
             "key": 4,
-            "value": 9818697393957024739
+            "value": 4665681159133520176
         },
         {
             "key": 5,
@@ -58,7 +58,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            2
+            3
         ],
         "AGE::PointLightComponent": {
             "cereal_class_version": 0,
@@ -96,7 +96,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            2
+            3
         ],
         "AGE::PointLightComponent": {
             "color": {
@@ -196,7 +196,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -205,8 +205,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -244,7 +244,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -252,8 +252,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -290,7 +290,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -298,8 +298,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -336,7 +336,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -344,8 +344,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -382,7 +382,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -390,8 +390,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -428,7 +428,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -436,8 +436,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -474,7 +474,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -482,8 +482,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -520,7 +520,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -528,8 +528,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -566,7 +566,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -574,8 +574,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -612,7 +612,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -620,8 +620,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -658,7 +658,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -666,8 +666,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -704,7 +704,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -712,8 +712,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -786,7 +786,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -794,8 +794,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -832,7 +832,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -840,8 +840,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -878,7 +878,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -886,8 +886,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -924,7 +924,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -932,8 +932,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -970,7 +970,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -978,8 +978,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -1016,7 +1016,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -1024,8 +1024,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -1062,7 +1062,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -1070,8 +1070,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -1108,7 +1108,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -1116,8 +1116,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -1154,7 +1154,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -1162,8 +1162,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -1200,7 +1200,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -1208,8 +1208,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -1246,7 +1246,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -1254,8 +1254,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -1292,7 +1292,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -1300,8 +1300,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -1374,7 +1374,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -1382,8 +1382,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -1420,7 +1420,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -1428,8 +1428,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -1466,7 +1466,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -1474,8 +1474,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -1512,7 +1512,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -1520,8 +1520,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -1558,7 +1558,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -1566,8 +1566,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -1604,7 +1604,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -1612,8 +1612,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -1650,7 +1650,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -1658,8 +1658,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -1696,7 +1696,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -1704,8 +1704,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -1742,7 +1742,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -1750,8 +1750,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -1788,7 +1788,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -1796,8 +1796,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -1834,7 +1834,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -1842,8 +1842,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -1880,7 +1880,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -1888,8 +1888,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -1989,7 +1989,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -1997,8 +1997,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -2035,7 +2035,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -2043,8 +2043,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -2081,7 +2081,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -2089,8 +2089,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -2127,7 +2127,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -2135,8 +2135,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -2173,7 +2173,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -2181,8 +2181,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -2219,7 +2219,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -2227,8 +2227,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -2265,7 +2265,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -2273,8 +2273,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -2311,7 +2311,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -2319,8 +2319,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -2357,7 +2357,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -2365,8 +2365,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -2403,7 +2403,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -2411,8 +2411,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -2449,7 +2449,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -2457,8 +2457,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -2495,7 +2495,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -2503,8 +2503,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -2577,7 +2577,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -2585,8 +2585,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -2623,7 +2623,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -2631,8 +2631,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -2669,7 +2669,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -2677,8 +2677,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -2715,7 +2715,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -2723,8 +2723,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -2761,7 +2761,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -2769,8 +2769,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -2807,7 +2807,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -2815,8 +2815,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -2853,7 +2853,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -2861,8 +2861,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -2899,7 +2899,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -2907,8 +2907,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -2945,7 +2945,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -2953,8 +2953,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -2991,7 +2991,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -2999,8 +2999,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -3037,7 +3037,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -3045,8 +3045,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -3083,7 +3083,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -3091,8 +3091,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -3165,7 +3165,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -3173,8 +3173,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -3211,7 +3211,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -3219,8 +3219,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -3257,7 +3257,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -3265,8 +3265,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -3303,7 +3303,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -3311,8 +3311,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -3349,7 +3349,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -3357,8 +3357,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -3395,7 +3395,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -3403,8 +3403,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -3441,7 +3441,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -3449,8 +3449,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -3487,7 +3487,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -3495,8 +3495,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -3533,7 +3533,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -3541,8 +3541,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -3579,7 +3579,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -3587,8 +3587,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -3625,7 +3625,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -3633,8 +3633,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -3671,7 +3671,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -3679,8 +3679,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -3780,7 +3780,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -3788,8 +3788,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -3826,7 +3826,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -3834,8 +3834,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -3872,7 +3872,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -3880,8 +3880,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -3918,7 +3918,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -3926,8 +3926,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -3964,7 +3964,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -3972,8 +3972,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -4010,7 +4010,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -4018,8 +4018,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -4056,7 +4056,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -4064,8 +4064,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -4102,7 +4102,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -4110,8 +4110,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -4148,7 +4148,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -4156,8 +4156,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -4194,7 +4194,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -4202,8 +4202,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -4240,7 +4240,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -4248,8 +4248,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -4286,7 +4286,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -4294,8 +4294,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -4368,7 +4368,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -4376,8 +4376,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -4414,7 +4414,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -4422,8 +4422,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -4460,7 +4460,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -4468,8 +4468,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -4506,7 +4506,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -4514,8 +4514,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -4552,7 +4552,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -4560,8 +4560,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -4598,7 +4598,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -4606,8 +4606,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -4644,7 +4644,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -4652,8 +4652,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -4690,7 +4690,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -4698,8 +4698,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -4736,7 +4736,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -4744,8 +4744,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -4782,7 +4782,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -4790,8 +4790,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -4828,7 +4828,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -4836,8 +4836,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -4874,7 +4874,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -4882,8 +4882,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -4956,7 +4956,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -4964,8 +4964,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -5002,7 +5002,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -5010,8 +5010,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -5048,7 +5048,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -5056,8 +5056,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -5094,7 +5094,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -5102,8 +5102,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -5140,7 +5140,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -5148,8 +5148,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -5186,7 +5186,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -5194,8 +5194,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -5232,7 +5232,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -5240,8 +5240,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -5278,7 +5278,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -5286,8 +5286,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -5324,7 +5324,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -5332,8 +5332,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -5370,7 +5370,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -5378,8 +5378,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -5416,7 +5416,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -5424,8 +5424,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -5462,7 +5462,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -5470,8 +5470,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -5571,7 +5571,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -5579,8 +5579,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -5617,7 +5617,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -5625,8 +5625,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -5663,7 +5663,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -5671,8 +5671,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -5709,7 +5709,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -5717,8 +5717,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -5755,7 +5755,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -5763,8 +5763,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -5801,7 +5801,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -5809,8 +5809,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -5847,7 +5847,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -5855,8 +5855,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -5893,7 +5893,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -5901,8 +5901,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -5939,7 +5939,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -5947,8 +5947,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -5985,7 +5985,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -5993,8 +5993,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -6031,7 +6031,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -6039,8 +6039,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -6077,7 +6077,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -6085,8 +6085,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -6159,7 +6159,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -6167,8 +6167,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -6205,7 +6205,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -6213,8 +6213,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -6251,7 +6251,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -6259,8 +6259,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -6297,7 +6297,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -6305,8 +6305,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -6343,7 +6343,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -6351,8 +6351,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -6389,7 +6389,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -6397,8 +6397,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -6435,7 +6435,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -6443,8 +6443,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -6481,7 +6481,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -6489,8 +6489,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -6527,7 +6527,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -6535,8 +6535,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -6573,7 +6573,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -6581,8 +6581,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -6619,7 +6619,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -6627,8 +6627,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -6665,7 +6665,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -6673,8 +6673,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -6747,7 +6747,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -6755,8 +6755,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -6793,7 +6793,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -6801,8 +6801,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -6839,7 +6839,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -6847,8 +6847,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -6885,7 +6885,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -6893,8 +6893,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -6931,7 +6931,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -6939,8 +6939,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -6977,7 +6977,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -6985,8 +6985,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -7023,7 +7023,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -7031,8 +7031,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -7069,7 +7069,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -7077,8 +7077,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -7115,7 +7115,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -7123,8 +7123,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -7161,7 +7161,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -7169,8 +7169,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -7207,7 +7207,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -7215,8 +7215,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -7253,7 +7253,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -7261,8 +7261,8 @@
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
                         "value2": ""
                     }
                 }
@@ -7299,7 +7299,8 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0
+            1,
+            2
         ],
         "AGE::MeshRenderer": {
             "value0": {
@@ -7312,6 +7313,27 @@
                     }
                 }
             }
+        },
+        "AGE::RigidBody": {
+            "cereal_class_version": 1,
+            "Mass": 0,
+            "Inertia": {
+                "value0": 0.1666666716337204,
+                "value1": 0.1666666716337204,
+                "value2": 0.1666666716337204
+            },
+            "Rotation constraint": {
+                "value0": 1,
+                "value1": 1,
+                "value2": 1
+            },
+            "Transform constraint": {
+                "value0": 1,
+                "value1": 1,
+                "value2": 1
+            },
+            "Collision shape path": "",
+            "Collision shape type": 1
         }
     }
 }
