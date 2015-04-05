@@ -39,7 +39,7 @@ namespace AGE
 
 			ImGui::Separator();
 
-			if (cpt->isArchetype())
+			if (cpt->isLinkedToArchetype())
 			{
 				ImGui::TextColored(ImVec4(0.3, 0.4, 0.5, 1.0), "Entity is Archetype, edit the proper archetype.");
 				return modified;

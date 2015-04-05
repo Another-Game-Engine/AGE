@@ -119,7 +119,7 @@ namespace AGE
 
 					auto representation = entity.getComponent<AGE::WE::EntityRepresentation>();
 
-					if (representation->isArchetype() == false)
+					if (representation->isLinkedToArchetype() == false)
 					{
 						auto &types = ComponentRegistrationManager::getInstance().getSystemIdToAgeIdMap();
 						auto &creationFn = ComponentRegistrationManager::getInstance().getCreationFunctions();

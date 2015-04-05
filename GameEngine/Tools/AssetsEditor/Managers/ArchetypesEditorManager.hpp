@@ -73,7 +73,7 @@ namespace AGE
 					}
 				}
 
-				entityRepresentationComponent->archetype = representation;
+				entityRepresentationComponent->archetypeLinked = representation;
 
 				representation->entities.insert(entity);
 
