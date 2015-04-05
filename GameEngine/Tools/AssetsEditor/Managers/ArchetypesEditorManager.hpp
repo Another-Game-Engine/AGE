@@ -113,6 +113,11 @@ namespace AGE
 
 				if (_selectedArchetype != nullptr)
 				{
+					if (_selectedEntity == nullptr)
+					{
+						_selectedEntity = &_selectedArchetype->archetype.getEntity();
+					}
+
 					ImGui::Checkbox("Graphnode display", &_graphNodeDisplay);
 					
 					auto entity = _selectedArchetype->archetype.getEntity();
@@ -121,7 +126,7 @@ namespace AGE
 					GetMainThread()->setSceneAsActive(_archetypesScene.get());
 					if (_graphNodeDisplay)
 					{
-						modified &= recursiveDisplayList(entity, entity.getPtr(), _selectParent);
+						modified &= recursiveDisplayList(entity, _selectedEntity, _selectParent);
 					}
 					else
 					{
@@ -167,6 +172,7 @@ namespace AGE
 			std::vector<const char*> _archetypesImGuiNamesList;
 			int _selectedArchetypeIndex = 0;
 			std::shared_ptr<ArchetypeEditorRepresentation> _selectedArchetype = nullptr;
+			Entity *_selectedEntity = nullptr;
 			bool _graphNodeDisplay = false;
 			bool _selectParent = false;
 			std::shared_ptr<AScene> _archetypesScene = nullptr;

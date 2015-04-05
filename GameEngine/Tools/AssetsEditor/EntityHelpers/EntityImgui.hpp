@@ -83,7 +83,7 @@ namespace AGE
 		}
 
 		//return true if entity has been modified
-		static bool recursiveDisplayList(Entity &entity, Entity *selectedEntity, bool &selectParent)
+		static bool recursiveDisplayList(Entity &entity, Entity *& selectedEntity, bool &selectParent)
 		{
 			bool modified = false;
 
