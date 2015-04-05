@@ -121,7 +121,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\Vendors\imgui\imgui.cpp" />
-    <ClCompile Include="Engine\Physic\ContactInformation.cpp" />
+    <ClCompile Include="Engine\Physics\BulletCollisionManager.cpp" />
+    <ClCompile Include="Engine\Physics\ContactInformation.cpp" />
+    <ClCompile Include="Engine\Physics\DynamicMotionState.cpp" />
+    <ClCompile Include="Engine\Physics\EngineTypeToPluginName.cpp" />
+    <ClCompile Include="Engine\Physics\Utils\BtConversion.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredMerging.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredPointLightning.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredBasicBuffering.cpp" />
@@ -141,14 +145,13 @@
     <ClCompile Include="Engine\Systems\BulletDynamicSystem.cpp" />
     <ClCompile Include="Engine\Systems\DebugSystem.cpp" />
     <ClCompile Include="Engine\Systems\FreeFlyCamera.cpp" />
+    <ClCompile Include="Engine\Systems\PhysicsSystem.cpp" />
     <ClCompile Include="Engine\Threads\Commands\MainToPrepareCommands.cpp" />
     <ClCompile Include="Engine\Core\ConfigurationManager.cpp" />
     <ClCompile Include="Engine\Core\DefaultConfiguration.cpp" />
     <ClCompile Include="Engine\Core\Link.cpp" />
     <ClCompile Include="Engine\SpacePartitioning\PreparableObject.cpp" />
     <ClCompile Include="Engine\Threads\Tasks\ToRenderTasks.cpp" />
-    <ClCompile Include="Engine\Physic\BulletCollisionManager.cpp" />
-    <ClCompile Include="Engine\Physic\DynamicMotionState.cpp" />
     <ClCompile Include="Engine\Render\Buffer\ABuffer.cpp" />
     <ClCompile Include="Engine\Render\Buffer\IndexBuffer.cpp" />
     <ClCompile Include="Engine\Render\Buffer\UniformBuffer.cpp" />
@@ -233,7 +236,6 @@
     <ClCompile Include="Engine\Core\Inputs\Input.cpp" />
     <ClCompile Include="Engine\Core\Timer.cpp" />
     <ClCompile Include="Engine\Components\MeshRenderer.cpp" />
-    <ClCompile Include="Engine\Physic\Utils\BtConversion.cpp" />
     <ClCompile Include="Engine\Systems\System.cpp" />
     <ClCompile Include="Engine\Text\Font.cpp" />
     <ClCompile Include="Engine\Text\FontGlyph.cpp" />
@@ -282,7 +284,14 @@
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
     <ClInclude Include="..\Vendors\imgui\imgui.h" />
     <ClInclude Include="..\Vendors\imgui\stb_textedit.h" />
-    <ClInclude Include="Engine\Physic\ContactInformation.hpp" />
+    <ClInclude Include="Engine\Physics\BulletCollisionManager.hpp" />
+    <ClInclude Include="Engine\Physics\BulletDynamicManager.hpp" />
+    <ClInclude Include="Engine\Physics\ContactInformation.hpp" />
+    <ClInclude Include="Engine\Physics\DynamicMotionState.hpp" />
+    <ClInclude Include="Engine\Physics\EngineTypes.hpp" />
+    <ClInclude Include="Engine\Physics\EngineTypeToPluginName.hpp" />
+    <ClInclude Include="Engine\Physics\PluginInterface.hpp" />
+    <ClInclude Include="Engine\Physics\Utils\BtConversion.hpp" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredMerging.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredPointLightning.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredBasicBuffering.hh" />
@@ -307,6 +316,7 @@
     <ClInclude Include="Engine\Render\Properties\Properties.hh" />
     <ClInclude Include="Engine\Systems\DebugSystem.hpp" />
     <ClInclude Include="Engine\Systems\FreeFlyCamera.hh" />
+    <ClInclude Include="Engine\Systems\PhysicsSystem.hpp" />
     <ClInclude Include="Engine\Threads\Commands\ToRenderCommands.hpp" />
     <ClInclude Include="Engine\Threads\Commands\MainToPrepareCommands.hpp" />
     <ClInclude Include="Engine\Core\Instance\MaterialInstance.hh" />
@@ -379,7 +389,6 @@
     <ClInclude Include="Engine\Core\EntityIdRegistrationManager.hh" />
     <ClInclude Include="Engine\Entities\BitsetManipulation.hpp" />
     <ClInclude Include="Engine\Entities\EntityFlags.hh" />
-    <ClInclude Include="Engine\Physic\DynamicMotionState.hpp" />
     <ClInclude Include="Engine\Render\Buffer\ABuffer.hh" />
     <ClInclude Include="Engine\Render\Buffer\IBuffer.hh" />
     <ClInclude Include="Engine\Render\Buffer\IndexBuffer.hh" />
@@ -460,14 +469,10 @@
     <ClInclude Include="Engine\Core\Tags.hh" />
     <ClInclude Include="Engine\Entities\Entity.hh" />
     <ClInclude Include="Engine\MediaFiles\CollisionShapeFile.hpp" />
-    <ClInclude Include="Engine\Physic\BulletCollisionManager.hpp" />
-    <ClInclude Include="Engine\Physic\BulletDynamicManager.hpp" />
-    <ClInclude Include="Engine\Physic\Utils\BtConversion.hpp" />
     <ClInclude Include="Engine\Sprite\Sprite.hh" />
     <ClInclude Include="Engine\Sprite\SpriteAnimation.hh" />
     <ClInclude Include="Engine\Sprite\SpriteFrame.hh" />
     <ClInclude Include="Engine\Sprite\SpriteManager.hh" />
-    <ClInclude Include="Engine\Systems\BulletCollisionSystem.hpp" />
     <ClInclude Include="Engine\Systems\BulletDynamicSystem.hpp" />
     <ClInclude Include="Engine\Systems\FPControllerSystem.hpp" />
     <ClInclude Include="Engine\Systems\MeshRenderSystem.h" />

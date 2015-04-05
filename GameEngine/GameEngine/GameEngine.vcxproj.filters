@@ -26,8 +26,6 @@
     <ClCompile Include="Engine\Core\Link.cpp" />
     <ClCompile Include="Engine\SpacePartitioning\PreparableObject.cpp" />
     <ClCompile Include="Engine\Threads\Tasks\ToRenderTasks.cpp" />
-    <ClCompile Include="Engine\Physic\BulletCollisionManager.cpp" />
-    <ClCompile Include="Engine\Physic\DynamicMotionState.cpp" />
     <ClCompile Include="Engine\Render\Buffer\ABuffer.cpp" />
     <ClCompile Include="Engine\Render\Buffer\IndexBuffer.cpp" />
     <ClCompile Include="Engine\Render\Buffer\UniformBuffer.cpp" />
@@ -112,7 +110,6 @@
     <ClCompile Include="Engine\Core\Inputs\Input.cpp" />
     <ClCompile Include="Engine\Core\Timer.cpp" />
     <ClCompile Include="Engine\Components\MeshRenderer.cpp" />
-    <ClCompile Include="Engine\Physic\Utils\BtConversion.cpp" />
     <ClCompile Include="Engine\Systems\System.cpp" />
     <ClCompile Include="Engine\Text\Font.cpp" />
     <ClCompile Include="Engine\Text\FontGlyph.cpp" />
@@ -157,7 +154,12 @@
     <ClCompile Include="Engine\WorldEditorGlobal.cpp" />
     <ClCompile Include="Engine\Render\OpenGLTask\OpenGLState.cpp" />
     <ClCompile Include="Engine\Systems\BulletDynamicSystem.cpp" />
-    <ClCompile Include="Engine\Physic\ContactInformation.cpp" />
+    <ClCompile Include="Engine\Systems\PhysicsSystem.cpp" />
+    <ClCompile Include="Engine\Physics\EngineTypeToPluginName.cpp" />
+    <ClCompile Include="Engine\Physics\Utils\BtConversion.cpp" />
+    <ClCompile Include="Engine\Physics\BulletCollisionManager.cpp" />
+    <ClCompile Include="Engine\Physics\ContactInformation.cpp" />
+    <ClCompile Include="Engine\Physics\DynamicMotionState.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -259,7 +261,6 @@
     <ClInclude Include="Engine\Core\EntityIdRegistrationManager.hh" />
     <ClInclude Include="Engine\Entities\BitsetManipulation.hpp" />
     <ClInclude Include="Engine\Entities\EntityFlags.hh" />
-    <ClInclude Include="Engine\Physic\DynamicMotionState.hpp" />
     <ClInclude Include="Engine\Render\Buffer\ABuffer.hh" />
     <ClInclude Include="Engine\Render\Buffer\IBuffer.hh" />
     <ClInclude Include="Engine\Render\Buffer\IndexBuffer.hh" />
@@ -340,14 +341,10 @@
     <ClInclude Include="Engine\Core\Tags.hh" />
     <ClInclude Include="Engine\Entities\Entity.hh" />
     <ClInclude Include="Engine\MediaFiles\CollisionShapeFile.hpp" />
-    <ClInclude Include="Engine\Physic\BulletCollisionManager.hpp" />
-    <ClInclude Include="Engine\Physic\BulletDynamicManager.hpp" />
-    <ClInclude Include="Engine\Physic\Utils\BtConversion.hpp" />
     <ClInclude Include="Engine\Sprite\Sprite.hh" />
     <ClInclude Include="Engine\Sprite\SpriteAnimation.hh" />
     <ClInclude Include="Engine\Sprite\SpriteFrame.hh" />
     <ClInclude Include="Engine\Sprite\SpriteManager.hh" />
-    <ClInclude Include="Engine\Systems\BulletCollisionSystem.hpp" />
     <ClInclude Include="Engine\Systems\BulletDynamicSystem.hpp" />
     <ClInclude Include="Engine\Systems\FPControllerSystem.hpp" />
     <ClInclude Include="Engine\Systems\MeshRenderSystem.h" />
@@ -410,7 +407,15 @@
     <ClInclude Include="Engine\Components\FreeFlyComponent.hh" />
     <ClInclude Include="Engine\WorldEditorGlobal.hpp" />
     <ClInclude Include="Engine\Render\OpenGLTask\OpenGLState.hh" />
-    <ClInclude Include="Engine\Physic\ContactInformation.hpp" />
+    <ClInclude Include="Engine\Systems\PhysicsSystem.hpp" />
+    <ClInclude Include="Engine\Physics\EngineTypes.hpp" />
+    <ClInclude Include="Engine\Physics\PluginInterface.hpp" />
+    <ClInclude Include="Engine\Physics\EngineTypeToPluginName.hpp" />
+    <ClInclude Include="Engine\Physics\Utils\BtConversion.hpp" />
+    <ClInclude Include="Engine\Physics\BulletCollisionManager.hpp" />
+    <ClInclude Include="Engine\Physics\BulletDynamicManager.hpp" />
+    <ClInclude Include="Engine\Physics\ContactInformation.hpp" />
+    <ClInclude Include="Engine\Physics\DynamicMotionState.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

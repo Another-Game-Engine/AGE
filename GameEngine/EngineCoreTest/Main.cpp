@@ -15,7 +15,7 @@
 // DEPENDENCIES
 #include <Context/SDL/SdlContext.hh>
 #include <Core/ConfigurationManager.hpp>
-#include <Physic/BulletDynamicManager.hpp>
+#include <Physics/BulletDynamicManager.hpp>
 #include <Core/Timer.hh>
 #include <Utils/PerformanceDebugger.hh>
 #include <AssetManagement/AssetManager.hh>

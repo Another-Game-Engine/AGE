@@ -3,7 +3,7 @@
 #include <Utils/MatrixConversion.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include <Physic/Utils/BtConversion.hpp>
+#include <Physics/Utils/BtConversion.hpp>
 
 namespace AGE
 {

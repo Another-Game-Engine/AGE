@@ -43,6 +43,7 @@
 #include <Render/Pipelining/Pipelines/CustomPipeline/BasicPipeline.hh>
 
 #include <Systems/FreeFlyCamera.hh>
+#include <Systems/PhysicsSystem.hpp>
 
 namespace AGE
 {
@@ -81,7 +82,11 @@ namespace AGE
 
 		setInstance<AGE::BulletDynamicManager, AGE::BulletCollisionManager>()->init();
 		addSystem<AGE::DebugSystem>(0);
+		addSystem<AGE::PhysicsSystem>(0, Physics::EngineTypes::PhysX);
+		
+		// TODO: Remove following line
 		addSystem<AGE::BulletDynamicSystem>(0);
+
 		addSystem<AGE::LifetimeSystem>(2);
 		addSystem<AGE::FreeFlyCamera>(0);
 		addSystem<AGE::RotationSystem>(0);

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Systems/System.h>
-#include <Physic/BulletDynamicManager.hpp>
+#include <Physics/BulletDynamicManager.hpp>
 
 namespace AGE
 {

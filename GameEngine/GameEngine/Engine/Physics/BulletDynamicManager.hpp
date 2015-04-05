@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Physic/BulletCollisionManager.hpp>
+#include <Physics/BulletCollisionManager.hpp>
 #include <Utils/MultiTypeObjectPool.hpp>
 
 namespace AGE

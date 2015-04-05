@@ -1,4 +1,4 @@
-#include <Physic/Utils/BtConversion.hpp>
+#include <Physics/Utils/BtConversion.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <bullet/src/LinearMath/btTransform.h>
 #include <bullet/src/LinearMath/btVector3.h>

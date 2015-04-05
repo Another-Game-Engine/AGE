@@ -1,7 +1,7 @@
 #include "RigidBody.hpp"
 #include <Core/AScene.hh>
-#include <Physic/BulletDynamicManager.hpp>
-#include <Physic/DynamicMotionState.hpp>
+#include <Physics/BulletDynamicManager.hpp>
+#include <Physics/DynamicMotionState.hpp>
 #ifdef EDITOR_ENABLED
 #include <imgui/imgui.h>
 #include <glm/gtc/type_ptr.hpp>

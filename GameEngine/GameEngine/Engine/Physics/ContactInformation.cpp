@@ -1,4 +1,4 @@
-#include "Physic/ContactInformation.hpp"
+#include "Physics/ContactInformation.hpp"
 
 namespace AGE
 {

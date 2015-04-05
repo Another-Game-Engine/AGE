@@ -11,7 +11,7 @@
 #include <BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
 
 #include <Utils/Dependency.hpp>
-#include <Physic/Utils/BtConversion.hpp>
+#include <Physics/Utils/BtConversion.hpp>
 #include <Entities/Entity.hh>
 
 #include <set>

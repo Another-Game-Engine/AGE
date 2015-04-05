@@ -6,7 +6,7 @@
 #ifdef EDITOR_ENABLED
 #include <WorldEditorGlobal.hpp>
 #endif
-#include <Physic/ContactInformation.hpp>
+#include <Physics/ContactInformation.hpp>
 
 class btCollisionShape;
 class btMotionState;

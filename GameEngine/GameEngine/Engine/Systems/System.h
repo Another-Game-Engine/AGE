@@ -18,7 +18,7 @@ namespace AGE
 		AScene *_scene;
 		std::string _name;
 		bool _activated;
-	private:
+	
 		virtual void updateBegin(float time) {}
 		virtual void updateEnd(float time) {}
 		virtual void mainUpdate(float time) {}
