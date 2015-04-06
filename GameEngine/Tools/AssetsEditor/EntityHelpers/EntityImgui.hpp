@@ -8,6 +8,28 @@ namespace AGE
 {
 	namespace WE
 	{
+		static void listEntityTree(Entity &entity, std::vector<const char*> &names, std::vector<Entity*> &entities)
+		{
+			if (!entity.isValid())
+			{
+				return;
+			}
+			if (!entity.haveComponent<EntityRepresentation>())
+			{
+				return;
+			}
+			
+			auto er = entity.getComponent<EntityRepresentation>();
+			names.push_back(er->name);
+			entities.push_back(entity.getPtr());
+
+			for (auto &c : entity.getLink().getChildren())
+			{
+				listEntityTree(c->getEntity()->getEntity(), names, entities);
+			}
+		}
+
+
 		//return true if entity has been modified
 		static bool displayEntity(Entity &entity, AScene *scene)
 		{

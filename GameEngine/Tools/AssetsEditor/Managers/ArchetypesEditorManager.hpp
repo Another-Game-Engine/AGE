@@ -134,7 +134,38 @@ namespace AGE
 					}
 					else
 					{
-						modified |= displayEntity(entity, scene);
+						_entitiesNames.clear();
+						std::vector<Entity*> tmpEntitiesList;
+						listEntityTree(_selectedArchetype->archetype.getEntity(), _entitiesNames, tmpEntitiesList);
+
+						if (tmpEntitiesList.size() > 0)
+						{
+
+							if (_selectedEntityIndex > tmpEntitiesList.size())
+							{
+								_selectedEntityIndex = tmpEntitiesList.size() - 1;
+							}
+
+							ImGui::PushItemWidth(-1);
+							//ImGui::ListBoxHeader("##empty");
+							if (ImGui::ListBox("##empty", &_selectedEntityIndex, &(_entitiesNames.front()), (int)(_entitiesNames.size())))
+							{
+								if (tmpEntitiesList.size() > 0 && _selectedEntityIndex < tmpEntitiesList.size())
+								{
+									_selectedEntity = tmpEntitiesList[_selectedEntityIndex];
+								}
+								else
+								{
+									_selectedEntity = nullptr;
+								}
+							}
+							//ImGui::ListBoxFooter();
+							ImGui::PopItemWidth();
+							if (_selectedEntity)
+							{
+								modified |= displayEntity(*_selectedEntity, scene);
+							}
+						}
 					}
 					GetMainThread()->setSceneAsActive(scene);
 
@@ -154,6 +185,8 @@ namespace AGE
 			std::vector<const char*> _archetypesImGuiNamesList;
 			int _selectedArchetypeIndex = 0;
 			std::shared_ptr<ArchetypeEditorRepresentation> _selectedArchetype = nullptr;
+			int _selectedEntityIndex = 0;
+			std::vector<const char*> _entitiesNames;
 			Entity *_selectedEntity = nullptr;
 			bool _graphNodeDisplay = false;
 			bool _selectParent = false;
