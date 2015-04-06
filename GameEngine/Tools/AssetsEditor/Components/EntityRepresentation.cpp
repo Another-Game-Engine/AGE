@@ -50,9 +50,9 @@ namespace AGE
 
 		void EntityRepresentation::reset()
 		{
-			if (archetypeLinked != nullptr)
+			if (_archetypeLinked != nullptr)
 			{
-				archetypeLinked->entities.erase(entity);
+				_archetypeLinked->entities.erase(entity);
 			}
 			memset(name, 0, ENTITY_NAME_LENGTH);
 		}

@@ -72,11 +72,34 @@ namespace AGE
 					}
 				}
 
-				entityRepresentationComponent->archetypeLinked = representation;
+				std::vector<Entity*> tmpEntitiesList;
+				std::vector<const char*> tmpEntitiesNameList;
+				listEntityTree(entity, tmpEntitiesNameList, tmpEntitiesList);
+
+				for (auto &e : tmpEntitiesList)
+				{
+					auto er = e->getComponent<EntityRepresentation>();
+					if (er != entityRepresentationComponent)
+					{
+						er->_parentIsArchetype = true;
+					}
+				}
+
+				tmpEntitiesList.clear(); tmpEntitiesNameList.clear();
+				listEntityTree(destination, tmpEntitiesNameList, tmpEntitiesList);
+
+				for (auto &e : tmpEntitiesList)
+				{
+					auto er = e->getComponent<EntityRepresentation>();
+					er->_isArchetype = true;
+				}
+
+				entityRepresentationComponent->_archetypeLinked = representation;
 
 				representation->entities.insert(entity);
 
 				_archetypesCollection.insert(std::make_pair(name, representation));
+
 				_regenerateImGuiNamesList();
 			}
 
@@ -209,7 +232,7 @@ namespace AGE
 				}
 
 				// and replace them by fresh copy
-				representation = _selectedArchetype->archetype.getEntity().getComponent<EntityRepresentation>();
+				representation = archetype.getComponent<EntityRepresentation>();
 				for (auto c : componentList)
 				{
 					if (c != nullptr && c != representation)

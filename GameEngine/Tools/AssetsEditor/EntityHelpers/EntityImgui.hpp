@@ -38,32 +38,42 @@ namespace AGE
 			auto cpt = entity.getComponent<AGE::WE::EntityRepresentation>();
 
 			ImGui::InputText("Name", cpt->name, ENTITY_NAME_LENGTH);
-			cpt->position = entity.getLink().getPosition();
-			if (ImGui::InputFloat3("Position", glm::value_ptr(cpt->position)))
-			{
-				modified = true;
-				entity.getLink().setPosition(cpt->position);
-			}
 
-			cpt->rotation = glm::eulerAngles(entity.getLink().getOrientation());
-			if (ImGui::InputFloat3("Rotation", glm::value_ptr(cpt->rotation)))
+			if (cpt->isArchetype() == false)
 			{
-				modified = true;
-				entity.getLink().setOrientation(glm::quat(cpt->rotation));
-			}
+				cpt->position = entity.getLink().getPosition();
+				if (ImGui::InputFloat3("Position", glm::value_ptr(cpt->position)))
+				{
+					modified = true;
+					entity.getLink().setPosition(cpt->position);
+				}
 
-			cpt->scale = entity.getLink().getScale();
-			if (ImGui::InputFloat3("Scale", glm::value_ptr(cpt->scale)))
-			{
-				modified = true;
-				entity.getLink().setScale(cpt->scale);
-			}
+				cpt->rotation = glm::eulerAngles(entity.getLink().getOrientation());
+				if (ImGui::InputFloat3("Rotation", glm::value_ptr(cpt->rotation)))
+				{
+					modified = true;
+					entity.getLink().setOrientation(glm::quat(cpt->rotation));
+				}
 
-			ImGui::Separator();
+				cpt->scale = entity.getLink().getScale();
+				if (ImGui::InputFloat3("Scale", glm::value_ptr(cpt->scale)))
+				{
+					modified = true;
+					entity.getLink().setScale(cpt->scale);
+				}
+
+				ImGui::Separator();
+			}
 
 			if (cpt->isLinkedToArchetype())
 			{
-				ImGui::TextColored(ImVec4(0.3, 0.4, 0.5, 1.0), "Entity is Archetype, edit the proper archetype.");
+				ImGui::TextColored(ImVec4(0.8, 0.4, 0.5, 1.0), "Entity is Archetype, edit the proper archetype.");
+				return modified;
+			}
+
+			if (cpt->parentIsArchetype())
+			{
+				ImGui::TextColored(ImVec4(0.8, 0.4, 0.5, 1.0), "Entity's parent is Archetype, edit the proper archetype.");
 				return modified;
 			}
 

@@ -119,7 +119,7 @@ namespace AGE
 
 					auto representation = entity.getComponent<AGE::WE::EntityRepresentation>();
 
-					if (representation->isLinkedToArchetype() == false)
+					if (representation->isLinkedToArchetype() == false && representation->parentIsArchetype() == false)
 					{
 						auto &types = ComponentRegistrationManager::getInstance().getSystemIdToAgeIdMap();
 						auto &creationFn = ComponentRegistrationManager::getInstance().getCreationFunctions();
@@ -138,21 +138,21 @@ namespace AGE
 						ImGui::Separator();
 					}
 
-					if (ImGui::Button("Delete entity"))
+					if (representation->parentIsArchetype() == false && ImGui::Button("Delete entity"))
 					{
 						_scene->destroy(entity);
 						_selectedEntity = nullptr;
 						_selectedEntityIndex = 0;
 					}
 
-					if (ImGui::Button("Duplicate"))
+					if (representation->isLinkedToArchetype() == false && representation->parentIsArchetype() == false && ImGui::Button("Duplicate"))
 					{
 						Entity duplicate;
 						_scene->copyEntity(entity, duplicate, true, false);
 					}
 
 					ImGui::InputText("Archetype name", _archetypeName, MAX_SCENE_NAME_LENGTH);
-					if (ImGui::Button("Convert to Archetype"))
+					if (representation->isLinkedToArchetype() == false && representation->parentIsArchetype() == false && ImGui::Button("Convert to Archetype"))
 					{
 						auto manager = _scene->getInstance<AGE::WE::ArchetypesEditorManager>();
 						manager->transformToArchetype(*_selectedEntity, _archetypeName);
