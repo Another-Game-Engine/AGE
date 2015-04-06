@@ -123,7 +123,7 @@ namespace AGE
 						selectedEntity = entity.getPtr();
 					}
 				}
-				else if (editableHierarchy)
+				else if (editableHierarchy && !cpt->isLinkedToArchetype())
 				{
 					ImGui::SameLine();
 					if (ImGui::SmallButton("Set as parent"))
