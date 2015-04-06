@@ -121,46 +121,28 @@ namespace AGE
 					ImGui::Checkbox("Graphnode display", &_graphNodeDisplay);
 					
 					auto entity = _selectedArchetype->archetype.getEntity();
-					auto modified = true;
+					auto modified = false;
 					
 					GetMainThread()->setSceneAsActive(_archetypesScene.get());
 					if (_graphNodeDisplay)
 					{
-						modified &= recursiveDisplayList(entity, _selectedEntity, _selectParent);
+						modified |= recursiveDisplayList(entity, _selectedEntity, _selectParent, false);
+						if (_selectedEntity)
+						{
+							modified |= displayEntity(*_selectedEntity, scene);
+						}
 					}
 					else
 					{
-						modified &= displayEntity(entity, scene);
+						modified |= displayEntity(entity, scene);
 					}
 					GetMainThread()->setSceneAsActive(scene);
 
 					if (modified)
 					{
-						auto &componentList = _selectedArchetype->archetype.getEntity().getComponentList();
-
 						for (auto e : _selectedArchetype->entities)
 						{
-							auto representation = e.getComponent<EntityRepresentation>();
-							auto &copyComponentList = e.getComponentList();
-
-							// we delete all existing components
-							for (auto c : copyComponentList)
-							{
-								if (c != nullptr && c != representation)
-								{
-									e.removeComponent(c->getType());
-								}
-							}
-
-							// and replace them by fresh copy
-							representation = _selectedArchetype->archetype.getEntity().getComponent<EntityRepresentation>();
-							for (auto c : componentList)
-							{
-								if (c != nullptr && c != representation)
-								{
-									e.copyComponent(c);
-								}
-							}
+							_copyArchetypeToInstanciedEntity(_selectedArchetype->archetype.getEntity(), e);
 						}
 					}
 				}
@@ -176,6 +158,43 @@ namespace AGE
 			bool _graphNodeDisplay = false;
 			bool _selectParent = false;
 			std::shared_ptr<AScene> _archetypesScene = nullptr;
+
+			void _copyArchetypeToInstanciedEntity(Entity &archetype, Entity &entity)
+			{
+				auto &componentList = archetype.getComponentList();
+
+				auto representation = entity.getComponent<EntityRepresentation>();
+				auto &copyComponentList = entity.getComponentList();
+
+				// we delete all existing components
+				for (auto c : copyComponentList)
+				{
+					if (c != nullptr && c != representation)
+					{
+						entity.removeComponent(c->getType());
+					}
+				}
+
+				// and replace them by fresh copy
+				representation = _selectedArchetype->archetype.getEntity().getComponent<EntityRepresentation>();
+				for (auto c : componentList)
+				{
+					if (c != nullptr && c != representation)
+					{
+						entity.copyComponent(c);
+					}
+				}
+
+				const auto &archetypesChild = archetype.getLink().getChildren();
+				const auto &entityChild = entity.getLink().getChildren();
+
+				AGE_ASSERT(archetypesChild.size() == entityChild.size());
+
+				for (std::size_t i = 0; i < archetypesChild.size(); ++i)
+				{
+					_copyArchetypeToInstanciedEntity(archetypesChild[i]->getEntity()->getEntity(), entityChild[i]->getEntity()->getEntity());
+				}
+			}
 
 			void _regenerateImGuiNamesList()
 			{

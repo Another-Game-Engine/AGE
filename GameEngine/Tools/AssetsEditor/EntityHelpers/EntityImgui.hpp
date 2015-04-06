@@ -83,7 +83,7 @@ namespace AGE
 		}
 
 		//return true if entity has been modified
-		static bool recursiveDisplayList(Entity &entity, Entity *& selectedEntity, bool &selectParent)
+		static bool recursiveDisplayList(Entity &entity, Entity *& selectedEntity, bool &selectParent, bool editableHierarchy = true)
 		{
 			bool modified = false;
 
@@ -101,7 +101,7 @@ namespace AGE
 						selectedEntity = entity.getPtr();
 					}
 				}
-				else
+				else if (editableHierarchy)
 				{
 					ImGui::SameLine();
 					if (ImGui::SmallButton("Set as parent"))
@@ -114,7 +114,7 @@ namespace AGE
 			}
 			else
 			{
-				if (!selectParent)
+				if (!selectParent && editableHierarchy)
 				{
 					ImGui::SameLine();
 					if (ImGui::SmallButton("Set parent"))
@@ -122,7 +122,7 @@ namespace AGE
 						selectParent = true;
 					}
 				}
-				else
+				else if (editableHierarchy)
 				{
 					ImGui::SameLine();
 					if (ImGui::SmallButton("Root"))
@@ -146,7 +146,7 @@ namespace AGE
 					auto children = entity.getLink().getChildren();
 					for (auto &e : children)
 					{
-						if (recursiveDisplayList(e->getEntity()->getEntity(), selectedEntity, selectParent))
+						if (recursiveDisplayList(e->getEntity()->getEntity(), selectedEntity, selectParent, editableHierarchy))
 						{
 							modified = true;
 						}
