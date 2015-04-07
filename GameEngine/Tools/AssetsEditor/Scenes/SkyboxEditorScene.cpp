@@ -38,7 +38,8 @@
 namespace AGE
 {
 	const std::string SkyboxEditorScene::Name = "SkyboxEditor";
-	
+	AE::Folder SkyboxEditorScene::_raw = AE::Folder();
+
 	SkyboxEditorScene::SkyboxEditorScene(AGE::Engine *engine)
 		: AScene(engine)
 	{
@@ -61,69 +62,28 @@ namespace AGE
 		Directory dir;
 		const bool succeed = dir.open(absPath.c_str());
 		AGE_ASSERT(succeed && "Impossible to open directory");
+		int current_item;
+		std::vector<std::string> _items;
 		for (auto it = dir.recursive_begin(); it != dir.recursive_end(); ++it)
 		{
 			if (Directory::IsFile(*it))
 			{
 				auto extension = AGE::FileSystemHelpers::GetExtension(*it);
-				if (extension == "tage")
-				{
-				}
+				//if (extension == "tage")
+				//	_items.push_back(AGE::FileSystem::getFileName(*it));
 			}
 		}
 		dir.close();
-		ImGui::BeginChild("Assets browser", ImVec2(ImGui::GetWindowWidth() * 0.333333f, 0), true);
-		{
-			{
-				ImGui::BeginChild("Raw", ImVec2(0, 0), false);
-				//_raw.update(
-				//	std::function<bool(AE::Folder*)>([](AE::Folder* folder) {
-				//	bool opened = ImGui::TreeNode((void*)(folder), folder->_path.path().filename().c_str());
-				//	if (opened)
-				//	{
-				//		ImGui::Separator();
-				//	}
-				//	return opened;
-				//}),
-				//	std::function<bool(AE::Folder*)>([](AE::Folder* folder) {
-				//	ImGui::Separator();
-				//	ImGui::TreePop();
-				//	return true;
-				//}),
-				//	std::function<void(AE::RawFile*)>([&](AE::RawFile* file) {
-				//	AE::AssetFileManager::PrintClickableRawAssetsFile(file, AE::AssetFileManager::PrintSection::Date | AE::AssetFileManager::PrintSection::Name | AE::AssetFileManager::PrintSection::Type, _selectedRaw);
-				//}));
-				ImGui::EndChild();
-			}
+		char const **tab = new char const *[_items.size()];
+		for (auto index = 0; index < _items.size(); ++index) {
+			tab[index] = _items[index].c_str();
 		}
-		ImGui::EndChild();
-		ImGui::SameLine();
-		ImGui::BeginChild("Selected Raw", ImVec2(ImGui::GetWindowWidth() * 0.33333333f, 0), false);
-		{
-			//if (_selectedRaw != nullptr)
-			//{
-			//	if (_selectedRaw->dataSet == nullptr)
-			//	{
-			//		auto path = _selectedRaw->getPath();
-			//		path = path.erase(0, _raw._path.path().string().size());
-			//		//_selectedRaw->dataSet->filePath = File(path);
-			//		_selectedRaw->dataSet = std::make_shared<AssetDataSet>(path);
-			//
-			//	}
-			//	if (!_selectedRaw->dataSet->isConverting)
-			//	{
-			//		_selectedRaw->selection();
-			//		ImGui::Separator();
-			//		if (ImGui::Button("Cook"))
-			//			_selectedRaw->cook();
-			//	}
-			//	else
-			//	{
-			//		ImGui::TextColored(ImVec4(1, 0, 0, 1), "Currently cooking : %s", _selectedRaw->getFileName().c_str());
-			//	}
-			//}
+		if (ImGui::ListBox("Skybox list", &current_item, tab, _items.size())) {
+
 		}
-		ImGui::EndChild();
+		if (ImGui::Button("Create Skybox")) {
+
+		}
 		return true;
 	}
 

@@ -4,6 +4,7 @@
 #include <Core/Engine.hh>
 #include <memory>
 #include <AssetFiles/Folder.hpp>
+#include <AssetFiles/RawFile.hpp>
 #include <set>
 
 namespace AGE
@@ -20,5 +21,8 @@ namespace AGE
 		virtual bool _userUpdateBegin(float time);
 		virtual bool _userUpdateEnd(float time);
 
+	private:
+		static AE::Folder _raw;
+		std::shared_ptr<AE::RawFile> _selectedRaw;
 	};
 }
