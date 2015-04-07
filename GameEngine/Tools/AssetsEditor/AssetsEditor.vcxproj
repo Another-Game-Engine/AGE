@@ -108,6 +108,7 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Scenes\AssetsEditorScene.cpp" />
     <ClCompile Include="Scenes\SceneSelectorScene.cpp" />
+    <ClCompile Include="Scenes\SkyboxEditorScene.cpp" />
     <ClCompile Include="Scenes\WorldEditorScene.cpp" />
     <ClCompile Include="Systems\AssetsAndComponentRelationsSystem.cpp" />
     <ClCompile Include="Systems\EntityManager.cpp" />
@@ -139,6 +140,7 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="Scenes\AssetsEditorScene.hpp" />
     <ClInclude Include="Scenes\SceneSelectorScene.hpp" />
+    <ClInclude Include="Scenes\SkyboxEditorScene.hh" />
     <ClInclude Include="Scenes\WorldEditorScene.hpp" />
     <ClInclude Include="Systems\AssetsAndComponentRelationsSystem.hpp" />
     <ClInclude Include="Systems\EntityManager.hpp" />

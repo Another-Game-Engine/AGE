@@ -1,6 +1,7 @@
 #include "SceneSelectorScene.hpp"
 #include <imgui\imgui.h>
 #include "AssetsEditorScene.hpp"
+#include "SkyboxEditorScene.hh"
 #include "WorldEditorScene.hpp"
 #include <Core/Inputs/Input.hh>
 #include <SDL/SDL.h>
@@ -32,12 +33,21 @@ namespace AGE
 		if (ImGui::Button("Asset Editor"))
 		{
 			getEngine()->disableScene(WorldEditorScene::Name);
+			getEngine()->disableScene(SkyboxEditorScene::Name);
 			getEngine()->enableScene(AssetsEditorScene::Name, 1000);
 		}
 		ImGui::SameLine();
 		if (ImGui::Button("World Editor"))
 		{
 			getEngine()->enableScene(WorldEditorScene::Name, 1000);
+			getEngine()->disableScene(AssetsEditorScene::Name);
+			getEngine()->disableScene(SkyboxEditorScene::Name);
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("Skybox Editor"))
+		{
+			getEngine()->enableScene(SkyboxEditorScene::Name, 1000);
+			getEngine()->disableScene(WorldEditorScene::Name);
 			getEngine()->disableScene(AssetsEditorScene::Name);
 		}
 		ImGui::EndChild();
