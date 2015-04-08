@@ -198,6 +198,24 @@ namespace AGE
 					}
 					GetMainThread()->setSceneAsActive(scene);
 
+					if (_selectedEntity)
+					{
+						auto &types = ComponentRegistrationManager::getInstance().getSystemIdToAgeIdMap();
+						auto &creationFn = ComponentRegistrationManager::getInstance().getCreationFunctions();
+
+						for (auto &t : types)
+						{
+							if (!_selectedEntity->haveComponent(t.second))
+							{
+								if (ImGui::SmallButton(std::string("Add : " + ComponentRegistrationManager::getInstance().getComponentName(t.second)).c_str()))
+								{
+									creationFn.at(t.first)(_selectedEntity);
+								}
+							}
+						}
+					}
+					ImGui::Separator();
+
 					if (modified)
 					{
 						for (auto e : _selectedArchetype->entities)
