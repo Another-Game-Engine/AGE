@@ -7,12 +7,33 @@
 
 namespace AGE
 {
+	enum SkyboxConfig
+	{
+		UP = 0,
+		DOWN,
+		LEFT,
+		RIGHT,
+		FRONT,
+		BACK,
+		TOTAL_FACES
+	};
+
 	enum ECompressedFormat
 	{
 		UNCOMPRESSED,
 		LUM_DXT1_FORMAT,
 		RGB_DXT1_FORMAT,
 		RGBA_DXT5_FORMAT
+	};
+
+	struct SkyboxData {
+		std::string rawPath[SkyboxConfig::TOTAL_FACES];
+
+		template <class Archive>
+		void serialize(Archive &ar, const std::uint32_t version)
+		{
+			ar(rawPath[UP], rawPath[DOWN], rawPath[LEFT], rawPath[RIGHT], rawPath[FRONT], rawPath[BACK]);
+		}
 	};
 
 	struct TextureData

@@ -5,7 +5,10 @@
 #include <memory>
 #include <AssetFiles/Folder.hpp>
 #include <AssetFiles/RawFile.hpp>
+#include <AssetManagement/Data/TextureData.hh>
 #include <set>
+
+#define NAME_LENGHT 50
 
 namespace AGE
 {
@@ -24,5 +27,7 @@ namespace AGE
 	private:
 		static AE::Folder _raw;
 		std::shared_ptr<AE::RawFile> _selectedRaw;
+		char name[NAME_LENGHT];
+		int _current_skybox[SkyboxConfig::TOTAL_FACES];
 	};
 }

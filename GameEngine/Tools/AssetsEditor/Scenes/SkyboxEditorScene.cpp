@@ -43,6 +43,10 @@ namespace AGE
 	SkyboxEditorScene::SkyboxEditorScene(AGE::Engine *engine)
 		: AScene(engine)
 	{
+		for (auto &c : _current_skybox) {
+			c = -1;
+		}
+		memset(name, 0, NAME_LENGHT);
 	}
 
 	SkyboxEditorScene::~SkyboxEditorScene(void)
@@ -62,15 +66,14 @@ namespace AGE
 		Directory dir;
 		const bool succeed = dir.open(absPath.c_str());
 		AGE_ASSERT(succeed && "Impossible to open directory");
-		int current_item;
 		std::vector<std::string> _items;
 		for (auto it = dir.recursive_begin(); it != dir.recursive_end(); ++it)
 		{
 			if (Directory::IsFile(*it))
 			{
 				auto extension = AGE::FileSystemHelpers::GetExtension(*it);
-				//if (extension == "tage")
-				//	_items.push_back(AGE::FileSystem::getFileName(*it));
+				if (extension == "tage")
+					_items.push_back(Path::RelativeName(absPath.c_str(), *it));
 			}
 		}
 		dir.close();
@@ -78,12 +81,26 @@ namespace AGE
 		for (auto index = 0; index < _items.size(); ++index) {
 			tab[index] = _items[index].c_str();
 		}
-		if (ImGui::ListBox("Skybox list", &current_item, tab, _items.size())) {
-
+		ImGui::ListBox("texture up", &_current_skybox[SkyboxConfig::UP], tab, _items.size());
+		ImGui::ListBox("texture down", &_current_skybox[SkyboxConfig::DOWN], tab, _items.size());
+		ImGui::ListBox("texture front", &_current_skybox[SkyboxConfig::FRONT], tab, _items.size());
+		ImGui::ListBox("texture back", &_current_skybox[SkyboxConfig::BACK], tab, _items.size());
+		ImGui::ListBox("texture left", &_current_skybox[SkyboxConfig::LEFT], tab, _items.size());
+		ImGui::ListBox("texture right", &_current_skybox[SkyboxConfig::RIGHT], tab, _items.size());
+		bool skybox_creatable = true;
+		for (auto &c : _current_skybox) {
+			if (c == -1) {
+				skybox_creatable = false;
+			}
 		}
-		if (ImGui::Button("Create Skybox")) {
-
+		if (skybox_creatable) {
+			ImGui::Text(name);
+			if (ImGui::Button("Create Skybox")) {
+				
+			}
 		}
+
+
 		return true;
 	}
 
