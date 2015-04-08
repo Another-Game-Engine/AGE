@@ -25,7 +25,7 @@ namespace AGE
 			msg.setValue(true);
 		});
 
-		registerCallback<Commands::MainToPrepare::SceneUpdateBegin>([this](Commands::MainToPrepare::SceneUpdateBegin &msg){
+		registerCallback<Commands::MainToPrepare::SetCurrentScene>([this](Commands::MainToPrepare::SetCurrentScene &msg){
 			this->_activeScene = _getRenderScene(msg.scene);
 			assert(this->_activeScene != nullptr);
 		});
@@ -208,9 +208,9 @@ namespace AGE
 		return nullptr;
 	}
 
-	void PrepareRenderThread::setCameraInfos(const glm::mat4& projection, const PrepareKey &key, const std::set<RenderType> &pipelines)
+	void PrepareRenderThread::setCameraInfos(const glm::mat4& projection, const PrepareKey &key, RenderType pipeline)
 	{
-		getQueue()->emplaceCommand<Commands::MainToPrepare::CameraInfos>(key, projection, pipelines);
+		getQueue()->emplaceCommand<Commands::MainToPrepare::CameraInfos>(key, projection, pipeline);
 	}
 
 	PrepareKey PrepareRenderThread::addCamera()
@@ -247,11 +247,11 @@ namespace AGE
 		return key;
 	}
 
-	void PrepareRenderThread::setPointLight(glm::vec3 const &color, glm::vec3 const &range, const PrepareKey &key)
+	void PrepareRenderThread::setPointLight(glm::vec3 const &color, glm::vec3 const &range, std::shared_ptr<ITexture> const &texture, const PrepareKey &key)
 	{
 		auto scene = _getRenderScene(GetMainThread()->getActiveScene());
 		assert(scene != nullptr);
-		getQueue()->emplaceCommand<Commands::MainToPrepare::SetPointLight>(color, range, key);
+		getQueue()->emplaceCommand<Commands::MainToPrepare::SetPointLight>(color, range, texture, key);
 	}
 
 

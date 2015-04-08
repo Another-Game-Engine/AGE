@@ -14,6 +14,7 @@ namespace AGE
 		private:
 			EntityFilter _rigidBodies;
 			EntityFilter _meshRenderer;
+			EntityFilter _all;
 
 			virtual void updateBegin(float time);
 			virtual void updateEnd(float time);

@@ -145,6 +145,7 @@ namespace AGE
 	void MainThread::setSceneAsActive(AScene *scene)
 	{
 		_activeScene = scene;
+		GetPrepareThread()->getQueue()->emplaceCommand<Commands::MainToPrepare::SetCurrentScene>(scene);
 	}
 
 }

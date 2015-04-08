@@ -126,7 +126,7 @@ namespace AGE
 		{
 			if (!cookingTask->dataSet->loadTextures)
 				return true;
-			if (cookingTask->assimpScene->HasTextures())
+			if (cookingTask->assimpScene && cookingTask->assimpScene->HasTextures())
 			{
 				for (auto textureIndex = 0; textureIndex < cookingTask->assimpScene->mNumTextures; ++textureIndex)
 				{

@@ -134,3 +134,10 @@
 # define AGE_ASSERT_GREATER(x, y)
 # define AGE_ASSERT_GREATER_OR_EQUAL(x, y)
 #endif
+
+// Code after that declaration will no be optimized
+// by the compiler, event in release
+// use that to debug parts of the code
+#define AGE_NOT_OPTIMIZED_BLOCK_BEGIN __pragma(optimize("",off))
+// cancel the effect of `AGE_NOT_OPTIMIZED_BLOCK_BEGIN`
+#define AGE_NOT_OPTIMIZED_BLOCK_END   __pragma(optimize("",on))

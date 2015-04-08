@@ -19,7 +19,7 @@ namespace AGE
 		virtual bool launch();
 		virtual bool stop();
 
-		void setCameraInfos(const glm::mat4& projection, const PrepareKey &key, const std::set<RenderType> &_pipelines);
+		void setCameraInfos(const glm::mat4& projection, const PrepareKey &key, RenderType pipeline);
 		PrepareKey addCamera();
 		void updateGeometry(
 			const PrepareKey &key
@@ -27,7 +27,7 @@ namespace AGE
 			, const std::vector<MaterialInstance> &materials);
 		PrepareKey addMesh();
 		PrepareKey addPointLight();
-		void setPointLight(glm::vec3 const &color, glm::vec3 const &range, const PrepareKey &key);
+		void setPointLight(glm::vec3 const &color, glm::vec3 const &range, std::shared_ptr<ITexture> const &texture, const PrepareKey &key);
 	private:
 		PrepareRenderThread();
 		virtual ~PrepareRenderThread();

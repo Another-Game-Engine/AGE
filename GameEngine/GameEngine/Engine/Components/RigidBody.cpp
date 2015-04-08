@@ -285,19 +285,22 @@ namespace AGE
 	}
 
 #ifdef EDITOR_ENABLED
-	void RigidBody::editorCreate(AScene *scene)
+	void RigidBody::editorCreate()
 	{
 		setMass(0.0f);
 	}
 
-	void RigidBody::editorDelete(AScene *scene)
+	void RigidBody::editorDelete()
 	{}
 
-	void RigidBody::editorUpdate(AScene *scene)
+	bool RigidBody::editorUpdate()
 	{
+		bool modified = false;
+
 		if (ImGui::InputFloat("Mass", &_mass))
 		{
 			setMass(_mass);
+			modified = true;
 		}
 
 		ImGui::Text("Rotation constraint");
@@ -312,6 +315,7 @@ namespace AGE
 		if (rotationConstraint)
 		{
 			setRotationConstraint(_rotationConstraint.x == 1, _rotationConstraint.y == 1, _rotationConstraint.z == 1);
+			modified = true;
 		}
 
 		ImGui::Text("Transformation constraint");
@@ -326,6 +330,7 @@ namespace AGE
 		if (transformConstraint)
 		{
 			setTransformConstraint(_transformConstraint.x == 1, _transformConstraint.y == 1, _transformConstraint.z == 1);
+			modified = true;
 		}
 
 		//ImGui::InputFloat3("Rotation constraint", glm::value_ptr(_rotationConstraint));
@@ -348,6 +353,7 @@ namespace AGE
 
 		if(ImGui::Checkbox("Simple shape", &simpleShapes))
 		{
+			modified = true;
 			if (simpleShapes)
 			{
 				reset();
@@ -367,6 +373,7 @@ namespace AGE
 			ImGui::PushItemWidth(-1);
 			if (ImGui::ListBox("Shapes", (int*)&selectedShapeIndex, &(shapeFileList->front()), (int)(shapeFileList->size())))
 			{
+				modified = true;
 				selectedShapeName = (*shapeFileList)[selectedShapeIndex];
 				selectedShapePath = (*shapePathList)[selectedShapeIndex];
 
@@ -380,11 +387,13 @@ namespace AGE
 			ImGui::PushItemWidth(-1);
 			if (ImGui::ListBox("Shapes", (int*)&selectedShapeIndex, CollisionShapeStr, CollisionShape::UNDEFINED))
 			{
+				modified = true;
 				_collisionShapeType = (CollisionShape)selectedShapeIndex;
 				setCollisionShape((CollisionShape)selectedShapeIndex);
 			}
 			ImGui::PopItemWidth();
 		}
+		return modified;
 	}
 #endif
 }

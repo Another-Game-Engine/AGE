@@ -18,6 +18,8 @@ namespace AGE
 	IRender & ScreenRender::render(RenderPipeline const &pipeline, RenderLightList const &lights, CameraInfos const &infos)
 	{
 		renderPass(pipeline, lights, infos);
+		if (_nextPass != nullptr)
+			_nextPass->render(pipeline, lights, infos);
 		return (*this);
 	}
 

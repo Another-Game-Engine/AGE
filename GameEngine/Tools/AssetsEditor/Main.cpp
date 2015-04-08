@@ -46,6 +46,8 @@
 //COMPONENTS
 #include <Components/EntityRepresentation.hpp>
 
+#include <Managers/ArchetypesEditorManager.hpp>
+
 int			main(int ac, char **av)
 {
 	AGE::InitAGE();
@@ -57,9 +59,13 @@ int			main(int ac, char **av)
 		auto configurationManager = engine->getInstance<AGE::ConfigurationManager>();
 		configurationManager->setConfiguration<std::string>(std::string("ShadersPath"), std::string(engine->getApplicationPath() + "/../../Shaders/"));
 
+		engine->displayThreadsStatistics(false);
+
 		AGE::GetThreadManager()->setAsWorker(false, false, false);
 		engine->setInstance<AGE::Timer>();
 		engine->setInstance<AGE::AssetsManager>();
+
+		engine->setInstance<AGE::WE::ArchetypesEditorManager>();
 
 		AGE::GetRenderThread()->getQueue()->emplaceFutureTask<AGE::Tasks::Basic::BoolFunction, bool>([=](){
 			AGE::Imgui::getInstance()->init(engine);

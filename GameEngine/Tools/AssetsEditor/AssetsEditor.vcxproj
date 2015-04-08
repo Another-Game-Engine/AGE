@@ -46,7 +46,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir)../../Vendors/assimp/include;$(ProjectDir)../../Vendors/OpenGL/include;$(ProjectDir)../../GameEngine/Engine;$(ProjectDir)../../GameEngine;$(ProjectDir);$(ProjectDir)../../Vendors;$(IncludePath);$(ProjectDir)../../Vendors\bullet\src;$(ProjectDir)../../Vendors\fmod\inc;$(ProjectDir)../../Vendors/FreeImage/include;$(ProjectDir)../../EngineCoreTest/Systems;$(ProjectDir)../../EngineCoreTest/Components;$(ProjectDir)../../Vendors/FreeImagePlus/include</IncludePath>
+    <IncludePath>$(ProjectDir)../../Vendors/assimp/include;$(ProjectDir)../../Vendors/OpenGL/include;$(ProjectDir)../../GameEngine/Engine;$(ProjectDir)../../GameEngine;$(ProjectDir);$(ProjectDir)../../Vendors;$(IncludePath);$(ProjectDir)../../Vendors\bullet\src;$(ProjectDir)../../Vendors\fmod\inc;$(ProjectDir)../../Vendors/FreeImage/include;$(ProjectDir)../../EngineCoreTest/Systems;$(ProjectDir)../../EngineCoreTest/Components;$(ProjectDir)../../Vendors/FreeImagePlus/include;$(SolutionDir)</IncludePath>
     <LibraryPath>$(ProjectDir)../../Vendors/assimp/x64/Release;$(ProjectDir)../../Vendors/OpenGL/lib/x64;$(ProjectDir)../../Vendors\fmod\lib;$(ProjectDir)../../Vendors/bullet\lib\x64Release;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(ProjectDir)../../Vendors/FreeImage/Release;$(ProjectDir)../../Vendors/FreeImagePlus/Release;$(ProjectDir)../../vendors\crunch\crnlib\lib\VC9\Release\x64;$(ProjectDir)../../Vendors\minizip\lib\windows\x64</LibraryPath>
     <SourcePath>$(VC_SourcePath);$(SolutionDir)EngineCoreTest/Systems;$(SolutionDir)EngineCoreTest/Components</SourcePath>
   </PropertyGroup>
@@ -94,7 +94,10 @@
     <ClCompile Include="..\..\EngineCoreTest\Components\RotationComponent.cpp" />
     <ClCompile Include="AssetFiles\AssetFileManager.cpp" />
     <ClCompile Include="AssetFiles\CookedFile.cpp" />
+    <ClCompile Include="AssetFiles\MaterialRawFile.cpp" />
+    <ClCompile Include="AssetFiles\MeshRawFile.cpp" />
     <ClCompile Include="AssetFiles\RawFile.cpp" />
+    <ClCompile Include="AssetFiles\TextureRawFile.cpp" />
     <ClCompile Include="AssetsDatabase.cpp" />
     <ClCompile Include="AssetFiles\File.cpp" />
     <ClCompile Include="AssetFiles\Folder.cpp" />
@@ -112,10 +115,13 @@
   <ItemGroup>
     <ClInclude Include="AssetFiles\AssetFileManager.hpp" />
     <ClInclude Include="AssetFiles\AssetsTypes.hpp" />
+    <ClInclude Include="AssetFiles\MaterialRawFile.hpp" />
+    <ClInclude Include="AssetFiles\MeshRawFile.hpp" />
+    <ClInclude Include="AssetFiles\RawFile.hpp" />
+    <ClInclude Include="AssetFiles\TextureRawFile.hpp" />
     <ClInclude Include="Components\EntityRepresentation.hpp" />
     <ClInclude Include="Convertor\ConvertorStatusManager.hpp" />
     <ClInclude Include="AssetFiles\CookedFile.hpp" />
-    <ClInclude Include="AssetFiles\RawFile.hpp" />
     <ClInclude Include="AssetsDatabase.hpp" />
     <ClInclude Include="Convertor\AnimationsLoader.hpp" />
     <ClInclude Include="Convertor\AssetDataSet.hpp" />
@@ -129,8 +135,11 @@
     <ClInclude Include="AssetFiles\File.hpp" />
     <ClInclude Include="AssetFiles\Folder.hpp" />
     <ClInclude Include="EditorConfiguration.hpp" />
+    <ClInclude Include="EntityHelpers\EntityImgui.hpp" />
     <ClInclude Include="ImageUtils.hh" />
+    <ClInclude Include="Managers\ArchetypesEditorManager.hpp" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="Scenes\ArchetypeScenes.hpp" />
     <ClInclude Include="Scenes\AssetsEditorScene.hpp" />
     <ClInclude Include="Scenes\SceneSelectorScene.hpp" />
     <ClInclude Include="Scenes\WorldEditorScene.hpp" />

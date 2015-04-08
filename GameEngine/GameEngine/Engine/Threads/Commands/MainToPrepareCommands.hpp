@@ -81,10 +81,11 @@ namespace AGE
 
 			struct SetPointLight
 			{
-				SetPointLight(glm::vec3 const &color, glm::vec3 const &attenuation, PrepareKey &key);
+				SetPointLight(glm::vec3 const &color, glm::vec3 const &attenuation, std::shared_ptr<ITexture> const &texture, PrepareKey &key);
 				PrepareKey key;
 				glm::vec3 color;
 				glm::vec3 attenuation;
+				std::shared_ptr<ITexture> texture;
 			};
 
 			struct DeleteCamera
@@ -101,10 +102,10 @@ namespace AGE
 
 			struct CameraInfos
 			{
-				CameraInfos(const PrepareKey &_key, const glm::mat4 &_projection, const std::set<RenderType> &_pipelines);
+				CameraInfos(const PrepareKey &_key, const glm::mat4 &_projection, RenderType pipeline);
 				PrepareKey key;
 				glm::mat4 projection;
-				std::set<RenderType> pipelines;
+				RenderType pipeline;
 			};
 
 			struct PrepareDrawLists
@@ -112,9 +113,9 @@ namespace AGE
 				std::size_t alignement;
 			};
 
-			struct SceneUpdateBegin
+			struct SetCurrentScene
 			{
-				SceneUpdateBegin(AScene *_scene);
+				SetCurrentScene(AScene *_scene);
 				AScene *scene;
 			};
 		};

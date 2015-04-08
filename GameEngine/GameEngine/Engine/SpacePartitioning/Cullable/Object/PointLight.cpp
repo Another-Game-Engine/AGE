@@ -37,7 +37,7 @@ namespace AGE
 		{
 			float d = Mathematic::secondDegreeDiscriminant(equation);
 			glm::vec2 res = Mathematic::resolveSecondDegree(equation, d);
-			lightRange = glm::vec3(glm::max(res.x, res.y));
+			lightRange = glm::vec3(max(res.x, res.y));
 		}
 		assert(lightRange.x > 0);
 		sphereTransform = glm::scale(transformation, lightRange + lightRange * errorRate);

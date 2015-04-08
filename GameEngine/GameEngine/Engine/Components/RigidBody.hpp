@@ -103,9 +103,9 @@ namespace AGE
 		std::string selectedShapePath = "";
 		bool simpleShapes = true;
 
-		virtual void editorCreate(AScene *scene);
-		virtual void editorDelete(AScene *scene);
-		virtual void editorUpdate(AScene *scene);
+		virtual void editorCreate();
+		virtual void editorDelete();
+		virtual bool editorUpdate();
 #endif
 	protected:
 		virtual void _copyFrom(const ComponentBase *model)
