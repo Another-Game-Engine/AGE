@@ -11,6 +11,14 @@ namespace AGE
 		static bool Load(const std::string &path, AScene *scene);
 		static std::shared_ptr<Archetype> &Create();
 
+		Archetype()
+		{
+			auto name = "NoNameArchetype";
+			auto len = strlen(name);
+			if (len >= ENTITY_NAME_LENGTH)
+				len = ENTITY_NAME_LENGTH;
+			memcpy(_name, name, len);
+		}
 		~Archetype(){}
 
 		Entity spawn(AScene *scene)
@@ -27,10 +35,18 @@ namespace AGE
 
 		void setName(const std::string &name)
 		{
-			_name = name;
+			auto len = name.length();
+			if (len >= ENTITY_NAME_LENGTH)
+				len = ENTITY_NAME_LENGTH;
+			memcpy(_name, name.c_str(), len);
 		}
 
-		const std::string &getName() const
+		const char *getName() const
+		{
+			return _name;
+		}
+
+		char *getNamePtr()
 		{
 			return _name;
 		}
@@ -41,6 +57,6 @@ namespace AGE
 		}
 	private:
 		Entity _entity;
-		std::string _name;
+		char _name[ENTITY_NAME_LENGTH];
 	};
 }

@@ -138,24 +138,27 @@ namespace AGE
 						ImGui::Separator();
 					}
 
-					if (representation->parentIsArchetype() == false && ImGui::Button("Delete entity"))
+					if (representation->parentIsArchetype() == false && ImGui::SmallButton("Delete entity"))
 					{
 						_scene->destroy(entity);
 						_selectedEntity = nullptr;
 						_selectedEntityIndex = 0;
 					}
 
-					if (representation->isLinkedToArchetype() == false && representation->parentIsArchetype() == false && ImGui::Button("Duplicate"))
+					if (representation->isLinkedToArchetype() == false && representation->parentIsArchetype() == false && ImGui::SmallButton("Duplicate"))
 					{
 						Entity duplicate;
 						_scene->copyEntity(entity, duplicate, true, false);
 					}
 
-					ImGui::InputText("Archetype name", _archetypeName, MAX_SCENE_NAME_LENGTH);
-					if (representation->isLinkedToArchetype() == false && representation->parentIsArchetype() == false && ImGui::Button("Convert to Archetype"))
+					if (representation->isLinkedToArchetype() == false && representation->parentIsArchetype() == false)
 					{
-						auto manager = _scene->getInstance<AGE::WE::ArchetypesEditorManager>();
-						manager->transformToArchetype(*_selectedEntity, _archetypeName);
+						ImGui::InputText("Archetype name", _archetypeName, MAX_SCENE_NAME_LENGTH);
+						if (ImGui::SmallButton("Convert to Archetype"))
+						{
+							auto manager = _scene->getInstance<AGE::WE::ArchetypesEditorManager>();
+							manager->transformToArchetype(*_selectedEntity, _archetypeName);
+						}
 					}
 				}
 
@@ -164,28 +167,30 @@ namespace AGE
 				{
 					_scene->createEntity();
 				}
-
-				if (ImGui::ListBox("Scenes", &WE::EditorConfiguration::getSelectedSceneIndex(), WE::EditorConfiguration::getScenesName().data(), WE::EditorConfiguration::getScenesName().size()))
+				if (ImGui::TreeNode("Scenes list"))
 				{
-					_scene->clearAllEntities();
+					if (ImGui::ListBox("Scenes", &WE::EditorConfiguration::getSelectedSceneIndex(), WE::EditorConfiguration::getScenesName().data(), WE::EditorConfiguration::getScenesName().size()))
+					{
+						_scene->clearAllEntities();
 
-					generateBasicEntities();
+						generateBasicEntities();
 
-					WESerialization::SetSerializeForEditor(true);
+						WESerialization::SetSerializeForEditor(true);
 
-					auto sceneFileName = WE::EditorConfiguration::getSelectedScenePath() + "_scene_description.json";
-					auto assetPackageFileName = WE::EditorConfiguration::getSelectedScenePath() + "_assets.json";
+						auto sceneFileName = WE::EditorConfiguration::getSelectedScenePath() + "_scene_description.json";
+						auto assetPackageFileName = WE::EditorConfiguration::getSelectedScenePath() + "_assets.json";
 
-					strcpy_s(_sceneName, WE::EditorConfiguration::getSelectedSceneName().c_str());
-					strcpy_s(_exportName, WE::EditorConfiguration::getSelectedSceneName().c_str());
+						strcpy_s(_sceneName, WE::EditorConfiguration::getSelectedSceneName().c_str());
+						strcpy_s(_exportName, WE::EditorConfiguration::getSelectedSceneName().c_str());
 
-					_scene->getInstance<AssetsManager>()->pushNewCallback(assetPackageFileName, _scene, std::function<void()>([=](){
-						_scene->loadFromJson(sceneFileName);
-						WESerialization::SetSerializeForEditor(false);
-					}));
-					_scene->getInstance<AssetsManager>()->loadPackage(assetPackageFileName, assetPackageFileName);
+						_scene->getInstance<AssetsManager>()->pushNewCallback(assetPackageFileName, _scene, std::function<void()>([=](){
+							_scene->loadFromJson(sceneFileName);
+							WESerialization::SetSerializeForEditor(false);
+						}));
+						_scene->getInstance<AssetsManager>()->loadPackage(assetPackageFileName, assetPackageFileName);
+					}
+					ImGui::TreePop();
 				}
-
 				_entities.clear();
 				{
 					EntityFilter::Lock lock(_filter);

@@ -116,7 +116,7 @@ namespace AGE
 				ImGui::SameLine();
 				ImGui::BeginChild("Archetypes", ImVec2(ImGui::GetWindowWidth() * 0.35f, 0));
 
-				if (! _archetypesImGuiNamesList.empty() 
+				if (ImGui::TreeNode("Archetypes") && ! _archetypesImGuiNamesList.empty() 
 					&& ImGui::Combo("", &_selectedArchetypeIndex, &_archetypesImGuiNamesList[0], _archetypesImGuiNamesList.size()))
 				{
 					if (_selectedArchetypeIndex < _archetypesImGuiNamesList.size())
@@ -132,6 +132,7 @@ namespace AGE
 							_selectedArchetype = find->second;
 						}
 					}
+					ImGui::TreePop();
 				}
 
 				if (_selectedArchetype != nullptr)
@@ -139,6 +140,11 @@ namespace AGE
 					if (_selectedEntity == nullptr)
 					{
 						_selectedEntity = &_selectedArchetype->archetype.getEntity();
+					}
+
+					if (ImGui::InputText("Archetype Name", _selectedArchetype->archetype.getNamePtr(), ENTITY_NAME_LENGTH))
+					{
+
 					}
 
 					ImGui::Checkbox("Graphnode display", &_graphNodeDisplay);
@@ -198,6 +204,18 @@ namespace AGE
 						{
 							_copyArchetypeToInstanciedEntity(_selectedArchetype->archetype.getEntity(), e);
 						}
+					}
+
+					if (ImGui::SmallButton("Create an instance"))
+					{
+						Entity duplicate;
+						scene->copyEntity(_selectedArchetype->archetype.getEntity(), duplicate, true, false);
+						auto representation = duplicate.getComponent<EntityRepresentation>();
+
+						representation->editorOnly = false;
+						representation->_archetypeLinked = _selectedArchetype;
+
+						_selectedArchetype->entities.insert(duplicate);
 					}
 				}
 
