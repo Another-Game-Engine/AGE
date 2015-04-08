@@ -196,7 +196,6 @@ namespace AGE
 							}
 						}
 					}
-					GetMainThread()->setSceneAsActive(scene);
 
 					if (_selectedEntity)
 					{
@@ -210,11 +209,14 @@ namespace AGE
 								if (ImGui::SmallButton(std::string("Add : " + ComponentRegistrationManager::getInstance().getComponentName(t.second)).c_str()))
 								{
 									creationFn.at(t.first)(_selectedEntity);
+									modified = true;
 								}
 							}
 						}
 					}
 					ImGui::Separator();
+
+					GetMainThread()->setSceneAsActive(scene);
 
 					if (modified)
 					{
@@ -257,6 +259,9 @@ namespace AGE
 
 				auto representation = entity.getComponent<EntityRepresentation>();
 				auto &copyComponentList = entity.getComponentList();
+
+				entity.getLink().setOrientation(archetype.getLink().getOrientation());
+				entity.getLink().setScale(archetype.getLink().getScale());
 
 				// we delete all existing components
 				for (auto c : copyComponentList)

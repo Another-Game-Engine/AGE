@@ -47,23 +47,23 @@ namespace AGE
 					modified = true;
 					entity.getLink().setPosition(cpt->position);
 				}
-
-				cpt->rotation = glm::eulerAngles(entity.getLink().getOrientation());
-				if (ImGui::InputFloat3("Rotation", glm::value_ptr(cpt->rotation)))
-				{
-					modified = true;
-					entity.getLink().setOrientation(glm::quat(cpt->rotation));
-				}
-
-				cpt->scale = entity.getLink().getScale();
-				if (ImGui::InputFloat3("Scale", glm::value_ptr(cpt->scale)))
-				{
-					modified = true;
-					entity.getLink().setScale(cpt->scale);
-				}
-
-				ImGui::Separator();
 			}
+
+			cpt->rotation = glm::eulerAngles(entity.getLink().getOrientation());
+			if (ImGui::InputFloat3("Rotation", glm::value_ptr(cpt->rotation)))
+			{
+				modified = true;
+				entity.getLink().setOrientation(glm::quat(cpt->rotation));
+			}
+
+			cpt->scale = entity.getLink().getScale();
+			if (ImGui::InputFloat3("Scale", glm::value_ptr(cpt->scale)))
+			{
+				modified = true;
+				entity.getLink().setScale(cpt->scale);
+			}
+
+			ImGui::Separator();
 
 			if (cpt->isLinkedToArchetype())
 			{
