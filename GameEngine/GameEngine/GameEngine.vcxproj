@@ -434,6 +434,7 @@
     <ClInclude Include="Engine\Utils\Architecture.hpp" />
     <ClInclude Include="Engine\Utils\BitOperations.hpp" />
     <ClInclude Include="Engine\Utils\BoundingInfos.hpp" />
+    <ClInclude Include="Engine\Utils\Debug.hpp" />
     <ClInclude Include="Engine\Utils\Serialization\btSerialization.hpp" />
     <ClInclude Include="Engine\Utils\StreamBuffer.hpp" />
     <ClInclude Include="Engine\Utils\BufferPool.hpp" />
