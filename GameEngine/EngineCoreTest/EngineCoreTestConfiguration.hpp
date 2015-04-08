@@ -119,7 +119,6 @@ namespace AGE
 		static int &getSelectedSceneIndex()
 		{
 			auto &res = _getConfigurations()->_selectedScene;
-			_dirty = true;
 			return res;
 		}
 		static void RefreshScenesDirectoryListing()
