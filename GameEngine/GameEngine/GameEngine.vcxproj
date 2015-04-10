@@ -60,7 +60,7 @@
       <OpenMPSupport>true</OpenMPSupport>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Jonathan\Desktop\AGE\GameEngine\Vendors\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <DisableSpecificWarnings>4503;4099</DisableSpecificWarnings>
       <TreatWarningAsError>false</TreatWarningAsError>
@@ -88,7 +88,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;EDITOR_ENABLED;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Jonathan\Desktop\AGE\GameEngine\Vendors\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4503;4099</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <TreatWarningAsError>false</TreatWarningAsError>
@@ -125,6 +125,8 @@
     <ClCompile Include="Engine\Physics\ContactInformation.cpp" />
     <ClCompile Include="Engine\Physics\DynamicMotionState.cpp" />
     <ClCompile Include="Engine\Physics\EngineTypeToPluginName.cpp" />
+    <ClCompile Include="Engine\Physics\Fallback\NullPlugin.cpp" />
+    <ClCompile Include="Engine\Physics\Fallback\NullWorld.cpp" />
     <ClCompile Include="Engine\Physics\Utils\BtConversion.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredMerging.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredPointLightning.cpp" />
@@ -290,8 +292,11 @@
     <ClInclude Include="Engine\Physics\DynamicMotionState.hpp" />
     <ClInclude Include="Engine\Physics\EngineTypes.hpp" />
     <ClInclude Include="Engine\Physics\EngineTypeToPluginName.hpp" />
+    <ClInclude Include="Engine\Physics\Fallback\NullPlugin.hpp" />
+    <ClInclude Include="Engine\Physics\Fallback\NullWorld.hpp" />
     <ClInclude Include="Engine\Physics\PluginInterface.hpp" />
     <ClInclude Include="Engine\Physics\Utils\BtConversion.hpp" />
+    <ClInclude Include="Engine\Physics\WorldInterface.hpp" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredMerging.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredPointLightning.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredBasicBuffering.hh" />
@@ -554,6 +559,14 @@
     <None Include="Engine\ResourceManager\SharedMesh.hh" />
     <None Include="Engine\ResourceManager\Texture.hh" />
     <None Include="Engine\Components\MeshRenderer.hh" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Plugins\Physics\Bullet\Bullet.vcxproj">
+      <Project>{c3490639-bced-4a06-9d1b-5c3bb25da5a7}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Plugins\Physics\PhysX\PhysX.vcxproj">
+      <Project>{fae1c65e-9000-4902-ae4f-c5786810b9fd}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

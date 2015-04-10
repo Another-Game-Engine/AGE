@@ -160,6 +160,8 @@
     <ClCompile Include="Engine\Physics\BulletCollisionManager.cpp" />
     <ClCompile Include="Engine\Physics\ContactInformation.cpp" />
     <ClCompile Include="Engine\Physics\DynamicMotionState.cpp" />
+    <ClCompile Include="Engine\Physics\Fallback\NullPlugin.cpp" />
+    <ClCompile Include="Engine\Physics\Fallback\NullWorld.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -416,6 +418,9 @@
     <ClInclude Include="Engine\Physics\BulletDynamicManager.hpp" />
     <ClInclude Include="Engine\Physics\ContactInformation.hpp" />
     <ClInclude Include="Engine\Physics\DynamicMotionState.hpp" />
+    <ClInclude Include="Engine\Physics\WorldInterface.hpp" />
+    <ClInclude Include="Engine\Physics\Fallback\NullPlugin.hpp" />
+    <ClInclude Include="Engine\Physics\Fallback\NullWorld.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

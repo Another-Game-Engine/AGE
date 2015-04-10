@@ -11,6 +11,7 @@ namespace AGE
 		virtual ~System();
 		void update(float time);
 		bool init();
+		virtual void finalize(void) { }
 		bool setActivation(bool tof);
 		bool isActivated() const;
 		inline const std::string &getName() const { return _name; }

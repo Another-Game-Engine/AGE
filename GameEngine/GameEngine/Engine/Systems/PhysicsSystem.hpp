@@ -23,7 +23,10 @@ namespace AGE
 		PhysicsSystem &operator=(PhysicsSystem const &) = delete;
 
 		// Destructors
-		virtual ~PhysicsSystem(void) = default;
+		~PhysicsSystem(void);
+
+		// Methods
+		Physics::PluginInterface *getPlugin(void);
 
 	private:
 		// Attributes
@@ -31,6 +34,8 @@ namespace AGE
 
 		// Inherited Methods
 		bool initialize(void) override final;
+
+		void finalize(void) override final;
 
 		bool onPluginLoaded(PluginPtr pluginData) override final;
 	};
