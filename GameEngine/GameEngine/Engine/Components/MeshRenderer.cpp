@@ -72,23 +72,15 @@ namespace AGE
 		return true;
 	}
 
-	void MeshRenderer::enableMode(RenderModes mode)
+	void MeshRenderer::enableRenderMode(RenderModes mode)
 	{
-		assert(_mesh != nullptr);
-		for (auto &subMesh : _mesh->subMeshs)
-		{
-			subMesh.renderMode[mode] = true;
-		}
+		_renderMode[mode] = true;
 		_updateGeometry();
 	}
 
-	void MeshRenderer::disableMode(RenderModes mode)
+	void MeshRenderer::disableRenderMode(RenderModes mode)
 	{
-		assert(_mesh != nullptr);
-		for (auto &subMesh : _mesh->subMeshs)
-		{
-			subMesh.renderMode[mode] = false;
-		}
+		_renderMode[mode] = false;
 		_updateGeometry();
 	}
 
@@ -128,6 +120,7 @@ namespace AGE
 			return;
 		}
 		AGE::GetPrepareThread()->updateGeometry(_key, _mesh->subMeshs, _material->datas);
+		AGE::GetPrepareThread()->updateRenderMode(_key, _renderMode);
 	}
 
 	void MeshRenderer::postUnserialization()

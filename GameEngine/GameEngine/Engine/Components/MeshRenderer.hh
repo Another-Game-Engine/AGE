@@ -42,8 +42,8 @@ namespace AGE
 		std::shared_ptr<AGE::MeshInstance> getMesh();
 		std::shared_ptr<AGE::MaterialSetInstance> getMaterial();
 
-		void enableMode(RenderModes mode);
-		void disableMode(RenderModes mode);
+		void enableRenderMode(RenderModes mode);
+		void disableRenderMode(RenderModes mode);
 
 		virtual void _copyFrom(const ComponentBase *destination);
 
@@ -73,6 +73,7 @@ namespace AGE
 		AGE::PrepareKey _key;
 		std::shared_ptr<AGE::MeshInstance> _mesh;
 		std::shared_ptr<AGE::MaterialSetInstance> _material;
+		RenderModeSet _renderMode;
 
 		struct SerializationInfos
 		{

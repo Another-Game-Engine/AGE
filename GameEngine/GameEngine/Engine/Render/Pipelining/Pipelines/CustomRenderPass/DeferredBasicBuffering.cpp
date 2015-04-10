@@ -76,10 +76,10 @@ namespace AGE
 		*_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("projection_matrix") = infos.projection;
 		*_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("view_matrix") = infos.view;
 
-		for (auto meshPaint : pipeline.keys)
+		for (auto &meshPaint : pipeline.keys)
 		{
 			auto painter = _painterManager->get_painter(Key<Painter>::createKey(meshPaint.first));
-			for (auto mode : meshPaint.second.drawables)
+			for (auto &mode : meshPaint.second.drawables)
 			{
 				if (renderModeCompatible(mode.renderMode))
 				{

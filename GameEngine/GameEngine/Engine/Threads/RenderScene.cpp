@@ -280,6 +280,20 @@ namespace AGE
 		}
 	}
 
+	void RenderScene::_setRenderMode(AGE::Commands::MainToPrepare::SetRenderMode &msg)
+	{
+		Mesh *uo = &_meshs.get(msg.key.id);
+
+		AGE_ASSERT(uo != nullptr);
+
+		for (auto &e : uo->drawableCollection)
+		{
+			Drawable &drawable = _drawables.get(e);
+
+			drawable.renderMode = msg.renderModes;
+		}
+	}
+
 	void RenderScene::_setTransform(AGE::Commands::MainToPrepare::SetTransform &msg)
 	{
 		Camera *co = nullptr;
@@ -431,7 +445,7 @@ namespace AGE
 					// and the good render mode
 					for (auto &drawableList : curRenderPainter->drawables)
 					{
-						if (drawableList.renderMode == currentDrawable->mesh.renderMode)
+						if (drawableList.renderMode == currentDrawable->renderMode)
 						{
 							curRenderDrawablelist = &drawableList;
 							break;
@@ -441,7 +455,7 @@ namespace AGE
 					{
 						curRenderPainter->drawables.emplace_back();
 						curRenderDrawablelist = &curRenderPainter->drawables.back();
-						curRenderDrawablelist->renderMode = currentDrawable->mesh.renderMode;
+						curRenderDrawablelist->renderMode = currentDrawable->renderMode;
 					}
 					// We find the good render mode
 					curRenderDrawablelist->vertices.emplace_back(currentDrawable->mesh.vertices);

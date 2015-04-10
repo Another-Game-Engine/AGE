@@ -148,7 +148,7 @@ namespace AGE
 			MeshRenderer *mesh;
 			mesh = e.addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("cube/cube.sage")
 				, getInstance<AGE::AssetsManager>()->getMaterial(OldFile("cube/cube.mage")));
-			mesh->enableMode(RenderModes::AGE_OPAQUE);
+			mesh->enableRenderMode(RenderModes::AGE_OPAQUE);
 			auto rigidBody = e.addComponent<RigidBody>(1.0f);
 			rigidBody->setCollisionShape(RigidBody::BOX);
 			rigidBody->getBody().setFriction(0.5f);
@@ -187,7 +187,7 @@ namespace AGE
 					e.addComponent<PointLightComponent>()->set(glm::vec3((float)(rand() % 1000) / 1000.0f, (float)(rand() % 1000) / 1000.0f, (float)(rand() % 1000) / 1000.0f), glm::vec3(1.f, 0.1f, 0.005f));
 				}
 
-				mesh->enableMode(RenderModes::AGE_OPAQUE);
+				mesh->enableRenderMode(RenderModes::AGE_OPAQUE);
 
 				auto rigidBody = e.addComponent<RigidBody>(1.0f);
 				if (i % 4 == 0)

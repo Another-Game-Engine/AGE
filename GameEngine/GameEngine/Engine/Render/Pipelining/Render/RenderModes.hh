@@ -1,5 +1,7 @@
 #pragma once
 
+#include <bitset>
+
 namespace AGE
 {
 	enum RenderModes
@@ -8,6 +10,9 @@ namespace AGE
 		AGE_SEMI_TRANSPARENT,
 		AGE_SKINNED,
 		AGE_NORMAL_MAP,
-		RENDER_MODE_NUMBER
+		AGE_OCCLUDER,
+		RENDER_MODE_NUMBER,
 	};
+
+	typedef std::bitset<RENDER_MODE_NUMBER> RenderModeSet;
 }
