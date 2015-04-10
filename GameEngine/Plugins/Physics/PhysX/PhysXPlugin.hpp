@@ -2,13 +2,13 @@
 
 #include <PxPhysicsAPI.h>
 
-#include "PluginInterface.hpp"
+#include "PhysicsInterface.hpp"
 
 namespace AGE
 {
 	namespace Physics
 	{
-		class PhysXPlugin final : public PluginInterface
+		class PhysXPlugin final : public PhysicsInterface
 		{
 		public:
 			// Constructors
@@ -43,6 +43,8 @@ namespace AGE
 			
 			physx::PxPhysics *physics = nullptr;
 
+			bool extensions = false;
+
 			// Inherited Methods
 			EngineTypes getPluginType(void) const override final;
 
@@ -50,9 +52,9 @@ namespace AGE
 
 			void finalize(void) override final;
 
-			WorldInterface *createWorld(const glm::vec3 &gravity, const std::string &worldName) override final;
+			WorldInterface *createWorld(const glm::vec3 &gravity) override final;
 
-			void deleteWorld(WorldInterface *world) override final;
+			void destroyWorld(WorldInterface *world) override final;
 		};
 	}
 }

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "WorldInterface.hpp"
 #include "PhysXPlugin.hpp"
 
 namespace AGE
@@ -12,7 +13,7 @@ namespace AGE
 			// Constructors
 			PhysXWorld(void) = delete;
 
-			PhysXWorld(PhysXPlugin *plugin, const glm::vec3 &gravity, const std::string &worldName);
+			PhysXWorld(PhysXPlugin *plugin, const glm::vec3 &gravity);
 
 			PhysXWorld(const PhysXWorld &) = delete;
 
@@ -24,8 +25,6 @@ namespace AGE
 
 		private:
 			// Attributes
-			PhysXPlugin *plugin = nullptr;
-
 			physx::PxScene *scene = nullptr;
 
 			// Inherited Methods

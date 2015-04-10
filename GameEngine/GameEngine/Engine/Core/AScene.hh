@@ -114,8 +114,7 @@ namespace AGE
 				if (typeid(*e.second.get()).name() == typeid(T).name())
 				{
 					e.second->finalize();
-					delete e.second;
-					_systems.erase(e);
+					_systems.erase(std::find(_systems.begin(), _systems.end(), e));
 					return;
 				}
 			}

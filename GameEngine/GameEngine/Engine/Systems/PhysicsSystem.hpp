@@ -5,11 +5,12 @@
 #include <Utils/Library.hpp>
 
 #include <Physics/EngineTypes.hpp>
-#include <Physics/PluginInterface.hpp>
+#include <Physics/PhysicsInterface.hpp>
+#include <Physics/WorldInterface.hpp>
 
 namespace AGE
 {
-	class PhysicsSystem final : public System, public PluginManager<Physics::PluginInterface>
+	class PhysicsSystem final : public System, public PluginManager<Physics::PhysicsInterface>
 	{
 	public:
 		// Constructors
@@ -26,11 +27,11 @@ namespace AGE
 		~PhysicsSystem(void);
 
 		// Methods
-		Physics::PluginInterface *getPlugin(void);
+		Physics::PhysicsInterface *getPlugin(void);
 
 	private:
 		// Attributes
-		Physics::PluginInterface *plugin = nullptr;
+		Physics::PhysicsInterface *plugin = nullptr;
 
 		// Inherited Methods
 		bool initialize(void) override final;

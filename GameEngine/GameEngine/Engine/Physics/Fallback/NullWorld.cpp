@@ -5,8 +5,8 @@ namespace AGE
 	namespace Physics
 	{
 		// Constructors
-		NullWorld::NullWorld(const std::string &worldName)
-			: WorldInterface(worldName)
+		NullWorld::NullWorld(NullPlugin *plugin)
+			: WorldInterface(plugin)
 		{
 			return;
 		}

@@ -6,8 +6,8 @@ namespace AGE
 {
 	namespace Physics
 	{
-		BulletWorld::BulletWorld(BulletPlugin *plugin, const glm::vec3 &gravity, const std::string &worldName)
-			: WorldInterface(worldName), plugin(plugin)
+		BulletWorld::BulletWorld(BulletPlugin *plugin, const glm::vec3 &gravity)
+			: WorldInterface(plugin)
 		{
 			// TO_DO
 		}

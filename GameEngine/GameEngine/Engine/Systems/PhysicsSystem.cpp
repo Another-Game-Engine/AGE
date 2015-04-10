@@ -31,7 +31,7 @@ namespace AGE
 	}
 
 	// Methods
-	Physics::PluginInterface *PhysicsSystem::getPlugin(void)
+	Physics::PhysicsInterface *PhysicsSystem::getPlugin(void)
 	{
 		return plugin;
 	}
@@ -40,7 +40,8 @@ namespace AGE
 	bool PhysicsSystem::initialize(void)
 	{
 		// Set Dependency to real plugin (physics enabled if plugin != NullPlugin)
-		_scene->deleteInstance<Physics::PluginInterface>();
+		_scene->getInstance<Physics::PhysicsInterface>()->shutdown();
+		_scene->deleteInstance<Physics::PhysicsInterface>();
 		_scene->setInstance(plugin);
 		Singleton<Logger>::getInstance()->log(Logger::Level::Normal, "Initializing PhysicsSystem with plugin '", Physics::GetPluginNameForEngine(plugin->getPluginType()), "'.");
 		return plugin->startup();
@@ -53,8 +54,8 @@ namespace AGE
 		plugin->shutdown();
 		plugin = nullptr;
 		// Set Dependency to the fallback plugin (physics disabled) --> Needed if a RigidBody is added while no PhysicsSystem exists
-		_scene->removeInstance<Physics::PluginInterface>();
-		_scene->setInstance<Physics::NullPlugin, Physics::PluginInterface>();
+		_scene->removeInstance<Physics::PhysicsInterface>();
+		_scene->setInstance<Physics::NullPlugin, Physics::PhysicsInterface>()->startup();
 	}
 
 	bool PhysicsSystem::onPluginLoaded(PluginPtr pluginData)

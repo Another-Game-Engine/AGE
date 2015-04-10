@@ -294,7 +294,7 @@
     <ClInclude Include="Engine\Physics\EngineTypeToPluginName.hpp" />
     <ClInclude Include="Engine\Physics\Fallback\NullPlugin.hpp" />
     <ClInclude Include="Engine\Physics\Fallback\NullWorld.hpp" />
-    <ClInclude Include="Engine\Physics\PluginInterface.hpp" />
+    <ClInclude Include="Engine\Physics\PhysicsInterface.hpp" />
     <ClInclude Include="Engine\Physics\Utils\BtConversion.hpp" />
     <ClInclude Include="Engine\Physics\WorldInterface.hpp" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredMerging.hh" />

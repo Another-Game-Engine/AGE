@@ -4,18 +4,22 @@
 
 #include <glm.hpp>
 
+#include "../Utils/Dependency.hpp"
+
 namespace AGE
 {
 	namespace Physics
 	{
-		class WorldInterface
+		class PhysicsInterface;
+
+		class WorldInterface : public Dependency<WorldInterface>
 		{
 		public:
 			// Constructors
 			WorldInterface(void) = delete;
 
-			inline WorldInterface(const std::string &worldName)
-				: worldName(worldName)
+			inline WorldInterface(PhysicsInterface *plugin)
+				: plugin(plugin)
 			{
 				return;
 			}
@@ -26,9 +30,14 @@ namespace AGE
 			WorldInterface &operator=(const WorldInterface &) = delete;
 
 			// Methods
-			inline const std::string &getName(void) const
+			inline PhysicsInterface *getPlugin(void)
 			{
-				return worldName;
+				return plugin;
+			}
+
+			inline const PhysicsInterface *getPlugin(void) const
+			{
+				return plugin;
 			}
 
 			inline void setGravity(float x, float y, float z)
@@ -65,13 +74,14 @@ namespace AGE
 			virtual void simulate(float stepSize) = 0;
 
 		protected:
+			// Attributes
+			PhysicsInterface *plugin = nullptr;
+
 			// Destructor
 			virtual ~WorldInterface(void) = default;
 
 		private:
 			// Attributes
-			std::string worldName;
-
 			std::size_t targetFPS = 60;
 
 			float accumulator = 0.0f;

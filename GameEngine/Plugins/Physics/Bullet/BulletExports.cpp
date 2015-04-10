@@ -2,12 +2,12 @@
 
 extern "C"
 {
-	__declspec(dllexport) AGE::Physics::PluginInterface *CreateInterface(void)
+	__declspec(dllexport) AGE::Physics::PhysicsInterface *CreateInterface(void)
 	{
-		return new AGE::Physics::BulletPlugin;
+		return static_cast<AGE::Physics::PhysicsInterface *>(new AGE::Physics::BulletPlugin);
 	}
 
-	__declspec(dllexport) void DestroyInterface(AGE::Physics::PluginInterface *interface)
+	__declspec(dllexport) void DestroyInterface(AGE::Physics::PhysicsInterface *interface)
 	{
 		delete interface;
 	}

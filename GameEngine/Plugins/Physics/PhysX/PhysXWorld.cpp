@@ -7,8 +7,8 @@ namespace AGE
 {
 	namespace Physics
 	{
-		PhysXWorld::PhysXWorld(PhysXPlugin *plugin, const glm::vec3 &gravity, const std::string &worldName)
-			: WorldInterface(worldName), plugin(plugin)
+		PhysXWorld::PhysXWorld(PhysXPlugin *plugin, const glm::vec3 &gravity)
+			: WorldInterface(static_cast<PhysicsInterface *>(plugin))
 		{
 			physx::PxSceneDesc sceneDescription(plugin->getPhysics()->getTolerancesScale());
 			sceneDescription.broadPhaseType = physx::PxBroadPhaseType::eMBP;

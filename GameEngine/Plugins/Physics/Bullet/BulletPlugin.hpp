@@ -1,12 +1,12 @@
 #pragma once
 
-#include "PluginInterface.hpp"
+#include "PhysicsInterface.hpp"
 
 namespace AGE
 {
 	namespace Physics
 	{
-		class BulletPlugin final : public PluginInterface
+		class BulletPlugin final : public PhysicsInterface
 		{
 		public:
 			// Constructors
@@ -28,9 +28,9 @@ namespace AGE
 
 			void finalize(void) override final;
 
-			WorldInterface *createWorld(const glm::vec3 &gravity, const std::string &worldName) override final;
+			WorldInterface *createWorld(const glm::vec3 &gravity) override final;
 
-			void deleteWorld(WorldInterface *world) override final;
+			void destroyWorld(WorldInterface *world) override final;
 		};
 	}
 }

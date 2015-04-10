@@ -22,12 +22,12 @@ namespace AGE
 			// TO_DO
 		}
 
-		WorldInterface *BulletPlugin::createWorld(const glm::vec3 &gravity, const std::string &worldName)
+		WorldInterface *BulletPlugin::createWorld(const glm::vec3 &gravity)
 		{
-			return new BulletWorld(this, gravity, worldName);
+			return static_cast<WorldInterface *>(new BulletWorld(this, gravity));
 		}
 
-		void BulletPlugin::deleteWorld(WorldInterface *world)
+		void BulletPlugin::destroyWorld(WorldInterface *world)
 		{
 			delete static_cast<BulletWorld *>(world);
 		}

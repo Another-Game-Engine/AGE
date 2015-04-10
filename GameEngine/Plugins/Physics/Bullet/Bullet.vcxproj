@@ -161,8 +161,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\PluginInterface.hpp" />
-    <ClInclude Include="..\..\WorldInterface.hpp" />
     <ClInclude Include="BulletPlugin.hpp" />
     <ClInclude Include="BulletWorld.hpp" />
   </ItemGroup>

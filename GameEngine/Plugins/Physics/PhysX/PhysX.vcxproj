@@ -179,8 +179,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\PluginInterface.hpp" />
-    <ClInclude Include="..\..\WorldInterface.hpp" />
     <ClInclude Include="PhysXPlugin.hpp" />
     <ClInclude Include="PhysXWorld.hpp" />
   </ItemGroup>

@@ -411,7 +411,6 @@
     <ClInclude Include="Engine\Render\OpenGLTask\OpenGLState.hh" />
     <ClInclude Include="Engine\Systems\PhysicsSystem.hpp" />
     <ClInclude Include="Engine\Physics\EngineTypes.hpp" />
-    <ClInclude Include="Engine\Physics\PluginInterface.hpp" />
     <ClInclude Include="Engine\Physics\EngineTypeToPluginName.hpp" />
     <ClInclude Include="Engine\Physics\Utils\BtConversion.hpp" />
     <ClInclude Include="Engine\Physics\BulletCollisionManager.hpp" />
@@ -421,6 +420,7 @@
     <ClInclude Include="Engine\Physics\WorldInterface.hpp" />
     <ClInclude Include="Engine\Physics\Fallback\NullPlugin.hpp" />
     <ClInclude Include="Engine\Physics\Fallback\NullWorld.hpp" />
+    <ClInclude Include="Engine\Physics\PhysicsInterface.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

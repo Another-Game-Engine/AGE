@@ -2,6 +2,8 @@
 
 #include <Physics/WorldInterface.hpp>
 
+#include "NullPlugin.hpp"
+
 namespace AGE
 {
 	namespace Physics
@@ -12,7 +14,7 @@ namespace AGE
 			// Constructors
 			NullWorld(void) = delete;
 
-			NullWorld(const std::string &worldName);
+			NullWorld(NullPlugin *plugin);
 
 			NullWorld(const NullWorld &) = delete;
 

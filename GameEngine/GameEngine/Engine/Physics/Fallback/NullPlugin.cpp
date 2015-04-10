@@ -21,13 +21,12 @@ namespace AGE
 			return;
 		}
 
-		WorldInterface *NullPlugin::createWorld(const glm::vec3 &gravity, const std::string &worldName)
+		WorldInterface *NullPlugin::createWorld(const glm::vec3 &gravity)
 		{
-			static NullWorld world(worldName);
-			return static_cast<WorldInterface *>(&world);
+			return static_cast<WorldInterface *>(new NullWorld(this));
 		}
 
-		void NullPlugin::deleteWorld(WorldInterface *world)
+		void NullPlugin::destroyWorld(WorldInterface *world)
 		{
 			delete static_cast<NullWorld *>(world);
 		}

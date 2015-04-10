@@ -32,11 +32,11 @@ namespace AGE
 				return static_cast<T*>(getComponent(id));
 			if (components.size() <= id)
 				components.resize(id + 1, nullptr);
-			T *ptr = scene->createComponent<T>(entity, args...);
+			T *ptr = scene->createComponent<T>(entity);
 			components[id] = ptr;
 			scene->informFiltersComponentAddition(id, *this);
 			ptr->reset();
-			ptr->init(args...);
+			ptr->init(std::forward<Args>(args)...);
 			return ptr;
 		}
 

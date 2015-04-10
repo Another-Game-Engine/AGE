@@ -47,7 +47,8 @@ namespace AGE
 				// Log Error
 				return false;
 			}
-			if (!PxInitExtensions(*physics))
+			extensions = PxInitExtensions(*physics);
+			if (!extensions)
 			{
 				// Log Error
 				return false;
@@ -57,6 +58,11 @@ namespace AGE
 
 		void PhysXPlugin::finalize(void)
 		{
+			if (extensions)
+			{
+				PxCloseExtensions();
+				extensions = false;
+			}
 			if (physics != nullptr)
 			{
 				physics->release();
@@ -74,12 +80,12 @@ namespace AGE
 			}
 		}
 
-		WorldInterface *PhysXPlugin::createWorld(const glm::vec3 &gravity, const std::string &worldName)
+		WorldInterface *PhysXPlugin::createWorld(const glm::vec3 &gravity)
 		{
-			return new PhysXWorld(this, gravity, worldName);
+			return static_cast<WorldInterface *>(new PhysXWorld(this, gravity));
 		}
 
-		void PhysXPlugin::deleteWorld(WorldInterface *world)
+		void PhysXPlugin::destroyWorld(WorldInterface *world)
 		{
 			delete static_cast<PhysXWorld *>(world);
 		}

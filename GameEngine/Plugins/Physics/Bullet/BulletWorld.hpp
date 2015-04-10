@@ -1,5 +1,6 @@
 #pragma once
 
+#include "WorldInterface.hpp"
 #include "BulletPlugin.hpp"
 
 namespace AGE
@@ -12,7 +13,7 @@ namespace AGE
 			// Constructors
 			BulletWorld(void) = delete;
 
-			BulletWorld(BulletPlugin *plugin, const glm::vec3 &gravity, const std::string &worldName);
+			BulletWorld(BulletPlugin *plugin, const glm::vec3 &gravity);
 
 			BulletWorld(const BulletWorld &) = delete;
 
@@ -23,9 +24,6 @@ namespace AGE
 			virtual ~BulletWorld(void) = default;
 
 		private:
-			// Attributes
-			BulletPlugin *plugin = nullptr;
-
 			// Inherited Methods
 			void setGravity(const glm::vec3 &gravity) override final;
 

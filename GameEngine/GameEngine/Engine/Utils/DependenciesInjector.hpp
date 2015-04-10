@@ -1,11 +1,12 @@
 #pragma once
 
 #include <cassert>
-#include <Utils/Dependency.hpp>
 #include <memory>
-#include <Utils/Containers/Vector.hpp>
 #include <mutex>
-#include <Utils/SpinLock.hpp>
+
+#include "Dependency.hpp"
+#include "Containers/Vector.hpp"
+#include "SpinLock.hpp"
 
 class DependenciesInjector
 {
