@@ -119,6 +119,11 @@ namespace AGE
 
 #ifdef OCCLUSION_CULLING
 
+		if (_programs[PROGRAM_OCCLUDER]->isCompiled() == false)
+		{
+			return;
+		}
+
 		_programs[PROGRAM_OCCLUDER]->use();
 		*_programs[PROGRAM_OCCLUDER]->get_resource<Mat4>("projection_matrix") = infos.projection;
 		*_programs[PROGRAM_OCCLUDER]->get_resource<Mat4>("view_matrix") = infos.view;
@@ -140,6 +145,11 @@ namespace AGE
 		_depth->bind();
 		glGenerateMipmap(GL_TEXTURE_2D);
 		_depth->unbind();
+
+		if (_programs[PROGRAM_BASIC]->isCompiled() == false)
+		{
+			return;
+		}
 
 		_programs[PROGRAM_BASIC]->use();
 		*_programs[PROGRAM_BASIC]->get_resource<Mat4>("projection_matrix") = infos.projection;
