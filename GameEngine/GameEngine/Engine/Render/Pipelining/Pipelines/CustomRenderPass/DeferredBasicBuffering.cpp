@@ -141,10 +141,10 @@ namespace AGE
 		}
 
 		// mipmap depth
-		//glActiveTextureARB(GL_TEXTURE0_ARB);
-		//_depth->bind();
-		//glGenerateMipmap(GL_TEXTURE_2D);
-		//_depth->unbind();
+		glActiveTextureARB(GL_TEXTURE0_ARB);
+		_depth->bind();
+		glGenerateMipmap(GL_TEXTURE_2D);
+		_depth->unbind();
 
 		if (_programs[PROGRAM_OCCLUDER]->isCompiled() == false)
 		{

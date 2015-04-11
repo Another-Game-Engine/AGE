@@ -12,15 +12,17 @@ uniform mat4 model_matrix;
 uniform sampler2D diffuse_map;
 uniform sampler2D normal_map;
 
-out vec3 inter_normal;
-out vec3 inter_tangent;
-out vec2 inter_texCoord;
+out VertexData {
+	vec3 inter_normal;
+	vec3 inter_tangent;
+	vec2 inter_texCoord;
+} VertexOut;
 
 void main()
 {
 	mat3 normal_matrix = transpose(inverse(mat3(model_matrix)));
-	inter_normal = normalize(normal_matrix * normal);
-	inter_texCoord = texCoord;
-	inter_tangent = normalize(normal_matrix * tangent);
+	VertexOut.inter_normal = normalize(normal_matrix * normal);
+	VertexOut.inter_texCoord = texCoord;
+	VertexOut.inter_tangent = normalize(normal_matrix * tangent);
 	gl_Position = projection_matrix * view_matrix * model_matrix * vec4(position, 1);
 }
