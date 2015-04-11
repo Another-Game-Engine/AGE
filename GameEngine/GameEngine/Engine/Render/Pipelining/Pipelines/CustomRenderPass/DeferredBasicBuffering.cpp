@@ -13,6 +13,9 @@
 #include <Render/ProgramResources/Types/Uniform/Mat4.hh>
 #include <Core/ConfigurationManager.hpp>
 #include <Core/Engine.hh>
+#include <Configuration.hpp>
+#include <Threads/RenderThread.hpp>
+#include <Threads/ThreadManager.hpp>
 
 #define DEFERRED_SHADING_BUFFERING_VERTEX "deferred_shading/deferred_shading_get_buffer.vp"
 #define DEFERRED_SHADING_BUFFERING_FRAG "deferred_shading/deferred_shading_get_buffer.fp"
@@ -31,7 +34,11 @@ namespace AGE
 												std::shared_ptr<Texture2D> specular,
 												std::shared_ptr<Texture2D> depth) :
 		FrameBufferRender(painterManager)
+		, _depth(depth)
 	{
+		AGE_ASSERT(depth != nullptr);
+
+
 		// We dont want to take the skinned or transparent meshes
 		_forbidden[AGE_SKINNED] = true;
 		_forbidden[AGE_SEMI_TRANSPARENT] = true;
@@ -76,6 +83,41 @@ namespace AGE
 		*_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("projection_matrix") = infos.projection;
 		*_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("view_matrix") = infos.view;
 
+#ifdef OCCLUSION_CULLING
+		for (auto &meshPaint : pipeline.keys)
+		{
+			auto painter = _painterManager->get_painter(Key<Painter>::createKey(meshPaint.first));
+			for (auto &mode : meshPaint.second.drawables)
+			{
+				if (mode.renderMode.at(AGE_OCCLUDER) == true)
+				{
+					painter->draw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], mode.properties, mode.vertices);
+				}
+			}
+		}
+
+		// mipmap depth
+		glActiveTextureARB(GL_TEXTURE0_ARB);
+		_depth->bind();
+		glGenerateMipmap(GL_TEXTURE_2D);
+		_depth->unbind();
+
+		_programs[PROGRAM_BUFFERING]->use();
+		*_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("projection_matrix") = infos.projection;
+		*_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("view_matrix") = infos.view;
+
+		for (auto &meshPaint : pipeline.keys)
+		{
+			auto painter = _painterManager->get_painter(Key<Painter>::createKey(meshPaint.first));
+			for (auto &mode : meshPaint.second.drawables)
+			{
+				if (mode.renderMode.at(AGE_OCCLUDER) == false)
+				{
+					painter->draw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], mode.properties, mode.vertices);
+				}
+			}
+		}
+#else
 		for (auto &meshPaint : pipeline.keys)
 		{
 			auto painter = _painterManager->get_painter(Key<Painter>::createKey(meshPaint.first));
@@ -87,6 +129,8 @@ namespace AGE
 				}
 			}
 		}
+#endif
+
 	}
 
 }
