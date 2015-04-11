@@ -81,7 +81,6 @@ namespace AGE
 		setInstance<AGE::BulletDynamicManager, AGE::BulletCollisionManager>()->init();
 		addSystem<AGE::DebugSystem>(0);
 		addSystem<AGE::PhysicsSystem>(0, Physics::EngineTypes::PhysX);
-		deleteSystem<AGE::PhysicsSystem>();
 		
 		// TODO: Remove following line
 		addSystem<AGE::BulletDynamicSystem>(0);

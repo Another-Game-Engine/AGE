@@ -175,7 +175,7 @@ namespace AGE
 		}
 		else
 		{
-			AGE_BREAK("Assets file path is missing. Add it in configuration.json");
+			AGE_BREAK(); // "Assets file path is missing. Add it in configuration.json"
 		}
 #endif //USE_DEFAULT_ENGINE_CONFIGURATION
 
