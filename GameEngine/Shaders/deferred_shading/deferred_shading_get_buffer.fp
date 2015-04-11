@@ -28,7 +28,7 @@ vec3 perturb_normal()
 
 void main(void)
 {
-	diffuse_frag = texture(diffuse_map, vec2(0.01, 0.04)); // diffuse_color * diffuse_ratio
+	diffuse_frag = texture(diffuse_map, inter_texCoord); // diffuse_color * diffuse_ratio
 	vec3 normal = perturb_normal() * 0.5f + 0.5f;
 	normal_frag = vec4(normal, 1.0f);
 	// To replace with the real specular of the object
