@@ -41,6 +41,8 @@ namespace AGE
 	{
 		_mesh = nullptr;
 		_material = nullptr;
+		_renderMode.reset();
+
 		if (!_key.invalid())
 		{
 			entity.getLink().unregisterOctreeObject(_key);
@@ -90,6 +92,7 @@ namespace AGE
 
 		_material = o->_material;
 		_mesh = o->_mesh;
+		_renderMode = o->_renderMode;
 #ifdef EDITOR_ENABLED
 		selectedMeshIndex = o->selectedMeshIndex;
 		selectedMeshName = o->selectedMeshName;
