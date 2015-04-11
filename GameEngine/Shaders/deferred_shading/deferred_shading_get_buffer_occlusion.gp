@@ -16,7 +16,7 @@ out VertexData {
 } VertexOut;
 
 flat in int Visible[1];
-
+	
 void main()
 {
 	if ( Visible[0] == 1 )
@@ -32,5 +32,6 @@ void main()
 			// done with the vertex
 			EmitVertex();
 		}
+		EndPrimitive();
 	}
 }

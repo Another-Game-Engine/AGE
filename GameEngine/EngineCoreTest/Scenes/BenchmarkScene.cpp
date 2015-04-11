@@ -161,44 +161,44 @@ namespace AGE
 
 		if (_chunkCounter >= _maxChunk)
 		{
-			for (auto i = 0; i < 10; ++i)
-			{
-				auto e = createEntity();
-				e.addComponent<Lifetime>(5.0f);
+			//for (auto i = 0; i < 10; ++i)
+			//{
+			//	auto e = createEntity();
+			//	e.addComponent<Lifetime>(5.0f);
 
-				auto &link = e.getLink();
-				link.setPosition(glm::vec3((rand() % 100) - 50, (rand() % 50) - 5, (rand() % 100) - 50));
-				link.setOrientation(glm::quat(glm::vec3(rand() % 360, rand() % 360, rand() % 360)));
-				link.setScale(glm::vec3(1.0f));
+			//	auto &link = e.getLink();
+			//	link.setPosition(glm::vec3((rand() % 100) - 50, (rand() % 50) - 5, (rand() % 100) - 50));
+			//	link.setOrientation(glm::quat(glm::vec3(rand() % 360, rand() % 360, rand() % 360)));
+			//	link.setScale(glm::vec3(1.0f));
 
 
-				MeshRenderer *mesh;
-				if (i % 4 == 0)
-				{
-					mesh = e.addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage"), getInstance<AGE::AssetsManager>()->getMaterial(OldFile("ball/ball.mage")));
-					link.setScale(glm::vec3(0.5f));
-				}
-				else
-				{
-					mesh = e.addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("cube/cube.sage"), getInstance<AGE::AssetsManager>()->getMaterial(OldFile("cube/cube.mage")));
-				}
+			//	MeshRenderer *mesh;
+			//	if (i % 4 == 0)
+			//	{
+			//		mesh = e.addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage"), getInstance<AGE::AssetsManager>()->getMaterial(OldFile("ball/ball.mage")));
+			//		link.setScale(glm::vec3(0.5f));
+			//	}
+			//	else
+			//	{
+			//		mesh = e.addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("cube/cube.sage"), getInstance<AGE::AssetsManager>()->getMaterial(OldFile("cube/cube.mage")));
+			//	}
 
-				if (i % 13 == 0)
-				{
-					e.addComponent<PointLightComponent>()->set(glm::vec3((float)(rand() % 1000) / 1000.0f, (float)(rand() % 1000) / 1000.0f, (float)(rand() % 1000) / 1000.0f), glm::vec3(1.f, 0.1f, 0.005f));
-				}
+			//	if (i % 13 == 0)
+			//	{
+			//		e.addComponent<PointLightComponent>()->set(glm::vec3((float)(rand() % 1000) / 1000.0f, (float)(rand() % 1000) / 1000.0f, (float)(rand() % 1000) / 1000.0f), glm::vec3(1.f, 0.1f, 0.005f));
+			//	}
 
-				mesh->enableRenderMode(RenderModes::AGE_OPAQUE);
+			//	mesh->enableRenderMode(RenderModes::AGE_OPAQUE);
 
-				auto rigidBody = e.addComponent<RigidBody>(1.0f);
-				if (i % 4 == 0)
-					rigidBody->setCollisionShape(RigidBody::SPHERE);
-				else
-					rigidBody->setCollisionShape(RigidBody::BOX);
-				rigidBody->getBody().setFriction(0.5f);
-				rigidBody->getBody().setRestitution(0.5f);
-				rigidBody->getBody().applyTorque(btVector3(float(rand() % 1000) / 300.0f, float(rand() % 1000) / 300.0f, float(rand() % 1000) / 300.0f));
-			}
+			//	auto rigidBody = e.addComponent<RigidBody>(1.0f);
+			//	if (i % 4 == 0)
+			//		rigidBody->setCollisionShape(RigidBody::SPHERE);
+			//	else
+			//		rigidBody->setCollisionShape(RigidBody::BOX);
+			//	rigidBody->getBody().setFriction(0.5f);
+			//	rigidBody->getBody().setRestitution(0.5f);
+			//	rigidBody->getBody().applyTorque(btVector3(float(rand() % 1000) / 300.0f, float(rand() % 1000) / 300.0f, float(rand() % 1000) / 300.0f));
+			//}
 			_chunkCounter = 0;
 		}
 

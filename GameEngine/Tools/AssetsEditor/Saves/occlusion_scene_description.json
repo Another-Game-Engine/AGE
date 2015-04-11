@@ -1,5 +1,5 @@
 {
-    "Number_of_serialized_entities": 32,
+    "Number_of_serialized_entities": 34,
     "Component type map": [
         {
             "key": 0,
@@ -128,7 +128,7 @@
             }
         }
     },
-    "Entity_12": {
+    "Entity_3": {
         "link": {
             "Position": {
                 "value0": 2,
@@ -166,7 +166,7 @@
             "name": "flashline"
         }
     },
-    "Entity_11": {
+    "Entity_4": {
         "link": {
             "Position": {
                 "value0": 0,
@@ -211,7 +211,7 @@
             }
         }
     },
-    "Entity_10": {
+    "Entity_5": {
         "link": {
             "Position": {
                 "value0": 0,
@@ -256,7 +256,7 @@
             }
         }
     },
-    "Entity_9": {
+    "Entity_6": {
         "link": {
             "Position": {
                 "value0": 0,
@@ -301,7 +301,7 @@
             }
         }
     },
-    "Entity_8": {
+    "Entity_7": {
         "link": {
             "Position": {
                 "value0": 0,
@@ -346,7 +346,7 @@
             }
         }
     },
-    "Entity_7": {
+    "Entity_8": {
         "link": {
             "Position": {
                 "value0": 0,
@@ -391,7 +391,7 @@
             }
         }
     },
-    "Entity_6": {
+    "Entity_9": {
         "link": {
             "Position": {
                 "value0": 0,
@@ -436,7 +436,7 @@
             }
         }
     },
-    "Entity_5": {
+    "Entity_10": {
         "link": {
             "Position": {
                 "value0": 0,
@@ -481,7 +481,7 @@
             }
         }
     },
-    "Entity_4": {
+    "Entity_11": {
         "link": {
             "Position": {
                 "value0": 0,
@@ -526,7 +526,7 @@
             }
         }
     },
-    "Entity_3": {
+    "Entity_12": {
         "link": {
             "Position": {
                 "value0": 0,
@@ -1454,6 +1454,89 @@
             "value1": {
                 "type": 0,
                 "data": 0
+            }
+        }
+    },
+    "Entity_33": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 10,
+                "value2": 0
+            },
+            "Scale": {
+                "value0": 1,
+                "value1": 1,
+                "value2": 1
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            0,
+            3
+        ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "light1"
+        },
+        "AGE::PointLightComponent": {
+            "cereal_class_version": 0,
+            "color": {
+                "value0": 1,
+                "value1": 0,
+                "value2": 1
+            },
+            "range": {
+                "value0": 0.038000002503395081,
+                "value1": 0.013000000268220901,
+                "value2": 0.02500000037252903
+            }
+        }
+    },
+    "Entity_34": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 8,
+                "value2": -10
+            },
+            "Scale": {
+                "value0": 1,
+                "value1": 1,
+                "value2": 1
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            0,
+            3
+        ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "light2"
+        },
+        "AGE::PointLightComponent": {
+            "color": {
+                "value0": 0,
+                "value1": 1,
+                "value2": 1
+            },
+            "range": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0.013000000268220901
             }
         }
     }

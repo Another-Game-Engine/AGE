@@ -8,14 +8,11 @@ layout (location = 3) in vec3 tangent;
 uniform mat4 projection_matrix;
 uniform mat4 view_matrix;
 uniform mat4 model_matrix;
-
-uniform sampler2D diffuse_map;
-uniform sampler2D normal_map;
+uniform vec3 AABB;
 
 out vec3 inter_normal;
 out vec3 inter_tangent;
 out vec2 inter_texCoord;
-
 
 flat out int Visible;
 
