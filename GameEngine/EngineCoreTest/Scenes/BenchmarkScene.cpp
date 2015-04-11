@@ -113,6 +113,7 @@ namespace AGE
 			, EngineCoreTestConfiguration::getScenesName().data()
 			, EngineCoreTestConfiguration::getScenesName().size()))
 		{
+			EngineCoreTestConfiguration::saveConfigurations();
 			clearAllEntities();
 
 			auto camera = createEntity();
