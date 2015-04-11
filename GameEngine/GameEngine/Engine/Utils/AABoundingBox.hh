@@ -40,6 +40,8 @@ namespace AGE
 		bool checkPointIn(glm::vec3 point) const;
 		glm::i8vec3 AABoundingBox::getDirection(glm::vec3 point) const;
 
+		glm::vec3 getSize() const;
+
 		template <class Archive>
 		void serialize(Archive &ar)
 		{

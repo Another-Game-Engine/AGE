@@ -23,6 +23,12 @@
 #include <Render/Properties/IProperty.hh>
 #include <Render/Properties/Transformation.hh>
 
+#ifdef OCCLUSION_CULLING
+
+#include <Render/Properties/AABB.hpp>
+
+#endif
+
 namespace AGE
 {
 	RenderScene::RenderScene(PrepareRenderThread *prepareThread, Engine *engine, AScene *scene)
@@ -291,6 +297,28 @@ namespace AGE
 			Drawable &drawable = _drawables.get(e);
 
 			drawable.renderMode = msg.renderModes;
+
+#ifdef OCCLUSION_CULLING
+			if (msg.renderModes.at(AGE_OCCLUDER))
+			{
+				auto &propertiesKey = drawable.mesh.properties;
+				auto &properties = _properties.get(propertiesKey.getId());
+
+				// we search for the property key of the AABB
+				auto &aabbKeyIt = _boundingBoxProperties.find(propertiesKey.getId());
+				
+				// if the property does not exists
+				if (aabbKeyIt == std::end(_boundingBoxProperties))
+				{
+					// we create it
+					auto aabbKey = _createAndAttachProperty<AABB>(propertiesKey, drawable.mesh.boundingBox.getSize());
+					_boundingBoxProperties.insert(std::make_pair(propertiesKey.getId(), aabbKey));
+					continue;
+				}
+				auto aabbKey = properties.get_property<AABB>(aabbKeyIt->second);
+			}
+#endif
+
 		}
 	}
 
@@ -488,6 +516,13 @@ namespace AGE
 
 	void RenderScene::_removeProperties(const Key<Properties> &key)
 	{
+#ifdef OCCLUSION_CULLING
+		auto &aabbKeyIt = _boundingBoxProperties.find(key.getId());
+		if (aabbKeyIt != std::end(_boundingBoxProperties))
+		{
+			_boundingBoxProperties.erase(aabbKeyIt);
+		}
+#endif
 		_properties.dealloc(key.getId());
 	}
 

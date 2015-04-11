@@ -140,4 +140,13 @@ namespace AGE
 							(dif.z >= 0) ? 1 : -1));
 	}
 
+	glm::vec3 AABoundingBox::getSize() const
+	{
+		auto min = glm::vec4(minPoint, 1);
+		auto max = glm::vec4(maxPoint, 1);
+		
+		return glm::vec3(glm::distance(min, max));
+	}
+
+
 }

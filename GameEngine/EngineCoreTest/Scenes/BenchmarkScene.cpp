@@ -188,6 +188,8 @@ namespace AGE
 				}
 
 				mesh->enableRenderMode(RenderModes::AGE_OPAQUE);
+				mesh->enableRenderMode(RenderModes::AGE_OCCLUDER);
+
 
 				auto rigidBody = e.addComponent<RigidBody>(1.0f);
 				if (i % 4 == 0)
