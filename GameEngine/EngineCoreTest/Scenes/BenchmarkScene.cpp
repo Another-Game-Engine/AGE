@@ -79,7 +79,7 @@ namespace AGE
 
 		setInstance<AGE::BulletDynamicManager, AGE::BulletCollisionManager>()->init();
 		addSystem<AGE::DebugSystem>(0);
-		addSystem<AGE::BulletDynamicSystem>(0);
+		//addSystem<AGE::BulletDynamicSystem>(0);
 		addSystem<AGE::LifetimeSystem>(2);
 		addSystem<AGE::FreeFlyCamera>(0);
 		addSystem<AGE::RotationSystem>(0);
@@ -189,8 +189,6 @@ namespace AGE
 				}
 
 				mesh->enableRenderMode(RenderModes::AGE_OPAQUE);
-				mesh->enableRenderMode(RenderModes::AGE_OCCLUDER);
-
 
 				auto rigidBody = e.addComponent<RigidBody>(1.0f);
 				if (i % 4 == 0)

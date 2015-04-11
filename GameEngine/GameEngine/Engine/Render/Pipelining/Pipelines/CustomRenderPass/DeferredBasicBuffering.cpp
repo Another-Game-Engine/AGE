@@ -119,33 +119,6 @@ namespace AGE
 
 #ifdef OCCLUSION_CULLING
 
-		if (_programs[PROGRAM_OCCLUDER]->isCompiled() == false)
-		{
-			return;
-		}
-
-		_programs[PROGRAM_OCCLUDER]->use();
-		*_programs[PROGRAM_OCCLUDER]->get_resource<Mat4>("projection_matrix") = infos.projection;
-		*_programs[PROGRAM_OCCLUDER]->get_resource<Mat4>("view_matrix") = infos.view;
-
-		for (auto &meshPaint : pipeline.keys)
-		{
-			auto painter = _painterManager->get_painter(Key<Painter>::createKey(meshPaint.first));
-			for (auto &mode : meshPaint.second.drawables)
-			{
-				if (mode.renderMode.at(AGE_OCCLUDER) == true)
-				{
-					painter->draw(GL_TRIANGLES, _programs[PROGRAM_OCCLUDER], mode.properties, mode.vertices);
-				}
-			}
-		}
-
-		// mipmap depth
-		glActiveTextureARB(GL_TEXTURE0_ARB);
-		_depth->bind();
-		glGenerateMipmap(GL_TEXTURE_2D);
-		_depth->unbind();
-
 		if (_programs[PROGRAM_BASIC]->isCompiled() == false)
 		{
 			return;
@@ -160,9 +133,36 @@ namespace AGE
 			auto painter = _painterManager->get_painter(Key<Painter>::createKey(meshPaint.first));
 			for (auto &mode : meshPaint.second.drawables)
 			{
-				if (mode.renderMode.at(AGE_OCCLUDER) == false)
+				if (mode.renderMode.at(AGE_OCCLUDER) == true)
 				{
 					painter->draw(GL_TRIANGLES, _programs[PROGRAM_BASIC], mode.properties, mode.vertices);
+				}
+			}
+		}
+
+		// mipmap depth
+		glActiveTextureARB(GL_TEXTURE0_ARB);
+		_depth->bind();
+		glGenerateMipmap(GL_TEXTURE_2D);
+		_depth->unbind();
+
+		if (_programs[PROGRAM_OCCLUDER]->isCompiled() == false)
+		{
+			return;
+		}
+
+		_programs[PROGRAM_OCCLUDER]->use();
+		*_programs[PROGRAM_OCCLUDER]->get_resource<Mat4>("projection_matrix") = infos.projection;
+		*_programs[PROGRAM_OCCLUDER]->get_resource<Mat4>("view_matrix") = infos.view;
+
+		for (auto &meshPaint : pipeline.keys)
+		{
+			auto painter = _painterManager->get_painter(Key<Painter>::createKey(meshPaint.first));
+			for (auto &mode : meshPaint.second.drawables)
+			{
+				if (mode.renderMode.at(AGE_OCCLUDER) == false)
+				{
+					painter->draw(GL_TRIANGLES, _programs[PROGRAM_OCCLUDER], mode.properties, mode.vertices);
 				}
 			}
 		}
