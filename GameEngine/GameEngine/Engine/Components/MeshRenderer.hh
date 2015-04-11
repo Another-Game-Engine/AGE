@@ -45,6 +45,8 @@ namespace AGE
 		void enableMode(RenderModes mode);
 		void disableMode(RenderModes mode);
 
+		virtual void _copyFrom(const ComponentBase *destination);
+
 #ifdef EDITOR_ENABLED
 		std::vector<const char*> *meshFileList = nullptr;
 		std::vector<const char*> *meshPathList = nullptr;
@@ -58,12 +60,13 @@ namespace AGE
 		std::string selectedMaterialName = "";
 		std::string selectedMaterialPath = "";
 
-		virtual void editorCreate(AScene *scene);
-		virtual void editorDelete(AScene *scene);
-		virtual void editorUpdate(AScene *scene);
+		virtual void editorCreate();
+		virtual void editorDelete();
+		virtual bool editorUpdate();
 #endif
 
 		virtual void postUnserialization();
+		MeshRenderer &operator=(MeshRenderer const &) = delete;
 
 	private:
 		friend class cereal::access;
@@ -87,7 +90,6 @@ namespace AGE
 
 		void _updateGeometry();
 		MeshRenderer(MeshRenderer const &) = delete;
-		MeshRenderer &operator=(MeshRenderer const &) = delete;
 	};
 
 	template <typename Archive>

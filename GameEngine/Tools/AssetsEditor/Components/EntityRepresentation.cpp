@@ -1,6 +1,6 @@
 #include "EntityRepresentation.hpp"
 #include <Core/AScene.hh>
-
+#include <Managers/ArchetypesEditorManager.hpp>
 
 namespace AGE
 {
@@ -15,6 +15,23 @@ namespace AGE
 		EntityRepresentation::~EntityRepresentation()
 		{
 
+		}
+
+		void EntityRepresentation::_copyFrom(const ComponentBase *model)
+		{
+			auto o = static_cast<const EntityRepresentation*>(model);
+			exposedInEditor = o->exposedInEditor;
+			editorOnly = o->editorOnly;
+			auto copyName = std::string(o->name);
+			copyName += "-Copy";
+			auto len = copyName.size();
+			if (len >= ENTITY_NAME_LENGTH)
+				len = ENTITY_NAME_LENGTH;
+			memcpy(name, copyName.c_str(), len);
+			auto &link = entity.getLink();
+			position = link.getPosition();
+			rotation = glm::eulerAngles(link.getOrientation());
+			scale = link.getScale();
 		}
 
 		void EntityRepresentation::init(const char *_name, const std::string &layerName /*= ""*/)
@@ -33,6 +50,10 @@ namespace AGE
 
 		void EntityRepresentation::reset()
 		{
+			if (_archetypeLinked != nullptr)
+			{
+				_archetypeLinked->entities.erase(entity);
+			}
 			memset(name, 0, ENTITY_NAME_LENGTH);
 		}
 

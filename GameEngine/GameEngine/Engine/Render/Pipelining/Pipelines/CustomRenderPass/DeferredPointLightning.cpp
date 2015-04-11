@@ -12,12 +12,14 @@
 #include <Render/ProgramResources/Types/Uniform/Vec3.hh>
 #include <Threads/RenderThread.hpp>
 #include <Threads/ThreadManager.hpp>
+#include <Core/ConfigurationManager.hpp>
+#include <Core/Engine.hh>
 
-#define DEFERRED_SHADING_STENCIL_VERTEX "../../Shaders/deferred_shading/basic_3d.vp"
-#define DEFERRED_SHADING_STENCIL_FRAG "../../Shaders/deferred_shading/basic_3d.fp"
+#define DEFERRED_SHADING_STENCIL_VERTEX "deferred_shading/basic_3d.vp"
+#define DEFERRED_SHADING_STENCIL_FRAG "deferred_shading/basic_3d.fp"
 
-#define DEFERRED_SHADING_POINT_LIGHT_VERTEX "../../Shaders/deferred_shading/deferred_shading_point_light.vp"
-#define DEFERRED_SHADING_POINT_LIGHT_FRAG "../../Shaders/deferred_shading/deferred_shading_point_light.fp"
+#define DEFERRED_SHADING_POINT_LIGHT_VERTEX "deferred_shading/deferred_shading_point_light.vp"
+#define DEFERRED_SHADING_POINT_LIGHT_FRAG "deferred_shading/deferred_shading_point_light.fp"
 
 namespace AGE
 {
@@ -42,16 +44,29 @@ namespace AGE
 
 		_programs.resize(PROGRAM_NBR);
 
+		auto confManager = GetEngine()->getInstance<ConfigurationManager>();
+
+		auto shaderPath = confManager->getConfiguration<std::string>("ShadersPath");
+
+		// you have to set shader directory in configuration path
+		AGE_ASSERT(shaderPath != nullptr);
+
+		auto vertexShaderPath = shaderPath->getValue() + DEFERRED_SHADING_STENCIL_VERTEX;
+		auto fragmentShaderPath = shaderPath->getValue() + DEFERRED_SHADING_STENCIL_FRAG;
+
 		_programs[PROGRAM_STENCIL] = std::make_shared<Program>(Program(std::string("basic_3d_render"),
 		{
-			std::make_shared<UnitProg>(DEFERRED_SHADING_STENCIL_VERTEX, GL_VERTEX_SHADER),
-			std::make_shared<UnitProg>(DEFERRED_SHADING_STENCIL_FRAG, GL_FRAGMENT_SHADER)
+			std::make_shared<UnitProg>(vertexShaderPath, GL_VERTEX_SHADER),
+			std::make_shared<UnitProg>(fragmentShaderPath, GL_FRAGMENT_SHADER)
 		}));
+
+		vertexShaderPath = shaderPath->getValue() + DEFERRED_SHADING_POINT_LIGHT_VERTEX;
+		fragmentShaderPath = shaderPath->getValue() + DEFERRED_SHADING_POINT_LIGHT_FRAG;
 
 		_programs[PROGRAM_LIGHTNING] = std::make_shared<Program>(Program(std::string("program_point_light"),
 		{
-			std::make_shared<UnitProg>(DEFERRED_SHADING_POINT_LIGHT_VERTEX, GL_VERTEX_SHADER),
-			std::make_shared<UnitProg>(DEFERRED_SHADING_POINT_LIGHT_FRAG, GL_FRAGMENT_SHADER)
+			std::make_shared<UnitProg>(vertexShaderPath, GL_VERTEX_SHADER),
+			std::make_shared<UnitProg>(fragmentShaderPath, GL_FRAGMENT_SHADER)
 		}));
 
 		// We get the sphere geometry
@@ -76,6 +91,7 @@ namespace AGE
 		*_programs[PROGRAM_STENCIL]->get_resource<Mat4>("view_matrix") = infos.view;
 		// Disable blending to clear the color buffer
 		OpenGLState::glDisable(GL_BLEND);
+		OpenGLState::glEnable(GL_CULL_FACE);
 		// clear the light accumulation to zero
 		OpenGLState::glClearColor(glm::vec4(0));
 		glClear(GL_COLOR_BUFFER_BIT);

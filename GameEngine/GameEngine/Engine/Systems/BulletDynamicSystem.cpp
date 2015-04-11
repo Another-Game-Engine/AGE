@@ -13,7 +13,7 @@ namespace AGE
 	}
 
 	void BulletDynamicSystem::updateBegin(float time)
-	{
+	{		
 		auto scene = _scene;
 		for (auto e : _filter.getCollection())
 		{
@@ -28,28 +28,12 @@ namespace AGE
 			}
 
 		}
+		if (time == 0.0f)
+		{
+			return;
+		}
 		_manager->getWorld()->stepSimulation(static_cast<btScalar>(time), 10);
 		registerContactInformations();
-		// Delete the following block (test purpose)
-		/*for (auto e : _filter.getCollection())
-		{
-			const RigidBody *rigidBody = e.getComponent<RigidBody>();
-			const RigidBody::ContactInformationsType &contactInformations = rigidBody->getContactInformations();
-			for (const RigidBody::ContactInformationsType::value_type &contactInformationPair : contactInformations)
-			{
-				const Entity otherEntity = contactInformationPair.first;
-				const RigidBody::ContactInformationList &contactInformationWithOtherEntity = contactInformationPair.second;
-				for (const ContactInformation &contactInformation : contactInformationWithOtherEntity)
-				{
-					const btVector3 &contactNormal = contactInformation.getContactNormal();
-					const btVector3 &contactPoint = contactInformation.getContactPoint();
-					std::cout << "Entity " << e.getId() << " collided with entity " << otherEntity.getId()
-						<< " at position (" << contactPoint.x() << ", " << contactPoint.y() << ", " << contactPoint.z() << ") "
-						<< " with a normal of (" << contactNormal.x() << ", " << contactNormal.y() << ", " << contactNormal.z() << ")." << std::endl;
-				}
-			}
-		}*/
-		// End of test block
 	}
 
 	void BulletDynamicSystem::registerContactInformations(void) const

@@ -28,7 +28,7 @@ namespace AGE
 		EntityFilter _filter;
 
 		// Inherited Methods
-		virtual void updateBegin(float time) override final;
+		void updateBegin(float time) override final;
 
 		// Methods
 		void registerContactInformations(void) const;

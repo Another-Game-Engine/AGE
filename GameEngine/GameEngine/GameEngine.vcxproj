@@ -128,7 +128,10 @@
     <ClCompile Include="Engine\Physics\Fallback\NullPlugin.cpp" />
     <ClCompile Include="Engine\Physics\Fallback\NullWorld.cpp" />
     <ClCompile Include="Engine\Physics\Utils\BtConversion.cpp" />
+    <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomPipeline\DebugDeferredShading.cpp" />
+    <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredDebugBuffering.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredMerging.cpp" />
+    <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredMergingDebug.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredPointLightning.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredBasicBuffering.cpp" />
     <ClCompile Include="Engine\Core\Inputs\ActionManager.cpp" />
@@ -297,7 +300,10 @@
     <ClInclude Include="Engine\Physics\PhysicsInterface.hpp" />
     <ClInclude Include="Engine\Physics\Utils\BtConversion.hpp" />
     <ClInclude Include="Engine\Physics\WorldInterface.hpp" />
+    <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomPipeline\DebugDeferredShading.hh" />
+    <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredDebugBuffering.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredMerging.hh" />
+    <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredMergingDebug.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredPointLightning.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredBasicBuffering.hh" />
     <ClInclude Include="Engine\Core\Inputs\ActionManager.hh" />
@@ -314,6 +320,7 @@
     <ClInclude Include="Engine\Entities\EntityData.hh" />
     <ClInclude Include="Engine\Render\GeometryManagement\SimpleGeometry.hh" />
     <ClInclude Include="Engine\Render\PipelineTypes.hpp" />
+    <ClInclude Include="Engine\Render\Pipelining\Pipelines\PipelineTools.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Render\RenderModes.hh" />
     <ClInclude Include="Engine\Render\ProgramResources\Types\Uniform\Vec3.hh" />
     <ClInclude Include="Engine\Render\Properties\Materials\Specular.hh" />
@@ -444,6 +451,7 @@
     <ClInclude Include="Engine\Utils\Architecture.hpp" />
     <ClInclude Include="Engine\Utils\BitOperations.hpp" />
     <ClInclude Include="Engine\Utils\BoundingInfos.hpp" />
+    <ClInclude Include="Engine\Utils\Debug.hpp" />
     <ClInclude Include="Engine\Utils\Serialization\btSerialization.hpp" />
     <ClInclude Include="Engine\Utils\StreamBuffer.hpp" />
     <ClInclude Include="Engine\Utils\BufferPool.hpp" />

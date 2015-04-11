@@ -1,15 +1,26 @@
 #include "OldFile.hpp"
 #include <algorithm>
 #include <fstream>
+#include <locale>
 
-OldFile::OldFile(const std::string &name /*= "unknownFile"*/) :
-fullPath_(name)
+OldFile::OldFile(const std::string &name /*= "unknownFile"*/)
 {
+	std::locale loc;
+	std::string tmp(name);
+	for (auto &e : tmp)
+	{
+		fullPath_ += std::tolower(e, loc);
+	}
 }
 
-OldFile::OldFile(const char *name) :
-fullPath_(name)
+OldFile::OldFile(const char *name)
 {
+	std::locale loc;
+	std::string tmp(name);
+	for (auto &e : tmp)
+	{
+		fullPath_ += std::tolower(e, loc);
+	}
 }
 
 bool OldFile::exists() const

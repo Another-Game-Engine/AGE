@@ -72,6 +72,7 @@ namespace AGE
 
 		bool haveComponent(ComponentType id) const;
 		void addComponentPtr(ComponentBase *cpt);
+		void copyComponent(ComponentBase *cpt);
 
 		template <typename T>
 		bool haveComponent() const
@@ -97,6 +98,11 @@ namespace AGE
 		inline ENTITY_FLAGS &setFlags()
 		{
 			return flags;
+		}
+
+		inline bool isValid() const
+		{
+			return id != MAX_ENTITY_NUMBER && ptr != nullptr;
 		}
 
 		const std::vector<ComponentBase*> &getComponentList() const;

@@ -21,6 +21,7 @@ namespace AGE
 		{
 			std::string _cookedAssetsDirectory = "../../Assets/Serialized/";
 			std::string _exportSceneFolder = "../../EngineCoreTest/DemoScenes/";
+			std::string _exportArchetypeFolder = "../../EngineCoreTest/Archetypes/";
 			int _selectedScene = 0;
 
 			// not serialized
@@ -33,9 +34,10 @@ namespace AGE
 			template <typename Archive>
 			void serialize(Archive &ar, std::uint32_t const version)
 			{
-				ar(cereal::make_nvp("Cooked assets directory", _cookedAssetsDirectory));
-				ar(cereal::make_nvp("Exported scenes directory", _exportSceneFolder));
-				ar(cereal::make_nvp("Selected scene index", _selectedScene));
+				//ar(cereal::make_nvp("Cooked assets directory", _cookedAssetsDirectory));
+				//ar(cereal::make_nvp("Exported scenes directory", _exportSceneFolder));
+				//ar(cereal::make_nvp("Selected scene index", _selectedScene));
+				//ar(cereal::make_nvp("Archetypes directory", _exportArchetypeFolder));
 			}
 		};
 
@@ -86,6 +88,10 @@ namespace AGE
 		{
 			return _getConfigurations()->_exportSceneFolder;
 		}
+		static const std::string &GetExportedArchetypeDirectory()
+		{
+			return _getConfigurations()->_exportArchetypeFolder;
+		}
 		static std::vector<const char*> getScenesName()
 		{
 			return _getConfigurations()->_scenesNames;
@@ -113,7 +119,6 @@ namespace AGE
 		static int &getSelectedSceneIndex()
 		{
 			auto &res = _getConfigurations()->_selectedScene;
-			_dirty = true;
 			return res;
 		}
 		static void RefreshScenesDirectoryListing()

@@ -20,6 +20,10 @@ namespace AGE
 		{
 		}
 
+		Render::InitRenderPipelines::InitRenderPipelines(Engine *_engine) : engine(_engine)
+		{
+		}
+
 	}
 
 }

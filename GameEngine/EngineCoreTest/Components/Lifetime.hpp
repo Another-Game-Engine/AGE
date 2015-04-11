@@ -8,6 +8,8 @@ namespace AGE
 	{
 		Lifetime();
 		virtual ~Lifetime(void);
+		Lifetime &operator=(const Lifetime &o) = delete;
+		virtual void _copyFrom(const ComponentBase *model);
 
 		void init(float t = 1.0f);
 

@@ -24,6 +24,12 @@ namespace AGE
 		virtual void reset(){};
 		virtual void postUnserialization(){}
 
+		void copyFrom(const ComponentBase *model)
+		{
+			_typeId = model->_typeId;
+			_copyFrom(model);
+		}
+
 		Entity entity;
 
 		inline ComponentType getType() const
@@ -33,9 +39,10 @@ namespace AGE
 		}
 
 #ifdef EDITOR_ENABLED
-		virtual void editorCreate(AScene *scene){}
-		virtual void editorDelete(AScene *scene){}
-		virtual void editorUpdate(AScene *scene){}
+		virtual void editorCreate(){}
+		virtual void editorDelete(){}
+		// return true if modified
+		virtual bool editorUpdate(){ return false; }
 		bool exposedInEditor = true;
 		bool deletableInEditor = true;
 		// if serialized in final export
@@ -43,6 +50,12 @@ namespace AGE
 #endif
 	protected:
 		static ComponentType _typeCounter;
+
+		// override this method to enable copy of the component
+		virtual void _copyFrom(const ComponentBase *model)
+		{
+			(void)(model);
+		}
 	private:
 		ComponentType _typeId;
 

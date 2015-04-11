@@ -4,6 +4,7 @@
 #include <Threads/PrepareRenderThread.hpp>
 #include <Threads/ThreadManager.hpp>
 #include <glm/glm.hpp>
+#include <AssetManagement/AssetManager.hh>
 
 #ifdef EDITOR_ENABLED
 #include <imgui\imgui.h>
@@ -14,7 +15,8 @@ namespace AGE
 {
 	PointLightComponent::PointLightComponent()
 		: _range(1)
-		, _color(1)
+		, _color(1),
+		_map(nullptr)
 	{
 	}
 
@@ -26,17 +28,18 @@ namespace AGE
 	PointLightComponent::PointLightComponent(PointLightComponent const &o)
 		: _key(o._key)
 		, _range(o._range)
-		, _color(o._color)
+		, _color(o._color),
+		_map(o._map)
 	{
-
+		postUnserialization();
 	}
 
-	PointLightComponent &PointLightComponent::operator=(PointLightComponent const &p)
+	void PointLightComponent::_copyFrom(const ComponentBase *model)
 	{
-		_key = p._key;
-		_range = p._range;
-		_color = p._color;
-		return (*this);
+		auto o = static_cast<const PointLightComponent*>(model);
+		_range = o->_range;
+		_color = o->_color;
+		postUnserialization();
 	}
 
 	void PointLightComponent::reset()
@@ -54,6 +57,7 @@ namespace AGE
 	{
 		_key = AGE::GetPrepareThread()->addPointLight();
 		entity.getLink().registerOctreeObject(_key);
+		_map = entity.getScene()->getInstance<AssetsManager>()->getPointLightTexture();
 		assert(!_key.invalid());
 	}
 
@@ -61,7 +65,7 @@ namespace AGE
 	{
 		_color = color;
 		_range = range;
-		AGE::GetPrepareThread()->setPointLight(color, range, _key);
+		AGE::GetPrepareThread()->setPointLight(color, range, _map, _key);
 		return (*this);
 	}
 
@@ -93,22 +97,26 @@ namespace AGE
 	}
 
 #ifdef EDITOR_ENABLED
-	void PointLightComponent::editorCreate(AScene *scene)
+	void PointLightComponent::editorCreate()
 	{}
 
-	void PointLightComponent::editorDelete(AScene *scene)
+	void PointLightComponent::editorDelete()
 	{}
 
-	void PointLightComponent::editorUpdate(AScene *scene)
+	bool PointLightComponent::editorUpdate()
 	{
+		bool modified = false;
 		if (ImGui::ColorEdit3("Color", getColorPtr()))
 		{
 			set(_color, _range);
+			modified = true;
 		}
 		if (ImGui::SliderFloat3("Range", glm::value_ptr(_range), 0.0f, 1.0f))
 		{
 			set(_color, _range);
+			modified = true;
 		}
+		return modified;
 	}
 #endif
 }

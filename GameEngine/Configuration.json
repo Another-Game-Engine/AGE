@@ -1,0 +1,8 @@
+{
+    "AssetsPath": {
+        "string": "../../Assets/Serialized/"
+    },
+    "ShadersPath": {
+        "string": "../../Shaders/"
+    }
+}

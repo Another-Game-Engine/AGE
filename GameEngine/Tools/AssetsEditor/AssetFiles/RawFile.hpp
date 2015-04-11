@@ -17,6 +17,9 @@ namespace AGE
 			virtual ~RawFile();
 			RawFile(const AE::Path &path, Folder *parent = nullptr);
 
+			virtual void cook() = 0;
+			virtual void selection() = 0;
+
 			bool _dirty;
 			std::shared_ptr<CookedFile> _cookedFile;
 			std::shared_ptr<AssetDataSet> dataSet;

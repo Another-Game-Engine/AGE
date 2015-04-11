@@ -3,6 +3,8 @@
 #include <Components/Component.hh>
 #include <Render/Key.hh>
 #include <Utils/Serialization/VectorSerialization.hpp>
+#include <Render/Textures/ITexture.hh>
+#include <memory>
 
 namespace gl { class GeometryManager; class Vertices; class Indices; }
 
@@ -14,7 +16,8 @@ namespace AGE
 		PointLightComponent();
 		virtual ~PointLightComponent();
 		PointLightComponent(PointLightComponent const &o);
-		PointLightComponent &operator=(PointLightComponent const &o);
+
+		virtual void _copyFrom(const ComponentBase *model);
 
 		virtual void reset();
 		void init();
@@ -29,15 +32,16 @@ namespace AGE
 		virtual void postUnserialization();
 
 #ifdef EDITOR_ENABLED
-		virtual void editorCreate(AScene *scene);
-		virtual void editorDelete(AScene *scene);
-		virtual void editorUpdate(AScene *scene);
+		virtual void editorCreate();
+		virtual void editorDelete();
+		virtual bool editorUpdate();
 #endif
 
 	private:
 		AGE::PrepareKey _key;
 		glm::vec3 _color;
 		glm::vec3 _range;
+		std::shared_ptr<ITexture> _map;
 
 #ifdef EDITOR_ENABLED
 #endif

@@ -3,23 +3,23 @@
     "Component type map": [
         {
             "key": 0,
-            "value": 5355615174208623061
+            "value": 9818697393957024739
         },
         {
             "key": 1,
-            "value": 1713135011246741269
+            "value": 5355615174208623061
         },
         {
             "key": 2,
-            "value": 573189261411184160
+            "value": 1713135011246741269
         },
         {
             "key": 3,
-            "value": 4665681159133520176
+            "value": 573189261411184160
         },
         {
             "key": 4,
-            "value": 9818697393957024739
+            "value": 4665681159133520176
         },
         {
             "key": 5,
@@ -60,7 +60,8 @@
         ],
         "flags": 0,
         "components_number": [
-            0,
+            1,
+            3,
             7
         ],
         "AGE::MeshRenderer": {
@@ -74,6 +75,19 @@
                         "value2": ""
                     }
                 }
+            }
+        },
+        "AGE::PointLightComponent": {
+            "cereal_class_version": 0,
+            "color": {
+                "value0": 1,
+                "value1": 1,
+                "value2": 0.36078432202339172
+            },
+            "range": {
+                "value0": 0.038000002503395081,
+                "value1": 0.02500000037252903,
+                "value2": 0.013000000268220901
             }
         },
         "AGE::RotationComponent": {
@@ -110,7 +124,7 @@
         ],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {
@@ -156,7 +170,7 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
+            1,
             7
         ],
         "AGE::MeshRenderer": {

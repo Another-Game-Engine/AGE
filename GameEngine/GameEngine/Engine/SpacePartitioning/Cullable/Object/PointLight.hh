@@ -4,6 +4,8 @@
 #include <SpacePartitioning/Cullable/CullableShape.hh>
 #include <glm/glm.hpp>
 #include <stdint.h>
+#include <Render/Textures/ITexture.hh>
+#include <memory>
 
 namespace AGE
 {
@@ -13,9 +15,9 @@ namespace AGE
 		// To remove when light will be in octree
 		uint32_t activePointLightIdx;
 
+		std::shared_ptr<ITexture> map;
 		glm::vec3 attenuation;
 		glm::vec3 color;
-
 		glm::mat4 sphereTransform;
 
 		PointLight();

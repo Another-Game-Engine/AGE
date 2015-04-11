@@ -58,7 +58,10 @@ namespace AGE
 	bool ConfigurationManager::loadFile()
 	{
 		if (!_saveFile.exists())
+		{
+			saveToFile();
 			return false;
+		}
 		auto content = _saveFile.getFileContent();
 
 		rapidjson::Document document;
@@ -67,11 +70,21 @@ namespace AGE
 		if (!document.IsObject())
 			return false;
 
-		for (auto &&e : _confs)
+		for (rapidjson::Value::ConstMemberIterator itr = document.MemberBegin();
+			itr != document.MemberEnd(); ++itr)
 		{
-			if (document.HasMember(e.first.c_str()))
+			auto name = itr->name.GetString();
+			if (_confs.find(name) != std::end(_confs))
 			{
-				e.second->load(document[e.first.c_str()], document);
+				_confs[name]->load(document[name], document);
+			}
+			else
+			{
+				if (itr->value.IsObject())
+				{
+					setConfiguration<std::string>(std::string(name), "");
+					_confs[name]->load(document[name], document);
+				}
 			}
 		}
 		return true;

@@ -115,9 +115,6 @@ namespace AGE
 		{
 			Singleton<Engine>::setInstance();
 			_engine = Singleton<Engine>::getInstance();
-			auto futur = GetRenderThread()->getQueue()->emplaceFutureTask<Tasks::Render::CreateRenderContext, bool>(_engine);
-			auto success = futur.get();
-			assert(success);
 		}
 		unique = false;
 		return _engine;
@@ -148,6 +145,7 @@ namespace AGE
 	void MainThread::setSceneAsActive(AScene *scene)
 	{
 		_activeScene = scene;
+		GetPrepareThread()->getQueue()->emplaceCommand<Commands::MainToPrepare::SetCurrentScene>(scene);
 	}
 
 }

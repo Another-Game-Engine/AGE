@@ -71,7 +71,6 @@ namespace AGE
 		const ContactInformationsType &getContactInformations(void) const;
 		virtual ~RigidBody(void);
 		RigidBody(RigidBody &&o) = delete;
-		RigidBody &operator=(RigidBody &&o) = delete;
 		//////
 		////
 		// Serialization
@@ -113,14 +112,17 @@ namespace AGE
 		std::string selectedShapePath = "";
 		bool simpleShapes = true;
 
-		virtual void editorCreate(AScene *scene);
-		virtual void editorDelete(AScene *scene);
-		virtual void editorUpdate(AScene *scene);
+		virtual void editorCreate();
+		virtual void editorDelete();
+		virtual bool editorUpdate();
 #endif
-
+	protected:
+		virtual void _copyFrom(const ComponentBase *model)
+		{
+			// !!! TODO TODO TODO
+		}
 	private:
-		RigidBody &operator=(RigidBody const &o);
-		RigidBody(RigidBody const &o);
+		RigidBody(RigidBody const &o) = delete;
 	};
 }
 

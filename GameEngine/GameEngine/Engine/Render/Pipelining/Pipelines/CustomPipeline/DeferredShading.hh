@@ -36,14 +36,4 @@ namespace AGE
 		std::shared_ptr<DeferredMerging> _deferredMerging;
 	};
 
-
-	template <typename OUTPUT, typename ...Params>
-	std::shared_ptr<OUTPUT> createRenderPassOutput(Params... params)
-	{
-		auto const &output = std::make_shared<OUTPUT>();
-		auto error = output->init(std::forward<Params>(params)...);
-		AGE_ASSERT(error != false && "Texture generation error.");
-		return output;
-	}
-
 }

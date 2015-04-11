@@ -34,13 +34,17 @@ namespace AGE
 				components.resize(id + 1, nullptr);
 			T *ptr = scene->createComponent<T>(entity);
 			components[id] = ptr;
-			scene->informFiltersComponentAddition(id, *this);
+			if (!outOfContext)
+			{
+				scene->informFiltersComponentAddition(id, *this);
+			}
 			ptr->reset();
 			ptr->init(std::forward<Args>(args)...);
 			return ptr;
 		}
 
 		void addComponentPtr(ComponentBase *cpt);
+		void copyComponent(ComponentBase *cpt);
 		void removeComponent(ComponentType id);
 		bool haveComponent(ComponentType id) const;
 		const std::vector<ComponentBase*> &getComponentList() const
@@ -52,6 +56,7 @@ namespace AGE
 		AGE::Link link;
 		std::vector<ComponentBase*> components;
 		AScene *scene;
+		bool outOfContext;
 	public:
 		friend AScene;
 		friend EntityFilter;

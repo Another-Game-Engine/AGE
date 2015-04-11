@@ -16,6 +16,13 @@ namespace AGE
 
 	}
 
+	void RotationComponent::_copyFrom(const ComponentBase *model)
+	{
+		auto o = static_cast<const RotationComponent*>(model);
+		_speed = o->_speed;
+		_angles = o->_angles;
+	}
+
 
 	void RotationComponent::init(const glm::vec3 &angles, float speed)
 	{

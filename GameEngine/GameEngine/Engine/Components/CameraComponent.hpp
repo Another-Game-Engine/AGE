@@ -13,31 +13,35 @@ namespace AGE
 	{
 		CameraComponent();
 		virtual ~CameraComponent();
-		CameraComponent(CameraComponent const &o);
-		CameraComponent	&operator=(CameraComponent const &o);
+		CameraComponent(CameraComponent const &o) = delete;
+		CameraComponent	&operator=(CameraComponent const &o) = delete;
+
+		virtual void _copyFrom(const ComponentBase *model);
 
 		void init();
 		virtual void reset();
 
 		void setProjection(const glm::mat4 &);
 		const glm::mat4 &getProjection() const;
-		void addPipeline(RenderType pipeline);
-		void removePipeline(RenderType pipeline);
-		bool havePipeline(RenderType pipeline) const;
+		void setPipeline(RenderType pipeline);
+		RenderType getPipeline() const { return _pipeline; }
+		//void addPipeline(RenderType pipeline);
+		//void removePipeline(RenderType pipeline);
+		//bool havePipeline(RenderType pipeline) const;
 
 		template <typename Archive> void save(Archive &ar, const std::uint32_t version) const;
 		template <typename Archive> void load(Archive &ar, const std::uint32_t version);
 		virtual void postUnserialization();
 
 #ifdef EDITOR_ENABLED
-		virtual void editorCreate(AScene *scene);
-		virtual void editorDelete(AScene *scene);
-		virtual void editorUpdate(AScene *scene);
+		virtual void editorCreate();
+		virtual void editorDelete();
+		virtual bool editorUpdate();
 #endif
 	private:
 		glm::mat4 _projection;
 		AGE::PrepareKey _key;
-		std::set < RenderType > _pipelines;
+		RenderType _pipeline;
 	};
 
 	template <typename Archive>

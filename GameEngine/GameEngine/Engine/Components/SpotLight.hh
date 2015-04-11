@@ -14,9 +14,9 @@ namespace AGE
 		unsigned int	padding[3];
 
 		SpotLightData();
-		SpotLightData(SpotLightData const &o);
+		SpotLightData(SpotLightData const &o) = delete;
 		~SpotLightData();
-		SpotLightData &operator=(SpotLightData const &o);
+		SpotLightData &operator=(SpotLightData const &o) = delete;
 	};
 
 	struct SpotLight : public ComponentBase

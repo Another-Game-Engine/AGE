@@ -129,7 +129,7 @@ namespace AGE
 		}
 	}
 
-	Entity &AScene::createEntity()
+	Entity &AScene::createEntity(bool outContext /* = false */)
 	{
 		auto e = _entityPool.create(this);
 
@@ -146,8 +146,12 @@ namespace AGE
 		}
 		//e->link._renderScene = _renderScene;
 		e->entity.ptr = e;
-		informFiltersEntityCreation(*e);
-		_entities.insert(e->entity);
+		e->outOfContext = outContext;
+		if (!outContext)
+		{
+			informFiltersEntityCreation(*e);
+			_entities.insert(e->entity);
+		}
 		return e->entity;
 	}
 
@@ -164,7 +168,6 @@ namespace AGE
 		{
 			if (data->components[i])
 			{
-				informFiltersComponentDeletion(ComponentType(i), *data);
 				data->removeComponent(i);
 			}
 
@@ -174,7 +177,10 @@ namespace AGE
 			//	informFiltersTagDeletion(TAG_ID(i - MAX_CPT_NUMBER), *data);
 			//}
 		}
-		informFiltersEntityDeletion(*data);
+		if (!data->outOfContext)
+		{
+			informFiltersEntityDeletion(*data);
+		}
 
 		auto children = e.getLink().getChildren();
 		for (auto &c : children)
@@ -191,6 +197,43 @@ namespace AGE
 		data->getLink().detachParent();
 
 		_entityPool.destroy(e.ptr);
+	}
+
+	bool AScene::copyEntity(const Entity &source, Entity &destination, bool deep /*= true*/, bool outContext /*= false*/)
+	{
+		if (!source.isValid())
+		{
+			return false;
+		}
+		if (!destination.isValid())
+		{
+			destination = createEntity(outContext);
+			destination.getLink().setPosition(source.getLink().getPosition());
+			destination.getLink().setOrientation(source.getLink().getOrientation());
+			destination.getLink().setScale(source.getLink().getScale());
+		}
+
+		if (deep)
+		{
+			auto link = source.getLink();
+			for (auto &e : link.getChildren())
+			{
+				Entity tmp;
+				if (!copyEntity(e->getEntity()->getEntity(), tmp, deep, outContext))
+				{
+					return false;
+				}
+				destination.getLink().attachChild(tmp.getLinkPtr());
+			}
+			for (auto e : source.getComponentList())
+			{
+				if (e != nullptr)
+				{
+					destination.copyComponent(e);
+				}
+			}
+		}
+		return true;
 	}
 
 	void AScene::clearAllEntities()
@@ -211,7 +254,8 @@ namespace AGE
 	void AScene::loadFromJson(const std::string &fileName)
 	{
 		std::ifstream file(fileName, std::ios::binary);
-		assert(file.is_open());
+		auto success = file.is_open();
+		assert(success);
 
 		{
 			auto ar = cereal::JSONInputArchive(file);

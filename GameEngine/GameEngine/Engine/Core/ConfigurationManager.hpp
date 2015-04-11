@@ -108,6 +108,14 @@ namespace AGE
 				ptr->callback(value);
 		}
 
+		template <typename T>
+		ConfigurationValue<T> *getConfiguration(const std::string &name)
+		{
+			if (_confs.find(name) == std::end(_confs))
+				return nullptr;
+			return dynamic_cast<ConfigurationValue<T>*>(_confs[name].get());
+		}
+
 	private:
 		OldFile _saveFile;
 		std::map<std::string, std::unique_ptr<Configuration>> _confs;

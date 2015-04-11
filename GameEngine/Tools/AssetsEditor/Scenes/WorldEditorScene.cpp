@@ -18,7 +18,7 @@
 #include <Systems/FreeFlyCamera.hh>
 #include <Systems/BulletDynamicSystem.hpp>
 #include <Components/EntityRepresentation.hpp>
-
+#include <Managers/ArchetypesEditorManager.hpp>
 #include <EditorConfiguration.hpp>
 
 namespace AGE
@@ -50,13 +50,13 @@ namespace AGE
 
 	bool WorldEditorScene::_userUpdateBegin(float time)
 	{
-		ImGui::BeginChild("World editor", ImVec2(0, 0), true);
 		return true;
 	}
 
 	bool WorldEditorScene::_userUpdateEnd(float time)
 	{
-		ImGui::EndChild();
+		getInstance<AGE::WE::ArchetypesEditorManager>()->update(this);
+
 		ImGui::End();
 
 		// TODO
