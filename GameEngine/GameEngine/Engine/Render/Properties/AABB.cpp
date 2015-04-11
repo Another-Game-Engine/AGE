@@ -6,7 +6,7 @@ namespace AGE
 {
 
 	AABB::AABB(glm::vec3 const &aabb) :
-		AProperty(std::string("model_matrix")),
+		AProperty(std::string("AABB")),
 		_aabb(aabb)
 	{
 
