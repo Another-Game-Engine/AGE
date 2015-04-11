@@ -71,6 +71,7 @@
     <TargetName>Physics_$(ProjectName)_x64_d</TargetName>
     <IntDir>$(ProjectDir)Dependencies\$(Platform)\$(Configuration)\</IntDir>
     <OutDir>$(ProjectDir)Binaries\$(Platform)\$(Configuration)\</OutDir>
+    <IncludePath>$(SolutionDir)GameEngine/Engine/Physics;$(ProjectDir);$(SolutionDir)Vendors;$(SolutionDir)Vendors/bullet/src;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
@@ -83,6 +84,7 @@
     <TargetName>Physics_$(ProjectName)_x64</TargetName>
     <IntDir>$(ProjectDir)Dependencies\$(Platform)\$(Configuration)\</IntDir>
     <OutDir>$(ProjectDir)Binaries\$(Platform)\$(Configuration)\</OutDir>
+    <IncludePath>$(SolutionDir)GameEngine/Engine/Physics;$(ProjectDir);$(SolutionDir)Vendors;$(SolutionDir)Vendors/bullet/src;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -97,7 +99,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>Precompiled.hpp</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>C:\Users\Jonathan\Desktop\AGE\GameEngine\Vendors\glm;C:\Users\Jonathan\Desktop\AGE\GameEngine\GameEngine\Engine\Physics\Solutions\Bullet;C:\Users\Jonathan\Desktop\AGE\GameEngine\GameEngine\Engine\Physics\Solutions\Common;C:\Users\Jonathan\Desktop\AGE\GameEngine\GameEngine\Engine\Physics;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -130,7 +132,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>Precompiled.hpp</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>C:\Users\Jonathan\Desktop\AGE\GameEngine\Vendors\glm;C:\Users\Jonathan\Desktop\AGE\GameEngine\GameEngine\Engine\Physics\Solutions\Bullet;C:\Users\Jonathan\Desktop\AGE\GameEngine\GameEngine\Engine\Physics\Solutions\Common;C:\Users\Jonathan\Desktop\AGE\GameEngine\GameEngine\Engine\Physics;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -161,6 +163,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\GameEngine\Engine\Physics\PhysicsInterface.hpp" />
+    <ClInclude Include="..\..\..\GameEngine\Engine\Physics\WorldInterface.hpp" />
     <ClInclude Include="BulletPlugin.hpp" />
     <ClInclude Include="BulletWorld.hpp" />
   </ItemGroup>

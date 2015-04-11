@@ -4,7 +4,7 @@
 #include <memory>
 #include <unordered_map>
 
-#include <glm.hpp>
+#include <glm/glm.hpp>
 
 #include "EngineTypes.hpp"
 #include "WorldInterface.hpp"

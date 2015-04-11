@@ -15,16 +15,16 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\PluginInterface.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\WorldInterface.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="PhysXPlugin.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PhysXWorld.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\GameEngine\Engine\Physics\PhysicsInterface.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\GameEngine\Engine\Physics\WorldInterface.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
