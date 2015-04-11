@@ -14,17 +14,17 @@ uniform sampler2D normal_map;
 
 out vec3 inter_normal;
 out vec3 inter_tangent;
-out vec2 vTexCoord;
+out vec2 inter_texCoord;
+
 
 flat out int Visible;
-out vec4 out_position;
 
 void main()
 {
 	mat3 normal_matrix = transpose(inverse(mat3(model_matrix)));
 	inter_normal = normalize(normal_matrix * normal);
-	vTexCoord = texCoord;
+	inter_texCoord = texCoord;
 	inter_tangent = normalize(normal_matrix * tangent);
-	out_position = projection_matrix * view_matrix * model_matrix * vec4(position, 1);
+	gl_Position = projection_matrix * view_matrix * model_matrix * vec4(position, 1);
 	Visible = 1;
 }

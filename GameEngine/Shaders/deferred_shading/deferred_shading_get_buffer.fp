@@ -1,7 +1,7 @@
 #version 330
 
 in vec3 inter_normal;
-in vec2 vTexCoord;
+in vec2 inter_texCoord;
 in vec3 inter_tangent;
 
 uniform vec4 diffuse_color;
@@ -19,7 +19,7 @@ layout (location = 2) out vec4 specular_frag;
 
 vec3 perturb_normal()
 {
-	vec3 perturbated_normal_ts = texture(normal_map, vTexCoord).xyz;
+	vec3 perturbated_normal_ts = texture(normal_map, inter_texCoord).xyz;
 	vec3 perturbated_normal = perturbated_normal_ts * 2.f - vec3(1.f);
 	vec3 bitangent = cross(inter_tangent, inter_normal);
 	mat3 TBN = mat3(inter_tangent, bitangent, inter_normal);
@@ -28,7 +28,7 @@ vec3 perturb_normal()
 
 void main(void)
 {
-	diffuse_frag = texture(diffuse_map, vTexCoord); // diffuse_color * diffuse_ratio
+	diffuse_frag = texture(diffuse_map, inter_texCoord); // diffuse_color * diffuse_ratio
 	vec3 normal = perturb_normal() * 0.5f + 0.5f;
 	normal_frag = vec4(normal, 1.0f);
 	// To replace with the real specular of the object
