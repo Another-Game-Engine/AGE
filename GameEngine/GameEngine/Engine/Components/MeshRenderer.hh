@@ -113,14 +113,28 @@ namespace AGE
 			serializationInfos->mesh = selectedMeshPath;
 		}
 #endif
-		ar(serializationInfos);
+		if (version < 1)
+		{
+			ar(serializationInfos);
+		}
+		else
+		{
+			ar(serializationInfos, _renderMode);
+		}
 	}
 
 	template <typename Archive>
 	void MeshRenderer::load(Archive &ar, const std::uint32_t version)
 	{
-		ar(_serializationInfos);
+		if (version < 1)
+		{
+			ar(_serializationInfos);
+		}
+		else
+		{
+			ar(_serializationInfos, _renderMode);
+		}
 	}
 }
 
-CEREAL_CLASS_VERSION(AGE::MeshRenderer, 0)
+CEREAL_CLASS_VERSION(AGE::MeshRenderer, 1)

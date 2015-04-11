@@ -201,6 +201,23 @@ namespace AGE
 			}
 		}
 
+		std::string occlusionButtonStr = "Occluder : ";
+		
+		if (_renderMode.test(AGE_OCCLUDER))
+		{
+			occlusionButtonStr += "TOGGLE OFF";
+		}
+		else
+		{
+			occlusionButtonStr += "TOGGLE ON";
+		}
+
+		if (ImGui::Button(occlusionButtonStr.c_str()))
+		{
+			_renderMode[AGE_OCCLUDER].flip();
+			_updateGeometry();
+		}
+
 		ImGui::PushItemWidth(-1);
 		if (ImGui::ListBox("Meshs", (int*)&selectedMeshIndex, &(meshFileList->front()), (int)(meshFileList->size())))
 		{
