@@ -26,5 +26,5 @@ void main()
 	VertexOut.inter_texCoord = texCoord;
 	VertexOut.inter_tangent = normalize(normal_matrix * tangent);
 	gl_Position = projection_matrix * view_matrix * model_matrix * vec4(position, 1);
-	Visible = 0;
+	Visible = 1;
 }

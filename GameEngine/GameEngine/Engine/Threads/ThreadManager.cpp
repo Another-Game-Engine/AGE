@@ -220,8 +220,7 @@ namespace AGE
 			Singleton<AGE::Logger>::setInstance();
 			auto threadManager = Singleton<ThreadManager>::getInstance();
 			res = threadManager->initAndLaunch();
-			if (!res)
-				return false;
+			return res;
 		});
 		return res;
 	}
