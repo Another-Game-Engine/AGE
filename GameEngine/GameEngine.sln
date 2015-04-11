@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GameEngine", "GameEngine\GameEngine.vcxproj", "{E24D022C-E33B-47A1-BBB4-33666C76DDA9}"
 EndProject
@@ -27,6 +27,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "deferred shading", "deferre
 		Shaders\deferred_shading\deferred_shading_debug_light.vp = Shaders\deferred_shading\deferred_shading_debug_light.vp
 		Shaders\deferred_shading\deferred_shading_get_buffer.fp = Shaders\deferred_shading\deferred_shading_get_buffer.fp
 		Shaders\deferred_shading\deferred_shading_get_buffer.vp = Shaders\deferred_shading\deferred_shading_get_buffer.vp
+		Shaders\deferred_shading\deferred_shading_get_buffer_occlusion.gp = Shaders\deferred_shading\deferred_shading_get_buffer_occlusion.gp
+		Shaders\deferred_shading\deferred_shading_get_buffer_occlusion.vp = Shaders\deferred_shading\deferred_shading_get_buffer_occlusion.vp
 		Shaders\deferred_shading\deferred_shading_merge.fp = Shaders\deferred_shading\deferred_shading_merge.fp
 		Shaders\deferred_shading\deferred_shading_merge.vp = Shaders\deferred_shading\deferred_shading_merge.vp
 		Shaders\deferred_shading\deferred_shading_merge_debug.fp = Shaders\deferred_shading\deferred_shading_merge_debug.fp
@@ -87,8 +89,8 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{CB955D69-5F17-4705-BE34-81FBE92E26EB} = {B36A8443-1340-428D-AB0B-7AD47BC2531F}
 		{03E6B97B-B898-4A33-AB68-8455868D3A13} = {6823E483-DFC6-4750-920C-35DA2E87B060}
 		{6DD3E825-06AD-46C8-B671-745D01D240D0} = {6823E483-DFC6-4750-920C-35DA2E87B060}
-		{CB955D69-5F17-4705-BE34-81FBE92E26EB} = {B36A8443-1340-428D-AB0B-7AD47BC2531F}
 	EndGlobalSection
 EndGlobal
