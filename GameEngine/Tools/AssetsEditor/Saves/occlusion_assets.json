@@ -1,0 +1,14 @@
+{
+    "value0": {
+        "cereal_class_version": 0,
+        "value0": [
+            "cube/cube.sage",
+            "Flash/Flash.sage"
+        ],
+        "value1": [
+            "cube/cube.mage",
+            "Flash/Flash.mage",
+            "sponza/banner.mage"
+        ]
+    }
+}
