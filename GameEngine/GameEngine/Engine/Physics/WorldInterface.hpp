@@ -1,11 +1,13 @@
 #pragma once
 
 #include <string>
+#include <unordered_map>
 
 #include <glm/glm.hpp>
 
 #include "../Utils/Dependency.hpp"
 #include "FilterGroup.hpp"
+#include "ColliderType.hpp"
 
 namespace AGE
 {
@@ -14,11 +16,14 @@ namespace AGE
 		class PhysicsInterface;
 		class RigidBodyInterface;
 		class MaterialInterface;
+		class ColliderInterface;
 
 		class WorldInterface : public Dependency < WorldInterface >
 		{
 			// Friendship
-			friend RigidBodyInterface;
+			friend PhysicsInterface;
+
+			friend ColliderInterface;
 
 		public:
 			WorldInterface(void) = delete;
@@ -44,6 +49,12 @@ namespace AGE
 
 			void update(float elapsedTime);
 
+			void setFilterNameForFilterGroup(FilterGroup group, const std::string &name);
+
+			const std::string &getFilterNameForFilterGroup(FilterGroup group) const;
+
+			const FilterGroup getFilterGroupForFilterName(const std::string &name) const;
+
 			void destroyRigidBody(RigidBodyInterface *rigidBody);
 
 			// Virtual Methods
@@ -62,6 +73,8 @@ namespace AGE
 			virtual ~WorldInterface(void) = default;
 
 		private:
+			using HashTable = std::unordered_map < std::string, FilterGroup > ;
+
 			// Attributes
 			PhysicsInterface *physics = nullptr;
 
@@ -69,11 +82,17 @@ namespace AGE
 
 			float accumulator = 0.0f;
 
+			HashTable filterNameToFilterGroup;
+
 			// Methods
+			void destroyCollider(ColliderInterface *collider);
+
 			void destroyMaterial(MaterialInterface *material);
 
 			// Virtual Methods
-			virtual MaterialInterface *createMaterial(void) = 0;
+			virtual ColliderInterface *createCollider(ColliderType colliderType) = 0;
+
+			virtual MaterialInterface *createMaterial(ColliderInterface *collider) = 0;
 
 			virtual void simulate(float stepSize) = 0;
 		};

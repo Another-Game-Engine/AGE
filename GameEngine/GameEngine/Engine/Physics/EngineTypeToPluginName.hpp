@@ -2,12 +2,12 @@
 
 #include <string>
 
-#include <Physics/EngineTypes.hpp>
+#include <Physics/EngineType.hpp>
 
 namespace AGE
 {
 	namespace Physics
 	{
-		std::string GetPluginNameForEngine(EngineTypes physicsEngineType);
+		std::string GetPluginNameForEngine(EngineType physicsEngineType);
 	}
 }

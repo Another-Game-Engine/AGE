@@ -4,6 +4,10 @@
 #include "PhysXWorld.hpp"
 #include "PhysXRigidBody.hpp"
 #include "PhysXMaterial.hpp"
+#include "PhysXBoxCollider.hpp"
+#include "PhysXCapsuleCollider.hpp"
+#include "PhysXMeshCollider.hpp"
+#include "PhysXSphereCollider.hpp"
 
 namespace AGE
 {
@@ -36,23 +40,17 @@ namespace AGE
 			sceneDescription.flags |= physx::PxSceneFlag::eENABLE_CCD;
 			sceneDescription.broadPhaseType = physx::PxBroadPhaseType::eMBP;
 			sceneDescription.gravity = physx::PxVec3(gravity.x, gravity.y, gravity.z);
+			sceneDescription.cpuDispatcher = physx::PxDefaultCpuDispatcherCreate(std::thread::hardware_concurrency());
 			if (sceneDescription.cpuDispatcher == nullptr)
 			{
-				sceneDescription.cpuDispatcher = physx::PxDefaultCpuDispatcherCreate(std::thread::hardware_concurrency());
-				if (sceneDescription.cpuDispatcher == nullptr)
-				{
-					assert(!"Impossible to create cpu dispatcher");
-					return;
-				}
+				assert(!"Impossible to create cpu dispatcher");
+				return;
 			}
 			for (std::size_t index = 0; index < sizeof(GroupCollisionFlags) / sizeof(*GroupCollisionFlags); ++index)
 			{
 				GroupCollisionFlags[index] = 0xFFFFFFFF;
 			}
-			if (sceneDescription.filterShader == nullptr)
-			{
-				sceneDescription.filterShader = &PhysXWorld::FilterShader;
-			}
+			sceneDescription.filterShader = &PhysXWorld::FilterShader;
 			sceneDescription.filterShaderData = static_cast<const void *>(GroupCollisionFlags);
 			sceneDescription.filterShaderDataSize = sizeof(GroupCollisionFlags);
 			scene = physics->getPhysics()->createScene(sceneDescription);
@@ -108,9 +106,27 @@ namespace AGE
 			return static_cast<RigidBodyInterface *>(new PhysXRigidBody(this, position));
 		}
 
-		MaterialInterface *PhysXWorld::createMaterial(void)
+		ColliderInterface *PhysXWorld::createCollider(ColliderType colliderType)
 		{
-			return static_cast<MaterialInterface *>(new PhysXMaterial(this));
+			switch (colliderType)
+			{
+				case ColliderType::Box:
+					return new PhysXBoxCollider(static_cast<WorldInterface *>(this));
+				case ColliderType::Capsule:
+					return new PhysXCapsuleCollider(static_cast<WorldInterface *>(this));
+				case ColliderType::Mesh:
+					return new PhysXMeshCollider(static_cast<WorldInterface *>(this));
+				case ColliderType::Sphere:
+					return new PhysXSphereCollider(static_cast<WorldInterface *>(this));
+				default:
+					assert(!"Never reached");
+					return nullptr;
+			}
+		}
+
+		MaterialInterface *PhysXWorld::createMaterial(ColliderInterface *collider)
+		{
+			return static_cast<MaterialInterface *>(new PhysXMaterial(this, collider));
 		}
 	}
 }

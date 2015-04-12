@@ -5,8 +5,8 @@ namespace AGE
 	namespace Physics
 	{
 		// Constructors
-		PhysXMaterial::PhysXMaterial(PhysXWorld *world)
-			: MaterialInterface(), material(static_cast<PhysXPhysics *>(world->getPhysics())->getPhysics()->createMaterial(0.5f, 0.5f, 0.1f))
+		PhysXMaterial::PhysXMaterial(PhysXWorld *world, ColliderInterface *collider)
+			: MaterialInterface(collider), material(static_cast<PhysXPhysics *>(world->getPhysics())->getPhysics()->createMaterial(0.5f, 0.5f, 0.1f))
 		{
 			assert(material != nullptr && "Impossible to create material");
 		}

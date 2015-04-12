@@ -12,7 +12,9 @@ namespace AGE
 		{
 		public:
 			// Constructors
-			BulletMaterial(void) = default;
+			BulletMaterial(void) = delete;
+
+			BulletMaterial(ColliderInterface *collider);
 
 			BulletMaterial(const BulletMaterial &) = delete;
 

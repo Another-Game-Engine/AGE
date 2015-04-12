@@ -2,20 +2,28 @@
 
 #include "MaterialInterface.hpp"
 #include "RigidBodyInterface.hpp"
+#include "ColliderInterface.hpp"
 
 namespace AGE
 {
 	namespace Physics
 	{
-		// Methods
-		inline RigidBodyInterface *MaterialInterface::getRigidBody(void)
+		// Constructors
+		inline MaterialInterface::MaterialInterface(ColliderInterface *collider)
+			: collider(collider)
 		{
-			return rigidBody;
+			return;
 		}
 
-		inline const RigidBodyInterface *MaterialInterface::getRigidBody(void) const
+		// Methods
+		inline ColliderInterface *MaterialInterface::getCollider(void)
 		{
-			return rigidBody;
+			return collider;
+		}
+
+		inline const ColliderInterface *MaterialInterface::getCollider(void) const
+		{
+			return collider;
 		}
 	}
 }

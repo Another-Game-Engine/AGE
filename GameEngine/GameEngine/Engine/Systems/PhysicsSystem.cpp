@@ -10,18 +10,18 @@
 namespace AGE
 {
 	// Constructors
-	PhysicsSystem::PhysicsSystem(AScene *scene, Physics::EngineTypes physicsEngineType)
+	PhysicsSystem::PhysicsSystem(AScene *scene, Physics::EngineType physicsEngineType)
 		: System(scene), PluginManager("CreateInterface", "DestroyInterface"), entityFilter(scene)
 	{
 		_name = "PhysicsSystem";
 		entityFilter.requireComponent<NewRigidBody>();
-		if (physicsEngineType == Physics::EngineTypes::Null)
+		if (physicsEngineType == Physics::EngineType::Null)
 		{
 			physics = new Physics::NullPhysics;
 		}
 		else if (!addPlugin(Physics::GetPluginNameForEngine(physicsEngineType)))
 		{
-			AGE_ERROR("Impossible to load physics plugin '", Physics::GetPluginNameForEngine(physicsEngineType), "'. Falling back to physics plugin '", Physics::GetPluginNameForEngine(Physics::EngineTypes::Null), "'.");
+			AGE_ERROR("Impossible to load physics plugin '", Physics::GetPluginNameForEngine(physicsEngineType), "'. Falling back to physics plugin '", Physics::GetPluginNameForEngine(Physics::EngineType::Null), "'.");
 			physics = new Physics::NullPhysics;
 		}
 		scene->addSystem<Private::CollisionSystem>(std::numeric_limits<std::size_t>::max(), physics);

@@ -49,7 +49,9 @@ namespace AGE
 
 			RigidBodyInterface *createRigidBody(const glm::vec3 &position) override final;
 
-			MaterialInterface *createMaterial(void) override final;
+			ColliderInterface *createCollider(ColliderType colliderType) override final;
+
+			MaterialInterface *createMaterial(ColliderInterface *collider) override final;
 		};
 	}
 }

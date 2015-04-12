@@ -8,19 +8,19 @@ namespace AGE
 {
 	namespace Physics
 	{
-		using HashTable = std::unordered_map < EngineTypes, std::string >;
+		using HashTable = std::unordered_map < EngineType, std::string >;
 
 		static const HashTable PhysicsEngineTypeToPluginNameTable
 		{
-			{ EngineTypes::Bullet, "Physics_Bullet" },
-			{ EngineTypes::PhysX, "Physics_PhysX" },
-			{ EngineTypes::Null, "Physics_Null" }
+			{ EngineType::Bullet, "Physics_Bullet" },
+			{ EngineType::PhysX, "Physics_PhysX" },
+			{ EngineType::Null, "Physics_Null" }
 		};
 
-		std::string GetPluginNameForEngine(EngineTypes physicsEngineType)
+		std::string GetPluginNameForEngine(EngineType physicsEngineType)
 		{
 			HashTable::const_iterator found = PhysicsEngineTypeToPluginNameTable.find(physicsEngineType);
-			return found != PhysicsEngineTypeToPluginNameTable.end() ? found->second : PhysicsEngineTypeToPluginNameTable.find(EngineTypes::Null)->second;
+			return found != PhysicsEngineTypeToPluginNameTable.end() ? found->second : PhysicsEngineTypeToPluginNameTable.find(EngineType::Null)->second;
 		}
 	}
 }

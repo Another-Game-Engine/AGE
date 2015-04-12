@@ -181,30 +181,49 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\GameEngine\Engine\Physics\BoxColliderInterface.hpp" />
+    <ClInclude Include="..\..\..\GameEngine\Engine\Physics\CapsuleColliderInterface.hpp" />
+    <ClInclude Include="..\..\..\GameEngine\Engine\Physics\ColliderInterface.hpp" />
+    <ClInclude Include="..\..\..\GameEngine\Engine\Physics\ColliderType.hpp" />
     <ClInclude Include="..\..\..\GameEngine\Engine\Physics\CollisionDetectionMode.hpp" />
     <ClInclude Include="..\..\..\GameEngine\Engine\Physics\EngineTypes.hpp" />
     <ClInclude Include="..\..\..\GameEngine\Engine\Physics\FilterGroup.hpp" />
     <ClInclude Include="..\..\..\GameEngine\Engine\Physics\ForceMode.hpp" />
     <ClInclude Include="..\..\..\GameEngine\Engine\Physics\MaterialInterface.hpp" />
+    <ClInclude Include="..\..\..\GameEngine\Engine\Physics\MeshColliderInterface.hpp" />
     <ClInclude Include="..\..\..\GameEngine\Engine\Physics\PhysicsInterface.hpp" />
     <ClInclude Include="..\..\..\GameEngine\Engine\Physics\RigidBodyInterface.hpp" />
+    <ClInclude Include="..\..\..\GameEngine\Engine\Physics\SphereColliderInterface.hpp" />
     <ClInclude Include="..\..\..\GameEngine\Engine\Physics\WorldInterface.hpp" />
+    <ClInclude Include="PhysXBoxCollider.hpp" />
+    <ClInclude Include="PhysXCapsuleCollider.hpp" />
     <ClInclude Include="PhysXMaterial.hpp" />
+    <ClInclude Include="PhysXMeshCollider.hpp" />
     <ClInclude Include="PhysXPhysics.hpp" />
     <ClInclude Include="PhysXRigidBody.hpp" />
+    <ClInclude Include="PhysXSphereCollider.hpp" />
     <ClInclude Include="PhysXWorld.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="PhysXBoxCollider.cpp" />
+    <ClCompile Include="PhysXCapsuleCollider.cpp" />
     <ClCompile Include="PhysXExports.cpp" />
     <ClCompile Include="PhysXMaterial.cpp" />
+    <ClCompile Include="PhysXMeshCollider.cpp" />
     <ClCompile Include="PhysXPhysics.cpp" />
     <ClCompile Include="PhysXRigidBody.cpp" />
+    <ClCompile Include="PhysXSphereCollider.cpp" />
     <ClCompile Include="PhysXWorld.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\..\GameEngine\Engine\Physics\BoxColliderInterface.inl" />
+    <None Include="..\..\..\GameEngine\Engine\Physics\CapsuleColliderInterface.inl" />
+    <None Include="..\..\..\GameEngine\Engine\Physics\ColliderInterface.inl" />
     <None Include="..\..\..\GameEngine\Engine\Physics\MaterialInterface.inl" />
+    <None Include="..\..\..\GameEngine\Engine\Physics\MeshColliderInterface.inl" />
     <None Include="..\..\..\GameEngine\Engine\Physics\PhysicsInterface.inl" />
     <None Include="..\..\..\GameEngine\Engine\Physics\RigidBodyInterface.inl" />
+    <None Include="..\..\..\GameEngine\Engine\Physics\SphereColliderInterface.inl" />
     <None Include="..\..\..\GameEngine\Engine\Physics\WorldInterface.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -5,6 +5,13 @@ namespace AGE
 {
 	namespace Physics
 	{
+		// Constructors
+		BulletMaterial::BulletMaterial(ColliderInterface *collider)
+			: MaterialInterface(collider)
+		{
+			return;
+		}
+
 		// Inherited Methods
 		void BulletMaterial::setStaticFriction(float staticFriction)
 		{

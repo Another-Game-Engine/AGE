@@ -51,6 +51,36 @@
     <ClInclude Include="..\..\..\GameEngine\Engine\Physics\FilterGroup.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\GameEngine\Engine\Physics\ColliderInterface.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\GameEngine\Engine\Physics\ColliderType.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\GameEngine\Engine\Physics\BoxColliderInterface.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\GameEngine\Engine\Physics\CapsuleColliderInterface.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\GameEngine\Engine\Physics\MeshColliderInterface.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\GameEngine\Engine\Physics\SphereColliderInterface.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysXBoxCollider.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysXCapsuleCollider.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysXMeshCollider.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysXSphereCollider.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PhysXWorld.cpp">
@@ -68,6 +98,18 @@
     <ClCompile Include="PhysXRigidBody.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="PhysXBoxCollider.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PhysXCapsuleCollider.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PhysXMeshCollider.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PhysXSphereCollider.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\GameEngine\Engine\Physics\MaterialInterface.inl">
@@ -80,6 +122,21 @@
       <Filter>Header Files</Filter>
     </None>
     <None Include="..\..\..\GameEngine\Engine\Physics\PhysicsInterface.inl">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="..\..\..\GameEngine\Engine\Physics\ColliderInterface.inl">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="..\..\..\GameEngine\Engine\Physics\BoxColliderInterface.inl">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="..\..\..\GameEngine\Engine\Physics\CapsuleColliderInterface.inl">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="..\..\..\GameEngine\Engine\Physics\MeshColliderInterface.inl">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="..\..\..\GameEngine\Engine\Physics\SphereColliderInterface.inl">
       <Filter>Header Files</Filter>
     </None>
   </ItemGroup>

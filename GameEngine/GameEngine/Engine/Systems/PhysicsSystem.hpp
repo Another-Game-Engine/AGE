@@ -4,7 +4,7 @@
 
 #include <Utils/Library.hpp>
 
-#include <Physics/EngineTypes.hpp>
+#include <Physics/EngineType.hpp>
 #include <Physics/PhysicsInterface.hpp>
 #include <Physics/WorldInterface.hpp>
 
@@ -16,7 +16,7 @@ namespace AGE
 		// Constructors
 		PhysicsSystem(void) = delete;
 
-		PhysicsSystem(AScene *scene, Physics::EngineTypes physicsEngineType);
+		PhysicsSystem(AScene *scene, Physics::EngineType physicsEngineType);
 
 		PhysicsSystem(PhysicsSystem const &) = delete;
 

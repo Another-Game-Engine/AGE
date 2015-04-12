@@ -169,6 +169,10 @@
     <ClCompile Include="Engine\Components\RigidBody.cpp" />
     <ClCompile Include="Engine\Physics\ContactInformation.cpp" />
     <ClCompile Include="Engine\Systems\CollisionSystem.cpp" />
+    <ClCompile Include="Engine\Physics\Fallback\NullBoxCollider.cpp" />
+    <ClCompile Include="Engine\Physics\Fallback\NullCapsuleCollider.cpp" />
+    <ClCompile Include="Engine\Physics\Fallback\NullMeshCollider.cpp" />
+    <ClCompile Include="Engine\Physics\Fallback\NullSphereCollider.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -442,6 +446,16 @@
     <ClInclude Include="Engine\Physics\CollisionDetectionMode.hpp" />
     <ClInclude Include="Engine\Physics\FilterGroup.hpp" />
     <ClInclude Include="Engine\Systems\CollisionSystem.hpp" />
+    <ClInclude Include="Engine\Physics\ColliderInterface.hpp" />
+    <ClInclude Include="Engine\Physics\ColliderType.hpp" />
+    <ClInclude Include="Engine\Physics\BoxColliderInterface.hpp" />
+    <ClInclude Include="Engine\Physics\CapsuleColliderInterface.hpp" />
+    <ClInclude Include="Engine\Physics\MeshColliderInterface.hpp" />
+    <ClInclude Include="Engine\Physics\SphereColliderInterface.hpp" />
+    <ClInclude Include="Engine\Physics\Fallback\NullBoxCollider.hpp" />
+    <ClInclude Include="Engine\Physics\Fallback\NullCapsuleCollider.hpp" />
+    <ClInclude Include="Engine\Physics\Fallback\NullMeshCollider.hpp" />
+    <ClInclude Include="Engine\Physics\Fallback\NullSphereCollider.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />
@@ -464,5 +478,11 @@
     <None Include="Engine\Physics\MaterialInterface.inl" />
     <None Include="Engine\Physics\RigidBodyInterface.inl" />
     <None Include="Engine\Physics\WorldInterface.inl" />
+    <None Include="Engine\Physics\ColliderInterface.inl" />
+    <None Include="Engine\Physics\BoxColliderInterface.inl" />
+    <None Include="Engine\Physics\CapsuleColliderInterface.inl" />
+    <None Include="Engine\Physics\MeshColliderInterface.inl" />
+    <None Include="Engine\Physics\SphereColliderInterface.inl" />
+    <None Include="Engine\Physics\PhysicsInterface.inl" />
   </ItemGroup>
 </Project>

@@ -13,7 +13,7 @@ namespace AGE
 			// Constructors
 			PhysXMaterial(void) = delete;
 
-			PhysXMaterial(PhysXWorld *world);
+			PhysXMaterial(PhysXWorld *world, ColliderInterface *collider);
 
 			PhysXMaterial(const PhysXMaterial &) = delete;
 

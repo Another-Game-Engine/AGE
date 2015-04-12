@@ -1,4 +1,8 @@
 #include "NullWorld.hpp"
+#include "NullBoxCollider.hpp"
+#include "NullCapsuleCollider.hpp"
+#include "NullMeshCollider.hpp"
+#include "NullSphereCollider.hpp"
 
 namespace AGE
 {
@@ -42,9 +46,27 @@ namespace AGE
 			return static_cast<RigidBodyInterface *>(new NullRigidBody(this));
 		}
 
-		MaterialInterface *NullWorld::createMaterial(void)
+		ColliderInterface *NullWorld::createCollider(ColliderType colliderType)
 		{
-			return static_cast<MaterialInterface *>(new NullMaterial);
+			switch (colliderType)
+			{
+				case ColliderType::Box:
+					return new NullBoxCollider(static_cast<WorldInterface *>(this));
+				case ColliderType::Capsule:
+					return new NullCapsuleCollider(static_cast<WorldInterface *>(this));
+				case ColliderType::Mesh:
+					return new NullMeshCollider(static_cast<WorldInterface *>(this));
+				case ColliderType::Sphere:
+					return new NullSphereCollider(static_cast<WorldInterface *>(this));
+				default:
+					assert(!"Never reached");
+					return nullptr;
+			}
+		}
+
+		MaterialInterface *NullWorld::createMaterial(ColliderInterface *collider)
+		{
+			return new NullMaterial(collider);
 		}
 	}
 }

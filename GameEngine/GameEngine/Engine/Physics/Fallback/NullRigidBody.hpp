@@ -21,14 +21,14 @@ namespace AGE
 			// Assignment Operators
 			NullRigidBody &operator=(const NullRigidBody &) = delete;
 
-			// Destructor
-			~NullRigidBody(void) = default;
-
 		private:
 			// Attributes
 			glm::vec3 bodyPosition;
 
 			glm::quat bodyRotation;
+
+			// Destructor
+			~NullRigidBody(void) = default;
 
 			// Inherited Methods
 			void setAngularDrag(float angularDrag) override final;

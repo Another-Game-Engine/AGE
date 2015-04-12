@@ -46,7 +46,7 @@ namespace AGE
 		{
 			assert(world != nullptr && "Invalid world");
 			_dependencyManager->removeInstance<WorldInterface>();
-			destroyWorld(world);
+			delete world;
 			world = nullptr;
 		}
 	}

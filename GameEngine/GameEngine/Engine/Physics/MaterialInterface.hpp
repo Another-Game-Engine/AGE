@@ -4,19 +4,20 @@ namespace AGE
 {
 	namespace Physics
 	{
-		class WorldInterface;
 		class RigidBodyInterface;
+		class ColliderInterface;
+		class WorldInterface;
 
 		class MaterialInterface
 		{
 			// Friendships
 			friend WorldInterface;
-
-			friend RigidBodyInterface;
 		
 		public:
 			// Constructors
-			MaterialInterface(void) = default;
+			MaterialInterface(void) = delete;
+
+			MaterialInterface(ColliderInterface *collider);
 
 			MaterialInterface(const MaterialInterface &) = delete;
 
@@ -24,9 +25,9 @@ namespace AGE
 			MaterialInterface &operator=(const MaterialInterface &) = delete;
 
 			// Methods
-			RigidBodyInterface *getRigidBody(void);
+			ColliderInterface *getCollider(void);
 
-			const RigidBodyInterface *getRigidBody(void) const;
+			const ColliderInterface *getCollider(void) const;
 
 			// Virtual Methods
 			virtual void setStaticFriction(float staticFriction) = 0;
@@ -47,7 +48,7 @@ namespace AGE
 
 		private:
 			// Attributes
-			RigidBodyInterface *rigidBody = nullptr;
+			ColliderInterface *collider = nullptr;
 		};
 	}
 }

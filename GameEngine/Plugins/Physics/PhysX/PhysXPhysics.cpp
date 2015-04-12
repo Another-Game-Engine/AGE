@@ -22,9 +22,9 @@ namespace AGE
 		}
 
 		// Inherited Methods
-		EngineTypes PhysXPhysics::getPluginType(void) const
+		EngineType PhysXPhysics::getPluginType(void) const
 		{
-			return EngineTypes::PhysX;
+			return EngineType::PhysX;
 		}
 
 		bool PhysXPhysics::initialize(void)
@@ -83,11 +83,6 @@ namespace AGE
 		WorldInterface *PhysXPhysics::createWorld(const glm::vec3 &gravity)
 		{
 			return static_cast<WorldInterface *>(new PhysXWorld(this, gravity));
-		}
-
-		void PhysXPhysics::destroyWorld(WorldInterface *world)
-		{
-			delete static_cast<PhysXWorld *>(world);
 		}
 	}
 }

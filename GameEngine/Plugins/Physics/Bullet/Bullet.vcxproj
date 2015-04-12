@@ -163,30 +163,49 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\GameEngine\Engine\Physics\BoxColliderInterface.hpp" />
+    <ClInclude Include="..\..\..\GameEngine\Engine\Physics\CapsuleColliderInterface.hpp" />
+    <ClInclude Include="..\..\..\GameEngine\Engine\Physics\ColliderInterface.hpp" />
+    <ClInclude Include="..\..\..\GameEngine\Engine\Physics\ColliderType.hpp" />
     <ClInclude Include="..\..\..\GameEngine\Engine\Physics\CollisionDetectionMode.hpp" />
-    <ClInclude Include="..\..\..\GameEngine\Engine\Physics\EngineTypes.hpp" />
+    <ClInclude Include="..\..\..\GameEngine\Engine\Physics\EngineType.hpp" />
     <ClInclude Include="..\..\..\GameEngine\Engine\Physics\FilterGroup.hpp" />
     <ClInclude Include="..\..\..\GameEngine\Engine\Physics\ForceMode.hpp" />
     <ClInclude Include="..\..\..\GameEngine\Engine\Physics\MaterialInterface.hpp" />
+    <ClInclude Include="..\..\..\GameEngine\Engine\Physics\MeshColliderInterface.hpp" />
     <ClInclude Include="..\..\..\GameEngine\Engine\Physics\PhysicsInterface.hpp" />
     <ClInclude Include="..\..\..\GameEngine\Engine\Physics\RigidBodyInterface.hpp" />
+    <ClInclude Include="..\..\..\GameEngine\Engine\Physics\SphereColliderInterface.hpp" />
     <ClInclude Include="..\..\..\GameEngine\Engine\Physics\WorldInterface.hpp" />
+    <ClInclude Include="BulletBoxCollider.hpp" />
+    <ClInclude Include="BulletCapsuleCollider.hpp" />
     <ClInclude Include="BulletMaterial.hpp" />
+    <ClInclude Include="BulletMeshCollider.hpp" />
     <ClInclude Include="BulletPhysics.hpp" />
     <ClInclude Include="BulletRigidBody.hpp" />
+    <ClInclude Include="BulletSphereCollider.hpp" />
     <ClInclude Include="BulletWorld.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BulletBoxCollider.cpp" />
+    <ClCompile Include="BulletCapsuleCollider.cpp" />
     <ClCompile Include="BulletExports.cpp" />
     <ClCompile Include="BulletMaterial.cpp" />
+    <ClCompile Include="BulletMeshCollider.cpp" />
     <ClCompile Include="BulletPhysics.cpp" />
     <ClCompile Include="BulletRigidBody.cpp" />
+    <ClCompile Include="BulletSphereCollider.cpp" />
     <ClCompile Include="BulletWorld.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\..\GameEngine\Engine\Physics\BoxColliderInterface.inl" />
+    <None Include="..\..\..\GameEngine\Engine\Physics\CapsuleColliderInterface.inl" />
+    <None Include="..\..\..\GameEngine\Engine\Physics\ColliderInterface.inl" />
     <None Include="..\..\..\GameEngine\Engine\Physics\MaterialInterface.inl" />
+    <None Include="..\..\..\GameEngine\Engine\Physics\MeshColliderInterface.inl" />
     <None Include="..\..\..\GameEngine\Engine\Physics\PhysicsInterface.inl" />
     <None Include="..\..\..\GameEngine\Engine\Physics\RigidBodyInterface.inl" />
+    <None Include="..\..\..\GameEngine\Engine\Physics\SphereColliderInterface.inl" />
     <None Include="..\..\..\GameEngine\Engine\Physics\WorldInterface.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

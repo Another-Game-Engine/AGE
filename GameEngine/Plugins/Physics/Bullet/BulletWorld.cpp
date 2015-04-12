@@ -3,6 +3,10 @@
 #include "BulletWorld.hpp"
 #include "BulletRigidBody.hpp"
 #include "BulletMaterial.hpp"
+#include "BulletBoxCollider.hpp"
+#include "BulletCapsuleCollider.hpp"
+#include "BulletMeshCollider.hpp"
+#include "BulletSphereCollider.hpp"
 
 namespace AGE
 {
@@ -47,9 +51,27 @@ namespace AGE
 			return static_cast<RigidBodyInterface *>(new BulletRigidBody(this, position));
 		}
 
-		MaterialInterface *BulletWorld::createMaterial(void)
+		ColliderInterface *BulletWorld::createCollider(ColliderType colliderType)
 		{
-			return static_cast<MaterialInterface *>(new BulletMaterial);
+			switch (colliderType)
+			{
+				case ColliderType::Box:
+					return new BulletBoxCollider(static_cast<WorldInterface *>(this));
+				case ColliderType::Capsule:
+					return new BulletCapsuleCollider(static_cast<WorldInterface *>(this));
+				case ColliderType::Mesh:
+					return new BulletMeshCollider(static_cast<WorldInterface *>(this));
+				case ColliderType::Sphere:
+					return new BulletSphereCollider(static_cast<WorldInterface *>(this));
+				default:
+					assert(!"Never reached");
+					return nullptr;
+			}
+		}
+
+		MaterialInterface *BulletWorld::createMaterial(ColliderInterface *collider)
+		{
+			return new BulletMaterial(collider);
 		}
 	}
 }

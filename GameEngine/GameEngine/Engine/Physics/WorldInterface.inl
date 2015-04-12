@@ -3,6 +3,7 @@
 #include "WorldInterface.hpp"
 #include "RigidBodyInterface.hpp"
 #include "MaterialInterface.hpp"
+#include "ColliderInterface.hpp"
 
 namespace AGE
 {
@@ -12,7 +13,38 @@ namespace AGE
 		inline WorldInterface::WorldInterface(PhysicsInterface *physics)
 			: physics(physics)
 		{
-			return;
+			filterNameToFilterGroup.emplace("GroupI", FilterGroup::GroupI);
+			filterNameToFilterGroup.emplace("GroupII", FilterGroup::GroupII);
+			filterNameToFilterGroup.emplace("GroupIII", FilterGroup::GroupIII);
+			filterNameToFilterGroup.emplace("GroupIV", FilterGroup::GroupIV);
+			filterNameToFilterGroup.emplace("GroupV", FilterGroup::GroupV);
+			filterNameToFilterGroup.emplace("GroupVI", FilterGroup::GroupVI);
+			filterNameToFilterGroup.emplace("GroupVII", FilterGroup::GroupVII);
+			filterNameToFilterGroup.emplace("GroupVIII", FilterGroup::GroupVIII);
+			filterNameToFilterGroup.emplace("GroupIX", FilterGroup::GroupIX);
+			filterNameToFilterGroup.emplace("GroupX", FilterGroup::GroupX);
+			filterNameToFilterGroup.emplace("GroupXI", FilterGroup::GroupXI);
+			filterNameToFilterGroup.emplace("GroupXII", FilterGroup::GroupXII);
+			filterNameToFilterGroup.emplace("GroupXIII", FilterGroup::GroupXIII);
+			filterNameToFilterGroup.emplace("GroupXIV", FilterGroup::GroupXIV);
+			filterNameToFilterGroup.emplace("GroupXV", FilterGroup::GroupXV);
+			filterNameToFilterGroup.emplace("GroupXVI", FilterGroup::GroupXVI);
+			filterNameToFilterGroup.emplace("GroupXVII", FilterGroup::GroupXVII);
+			filterNameToFilterGroup.emplace("GroupXVIII", FilterGroup::GroupXVIII);
+			filterNameToFilterGroup.emplace("GroupXIX", FilterGroup::GroupXIX);
+			filterNameToFilterGroup.emplace("GroupXX", FilterGroup::GroupXX);
+			filterNameToFilterGroup.emplace("GroupXXI", FilterGroup::GroupXXI);
+			filterNameToFilterGroup.emplace("GroupXXII", FilterGroup::GroupXXII);
+			filterNameToFilterGroup.emplace("GroupXXIII", FilterGroup::GroupXXIII);
+			filterNameToFilterGroup.emplace("GroupXXIV", FilterGroup::GroupXXIV);
+			filterNameToFilterGroup.emplace("GroupXXV", FilterGroup::GroupXXV);
+			filterNameToFilterGroup.emplace("GroupXXVI", FilterGroup::GroupXXVI);
+			filterNameToFilterGroup.emplace("GroupXXVII", FilterGroup::GroupXXVII);
+			filterNameToFilterGroup.emplace("GroupXXVIII", FilterGroup::GroupXXVIII);
+			filterNameToFilterGroup.emplace("GroupXXIX", FilterGroup::GroupXXIX);
+			filterNameToFilterGroup.emplace("GroupXXX", FilterGroup::GroupXXX);
+			filterNameToFilterGroup.emplace("GroupXXXI", FilterGroup::GroupXXXI);
+			filterNameToFilterGroup.emplace("GroupXXXII", FilterGroup::GroupXXXII);
 		}
 
 		// Methods
@@ -52,9 +84,43 @@ namespace AGE
 			}
 		}
 
+		inline void WorldInterface::setFilterNameForFilterGroup(FilterGroup group, const std::string &name)
+		{
+			assert(!name.empty() && "Invalid name");
+			filterNameToFilterGroup.erase(getFilterNameForFilterGroup(group));
+			filterNameToFilterGroup.emplace(name, group);
+		}
+
+		inline const std::string &WorldInterface::getFilterNameForFilterGroup(FilterGroup group) const
+		{
+			for (const HashTable::value_type &pair : filterNameToFilterGroup)
+			{
+				if (pair.second == group)
+				{
+					return pair.first;
+				}
+			}
+			assert(!"Never reached");
+			static std::string EmptyName;
+			return EmptyName;
+		}
+
+		inline const FilterGroup WorldInterface::getFilterGroupForFilterName(const std::string &name) const
+		{
+			assert(!name.empty() && "Invalid name");
+			HashTable::const_iterator found = filterNameToFilterGroup.find(name);
+			assert(found != filterNameToFilterGroup.end() && "Name not found");
+			return found != filterNameToFilterGroup.end() ? found->second : FilterGroup::GroupI;
+		}
+
 		inline void WorldInterface::destroyRigidBody(RigidBodyInterface *rigidBody)
 		{
 			delete rigidBody;
+		}
+
+		inline void WorldInterface::destroyCollider(ColliderInterface *collider)
+		{
+			delete collider;
 		}
 
 		inline void WorldInterface::destroyMaterial(MaterialInterface *material)

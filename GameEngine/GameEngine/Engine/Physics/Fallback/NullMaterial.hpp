@@ -12,17 +12,19 @@ namespace AGE
 		{
 		public:
 			// Constructors
-			NullMaterial(void) = default;
+			NullMaterial(void) = delete;
+
+			NullMaterial(ColliderInterface *collider);
 
 			NullMaterial(const NullMaterial &) = delete;
 
 			// Assignment Operators
 			NullMaterial &operator=(const NullMaterial &) = delete;
 
+		private:
 			// Destructor
 			~NullMaterial(void) = default;
 
-		private:
 			// Inherited Methods
 			void setStaticFriction(float staticFriction) override final;
 

@@ -6,7 +6,7 @@
 
 #include <glm/glm.hpp>
 
-#include "EngineTypes.hpp"
+#include "EngineType.hpp"
 #include "../Utils/DependenciesInjector.hpp"
 
 namespace AGE
@@ -43,7 +43,7 @@ namespace AGE
 			void destroyWorld(void);
 
 			// Virtual Methods
-			virtual EngineTypes getPluginType(void) const = 0;
+			virtual EngineType getPluginType(void) const = 0;
 
 		protected:
 			// Attributes
@@ -55,8 +55,6 @@ namespace AGE
 			virtual void finalize(void) = 0;
 
 			virtual WorldInterface *createWorld(const glm::vec3 &gravity) = 0;
-
-			virtual void destroyWorld(WorldInterface *world) = 0;
 		};
 	}
 }

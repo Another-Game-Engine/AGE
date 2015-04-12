@@ -5,6 +5,7 @@
 
 #include "ForceMode.hpp"
 #include "CollisionDetectionMode.hpp"
+#include "FilterGroup.hpp"
 
 namespace AGE
 {
@@ -33,10 +34,6 @@ namespace AGE
 			WorldInterface *getWorld(void);
 
 			const WorldInterface *getWorld(void) const;
-
-			MaterialInterface *getMaterial(void);
-
-			const MaterialInterface *getMaterial(void) const;
 
 			glm::vec3 getWorldCenterOfMass(void) const;
 
@@ -118,8 +115,6 @@ namespace AGE
 		private:
 			// Attributes
 			WorldInterface *world = nullptr;
-
-			MaterialInterface *material = nullptr;
 		};
 	}
 }

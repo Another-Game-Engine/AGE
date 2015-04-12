@@ -6,11 +6,12 @@ namespace AGE
 {
 	namespace Physics
 	{
-		enum class EngineTypes : std::uint8_t
+		enum class ColliderType : std::uint8_t
 		{
-			Bullet,
-			PhysX,
-			Null
+			Box,
+			Sphere,
+			Capsule,
+			Mesh
 		};
 	}
 }

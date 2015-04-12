@@ -23,7 +23,7 @@ namespace AGE
 			NullWorld &operator=(const NullWorld &) = delete;
 
 			// Destructor
-			virtual ~NullWorld(void) = default;
+			~NullWorld(void) = default;
 
 		private:
 			// Inherited Methods
@@ -39,7 +39,9 @@ namespace AGE
 
 			RigidBodyInterface *createRigidBody(const glm::vec3 &position) override final;
 
-			MaterialInterface *createMaterial(void) override final;
+			ColliderInterface *createCollider(ColliderType colliderType) override final;
+
+			MaterialInterface *createMaterial(ColliderInterface *collider) override final;
 		};
 	}
 }
