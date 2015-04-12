@@ -27,6 +27,16 @@ namespace AGE
 			return glm::vec3();
 		}
 
+		void BulletWorld::enableCollisionBetweenGroups(FilterGroup group1, FilterGroup group2)
+		{
+			// TO_DO
+		}
+
+		void BulletWorld::disableCollisionBetweenGroups(FilterGroup group1, FilterGroup group2)
+		{
+			// TO_DO
+		}
+
 		void BulletWorld::simulate(float stepSize)
 		{
 			// TO_DO

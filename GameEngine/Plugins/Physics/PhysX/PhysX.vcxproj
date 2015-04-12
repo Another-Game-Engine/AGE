@@ -181,6 +181,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\GameEngine\Engine\Physics\CollisionDetectionMode.hpp" />
+    <ClInclude Include="..\..\..\GameEngine\Engine\Physics\EngineTypes.hpp" />
+    <ClInclude Include="..\..\..\GameEngine\Engine\Physics\FilterGroup.hpp" />
+    <ClInclude Include="..\..\..\GameEngine\Engine\Physics\ForceMode.hpp" />
     <ClInclude Include="..\..\..\GameEngine\Engine\Physics\MaterialInterface.hpp" />
     <ClInclude Include="..\..\..\GameEngine\Engine\Physics\PhysicsInterface.hpp" />
     <ClInclude Include="..\..\..\GameEngine\Engine\Physics\RigidBodyInterface.hpp" />

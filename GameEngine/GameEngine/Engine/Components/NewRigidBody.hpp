@@ -46,6 +46,10 @@ namespace AGE
 
 		float getMass(void) const;
 
+		void setDiagonalInertiaTensor(const glm::vec3 &diagonalInertiaTensor);
+
+		glm::vec3 getDiagonalInertiaTensor(void) const;
+
 		void setMaxAngularVelocity(float maxAngularVelocity);
 
 		float getMaxAngularVelocity(void) const;
@@ -61,6 +65,32 @@ namespace AGE
 		void setRotation(const glm::quat &rotation);
 
 		glm::quat getRotation(void) const;
+
+		void affectByGravity(bool mustBeAffectedByGravity);
+
+		bool isAffectedByGravity(void) const;
+
+		void setAsKinematic(bool mustBeKinematic);
+
+		bool isKinematic(void) const;
+
+		void setCollisionDetectionMode(Physics::CollisionDetectionMode collisionDetectionMode);
+
+		Physics::CollisionDetectionMode getCollisionDetectionMode(void) const;
+
+		void addExplosionForce(float explosionForce, const glm::vec3 &explosionPosition, float explosionRadius, Physics::ForceMode forceMode = Physics::ForceMode::Force);
+
+		void addForce(const glm::vec3 &force, Physics::ForceMode forceMode = Physics::ForceMode::Force);
+
+		void addForceAtWorldPosition(const glm::vec3 &force, const glm::vec3 &position, Physics::ForceMode forceMode = Physics::ForceMode::Force);
+
+		void addForceAtLocalPosition(const glm::vec3 &force, const glm::vec3 &position, Physics::ForceMode forceMode = Physics::ForceMode::Force);
+
+		void addTorque(const glm::vec3 &torque, Physics::ForceMode forceMode = Physics::ForceMode::Force);
+
+		glm::vec3 getVelocityAtWorldPosition(const glm::vec3 &position) const;
+
+		glm::vec3 getVelocityAtLocalPosition(const glm::vec3 &position) const;
 
 		// Inherited Methods
 		void reset(void);

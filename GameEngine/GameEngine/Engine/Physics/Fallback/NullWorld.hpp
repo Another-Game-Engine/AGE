@@ -31,6 +31,10 @@ namespace AGE
 
 			glm::vec3 getGravity(void) const override final;
 
+			void enableCollisionBetweenGroups(FilterGroup group1, FilterGroup group2) override final;
+
+			void disableCollisionBetweenGroups(FilterGroup group1, FilterGroup group2) override final;
+
 			void simulate(float stepSize) override final;
 
 			RigidBodyInterface *createRigidBody(const glm::vec3 &position) override final;

@@ -83,6 +83,18 @@ namespace AGE
 		return rigidBody->getMass();
 	}
 
+	void NewRigidBody::setDiagonalInertiaTensor(const glm::vec3 &diagonalInertiaTensor)
+	{
+		assert(rigidBody != nullptr && "Invalid NewRigidBody");
+		rigidBody->setDiagonalInertiaTensor(diagonalInertiaTensor);
+	}
+
+	glm::vec3 NewRigidBody::getDiagonalInertiaTensor(void) const
+	{
+		assert(rigidBody != nullptr && "Invalid NewRigidBody");
+		return rigidBody->getDiagonalInertiaTensor();
+	}
+
 	void NewRigidBody::setMaxAngularVelocity(float maxAngularVelocity)
 	{
 		assert(rigidBody != nullptr && "Invalid NewRigidBody");
@@ -109,9 +121,15 @@ namespace AGE
 
 	void NewRigidBody::setPosition(const glm::vec3 &position)
 	{
-		assert(rigidBody != nullptr && "Invalid NewRigidBody");
-		rigidBody->setPosition(position);
-		entity.getLink().setPosition(position);
+		static bool FirstCall = true;
+		if (FirstCall)
+		{
+			FirstCall = false;
+			assert(rigidBody != nullptr && "Invalid NewRigidBody");
+			rigidBody->setPosition(position);
+			entity.getLink().setPosition(position);
+			FirstCall = true;
+		}
 	}
 
 	glm::vec3 NewRigidBody::getPosition(void) const
@@ -122,15 +140,99 @@ namespace AGE
 
 	void NewRigidBody::setRotation(const glm::quat &rotation)
 	{
-		assert(rigidBody != nullptr && "Invalid NewRigidBody");
-		rigidBody->setRotation(rotation);
-		entity.getLink().setOrientation(rotation);
+		static bool FirstCall = true;
+		if (FirstCall)
+		{
+			FirstCall = false;
+			assert(rigidBody != nullptr && "Invalid NewRigidBody");
+			rigidBody->setRotation(rotation);
+			entity.getLink().setOrientation(rotation);
+			FirstCall = true;
+		}
 	}
 
 	glm::quat NewRigidBody::getRotation(void) const
 	{
 		assert(rigidBody != nullptr && "Invalid NewRigidBody");
 		return rigidBody->getRotation();
+	}
+
+	void NewRigidBody::affectByGravity(bool mustBeAffectedByGravity)
+	{
+		assert(rigidBody != nullptr && "Invalid NewRigidBody");
+		rigidBody->affectByGravity(mustBeAffectedByGravity);
+	}
+
+	bool NewRigidBody::isAffectedByGravity(void) const
+	{
+		assert(rigidBody != nullptr && "Invalid NewRigidBody");
+		return rigidBody->isAffectedByGravity();
+	}
+
+	void NewRigidBody::setAsKinematic(bool mustBeKinematic)
+	{
+		assert(rigidBody != nullptr && "Invalid NewRigidBody");
+		rigidBody->setAsKinematic(mustBeKinematic);
+	}
+
+	bool NewRigidBody::isKinematic(void) const
+	{
+		assert(rigidBody != nullptr && "Invalid NewRigidBody");
+		return rigidBody->isKinematic();
+	}
+
+	void NewRigidBody::setCollisionDetectionMode(Physics::CollisionDetectionMode collisionDetectionMode)
+	{
+		assert(rigidBody != nullptr && "Invalid NewRigidBody");
+		rigidBody->setCollisionDetectionMode(collisionDetectionMode);
+	}
+
+	Physics::CollisionDetectionMode NewRigidBody::getCollisionDetectionMode(void) const
+	{
+		assert(rigidBody != nullptr && "Invalid NewRigidBody");
+		return rigidBody->getCollisionDetectionMode();
+	}
+
+	void NewRigidBody::addExplosionForce(float explosionForce, const glm::vec3 &explosionPosition, float explosionRadius, Physics::ForceMode forceMode)
+	{
+		assert(rigidBody != nullptr && "Invalid NewRigidBody");
+		rigidBody->addExplosionForce(explosionForce, explosionPosition, explosionRadius, forceMode);
+	}
+
+	void NewRigidBody::addForce(const glm::vec3 &force, Physics::ForceMode forceMode)
+	{
+		assert(rigidBody != nullptr && "Invalid NewRigidBody");
+		rigidBody->addForce(force, forceMode);
+	}
+
+	void NewRigidBody::addForceAtWorldPosition(const glm::vec3 &force, const glm::vec3 &position, Physics::ForceMode forceMode)
+	{
+		assert(rigidBody != nullptr && "Invalid NewRigidBody");
+		rigidBody->addForceAtWorldPosition(force, position, forceMode);
+	}
+
+	void NewRigidBody::addForceAtLocalPosition(const glm::vec3 &force, const glm::vec3 &position, Physics::ForceMode forceMode)
+	{
+		assert(rigidBody != nullptr && "Invalid NewRigidBody");
+		rigidBody->addForceAtLocalPosition(force, position, forceMode);
+	}
+
+	void NewRigidBody::addTorque(const glm::vec3 &torque, Physics::ForceMode forceMode)
+	{
+		assert(rigidBody != nullptr && "Invalid NewRigidBody");
+		rigidBody->addTorque(torque, forceMode);
+	}
+
+	glm::vec3 NewRigidBody::getVelocityAtWorldPosition(const glm::vec3 &position) const
+	{
+		assert(rigidBody != nullptr && "Invalid NewRigidBody");
+		return rigidBody->getVelocityAtWorldPosition(position);
+	}
+
+	glm::vec3 NewRigidBody::getVelocityAtLocalPosition(const glm::vec3 &position) const
+	{
+		assert(rigidBody != nullptr && "Invalid NewRigidBody");
+		return rigidBody->getVelocityAtLocalPosition(position);
 	}
 
 	// Inherited Methods

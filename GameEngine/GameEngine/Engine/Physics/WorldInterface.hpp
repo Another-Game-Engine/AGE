@@ -5,6 +5,7 @@
 #include <glm/glm.hpp>
 
 #include "../Utils/Dependency.hpp"
+#include "FilterGroup.hpp"
 
 namespace AGE
 {
@@ -50,7 +51,9 @@ namespace AGE
 
 			virtual glm::vec3 getGravity(void) const = 0;
 
-			virtual void simulate(float stepSize) = 0;
+			virtual void enableCollisionBetweenGroups(FilterGroup group1, FilterGroup group2) = 0;
+
+			virtual void disableCollisionBetweenGroups(FilterGroup group1, FilterGroup group2) = 0;
 
 			virtual RigidBodyInterface *createRigidBody(const glm::vec3 &position) = 0;
 
@@ -71,6 +74,8 @@ namespace AGE
 
 			// Virtual Methods
 			virtual MaterialInterface *createMaterial(void) = 0;
+
+			virtual void simulate(float stepSize) = 0;
 		};
 	}
 }

@@ -9,11 +9,31 @@ namespace AGE
 {
 	namespace Physics
 	{
+		// Static Variables
+		static physx::PxU32 GroupCollisionFlags[32];
+
+		// Static Methods
+		physx::PxFilterFlags PhysXWorld::FilterShader(physx::PxFilterObjectAttributes attributes1, physx::PxFilterData filterData1, physx::PxFilterObjectAttributes attributes2,
+													  physx::PxFilterData filterData2, physx::PxPairFlags& pairFlags, const void *constantBlock, physx::PxU32 constantBlockSize)
+		{
+			if (physx::PxFilterObjectIsTrigger(attributes1) || physx::PxFilterObjectIsTrigger(attributes2))
+			{
+				pairFlags = physx::PxPairFlag::eTRIGGER_DEFAULT;
+				return physx::PxFilterFlag::eDEFAULT;
+			}
+			pairFlags = physx::PxPairFlag::eRESOLVE_CONTACTS | physx::PxPairFlag::eCCD_LINEAR;
+			const physx::PxU32 shapeGroup1 = filterData1.word0 & 31;
+			const physx::PxU32 shapeGroup2 = filterData2.word0 & 31;
+			const physx::PxU32 *groupCollisionFlags = static_cast<const physx::PxU32 *>(constantBlock);
+			return (groupCollisionFlags[shapeGroup1] & (1 << shapeGroup2)) == 0 ? physx::PxFilterFlag::eSUPPRESS : physx::PxFilterFlag::eDEFAULT;
+		}
+
 		// Constructors
 		PhysXWorld::PhysXWorld(PhysXPhysics *physics, const glm::vec3 &gravity)
 			: WorldInterface(physics)
 		{
 			physx::PxSceneDesc sceneDescription(physics->getPhysics()->getTolerancesScale());
+			sceneDescription.flags |= physx::PxSceneFlag::eENABLE_CCD;
 			sceneDescription.broadPhaseType = physx::PxBroadPhaseType::eMBP;
 			sceneDescription.gravity = physx::PxVec3(gravity.x, gravity.y, gravity.z);
 			if (sceneDescription.cpuDispatcher == nullptr)
@@ -25,10 +45,16 @@ namespace AGE
 					return;
 				}
 			}
+			for (std::size_t index = 0; index < sizeof(GroupCollisionFlags) / sizeof(*GroupCollisionFlags); ++index)
+			{
+				GroupCollisionFlags[index] = 0xFFFFFFFF;
+			}
 			if (sceneDescription.filterShader == nullptr)
 			{
-				sceneDescription.filterShader = physx::PxDefaultSimulationFilterShader;
+				sceneDescription.filterShader = &PhysXWorld::FilterShader;
 			}
+			sceneDescription.filterShaderData = static_cast<const void *>(GroupCollisionFlags);
+			sceneDescription.filterShaderDataSize = sizeof(GroupCollisionFlags);
 			scene = physics->getPhysics()->createScene(sceneDescription);
 			assert(scene != nullptr && "Impossible to create scene");
 		}
@@ -56,6 +82,18 @@ namespace AGE
 			assert(scene != nullptr && "Invalid scene");
 			physx::PxVec3 gravity = scene->getGravity();
 			return glm::vec3(gravity.x, gravity.y, gravity.z);
+		}
+
+		void PhysXWorld::enableCollisionBetweenGroups(FilterGroup group1, FilterGroup group2)
+		{
+			GroupCollisionFlags[static_cast<std::uint8_t>(group1)] |= (1 << static_cast<std::uint8_t>(group2));
+			GroupCollisionFlags[static_cast<std::uint8_t>(group2)] |= (1 << static_cast<std::uint8_t>(group1));
+		}
+
+		void PhysXWorld::disableCollisionBetweenGroups(FilterGroup group1, FilterGroup group2)
+		{
+			GroupCollisionFlags[static_cast<std::uint8_t>(group1)] &= ~(1 << static_cast<std::uint8_t>(group2));
+			GroupCollisionFlags[static_cast<std::uint8_t>(group2)] &= ~(1 << static_cast<std::uint8_t>(group1));
 		}
 
 		void PhysXWorld::simulate(float stepSize)

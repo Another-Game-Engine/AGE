@@ -73,6 +73,16 @@ namespace AGE
 			return 0.0f;
 		}
 
+		void NullRigidBody::setDiagonalInertiaTensor(const glm::vec3 &diagonalInertiaTensor)
+		{
+			return;
+		}
+
+		glm::vec3 NullRigidBody::getDiagonalInertiaTensor(void) const
+		{
+			return glm::vec3();
+		}
+
 		void NullRigidBody::setMaxAngularVelocity(float maxAngularVelocity)
 		{
 			return;
@@ -95,22 +105,82 @@ namespace AGE
 
 		void NullRigidBody::setPosition(const glm::vec3 &position)
 		{
-			return;
+			bodyPosition = position;
 		}
 
 		glm::vec3 NullRigidBody::getPosition(void) const
 		{
-			return glm::vec3();
+			return bodyPosition;
 		}
 
 		void NullRigidBody::setRotation(const glm::quat &rotation)
 		{
-			return;
+			bodyRotation = rotation;
 		}
 
 		glm::quat NullRigidBody::getRotation(void) const
 		{
-			return glm::quat();
+			return bodyRotation;
+		}
+
+		void NullRigidBody::affectByGravity(bool mustBeAffectedByGravity)
+		{
+			return;
+		}
+
+		bool NullRigidBody::isAffectedByGravity(void) const
+		{
+			return false;
+		}
+
+		void NullRigidBody::setAsKinematic(bool mustBeKinematic)
+		{
+			return;
+		}
+
+		bool NullRigidBody::isKinematic(void) const
+		{
+			return false;
+		}
+
+		void NullRigidBody::setCollisionDetectionMode(CollisionDetectionMode collisionDetectionMode)
+		{
+			return;
+		}
+
+		CollisionDetectionMode NullRigidBody::getCollisionDetectionMode(void) const
+		{
+			return CollisionDetectionMode::Discrete;
+		}
+
+		void NullRigidBody::addForce(const glm::vec3 &force, ForceMode forceMode)
+		{
+			return;
+		}
+
+		void NullRigidBody::addForceAtWorldPosition(const glm::vec3 &force, const glm::vec3 &position, ForceMode forceMode)
+		{
+			return;
+		}
+
+		void NullRigidBody::addForceAtLocalPosition(const glm::vec3 &force, const glm::vec3 &position, ForceMode forceMode)
+		{
+			return;
+		}
+
+		void NullRigidBody::addTorque(const glm::vec3 &torque, ForceMode forceMode)
+		{
+			return;
+		}
+
+		glm::vec3 NullRigidBody::getVelocityAtWorldPosition(const glm::vec3 &position) const
+		{
+			return glm::vec3();
+		}
+
+		glm::vec3 NullRigidBody::getVelocityAtLocalPosition(const glm::vec3 &position) const
+		{
+			return glm::vec3();
 		}
 	}
 }

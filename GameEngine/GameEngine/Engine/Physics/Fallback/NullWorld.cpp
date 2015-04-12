@@ -22,6 +22,16 @@ namespace AGE
 			return glm::vec3();
 		}
 
+		void NullWorld::enableCollisionBetweenGroups(FilterGroup group1, FilterGroup group2)
+		{
+			return;
+		}
+
+		void NullWorld::disableCollisionBetweenGroups(FilterGroup group1, FilterGroup group2)
+		{
+			return;
+		}
+
 		void NullWorld::simulate(float stepSize)
 		{
 			return;

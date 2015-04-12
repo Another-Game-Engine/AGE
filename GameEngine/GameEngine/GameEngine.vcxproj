@@ -151,6 +151,7 @@
     <ClCompile Include="Engine\Render\Properties\Properties.cpp" />
     <ClCompile Include="Engine\Render\PropertyManager.cpp" />
     <ClCompile Include="Engine\Systems\BulletDynamicSystem.cpp" />
+    <ClCompile Include="Engine\Systems\CollisionSystem.cpp" />
     <ClCompile Include="Engine\Systems\DebugSystem.cpp" />
     <ClCompile Include="Engine\Systems\FreeFlyCamera.cpp" />
     <ClCompile Include="Engine\Systems\PhysicsSystem.cpp" />
@@ -295,6 +296,7 @@
     <ClInclude Include="Engine\Components\RigidBody.hpp" />
     <ClInclude Include="Engine\Physics\BulletCollisionManager.hpp" />
     <ClInclude Include="Engine\Physics\BulletDynamicManager.hpp" />
+    <ClInclude Include="Engine\Physics\CollisionDetectionMode.hpp" />
     <ClInclude Include="Engine\Physics\ContactInformation.hpp" />
     <ClInclude Include="Engine\Physics\DynamicMotionState.hpp" />
     <ClInclude Include="Engine\Physics\EngineTypes.hpp" />
@@ -303,6 +305,8 @@
     <ClInclude Include="Engine\Physics\Fallback\NullPhysics.hpp" />
     <ClInclude Include="Engine\Physics\Fallback\NullRigidBody.hpp" />
     <ClInclude Include="Engine\Physics\Fallback\NullWorld.hpp" />
+    <ClInclude Include="Engine\Physics\FilterGroup.hpp" />
+    <ClInclude Include="Engine\Physics\ForceMode.hpp" />
     <ClInclude Include="Engine\Physics\MaterialInterface.hpp" />
     <ClInclude Include="Engine\Physics\PhysicsInterface.hpp" />
     <ClInclude Include="Engine\Physics\RigidBodyInterface.hpp" />
@@ -334,6 +338,7 @@
     <ClInclude Include="Engine\Render\Properties\Materials\Specular.hh" />
     <ClInclude Include="Engine\Render\ProgramResources\Types\Uniform\Mat4Array255.hh" />
     <ClInclude Include="Engine\Render\Properties\Properties.hh" />
+    <ClInclude Include="Engine\Systems\CollisionSystem.hpp" />
     <ClInclude Include="Engine\Systems\DebugSystem.hpp" />
     <ClInclude Include="Engine\Systems\FreeFlyCamera.hh" />
     <ClInclude Include="Engine\Systems\PhysicsSystem.hpp" />

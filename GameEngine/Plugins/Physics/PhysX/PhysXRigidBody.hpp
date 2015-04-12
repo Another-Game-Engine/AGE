@@ -25,7 +25,7 @@ namespace AGE
 
 		private:
 			// Attributes
-			physx::PxRigidDynamic *actor = nullptr;
+			physx::PxRigidDynamic *body = nullptr;
 
 			// Inherited Methods
 			void setAngularDrag(float angularDrag) override final;
@@ -52,6 +52,10 @@ namespace AGE
 
 			float getMass(void) const override final;
 
+			void setDiagonalInertiaTensor(const glm::vec3 &diagonalInertiaTensor) override final;
+
+			glm::vec3 getDiagonalInertiaTensor(void) const override final;
+
 			void setMaxAngularVelocity(float maxAngularVelocity) override final;
 
 			float getMaxAngularVelocity(void) const override final;
@@ -67,6 +71,30 @@ namespace AGE
 			void setRotation(const glm::quat &rotation) override final;
 
 			glm::quat getRotation(void) const override final;
+
+			void affectByGravity(bool mustBeAffectedByGravity) override final;
+
+			bool isAffectedByGravity(void) const override final;
+
+			void setAsKinematic(bool mustBeKinematic) override final;
+
+			bool isKinematic(void) const override final;
+
+			void setCollisionDetectionMode(CollisionDetectionMode collisionDetectionMode) override final;
+
+			CollisionDetectionMode getCollisionDetectionMode(void) const override final;
+
+			void addForce(const glm::vec3 &force, ForceMode forceMode) override final;
+
+			void addForceAtWorldPosition(const glm::vec3 &force, const glm::vec3 &position, ForceMode forceMode) override final;
+
+			void addForceAtLocalPosition(const glm::vec3 &force, const glm::vec3 &position, ForceMode forceMode) override final;
+
+			void addTorque(const glm::vec3 &torque, ForceMode forceMode) override final;
+
+			glm::vec3 getVelocityAtWorldPosition(const glm::vec3 &position) const override final;
+
+			glm::vec3 getVelocityAtLocalPosition(const glm::vec3 &position) const override final;
 		};
 	}
 }

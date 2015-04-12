@@ -27,11 +27,15 @@ namespace AGE
 		~PhysicsSystem(void);
 
 		// Methods
-		Physics::PhysicsInterface *getPlugin(void);
+		Physics::PhysicsInterface *getPhysics(void);
+
+		const Physics::PhysicsInterface *getPhysics(void) const;
 
 	private:
 		// Attributes
-		Physics::PhysicsInterface *plugin = nullptr;
+		Physics::PhysicsInterface *physics = nullptr;
+
+		EntityFilter entityFilter;
 
 		// Inherited Methods
 		bool initialize(void) override final;
@@ -39,5 +43,7 @@ namespace AGE
 		void finalize(void) override final;
 
 		bool onPluginLoaded(PluginPtr pluginData) override final;
+
+		void mainUpdate(float elapsedTime) override final;
 	};
 }

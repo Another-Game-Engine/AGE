@@ -79,6 +79,17 @@ namespace AGE
 			return 0.0f;
 		}
 
+		void BulletRigidBody::setDiagonalInertiaTensor(const glm::vec3 &diagonalInertiaTensor)
+		{
+			// TO_DO
+		}
+
+		glm::vec3 BulletRigidBody::getDiagonalInertiaTensor(void) const
+		{
+			// TO_DO
+			return glm::vec3();
+		}
+
 		void BulletRigidBody::setMaxAngularVelocity(float maxAngularVelocity)
 		{
 			// TO_DO
@@ -121,6 +132,71 @@ namespace AGE
 		{
 			// TO_DO
 			return glm::quat();
+		}
+
+		void BulletRigidBody::affectByGravity(bool mustBeAffectedByGravity)
+		{
+			// TO_DO
+		}
+
+		bool BulletRigidBody::isAffectedByGravity(void) const
+		{
+			// TO_DO
+			return false;
+		}
+
+		void BulletRigidBody::setAsKinematic(bool mustBeKinematic)
+		{
+			// TO_DO
+		}
+
+		bool BulletRigidBody::isKinematic(void) const
+		{
+			// TO_DO
+			return false;
+		}
+
+		void BulletRigidBody::setCollisionDetectionMode(CollisionDetectionMode collisionDetectionMode)
+		{
+			// TO_DO
+		}
+
+		CollisionDetectionMode BulletRigidBody::getCollisionDetectionMode(void) const
+		{
+			// TO_DO
+			return CollisionDetectionMode::Discrete;
+		}
+
+		void BulletRigidBody::addForce(const glm::vec3 &force, ForceMode forceMode)
+		{
+			// TO_DO
+		}
+
+		void BulletRigidBody::addForceAtWorldPosition(const glm::vec3 &force, const glm::vec3 &position, ForceMode forceMode)
+		{
+			// TO_DO
+		}
+
+		void BulletRigidBody::addForceAtLocalPosition(const glm::vec3 &force, const glm::vec3 &position, ForceMode forceMode)
+		{
+			// TO_DO
+		}
+
+		void BulletRigidBody::addTorque(const glm::vec3 &torque, ForceMode forceMode)
+		{
+			// TO_DO
+		}
+
+		glm::vec3 BulletRigidBody::getVelocityAtWorldPosition(const glm::vec3 &position) const
+		{
+			// TO_DO
+			return glm::vec3();
+		}
+
+		glm::vec3 BulletRigidBody::getVelocityAtLocalPosition(const glm::vec3 &position) const
+		{
+			// TO_DO
+			return glm::vec3();
 		}
 	}
 }
