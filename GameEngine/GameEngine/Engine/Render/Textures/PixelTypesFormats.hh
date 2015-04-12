@@ -33,5 +33,6 @@ std::unordered_map<GLenum, PixelType> available_type_pixel =
 {
 	{ GL_UNSIGNED_BYTE, PixelType(1) },
 	{ GL_UNSIGNED_INT, PixelType(4) },
-	{ GL_UNSIGNED_SHORT, PixelType(2) }
+	{ GL_UNSIGNED_SHORT, PixelType(2) },
+	{ GL_UNSIGNED_INT_24_8, PixelType(4) }
 };
