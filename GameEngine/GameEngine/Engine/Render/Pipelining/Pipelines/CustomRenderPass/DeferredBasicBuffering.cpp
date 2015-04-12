@@ -144,8 +144,8 @@ namespace AGE
 			// mipmap depth
 		glActiveTextureARB(GL_TEXTURE0_ARB);
 		_depth->bind();
-		glGenerateMipmap(GL_TEXTURE_2D);
-		_depth->get(4, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, _depthPixels);
+		//glGenerateMipmap(GL_TEXTURE_2D);
+		//_depth->get(4, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, _depthPixels);
 		//for (auto i = 0; i < _depthPixels.size(); ++i)
 		//{
 		//	_depthPixels[i] = (((_depthPixels[i] & 0xFFFFFF00) >> 8) / 0xFFFF);
@@ -161,6 +161,8 @@ namespace AGE
 		*_programs[PROGRAM_OCCLUDER]->get_resource<Mat4>("projection_matrix") = infos.projection;
 		*_programs[PROGRAM_OCCLUDER]->get_resource<Mat4>("view_matrix") = infos.view;
 
+		auto VP = infos.projection * infos.view;
+
 		for (auto &meshPaint : pipeline.keys)
 		{
 			auto painter = _painterManager->get_painter(Key<Painter>::createKey(meshPaint.first));
@@ -168,6 +170,13 @@ namespace AGE
 			{
 				if (mode.renderMode.at(AGE_OCCLUDER) == false)
 				{
+					//for (auto &meshKey : mode.vertices)
+					//{
+					//	auto modelProject = mode.properties[meshKey.getId()]
+					//	auto MVP = VP * mesh
+
+					//		painter->draw(GL_TRIANGLES, _programs[PROGRAM_OCCLUDER], mode.properties, mode.vertices);
+					//}
 					painter->draw(GL_TRIANGLES, _programs[PROGRAM_OCCLUDER], mode.properties, mode.vertices);
 				}
 			}
