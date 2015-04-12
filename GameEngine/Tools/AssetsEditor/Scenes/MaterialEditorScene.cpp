@@ -76,7 +76,7 @@ namespace AGE
 			}
 			_mode = ModeMaterialEditor::selectSubMaterial;
 		}
-		else
+		if (_indexMaterial == -1)
 		{
 			ImGui::Text("Please select one material for edition");
 		}
@@ -123,7 +123,7 @@ namespace AGE
 		delete[] matListBox;
 		if (_indexSubMaterial != -1 && ImGui::Button("open a sub material"))
 			_mode = ModeMaterialEditor::edit;
-		else
+		if (_indexSubMaterial == -1)
 			ImGui::Text("Please select one sub material for edition");
 	}
 
