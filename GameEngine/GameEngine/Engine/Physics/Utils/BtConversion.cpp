@@ -27,7 +27,7 @@ btVector3 convertGLMVectorToBullet(const glm::vec3 &vector)
 
 btVector3 convertGLMVectorToBullet(const glm::uvec3 &vector)
 {
-	return btVector3(vector.x, vector.y, vector.z);
+	return btVector3(static_cast<btScalar>(vector.x), static_cast<btScalar>(vector.y), static_cast<btScalar>(vector.z));
 }
 
 glm::vec3 convertBulletVectorToGLM(const btVector3& vector)

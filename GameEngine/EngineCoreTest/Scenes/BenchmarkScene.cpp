@@ -116,7 +116,7 @@ namespace AGE
 			|| ImGui::ListBox("Scenes"
 			, &EngineCoreTestConfiguration::getSelectedSceneIndex()
 			, EngineCoreTestConfiguration::getScenesName().data()
-			, EngineCoreTestConfiguration::getScenesName().size()))
+			, static_cast<int>(EngineCoreTestConfiguration::getScenesName().size())))
 		{
 			clearAllEntities();
 

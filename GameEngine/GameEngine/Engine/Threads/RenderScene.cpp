@@ -172,7 +172,7 @@ namespace AGE
 		if (l->hasMoved == false)
 		{
 			l->hasMoved = true;
-			l->moveBufferIdx = _pointLightsToMove.size();
+			l->moveBufferIdx = static_cast<uint32_t>(_pointLightsToMove.size());
 			_pointLightsToMove.push_back(msg.key.id);
 		}
 	}

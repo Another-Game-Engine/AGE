@@ -35,7 +35,7 @@ namespace AGE
 		pointLightning->setNextPass(_deferredMerging);
 		_deferredMerging->setNextPass(debugMerging);
 
-		setAmbient(glm::vec3(0.2));
+		setAmbient(glm::vec3(0.2f));
 	}
 
 	DebugDeferredShading::DebugDeferredShading(DebugDeferredShading &&move) :
