@@ -10,9 +10,9 @@
 namespace AGE
 {
 	enum class ModeMaterialEditor {
-		menu,
-		edit,
-		size
+		selectMaterial,
+		selectSubMaterial,
+		edit
 	};
 
 	class MaterialEditorScene : public AScene
@@ -26,14 +26,20 @@ namespace AGE
 		virtual bool _userStart();
 		virtual bool _userUpdateBegin(float time);
 		virtual bool _userUpdateEnd(float time);
+		void _selectMaterial();
+		void _selectSubMaterial();
 		void _editName();
-		void _editMaterial();
-		void _menu();
+		void _editData();
+
+
+
+
 		void _resetNameEdition();
 	
 	private:
 		ModeMaterialEditor _mode;
-		int _selectMaterial;
+		int _indexMaterial;
+		int _indexSubMaterial;
 		MaterialDataSet _current;
 		bool _editModeName;
 		char _bufferName[NAME_LENGTH];

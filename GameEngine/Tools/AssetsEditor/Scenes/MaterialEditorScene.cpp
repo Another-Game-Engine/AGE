@@ -13,8 +13,9 @@ namespace AGE
 
 	MaterialEditorScene::MaterialEditorScene(AGE::Engine *engine)
 		: AScene(engine),
-		_mode(ModeMaterialEditor::menu),
-		_selectMaterial(-1),
+		_mode(ModeMaterialEditor::selectMaterial),
+		_indexMaterial(-1),
+		_indexSubMaterial(-1),
 		_editModeName(false)
 	{
 		memset(_bufferName, 0, NAME_LENGTH);
@@ -32,15 +33,16 @@ namespace AGE
 	void MaterialEditorScene::_resetNameEdition()
 	{
 		_editModeName = false;
+		_indexSubMaterial = -1;
 		memset(_bufferName, 0, NAME_LENGTH);
 	}
 
-	void MaterialEditorScene::_menu()
+	void MaterialEditorScene::_selectMaterial()
 	{
 		const std::string currentDir = Directory::GetCurrentDirectory();
 		const std::string absPath = Path::AbsoluteName(currentDir.c_str(), WE::EditorConfiguration::GetCookedDirectory().c_str());
-		std::vector<std::string> _materialGettable;
-		std::vector<std::string> _materialFullPath;
+		std::vector<std::string> materialGettable;
+		std::vector<std::string> materialFullPath;
 		Directory dir;
 		const bool succeed = dir.open(absPath.c_str());
 		AGE_ASSERT(succeed && "Impossible to open directory");
@@ -48,37 +50,35 @@ namespace AGE
 		{
 			if (Directory::IsFile(*it) && AGE::FileSystemHelpers::GetExtension(*it) == "mage")
 			{
-				_materialGettable.push_back(std::string(Path::RelativeName(absPath.c_str(), *it)));
-				_materialFullPath.push_back(*it);
+				materialGettable.push_back(std::string(Path::RelativeName(absPath.c_str(), *it)));
+				materialFullPath.push_back(*it);
 			}
 		}
 		dir.close();
-		char const **matListBox = new char const *[_materialGettable.size()];
-		for (auto index = 0; index < _materialGettable.size(); ++index) {
-			matListBox[index] = _materialGettable[index].c_str();
+		char const **matListBox = new char const *[materialGettable.size()];
+		for (auto index = 0; index < materialFullPath.size(); ++index) {
+			matListBox[index] = materialGettable[index].c_str();
 		}
-		ImGui::ListBox("List of Material existing", &_selectMaterial, matListBox, _materialGettable.size());
+		ImGui::ListBox("List of material existing", &_indexMaterial, matListBox, materialFullPath.size());
 		delete[] matListBox;
-		if (_selectMaterial != -1 && ImGui::Button("open a material"))
+		if (_indexMaterial != -1 && ImGui::Button("open a material"))
 		{
 			_resetNameEdition();
 			std::shared_ptr<MaterialDataSet> material_data_set = std::make_shared<MaterialDataSet>();
-			std::ifstream ifs(_materialFullPath[_selectMaterial]);
+			std::ifstream ifs(materialFullPath[_indexMaterial]);
 			cereal::PortableBinaryInputArchive ar(ifs);
 			ar(*material_data_set.get());
 			_current = *material_data_set;
 			if (_current.name == "")
 			{
-				std::string fileName = std::string(_materialGettable[_selectMaterial]);
+				std::string fileName = std::string(materialGettable[_indexMaterial]);
 				_current.name = fileName.substr(0, fileName.find('.'));
 			}
-			_mode = ModeMaterialEditor::edit;
+			_mode = ModeMaterialEditor::selectSubMaterial;
 		}
-		if (ImGui::Button("create a new material"))
+		else
 		{
-			_resetNameEdition();
-			_current = MaterialDataSet();
-			_mode = ModeMaterialEditor::edit;
+			ImGui::Text("Please select one material for edition");
 		}
 	}
 
@@ -106,18 +106,32 @@ namespace AGE
 		}
 	}
 
-	void MaterialEditorScene::_editMaterial()
+	void MaterialEditorScene::_selectSubMaterial()
 	{
 		if (ImGui::Button("precedent"))
-			_mode = ModeMaterialEditor::menu;
+			_mode = ModeMaterialEditor::selectMaterial;
 		ImGui::Separator();
 		ImGui::Spacing();
 		_editName();
-		if (ImGui::Button("cook")) {
-			std::string const currentDir = Directory::GetCurrentDirectory();
-			const std::string absPath = Path::AbsoluteName(currentDir.c_str(), WE::EditorConfiguration::GetCookedDirectory().c_str());
-			auto fileName = absPath + _current.name + ".mage";
-		}
+		std::vector<std::string> subMaterials;
+		for (auto index = 0; index < _current.collection.size(); ++index)
+			subMaterials.emplace_back(std::string("sub material: ") + std::to_string(index));
+		char const **matListBox = new char const *[_current.collection.size()];
+		for (auto index = 0; index < _current.collection.size(); ++index)
+			matListBox[index] = subMaterials[index].c_str();
+		ImGui::ListBox("List of sub material", &_indexSubMaterial, matListBox, _current.collection.size());
+		delete[] matListBox;
+		if (_indexSubMaterial != -1 && ImGui::Button("open a sub material"))
+			_mode = ModeMaterialEditor::edit;
+		else
+			ImGui::Text("Please select one sub material for edition");
+	}
+
+	void MaterialEditorScene::_editData()
+	{
+		if (ImGui::Button("precedent"))
+			_mode = ModeMaterialEditor::selectSubMaterial;
+		MaterialData &mat = _current.collection[_indexSubMaterial];
 	}
 
 	bool MaterialEditorScene::_userUpdateBegin(float time)
@@ -125,11 +139,14 @@ namespace AGE
 		glClear(GL_COLOR_BUFFER_BIT);
 		ImGui::BeginChild("Material editor", ImVec2(0, 0), true);
 		switch (_mode) {
-		case ModeMaterialEditor::menu:
-			_menu();
+		case ModeMaterialEditor::selectMaterial:
+			_selectMaterial();
+			break;
+		case ModeMaterialEditor::selectSubMaterial:
+			_selectSubMaterial();
 			break;
 		case ModeMaterialEditor::edit:
-			_editMaterial();
+			_editData();
 			break;
 		}
 		return true;
