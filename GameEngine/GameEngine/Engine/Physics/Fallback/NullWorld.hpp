@@ -1,8 +1,9 @@
 #pragma once
 
 #include <Physics/WorldInterface.hpp>
-
-#include "NullPlugin.hpp"
+#include <Physics/Fallback/NullPhysics.hpp>
+#include <Physics/Fallback/NullMaterial.hpp>
+#include <Physics/Fallback/NullRigidBody.hpp>
 
 namespace AGE
 {
@@ -14,7 +15,7 @@ namespace AGE
 			// Constructors
 			NullWorld(void) = delete;
 
-			NullWorld(NullPlugin *plugin);
+			NullWorld(NullPhysics *physics);
 
 			NullWorld(const NullWorld &) = delete;
 
@@ -31,6 +32,10 @@ namespace AGE
 			glm::vec3 getGravity(void) const override final;
 
 			void simulate(float stepSize) override final;
+
+			RigidBodyInterface *createRigidBody(const glm::vec3 &position) override final;
+
+			MaterialInterface *createMaterial(void) override final;
 		};
 	}
 }

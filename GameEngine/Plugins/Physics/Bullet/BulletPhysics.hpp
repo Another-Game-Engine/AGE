@@ -1,24 +1,24 @@
 #pragma once
 
-#include <Physics/PhysicsInterface.hpp>
+#include "PhysicsInterface.hpp"
 
 namespace AGE
 {
 	namespace Physics
 	{
-		class NullPlugin final : public PhysicsInterface
+		class BulletPhysics final : public PhysicsInterface
 		{
 		public:
 			// Constructors
-			NullPlugin(void) = default;
+			BulletPhysics(void) = default;
 
-			NullPlugin(const NullPlugin &) = delete;
+			BulletPhysics(const BulletPhysics &) = delete;
 
 			// Assignment Operators
-			NullPlugin &operator=(const NullPlugin &) = delete;
+			BulletPhysics &operator=(const BulletPhysics &) = delete;
 
 			// Destructor
-			virtual ~NullPlugin(void) = default;
+			virtual ~BulletPhysics(void) = default;
 
 		private:
 			// Inherited Methods

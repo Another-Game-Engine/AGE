@@ -2,15 +2,18 @@
 #include <cassert>
 
 #include "PhysXWorld.hpp"
+#include "PhysXRigidBody.hpp"
+#include "PhysXMaterial.hpp"
 
 namespace AGE
 {
 	namespace Physics
 	{
-		PhysXWorld::PhysXWorld(PhysXPlugin *plugin, const glm::vec3 &gravity)
-			: WorldInterface(static_cast<PhysicsInterface *>(plugin))
+		// Constructors
+		PhysXWorld::PhysXWorld(PhysXPhysics *physics, const glm::vec3 &gravity)
+			: WorldInterface(physics)
 		{
-			physx::PxSceneDesc sceneDescription(plugin->getPhysics()->getTolerancesScale());
+			physx::PxSceneDesc sceneDescription(physics->getPhysics()->getTolerancesScale());
 			sceneDescription.broadPhaseType = physx::PxBroadPhaseType::eMBP;
 			sceneDescription.gravity = physx::PxVec3(gravity.x, gravity.y, gravity.z);
 			if (sceneDescription.cpuDispatcher == nullptr)
@@ -18,7 +21,7 @@ namespace AGE
 				sceneDescription.cpuDispatcher = physx::PxDefaultCpuDispatcherCreate(std::thread::hardware_concurrency());
 				if (sceneDescription.cpuDispatcher == nullptr)
 				{
-					// Log Error
+					assert(!"Impossible to create cpu dispatcher");
 					return;
 				}
 			}
@@ -26,13 +29,22 @@ namespace AGE
 			{
 				sceneDescription.filterShader = physx::PxDefaultSimulationFilterShader;
 			}
-			scene = plugin->getPhysics()->createScene(sceneDescription);
-			if (scene == nullptr)
-			{
-				// Log Error
-			}
+			scene = physics->getPhysics()->createScene(sceneDescription);
+			assert(scene != nullptr && "Impossible to create scene");
 		}
 
+		// Methods
+		physx::PxScene *PhysXWorld::getScene(void)
+		{
+			return scene;
+		}
+
+		const physx::PxScene *PhysXWorld::getScene(void) const
+		{
+			return scene;
+		}
+
+		// Inherited Methods
 		void PhysXWorld::setGravity(const glm::vec3 &gravity)
 		{
 			assert(scene != nullptr && "Invalid scene");
@@ -51,6 +63,16 @@ namespace AGE
 			assert(scene != nullptr && "Invalid scene");
 			scene->simulate(stepSize);
 			scene->fetchResults(true);
+		}
+
+		RigidBodyInterface *PhysXWorld::createRigidBody(const glm::vec3 &position)
+		{
+			return static_cast<RigidBodyInterface *>(new PhysXRigidBody(this, position));
+		}
+
+		MaterialInterface *PhysXWorld::createMaterial(void)
+		{
+			return static_cast<MaterialInterface *>(new PhysXMaterial(this));
 		}
 	}
 }

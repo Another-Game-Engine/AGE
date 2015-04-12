@@ -7,14 +7,15 @@
 #include <glm/glm.hpp>
 
 #include "EngineTypes.hpp"
-#include "WorldInterface.hpp"
 #include "../Utils/DependenciesInjector.hpp"
 
 namespace AGE
 {
 	namespace Physics
 	{
-		class PhysicsInterface : public Dependency<PhysicsInterface>
+		class WorldInterface;
+
+		class PhysicsInterface : public Dependency < PhysicsInterface >
 		{
 		public:
 			// Constructors
@@ -29,52 +30,23 @@ namespace AGE
 			virtual ~PhysicsInterface(void) = default;
 
 			// Methods
-			inline bool startup(void)
-			{
-				return initialize() && createWorld() != nullptr;
-			}
+			bool startup(void);
 
-			inline void shutdown(void)
-			{
-				finalize();
-				if (world != nullptr)
-				{
-					destroyWorld();
-				}
-			}
+			void shutdown(void);
 
-			inline WorldInterface *createWorld(void)
-			{
-				assert(world == nullptr && "World already created");
-				world = createWorld(glm::vec3(0.0f, -9.81f, 0.0f));
-				_dependencyManager->setInstance(world);
-				return world;
-			}
+			WorldInterface *createWorld(void);
 
-			inline WorldInterface *getWorld(void)
-			{
-				assert(world != nullptr && "Invalid world");
-				return world;
-			}
+			WorldInterface *getWorld(void);
 
-			inline const WorldInterface *getWorld(void) const
-			{
-				assert(world != nullptr && "Invalid world");
-				return world;
-			}
+			const WorldInterface *getWorld(void) const;
 
-			inline void destroyWorld(void)
-			{
-				assert(world != nullptr && "Invalid world");
-				_dependencyManager->removeInstance<WorldInterface>();
-				destroyWorld(world);
-				world = nullptr;
-			}
+			void destroyWorld(void);
 
 			// Virtual Methods
 			virtual EngineTypes getPluginType(void) const = 0;
 
 		protected:
+			// Attributes
 			WorldInterface *world = nullptr;
 
 			// Virtual Methods
@@ -88,3 +60,5 @@ namespace AGE
 		};
 	}
 }
+
+#include "PhysicsInterface.inl"

@@ -15,10 +15,13 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="PhysXPlugin.hpp">
+    <ClInclude Include="PhysXWorld.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PhysXWorld.hpp">
+    <ClInclude Include="..\..\..\GameEngine\Engine\Physics\RigidBodyInterface.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\GameEngine\Engine\Physics\MaterialInterface.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\GameEngine\Engine\Physics\PhysicsInterface.hpp">
@@ -27,16 +30,45 @@
     <ClInclude Include="..\..\..\GameEngine\Engine\Physics\WorldInterface.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="PhysXPhysics.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysXMaterial.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysXRigidBody.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="PhysXPlugin.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="PhysXWorld.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="PhysXExports.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="PhysXPhysics.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PhysXMaterial.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PhysXRigidBody.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\GameEngine\Engine\Physics\MaterialInterface.inl">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="..\..\..\GameEngine\Engine\Physics\RigidBodyInterface.inl">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="..\..\..\GameEngine\Engine\Physics\WorldInterface.inl">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="..\..\..\GameEngine\Engine\Physics\PhysicsInterface.inl">
+      <Filter>Header Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

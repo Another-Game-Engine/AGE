@@ -1,7 +1,7 @@
 #include <Systems/PhysicsSystem.hpp>
 #include <Physics/EngineTypeToPluginName.hpp>
 #include <Physics/WorldInterface.hpp>
-#include <Physics/Fallback/NullPlugin.hpp>
+#include <Physics/Fallback/NullPhysics.hpp>
 
 namespace AGE
 {
@@ -12,12 +12,12 @@ namespace AGE
 		_name = "PhysicsSystem";
 		if (physicsEngineType == Physics::EngineTypes::Null)
 		{
-			plugin = new Physics::NullPlugin;
+			plugin = new Physics::NullPhysics;
 		}
 		else if (!addPlugin(Physics::GetPluginNameForEngine(physicsEngineType)))
 		{
 			AGE_ERROR("Impossible to load physics plugin '", Physics::GetPluginNameForEngine(physicsEngineType), "'. Falling back to physics plugin '", Physics::GetPluginNameForEngine(Physics::EngineTypes::Null), "'.");
-			plugin = new Physics::NullPlugin;
+			plugin = new Physics::NullPhysics;
 		}
 	}
 
@@ -39,7 +39,7 @@ namespace AGE
 	// Virtual Methods
 	bool PhysicsSystem::initialize(void)
 	{
-		// Set Dependency to real plugin (physics enabled if plugin != NullPlugin)
+		// Set Dependency to real plugin (physics enabled if plugin != NullPhysics)
 		_scene->getInstance<Physics::PhysicsInterface>()->shutdown();
 		_scene->deleteInstance<Physics::PhysicsInterface>();
 		_scene->setInstance(plugin);
@@ -55,7 +55,7 @@ namespace AGE
 		plugin = nullptr;
 		// Set Dependency to the fallback plugin (physics disabled) --> Needed if a RigidBody is added while no PhysicsSystem exists
 		_scene->removeInstance<Physics::PhysicsInterface>();
-		_scene->setInstance<Physics::NullPlugin, Physics::PhysicsInterface>()->startup();
+		_scene->setInstance<Physics::NullPhysics, Physics::PhysicsInterface>()->startup();
 	}
 
 	bool PhysicsSystem::onPluginLoaded(PluginPtr pluginData)

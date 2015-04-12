@@ -1,7 +1,7 @@
 #pragma once
 
 #include "WorldInterface.hpp"
-#include "PhysXPlugin.hpp"
+#include "PhysXPhysics.hpp"
 
 namespace AGE
 {
@@ -13,7 +13,7 @@ namespace AGE
 			// Constructors
 			PhysXWorld(void) = delete;
 
-			PhysXWorld(PhysXPlugin *plugin, const glm::vec3 &gravity);
+			PhysXWorld(PhysXPhysics *physics, const glm::vec3 &gravity);
 
 			PhysXWorld(const PhysXWorld &) = delete;
 
@@ -22,6 +22,11 @@ namespace AGE
 
 			// Destructor
 			virtual ~PhysXWorld(void) = default;
+
+			// Methods
+			physx::PxScene *getScene(void);
+
+			const physx::PxScene *getScene(void) const;
 
 		private:
 			// Attributes
@@ -33,6 +38,10 @@ namespace AGE
 			glm::vec3 getGravity(void) const override final;
 
 			void simulate(float stepSize) override final;
+
+			RigidBodyInterface *createRigidBody(const glm::vec3 &position) override final;
+
+			MaterialInterface *createMaterial(void) override final;
 		};
 	}
 }

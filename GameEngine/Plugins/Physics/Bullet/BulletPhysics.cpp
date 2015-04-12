@@ -1,4 +1,4 @@
-#include "BulletPlugin.hpp"
+#include "BulletPhysics.hpp"
 #include "BulletWorld.hpp"
 
 namespace AGE
@@ -6,28 +6,28 @@ namespace AGE
 	namespace Physics
 	{
 		// Inherited Methods
-		EngineTypes BulletPlugin::getPluginType(void) const
+		EngineTypes BulletPhysics::getPluginType(void) const
 		{
 			return EngineTypes::Bullet;
 		}
 
-		bool BulletPlugin::initialize(void)
+		bool BulletPhysics::initialize(void)
 		{
 			// TO_DO
 			return true;
 		}
 
-		void BulletPlugin::finalize(void)
+		void BulletPhysics::finalize(void)
 		{
 			// TO_DO
 		}
 
-		WorldInterface *BulletPlugin::createWorld(const glm::vec3 &gravity)
+		WorldInterface *BulletPhysics::createWorld(const glm::vec3 &gravity)
 		{
 			return static_cast<WorldInterface *>(new BulletWorld(this, gravity));
 		}
 
-		void BulletPlugin::destroyWorld(WorldInterface *world)
+		void BulletPhysics::destroyWorld(WorldInterface *world)
 		{
 			delete static_cast<BulletWorld *>(world);
 		}

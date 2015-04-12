@@ -11,18 +11,19 @@ namespace AGE
 	namespace Physics
 	{
 		class PhysicsInterface;
+		class RigidBodyInterface;
+		class MaterialInterface;
 
-		class WorldInterface : public Dependency<WorldInterface>
+		class WorldInterface : public Dependency < WorldInterface >
 		{
+			// Friendship
+			friend RigidBodyInterface;
+
 		public:
-			// Constructors
 			WorldInterface(void) = delete;
 
-			inline WorldInterface(PhysicsInterface *plugin)
-				: plugin(plugin)
-			{
-				return;
-			}
+			// Constructors
+			WorldInterface(PhysicsInterface *physics);
 
 			WorldInterface(const WorldInterface &) = delete;
 
@@ -30,41 +31,19 @@ namespace AGE
 			WorldInterface &operator=(const WorldInterface &) = delete;
 
 			// Methods
-			inline PhysicsInterface *getPlugin(void)
-			{
-				return plugin;
-			}
+			PhysicsInterface *getPhysics(void);
 
-			inline const PhysicsInterface *getPlugin(void) const
-			{
-				return plugin;
-			}
+			const PhysicsInterface *getPhysics(void) const;
 
-			inline void setGravity(float x, float y, float z)
-			{
-				setGravity(glm::vec3(x, y, z));
-			}
+			void setGravity(float x, float y, float z);
 
-			inline void setTargetFPS(std::size_t target)
-			{
-				targetFPS = target;
-			}
+			void setTargetFPS(std::size_t target);
 
-			inline std::size_t getTargetFPS(void) const
-			{
-				return targetFPS;
-			}
+			std::size_t getTargetFPS(void) const;
 
-			inline void update(float elapsedTime)
-			{
-				const float stepSize = 1.0f / static_cast<float>(targetFPS);
-				accumulator += elapsedTime;
-				while (accumulator >= stepSize)
-				{
-					simulate(stepSize);
-					accumulator -= stepSize;
-				}
-			}
+			void update(float elapsedTime);
+
+			void destroyRigidBody(RigidBodyInterface *rigidBody);
 
 			// Virtual Methods
 			virtual void setGravity(const glm::vec3 &gravity) = 0;
@@ -73,18 +52,27 @@ namespace AGE
 
 			virtual void simulate(float stepSize) = 0;
 
-		protected:
-			// Attributes
-			PhysicsInterface *plugin = nullptr;
+			virtual RigidBodyInterface *createRigidBody(const glm::vec3 &position) = 0;
 
+		protected:
 			// Destructor
 			virtual ~WorldInterface(void) = default;
 
 		private:
 			// Attributes
+			PhysicsInterface *physics = nullptr;
+
 			std::size_t targetFPS = 60;
 
 			float accumulator = 0.0f;
+
+			// Methods
+			void destroyMaterial(MaterialInterface *material);
+
+			// Virtual Methods
+			virtual MaterialInterface *createMaterial(void) = 0;
 		};
 	}
 }
+
+#include "WorldInterface.inl"

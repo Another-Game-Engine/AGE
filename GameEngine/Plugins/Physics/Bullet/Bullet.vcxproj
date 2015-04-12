@@ -163,15 +163,27 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\GameEngine\Engine\Physics\MaterialInterface.hpp" />
     <ClInclude Include="..\..\..\GameEngine\Engine\Physics\PhysicsInterface.hpp" />
+    <ClInclude Include="..\..\..\GameEngine\Engine\Physics\RigidBodyInterface.hpp" />
     <ClInclude Include="..\..\..\GameEngine\Engine\Physics\WorldInterface.hpp" />
-    <ClInclude Include="BulletPlugin.hpp" />
+    <ClInclude Include="BulletMaterial.hpp" />
+    <ClInclude Include="BulletPhysics.hpp" />
+    <ClInclude Include="BulletRigidBody.hpp" />
     <ClInclude Include="BulletWorld.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BulletExports.cpp" />
-    <ClCompile Include="BulletPlugin.cpp" />
+    <ClCompile Include="BulletMaterial.cpp" />
+    <ClCompile Include="BulletPhysics.cpp" />
+    <ClCompile Include="BulletRigidBody.cpp" />
     <ClCompile Include="BulletWorld.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\GameEngine\Engine\Physics\MaterialInterface.inl" />
+    <None Include="..\..\..\GameEngine\Engine\Physics\PhysicsInterface.inl" />
+    <None Include="..\..\..\GameEngine\Engine\Physics\RigidBodyInterface.inl" />
+    <None Include="..\..\..\GameEngine\Engine\Physics\WorldInterface.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

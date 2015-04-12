@@ -1,4 +1,4 @@
-#include "NullPlugin.hpp"
+#include "NullPhysics.hpp"
 #include "NullWorld.hpp"
 
 namespace AGE
@@ -6,27 +6,27 @@ namespace AGE
 	namespace Physics
 	{
 		// Inherited Methods
-		EngineTypes NullPlugin::getPluginType(void) const
+		EngineTypes NullPhysics::getPluginType(void) const
 		{
 			return EngineTypes::Null;
 		}
 
-		bool NullPlugin::initialize(void)
+		bool NullPhysics::initialize(void)
 		{
 			return true;
 		}
 
-		void NullPlugin::finalize(void)
+		void NullPhysics::finalize(void)
 		{
 			return;
 		}
 
-		WorldInterface *NullPlugin::createWorld(const glm::vec3 &gravity)
+		WorldInterface *NullPhysics::createWorld(const glm::vec3 &gravity)
 		{
 			return static_cast<WorldInterface *>(new NullWorld(this));
 		}
 
-		void NullPlugin::destroyWorld(WorldInterface *world)
+		void NullPhysics::destroyWorld(WorldInterface *world)
 		{
 			delete static_cast<NullWorld *>(world);
 		}

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "WorldInterface.hpp"
-#include "BulletPlugin.hpp"
+#include "BulletPhysics.hpp"
 
 namespace AGE
 {
@@ -13,7 +13,7 @@ namespace AGE
 			// Constructors
 			BulletWorld(void) = delete;
 
-			BulletWorld(BulletPlugin *plugin, const glm::vec3 &gravity);
+			BulletWorld(BulletPhysics *physics, const glm::vec3 &gravity);
 
 			BulletWorld(const BulletWorld &) = delete;
 
@@ -30,6 +30,10 @@ namespace AGE
 			glm::vec3 getGravity(void) const override final;
 
 			void simulate(float stepSize) override final;
+
+			RigidBodyInterface *createRigidBody(const glm::vec3 &position) override final;
+
+			MaterialInterface *createMaterial(void) override final;
 		};
 	}
 }

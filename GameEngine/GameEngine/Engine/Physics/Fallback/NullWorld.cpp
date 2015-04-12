@@ -5,8 +5,8 @@ namespace AGE
 	namespace Physics
 	{
 		// Constructors
-		NullWorld::NullWorld(NullPlugin *plugin)
-			: WorldInterface(plugin)
+		NullWorld::NullWorld(NullPhysics *physics)
+			: WorldInterface(physics)
 		{
 			return;
 		}
@@ -25,6 +25,16 @@ namespace AGE
 		void NullWorld::simulate(float stepSize)
 		{
 			return;
+		}
+
+		RigidBodyInterface *NullWorld::createRigidBody(const glm::vec3 &position)
+		{
+			return static_cast<RigidBodyInterface *>(new NullRigidBody(this));
+		}
+
+		MaterialInterface *NullWorld::createMaterial(void)
+		{
+			return static_cast<MaterialInterface *>(new NullMaterial);
 		}
 	}
 }

@@ -121,11 +121,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\Vendors\imgui\imgui.cpp" />
+    <ClCompile Include="Engine\Components\RigidBody.cpp" />
     <ClCompile Include="Engine\Physics\BulletCollisionManager.cpp" />
     <ClCompile Include="Engine\Physics\ContactInformation.cpp" />
     <ClCompile Include="Engine\Physics\DynamicMotionState.cpp" />
     <ClCompile Include="Engine\Physics\EngineTypeToPluginName.cpp" />
-    <ClCompile Include="Engine\Physics\Fallback\NullPlugin.cpp" />
+    <ClCompile Include="Engine\Physics\Fallback\NullMaterial.cpp" />
+    <ClCompile Include="Engine\Physics\Fallback\NullPhysics.cpp" />
+    <ClCompile Include="Engine\Physics\Fallback\NullRigidBody.cpp" />
     <ClCompile Include="Engine\Physics\Fallback\NullWorld.cpp" />
     <ClCompile Include="Engine\Physics\Utils\BtConversion.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomPipeline\DebugDeferredShading.cpp" />
@@ -137,7 +140,7 @@
     <ClCompile Include="Engine\Core\Inputs\ActionManager.cpp" />
     <ClCompile Include="Engine\AssetManagement\AssetManager.cpp" />
     <ClCompile Include="Engine\Components\Light.cpp" />
-    <ClCompile Include="Engine\Components\RigidBody.cpp" />
+    <ClCompile Include="Engine\Components\NewRigidBody.cpp" />
     <ClCompile Include="Engine\Context\IRenderContext.cpp" />
     <ClCompile Include="Engine\Context\SDL\SdlToAgeInputs.cpp" />
     <ClCompile Include="Engine\Entities\Entity.cpp" />
@@ -289,15 +292,20 @@
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
     <ClInclude Include="..\Vendors\imgui\imgui.h" />
     <ClInclude Include="..\Vendors\imgui\stb_textedit.h" />
+    <ClInclude Include="Engine\Components\RigidBody.hpp" />
     <ClInclude Include="Engine\Physics\BulletCollisionManager.hpp" />
     <ClInclude Include="Engine\Physics\BulletDynamicManager.hpp" />
     <ClInclude Include="Engine\Physics\ContactInformation.hpp" />
     <ClInclude Include="Engine\Physics\DynamicMotionState.hpp" />
     <ClInclude Include="Engine\Physics\EngineTypes.hpp" />
     <ClInclude Include="Engine\Physics\EngineTypeToPluginName.hpp" />
-    <ClInclude Include="Engine\Physics\Fallback\NullPlugin.hpp" />
+    <ClInclude Include="Engine\Physics\Fallback\NullMaterial.hpp" />
+    <ClInclude Include="Engine\Physics\Fallback\NullPhysics.hpp" />
+    <ClInclude Include="Engine\Physics\Fallback\NullRigidBody.hpp" />
     <ClInclude Include="Engine\Physics\Fallback\NullWorld.hpp" />
+    <ClInclude Include="Engine\Physics\MaterialInterface.hpp" />
     <ClInclude Include="Engine\Physics\PhysicsInterface.hpp" />
+    <ClInclude Include="Engine\Physics\RigidBodyInterface.hpp" />
     <ClInclude Include="Engine\Physics\Utils\BtConversion.hpp" />
     <ClInclude Include="Engine\Physics\WorldInterface.hpp" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomPipeline\DebugDeferredShading.hh" />
@@ -473,7 +481,7 @@
     <ClInclude Include="Engine\Components\ComponentRegistrationManager.hpp" />
     <ClInclude Include="Engine\Components\FPController.hpp" />
     <ClInclude Include="Engine\Components\GraphNode.hpp" />
-    <ClInclude Include="Engine\Components\RigidBody.hpp" />
+    <ClInclude Include="Engine\Components\NewRigidBody.hpp" />
     <ClInclude Include="Engine\Components\RotationForce.hh" />
     <ClInclude Include="Engine\Core\EntityFilter.hpp" />
     <ClInclude Include="Engine\Core\EntityIdRegistrar.hpp" />
@@ -560,6 +568,9 @@
     <None Include="Engine\Core\MaterialPass.hh" />
     <None Include="Engine\Core\Timer.hh" />
     <None Include="Engine\Parsers\Parsers.hh" />
+    <None Include="Engine\Physics\MaterialInterface.inl" />
+    <None Include="Engine\Physics\RigidBodyInterface.inl" />
+    <None Include="Engine\Physics\WorldInterface.inl" />
     <None Include="Engine\Utils\OpenGL.hh" />
     <None Include="Engine\Utils\Singleton.hh" />
     <None Include="Engine\Utils\SmartPointer.hh" />

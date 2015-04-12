@@ -15,10 +15,13 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BulletPlugin.hpp">
+    <ClInclude Include="BulletWorld.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="BulletWorld.hpp">
+    <ClInclude Include="..\..\..\GameEngine\Engine\Physics\MaterialInterface.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\GameEngine\Engine\Physics\RigidBodyInterface.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\GameEngine\Engine\Physics\PhysicsInterface.hpp">
@@ -27,16 +30,45 @@
     <ClInclude Include="..\..\..\GameEngine\Engine\Physics\WorldInterface.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="BulletPhysics.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BulletMaterial.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BulletRigidBody.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="BulletPlugin.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="BulletWorld.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="BulletExports.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="BulletPhysics.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BulletMaterial.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BulletRigidBody.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\GameEngine\Engine\Physics\PhysicsInterface.inl">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="..\..\..\GameEngine\Engine\Physics\MaterialInterface.inl">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="..\..\..\GameEngine\Engine\Physics\RigidBodyInterface.inl">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="..\..\..\GameEngine\Engine\Physics\WorldInterface.inl">
+      <Filter>Header Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

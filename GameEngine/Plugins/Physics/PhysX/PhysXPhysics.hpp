@@ -8,19 +8,19 @@ namespace AGE
 {
 	namespace Physics
 	{
-		class PhysXPlugin final : public PhysicsInterface
+		class PhysXPhysics final : public PhysicsInterface
 		{
 		public:
 			// Constructors
-			PhysXPlugin(void) = default;
+			PhysXPhysics(void) = default;
 
-			PhysXPlugin(const PhysXPlugin &) = delete;
+			PhysXPhysics(const PhysXPhysics &) = delete;
 
 			// Assignment Operators
-			PhysXPlugin &operator=(const PhysXPlugin &) = delete;
+			PhysXPhysics &operator=(const PhysXPhysics &) = delete;
 
 			// Destructor
-			virtual ~PhysXPlugin(void) = default;
+			virtual ~PhysXPhysics(void) = default;
 
 			// Methods
 			physx::PxFoundation *getFoundation(void);

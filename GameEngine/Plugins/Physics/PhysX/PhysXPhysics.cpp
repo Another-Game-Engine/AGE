@@ -1,4 +1,4 @@
-#include "PhysXPlugin.hpp"
+#include "PhysXPhysics.hpp"
 #include "PhysXWorld.hpp"
 
 namespace AGE
@@ -6,57 +6,57 @@ namespace AGE
 	namespace Physics
 	{
 		// Methods
-		physx::PxFoundation *PhysXPlugin::getFoundation(void)
+		physx::PxFoundation *PhysXPhysics::getFoundation(void)
 		{
 			return foundation;
 		}
 
-		physx::PxCooking *PhysXPlugin::getCooking(void)
+		physx::PxCooking *PhysXPhysics::getCooking(void)
 		{
 			return cooking;
 		}
 
-		physx::PxPhysics *PhysXPlugin::getPhysics(void)
+		physx::PxPhysics *PhysXPhysics::getPhysics(void)
 		{
 			return physics;
 		}
 
 		// Inherited Methods
-		EngineTypes PhysXPlugin::getPluginType(void) const
+		EngineTypes PhysXPhysics::getPluginType(void) const
 		{
 			return EngineTypes::PhysX;
 		}
 
-		bool PhysXPlugin::initialize(void)
+		bool PhysXPhysics::initialize(void)
 		{
 			foundation = PxCreateFoundation(PX_PHYSICS_VERSION, defaultAllocatorCallback, defaultErrorCallback);
 			if (foundation == nullptr)
 			{
-				// Log Error
+				assert(!"Impossible to create foundation");
 				return false;
 			}
 			cooking = PxCreateCooking(PX_PHYSICS_VERSION, *foundation, physx::PxCookingParams(toleranceScale));
 			if (cooking == nullptr)
 			{
-				// Log Error
+				assert(!"Impossible to create cooking");
 				return false;
 			}
 			physics = PxCreatePhysics(PX_PHYSICS_VERSION, *foundation, toleranceScale);
 			if (physics == nullptr)
 			{
-				// Log Error
+				assert(!"Impossible to create physics");
 				return false;
 			}
 			extensions = PxInitExtensions(*physics);
 			if (!extensions)
 			{
-				// Log Error
+				assert(!"Impossible to initialize extensions");
 				return false;
 			}
 			return true;
 		}
 
-		void PhysXPlugin::finalize(void)
+		void PhysXPhysics::finalize(void)
 		{
 			if (extensions)
 			{
@@ -80,12 +80,12 @@ namespace AGE
 			}
 		}
 
-		WorldInterface *PhysXPlugin::createWorld(const glm::vec3 &gravity)
+		WorldInterface *PhysXPhysics::createWorld(const glm::vec3 &gravity)
 		{
 			return static_cast<WorldInterface *>(new PhysXWorld(this, gravity));
 		}
 
-		void PhysXPlugin::destroyWorld(WorldInterface *world)
+		void PhysXPhysics::destroyWorld(WorldInterface *world)
 		{
 			delete static_cast<PhysXWorld *>(world);
 		}

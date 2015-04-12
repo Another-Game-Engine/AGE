@@ -181,15 +181,27 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\GameEngine\Engine\Physics\MaterialInterface.hpp" />
     <ClInclude Include="..\..\..\GameEngine\Engine\Physics\PhysicsInterface.hpp" />
+    <ClInclude Include="..\..\..\GameEngine\Engine\Physics\RigidBodyInterface.hpp" />
     <ClInclude Include="..\..\..\GameEngine\Engine\Physics\WorldInterface.hpp" />
-    <ClInclude Include="PhysXPlugin.hpp" />
+    <ClInclude Include="PhysXMaterial.hpp" />
+    <ClInclude Include="PhysXPhysics.hpp" />
+    <ClInclude Include="PhysXRigidBody.hpp" />
     <ClInclude Include="PhysXWorld.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PhysXExports.cpp" />
-    <ClCompile Include="PhysXPlugin.cpp" />
+    <ClCompile Include="PhysXMaterial.cpp" />
+    <ClCompile Include="PhysXPhysics.cpp" />
+    <ClCompile Include="PhysXRigidBody.cpp" />
     <ClCompile Include="PhysXWorld.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\GameEngine\Engine\Physics\MaterialInterface.inl" />
+    <None Include="..\..\..\GameEngine\Engine\Physics\PhysicsInterface.inl" />
+    <None Include="..\..\..\GameEngine\Engine\Physics\RigidBodyInterface.inl" />
+    <None Include="..\..\..\GameEngine\Engine\Physics\WorldInterface.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

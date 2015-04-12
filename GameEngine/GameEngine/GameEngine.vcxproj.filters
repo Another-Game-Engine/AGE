@@ -7,7 +7,6 @@
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredBasicBuffering.cpp" />
     <ClCompile Include="Engine\Core\Inputs\ActionManager.cpp" />
     <ClCompile Include="Engine\AssetManagement\AssetManager.cpp" />
-    <ClCompile Include="Engine\Components\RigidBody.cpp" />
     <ClCompile Include="Engine\Context\IRenderContext.cpp" />
     <ClCompile Include="Engine\Context\SDL\SdlToAgeInputs.cpp" />
     <ClCompile Include="Engine\Entities\Entity.cpp" />
@@ -157,14 +156,18 @@
     <ClCompile Include="Engine\Physics\EngineTypeToPluginName.cpp" />
     <ClCompile Include="Engine\Physics\Utils\BtConversion.cpp" />
     <ClCompile Include="Engine\Physics\BulletCollisionManager.cpp" />
-    <ClCompile Include="Engine\Physics\ContactInformation.cpp" />
     <ClCompile Include="Engine\Physics\DynamicMotionState.cpp" />
-    <ClCompile Include="Engine\Physics\Fallback\NullPlugin.cpp" />
     <ClCompile Include="Engine\Physics\Fallback\NullWorld.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomPipeline\DebugDeferredShading.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredDebugBuffering.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredMergingDebug.cpp" />
     <ClCompile Include="Engine\Components\Light.cpp" />
+    <ClCompile Include="Engine\Physics\Fallback\NullPhysics.cpp" />
+    <ClCompile Include="Engine\Physics\Fallback\NullMaterial.cpp" />
+    <ClCompile Include="Engine\Physics\Fallback\NullRigidBody.cpp" />
+    <ClCompile Include="Engine\Components\NewRigidBody.cpp" />
+    <ClCompile Include="Engine\Components\RigidBody.cpp" />
+    <ClCompile Include="Engine\Physics\ContactInformation.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -336,7 +339,6 @@
     <ClInclude Include="Engine\Components\ComponentRegistrationManager.hpp" />
     <ClInclude Include="Engine\Components\FPController.hpp" />
     <ClInclude Include="Engine\Components\GraphNode.hpp" />
-    <ClInclude Include="Engine\Components\RigidBody.hpp" />
     <ClInclude Include="Engine\Components\RotationForce.hh" />
     <ClInclude Include="Engine\Core\EntityFilter.hpp" />
     <ClInclude Include="Engine\Core\EntityIdRegistrar.hpp" />
@@ -417,10 +419,8 @@
     <ClInclude Include="Engine\Physics\Utils\BtConversion.hpp" />
     <ClInclude Include="Engine\Physics\BulletCollisionManager.hpp" />
     <ClInclude Include="Engine\Physics\BulletDynamicManager.hpp" />
-    <ClInclude Include="Engine\Physics\ContactInformation.hpp" />
     <ClInclude Include="Engine\Physics\DynamicMotionState.hpp" />
     <ClInclude Include="Engine\Physics\WorldInterface.hpp" />
-    <ClInclude Include="Engine\Physics\Fallback\NullPlugin.hpp" />
     <ClInclude Include="Engine\Physics\Fallback\NullWorld.hpp" />
     <ClInclude Include="Engine\Physics\PhysicsInterface.hpp" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomPipeline\DebugDeferredShading.hh" />
@@ -429,6 +429,14 @@
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredMergingDebug.hh" />
     <ClInclude Include="Engine\Components\Light.hh" />
     <ClInclude Include="Engine\Utils\Debug.hpp" />
+    <ClInclude Include="Engine\Physics\Fallback\NullPhysics.hpp" />
+    <ClInclude Include="Engine\Physics\Fallback\NullMaterial.hpp" />
+    <ClInclude Include="Engine\Physics\Fallback\NullRigidBody.hpp" />
+    <ClInclude Include="Engine\Physics\MaterialInterface.hpp" />
+    <ClInclude Include="Engine\Physics\RigidBodyInterface.hpp" />
+    <ClInclude Include="Engine\Components\NewRigidBody.hpp" />
+    <ClInclude Include="Engine\Components\RigidBody.hpp" />
+    <ClInclude Include="Engine\Physics\ContactInformation.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />
@@ -448,5 +456,8 @@
     <None Include="Engine\ResourceManager\SharedMesh.hh" />
     <None Include="Engine\ResourceManager\Texture.hh" />
     <None Include="Engine\Components\MeshRenderer.hh" />
+    <None Include="Engine\Physics\MaterialInterface.inl" />
+    <None Include="Engine\Physics\RigidBodyInterface.inl" />
+    <None Include="Engine\Physics\WorldInterface.inl" />
   </ItemGroup>
 </Project>
