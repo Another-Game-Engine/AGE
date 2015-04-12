@@ -14,7 +14,8 @@ namespace AGE
 	const std::string MaterialEditorScene::Name = "MaterialEditor";
 
 	MaterialEditorScene::MaterialEditorScene(AGE::Engine *engine)
-		: AScene(engine)
+		: AScene(engine),
+		_mode(ModeMaterialEditor::main)
 	{
 	}
 
@@ -27,10 +28,18 @@ namespace AGE
 		return true;
 	}
 
-	bool MaterialEditorScene::_userUpdateBegin(float time)
+	void MaterialEditorScene::_main()
 	{
-		glClear(GL_COLOR_BUFFER_BIT);
-		ImGui::BeginChild("Material editor", ImVec2(0, 0), true);
+		if (ImGui::Button("create a new material"))
+			_mode = ModeMaterialEditor::creation;
+	}
+
+	void MaterialEditorScene::_createMaterial()
+	{
+		if (ImGui::Button("precedent"))
+			_mode = ModeMaterialEditor::main;
+		ImGui::Separator();
+		ImGui::Spacing();
 		char buffer[NAME_LENGTH];
 		memset(buffer, 0, NAME_LENGTH);
 		auto materialSet = std::make_shared<MaterialDataSet>();
@@ -40,6 +49,20 @@ namespace AGE
 			std::string const currentDir = Directory::GetCurrentDirectory();
 			const std::string absPath = Path::AbsoluteName(currentDir.c_str(), WE::EditorConfiguration::GetCookedDirectory().c_str());
 			auto fileName = absPath + name + ".mage";
+		}
+	}
+
+	bool MaterialEditorScene::_userUpdateBegin(float time)
+	{
+		glClear(GL_COLOR_BUFFER_BIT);
+		ImGui::BeginChild("Material editor", ImVec2(0, 0), true);
+		switch (_mode) {
+		case ModeMaterialEditor::main:
+			_main();
+			break;
+		case ModeMaterialEditor::creation:
+			_createMaterial();
+			break;
 		}
 		return true;
 	}

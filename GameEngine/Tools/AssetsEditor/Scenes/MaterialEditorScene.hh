@@ -6,6 +6,12 @@
 
 namespace AGE
 {
+	enum class ModeMaterialEditor {
+		main,
+		creation,
+		size
+	};
+
 	class MaterialEditorScene : public AScene
 	{
 	public:
@@ -17,5 +23,11 @@ namespace AGE
 		virtual bool _userStart();
 		virtual bool _userUpdateBegin(float time);
 		virtual bool _userUpdateEnd(float time);
+
+		void _createMaterial();
+		void _main();
+	
+	private:
+		ModeMaterialEditor _mode;
 	};
 }
