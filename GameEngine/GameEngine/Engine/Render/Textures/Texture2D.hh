@@ -16,7 +16,23 @@ namespace AGE
 		Texture2D(Texture2D &&move);
 
 	public:
-		void get(GLint level, GLenum format, GLenum type, std::vector<uint8_t> &destination) const;
+
+		template <typename T>
+		void get(GLint level, GLenum format, GLenum type, std::vector<T> &destination) const
+		{
+			auto w = _width;
+			auto h = _height;
+			auto i = level;
+			while (i > 0)
+			{
+				w /= 2;
+				h /= 2;
+				--i;
+			}
+			destination.resize(w * h);
+
+			glGetTexImage(GL_TEXTURE_2D, level, format, type, (GLvoid *)destination.data());
+		}
 		Texture2D &set(std::vector<uint8_t> const &data, GLint level, GLenum format, GLenum type);
 
 	public:

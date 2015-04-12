@@ -139,11 +139,17 @@ namespace AGE
 				}
 			}
 		}
-
-		// mipmap depth
+		
+		
+			// mipmap depth
 		glActiveTextureARB(GL_TEXTURE0_ARB);
 		_depth->bind();
 		glGenerateMipmap(GL_TEXTURE_2D);
+		_depth->get(4, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, _depthPixels);
+		//for (auto i = 0; i < _depthPixels.size(); ++i)
+		//{
+		//	_depthPixels[i] = (((_depthPixels[i] & 0xFFFFFF00) >> 8) / 0xFFFF);
+		//}
 		_depth->unbind();
 
 		if (_programs[PROGRAM_OCCLUDER]->isCompiled() == false)

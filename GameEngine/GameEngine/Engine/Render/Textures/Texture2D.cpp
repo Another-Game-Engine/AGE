@@ -43,13 +43,6 @@ namespace AGE
 		return (*this);
 	}
 
-	void Texture2D::get(GLint level, GLenum format, GLenum type, std::vector<uint8_t> &destination) const
-	{
-		destination.resize(_width * _height * available_type_pixel[type].size);
-		
-		glGetTexImage(GL_TEXTURE_2D, level, format, type, (GLvoid *)destination.data());
-	}
-
 	Texture2D & Texture2D::set(std::vector<uint8_t> const &data, GLint level, GLenum format, GLenum type)
 	{
 		glTexSubImage2D(GL_TEXTURE_2D, level, 0, 0, _width, _height, format, type, (GLvoid const *)data.data());
