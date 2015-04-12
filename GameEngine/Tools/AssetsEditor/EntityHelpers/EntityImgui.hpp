@@ -67,13 +67,13 @@ namespace AGE
 
 			if (cpt->isLinkedToArchetype())
 			{
-				ImGui::TextColored(ImVec4(0.8, 0.4, 0.5, 1.0), "Entity is Archetype, edit the proper archetype.");
+				ImGui::TextColored(ImVec4(0.8f, 0.4f, 0.5f, 1.0f), "Entity is Archetype, edit the proper archetype.");
 				return modified;
 			}
 
 			if (cpt->parentIsArchetype())
 			{
-				ImGui::TextColored(ImVec4(0.8, 0.4, 0.5, 1.0), "Entity's parent is Archetype, edit the proper archetype.");
+				ImGui::TextColored(ImVec4(0.8f, 0.4f, 0.5f, 1.0f), "Entity's parent is Archetype, edit the proper archetype.");
 				return modified;
 			}
 

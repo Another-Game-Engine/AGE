@@ -11,7 +11,7 @@ namespace AGE
 	namespace AE
 	{
 		class RawFile;
-		class CookConfig;
+		struct CookConfig;
 	}
 	class AssetsEditorScene : public AScene
 	{

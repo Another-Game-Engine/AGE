@@ -22,11 +22,11 @@ namespace AGE
 		static std::vector<ImVec4> &Colors()
 		{
 			static auto colors = std::vector < ImVec4 > {
-				ImVec4(0.8, 0.8, 0.8, 1), // raw
-					ImVec4(0.7, 1, 0.85, 1), // cooked
-					ImVec4(0, 0.65, 0.85, 1), // Mesh
-					ImVec4(0.78, 0.05, 0.75, 1), // material
-					ImVec4(0.9, 0.6, 0, 1) // texture
+				ImVec4(0.8f, 0.8f, 0.8f, 1.0f), // raw
+					ImVec4(0.7f, 1.0f, 0.85f, 1.0f), // cooked
+					ImVec4(0.0f, 0.65f, 0.85f, 1.0f), // Mesh
+					ImVec4(0.78f, 0.05f, 0.75f, 1.0f), // material
+					ImVec4(0.9f, 0.6f, 0.0f, 1.0f) // texture
 			};
 			return colors;
 		}
