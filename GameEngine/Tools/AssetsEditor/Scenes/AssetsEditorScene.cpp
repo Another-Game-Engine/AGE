@@ -90,7 +90,7 @@ namespace AGE
 			_cookedMaterialFullPath.push_back("NONE");
 			_cookedMeshFiles.push_back("NONE");
 			_cookedMeshsFullPath.push_back("NONE");
-
+		
 			const std::string currentDir = Directory::GetCurrentDirectory();
 			const std::string absPath = Path::AbsoluteName(currentDir.c_str(), WE::EditorConfiguration::GetCookedDirectory().c_str());
 			Directory dir;
