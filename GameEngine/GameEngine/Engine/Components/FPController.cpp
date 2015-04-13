@@ -1,10 +1,10 @@
 #include <Components/FPController.hpp>
-#include <Physic/Utils/BtConversion.hpp>
+#include <Physics/Utils/BtConversion.hpp>
 #include <Utils/MatrixConversion.hpp>
 #include <Components/Extras/CustomCharacterController.hh>
 #include <Entities/Entity.hh>
 #include <Core/AScene.hh>
-#include <Physic/BulletDynamicManager.hpp>
+#include <Physics/BulletDynamicManager.hpp>
 
 namespace AGE
 {

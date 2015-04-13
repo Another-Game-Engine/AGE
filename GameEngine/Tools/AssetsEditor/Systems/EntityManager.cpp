@@ -9,6 +9,8 @@
 #include <Components/CameraComponent.hpp>
 #include <Components/FreeFlyComponent.hh>
 #include <Entities/Archetype.hpp>
+#include <Managers/ArchetypesEditorManager.hpp>
+#include <EntityHelpers/EntityImgui.hpp>
 
 namespace AGE
 {
@@ -100,7 +102,7 @@ namespace AGE
 				{
 					for (auto &e : _entities)
 					{
-						recursiveDisplayList(e);
+						recursiveDisplayList(e, _selectedEntity, _selectParent);
 					}
 				}
 
@@ -111,64 +113,52 @@ namespace AGE
 				if (_entities.size() > 0 && _selectedEntity != nullptr)
 				{
 					auto entity = *_selectedEntity;
-					displayEntity(entity);
+					displayEntity(entity, _scene);
 
 					ImGui::Separator();
 
-					auto &types = ComponentRegistrationManager::getInstance().getSystemIdToAgeIdMap();
-					auto &creationFn = ComponentRegistrationManager::getInstance().getCreationFunctions();
+					auto representation = entity.getComponent<AGE::WE::EntityRepresentation>();
 
-					for (auto &t : types)
+					if (representation->isLinkedToArchetype() == false && representation->parentIsArchetype() == false)
 					{
-						if (!entity.haveComponent(t.second))
+						auto &types = ComponentRegistrationManager::getInstance().getSystemIdToAgeIdMap();
+						auto &creationFn = ComponentRegistrationManager::getInstance().getCreationFunctions();
+
+						for (auto &t : types)
 						{
-							if (ImGui::SmallButton(std::string("Add : " + ComponentRegistrationManager::getInstance().getComponentName(t.second)).c_str()))
+							if (!entity.haveComponent(t.second))
 							{
-								creationFn.at(t.first)(&entity);
+								if (ImGui::SmallButton(std::string("Add : " + ComponentRegistrationManager::getInstance().getComponentName(t.second)).c_str()))
+								{
+									creationFn.at(t.first)(&entity);
+								}
 							}
 						}
+
+						ImGui::Separator();
 					}
 
-					ImGui::Separator();
-
-					if (ImGui::Button("Delete entity"))
+					if (representation->parentIsArchetype() == false && ImGui::SmallButton("Delete entity"))
 					{
 						_scene->destroy(entity);
 						_selectedEntity = nullptr;
 						_selectedEntityIndex = 0;
 					}
 
-					if (ImGui::Button("Duplicate"))
+					if (representation->isLinkedToArchetype() == false && representation->parentIsArchetype() == false && ImGui::SmallButton("Duplicate"))
 					{
 						Entity duplicate;
 						_scene->copyEntity(entity, duplicate, true, false);
 					}
 
-					ImGui::InputText("Archetype name", _archetypeName, MAX_SCENE_NAME_LENGTH);
-					ImGui::SameLine();
-					if (ImGui::Button("Save as archetype"))
+					if (representation->isLinkedToArchetype() == false && representation->parentIsArchetype() == false)
 					{
-						WESerialization::SetSerializeForEditor(true);
-						// we list all assets dependencies
+						ImGui::InputText("Archetype name", _archetypeName, MAX_SCENE_NAME_LENGTH);
+						if (ImGui::SmallButton("Convert to Archetype"))
 						{
-							AssetsManager::AssetsPackage package;
-							for (auto e : _meshRenderers.getCollection())
-							{
-								auto cpt = e.getComponent<MeshRenderer>();
-								if (!cpt->selectedMeshPath.empty())
-								{
-									package.meshs.insert(cpt->selectedMeshPath);
-								}
-								if (!cpt->selectedMaterialPath.empty())
-								{
-									package.materials.insert(cpt->selectedMaterialPath);
-								}
-							}
-							_scene->getInstance<AssetsManager>()->savePackage(package, WE::EditorConfiguration::GetEditedArchetypeDirectory() + std::string(_archetypeName) + "_assets.json");
+							auto manager = _scene->getInstance<AGE::WE::ArchetypesEditorManager>();
+							manager->transformToArchetype(*_selectedEntity, _archetypeName);
 						}
-
-						_scene->saveSelectionToJson(WE::EditorConfiguration::GetEditedArchetypeDirectory() + std::string(_archetypeName) + "_archetype.json", _entities);
-						WESerialization::SetSerializeForEditor(false);
 					}
 				}
 
@@ -177,28 +167,30 @@ namespace AGE
 				{
 					_scene->createEntity();
 				}
-
-				if (ImGui::ListBox("Scenes", &WE::EditorConfiguration::getSelectedSceneIndex(), WE::EditorConfiguration::getScenesName().data(), WE::EditorConfiguration::getScenesName().size()))
+				if (ImGui::TreeNode("Scenes list"))
 				{
-					_scene->clearAllEntities();
+					if (ImGui::ListBox("Scenes", &WE::EditorConfiguration::getSelectedSceneIndex(), WE::EditorConfiguration::getScenesName().data(), static_cast<int>(WE::EditorConfiguration::getScenesName().size())))
+					{
+						_scene->clearAllEntities();
 
-					generateBasicEntities();
+						generateBasicEntities();
 
-					WESerialization::SetSerializeForEditor(true);
+						WESerialization::SetSerializeForEditor(true);
 
-					auto sceneFileName = WE::EditorConfiguration::getSelectedScenePath() + "_scene_description.json";
-					auto assetPackageFileName = WE::EditorConfiguration::getSelectedScenePath() + "_assets.json";
+						auto sceneFileName = WE::EditorConfiguration::getSelectedScenePath() + "_scene_description.json";
+						auto assetPackageFileName = WE::EditorConfiguration::getSelectedScenePath() + "_assets.json";
 
-					strcpy_s(_sceneName, WE::EditorConfiguration::getSelectedSceneName().c_str());
-					strcpy_s(_exportName, WE::EditorConfiguration::getSelectedSceneName().c_str());
+						strcpy_s(_sceneName, WE::EditorConfiguration::getSelectedSceneName().c_str());
+						strcpy_s(_exportName, WE::EditorConfiguration::getSelectedSceneName().c_str());
 
-					_scene->getInstance<AssetsManager>()->pushNewCallback(assetPackageFileName, std::function<void()>([=](){
-						_scene->loadFromJson(sceneFileName);
-						WESerialization::SetSerializeForEditor(false);
-					}));
-					_scene->getInstance<AssetsManager>()->loadPackage(assetPackageFileName, assetPackageFileName);
+						_scene->getInstance<AssetsManager>()->pushNewCallback(assetPackageFileName, _scene, std::function<void()>([=](){
+							_scene->loadFromJson(sceneFileName);
+							WESerialization::SetSerializeForEditor(false);
+						}));
+						_scene->getInstance<AssetsManager>()->loadPackage(assetPackageFileName, assetPackageFileName);
+					}
+					ImGui::TreePop();
 				}
-
 				_entities.clear();
 				{
 					EntityFilter::Lock lock(_filter);
@@ -269,140 +261,8 @@ namespace AGE
 				ImGui::EndChild(); // Entity List
 			}
 
-			void EntityManager::displayEntity(Entity &entity)
-			{
-				auto cpt = entity.getComponent<AGE::WE::EntityRepresentation>();
-
-				ImGui::InputText("Name", cpt->name, ENTITY_NAME_LENGTH);
-				cpt->position = entity.getLink().getPosition();
-				if (ImGui::InputFloat3("Position", glm::value_ptr(cpt->position)))
-				{
-					entity.getLink().setPosition(cpt->position);
-				}
-
-				cpt->rotation = glm::eulerAngles(entity.getLink().getOrientation());
-				if (ImGui::InputFloat3("Rotation", glm::value_ptr(cpt->rotation)))
-				{
-					entity.getLink().setOrientation(glm::quat(cpt->rotation));
-				}
-
-				cpt->scale = entity.getLink().getScale();
-				if (ImGui::InputFloat3("Scale", glm::value_ptr(cpt->scale)))
-				{
-					entity.getLink().setScale(cpt->scale);
-				}
-
-				ImGui::Separator();
-
-				auto &components = entity.getComponentList();
-				for (ComponentType i = 0; i < components.size(); ++i)
-				{
-					if (entity.haveComponent(i))
-					{
-						auto ptr = entity.getComponent(i);
-						if (ptr->exposedInEditor)
-						{
-							bool opened = ImGui::TreeNode(ComponentRegistrationManager::getInstance().getComponentName(ptr->getType()).c_str());
-							bool deleted = false;
-							if (ptr->deletableInEditor)
-							{
-								ImGui::SameLine();
-								ImGui::PushID(i);
-								deleted = ImGui::SmallButton("Delete");
-								if (deleted)
-								{
-									ptr->editorDelete(_scene);
-									entity.removeComponent(i);
-								}
-								ImGui::PopID();
-							}
-							if (opened && !deleted)
-							{
-								ptr->editorUpdate(_scene);
-								ImGui::TreePop();
-							}
-						}
-					}
-				}
-			}
-
-			void EntityManager::recursiveDisplayList(Entity &entity)
-			{
-				auto cpt = entity.getComponent<AGE::WE::EntityRepresentation>();
-				bool opened = false;
-				opened = ImGui::TreeNode(cpt->name);
-				ImGui::PushID(entity.getPtr());
-				if (_selectedEntity != entity.getPtr())
-				{
-					if (!_selectParent)
-					{
-						ImGui::SameLine();
-						if (ImGui::SmallButton("Select"))
-						{
-							_selectedEntity = entity.getPtr();
-						}
-					}
-					else/* (_selectedEntity != nullptr)*/
-					{
-						ImGui::SameLine();
-						if (ImGui::SmallButton("Set as parent"))
-						{
-							_selectedEntity->getLink().attachParent(entity.getLinkPtr());
-							_selectParent = false;
-						}
-					}
-				}
-				else
-				{
-					if (!_selectParent)
-					{
-						ImGui::SameLine();
-						if (ImGui::SmallButton("Set parent"))
-						{
-							_selectParent = true;
-						}
-					}
-					else
-					{
-						ImGui::SameLine();
-						if (ImGui::SmallButton("Root"))
-						{
-							_selectedEntity->getLink().detachParent();
-							_selectParent = false;
-						}
-						ImGui::SameLine();
-						if (ImGui::SmallButton("Cancel"))
-						{
-							_selectParent = false;
-						}
-					}
-				}
-				ImGui::PopID();
-				if (opened)
-				{
-					if (entity.getLink().hasChildren())
-					{
-						auto children = entity.getLink().getChildren();
-						for (auto &e : children)
-						{
-							recursiveDisplayList(e->getEntity()->getEntity());
-						}
-					}
-					ImGui::TreePop();
-				}
-			}
-
-
 			bool EntityManager::initialize()
 			{
-				_filter.setOnAdd(std::function<void(Entity e)>([this](Entity en)
-				{
-					en.addComponent<AGE::WE::EntityRepresentation>(std::string("Entity " + std::to_string(en.getId()) + "\0").c_str());
-				}));
-
-				_filter.setOnRemove(std::function<void(Entity e)>([this](Entity en)
-				{
-				}));
 				return true;
 			}
 
@@ -410,7 +270,7 @@ namespace AGE
 			{
 				auto camera = _scene->createEntity();
 				auto cam = camera.addComponent<CameraComponent>();
-				cam->addPipeline(RenderType::DEFERRED);
+				cam->setPipeline(RenderType::DEBUG_DEFERRED);
 				camera.getLink().setPosition(glm::vec3(0, 3, 5));
 				camera.getLink().setForward(glm::vec3(0, 0, 0));
 				camera.addComponent<FreeFlyComponent>();

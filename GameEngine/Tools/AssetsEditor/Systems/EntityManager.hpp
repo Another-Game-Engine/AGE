@@ -31,8 +31,6 @@ namespace AGE
 			virtual void updateEnd(float time);
 			virtual void mainUpdate(float time);
 			virtual bool initialize();
-			void displayEntity(Entity &entity);
-			void recursiveDisplayList(Entity &entity);
 			void generateBasicEntities();
 		};
 	}

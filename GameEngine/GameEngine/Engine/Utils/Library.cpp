@@ -1,5 +1,9 @@
 #include "Library.hpp"
 
+#if !defined(AGE_PLATFORM_WINDOWS)
+# include <dlfcn.h>
+#endif
+
 namespace AGE
 {
 	Library::Library(const std::string &name)
@@ -7,35 +11,12 @@ namespace AGE
 		load(name);
 	}
 
-	Library::Library(Library &other)
-		: handle(other.handle), pluginName(other.pluginName)
+	Library::Library(Library &&other)
+		: handle(other.handle), pluginName(std::move(other.pluginName))
 	{
 		other.handle = nullptr;
-		other.pluginName.clear();
 	}
-
-	Library::Library(Library &&other)
-		: handle(std::move(other.handle)), pluginName(std::move(other.pluginName))
-	{
-		return;
-	}
-
-	Library &Library::operator=(Library &other)
-	{
-		if (this != &other)
-		{
-			if (isLoaded())
-			{
-				close();
-			}
-			handle = other.handle;
-			pluginName = other.pluginName;
-			other.handle = nullptr;
-			other.pluginName.clear();
-		}
-		return *this;
-	}
-
+	
 	Library &Library::operator=(Library &&other)
 	{
 		if (this != &other)
@@ -44,7 +25,8 @@ namespace AGE
 			{
 				close();
 			}
-			handle = std::move(other.handle);
+			handle = other.handle;
+			other.handle = nullptr;
 			pluginName = std::move(other.pluginName);
 		}
 		return *this;
@@ -64,15 +46,27 @@ namespace AGE
 		std::string libraryName = Library::GenerateName(name);
 		if (libraryName.empty())
 		{
+#if defined(AGE_PLATFORM_WINDOWS)
 			handle = GetModuleHandle(nullptr);
+#else
+			handle = dlopen(nullptr, 0);
+#endif
 		}
 		else
 		{
+#if defined(AGE_PLATFORM_WINDOWS)
 			handle = LoadLibrary(libraryName.c_str());
+#else
+			handle = dlopen(libraryName.c_str(), RTLD_LAZY);
+#endif
 			if (!handle)
 			{
 				libraryName = name;
+#if defined(AGE_PLATFORM_WINDOWS)
 				handle = LoadLibrary(libraryName.c_str());
+#else
+				handle = dlopen(libraryName.c_str(), RTLD_LAZY);
+#endif
 			}
 		}
 		if (handle != nullptr)
@@ -104,7 +98,13 @@ namespace AGE
 		AGE_ASSERT(handle && "Library not opened");
 		if (handle)
 		{
+#if defined(AGE_PLATFORM_WINDOWS)
 			FreeLibrary(handle);
+#else
+			dlclose(handle);
+#endif
+			handle = nullptr;
+			pluginName.clear();
 		}
 	}
 
@@ -142,7 +142,7 @@ namespace AGE
 			static const std::string architectureSuffix = "_x64";
 #endif
 #if defined(AGE_DEBUG)
-			static const std::string debugSuffix = "d";
+			static const std::string debugSuffix = "_d";
 #else
 			static const std::string debugSuffix = "";
 #endif

@@ -40,9 +40,8 @@
 #include <Skinning/Skeleton.hpp>
 #include <Utils/MatrixConversion.hpp>
 
-#include <Render/Pipelining/Pipelines/CustomPipeline/BasicPipeline.hh>
-
 #include <Systems/FreeFlyCamera.hh>
+#include <Systems/PhysicsSystem.hpp>
 
 namespace AGE
 {
@@ -81,7 +80,11 @@ namespace AGE
 
 		setInstance<AGE::BulletDynamicManager, AGE::BulletCollisionManager>()->init();
 		addSystem<AGE::DebugSystem>(0);
+		addSystem<AGE::PhysicsSystem>(0, Physics::EngineType::PhysX);
+		
+		// TODO: Remove following line
 		addSystem<AGE::BulletDynamicSystem>(0);
+
 		addSystem<AGE::LifetimeSystem>(2);
 		addSystem<AGE::FreeFlyCamera>(0);
 		addSystem<AGE::RotationSystem>(0);
@@ -113,7 +116,7 @@ namespace AGE
 			|| ImGui::ListBox("Scenes"
 			, &EngineCoreTestConfiguration::getSelectedSceneIndex()
 			, EngineCoreTestConfiguration::getScenesName().data()
-			, EngineCoreTestConfiguration::getScenesName().size()))
+			, static_cast<int>(EngineCoreTestConfiguration::getScenesName().size())))
 		{
 			clearAllEntities();
 
@@ -121,13 +124,13 @@ namespace AGE
 			GLOBAL_CAMERA = camera;
 			auto cam = camera.addComponent<CameraComponent>();
 			camera.addComponent<FreeFlyComponent>();
-			cam->addPipeline(RenderType::DEFERRED);
+			cam->setPipeline(RenderType::DEFERRED);
 			camera.getLink().setPosition(glm::vec3(0, 2.5f, 4.5f));
 
 			auto sceneFileName = EngineCoreTestConfiguration::getSelectedScenePath() + "_export.json";
 			auto assetPackageFileName = EngineCoreTestConfiguration::getSelectedScenePath() + "_assets.json";
 
-			getInstance<AssetsManager>()->pushNewCallback(assetPackageFileName, std::function<void()>([=](){
+			getInstance<AssetsManager>()->pushNewCallback(assetPackageFileName, this, std::function<void()>([=](){
 				loadFromJson(sceneFileName);
 			}));
 			getInstance<AssetsManager>()->loadPackage(assetPackageFileName, assetPackageFileName);
@@ -209,20 +212,14 @@ namespace AGE
 		}
 
 		auto camComponent = GLOBAL_CAMERA.getComponent<CameraComponent>();
-		static bool cameraPipelines[2] = {false, false};
-		cameraPipelines[RenderType::DEFERRED] = camComponent->havePipeline(RenderType::DEFERRED);
-
+		static bool cameraPipelines[RenderType::TOTAL] = {false, false};
+		cameraPipelines[camComponent->getPipeline()] = true;
 		if (ImGui::Checkbox("Deferred rendering", &cameraPipelines[RenderType::DEFERRED]))
-		{
 			if (cameraPipelines[RenderType::DEFERRED])
-			{
-				camComponent->addPipeline(RenderType::DEFERRED);
-			}
-			else
-			{
-				camComponent->removePipeline(RenderType::DEFERRED);
-			}
-		}
+				camComponent->setPipeline(RenderType::DEFERRED);
+		if (ImGui::Checkbox("Debug deferred rendering", &cameraPipelines[RenderType::DEBUG_DEFERRED]))
+			if (cameraPipelines[RenderType::DEBUG_DEFERRED])
+				camComponent->setPipeline(RenderType::DEBUG_DEFERRED);
 
 		AGE::GetPrepareThread()->getQueue()->emplaceCommand<AGE::Commands::MainToPrepare::PrepareDrawLists>();
 		AGE::GetPrepareThread()->getQueue()->emplaceCommand<AGE::Commands::ToRender::RenderDrawLists>();

@@ -1,6 +1,6 @@
 #include "EntityRepresentation.hpp"
 #include <Core/AScene.hh>
-
+#include <Managers/ArchetypesEditorManager.hpp>
 
 namespace AGE
 {
@@ -50,6 +50,10 @@ namespace AGE
 
 		void EntityRepresentation::reset()
 		{
+			if (_archetypeLinked != nullptr)
+			{
+				_archetypeLinked->entities.erase(entity);
+			}
 			memset(name, 0, ENTITY_NAME_LENGTH);
 		}
 

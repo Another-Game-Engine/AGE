@@ -56,9 +56,9 @@ namespace AGE
 
 	void ImageUtils::switchRedBlue(fipImage &image)
 	{
-		for (int y = 0; y < image.getHeight(); ++y)
+		for (unsigned int y = 0; y < image.getHeight(); ++y)
 		{
-			for (int x = 0; x < image.getWidth(); ++x)
+			for (unsigned int x = 0; x < image.getWidth(); ++x)
 			{
 				RGBQUAD color;
 
@@ -83,7 +83,7 @@ namespace AGE
 		params.m_height = infos->height;
 		params.m_width = infos->width;
 
-		bool flipVertical = image.flipVertical();
+		bool flipVertical = image.flipVertical() != 0;
 		assert(flipVertical);
 
 		auto imgData = image.accessPixels();

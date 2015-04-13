@@ -10,15 +10,18 @@
 #include <Threads/MainThread.hpp>
 #include <Threads/PrepareRenderThread.hpp>
 #include <Components/ComponentRegistrationManager.hpp>
+#include <Physics/Fallback/NullPhysics.hpp>
 
 namespace AGE
 {
 	AScene::AScene(Engine *engine) :
-		DependenciesInjector(std::move(engine))
+		DependenciesInjector(engine)
 		, _entityNumber(0)
 		, _engine(engine)
 		, _renderScene(nullptr)
 	{
+		// Set Dependency to the fallback plugin (physics disabled) --> Needed if a RigidBody is added while no PhysicsSystem exists
+		setInstance<Physics::NullPhysics, Physics::PhysicsInterface>()->startup();
 	}
 
 	AScene::~AScene()

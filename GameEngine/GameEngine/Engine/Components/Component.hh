@@ -39,9 +39,10 @@ namespace AGE
 		}
 
 #ifdef EDITOR_ENABLED
-		virtual void editorCreate(AScene *scene){}
-		virtual void editorDelete(AScene *scene){}
-		virtual void editorUpdate(AScene *scene){}
+		virtual void editorCreate(){}
+		virtual void editorDelete(){}
+		// return true if modified
+		virtual bool editorUpdate(){ return false; }
 		bool exposedInEditor = true;
 		bool deletableInEditor = true;
 		// if serialized in final export

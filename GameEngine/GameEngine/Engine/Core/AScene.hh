@@ -90,10 +90,10 @@ namespace AGE
 
 		void clearAllEntities();
 
-		template <typename T>
-		std::shared_ptr<T> addSystem(std::size_t priority)
+		template <typename T, typename... Args>
+		std::shared_ptr<T> addSystem(std::size_t priority, Args &&...args)
 		{
-			auto tmp = std::make_shared<T>((AScene*)(this));
+			auto tmp = std::make_shared<T>((AScene*)(this), std::forward<Args>(args)...);
 			if (!tmp->init())
 				return nullptr;
 			_systems.insert(std::make_pair(priority, tmp));
@@ -118,8 +118,8 @@ namespace AGE
 			{
 				if (typeid(*e.second.get()).name() == typeid(T).name())
 				{
-					delete e.second;
-					_systems.erase(e);
+					e.second->finalize();
+					_systems.erase(std::find(_systems.begin(), _systems.end(), e));
 					return;
 				}
 			}

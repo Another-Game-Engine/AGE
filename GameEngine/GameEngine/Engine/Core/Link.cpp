@@ -6,6 +6,7 @@
 #include <Utils/Debug.hpp>
 #include <Utils/MatrixConversion.hpp>
 #include <Core/AScene.hh>
+#include <Components/NewRigidBody.hpp>
 
 using namespace AGE;
 
@@ -47,8 +48,19 @@ const std::vector<Link*> &Link::getChildren() const { return _children; }
 
 void Link::setPosition(const glm::vec3 &v)
 {
-	_userModification = true;
-	internalSetPosition(v);
+	static bool FirstCall = true;
+	if (FirstCall)
+	{
+		FirstCall = false;
+		_userModification = true;
+		internalSetPosition(v);
+		NewRigidBody *rigidBody = static_cast<NewRigidBody *>(_entityPtr->getComponent(Component<NewRigidBody>::getTypeId()));
+		if (rigidBody != nullptr)
+		{
+			rigidBody->setPosition(v);
+		}
+		FirstCall = true;
+	}
 }
 
 void Link::setScale(const glm::vec3 &v) {
@@ -62,9 +74,21 @@ void Link::setScale(float v) {
 }
 
 
-void Link::setOrientation(const glm::quat &v) {
-	_userModification = true;
-	internalSetOrientation(v);
+void Link::setOrientation(const glm::quat &v)
+{
+	static bool FirstCall = true;
+	if (FirstCall)
+	{
+		FirstCall = false;
+		_userModification = true;
+		internalSetOrientation(v);
+		NewRigidBody *rigidBody = static_cast<NewRigidBody *>(_entityPtr->getComponent(Component<NewRigidBody>::getTypeId()));
+		if (rigidBody != nullptr)
+		{
+			rigidBody->setRotation(v);
+		}
+		FirstCall = true;
+	}
 }
 
 void Link::setForward(const glm::vec3 &v)

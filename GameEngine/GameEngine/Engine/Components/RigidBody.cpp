@@ -1,7 +1,7 @@
 #include "RigidBody.hpp"
 #include <Core/AScene.hh>
-#include <Physic/BulletDynamicManager.hpp>
-#include <Physic/DynamicMotionState.hpp>
+#include <Physics/BulletDynamicManager.hpp>
+#include <Physics/DynamicMotionState.hpp>
 #ifdef EDITOR_ENABLED
 #include <imgui/imgui.h>
 #include <glm/gtc/type_ptr.hpp>
@@ -231,6 +231,24 @@ namespace AGE
 		_collisionShape = nullptr;
 	}
 
+	void RigidBody::_addContactInformation(const Entity &entity, const btVector3 &contactPoint, const btVector3 &contactNormal)
+	{
+		ContactInformationsType::iterator found = _contactInformations.find(entity);
+		if (found != _contactInformations.end())
+		{
+			found->second.emplace_back(contactPoint, contactNormal);
+		}
+		else
+		{
+			_contactInformations.emplace(entity, ContactInformationList()).first->second.emplace_back(contactPoint, contactNormal);
+		}
+	}
+
+	const RigidBody::ContactInformationsType &RigidBody::getContactInformations(void) const
+	{
+		return _contactInformations;
+	}
+
 	void RigidBody::setTransformConstraint(bool x, bool y, bool z)
 	{
 		_transformConstraint = glm::uvec3(static_cast<unsigned int>(x),
@@ -285,19 +303,22 @@ namespace AGE
 	}
 
 #ifdef EDITOR_ENABLED
-	void RigidBody::editorCreate(AScene *scene)
+	void RigidBody::editorCreate()
 	{
 		setMass(0.0f);
 	}
 
-	void RigidBody::editorDelete(AScene *scene)
+	void RigidBody::editorDelete()
 	{}
 
-	void RigidBody::editorUpdate(AScene *scene)
+	bool RigidBody::editorUpdate()
 	{
+		bool modified = false;
+
 		if (ImGui::InputFloat("Mass", &_mass))
 		{
 			setMass(_mass);
+			modified = true;
 		}
 
 		ImGui::Text("Rotation constraint");
@@ -312,6 +333,7 @@ namespace AGE
 		if (rotationConstraint)
 		{
 			setRotationConstraint(_rotationConstraint.x == 1, _rotationConstraint.y == 1, _rotationConstraint.z == 1);
+			modified = true;
 		}
 
 		ImGui::Text("Transformation constraint");
@@ -326,6 +348,7 @@ namespace AGE
 		if (transformConstraint)
 		{
 			setTransformConstraint(_transformConstraint.x == 1, _transformConstraint.y == 1, _transformConstraint.z == 1);
+			modified = true;
 		}
 
 		//ImGui::InputFloat3("Rotation constraint", glm::value_ptr(_rotationConstraint));
@@ -348,6 +371,7 @@ namespace AGE
 
 		if(ImGui::Checkbox("Simple shape", &simpleShapes))
 		{
+			modified = true;
 			if (simpleShapes)
 			{
 				reset();
@@ -367,6 +391,7 @@ namespace AGE
 			ImGui::PushItemWidth(-1);
 			if (ImGui::ListBox("Shapes", (int*)&selectedShapeIndex, &(shapeFileList->front()), (int)(shapeFileList->size())))
 			{
+				modified = true;
 				selectedShapeName = (*shapeFileList)[selectedShapeIndex];
 				selectedShapePath = (*shapePathList)[selectedShapeIndex];
 
@@ -380,11 +405,13 @@ namespace AGE
 			ImGui::PushItemWidth(-1);
 			if (ImGui::ListBox("Shapes", (int*)&selectedShapeIndex, CollisionShapeStr, CollisionShape::UNDEFINED))
 			{
+				modified = true;
 				_collisionShapeType = (CollisionShape)selectedShapeIndex;
 				setCollisionShape((CollisionShape)selectedShapeIndex);
 			}
 			ImGui::PopItemWidth();
 		}
+		return modified;
 	}
 #endif
 }

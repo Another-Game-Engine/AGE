@@ -3,23 +3,23 @@
     "Component type map": [
         {
             "key": 0,
-            "value": 5355615174208623061
+            "value": 9818697393957024739
         },
         {
             "key": 1,
-            "value": 1713135011246741269
+            "value": 5355615174208623061
         },
         {
             "key": 2,
-            "value": 573189261411184160
+            "value": 1713135011246741269
         },
         {
             "key": 3,
-            "value": 4665681159133520176
+            "value": 573189261411184160
         },
         {
             "key": 4,
-            "value": 9818697393957024739
+            "value": 4665681159133520176
         },
         {
             "key": 5,
@@ -58,9 +58,13 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            2,
-            4
+            0,
+            3
         ],
+        "AGE::WE::EntityRepresentation": {
+            "cereal_class_version": 0,
+            "name": "light2"
+        },
         "AGE::PointLightComponent": {
             "cereal_class_version": 0,
             "color": {
@@ -73,10 +77,6 @@
                 "value1": 0.091000005602836609,
                 "value2": 0.038000002503395081
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "cereal_class_version": 0,
-            "name": "light2"
         }
     },
     "Entity_2": {
@@ -101,9 +101,12 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            2,
-            4
+            0,
+            3
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "light1"
+        },
         "AGE::PointLightComponent": {
             "color": {
                 "value0": 1,
@@ -115,9 +118,6 @@
                 "value1": 0.091000005602836609,
                 "value2": 0.02500000037252903
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "light1"
         }
     },
     "Entity_3": {
@@ -146,7 +146,7 @@
         ],
         "flags": 0,
         "components_number": [
-            4
+            0
         ],
         "AGE::WE::EntityRepresentation": {
             "name": "big-flash-pack2"
@@ -187,7 +187,7 @@
         ],
         "flags": 0,
         "components_number": [
-            4
+            0
         ],
         "AGE::WE::EntityRepresentation": {
             "name": "flash-pack2"
@@ -216,9 +216,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "cereal_class_version": 0,
             "value0": {
@@ -231,9 +234,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "cereal_class_version": 1,
@@ -268,9 +268,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -282,9 +285,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -318,9 +318,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -332,9 +335,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -368,9 +368,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -382,9 +385,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -418,9 +418,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -432,9 +435,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -468,9 +468,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -482,9 +485,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -518,9 +518,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -532,9 +535,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -568,9 +568,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -582,9 +585,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -618,9 +618,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -632,9 +635,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -668,9 +668,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -682,9 +685,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -718,9 +718,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -732,9 +735,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -768,9 +768,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -782,9 +785,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -830,7 +830,7 @@
         ],
         "flags": 0,
         "components_number": [
-            4
+            0
         ],
         "AGE::WE::EntityRepresentation": {
             "name": "flash-pack1"
@@ -859,9 +859,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -873,9 +876,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -909,9 +909,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -923,9 +926,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -959,9 +959,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -973,9 +976,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -1009,9 +1009,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -1023,9 +1026,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -1059,9 +1059,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -1073,9 +1076,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -1109,9 +1109,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -1123,9 +1126,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -1159,9 +1159,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -1173,9 +1176,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -1209,9 +1209,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -1223,9 +1226,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -1259,9 +1259,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -1273,9 +1276,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -1309,9 +1309,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -1323,9 +1326,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -1359,9 +1359,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -1373,9 +1376,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -1409,9 +1409,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -1423,9 +1426,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -1471,7 +1471,7 @@
         ],
         "flags": 0,
         "components_number": [
-            4
+            0
         ],
         "AGE::WE::EntityRepresentation": {
             "name": "flash-pack3"
@@ -1500,9 +1500,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -1514,9 +1517,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -1550,9 +1550,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -1564,9 +1567,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -1600,9 +1600,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -1614,9 +1617,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -1650,9 +1650,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -1664,9 +1667,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -1700,9 +1700,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -1714,9 +1717,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -1750,9 +1750,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -1764,9 +1767,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -1800,9 +1800,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -1814,9 +1817,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -1850,9 +1850,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -1864,9 +1867,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -1900,9 +1900,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -1914,9 +1917,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -1950,9 +1950,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -1964,9 +1967,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -2000,9 +2000,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -2014,9 +2017,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -2050,9 +2050,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -2064,9 +2067,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -2103,7 +2103,7 @@
         ],
         "flags": 0,
         "components_number": [
-            4
+            0
         ],
         "AGE::WE::EntityRepresentation": {
             "name": "big-flash-pack1"
@@ -2144,7 +2144,7 @@
         ],
         "flags": 0,
         "components_number": [
-            4
+            0
         ],
         "AGE::WE::EntityRepresentation": {
             "name": "flash-pack2"
@@ -2173,9 +2173,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -2187,9 +2190,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -2223,9 +2223,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -2237,9 +2240,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -2273,9 +2273,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -2287,9 +2290,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -2323,9 +2323,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -2337,9 +2340,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -2373,9 +2373,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -2387,9 +2390,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -2423,9 +2423,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -2437,9 +2440,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -2473,9 +2473,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -2487,9 +2490,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -2523,9 +2523,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -2537,9 +2540,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -2573,9 +2573,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -2587,9 +2590,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -2623,9 +2623,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -2637,9 +2640,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -2673,9 +2673,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -2687,9 +2690,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -2723,9 +2723,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -2737,9 +2740,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -2785,7 +2785,7 @@
         ],
         "flags": 0,
         "components_number": [
-            4
+            0
         ],
         "AGE::WE::EntityRepresentation": {
             "name": "flash-pack1"
@@ -2814,9 +2814,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -2828,9 +2831,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -2864,9 +2864,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -2878,9 +2881,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -2914,9 +2914,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -2928,9 +2931,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -2964,9 +2964,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -2978,9 +2981,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -3014,9 +3014,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -3028,9 +3031,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -3064,9 +3064,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -3078,9 +3081,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -3114,9 +3114,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -3128,9 +3131,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -3164,9 +3164,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -3178,9 +3181,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -3214,9 +3214,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -3228,9 +3231,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -3264,9 +3264,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -3278,9 +3281,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -3314,9 +3314,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -3328,9 +3331,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -3364,9 +3364,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -3378,9 +3381,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -3426,7 +3426,7 @@
         ],
         "flags": 0,
         "components_number": [
-            4
+            0
         ],
         "AGE::WE::EntityRepresentation": {
             "name": "flash-pack3"
@@ -3455,9 +3455,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -3469,9 +3472,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -3505,9 +3505,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -3519,9 +3522,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -3555,9 +3555,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -3569,9 +3572,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -3605,9 +3605,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -3619,9 +3622,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -3655,9 +3655,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -3669,9 +3672,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -3705,9 +3705,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -3719,9 +3722,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -3755,9 +3755,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -3769,9 +3772,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -3805,9 +3805,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -3819,9 +3822,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -3855,9 +3855,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -3869,9 +3872,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -3905,9 +3905,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -3919,9 +3922,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -3955,9 +3955,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -3969,9 +3972,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -4005,9 +4005,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -4019,9 +4022,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -4058,7 +4058,7 @@
         ],
         "flags": 0,
         "components_number": [
-            4
+            0
         ],
         "AGE::WE::EntityRepresentation": {
             "name": "big-flash-pack3"
@@ -4099,7 +4099,7 @@
         ],
         "flags": 0,
         "components_number": [
-            4
+            0
         ],
         "AGE::WE::EntityRepresentation": {
             "name": "flash-pack2"
@@ -4128,9 +4128,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -4142,9 +4145,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -4178,9 +4178,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -4192,9 +4195,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -4228,9 +4228,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -4242,9 +4245,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -4278,9 +4278,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -4292,9 +4295,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -4328,9 +4328,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -4342,9 +4345,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -4378,9 +4378,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -4392,9 +4395,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -4428,9 +4428,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -4442,9 +4445,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -4478,9 +4478,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -4492,9 +4495,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -4528,9 +4528,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -4542,9 +4545,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -4578,9 +4578,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -4592,9 +4595,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -4628,9 +4628,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -4642,9 +4645,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -4678,9 +4678,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -4692,9 +4695,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -4740,7 +4740,7 @@
         ],
         "flags": 0,
         "components_number": [
-            4
+            0
         ],
         "AGE::WE::EntityRepresentation": {
             "name": "flash-pack1"
@@ -4769,9 +4769,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -4783,9 +4786,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -4819,9 +4819,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -4833,9 +4836,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -4869,9 +4869,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -4883,9 +4886,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -4919,9 +4919,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -4933,9 +4936,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -4969,9 +4969,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -4983,9 +4986,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -5019,9 +5019,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -5033,9 +5036,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -5069,9 +5069,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -5083,9 +5086,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -5119,9 +5119,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -5133,9 +5136,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -5169,9 +5169,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -5183,9 +5186,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -5219,9 +5219,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -5233,9 +5236,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -5269,9 +5269,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -5283,9 +5286,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -5319,9 +5319,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -5333,9 +5336,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -5381,7 +5381,7 @@
         ],
         "flags": 0,
         "components_number": [
-            4
+            0
         ],
         "AGE::WE::EntityRepresentation": {
             "name": "flash-pack3"
@@ -5410,9 +5410,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -5424,9 +5427,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -5460,9 +5460,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -5474,9 +5477,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -5510,9 +5510,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -5524,9 +5527,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -5560,9 +5560,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -5574,9 +5577,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -5610,9 +5610,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -5624,9 +5627,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -5660,9 +5660,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -5674,9 +5677,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -5710,9 +5710,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -5724,9 +5727,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -5760,9 +5760,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -5774,9 +5777,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -5810,9 +5810,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -5824,9 +5827,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -5860,9 +5860,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -5874,9 +5877,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -5910,9 +5910,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -5924,9 +5927,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -5960,9 +5960,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -5974,9 +5977,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -6013,7 +6013,7 @@
         ],
         "flags": 0,
         "components_number": [
-            4
+            0
         ],
         "AGE::WE::EntityRepresentation": {
             "name": "big-flash-pack4"
@@ -6054,7 +6054,7 @@
         ],
         "flags": 0,
         "components_number": [
-            4
+            0
         ],
         "AGE::WE::EntityRepresentation": {
             "name": "flash-pack2"
@@ -6083,9 +6083,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -6097,9 +6100,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -6133,9 +6133,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -6147,9 +6150,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -6183,9 +6183,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -6197,9 +6200,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -6233,9 +6233,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -6247,9 +6250,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -6283,9 +6283,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -6297,9 +6300,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -6333,9 +6333,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -6347,9 +6350,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -6383,9 +6383,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -6397,9 +6400,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -6433,9 +6433,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -6447,9 +6450,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -6483,9 +6483,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -6497,9 +6500,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -6533,9 +6533,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -6547,9 +6550,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -6583,9 +6583,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -6597,9 +6600,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -6633,9 +6633,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -6647,9 +6650,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -6695,7 +6695,7 @@
         ],
         "flags": 0,
         "components_number": [
-            4
+            0
         ],
         "AGE::WE::EntityRepresentation": {
             "name": "flash-pack1"
@@ -6724,9 +6724,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -6738,9 +6741,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -6774,9 +6774,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -6788,9 +6791,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -6824,9 +6824,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -6838,9 +6841,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -6874,9 +6874,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -6888,9 +6891,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -6924,9 +6924,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -6938,9 +6941,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -6974,9 +6974,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -6988,9 +6991,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -7024,9 +7024,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -7038,9 +7041,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -7074,9 +7074,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -7088,9 +7091,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -7124,9 +7124,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -7138,9 +7141,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -7174,9 +7174,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -7188,9 +7191,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -7224,9 +7224,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -7238,9 +7241,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -7274,9 +7274,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -7288,9 +7291,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -7336,7 +7336,7 @@
         ],
         "flags": 0,
         "components_number": [
-            4
+            0
         ],
         "AGE::WE::EntityRepresentation": {
             "name": "flash-pack3"
@@ -7365,9 +7365,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -7379,9 +7382,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -7415,9 +7415,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -7429,9 +7432,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -7465,9 +7465,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -7479,9 +7482,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -7515,9 +7515,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -7529,9 +7532,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -7565,9 +7565,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -7579,9 +7582,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -7615,9 +7615,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -7629,9 +7632,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -7665,9 +7665,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -7679,9 +7682,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -7715,9 +7715,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -7729,9 +7732,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -7765,9 +7765,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -7779,9 +7782,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -7815,9 +7815,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -7829,9 +7832,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -7865,9 +7865,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -7879,9 +7882,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -7915,9 +7915,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4,
+            1,
             7
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "mesh"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -7929,9 +7932,6 @@
                     }
                 }
             }
-        },
-        "AGE::WE::EntityRepresentation": {
-            "name": "mesh"
         },
         "AGE::RotationComponent": {
             "Angles": {
@@ -7965,8 +7965,12 @@
         "flags": 0,
         "components_number": [
             0,
-            4
+            1,
+            2
         ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "floor"
+        },
         "AGE::MeshRenderer": {
             "value0": {
                 "ptr_wrapper": {
@@ -7979,8 +7983,30 @@
                 }
             }
         },
-        "AGE::WE::EntityRepresentation": {
-            "name": "floor"
+        "AGE::RigidBody": {
+            "cereal_class_version": 1,
+            "Mass": 0,
+            "Inertia": {
+                "value0": 0.1666666716337204,
+                "value1": 0.1666666716337204,
+                "value2": 0.1666666716337204
+            },
+            "Rotation constraint": {
+                "value0": 1,
+                "value1": 1,
+                "value2": 1
+            },
+            "Transform constraint": {
+                "value0": 1,
+                "value1": 1,
+                "value2": 1
+            },
+            "Collision shape path": "",
+            "Collision shape type": 1,
+            "Selected mesh shape index": 25,
+            "Selected mesh shape path": "",
+            "Selected mesh shape name": "",
+            "Simple shape": true
         }
     }
 }

@@ -36,6 +36,26 @@
 
 namespace AGE
 {
+	static BOOL CtrlHandler(DWORD fdwCtrlType)
+	{
+		switch (fdwCtrlType)
+		{
+			case CTRL_C_EVENT:
+				// Disable CTRL-C signal.
+				return TRUE;
+			case CTRL_CLOSE_EVENT:
+				// Exit properly if the console is closed.
+				ExitAGE();
+				return TRUE;
+			case CTRL_BREAK_EVENT:
+			case CTRL_LOGOFF_EVENT:
+			case CTRL_SHUTDOWN_EVENT:
+			default:
+				// Pass other signals to the next handler.
+				return FALSE;
+		}
+	}
+
 	Engine::Engine(void)
 		: Engine(0, nullptr)
 		//, _timer(nullptr)
@@ -63,6 +83,8 @@ namespace AGE
 		{
 			arguments.push_back(argv[index]);
 		}
+		// Catch signals.
+		SetConsoleCtrlHandler(reinterpret_cast<PHANDLER_ROUTINE>(CtrlHandler), TRUE);
 	}
 
 	Engine::~Engine()
@@ -153,7 +175,7 @@ namespace AGE
 		}
 		else
 		{
-			AGE_BREAK("Assets file path is missing. Add it in configuration.json");
+			AGE_BREAK(); // "Assets file path is missing. Add it in configuration.json"
 		}
 #endif //USE_DEFAULT_ENGINE_CONFIGURATION
 
@@ -299,6 +321,25 @@ namespace AGE
 			e.averageWaitTimeCopy = e.averageWaitTime;
 			e.averageWorkTimeCopy = e.averageWorkTime;
 		}
+
+		if (_displayThreadsStatistics)
+		{
+			_renderThreadsStatistics();
+		}
+		if (_displayFps)
+		{
+			_renderFpsStatitstics();
+		}
+#ifdef USE_IMGUI
+		ImGui::Render();
+#endif
+		GetPrepareThread()->getQueue()->emplaceCommand<Commands::ToRender::Flush>();
+		++frame;
+		return true;
+	}
+
+	void Engine::_renderThreadsStatistics()
+	{
 #ifdef USE_IMGUI
 		if (ImGui::Begin("Threads statistics", (bool*)0, ImVec2(0, 0), -1.0f, ImGuiWindowFlags_AlwaysAutoResize))
 		{
@@ -336,20 +377,24 @@ namespace AGE
 			}
 		}
 		ImGui::End();
-		if (_displayFps)
+#endif
+	}
+
+	void Engine::_renderFpsStatitstics()
+	{
+#ifdef USE_IMGUI
+		if (!ImGui::Begin("Example: Fixed OverlayFPS OVERLAY", (bool*)1, ImVec2(0, 0), 0.3f, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings))
 		{
-			if (!ImGui::Begin("Example: Fixed OverlayFPS OVERLAY", (bool*)1, ImVec2(0, 0), 0.3f, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings))
+			ImGui::End();
+		}
+		else
+		{
+			ImGui::SetWindowPos(ImVec2(10, 10));
 			{
-				ImGui::End();
+				auto &e = GetThreadManager()->getStatistics()[Thread::Main];
+				if (e.averageWaitTimeCopy + e.averageWorkTimeCopy > 0)
+					ImGui::Text("Main : %i fps", (int)(1000 / (e.averageWaitTimeCopy + e.averageWorkTimeCopy)));
 			}
-			else
-			{
-				ImGui::SetWindowPos(ImVec2(10, 10));
-				{
-					auto &e = GetThreadManager()->getStatistics()[Thread::Main];
-					if (e.averageWaitTimeCopy + e.averageWorkTimeCopy > 0)
-						ImGui::Text("Main : %i fps", (int)(1000 / (e.averageWaitTimeCopy + e.averageWorkTimeCopy)));
-				}
 			{
 				auto &e = GetThreadManager()->getStatistics()[Thread::PrepareRender];
 				if (e.averageWaitTimeCopy + e.averageWorkTimeCopy > 0)
@@ -361,15 +406,8 @@ namespace AGE
 					ImGui::Text("Render : %i fps", (int)(1000 / (e.averageWaitTimeCopy + e.averageWorkTimeCopy)));
 			}
 			ImGui::End();
-			}
 		}
 #endif
-#ifdef USE_IMGUI
-		ImGui::Render();
-#endif
-		GetPrepareThread()->getQueue()->emplaceCommand<Commands::ToRender::Flush>();
-		++frame;
-		return true;
 	}
 
 	Engine *GetEngine()

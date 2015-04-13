@@ -88,8 +88,8 @@ namespace AGE
 					indiceNb += e.indices.size();
 					verticeNb += e.positions.size();
 				}
-				cookingTask->staticTriangleMesh->preallocateIndices(indiceNb);
-				cookingTask->staticTriangleMesh->preallocateVertices(verticeNb);
+				cookingTask->staticTriangleMesh->preallocateIndices(static_cast<int>(indiceNb));
+				cookingTask->staticTriangleMesh->preallocateVertices(static_cast<int>(verticeNb));
 				for (std::size_t j = 0; j < meshs.size(); ++j)
 				{
 					auto &geo = meshs[j];

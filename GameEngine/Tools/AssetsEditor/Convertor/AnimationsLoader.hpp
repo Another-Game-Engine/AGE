@@ -57,7 +57,7 @@ namespace AGE
 				cookinTask->animations[animNum] = std::make_shared<AnimationData>();
 				auto anim = cookinTask->animations[animNum];
 				anim->name = aiAnim->mName.data;
-				anim->duration = aiAnim->mDuration;
+				anim->duration = static_cast<float>(aiAnim->mDuration);
 				anim->id = animNum;
 				auto channelCounter = 0;
 				for (unsigned int channelNbr = 0; channelNbr < aiAnim->mNumChannels; ++channelNbr)

@@ -4,6 +4,7 @@
 #include <Components/MeshRenderer.hh>
 #include <Scenes/AssetsEditorScene.hpp>
 #include <AssetFiles/RawFile.hpp>
+#include <Components/EntityRepresentation.hpp>
 
 namespace AGE
 {
@@ -13,6 +14,7 @@ namespace AGE
 			: System(scene)
 			, _rigidBodies(std::move(scene))
 			, _meshRenderer(std::move(scene))
+			, _all(std::move(scene))
 		{
 			_name = "we_assets_and_component_relations";
 		}
@@ -44,6 +46,15 @@ namespace AGE
 		{
 			_rigidBodies.requireComponent<AGE::RigidBody>();
 			_meshRenderer.requireComponent<AGE::MeshRenderer>();
+
+			_all.setOnAdd(std::function<void(Entity e)>([this](Entity en)
+			{
+				en.addComponent<AGE::WE::EntityRepresentation>(std::string("Entity " + std::to_string(en.getId()) + "\0").c_str());
+			}));
+
+			_all.setOnRemove(std::function<void(Entity e)>([this](Entity en)
+			{
+			}));
 			return true;
 		}
 	}

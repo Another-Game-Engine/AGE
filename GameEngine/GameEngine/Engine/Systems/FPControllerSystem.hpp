@@ -5,7 +5,7 @@
 //#include <glm/gtc/matrix_transform.hpp>
 #include <Systems/System.h>
 #include <Components/FPController.hpp>
-//#include <Physic/BulletDynamicManager.hpp>
+//#include <Physics/BulletDynamicManager.hpp>
 //#include <Core/Engine.hh>
 //#include <Context/SdlContext.hh>
 //#include <Utils/MatrixConversion.hpp>

@@ -139,7 +139,7 @@ namespace AGE
 			_mesh = scene->getInstance<AGE::AssetsManager>()->getMesh(_serializationInfos->mesh);
 			if (!_serializationInfos->mesh.empty() && !_mesh)
 			{
-				scene->getInstance<AGE::AssetsManager>()->pushNewCallback(_serializationInfos->mesh,
+				scene->getInstance<AGE::AssetsManager>()->pushNewCallback(_serializationInfos->mesh, scene,
 					std::function<void()>([=](){
 					_mesh = scene->getInstance<AGE::AssetsManager>()->getMesh(_serializationInfos->mesh);
 					setMeshAndMaterial(_mesh, _material);
@@ -151,7 +151,7 @@ namespace AGE
 			_material = scene->getInstance<AGE::AssetsManager>()->getMaterial(_serializationInfos->material);
 			if (!_serializationInfos->material.empty() && !_material)
 			{
-				scene->getInstance<AGE::AssetsManager>()->pushNewCallback(_serializationInfos->material,
+				scene->getInstance<AGE::AssetsManager>()->pushNewCallback(_serializationInfos->material, scene,
 					std::function<void()>([=](){
 					_material = scene->getInstance<AGE::AssetsManager>()->getMaterial(_serializationInfos->material);
 					setMeshAndMaterial(_mesh, _material);
@@ -168,14 +168,17 @@ namespace AGE
 	}
 
 #ifdef EDITOR_ENABLED
-	void MeshRenderer::editorCreate(AScene *scene)
+	void MeshRenderer::editorCreate()
 	{}
 
-	void MeshRenderer::editorDelete(AScene *scene)
+	void MeshRenderer::editorDelete()
 	{}
 
-	void MeshRenderer::editorUpdate(AScene *scene)
+	bool MeshRenderer::editorUpdate()
 	{
+		bool modified = false;
+		auto scene = entity.getScene();
+
 		if ((*meshPathList)[selectedMeshIndex] != selectedMeshPath)
 		{
 			std::size_t i = 0;
@@ -184,6 +187,7 @@ namespace AGE
 				if (e == selectedMeshPath)
 				{
 					selectedMeshIndex = i;
+					modified = true;
 					break;
 				}
 				++i;
@@ -197,6 +201,7 @@ namespace AGE
 				if (e == selectedMaterialPath)
 				{
 					selectedMaterialIndex = i;
+					modified = true;
 					break;
 				}
 				++i;
@@ -206,6 +211,8 @@ namespace AGE
 		ImGui::PushItemWidth(-1);
 		if (ImGui::ListBox("Meshs", (int*)&selectedMeshIndex, &(meshFileList->front()), (int)(meshFileList->size())))
 		{
+			modified = true;
+
 			selectedMeshName = (*meshFileList)[selectedMeshIndex];
 			selectedMeshPath = (*meshPathList)[selectedMeshIndex];
 
@@ -213,7 +220,7 @@ namespace AGE
 
 			if (!_mesh)
 			{
-				scene->getInstance<AGE::AssetsManager>()->pushNewCallback(selectedMeshPath,
+				scene->getInstance<AGE::AssetsManager>()->pushNewCallback(selectedMeshPath, scene,
 					std::function<void()>([=](){
 					_mesh = scene->getInstance<AGE::AssetsManager>()->getMesh(selectedMeshPath);
 					if (_mesh && _material)
@@ -235,6 +242,8 @@ namespace AGE
 		ImGui::PushItemWidth(-1);
 		if (!materialFileList->empty() && ImGui::ListBox("Material", (int*)&selectedMaterialIndex, &(materialFileList->front()), (int)(materialFileList->size())))
 		{
+			modified = true;
+
 			selectedMaterialName = (*materialFileList)[selectedMaterialIndex];
 			selectedMaterialPath = (*materialPathList)[selectedMaterialIndex];
 
@@ -242,7 +251,7 @@ namespace AGE
 
 			if (!_material)
 			{
-				scene->getInstance<AGE::AssetsManager>()->pushNewCallback(selectedMaterialPath,
+				scene->getInstance<AGE::AssetsManager>()->pushNewCallback(selectedMaterialPath, scene,
 					std::function<void()>([=](){
 					_material = scene->getInstance<AGE::AssetsManager>()->getMaterial(selectedMaterialPath);
 					if (_mesh && _material)
@@ -262,7 +271,7 @@ namespace AGE
 		}
 		//ImGui::ListBoxFooter();
 		ImGui::PopItemWidth();
-
+		return modified;
 	}
 #endif
 }

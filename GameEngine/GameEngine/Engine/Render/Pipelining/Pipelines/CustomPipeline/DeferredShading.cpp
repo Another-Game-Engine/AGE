@@ -2,6 +2,7 @@
 #include <Render/Pipelining/Pipelines/CustomRenderPass/DeferredBasicBuffering.hh>
 #include <Render/Pipelining/Pipelines/CustomRenderPass/DeferredPointLightning.hh>
 #include <Render/Pipelining/Pipelines/CustomRenderPass/DeferredMerging.hh>
+#include <Render/Pipelining/Pipelines/PipelineTools.hh>
 
 namespace AGE
 {
@@ -27,7 +28,7 @@ namespace AGE
 		basicBuffering->setNextPass(pointLightning);
 		pointLightning->setNextPass(_deferredMerging);
 
-		setAmbient(glm::vec3(0.2));
+		setAmbient(glm::vec3(0.2f));
 	}
 
 	DeferredShading::DeferredShading(DeferredShading &&move) :

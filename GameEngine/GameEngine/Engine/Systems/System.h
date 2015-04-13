@@ -11,6 +11,7 @@ namespace AGE
 		virtual ~System();
 		void update(float time);
 		bool init();
+		virtual void finalize(void) { }
 		bool setActivation(bool tof);
 		bool isActivated() const;
 		inline const std::string &getName() const { return _name; }
@@ -18,12 +19,12 @@ namespace AGE
 		AScene *_scene;
 		std::string _name;
 		bool _activated;
-	private:
-		virtual void updateBegin(float time) = 0;
-		virtual void updateEnd(float time) = 0;
-		virtual void mainUpdate(float time) = 0;
-		virtual bool initialize() = 0;
-		virtual bool activate(){ return true; };
-		virtual bool deactivate(){ return true; };
+	
+		virtual void updateBegin(float time) {}
+		virtual void updateEnd(float time) {}
+		virtual void mainUpdate(float time) {}
+		virtual bool initialize() { return true; }
+		virtual bool activate(){ return true; }
+		virtual bool deactivate(){ return true; }
 	};
 }

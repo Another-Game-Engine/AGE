@@ -126,9 +126,9 @@ namespace AGE
 		{
 			if (!cookingTask->dataSet->loadTextures)
 				return true;
-			if (cookingTask->assimpScene->HasTextures())
+			if (cookingTask->assimpScene && cookingTask->assimpScene->HasTextures())
 			{
-				for (auto textureIndex = 0; textureIndex < cookingTask->assimpScene->mNumTextures; ++textureIndex)
+				for (unsigned int textureIndex = 0; textureIndex < cookingTask->assimpScene->mNumTextures; ++textureIndex)
 				{
 					auto &aiText = cookingTask->assimpScene->mTextures[textureIndex];
 					unsigned int i = 0;

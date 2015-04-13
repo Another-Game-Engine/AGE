@@ -2,8 +2,7 @@
 
 #include <string>
 #include <functional>
-#include <map>
-#include <vector>
+#include <unordered_map>
 
 #include "Architecture.hpp"
 #include "Debug.hpp"
@@ -22,9 +21,9 @@ namespace AGE
 
 		Library(void) = default;
 		Library(const std::string &name);
-		Library(Library &other);
+		Library(const Library &other) = delete;
 		Library(Library &&other);
-		Library &operator=(Library &other);
+		Library &operator=(const Library &other) = delete;
 		Library &operator=(Library &&other);
 		~Library(void);
 
@@ -38,7 +37,11 @@ namespace AGE
 			AGE_ASSERT(handle && "Library is not loaded");
 			if (handle)
 			{
+#if defined(AGE_PLATFORM_WINDOWS)
 				FARPROC func = GetProcAddress(handle, functionName.c_str());
+#else
+				void *func = dlsym(handle, functionName.c_str());
+#endif
 				if (func != nullptr)
 				{
 					return std::function<FunctionSignature>(reinterpret_cast<FunctionSignature *>(func));
@@ -61,5 +64,157 @@ namespace AGE
 		std::string pluginName;
 
 		static std::string GenerateName(const std::string &name);
+	};
+
+	template <class T>
+	class PluginManager
+	{
+	protected:
+		struct PluginData
+		{
+			using ManagerType = std::shared_ptr < Library > ;
+			using ReleaseFunction = std::function < void(T *) > ;
+
+			ManagerType manager = std::make_shared<Library>();
+			T *plugin = nullptr;
+			ReleaseFunction release;
+		};
+
+		using PluginPtr = std::shared_ptr < PluginData > ;
+		using PluginContainer = std::unordered_map < std::string, PluginPtr >;
+
+		const char *createFunction;
+		const char *releaseFunction;
+		PluginContainer plugins;
+
+	public:
+		PluginManager(const char *createFunction = "CreatePlugin", const char *releaseFunction = "ReleasePlugin")
+			: createFunction(createFunction), releaseFunction(releaseFunction)
+		{
+			AGE_ASSERT(createFunction != nullptr && releaseFunction != nullptr && "Invalid function names");
+		}
+
+		PluginManager(const PluginManager &other) = delete;
+		PluginManager &operator=(const PluginManager &other) = delete;
+
+		virtual ~PluginManager(void)
+		{
+			for (auto &p : plugins)
+			{
+				p.second->release(p.second->plugin);
+				p.second->manager->close();
+			}
+		}
+
+		template <typename... Args>
+		bool addPlugin(const std::string &name, Args &&...args)
+		{
+			AGE_ASSERT(!name.empty() && "Invalid name");
+			PluginContainer::const_iterator found = plugins.find(name);
+			if (found != plugins.end())
+			{
+				AGE_ERROR("\"", name, "\" plugin is already loaded");
+				return false;
+			}
+			PluginPtr p = std::make_shared<PluginData>();
+			if (!p->manager->load(name))
+			{
+				return false;
+			}
+			auto create = p->manager->getFunction<T *(Args...)>(createFunction);
+			p->release = p->manager->getFunction<void(T *)>(releaseFunction);
+			if (!create)
+			{
+				AGE_ERROR("Impossible to find ", createFunction, " function in \"", p->manager->getName(), "\" library");
+				p->manager->close();
+				return false;
+			}
+			if (!p->release)
+			{
+				AGE_ERROR("Impossible to find ", releaseFunction, " function in \"", p->manager->getName(), "\" library");
+				p->manager->close();
+				return false;
+			}
+			p->plugin = create(std::forward<Args>(args)...);
+			if (p->plugin == nullptr)
+			{
+				AGE_ERROR("Impossible to create \"", name, "\" plugin");
+				p->manager->close();
+				return false;
+			}
+			else
+			{
+				const bool returnValue = onPluginLoaded(p);
+				if (returnValue)
+				{
+					plugins.insert(std::make_pair(name, p));
+				}
+				return returnValue;
+			}
+		}
+
+		bool releasePlugin(const std::string &name)
+		{
+			AGE_ASSERT(!name.empty() && "Invalid name");
+			PluginContainer::const_iterator found = plugins.find(name);
+			if (found != plugins.end())
+			{
+				found->second->release(found->second->plugin);
+				found->second->manager->close();
+				plugins.erase(found);
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+
+		typename PluginData::ManagerType getManager(const std::string &name)
+		{
+			AGE_ASSERT(!name.empty() && "Invalid name");
+			PluginContainer::const_iterator found = plugins.find(name);
+			if (found != plugins.end())
+			{
+				found->second->manager;
+			}
+			else
+			{
+				return nullptr;
+			}
+		}
+
+		T *getPlugin(const std::string &name)
+		{
+			AGE_ASSERT(!name.empty() && "Invalid name");
+			PluginContainer::iterator found = plugins.find(name);
+			if (found != plugins.end())
+			{
+				return found->second->plugin;
+			}
+			else
+			{
+				return nullptr;
+			}
+		}
+
+		const T *getPlugin(const std::string &name) const
+		{
+			AGE_ASSERT(!name.empty() && "Invalid name");
+			PluginContainer::const_iterator found = plugins.find(name);
+			if (found != plugins.end())
+			{
+				found->second->plugin;
+			}
+			else
+			{
+				return nullptr;
+			}
+		}
+
+		virtual bool onPluginLoaded(PluginPtr pluginData)
+		{
+			return true;
+		}
 	};
 }
