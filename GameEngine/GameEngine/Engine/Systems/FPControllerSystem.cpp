@@ -3,7 +3,7 @@
 #include <Core/AScene.hh>
 #include <Core/Inputs/Input.hh>
 #include <glm/gtc/matrix_transform.hpp>
-#include <Physic/Utils/BtConversion.hpp>
+#include <Physics/Utils/BtConversion.hpp>
 
 namespace AGE
 {

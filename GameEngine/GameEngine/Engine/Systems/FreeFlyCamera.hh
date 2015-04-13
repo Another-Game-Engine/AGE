@@ -6,7 +6,7 @@
 
 namespace AGE
 {
-	class Link;
+	struct Link;
 
 	class FreeFlyCamera : public System
 	{

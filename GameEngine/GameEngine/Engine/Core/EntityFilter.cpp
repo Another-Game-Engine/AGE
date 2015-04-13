@@ -3,7 +3,7 @@
 namespace AGE
 {
 	EntityFilter::EntityFilter(AScene *scene)
-		: _scene(std::move(scene))
+		: _scene(scene)
 		, _locked(false)
 	{
 		assert(_scene != nullptr && "System Scene is not valid.");

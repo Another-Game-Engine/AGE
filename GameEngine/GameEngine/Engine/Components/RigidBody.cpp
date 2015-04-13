@@ -1,7 +1,7 @@
 #include "RigidBody.hpp"
 #include <Core/AScene.hh>
-#include <Physic/BulletDynamicManager.hpp>
-#include <Physic/DynamicMotionState.hpp>
+#include <Physics/BulletDynamicManager.hpp>
+#include <Physics/DynamicMotionState.hpp>
 #ifdef EDITOR_ENABLED
 #include <imgui/imgui.h>
 #include <glm/gtc/type_ptr.hpp>
@@ -229,6 +229,24 @@ namespace AGE
 				assert(false);
 		}
 		_collisionShape = nullptr;
+	}
+
+	void RigidBody::_addContactInformation(const Entity &entity, const btVector3 &contactPoint, const btVector3 &contactNormal)
+	{
+		ContactInformationsType::iterator found = _contactInformations.find(entity);
+		if (found != _contactInformations.end())
+		{
+			found->second.emplace_back(contactPoint, contactNormal);
+		}
+		else
+		{
+			_contactInformations.emplace(entity, ContactInformationList()).first->second.emplace_back(contactPoint, contactNormal);
+		}
+	}
+
+	const RigidBody::ContactInformationsType &RigidBody::getContactInformations(void) const
+	{
+		return _contactInformations;
 	}
 
 	void RigidBody::setTransformConstraint(bool x, bool y, bool z)

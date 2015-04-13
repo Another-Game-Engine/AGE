@@ -117,7 +117,7 @@ namespace AGE
 				ImGui::BeginChild("Archetypes", ImVec2(ImGui::GetWindowWidth() * 0.35f, 0));
 
 				if (ImGui::TreeNode("Archetypes") && ! _archetypesImGuiNamesList.empty() 
-					&& ImGui::Combo("", &_selectedArchetypeIndex, &_archetypesImGuiNamesList[0], _archetypesImGuiNamesList.size()))
+					&& ImGui::Combo("", &_selectedArchetypeIndex, &_archetypesImGuiNamesList[0], static_cast<int>(_archetypesImGuiNamesList.size())))
 				{
 					if (_selectedArchetypeIndex < _archetypesImGuiNamesList.size())
 					{
@@ -172,7 +172,7 @@ namespace AGE
 
 							if (_selectedEntityIndex > tmpEntitiesList.size())
 							{
-								_selectedEntityIndex = tmpEntitiesList.size() - 1;
+								_selectedEntityIndex = static_cast<int>(tmpEntitiesList.size() - 1);
 							}
 
 							ImGui::PushItemWidth(-1);

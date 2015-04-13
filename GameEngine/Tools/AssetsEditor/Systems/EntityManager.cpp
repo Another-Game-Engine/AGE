@@ -169,7 +169,7 @@ namespace AGE
 				}
 				if (ImGui::TreeNode("Scenes list"))
 				{
-					if (ImGui::ListBox("Scenes", &WE::EditorConfiguration::getSelectedSceneIndex(), WE::EditorConfiguration::getScenesName().data(), WE::EditorConfiguration::getScenesName().size()))
+					if (ImGui::ListBox("Scenes", &WE::EditorConfiguration::getSelectedSceneIndex(), WE::EditorConfiguration::getScenesName().data(), static_cast<int>(WE::EditorConfiguration::getScenesName().size())))
 					{
 						_scene->clearAllEntities();
 

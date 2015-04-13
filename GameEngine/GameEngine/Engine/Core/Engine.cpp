@@ -36,6 +36,26 @@
 
 namespace AGE
 {
+	static BOOL CtrlHandler(DWORD fdwCtrlType)
+	{
+		switch (fdwCtrlType)
+		{
+			case CTRL_C_EVENT:
+				// Disable CTRL-C signal.
+				return TRUE;
+			case CTRL_CLOSE_EVENT:
+				// Exit properly if the console is closed.
+				ExitAGE();
+				return TRUE;
+			case CTRL_BREAK_EVENT:
+			case CTRL_LOGOFF_EVENT:
+			case CTRL_SHUTDOWN_EVENT:
+			default:
+				// Pass other signals to the next handler.
+				return FALSE;
+		}
+	}
+
 	Engine::Engine(void)
 		: Engine(0, nullptr)
 		//, _timer(nullptr)
@@ -63,6 +83,8 @@ namespace AGE
 		{
 			arguments.push_back(argv[index]);
 		}
+		// Catch signals.
+		SetConsoleCtrlHandler(reinterpret_cast<PHANDLER_ROUTINE>(CtrlHandler), TRUE);
 	}
 
 	Engine::~Engine()
@@ -153,7 +175,7 @@ namespace AGE
 		}
 		else
 		{
-			AGE_BREAK("Assets file path is missing. Add it in configuration.json");
+			AGE_BREAK(); // "Assets file path is missing. Add it in configuration.json"
 		}
 #endif //USE_DEFAULT_ENGINE_CONFIGURATION
 

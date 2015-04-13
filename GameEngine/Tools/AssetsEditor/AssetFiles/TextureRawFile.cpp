@@ -51,7 +51,7 @@ namespace AGE
 
 		void TextureRawFile::selection()
 		{
-			ImGui::Text("Selected asset : "); ImGui::SameLine(); ImGui::TextColored(ImVec4(0.58, 0, 0.7, 1), getFileName().c_str());
+			ImGui::Text("Selected asset : "); ImGui::SameLine(); ImGui::TextColored(ImVec4(0.58f, 0.0f, 0.7f, 1.0f), getFileName().c_str());
 			ImGui::Text("Last modifiction : %s", _lastWriteTimeStr.c_str());
 			auto dataset = dataSet;
 			ImGui::Checkbox("Compress textures", &dataset->compressTextures);

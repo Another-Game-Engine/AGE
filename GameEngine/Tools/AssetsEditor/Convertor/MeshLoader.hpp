@@ -142,26 +142,26 @@ namespace AGE
 						for (unsigned int j = 0; j < mesh->mBones[i]->mNumWeights; ++j)
 						{
 							float weight = mesh->mBones[i]->mWeights[j].mWeight;
-							float vid = mesh->mBones[i]->mWeights[j].mVertexId;
+							unsigned int vid = mesh->mBones[i]->mWeights[j].mVertexId;
 							if (meshs[meshIndex].weights[vid].r == 0.0f)
 							{
 								meshs[meshIndex].weights[vid].r = weight;
-								meshs[meshIndex].boneIndices[vid].r = boneIndex;
+								meshs[meshIndex].boneIndices[vid].r = static_cast<float>(boneIndex);
 							}
 							else if (meshs[meshIndex].weights[vid].g == 0.0f)
 							{
 								meshs[meshIndex].weights[vid].g = weight;
-								meshs[meshIndex].boneIndices[vid].g = boneIndex;
+								meshs[meshIndex].boneIndices[vid].g = static_cast<float>(boneIndex);
 							}
 							else if (meshs[meshIndex].weights[vid].b == 0.0f)
 							{
 								meshs[meshIndex].weights[vid].b = weight;
-								meshs[meshIndex].boneIndices[vid].b = boneIndex;
+								meshs[meshIndex].boneIndices[vid].b = static_cast<float>(boneIndex);
 							}
 							else if (meshs[meshIndex].weights[vid].a == 0.0f)
 							{
 								meshs[meshIndex].weights[vid].a = weight;
-								meshs[meshIndex].boneIndices[vid].a = boneIndex;
+								meshs[meshIndex].boneIndices[vid].a = static_cast<float>(boneIndex);
 							}
 						}
 					}
