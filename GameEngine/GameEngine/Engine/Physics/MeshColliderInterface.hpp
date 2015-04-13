@@ -6,13 +6,13 @@ namespace AGE
 {
 	namespace Physics
 	{
-		class MeshColliderInterface : public ColliderInterface
+		class MeshColliderInterface : public virtual ColliderInterface
 		{
 		public:
 			// Constructors
 			MeshColliderInterface(void) = delete;
 
-			MeshColliderInterface(WorldInterface *world);
+			MeshColliderInterface(WorldInterface *world, void *&data);
 
 			MeshColliderInterface(const MeshColliderInterface &) = delete;
 

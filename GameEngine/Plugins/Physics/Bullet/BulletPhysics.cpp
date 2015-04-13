@@ -24,7 +24,7 @@ namespace AGE
 
 		WorldInterface *BulletPhysics::createWorld(const glm::vec3 &gravity)
 		{
-			return static_cast<WorldInterface *>(new BulletWorld(this, gravity));
+			return new BulletWorld(this, gravity);
 		}
 	}
 }

@@ -6,18 +6,31 @@ namespace AGE
 {
 	namespace Physics
 	{
-		class CapsuleColliderInterface : public ColliderInterface
+		class CapsuleColliderInterface : public virtual ColliderInterface
 		{
 		public:
 			// Constructors
 			CapsuleColliderInterface(void) = delete;
 
-			CapsuleColliderInterface(WorldInterface *world);
+			CapsuleColliderInterface(WorldInterface *world, void *&data);
 
 			CapsuleColliderInterface(const CapsuleColliderInterface &) = delete;
 
 			// Assignment Operators
 			CapsuleColliderInterface &operator=(const CapsuleColliderInterface &) = delete;
+
+			// Virtual Methods
+			virtual void setCenter(const glm::vec3 &center) = 0;
+
+			virtual glm::vec3 getCenter(void) const = 0;
+
+			virtual void setHeight(float height) = 0;
+
+			virtual float getHeight(void) const = 0;
+
+			virtual void setRadius(float radius) = 0;
+
+			virtual float getRadius(void) const = 0;
 
 		protected:
 			// Destructor

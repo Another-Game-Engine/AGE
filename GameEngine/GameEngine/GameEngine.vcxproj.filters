@@ -173,6 +173,8 @@
     <ClCompile Include="Engine\Physics\Fallback\NullCapsuleCollider.cpp" />
     <ClCompile Include="Engine\Physics\Fallback\NullMeshCollider.cpp" />
     <ClCompile Include="Engine\Physics\Fallback\NullSphereCollider.cpp" />
+    <ClCompile Include="Engine\Physics\Fallback\NullCollider.cpp" />
+    <ClCompile Include="Engine\Components\PhysicsData.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -456,6 +458,9 @@
     <ClInclude Include="Engine\Physics\Fallback\NullCapsuleCollider.hpp" />
     <ClInclude Include="Engine\Physics\Fallback\NullMeshCollider.hpp" />
     <ClInclude Include="Engine\Physics\Fallback\NullSphereCollider.hpp" />
+    <ClInclude Include="Engine\Physics\MemoryPoolHelper.hpp" />
+    <ClInclude Include="Engine\Physics\Fallback\NullCollider.hpp" />
+    <ClInclude Include="Engine\Components\PhysicsData.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />
@@ -484,5 +489,6 @@
     <None Include="Engine\Physics\MeshColliderInterface.inl" />
     <None Include="Engine\Physics\SphereColliderInterface.inl" />
     <None Include="Engine\Physics\PhysicsInterface.inl" />
+    <None Include="Engine\Physics\MemoryPoolHelper.inl" />
   </ItemGroup>
 </Project>

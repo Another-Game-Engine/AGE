@@ -1,7 +1,7 @@
 #pragma once
 
 #include <cassert>
-#include <list>
+#include <forward_list>
 
 namespace AGE
 {
@@ -55,7 +55,7 @@ namespace AGE
 			std::size_t index;
 		};
 
-		std::list<Chunk*> _chunks;
+		std::forward_list<Chunk*> _chunks;
 		std::size_t _objectPerChunk;
 		std::size_t _objectSize;
 		std::size_t _freeObjectNumber;

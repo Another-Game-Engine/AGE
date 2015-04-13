@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ColliderType.hpp"
+#include "FilterGroup.hpp"
 
 namespace AGE
 {
@@ -51,7 +52,7 @@ namespace AGE
 			// Constructors
 			ColliderInterface(void) = delete;
 
-			ColliderInterface(WorldInterface *world);
+			ColliderInterface(WorldInterface *world, void *&data);
 
 			ColliderInterface(const ColliderInterface &) = delete;
 
@@ -67,6 +68,16 @@ namespace AGE
 
 			const MaterialInterface *getMaterial(void) const;
 
+			void *&getData(void);
+
+			void * const &getData(void) const;
+
+			template <typename T>
+			T *getDataAs(void);
+
+			template <typename T>
+			const T *getDataAs(void) const;
+
 			template <ColliderType Type>
 			bool is(void) const;
 
@@ -81,6 +92,14 @@ namespace AGE
 			// Virtual Methods
 			virtual ColliderType getColliderType(void) const = 0;
 
+			virtual void setAsTrigger(bool mustBeATrigger) = 0;
+
+			virtual bool isATrigger(void) const = 0;
+
+			virtual void setFilterGroup(FilterGroup group) = 0;
+
+			virtual FilterGroup getFilterGroup(void) const = 0;
+
 		protected:
 			// Destructor
 			virtual ~ColliderInterface(void);
@@ -88,6 +107,8 @@ namespace AGE
 		private:
 			// Attributes
 			WorldInterface *world = nullptr;
+
+			void *&data;
 
 			MaterialInterface *material = nullptr;
 		};

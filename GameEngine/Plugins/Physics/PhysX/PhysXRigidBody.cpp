@@ -5,175 +5,182 @@ namespace AGE
 	namespace Physics
 	{
 		// Constructors
-		PhysXRigidBody::PhysXRigidBody(PhysXWorld *world, const glm::vec3 &position)
-			: RigidBodyInterface(static_cast<WorldInterface *>(world)), body(static_cast<PhysXPhysics *>(world->getPhysics())->getPhysics()->createRigidDynamic(physx::PxTransform(position.x, position.y, position.z)))
+		PhysXRigidBody::PhysXRigidBody(PhysXWorld *world, void *&data)
+			: RigidBodyInterface(world, data)
 		{
-			assert(body != nullptr && "Impossible to create body");
-			world->getScene()->addActor(*body);
+			if (getData() == nullptr)
+			{
+				getData() = static_cast<PhysXPhysics *>(world->getPhysics())->getPhysics()->createRigidDynamic(physx::PxTransform());
+			}
+			assert(getData() != nullptr && "Impossible to create actor");
+			world->getScene()->addActor(*getDataAs<physx::PxRigidDynamic>());
 		}
 
 		// Inherited Methods
 		void PhysXRigidBody::setAngularDrag(float angularDrag)
 		{
-			body->setAngularDamping(angularDrag);
+			getDataAs<physx::PxRigidDynamic>()->setAngularDamping(angularDrag);
 		}
 
 		float PhysXRigidBody::getAngularDrag(void) const
 		{
-			return body->getAngularDamping();
+			return getDataAs<physx::PxRigidDynamic>()->getAngularDamping();
 		}
 
 		void PhysXRigidBody::setAngularVelocity(const glm::vec3 &angularVelocity)
 		{
-			body->setAngularVelocity(physx::PxVec3(angularVelocity.x, angularVelocity.y, angularVelocity.z));
+			getDataAs<physx::PxRigidDynamic>()->setAngularVelocity(physx::PxVec3(angularVelocity.x, angularVelocity.y, angularVelocity.z));
 		}
 
 		glm::vec3 PhysXRigidBody::getAngularVelocity(void) const
 		{
-			const physx::PxVec3 angularVelocity = body->getAngularVelocity();
+			const physx::PxVec3 angularVelocity = getDataAs<physx::PxRigidDynamic>()->getAngularVelocity();
 			return glm::vec3(angularVelocity.x, angularVelocity.y, angularVelocity.z);
 		}
 
 		void PhysXRigidBody::setCenterOfMass(const glm::vec3 &centerOfMass)
 		{
-			body->setCMassLocalPose(physx::PxTransform(centerOfMass.x, centerOfMass.y, centerOfMass.z));
+			getDataAs<physx::PxRigidDynamic>()->setCMassLocalPose(physx::PxTransform(centerOfMass.x, centerOfMass.y, centerOfMass.z));
 		}
 
 		glm::vec3 PhysXRigidBody::getCenterOfMass(void) const
 		{
-			const physx::PxVec3 centerOfMass = body->getCMassLocalPose().p;
+			const physx::PxVec3 centerOfMass = getDataAs<physx::PxRigidDynamic>()->getCMassLocalPose().p;
 			return glm::vec3(centerOfMass.x, centerOfMass.y, centerOfMass.z);
 		}
 
 		void PhysXRigidBody::setLinearDrag(float linearDrag)
 		{
-			body->setLinearDamping(linearDrag);
+			getDataAs<physx::PxRigidDynamic>()->setLinearDamping(linearDrag);
 		}
 
 		float PhysXRigidBody::getLinearDrag(void) const
 		{
-			return body->getLinearDamping();
+			return getDataAs<physx::PxRigidDynamic>()->getLinearDamping();
 		}
 
 		void PhysXRigidBody::setLinearVelocity(const glm::vec3 &linearVelocity)
 		{
-			body->setLinearVelocity(physx::PxVec3(linearVelocity.x, linearVelocity.y, linearVelocity.z));
+			getDataAs<physx::PxRigidDynamic>()->setLinearVelocity(physx::PxVec3(linearVelocity.x, linearVelocity.y, linearVelocity.z));
 		}
 
 		glm::vec3 PhysXRigidBody::getLinearVelocity(void) const
 		{
-			const physx::PxVec3 linearVelocity = body->getLinearVelocity();
+			const physx::PxVec3 linearVelocity = getDataAs<physx::PxRigidDynamic>()->getLinearVelocity();
 			return glm::vec3(linearVelocity.x, linearVelocity.y, linearVelocity.z);
 		}
 
 		void PhysXRigidBody::setMass(float mass)
 		{
-			body->setMass(mass);
+			getDataAs<physx::PxRigidDynamic>()->setMass(mass);
 		}
 
 		float PhysXRigidBody::getMass(void) const
 		{
-			return body->getMass();
+			return getDataAs<physx::PxRigidDynamic>()->getMass();
 		}
 
 		void PhysXRigidBody::setDiagonalInertiaTensor(const glm::vec3 &diagonalInertiaTensor)
 		{
-			body->setMassSpaceInertiaTensor(physx::PxVec3(diagonalInertiaTensor.x, diagonalInertiaTensor.y, diagonalInertiaTensor.z));
+			getDataAs<physx::PxRigidDynamic>()->setMassSpaceInertiaTensor(physx::PxVec3(diagonalInertiaTensor.x, diagonalInertiaTensor.y, diagonalInertiaTensor.z));
 		}
 
 		glm::vec3 PhysXRigidBody::getDiagonalInertiaTensor(void) const
 		{
-			const physx::PxVec3 diagonalInertiaTensor = body->getMassSpaceInertiaTensor();
+			const physx::PxVec3 diagonalInertiaTensor = getDataAs<physx::PxRigidDynamic>()->getMassSpaceInertiaTensor();
 			return glm::vec3(diagonalInertiaTensor.x, diagonalInertiaTensor.y, diagonalInertiaTensor.z);
 		}
 
 		void PhysXRigidBody::setMaxAngularVelocity(float maxAngularVelocity)
 		{
-			body->setMaxAngularVelocity(maxAngularVelocity);
+			getDataAs<physx::PxRigidDynamic>()->setMaxAngularVelocity(maxAngularVelocity);
 		}
 
 		float PhysXRigidBody::getMaxAngularVelocity(void) const
 		{
-			return body->getMaxAngularVelocity();
+			return getDataAs<physx::PxRigidDynamic>()->getMaxAngularVelocity();
 		}
 
 		void PhysXRigidBody::setMaxDepenetrationVelocity(float maxDepenetrationVelocity)
 		{
-			body->setMaxDepenetrationVelocity(maxDepenetrationVelocity);
+			getDataAs<physx::PxRigidDynamic>()->setMaxDepenetrationVelocity(maxDepenetrationVelocity);
 		}
 
 		float PhysXRigidBody::getMaxDepenetrationVelocity(void) const
 		{
-			return body->getMaxDepenetrationVelocity();
+			return getDataAs<physx::PxRigidDynamic>()->getMaxDepenetrationVelocity();
 		}
 
 		void PhysXRigidBody::setPosition(const glm::vec3 &position)
 		{
-			physx::PxTransform transform = body->getGlobalPose();
+			physx::PxRigidDynamic *actor = getDataAs<physx::PxRigidDynamic>();
+			physx::PxTransform transform = actor->getGlobalPose();
 			transform.p.x = position.x;
 			transform.p.y = position.y;
 			transform.p.z = position.z;
-			body->setGlobalPose(transform);
-			body->setKinematicTarget(transform);
+			actor->setGlobalPose(transform);
+			actor->setKinematicTarget(transform);
 		}
 
 		glm::vec3 PhysXRigidBody::getPosition(void) const
 		{
-			const physx::PxVec3 position = body->getGlobalPose().p;
+			const physx::PxVec3 position = getDataAs<physx::PxRigidDynamic>()->getGlobalPose().p;
 			return glm::vec3(position.x, position.y, position.z);
 		}
 
 		void PhysXRigidBody::setRotation(const glm::quat &rotation)
 		{
-			physx::PxTransform transform = body->getGlobalPose();
+			physx::PxRigidDynamic *actor = getDataAs<physx::PxRigidDynamic>();
+			physx::PxTransform transform = actor->getGlobalPose();
 			transform.q.x = rotation.x;
 			transform.q.y = rotation.y;
 			transform.q.z = rotation.z;
 			transform.q.w = rotation.w;
-			body->setGlobalPose(transform);
-			body->setKinematicTarget(transform);
+			actor->setGlobalPose(transform);
+			actor->setKinematicTarget(transform);
 		}
 
 		glm::quat PhysXRigidBody::getRotation(void) const
 		{
-			const physx::PxQuat rotation = body->getGlobalPose().q;
+			const physx::PxQuat rotation = getDataAs<physx::PxRigidDynamic>()->getGlobalPose().q;
 			return glm::quat(rotation.w, rotation.x, rotation.y, rotation.z);
 		}
 
 		void PhysXRigidBody::affectByGravity(bool mustBeAffectedByGravity)
 		{
-			body->setActorFlag(physx::PxActorFlag::eDISABLE_GRAVITY, !mustBeAffectedByGravity);
+			getDataAs<physx::PxRigidDynamic>()->setActorFlag(physx::PxActorFlag::eDISABLE_GRAVITY, !mustBeAffectedByGravity);
 		}
 
 		bool PhysXRigidBody::isAffectedByGravity(void) const
 		{
-			return !body->getActorFlags().isSet(physx::PxActorFlag::eDISABLE_GRAVITY);
+			return !getDataAs<physx::PxRigidDynamic>()->getActorFlags().isSet(physx::PxActorFlag::eDISABLE_GRAVITY);
 		}
 
 		void PhysXRigidBody::setAsKinematic(bool mustBeKinematic)
 		{
-			body->setRigidBodyFlag(physx::PxRigidBodyFlag::eKINEMATIC, mustBeKinematic);
+			physx::PxRigidDynamic *actor = getDataAs<physx::PxRigidDynamic>();
+			actor->setRigidBodyFlag(physx::PxRigidBodyFlag::eKINEMATIC, mustBeKinematic);
 			if (mustBeKinematic)
 			{
 				const glm::vec3 position = getPosition();
 				const glm::quat rotation = getRotation();
-				body->setKinematicTarget(physx::PxTransform(position.x, position.y, position.z, physx::PxQuat(rotation.x, rotation.y, rotation.z, rotation.w)));
+				actor->setKinematicTarget(physx::PxTransform(position.x, position.y, position.z, physx::PxQuat(rotation.x, rotation.y, rotation.z, rotation.w)));
 			}
 		}
 
 		bool PhysXRigidBody::isKinematic(void) const
 		{
-			return body->getRigidBodyFlags().isSet(physx::PxRigidBodyFlag::eKINEMATIC);
+			return getDataAs<physx::PxRigidDynamic>()->getRigidBodyFlags().isSet(physx::PxRigidBodyFlag::eKINEMATIC);
 		}
 
 		void PhysXRigidBody::setCollisionDetectionMode(CollisionDetectionMode collisionDetectionMode)
 		{
-			body->setRigidBodyFlag(physx::PxRigidBodyFlag::eENABLE_CCD, collisionDetectionMode == CollisionDetectionMode::Continuous);
+			getDataAs<physx::PxRigidDynamic>()->setRigidBodyFlag(physx::PxRigidBodyFlag::eENABLE_CCD, collisionDetectionMode == CollisionDetectionMode::Continuous);
 		}
 
 		CollisionDetectionMode PhysXRigidBody::getCollisionDetectionMode(void) const
 		{
-			return body->getRigidBodyFlags().isSet(physx::PxRigidBodyFlag::eENABLE_CCD) ? CollisionDetectionMode::Continuous : CollisionDetectionMode::Discrete;
+			return getDataAs<physx::PxRigidDynamic>()->getRigidBodyFlags().isSet(physx::PxRigidBodyFlag::eENABLE_CCD) ? CollisionDetectionMode::Continuous : CollisionDetectionMode::Discrete;
 		}
 
 		void PhysXRigidBody::addForce(const glm::vec3 &force, ForceMode forceMode)
@@ -181,16 +188,16 @@ namespace AGE
 			switch (forceMode)
 			{
 				case ForceMode::Acceleration:
-					body->addForce(physx::PxVec3(force.x, force.y, force.z), physx::PxForceMode::eACCELERATION);
+					getDataAs<physx::PxRigidDynamic>()->addForce(physx::PxVec3(force.x, force.y, force.z), physx::PxForceMode::eACCELERATION);
 					break;
 				case ForceMode::Force:
-					body->addForce(physx::PxVec3(force.x, force.y, force.z), physx::PxForceMode::eFORCE);
+					getDataAs<physx::PxRigidDynamic>()->addForce(physx::PxVec3(force.x, force.y, force.z), physx::PxForceMode::eFORCE);
 					break;
 				case ForceMode::Impulse:
-					body->addForce(physx::PxVec3(force.x, force.y, force.z), physx::PxForceMode::eIMPULSE);
+					getDataAs<physx::PxRigidDynamic>()->addForce(physx::PxVec3(force.x, force.y, force.z), physx::PxForceMode::eIMPULSE);
 					break;
 				case ForceMode::VelocityChange:
-					body->addForce(physx::PxVec3(force.x, force.y, force.z), physx::PxForceMode::eVELOCITY_CHANGE);
+					getDataAs<physx::PxRigidDynamic>()->addForce(physx::PxVec3(force.x, force.y, force.z), physx::PxForceMode::eVELOCITY_CHANGE);
 					break;
 				default:
 					break;
@@ -202,16 +209,16 @@ namespace AGE
 			switch (forceMode)
 			{
 				case ForceMode::Acceleration:
-					physx::PxRigidBodyExt::addForceAtPos(*body, physx::PxVec3(force.x, force.y, force.z), physx::PxVec3(position.x, position.y, position.z), physx::PxForceMode::eACCELERATION);
+					physx::PxRigidBodyExt::addForceAtPos(*getDataAs<physx::PxRigidDynamic>(), physx::PxVec3(force.x, force.y, force.z), physx::PxVec3(position.x, position.y, position.z), physx::PxForceMode::eACCELERATION);
 					break;
 				case ForceMode::Force:
-					physx::PxRigidBodyExt::addForceAtPos(*body, physx::PxVec3(force.x, force.y, force.z), physx::PxVec3(position.x, position.y, position.z), physx::PxForceMode::eFORCE);
+					physx::PxRigidBodyExt::addForceAtPos(*getDataAs<physx::PxRigidDynamic>(), physx::PxVec3(force.x, force.y, force.z), physx::PxVec3(position.x, position.y, position.z), physx::PxForceMode::eFORCE);
 					break;
 				case ForceMode::Impulse:
-					physx::PxRigidBodyExt::addForceAtPos(*body, physx::PxVec3(force.x, force.y, force.z), physx::PxVec3(position.x, position.y, position.z), physx::PxForceMode::eIMPULSE);
+					physx::PxRigidBodyExt::addForceAtPos(*getDataAs<physx::PxRigidDynamic>(), physx::PxVec3(force.x, force.y, force.z), physx::PxVec3(position.x, position.y, position.z), physx::PxForceMode::eIMPULSE);
 					break;
 				case ForceMode::VelocityChange:
-					physx::PxRigidBodyExt::addForceAtPos(*body, physx::PxVec3(force.x, force.y, force.z), physx::PxVec3(position.x, position.y, position.z), physx::PxForceMode::eVELOCITY_CHANGE);
+					physx::PxRigidBodyExt::addForceAtPos(*getDataAs<physx::PxRigidDynamic>(), physx::PxVec3(force.x, force.y, force.z), physx::PxVec3(position.x, position.y, position.z), physx::PxForceMode::eVELOCITY_CHANGE);
 					break;
 				default:
 					break;
@@ -223,16 +230,16 @@ namespace AGE
 			switch (forceMode)
 			{
 				case ForceMode::Acceleration:
-					physx::PxRigidBodyExt::addForceAtLocalPos(*body, physx::PxVec3(force.x, force.y, force.z), physx::PxVec3(position.x, position.y, position.z), physx::PxForceMode::eACCELERATION);
+					physx::PxRigidBodyExt::addForceAtLocalPos(*getDataAs<physx::PxRigidDynamic>(), physx::PxVec3(force.x, force.y, force.z), physx::PxVec3(position.x, position.y, position.z), physx::PxForceMode::eACCELERATION);
 					break;
 				case ForceMode::Force:
-					physx::PxRigidBodyExt::addForceAtLocalPos(*body, physx::PxVec3(force.x, force.y, force.z), physx::PxVec3(position.x, position.y, position.z), physx::PxForceMode::eFORCE);
+					physx::PxRigidBodyExt::addForceAtLocalPos(*getDataAs<physx::PxRigidDynamic>(), physx::PxVec3(force.x, force.y, force.z), physx::PxVec3(position.x, position.y, position.z), physx::PxForceMode::eFORCE);
 					break;
 				case ForceMode::Impulse:
-					physx::PxRigidBodyExt::addForceAtLocalPos(*body, physx::PxVec3(force.x, force.y, force.z), physx::PxVec3(position.x, position.y, position.z), physx::PxForceMode::eIMPULSE);
+					physx::PxRigidBodyExt::addForceAtLocalPos(*getDataAs<physx::PxRigidDynamic>(), physx::PxVec3(force.x, force.y, force.z), physx::PxVec3(position.x, position.y, position.z), physx::PxForceMode::eIMPULSE);
 					break;
 				case ForceMode::VelocityChange:
-					physx::PxRigidBodyExt::addForceAtLocalPos(*body, physx::PxVec3(force.x, force.y, force.z), physx::PxVec3(position.x, position.y, position.z), physx::PxForceMode::eVELOCITY_CHANGE);
+					physx::PxRigidBodyExt::addForceAtLocalPos(*getDataAs<physx::PxRigidDynamic>(), physx::PxVec3(force.x, force.y, force.z), physx::PxVec3(position.x, position.y, position.z), physx::PxForceMode::eVELOCITY_CHANGE);
 					break;
 				default:
 					break;
@@ -244,16 +251,16 @@ namespace AGE
 			switch (forceMode)
 			{
 				case ForceMode::Acceleration:
-					body->addTorque(physx::PxVec3(torque.x, torque.y, torque.z), physx::PxForceMode::eACCELERATION);
+					getDataAs<physx::PxRigidDynamic>()->addTorque(physx::PxVec3(torque.x, torque.y, torque.z), physx::PxForceMode::eACCELERATION);
 					break;
 				case ForceMode::Force:
-					body->addTorque(physx::PxVec3(torque.x, torque.y, torque.z), physx::PxForceMode::eFORCE);
+					getDataAs<physx::PxRigidDynamic>()->addTorque(physx::PxVec3(torque.x, torque.y, torque.z), physx::PxForceMode::eFORCE);
 					break;
 				case ForceMode::Impulse:
-					body->addTorque(physx::PxVec3(torque.x, torque.y, torque.z), physx::PxForceMode::eIMPULSE);
+					getDataAs<physx::PxRigidDynamic>()->addTorque(physx::PxVec3(torque.x, torque.y, torque.z), physx::PxForceMode::eIMPULSE);
 					break;
 				case ForceMode::VelocityChange:
-					body->addTorque(physx::PxVec3(torque.x, torque.y, torque.z), physx::PxForceMode::eVELOCITY_CHANGE);
+					getDataAs<physx::PxRigidDynamic>()->addTorque(physx::PxVec3(torque.x, torque.y, torque.z), physx::PxForceMode::eVELOCITY_CHANGE);
 					break;
 				default:
 					break;
@@ -262,13 +269,13 @@ namespace AGE
 
 		glm::vec3 PhysXRigidBody::getVelocityAtWorldPosition(const glm::vec3 &position) const
 		{
-			const physx::PxVec3 velocity = physx::PxRigidBodyExt::getVelocityAtPos(*body, physx::PxVec3(position.x, position.y, position.z));
+			const physx::PxVec3 velocity = physx::PxRigidBodyExt::getVelocityAtPos(*getDataAs<physx::PxRigidDynamic>(), physx::PxVec3(position.x, position.y, position.z));
 			return glm::vec3(velocity.x, velocity.y, velocity.z);
 		}
 
 		glm::vec3 PhysXRigidBody::getVelocityAtLocalPosition(const glm::vec3 &position) const
 		{
-			const physx::PxVec3 velocity = physx::PxRigidBodyExt::getVelocityAtOffset(*body, physx::PxVec3(position.x, position.y, position.z));
+			const physx::PxVec3 velocity = physx::PxRigidBodyExt::getVelocityAtOffset(*getDataAs<physx::PxRigidDynamic>(), physx::PxVec3(position.x, position.y, position.z));
 			return glm::vec3(velocity.x, velocity.y, velocity.z);
 		}
 	}

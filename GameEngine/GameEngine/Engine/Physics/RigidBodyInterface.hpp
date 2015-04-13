@@ -23,7 +23,7 @@ namespace AGE
 			// Constructors
 			RigidBodyInterface(void) = delete;
 
-			RigidBodyInterface(WorldInterface *world);
+			RigidBodyInterface(WorldInterface *world, void *&data);
 
 			RigidBodyInterface(const RigidBodyInterface &) = delete;
 
@@ -34,6 +34,16 @@ namespace AGE
 			WorldInterface *getWorld(void);
 
 			const WorldInterface *getWorld(void) const;
+
+			void *&getData(void);
+
+			void * const &getData(void) const;
+
+			template <typename T>
+			T *getDataAs(void);
+
+			template <typename T>
+			const T *getDataAs(void) const;
 
 			glm::vec3 getWorldCenterOfMass(void) const;
 
@@ -115,6 +125,8 @@ namespace AGE
 		private:
 			// Attributes
 			WorldInterface *world = nullptr;
+
+			void *&data;
 		};
 	}
 }

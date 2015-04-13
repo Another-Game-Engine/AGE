@@ -1,27 +1,42 @@
 #pragma once
 
 #include "BoxColliderInterface.hpp"
+#include "PhysXCollider.hpp"
+
+#pragma warning(push)
+#pragma warning(disable: 4250)
 
 namespace AGE
 {
 	namespace Physics
 	{
-		class PhysXBoxCollider final : public BoxColliderInterface
+		class PhysXBoxCollider final : public BoxColliderInterface, public PhysXCollider
 		{
 		public:
 			// Constructors
 			PhysXBoxCollider(void) = delete;
 
-			PhysXBoxCollider(WorldInterface *world);
+			PhysXBoxCollider(WorldInterface *world, void *&data);
 
 			PhysXBoxCollider(const PhysXBoxCollider &) = delete;
 
 			// Assignment Operators
 			PhysXBoxCollider &operator=(const PhysXBoxCollider &) = delete;
 
-		protected:
+		private:
 			// Destructor
 			~PhysXBoxCollider(void) = default;
+
+			// Inherited Methods
+			void setCenter(const glm::vec3 &center) override final;
+
+			glm::vec3 getCenter(void) const override final;
+
+			void setSize(const glm::vec3 &size) override final;
+
+			glm::vec3 getSize(void) const override final;
 		};
 	}
 }
+
+#pragma warning(pop)

@@ -6,8 +6,8 @@ namespace AGE
 	namespace Physics
 	{
 		// Constructors
-		BulletRigidBody::BulletRigidBody(BulletWorld *world, const glm::vec3 &position)
-			: RigidBodyInterface(static_cast<WorldInterface *>(world))
+		BulletRigidBody::BulletRigidBody(BulletWorld *world, void *&data)
+			: RigidBodyInterface(world, data)
 		{
 			// TO_DO
 		}

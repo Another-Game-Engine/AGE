@@ -7,8 +7,8 @@ namespace AGE
 	namespace Physics
 	{
 		// Constructors
-		inline CapsuleColliderInterface::CapsuleColliderInterface(WorldInterface *world)
-			: ColliderInterface(world)
+		inline CapsuleColliderInterface::CapsuleColliderInterface(WorldInterface *world, void *&data)
+			: ColliderInterface(world, data)
 		{
 			return;
 		}

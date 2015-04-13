@@ -41,23 +41,23 @@ namespace AGE
 			return;
 		}
 
-		RigidBodyInterface *NullWorld::createRigidBody(const glm::vec3 &position)
+		RigidBodyInterface *NullWorld::createRigidBody(void *&data)
 		{
-			return static_cast<RigidBodyInterface *>(new NullRigidBody(this));
+			return new NullRigidBody(this, data);
 		}
 
-		ColliderInterface *NullWorld::createCollider(ColliderType colliderType)
+		ColliderInterface *NullWorld::createCollider(ColliderType colliderType, void *&data)
 		{
 			switch (colliderType)
 			{
 				case ColliderType::Box:
-					return new NullBoxCollider(static_cast<WorldInterface *>(this));
+					return new NullBoxCollider(this, data);
 				case ColliderType::Capsule:
-					return new NullCapsuleCollider(static_cast<WorldInterface *>(this));
+					return new NullCapsuleCollider(this, data);
 				case ColliderType::Mesh:
-					return new NullMeshCollider(static_cast<WorldInterface *>(this));
+					return new NullMeshCollider(this, data);
 				case ColliderType::Sphere:
-					return new NullSphereCollider(static_cast<WorldInterface *>(this));
+					return new NullSphereCollider(this, data);
 				default:
 					assert(!"Never reached");
 					return nullptr;

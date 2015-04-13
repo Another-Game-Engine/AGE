@@ -6,8 +6,8 @@ namespace AGE
 	namespace Physics
 	{
 		// Constructors
-		NullRigidBody::NullRigidBody(NullWorld *world)
-			: RigidBodyInterface(static_cast<WorldInterface *>(world))
+		NullRigidBody::NullRigidBody(NullWorld *world, void *&data)
+			: RigidBodyInterface(world, data)
 		{
 			return;
 		}

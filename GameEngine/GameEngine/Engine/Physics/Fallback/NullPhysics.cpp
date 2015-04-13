@@ -23,7 +23,7 @@ namespace AGE
 
 		WorldInterface *NullPhysics::createWorld(const glm::vec3 &gravity)
 		{
-			return static_cast<WorldInterface *>(new NullWorld(this));
+			return new NullWorld(this);
 		}
 	}
 }

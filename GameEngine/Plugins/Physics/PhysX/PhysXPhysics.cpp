@@ -82,7 +82,7 @@ namespace AGE
 
 		WorldInterface *PhysXPhysics::createWorld(const glm::vec3 &gravity)
 		{
-			return static_cast<WorldInterface *>(new PhysXWorld(this, gravity));
+			return new PhysXWorld(this, gravity);
 		}
 	}
 }

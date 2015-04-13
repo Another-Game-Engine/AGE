@@ -121,6 +121,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\Vendors\imgui\imgui.cpp" />
+    <ClCompile Include="Engine\Components\PhysicsData.cpp" />
     <ClCompile Include="Engine\Components\RigidBody.cpp" />
     <ClCompile Include="Engine\Physics\BulletCollisionManager.cpp" />
     <ClCompile Include="Engine\Physics\ContactInformation.cpp" />
@@ -128,6 +129,7 @@
     <ClCompile Include="Engine\Physics\EngineTypeToPluginName.cpp" />
     <ClCompile Include="Engine\Physics\Fallback\NullBoxCollider.cpp" />
     <ClCompile Include="Engine\Physics\Fallback\NullCapsuleCollider.cpp" />
+    <ClCompile Include="Engine\Physics\Fallback\NullCollider.cpp" />
     <ClCompile Include="Engine\Physics\Fallback\NullMaterial.cpp" />
     <ClCompile Include="Engine\Physics\Fallback\NullMeshCollider.cpp" />
     <ClCompile Include="Engine\Physics\Fallback\NullPhysics.cpp" />
@@ -297,6 +299,7 @@
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
     <ClInclude Include="..\Vendors\imgui\imgui.h" />
     <ClInclude Include="..\Vendors\imgui\stb_textedit.h" />
+    <ClInclude Include="Engine\Components\PhysicsData.hpp" />
     <ClInclude Include="Engine\Components\RigidBody.hpp" />
     <ClInclude Include="Engine\Physics\BoxColliderInterface.hpp" />
     <ClInclude Include="Engine\Physics\BulletCollisionManager.hpp" />
@@ -311,6 +314,7 @@
     <ClInclude Include="Engine\Physics\EngineTypeToPluginName.hpp" />
     <ClInclude Include="Engine\Physics\Fallback\NullBoxCollider.hpp" />
     <ClInclude Include="Engine\Physics\Fallback\NullCapsuleCollider.hpp" />
+    <ClInclude Include="Engine\Physics\Fallback\NullCollider.hpp" />
     <ClInclude Include="Engine\Physics\Fallback\NullMaterial.hpp" />
     <ClInclude Include="Engine\Physics\Fallback\NullMeshCollider.hpp" />
     <ClInclude Include="Engine\Physics\Fallback\NullPhysics.hpp" />
@@ -320,6 +324,7 @@
     <ClInclude Include="Engine\Physics\FilterGroup.hpp" />
     <ClInclude Include="Engine\Physics\ForceMode.hpp" />
     <ClInclude Include="Engine\Physics\MaterialInterface.hpp" />
+    <ClInclude Include="Engine\Physics\MemoryPoolHelper.hpp" />
     <ClInclude Include="Engine\Physics\MeshColliderInterface.hpp" />
     <ClInclude Include="Engine\Physics\PhysicsInterface.hpp" />
     <ClInclude Include="Engine\Physics\RigidBodyInterface.hpp" />
@@ -591,6 +596,7 @@
     <None Include="Engine\Physics\CapsuleColliderInterface.inl" />
     <None Include="Engine\Physics\ColliderInterface.inl" />
     <None Include="Engine\Physics\MaterialInterface.inl" />
+    <None Include="Engine\Physics\MemoryPoolHelper.inl" />
     <None Include="Engine\Physics\MeshColliderInterface.inl" />
     <None Include="Engine\Physics\PhysicsInterface.inl" />
     <None Include="Engine\Physics\RigidBodyInterface.inl" />

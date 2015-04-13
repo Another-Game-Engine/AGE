@@ -81,6 +81,9 @@
     <ClInclude Include="BulletSphereCollider.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="BulletCollider.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BulletWorld.cpp">
@@ -108,6 +111,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="BulletSphereCollider.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BulletCollider.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

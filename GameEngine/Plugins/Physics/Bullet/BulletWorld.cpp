@@ -14,7 +14,7 @@ namespace AGE
 	{
 		// Constructors
 		BulletWorld::BulletWorld(BulletPhysics *physics, const glm::vec3 &gravity)
-			: WorldInterface(static_cast<PhysicsInterface *>(physics))
+			: WorldInterface(physics)
 		{
 			// TO_DO
 		}
@@ -46,23 +46,23 @@ namespace AGE
 			// TO_DO
 		}
 
-		RigidBodyInterface *BulletWorld::createRigidBody(const glm::vec3 &position)
+		RigidBodyInterface *BulletWorld::createRigidBody(void *&data)
 		{
-			return static_cast<RigidBodyInterface *>(new BulletRigidBody(this, position));
+			return new BulletRigidBody(this, data);
 		}
 
-		ColliderInterface *BulletWorld::createCollider(ColliderType colliderType)
+		ColliderInterface *BulletWorld::createCollider(ColliderType colliderType, void *&data)
 		{
 			switch (colliderType)
 			{
 				case ColliderType::Box:
-					return new BulletBoxCollider(static_cast<WorldInterface *>(this));
+					return new BulletBoxCollider(this, data);
 				case ColliderType::Capsule:
-					return new BulletCapsuleCollider(static_cast<WorldInterface *>(this));
+					return new BulletCapsuleCollider(this, data);
 				case ColliderType::Mesh:
-					return new BulletMeshCollider(static_cast<WorldInterface *>(this));
+					return new BulletMeshCollider(this, data);
 				case ColliderType::Sphere:
-					return new BulletSphereCollider(static_cast<WorldInterface *>(this));
+					return new BulletSphereCollider(this, data);
 				default:
 					assert(!"Never reached");
 					return nullptr;

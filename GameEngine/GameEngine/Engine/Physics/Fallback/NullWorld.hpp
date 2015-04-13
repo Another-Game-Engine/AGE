@@ -37,9 +37,9 @@ namespace AGE
 
 			void simulate(float stepSize) override final;
 
-			RigidBodyInterface *createRigidBody(const glm::vec3 &position) override final;
+			RigidBodyInterface *createRigidBody(void *&data) override final;
 
-			ColliderInterface *createCollider(ColliderType colliderType) override final;
+			ColliderInterface *createCollider(ColliderType colliderType, void *&data) override final;
 
 			MaterialInterface *createMaterial(ColliderInterface *collider) override final;
 		};

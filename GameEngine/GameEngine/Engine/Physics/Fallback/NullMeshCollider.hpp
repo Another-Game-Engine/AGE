@@ -1,18 +1,22 @@
 #pragma once
 
 #include <Physics/MeshColliderInterface.hpp>
+#include <Physics/Fallback/NullCollider.hpp>
+
+#pragma warning(push)
+#pragma warning(disable: 4250)
 
 namespace AGE
 {
 	namespace Physics
 	{
-		class NullMeshCollider final : public MeshColliderInterface
+		class NullMeshCollider final : public MeshColliderInterface, public NullCollider
 		{
 		public:
 			// Constructors
 			NullMeshCollider(void) = delete;
 
-			NullMeshCollider(WorldInterface *world);
+			NullMeshCollider(WorldInterface *world, void *&data);
 
 			NullMeshCollider(const NullMeshCollider &) = delete;
 
@@ -25,3 +29,5 @@ namespace AGE
 		};
 	}
 }
+
+#pragma warning(pop)

@@ -1,4 +1,5 @@
 #include <Components/NewRigidBody.hpp>
+#include <Components/PhysicsData.hpp>
 #include <Core/AScene.hh>
 #include <Physics/WorldInterface.hpp>
 
@@ -8,7 +9,7 @@ namespace AGE
 	void NewRigidBody::init(void)
 	{
 		assert(rigidBody == nullptr && "NewRigidBody already initialized");
-		rigidBody = entity.getScene()->getInstance<Physics::WorldInterface>()->createRigidBody(entity.getLink().getPosition());
+		rigidBody = entity.getScene()->getInstance<Physics::WorldInterface>()->createRigidBody(entity.addComponent<Private::PhysicsData>()->getData());
 	}
 
 	void NewRigidBody::setAngularDrag(float angularDrag)

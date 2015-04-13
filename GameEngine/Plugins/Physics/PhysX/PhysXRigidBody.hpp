@@ -13,7 +13,7 @@ namespace AGE
 			// Constructors
 			PhysXRigidBody(void) = delete;
 
-			PhysXRigidBody(PhysXWorld *world, const glm::vec3 &position);
+			PhysXRigidBody(PhysXWorld *world, void *&data);
 
 			PhysXRigidBody(const PhysXRigidBody &) = delete;
 
@@ -24,9 +24,6 @@ namespace AGE
 			~PhysXRigidBody(void) = default;
 
 		private:
-			// Attributes
-			physx::PxRigidDynamic *body = nullptr;
-
 			// Inherited Methods
 			void setAngularDrag(float angularDrag) override final;
 

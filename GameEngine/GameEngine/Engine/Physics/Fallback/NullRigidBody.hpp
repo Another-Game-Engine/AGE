@@ -14,7 +14,7 @@ namespace AGE
 			// Constructors
 			NullRigidBody(void) = delete;
 
-			NullRigidBody(NullWorld *world);
+			NullRigidBody(NullWorld *world, void *&data);
 
 			NullRigidBody(const NullRigidBody &) = delete;
 

@@ -14,7 +14,7 @@ namespace AGE
 			// Constructors
 			BulletRigidBody(void) = delete;
 
-			BulletRigidBody(BulletWorld *world, const glm::vec3 &position);
+			BulletRigidBody(BulletWorld *world, void *&data);
 
 			BulletRigidBody(const BulletRigidBody &) = delete;
 

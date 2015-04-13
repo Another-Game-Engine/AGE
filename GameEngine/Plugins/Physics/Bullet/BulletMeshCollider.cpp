@@ -7,8 +7,8 @@ namespace AGE
 	namespace Physics
 	{
 		// Constructors
-		BulletMeshCollider::BulletMeshCollider(WorldInterface *world)
-			: MeshColliderInterface(world)
+		BulletMeshCollider::BulletMeshCollider(WorldInterface *world, void *&data)
+			: ColliderInterface(world, data), MeshColliderInterface(world, data), BulletCollider(world, data)
 		{
 			return;
 		}

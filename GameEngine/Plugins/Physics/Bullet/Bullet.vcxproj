@@ -179,6 +179,7 @@
     <ClInclude Include="..\..\..\GameEngine\Engine\Physics\WorldInterface.hpp" />
     <ClInclude Include="BulletBoxCollider.hpp" />
     <ClInclude Include="BulletCapsuleCollider.hpp" />
+    <ClInclude Include="BulletCollider.hpp" />
     <ClInclude Include="BulletMaterial.hpp" />
     <ClInclude Include="BulletMeshCollider.hpp" />
     <ClInclude Include="BulletPhysics.hpp" />
@@ -189,6 +190,7 @@
   <ItemGroup>
     <ClCompile Include="BulletBoxCollider.cpp" />
     <ClCompile Include="BulletCapsuleCollider.cpp" />
+    <ClCompile Include="BulletCollider.cpp" />
     <ClCompile Include="BulletExports.cpp" />
     <ClCompile Include="BulletMaterial.cpp" />
     <ClCompile Include="BulletMeshCollider.cpp" />

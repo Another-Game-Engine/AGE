@@ -101,23 +101,23 @@ namespace AGE
 			scene->fetchResults(true);
 		}
 
-		RigidBodyInterface *PhysXWorld::createRigidBody(const glm::vec3 &position)
+		RigidBodyInterface *PhysXWorld::createRigidBody(void *&data)
 		{
-			return static_cast<RigidBodyInterface *>(new PhysXRigidBody(this, position));
+			return new PhysXRigidBody(this, data);
 		}
 
-		ColliderInterface *PhysXWorld::createCollider(ColliderType colliderType)
+		ColliderInterface *PhysXWorld::createCollider(ColliderType colliderType, void *&data)
 		{
 			switch (colliderType)
 			{
 				case ColliderType::Box:
-					return new PhysXBoxCollider(static_cast<WorldInterface *>(this));
+					return new PhysXBoxCollider(this, data);
 				case ColliderType::Capsule:
-					return new PhysXCapsuleCollider(static_cast<WorldInterface *>(this));
+					return new PhysXCapsuleCollider(this, data);
 				case ColliderType::Mesh:
-					return new PhysXMeshCollider(static_cast<WorldInterface *>(this));
+					return new PhysXMeshCollider(this, data);
 				case ColliderType::Sphere:
-					return new PhysXSphereCollider(static_cast<WorldInterface *>(this));
+					return new PhysXSphereCollider(this, data);
 				default:
 					assert(!"Never reached");
 					return nullptr;
@@ -126,7 +126,7 @@ namespace AGE
 
 		MaterialInterface *PhysXWorld::createMaterial(ColliderInterface *collider)
 		{
-			return static_cast<MaterialInterface *>(new PhysXMaterial(this, collider));
+			return new PhysXMaterial(this, collider);
 		}
 	}
 }

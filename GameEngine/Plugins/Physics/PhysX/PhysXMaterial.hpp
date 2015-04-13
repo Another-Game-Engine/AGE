@@ -7,8 +7,23 @@ namespace AGE
 {
 	namespace Physics
 	{
+		class PhysXBoxCollider;
+		class PhysXCapsuleCollider;
+		class PhysXMeshCollider;
+		class PhysXSphereCollider;
+
+
 		class PhysXMaterial final : public MaterialInterface
 		{
+			// Friendships
+			friend PhysXBoxCollider;
+			
+			friend PhysXCapsuleCollider;
+			
+			friend PhysXMeshCollider;
+
+			friend PhysXSphereCollider;
+
 		public:
 			// Constructors
 			PhysXMaterial(void) = delete;

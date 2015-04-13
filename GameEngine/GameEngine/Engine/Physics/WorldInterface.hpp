@@ -11,6 +11,8 @@
 
 namespace AGE
 {
+	class NewRigidBody;
+
 	namespace Physics
 	{
 		class PhysicsInterface;
@@ -21,6 +23,8 @@ namespace AGE
 		class WorldInterface : public Dependency < WorldInterface >
 		{
 			// Friendship
+			friend NewRigidBody;
+
 			friend PhysicsInterface;
 
 			friend ColliderInterface;
@@ -55,8 +59,6 @@ namespace AGE
 
 			const FilterGroup getFilterGroupForFilterName(const std::string &name) const;
 
-			void destroyRigidBody(RigidBodyInterface *rigidBody);
-
 			// Virtual Methods
 			virtual void setGravity(const glm::vec3 &gravity) = 0;
 
@@ -66,13 +68,12 @@ namespace AGE
 
 			virtual void disableCollisionBetweenGroups(FilterGroup group1, FilterGroup group2) = 0;
 
-			virtual RigidBodyInterface *createRigidBody(const glm::vec3 &position) = 0;
-
 		protected:
 			// Destructor
 			virtual ~WorldInterface(void) = default;
 
 		private:
+			// Type Aliases
 			using HashTable = std::unordered_map < std::string, FilterGroup > ;
 
 			// Attributes
@@ -85,12 +86,16 @@ namespace AGE
 			HashTable filterNameToFilterGroup;
 
 			// Methods
+			void destroyRigidBody(RigidBodyInterface *rigidBody);
+
 			void destroyCollider(ColliderInterface *collider);
 
 			void destroyMaterial(MaterialInterface *material);
 
 			// Virtual Methods
-			virtual ColliderInterface *createCollider(ColliderType colliderType) = 0;
+			virtual RigidBodyInterface *createRigidBody(void *&data) = 0;
+
+			virtual ColliderInterface *createCollider(ColliderType colliderType, void *&data) = 0;
 
 			virtual MaterialInterface *createMaterial(ColliderInterface *collider) = 0;
 
