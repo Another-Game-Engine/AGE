@@ -19,6 +19,18 @@ namespace AGE
 		edit
 	};
 
+	enum ModeTexture
+	{
+		ambient = 0,
+		diffuse,
+		emissive,
+		reflective,
+		specular,
+		normal,
+		bump,
+		size
+	};
+
 	class MaterialEditorScene : public AScene
 	{
 	public:
@@ -33,9 +45,10 @@ namespace AGE
 		void _selectMaterial();
 		void _selectSubMaterial();
 		void _editName();
+		void _editTexture(ModeTexture mode, std::string &current);
 		void _editData();
 		void _saveEdit();
-		void _resetNameEdition();
+		void _resetEdition();
 	
 	private:
 		ModeMaterialEditor _mode;
@@ -43,13 +56,8 @@ namespace AGE
 		int _indexSubMaterial;
 		MaterialDataSet _current;
 		bool _editModeName;
+		bool _editModeTexture[unsigned long long(ModeTexture::size)];
+		char _bufferTexture[unsigned long long(ModeTexture::size)][TEXTURE_LENGTH];
 		char _bufferName[NAME_LENGTH];
-		char _bufferAmbiant[TEXTURE_LENGTH];
-		char _bufferDiffuse[TEXTURE_LENGTH];
-		char _bufferEmissive[TEXTURE_LENGTH];
-		char _bufferReflective[TEXTURE_LENGTH];
-		char _bufferSpecular[TEXTURE_LENGTH];
-		char _bufferNormal[TEXTURE_LENGTH];
-		char _bufferBump[TEXTURE_LENGTH];
 	};
 }

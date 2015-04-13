@@ -11,23 +11,24 @@
 
 namespace AGE
 {
+	static const char const *_nameTexture[ModeTexture::size] = {
+		"ambient texture",
+		"diffuse texture",
+		"emissive texture",
+		"reflective texture",
+		"specular texture",
+		"normal texture",
+		"bump texture"
+	};
+
 	const std::string MaterialEditorScene::Name = "MaterialEditor";
 
 	MaterialEditorScene::MaterialEditorScene(AGE::Engine *engine)
 		: AScene(engine),
 		_mode(ModeMaterialEditor::selectMaterial),
-		_indexMaterial(-1),
-		_indexSubMaterial(-1),
-		_editModeName(false)
+		_indexMaterial(-1)
 	{
-		memset(_bufferName, 0, NAME_LENGTH);
-		memset(_bufferAmbiant, 0, TEXTURE_LENGTH);
-		memset(_bufferDiffuse, 0, TEXTURE_LENGTH);
-		memset(_bufferEmissive, 0, TEXTURE_LENGTH);
-		memset(_bufferReflective, 0, TEXTURE_LENGTH);
-		memset(_bufferSpecular, 0, TEXTURE_LENGTH);
-		memset(_bufferNormal, 0, TEXTURE_LENGTH);
-		memset(_bufferBump, 0, TEXTURE_LENGTH);
+		_resetEdition();
 	}
 
 	MaterialEditorScene::~MaterialEditorScene(void)
@@ -39,18 +40,17 @@ namespace AGE
 		return true;
 	}
 
-	void MaterialEditorScene::_resetNameEdition()
+	void MaterialEditorScene::_resetEdition()
 	{
 		_editModeName = false;
 		_indexSubMaterial = -1;
 		memset(_bufferName, 0, NAME_LENGTH);
-		memset(_bufferAmbiant, 0, TEXTURE_LENGTH);
-		memset(_bufferDiffuse, 0, TEXTURE_LENGTH);
-		memset(_bufferEmissive, 0, TEXTURE_LENGTH);
-		memset(_bufferReflective, 0, TEXTURE_LENGTH);
-		memset(_bufferSpecular, 0, TEXTURE_LENGTH);
-		memset(_bufferNormal, 0, TEXTURE_LENGTH);
-		memset(_bufferBump, 0, TEXTURE_LENGTH);
+		for (auto index = 0; index < ModeTexture::size; ++index) {
+			memset(_bufferTexture[index], 0, TEXTURE_LENGTH);
+		}
+		for (auto index = 0; index < ModeTexture::size; ++index) {
+			_editModeTexture[index] = false;
+		}
 	}
 
 	void MaterialEditorScene::_selectMaterial()
@@ -79,7 +79,7 @@ namespace AGE
 		delete[] matListBox;
 		if (_indexMaterial != -1 && ImGui::Button("open a material"))
 		{
-			_resetNameEdition();
+			_resetEdition();
 			std::shared_ptr<MaterialDataSet> material_data_set = std::make_shared<MaterialDataSet>();
 			std::ifstream ifs(materialFullPath[_indexMaterial]);
 			cereal::PortableBinaryInputArchive ar(ifs);
@@ -95,6 +95,30 @@ namespace AGE
 		if (_indexMaterial == -1)
 		{
 			ImGui::Text("Please select one material for edition");
+		}
+	}
+
+	void MaterialEditorScene::_editTexture(ModeTexture mode, std::string &current)
+	{
+		if (!_editModeTexture[mode])
+		{
+			if (current.empty())
+				ImGui::Text(std::string("No " + std::string(_nameTexture[mode]) +  "...").c_str());
+			else
+				ImGui::Text(current.c_str());
+			ImGui::SameLine();
+			if (ImGui::Button("Edit texture"))
+				_editModeTexture[mode] = true;
+		}
+		else
+		{
+			ImGui::InputText(_nameTexture[mode], _bufferTexture[mode], NAME_LENGTH);
+			ImGui::SameLine();
+			if (ImGui::Button("valid new texture"))
+			{
+				current = std::string(_bufferName);
+				_editModeTexture[mode] = false;
+			}
 		}
 	}
 
@@ -165,13 +189,13 @@ namespace AGE
 		ImGui::InputFloat3("emissive", glm::value_ptr(mat.emissive));
 		ImGui::InputFloat3("reflective", glm::value_ptr(mat.reflective));
 		ImGui::InputFloat3("specular", glm::value_ptr(mat.specular));
-		InputTextCustom("ambient texture", _bufferAmbiant, ambientTexPath);
-		InputTextCustom("diffuse texture", _bufferDiffuse, diffuseTexPath);
-		InputTextCustom("emissive texture", _bufferEmissive, emissiveTexPath);
-		InputTextCustom("reflective texture", _bufferReflective, reflectiveTexPath);
-		InputTextCustom("specular texture", _bufferSpecular, specularTexPath);
-		InputTextCustom("normal texture", _bufferNormal, normalTexPath);
-		InputTextCustom("bump texture", _bufferBump, bumpTexPath);
+		_editTexture(ModeTexture::diffuse, mat.diffuseTexPath);
+		_editTexture(ModeTexture::specular, mat.specularTexPath);
+		_editTexture(ModeTexture::ambient, mat.ambientTexPath);
+		_editTexture(ModeTexture::reflective, mat.reflectiveTexPath);
+		_editTexture(ModeTexture::emissive, mat.emissiveTexPath);
+		_editTexture(ModeTexture::normal, mat.reflectiveTexPath);
+		_editTexture(ModeTexture::bump, mat.bumpTexPath);
 		_saveEdit();
 	}
 
