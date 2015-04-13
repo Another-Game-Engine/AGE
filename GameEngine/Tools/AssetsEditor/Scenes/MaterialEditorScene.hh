@@ -30,6 +30,7 @@ namespace AGE
 		void _selectSubMaterial();
 		void _editName();
 		void _editData();
+		void _saveEdit();
 
 
 

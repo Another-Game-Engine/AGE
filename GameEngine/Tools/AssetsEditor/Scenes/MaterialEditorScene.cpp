@@ -6,6 +6,8 @@
 #include <Utils/Path.hpp>
 #include <Utils/FileSystemHelpers.hpp>
 #include <EditorConfiguration.hpp>
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 namespace AGE
 {
@@ -125,6 +127,18 @@ namespace AGE
 			_mode = ModeMaterialEditor::edit;
 		if (_indexSubMaterial == -1)
 			ImGui::Text("Please select one sub material for edition");
+		_saveEdit();
+	}
+
+	void MaterialEditorScene::_saveEdit()
+	{
+		if (ImGui::Button("Save Edition")) {
+			const std::string currentDir = Directory::GetCurrentDirectory();
+			const std::string absPath = Path::AbsoluteName(currentDir.c_str(), WE::EditorConfiguration::GetCookedDirectory().c_str());
+			std::ofstream file(absPath + _current.name + ".mage");
+			cereal::PortableBinaryOutputArchive ar(file);
+			ar(_current);
+		}
 	}
 
 	void MaterialEditorScene::_editData()
@@ -132,6 +146,12 @@ namespace AGE
 		if (ImGui::Button("precedent"))
 			_mode = ModeMaterialEditor::selectSubMaterial;
 		MaterialData &mat = _current.collection[_indexSubMaterial];
+		ImGui::InputFloat3("ambient", glm::value_ptr(mat.ambient));
+		ImGui::InputFloat3("diffuse", glm::value_ptr(mat.diffuse));
+		ImGui::InputFloat3("emissive", glm::value_ptr(mat.emissive));
+		ImGui::InputFloat3("reflective", glm::value_ptr(mat.reflective));
+		ImGui::InputFloat3("specular", glm::value_ptr(mat.specular));
+		_saveEdit();
 	}
 
 	bool MaterialEditorScene::_userUpdateBegin(float time)
