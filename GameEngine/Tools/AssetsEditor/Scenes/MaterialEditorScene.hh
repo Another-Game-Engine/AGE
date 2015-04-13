@@ -6,6 +6,10 @@
 #include <memory>
 
 #define NAME_LENGTH 50
+#define TEXTURE_LENGTH 255
+
+#define InputTextCustom(name, diff1, diff2) memcpy(diff1, mat.diff2.c_str(), mat.diff2.size()); \
+	ImGui::InputText(name, diff1, mat.diff2.size());
 
 namespace AGE
 {
@@ -31,10 +35,6 @@ namespace AGE
 		void _editName();
 		void _editData();
 		void _saveEdit();
-
-
-
-
 		void _resetNameEdition();
 	
 	private:
@@ -44,5 +44,12 @@ namespace AGE
 		MaterialDataSet _current;
 		bool _editModeName;
 		char _bufferName[NAME_LENGTH];
+		char _bufferAmbiant[TEXTURE_LENGTH];
+		char _bufferDiffuse[TEXTURE_LENGTH];
+		char _bufferEmissive[TEXTURE_LENGTH];
+		char _bufferReflective[TEXTURE_LENGTH];
+		char _bufferSpecular[TEXTURE_LENGTH];
+		char _bufferNormal[TEXTURE_LENGTH];
+		char _bufferBump[TEXTURE_LENGTH];
 	};
 }

@@ -21,6 +21,13 @@ namespace AGE
 		_editModeName(false)
 	{
 		memset(_bufferName, 0, NAME_LENGTH);
+		memset(_bufferAmbiant, 0, TEXTURE_LENGTH);
+		memset(_bufferDiffuse, 0, TEXTURE_LENGTH);
+		memset(_bufferEmissive, 0, TEXTURE_LENGTH);
+		memset(_bufferReflective, 0, TEXTURE_LENGTH);
+		memset(_bufferSpecular, 0, TEXTURE_LENGTH);
+		memset(_bufferNormal, 0, TEXTURE_LENGTH);
+		memset(_bufferBump, 0, TEXTURE_LENGTH);
 	}
 
 	MaterialEditorScene::~MaterialEditorScene(void)
@@ -37,6 +44,13 @@ namespace AGE
 		_editModeName = false;
 		_indexSubMaterial = -1;
 		memset(_bufferName, 0, NAME_LENGTH);
+		memset(_bufferAmbiant, 0, TEXTURE_LENGTH);
+		memset(_bufferDiffuse, 0, TEXTURE_LENGTH);
+		memset(_bufferEmissive, 0, TEXTURE_LENGTH);
+		memset(_bufferReflective, 0, TEXTURE_LENGTH);
+		memset(_bufferSpecular, 0, TEXTURE_LENGTH);
+		memset(_bufferNormal, 0, TEXTURE_LENGTH);
+		memset(_bufferBump, 0, TEXTURE_LENGTH);
 	}
 
 	void MaterialEditorScene::_selectMaterial()
@@ -151,6 +165,13 @@ namespace AGE
 		ImGui::InputFloat3("emissive", glm::value_ptr(mat.emissive));
 		ImGui::InputFloat3("reflective", glm::value_ptr(mat.reflective));
 		ImGui::InputFloat3("specular", glm::value_ptr(mat.specular));
+		InputTextCustom("ambient texture", _bufferAmbiant, ambientTexPath);
+		InputTextCustom("diffuse texture", _bufferDiffuse, diffuseTexPath);
+		InputTextCustom("emissive texture", _bufferEmissive, emissiveTexPath);
+		InputTextCustom("reflective texture", _bufferReflective, reflectiveTexPath);
+		InputTextCustom("specular texture", _bufferSpecular, specularTexPath);
+		InputTextCustom("normal texture", _bufferNormal, normalTexPath);
+		InputTextCustom("bump texture", _bufferBump, bumpTexPath);
 		_saveEdit();
 	}
 
