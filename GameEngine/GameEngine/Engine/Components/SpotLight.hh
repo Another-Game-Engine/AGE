@@ -25,6 +25,8 @@ namespace AGE
 		template <typename Archive>void serialize(Archive &ar, const std::uint32_t version);
 		inline const glm::vec3 &getColor() const { return _color; }
 		inline const glm::vec3 &getRange() const { return _range; }
+		inline const glm::mat4 &projection() const { return _projection; }
+		inline const glm::mat4 &transform() const { return _transform; }
 		inline float *getColorPtr() { return &_color.x; }
 		inline float *getRangePtr() { return &_range.x; }
 		virtual void postUnserialization();
@@ -37,7 +39,7 @@ namespace AGE
 
 	private:
 		AGE::PrepareKey _key;
-		glm::mat4 _view;
+		glm::mat4 _transform;
 		glm::mat4 _projection;
 		glm::vec3 _color;
 		glm::vec3 _range;
