@@ -2,44 +2,46 @@
 
 #include <Components/Component.hh>
 #include <glm/fwd.hpp>
+#include <Utils/Serialization/VectorSerialization.hpp>
+#include <Render/Textures/ITexture.hh>
 
 namespace AGE
 {
-	struct SpotLightData
+
+	struct SpotLightComponent : public ComponentBase
 	{
-		glm::mat4		lightVP;
-		glm::vec4		positionPower;
-		glm::vec4		colorRange;
-		int				shadowId;
-		unsigned int	padding[3];
+	public:
+		SpotLightComponent();
+		virtual ~SpotLightComponent();
+		SpotLightComponent(SpotLightComponent const &o);
 
-		SpotLightData();
-		SpotLightData(SpotLightData const &o) = delete;
-		~SpotLightData();
-		SpotLightData &operator=(SpotLightData const &o) = delete;
-	};
-
-	struct SpotLight : public ComponentBase
-	{
-		SpotLightData		lightData;
-		glm::mat4			projection;
-
-		SpotLight();
-
-		SpotLight(SpotLight const &o);
-
-		virtual ~SpotLight();
-
-		void		updateLightData(const glm::mat4 &globalTransform);
+		virtual void _copyFrom(const ComponentBase *model);
 
 		virtual void reset();
+		void init();
 
-		SpotLight &operator=(SpotLight const &o);
+		SpotLightComponent &set(glm::vec3 const &color = glm::vec3(1.0f), glm::vec3 const &range = glm::vec3(1.0f, 0.1f, 0.01f));
 
-		void	init();
+		template <typename Archive>void serialize(Archive &ar, const std::uint32_t version);
+		inline const glm::vec3 &getColor() const { return _color; }
+		inline const glm::vec3 &getRange() const { return _range; }
+		inline float *getColorPtr() { return &_color.x; }
+		inline float *getRangePtr() { return &_range.x; }
+		virtual void postUnserialization();
 
-		template <typename Archive>
-		void serialize(Archive &ar);
+#ifdef EDITOR_ENABLED
+		virtual void editorCreate();
+		virtual void editorDelete();
+		virtual bool editorUpdate();
+#endif
+
+	private:
+		AGE::PrepareKey _key;
+		glm::mat4 _view;
+		glm::mat4 _projection;
+		glm::vec3 _color;
+		glm::vec3 _range;
+		std::shared_ptr<ITexture> _map;
 
 	};
 }

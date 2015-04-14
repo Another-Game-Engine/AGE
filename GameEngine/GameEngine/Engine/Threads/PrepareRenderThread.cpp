@@ -238,6 +238,15 @@ namespace AGE
 		return key;
 	}
 
+	PrepareKey PrepareRenderThread::addSpotLight()
+	{
+		auto scene = _getRenderScene(GetMainThread()->getActiveScene());
+		assert(scene != nullptr);
+		auto key = scene->addSpotLight();
+		getQueue()->emplaceCommand<Commands::MainToPrepare::CreateSpotLight>(key);
+		return key;
+	}
+
 	PrepareKey PrepareRenderThread::addPointLight()
 	{
 		auto scene = _getRenderScene(GetMainThread()->getActiveScene());

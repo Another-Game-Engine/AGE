@@ -13,6 +13,7 @@ namespace AGE
 			, Drawable
 			, Mesh
 			, PointLight
+			, SpotLight
 		};
 		
 		typedef std::uint8_t OctreeObjectType;

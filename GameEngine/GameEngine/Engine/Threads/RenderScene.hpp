@@ -66,6 +66,7 @@ namespace AGE
 		PrepareKey addMesh();
 		PrepareKey addCamera();
 		PrepareKey addPointLight();
+		PrepareKey addSpotLight();
 		RenderScene &removeElement(const PrepareKey &key);
 		RenderScene &setTransform(const glm::mat4 &v, const PrepareKey &id);
 		RenderScene &setTransform(const glm::mat4&v, const std::array<PrepareKey, MAX_CPT_NUMBER> &ids);
@@ -86,6 +87,7 @@ namespace AGE
 		MemoryPool<Drawable> _drawables;
 		MemoryPool<Camera> _cameras;
 		MemoryPool<PointLight> _pointLights;
+		MemoryPool<SpotLight> _spotLights;
 
 		AGE::Vector<uint32_t> _activeCameras;
 

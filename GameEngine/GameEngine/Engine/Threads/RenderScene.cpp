@@ -69,6 +69,14 @@ namespace AGE
 		return res;
 	}
 
+	PrepareKey RenderScene::addSpotLight()
+	{
+		PrepareKey res;
+		res.type = PrepareKey::Type::SpotLight;
+		res.id = (AGE::PrepareKey::OctreeObjectId)(_spotLights.prepareAlloc());
+		return res;
+	}
+
 	RenderScene &RenderScene::removeElement(const PrepareKey &key)
 	{
 		assert(!key.invalid());

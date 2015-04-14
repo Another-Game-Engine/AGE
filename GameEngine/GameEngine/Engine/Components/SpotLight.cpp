@@ -1,43 +1,101 @@
-#include <Components\SpotLight.hh>
+#include <Components/SpotLight.hh>
+#include <Core/AScene.hh>
+#include <Utils/MathematicTools.hh>
+#include <Threads/PrepareRenderThread.hpp>
+#include <Threads/ThreadManager.hpp>
 #include <glm/glm.hpp>
+#include <AssetManagement/AssetManager.hh>
 
+#ifdef EDITOR_ENABLED
+#	include <imgui\imgui.h>
+#	include <glm/gtc/type_ptr.hpp>
+#endif
 
 namespace AGE
 {
-	SpotLightData::SpotLightData() { }
-
-	SpotLightData::~SpotLightData()
+	SpotLightComponent::SpotLightComponent()
+		: _range(1)
+		, _color(1),
+		_map(nullptr)
 	{
 	}
 
-
-	SpotLight::SpotLight()
+	SpotLightComponent::~SpotLightComponent()
 	{
+
 	}
 
-	SpotLight::~SpotLight()
+	SpotLightComponent::SpotLightComponent(SpotLightComponent const &o)
+		: _key(o._key)
+		, _range(o._range)
+		, _color(o._color),
+		_map(o._map)
 	{
+		postUnserialization();
 	}
 
-	void		SpotLight::updateLightData(const glm::mat4 &globalTransform)
+	void SpotLightComponent::_copyFrom(const ComponentBase *model)
 	{
-		lightData.lightVP = projection * glm::inverse(globalTransform);
-		lightData.positionPower.x = globalTransform[3].x;
-		lightData.positionPower.y = globalTransform[3].y;
-		lightData.positionPower.z = globalTransform[3].z;
+		auto o = static_cast<const SpotLightComponent*>(model);
+		_range = o->_range;
+		_color = o->_color;
+		postUnserialization();
 	}
 
-	void SpotLight::reset()
+	void SpotLightComponent::reset()
 	{
+		if (!_key.invalid())
+		{
+			entity.getLink().unregisterOctreeObject(_key);
+		}
+		_key = AGE::PrepareKey();
+		_color = glm::vec3(1);
+		_range = glm::vec3(1);
 	}
 
-	void	SpotLight::init()
+	void SpotLightComponent::init()
 	{
+		_key = AGE::GetPrepareThread()->addSpotLight();
+		entity.getLink().registerOctreeObject(_key);
+		_map = entity.getScene()->getInstance<AssetsManager>()->getPointLightTexture();
+		assert(!_key.invalid());
 	}
 
-	template <typename Archive>
-	void SpotLight::serialize(Archive &ar)
+	SpotLightComponent &SpotLightComponent::set(glm::vec3 const &color, glm::vec3 const &range)
 	{
+		_color = color;
+		_range = range;
+		//AGE::GetPrepareThread()->setPointLight(color, range, _map, _key);
+		return (*this);
 	}
 
+	void SpotLightComponent::postUnserialization()
+	{
+		init();
+		set(_color, _range);
+	}
+
+#ifdef EDITOR_ENABLED
+	void SpotLightComponent::editorCreate()
+	{}
+
+	void SpotLightComponent::editorDelete()
+	{}
+
+	bool SpotLightComponent::editorUpdate()
+	{
+		bool modified = false;
+		if (ImGui::ColorEdit3("Color", getColorPtr()))
+		{
+			set(_color, _range);
+			modified = true;
+		}
+		if (ImGui::SliderFloat3("Range", glm::value_ptr(_range), 0.0f, 1.0f))
+		{
+			set(_color, _range);
+			modified = true;
+		}
+		return modified;
+	}
+#endif
 }

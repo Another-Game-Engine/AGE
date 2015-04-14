@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Utils/Sphere.hh>
+#include <Utils/Frustum.hh>
 #include <SpacePartitioning/Cullable/CullableShape.hh>
 #include <glm/glm.hpp>
 #include <stdint.h>
@@ -24,6 +25,25 @@ namespace AGE
 		PointLight(glm::vec3 const &position, glm::vec3 const &color, glm::vec3 const &attenuation);
 
 		void computeSphereTransform();
+	};
+
+	struct SpotLight : public CullableShape<Frustum>
+	{
+		// To remove when light will be in octree
+		uint32_t activeSpotLightIdx;
+
+		std::shared_ptr<ITexture> map;
+		glm::vec3 attenuation;
+		glm::vec3 color;
+		glm::mat4 sphereTransform;
+		glm::mat4 frustrumTransform;
+		glm::mat4 projection;
+		glm::mat4 view;
+
+		SpotLight();
+		SpotLight(glm::vec3 const &position, glm::vec3 const &color, glm::vec3 const &attenuation);
+
+		void computeFrustrumTransform();
 	};
 
 }
