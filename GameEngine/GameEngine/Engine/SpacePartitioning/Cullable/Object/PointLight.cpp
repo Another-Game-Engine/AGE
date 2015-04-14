@@ -43,4 +43,16 @@ namespace AGE
 		sphereTransform = glm::scale(transformation, lightRange + lightRange * errorRate);
 	}
 
+	SpotLight::SpotLight() :
+		color(1.0f)
+	{
+
+	}
+
+	SpotLight::SpotLight(glm::vec3 const &pPosition, glm::vec3 const &pColor, glm::vec3 const &pAttenuation) :
+		color(pColor)
+	{
+		PreparableObject::transformation = glm::translate(glm::mat4(1), pPosition);
+	}
+
 }

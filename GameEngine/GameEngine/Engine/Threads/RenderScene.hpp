@@ -82,6 +82,7 @@ namespace AGE
 
 		AGE::Vector<uint32_t> _drawablesToMove;
 		AGE::Vector<uint32_t> _pointLightsToMove;
+		AGE::Vector<uint32_t> _spotLightsToMove;
 
 		MemoryPool<Mesh> _meshs;
 		MemoryPool<Drawable> _drawables;

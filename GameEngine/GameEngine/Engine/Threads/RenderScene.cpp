@@ -293,7 +293,7 @@ namespace AGE
 		Camera *co = nullptr;
 		Mesh *uo = nullptr;
 		PointLight *l = nullptr;
-
+		SpotLight *s = nullptr;
 		switch (msg.key.type)
 		{
 
@@ -325,6 +325,16 @@ namespace AGE
 				l->hasMoved = true;
 				l->moveBufferIdx = (uint32_t)_pointLightsToMove.size();
 				_pointLightsToMove.push_back(msg.key.id);
+			}
+			break;
+		case(PrepareKey::Type::SpotLight) :
+			s = &_spotLights.get(msg.key.id);
+			s->transformation = msg.transform;
+			if (s->hasMoved == false)
+			{
+				s->hasMoved = true;
+				s->moveBufferIdx = (uint32_t)_spotLightsToMove.size();
+				_spotLightsToMove.push_back(msg.key.id);
 			}
 			break;
 		default:
@@ -359,8 +369,15 @@ namespace AGE
 			e.computeSphereTransform();
 			// TODO: move in octree
 		}
+		for (uint32_t idx : _spotLightsToMove)
+		{
+			SpotLight &e = _spotLights.get(idx);
+
+			e.hasMoved = false;
+		}
 		_drawablesToMove.clear();
 		_pointLightsToMove.clear();
+		_spotLightsToMove.clear();
 	}
 
 	void RenderScene::_prepareDrawList(AGE::Commands::MainToPrepare::PrepareDrawLists &msg)
@@ -463,6 +480,13 @@ namespace AGE
 					renderCamera.lights.pointLight.emplace_back();
 					renderCamera.lights.pointLight.back().light = *currentPointLight;
 					// TODO: Cull the shadows
+				}
+				break;
+				case PrepareKey::Type::SpotLight:
+				{
+					SpotLight *currentSpotLight = static_cast<SpotLight*>(e);
+					renderCamera.lights.spotLights.emplace_back();
+					renderCamera.lights.spotLights.back().light = *currentSpotLight;
 				}
 				break;
 				default:
