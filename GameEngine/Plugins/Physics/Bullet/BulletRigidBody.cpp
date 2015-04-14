@@ -6,7 +6,7 @@ namespace AGE
 	namespace Physics
 	{
 		// Constructors
-		BulletRigidBody::BulletRigidBody(BulletWorld *world, void *&data)
+		BulletRigidBody::BulletRigidBody(BulletWorld *world, Private::GenericData *data)
 			: RigidBodyInterface(world, data)
 		{
 			// TO_DO

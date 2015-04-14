@@ -84,6 +84,12 @@
     <ClInclude Include="BulletCollider.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\GameEngine\Engine\Physics\MemoryPoolHelper.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\GameEngine\Engine\Physics\GenericData.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BulletWorld.cpp">
@@ -143,6 +149,9 @@
       <Filter>Header Files</Filter>
     </None>
     <None Include="..\..\..\GameEngine\Engine\Physics\SphereColliderInterface.inl">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="..\..\..\GameEngine\Engine\Physics\MemoryPoolHelper.inl">
       <Filter>Header Files</Filter>
     </None>
   </ItemGroup>

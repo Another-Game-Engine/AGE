@@ -92,10 +92,11 @@ namespace AGE
 
 		glm::vec3 getVelocityAtLocalPosition(const glm::vec3 &position) const;
 
+	private:
+		// Attributes
+		Physics::RigidBodyInterface *rigidBody = nullptr;
+
 		// Inherited Methods
 		void reset(void);
-
-	private:
-		Physics::RigidBodyInterface *rigidBody = nullptr;
 	};
 }

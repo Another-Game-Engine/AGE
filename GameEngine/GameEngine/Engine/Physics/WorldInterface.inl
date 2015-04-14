@@ -113,19 +113,14 @@ namespace AGE
 			return found != filterNameToFilterGroup.end() ? found->second : FilterGroup::GroupI;
 		}
 
-		inline void WorldInterface::destroyRigidBody(RigidBodyInterface *rigidBody)
+		inline void WorldInterface::enableCollisionBetweenGroups(const std::string &group1, const std::string &group2)
 		{
-			delete rigidBody;
+			enableCollisionBetweenGroups(getFilterGroupForFilterName(group1), getFilterGroupForFilterName(group2));
 		}
 
-		inline void WorldInterface::destroyCollider(ColliderInterface *collider)
+		inline void WorldInterface::disableCollisionBetweenGroups(const std::string &group1, const std::string &group2)
 		{
-			delete collider;
-		}
-
-		inline void WorldInterface::destroyMaterial(MaterialInterface *material)
-		{
-			delete material;
+			disableCollisionBetweenGroups(getFilterGroupForFilterName(group1), getFilterGroupForFilterName(group2));
 		}
 	}
 }

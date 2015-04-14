@@ -7,7 +7,7 @@ namespace AGE
 	namespace Physics
 	{
 		// Constructors
-		NullMeshCollider::NullMeshCollider(WorldInterface *world, void *&data)
+		NullMeshCollider::NullMeshCollider(WorldInterface *world, Private::GenericData *data)
 			: ColliderInterface(world, data), MeshColliderInterface(world, data), NullCollider(world, data)
 		{
 			return;

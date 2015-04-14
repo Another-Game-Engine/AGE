@@ -12,10 +12,10 @@ namespace AGE
 	namespace Physics
 	{
 		// Constructors
-		inline RigidBodyInterface::RigidBodyInterface(WorldInterface *world, void *&data)
+		inline RigidBodyInterface::RigidBodyInterface(WorldInterface *world, Private::GenericData *data)
 			: world(world), data(data)
 		{
-			return;
+			assert(data != nullptr && "Invalid data");
 		}
 
 		// Destructor
@@ -35,12 +35,12 @@ namespace AGE
 			return world;
 		}
 
-		inline void *&RigidBodyInterface::getData(void)
+		inline Private::GenericData *RigidBodyInterface::getData(void)
 		{
 			return data;
 		}
 
-		inline void * const &RigidBodyInterface::getData(void) const
+		inline const Private::GenericData *RigidBodyInterface::getData(void) const
 		{
 			return data;
 		}
@@ -48,13 +48,13 @@ namespace AGE
 		template <typename T>
 		inline T *RigidBodyInterface::getDataAs(void)
 		{
-			return static_cast<T *>(getData());
+			return static_cast<T *>(getData()->data);
 		}
 
 		template <typename T>
 		inline const T *RigidBodyInterface::getDataAs(void) const
 		{
-			return static_cast<const T *>(getData());
+			return static_cast<const T *>(getData()->data);
 		}
 
 		inline glm::vec3 RigidBodyInterface::getWorldCenterOfMass(void) const

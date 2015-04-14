@@ -1,4 +1,5 @@
 #include "PhysXMaterial.hpp"
+#include "PhysXWorld.hpp"
 
 namespace AGE
 {

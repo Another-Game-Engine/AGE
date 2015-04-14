@@ -12,11 +12,14 @@ namespace AGE
 	{
 		class PhysXMeshCollider final : public MeshColliderInterface, public PhysXCollider
 		{
+			// Friendships
+			friend ObjectPool < PhysXMeshCollider >;
+
 		public:
 			// Constructors
 			PhysXMeshCollider(void) = delete;
 
-			PhysXMeshCollider(WorldInterface *world, void *&data);
+			PhysXMeshCollider(WorldInterface *world, Private::GenericData *data);
 
 			PhysXMeshCollider(const PhysXMeshCollider &) = delete;
 

@@ -171,7 +171,9 @@
     <ClInclude Include="..\..\..\GameEngine\Engine\Physics\EngineType.hpp" />
     <ClInclude Include="..\..\..\GameEngine\Engine\Physics\FilterGroup.hpp" />
     <ClInclude Include="..\..\..\GameEngine\Engine\Physics\ForceMode.hpp" />
+    <ClInclude Include="..\..\..\GameEngine\Engine\Physics\GenericData.hpp" />
     <ClInclude Include="..\..\..\GameEngine\Engine\Physics\MaterialInterface.hpp" />
+    <ClInclude Include="..\..\..\GameEngine\Engine\Physics\MemoryPoolHelper.hpp" />
     <ClInclude Include="..\..\..\GameEngine\Engine\Physics\MeshColliderInterface.hpp" />
     <ClInclude Include="..\..\..\GameEngine\Engine\Physics\PhysicsInterface.hpp" />
     <ClInclude Include="..\..\..\GameEngine\Engine\Physics\RigidBodyInterface.hpp" />
@@ -204,6 +206,7 @@
     <None Include="..\..\..\GameEngine\Engine\Physics\CapsuleColliderInterface.inl" />
     <None Include="..\..\..\GameEngine\Engine\Physics\ColliderInterface.inl" />
     <None Include="..\..\..\GameEngine\Engine\Physics\MaterialInterface.inl" />
+    <None Include="..\..\..\GameEngine\Engine\Physics\MemoryPoolHelper.inl" />
     <None Include="..\..\..\GameEngine\Engine\Physics\MeshColliderInterface.inl" />
     <None Include="..\..\..\GameEngine\Engine\Physics\PhysicsInterface.inl" />
     <None Include="..\..\..\GameEngine\Engine\Physics\RigidBodyInterface.inl" />

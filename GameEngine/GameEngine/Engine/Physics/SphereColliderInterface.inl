@@ -7,7 +7,7 @@ namespace AGE
 	namespace Physics
 	{
 		// Constructors
-		inline SphereColliderInterface::SphereColliderInterface(WorldInterface *world, void *&data)
+		inline SphereColliderInterface::SphereColliderInterface(WorldInterface *world, Private::GenericData *data)
 			: ColliderInterface(world, data)
 		{
 			return;

@@ -2,6 +2,7 @@
 
 #include "ColliderType.hpp"
 #include "FilterGroup.hpp"
+#include "GenericData.hpp"
 
 namespace AGE
 {
@@ -16,9 +17,6 @@ namespace AGE
 
 		class ColliderInterface
 		{
-			// Friendships
-			friend WorldInterface;
-
 		private:
 			// Type Traits
 			template <ColliderType>
@@ -52,7 +50,7 @@ namespace AGE
 			// Constructors
 			ColliderInterface(void) = delete;
 
-			ColliderInterface(WorldInterface *world, void *&data);
+			ColliderInterface(WorldInterface *world, Private::GenericData *data);
 
 			ColliderInterface(const ColliderInterface &) = delete;
 
@@ -68,9 +66,9 @@ namespace AGE
 
 			const MaterialInterface *getMaterial(void) const;
 
-			void *&getData(void);
+			Private::GenericData *getData(void);
 
-			void * const &getData(void) const;
+			const Private::GenericData *getData(void) const;
 
 			template <typename T>
 			T *getDataAs(void);
@@ -108,7 +106,7 @@ namespace AGE
 			// Attributes
 			WorldInterface *world = nullptr;
 
-			void *&data;
+			Private::GenericData *data;
 
 			MaterialInterface *material = nullptr;
 		};

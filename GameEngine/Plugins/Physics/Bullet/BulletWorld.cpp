@@ -46,32 +46,64 @@ namespace AGE
 			// TO_DO
 		}
 
-		RigidBodyInterface *BulletWorld::createRigidBody(void *&data)
+		RigidBodyInterface *BulletWorld::createRigidBody(Private::GenericData *data)
 		{
-			return new BulletRigidBody(this, data);
+			return create<BulletRigidBody>(this, data);
 		}
 
-		ColliderInterface *BulletWorld::createCollider(ColliderType colliderType, void *&data)
+		void BulletWorld::destroyRigidBody(RigidBodyInterface *rigidBody)
+		{
+			destroy(static_cast<BulletRigidBody *>(rigidBody));
+		}
+
+		ColliderInterface *BulletWorld::createCollider(ColliderType colliderType, Private::GenericData *data)
 		{
 			switch (colliderType)
 			{
 				case ColliderType::Box:
-					return new BulletBoxCollider(this, data);
+					return create<BulletBoxCollider>(this, data);
 				case ColliderType::Capsule:
-					return new BulletCapsuleCollider(this, data);
+					return create<BulletCapsuleCollider>(this, data);
 				case ColliderType::Mesh:
-					return new BulletMeshCollider(this, data);
+					return create<BulletMeshCollider>(this, data);
 				case ColliderType::Sphere:
-					return new BulletSphereCollider(this, data);
+					return create<BulletSphereCollider>(this, data);
 				default:
 					assert(!"Never reached");
 					return nullptr;
 			}
 		}
 
+		void BulletWorld::destroyCollider(ColliderInterface *collider)
+		{
+			switch (collider->getColliderType())
+			{
+				case ColliderType::Box:
+					destroy(dynamic_cast<BulletBoxCollider *>(collider));
+					break;
+				case ColliderType::Capsule:
+					destroy(dynamic_cast<BulletCapsuleCollider *>(collider));
+					break;
+				case ColliderType::Mesh:
+					destroy(dynamic_cast<BulletMeshCollider *>(collider));
+					break;
+				case ColliderType::Sphere:
+					destroy(dynamic_cast<BulletSphereCollider *>(collider));
+					break;
+				default:
+					assert(!"Never reached");
+					break;
+			}
+		}
+
 		MaterialInterface *BulletWorld::createMaterial(ColliderInterface *collider)
 		{
-			return new BulletMaterial(collider);
+			return create<BulletMaterial>(collider);
+		}
+
+		void BulletWorld::destroyMaterial(MaterialInterface *material)
+		{
+			destroy(static_cast<BulletMaterial *>(material));
 		}
 	}
 }

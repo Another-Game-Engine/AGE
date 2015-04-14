@@ -41,32 +41,64 @@ namespace AGE
 			return;
 		}
 
-		RigidBodyInterface *NullWorld::createRigidBody(void *&data)
+		RigidBodyInterface *NullWorld::createRigidBody(Private::GenericData *data)
 		{
-			return new NullRigidBody(this, data);
+			return create<NullRigidBody>(this, data);
 		}
 
-		ColliderInterface *NullWorld::createCollider(ColliderType colliderType, void *&data)
+		void NullWorld::destroyRigidBody(RigidBodyInterface *rigidBody)
+		{
+			destroy(static_cast<NullRigidBody *>(rigidBody));
+		}
+
+		ColliderInterface *NullWorld::createCollider(ColliderType colliderType, Private::GenericData *data)
 		{
 			switch (colliderType)
 			{
 				case ColliderType::Box:
-					return new NullBoxCollider(this, data);
+					return create<NullBoxCollider>(this, data);
 				case ColliderType::Capsule:
-					return new NullCapsuleCollider(this, data);
+					return create<NullCapsuleCollider>(this, data);
 				case ColliderType::Mesh:
-					return new NullMeshCollider(this, data);
+					return create<NullMeshCollider>(this, data);
 				case ColliderType::Sphere:
-					return new NullSphereCollider(this, data);
+					return create<NullSphereCollider>(this, data);
 				default:
 					assert(!"Never reached");
 					return nullptr;
 			}
 		}
 
+		void NullWorld::destroyCollider(ColliderInterface *collider)
+		{
+			switch (collider->getColliderType())
+			{
+				case ColliderType::Box:
+					destroy(dynamic_cast<NullBoxCollider *>(collider));
+					break;
+				case ColliderType::Capsule:
+					destroy(dynamic_cast<NullCapsuleCollider *>(collider));
+					break;
+				case ColliderType::Mesh:
+					destroy(dynamic_cast<NullMeshCollider *>(collider));
+					break;
+				case ColliderType::Sphere:
+					destroy(dynamic_cast<NullSphereCollider *>(collider));
+					break;
+				default:
+					assert(!"Never reached");
+					break;
+			}
+		}
+
 		MaterialInterface *NullWorld::createMaterial(ColliderInterface *collider)
 		{
-			return new NullMaterial(collider);
+			return create<NullMaterial>(collider);
+		}
+
+		void NullWorld::destroyMaterial(MaterialInterface *material)
+		{
+			destroy(static_cast<NullMaterial *>(material));
 		}
 	}
 }

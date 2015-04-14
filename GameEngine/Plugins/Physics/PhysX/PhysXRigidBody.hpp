@@ -1,19 +1,23 @@
 #pragma once
 
 #include "RigidBodyInterface.hpp"
-#include "PhysXWorld.hpp"
 
 namespace AGE
 {
 	namespace Physics
 	{
+		class PhysXWorld;
+
 		class PhysXRigidBody final : public RigidBodyInterface
 		{
+			// Friendships
+			friend ObjectPool < PhysXRigidBody >;
+
 		public:
 			// Constructors
 			PhysXRigidBody(void) = delete;
 
-			PhysXRigidBody(PhysXWorld *world, void *&data);
+			PhysXRigidBody(PhysXWorld *world, Private::GenericData *data);
 
 			PhysXRigidBody(const PhysXRigidBody &) = delete;
 

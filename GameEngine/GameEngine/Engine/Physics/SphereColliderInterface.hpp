@@ -12,7 +12,7 @@ namespace AGE
 			// Constructors
 			SphereColliderInterface(void) = delete;
 
-			SphereColliderInterface(WorldInterface *world, void *&data);
+			SphereColliderInterface(WorldInterface *world, Private::GenericData *data);
 
 			SphereColliderInterface(const SphereColliderInterface &) = delete;
 

@@ -6,6 +6,7 @@
 #include "ForceMode.hpp"
 #include "CollisionDetectionMode.hpp"
 #include "FilterGroup.hpp"
+#include "GenericData.hpp"
 
 namespace AGE
 {
@@ -16,14 +17,11 @@ namespace AGE
 
 		class RigidBodyInterface
 		{
-			// Friendships
-			friend WorldInterface;
-
 		public:
 			// Constructors
 			RigidBodyInterface(void) = delete;
 
-			RigidBodyInterface(WorldInterface *world, void *&data);
+			RigidBodyInterface(WorldInterface *world, Private::GenericData *data);
 
 			RigidBodyInterface(const RigidBodyInterface &) = delete;
 
@@ -35,9 +33,9 @@ namespace AGE
 
 			const WorldInterface *getWorld(void) const;
 
-			void *&getData(void);
+			Private::GenericData *getData(void);
 
-			void * const &getData(void) const;
+			const Private::GenericData *getData(void) const;
 
 			template <typename T>
 			T *getDataAs(void);
@@ -126,7 +124,7 @@ namespace AGE
 			// Attributes
 			WorldInterface *world = nullptr;
 
-			void *&data;
+			Private::GenericData *data;
 		};
 	}
 }

@@ -10,6 +10,9 @@ namespace AGE
 
 		class NullMaterial final : public MaterialInterface
 		{
+			// Friendships
+			friend ObjectPool < NullMaterial >;
+
 		public:
 			// Constructors
 			NullMaterial(void) = delete;

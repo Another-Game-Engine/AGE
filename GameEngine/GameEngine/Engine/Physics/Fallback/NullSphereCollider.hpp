@@ -12,11 +12,14 @@ namespace AGE
 	{
 		class NullSphereCollider final : public SphereColliderInterface, public NullCollider
 		{
+			// Friendships
+			friend ObjectPool < NullSphereCollider >;
+
 		public:
 			// Constructors
 			NullSphereCollider(void) = delete;
 
-			NullSphereCollider(WorldInterface *world, void *&data);
+			NullSphereCollider(WorldInterface *world, Private::GenericData *data);
 
 			NullSphereCollider(const NullSphereCollider &) = delete;
 

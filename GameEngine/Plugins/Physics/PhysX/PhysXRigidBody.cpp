@@ -1,18 +1,19 @@
 #include "PhysXRigidBody.hpp"
+#include "PhysXWorld.hpp"
 
 namespace AGE
 {
 	namespace Physics
 	{
 		// Constructors
-		PhysXRigidBody::PhysXRigidBody(PhysXWorld *world, void *&data)
+		PhysXRigidBody::PhysXRigidBody(PhysXWorld *world, Private::GenericData *data)
 			: RigidBodyInterface(world, data)
 		{
-			if (getData() == nullptr)
+			if (getData()->data == nullptr)
 			{
-				getData() = static_cast<PhysXPhysics *>(world->getPhysics())->getPhysics()->createRigidDynamic(physx::PxTransform());
+				getData()->data = static_cast<PhysXPhysics *>(world->getPhysics())->getPhysics()->createRigidDynamic(physx::PxTransform(physx::PxIdentity));
 			}
-			assert(getData() != nullptr && "Impossible to create actor");
+			assert(getData()->data != nullptr && "Impossible to create actor");
 			world->getScene()->addActor(*getDataAs<physx::PxRigidDynamic>());
 		}
 

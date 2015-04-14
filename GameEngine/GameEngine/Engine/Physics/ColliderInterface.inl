@@ -12,10 +12,11 @@ namespace AGE
 	namespace Physics
 	{
 		// Constructors
-		inline ColliderInterface::ColliderInterface(WorldInterface *world, void *&data)
+		inline ColliderInterface::ColliderInterface(WorldInterface *world, Private::GenericData *data)
 			: world(world), data(data), material(world->createMaterial(this))
 		{
 			assert(world != nullptr && "Invalid world");
+			assert(data != nullptr && "Invalid data");
 			assert(material != nullptr && "Invalid material");
 		}
 
@@ -38,12 +39,12 @@ namespace AGE
 			return world;
 		}
 
-		inline void *&ColliderInterface::getData(void)
+		inline Private::GenericData *ColliderInterface::getData(void)
 		{
 			return data;
 		}
 
-		inline void * const &ColliderInterface::getData(void) const
+		inline const Private::GenericData *ColliderInterface::getData(void) const
 		{
 			return data;
 		}
@@ -51,13 +52,13 @@ namespace AGE
 		template <typename T>
 		inline T *ColliderInterface::getDataAs(void)
 		{
-			return static_cast<T *>(getData());
+			return static_cast<T *>(getData()->data);
 		}
 
 		template <typename T>
 		inline const T *ColliderInterface::getDataAs(void) const
 		{
-			return static_cast<const T *>(getData());
+			return static_cast<const T *>(getData()->data);
 		}
 
 		inline MaterialInterface *ColliderInterface::getMaterial(void)
@@ -85,14 +86,14 @@ namespace AGE
 		inline typename ColliderInterface::DeduceColliderType<Type>::Type *ColliderInterface::as(void)
 		{
 			assert(is<Type>() && "Invalid type");
-			return is<Type>() ? static_cast<DeduceColliderType<Type>::Type *>(this) : nullptr;
+			return dynamic_cast<DeduceColliderType<Type>::Type *>(this);
 		}
 
 		template <ColliderType Type>
 		inline const typename ColliderInterface::DeduceColliderType<Type>::Type *ColliderInterface::as(void) const
 		{
 			assert(is<Type>() && "Invalid type");
-			return is<Type>() ? static_cast<const DeduceColliderType<Type>::Type *>(this) : nullptr;
+			return dynamic_cast<DeduceColliderType<Type>::Type *>(this);
 		}
 	}
 }

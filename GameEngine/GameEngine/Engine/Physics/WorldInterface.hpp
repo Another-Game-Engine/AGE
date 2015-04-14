@@ -8,10 +8,13 @@
 #include "../Utils/Dependency.hpp"
 #include "FilterGroup.hpp"
 #include "ColliderType.hpp"
+#include "MemoryPoolHelper.hpp"
+#include "GenericData.hpp"
 
 namespace AGE
 {
 	class NewRigidBody;
+	class Collider;
 
 	namespace Physics
 	{
@@ -24,6 +27,8 @@ namespace AGE
 		{
 			// Friendship
 			friend NewRigidBody;
+
+			friend Collider;
 
 			friend PhysicsInterface;
 
@@ -59,6 +64,10 @@ namespace AGE
 
 			const FilterGroup getFilterGroupForFilterName(const std::string &name) const;
 
+			void enableCollisionBetweenGroups(const std::string &group1, const std::string &group2);
+
+			void disableCollisionBetweenGroups(const std::string &group1, const std::string &group2);
+
 			// Virtual Methods
 			virtual void setGravity(const glm::vec3 &gravity) = 0;
 
@@ -85,19 +94,18 @@ namespace AGE
 
 			HashTable filterNameToFilterGroup;
 
-			// Methods
-			void destroyRigidBody(RigidBodyInterface *rigidBody);
-
-			void destroyCollider(ColliderInterface *collider);
-
-			void destroyMaterial(MaterialInterface *material);
-
 			// Virtual Methods
-			virtual RigidBodyInterface *createRigidBody(void *&data) = 0;
+			virtual RigidBodyInterface *createRigidBody(Private::GenericData *data) = 0;
 
-			virtual ColliderInterface *createCollider(ColliderType colliderType, void *&data) = 0;
+			virtual void destroyRigidBody(RigidBodyInterface *rigidBody) = 0;
+
+			virtual ColliderInterface *createCollider(ColliderType colliderType, Private::GenericData *data) = 0;
+
+			virtual void destroyCollider(ColliderInterface *collider) = 0;
 
 			virtual MaterialInterface *createMaterial(ColliderInterface *collider) = 0;
+
+			virtual void destroyMaterial(MaterialInterface *material) = 0;
 
 			virtual void simulate(float stepSize) = 0;
 		};

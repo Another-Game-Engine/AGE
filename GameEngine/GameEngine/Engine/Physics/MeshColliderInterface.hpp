@@ -12,7 +12,7 @@ namespace AGE
 			// Constructors
 			MeshColliderInterface(void) = delete;
 
-			MeshColliderInterface(WorldInterface *world, void *&data);
+			MeshColliderInterface(WorldInterface *world, Private::GenericData *data);
 
 			MeshColliderInterface(const MeshColliderInterface &) = delete;
 

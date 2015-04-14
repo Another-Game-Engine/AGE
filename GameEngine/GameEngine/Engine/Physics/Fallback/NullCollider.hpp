@@ -12,7 +12,7 @@ namespace AGE
 			// Constructors
 			NullCollider(void) = delete;
 
-			NullCollider(WorldInterface *world, void *&data);
+			NullCollider(WorldInterface *world, Private::GenericData *data);
 
 			NullCollider(const NullCollider &) = delete;
 

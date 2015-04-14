@@ -2,12 +2,19 @@
 
 #include "WorldInterface.hpp"
 #include "PhysXPhysics.hpp"
+#include "PhysXRigidBody.hpp"
+#include "PhysXMaterial.hpp"
+#include "PhysXBoxCollider.hpp"
+#include "PhysXCapsuleCollider.hpp"
+#include "PhysXMeshCollider.hpp"
+#include "PhysXSphereCollider.hpp"
+#include "MemoryPoolHelper.hpp"
 
 namespace AGE
 {
 	namespace Physics
 	{
-		class PhysXWorld final : public WorldInterface
+		class PhysXWorld final : public WorldInterface, public MemoryPoolHelper<PhysXRigidBody, PhysXMaterial, PhysXBoxCollider, PhysXCapsuleCollider, PhysXMeshCollider, PhysXSphereCollider>
 		{
 		public:
 			// Constructors
@@ -47,11 +54,17 @@ namespace AGE
 
 			void simulate(float stepSize) override final;
 
-			RigidBodyInterface *createRigidBody(void *&data) override final;
+			RigidBodyInterface *createRigidBody(Private::GenericData *data) override final;
 
-			ColliderInterface *createCollider(ColliderType colliderType, void *&data) override final;
+			void destroyRigidBody(RigidBodyInterface *rigidBody) override final;
+
+			ColliderInterface *createCollider(ColliderType colliderType, Private::GenericData *data) override final;
+
+			void destroyCollider(ColliderInterface *collider) override final;
 
 			MaterialInterface *createMaterial(ColliderInterface *collider) override final;
+
+			void destroyMaterial(MaterialInterface *material) override final;
 		};
 	}
 }

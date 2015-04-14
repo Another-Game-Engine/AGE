@@ -7,7 +7,7 @@ namespace AGE
 	namespace Physics
 	{
 		// Constructors
-		NullBoxCollider::NullBoxCollider(WorldInterface *world, void *&data)
+		NullBoxCollider::NullBoxCollider(WorldInterface *world, Private::GenericData *data)
 			: ColliderInterface(world, data), BoxColliderInterface(world, data), NullCollider(world, data)
 		{
 			return;

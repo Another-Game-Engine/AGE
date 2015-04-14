@@ -1,4 +1,5 @@
 #include <Components/NewRigidBody.hpp>
+#include <Components/Collider.hpp>
 #include <Components/PhysicsData.hpp>
 #include <Core/AScene.hh>
 #include <Physics/WorldInterface.hpp>
@@ -243,6 +244,10 @@ namespace AGE
 		{
 			entity.getScene()->getInstance<Physics::WorldInterface>()->destroyRigidBody(rigidBody);
 			rigidBody = nullptr;
+		}
+		if (!entity.haveComponent<Collider>())
+		{
+			entity.removeComponent<Private::PhysicsData>();
 		}
 	}
 }

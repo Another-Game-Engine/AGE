@@ -14,7 +14,7 @@ namespace AGE
 			// Constructors
 			PhysXCollider(void) = delete;
 
-			PhysXCollider(WorldInterface *world, void *&data, physx::PxShape *shape);
+			PhysXCollider(WorldInterface *world, Private::GenericData *data, physx::PxShape *shape);
 
 			PhysXCollider(const PhysXCollider &) = delete;
 

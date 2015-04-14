@@ -1,7 +1,8 @@
 #pragma once
 
+#include <PxPhysicsAPI.h>
+
 #include "MaterialInterface.hpp"
-#include "PhysXWorld.hpp"
 
 namespace AGE
 {
@@ -11,7 +12,7 @@ namespace AGE
 		class PhysXCapsuleCollider;
 		class PhysXMeshCollider;
 		class PhysXSphereCollider;
-
+		class PhysXWorld;
 
 		class PhysXMaterial final : public MaterialInterface
 		{
@@ -23,6 +24,8 @@ namespace AGE
 			friend PhysXMeshCollider;
 
 			friend PhysXSphereCollider;
+
+			friend ObjectPool < PhysXMaterial >;
 
 		public:
 			// Constructors

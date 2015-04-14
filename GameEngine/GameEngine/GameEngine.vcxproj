@@ -121,6 +121,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\Vendors\imgui\imgui.cpp" />
+    <ClCompile Include="Engine\Components\Collider.cpp" />
     <ClCompile Include="Engine\Components\PhysicsData.cpp" />
     <ClCompile Include="Engine\Components\RigidBody.cpp" />
     <ClCompile Include="Engine\Physics\BulletCollisionManager.cpp" />
@@ -299,6 +300,7 @@
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
     <ClInclude Include="..\Vendors\imgui\imgui.h" />
     <ClInclude Include="..\Vendors\imgui\stb_textedit.h" />
+    <ClInclude Include="Engine\Components\Collider.hpp" />
     <ClInclude Include="Engine\Components\PhysicsData.hpp" />
     <ClInclude Include="Engine\Components\RigidBody.hpp" />
     <ClInclude Include="Engine\Physics\BoxColliderInterface.hpp" />
@@ -323,6 +325,7 @@
     <ClInclude Include="Engine\Physics\Fallback\NullWorld.hpp" />
     <ClInclude Include="Engine\Physics\FilterGroup.hpp" />
     <ClInclude Include="Engine\Physics\ForceMode.hpp" />
+    <ClInclude Include="Engine\Physics\GenericData.hpp" />
     <ClInclude Include="Engine\Physics\MaterialInterface.hpp" />
     <ClInclude Include="Engine\Physics\MemoryPoolHelper.hpp" />
     <ClInclude Include="Engine\Physics\MeshColliderInterface.hpp" />

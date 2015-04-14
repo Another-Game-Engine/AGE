@@ -12,7 +12,7 @@ namespace AGE
 			// Constructors
 			BoxColliderInterface(void) = delete;
 
-			BoxColliderInterface(WorldInterface *world, void *&data);
+			BoxColliderInterface(WorldInterface *world, Private::GenericData *data);
 
 			BoxColliderInterface(const BoxColliderInterface &) = delete;
 

@@ -5,15 +5,15 @@ namespace AGE
 	namespace Physics
 	{
 		// Constructors
-		PhysXCollider::PhysXCollider(WorldInterface *world, void *&data, physx::PxShape *shape)
+		PhysXCollider::PhysXCollider(WorldInterface *world, Private::GenericData *data, physx::PxShape *shape)
 			: ColliderInterface(world, data), shape(shape)
 		{
 			assert(shape != nullptr && "Invalid shape");
-			if (getData() == nullptr)
+			if (getData()->data == nullptr)
 			{
-				getData() = static_cast<PhysXPhysics *>(world->getPhysics())->getPhysics()->createRigidDynamic(physx::PxTransform());
+				getData()->data = static_cast<PhysXPhysics *>(world->getPhysics())->getPhysics()->createRigidDynamic(physx::PxTransform(physx::PxIdentity));
 			}
-			assert(getData() != nullptr && "Impossible to create actor");
+			assert(getData()->data != nullptr && "Impossible to create actor");
 			getDataAs<physx::PxRigidDynamic>()->attachShape(*shape);
 		}
 

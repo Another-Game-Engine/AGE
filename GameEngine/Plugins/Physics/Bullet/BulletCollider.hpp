@@ -12,7 +12,7 @@ namespace AGE
 			// Constructors
 			BulletCollider(void) = delete;
 
-			BulletCollider(WorldInterface *world, void *&data);
+			BulletCollider(WorldInterface *world, Private::GenericData *data);
 
 			BulletCollider(const BulletCollider &) = delete;
 

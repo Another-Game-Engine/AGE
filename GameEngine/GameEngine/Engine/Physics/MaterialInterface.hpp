@@ -10,9 +10,6 @@ namespace AGE
 
 		class MaterialInterface
 		{
-			// Friendships
-			friend WorldInterface;
-		
 		public:
 			// Constructors
 			MaterialInterface(void) = delete;

@@ -12,11 +12,14 @@ namespace AGE
 	{
 		class BulletBoxCollider final : public BoxColliderInterface, public BulletCollider
 		{
+			// Friendships
+			friend ObjectPool < BulletBoxCollider > ;
+
 		public:
 			// Constructors
 			BulletBoxCollider(void) = delete;
 
-			BulletBoxCollider(WorldInterface *world, void *&data);
+			BulletBoxCollider(WorldInterface *world, Private::GenericData *data);
 
 			BulletBoxCollider(const BulletBoxCollider &) = delete;
 

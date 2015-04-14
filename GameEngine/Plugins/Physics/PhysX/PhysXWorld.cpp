@@ -18,7 +18,7 @@ namespace AGE
 
 		// Static Methods
 		physx::PxFilterFlags PhysXWorld::FilterShader(physx::PxFilterObjectAttributes attributes1, physx::PxFilterData filterData1, physx::PxFilterObjectAttributes attributes2,
-													  physx::PxFilterData filterData2, physx::PxPairFlags& pairFlags, const void *constantBlock, physx::PxU32 constantBlockSize)
+													  physx::PxFilterData filterData2, physx::PxPairFlags &pairFlags, const void *constantBlock, physx::PxU32 constantBlockSize)
 		{
 			if (physx::PxFilterObjectIsTrigger(attributes1) || physx::PxFilterObjectIsTrigger(attributes2))
 			{
@@ -101,32 +101,64 @@ namespace AGE
 			scene->fetchResults(true);
 		}
 
-		RigidBodyInterface *PhysXWorld::createRigidBody(void *&data)
+		RigidBodyInterface *PhysXWorld::createRigidBody(Private::GenericData *data)
 		{
-			return new PhysXRigidBody(this, data);
+			return create<PhysXRigidBody>(this, data);
 		}
 
-		ColliderInterface *PhysXWorld::createCollider(ColliderType colliderType, void *&data)
+		void PhysXWorld::destroyRigidBody(RigidBodyInterface *rigidBody)
+		{
+			destroy(static_cast<PhysXRigidBody *>(rigidBody));
+		}
+
+		ColliderInterface *PhysXWorld::createCollider(ColliderType colliderType, Private::GenericData *data)
 		{
 			switch (colliderType)
 			{
 				case ColliderType::Box:
-					return new PhysXBoxCollider(this, data);
+					return create<PhysXBoxCollider>(this, data);
 				case ColliderType::Capsule:
-					return new PhysXCapsuleCollider(this, data);
+					return create<PhysXCapsuleCollider>(this, data);
 				case ColliderType::Mesh:
-					return new PhysXMeshCollider(this, data);
+					return create<PhysXMeshCollider>(this, data);
 				case ColliderType::Sphere:
-					return new PhysXSphereCollider(this, data);
+					return create<PhysXSphereCollider>(this, data);
 				default:
 					assert(!"Never reached");
 					return nullptr;
 			}
 		}
 
+		void PhysXWorld::destroyCollider(ColliderInterface *collider)
+		{
+			switch (collider->getColliderType())
+			{
+				case ColliderType::Box:
+					destroy(dynamic_cast<PhysXBoxCollider *>(collider));
+					break;
+				case ColliderType::Capsule:
+					destroy(dynamic_cast<PhysXCapsuleCollider *>(collider));
+					break;
+				case ColliderType::Mesh:
+					destroy(dynamic_cast<PhysXMeshCollider *>(collider));
+					break;
+				case ColliderType::Sphere:
+					destroy(dynamic_cast<PhysXSphereCollider *>(collider));
+					break;
+				default:
+					assert(!"Never reached");
+					break;
+			}
+		}
+
 		MaterialInterface *PhysXWorld::createMaterial(ColliderInterface *collider)
 		{
-			return new PhysXMaterial(this, collider);
+			return create<PhysXMaterial>(this, collider);
+		}
+
+		void PhysXWorld::destroyMaterial(MaterialInterface *material)
+		{
+			destroy(static_cast<PhysXMaterial *>(material));
 		}
 	}
 }

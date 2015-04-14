@@ -10,11 +10,14 @@ namespace AGE
 
 		class BulletRigidBody final : public RigidBodyInterface
 		{
+			// Friendships
+			friend ObjectPool < BulletRigidBody >;
+
 		public:
 			// Constructors
 			BulletRigidBody(void) = delete;
 
-			BulletRigidBody(BulletWorld *world, void *&data);
+			BulletRigidBody(BulletWorld *world, Private::GenericData *data);
 
 			BulletRigidBody(const BulletRigidBody &) = delete;
 

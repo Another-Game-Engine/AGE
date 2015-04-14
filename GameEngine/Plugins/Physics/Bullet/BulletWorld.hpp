@@ -2,12 +2,19 @@
 
 #include "WorldInterface.hpp"
 #include "BulletPhysics.hpp"
+#include "BulletRigidBody.hpp"
+#include "BulletMaterial.hpp"
+#include "BulletBoxCollider.hpp"
+#include "BulletCapsuleCollider.hpp"
+#include "BulletMeshCollider.hpp"
+#include "BulletSphereCollider.hpp"
+#include "MemoryPoolHelper.hpp"
 
 namespace AGE
 {
 	namespace Physics
 	{
-		class BulletWorld final : public WorldInterface
+		class BulletWorld final : public WorldInterface, public MemoryPoolHelper<BulletRigidBody, BulletMaterial, BulletBoxCollider, BulletCapsuleCollider, BulletMeshCollider, BulletSphereCollider>
 		{
 		public:
 			// Constructors
@@ -35,11 +42,17 @@ namespace AGE
 
 			void simulate(float stepSize) override final;
 
-			RigidBodyInterface *createRigidBody(void *&data) override final;
+			RigidBodyInterface *createRigidBody(Private::GenericData *data) override final;
 
-			ColliderInterface *createCollider(ColliderType colliderType, void *&data) override final;
+			void destroyRigidBody(RigidBodyInterface *rigidBody) override final;
+
+			ColliderInterface *createCollider(ColliderType colliderType, Private::GenericData *data) override final;
+
+			void destroyCollider(ColliderInterface *collider) override final;
 
 			MaterialInterface *createMaterial(ColliderInterface *collider) override final;
+
+			void destroyMaterial(MaterialInterface *material) override final;
 		};
 	}
 }

@@ -5,7 +5,7 @@ namespace AGE
 	namespace Physics
 	{
 		// Constructors
-		BulletCollider::BulletCollider(WorldInterface *world, void *&data)
+		BulletCollider::BulletCollider(WorldInterface *world, Private::GenericData *data)
 			: ColliderInterface(world, data)
 		{
 			return;

@@ -10,6 +10,9 @@ namespace AGE
 
 		class BulletMaterial final : public MaterialInterface
 		{
+			// Friendships
+			friend ObjectPool < BulletMaterial > ;
+
 		public:
 			// Constructors
 			BulletMaterial(void) = delete;

@@ -10,11 +10,14 @@ namespace AGE
 
 		class NullRigidBody final : public RigidBodyInterface
 		{
+			// Friendships
+			friend ObjectPool < NullRigidBody >;
+
 		public:
 			// Constructors
 			NullRigidBody(void) = delete;
 
-			NullRigidBody(NullWorld *world, void *&data);
+			NullRigidBody(NullWorld *world, Private::GenericData *data);
 
 			NullRigidBody(const NullRigidBody &) = delete;
 

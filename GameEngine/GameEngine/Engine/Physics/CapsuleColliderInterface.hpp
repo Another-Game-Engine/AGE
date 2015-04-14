@@ -12,7 +12,7 @@ namespace AGE
 			// Constructors
 			CapsuleColliderInterface(void) = delete;
 
-			CapsuleColliderInterface(WorldInterface *world, void *&data);
+			CapsuleColliderInterface(WorldInterface *world, Private::GenericData *data);
 
 			CapsuleColliderInterface(const CapsuleColliderInterface &) = delete;
 

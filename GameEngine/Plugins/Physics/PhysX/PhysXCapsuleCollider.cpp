@@ -7,7 +7,7 @@ namespace AGE
 	namespace Physics
 	{
 		// Constructors
-		PhysXCapsuleCollider::PhysXCapsuleCollider(WorldInterface *world, void *&data)
+		PhysXCapsuleCollider::PhysXCapsuleCollider(WorldInterface *world, Private::GenericData *data)
 			: ColliderInterface(world, data), CapsuleColliderInterface(world, data), PhysXCollider(world, data, static_cast<PhysXPhysics *>(world->getPhysics())->getPhysics()->createShape(physx::PxCapsuleGeometry(0.5f, 0.5f), *static_cast<const PhysXMaterial *>(getMaterial())->material))
 		{
 			return;

@@ -41,7 +41,12 @@
 #include <Utils/MatrixConversion.hpp>
 
 #include <Systems/FreeFlyCamera.hh>
+
+
 #include <Systems/PhysicsSystem.hpp>
+#include <Components/NewRigidBody.hpp>
+#include <Components/Collider.hpp>
+
 
 namespace AGE
 {
