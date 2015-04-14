@@ -263,6 +263,12 @@ namespace AGE
 		getQueue()->emplaceCommand<Commands::MainToPrepare::SetPointLight>(color, range, texture, key);
 	}
 
+	void PrepareRenderThread::setSpotLight(glm::vec3 const &color, glm::vec3 const &range, std::shared_ptr<ITexture> const &texture, const PrepareKey &key)
+	{
+		auto scene = _getRenderScene(GetMainThread()->getActiveScene());
+		assert(scene != nullptr);
+		getQueue()->emplaceCommand<Commands::MainToPrepare::SetSpotLight>(color, range, texture, key);
+	}
 
 	void PrepareRenderThread::_createRenderScene(AScene *scene)
 	{
