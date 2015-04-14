@@ -65,6 +65,10 @@ namespace AGE
 				: key(_key)
 			{}
 
+			DeleteSpotLight::DeleteSpotLight(const PrepareKey &_key)
+				: key(_key)
+			{}
+
 			CameraInfos::CameraInfos(const PrepareKey &_key
 				, const glm::mat4 &_projection
 				, RenderType pipeline)

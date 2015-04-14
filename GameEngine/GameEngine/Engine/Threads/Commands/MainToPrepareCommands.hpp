@@ -115,6 +115,12 @@ namespace AGE
 				PrepareKey key;
 			};
 
+			struct DeleteSpotLight
+			{
+				DeleteSpotLight(const PrepareKey &_key);
+				PrepareKey key;
+			};
+
 			struct CameraInfos
 			{
 				CameraInfos(const PrepareKey &_key, const glm::mat4 &_projection, RenderType pipeline);

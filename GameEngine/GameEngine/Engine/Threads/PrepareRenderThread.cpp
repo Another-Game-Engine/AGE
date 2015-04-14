@@ -50,6 +50,11 @@ namespace AGE
 			_activeScene->_createPointLight(msg);
 		});
 
+		registerCallback<Commands::MainToPrepare::CreateSpotLight>([this](Commands::MainToPrepare::CreateSpotLight &msg){
+			assert(this->_activeScene != nullptr);
+			_activeScene->_createSpotLight(msg);
+		});
+
 		registerCallback<Commands::MainToPrepare::DeleteCamera>([this](Commands::MainToPrepare::DeleteCamera &msg){
 			assert(this->_activeScene != nullptr);
 			_activeScene->_deleteCamera(msg);
@@ -65,6 +70,11 @@ namespace AGE
 			_activeScene->_deletePointLight(msg);
 		});
 
+		registerCallback<Commands::MainToPrepare::DeleteSpotLight>([this](Commands::MainToPrepare::DeleteSpotLight &msg){
+			assert(this->_activeScene != nullptr);
+			_activeScene->_deleteSpotLight(msg);
+		});
+
 		registerCallback<Commands::MainToPrepare::PrepareDrawLists>([this](Commands::MainToPrepare::PrepareDrawLists &msg){
 			assert(this->_activeScene != nullptr);
 			_activeScene->_prepareDrawList(msg);
@@ -78,6 +88,11 @@ namespace AGE
 		registerCallback<Commands::MainToPrepare::SetPointLight>([this](Commands::MainToPrepare::SetPointLight &msg){
 			assert(this->_activeScene != nullptr);
 			_activeScene->_setPointLight(msg);
+		});
+
+		registerCallback<Commands::MainToPrepare::SetSpotLight>([this](Commands::MainToPrepare::SetSpotLight &msg){
+			assert(this->_activeScene != nullptr);
+			_activeScene->_setSpotLight(msg);
 		});
 
 		registerCallback<Commands::MainToPrepare::SetTransform>([this](Commands::MainToPrepare::SetTransform &msg){
