@@ -14,14 +14,21 @@ namespace AGE
 				getData()->data = static_cast<PhysXPhysics *>(world->getPhysics())->getPhysics()->createRigidDynamic(physx::PxTransform(physx::PxIdentity));
 			}
 			assert(getData()->data != nullptr && "Impossible to create actor");
-			getDataAs<physx::PxRigidDynamic>()->attachShape(*shape);
+			physx::PxRigidDynamic *body = getDataAs<physx::PxRigidDynamic>();
+			if (body->userData == nullptr)
+			{
+				body->userData = static_cast<ColliderInterface *>(this);
+			}
+			body->attachShape(*shape);
 		}
 
 		// Destructor
 		PhysXCollider::~PhysXCollider(void)
 		{
 			assert(getData() != nullptr && "Impossible to get actor");
-			getDataAs<physx::PxRigidDynamic>()->detachShape(*shape);
+			physx::PxRigidDynamic *body = getDataAs<physx::PxRigidDynamic>();
+			body->userData = nullptr;
+			body->detachShape(*shape);
 			shape->release();
 			shape = nullptr;
 		}

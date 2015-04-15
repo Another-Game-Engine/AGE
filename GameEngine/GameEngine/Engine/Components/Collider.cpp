@@ -11,6 +11,7 @@ namespace AGE
 	{
 		assert(collider == nullptr && "Collider already initialized");
 		collider = entity.getScene()->getInstance<Physics::WorldInterface>()->createCollider(colliderType, entity.addComponent<Private::PhysicsData>()->getData());
+		collider->collider = this;
 	}
 
 	void Collider::setStaticFriction(float staticFriction)

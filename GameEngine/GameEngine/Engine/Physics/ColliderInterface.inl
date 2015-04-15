@@ -23,12 +23,25 @@ namespace AGE
 		// Destructor
 		inline ColliderInterface::~ColliderInterface(void)
 		{
+			collider = nullptr;
 			world->destroyMaterial(material);
 			material = nullptr;
 			world = nullptr;
 		}
 
 		// Methods
+		inline Collider *ColliderInterface::getCollider(void)
+		{
+			assert(collider != nullptr && "Invalid collider");
+			return collider;
+		}
+
+		inline const Collider *ColliderInterface::getCollider(void) const
+		{
+			assert(collider != nullptr && "Invalid collider");
+			return collider;
+		}
+
 		inline WorldInterface *ColliderInterface::getWorld(void)
 		{
 			return world;

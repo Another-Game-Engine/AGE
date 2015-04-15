@@ -1,31 +1,39 @@
 #include <Systems/CollisionSystem.hpp>
+#include <Physics/Collision.hpp>
 
 namespace AGE
 {
 	namespace Private
 	{
-		CollisionSystem::CollisionSystem(AScene *scene, Physics::PhysicsInterface *physics)
-			: System(scene), physics(physics), entityFilter(scene)
+		CollisionSystem::CollisionSystem(AScene *scene)
+			: System(scene), entityFilter(scene)
 		{
 			_name = "CollisionSystem";
-			// TO_DO
-			// entityFilter.requireComponent<Collider>();
+			entityFilter.requireComponent<Collider>();
 		}
 
 		bool CollisionSystem::initialize(void)
 		{
-			// TO_DO
+			_scene->getInstance<Physics::WorldInterface>()->setCollisionListener(this);
 			return true;
 		}
 
 		void CollisionSystem::finalize(void)
 		{
-			// TO_DO
+			_scene->getInstance<Physics::WorldInterface>()->setCollisionListener(nullptr);
 		}
 
 		void CollisionSystem::mainUpdate(float elapsedTime)
 		{
-			// TO_DO
+			for (Entity entity : entityFilter.getCollection())
+			{
+				entity.getComponent<Collider>()->collisions.clear();
+			}
+		}
+
+		void CollisionSystem::onCollision(Collider *currentCollider, Collider *hitCollider, std::vector<Physics::Contact> contacts, Physics::ContactType contactType)
+		{
+			currentCollider->collisions.push_back(Physics::Collision(hitCollider, contacts, contactType));
 		}
 	}
 }

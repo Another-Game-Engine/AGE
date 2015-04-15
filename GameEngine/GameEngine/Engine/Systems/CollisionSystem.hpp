@@ -1,19 +1,20 @@
 #pragma once
 
 #include <Systems/System.h>
-#include <Physics/PhysicsInterface.hpp>
+#include <Physics/CollisionListener.hpp>
+#include <Components/Collider.hpp>
 
 namespace AGE
 {
 	namespace Private
 	{
-		class CollisionSystem final : public System
+		class CollisionSystem final : public System, public Physics::CollisionListener
 		{
 		public:
 			// Constructors
 			CollisionSystem(void) = delete;
 
-			CollisionSystem(AScene *scene, Physics::PhysicsInterface *physics);
+			CollisionSystem(AScene *scene);
 
 			CollisionSystem(CollisionSystem const &) = delete;
 
@@ -25,8 +26,6 @@ namespace AGE
 
 		private:
 			// Attributes
-			Physics::PhysicsInterface *physics = nullptr;
-
 			EntityFilter entityFilter;
 
 			// Inherited Methods
@@ -35,6 +34,8 @@ namespace AGE
 			void finalize(void) override final;
 
 			void mainUpdate(float elapsedTime) override final;
+
+			void onCollision(Collider *currentCollider, Collider *hitCollider, std::vector<Physics::Contact> contacts, Physics::ContactType contactType) override final;
 		};
 	}
 }

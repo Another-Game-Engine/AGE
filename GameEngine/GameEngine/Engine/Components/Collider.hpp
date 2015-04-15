@@ -2,11 +2,24 @@
 
 #include <Components/Component.hh>
 #include <Physics/ColliderInterface.hpp>
+#include <Physics/Collision.hpp>
+#include <Physics/Trigger.hpp>
 
 namespace AGE
 {
+	namespace Private
+	{
+		class CollisionSystem;
+		class TriggerSystem;
+	}
+
 	class Collider final : public ComponentBase
 	{
+		// Friendships
+		friend Private::CollisionSystem;
+
+		friend Private::TriggerSystem;
+
 	public:
 		// Constructors
 		Collider(void) = default;
@@ -64,9 +77,15 @@ namespace AGE
 
 		glm::vec3 getSize(void) const;
 
+		const std::vector<Physics::Collision> &getCollisions(void) const;
+
 	private:
 		// Attributes
 		Physics::ColliderInterface *collider = nullptr;
+
+		std::vector<Physics::Collision> collisions;
+
+		std::vector<Physics::Trigger> triggers;
 
 		// Inherited Methods
 		void reset(void);

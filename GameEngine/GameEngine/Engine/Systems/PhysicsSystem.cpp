@@ -6,6 +6,7 @@
 #include <Physics/Fallback/NullPhysics.hpp>
 #include <Components/NewRigidBody.hpp>
 #include <Systems/CollisionSystem.hpp>
+#include <Systems/TriggerSystem.hpp>
 
 namespace AGE
 {
@@ -24,7 +25,6 @@ namespace AGE
 			AGE_ERROR("Impossible to load physics plugin '", Physics::GetPluginNameForEngine(physicsEngineType), "'. Falling back to physics plugin '", Physics::GetPluginNameForEngine(Physics::EngineType::Null), "'.");
 			physics = new Physics::NullPhysics;
 		}
-		scene->addSystem<Private::CollisionSystem>(std::numeric_limits<std::size_t>::max(), physics);
 	}
 
 	// Destructor
@@ -55,7 +55,16 @@ namespace AGE
 		_scene->deleteInstance<Physics::PhysicsInterface>();
 		_scene->setInstance(physics);
 		Singleton<Logger>::getInstance()->log(Logger::Level::Normal, "Initializing PhysicsSystem with plugin '", Physics::GetPluginNameForEngine(physics->getPluginType()), "'.");
-		return physics->startup();
+		if (physics->startup())
+		{
+			_scene->addSystem<Private::CollisionSystem>(std::numeric_limits<std::size_t>::min());
+			_scene->addSystem<Private::TriggerSystem>(std::numeric_limits<std::size_t>::min());
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 
 	void PhysicsSystem::finalize(void)

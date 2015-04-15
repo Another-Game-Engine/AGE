@@ -58,6 +58,40 @@ namespace AGE
 			return physics;
 		}
 
+		inline void WorldInterface::setCollisionListener(CollisionListener *listener)
+		{
+			collisionListener = listener;
+		}
+
+		inline CollisionListener *WorldInterface::getCollisionListener(void)
+		{
+			assert(collisionListener != nullptr && "Invalid collisionListener");
+			return collisionListener;
+		}
+
+		inline const CollisionListener *WorldInterface::getCollisionListener(void) const
+		{
+			assert(collisionListener != nullptr && "Invalid collisionListener");
+			return collisionListener;
+		}
+
+		inline void WorldInterface::setTriggerListener(TriggerListener *listener)
+		{
+			triggerListener = listener;
+		}
+
+		inline TriggerListener *WorldInterface::getTriggerListener(void)
+		{
+			assert(triggerListener != nullptr && "Invalid triggerListener");
+			return triggerListener;
+		}
+
+		inline const TriggerListener *WorldInterface::getTriggerListener(void) const
+		{
+			assert(triggerListener != nullptr && "Invalid triggerListener");
+			return triggerListener;
+		}
+
 		inline void WorldInterface::setGravity(float x, float y, float z)
 		{
 			setGravity(glm::vec3(x, y, z));

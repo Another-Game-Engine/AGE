@@ -186,6 +186,9 @@
     <ClInclude Include="..\..\..\GameEngine\Engine\Physics\ColliderInterface.hpp" />
     <ClInclude Include="..\..\..\GameEngine\Engine\Physics\ColliderType.hpp" />
     <ClInclude Include="..\..\..\GameEngine\Engine\Physics\CollisionDetectionMode.hpp" />
+    <ClInclude Include="..\..\..\GameEngine\Engine\Physics\CollisionListener.hpp" />
+    <ClInclude Include="..\..\..\GameEngine\Engine\Physics\Contact.hpp" />
+    <ClInclude Include="..\..\..\GameEngine\Engine\Physics\ContactType.hpp" />
     <ClInclude Include="..\..\..\GameEngine\Engine\Physics\EngineTypes.hpp" />
     <ClInclude Include="..\..\..\GameEngine\Engine\Physics\FilterGroup.hpp" />
     <ClInclude Include="..\..\..\GameEngine\Engine\Physics\ForceMode.hpp" />
@@ -196,6 +199,8 @@
     <ClInclude Include="..\..\..\GameEngine\Engine\Physics\PhysicsInterface.hpp" />
     <ClInclude Include="..\..\..\GameEngine\Engine\Physics\RigidBodyInterface.hpp" />
     <ClInclude Include="..\..\..\GameEngine\Engine\Physics\SphereColliderInterface.hpp" />
+    <ClInclude Include="..\..\..\GameEngine\Engine\Physics\TriggerListener.hpp" />
+    <ClInclude Include="..\..\..\GameEngine\Engine\Physics\TriggerType.hpp" />
     <ClInclude Include="..\..\..\GameEngine\Engine\Physics\WorldInterface.hpp" />
     <ClInclude Include="PhysXBoxCollider.hpp" />
     <ClInclude Include="PhysXCapsuleCollider.hpp" />

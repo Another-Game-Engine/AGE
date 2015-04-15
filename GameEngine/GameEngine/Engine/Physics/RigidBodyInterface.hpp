@@ -10,6 +10,8 @@
 
 namespace AGE
 {
+	class NewRigidBody;
+
 	namespace Physics
 	{
 		class WorldInterface;
@@ -17,6 +19,9 @@ namespace AGE
 
 		class RigidBodyInterface
 		{
+			// Friendships
+			friend NewRigidBody;
+
 		public:
 			// Constructors
 			RigidBodyInterface(void) = delete;
@@ -29,6 +34,10 @@ namespace AGE
 			RigidBodyInterface &operator=(const RigidBodyInterface &) = delete;
 
 			// Methods
+			NewRigidBody *getRigidBody(void);
+
+			const NewRigidBody *getRigidBody(void) const;
+
 			WorldInterface *getWorld(void);
 
 			const WorldInterface *getWorld(void) const;
@@ -122,6 +131,8 @@ namespace AGE
 
 		private:
 			// Attributes
+			NewRigidBody *rigidBody = nullptr;
+
 			WorldInterface *world = nullptr;
 
 			Private::GenericData *data;

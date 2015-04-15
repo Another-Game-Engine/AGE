@@ -6,6 +6,8 @@
 
 namespace AGE
 {
+	class Collider;
+
 	namespace Physics
 	{
 		class WorldInterface;
@@ -17,6 +19,9 @@ namespace AGE
 
 		class ColliderInterface
 		{
+			// Friendships
+			friend Collider;
+
 		private:
 			// Type Traits
 			template <ColliderType>
@@ -58,6 +63,10 @@ namespace AGE
 			ColliderInterface &operator=(const ColliderInterface &) = delete;
 
 			// Methods
+			Collider *getCollider(void);
+
+			const Collider *getCollider(void) const;
+
 			WorldInterface *getWorld(void);
 
 			const WorldInterface *getWorld(void) const;
@@ -104,6 +113,8 @@ namespace AGE
 
 		private:
 			// Attributes
+			Collider *collider = nullptr;
+
 			WorldInterface *world = nullptr;
 
 			Private::GenericData *data;

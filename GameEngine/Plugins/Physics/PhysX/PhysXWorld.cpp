@@ -1,5 +1,6 @@
 #include <thread>
 #include <cassert>
+#include <vector>
 
 #include "PhysXWorld.hpp"
 #include "PhysXRigidBody.hpp"
@@ -20,12 +21,13 @@ namespace AGE
 		physx::PxFilterFlags PhysXWorld::FilterShader(physx::PxFilterObjectAttributes attributes1, physx::PxFilterData filterData1, physx::PxFilterObjectAttributes attributes2,
 													  physx::PxFilterData filterData2, physx::PxPairFlags &pairFlags, const void *constantBlock, physx::PxU32 constantBlockSize)
 		{
+			pairFlags = physx::PxPairFlag::eNOTIFY_TOUCH_FOUND | physx::PxPairFlag::eNOTIFY_TOUCH_PERSISTS | physx::PxPairFlag::eNOTIFY_TOUCH_LOST;
 			if (physx::PxFilterObjectIsTrigger(attributes1) || physx::PxFilterObjectIsTrigger(attributes2))
 			{
-				pairFlags = physx::PxPairFlag::eTRIGGER_DEFAULT;
+				pairFlags |= physx::PxPairFlag::eTRIGGER_DEFAULT;
 				return physx::PxFilterFlag::eDEFAULT;
 			}
-			pairFlags = physx::PxPairFlag::eRESOLVE_CONTACTS | physx::PxPairFlag::eCCD_LINEAR;
+			pairFlags |= physx::PxPairFlag::eRESOLVE_CONTACTS | physx::PxPairFlag::eCCD_LINEAR | physx::PxPairFlag::eNOTIFY_CONTACT_POINTS;
 			const physx::PxU32 shapeGroup1 = filterData1.word0 & 31;
 			const physx::PxU32 shapeGroup2 = filterData2.word0 & 31;
 			const physx::PxU32 *groupCollisionFlags = static_cast<const physx::PxU32 *>(constantBlock);
@@ -55,6 +57,20 @@ namespace AGE
 			sceneDescription.filterShaderDataSize = sizeof(GroupCollisionFlags);
 			scene = physics->getPhysics()->createScene(sceneDescription);
 			assert(scene != nullptr && "Impossible to create scene");
+			scene->setFlag(physx::PxSceneFlag::eENABLE_KINEMATIC_PAIRS, true);
+			scene->setFlag(physx::PxSceneFlag::eENABLE_KINEMATIC_STATIC_PAIRS, true);
+			scene->setSimulationEventCallback(this);
+		}
+
+		// Destructor
+		PhysXWorld::~PhysXWorld(void)
+		{
+			if (scene)
+			{
+				scene->setSimulationEventCallback(nullptr);
+				scene->release();
+				scene = nullptr;
+			}
 		}
 
 		// Methods
@@ -159,6 +175,95 @@ namespace AGE
 		void PhysXWorld::destroyMaterial(MaterialInterface *material)
 		{
 			destroy(static_cast<PhysXMaterial *>(material));
+		}
+
+		void PhysXWorld::onConstraintBreak(physx::PxConstraintInfo *constraints, physx::PxU32 numberOfConstraints)
+		{
+			return;
+		}
+
+		void PhysXWorld::onWake(physx::PxActor **actors, physx::PxU32 numberOfActors)
+		{
+			return;
+		}
+
+		void PhysXWorld::onSleep(physx::PxActor **actors, physx::PxU32 numberOfActors)
+		{
+			return;
+		}
+
+		void PhysXWorld::onContact(const physx::PxContactPairHeader &pairHeader, const physx::PxContactPair *pairs, physx::PxU32 numberOfPairs)
+		{
+			if (pairHeader.flags.isSet(physx::PxContactPairHeaderFlag::eREMOVED_ACTOR_0) || pairHeader.flags.isSet(physx::PxContactPairHeaderFlag::eREMOVED_ACTOR_1))
+			{
+				return;
+			}
+			assert(pairHeader.actors[0]->userData != nullptr && "Invalid actor");
+			assert(pairHeader.actors[1]->userData != nullptr && "Invalid actor");
+			CollisionListener *collisionListener = getCollisionListener();
+			std::vector<Contact> firstColliderContacts;
+			std::vector<Contact> secondColliderContacts;
+			ContactType contactType = ContactType::Persistent;
+			for (physx::PxU32 index = 0; index < numberOfPairs; ++index)
+			{
+				const physx::PxContactPair &contactPair = pairs[index];
+				if (contactPair.flags.isSet(physx::PxContactPairFlag::eREMOVED_SHAPE_0) || contactPair.flags.isSet(physx::PxContactPairFlag::eREMOVED_SHAPE_1))
+				{
+					continue;
+				}
+				if (contactPair.events.isSet(physx::PxPairFlag::eNOTIFY_TOUCH_FOUND))
+				{
+					contactType = ContactType::New;
+				}
+				else if (contactPair.events.isSet(physx::PxPairFlag::eNOTIFY_TOUCH_LOST))
+				{
+					contactType = ContactType::Lost;
+				}
+				physx::PxContactStreamIterator iterator(const_cast<physx::PxU8 *>(contactPair.contactStream), contactPair.contactStreamSize);
+				physx::PxU32 numberOfContacts = 0;
+				while (iterator.hasNextPatch())
+				{
+					iterator.nextPatch();
+					while (iterator.hasNextContact())
+					{
+						iterator.nextContact();
+						const physx::PxVec3 position = iterator.getContactPoint();
+						const physx::PxVec3 normal = iterator.getContactNormal();
+						firstColliderContacts.push_back({ glm::vec3(position.x, position.y, position.z), glm::vec3(normal.x, normal.y, normal.z) });
+						secondColliderContacts.push_back({ glm::vec3(position.x, position.y, position.z), glm::vec3(-normal.x, -normal.y, -normal.z) });
+						++numberOfContacts;
+					}
+				}
+			}
+			Collider *firstCollider = static_cast<ColliderInterface *>(pairHeader.actors[0]->userData)->getCollider();
+			Collider *secondCollider = static_cast<ColliderInterface *>(pairHeader.actors[1]->userData)->getCollider();
+			collisionListener->onCollision(firstCollider, secondCollider, firstColliderContacts, contactType);
+			collisionListener->onCollision(secondCollider, firstCollider, secondColliderContacts, contactType);
+		}
+
+		void PhysXWorld::onTrigger(physx::PxTriggerPair *pairs, physx::PxU32 numberOfPairs)
+		{
+			TriggerListener *triggerListener = getTriggerListener();
+			for (physx::PxU32 index = 0; index < numberOfPairs; ++index)
+			{
+				const physx::PxTriggerPair &triggerPair = pairs[index];
+				if (triggerPair.flags.isSet(physx::PxTriggerPairFlag::eREMOVED_SHAPE_TRIGGER) || triggerPair.flags.isSet(physx::PxTriggerPairFlag::eREMOVED_SHAPE_OTHER))
+				{
+					continue;
+				}
+				TriggerType triggerType = TriggerType::Persistent;
+				if (triggerPair.status == physx::PxPairFlag::eNOTIFY_TOUCH_FOUND)
+				{
+					triggerType = TriggerType::New;
+				}
+				else if (triggerPair.status == physx::PxPairFlag::eNOTIFY_TOUCH_LOST)
+				{
+					triggerType = TriggerType::Lost;
+				}
+				Collider *triggerCollider = static_cast<ColliderInterface *>(triggerPair.triggerActor->userData)->getCollider();
+				Collider *otherCollider = static_cast<ColliderInterface *>(triggerPair.otherActor->userData)->getCollider();
+				triggerListener->onTrigger(triggerCollider, otherCollider, triggerType);
+			}
 		}
 	}
 }

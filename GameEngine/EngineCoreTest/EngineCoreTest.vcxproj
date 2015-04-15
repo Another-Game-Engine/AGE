@@ -113,6 +113,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\GameEngine\Engine\Physics\ContactType.hpp" />
     <ClInclude Include="Components\Lifetime.hpp" />
     <ClInclude Include="Components\lifetimeComponent.hh" />
     <ClInclude Include="Components\RotationComponent.hpp" />

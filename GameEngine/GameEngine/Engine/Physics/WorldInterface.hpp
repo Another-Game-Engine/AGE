@@ -10,6 +10,8 @@
 #include "ColliderType.hpp"
 #include "MemoryPoolHelper.hpp"
 #include "GenericData.hpp"
+#include "CollisionListener.hpp"
+#include "TriggerListener.hpp"
 
 namespace AGE
 {
@@ -50,6 +52,18 @@ namespace AGE
 
 			const PhysicsInterface *getPhysics(void) const;
 
+			void setCollisionListener(CollisionListener *listener);
+
+			CollisionListener *getCollisionListener(void);
+
+			const CollisionListener *getCollisionListener(void) const;
+
+			void setTriggerListener(TriggerListener *listener);
+
+			TriggerListener *getTriggerListener(void);
+
+			const TriggerListener *getTriggerListener(void) const;
+
 			void setGravity(float x, float y, float z);
 
 			void setTargetFPS(std::size_t target);
@@ -87,6 +101,10 @@ namespace AGE
 
 			// Attributes
 			PhysicsInterface *physics = nullptr;
+
+			CollisionListener *collisionListener = nullptr;
+
+			TriggerListener *triggerListener = nullptr;
 
 			std::size_t targetFPS = 60;
 

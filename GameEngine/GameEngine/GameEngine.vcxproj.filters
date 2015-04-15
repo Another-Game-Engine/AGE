@@ -176,6 +176,9 @@
     <ClCompile Include="Engine\Physics\Fallback\NullCollider.cpp" />
     <ClCompile Include="Engine\Components\PhysicsData.cpp" />
     <ClCompile Include="Engine\Components\Collider.cpp" />
+    <ClCompile Include="Engine\Systems\TriggerSystem.cpp" />
+    <ClCompile Include="Engine\Physics\Collision.cpp" />
+    <ClCompile Include="Engine\Physics\Trigger.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -464,6 +467,13 @@
     <ClInclude Include="Engine\Components\PhysicsData.hpp" />
     <ClInclude Include="Engine\Components\Collider.hpp" />
     <ClInclude Include="Engine\Physics\GenericData.hpp" />
+    <ClInclude Include="Engine\Physics\Collision.hpp" />
+    <ClInclude Include="Engine\Physics\Contact.hpp" />
+    <ClInclude Include="Engine\Physics\TriggerType.hpp" />
+    <ClInclude Include="Engine\Physics\CollisionListener.hpp" />
+    <ClInclude Include="Engine\Physics\TriggerListener.hpp" />
+    <ClInclude Include="Engine\Systems\TriggerSystem.hpp" />
+    <ClInclude Include="Engine\Physics\Trigger.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

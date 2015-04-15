@@ -11,6 +11,7 @@ namespace AGE
 	{
 		assert(rigidBody == nullptr && "NewRigidBody already initialized");
 		rigidBody = entity.getScene()->getInstance<Physics::WorldInterface>()->createRigidBody(entity.addComponent<Private::PhysicsData>()->getData());
+		rigidBody->rigidBody = this;
 	}
 
 	void NewRigidBody::setAngularDrag(float angularDrag)
