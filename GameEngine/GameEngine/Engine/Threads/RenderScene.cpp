@@ -474,7 +474,6 @@ namespace AGE
 						auto MVP = VP * currentDrawable->transformation;
 						auto BB = currentDrawable->mesh.boundingBox;
 
-						bool pass = false;
 						for (std::size_t i = 0; i < 8; ++i)
 						{
 							auto point = MVP * glm::vec4(BB.getCornerPoint(i), 1.0f);
@@ -486,18 +485,14 @@ namespace AGE
 							{
 								continue;
 							}
-							pass = true;
+
+							curRenderDrawablelist->vertices.emplace_back(currentDrawable->mesh.vertices);
+							curRenderDrawablelist->properties.emplace_back(_properties.get(currentDrawable->mesh.properties.getId()));
 							break;
 						}
-
-						if (!pass)
-						{
-							continue;
-						}
+						continue;
 					}
 
-
-					// We find the good render mode
 					curRenderDrawablelist->vertices.emplace_back(currentDrawable->mesh.vertices);
 					curRenderDrawablelist->properties.emplace_back(_properties.get(currentDrawable->mesh.properties.getId()));
 
