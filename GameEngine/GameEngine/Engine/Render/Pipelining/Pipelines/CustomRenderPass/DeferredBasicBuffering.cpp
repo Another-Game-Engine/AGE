@@ -25,27 +25,14 @@
 
 #define DEFERRED_SHADING_BUFFERING_VERTEX "deferred_shading/deferred_shading_get_buffer.vp"
 #define DEFERRED_SHADING_BUFFERING_FRAG "deferred_shading/deferred_shading_get_buffer.fp"
-#ifdef OCCLUSION_CULLING
-#define DEFERRED_SHADING_BUFFERING_OCCLUSION_GEO "deferred_shading/deferred_shading_get_buffer_occlusion.gp"
-#define DEFERRED_SHADING_BUFFERING_OCCLUSION_VERTEX "deferred_shading/deferred_shading_get_buffer_occlusion.vp"
-#endif
 
 namespace AGE
 {
-#ifdef OCCLUSION_CULLING
-	enum Programs
-	{
-		PROGRAM_OCCLUDER = 0,
-		PROGRAM_BASIC,
-		PROGRAM_NBR
-	};
-#else
 	enum Programs
 	{
 		PROGRAM_BUFFERING = 0,
 		PROGRAM_NBR
 	};
-#endif
 
 	DeferredBasicBuffering::DeferredBasicBuffering(std::shared_ptr<PaintingManager> painterManager,
 												std::shared_ptr<Texture2D> diffuse,
@@ -76,30 +63,6 @@ namespace AGE
 		// you have to set shader directory in configuration path
 		AGE_ASSERT(shaderPath != nullptr);
 
-#ifdef OCCLUSION_CULLING
-		{
-			auto vertexShaderPath = shaderPath->getValue() + DEFERRED_SHADING_BUFFERING_VERTEX;
-			auto fragmentShaderPath = shaderPath->getValue() + DEFERRED_SHADING_BUFFERING_FRAG;
-
-			_programs[PROGRAM_BASIC] = std::make_shared<Program>(Program(std::string("program_buffering_occlusion"),
-			{
-				std::make_shared<UnitProg>(vertexShaderPath, GL_VERTEX_SHADER),
-				std::make_shared<UnitProg>(fragmentShaderPath, GL_FRAGMENT_SHADER)
-			}));
-		}
-		{
-			auto vertexShaderPath = shaderPath->getValue() + DEFERRED_SHADING_BUFFERING_OCCLUSION_VERTEX;
-			auto geoShaderPath = shaderPath->getValue() + DEFERRED_SHADING_BUFFERING_OCCLUSION_GEO;
-			auto fragmentShaderPath = shaderPath->getValue() + DEFERRED_SHADING_BUFFERING_FRAG;
-
-			_programs[PROGRAM_OCCLUDER] = std::make_shared<Program>(Program(std::string("program_buffering"),
-			{
-				std::make_shared<UnitProg>(vertexShaderPath, GL_VERTEX_SHADER),
-				std::make_shared<UnitProg>(geoShaderPath, GL_GEOMETRY_SHADER),
-				std::make_shared<UnitProg>(fragmentShaderPath, GL_FRAGMENT_SHADER)
-			}));
-		}
-#else
 		auto vertexShaderPath = shaderPath->getValue() + DEFERRED_SHADING_BUFFERING_VERTEX;
 		auto fragmentShaderPath = shaderPath->getValue() + DEFERRED_SHADING_BUFFERING_FRAG;
 
@@ -108,7 +71,6 @@ namespace AGE
 			std::make_shared<UnitProg>(vertexShaderPath, GL_VERTEX_SHADER),
 			std::make_shared<UnitProg>(fragmentShaderPath, GL_FRAGMENT_SHADER)
 		}));
-#endif
 	}
 
 	void DeferredBasicBuffering::renderPass(RenderPipeline const &pipeline, RenderLightList const &, CameraInfos const &infos)
@@ -125,14 +87,9 @@ namespace AGE
 
 #ifdef OCCLUSION_CULLING
 
-		if (_programs[PROGRAM_BASIC]->isCompiled() == false)
-		{
-			return;
-		}
-
-		_programs[PROGRAM_BASIC]->use();
-		*_programs[PROGRAM_BASIC]->get_resource<Mat4>("projection_matrix") = infos.projection;
-		*_programs[PROGRAM_BASIC]->get_resource<Mat4>("view_matrix") = infos.view;
+		_programs[PROGRAM_BUFFERING]->use();
+		*_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("projection_matrix") = infos.projection;
+		*_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("view_matrix") = infos.view;
 
 		for (auto &meshPaint : pipeline.keys)
 		{
@@ -141,7 +98,7 @@ namespace AGE
 			{
 				if (mode.renderMode.at(AGE_OCCLUDER) == true)
 				{
-					painter->draw(GL_TRIANGLES, _programs[PROGRAM_BASIC], mode.properties, mode.vertices);
+					painter->draw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], mode.properties, mode.vertices);
 				}
 			}
 		}
@@ -161,15 +118,6 @@ namespace AGE
 			}
 		}
 
-		if (_programs[PROGRAM_OCCLUDER]->isCompiled() == false)
-		{
-			return;
-		}
-
-		_programs[PROGRAM_OCCLUDER]->use();
-		*_programs[PROGRAM_OCCLUDER]->get_resource<Mat4>("projection_matrix") = infos.projection;
-		*_programs[PROGRAM_OCCLUDER]->get_resource<Mat4>("view_matrix") = infos.view;
-
 		for (auto &meshPaint : pipeline.keys)
 		{
 			auto painter = _painterManager->get_painter(Key<Painter>::createKey(meshPaint.first));
@@ -177,7 +125,7 @@ namespace AGE
 			{
 				if (mode.renderMode.at(AGE_OCCLUDER) == false)
 				{
-					painter->draw(GL_TRIANGLES, _programs[PROGRAM_OCCLUDER], mode.properties, mode.vertices);
+					painter->draw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], mode.properties, mode.vertices);
 				}
 			}
 		}

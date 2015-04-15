@@ -301,28 +301,6 @@ namespace AGE
 			Drawable &drawable = _drawables.get(e);
 
 			drawable.renderMode = msg.renderModes;
-
-#ifdef OCCLUSION_CULLING
-			if (msg.renderModes.at(AGE_OCCLUDER))
-			{
-				auto &propertiesKey = drawable.mesh.properties;
-				auto &properties = _properties.get(propertiesKey.getId());
-
-				// we search for the property key of the AABB
-				auto &aabbKeyIt = _boundingBoxProperties.find(propertiesKey.getId());
-				
-				// if the property does not exists
-				if (aabbKeyIt == std::end(_boundingBoxProperties))
-				{
-					// we create it
-					auto aabbKey = _createAndAttachProperty<AABB>(propertiesKey, drawable.mesh.boundingBox.getSize());
-					_boundingBoxProperties.insert(std::make_pair(propertiesKey.getId(), aabbKey));
-					continue;
-				}
-				auto aabbKey = properties.get_property<AABB>(aabbKeyIt->second);
-			}
-#endif
-
 		}
 	}
 
@@ -505,7 +483,7 @@ namespace AGE
 						int screenX = (point.x + 1) / 2.0f * depthMap->getMipmapWidth();
 						int screenY = (point.y + 1) / 2.0f * depthMap->getMipmapHeight();
 
-						if (depthMap->passTest(point.z, screenX, screenY) == false)
+						if (depthMap->passTest(point.z + 0.005, screenX, screenY) == false)
 						{
 							continue;
 						}
