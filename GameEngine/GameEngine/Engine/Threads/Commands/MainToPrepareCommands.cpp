@@ -50,11 +50,12 @@ namespace AGE
 				attenuation(attenuation)
 			{}
 
-			SetSpotLight::SetSpotLight(glm::vec3 const &color, glm::vec3 const &attenuation, std::shared_ptr<ITexture> const &texture, PrepareKey &key)
+			SetSpotLight::SetSpotLight(glm::vec3 const &color, glm::vec3 const &direction, float cutOff, std::shared_ptr<ITexture> const &texture, PrepareKey &key)
 				: key(key),
 				color(color),
-				texture(texture),
-				attenuation(attenuation)
+				direction(direction),
+				cutOff(cutOff),
+				texture(texture)
 			{}
 
 			DeleteCamera::DeleteCamera(const PrepareKey &_key)

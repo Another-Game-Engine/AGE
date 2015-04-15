@@ -5,19 +5,6 @@
 namespace AGE
 {
 
-	PointLight::PointLight() :
-		attenuation(1.0f),
-		color(1.0f)
-	{
-	}
-
-	PointLight::PointLight(glm::vec3 const &pPosition, glm::vec3 const &pColor, glm::vec3 const &pAttenuation) :
-		attenuation(pAttenuation),
-		color(pColor)
-	{
-		PreparableObject::transformation = glm::translate(glm::mat4(1), pPosition);
-	}
-
 	void PointLight::computeSphereTransform()
 	{
 		float errorRate = 0.01f;
@@ -43,16 +30,8 @@ namespace AGE
 		sphereTransform = glm::scale(transformation, lightRange + lightRange * errorRate);
 	}
 
-	SpotLight::SpotLight() :
-		color(1.0f)
+	void SpotLight::computeDirectionTransform()
 	{
-
+		direction = glm::mat3(transformation) * direction;
 	}
-
-	SpotLight::SpotLight(glm::vec3 const &pPosition, glm::vec3 const &pColor, glm::vec3 const &pAttenuation) :
-		color(pColor)
-	{
-		PreparableObject::transformation = glm::translate(glm::mat4(1), pPosition);
-	}
-
 }

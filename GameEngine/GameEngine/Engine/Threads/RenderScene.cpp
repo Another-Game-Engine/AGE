@@ -201,6 +201,8 @@ namespace AGE
 	{
 		SpotLight *l = &_spotLights.get(msg.key.id);
 		l->color = msg.color;
+		l->direction = msg.direction;
+		l->spotCutOff = msg.cutOff;
 		l->map = msg.texture;
 		if (l->hasMoved == false)
 		{
@@ -416,8 +418,9 @@ namespace AGE
 		for (uint32_t idx : _spotLightsToMove)
 		{
 			SpotLight &e = _spotLights.get(idx);
-
 			e.hasMoved = false;
+			e.computeDirectionTransform();
+			// TODO: move in octree
 		}
 		_drawablesToMove.clear();
 		_pointLightsToMove.clear();

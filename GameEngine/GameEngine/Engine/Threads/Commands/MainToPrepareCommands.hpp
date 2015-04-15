@@ -96,10 +96,11 @@ namespace AGE
 
 			struct SetSpotLight
 			{
-				SetSpotLight(glm::vec3 const &color, glm::vec3 const &attenuation, std::shared_ptr<ITexture> const &texture, PrepareKey &key);
+				SetSpotLight(glm::vec3 const &color, glm::vec3 const &direction, float cutOff, std::shared_ptr<ITexture> const &texture, PrepareKey &key);
 				PrepareKey key;
 				glm::vec3 color;
-				glm::vec3 attenuation;
+				glm::vec3 direction;
+				float cutOff;
 				std::shared_ptr<ITexture> texture;
 			};
 
