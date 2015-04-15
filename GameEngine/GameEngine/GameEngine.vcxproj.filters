@@ -160,6 +160,9 @@
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredMergingDebug.cpp" />
     <ClCompile Include="Engine\Components\Light.cpp" />
     <ClCompile Include="Engine\Render\Properties\AABB.cpp" />
+    <ClCompile Include="Engine\Render\DepthMapManager.cpp" />
+    <ClCompile Include="Engine\Render\DepthMapHandle.cpp" />
+    <ClCompile Include="Engine\Render\DepthMap.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -418,6 +421,9 @@
     <ClInclude Include="Engine\Components\Light.hh" />
     <ClInclude Include="Engine\Utils\Debug.hpp" />
     <ClInclude Include="Engine\Render\Properties\AABB.hpp" />
+    <ClInclude Include="Engine\Render\DepthMapManager.hpp" />
+    <ClInclude Include="Engine\Render\DepthMapHandle.hpp" />
+    <ClInclude Include="Engine\Render\DepthMap.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

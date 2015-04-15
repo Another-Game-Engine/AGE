@@ -149,6 +149,9 @@ namespace AGE
 				msg.setValue(false);
 				return;
 			}
+
+			_depthMapManager.init(1280, 720, 9);
+
 			msg.setValue(true);
 		});
 

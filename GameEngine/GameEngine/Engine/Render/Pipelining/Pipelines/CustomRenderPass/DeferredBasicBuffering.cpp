@@ -16,6 +16,8 @@
 #include <Configuration.hpp>
 #include <Threads/RenderThread.hpp>
 #include <Threads/ThreadManager.hpp>
+#include <Render/DepthMapHandle.hpp>
+#include <Render/DepthMap.hpp>
 
 #ifdef OCCLUSION_CULLING
 #include <Render/Properties/Transformation.hh>
@@ -143,21 +145,21 @@ namespace AGE
 				}
 			}
 		}
-		
-		
-			// mipmap depth
-		glActiveTextureARB(GL_TEXTURE0_ARB);
-		_depth->bind();
-		glGenerateMipmap(GL_TEXTURE_2D);
 
-		int mipmapLevel = 3;
+		{
+			auto writableBuffer = GetRenderThread()->getDepthMapManager().getWritableMap();
+			auto mipmapLevel = GetRenderThread()->getDepthMapManager().getMipmapLevel();
 
-		_depth->get(mipmapLevel, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, _depthPixels);
-		//for (auto i = 0; i < _depthPixels.size(); ++i)
-		//{
-		//	_depthPixels[i] = ((_depthPixels[i] & 0xFFFFFF00) >> 8);
-		//}
-		_depth->unbind();
+			if (writableBuffer.isValid())
+			{
+				glActiveTextureARB(GL_TEXTURE0_ARB);
+				_depth->bind();
+				glGenerateMipmap(GL_TEXTURE_2D);
+				_depth->get(mipmapLevel, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, writableBuffer.getWritableBuffer());
+				_depth->unbind();
+				writableBuffer.setMV(infos.view * infos.projection);
+			}
+		}
 
 		if (_programs[PROGRAM_OCCLUDER]->isCompiled() == false)
 		{
@@ -168,18 +170,6 @@ namespace AGE
 		*_programs[PROGRAM_OCCLUDER]->get_resource<Mat4>("projection_matrix") = infos.projection;
 		*_programs[PROGRAM_OCCLUDER]->get_resource<Mat4>("view_matrix") = infos.view;
 
-		auto VP = infos.projection * infos.view;
-
-		int mipMapW = 1280;
-		int mipMapH = 720;
-		int mipMapCounter = mipmapLevel;
-		while (mipMapCounter > 0)
-		{
-			mipMapW /= 2;
-			mipMapH /= 2;
-			--mipMapCounter;
-		}
-
 		for (auto &meshPaint : pipeline.keys)
 		{
 			auto painter = _painterManager->get_painter(Key<Painter>::createKey(meshPaint.first));
@@ -187,40 +177,7 @@ namespace AGE
 			{
 				if (mode.renderMode.at(AGE_OCCLUDER) == false)
 				{
-					int index = 0;
-					for (auto &meshKey : mode.vertices)
-					{
-						auto &properties = mode.properties[index];
-						++index;
-
-
-						auto modelMatrixProperty = properties.searchForProperty("model_matrix");
-						AGE_ASSERT(modelMatrixProperty != nullptr);
-						auto MVP = VP * std::static_pointer_cast<Transformation>(modelMatrixProperty)->get();
-						auto point = MVP * glm::vec4(0, 0, 0, 1);
-						point /= point.w;
-						int screenX = (point.x + 1) / 2.0f * mipMapW;
-						int screenY = (point.y + 1) / 2.0f * mipMapH;
-
-						if (screenX < 0 || screenX >= mipMapW)
-						{
-							continue;
-						}
-						if (screenY < 0 || screenY >= mipMapH)
-						{
-							continue;
-						}
-
-
-
-						auto depth = ((float)((_depthPixels[screenX + screenY * mipMapW] & 0xFFFFFF00) >> 8) / (float)0xFFFFFF);
-						if (depth < point.z + 0.01f)
-						{
-							continue;
-						}
-
-						painter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_OCCLUDER], properties, meshKey);
-					}
+					painter->draw(GL_TRIANGLES, _programs[PROGRAM_OCCLUDER], mode.properties, mode.vertices);
 				}
 			}
 		}

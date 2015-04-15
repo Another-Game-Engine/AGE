@@ -23,6 +23,10 @@
 #include <Render/Properties/IProperty.hh>
 #include <Render/Properties/Transformation.hh>
 
+#include <Render/DepthMap.hpp>
+#include <Render/DepthMapManager.hpp>
+#include <Render/DepthMapHandle.hpp>
+
 #ifdef OCCLUSION_CULLING
 
 #include <Render/Properties/AABB.hpp>
@@ -423,6 +427,10 @@ namespace AGE
 
 		// clean empty nodes
 		_octree.cleanOctree();
+
+		auto &depthMapManager = GetRenderThread()->getDepthMapManager();
+		auto depthMap = depthMapManager.getWritableMap();
+
 		for (uint32_t cameraIdx : _activeCameras)
 		{
 			Camera &camera = _cameras.get(cameraIdx);
@@ -439,6 +447,9 @@ namespace AGE
 			renderCamera.camInfos.view = view;
 			renderCamera.camInfos.projection = camera.projection;
 			renderCamera.camInfos.renderType = camera.pipeline;
+
+			auto VP = camera.projection * view;
+
 			// no culling for the lights for the moment (TODO)
 			for (uint32_t pointLightIdx : _activePointLights)
 			{
@@ -485,6 +496,21 @@ namespace AGE
 						curRenderDrawablelist = &curRenderPainter->drawables.back();
 						curRenderDrawablelist->renderMode = currentDrawable->renderMode;
 					}
+
+					if (depthMap.isValid() && curRenderDrawablelist->renderMode.at(AGE_OCCLUDER) == false)
+					{
+						auto MVP = VP * currentDrawable->transformation;
+						auto point = MVP * glm::vec4(0, 0, 0, 1);
+						point /= point.w;
+						int screenX = (point.x + 1) / 2.0f * depthMap->getMipmapWidth();
+						int screenY = (point.y + 1) / 2.0f * depthMap->getMipmapHeight();
+
+						if (depthMap->passTest(point.z, screenX, screenY) == false)
+						{
+							continue;
+						}
+					}
+
 					// We find the good render mode
 					curRenderDrawablelist->vertices.emplace_back(currentDrawable->mesh.vertices);
 					curRenderDrawablelist->properties.emplace_back(_properties.get(currentDrawable->mesh.properties.getId()));
