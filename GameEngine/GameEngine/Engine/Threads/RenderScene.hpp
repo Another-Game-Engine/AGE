@@ -13,10 +13,6 @@
 #include <array>
 #include <Configuration.hpp>
 
-#ifdef OCCLUSION_CULLING
-#include <map>
-#endif
-
 namespace AGE
 {
 	struct Drawable;
@@ -103,9 +99,5 @@ namespace AGE
 		std::unique_ptr<Link> _rootLink;
 
 		MemoryPool<Properties> _properties;
-
-#ifdef OCCLUSION_CULLING
-		std::map<std::size_t, Key<Property>> _boundingBoxProperties;
-#endif
 	};
 }

@@ -85,51 +85,6 @@ namespace AGE
 		OpenGLState::glClearColor(glm::vec4(0.f, 0.0f, 0.0f, 0.0f));
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-#ifdef OCCLUSION_CULLING
-
-		_programs[PROGRAM_BUFFERING]->use();
-		*_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("projection_matrix") = infos.projection;
-		*_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("view_matrix") = infos.view;
-
-		for (auto &meshPaint : pipeline.keys)
-		{
-			auto painter = _painterManager->get_painter(Key<Painter>::createKey(meshPaint.first));
-			for (auto &mode : meshPaint.second.drawables)
-			{
-				if (mode.renderMode.at(AGE_OCCLUDER) == true)
-				{
-					painter->draw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], mode.properties, mode.vertices);
-				}
-			}
-		}
-
-		{
-			auto writableBuffer = GetRenderThread()->getDepthMapManager().getWritableMap();
-			auto mipmapLevel = GetRenderThread()->getDepthMapManager().getMipmapLevel();
-
-			if (writableBuffer.isValid())
-			{
-				glActiveTextureARB(GL_TEXTURE0_ARB);
-				_depth->bind();
-				glGenerateMipmap(GL_TEXTURE_2D);
-				_depth->get(mipmapLevel, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, writableBuffer.getWritableBuffer());
-				_depth->unbind();
-				writableBuffer.setMV(infos.view * infos.projection);
-			}
-		}
-
-		for (auto &meshPaint : pipeline.keys)
-		{
-			auto painter = _painterManager->get_painter(Key<Painter>::createKey(meshPaint.first));
-			for (auto &mode : meshPaint.second.drawables)
-			{
-				if (mode.renderMode.at(AGE_OCCLUDER) == false)
-				{
-					painter->draw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], mode.properties, mode.vertices);
-				}
-			}
-		}
-#else
 		_programs[PROGRAM_BUFFERING]->use();
 		*_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("projection_matrix") = infos.projection;
 		*_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("view_matrix") = infos.view;
@@ -145,7 +100,19 @@ namespace AGE
 				}
 			}
 		}
-#endif
+
+		auto writableBuffer = GetRenderThread()->getDepthMapManager().getWritableMap();
+		auto mipmapLevel = GetRenderThread()->getDepthMapManager().getMipmapLevel();
+
+		if (writableBuffer.isValid())
+		{
+			glActiveTextureARB(GL_TEXTURE0_ARB);
+			_depth->bind();
+			glGenerateMipmap(GL_TEXTURE_2D);
+			_depth->get(mipmapLevel, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, writableBuffer.getWritableBuffer());
+			_depth->unbind();
+			writableBuffer.setMV(infos.view * infos.projection);
+		}
 
 	}
 

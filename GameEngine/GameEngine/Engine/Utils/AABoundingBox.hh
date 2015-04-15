@@ -29,6 +29,7 @@ namespace AGE
 
 		glm::vec3	getPositivePoint(glm::vec3 const &normal) const;
 		glm::vec3	getNegativePoint(glm::vec3 const &normal) const;
+		glm::vec3   getCornerPoint(std::size_t index /*from 0 to 7*/);
 
 		// create an AABB from another AABB and a transformation matrix
 		void		fromTransformedBox(AABoundingBox const &oth, glm::mat4 const &transform);

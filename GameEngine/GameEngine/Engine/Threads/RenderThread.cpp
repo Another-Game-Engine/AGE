@@ -150,7 +150,7 @@ namespace AGE
 				return;
 			}
 
-			_depthMapManager.init(1280, 720, 9);
+			_depthMapManager.init(1280, 720, 2);
 
 			msg.setValue(true);
 		});

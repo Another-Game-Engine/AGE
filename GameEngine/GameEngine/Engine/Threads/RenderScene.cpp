@@ -27,12 +27,6 @@
 #include <Render/DepthMapManager.hpp>
 #include <Render/DepthMapHandle.hpp>
 
-#ifdef OCCLUSION_CULLING
-
-#include <Render/Properties/AABB.hpp>
-
-#endif
-
 namespace AGE
 {
 	RenderScene::RenderScene(PrepareRenderThread *prepareThread, Engine *engine, AScene *scene)
@@ -478,16 +472,30 @@ namespace AGE
 					if (depthMap.isValid() && curRenderDrawablelist->renderMode.at(AGE_OCCLUDER) == false)
 					{
 						auto MVP = VP * currentDrawable->transformation;
-						auto point = MVP * glm::vec4(0, 0, 0, 1);
-						point /= point.w;
-						int screenX = (point.x + 1) / 2.0f * depthMap->getMipmapWidth();
-						int screenY = (point.y + 1) / 2.0f * depthMap->getMipmapHeight();
+						auto BB = currentDrawable->mesh.boundingBox;
 
-						if (depthMap->passTest(point.z + 0.005, screenX, screenY) == false)
+						bool pass = false;
+						for (std::size_t i = 0; i < 8; ++i)
+						{
+							auto point = MVP * glm::vec4(BB.getCornerPoint(i), 1.0f);
+							point /= point.w;
+							int screenX = (point.x + 1) / 2.0f * depthMap->getMipmapWidth();
+							int screenY = (point.y + 1) / 2.0f * depthMap->getMipmapHeight();
+
+							if (depthMap->passTest(point.z, screenX, screenY) == false)
+							{
+								continue;
+							}
+							pass = true;
+							break;
+						}
+
+						if (!pass)
 						{
 							continue;
 						}
 					}
+
 
 					// We find the good render mode
 					curRenderDrawablelist->vertices.emplace_back(currentDrawable->mesh.vertices);
@@ -520,13 +528,6 @@ namespace AGE
 
 	void RenderScene::_removeProperties(const Key<Properties> &key)
 	{
-#ifdef OCCLUSION_CULLING
-		auto &aabbKeyIt = _boundingBoxProperties.find(key.getId());
-		if (aabbKeyIt != std::end(_boundingBoxProperties))
-		{
-			_boundingBoxProperties.erase(aabbKeyIt);
-		}
-#endif
 		_properties.dealloc(key.getId());
 	}
 
