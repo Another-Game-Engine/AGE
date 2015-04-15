@@ -52,7 +52,7 @@ namespace AGE
 
 	glm::vec3   AABoundingBox::getCornerPoint(std::size_t index /*from 0 to 7*/)
 	{
-		AGE_ASSERT(index < 7);
+		AGE_ASSERT(index <= 7);
 
 		if (index == 0)
 		{
@@ -82,7 +82,7 @@ namespace AGE
 		{
 			return glm::vec3(maxPoint.x, maxPoint.y, minPoint.z);
 		}
-		else if (index == 6)
+		else if (index == 7)
 		{
 			return glm::vec3(maxPoint.x, maxPoint.y, maxPoint.z);
 		}
