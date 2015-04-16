@@ -220,10 +220,16 @@ namespace AGE
 		rigidBody->addForceAtLocalPosition(force, position, forceMode);
 	}
 
-	void NewRigidBody::addTorque(const glm::vec3 &torque, Physics::ForceMode forceMode)
+	void NewRigidBody::addAbsoluteTorque(const glm::vec3 &torque, Physics::ForceMode forceMode)
 	{
 		assert(rigidBody != nullptr && "Invalid NewRigidBody");
-		rigidBody->addTorque(torque, forceMode);
+		rigidBody->addAbsoluteTorque(torque, forceMode);
+	}
+
+	void NewRigidBody::addRelativeTorque(const glm::vec3 &torque, Physics::ForceMode forceMode)
+	{
+		assert(rigidBody != nullptr && "Invalid NewRigidBody");
+		rigidBody->addRelativeTorque(torque, forceMode);
 	}
 
 	glm::vec3 NewRigidBody::getVelocityAtWorldPosition(const glm::vec3 &position) const

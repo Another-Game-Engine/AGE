@@ -247,7 +247,7 @@ namespace AGE
 			}
 		}
 
-		void PhysXRigidBody::addTorque(const glm::vec3 &torque, ForceMode forceMode)
+		void PhysXRigidBody::addAbsoluteTorque(const glm::vec3 &torque, ForceMode forceMode)
 		{
 			switch (forceMode)
 			{
@@ -266,6 +266,12 @@ namespace AGE
 				default:
 					break;
 			}
+		}
+
+		void PhysXRigidBody::addRelativeTorque(const glm::vec3 &torque, ForceMode forceMode)
+		{
+			const physx::PxVec3 absoluteTorque = getDataAs<physx::PxRigidDynamic>()->getGlobalPose().transform(physx::PxVec3(torque.x, torque.y, torque.z));
+			addAbsoluteTorque(glm::vec3(absoluteTorque.x, absoluteTorque.y, absoluteTorque.z), forceMode);
 		}
 
 		glm::vec3 PhysXRigidBody::getVelocityAtWorldPosition(const glm::vec3 &position) const

@@ -119,7 +119,9 @@ namespace AGE
 
 			virtual void addForceAtLocalPosition(const glm::vec3 &force, const glm::vec3 &position, ForceMode forceMode) = 0;
 
-			virtual void addTorque(const glm::vec3 &torque, ForceMode forceMode) = 0;
+			virtual void addAbsoluteTorque(const glm::vec3 &torque, ForceMode forceMode) = 0;
+
+			virtual void addRelativeTorque(const glm::vec3 &torque, ForceMode forceMode) = 0;
 
 			virtual glm::vec3 getVelocityAtWorldPosition(const glm::vec3 &position) const = 0;
 

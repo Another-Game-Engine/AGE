@@ -168,7 +168,12 @@ namespace AGE
 			return;
 		}
 
-		void NullRigidBody::addTorque(const glm::vec3 &torque, ForceMode forceMode)
+		void NullRigidBody::addAbsoluteTorque(const glm::vec3 &torque, ForceMode forceMode)
+		{
+			return;
+		}
+
+		void NullRigidBody::addRelativeTorque(const glm::vec3 &torque, ForceMode forceMode)
 		{
 			return;
 		}

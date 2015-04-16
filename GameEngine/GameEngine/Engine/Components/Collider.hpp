@@ -4,6 +4,7 @@
 #include <Physics/ColliderInterface.hpp>
 #include <Physics/Collision.hpp>
 #include <Physics/Trigger.hpp>
+#include <Utils/Serialization/VectorSerialization.hpp>
 
 namespace AGE
 {
@@ -33,7 +34,7 @@ namespace AGE
 		~Collider(void) = default;
 
 		// Methods
-		void init(Physics::ColliderType colliderType);
+		void init(Physics::ColliderType colliderType = Physics::ColliderType::Box);
 
 		void setStaticFriction(float staticFriction);
 
@@ -79,6 +80,36 @@ namespace AGE
 
 		const std::vector<Physics::Collision> &getCollisions(void) const;
 
+		template <typename Archive>
+		void save(Archive &ar, const std::uint32_t version) const;
+
+		template <typename Archive>
+		void saveBoxCollider(Archive &ar, const std::uint32_t version) const;
+
+		template <typename Archive>
+		void saveCapsuleCollider(Archive &ar, const std::uint32_t version) const;
+
+		template <typename Archive>
+		void saveMeshCollider(Archive &ar, const std::uint32_t version) const;
+
+		template <typename Archive>
+		void saveSphereCollider(Archive &ar, const std::uint32_t version) const;
+
+		template <typename Archive>
+		void load(Archive &ar, const std::uint32_t version);
+
+		template <typename Archive>
+		void loadBoxCollider(Archive &ar, const std::uint32_t version);
+
+		template <typename Archive>
+		void loadCapsuleCollider(Archive &ar, const std::uint32_t version);
+
+		template <typename Archive>
+		void loadMeshCollider(Archive &ar, const std::uint32_t version);
+
+		template <typename Archive>
+		void loadSphereCollider(Archive &ar, const std::uint32_t version);
+
 	private:
 		// Attributes
 		Physics::ColliderInterface *collider = nullptr;
@@ -91,3 +122,7 @@ namespace AGE
 		void reset(void);
 	};
 }
+
+CEREAL_CLASS_VERSION(AGE::Collider, 1);
+
+#include <Components/Collider.inl>

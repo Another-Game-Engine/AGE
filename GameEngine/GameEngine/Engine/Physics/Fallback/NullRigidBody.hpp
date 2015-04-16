@@ -96,7 +96,9 @@ namespace AGE
 
 			void addForceAtLocalPosition(const glm::vec3 &force, const glm::vec3 &position, ForceMode forceMode) override final;
 
-			void addTorque(const glm::vec3 &torque, ForceMode forceMode) override final;
+			void addAbsoluteTorque(const glm::vec3 &torque, ForceMode forceMode) override final;
+
+			void addRelativeTorque(const glm::vec3 &torque, ForceMode forceMode) override final;
 
 			glm::vec3 getVelocityAtWorldPosition(const glm::vec3 &position) const override final;
 

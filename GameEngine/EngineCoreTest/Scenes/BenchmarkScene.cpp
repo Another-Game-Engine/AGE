@@ -82,12 +82,15 @@ namespace AGE
 		REGISTER_COMPONENT_TYPE(AGE::PointLightComponent);
 		REGISTER_COMPONENT_TYPE(AGE::FreeFlyComponent);
 		REGISTER_COMPONENT_TYPE(AGE::RotationComponent);
+		REGISTER_COMPONENT_TYPE(AGE::NewRigidBody);
+		REGISTER_COMPONENT_TYPE(AGE::Collider);
 
+		// TO_DO: Remove the following line
 		setInstance<AGE::BulletDynamicManager, AGE::BulletCollisionManager>()->init();
 		addSystem<AGE::DebugSystem>(0);
 		addSystem<AGE::PhysicsSystem>(0, Physics::EngineType::PhysX);
 		
-		// TODO: Remove following line
+		// TO_DO: Remove following line
 		addSystem<AGE::BulletDynamicSystem>(0);
 
 		addSystem<AGE::LifetimeSystem>(2);

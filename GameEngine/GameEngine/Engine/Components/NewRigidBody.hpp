@@ -2,6 +2,7 @@
 
 #include <Components/Component.hh>
 #include <Physics/RigidBodyInterface.hpp>
+#include <Utils/Serialization/VectorSerialization.hpp>
 
 namespace AGE
 {
@@ -86,11 +87,19 @@ namespace AGE
 
 		void addForceAtLocalPosition(const glm::vec3 &force, const glm::vec3 &position, Physics::ForceMode forceMode = Physics::ForceMode::Force);
 
-		void addTorque(const glm::vec3 &torque, Physics::ForceMode forceMode = Physics::ForceMode::Force);
+		void addAbsoluteTorque(const glm::vec3 &torque, Physics::ForceMode forceMode = Physics::ForceMode::Force);
+		
+		void addRelativeTorque(const glm::vec3 &torque, Physics::ForceMode forceMode = Physics::ForceMode::Force);
 
 		glm::vec3 getVelocityAtWorldPosition(const glm::vec3 &position) const;
 
 		glm::vec3 getVelocityAtLocalPosition(const glm::vec3 &position) const;
+
+		template <typename Archive>
+		void save(Archive &ar, const std::uint32_t version) const;
+
+		template <typename Archive>
+		void load(Archive &ar, const std::uint32_t version);
 
 	private:
 		// Attributes
@@ -100,3 +109,7 @@ namespace AGE
 		void reset(void);
 	};
 }
+
+CEREAL_CLASS_VERSION(AGE::NewRigidBody, 1);
+
+#include <Components/NewRigidBody.inl>

@@ -595,7 +595,9 @@
     <ClInclude Include="Engine\Render\OpenGLTask\OpenGLState.hh" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Engine\Components\Collider.inl" />
     <None Include="Engine\Components\Component.hh" />
+    <None Include="Engine\Components\NewRigidBody.inl" />
     <None Include="Engine\Context\IRenderContext.hh" />
     <None Include="Engine\Context\SDL\SdlContext.hh" />
     <None Include="Engine\Core\AScene.hh" />

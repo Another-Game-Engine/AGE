@@ -182,7 +182,12 @@ namespace AGE
 			// TO_DO
 		}
 
-		void BulletRigidBody::addTorque(const glm::vec3 &torque, ForceMode forceMode)
+		void BulletRigidBody::addAbsoluteTorque(const glm::vec3 &torque, ForceMode forceMode)
+		{
+			// TO_DO
+		}
+
+		void BulletRigidBody::addRelativeTorque(const glm::vec3 &torque, ForceMode forceMode)
 		{
 			// TO_DO
 		}
