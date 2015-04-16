@@ -6,8 +6,13 @@
 
 namespace AGE
 {
+	struct Link;
+
 	class NewRigidBody final : public ComponentBase
 	{
+		// Friendships
+		friend Link;
+
 	public:
 		// Constructors
 		NewRigidBody(void) = default;
@@ -59,11 +64,7 @@ namespace AGE
 
 		float getMaxDepenetrationVelocity(void) const;
 
-		void setPosition(const glm::vec3 &position);
-
 		glm::vec3 getPosition(void) const;
-
-		void setRotation(const glm::quat &rotation);
 
 		glm::quat getRotation(void) const;
 
@@ -104,6 +105,11 @@ namespace AGE
 	private:
 		// Attributes
 		Physics::RigidBodyInterface *rigidBody = nullptr;
+
+		// Methods
+		void setPosition(const glm::vec3 &position);
+
+		void setRotation(const glm::quat &rotation);
 
 		// Inherited Methods
 		void reset(void);

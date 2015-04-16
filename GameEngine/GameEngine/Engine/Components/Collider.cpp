@@ -12,6 +12,7 @@ namespace AGE
 		assert(collider == nullptr && "Collider already initialized");
 		collider = entity.getScene()->getInstance<Physics::WorldInterface>()->createCollider(colliderType, entity.addComponent<Private::PhysicsData>()->getData());
 		collider->collider = this;
+		scale(entity.getLink().getScale());
 	}
 
 	void Collider::setStaticFriction(float staticFriction)
@@ -214,6 +215,12 @@ namespace AGE
 				assert(!"Invalid collider type");
 				return glm::vec3();
 		}
+	}
+
+	void Collider::scale(const glm::vec3 &scaling)
+	{
+		assert(collider != nullptr && "Invalid Collider");
+		collider->scale(scaling);
 	}
 
 	// Inherited Methods

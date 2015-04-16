@@ -31,5 +31,10 @@ namespace AGE
 		{
 			return FilterGroup::GroupI;
 		}
+
+		void NullCollider::scale(const glm::vec3 &scaling)
+		{
+			return;
+		}
 	}
 }

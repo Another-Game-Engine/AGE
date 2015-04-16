@@ -86,18 +86,17 @@ namespace AGE
 
 	void PhysicsSystem::mainUpdate(float elapsedTime)
 	{
-		for (Entity entity : entityFilter.getCollection())
-		{
-			NewRigidBody *rigidBody = entity.getComponent<NewRigidBody>();
-			Link *link = entity.getLinkPtr();
-			rigidBody->setPosition(link->getPosition());
-			rigidBody->setRotation(link->getOrientation());
-		}
 		physics->getWorld()->update(elapsedTime);
+	}
+
+	void PhysicsSystem::updateEnd(float elapsedTime)
+	{
+		NewRigidBody *rigidBody = nullptr;
+		Link *link = nullptr;
 		for (Entity entity : entityFilter.getCollection())
 		{
-			NewRigidBody *rigidBody = entity.getComponent<NewRigidBody>();
-			Link *link = entity.getLinkPtr();
+			rigidBody = entity.getComponent<NewRigidBody>();
+			link = entity.getLinkPtr();
 			link->setPosition(rigidBody->getPosition());
 			link->setOrientation(rigidBody->getRotation());
 		}

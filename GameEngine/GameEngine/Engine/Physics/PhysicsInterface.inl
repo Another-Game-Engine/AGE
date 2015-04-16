@@ -15,11 +15,11 @@ namespace AGE
 
 		inline void PhysicsInterface::shutdown(void)
 		{
-			finalize();
 			if (world != nullptr)
 			{
 				destroyWorld();
 			}
+			finalize();
 		}
 
 		inline WorldInterface *PhysicsInterface::createWorld(void)

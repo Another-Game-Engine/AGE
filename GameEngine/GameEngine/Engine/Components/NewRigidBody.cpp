@@ -12,6 +12,9 @@ namespace AGE
 		assert(rigidBody == nullptr && "NewRigidBody already initialized");
 		rigidBody = entity.getScene()->getInstance<Physics::WorldInterface>()->createRigidBody(entity.addComponent<Private::PhysicsData>()->getData());
 		rigidBody->rigidBody = this;
+		Link *link = entity.getLinkPtr();
+		setPosition(link->getPosition());
+		setRotation(link->getOrientation());
 	}
 
 	void NewRigidBody::setAngularDrag(float angularDrag)
@@ -124,15 +127,8 @@ namespace AGE
 
 	void NewRigidBody::setPosition(const glm::vec3 &position)
 	{
-		static bool FirstCall = true;
-		if (FirstCall)
-		{
-			FirstCall = false;
-			assert(rigidBody != nullptr && "Invalid NewRigidBody");
-			rigidBody->setPosition(position);
-			entity.getLink().setPosition(position);
-			FirstCall = true;
-		}
+		assert(rigidBody != nullptr && "Invalid NewRigidBody");
+		rigidBody->setPosition(position);
 	}
 
 	glm::vec3 NewRigidBody::getPosition(void) const
@@ -143,15 +139,8 @@ namespace AGE
 
 	void NewRigidBody::setRotation(const glm::quat &rotation)
 	{
-		static bool FirstCall = true;
-		if (FirstCall)
-		{
-			FirstCall = false;
-			assert(rigidBody != nullptr && "Invalid NewRigidBody");
-			rigidBody->setRotation(rotation);
-			entity.getLink().setOrientation(rotation);
-			FirstCall = true;
-		}
+		assert(rigidBody != nullptr && "Invalid NewRigidBody");
+		rigidBody->setRotation(rotation);
 	}
 
 	glm::quat NewRigidBody::getRotation(void) const

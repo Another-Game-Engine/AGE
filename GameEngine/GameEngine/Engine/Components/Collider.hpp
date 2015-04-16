@@ -8,6 +8,8 @@
 
 namespace AGE
 {
+	struct Link;
+
 	namespace Private
 	{
 		class CollisionSystem;
@@ -20,6 +22,8 @@ namespace AGE
 		friend Private::CollisionSystem;
 
 		friend Private::TriggerSystem;
+
+		friend Link;
 
 	public:
 		// Constructors
@@ -117,6 +121,9 @@ namespace AGE
 		std::vector<Physics::Collision> collisions;
 
 		std::vector<Physics::Trigger> triggers;
+
+		// Methods
+		void scale(const glm::vec3 &scaling);
 
 		// Inherited Methods
 		void reset(void);

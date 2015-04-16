@@ -1,5 +1,7 @@
 #pragma once
 
+#include <glm/glm.hpp>
+
 #include "ColliderType.hpp"
 #include "FilterGroup.hpp"
 #include "GenericData.hpp"
@@ -110,6 +112,9 @@ namespace AGE
 		protected:
 			// Destructor
 			virtual ~ColliderInterface(void);
+
+			// Virtual Methods
+			virtual void scale(const glm::vec3 &scaling) = 0;
 
 		private:
 			// Attributes

@@ -33,5 +33,10 @@ namespace AGE
 			// TO_DO
 			return FilterGroup::GroupI;
 		}
+
+		void BulletCollider::scale(const glm::vec3 &scaling)
+		{
+			// TO_DO
+		}
 	}
 }

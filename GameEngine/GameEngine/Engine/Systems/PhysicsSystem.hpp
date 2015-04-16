@@ -45,5 +45,7 @@ namespace AGE
 		bool onPluginLoaded(PluginPtr pluginData) override final;
 
 		void mainUpdate(float elapsedTime) override final;
+
+		void updateEnd(float elapsedTime) override final;
 	};
 }

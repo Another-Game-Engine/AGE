@@ -7,6 +7,7 @@
 #include <Utils/MatrixConversion.hpp>
 #include <Core/AScene.hh>
 #include <Components/NewRigidBody.hpp>
+#include <Components/Collider.hpp>
 
 using namespace AGE;
 
@@ -48,46 +49,39 @@ const std::vector<Link*> &Link::getChildren() const { return _children; }
 
 void Link::setPosition(const glm::vec3 &v)
 {
-	static bool FirstCall = true;
-	if (FirstCall)
+	_userModification = true;
+	internalSetPosition(v);
+	NewRigidBody *rigidBody = static_cast<NewRigidBody *>(_entityPtr->getComponent(Component<NewRigidBody>::getTypeId()));
+	if (rigidBody != nullptr)
 	{
-		FirstCall = false;
-		_userModification = true;
-		internalSetPosition(v);
-		NewRigidBody *rigidBody = static_cast<NewRigidBody *>(_entityPtr->getComponent(Component<NewRigidBody>::getTypeId()));
-		if (rigidBody != nullptr)
-		{
-			rigidBody->setPosition(v);
-		}
-		FirstCall = true;
+		rigidBody->setPosition(getPosition());
 	}
 }
 
 void Link::setScale(const glm::vec3 &v) {
+	const glm::vec3 oldScale = getScale();
 	_userModification = true;
 	internalSetScale(v);
+	Collider *collider = static_cast<Collider *>(_entityPtr->getComponent(Component<Collider>::getTypeId()));
+	if (collider != nullptr)
+	{
+		collider->scale(getScale() / oldScale);
+	}
 }
 
 void Link::setScale(float v) {
-	_userModification = true;
-	internalSetScale(glm::vec3(v));
+	setScale(glm::vec3(v, v, v));
 }
 
 
 void Link::setOrientation(const glm::quat &v)
 {
-	static bool FirstCall = true;
-	if (FirstCall)
+	_userModification = true;
+	internalSetOrientation(v);
+	NewRigidBody *rigidBody = static_cast<NewRigidBody *>(_entityPtr->getComponent(Component<NewRigidBody>::getTypeId()));
+	if (rigidBody != nullptr)
 	{
-		FirstCall = false;
-		_userModification = true;
-		internalSetOrientation(v);
-		NewRigidBody *rigidBody = static_cast<NewRigidBody *>(_entityPtr->getComponent(Component<NewRigidBody>::getTypeId()));
-		if (rigidBody != nullptr)
-		{
-			rigidBody->setRotation(v);
-		}
-		FirstCall = true;
+		rigidBody->setRotation(getOrientation());
 	}
 }
 
