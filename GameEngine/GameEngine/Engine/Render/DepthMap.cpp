@@ -41,7 +41,7 @@ namespace AGE
 		}
 
 		float depth = ((float)((_buffer[index] & 0xFFFFFF00) >> 8) / (float)0xFFFFFF);
-		if (depth - 0.005 < pixelDepth)
+		if (depth < pixelDepth)
 		{
 			return false;
 		}

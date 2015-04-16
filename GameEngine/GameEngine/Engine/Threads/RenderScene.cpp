@@ -475,7 +475,7 @@ namespace AGE
 
 						for (std::size_t i = 0; i < 8; ++i)
 						{
-							auto point = VP * glm::vec4(BB.getCornerPoint(i), 1.0f);
+							auto point = VP * currentDrawable->transformation * glm::vec4(BB.getCornerPoint(i), 1.0f);
 							point /= point.w;
 							int screenX = (point.x + 1) / 2.0f * depthMap->getMipmapWidth();
 							int screenY = (point.y + 1) / 2.0f * depthMap->getMipmapHeight();
