@@ -203,7 +203,7 @@ namespace AGE
 			CollisionListener *collisionListener = getCollisionListener();
 			std::vector<Contact> firstColliderContacts;
 			std::vector<Contact> secondColliderContacts;
-			ContactType contactType = ContactType::Persistent;
+			CollisionType CollisionType = CollisionType::Persistent;
 			for (physx::PxU32 index = 0; index < numberOfPairs; ++index)
 			{
 				const physx::PxContactPair &contactPair = pairs[index];
@@ -213,11 +213,11 @@ namespace AGE
 				}
 				if (contactPair.events.isSet(physx::PxPairFlag::eNOTIFY_TOUCH_FOUND))
 				{
-					contactType = ContactType::New;
+					CollisionType = CollisionType::New;
 				}
 				else if (contactPair.events.isSet(physx::PxPairFlag::eNOTIFY_TOUCH_LOST))
 				{
-					contactType = ContactType::Lost;
+					CollisionType = CollisionType::Lost;
 				}
 				physx::PxContactStreamIterator iterator(const_cast<physx::PxU8 *>(contactPair.contactStream), contactPair.contactStreamSize);
 				physx::PxU32 numberOfContacts = 0;
@@ -237,8 +237,8 @@ namespace AGE
 			}
 			Collider *firstCollider = static_cast<ColliderInterface *>(pairHeader.actors[0]->userData)->getCollider();
 			Collider *secondCollider = static_cast<ColliderInterface *>(pairHeader.actors[1]->userData)->getCollider();
-			collisionListener->onCollision(firstCollider, secondCollider, firstColliderContacts, contactType);
-			collisionListener->onCollision(secondCollider, firstCollider, secondColliderContacts, contactType);
+			collisionListener->onCollision(firstCollider, secondCollider, firstColliderContacts, CollisionType);
+			collisionListener->onCollision(secondCollider, firstCollider, secondColliderContacts, CollisionType);
 		}
 
 		void PhysXWorld::onTrigger(physx::PxTriggerPair *pairs, physx::PxU32 numberOfPairs)

@@ -138,6 +138,8 @@
     <ClCompile Include="Engine\Physics\Fallback\NullRigidBody.cpp" />
     <ClCompile Include="Engine\Physics\Fallback\NullSphereCollider.cpp" />
     <ClCompile Include="Engine\Physics\Fallback\NullWorld.cpp" />
+    <ClCompile Include="Engine\Physics\ICollisionListener.cpp" />
+    <ClCompile Include="Engine\Physics\ITriggerListener.cpp" />
     <ClCompile Include="Engine\Physics\Trigger.cpp" />
     <ClCompile Include="Engine\Physics\Utils\BtConversion.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomPipeline\DebugDeferredShading.cpp" />
@@ -315,6 +317,7 @@
     <ClInclude Include="Engine\Physics\Collision.hpp" />
     <ClInclude Include="Engine\Physics\CollisionDetectionMode.hpp" />
     <ClInclude Include="Engine\Physics\CollisionListener.hpp" />
+    <ClInclude Include="Engine\Physics\CollisionType.hpp" />
     <ClInclude Include="Engine\Physics\Contact.hpp" />
     <ClInclude Include="Engine\Physics\ContactInformation.hpp" />
     <ClInclude Include="Engine\Physics\DynamicMotionState.hpp" />
@@ -332,6 +335,8 @@
     <ClInclude Include="Engine\Physics\FilterGroup.hpp" />
     <ClInclude Include="Engine\Physics\ForceMode.hpp" />
     <ClInclude Include="Engine\Physics\GenericData.hpp" />
+    <ClInclude Include="Engine\Physics\ICollisionListener.hpp" />
+    <ClInclude Include="Engine\Physics\ITriggerListener.hpp" />
     <ClInclude Include="Engine\Physics\MaterialInterface.hpp" />
     <ClInclude Include="Engine\Physics\MemoryPoolHelper.hpp" />
     <ClInclude Include="Engine\Physics\MeshColliderInterface.hpp" />

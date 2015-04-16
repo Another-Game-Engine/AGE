@@ -7,14 +7,14 @@ namespace AGE
 	namespace Physics
 	{
 		// Constructors
-		Collision::Collision(Collider *hitCollider, std::vector<Contact> contacts, ContactType contactType)
-			: hitCollider(hitCollider), contacts(std::move(contacts)), contactType(contactType)
+		Collision::Collision(Collider *hitCollider, std::vector<Contact> contacts, CollisionType CollisionType)
+			: hitCollider(hitCollider), contacts(std::move(contacts)), collisionType(CollisionType)
 		{
 			return;
 		}
 
 		Collision::Collision(Collision &&other)
-			: hitCollider(other.hitCollider), contacts(std::move(other.contacts)), contactType(other.contactType)
+			: hitCollider(other.hitCollider), contacts(std::move(other.contacts)), collisionType(other.collisionType)
 		{
 			other.hitCollider = nullptr;
 		}
@@ -27,7 +27,7 @@ namespace AGE
 				hitCollider = other.hitCollider;
 				other.hitCollider = nullptr;
 				contacts = std::move(other.contacts);
-				contactType = other.contactType;
+				collisionType = other.collisionType;
 			}
 			return *this;
 		}
@@ -48,9 +48,9 @@ namespace AGE
 			return contacts;
 		}
 
-		ContactType Collision::getContactType(void) const
+		CollisionType Collision::getCollisionType(void) const
 		{
-			return contactType;
+			return collisionType;
 		}
 	}
 }

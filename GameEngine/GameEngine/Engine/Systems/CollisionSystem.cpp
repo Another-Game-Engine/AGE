@@ -5,6 +5,7 @@ namespace AGE
 {
 	namespace Private
 	{
+		// Constructors
 		CollisionSystem::CollisionSystem(AScene *scene)
 			: System(scene), entityFilter(scene)
 		{
@@ -12,6 +13,18 @@ namespace AGE
 			entityFilter.requireComponent<Collider>();
 		}
 
+		// Methods
+		void CollisionSystem::addListener(Physics::ICollisionListener *listener)
+		{
+			listeners.insert(listener);
+		}
+
+		void CollisionSystem::removeListener(Physics::ICollisionListener *listener)
+		{
+			listeners.erase(listener);
+		}
+
+		// Inherited Methods
 		bool CollisionSystem::initialize(void)
 		{
 			_scene->getInstance<Physics::WorldInterface>()->setCollisionListener(this);
@@ -31,9 +44,41 @@ namespace AGE
 			}
 		}
 
-		void CollisionSystem::onCollision(Collider *currentCollider, Collider *hitCollider, std::vector<Physics::Contact> contacts, Physics::ContactType contactType)
+		void CollisionSystem::onCollision(Collider *currentCollider, Collider *hitCollider, const std::vector<Physics::Contact> &contacts, Physics::CollisionType CollisionType)
 		{
-			currentCollider->collisions.push_back(Physics::Collision(hitCollider, contacts, contactType));
+			currentCollider->collisions.push_back(Physics::Collision(hitCollider, contacts, CollisionType));
+			switch (CollisionType)
+			{
+				case Physics::CollisionType::New:
+				{
+					for (Physics::ICollisionListener *listener : listeners)
+					{
+						listener->onCollisionEnter(currentCollider->entity, hitCollider->entity, contacts);
+					}
+					break;
+				}
+				case Physics::CollisionType::Persistent:
+				{
+					for (Physics::ICollisionListener *listener : listeners)
+					{
+						listener->onCollisionStay(currentCollider->entity, hitCollider->entity, contacts);
+					}
+					break;
+				}
+				case Physics::CollisionType::Lost:
+				{
+					for (Physics::ICollisionListener *listener : listeners)
+					{
+						listener->onCollisionExit(currentCollider->entity, hitCollider->entity, contacts);
+					}
+					break;
+				}
+				default:
+				{
+					assert(!"Never reached");
+					break;
+				}
+			}
 		}
 	}
 }

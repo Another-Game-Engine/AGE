@@ -1,8 +1,11 @@
 #pragma once
 
+#include <unordered_set>
+
 #include <Systems/System.h>
 #include <Physics/TriggerListener.hpp>
 #include <Components/Collider.hpp>
+#include <Physics/ITriggerListener.hpp>
 
 namespace AGE
 {
@@ -24,9 +27,16 @@ namespace AGE
 			// Destructors
 			~TriggerSystem(void) = default;
 
+			// Methods
+			void addListener(Physics::ITriggerListener *listener);
+
+			void removeListener(Physics::ITriggerListener *listener);
+
 		private:
 			// Attributes
 			EntityFilter entityFilter;
+
+			std::unordered_set<Physics::ITriggerListener *> listeners;
 
 			// Inherited Methods
 			bool initialize(void) override final;

@@ -179,6 +179,8 @@
     <ClCompile Include="Engine\Systems\TriggerSystem.cpp" />
     <ClCompile Include="Engine\Physics\Collision.cpp" />
     <ClCompile Include="Engine\Physics\Trigger.cpp" />
+    <ClCompile Include="Engine\Physics\ICollisionListener.cpp" />
+    <ClCompile Include="Engine\Physics\ITriggerListener.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -474,6 +476,9 @@
     <ClInclude Include="Engine\Physics\TriggerListener.hpp" />
     <ClInclude Include="Engine\Systems\TriggerSystem.hpp" />
     <ClInclude Include="Engine\Physics\Trigger.hpp" />
+    <ClInclude Include="Engine\Physics\ICollisionListener.hpp" />
+    <ClInclude Include="Engine\Physics\ITriggerListener.hpp" />
+    <ClInclude Include="Engine\Physics\CollisionType.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

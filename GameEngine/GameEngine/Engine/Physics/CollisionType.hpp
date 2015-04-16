@@ -6,7 +6,7 @@ namespace AGE
 {
 	namespace Physics
 	{
-		enum class ContactType : std::uint8_t
+		enum class CollisionType : std::uint8_t
 		{
 			New,
 			Persistent,

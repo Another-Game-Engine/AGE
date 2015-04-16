@@ -1,8 +1,11 @@
 #pragma once
 
+#include <unordered_set>
+
 #include <Systems/System.h>
 #include <Physics/CollisionListener.hpp>
 #include <Components/Collider.hpp>
+#include <Physics/ICollisionListener.hpp>
 
 namespace AGE
 {
@@ -24,9 +27,16 @@ namespace AGE
 			// Destructors
 			~CollisionSystem(void) = default;
 
+			// Methods
+			void addListener(Physics::ICollisionListener *listener);
+			
+			void removeListener(Physics::ICollisionListener *listener);
+
 		private:
 			// Attributes
 			EntityFilter entityFilter;
+			
+			std::unordered_set<Physics::ICollisionListener *> listeners;
 
 			// Inherited Methods
 			bool initialize(void) override final;
@@ -35,7 +45,7 @@ namespace AGE
 
 			void mainUpdate(float elapsedTime) override final;
 
-			void onCollision(Collider *currentCollider, Collider *hitCollider, std::vector<Physics::Contact> contacts, Physics::ContactType contactType) override final;
+			void onCollision(Collider *currentCollider, Collider *hitCollider, const std::vector<Physics::Contact> &contacts, Physics::CollisionType CollisionType) override final;
 		};
 	}
 }

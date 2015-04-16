@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include <Physics/ContactType.hpp>
+#include <Physics/CollisionType.hpp>
 #include <Physics/Contact.hpp>
 
 namespace AGE
@@ -17,7 +17,7 @@ namespace AGE
 			// Constructors
 			Collision(void) = delete;
 
-			Collision(Collider *hitCollider, std::vector<Contact> contacts, ContactType contactType);
+			Collision(Collider *hitCollider, std::vector<Contact> contacts, CollisionType collisionType);
 
 			Collision(const Collision &) = default;
 
@@ -38,7 +38,7 @@ namespace AGE
 
 			const std::vector<Contact> &getContacts(void) const;
 
-			ContactType getContactType(void) const;
+			CollisionType getCollisionType(void) const;
 
 		private:
 			// Attributes
@@ -46,7 +46,7 @@ namespace AGE
 
 			std::vector<Contact> contacts;
 
-			ContactType contactType;
+			CollisionType collisionType;
 		};
 	}
 }

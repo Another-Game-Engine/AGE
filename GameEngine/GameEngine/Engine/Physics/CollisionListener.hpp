@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Contact.hpp"
-#include "ContactType.hpp"
+#include "CollisionType.hpp"
 
 namespace AGE
 {
@@ -24,7 +24,7 @@ namespace AGE
 			virtual ~CollisionListener(void) = default;
 
 			// Virtual Methods
-			virtual void onCollision(Collider *currentCollider, Collider *hitCollider, std::vector<Contact> contacts, ContactType contactType) = 0;
+			virtual void onCollision(Collider *currentCollider, Collider *hitCollider, const std::vector<Contact> &contacts, CollisionType CollisionType) = 0;
 		};
 	}
 }
