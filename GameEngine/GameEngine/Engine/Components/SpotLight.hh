@@ -12,7 +12,7 @@ namespace AGE
 	{
 	public:
 		SpotLightComponent();
-		virtual ~SpotLightComponent();
+		virtual ~SpotLightComponent() = default;
 		SpotLightComponent(SpotLightComponent const &o);
 
 		virtual void _copyFrom(const ComponentBase *model);
@@ -20,15 +20,18 @@ namespace AGE
 		virtual void reset();
 		void init();
 
-		SpotLightComponent &set(glm::vec3 const &color = glm::vec3(1.0f), glm::vec3 const &range = glm::vec3(1.0f, 0.1f, 0.01f));
+		SpotLightComponent &set(glm::vec3 const &color, glm::vec3 const &direction, float cutOff);
 
-		template <typename Archive>void serialize(Archive &ar, const std::uint32_t version);
+		template <typename Archive>
+		void serialize(Archive &ar, const std::uint32_t version)
+		{
+			ar(cereal::make_nvp("color", _color), cereal::make_nvp("direction", _direction), cereal::make_nvp("cutOff", _cutOff));
+		}
+
 		inline const glm::vec3 &getColor() const { return _color; }
-		inline const glm::vec3 &getRange() const { return _range; }
-		inline const glm::mat4 &projection() const { return _projection; }
-		inline const glm::mat4 &transform() const { return _transform; }
+		inline const glm::vec3 &getDirection() const { return _direction; }
+		inline float getCutOff() const { return _cutOff;  }
 		inline float *getColorPtr() { return &_color.x; }
-		inline float *getRangePtr() { return &_range.x; }
 		virtual void postUnserialization();
 
 #ifdef EDITOR_ENABLED
@@ -39,10 +42,9 @@ namespace AGE
 
 	private:
 		AGE::PrepareKey _key;
-		glm::mat4 _transform;
-		glm::mat4 _projection;
 		glm::vec3 _color;
-		glm::vec3 _range;
+		glm::vec3 _direction;
+		float _cutOff;
 		std::shared_ptr<ITexture> _map;
 
 	};

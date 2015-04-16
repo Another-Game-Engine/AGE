@@ -14,20 +14,13 @@
 namespace AGE
 {
 	SpotLightComponent::SpotLightComponent()
-		: _range(1)
-		, _color(1),
+		:  _color(1),
 		_map(nullptr)
 	{
 	}
 
-	SpotLightComponent::~SpotLightComponent()
-	{
-
-	}
-
 	SpotLightComponent::SpotLightComponent(SpotLightComponent const &o)
 		: _key(o._key)
-		, _range(o._range)
 		, _color(o._color),
 		_map(o._map)
 	{
@@ -37,7 +30,6 @@ namespace AGE
 	void SpotLightComponent::_copyFrom(const ComponentBase *model)
 	{
 		auto o = static_cast<const SpotLightComponent*>(model);
-		_range = o->_range;
 		_color = o->_color;
 		postUnserialization();
 	}
@@ -50,7 +42,6 @@ namespace AGE
 		}
 		_key = AGE::PrepareKey();
 		_color = glm::vec3(1);
-		_range = glm::vec3(1);
 	}
 
 	void SpotLightComponent::init()
@@ -61,18 +52,19 @@ namespace AGE
 		assert(!_key.invalid());
 	}
 
-	SpotLightComponent &SpotLightComponent::set(glm::vec3 const &color, glm::vec3 const &range)
+	SpotLightComponent &SpotLightComponent::set(glm::vec3 const &color, glm::vec3 const &direction, float cutOff)
 	{
 		_color = color;
-		_range = range;
-		AGE::GetPrepareThread()->setPointLight(color, range, _map, _key);
+		_direction = direction;
+		_cutOff = cutOff;
+		AGE::GetPrepareThread()->setSpotLight(_color, _direction, _cutOff, _map, _key);
 		return (*this);
 	}
 
 	void SpotLightComponent::postUnserialization()
 	{
 		init();
-		set(_color, _range);
+		set(_color, _direction, _cutOff);
 	}
 
 #ifdef EDITOR_ENABLED
@@ -84,18 +76,7 @@ namespace AGE
 
 	bool SpotLightComponent::editorUpdate()
 	{
-		bool modified = false;
-		if (ImGui::ColorEdit3("Color", getColorPtr()))
-		{
-			set(_color, _range);
-			modified = true;
-		}
-		if (ImGui::SliderFloat3("Range", glm::value_ptr(_range), 0.0f, 1.0f))
-		{
-			set(_color, _range);
-			modified = true;
-		}
-		return modified;
+		return false;
 	}
 #endif
 }

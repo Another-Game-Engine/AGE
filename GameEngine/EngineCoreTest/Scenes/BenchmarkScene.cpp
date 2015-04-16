@@ -17,6 +17,7 @@
 #include <Components/FreeFlyComponent.hh>
 #include <Components/CameraComponent.hpp>
 #include <Components/Light.hh>
+#include <Components/SpotLight.hh>
 #include <Components/RigidBody.hpp>
 #include <Components/MeshRenderer.hh>
 #include <Components/Lifetime.hpp>
@@ -75,6 +76,7 @@ namespace AGE
 		REGISTER_COMPONENT_TYPE(AGE::Lifetime);
 		REGISTER_COMPONENT_TYPE(AGE::RigidBody);
 		REGISTER_COMPONENT_TYPE(AGE::PointLightComponent);
+		REGISTER_COMPONENT_TYPE(AGE::SpotLightComponent);
 		REGISTER_COMPONENT_TYPE(AGE::FreeFlyComponent);
 		REGISTER_COMPONENT_TYPE(AGE::RotationComponent);
 
