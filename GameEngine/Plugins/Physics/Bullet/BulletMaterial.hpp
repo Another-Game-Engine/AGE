@@ -1,5 +1,8 @@
 #pragma once
 
+#include <btBulletCollisionCommon.h>
+#include <BulletCollision/CollisionShapes/btMaterial.h>
+
 #include "MaterialInterface.hpp"
 
 namespace AGE
@@ -25,9 +28,12 @@ namespace AGE
 			BulletMaterial &operator=(const BulletMaterial &) = delete;
 
 			// Destructor
-			~BulletMaterial(void) = default;
+			~BulletMaterial(void);
 
 		private:
+			// Attributes
+			btMaterial *material = new btMaterial();
+
 			// Inherited Methods
 			void setStaticFriction(float staticFriction) override final;
 

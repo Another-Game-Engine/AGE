@@ -9,41 +9,51 @@ namespace AGE
 		BulletMaterial::BulletMaterial(ColliderInterface *collider)
 			: MaterialInterface(collider)
 		{
-			return;
+			assert(material != nullptr && "Impossible to create material");
+		}
+
+		// Destructor
+		BulletMaterial::~BulletMaterial(void)
+		{
+			delete material;
+			material = nullptr;
 		}
 
 		// Inherited Methods
 		void BulletMaterial::setStaticFriction(float staticFriction)
 		{
-			// TO_DO
+			assert(material != nullptr && "Invalid material");
+			material->m_friction = staticFriction;
 		}
 
 		float BulletMaterial::getStaticFriction(void) const
 		{
-			// TO_DO
-			return 0.0f;
+			assert(material != nullptr && "Invalid material");
+			return material->m_friction;
 		}
 
 		void BulletMaterial::setDynamicFriction(float dynamicFriction)
 		{
-			// TO_DO
+			assert(material != nullptr && "Invalid material");
+			material->m_friction = dynamicFriction;
 		}
 
 		float BulletMaterial::getDynamicFriction(void) const
 		{
-			// TO_DO
-			return 0.0f;
+			assert(material != nullptr && "Invalid material");
+			return material->m_friction;
 		}
 
 		void BulletMaterial::setRestitution(float restitution)
 		{
-			// TO_DO
+			assert(material != nullptr && "Invalid material");
+			material->m_restitution = restitution;
 		}
 
 		float BulletMaterial::getRestitution(void) const
 		{
-			// TO_DO
-			return 0.0f;
+			assert(material != nullptr && "Invalid material");
+			return material->m_restitution;
 		}
 	}
 }
