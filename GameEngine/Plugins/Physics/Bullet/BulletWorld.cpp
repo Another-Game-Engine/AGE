@@ -16,34 +16,60 @@ namespace AGE
 		BulletWorld::BulletWorld(BulletPhysics *physics, const glm::vec3 &gravity)
 			: WorldInterface(physics)
 		{
-			// TO_DO
+			assert(world != nullptr && "Impossible to create world");
+			world->setGravity(btVector3(0.0f, -9.81f, 0.0f));
+			world->getPairCache()->setOverlapFilterCallback(this);
+		}
+
+		// Destructor
+		BulletWorld::~BulletWorld(void)
+		{
+			if (world != nullptr)
+			{
+				world->getPairCache()->setOverlapFilterCallback(nullptr);
+			}
+			delete collisionConfiguration;
+			delete dispatcher;
+			delete overlappingPairCache;
+			delete solver;
+			delete world;
+			collisionConfiguration = nullptr;
+			dispatcher = nullptr;
+			overlappingPairCache = nullptr;
+			solver = nullptr;
+			world = nullptr;
 		}
 
 		// Inherited Methods
 		void BulletWorld::setGravity(const glm::vec3 &gravity)
 		{
-			// TO_DO
+			assert(world != nullptr && "Invalid world");
+			world->setGravity(btVector3(gravity.x, gravity.y, gravity.z));
 		}
 
 		glm::vec3 BulletWorld::getGravity(void) const
 		{
-			// TO_DO
-			return glm::vec3();
+			assert(world != nullptr && "Invalid world");
+			const btVector3 gravity = world->getGravity();
+			return glm::vec3(gravity.x(), gravity.y(), gravity.z());
 		}
 
 		void BulletWorld::enableCollisionBetweenGroups(FilterGroup group1, FilterGroup group2)
 		{
-			// TO_DO
+			groupCollisionFlags[static_cast<std::uint8_t>(group1)] |= (1 << static_cast<std::uint8_t>(group2));
+			groupCollisionFlags[static_cast<std::uint8_t>(group2)] |= (1 << static_cast<std::uint8_t>(group1));
 		}
 
 		void BulletWorld::disableCollisionBetweenGroups(FilterGroup group1, FilterGroup group2)
 		{
-			// TO_DO
+			groupCollisionFlags[static_cast<std::uint8_t>(group1)] &= ~(1 << static_cast<std::uint8_t>(group2));
+			groupCollisionFlags[static_cast<std::uint8_t>(group2)] &= ~(1 << static_cast<std::uint8_t>(group1));
 		}
 
 		void BulletWorld::simulate(float stepSize)
 		{
-			// TO_DO
+			assert(world != nullptr && "Invalid world");
+			world->stepSimulation(stepSize);
 		}
 
 		RigidBodyInterface *BulletWorld::createRigidBody(Private::GenericData *data)
@@ -104,6 +130,13 @@ namespace AGE
 		void BulletWorld::destroyMaterial(MaterialInterface *material)
 		{
 			destroy(static_cast<BulletMaterial *>(material));
+		}
+
+		bool BulletWorld::needBroadphaseCollision(btBroadphaseProxy *proxy1, btBroadphaseProxy *proxy2) const
+		{
+			const std::uint32_t shapeGroup1 = static_cast<std::uint32_t>(proxy1->m_collisionFilterGroup) & 31;
+			const std::uint32_t shapeGroup2 = static_cast<std::uint32_t>(proxy2->m_collisionFilterGroup) & 31;
+			return (groupCollisionFlags[shapeGroup1] & (1 << shapeGroup2)) != 0;
 		}
 	}
 }

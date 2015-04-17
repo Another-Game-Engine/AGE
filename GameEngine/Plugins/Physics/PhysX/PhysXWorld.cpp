@@ -14,9 +14,6 @@ namespace AGE
 {
 	namespace Physics
 	{
-		// Static Variables
-		static physx::PxU32 GroupCollisionFlags[32];
-
 		// Static Methods
 		physx::PxFilterFlags PhysXWorld::FilterShader(physx::PxFilterObjectAttributes attributes1, physx::PxFilterData filterData1, physx::PxFilterObjectAttributes attributes2,
 													  physx::PxFilterData filterData2, physx::PxPairFlags &pairFlags, const void *constantBlock, physx::PxU32 constantBlockSize)
@@ -48,13 +45,13 @@ namespace AGE
 				assert(!"Impossible to create cpu dispatcher");
 				return;
 			}
-			for (std::size_t index = 0; index < sizeof(GroupCollisionFlags) / sizeof(*GroupCollisionFlags); ++index)
+			for (std::size_t index = 0; index < sizeof(groupCollisionFlags) / sizeof(*groupCollisionFlags); ++index)
 			{
-				GroupCollisionFlags[index] = 0xFFFFFFFF;
+				groupCollisionFlags[index] = 0xFFFFFFFF;
 			}
 			sceneDescription.filterShader = &PhysXWorld::FilterShader;
-			sceneDescription.filterShaderData = static_cast<const void *>(GroupCollisionFlags);
-			sceneDescription.filterShaderDataSize = sizeof(GroupCollisionFlags);
+			sceneDescription.filterShaderData = static_cast<const void *>(groupCollisionFlags);
+			sceneDescription.filterShaderDataSize = sizeof(groupCollisionFlags);
 			scene = physics->getPhysics()->createScene(sceneDescription);
 			assert(scene != nullptr && "Impossible to create scene");
 			scene->setFlag(physx::PxSceneFlag::eENABLE_KINEMATIC_PAIRS, true);
@@ -100,14 +97,14 @@ namespace AGE
 
 		void PhysXWorld::enableCollisionBetweenGroups(FilterGroup group1, FilterGroup group2)
 		{
-			GroupCollisionFlags[static_cast<std::uint8_t>(group1)] |= (1 << static_cast<std::uint8_t>(group2));
-			GroupCollisionFlags[static_cast<std::uint8_t>(group2)] |= (1 << static_cast<std::uint8_t>(group1));
+			groupCollisionFlags[static_cast<std::uint8_t>(group1)] |= (1 << static_cast<std::uint8_t>(group2));
+			groupCollisionFlags[static_cast<std::uint8_t>(group2)] |= (1 << static_cast<std::uint8_t>(group1));
 		}
 
 		void PhysXWorld::disableCollisionBetweenGroups(FilterGroup group1, FilterGroup group2)
 		{
-			GroupCollisionFlags[static_cast<std::uint8_t>(group1)] &= ~(1 << static_cast<std::uint8_t>(group2));
-			GroupCollisionFlags[static_cast<std::uint8_t>(group2)] &= ~(1 << static_cast<std::uint8_t>(group1));
+			groupCollisionFlags[static_cast<std::uint8_t>(group1)] &= ~(1 << static_cast<std::uint8_t>(group2));
+			groupCollisionFlags[static_cast<std::uint8_t>(group2)] &= ~(1 << static_cast<std::uint8_t>(group1));
 		}
 
 		void PhysXWorld::simulate(float stepSize)

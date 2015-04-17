@@ -1,5 +1,7 @@
 #pragma once
 
+#include <btBulletDynamicsCommon.h>
+
 #include "WorldInterface.hpp"
 #include "BulletPhysics.hpp"
 #include "BulletRigidBody.hpp"
@@ -14,7 +16,7 @@ namespace AGE
 {
 	namespace Physics
 	{
-		class BulletWorld final : public WorldInterface, public MemoryPoolHelper<BulletRigidBody, BulletMaterial, BulletBoxCollider, BulletCapsuleCollider, BulletMeshCollider, BulletSphereCollider>
+		class BulletWorld final : public WorldInterface, public btOverlapFilterCallback, public MemoryPoolHelper<BulletRigidBody, BulletMaterial, BulletBoxCollider, BulletCapsuleCollider, BulletMeshCollider, BulletSphereCollider>
 		{
 		public:
 			// Constructors
@@ -27,10 +29,23 @@ namespace AGE
 			// Assignment Operators
 			BulletWorld &operator=(const BulletWorld &) = delete;
 
-			// Destructor
-			virtual ~BulletWorld(void) = default;
-
 		private:
+			// Attributes
+			btDefaultCollisionConfiguration *collisionConfiguration = new btDefaultCollisionConfiguration();
+
+			btCollisionDispatcher *dispatcher = new btCollisionDispatcher(collisionConfiguration);
+
+			btBroadphaseInterface *overlappingPairCache = new btDbvtBroadphase();
+
+			btSequentialImpulseConstraintSolver *solver = new btSequentialImpulseConstraintSolver();
+
+			btDiscreteDynamicsWorld *world = new btDiscreteDynamicsWorld(dispatcher, overlappingPairCache, solver, collisionConfiguration);
+
+			std::uint32_t groupCollisionFlags[32];
+
+			// Destructor
+			virtual ~BulletWorld(void);
+
 			// Inherited Methods
 			void setGravity(const glm::vec3 &gravity) override final;
 
@@ -53,6 +68,8 @@ namespace AGE
 			MaterialInterface *createMaterial(ColliderInterface *collider) override final;
 
 			void destroyMaterial(MaterialInterface *material) override final;
+
+			bool needBroadphaseCollision(btBroadphaseProxy *proxy1, btBroadphaseProxy *proxy2) const override final;
 		};
 	}
 }

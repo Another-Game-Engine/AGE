@@ -41,6 +41,8 @@ namespace AGE
 			// Attributes
 			physx::PxScene *scene = nullptr;
 
+			physx::PxU32 groupCollisionFlags[32];
+
 			// Static Methods
 			static physx::PxFilterFlags FilterShader(physx::PxFilterObjectAttributes attributes1, physx::PxFilterData filterData1, physx::PxFilterObjectAttributes attributes2,
 													 physx::PxFilterData filterData2, physx::PxPairFlags& pairFlags, const void *constantBlock, physx::PxU32 constantBlockSize);
