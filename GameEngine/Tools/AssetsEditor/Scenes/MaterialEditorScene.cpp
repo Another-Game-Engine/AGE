@@ -80,8 +80,18 @@ namespace AGE
 		if (_indexMaterial != -1 && ImGui::Button("open a material"))
 		{
 			_resetEdition();
+
+			//std::shared_ptr<MaterialDataSet> material_data_set = std::make_shared<MaterialDataSet>();
+			//std::ifstream ifs(filePath.getFullName(), std::ios::binary);
+			//cereal::PortableBinaryInputArchive ar(ifs);
+			//ar(*material_data_set.get());
+			//material->name = material_data_set->name;
+			//material->path = _filePath.getFullName();
+
+			//getInstance<AssetsManager>()->loadMaterial()
+
 			std::shared_ptr<MaterialDataSet> material_data_set = std::make_shared<MaterialDataSet>();
-			std::ifstream ifs(materialFullPath[_indexMaterial]);
+			std::ifstream ifs(materialFullPath[_indexMaterial], std::ios::binary);
 			cereal::PortableBinaryInputArchive ar(ifs);
 			ar(*material_data_set.get());
 			_current = *material_data_set;
