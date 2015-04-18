@@ -150,7 +150,7 @@ namespace AGE
 				return;
 			}
 
-			_depthMapManager.init(1280, 720, 0);
+			_depthMapManager.init(1280, 720, 2);
 
 			msg.setValue(true);
 		});
@@ -242,6 +242,7 @@ namespace AGE
 				pipelines[curCamera.camInfos.renderType]->render(curCamera.pipeline, curCamera.lights, curCamera.camInfos);
 			}
 			_drawlistPtr = nullptr;
+			painterPtr->remove_vertices(debug2Dlines.verticesKey);
 		});
 
 		registerSharedCallback<AGE::Tasks::Basic::BoolFunction>([&](AGE::Tasks::Basic::BoolFunction& msg)

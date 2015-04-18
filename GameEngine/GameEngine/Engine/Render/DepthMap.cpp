@@ -22,7 +22,7 @@ namespace AGE
 		_buffer.resize(_mipmapHeight * _mipmapWidth, -1);
 	}
 
-	bool DepthMap::passTest(uint32_t pixelDepth, std::size_t x, std::size_t y) const
+	bool DepthMap::testPixel(uint32_t pixelDepth, std::size_t x, std::size_t y) const
 	{
 		if (x >= _width)
 		{
@@ -47,6 +47,23 @@ namespace AGE
 			return false;
 		}
 		return true;
+	}
+
+	bool DepthMap::testBox(uint32_t pixelDepth, glm::uvec2 min, glm::uvec2 max) const
+	{
+		for (std::size_t y = min.y; y < max.y; ++y)
+		{
+			for (std::size_t x = min.x; x < max.x; ++x)
+			{
+				std::size_t index = x + y * _mipmapWidth;
+				uint32_t depth = (_buffer[index] & 0xFFFFFF00) >> 8;
+				if (depth > pixelDepth)
+				{
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	const glm::mat4 &DepthMap::getMV() const { return _mv; }

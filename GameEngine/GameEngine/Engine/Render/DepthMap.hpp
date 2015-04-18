@@ -11,7 +11,8 @@ namespace AGE
 	{
 	public:
 		void init(std::size_t width, std::size_t height, std::size_t mipmalLevel);
-		bool passTest(uint32_t pixelDepth, std::size_t x, std::size_t y) const;
+		bool testPixel(uint32_t pixelDepth, std::size_t x, std::size_t y) const;
+		bool testBox(uint32_t pixelDepth, glm::uvec2 min, glm::uvec2 max) const;
 		const glm::mat4 &getMV() const;
 		std::size_t getMipmapWidth() const { return _mipmapWidth; }
 		std::size_t getMipmapHeight() const { return _mipmapHeight; }

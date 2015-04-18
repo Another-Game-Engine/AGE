@@ -480,6 +480,7 @@ namespace AGE
 
 						glm::vec2 minPoint = glm::vec2(1);
 						glm::vec2 maxPoint = glm::vec2(-1);
+
 						float minZ = std::numeric_limits<float>::max();
 
 						for (std::size_t i = 0; i < 8; ++i)
@@ -504,23 +505,37 @@ namespace AGE
 								point.y = 1;
 							}
 
-							int screenX = (point.x + 1) / 2.0f * depthMap->getMipmapWidth();
-							int screenY = (point.y + 1) / 2.0f * depthMap->getMipmapHeight();
-
 							minPoint.x = std::min(minPoint.x, point.x);
 							minPoint.y = std::min(minPoint.y, point.y);
 							maxPoint.x = std::max(maxPoint.x, point.x);
 							maxPoint.y = std::max(maxPoint.y, point.y);
 
 							point.z = (point.z + 1) * 0.5;
-
 							minZ = std::min(minZ, point.z);
-
-							if (depthMap->passTest((uint32_t)(point.z * (1 << 24)), screenX, screenY) == true)
-							{
-								drawObject = true;
-							}
 						}
+
+
+						//int screenX = (minPoint.x + 1) / 2.0f * depthMap->getMipmapWidth();
+						//int screenY = (minPoint.y + 1) / 2.0f * depthMap->getMipmapHeight();
+						//drawObject |= depthMap->testPixel((uint32_t)(minZ * (1 << 24)), screenX, screenY);
+
+						//screenX = (minPoint.x + 1) / 2.0f * depthMap->getMipmapWidth();
+						//screenY = (maxPoint.y + 1) / 2.0f * depthMap->getMipmapHeight();
+						//drawObject |= depthMap->testPixel((uint32_t)(minZ * (1 << 24)), screenX, screenY);
+
+						//screenX = (maxPoint.x + 1) / 2.0f * depthMap->getMipmapWidth();
+						//screenY = (maxPoint.y + 1) / 2.0f * depthMap->getMipmapHeight();
+						//drawObject |= depthMap->testPixel((uint32_t)(minZ * (1 << 24)), screenX, screenY);
+
+						//screenX = (maxPoint.x + 1) / 2.0f * depthMap->getMipmapWidth();
+						//screenY = (minPoint.y + 1) / 2.0f * depthMap->getMipmapHeight();
+						//drawObject |= depthMap->testPixel((uint32_t)(minZ * (1 << 24)), screenX, screenY);
+
+						glm::uvec2 screenMin(((minPoint + glm::vec2(1)) / glm::vec2(2)) * glm::vec2(depthMap->getMipmapWidth(), depthMap->getMipmapHeight()));
+						glm::uvec2 screenMax(((maxPoint + glm::vec2(1)) / glm::vec2(2)) * glm::vec2(depthMap->getMipmapWidth(), depthMap->getMipmapHeight()));
+
+						drawObject |= depthMap->testBox((uint32_t)(minZ * (1 << 24)), screenMin, screenMax);
+
 						if (drawObject)
 						{
 							GetRenderThread()->getQueue()->emplaceCommand<AGE::Commands::ToRender::Draw2DLine>(glm::vec2(minPoint.x, minPoint.y), glm::vec2(minPoint.x, maxPoint.y));
