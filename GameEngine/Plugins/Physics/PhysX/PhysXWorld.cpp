@@ -1,4 +1,3 @@
-#include <thread>
 #include <cassert>
 #include <vector>
 
@@ -39,7 +38,7 @@ namespace AGE
 			sceneDescription.flags |= physx::PxSceneFlag::eENABLE_CCD;
 			sceneDescription.broadPhaseType = physx::PxBroadPhaseType::eMBP;
 			sceneDescription.gravity = physx::PxVec3(gravity.x, gravity.y, gravity.z);
-			sceneDescription.cpuDispatcher = physx::PxDefaultCpuDispatcherCreate(std::thread::hardware_concurrency());
+			sceneDescription.cpuDispatcher = physx::PxDefaultCpuDispatcherCreate(1);
 			if (sceneDescription.cpuDispatcher == nullptr)
 			{
 				assert(!"Impossible to create cpu dispatcher");

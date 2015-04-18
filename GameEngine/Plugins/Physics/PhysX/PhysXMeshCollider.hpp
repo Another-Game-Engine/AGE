@@ -26,7 +26,7 @@ namespace AGE
 			// Assignment Operators
 			PhysXMeshCollider &operator=(const PhysXMeshCollider &) = delete;
 
-		protected:
+		private:
 			// Destructor
 			~PhysXMeshCollider(void) = default;
 		};

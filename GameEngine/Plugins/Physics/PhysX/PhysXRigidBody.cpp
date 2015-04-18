@@ -15,6 +15,18 @@ namespace AGE
 			}
 			assert(getData()->data != nullptr && "Impossible to create actor");
 			world->getScene()->addActor(*getDataAs<physx::PxRigidDynamic>());
+			setAngularDrag(GetDefaultAngularDrag());
+			setAngularVelocity(GetDefaultAngularVelocity());
+			setCenterOfMass(GetDefaultCenterOfMass());
+			setLinearDrag(GetDefaultLinearDrag());
+			setLinearVelocity(GetDefaultLinearVelocity());
+			setMass(GetDefaultMass());
+			setDiagonalInertiaTensor(GetDefaultDiagonalInertiaTensor());
+			setMaxAngularVelocity(GetDefaultMaxAngularVelocity());
+			setMaxDepenetrationVelocity(GetDefaultMaxDepenetrationVelocity());
+			affectByGravity(IsAffectedByGravityByDefault());
+			setAsKinematic(IsKinematicByDefault());
+			setCollisionDetectionMode(GetDefaultCollisionDetectionMode());
 		}
 
 		// Inherited Methods

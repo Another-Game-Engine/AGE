@@ -38,12 +38,12 @@ namespace AGE
 			// Assignment Operators
 			PhysXMaterial &operator=(const PhysXMaterial &) = delete;
 
-			// Destructor
-			~PhysXMaterial(void) = default;
-
 		private:
 			// Attributes
 			physx::PxMaterial *material = nullptr;
+
+			// Destructor
+			~PhysXMaterial(void) = default;
 
 			// Inherited Methods
 			void setStaticFriction(float staticFriction) override final;

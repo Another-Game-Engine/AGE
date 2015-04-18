@@ -26,7 +26,7 @@ namespace AGE
 			// Assignment Operators
 			BulletMeshCollider &operator=(const BulletMeshCollider &) = delete;
 
-		protected:
+		private:
 			// Destructor
 			~BulletMeshCollider(void) = default;
 		};

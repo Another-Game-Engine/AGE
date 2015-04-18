@@ -7,7 +7,7 @@ namespace AGE
 	{
 		// Constructors
 		PhysXMaterial::PhysXMaterial(PhysXWorld *world, ColliderInterface *collider)
-			: MaterialInterface(collider), material(static_cast<PhysXPhysics *>(world->getPhysics())->getPhysics()->createMaterial(0.5f, 0.5f, 0.1f))
+			: MaterialInterface(collider), material(static_cast<PhysXPhysics *>(world->getPhysics())->getPhysics()->createMaterial(GetDefaultStaticFriction(), GetDefaultDynamicFriction(), GetDefaultRestitution()))
 		{
 			assert(material != nullptr && "Impossible to create material");
 		}

@@ -24,10 +24,10 @@ namespace AGE
 			// Assignment Operators
 			BulletRigidBody &operator=(const BulletRigidBody &) = delete;
 
+		private:
 			// Destructor
 			~BulletRigidBody(void) = default;
 
-		private:
 			// Inherited Methods
 			void setAngularDrag(float angularDrag) override final;
 

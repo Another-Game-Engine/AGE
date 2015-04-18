@@ -1,6 +1,7 @@
 #include <cmath>
 
 #include "PhysXCollider.hpp"
+#include "PhysXMaterial.hpp"
 
 namespace AGE
 {

@@ -29,6 +29,9 @@ namespace AGE
 			virtual float getRadius(void) const = 0;
 
 		protected:
+			// Static Methods
+			static float GetDefaultRadius(void);
+
 			// Destructor
 			virtual ~SphereColliderInterface(void) = default;
 

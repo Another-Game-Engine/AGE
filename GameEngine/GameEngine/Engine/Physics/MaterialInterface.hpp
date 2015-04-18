@@ -40,6 +40,13 @@ namespace AGE
 			virtual float getRestitution(void) const = 0;
 
 		protected:
+			// Static Methods
+			static float GetDefaultStaticFriction(void);
+
+			static float GetDefaultDynamicFriction(void);
+
+			static float GetDefaultRestitution(void);
+
 			// Destructor
 			virtual ~MaterialInterface(void) = default;
 

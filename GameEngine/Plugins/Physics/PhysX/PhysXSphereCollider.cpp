@@ -8,7 +8,7 @@ namespace AGE
 	{
 		// Constructors
 		PhysXSphereCollider::PhysXSphereCollider(WorldInterface *world, Private::GenericData *data)
-			: ColliderInterface(world, data), SphereColliderInterface(world, data), PhysXCollider(world, data, static_cast<PhysXPhysics *>(world->getPhysics())->getPhysics()->createShape(physx::PxSphereGeometry(1.0f), *static_cast<const PhysXMaterial *>(getMaterial())->material))
+			: ColliderInterface(world, data), SphereColliderInterface(world, data), PhysXCollider(world, data, static_cast<PhysXPhysics *>(world->getPhysics())->getPhysics()->createShape(physx::PxSphereGeometry(GetDefaultRadius()), *static_cast<const PhysXMaterial *>(getMaterial())->material))
 		{
 			return;
 		}

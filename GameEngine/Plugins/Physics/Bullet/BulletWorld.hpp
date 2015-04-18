@@ -31,15 +31,15 @@ namespace AGE
 
 		private:
 			// Attributes
-			btDefaultCollisionConfiguration *collisionConfiguration = new btDefaultCollisionConfiguration();
+			btDefaultCollisionConfiguration collisionConfiguration;
 
-			btCollisionDispatcher *dispatcher = new btCollisionDispatcher(collisionConfiguration);
+			btCollisionDispatcher dispatcher = btCollisionDispatcher(&collisionConfiguration);
 
-			btBroadphaseInterface *overlappingPairCache = new btDbvtBroadphase();
+			btDbvtBroadphase overlappingPairCache;
 
-			btSequentialImpulseConstraintSolver *solver = new btSequentialImpulseConstraintSolver();
+			btSequentialImpulseConstraintSolver solver;
 
-			btDiscreteDynamicsWorld *world = new btDiscreteDynamicsWorld(dispatcher, overlappingPairCache, solver, collisionConfiguration);
+			btDiscreteDynamicsWorld world = btDiscreteDynamicsWorld(&dispatcher, &overlappingPairCache, &solver, &collisionConfiguration);
 
 			std::uint32_t groupCollisionFlags[32];
 

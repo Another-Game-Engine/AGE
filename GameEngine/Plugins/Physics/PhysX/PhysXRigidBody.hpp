@@ -24,10 +24,10 @@ namespace AGE
 			// Assignment Operators
 			PhysXRigidBody &operator=(const PhysXRigidBody &) = delete;
 
+		private:
 			// Destructor
 			~PhysXRigidBody(void) = default;
 
-		private:
 			// Inherited Methods
 			void setAngularDrag(float angularDrag) override final;
 

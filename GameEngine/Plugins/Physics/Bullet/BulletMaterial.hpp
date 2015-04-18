@@ -27,12 +27,12 @@ namespace AGE
 			// Assignment Operators
 			BulletMaterial &operator=(const BulletMaterial &) = delete;
 
-			// Destructor
-			~BulletMaterial(void);
-
 		private:
 			// Attributes
-			btMaterial *material = new btMaterial();
+			btMaterial material;
+
+			// Destructor
+			~BulletMaterial(void) = default;
 
 			// Inherited Methods
 			void setStaticFriction(float staticFriction) override final;

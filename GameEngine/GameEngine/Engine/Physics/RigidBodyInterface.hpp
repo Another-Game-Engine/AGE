@@ -128,6 +128,31 @@ namespace AGE
 			virtual glm::vec3 getVelocityAtLocalPosition(const glm::vec3 &position) const = 0;
 
 		protected:
+			// Static Methods
+			static float GetDefaultAngularDrag(void);
+
+			static glm::vec3 GetDefaultAngularVelocity(void);
+
+			static glm::vec3 GetDefaultCenterOfMass(void);
+
+			static float GetDefaultLinearDrag(void);
+
+			static glm::vec3 GetDefaultLinearVelocity(void);
+
+			static float GetDefaultMass(void);
+
+			static glm::vec3 GetDefaultDiagonalInertiaTensor(void);
+
+			static float GetDefaultMaxAngularVelocity(void);
+
+			static float GetDefaultMaxDepenetrationVelocity(void);
+
+			static bool IsAffectedByGravityByDefault(void);
+
+			static bool IsKinematicByDefault(void);
+
+			static CollisionDetectionMode GetDefaultCollisionDetectionMode(void);
+
 			// Destructor
 			virtual ~RigidBodyInterface(void);
 

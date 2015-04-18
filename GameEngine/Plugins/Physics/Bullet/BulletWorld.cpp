@@ -16,41 +16,26 @@ namespace AGE
 		BulletWorld::BulletWorld(BulletPhysics *physics, const glm::vec3 &gravity)
 			: WorldInterface(physics)
 		{
-			assert(world != nullptr && "Impossible to create world");
-			world->setGravity(btVector3(0.0f, -9.81f, 0.0f));
-			world->getPairCache()->setOverlapFilterCallback(this);
+			world.setGravity(btVector3(0.0f, -9.81f, 0.0f));
+			world.getPairCache()->setOverlapFilterCallback(this);
+			world.getDispatchInfo().m_useContinuous = true;
 		}
 
 		// Destructor
 		BulletWorld::~BulletWorld(void)
 		{
-			if (world != nullptr)
-			{
-				world->getPairCache()->setOverlapFilterCallback(nullptr);
-			}
-			delete collisionConfiguration;
-			delete dispatcher;
-			delete overlappingPairCache;
-			delete solver;
-			delete world;
-			collisionConfiguration = nullptr;
-			dispatcher = nullptr;
-			overlappingPairCache = nullptr;
-			solver = nullptr;
-			world = nullptr;
+			world.getPairCache()->setOverlapFilterCallback(nullptr);
 		}
 
 		// Inherited Methods
 		void BulletWorld::setGravity(const glm::vec3 &gravity)
 		{
-			assert(world != nullptr && "Invalid world");
-			world->setGravity(btVector3(gravity.x, gravity.y, gravity.z));
+			world.setGravity(btVector3(gravity.x, gravity.y, gravity.z));
 		}
 
 		glm::vec3 BulletWorld::getGravity(void) const
 		{
-			assert(world != nullptr && "Invalid world");
-			const btVector3 gravity = world->getGravity();
+			const btVector3 gravity = world.getGravity();
 			return glm::vec3(gravity.x(), gravity.y(), gravity.z());
 		}
 
@@ -68,8 +53,7 @@ namespace AGE
 
 		void BulletWorld::simulate(float stepSize)
 		{
-			assert(world != nullptr && "Invalid world");
-			world->stepSimulation(stepSize);
+			world.stepSimulation(stepSize);
 		}
 
 		RigidBodyInterface *BulletWorld::createRigidBody(Private::GenericData *data)

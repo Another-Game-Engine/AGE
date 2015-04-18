@@ -13,13 +13,12 @@ namespace AGE
 
 		bool BulletPhysics::initialize(void)
 		{
-			// TO_DO
 			return true;
 		}
 
 		void BulletPhysics::finalize(void)
 		{
-			// TO_DO
+			return;
 		}
 
 		WorldInterface *BulletPhysics::createWorld(const glm::vec3 &gravity)

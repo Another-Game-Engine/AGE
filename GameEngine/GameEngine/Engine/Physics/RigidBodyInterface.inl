@@ -11,6 +11,67 @@ namespace AGE
 {
 	namespace Physics
 	{
+		// Static Methods
+		inline float RigidBodyInterface::GetDefaultAngularDrag(void)
+		{
+			return 0.05f;
+		}
+
+		inline glm::vec3 RigidBodyInterface::GetDefaultAngularVelocity(void)
+		{
+			return glm::vec3();
+		}
+
+		inline glm::vec3 RigidBodyInterface::GetDefaultCenterOfMass(void)
+		{
+			return glm::vec3();
+		}
+
+		inline float RigidBodyInterface::GetDefaultLinearDrag(void)
+		{
+			return 0.0f;
+		}
+
+		inline glm::vec3 RigidBodyInterface::GetDefaultLinearVelocity(void)
+		{
+			return glm::vec3();
+		}
+
+		inline float RigidBodyInterface::GetDefaultMass(void)
+		{
+			return 1.0f;
+		}
+
+		inline glm::vec3 RigidBodyInterface::GetDefaultDiagonalInertiaTensor(void)
+		{
+			return glm::vec3();
+		}
+
+		inline float RigidBodyInterface::GetDefaultMaxAngularVelocity(void)
+		{
+			return std::numeric_limits<float>::max();
+		}
+
+		inline float RigidBodyInterface::GetDefaultMaxDepenetrationVelocity(void)
+		{
+			return std::numeric_limits<float>::max();
+		}
+
+		inline bool RigidBodyInterface::IsAffectedByGravityByDefault(void)
+		{
+			return true;
+		}
+
+		inline bool RigidBodyInterface::IsKinematicByDefault(void)
+		{
+			return false;
+		}
+
+		inline CollisionDetectionMode RigidBodyInterface::GetDefaultCollisionDetectionMode(void)
+		{
+			return CollisionDetectionMode::Continuous;
+		}
+
 		// Constructors
 		inline RigidBodyInterface::RigidBodyInterface(WorldInterface *world, Private::GenericData *data)
 			: world(world), data(data)

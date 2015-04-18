@@ -8,6 +8,22 @@ namespace AGE
 {
 	namespace Physics
 	{
+		// Static Methods
+		inline float MaterialInterface::GetDefaultStaticFriction(void)
+		{
+			return 0.5f;
+		}
+
+		inline float MaterialInterface::GetDefaultDynamicFriction(void)
+		{
+			return 0.5f;
+		}
+
+		inline float MaterialInterface::GetDefaultRestitution(void)
+		{
+			return 0.1f;
+		}
+
 		// Constructors
 		inline MaterialInterface::MaterialInterface(ColliderInterface *collider)
 			: collider(collider)

@@ -6,6 +6,12 @@ namespace AGE
 {
 	namespace Physics
 	{
+		// Static Methods
+		inline float SphereColliderInterface::GetDefaultRadius(void)
+		{
+			return 1.0f;
+		}
+
 		// Constructors
 		inline SphereColliderInterface::SphereColliderInterface(WorldInterface *world, Private::GenericData *data)
 			: ColliderInterface(world, data)

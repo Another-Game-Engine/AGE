@@ -29,6 +29,9 @@ namespace AGE
 			virtual glm::vec3 getSize(void) const = 0;
 
 		protected:
+			// Static Methods
+			static glm::vec3 GetDefaultBoxSize(void);
+
 			// Destructor
 			virtual ~BoxColliderInterface(void) = default;
 
