@@ -34,6 +34,8 @@ namespace AGE
 
 		protected:
 			// Static Methods
+			static glm::vec3 GetDefaultCenter(void);
+
 			static float GetDefaultHeight(void);
 
 			static float GetDefaultRadius(void);

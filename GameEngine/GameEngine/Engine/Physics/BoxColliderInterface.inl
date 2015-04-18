@@ -7,7 +7,12 @@ namespace AGE
 	namespace Physics
 	{
 		// Static Methods
-		inline glm::vec3 BoxColliderInterface::GetDefaultBoxSize(void)
+		inline glm::vec3 BoxColliderInterface::GetDefaultCenter(void)
+		{
+			return glm::vec3();
+		}
+
+		inline glm::vec3 BoxColliderInterface::GetDefaultSize(void)
 		{
 			return glm::vec3(1.0f, 1.0f, 1.0f);
 		}

@@ -31,13 +31,13 @@ namespace AGE
 		}
 
 		// Constructors
-		PhysXWorld::PhysXWorld(PhysXPhysics *physics, const glm::vec3 &gravity)
+		PhysXWorld::PhysXWorld(PhysXPhysics *physics)
 			: WorldInterface(physics)
 		{
 			physx::PxSceneDesc sceneDescription(physics->getPhysics()->getTolerancesScale());
 			sceneDescription.flags |= physx::PxSceneFlag::eENABLE_CCD;
 			sceneDescription.broadPhaseType = physx::PxBroadPhaseType::eMBP;
-			sceneDescription.gravity = physx::PxVec3(gravity.x, gravity.y, gravity.z);
+			sceneDescription.gravity = physx::PxVec3(GetDefaultGravity().x, GetDefaultGravity().y, GetDefaultGravity().z);
 			sceneDescription.cpuDispatcher = physx::PxDefaultCpuDispatcherCreate(1);
 			if (sceneDescription.cpuDispatcher == nullptr)
 			{

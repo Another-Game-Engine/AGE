@@ -27,6 +27,11 @@ namespace AGE
 			NullSphereCollider &operator=(const NullSphereCollider &) = delete;
 
 		private:
+			// Attributes
+			glm::vec3 center;
+
+			float radius = 0.0f;
+
 			// Destructor
 			~NullSphereCollider(void) = default;
 
@@ -38,6 +43,8 @@ namespace AGE
 			void setRadius(float radius) override final;
 
 			float getRadius(void) const override final;
+
+			void scale(const glm::vec3 &scaling) override final;
 		};
 	}
 }

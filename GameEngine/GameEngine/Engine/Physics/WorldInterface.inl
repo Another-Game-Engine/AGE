@@ -9,6 +9,12 @@ namespace AGE
 {
 	namespace Physics
 	{
+		// Static Methods
+		inline glm::vec3 WorldInterface::GetDefaultGravity(void)
+		{
+			return glm::vec3(0.0f, -9.81f, 0.0f);
+		}
+
 		// Constructors
 		inline WorldInterface::WorldInterface(PhysicsInterface *physics)
 			: physics(physics)

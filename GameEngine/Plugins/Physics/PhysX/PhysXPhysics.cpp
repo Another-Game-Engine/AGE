@@ -80,9 +80,9 @@ namespace AGE
 			}
 		}
 
-		WorldInterface *PhysXPhysics::createWorld(const glm::vec3 &gravity)
+		WorldInterface *PhysXPhysics::createWorld(void)
 		{
-			return new PhysXWorld(this, gravity);
+			return new PhysXWorld(this);
 		}
 	}
 }

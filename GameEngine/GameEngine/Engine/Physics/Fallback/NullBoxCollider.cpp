@@ -8,7 +8,7 @@ namespace AGE
 	{
 		// Constructors
 		NullBoxCollider::NullBoxCollider(WorldInterface *world, Private::GenericData *data)
-			: ColliderInterface(world, data), BoxColliderInterface(world, data), NullCollider(world, data)
+			: ColliderInterface(world, data), BoxColliderInterface(world, data), NullCollider(world, data), center(GetDefaultCenter()), size(GetDefaultSize())
 		{
 			return;
 		}
@@ -16,22 +16,27 @@ namespace AGE
 		// Inherited Methods
 		void NullBoxCollider::setCenter(const glm::vec3 &center)
 		{
-			return;
+			this->center = center;
 		}
 
 		glm::vec3 NullBoxCollider::getCenter(void) const
 		{
-			return glm::vec3();
+			return center;
 		}
 
 		void NullBoxCollider::setSize(const glm::vec3 &size)
 		{
-			return;
+			this->size = size;
 		}
 
 		glm::vec3 NullBoxCollider::getSize(void) const
 		{
-			return glm::vec3();
+			return size;
+		}
+
+		void NullBoxCollider::scale(const glm::vec3 &scaling)
+		{
+			size *= scaling;
 		}
 	}
 }

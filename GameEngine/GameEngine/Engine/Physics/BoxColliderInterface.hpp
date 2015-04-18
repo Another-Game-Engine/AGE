@@ -30,7 +30,9 @@ namespace AGE
 
 		protected:
 			// Static Methods
-			static glm::vec3 GetDefaultBoxSize(void);
+			static glm::vec3 GetDefaultCenter(void);
+
+			static glm::vec3 GetDefaultSize(void);
 
 			// Destructor
 			virtual ~BoxColliderInterface(void) = default;

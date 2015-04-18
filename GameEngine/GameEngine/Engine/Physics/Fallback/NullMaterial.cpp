@@ -7,7 +7,7 @@ namespace AGE
 	{
 		// Constructors
 		NullMaterial::NullMaterial(ColliderInterface *collider)
-			: MaterialInterface(collider)
+			: MaterialInterface(collider), staticFriction(GetDefaultStaticFriction()), dynamicFriction(GetDefaultDynamicFriction()), restitution(GetDefaultRestitution())
 		{
 			return;
 		}
@@ -15,32 +15,32 @@ namespace AGE
 		// Inherited Methods
 		void NullMaterial::setStaticFriction(float staticFriction)
 		{
-			return;
+			this->staticFriction = staticFriction;
 		}
 
 		float NullMaterial::getStaticFriction(void) const
 		{
-			return 0.0f;
+			return staticFriction;
 		}
 
 		void NullMaterial::setDynamicFriction(float dynamicFriction)
 		{
-			return;
+			this->dynamicFriction = dynamicFriction;
 		}
 
 		float NullMaterial::getDynamicFriction(void) const
 		{
-			return 0.0f;
+			return dynamicFriction;
 		}
 
 		void NullMaterial::setRestitution(float restitution)
 		{
-			return;
+			this->restitution = restitution;
 		}
 
 		float NullMaterial::getRestitution(void) const
 		{
-			return 0.0f;
+			return restitution;
 		}
 	}
 }

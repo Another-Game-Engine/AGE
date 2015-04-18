@@ -27,6 +27,11 @@ namespace AGE
 			NullBoxCollider &operator=(const NullBoxCollider &) = delete;
 
 		private:
+			// Attributes
+			glm::vec3 center;
+
+			glm::vec3 size;
+
 			// Destructor
 			~NullBoxCollider(void) = default;
 
@@ -38,6 +43,8 @@ namespace AGE
 			void setSize(const glm::vec3 &size) override final;
 
 			glm::vec3 getSize(void) const override final;
+
+			void scale(const glm::vec3 &scaling) override final;
 		};
 	}
 }

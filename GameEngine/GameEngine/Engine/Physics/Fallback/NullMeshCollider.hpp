@@ -26,9 +26,12 @@ namespace AGE
 			// Assignment Operators
 			NullMeshCollider &operator=(const NullMeshCollider &) = delete;
 
-		protected:
+		private:
 			// Destructor
 			~NullMeshCollider(void) = default;
+
+			// Inherited Methods
+			void scale(const glm::vec3 &scaling) override final;
 		};
 	}
 }

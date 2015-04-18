@@ -13,10 +13,10 @@ namespace AGE
 	namespace Physics
 	{
 		// Constructors
-		BulletWorld::BulletWorld(BulletPhysics *physics, const glm::vec3 &gravity)
+		BulletWorld::BulletWorld(BulletPhysics *physics)
 			: WorldInterface(physics)
 		{
-			world.setGravity(btVector3(0.0f, -9.81f, 0.0f));
+			world.setGravity(btVector3(GetDefaultGravity().x, GetDefaultGravity().y, GetDefaultGravity().z));
 			world.getPairCache()->setOverlapFilterCallback(this);
 			world.getDispatchInfo().m_useContinuous = true;
 		}
@@ -25,6 +25,17 @@ namespace AGE
 		BulletWorld::~BulletWorld(void)
 		{
 			world.getPairCache()->setOverlapFilterCallback(nullptr);
+		}
+
+		// Methods
+		btDiscreteDynamicsWorld *BulletWorld::getWorld(void)
+		{
+			return &world;
+		}
+
+		const btDiscreteDynamicsWorld *BulletWorld::getWorld(void) const
+		{
+			return &world;
 		}
 
 		// Inherited Methods

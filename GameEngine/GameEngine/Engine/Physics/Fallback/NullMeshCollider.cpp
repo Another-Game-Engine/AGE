@@ -12,5 +12,11 @@ namespace AGE
 		{
 			return;
 		}
+		
+		// Inherited Methods
+		void NullMeshCollider::scale(const glm::vec3 &scaling)
+		{
+			// TO_DO
+		}
 	}
 }

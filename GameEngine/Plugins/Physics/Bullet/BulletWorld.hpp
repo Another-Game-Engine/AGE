@@ -22,12 +22,17 @@ namespace AGE
 			// Constructors
 			BulletWorld(void) = delete;
 
-			BulletWorld(BulletPhysics *physics, const glm::vec3 &gravity);
+			BulletWorld(BulletPhysics *physics);
 
 			BulletWorld(const BulletWorld &) = delete;
 
 			// Assignment Operators
 			BulletWorld &operator=(const BulletWorld &) = delete;
+
+			// Methods
+			btDiscreteDynamicsWorld *getWorld(void);
+
+			const btDiscreteDynamicsWorld *getWorld(void) const;
 
 		private:
 			// Attributes

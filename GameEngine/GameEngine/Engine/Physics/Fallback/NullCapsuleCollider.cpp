@@ -8,7 +8,7 @@ namespace AGE
 	{
 		// Constructors
 		NullCapsuleCollider::NullCapsuleCollider(WorldInterface *world, Private::GenericData *data)
-			: ColliderInterface(world, data), CapsuleColliderInterface(world, data), NullCollider(world, data)
+			: ColliderInterface(world, data), CapsuleColliderInterface(world, data), NullCollider(world, data), center(GetDefaultCenter()), height(GetDefaultHeight()), radius(GetDefaultRadius())
 		{
 			return;
 		}
@@ -16,32 +16,38 @@ namespace AGE
 		// Inherited Methods
 		void NullCapsuleCollider::setCenter(const glm::vec3 &center)
 		{
-			return;
+			this->center = center;
 		}
 
 		glm::vec3 NullCapsuleCollider::getCenter(void) const
 		{
-			return glm::vec3();
+			return center;
 		}
 
 		void NullCapsuleCollider::setHeight(float height)
 		{
-			return;
+			this->height = height;
 		}
 
 		float NullCapsuleCollider::getHeight(void) const
 		{
-			return 0.0f;
+			return height;
 		}
 
 		void NullCapsuleCollider::setRadius(float radius)
 		{
-			return;
+			this->radius = radius;
 		}
 
 		float NullCapsuleCollider::getRadius(void) const
 		{
-			return 0.0f;
+			return radius;
+		}
+
+		void NullCapsuleCollider::scale(const glm::vec3 &scaling)
+		{
+			height *= scaling.y;
+			radius *= std::sqrt(scaling.x * scaling.z);
 		}
 	}
 }

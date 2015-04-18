@@ -28,10 +28,13 @@ namespace AGE
 			// Assignment Operators
 			NullWorld &operator=(const NullWorld &) = delete;
 
+		private:
 			// Destructor
 			~NullWorld(void) = default;
 
-		private:
+			// Attributes
+			glm::vec3 gravity;
+
 			// Inherited Methods
 			void setGravity(const glm::vec3 &gravity) override final;
 

@@ -26,9 +26,33 @@ namespace AGE
 
 		private:
 			// Attributes
-			glm::vec3 bodyPosition;
+			float angularDrag = 0.0f;
 
-			glm::quat bodyRotation;
+			glm::vec3 angularVelocity;
+
+			glm::vec3 centerOfMass;
+
+			float linearDrag = 0.0f;
+
+			glm::vec3 linearVelocity;
+
+			float mass = 0.0f;
+
+			glm::vec3 diagonalInertiaTensor;
+
+			float maxAngularVelocity = std::numeric_limits<float>::max();
+
+			float maxDepenetrationVelocity = std::numeric_limits<float>::max();
+
+			glm::vec3 position;
+
+			glm::quat rotation;
+
+			bool affectedByGravity = true;
+
+			bool kinematic = false;
+
+			CollisionDetectionMode collisionDetectionMode = CollisionDetectionMode::Continuous;
 
 			// Destructor
 			~NullRigidBody(void) = default;

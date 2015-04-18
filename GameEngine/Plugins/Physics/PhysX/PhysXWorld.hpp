@@ -22,15 +22,12 @@ namespace AGE
 			// Constructors
 			PhysXWorld(void) = delete;
 
-			PhysXWorld(PhysXPhysics *physics, const glm::vec3 &gravity);
+			PhysXWorld(PhysXPhysics *physics);
 
 			PhysXWorld(const PhysXWorld &) = delete;
 
 			// Assignment Operators
 			PhysXWorld &operator=(const PhysXWorld &) = delete;
-
-			// Destructor
-			~PhysXWorld(void);
 
 			// Methods
 			physx::PxScene *getScene(void);
@@ -46,6 +43,9 @@ namespace AGE
 			// Static Methods
 			static physx::PxFilterFlags FilterShader(physx::PxFilterObjectAttributes attributes1, physx::PxFilterData filterData1, physx::PxFilterObjectAttributes attributes2,
 													 physx::PxFilterData filterData2, physx::PxPairFlags& pairFlags, const void *constantBlock, physx::PxU32 constantBlockSize);
+
+			// Destructor
+			~PhysXWorld(void);
 
 			// Inherited Methods
 			void setGravity(const glm::vec3 &gravity) override final;

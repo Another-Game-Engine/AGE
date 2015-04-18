@@ -29,6 +29,9 @@ namespace AGE
 		private:
 			// Destructor
 			~PhysXMeshCollider(void) = default;
+
+			// Inherited Methods
+			void scale(const glm::vec3 &scaling) override final;
 		};
 	}
 }

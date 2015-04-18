@@ -12,9 +12,9 @@ namespace AGE
 			if (getData()->data == nullptr)
 			{
 				getData()->data = static_cast<PhysXPhysics *>(world->getPhysics())->getPhysics()->createRigidDynamic(physx::PxTransform(physx::PxIdentity));
+				assert(getData()->data != nullptr && "Impossible to create actor");
+				world->getScene()->addActor(*getDataAs<physx::PxRigidDynamic>());
 			}
-			assert(getData()->data != nullptr && "Impossible to create actor");
-			world->getScene()->addActor(*getDataAs<physx::PxRigidDynamic>());
 			setAngularDrag(GetDefaultAngularDrag());
 			setAngularVelocity(GetDefaultAngularVelocity());
 			setCenterOfMass(GetDefaultCenterOfMass());

@@ -28,6 +28,11 @@ namespace AGE
 			// Destructor
 			~BulletRigidBody(void) = default;
 
+			// Attributes
+			float maxAngularVelocity = 0.0f;
+
+			float maxDepenetrationVelocity = 0.0f;
+
 			// Inherited Methods
 			void setAngularDrag(float angularDrag) override final;
 

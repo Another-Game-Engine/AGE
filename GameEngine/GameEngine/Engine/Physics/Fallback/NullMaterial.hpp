@@ -28,6 +28,13 @@ namespace AGE
 			// Destructor
 			~NullMaterial(void) = default;
 
+			// Attributes
+			float staticFriction = 0.0f;
+
+			float dynamicFriction = 0.0f;
+
+			float restitution = 0.0f;
+
 			// Inherited Methods
 			void setStaticFriction(float staticFriction) override final;
 

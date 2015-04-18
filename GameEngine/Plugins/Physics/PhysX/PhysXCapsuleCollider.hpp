@@ -42,6 +42,8 @@ namespace AGE
 			void setRadius(float radius) override final;
 
 			float getRadius(void) const override final;
+
+			void scale(const glm::vec3 &scaling) override final;
 		};
 	}
 }

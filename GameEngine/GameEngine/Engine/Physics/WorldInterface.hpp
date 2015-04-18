@@ -95,6 +95,9 @@ namespace AGE
 			// Destructor
 			virtual ~WorldInterface(void) = default;
 
+			// Static Methods
+			static glm::vec3 GetDefaultGravity(void);
+
 		private:
 			// Type Aliases
 			using HashTable = std::unordered_map < std::string, FilterGroup > ;

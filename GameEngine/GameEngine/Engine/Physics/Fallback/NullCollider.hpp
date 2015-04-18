@@ -24,6 +24,11 @@ namespace AGE
 			virtual ~NullCollider(void) = default;
 
 		private:
+			// Attributes
+			bool isTrigger = false;
+
+			FilterGroup filterGroup = FilterGroup::GroupI;
+
 			// Inherited Methods
 			void setAsTrigger(bool mustBeATrigger) override final;
 
@@ -32,8 +37,6 @@ namespace AGE
 			void setFilterGroup(FilterGroup group) override final;
 
 			FilterGroup getFilterGroup(void) const override final;
-
-			void scale(const glm::vec3 &scaling) override final;
 		};
 	}
 }

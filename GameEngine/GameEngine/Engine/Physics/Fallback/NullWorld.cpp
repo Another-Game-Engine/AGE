@@ -10,7 +10,7 @@ namespace AGE
 	{
 		// Constructors
 		NullWorld::NullWorld(NullPhysics *physics)
-			: WorldInterface(physics)
+			: WorldInterface(physics), gravity(GetDefaultGravity())
 		{
 			return;
 		}
@@ -18,12 +18,12 @@ namespace AGE
 		// Inherited Methods
 		void NullWorld::setGravity(const glm::vec3 &gravity)
 		{
-			return;
+			this->gravity = gravity;
 		}
 
 		glm::vec3 NullWorld::getGravity(void) const
 		{
-			return glm::vec3();
+			return gravity;
 		}
 
 		void NullWorld::enableCollisionBetweenGroups(FilterGroup group1, FilterGroup group2)

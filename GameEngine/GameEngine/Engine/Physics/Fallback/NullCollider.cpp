@@ -14,27 +14,22 @@ namespace AGE
 		// Inherited Methods
 		void NullCollider::setAsTrigger(bool mustBeATrigger)
 		{
-			return;
+			isTrigger = mustBeATrigger;
 		}
 
 		bool NullCollider::isATrigger(void) const
 		{
-			return false;
+			return isTrigger;
 		}
 
 		void NullCollider::setFilterGroup(FilterGroup group)
 		{
-			return;
+			filterGroup = group;
 		}
 
 		FilterGroup NullCollider::getFilterGroup(void) const
 		{
-			return FilterGroup::GroupI;
-		}
-
-		void NullCollider::scale(const glm::vec3 &scaling)
-		{
-			return;
+			return filterGroup;
 		}
 	}
 }

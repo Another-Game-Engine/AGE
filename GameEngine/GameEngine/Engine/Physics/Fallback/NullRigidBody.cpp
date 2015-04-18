@@ -9,148 +9,159 @@ namespace AGE
 		NullRigidBody::NullRigidBody(NullWorld *world, Private::GenericData *data)
 			: RigidBodyInterface(world, data)
 		{
-			return;
+			setAngularDrag(GetDefaultAngularDrag());
+			setAngularVelocity(GetDefaultAngularVelocity());
+			setCenterOfMass(GetDefaultCenterOfMass());
+			setLinearDrag(GetDefaultLinearDrag());
+			setLinearVelocity(GetDefaultLinearVelocity());
+			setMass(GetDefaultMass());
+			setDiagonalInertiaTensor(GetDefaultDiagonalInertiaTensor());
+			setMaxAngularVelocity(GetDefaultMaxAngularVelocity());
+			setMaxDepenetrationVelocity(GetDefaultMaxDepenetrationVelocity());
+			affectByGravity(IsAffectedByGravityByDefault());
+			setAsKinematic(IsKinematicByDefault());
+			setCollisionDetectionMode(GetDefaultCollisionDetectionMode());
 		}
 
 		// Inherited Methods
 		void NullRigidBody::setAngularDrag(float angularDrag)
 		{
-			return;
+			this->angularDrag = angularDrag;
 		}
 
 		float NullRigidBody::getAngularDrag(void) const
 		{
-			return 0.0f;
+			return angularDrag;
 		}
 
 		void NullRigidBody::setAngularVelocity(const glm::vec3 &angularVelocity)
 		{
-			return;
+			this->angularVelocity = angularVelocity;
 		}
 
 		glm::vec3 NullRigidBody::getAngularVelocity(void) const
 		{
-			return glm::vec3();
+			return angularVelocity;
 		}
 
 		void NullRigidBody::setCenterOfMass(const glm::vec3 &centerOfMass)
 		{
-			return;
+			this->centerOfMass = centerOfMass;
 		}
 
 		glm::vec3 NullRigidBody::getCenterOfMass(void) const
 		{
-			return glm::vec3();
+			return centerOfMass;
 		}
 
 		void NullRigidBody::setLinearDrag(float linearDrag)
 		{
-			return;
+			this->linearDrag = linearDrag;
 		}
 
 		float NullRigidBody::getLinearDrag(void) const
 		{
-			return 0.0f;
+			return linearDrag;
 		}
 
 		void NullRigidBody::setLinearVelocity(const glm::vec3 &linearVelocity)
 		{
-			return;
+			this->linearVelocity = linearVelocity;
 		}
 
 		glm::vec3 NullRigidBody::getLinearVelocity(void) const
 		{
-			return glm::vec3();
+			return linearVelocity;
 		}
 
 		void NullRigidBody::setMass(float mass)
 		{
-			return;
+			this->mass = mass;
 		}
 
 		float NullRigidBody::getMass(void) const
 		{
-			return 0.0f;
+			return mass;
 		}
 
 		void NullRigidBody::setDiagonalInertiaTensor(const glm::vec3 &diagonalInertiaTensor)
 		{
-			return;
+			this->diagonalInertiaTensor = diagonalInertiaTensor;
 		}
 
 		glm::vec3 NullRigidBody::getDiagonalInertiaTensor(void) const
 		{
-			return glm::vec3();
+			return diagonalInertiaTensor;
 		}
 
 		void NullRigidBody::setMaxAngularVelocity(float maxAngularVelocity)
 		{
-			return;
+			this->maxAngularVelocity = maxAngularVelocity;
 		}
 
 		float NullRigidBody::getMaxAngularVelocity(void) const
 		{
-			return 0.0f;
+			return maxAngularVelocity;
 		}
 
 		void NullRigidBody::setMaxDepenetrationVelocity(float maxDepenetrationVelocity)
 		{
-			return;
+			this->maxDepenetrationVelocity = maxDepenetrationVelocity;
 		}
 
 		float NullRigidBody::getMaxDepenetrationVelocity(void) const
 		{
-			return 0.0f;
+			return maxDepenetrationVelocity;
 		}
 
 		void NullRigidBody::setPosition(const glm::vec3 &position)
 		{
-			bodyPosition = position;
+			this->position = position;
 		}
 
 		glm::vec3 NullRigidBody::getPosition(void) const
 		{
-			return bodyPosition;
+			return position;
 		}
 
 		void NullRigidBody::setRotation(const glm::quat &rotation)
 		{
-			bodyRotation = rotation;
+			this->rotation = rotation;
 		}
 
 		glm::quat NullRigidBody::getRotation(void) const
 		{
-			return bodyRotation;
+			return rotation;
 		}
 
 		void NullRigidBody::affectByGravity(bool mustBeAffectedByGravity)
 		{
-			return;
+			affectedByGravity = mustBeAffectedByGravity;
 		}
 
 		bool NullRigidBody::isAffectedByGravity(void) const
 		{
-			return false;
+			return affectedByGravity;
 		}
 
 		void NullRigidBody::setAsKinematic(bool mustBeKinematic)
 		{
-			return;
+			kinematic = mustBeKinematic;
 		}
 
 		bool NullRigidBody::isKinematic(void) const
 		{
-			return false;
+			return kinematic;
 		}
 
 		void NullRigidBody::setCollisionDetectionMode(CollisionDetectionMode collisionDetectionMode)
 		{
-			return;
+			this->collisionDetectionMode = collisionDetectionMode;
 		}
 
 		CollisionDetectionMode NullRigidBody::getCollisionDetectionMode(void) const
 		{
-			return CollisionDetectionMode::Discrete;
+			return collisionDetectionMode;
 		}
 
 		void NullRigidBody::addForce(const glm::vec3 &force, ForceMode forceMode)

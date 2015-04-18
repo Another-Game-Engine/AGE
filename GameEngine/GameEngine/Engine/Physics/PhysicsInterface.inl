@@ -10,7 +10,17 @@ namespace AGE
 		// Methods
 		inline bool PhysicsInterface::startup(void)
 		{
-			return initialize() && createWorld() != nullptr;
+			if (initialize())
+			{
+				assert(world == nullptr && "World already created");
+				world = createWorld();
+				assert(world != nullptr && "Impossible to create world");
+				_dependencyManager->setInstance(world);
+			}
+			else
+			{
+				return false;
+			}
 		}
 
 		inline void PhysicsInterface::shutdown(void)
@@ -20,14 +30,6 @@ namespace AGE
 				destroyWorld();
 			}
 			finalize();
-		}
-
-		inline WorldInterface *PhysicsInterface::createWorld(void)
-		{
-			assert(world == nullptr && "World already created");
-			world = createWorld(glm::vec3(0.0f, -9.81f, 0.0f));
-			_dependencyManager->setInstance(world);
-			return world;
 		}
 
 		inline WorldInterface *PhysicsInterface::getWorld(void)

@@ -7,6 +7,11 @@ namespace AGE
 	namespace Physics
 	{
 		// Static Methods
+		inline glm::vec3 SphereColliderInterface::GetDefaultCenter(void)
+		{
+			return glm::vec3();
+		}
+
 		inline float SphereColliderInterface::GetDefaultRadius(void)
 		{
 			return 1.0f;
