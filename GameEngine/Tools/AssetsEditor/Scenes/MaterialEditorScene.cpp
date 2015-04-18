@@ -185,11 +185,11 @@ namespace AGE
 		if (ImGui::Button("precedent"))
 			_mode = ModeMaterialEditor::selectSubMaterial;
 		MaterialData &mat = _current.collection[_indexSubMaterial];
-		ImGui::InputFloat3("ambient", glm::value_ptr(mat.ambient));
-		ImGui::InputFloat3("diffuse", glm::value_ptr(mat.diffuse));
-		ImGui::InputFloat3("emissive", glm::value_ptr(mat.emissive));
-		ImGui::InputFloat3("reflective", glm::value_ptr(mat.reflective));
-		ImGui::InputFloat3("specular", glm::value_ptr(mat.specular));
+		ImGui::ColorEdit3("ambient", glm::value_ptr(mat.ambient));
+		ImGui::ColorEdit3("diffuse", glm::value_ptr(mat.diffuse));
+		ImGui::ColorEdit3("emissive", glm::value_ptr(mat.emissive));
+		ImGui::ColorEdit3("reflective", glm::value_ptr(mat.reflective));
+		ImGui::ColorEdit3("specular", glm::value_ptr(mat.specular));
 		_editTexture(ModeTexture::diffuse, mat.diffuseTexPath);
 		_editTexture(ModeTexture::specular, mat.specularTexPath);
 		_editTexture(ModeTexture::ambient, mat.ambientTexPath);
