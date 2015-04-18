@@ -2,7 +2,7 @@
 #include <imgui\imgui.h>
 #include <Systems/EntityManager.hpp>
 #include <Systems/AssetsAndComponentRelationsSystem.hpp>
-#include <Physic/BulletDynamicManager.hpp>
+#include <Physics/BulletDynamicManager.hpp>
 #include <AssetManagement/AssetManager.hh>
 
 #include <Components/CameraComponent.hpp>

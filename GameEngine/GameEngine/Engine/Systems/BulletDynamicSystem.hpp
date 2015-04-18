@@ -1,66 +1,36 @@
 #pragma once
 
-#include <Physic/Utils/BtConversion.hpp>
 #include <Systems/System.h>
-#include <Components/RigidBody.hpp>
-#include <Physic/BulletDynamicManager.hpp>
-#include <Core/Engine.hh>
-#include <Entities/EntityFlags.hh>
-
-#include <future>
+#include <Physics/BulletDynamicManager.hpp>
 
 namespace AGE
 {
-	class BulletDynamicSystem : public System
+	class BulletDynamicSystem final : public System
 	{
 	public:
-		BulletDynamicSystem(AScene *scene)
-			: System(std::move(scene))
-			, _manager(nullptr)
-			, _filter(std::move(scene))
-		{
-			_name = "bullet_dynamic_system";
-			_manager = dynamic_cast<BulletDynamicManager*>(_scene->getInstance<BulletCollisionManager>());
-			_filter.requireComponent<RigidBody>();
-		}
-		virtual ~BulletDynamicSystem(){}
+		// Constructors
+		BulletDynamicSystem(void) = delete;
+
+		BulletDynamicSystem(AScene *scene);
+
+		BulletDynamicSystem(const BulletDynamicSystem &) = delete;
+
+		// Assignment Operators
+		BulletDynamicSystem &operator=(const BulletDynamicSystem &) = delete;
+
+		// Destructors
+		virtual ~BulletDynamicSystem(void) = default;
+
 	private:
+		// Attributes
 		BulletDynamicManager* _manager;
+
 		EntityFilter _filter;
 
-		virtual void updateBegin(float time)
-		{
-			auto scene = _scene;
-			for (auto e : _filter.getCollection())
-			{
-				if (e.getLink().isUserModified())
-				{
-					auto rb = e.getComponent<RigidBody>();
-					if (rb->getMass() == 0)
-					{
-						rb->setTransformation(&e.getLink());
-						e.getLink().setUserModified(false);
-					}
-				}
+		// Inherited Methods
+		void updateBegin(float time) override final;
 
-			}
-			if (time == 0.0f)
-			{
-				return;
-			}
-			_manager->getWorld()->stepSimulation(static_cast<btScalar>(time), 10);
-		}
-
-		virtual void updateEnd(float time)
-		{}
-
-		virtual void mainUpdate(float time)
-		{
-		}
-
-		virtual bool initialize()
-		{
-			return true;
-		}
+		// Methods
+		void registerContactInformations(void) const;
 	};
 }

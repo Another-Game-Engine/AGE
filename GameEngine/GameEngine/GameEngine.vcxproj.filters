@@ -7,7 +7,6 @@
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredBasicBuffering.cpp" />
     <ClCompile Include="Engine\Core\Inputs\ActionManager.cpp" />
     <ClCompile Include="Engine\AssetManagement\AssetManager.cpp" />
-    <ClCompile Include="Engine\Components\RigidBody.cpp" />
     <ClCompile Include="Engine\Context\IRenderContext.cpp" />
     <ClCompile Include="Engine\Context\SDL\SdlToAgeInputs.cpp" />
     <ClCompile Include="Engine\Entities\Entity.cpp" />
@@ -25,8 +24,6 @@
     <ClCompile Include="Engine\Core\Link.cpp" />
     <ClCompile Include="Engine\SpacePartitioning\PreparableObject.cpp" />
     <ClCompile Include="Engine\Threads\Tasks\ToRenderTasks.cpp" />
-    <ClCompile Include="Engine\Physic\BulletCollisionManager.cpp" />
-    <ClCompile Include="Engine\Physic\DynamicMotionState.cpp" />
     <ClCompile Include="Engine\Render\Buffer\ABuffer.cpp" />
     <ClCompile Include="Engine\Render\Buffer\IndexBuffer.cpp" />
     <ClCompile Include="Engine\Render\Buffer\UniformBuffer.cpp" />
@@ -111,7 +108,6 @@
     <ClCompile Include="Engine\Core\Inputs\Input.cpp" />
     <ClCompile Include="Engine\Core\Timer.cpp" />
     <ClCompile Include="Engine\Components\MeshRenderer.cpp" />
-    <ClCompile Include="Engine\Physic\Utils\BtConversion.cpp" />
     <ClCompile Include="Engine\Systems\System.cpp" />
     <ClCompile Include="Engine\Text\Font.cpp" />
     <ClCompile Include="Engine\Text\FontGlyph.cpp" />
@@ -155,14 +151,37 @@
     <ClCompile Include="Engine\Components\FreeFlyComponent.cpp" />
     <ClCompile Include="Engine\WorldEditorGlobal.cpp" />
     <ClCompile Include="Engine\Render\OpenGLTask\OpenGLState.cpp" />
+    <ClCompile Include="Engine\Systems\BulletDynamicSystem.cpp" />
+    <ClCompile Include="Engine\Systems\PhysicsSystem.cpp" />
+    <ClCompile Include="Engine\Physics\EngineTypeToPluginName.cpp" />
+    <ClCompile Include="Engine\Physics\Utils\BtConversion.cpp" />
+    <ClCompile Include="Engine\Physics\BulletCollisionManager.cpp" />
+    <ClCompile Include="Engine\Physics\DynamicMotionState.cpp" />
+    <ClCompile Include="Engine\Physics\Fallback\NullWorld.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomPipeline\DebugDeferredShading.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredDebugBuffering.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredMergingDebug.cpp" />
     <ClCompile Include="Engine\Components\Light.cpp" />
+<<<<<<< HEAD
     <ClCompile Include="Engine\Render\Properties\AABB.cpp" />
     <ClCompile Include="Engine\Render\DepthMapManager.cpp" />
     <ClCompile Include="Engine\Render\DepthMapHandle.cpp" />
     <ClCompile Include="Engine\Render\DepthMap.cpp" />
+=======
+    <ClCompile Include="Engine\Physics\Fallback\NullPhysics.cpp" />
+    <ClCompile Include="Engine\Physics\Fallback\NullMaterial.cpp" />
+    <ClCompile Include="Engine\Physics\Fallback\NullRigidBody.cpp" />
+    <ClCompile Include="Engine\Components\NewRigidBody.cpp" />
+    <ClCompile Include="Engine\Components\RigidBody.cpp" />
+    <ClCompile Include="Engine\Physics\ContactInformation.cpp" />
+    <ClCompile Include="Engine\Systems\CollisionSystem.cpp" />
+    <ClCompile Include="Engine\Physics\Fallback\NullBoxCollider.cpp" />
+    <ClCompile Include="Engine\Physics\Fallback\NullCapsuleCollider.cpp" />
+    <ClCompile Include="Engine\Physics\Fallback\NullMeshCollider.cpp" />
+    <ClCompile Include="Engine\Physics\Fallback\NullSphereCollider.cpp" />
+    <ClCompile Include="Engine\Physics\Fallback\NullCollider.cpp" />
+    <ClCompile Include="Engine\Components\PhysicsData.cpp" />
+>>>>>>> 0a125b559103de58933bdb9c417ef2fd8f051fa7
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -263,7 +282,6 @@
     <ClInclude Include="Engine\Core\EntityIdRegistrationManager.hh" />
     <ClInclude Include="Engine\Entities\BitsetManipulation.hpp" />
     <ClInclude Include="Engine\Entities\EntityFlags.hh" />
-    <ClInclude Include="Engine\Physic\DynamicMotionState.hpp" />
     <ClInclude Include="Engine\Render\Buffer\ABuffer.hh" />
     <ClInclude Include="Engine\Render\Buffer\IBuffer.hh" />
     <ClInclude Include="Engine\Render\Buffer\IndexBuffer.hh" />
@@ -335,7 +353,6 @@
     <ClInclude Include="Engine\Components\ComponentRegistrationManager.hpp" />
     <ClInclude Include="Engine\Components\FPController.hpp" />
     <ClInclude Include="Engine\Components\GraphNode.hpp" />
-    <ClInclude Include="Engine\Components\RigidBody.hpp" />
     <ClInclude Include="Engine\Components\RotationForce.hh" />
     <ClInclude Include="Engine\Core\EntityFilter.hpp" />
     <ClInclude Include="Engine\Core\EntityIdRegistrar.hpp" />
@@ -344,14 +361,10 @@
     <ClInclude Include="Engine\Core\Tags.hh" />
     <ClInclude Include="Engine\Entities\Entity.hh" />
     <ClInclude Include="Engine\MediaFiles\CollisionShapeFile.hpp" />
-    <ClInclude Include="Engine\Physic\BulletCollisionManager.hpp" />
-    <ClInclude Include="Engine\Physic\BulletDynamicManager.hpp" />
-    <ClInclude Include="Engine\Physic\Utils\BtConversion.hpp" />
     <ClInclude Include="Engine\Sprite\Sprite.hh" />
     <ClInclude Include="Engine\Sprite\SpriteAnimation.hh" />
     <ClInclude Include="Engine\Sprite\SpriteFrame.hh" />
     <ClInclude Include="Engine\Sprite\SpriteManager.hh" />
-    <ClInclude Include="Engine\Systems\BulletCollisionSystem.hpp" />
     <ClInclude Include="Engine\Systems\BulletDynamicSystem.hpp" />
     <ClInclude Include="Engine\Systems\FPControllerSystem.hpp" />
     <ClInclude Include="Engine\Systems\MeshRenderSystem.h" />
@@ -414,16 +427,54 @@
     <ClInclude Include="Engine\Components\FreeFlyComponent.hh" />
     <ClInclude Include="Engine\WorldEditorGlobal.hpp" />
     <ClInclude Include="Engine\Render\OpenGLTask\OpenGLState.hh" />
+    <ClInclude Include="Engine\Systems\PhysicsSystem.hpp" />
+    <ClInclude Include="Engine\Physics\EngineTypes.hpp" />
+    <ClInclude Include="Engine\Physics\EngineTypeToPluginName.hpp" />
+    <ClInclude Include="Engine\Physics\Utils\BtConversion.hpp" />
+    <ClInclude Include="Engine\Physics\BulletCollisionManager.hpp" />
+    <ClInclude Include="Engine\Physics\BulletDynamicManager.hpp" />
+    <ClInclude Include="Engine\Physics\DynamicMotionState.hpp" />
+    <ClInclude Include="Engine\Physics\WorldInterface.hpp" />
+    <ClInclude Include="Engine\Physics\Fallback\NullWorld.hpp" />
+    <ClInclude Include="Engine\Physics\PhysicsInterface.hpp" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomPipeline\DebugDeferredShading.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\PipelineTools.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredDebugBuffering.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredMergingDebug.hh" />
     <ClInclude Include="Engine\Components\Light.hh" />
     <ClInclude Include="Engine\Utils\Debug.hpp" />
+<<<<<<< HEAD
     <ClInclude Include="Engine\Render\Properties\AABB.hpp" />
     <ClInclude Include="Engine\Render\DepthMapManager.hpp" />
     <ClInclude Include="Engine\Render\DepthMapHandle.hpp" />
     <ClInclude Include="Engine\Render\DepthMap.hpp" />
+=======
+    <ClInclude Include="Engine\Physics\Fallback\NullPhysics.hpp" />
+    <ClInclude Include="Engine\Physics\Fallback\NullMaterial.hpp" />
+    <ClInclude Include="Engine\Physics\Fallback\NullRigidBody.hpp" />
+    <ClInclude Include="Engine\Physics\MaterialInterface.hpp" />
+    <ClInclude Include="Engine\Physics\RigidBodyInterface.hpp" />
+    <ClInclude Include="Engine\Components\NewRigidBody.hpp" />
+    <ClInclude Include="Engine\Components\RigidBody.hpp" />
+    <ClInclude Include="Engine\Physics\ContactInformation.hpp" />
+    <ClInclude Include="Engine\Physics\ForceMode.hpp" />
+    <ClInclude Include="Engine\Physics\CollisionDetectionMode.hpp" />
+    <ClInclude Include="Engine\Physics\FilterGroup.hpp" />
+    <ClInclude Include="Engine\Systems\CollisionSystem.hpp" />
+    <ClInclude Include="Engine\Physics\ColliderInterface.hpp" />
+    <ClInclude Include="Engine\Physics\ColliderType.hpp" />
+    <ClInclude Include="Engine\Physics\BoxColliderInterface.hpp" />
+    <ClInclude Include="Engine\Physics\CapsuleColliderInterface.hpp" />
+    <ClInclude Include="Engine\Physics\MeshColliderInterface.hpp" />
+    <ClInclude Include="Engine\Physics\SphereColliderInterface.hpp" />
+    <ClInclude Include="Engine\Physics\Fallback\NullBoxCollider.hpp" />
+    <ClInclude Include="Engine\Physics\Fallback\NullCapsuleCollider.hpp" />
+    <ClInclude Include="Engine\Physics\Fallback\NullMeshCollider.hpp" />
+    <ClInclude Include="Engine\Physics\Fallback\NullSphereCollider.hpp" />
+    <ClInclude Include="Engine\Physics\MemoryPoolHelper.hpp" />
+    <ClInclude Include="Engine\Physics\Fallback\NullCollider.hpp" />
+    <ClInclude Include="Engine\Components\PhysicsData.hpp" />
+>>>>>>> 0a125b559103de58933bdb9c417ef2fd8f051fa7
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />
@@ -443,5 +494,15 @@
     <None Include="Engine\ResourceManager\SharedMesh.hh" />
     <None Include="Engine\ResourceManager\Texture.hh" />
     <None Include="Engine\Components\MeshRenderer.hh" />
+    <None Include="Engine\Physics\MaterialInterface.inl" />
+    <None Include="Engine\Physics\RigidBodyInterface.inl" />
+    <None Include="Engine\Physics\WorldInterface.inl" />
+    <None Include="Engine\Physics\ColliderInterface.inl" />
+    <None Include="Engine\Physics\BoxColliderInterface.inl" />
+    <None Include="Engine\Physics\CapsuleColliderInterface.inl" />
+    <None Include="Engine\Physics\MeshColliderInterface.inl" />
+    <None Include="Engine\Physics\SphereColliderInterface.inl" />
+    <None Include="Engine\Physics\PhysicsInterface.inl" />
+    <None Include="Engine\Physics\MemoryPoolHelper.inl" />
   </ItemGroup>
 </Project>

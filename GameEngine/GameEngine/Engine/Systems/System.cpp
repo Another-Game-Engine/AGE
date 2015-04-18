@@ -4,7 +4,7 @@
 namespace AGE
 {
 	System::System(AScene *scene) :
-		_scene(std::move(scene))
+		_scene(scene)
 		, _activated(false)
 	{}
 

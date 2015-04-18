@@ -1,5 +1,7 @@
 #pragma once
 
+#include <utility>
+
 #include "BufferPool.hpp"
 
 namespace AGE
@@ -17,7 +19,7 @@ namespace AGE
 	public:
 		ObjectPool()
 		{
-			bool init = _init(sizeof(T), Alignement, ObjectNumberPerChunk);
+			const bool init = _init(sizeof(T), Alignement, ObjectNumberPerChunk);
 			assert(init);
 		}
 		virtual ~ObjectPool()
@@ -29,7 +31,7 @@ namespace AGE
 		virtual void *allocateObject()
 		{
 			void *res;
-			auto error = _allocateObject(res);
+			const bool error = _allocateObject(res);
 			assert(error);
 			return res;
 		}
@@ -37,14 +39,12 @@ namespace AGE
 		template <typename ...Args>
 		T *create(Args &&...args)
 		{
-			void *res = allocateObject();
-			T *tRes = new (res)T(args...);
-			return tRes;
+			return new (allocateObject()) T(std::forward<Args>(args)...);
 		}
 
 		virtual void destroy(void *ptr)
 		{
-			destroy((T*)ptr);
+			destroy(static_cast<T *>(ptr));
 		}
 
 		void destroy(T *ptr)

@@ -1,0 +1,26 @@
+#pragma once
+
+#include <unordered_map>
+
+#include <Physics/EngineTypeToPluginName.hpp>
+
+namespace AGE
+{
+	namespace Physics
+	{
+		using HashTable = std::unordered_map < EngineType, std::string >;
+
+		static const HashTable PhysicsEngineTypeToPluginNameTable
+		{
+			{ EngineType::Bullet, "Physics_Bullet" },
+			{ EngineType::PhysX, "Physics_PhysX" },
+			{ EngineType::Null, "Physics_Null" }
+		};
+
+		std::string GetPluginNameForEngine(EngineType physicsEngineType)
+		{
+			HashTable::const_iterator found = PhysicsEngineTypeToPluginNameTable.find(physicsEngineType);
+			return found != PhysicsEngineTypeToPluginNameTable.end() ? found->second : PhysicsEngineTypeToPluginNameTable.find(EngineType::Null)->second;
+		}
+	}
+}

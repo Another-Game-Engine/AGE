@@ -1,11 +1,12 @@
 #pragma once
 
 #include <cassert>
-#include <Utils/Dependency.hpp>
 #include <memory>
-#include <Utils/Containers/Vector.hpp>
 #include <mutex>
-#include <Utils/SpinLock.hpp>
+
+#include "Dependency.hpp"
+#include "Containers/Vector.hpp"
+#include "SpinLock.hpp"
 
 class DependenciesInjector
 {
@@ -57,6 +58,26 @@ public:
 	}
 
 	template <typename T>
+	void removeInstance(void)
+	{
+		std::unique_lock<AGE::SpinLock> lock(_mutex);
+		std::uint16_t id = T::getTypeId();
+		if (!hasInstance<T>())
+		{
+			auto p = _parent;
+			if (p)
+			{
+				lock.unlock();
+				return p->removeInstance<T>();
+			}
+			else
+				assert(false && "Instance is not set !");
+		}
+		static_cast<T*>(_instances[id])->_dependencyManager = nullptr;
+		_instances[id] = nullptr;
+	}
+
+	template <typename T>
 	void deleteInstance()
 	{
 		std::unique_lock<AGE::SpinLock> lock(_mutex);
@@ -75,6 +96,22 @@ public:
 		}
 		delete static_cast<T*>(_instances[id]);
 		_instances[id] = nullptr;
+	}
+
+	template <typename T, typename TypeSelector = T>
+	T *setInstance(T *instance)
+	{
+		std::lock_guard<AGE::SpinLock> lock(_mutex);
+		std::uint16_t id = TypeSelector::getTypeId();
+		if (_instances.size() <= id || _instances[id] == nullptr)
+		{
+			if (_instances.size() <= id)
+				_instances.resize(id + 1, nullptr);
+			assert(_instances[id] == nullptr); // instance already defined
+			instance->_dependencyManager = this;
+			_instances[id] = instance;
+		}
+		return static_cast<T*>(_instances[id]);
 	}
 
 	template <typename T, typename TypeSelector = T, typename ...Args>

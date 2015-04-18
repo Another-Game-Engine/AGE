@@ -1,0 +1,18 @@
+echo xcopy /E /I /Y "..\..\..\Vendors\PhysX\Bin\nvToolsExt64_1.dll" "Binaries\x64\Release\"
+xcopy /E /I /Y "..\..\..\Vendors\PhysX\Bin\nvToolsExt64_1.dll" "Binaries\x64\Release\"
+echo xcopy /E /I /Y "..\..\..\Vendors\PhysX\Bin\PhysXDevice64.dll" "Binaries\x64\Release\"
+xcopy /E /I /Y "..\..\..\Vendors\PhysX\Bin\PhysXDevice64.dll" "Binaries\x64\Release\"
+
+echo xcopy /E /I /Y "..\..\..\Vendors\PhysX\Bin\PhysX3_x64.dll" "Binaries\x64\Release\"
+xcopy /E /I /Y "..\..\..\Vendors\PhysX\Bin\PhysX3_x64.dll" "Binaries\x64\Release\"
+echo xcopy /E /I /Y "..\..\..\Vendors\PhysX\Bin\PhysX3CharacterKinematic_x64.dll" "Binaries\x64\Release\"
+xcopy /E /I /Y "..\..\..\Vendors\PhysX\Bin\PhysX3CharacterKinematic_x64.dll" "Binaries\x64\Release\"
+echo xcopy /E /I /Y "..\..\..\Vendors\PhysX\Bin\PhysX3Common_x64.dll" "Binaries\x64\Release\"
+xcopy /E /I /Y "..\..\..\Vendors\PhysX\Bin\PhysX3Common_x64.dll" "Binaries\x64\Release\"
+echo xcopy /E /I /Y "..\..\..\Vendors\PhysX\Bin\PhysX3Cooking_x64.dll" "Binaries\x64\Release\"
+xcopy /E /I /Y "..\..\..\Vendors\PhysX\Bin\PhysX3Cooking_x64.dll" "Binaries\x64\Release\"
+echo xcopy /E /I /Y "..\..\..\Vendors\PhysX\Bin\PhysX3Gpu_x64.dll" "Binaries\x64\Release\"
+xcopy /E /I /Y "..\..\..\Vendors\PhysX\Bin\PhysX3Gpu_x64.dll" "Binaries\x64\Release\"
+
+echo xcopy /E /I /Y "Binaries\x64\Release\*.dll" "..\..\..\x64\Release\"
+xcopy /E /I /Y "Binaries\x64\Release\*.dll" "..\..\..\x64\Release\"

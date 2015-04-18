@@ -67,6 +67,9 @@
       <AdditionalLibraryDirectories>$(ProjectDir)../../Vendors\zlib\lib\windows\x64;$(ProjectDir)../../Vendors\minizip\lib\windows\x64;C:\Program Files (x86)\Visual Leak Detector\lib\Win64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>/ignore:4099 %(AdditionalOptions)</AdditionalOptions>
     </Link>
+    <PostBuildEvent>
+      <Command>call "$(ProjectDir)/Scripts/PostBuildDebug.bat"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -88,6 +91,9 @@
       <AdditionalLibraryDirectories>$(ProjectDir)../../Vendors\zlib\lib\windows\x64;$(ProjectDir)../../Vendors\minizip\lib\windows\x64;C:\Program Files (x86)\Visual Leak Detector\lib\Win64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>/ignore:4099 %(AdditionalOptions)</AdditionalOptions>
     </Link>
+    <PostBuildEvent>
+      <Command>call "$(ProjectDir)/Scripts/PostBuildRelease.bat"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\EngineCoreTest\Components\Lifetime.cpp" />
@@ -107,6 +113,7 @@
     <ClCompile Include="ImageUtils.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Scenes\AssetsEditorScene.cpp" />
+    <ClCompile Include="Scenes\MaterialEditorScene.cpp" />
     <ClCompile Include="Scenes\SceneSelectorScene.cpp" />
     <ClCompile Include="Scenes\WorldEditorScene.cpp" />
     <ClCompile Include="Systems\AssetsAndComponentRelationsSystem.cpp" />
@@ -141,6 +148,7 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="Scenes\ArchetypeScenes.hpp" />
     <ClInclude Include="Scenes\AssetsEditorScene.hpp" />
+    <ClInclude Include="Scenes\MaterialEditorScene.hh" />
     <ClInclude Include="Scenes\SceneSelectorScene.hpp" />
     <ClInclude Include="Scenes\WorldEditorScene.hpp" />
     <ClInclude Include="Systems\AssetsAndComponentRelationsSystem.hpp" />

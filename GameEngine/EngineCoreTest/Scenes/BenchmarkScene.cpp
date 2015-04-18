@@ -41,6 +41,7 @@
 #include <Utils/MatrixConversion.hpp>
 
 #include <Systems/FreeFlyCamera.hh>
+#include <Systems/PhysicsSystem.hpp>
 
 namespace AGE
 {
@@ -79,7 +80,11 @@ namespace AGE
 
 		setInstance<AGE::BulletDynamicManager, AGE::BulletCollisionManager>()->init();
 		addSystem<AGE::DebugSystem>(0);
+		addSystem<AGE::PhysicsSystem>(0, Physics::EngineType::PhysX);
+		
+		// TODO: Remove following line
 		//addSystem<AGE::BulletDynamicSystem>(0);
+
 		addSystem<AGE::LifetimeSystem>(2);
 		addSystem<AGE::FreeFlyCamera>(0);
 		addSystem<AGE::RotationSystem>(0);
@@ -111,7 +116,7 @@ namespace AGE
 			|| ImGui::ListBox("Scenes"
 			, &EngineCoreTestConfiguration::getSelectedSceneIndex()
 			, EngineCoreTestConfiguration::getScenesName().data()
-			, EngineCoreTestConfiguration::getScenesName().size()))
+			, static_cast<int>(EngineCoreTestConfiguration::getScenesName().size())))
 		{
 			EngineCoreTestConfiguration::saveConfigurations();
 			clearAllEntities();

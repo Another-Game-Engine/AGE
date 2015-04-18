@@ -41,7 +41,7 @@ namespace AGE
 			auto cookingTask = std::make_shared<CookingTask>(dataSet);
 			AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=]()
 			{
-				cookingTask->texturesPath.insert(getFileName());
+				cookingTask->texturesPath.insert(cookingTask->dataSet->filePath.getFullName());
 				cookingTask->serializedDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>(WE::EditorConfiguration::GetCookedDirectory());
 				cookingTask->rawDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>(WE::EditorConfiguration::GetRawDirectory());				
 				AGE::ImageLoader::load(cookingTask);
@@ -51,7 +51,7 @@ namespace AGE
 
 		void TextureRawFile::selection()
 		{
-			ImGui::Text("Selected asset : "); ImGui::SameLine(); ImGui::TextColored(ImVec4(0.58, 0, 0.7, 1), getFileName().c_str());
+			ImGui::Text("Selected asset : "); ImGui::SameLine(); ImGui::TextColored(ImVec4(0.58f, 0.0f, 0.7f, 1.0f), getFileName().c_str());
 			ImGui::Text("Last modifiction : %s", _lastWriteTimeStr.c_str());
 			auto dataset = dataSet;
 			ImGui::Checkbox("Compress textures", &dataset->compressTextures);

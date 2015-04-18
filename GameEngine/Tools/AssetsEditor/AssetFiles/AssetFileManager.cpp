@@ -22,11 +22,11 @@ namespace AGE
 		static std::vector<ImVec4> &Colors()
 		{
 			static auto colors = std::vector < ImVec4 > {
-				ImVec4(0.8, 0.8, 0.8, 1), // raw
-					ImVec4(0.7, 1, 0.85, 1), // cooked
-					ImVec4(0, 0.65, 0.85, 1), // Mesh
-					ImVec4(0.78, 0.05, 0.75, 1), // material
-					ImVec4(0.9, 0.6, 0, 1) // texture
+				ImVec4(0.8f, 0.8f, 0.8f, 1.0f), // raw
+					ImVec4(0.7f, 1.0f, 0.85f, 1.0f), // cooked
+					ImVec4(0.0f, 0.65f, 0.85f, 1.0f), // Mesh
+					ImVec4(0.78f, 0.05f, 0.75f, 1.0f), // material
+					ImVec4(0.9f, 0.6f, 0.0f, 1.0f) // texture
 			};
 			return colors;
 		}
@@ -42,7 +42,7 @@ namespace AGE
 			auto extension = AGE::FileSystemHelpers::GetExtension(path);
 			if (extension == "obj" || extension == "fbx" || extension == "dae")
 				return true;
-			if (extension == "bmp" || extension == "jpg" || extension == "jpeg" || extension == "tga" || extension == "png")
+			if (extension == "bmp" || extension == "jpg" || extension == "jpeg" || extension == "tga" || extension == "png" || extension == "tif")
 				return true;
 			if (extension == "mtl")
 				return true;
@@ -58,7 +58,7 @@ namespace AGE
 				t = std::make_shared<MeshRawFile>(path, parent);
 				t->_type = AssetType::Raw | AssetType::Mesh;
 			}
-			else if (extension == "bmp" || extension == "jpg" || extension == "jpeg" || extension == "tga" || extension == "png")
+			else if (extension == "bmp" || extension == "jpg" || extension == "jpeg" || extension == "tga" || extension == "png" || extension == "tif")
 			{
 				t = std::make_shared<TextureRawFile>(path, parent);
 				t->_type = AssetType::Raw | AssetType::Texture;

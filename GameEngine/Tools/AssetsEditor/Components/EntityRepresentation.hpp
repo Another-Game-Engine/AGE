@@ -13,7 +13,7 @@ namespace AGE
 {
 	namespace WE
 	{
-		class ArchetypeEditorRepresentation;
+		struct ArchetypeEditorRepresentation;
 
 		struct EntityRepresentation : public ComponentBase
 		{
