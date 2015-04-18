@@ -95,6 +95,7 @@ namespace AGE
 
 		OpenGLState::glDisable(GL_DEPTH_TEST);
 		OpenGLState::glDisable(GL_STENCIL_TEST);
+		OpenGLState::glDepthMask(GL_FALSE);
 		_programs[PROGRAM_DRAW_LINE]->use();
 
 		_lines = _painterManager->get_painter(GetRenderThread()->debug2Dlines.painterKey);

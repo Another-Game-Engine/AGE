@@ -445,6 +445,8 @@ namespace AGE
 					RenderPainter *curRenderPainter = nullptr;
 					RenderDrawableList *curRenderDrawablelist = nullptr;
 
+					bool drawObject = true;
+
 					auto renderPainter = curRenderPipeline->keys.find(currentDrawable->mesh.painter.getId());
 					// We find the good render painter
 					if (renderPainter == curRenderPipeline->keys.end())
@@ -469,44 +471,70 @@ namespace AGE
 						curRenderDrawablelist->renderMode = currentDrawable->renderMode;
 					}
 
+
 					if (depthMap.isValid() && curRenderDrawablelist->renderMode.at(AGE_OCCLUDER) == false)
 					{
+						drawObject = false;
+
 						auto BB = currentDrawable->mesh.boundingBox;
 
-						glm::vec2 bboxLines[8];
+						glm::vec2 minPoint = glm::vec2(1);
+						glm::vec2 maxPoint = glm::vec2(-1);
+						float minZ = std::numeric_limits<float>::max();
 
 						for (std::size_t i = 0; i < 8; ++i)
 						{
 							auto point = VP * currentDrawable->transformation * glm::vec4(BB.getCornerPoint(i), 1.0f);
 							point /= point.w;
 
+							if (point.x < -1)
+							{
+								point.x = -1;
+							}
+							if (point.y < -1)
+							{
+								point.y = -1;
+							}
+							if (point.x > 1)
+							{
+								point.x = 1;
+							}
+							if (point.y > 1)
+							{
+								point.y = 1;
+							}
+
 							int screenX = (point.x + 1) / 2.0f * depthMap->getMipmapWidth();
 							int screenY = (point.y + 1) / 2.0f * depthMap->getMipmapHeight();
 
-							bboxLines[i] = glm::vec2(point.x, point.y);
+							minPoint.x = std::min(minPoint.x, point.x);
+							minPoint.y = std::min(minPoint.y, point.y);
+							maxPoint.x = std::max(maxPoint.x, point.x);
+							maxPoint.y = std::max(maxPoint.y, point.y);
 
-							if (i > 0)
+							point.z = (point.z + 1) * 0.5;
+
+							minZ = std::min(minZ, point.z);
+
+							if (depthMap->passTest((uint32_t)(point.z * (1 << 24)), screenX, screenY) == true)
 							{
-								GetRenderThread()->getQueue()->emplaceCommand<AGE::Commands::ToRender::Draw2DLine>(bboxLines[i - 1], bboxLines[i]);
+								drawObject = true;
 							}
-
-
-							if (depthMap->passTest((uint32_t)(point.z * 0xFFFFFF), screenX, screenY) == false)
-							{
-								continue;
-							}
-
-							curRenderDrawablelist->vertices.emplace_back(currentDrawable->mesh.vertices);
-							curRenderDrawablelist->properties.emplace_back(_properties.get(currentDrawable->mesh.properties.getId()));
-							break;
 						}
-						continue;
+						if (drawObject)
+						{
+							GetRenderThread()->getQueue()->emplaceCommand<AGE::Commands::ToRender::Draw2DLine>(glm::vec2(minPoint.x, minPoint.y), glm::vec2(minPoint.x, maxPoint.y));
+							GetRenderThread()->getQueue()->emplaceCommand<AGE::Commands::ToRender::Draw2DLine>(glm::vec2(minPoint.x, maxPoint.y), glm::vec2(maxPoint.x, maxPoint.y));
+							GetRenderThread()->getQueue()->emplaceCommand<AGE::Commands::ToRender::Draw2DLine>(glm::vec2(maxPoint.x, maxPoint.y), glm::vec2(maxPoint.x, minPoint.y));
+							GetRenderThread()->getQueue()->emplaceCommand<AGE::Commands::ToRender::Draw2DLine>(glm::vec2(maxPoint.x, minPoint.y), glm::vec2(minPoint.x, minPoint.y));
+						}
 					}
 
-
-
-					curRenderDrawablelist->vertices.emplace_back(currentDrawable->mesh.vertices);
-					curRenderDrawablelist->properties.emplace_back(_properties.get(currentDrawable->mesh.properties.getId()));
+					if (drawObject)
+					{
+						curRenderDrawablelist->vertices.emplace_back(currentDrawable->mesh.vertices);
+						curRenderDrawablelist->properties.emplace_back(_properties.get(currentDrawable->mesh.properties.getId()));
+					}
 
 				}
 				break;

@@ -1,5 +1,5 @@
 {
-    "Number_of_serialized_entities": 114,
+    "Number_of_serialized_entities": 120,
     "Component type map": [
         {
             "key": 0,
@@ -87,12 +87,135 @@
         "link": {
             "Position": {
                 "value0": 0,
-                "value1": 4,
-                "value2": -4
+                "value1": 0,
+                "value2": 30
             },
             "Scale": {
-                "value0": 20,
+                "value0": 1,
+                "value1": 1,
+                "value2": 1
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [
+            2,
+            3,
+            4,
+            5
+        ],
+        "flags": 0,
+        "components_number": [
+            0
+        ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "trou-dans-le-mur"
+        }
+    },
+    "Entity_116": {
+        "link": {
+            "Position": {
+                "value0": -10,
+                "value1": 4,
+                "value2": -20
+            },
+            "Scale": {
+                "value0": 18,
                 "value1": 10,
+                "value2": 2
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            0,
+            1
+        ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "occluder1-Copy"
+        },
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "cube/cube.sage",
+                        "value1": "sponza/banner.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 16
+            }
+        }
+    },
+    "Entity_117": {
+        "link": {
+            "Position": {
+                "value0": 10,
+                "value1": 4,
+                "value2": -20
+            },
+            "Scale": {
+                "value0": 18,
+                "value1": 10,
+                "value2": 2
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            0,
+            1
+        ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "occluder1-Copy"
+        },
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "cube/cube.sage",
+                        "value1": "sponza/banner.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 16
+            }
+        }
+    },
+    "Entity_118": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 7,
+                "value2": -20
+            },
+            "Scale": {
+                "value0": 5,
+                "value1": 5,
                 "value2": 1
             },
             "Orientation": {
@@ -109,7 +232,52 @@
             1
         ],
         "AGE::WE::EntityRepresentation": {
-            "name": "occluder1"
+            "name": "occluder1-Copy"
+        },
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "cube/cube.sage",
+                        "value1": "sponza/banner.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 16
+            }
+        }
+    },
+    "Entity_119": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -20
+            },
+            "Scale": {
+                "value0": 5,
+                "value1": 5,
+                "value2": 1
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            0,
+            1
+        ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "occluder1-Copy-Copy"
         },
         "AGE::MeshRenderer": {
             "value0": {
@@ -148,16 +316,16 @@
             }
         },
         "children": [
-            3,
-            4,
-            5,
-            6,
             7,
             8,
             9,
             10,
             11,
-            12
+            12,
+            13,
+            14,
+            15,
+            16
         ],
         "flags": 0,
         "components_number": [
@@ -637,16 +805,16 @@
             }
         },
         "children": [
-            14,
-            15,
-            16,
-            17,
             18,
             19,
             20,
             21,
             22,
-            23
+            23,
+            24,
+            25,
+            26,
+            27
         ],
         "flags": 0,
         "components_number": [
@@ -1126,16 +1294,16 @@
             }
         },
         "children": [
-            25,
-            26,
-            27,
-            28,
             29,
             30,
             31,
             32,
             33,
-            34
+            34,
+            35,
+            36,
+            37,
+            38
         ],
         "flags": 0,
         "components_number": [
@@ -1698,16 +1866,16 @@
             }
         },
         "children": [
-            38,
-            39,
-            40,
-            41,
             42,
             43,
             44,
             45,
             46,
-            47
+            47,
+            48,
+            49,
+            50,
+            51
         ],
         "flags": 0,
         "components_number": [
@@ -2187,16 +2355,16 @@
             }
         },
         "children": [
-            49,
-            50,
-            51,
-            52,
             53,
             54,
             55,
             56,
             57,
-            58
+            58,
+            59,
+            60,
+            61,
+            62
         ],
         "flags": 0,
         "components_number": [
@@ -2676,16 +2844,16 @@
             }
         },
         "children": [
-            60,
-            61,
-            62,
-            63,
             64,
             65,
             66,
             67,
             68,
-            69
+            69,
+            70,
+            71,
+            72,
+            73
         ],
         "flags": 0,
         "components_number": [
@@ -3165,16 +3333,16 @@
             }
         },
         "children": [
-            71,
-            72,
-            73,
-            74,
             75,
             76,
             77,
             78,
             79,
-            80
+            80,
+            81,
+            82,
+            83,
+            84
         ],
         "flags": 0,
         "components_number": [
@@ -3654,16 +3822,16 @@
             }
         },
         "children": [
-            82,
-            83,
-            84,
-            85,
             86,
             87,
             88,
             89,
             90,
-            91
+            91,
+            92,
+            93,
+            94,
+            95
         ],
         "flags": 0,
         "components_number": [
@@ -4143,16 +4311,16 @@
             }
         },
         "children": [
-            93,
-            94,
-            95,
-            96,
             97,
             98,
             99,
             100,
             101,
-            102
+            102,
+            103,
+            104,
+            105,
+            106
         ],
         "flags": 0,
         "components_number": [
@@ -4632,16 +4800,16 @@
             }
         },
         "children": [
-            104,
-            105,
-            106,
-            107,
             108,
             109,
             110,
             111,
             112,
-            113
+            113,
+            114,
+            115,
+            116,
+            117
         ],
         "flags": 0,
         "components_number": [
@@ -5099,6 +5267,106 @@
                 "type": 0,
                 "data": 0
             }
+        }
+    },
+    "Entity_115": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 4,
+                "value2": -4
+            },
+            "Scale": {
+                "value0": 20,
+                "value1": 10,
+                "value2": 1
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            0,
+            1
+        ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "occluder1-Copy"
+        },
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "cube/cube.sage",
+                        "value1": "sponza/banner.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 16
+            }
+        }
+    },
+    "Entity_120": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": 17
+            },
+            "Scale": {
+                "value0": 8,
+                "value1": 8,
+                "value2": 8
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            0,
+            1,
+            7
+        ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "occluded-statue"
+        },
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "borderland_zero/zero.sage",
+                        "value1": "borderland_zero/zero.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        },
+        "AGE::RotationComponent": {
+            "cereal_class_version": 1,
+            "Angles": {
+                "value0": -1.#IND,
+                "value1": -1.#IND,
+                "value2": -1.#IND
+            },
+            "Speed": 100
         }
     }
 }

@@ -41,6 +41,7 @@ namespace AGE
 		}
 		
 		uint32_t depth = (_buffer[index] & 0xFFFFFF00) >> 8;
+
 		if (depth < pixelDepth)
 		{
 			return false;
