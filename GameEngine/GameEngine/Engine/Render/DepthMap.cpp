@@ -22,7 +22,7 @@ namespace AGE
 		_buffer.resize(_mipmapHeight * _mipmapWidth, -1);
 	}
 
-	bool DepthMap::passTest(float pixelDepth, std::size_t x, std::size_t y) const
+	bool DepthMap::passTest(uint32_t pixelDepth, std::size_t x, std::size_t y) const
 	{
 		if (x >= _width)
 		{
@@ -39,9 +39,9 @@ namespace AGE
 		{
 			return false;
 		}
-
-		float depth = ((float)((_buffer[index] & 0xFFFFFF00) >> 8) / (float)0xFFFFFF);
-		if (depth - 0.005 < pixelDepth)
+		
+		uint32_t depth = (_buffer[index] & 0xFFFFFF00) >> 8;
+		if (depth < pixelDepth)
 		{
 			return false;
 		}

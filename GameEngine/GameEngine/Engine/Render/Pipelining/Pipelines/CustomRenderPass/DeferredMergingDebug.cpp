@@ -16,11 +16,16 @@
 #define DEFERRED_SHADING_MERGING_VERTEX "../../Shaders/deferred_shading/deferred_shading_merge_debug.vp"
 #define DEFERRED_SHADING_MERGING_FRAG "../../Shaders/deferred_shading/deferred_shading_merge_debug.fp"
 
+#define DEFERRED_SHADING_MERGING_VERTEX "../../Shaders/deferred_shading/deferred_shading_merge_debug.vp"
+#define DEFERRED_SHADING_MERGING_FRAG "../../Shaders/deferred_shading/deferred_shading_merge_debug.fp"
+
+
 namespace AGE
 {
 	enum Programs
 	{
 		PROGRAM_MERGING = 0,
+//		PROGRAM_DRAW_2DLINE,
 		PROGRAM_NBR
 	};
 

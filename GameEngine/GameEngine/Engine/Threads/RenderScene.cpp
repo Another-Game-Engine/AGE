@@ -470,17 +470,28 @@ namespace AGE
 					}
 
 					if (depthMap.isValid() && curRenderDrawablelist->renderMode.at(AGE_OCCLUDER) == false)
-					{;
+					{
 						auto BB = currentDrawable->mesh.boundingBox;
+
+						glm::vec2 bboxLines[8];
 
 						for (std::size_t i = 0; i < 8; ++i)
 						{
 							auto point = VP * currentDrawable->transformation * glm::vec4(BB.getCornerPoint(i), 1.0f);
 							point /= point.w;
+
 							int screenX = (point.x + 1) / 2.0f * depthMap->getMipmapWidth();
 							int screenY = (point.y + 1) / 2.0f * depthMap->getMipmapHeight();
 
-							if (depthMap->passTest(point.z, screenX, screenY) == false)
+							bboxLines[i] = glm::vec2(point.x, point.y);
+
+							if (i > 0)
+							{
+								GetRenderThread()->getQueue()->emplaceCommand<AGE::Commands::ToRender::Draw2DLine>(bboxLines[i - 1], bboxLines[i]);
+							}
+
+
+							if (depthMap->passTest((uint32_t)(point.z * 0xFFFFFF), screenX, screenY) == false)
 							{
 								continue;
 							}
@@ -491,6 +502,8 @@ namespace AGE
 						}
 						continue;
 					}
+
+
 
 					curRenderDrawablelist->vertices.emplace_back(currentDrawable->mesh.vertices);
 					curRenderDrawablelist->properties.emplace_back(_properties.get(currentDrawable->mesh.properties.getId()));

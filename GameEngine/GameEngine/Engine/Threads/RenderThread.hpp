@@ -12,6 +12,7 @@
 #include <Engine/SpacePartitioning/Ouptut/RenderCamera.hh>
 #include <Render/PipelineTypes.hpp>
 #include <Render/DepthMapManager.hpp>
+#include <Render/GeometryManagement/SimpleGeometry.hh>
 
 namespace AGE
 {
@@ -25,12 +26,17 @@ namespace AGE
 
 	class RenderThread : public Thread, public QueueOwner
 	{
+
 	public:
 		virtual bool init();
 		virtual bool release();
 		bool update();
 		virtual bool launch();
 		virtual bool stop();
+
+		// temporary
+		SimpleGeometry::SimpleGeometryKeys debug2Dlines;
+		std::vector<glm::vec2> debug2DlinesPoints;
 
 		// used by render scene, maybe should be protected
 		void createMeshProperty(const Key<Painter> &painter, Key<Properties> &properties, Key<Property> &transformation);

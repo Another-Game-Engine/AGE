@@ -46,6 +46,18 @@ namespace AGE
 					program(p_proram)
 				{ }
 			};
+
+			struct Draw2DLine
+			{
+				glm::vec2 start;
+				glm::vec2 end;
+
+				Draw2DLine(glm::vec2 _start, glm::vec2 _end) :
+					start(_start),
+					end(_end)
+				{
+				}
+			};
 		};
 	}
 }
