@@ -477,6 +477,12 @@ namespace AGE
 				renderCamera.lights.pointLight.back().light = p;
 				// TODO: Cull the shadows
 			}
+			for (uint32_t spotLightIdx : _activeSpotLights) 
+			{
+				auto &p = _spotLights.get(spotLightIdx);
+				renderCamera.lights.spotLights.emplace_back();
+				renderCamera.lights.spotLights.back().light = p;
+			}
 			// Do the culling
 			_octree.getElementsCollide(&camera, toDraw);
 			RenderPipeline *curRenderPipeline = &renderCamera.pipeline;
