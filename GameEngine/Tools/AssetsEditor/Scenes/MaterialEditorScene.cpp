@@ -8,6 +8,7 @@
 #include <EditorConfiguration.hpp>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include "AssetsEditorScene.hpp"
 
 namespace AGE
 {
@@ -45,12 +46,6 @@ namespace AGE
 		_editModeName = false;
 		_indexSubMaterial = -1;
 		memset(_bufferName, 0, NAME_LENGTH);
-		for (auto index = 0; index < ModeTexture::size; ++index) {
-			memset(_bufferTexture[index], 0, TEXTURE_LENGTH);
-		}
-		for (auto index = 0; index < ModeTexture::size; ++index) {
-			_editModeTexture[index] = false;
-		}
 	}
 
 	void MaterialEditorScene::_selectMaterial()
@@ -99,27 +94,31 @@ namespace AGE
 		}
 	}
 
-	void MaterialEditorScene::_editTexture(ModeTexture mode, std::string &current)
+	void MaterialEditorScene::_editTexture(std::string &texturePath, ModeTexture mode, MaterialData &current)
 	{
-		if (!_editModeTexture[mode])
+		if (current.selectedTextureIndex[mode] == 0
+			&& texturePath.size() != 0)
 		{
-			if (current.empty())
-				ImGui::Text(std::string("No " + std::string(_nameTexture[mode]) +  "...").c_str());
-			else
-				ImGui::Text(current.c_str());
-			ImGui::SameLine();
-			if (ImGui::Button("Edit texture"))
-				_editModeTexture[mode] = true;
-		}
-		else
-		{
-			ImGui::InputText(_nameTexture[mode], _bufferTexture[mode], NAME_LENGTH);
-			ImGui::SameLine();
-			if (ImGui::Button("valid new texture"))
+			int i = 1;
+			auto slashRemoved = texturePath;
+			slashRemoved.erase(std::remove_if(slashRemoved.begin(), slashRemoved.end(), [](char chr){ return chr == '/' || chr == '\\'; }), slashRemoved.end());
+			for (auto &e : AssetsEditorScene::getCookedTextureListFullPath())
 			{
-				current = std::string(_bufferName);
-				_editModeTexture[mode] = false;
+				std::string copy = e;
+				copy.erase(std::remove_if(copy.begin(), copy.end(), [](char chr){ return chr == '/' || chr == '\\'; }), copy.end());
+				if (copy == slashRemoved)
+				{
+					current.selectedTextureIndex[mode] = i;
+					break;
+				}
+				++i;
 			}
+		}
+
+		if (ImGui::Combo(_nameTexture[mode], &current.selectedTextureIndex[mode], AssetsEditorScene::getCookedTextureListFullPath().data(), (int)AssetsEditorScene::getCookedTextureListFullPath().size()))
+		{
+			auto index = current.selectedTextureIndex[mode];
+			texturePath = AssetsEditorScene::getCookedTextureListFullPath()[index];
 		}
 	}
 
@@ -190,13 +189,13 @@ namespace AGE
 		ImGui::ColorEdit3("emissive", glm::value_ptr(mat.emissive));
 		ImGui::ColorEdit3("reflective", glm::value_ptr(mat.reflective));
 		ImGui::ColorEdit3("specular", glm::value_ptr(mat.specular));
-		_editTexture(ModeTexture::diffuse, mat.diffuseTexPath);
-		_editTexture(ModeTexture::specular, mat.specularTexPath);
-		_editTexture(ModeTexture::ambient, mat.ambientTexPath);
-		_editTexture(ModeTexture::reflective, mat.reflectiveTexPath);
-		_editTexture(ModeTexture::emissive, mat.emissiveTexPath);
-		_editTexture(ModeTexture::normal, mat.reflectiveTexPath);
-		_editTexture(ModeTexture::bump, mat.bumpTexPath);
+		_editTexture(mat.diffuseTexPath, ModeTexture::diffuse, mat);
+		_editTexture(mat.specularTexPath, ModeTexture::specular, mat);
+		_editTexture(mat.ambientTexPath, ModeTexture::ambient, mat);
+		_editTexture(mat.reflectiveTexPath, ModeTexture::reflective, mat);
+		_editTexture(mat.emissiveTexPath, ModeTexture::emissive, mat);
+		_editTexture(mat.normalTexPath, ModeTexture::normal, mat);
+		_editTexture(mat.bumpTexPath, ModeTexture::bump, mat);
 		_saveEdit();
 	}
 

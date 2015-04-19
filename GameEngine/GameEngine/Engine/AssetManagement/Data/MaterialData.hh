@@ -25,8 +25,21 @@ namespace AGE
 		std::string normalTexPath;
 		std::string bumpTexPath;
 
+#ifdef EDITOR_ENABLED
+		int selectedTextureIndex[7];
+#endif
+
 	public:
 		template <class Archive> void serialize(Archive &ar, const std::uint32_t version);
+		MaterialData()
+		{
+#ifdef EDITOR_ENABLED
+			for (auto i = 0; i < 7; ++i)
+			{
+				selectedTextureIndex[i] = 0;
+			}
+#endif
+		}
 	};
 
 	struct MaterialDataSet
@@ -34,7 +47,6 @@ namespace AGE
 	public:
 		std::vector<MaterialData> collection;
 		std::string name;
-
 	public:
 		template <class Archive> void serialize(Archive &ar, const std::uint32_t version);
 	};
