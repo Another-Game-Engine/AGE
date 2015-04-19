@@ -19,10 +19,6 @@
 #include <Render/DepthMapHandle.hpp>
 #include <Render/DepthMap.hpp>
 
-#ifdef OCCLUSION_CULLING
-#include <Render/Properties/Transformation.hh>
-#endif
-
 #define DEFERRED_SHADING_BUFFERING_VERTEX "deferred_shading/deferred_shading_get_buffer.vp"
 #define DEFERRED_SHADING_BUFFERING_FRAG "deferred_shading/deferred_shading_get_buffer.fp"
 

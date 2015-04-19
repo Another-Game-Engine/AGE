@@ -472,6 +472,7 @@ namespace AGE
 					}
 
 
+#ifdef OCCLUSION_CULLING
 					if (depthMap.isValid() && curRenderDrawablelist->renderMode.at(AGE_OCCLUDER) == false)
 					{
 						drawObject = false;
@@ -514,23 +515,6 @@ namespace AGE
 							minZ = std::min(minZ, point.z);
 						}
 
-
-						//int screenX = (minPoint.x + 1) / 2.0f * depthMap->getMipmapWidth();
-						//int screenY = (minPoint.y + 1) / 2.0f * depthMap->getMipmapHeight();
-						//drawObject |= depthMap->testPixel((uint32_t)(minZ * (1 << 24)), screenX, screenY);
-
-						//screenX = (minPoint.x + 1) / 2.0f * depthMap->getMipmapWidth();
-						//screenY = (maxPoint.y + 1) / 2.0f * depthMap->getMipmapHeight();
-						//drawObject |= depthMap->testPixel((uint32_t)(minZ * (1 << 24)), screenX, screenY);
-
-						//screenX = (maxPoint.x + 1) / 2.0f * depthMap->getMipmapWidth();
-						//screenY = (maxPoint.y + 1) / 2.0f * depthMap->getMipmapHeight();
-						//drawObject |= depthMap->testPixel((uint32_t)(minZ * (1 << 24)), screenX, screenY);
-
-						//screenX = (maxPoint.x + 1) / 2.0f * depthMap->getMipmapWidth();
-						//screenY = (minPoint.y + 1) / 2.0f * depthMap->getMipmapHeight();
-						//drawObject |= depthMap->testPixel((uint32_t)(minZ * (1 << 24)), screenX, screenY);
-
 						glm::uvec2 screenMin(((minPoint + glm::vec2(1)) / glm::vec2(2)) * glm::vec2(depthMap->getMipmapWidth(), depthMap->getMipmapHeight()));
 						glm::uvec2 screenMax(((maxPoint + glm::vec2(1)) / glm::vec2(2)) * glm::vec2(depthMap->getMipmapWidth(), depthMap->getMipmapHeight()));
 
@@ -544,7 +528,7 @@ namespace AGE
 							GetRenderThread()->getQueue()->emplaceCommand<AGE::Commands::ToRender::Draw2DLine>(glm::vec2(maxPoint.x, minPoint.y), glm::vec2(minPoint.x, minPoint.y));
 						}
 					}
-
+#endif // OCCLUSION
 					if (drawObject)
 					{
 						curRenderDrawablelist->vertices.emplace_back(currentDrawable->mesh.vertices);
