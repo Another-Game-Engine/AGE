@@ -5362,9 +5362,9 @@
         "AGE::RotationComponent": {
             "cereal_class_version": 1,
             "Angles": {
-                "value0": -1.#IND,
-                "value1": -1.#IND,
-                "value2": -1.#IND
+                "value0": 0,
+                "value1": 1,
+                "value2": 0
             },
             "Speed": 100
         }
