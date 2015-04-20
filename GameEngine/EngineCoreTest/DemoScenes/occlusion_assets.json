@@ -7,9 +7,9 @@
             "borderland_zero/zero.sage"
         ],
         "value1": [
-            "cube/cube.mage",
-            "sponza/banner.mage",
+            "brick.mage",
             "Flash/Flash.mage",
+            "sponza/banner.mage",
             "borderland_zero/zero.mage"
         ]
     }

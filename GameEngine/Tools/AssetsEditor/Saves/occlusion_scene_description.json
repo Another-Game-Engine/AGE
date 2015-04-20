@@ -72,7 +72,7 @@
                     "valid": 1,
                     "data": {
                         "value0": "cube/cube.sage",
-                        "value1": "cube/cube.mage",
+                        "value1": "brick.mage",
                         "value2": ""
                     }
                 }
@@ -116,7 +116,7 @@
             "name": "trou-dans-le-mur"
         }
     },
-    "Entity_116": {
+    "Entity_3": {
         "link": {
             "Position": {
                 "value0": -10,
@@ -161,7 +161,7 @@
             }
         }
     },
-    "Entity_117": {
+    "Entity_4": {
         "link": {
             "Position": {
                 "value0": 10,
@@ -206,7 +206,7 @@
             }
         }
     },
-    "Entity_118": {
+    "Entity_5": {
         "link": {
             "Position": {
                 "value0": 0,
@@ -251,7 +251,7 @@
             }
         }
     },
-    "Entity_119": {
+    "Entity_6": {
         "link": {
             "Position": {
                 "value0": 0,
@@ -296,7 +296,7 @@
             }
         }
     },
-    "Entity_3": {
+    "Entity_7": {
         "link": {
             "Position": {
                 "value0": 2,
@@ -335,192 +335,12 @@
             "name": "flashline"
         }
     },
-    "Entity_4": {
-        "link": {
-            "Position": {
-                "value0": 0,
-                "value1": 1,
-                "value2": -4
-            },
-            "Scale": {
-                "value0": 3,
-                "value1": 3,
-                "value2": 3
-            },
-            "Orientation": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 0,
-                "value3": 1
-            }
-        },
-        "children": [],
-        "flags": 0,
-        "components_number": [
-            0,
-            1
-        ],
-        "AGE::WE::EntityRepresentation": {
-            "name": "flash-Copy"
-        },
-        "AGE::MeshRenderer": {
-            "value0": {
-                "ptr_wrapper": {
-                    "valid": 1,
-                    "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
-                        "value2": ""
-                    }
-                }
-            },
-            "value1": {
-                "type": 0,
-                "data": 0
-            }
-        }
-    },
-    "Entity_5": {
-        "link": {
-            "Position": {
-                "value0": 0,
-                "value1": 1,
-                "value2": -10
-            },
-            "Scale": {
-                "value0": 3,
-                "value1": 3,
-                "value2": 3
-            },
-            "Orientation": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 0,
-                "value3": 1
-            }
-        },
-        "children": [],
-        "flags": 0,
-        "components_number": [
-            0,
-            1
-        ],
-        "AGE::WE::EntityRepresentation": {
-            "name": "flash-Copy"
-        },
-        "AGE::MeshRenderer": {
-            "value0": {
-                "ptr_wrapper": {
-                    "valid": 1,
-                    "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
-                        "value2": ""
-                    }
-                }
-            },
-            "value1": {
-                "type": 0,
-                "data": 0
-            }
-        }
-    },
-    "Entity_6": {
-        "link": {
-            "Position": {
-                "value0": 0,
-                "value1": 1,
-                "value2": -9
-            },
-            "Scale": {
-                "value0": 3,
-                "value1": 3,
-                "value2": 3
-            },
-            "Orientation": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 0,
-                "value3": 1
-            }
-        },
-        "children": [],
-        "flags": 0,
-        "components_number": [
-            0,
-            1
-        ],
-        "AGE::WE::EntityRepresentation": {
-            "name": "flash-Copy"
-        },
-        "AGE::MeshRenderer": {
-            "value0": {
-                "ptr_wrapper": {
-                    "valid": 1,
-                    "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
-                        "value2": ""
-                    }
-                }
-            },
-            "value1": {
-                "type": 0,
-                "data": 0
-            }
-        }
-    },
-    "Entity_7": {
-        "link": {
-            "Position": {
-                "value0": 0,
-                "value1": 1,
-                "value2": -8
-            },
-            "Scale": {
-                "value0": 3,
-                "value1": 3,
-                "value2": 3
-            },
-            "Orientation": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 0,
-                "value3": 1
-            }
-        },
-        "children": [],
-        "flags": 0,
-        "components_number": [
-            0,
-            1
-        ],
-        "AGE::WE::EntityRepresentation": {
-            "name": "flash-Copy"
-        },
-        "AGE::MeshRenderer": {
-            "value0": {
-                "ptr_wrapper": {
-                    "valid": 1,
-                    "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
-                        "value2": ""
-                    }
-                }
-            },
-            "value1": {
-                "type": 0,
-                "data": 0
-            }
-        }
-    },
     "Entity_8": {
         "link": {
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -7
+                "value2": -4
             },
             "Scale": {
                 "value0": 3,
@@ -565,7 +385,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -6
+                "value2": -10
             },
             "Scale": {
                 "value0": 3,
@@ -610,7 +430,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -5
+                "value2": -9
             },
             "Scale": {
                 "value0": 3,
@@ -655,7 +475,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -11
+                "value2": -8
             },
             "Scale": {
                 "value0": 3,
@@ -700,6 +520,186 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
+                "value2": -7
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            0,
+            1
+        ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "flash-Copy"
+        },
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "Flash/Flash.sage",
+                        "value1": "Flash/Flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_13": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -6
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            0,
+            1
+        ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "flash-Copy"
+        },
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "Flash/Flash.sage",
+                        "value1": "Flash/Flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_14": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -5
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            0,
+            1
+        ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "flash-Copy"
+        },
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "Flash/Flash.sage",
+                        "value1": "Flash/Flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_15": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -11
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            0,
+            1
+        ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "flash-Copy"
+        },
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "Flash/Flash.sage",
+                        "value1": "Flash/Flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_16": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
                 "value2": -2
             },
             "Scale": {
@@ -740,7 +740,7 @@
             }
         }
     },
-    "Entity_13": {
+    "Entity_17": {
         "link": {
             "Position": {
                 "value0": 0,
@@ -785,7 +785,7 @@
             }
         }
     },
-    "Entity_14": {
+    "Entity_18": {
         "link": {
             "Position": {
                 "value0": 2,
@@ -824,192 +824,12 @@
             "name": "flashline-Copy"
         }
     },
-    "Entity_15": {
-        "link": {
-            "Position": {
-                "value0": 0,
-                "value1": 1,
-                "value2": -4
-            },
-            "Scale": {
-                "value0": 3,
-                "value1": 3,
-                "value2": 3
-            },
-            "Orientation": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 0,
-                "value3": 1
-            }
-        },
-        "children": [],
-        "flags": 0,
-        "components_number": [
-            0,
-            1
-        ],
-        "AGE::WE::EntityRepresentation": {
-            "name": "flash-Copy-Copy"
-        },
-        "AGE::MeshRenderer": {
-            "value0": {
-                "ptr_wrapper": {
-                    "valid": 1,
-                    "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
-                        "value2": ""
-                    }
-                }
-            },
-            "value1": {
-                "type": 0,
-                "data": 0
-            }
-        }
-    },
-    "Entity_16": {
-        "link": {
-            "Position": {
-                "value0": 0,
-                "value1": 1,
-                "value2": -10
-            },
-            "Scale": {
-                "value0": 3,
-                "value1": 3,
-                "value2": 3
-            },
-            "Orientation": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 0,
-                "value3": 1
-            }
-        },
-        "children": [],
-        "flags": 0,
-        "components_number": [
-            0,
-            1
-        ],
-        "AGE::WE::EntityRepresentation": {
-            "name": "flash-Copy-Copy"
-        },
-        "AGE::MeshRenderer": {
-            "value0": {
-                "ptr_wrapper": {
-                    "valid": 1,
-                    "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
-                        "value2": ""
-                    }
-                }
-            },
-            "value1": {
-                "type": 0,
-                "data": 0
-            }
-        }
-    },
-    "Entity_17": {
-        "link": {
-            "Position": {
-                "value0": 0,
-                "value1": 1,
-                "value2": -9
-            },
-            "Scale": {
-                "value0": 3,
-                "value1": 3,
-                "value2": 3
-            },
-            "Orientation": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 0,
-                "value3": 1
-            }
-        },
-        "children": [],
-        "flags": 0,
-        "components_number": [
-            0,
-            1
-        ],
-        "AGE::WE::EntityRepresentation": {
-            "name": "flash-Copy-Copy"
-        },
-        "AGE::MeshRenderer": {
-            "value0": {
-                "ptr_wrapper": {
-                    "valid": 1,
-                    "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
-                        "value2": ""
-                    }
-                }
-            },
-            "value1": {
-                "type": 0,
-                "data": 0
-            }
-        }
-    },
-    "Entity_18": {
-        "link": {
-            "Position": {
-                "value0": 0,
-                "value1": 1,
-                "value2": -8
-            },
-            "Scale": {
-                "value0": 3,
-                "value1": 3,
-                "value2": 3
-            },
-            "Orientation": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 0,
-                "value3": 1
-            }
-        },
-        "children": [],
-        "flags": 0,
-        "components_number": [
-            0,
-            1
-        ],
-        "AGE::WE::EntityRepresentation": {
-            "name": "flash-Copy-Copy"
-        },
-        "AGE::MeshRenderer": {
-            "value0": {
-                "ptr_wrapper": {
-                    "valid": 1,
-                    "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
-                        "value2": ""
-                    }
-                }
-            },
-            "value1": {
-                "type": 0,
-                "data": 0
-            }
-        }
-    },
     "Entity_19": {
         "link": {
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -7
+                "value2": -4
             },
             "Scale": {
                 "value0": 3,
@@ -1054,7 +874,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -6
+                "value2": -10
             },
             "Scale": {
                 "value0": 3,
@@ -1099,7 +919,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -5
+                "value2": -9
             },
             "Scale": {
                 "value0": 3,
@@ -1144,7 +964,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -11
+                "value2": -8
             },
             "Scale": {
                 "value0": 3,
@@ -1189,7 +1009,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -2
+                "value2": -7
             },
             "Scale": {
                 "value0": 3,
@@ -1210,7 +1030,7 @@
             1
         ],
         "AGE::WE::EntityRepresentation": {
-            "name": "flash-Copy"
+            "name": "flash-Copy-Copy"
         },
         "AGE::MeshRenderer": {
             "value0": {
@@ -1234,7 +1054,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -3
+                "value2": -6
             },
             "Scale": {
                 "value0": 3,
@@ -1278,13 +1098,13 @@
         "link": {
             "Position": {
                 "value0": 0,
-                "value1": 0,
-                "value2": -6
+                "value1": 1,
+                "value2": -5
             },
             "Scale": {
-                "value0": 1,
-                "value1": 1,
-                "value2": 1
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
             },
             "Orientation": {
                 "value0": 0,
@@ -1293,24 +1113,30 @@
                 "value3": 1
             }
         },
-        "children": [
-            29,
-            30,
-            31,
-            32,
-            33,
-            34,
-            35,
-            36,
-            37,
-            38
-        ],
+        "children": [],
         "flags": 0,
         "components_number": [
-            0
+            0,
+            1
         ],
         "AGE::WE::EntityRepresentation": {
-            "name": "flashline-Copy"
+            "name": "flash-Copy-Copy"
+        },
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "Flash/Flash.sage",
+                        "value1": "Flash/Flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
         }
     },
     "Entity_26": {
@@ -1318,7 +1144,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -4
+                "value2": -11
             },
             "Scale": {
                 "value0": 3,
@@ -1363,7 +1189,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -10
+                "value2": -2
             },
             "Scale": {
                 "value0": 3,
@@ -1384,7 +1210,7 @@
             1
         ],
         "AGE::WE::EntityRepresentation": {
-            "name": "flash-Copy-Copy"
+            "name": "flash-Copy"
         },
         "AGE::MeshRenderer": {
             "value0": {
@@ -1408,7 +1234,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -9
+                "value2": -3
             },
             "Scale": {
                 "value0": 3,
@@ -1452,13 +1278,13 @@
         "link": {
             "Position": {
                 "value0": 0,
-                "value1": 1,
-                "value2": -8
+                "value1": 0,
+                "value2": -6
             },
             "Scale": {
-                "value0": 3,
-                "value1": 3,
-                "value2": 3
+                "value0": 1,
+                "value1": 1,
+                "value2": 1
             },
             "Orientation": {
                 "value0": 0,
@@ -1467,30 +1293,24 @@
                 "value3": 1
             }
         },
-        "children": [],
+        "children": [
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38
+        ],
         "flags": 0,
         "components_number": [
-            0,
-            1
+            0
         ],
         "AGE::WE::EntityRepresentation": {
-            "name": "flash-Copy-Copy"
-        },
-        "AGE::MeshRenderer": {
-            "value0": {
-                "ptr_wrapper": {
-                    "valid": 1,
-                    "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
-                        "value2": ""
-                    }
-                }
-            },
-            "value1": {
-                "type": 0,
-                "data": 0
-            }
+            "name": "flashline-Copy"
         }
     },
     "Entity_30": {
@@ -1498,7 +1318,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -7
+                "value2": -4
             },
             "Scale": {
                 "value0": 3,
@@ -1543,7 +1363,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -6
+                "value2": -10
             },
             "Scale": {
                 "value0": 3,
@@ -1588,7 +1408,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -5
+                "value2": -9
             },
             "Scale": {
                 "value0": 3,
@@ -1633,7 +1453,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -11
+                "value2": -8
             },
             "Scale": {
                 "value0": 3,
@@ -1678,6 +1498,186 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
+                "value2": -7
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            0,
+            1
+        ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "flash-Copy-Copy"
+        },
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "Flash/Flash.sage",
+                        "value1": "Flash/Flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_35": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -6
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            0,
+            1
+        ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "flash-Copy-Copy"
+        },
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "Flash/Flash.sage",
+                        "value1": "Flash/Flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_36": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -5
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            0,
+            1
+        ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "flash-Copy-Copy"
+        },
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "Flash/Flash.sage",
+                        "value1": "Flash/Flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_37": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -11
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            0,
+            1
+        ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "flash-Copy-Copy"
+        },
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "Flash/Flash.sage",
+                        "value1": "Flash/Flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_38": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
                 "value2": -2
             },
             "Scale": {
@@ -1718,7 +1718,7 @@
             }
         }
     },
-    "Entity_35": {
+    "Entity_39": {
         "link": {
             "Position": {
                 "value0": 0,
@@ -1763,7 +1763,7 @@
             }
         }
     },
-    "Entity_36": {
+    "Entity_40": {
         "link": {
             "Position": {
                 "value0": 0,
@@ -1805,7 +1805,7 @@
             }
         }
     },
-    "Entity_37": {
+    "Entity_41": {
         "link": {
             "Position": {
                 "value0": 0,
@@ -1846,7 +1846,7 @@
             }
         }
     },
-    "Entity_38": {
+    "Entity_42": {
         "link": {
             "Position": {
                 "value0": 0,
@@ -1885,192 +1885,12 @@
             "name": "flashline-Copy"
         }
     },
-    "Entity_39": {
-        "link": {
-            "Position": {
-                "value0": 0,
-                "value1": 1,
-                "value2": -4
-            },
-            "Scale": {
-                "value0": 3,
-                "value1": 3,
-                "value2": 3
-            },
-            "Orientation": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 0,
-                "value3": 1
-            }
-        },
-        "children": [],
-        "flags": 0,
-        "components_number": [
-            0,
-            1
-        ],
-        "AGE::WE::EntityRepresentation": {
-            "name": "flash-Copy-Copy"
-        },
-        "AGE::MeshRenderer": {
-            "value0": {
-                "ptr_wrapper": {
-                    "valid": 1,
-                    "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
-                        "value2": ""
-                    }
-                }
-            },
-            "value1": {
-                "type": 0,
-                "data": 0
-            }
-        }
-    },
-    "Entity_40": {
-        "link": {
-            "Position": {
-                "value0": 0,
-                "value1": 1,
-                "value2": -10
-            },
-            "Scale": {
-                "value0": 3,
-                "value1": 3,
-                "value2": 3
-            },
-            "Orientation": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 0,
-                "value3": 1
-            }
-        },
-        "children": [],
-        "flags": 0,
-        "components_number": [
-            0,
-            1
-        ],
-        "AGE::WE::EntityRepresentation": {
-            "name": "flash-Copy-Copy"
-        },
-        "AGE::MeshRenderer": {
-            "value0": {
-                "ptr_wrapper": {
-                    "valid": 1,
-                    "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
-                        "value2": ""
-                    }
-                }
-            },
-            "value1": {
-                "type": 0,
-                "data": 0
-            }
-        }
-    },
-    "Entity_41": {
-        "link": {
-            "Position": {
-                "value0": 0,
-                "value1": 1,
-                "value2": -9
-            },
-            "Scale": {
-                "value0": 3,
-                "value1": 3,
-                "value2": 3
-            },
-            "Orientation": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 0,
-                "value3": 1
-            }
-        },
-        "children": [],
-        "flags": 0,
-        "components_number": [
-            0,
-            1
-        ],
-        "AGE::WE::EntityRepresentation": {
-            "name": "flash-Copy-Copy"
-        },
-        "AGE::MeshRenderer": {
-            "value0": {
-                "ptr_wrapper": {
-                    "valid": 1,
-                    "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
-                        "value2": ""
-                    }
-                }
-            },
-            "value1": {
-                "type": 0,
-                "data": 0
-            }
-        }
-    },
-    "Entity_42": {
-        "link": {
-            "Position": {
-                "value0": 0,
-                "value1": 1,
-                "value2": -8
-            },
-            "Scale": {
-                "value0": 3,
-                "value1": 3,
-                "value2": 3
-            },
-            "Orientation": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 0,
-                "value3": 1
-            }
-        },
-        "children": [],
-        "flags": 0,
-        "components_number": [
-            0,
-            1
-        ],
-        "AGE::WE::EntityRepresentation": {
-            "name": "flash-Copy-Copy"
-        },
-        "AGE::MeshRenderer": {
-            "value0": {
-                "ptr_wrapper": {
-                    "valid": 1,
-                    "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
-                        "value2": ""
-                    }
-                }
-            },
-            "value1": {
-                "type": 0,
-                "data": 0
-            }
-        }
-    },
     "Entity_43": {
         "link": {
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -7
+                "value2": -4
             },
             "Scale": {
                 "value0": 3,
@@ -2115,7 +1935,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -6
+                "value2": -10
             },
             "Scale": {
                 "value0": 3,
@@ -2160,7 +1980,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -5
+                "value2": -9
             },
             "Scale": {
                 "value0": 3,
@@ -2205,7 +2025,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -11
+                "value2": -8
             },
             "Scale": {
                 "value0": 3,
@@ -2250,7 +2070,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -2
+                "value2": -7
             },
             "Scale": {
                 "value0": 3,
@@ -2271,7 +2091,7 @@
             1
         ],
         "AGE::WE::EntityRepresentation": {
-            "name": "flash-Copy"
+            "name": "flash-Copy-Copy"
         },
         "AGE::MeshRenderer": {
             "value0": {
@@ -2295,7 +2115,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -3
+                "value2": -6
             },
             "Scale": {
                 "value0": 3,
@@ -2338,14 +2158,14 @@
     "Entity_49": {
         "link": {
             "Position": {
-                "value0": -2,
-                "value1": 0,
-                "value2": -6
+                "value0": 0,
+                "value1": 1,
+                "value2": -5
             },
             "Scale": {
-                "value0": 1,
-                "value1": 1,
-                "value2": 1
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
             },
             "Orientation": {
                 "value0": 0,
@@ -2354,24 +2174,30 @@
                 "value3": 1
             }
         },
-        "children": [
-            53,
-            54,
-            55,
-            56,
-            57,
-            58,
-            59,
-            60,
-            61,
-            62
-        ],
+        "children": [],
         "flags": 0,
         "components_number": [
-            0
+            0,
+            1
         ],
         "AGE::WE::EntityRepresentation": {
-            "name": "flashline-Copy"
+            "name": "flash-Copy-Copy"
+        },
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "Flash/Flash.sage",
+                        "value1": "Flash/Flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
         }
     },
     "Entity_50": {
@@ -2379,7 +2205,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -4
+                "value2": -11
             },
             "Scale": {
                 "value0": 3,
@@ -2424,7 +2250,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -10
+                "value2": -2
             },
             "Scale": {
                 "value0": 3,
@@ -2445,7 +2271,7 @@
             1
         ],
         "AGE::WE::EntityRepresentation": {
-            "name": "flash-Copy-Copy"
+            "name": "flash-Copy"
         },
         "AGE::MeshRenderer": {
             "value0": {
@@ -2469,7 +2295,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -9
+                "value2": -3
             },
             "Scale": {
                 "value0": 3,
@@ -2512,14 +2338,14 @@
     "Entity_53": {
         "link": {
             "Position": {
-                "value0": 0,
-                "value1": 1,
-                "value2": -8
+                "value0": -2,
+                "value1": 0,
+                "value2": -6
             },
             "Scale": {
-                "value0": 3,
-                "value1": 3,
-                "value2": 3
+                "value0": 1,
+                "value1": 1,
+                "value2": 1
             },
             "Orientation": {
                 "value0": 0,
@@ -2528,30 +2354,24 @@
                 "value3": 1
             }
         },
-        "children": [],
+        "children": [
+            53,
+            54,
+            55,
+            56,
+            57,
+            58,
+            59,
+            60,
+            61,
+            62
+        ],
         "flags": 0,
         "components_number": [
-            0,
-            1
+            0
         ],
         "AGE::WE::EntityRepresentation": {
-            "name": "flash-Copy-Copy"
-        },
-        "AGE::MeshRenderer": {
-            "value0": {
-                "ptr_wrapper": {
-                    "valid": 1,
-                    "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
-                        "value2": ""
-                    }
-                }
-            },
-            "value1": {
-                "type": 0,
-                "data": 0
-            }
+            "name": "flashline-Copy"
         }
     },
     "Entity_54": {
@@ -2559,7 +2379,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -7
+                "value2": -4
             },
             "Scale": {
                 "value0": 3,
@@ -2604,7 +2424,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -6
+                "value2": -10
             },
             "Scale": {
                 "value0": 3,
@@ -2649,7 +2469,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -5
+                "value2": -9
             },
             "Scale": {
                 "value0": 3,
@@ -2694,7 +2514,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -11
+                "value2": -8
             },
             "Scale": {
                 "value0": 3,
@@ -2739,7 +2559,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -2
+                "value2": -7
             },
             "Scale": {
                 "value0": 3,
@@ -2760,7 +2580,7 @@
             1
         ],
         "AGE::WE::EntityRepresentation": {
-            "name": "flash-Copy"
+            "name": "flash-Copy-Copy"
         },
         "AGE::MeshRenderer": {
             "value0": {
@@ -2784,7 +2604,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -3
+                "value2": -6
             },
             "Scale": {
                 "value0": 3,
@@ -2827,14 +2647,14 @@
     "Entity_60": {
         "link": {
             "Position": {
-                "value0": -2,
-                "value1": 3,
-                "value2": -6
+                "value0": 0,
+                "value1": 1,
+                "value2": -5
             },
             "Scale": {
-                "value0": 1,
-                "value1": 1,
-                "value2": 1
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
             },
             "Orientation": {
                 "value0": 0,
@@ -2843,24 +2663,30 @@
                 "value3": 1
             }
         },
-        "children": [
-            64,
-            65,
-            66,
-            67,
-            68,
-            69,
-            70,
-            71,
-            72,
-            73
-        ],
+        "children": [],
         "flags": 0,
         "components_number": [
-            0
+            0,
+            1
         ],
         "AGE::WE::EntityRepresentation": {
-            "name": "flashline-Copy"
+            "name": "flash-Copy-Copy"
+        },
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "Flash/Flash.sage",
+                        "value1": "Flash/Flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
         }
     },
     "Entity_61": {
@@ -2868,7 +2694,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -4
+                "value2": -11
             },
             "Scale": {
                 "value0": 3,
@@ -2913,7 +2739,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -10
+                "value2": -2
             },
             "Scale": {
                 "value0": 3,
@@ -2934,7 +2760,7 @@
             1
         ],
         "AGE::WE::EntityRepresentation": {
-            "name": "flash-Copy-Copy"
+            "name": "flash-Copy"
         },
         "AGE::MeshRenderer": {
             "value0": {
@@ -2958,7 +2784,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -9
+                "value2": -3
             },
             "Scale": {
                 "value0": 3,
@@ -3001,14 +2827,14 @@
     "Entity_64": {
         "link": {
             "Position": {
-                "value0": 0,
-                "value1": 1,
-                "value2": -8
+                "value0": -2,
+                "value1": 3,
+                "value2": -6
             },
             "Scale": {
-                "value0": 3,
-                "value1": 3,
-                "value2": 3
+                "value0": 1,
+                "value1": 1,
+                "value2": 1
             },
             "Orientation": {
                 "value0": 0,
@@ -3017,30 +2843,24 @@
                 "value3": 1
             }
         },
-        "children": [],
+        "children": [
+            64,
+            65,
+            66,
+            67,
+            68,
+            69,
+            70,
+            71,
+            72,
+            73
+        ],
         "flags": 0,
         "components_number": [
-            0,
-            1
+            0
         ],
         "AGE::WE::EntityRepresentation": {
-            "name": "flash-Copy-Copy"
-        },
-        "AGE::MeshRenderer": {
-            "value0": {
-                "ptr_wrapper": {
-                    "valid": 1,
-                    "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
-                        "value2": ""
-                    }
-                }
-            },
-            "value1": {
-                "type": 0,
-                "data": 0
-            }
+            "name": "flashline-Copy"
         }
     },
     "Entity_65": {
@@ -3048,7 +2868,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -7
+                "value2": -4
             },
             "Scale": {
                 "value0": 3,
@@ -3093,7 +2913,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -6
+                "value2": -10
             },
             "Scale": {
                 "value0": 3,
@@ -3138,7 +2958,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -5
+                "value2": -9
             },
             "Scale": {
                 "value0": 3,
@@ -3183,7 +3003,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -11
+                "value2": -8
             },
             "Scale": {
                 "value0": 3,
@@ -3228,7 +3048,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -2
+                "value2": -7
             },
             "Scale": {
                 "value0": 3,
@@ -3249,7 +3069,7 @@
             1
         ],
         "AGE::WE::EntityRepresentation": {
-            "name": "flash-Copy"
+            "name": "flash-Copy-Copy"
         },
         "AGE::MeshRenderer": {
             "value0": {
@@ -3273,7 +3093,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -3
+                "value2": -6
             },
             "Scale": {
                 "value0": 3,
@@ -3316,14 +3136,14 @@
     "Entity_71": {
         "link": {
             "Position": {
-                "value0": -4,
-                "value1": 0,
-                "value2": -6
+                "value0": 0,
+                "value1": 1,
+                "value2": -5
             },
             "Scale": {
-                "value0": 1,
-                "value1": 1,
-                "value2": 1
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
             },
             "Orientation": {
                 "value0": 0,
@@ -3332,24 +3152,30 @@
                 "value3": 1
             }
         },
-        "children": [
-            75,
-            76,
-            77,
-            78,
-            79,
-            80,
-            81,
-            82,
-            83,
-            84
-        ],
+        "children": [],
         "flags": 0,
         "components_number": [
-            0
+            0,
+            1
         ],
         "AGE::WE::EntityRepresentation": {
-            "name": "flashline-Copy"
+            "name": "flash-Copy-Copy"
+        },
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "Flash/Flash.sage",
+                        "value1": "Flash/Flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
         }
     },
     "Entity_72": {
@@ -3357,7 +3183,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -4
+                "value2": -11
             },
             "Scale": {
                 "value0": 3,
@@ -3402,7 +3228,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -10
+                "value2": -2
             },
             "Scale": {
                 "value0": 3,
@@ -3423,7 +3249,7 @@
             1
         ],
         "AGE::WE::EntityRepresentation": {
-            "name": "flash-Copy-Copy"
+            "name": "flash-Copy"
         },
         "AGE::MeshRenderer": {
             "value0": {
@@ -3447,7 +3273,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -9
+                "value2": -3
             },
             "Scale": {
                 "value0": 3,
@@ -3490,14 +3316,14 @@
     "Entity_75": {
         "link": {
             "Position": {
-                "value0": 0,
-                "value1": 1,
-                "value2": -8
+                "value0": -4,
+                "value1": 0,
+                "value2": -6
             },
             "Scale": {
-                "value0": 3,
-                "value1": 3,
-                "value2": 3
+                "value0": 1,
+                "value1": 1,
+                "value2": 1
             },
             "Orientation": {
                 "value0": 0,
@@ -3506,30 +3332,24 @@
                 "value3": 1
             }
         },
-        "children": [],
+        "children": [
+            75,
+            76,
+            77,
+            78,
+            79,
+            80,
+            81,
+            82,
+            83,
+            84
+        ],
         "flags": 0,
         "components_number": [
-            0,
-            1
+            0
         ],
         "AGE::WE::EntityRepresentation": {
-            "name": "flash-Copy-Copy"
-        },
-        "AGE::MeshRenderer": {
-            "value0": {
-                "ptr_wrapper": {
-                    "valid": 1,
-                    "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
-                        "value2": ""
-                    }
-                }
-            },
-            "value1": {
-                "type": 0,
-                "data": 0
-            }
+            "name": "flashline-Copy"
         }
     },
     "Entity_76": {
@@ -3537,7 +3357,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -7
+                "value2": -4
             },
             "Scale": {
                 "value0": 3,
@@ -3582,7 +3402,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -6
+                "value2": -10
             },
             "Scale": {
                 "value0": 3,
@@ -3627,7 +3447,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -5
+                "value2": -9
             },
             "Scale": {
                 "value0": 3,
@@ -3672,7 +3492,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -11
+                "value2": -8
             },
             "Scale": {
                 "value0": 3,
@@ -3717,7 +3537,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -2
+                "value2": -7
             },
             "Scale": {
                 "value0": 3,
@@ -3738,7 +3558,7 @@
             1
         ],
         "AGE::WE::EntityRepresentation": {
-            "name": "flash-Copy"
+            "name": "flash-Copy-Copy"
         },
         "AGE::MeshRenderer": {
             "value0": {
@@ -3762,7 +3582,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -3
+                "value2": -6
             },
             "Scale": {
                 "value0": 3,
@@ -3805,14 +3625,14 @@
     "Entity_82": {
         "link": {
             "Position": {
-                "value0": -4,
-                "value1": 3,
-                "value2": -6
+                "value0": 0,
+                "value1": 1,
+                "value2": -5
             },
             "Scale": {
-                "value0": 1,
-                "value1": 1,
-                "value2": 1
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
             },
             "Orientation": {
                 "value0": 0,
@@ -3821,24 +3641,30 @@
                 "value3": 1
             }
         },
-        "children": [
-            86,
-            87,
-            88,
-            89,
-            90,
-            91,
-            92,
-            93,
-            94,
-            95
-        ],
+        "children": [],
         "flags": 0,
         "components_number": [
-            0
+            0,
+            1
         ],
         "AGE::WE::EntityRepresentation": {
-            "name": "flashline-Copy"
+            "name": "flash-Copy-Copy"
+        },
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "Flash/Flash.sage",
+                        "value1": "Flash/Flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
         }
     },
     "Entity_83": {
@@ -3846,7 +3672,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -4
+                "value2": -11
             },
             "Scale": {
                 "value0": 3,
@@ -3891,7 +3717,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -10
+                "value2": -2
             },
             "Scale": {
                 "value0": 3,
@@ -3912,7 +3738,7 @@
             1
         ],
         "AGE::WE::EntityRepresentation": {
-            "name": "flash-Copy-Copy"
+            "name": "flash-Copy"
         },
         "AGE::MeshRenderer": {
             "value0": {
@@ -3936,7 +3762,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -9
+                "value2": -3
             },
             "Scale": {
                 "value0": 3,
@@ -3979,14 +3805,14 @@
     "Entity_86": {
         "link": {
             "Position": {
-                "value0": 0,
-                "value1": 1,
-                "value2": -8
+                "value0": -4,
+                "value1": 3,
+                "value2": -6
             },
             "Scale": {
-                "value0": 3,
-                "value1": 3,
-                "value2": 3
+                "value0": 1,
+                "value1": 1,
+                "value2": 1
             },
             "Orientation": {
                 "value0": 0,
@@ -3995,30 +3821,24 @@
                 "value3": 1
             }
         },
-        "children": [],
+        "children": [
+            86,
+            87,
+            88,
+            89,
+            90,
+            91,
+            92,
+            93,
+            94,
+            95
+        ],
         "flags": 0,
         "components_number": [
-            0,
-            1
+            0
         ],
         "AGE::WE::EntityRepresentation": {
-            "name": "flash-Copy-Copy"
-        },
-        "AGE::MeshRenderer": {
-            "value0": {
-                "ptr_wrapper": {
-                    "valid": 1,
-                    "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
-                        "value2": ""
-                    }
-                }
-            },
-            "value1": {
-                "type": 0,
-                "data": 0
-            }
+            "name": "flashline-Copy"
         }
     },
     "Entity_87": {
@@ -4026,7 +3846,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -7
+                "value2": -4
             },
             "Scale": {
                 "value0": 3,
@@ -4071,7 +3891,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -6
+                "value2": -10
             },
             "Scale": {
                 "value0": 3,
@@ -4116,7 +3936,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -5
+                "value2": -9
             },
             "Scale": {
                 "value0": 3,
@@ -4161,7 +3981,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -11
+                "value2": -8
             },
             "Scale": {
                 "value0": 3,
@@ -4206,7 +4026,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -2
+                "value2": -7
             },
             "Scale": {
                 "value0": 3,
@@ -4227,7 +4047,7 @@
             1
         ],
         "AGE::WE::EntityRepresentation": {
-            "name": "flash-Copy"
+            "name": "flash-Copy-Copy"
         },
         "AGE::MeshRenderer": {
             "value0": {
@@ -4251,7 +4071,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -3
+                "value2": -6
             },
             "Scale": {
                 "value0": 3,
@@ -4294,14 +4114,14 @@
     "Entity_93": {
         "link": {
             "Position": {
-                "value0": -6,
-                "value1": 0,
-                "value2": -6
+                "value0": 0,
+                "value1": 1,
+                "value2": -5
             },
             "Scale": {
-                "value0": 1,
-                "value1": 1,
-                "value2": 1
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
             },
             "Orientation": {
                 "value0": 0,
@@ -4310,24 +4130,30 @@
                 "value3": 1
             }
         },
-        "children": [
-            97,
-            98,
-            99,
-            100,
-            101,
-            102,
-            103,
-            104,
-            105,
-            106
-        ],
+        "children": [],
         "flags": 0,
         "components_number": [
-            0
+            0,
+            1
         ],
         "AGE::WE::EntityRepresentation": {
-            "name": "flashline-Copy"
+            "name": "flash-Copy-Copy"
+        },
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "Flash/Flash.sage",
+                        "value1": "Flash/Flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
         }
     },
     "Entity_94": {
@@ -4335,7 +4161,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -4
+                "value2": -11
             },
             "Scale": {
                 "value0": 3,
@@ -4380,7 +4206,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -10
+                "value2": -2
             },
             "Scale": {
                 "value0": 3,
@@ -4401,7 +4227,7 @@
             1
         ],
         "AGE::WE::EntityRepresentation": {
-            "name": "flash-Copy-Copy"
+            "name": "flash-Copy"
         },
         "AGE::MeshRenderer": {
             "value0": {
@@ -4425,7 +4251,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -9
+                "value2": -3
             },
             "Scale": {
                 "value0": 3,
@@ -4468,14 +4294,14 @@
     "Entity_97": {
         "link": {
             "Position": {
-                "value0": 0,
-                "value1": 1,
-                "value2": -8
+                "value0": -6,
+                "value1": 0,
+                "value2": -6
             },
             "Scale": {
-                "value0": 3,
-                "value1": 3,
-                "value2": 3
+                "value0": 1,
+                "value1": 1,
+                "value2": 1
             },
             "Orientation": {
                 "value0": 0,
@@ -4484,30 +4310,24 @@
                 "value3": 1
             }
         },
-        "children": [],
+        "children": [
+            97,
+            98,
+            99,
+            100,
+            101,
+            102,
+            103,
+            104,
+            105,
+            106
+        ],
         "flags": 0,
         "components_number": [
-            0,
-            1
+            0
         ],
         "AGE::WE::EntityRepresentation": {
-            "name": "flash-Copy-Copy"
-        },
-        "AGE::MeshRenderer": {
-            "value0": {
-                "ptr_wrapper": {
-                    "valid": 1,
-                    "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
-                        "value2": ""
-                    }
-                }
-            },
-            "value1": {
-                "type": 0,
-                "data": 0
-            }
+            "name": "flashline-Copy"
         }
     },
     "Entity_98": {
@@ -4515,7 +4335,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -7
+                "value2": -4
             },
             "Scale": {
                 "value0": 3,
@@ -4560,7 +4380,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -6
+                "value2": -10
             },
             "Scale": {
                 "value0": 3,
@@ -4605,7 +4425,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -5
+                "value2": -9
             },
             "Scale": {
                 "value0": 3,
@@ -4650,7 +4470,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -11
+                "value2": -8
             },
             "Scale": {
                 "value0": 3,
@@ -4695,315 +4515,6 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -2
-            },
-            "Scale": {
-                "value0": 3,
-                "value1": 3,
-                "value2": 3
-            },
-            "Orientation": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 0,
-                "value3": 1
-            }
-        },
-        "children": [],
-        "flags": 0,
-        "components_number": [
-            0,
-            1
-        ],
-        "AGE::WE::EntityRepresentation": {
-            "name": "flash-Copy"
-        },
-        "AGE::MeshRenderer": {
-            "value0": {
-                "ptr_wrapper": {
-                    "valid": 1,
-                    "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
-                        "value2": ""
-                    }
-                }
-            },
-            "value1": {
-                "type": 0,
-                "data": 0
-            }
-        }
-    },
-    "Entity_103": {
-        "link": {
-            "Position": {
-                "value0": 0,
-                "value1": 1,
-                "value2": -3
-            },
-            "Scale": {
-                "value0": 3,
-                "value1": 3,
-                "value2": 3
-            },
-            "Orientation": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 0,
-                "value3": 1
-            }
-        },
-        "children": [],
-        "flags": 0,
-        "components_number": [
-            0,
-            1
-        ],
-        "AGE::WE::EntityRepresentation": {
-            "name": "flash-Copy-Copy"
-        },
-        "AGE::MeshRenderer": {
-            "value0": {
-                "ptr_wrapper": {
-                    "valid": 1,
-                    "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
-                        "value2": ""
-                    }
-                }
-            },
-            "value1": {
-                "type": 0,
-                "data": 0
-            }
-        }
-    },
-    "Entity_104": {
-        "link": {
-            "Position": {
-                "value0": -6,
-                "value1": 3,
-                "value2": -6
-            },
-            "Scale": {
-                "value0": 1,
-                "value1": 1,
-                "value2": 1
-            },
-            "Orientation": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 0,
-                "value3": 1
-            }
-        },
-        "children": [
-            108,
-            109,
-            110,
-            111,
-            112,
-            113,
-            114,
-            115,
-            116,
-            117
-        ],
-        "flags": 0,
-        "components_number": [
-            0
-        ],
-        "AGE::WE::EntityRepresentation": {
-            "name": "flashline-Copy"
-        }
-    },
-    "Entity_105": {
-        "link": {
-            "Position": {
-                "value0": 0,
-                "value1": 1,
-                "value2": -4
-            },
-            "Scale": {
-                "value0": 3,
-                "value1": 3,
-                "value2": 3
-            },
-            "Orientation": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 0,
-                "value3": 1
-            }
-        },
-        "children": [],
-        "flags": 0,
-        "components_number": [
-            0,
-            1
-        ],
-        "AGE::WE::EntityRepresentation": {
-            "name": "flash-Copy-Copy"
-        },
-        "AGE::MeshRenderer": {
-            "value0": {
-                "ptr_wrapper": {
-                    "valid": 1,
-                    "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
-                        "value2": ""
-                    }
-                }
-            },
-            "value1": {
-                "type": 0,
-                "data": 0
-            }
-        }
-    },
-    "Entity_106": {
-        "link": {
-            "Position": {
-                "value0": 0,
-                "value1": 1,
-                "value2": -10
-            },
-            "Scale": {
-                "value0": 3,
-                "value1": 3,
-                "value2": 3
-            },
-            "Orientation": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 0,
-                "value3": 1
-            }
-        },
-        "children": [],
-        "flags": 0,
-        "components_number": [
-            0,
-            1
-        ],
-        "AGE::WE::EntityRepresentation": {
-            "name": "flash-Copy-Copy"
-        },
-        "AGE::MeshRenderer": {
-            "value0": {
-                "ptr_wrapper": {
-                    "valid": 1,
-                    "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
-                        "value2": ""
-                    }
-                }
-            },
-            "value1": {
-                "type": 0,
-                "data": 0
-            }
-        }
-    },
-    "Entity_107": {
-        "link": {
-            "Position": {
-                "value0": 0,
-                "value1": 1,
-                "value2": -9
-            },
-            "Scale": {
-                "value0": 3,
-                "value1": 3,
-                "value2": 3
-            },
-            "Orientation": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 0,
-                "value3": 1
-            }
-        },
-        "children": [],
-        "flags": 0,
-        "components_number": [
-            0,
-            1
-        ],
-        "AGE::WE::EntityRepresentation": {
-            "name": "flash-Copy-Copy"
-        },
-        "AGE::MeshRenderer": {
-            "value0": {
-                "ptr_wrapper": {
-                    "valid": 1,
-                    "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
-                        "value2": ""
-                    }
-                }
-            },
-            "value1": {
-                "type": 0,
-                "data": 0
-            }
-        }
-    },
-    "Entity_108": {
-        "link": {
-            "Position": {
-                "value0": 0,
-                "value1": 1,
-                "value2": -8
-            },
-            "Scale": {
-                "value0": 3,
-                "value1": 3,
-                "value2": 3
-            },
-            "Orientation": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 0,
-                "value3": 1
-            }
-        },
-        "children": [],
-        "flags": 0,
-        "components_number": [
-            0,
-            1
-        ],
-        "AGE::WE::EntityRepresentation": {
-            "name": "flash-Copy-Copy"
-        },
-        "AGE::MeshRenderer": {
-            "value0": {
-                "ptr_wrapper": {
-                    "valid": 1,
-                    "data": {
-                        "value0": "Flash/Flash.sage",
-                        "value1": "Flash/Flash.mage",
-                        "value2": ""
-                    }
-                }
-            },
-            "value1": {
-                "type": 0,
-                "data": 0
-            }
-        }
-    },
-    "Entity_109": {
-        "link": {
-            "Position": {
-                "value0": 0,
-                "value1": 1,
                 "value2": -7
             },
             "Scale": {
@@ -5044,7 +4555,7 @@
             }
         }
     },
-    "Entity_110": {
+    "Entity_103": {
         "link": {
             "Position": {
                 "value0": 0,
@@ -5089,7 +4600,7 @@
             }
         }
     },
-    "Entity_111": {
+    "Entity_104": {
         "link": {
             "Position": {
                 "value0": 0,
@@ -5134,7 +4645,7 @@
             }
         }
     },
-    "Entity_112": {
+    "Entity_105": {
         "link": {
             "Position": {
                 "value0": 0,
@@ -5179,7 +4690,7 @@
             }
         }
     },
-    "Entity_113": {
+    "Entity_106": {
         "link": {
             "Position": {
                 "value0": 0,
@@ -5224,7 +4735,7 @@
             }
         }
     },
-    "Entity_114": {
+    "Entity_107": {
         "link": {
             "Position": {
                 "value0": 0,
@@ -5269,7 +4780,496 @@
             }
         }
     },
+    "Entity_108": {
+        "link": {
+            "Position": {
+                "value0": -6,
+                "value1": 3,
+                "value2": -6
+            },
+            "Scale": {
+                "value0": 1,
+                "value1": 1,
+                "value2": 1
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [
+            108,
+            109,
+            110,
+            111,
+            112,
+            113,
+            114,
+            115,
+            116,
+            117
+        ],
+        "flags": 0,
+        "components_number": [
+            0
+        ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "flashline-Copy"
+        }
+    },
+    "Entity_109": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -4
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            0,
+            1
+        ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "flash-Copy-Copy"
+        },
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "Flash/Flash.sage",
+                        "value1": "Flash/Flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_110": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -10
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            0,
+            1
+        ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "flash-Copy-Copy"
+        },
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "Flash/Flash.sage",
+                        "value1": "Flash/Flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_111": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -9
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            0,
+            1
+        ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "flash-Copy-Copy"
+        },
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "Flash/Flash.sage",
+                        "value1": "Flash/Flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_112": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -8
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            0,
+            1
+        ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "flash-Copy-Copy"
+        },
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "Flash/Flash.sage",
+                        "value1": "Flash/Flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_113": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -7
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            0,
+            1
+        ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "flash-Copy-Copy"
+        },
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "Flash/Flash.sage",
+                        "value1": "Flash/Flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_114": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -6
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            0,
+            1
+        ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "flash-Copy-Copy"
+        },
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "Flash/Flash.sage",
+                        "value1": "Flash/Flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
     "Entity_115": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -5
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            0,
+            1
+        ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "flash-Copy-Copy"
+        },
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "Flash/Flash.sage",
+                        "value1": "Flash/Flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_116": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -11
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            0,
+            1
+        ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "flash-Copy-Copy"
+        },
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "Flash/Flash.sage",
+                        "value1": "Flash/Flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_117": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -2
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            0,
+            1
+        ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "flash-Copy"
+        },
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "Flash/Flash.sage",
+                        "value1": "Flash/Flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_118": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -3
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            0,
+            1
+        ],
+        "AGE::WE::EntityRepresentation": {
+            "name": "flash-Copy-Copy"
+        },
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "Flash/Flash.sage",
+                        "value1": "Flash/Flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_119": {
         "link": {
             "Position": {
                 "value0": 0,
@@ -5303,7 +5303,7 @@
                     "valid": 1,
                     "data": {
                         "value0": "cube/cube.sage",
-                        "value1": "sponza/banner.mage",
+                        "value1": "brick.mage",
                         "value2": ""
                     }
                 }

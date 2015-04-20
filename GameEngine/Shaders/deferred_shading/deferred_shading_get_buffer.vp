@@ -45,12 +45,28 @@ void main()
 	VertexOut.inter_texCoord = texCoord;
 	if (scaleUvs > 0.0f)
 	{
+		//vec3 scale = scaleFromMat4(model_matrix);
+		//scale.x = sqrt(scale.x * scale.z);
+		//scale.y = sqrt(scale.y * scale.z);
+		//scale.x *= texCoord.x;
+		//scale.y *= texCoord.y;
+		//VertexOut.inter_texCoord = scale.xy;
+
 		vec3 scale = scaleFromMat4(model_matrix);
-		scale.x = sqrt(scale.x * scale.z);
-		scale.y = sqrt(scale.y * scale.z);
-		scale.x *= texCoord.x;
-		scale.y *= texCoord.y;
-		VertexOut.inter_texCoord = scale.xy;
+		if (normal.y != 0)
+		{
+			scale.y = scale.z;
+		}
+		if (normal.x != 0)
+		{
+			scale.x = scale.z;
+		}
+
+		VertexOut.inter_texCoord = (vec3(texCoord, 0) * scale).xy;
+		//scale.y = sqrt(scale.y * scale.z);
+		//scale.x *= texCoord.x;
+		//scale.y *= texCoord.y;
+		//VertexOut.inter_texCoord = scale.xy;
 
 		//vec3 scale = scaleFromMat4(model_matrix);
 		//scale.x *= texCoord.x;
