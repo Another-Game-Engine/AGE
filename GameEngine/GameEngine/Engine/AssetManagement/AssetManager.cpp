@@ -25,6 +25,7 @@
 #include <Render/Properties/Materials/Diffuse.hh>
 #include <Render/Properties/Materials/MapColor.hh>
 #include <Render/Properties/Materials/Specular.hh>
+#include <Render/Properties/Materials/ScaleUVs.hpp>
 
 #include <Configuration.hpp>
 
@@ -144,6 +145,10 @@ namespace AGE
 				auto specularTexPtr = std::static_pointer_cast<Texture2D>(loadTexture(material_data.specularTexPath, loadingChannel));
 				specularTex->set(specularTexPtr);
 
+				auto scaleUVs = std::make_shared<ScaleUVs>();
+				materialSubset._properties.push_back(scaleUVs);
+				scaleUVs->set(material_data.scaleUVs);
+
 //				auto futureSubMaterial = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<Tasks::Render::AddMaterial, MaterialInstance>(material_data);
 //				auto subMaterial = futureSubMaterial.get();
 //				material_set->datas.emplace_back(subMaterial);
@@ -222,6 +227,7 @@ namespace AGE
 			switch (data->repeatX)
 			{
 			case TextureData::NoRepeat:
+				texture->parameter(GL_TEXTURE_WRAP_T, GL_REPEAT);
 				break;
 			case TextureData::Repeat:
 				texture->parameter(GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -240,6 +246,7 @@ namespace AGE
 			switch (data->repeatY)
 			{
 			case TextureData::NoRepeat:
+				texture->parameter(GL_TEXTURE_WRAP_S, GL_REPEAT);
 				break;
 			case TextureData::Repeat:
 				texture->parameter(GL_TEXTURE_WRAP_S, GL_REPEAT);
