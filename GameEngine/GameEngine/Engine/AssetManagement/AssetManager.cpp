@@ -188,6 +188,7 @@ namespace AGE
 			std::ifstream ifs(filePath.getFullName(), std::ios::binary);
 			cereal::PortableBinaryInputArchive ar(ifs);
 			ar(*data.get());
+
 			GLenum ct = GL_RGB32F;
 			GLenum color = GL_RGB;
 			switch (data->colorNumber)
@@ -213,12 +214,49 @@ namespace AGE
 			{
 				return AssetsLoadingResult(false, "Texture loading error");
 			}
+			texture->bind();
 			texture->set(data->data, 0, color, GL_UNSIGNED_BYTE);
 			texture->parameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 			texture->parameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-			texture->parameter(GL_TEXTURE_WRAP_T, GL_REPEAT);
-			texture->parameter(GL_TEXTURE_WRAP_S, GL_REPEAT);
+
+			switch (data->repeatX)
+			{
+			case TextureData::NoRepeat:
+				break;
+			case TextureData::Repeat:
+				texture->parameter(GL_TEXTURE_WRAP_T, GL_REPEAT);
+				break;
+			case TextureData::MirrorRepeat:
+				texture->parameter(GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
+				break;
+			case TextureData::ClampToBorder:
+				texture->parameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+				break;
+			case TextureData::ClampToEdge:
+				texture->parameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+				break;
+			}
+
+			switch (data->repeatY)
+			{
+			case TextureData::NoRepeat:
+				break;
+			case TextureData::Repeat:
+				texture->parameter(GL_TEXTURE_WRAP_S, GL_REPEAT);
+				break;
+			case TextureData::MirrorRepeat:
+				texture->parameter(GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
+				break;
+			case TextureData::ClampToBorder:
+				texture->parameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+				break;
+			case TextureData::ClampToEdge:
+				texture->parameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+				break;
+			}
+
 			texture->generateMipmaps();
+			texture->unbind();
 			return AssetsLoadingResult(true);
 		});
 		pushNewAsset(loadingChannel, _filePath.getFullName(), future);
