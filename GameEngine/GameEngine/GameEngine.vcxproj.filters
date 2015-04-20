@@ -175,6 +175,7 @@
     <ClCompile Include="Engine\Physics\Fallback\NullSphereCollider.cpp" />
     <ClCompile Include="Engine\Physics\Fallback\NullCollider.cpp" />
     <ClCompile Include="Engine\Components\PhysicsData.cpp" />
+    <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredSpotLightning.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -461,6 +462,7 @@
     <ClInclude Include="Engine\Physics\MemoryPoolHelper.hpp" />
     <ClInclude Include="Engine\Physics\Fallback\NullCollider.hpp" />
     <ClInclude Include="Engine\Components\PhysicsData.hpp" />
+    <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredSpotLightning.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />
