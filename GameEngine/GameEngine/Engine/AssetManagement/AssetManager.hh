@@ -153,6 +153,7 @@ static std::pair<std::pair<GLenum, std::string>, std::function<void(Vertices &ve
 		bool isLoading();
 		void pushNewCallback(const std::string &loadingChannel, AScene *currentScene, std::function<void()> &callback);
 		std::shared_ptr<ITexture> const &getPointLightTexture();
+		std::shared_ptr<ITexture> const &getSpotLightTexture();
 
 private:
 		std::string _assetsDirectory;
@@ -164,6 +165,7 @@ private:
 		std::map<std::string, std::shared_ptr<ITexture>> _textures;
 		std::map<std::string, std::shared_ptr<AssetsLoadingChannel>> _loadingChannels;
 		std::shared_ptr<ITexture> _pointLight;
+		std::shared_ptr<ITexture> _spotLight;
 		std::mutex _mutex;
 		std::atomic<bool> _isLoading;
 	private:

@@ -48,7 +48,7 @@ namespace AGE
 	{
 		_key = AGE::GetPrepareThread()->addSpotLight();
 		entity.getLink().registerOctreeObject(_key);
-		_map = entity.getScene()->getInstance<AssetsManager>()->getPointLightTexture();
+		_map = entity.getScene()->getInstance<AssetsManager>()->getSpotLightTexture();
 		assert(!_key.invalid());
 	}
 

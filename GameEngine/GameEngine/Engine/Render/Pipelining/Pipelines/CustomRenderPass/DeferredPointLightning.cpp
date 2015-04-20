@@ -108,7 +108,6 @@ namespace AGE
 		// Set stencil clear value to 0
 		OpenGLState::glClearStencil(0);
 		// Iterate throught each light
-		std::cout << lights.spotLights.size() << std::endl;
 		for (auto &pl : lights.pointLight)
 		{
 			_programs[PROGRAM_STENCIL]->use();
