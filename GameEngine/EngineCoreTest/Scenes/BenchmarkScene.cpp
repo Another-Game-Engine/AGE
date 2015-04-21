@@ -164,7 +164,7 @@ namespace AGE
 		else
 			trigger = 0.0f;
 
-		if (_chunkCounter >= _maxChunk)
+	/*	if (_chunkCounter >= _maxChunk)
 		{
 			for (auto i = 0; i < 10; ++i)
 			{
@@ -205,7 +205,7 @@ namespace AGE
 				rigidBody->getBody().applyTorque(btVector3(float(rand() % 1000) / 300.0f, float(rand() % 1000) / 300.0f, float(rand() % 1000) / 300.0f));
 			}
 			_chunkCounter = 0;
-		}
+		}*/
 
 		if (ImGui::Button("Reload shaders or type R") || getInstance<Input>()->getPhysicalKeyPressed(AGE_r))
 		{
