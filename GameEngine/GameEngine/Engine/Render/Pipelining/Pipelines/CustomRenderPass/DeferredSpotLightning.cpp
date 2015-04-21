@@ -48,7 +48,7 @@ namespace AGE
 		AGE_ASSERT(shaderPath != nullptr);
 
 		auto vertexShaderPath = shaderPath->getValue() + DEFERRED_SHADING_SPOT_LIGHT_VERTEX;
-		auto fragmentShaderPath = shaderPath->getValue() + DEFERRED_SHADING_SPOT_LIGHT_VERTEX;
+		auto fragmentShaderPath = shaderPath->getValue() + DEFERRED_SHADING_SPOT_LIGHT_FRAG;
 
 		_programs[PROGRAM_LIGHTNING] = std::make_shared<Program>(Program(std::string("program_point_light"),
 		{
@@ -81,7 +81,7 @@ namespace AGE
 			_programs[PROGRAM_LIGHTNING]->use();
 			*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("position_light") = glm::vec3(pl.light.transformation[3]);
 			*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("attenuation_light") = pl.light.attenuation;
-			*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("direction_light") = pl.light.direction;
+		//	*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("direction_light") = pl.light.direction;
 			*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("color_light") = pl.light.color;
 			*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("ambient_color") = glm::vec3(0);
 			_painterManager->get_painter(_quadPainter)->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_LIGHTNING], Properties(), _quad);

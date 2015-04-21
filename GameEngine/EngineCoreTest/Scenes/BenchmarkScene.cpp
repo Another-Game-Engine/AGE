@@ -138,7 +138,7 @@ namespace AGE
 			getInstance<AssetsManager>()->loadPackage(assetPackageFileName, assetPackageFileName);
 			auto entity = createEntity();
 			auto spotLight = entity.addComponent<SpotLightComponent>();
-			spotLight->set(glm::vec3(1.0f), glm::vec3(1.0f), glm::vec3(1.0f, 0.1f, 0.01f), 50.f);
+			spotLight->set(glm::vec3(1.0f, 0.f, 0.f), glm::vec3(1.0f), glm::vec3(1.0f, 0.1f, 0.01f), 50.f);
 		}
 
 		if (getInstance<Input>()->getPhysicalKeyJustReleased(AGE_ESCAPE))
