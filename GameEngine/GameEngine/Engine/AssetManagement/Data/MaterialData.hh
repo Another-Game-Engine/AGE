@@ -25,7 +25,7 @@ namespace AGE
 		std::string normalTexPath;
 		std::string bumpTexPath;
 		// will scale UVs based on the scale of the mesh
-		bool scaleUVs = true;
+		bool scaleUVs = false;
 
 #ifdef EDITOR_ENABLED
 		int selectedTextureIndex[7];
@@ -70,5 +70,5 @@ namespace AGE
 	}
 }
 
-CEREAL_CLASS_VERSION(AGE::MaterialData, 0)
+CEREAL_CLASS_VERSION(AGE::MaterialData, 1)
 CEREAL_CLASS_VERSION(AGE::MaterialDataSet, 0)

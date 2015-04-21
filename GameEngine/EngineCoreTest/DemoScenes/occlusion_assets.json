@@ -7,10 +7,11 @@
             "borderland_zero/zero.sage"
         ],
         "value1": [
-            "brick.mage",
+            "borderland_zero/zero.mage",
+            "pixar128 library/wood/american_cherry.mage",
+            "pixar128 library/wood/american-oak.mage",
             "Flash/Flash.mage",
-            "sponza/banner.mage",
-            "borderland_zero/zero.mage"
+            "pixar128 library/brick/red_dutch.mage"
         ]
     }
 }

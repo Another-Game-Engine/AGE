@@ -34,7 +34,7 @@
             "value": 16479542503635362968
         }
     ],
-    "Entity_1": {
+    "Entity_0": {
         "cereal_class_version": 0,
         "link": {
             "cereal_class_version": 0,
@@ -67,117 +67,7 @@
                     "valid": 1,
                     "data": {
                         "value0": "cube/cube.sage",
-                        "value1": "brick.mage",
-                        "value2": ""
-                    }
-                }
-            },
-            "value1": {
-                "type": 0,
-                "data": 16
-            }
-        }
-    },
-    "Entity_2": {
-        "link": {
-            "Position": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 30
-            },
-            "Scale": {
-                "value0": 1,
-                "value1": 1,
-                "value2": 1
-            },
-            "Orientation": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 0,
-                "value3": 1
-            }
-        },
-        "children": [
-            2,
-            3,
-            4,
-            5
-        ],
-        "flags": 0,
-        "components_number": []
-    },
-    "Entity_3": {
-        "link": {
-            "Position": {
-                "value0": -10,
-                "value1": 4,
-                "value2": -20
-            },
-            "Scale": {
-                "value0": 18,
-                "value1": 10,
-                "value2": 2
-            },
-            "Orientation": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 0,
-                "value3": 1
-            }
-        },
-        "children": [],
-        "flags": 0,
-        "components_number": [
-            1
-        ],
-        "AGE::MeshRenderer": {
-            "value0": {
-                "ptr_wrapper": {
-                    "valid": 1,
-                    "data": {
-                        "value0": "cube/cube.sage",
-                        "value1": "sponza/banner.mage",
-                        "value2": ""
-                    }
-                }
-            },
-            "value1": {
-                "type": 0,
-                "data": 16
-            }
-        }
-    },
-    "Entity_4": {
-        "link": {
-            "Position": {
-                "value0": 10,
-                "value1": 4,
-                "value2": -20
-            },
-            "Scale": {
-                "value0": 18,
-                "value1": 10,
-                "value2": 2
-            },
-            "Orientation": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 0,
-                "value3": 1
-            }
-        },
-        "children": [],
-        "flags": 0,
-        "components_number": [
-            1
-        ],
-        "AGE::MeshRenderer": {
-            "value0": {
-                "ptr_wrapper": {
-                    "valid": 1,
-                    "data": {
-                        "value0": "cube/cube.sage",
-                        "value1": "sponza/banner.mage",
+                        "value1": "pixar128 library/wood/american_cherry.mage",
                         "value2": ""
                     }
                 }
@@ -189,88 +79,6 @@
         }
     },
     "Entity_5": {
-        "link": {
-            "Position": {
-                "value0": 0,
-                "value1": 7,
-                "value2": -20
-            },
-            "Scale": {
-                "value0": 5,
-                "value1": 5,
-                "value2": 1
-            },
-            "Orientation": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 0,
-                "value3": 1
-            }
-        },
-        "children": [],
-        "flags": 0,
-        "components_number": [
-            1
-        ],
-        "AGE::MeshRenderer": {
-            "value0": {
-                "ptr_wrapper": {
-                    "valid": 1,
-                    "data": {
-                        "value0": "cube/cube.sage",
-                        "value1": "sponza/banner.mage",
-                        "value2": ""
-                    }
-                }
-            },
-            "value1": {
-                "type": 0,
-                "data": 16
-            }
-        }
-    },
-    "Entity_6": {
-        "link": {
-            "Position": {
-                "value0": 0,
-                "value1": 1,
-                "value2": -20
-            },
-            "Scale": {
-                "value0": 5,
-                "value1": 5,
-                "value2": 1
-            },
-            "Orientation": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 0,
-                "value3": 1
-            }
-        },
-        "children": [],
-        "flags": 0,
-        "components_number": [
-            1
-        ],
-        "AGE::MeshRenderer": {
-            "value0": {
-                "ptr_wrapper": {
-                    "valid": 1,
-                    "data": {
-                        "value0": "cube/cube.sage",
-                        "value1": "sponza/banner.mage",
-                        "value2": ""
-                    }
-                }
-            },
-            "value1": {
-                "type": 0,
-                "data": 16
-            }
-        }
-    },
-    "Entity_7": {
         "link": {
             "Position": {
                 "value0": 2,
@@ -290,26 +98,67 @@
             }
         },
         "children": [
+            2,
+            3,
+            4,
+            5,
+            6,
             7,
             8,
             9,
             10,
-            11,
-            12,
-            13,
-            14,
-            15,
-            16
+            11
         ],
         "flags": 0,
         "components_number": []
     },
-    "Entity_8": {
+    "Entity_6": {
         "link": {
             "Position": {
                 "value0": 0,
                 "value1": 1,
                 "value2": -4
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_7": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -10
             },
             "Scale": {
                 "value0": 3,
@@ -350,7 +199,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -10
+                "value2": -9
             },
             "Scale": {
                 "value0": 3,
@@ -391,7 +240,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -9
+                "value2": -8
             },
             "Scale": {
                 "value0": 3,
@@ -432,7 +281,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -8
+                "value2": -7
             },
             "Scale": {
                 "value0": 3,
@@ -473,7 +322,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -7
+                "value2": -6
             },
             "Scale": {
                 "value0": 3,
@@ -514,7 +363,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -6
+                "value2": -5
             },
             "Scale": {
                 "value0": 3,
@@ -555,7 +404,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -5
+                "value2": -11
             },
             "Scale": {
                 "value0": 3,
@@ -596,7 +445,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -11
+                "value2": -2
             },
             "Scale": {
                 "value0": 3,
@@ -637,47 +486,6 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -2
-            },
-            "Scale": {
-                "value0": 3,
-                "value1": 3,
-                "value2": 3
-            },
-            "Orientation": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 0,
-                "value3": 1
-            }
-        },
-        "children": [],
-        "flags": 0,
-        "components_number": [
-            1
-        ],
-        "AGE::MeshRenderer": {
-            "value0": {
-                "ptr_wrapper": {
-                    "valid": 1,
-                    "data": {
-                        "value0": "flash/flash.sage",
-                        "value1": "flash/flash.mage",
-                        "value2": ""
-                    }
-                }
-            },
-            "value1": {
-                "type": 0,
-                "data": 0
-            }
-        }
-    },
-    "Entity_17": {
-        "link": {
-            "Position": {
-                "value0": 0,
-                "value1": 1,
                 "value2": -3
             },
             "Scale": {
@@ -714,7 +522,199 @@
             }
         }
     },
-    "Entity_18": {
+    "Entity_8": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 30
+            },
+            "Scale": {
+                "value0": 1,
+                "value1": 1,
+                "value2": 1
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [
+            13,
+            14,
+            15,
+            16
+        ],
+        "flags": 0,
+        "components_number": []
+    },
+    "Entity_1": {
+        "link": {
+            "Position": {
+                "value0": -10,
+                "value1": 4,
+                "value2": -20
+            },
+            "Scale": {
+                "value0": 18,
+                "value1": 10,
+                "value2": 2
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "cube/cube.sage",
+                        "value1": "pixar128 library/wood/american-oak.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 16
+            }
+        }
+    },
+    "Entity_2": {
+        "link": {
+            "Position": {
+                "value0": 10,
+                "value1": 4,
+                "value2": -20
+            },
+            "Scale": {
+                "value0": 18,
+                "value1": 10,
+                "value2": 2
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "cube/cube.sage",
+                        "value1": "pixar128 library/wood/american-oak.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 16
+            }
+        }
+    },
+    "Entity_3": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 7,
+                "value2": -20
+            },
+            "Scale": {
+                "value0": 5,
+                "value1": 5,
+                "value2": 1
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "cube/cube.sage",
+                        "value1": "pixar128 library/wood/american-oak.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 16
+            }
+        }
+    },
+    "Entity_4": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -20
+            },
+            "Scale": {
+                "value0": 5,
+                "value1": 5,
+                "value2": 1
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "cube/cube.sage",
+                        "value1": "pixar128 library/wood/american-oak.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 16
+            }
+        }
+    },
+    "Entity_17": {
         "link": {
             "Position": {
                 "value0": 2,
@@ -748,12 +748,53 @@
         "flags": 0,
         "components_number": []
     },
-    "Entity_19": {
+    "Entity_18": {
         "link": {
             "Position": {
                 "value0": 0,
                 "value1": 1,
                 "value2": -4
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_19": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -10
             },
             "Scale": {
                 "value0": 3,
@@ -794,7 +835,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -10
+                "value2": -9
             },
             "Scale": {
                 "value0": 3,
@@ -835,7 +876,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -9
+                "value2": -8
             },
             "Scale": {
                 "value0": 3,
@@ -876,7 +917,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -8
+                "value2": -7
             },
             "Scale": {
                 "value0": 3,
@@ -917,7 +958,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -7
+                "value2": -6
             },
             "Scale": {
                 "value0": 3,
@@ -958,7 +999,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -6
+                "value2": -5
             },
             "Scale": {
                 "value0": 3,
@@ -999,7 +1040,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -5
+                "value2": -11
             },
             "Scale": {
                 "value0": 3,
@@ -1040,7 +1081,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -11
+                "value2": -2
             },
             "Scale": {
                 "value0": 3,
@@ -1081,7 +1122,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -2
+                "value2": -3
             },
             "Scale": {
                 "value0": 3,
@@ -1121,8 +1162,42 @@
         "link": {
             "Position": {
                 "value0": 0,
+                "value1": 0,
+                "value2": -6
+            },
+            "Scale": {
+                "value0": 1,
                 "value1": 1,
-                "value2": -3
+                "value2": 1
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38
+        ],
+        "flags": 0,
+        "components_number": []
+    },
+    "Entity_29": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -4
             },
             "Scale": {
                 "value0": 3,
@@ -1158,46 +1233,12 @@
             }
         }
     },
-    "Entity_29": {
-        "link": {
-            "Position": {
-                "value0": 0,
-                "value1": 0,
-                "value2": -6
-            },
-            "Scale": {
-                "value0": 1,
-                "value1": 1,
-                "value2": 1
-            },
-            "Orientation": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 0,
-                "value3": 1
-            }
-        },
-        "children": [
-            29,
-            30,
-            31,
-            32,
-            33,
-            34,
-            35,
-            36,
-            37,
-            38
-        ],
-        "flags": 0,
-        "components_number": []
-    },
     "Entity_30": {
         "link": {
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -4
+                "value2": -10
             },
             "Scale": {
                 "value0": 3,
@@ -1238,7 +1279,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -10
+                "value2": -9
             },
             "Scale": {
                 "value0": 3,
@@ -1279,7 +1320,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -9
+                "value2": -8
             },
             "Scale": {
                 "value0": 3,
@@ -1320,7 +1361,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -8
+                "value2": -7
             },
             "Scale": {
                 "value0": 3,
@@ -1361,7 +1402,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -7
+                "value2": -6
             },
             "Scale": {
                 "value0": 3,
@@ -1402,7 +1443,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -6
+                "value2": -5
             },
             "Scale": {
                 "value0": 3,
@@ -1443,7 +1484,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -5
+                "value2": -11
             },
             "Scale": {
                 "value0": 3,
@@ -1484,7 +1525,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -11
+                "value2": -2
             },
             "Scale": {
                 "value0": 3,
@@ -1525,7 +1566,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -2
+                "value2": -3
             },
             "Scale": {
                 "value0": 3,
@@ -1565,47 +1606,6 @@
         "link": {
             "Position": {
                 "value0": 0,
-                "value1": 1,
-                "value2": -3
-            },
-            "Scale": {
-                "value0": 3,
-                "value1": 3,
-                "value2": 3
-            },
-            "Orientation": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 0,
-                "value3": 1
-            }
-        },
-        "children": [],
-        "flags": 0,
-        "components_number": [
-            1
-        ],
-        "AGE::MeshRenderer": {
-            "value0": {
-                "ptr_wrapper": {
-                    "valid": 1,
-                    "data": {
-                        "value0": "flash/flash.sage",
-                        "value1": "flash/flash.mage",
-                        "value2": ""
-                    }
-                }
-            },
-            "value1": {
-                "type": 0,
-                "data": 0
-            }
-        }
-    },
-    "Entity_40": {
-        "link": {
-            "Position": {
-                "value0": 0,
                 "value1": 10,
                 "value2": 0
             },
@@ -1640,7 +1640,7 @@
             }
         }
     },
-    "Entity_41": {
+    "Entity_40": {
         "link": {
             "Position": {
                 "value0": 0,
@@ -1677,7 +1677,7 @@
             }
         }
     },
-    "Entity_42": {
+    "Entity_41": {
         "link": {
             "Position": {
                 "value0": 0,
@@ -1711,12 +1711,53 @@
         "flags": 0,
         "components_number": []
     },
-    "Entity_43": {
+    "Entity_42": {
         "link": {
             "Position": {
                 "value0": 0,
                 "value1": 1,
                 "value2": -4
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_43": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -10
             },
             "Scale": {
                 "value0": 3,
@@ -1757,7 +1798,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -10
+                "value2": -9
             },
             "Scale": {
                 "value0": 3,
@@ -1798,7 +1839,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -9
+                "value2": -8
             },
             "Scale": {
                 "value0": 3,
@@ -1839,7 +1880,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -8
+                "value2": -7
             },
             "Scale": {
                 "value0": 3,
@@ -1880,7 +1921,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -7
+                "value2": -6
             },
             "Scale": {
                 "value0": 3,
@@ -1921,7 +1962,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -6
+                "value2": -5
             },
             "Scale": {
                 "value0": 3,
@@ -1962,7 +2003,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -5
+                "value2": -11
             },
             "Scale": {
                 "value0": 3,
@@ -2003,7 +2044,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -11
+                "value2": -2
             },
             "Scale": {
                 "value0": 3,
@@ -2044,7 +2085,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -2
+                "value2": -3
             },
             "Scale": {
                 "value0": 3,
@@ -2083,47 +2124,6 @@
     "Entity_52": {
         "link": {
             "Position": {
-                "value0": 0,
-                "value1": 1,
-                "value2": -3
-            },
-            "Scale": {
-                "value0": 3,
-                "value1": 3,
-                "value2": 3
-            },
-            "Orientation": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 0,
-                "value3": 1
-            }
-        },
-        "children": [],
-        "flags": 0,
-        "components_number": [
-            1
-        ],
-        "AGE::MeshRenderer": {
-            "value0": {
-                "ptr_wrapper": {
-                    "valid": 1,
-                    "data": {
-                        "value0": "flash/flash.sage",
-                        "value1": "flash/flash.mage",
-                        "value2": ""
-                    }
-                }
-            },
-            "value1": {
-                "type": 0,
-                "data": 0
-            }
-        }
-    },
-    "Entity_53": {
-        "link": {
-            "Position": {
                 "value0": -2,
                 "value1": 0,
                 "value2": -6
@@ -2155,7 +2155,7 @@
         "flags": 0,
         "components_number": []
     },
-    "Entity_54": {
+    "Entity_53": {
         "link": {
             "Position": {
                 "value0": 0,
@@ -2196,7 +2196,7 @@
             }
         }
     },
-    "Entity_55": {
+    "Entity_54": {
         "link": {
             "Position": {
                 "value0": 0,
@@ -2237,7 +2237,7 @@
             }
         }
     },
-    "Entity_56": {
+    "Entity_55": {
         "link": {
             "Position": {
                 "value0": 0,
@@ -2278,7 +2278,7 @@
             }
         }
     },
-    "Entity_57": {
+    "Entity_56": {
         "link": {
             "Position": {
                 "value0": 0,
@@ -2319,7 +2319,7 @@
             }
         }
     },
-    "Entity_58": {
+    "Entity_57": {
         "link": {
             "Position": {
                 "value0": 0,
@@ -2360,7 +2360,7 @@
             }
         }
     },
-    "Entity_59": {
+    "Entity_58": {
         "link": {
             "Position": {
                 "value0": 0,
@@ -2401,7 +2401,7 @@
             }
         }
     },
-    "Entity_60": {
+    "Entity_59": {
         "link": {
             "Position": {
                 "value0": 0,
@@ -2442,7 +2442,7 @@
             }
         }
     },
-    "Entity_61": {
+    "Entity_60": {
         "link": {
             "Position": {
                 "value0": 0,
@@ -2483,7 +2483,7 @@
             }
         }
     },
-    "Entity_62": {
+    "Entity_61": {
         "link": {
             "Position": {
                 "value0": 0,
@@ -2524,7 +2524,7 @@
             }
         }
     },
-    "Entity_63": {
+    "Entity_62": {
         "link": {
             "Position": {
                 "value0": 0,
@@ -2565,7 +2565,7 @@
             }
         }
     },
-    "Entity_64": {
+    "Entity_63": {
         "link": {
             "Position": {
                 "value0": -2,
@@ -4815,7 +4815,7 @@
                     "valid": 1,
                     "data": {
                         "value0": "cube/cube.sage",
-                        "value1": "brick.mage",
+                        "value1": "pixar128 library/brick/red_dutch.mage",
                         "value2": ""
                     }
                 }

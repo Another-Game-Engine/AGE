@@ -45,13 +45,6 @@ void main()
 	VertexOut.inter_texCoord = texCoord;
 	if (scaleUvs > 0.0f)
 	{
-		//vec3 scale = scaleFromMat4(model_matrix);
-		//scale.x = sqrt(scale.x * scale.z);
-		//scale.y = sqrt(scale.y * scale.z);
-		//scale.x *= texCoord.x;
-		//scale.y *= texCoord.y;
-		//VertexOut.inter_texCoord = scale.xy;
-
 		vec3 scale = scaleFromMat4(model_matrix);
 		if (normal.y != 0)
 		{
@@ -63,17 +56,6 @@ void main()
 		}
 
 		VertexOut.inter_texCoord = (vec3(texCoord, 0) * scale).xy;
-		//scale.y = sqrt(scale.y * scale.z);
-		//scale.x *= texCoord.x;
-		//scale.y *= texCoord.y;
-		//VertexOut.inter_texCoord = scale.xy;
-
-		//vec3 scale = scaleFromMat4(model_matrix);
-		//scale.x *= texCoord.x;
-		//scale.y = scale.z * texCoord.y;
-		//VertexOut.inter_texCoord = scale.xy;
-
-		//VertexOut.inter_texCoord = (vec3(texCoord, 0) * scaleFromMat4(model_matrix)).xy + vec2(scaleFromMat4(model_matrix).z, 0);
 	}
 	VertexOut.inter_tangent = normalize(normal_matrix * tangent);
 	gl_Position = projection_matrix * view_matrix * model_matrix * vec4(position, 1);

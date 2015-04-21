@@ -53,7 +53,12 @@ namespace AGE
 				return true;
 			}
 
-			for (unsigned int materialIndex = 0; materialIndex < cookingTask->assimpScene->mNumMaterials; ++materialIndex)
+			if (cookingTask->assimpScene->mNumMaterials <= 1)
+			{
+				return true;
+			}
+
+			for (unsigned int materialIndex = 1; materialIndex < cookingTask->assimpScene->mNumMaterials; ++materialIndex)
 			{
 				auto &aiMat = cookingTask->assimpScene->mMaterials[materialIndex];
 

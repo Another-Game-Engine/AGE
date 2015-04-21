@@ -165,6 +165,15 @@ namespace AGE
 			_mode = ModeMaterialEditor::edit;
 		if (_indexSubMaterial == -1)
 			ImGui::Text("Please select one sub material for edition");
+		if (_indexSubMaterial != -1 && ImGui::Button("Delete sub material"))
+		{
+			_current.collection[_indexSubMaterial] = _current.collection.back();
+			_current.collection.pop_back();
+		}
+		if (ImGui::Button("Create sub material"))
+		{
+			_current.collection.resize(_current.collection.size() + 1);
+		}
 		_saveEdit();
 	}
 
@@ -196,6 +205,8 @@ namespace AGE
 		_editTexture(mat.emissiveTexPath, ModeTexture::emissive, mat);
 		_editTexture(mat.normalTexPath, ModeTexture::normal, mat);
 		_editTexture(mat.bumpTexPath, ModeTexture::bump, mat);
+		ImGui::Checkbox("Scale UVs", &mat.scaleUVs);
+		ImGui::SameLine(); ImGui::Text("Use it only for plane or boxes");
 		_saveEdit();
 	}
 
