@@ -157,6 +157,7 @@ namespace AGE
 			if (_joysticks[i]._connected)
 				_joysticks[i]._frameUpdate();
 		}
+		_mouseWheelX = _mouseWheelY = 0;
 	}
 
 	void	Input::resetInputs()
@@ -304,7 +305,8 @@ namespace AGE
 		GetMainThread()->getQueue()->emplaceTask<ImGuiMouseStateEvent>(mousePosition,
 			getMouseButtonPressed(AGE_MOUSE_LEFT),
 			getMouseButtonPressed(AGE_MOUSE_MIDDLE),
-			getMouseButtonPressed(AGE_MOUSE_RIGHT));
+			getMouseButtonPressed(AGE_MOUSE_RIGHT),
+			((float)getMouseWheel().y) / 10.0f);
 #endif
 	}
 

@@ -65,16 +65,20 @@
             7
         ],
         "AGE::MeshRenderer": {
-            "cereal_class_version": 0,
+            "cereal_class_version": 1,
             "value0": {
                 "ptr_wrapper": {
                     "valid": 1,
                     "data": {
                         "value0": "ball/ball.sage",
-                        "value1": "sponza/sponza.mage",
+                        "value1": "pixar128 library/brick/red_dutch.mage",
                         "value2": ""
                     }
                 }
+            },
+            "value1": {
+                "type": 0,
+                "data": 16
             }
         },
         "AGE::PointLightComponent": {
@@ -137,6 +141,10 @@
                         "value2": ""
                     }
                 }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
             }
         },
         "AGE::RotationComponent": {
@@ -183,6 +191,10 @@
                         "value2": ""
                     }
                 }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
             }
         },
         "AGE::RotationComponent": {
