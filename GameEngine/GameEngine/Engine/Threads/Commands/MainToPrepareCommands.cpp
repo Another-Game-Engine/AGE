@@ -54,9 +54,9 @@ namespace AGE
 				: key(key),
 				color(color),
 				direction(direction),
+				range(range),
 				cutOff(cutOff),
-				texture(texture),
-				range(range)
+				texture(texture)
 			{}
 
 			DeleteCamera::DeleteCamera(const PrepareKey &_key)

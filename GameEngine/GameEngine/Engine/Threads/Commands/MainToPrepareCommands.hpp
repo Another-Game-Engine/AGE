@@ -100,9 +100,10 @@ namespace AGE
 				PrepareKey key;
 				glm::vec3 color;
 				glm::vec3 direction;
+				glm::vec3 range;
 				float cutOff;
 				std::shared_ptr<ITexture> texture;
-				glm::vec3 const &range;
+
 			};
 
 			struct DeleteCamera
