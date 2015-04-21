@@ -22,23 +22,14 @@ namespace AGE
 	{
 		std::lock_guard<AGE::SpinLock> lock(_mutex);
 
-		std::size_t index = 0;
-		if (_status[index] != Readable)
+		if (_lastReadable > 1)
 		{
-			index = 1;
-			if (_status[index] != Readable)
-			{
-				index = -1;
-			}
-		}
-		if (index == -1)
-		{
-			return DepthMapHandle(this, nullptr, index, Reading);
+			return DepthMapHandle(this, nullptr, -1, Reading);
 		}
 		else
 		{
-			_status[index] = Reading;
-			return DepthMapHandle(this, &_maps[index], index, Reading);
+			_status[_lastReadable] = Reading;
+			return DepthMapHandle(this, &_maps[_lastReadable], _lastReadable, Reading);
 		}
 	}
 
@@ -61,6 +52,10 @@ namespace AGE
 		}
 		else
 		{
+			if (_lastReadable == index)
+			{
+				_lastReadable = -1;
+			}
 			_status[index] = Writing;
 			return DepthMapHandle(this, &_maps[index], index, Writing);
 		}
@@ -80,6 +75,7 @@ namespace AGE
 		if (_status[index] == Writing)
 		{
 			_status[index] = Readable;
+			_lastReadable = index;
 		}
 	}
 }

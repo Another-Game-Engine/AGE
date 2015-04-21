@@ -25,6 +25,7 @@ namespace AGE
 	private:
 		void _releaseMap(std::size_t index);
 		DepthMap _maps[2];
+		std::size_t _lastReadable = 0;
 		uint32_t _status[2];
 		AGE::SpinLock _mutex;
 		std::size_t _mipmapLevel;
