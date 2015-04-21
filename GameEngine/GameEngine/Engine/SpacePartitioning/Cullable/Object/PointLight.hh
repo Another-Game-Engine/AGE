@@ -28,6 +28,7 @@ namespace AGE
 		uint32_t activeSpotLightIdx;
 		std::shared_ptr<ITexture> map;
 		glm::vec3 color;
+		glm::vec3 attenuation;
 		glm::vec3 direction;
 		float spotCutOff;
 		void computeDirectionTransform();

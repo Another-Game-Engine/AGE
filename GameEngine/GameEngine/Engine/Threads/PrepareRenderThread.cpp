@@ -278,11 +278,11 @@ namespace AGE
 		getQueue()->emplaceCommand<Commands::MainToPrepare::SetPointLight>(color, range, texture, key);
 	}
 
-	void PrepareRenderThread::setSpotLight(glm::vec3 const &color, glm::vec3 const &direction, float cutOff, std::shared_ptr<ITexture> const &texture, const PrepareKey &key)
+	void PrepareRenderThread::setSpotLight(glm::vec3 const &color, glm::vec3 const &direction, glm::vec3 const &range, float cutOff, std::shared_ptr<ITexture> const &texture, const PrepareKey &key)
 	{
 		auto scene = _getRenderScene(GetMainThread()->getActiveScene());
 		assert(scene != nullptr);
-		getQueue()->emplaceCommand<Commands::MainToPrepare::SetSpotLight>(color, direction, cutOff, texture, key);
+		getQueue()->emplaceCommand<Commands::MainToPrepare::SetSpotLight>(color, direction, range, cutOff, texture, key);
 	}
 
 	void PrepareRenderThread::_createRenderScene(AScene *scene)

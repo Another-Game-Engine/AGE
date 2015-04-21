@@ -204,6 +204,7 @@ namespace AGE
 		l->direction = msg.direction;
 		l->spotCutOff = msg.cutOff;
 		l->map = msg.texture;
+		l->attenuation = msg.range;
 		if (l->hasMoved == false)
 		{
 			l->hasMoved = true;
