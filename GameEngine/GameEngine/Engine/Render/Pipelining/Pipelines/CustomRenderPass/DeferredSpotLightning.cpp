@@ -70,8 +70,7 @@ namespace AGE
 		*_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("depth_buffer") = _depthInput;
 		*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("eye_pos") = cameraPosition;
 
-		OpenGLState::glEnable(GL_DEPTH_TEST);
-		OpenGLState::glDepthFunc(GL_ALWAYS);
+		OpenGLState::glDisable(GL_DEPTH_TEST);
 		// And we set the blend mode to additive
 		OpenGLState::glEnable(GL_BLEND);
 		OpenGLState::glBlendFunc(GL_ONE, GL_ONE);
@@ -80,9 +79,9 @@ namespace AGE
 		{
 			_programs[PROGRAM_LIGHTNING]->use();
 			*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("position_light") = glm::vec3(pl.light.transformation[3]);
-			*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("attenuation_light") = pl.light.attenuation;
+			*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("attenuation_light") = glm::vec3(1.0f, 0.000f, 0.00000f);
 		//	*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("direction_light") = pl.light.direction;
-			*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("color_light") = pl.light.color;
+			*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("color_light") = glm::vec3(1.0f, 0.0f, 0.f);
 			*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("ambient_color") = glm::vec3(0);
 			_painterManager->get_painter(_quadPainter)->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_LIGHTNING], Properties(), _quad);
 		}
