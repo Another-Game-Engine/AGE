@@ -400,9 +400,6 @@ namespace AGE
 		// clean empty nodes
 		_octree.cleanOctree();
 
-		auto &depthMapManager = GetRenderThread()->getDepthMapManager();
-		auto depthMap = depthMapManager.getWritableMap();
-
 		for (uint32_t cameraIdx : _activeCameras)
 		{
 			Camera &camera = _cameras.get(cameraIdx);
@@ -421,6 +418,9 @@ namespace AGE
 			renderCamera.camInfos.renderType = camera.pipeline;
 
 			auto VP = camera.projection * view;
+
+			auto &depthMapManager = GetRenderThread()->getDepthMapManager();
+			auto depthMap = depthMapManager.getReadableMap();
 
 			// no culling for the lights for the moment (TODO)
 			for (uint32_t pointLightIdx : _activePointLights)
@@ -486,7 +486,7 @@ namespace AGE
 
 						for (std::size_t i = 0; i < 8; ++i)
 						{
-							auto point = VP * currentDrawable->transformation * glm::vec4(BB.getCornerPoint(i), 1.0f);
+							auto point = depthMap->getMV() * currentDrawable->transformation * glm::vec4(BB.getCornerPoint(i), 1.0f);
 							point /= point.w;
 
 							if (point.x < -1)

@@ -13,8 +13,8 @@ namespace AGE
 	{
 		_maps[0].init(width, height, mipmalLevel);
 		_maps[1].init(width, height, mipmalLevel);
-		_status[0] = Writable;
-		_status[1] = Writable;
+		_status[0] = Readable;
+		_status[1] = Readable;
 		_mipmapLevel = mipmalLevel;
 	}
 
@@ -50,12 +50,12 @@ namespace AGE
 		if (_status[index] == Reading)
 		{
 			index = 1;
-			if (_status[index] != Reading)
+			if (_status[index] == Reading)
 			{
 				index = -1;
 			}
 		}
-		if (index == -1)
+		if (index > 1)
 		{
 			return DepthMapHandle(this, nullptr, index, Writing);
 		}

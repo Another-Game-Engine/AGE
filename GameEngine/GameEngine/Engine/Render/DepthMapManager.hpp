@@ -13,9 +13,8 @@ namespace AGE
 		enum Status
 		{
 			Readable = 0,
-			Writable = 1,
-			Reading = 2,
-			Writing = 3
+			Reading = 1,
+			Writing = 2
 		};
 
 		DepthMapManager();

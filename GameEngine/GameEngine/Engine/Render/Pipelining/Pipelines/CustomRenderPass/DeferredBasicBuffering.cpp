@@ -105,12 +105,12 @@ namespace AGE
 
 			if (writableBuffer.isValid())
 			{
+				writableBuffer.setMV(infos.projection * infos.view);
 				glActiveTextureARB(GL_TEXTURE0_ARB);
 				_depth->bind();
 				glGenerateMipmap(GL_TEXTURE_2D);
 				_depth->get(mipmapLevel, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, writableBuffer.getWritableBuffer());
 				_depth->unbind();
-				writableBuffer.setMV(infos.view * infos.projection);
 			}
 		}
 

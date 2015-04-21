@@ -57,7 +57,7 @@ namespace AGE
 			{
 				std::size_t index = x + y * _mipmapWidth;
 				uint32_t depth = (_buffer[index] & 0xFFFFFF00) >> 8;
-				if (depth > pixelDepth)
+				if (depth >= pixelDepth) //				if ((int64_t)((int64_t)depth - pixelDepth) > 0)
 				{
 					return true;
 				}
@@ -66,5 +66,5 @@ namespace AGE
 		return false;
 	}
 
-	const glm::mat4 &DepthMap::getMV() const { return _mv; }
+	glm::mat4 DepthMap::getMV() const { return _mv; }
 }

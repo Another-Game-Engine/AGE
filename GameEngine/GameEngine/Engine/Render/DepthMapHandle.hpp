@@ -17,7 +17,6 @@ namespace AGE
 		std::vector<uint32_t> &getWritableBuffer();
 		void setMV(const glm::mat4 &mv);
 	private:
-		DepthMapHandle(){}
 		DepthMapHandle(AGE::DepthMapManager *managerPtr, DepthMap *map, std::size_t index, DepthMapManager::Status status);
 		DepthMapManager *_manager = nullptr;
 		DepthMap *_map = nullptr;
