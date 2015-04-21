@@ -13,44 +13,48 @@
 
 namespace AGE
 {
+	struct ECTConfigurations
+	{
+		std::string _cookedAssetsDirectory = "../../Assets/Serialized/";
+		std::string _exportSceneFolder = "../../EngineCoreTest/DemoScenes/";
+		std::string _exportArchetypeFolder = "../../EngineCoreTest/Archetypes/";
+		int _selectedScene = 0;
+
+		// not serialized
+		std::vector<std::string> _scenesPaths;
+		std::list<std::string> _scenesNamesCache;
+		std::vector<const char*> _scenesNames;
+
+		friend class cereal::access;
+
+		template <typename Archive>
+		void serialize(Archive &ar, std::uint32_t const version)
+		{
+			ar(cereal::make_nvp("Cooked assets directory", _cookedAssetsDirectory));
+			ar(cereal::make_nvp("Exported scenes directory", _exportSceneFolder));
+			ar(cereal::make_nvp("Selected scene index", _selectedScene));
+			ar(cereal::make_nvp("Archetypes directory", _exportArchetypeFolder));
+		}
+	};
+
 	class EngineCoreTestConfiguration
 	{
-	private:
-		friend class cereal::access;
-		struct Configurations
+	public:
+		~EngineCoreTestConfiguration()
 		{
-			std::string _cookedAssetsDirectory = "../../Assets/Serialized/";
-			std::string _exportSceneFolder = "../../EngineCoreTest/DemoScenes/";
-			std::string _exportArchetypeFolder = "../../EngineCoreTest/Archetypes/";
-			int _selectedScene = 0;
-
-			// not serialized
-			std::vector<std::string> _scenesPaths;
-			std::list<std::string> _scenesNamesCache;
-			std::vector<const char*> _scenesNames;
-
-			friend class cereal::access;
-
-			template <typename Archive>
-			void serialize(Archive &ar, std::uint32_t const version)
-			{
-				//ar(cereal::make_nvp("Cooked assets directory", _cookedAssetsDirectory));
-				//ar(cereal::make_nvp("Exported scenes directory", _exportSceneFolder));
-				//ar(cereal::make_nvp("Selected scene index", _selectedScene));
-				//ar(cereal::make_nvp("Archetypes directory", _exportArchetypeFolder));
-			}
-		};
+			saveConfigurations();
+		}
 
 		static bool _dirty;
 
-		static std::shared_ptr<Configurations> _getConfigurations()
+		static std::shared_ptr<ECTConfigurations> _getConfigurations()
 		{
 			if (_configurations == nullptr)
 			{
 				if (!AGE::FileSystemHelpers::AgeExists("EngineCoreTestConfiguration.json"))
 				{
-					_configurations = std::make_shared<Configurations>();
-					_saveConfigurations();
+					_configurations = std::make_shared<ECTConfigurations>();
+					saveConfigurations();
 				}
 				else
 				{
@@ -60,8 +64,8 @@ namespace AGE
 					// if file is empty
 					if (file.peek() == std::ifstream::traits_type::eof())
 					{
-						_configurations = std::make_shared<Configurations>();
-						_saveConfigurations();
+						_configurations = std::make_shared<ECTConfigurations>();
+						saveConfigurations();
 					}
 					else
 					{
@@ -73,12 +77,12 @@ namespace AGE
 			}
 			if (_dirty)
 			{
-				_saveConfigurations();
+				saveConfigurations();
 			}
 			return _configurations;
 		}
 
-		static std::shared_ptr<Configurations> _configurations;
+		static std::shared_ptr<ECTConfigurations> _configurations;
 	public:
 		static const std::string &GetCookedDirectory()
 		{
@@ -121,6 +125,7 @@ namespace AGE
 			auto &res = _getConfigurations()->_selectedScene;
 			return res;
 		}
+
 		static void RefreshScenesDirectoryListing()
 		{
 			_dirty = true;
@@ -156,8 +161,8 @@ namespace AGE
 			}
 			_dirty = true;
 		}
-	private:
-		static void _saveConfigurations()
+
+		static void saveConfigurations()
 		{
 			std::ofstream file("EngineCoreTestConfiguration.json", std::ios::binary);
 			assert(file.is_open());
@@ -170,3 +175,5 @@ namespace AGE
 		}
 	};
 }
+
+CEREAL_CLASS_VERSION(AGE::ECTConfigurations, 0);

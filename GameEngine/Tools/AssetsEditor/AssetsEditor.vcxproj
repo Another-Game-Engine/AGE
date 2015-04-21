@@ -109,6 +109,7 @@
     <ClCompile Include="AssetFiles\Folder.cpp" />
     <ClCompile Include="Components\EntityRepresentation.cpp" />
     <ClCompile Include="Convertor\ConvertorStatusManager.cpp" />
+    <ClCompile Include="Convertor\MeshLoader.cpp" />
     <ClCompile Include="EditorConfiguration.cpp" />
     <ClCompile Include="ImageUtils.cpp" />
     <ClCompile Include="Main.cpp" />

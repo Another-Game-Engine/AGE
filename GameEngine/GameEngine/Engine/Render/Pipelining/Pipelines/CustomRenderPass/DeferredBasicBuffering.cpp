@@ -13,6 +13,11 @@
 #include <Render/ProgramResources/Types/Uniform/Mat4.hh>
 #include <Core/ConfigurationManager.hpp>
 #include <Core/Engine.hh>
+#include <Configuration.hpp>
+#include <Threads/RenderThread.hpp>
+#include <Threads/ThreadManager.hpp>
+#include <Render/DepthMapHandle.hpp>
+#include <Render/DepthMap.hpp>
 
 #define DEFERRED_SHADING_BUFFERING_VERTEX "deferred_shading/deferred_shading_get_buffer.vp"
 #define DEFERRED_SHADING_BUFFERING_FRAG "deferred_shading/deferred_shading_get_buffer.fp"
@@ -31,7 +36,11 @@ namespace AGE
 												std::shared_ptr<Texture2D> specular,
 												std::shared_ptr<Texture2D> depth) :
 		FrameBufferRender(painterManager)
+		, _depth(depth)
 	{
+		AGE_ASSERT(depth != nullptr);
+
+
 		// We dont want to take the skinned or transparent meshes
 		_forbidden[AGE_SKINNED] = true;
 		_forbidden[AGE_SEMI_TRANSPARENT] = true;
@@ -72,14 +81,59 @@ namespace AGE
 		OpenGLState::glClearColor(glm::vec4(0.f, 0.0f, 0.0f, 0.0f));
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+#ifdef OCCLUSION_CULLING
+
 		_programs[PROGRAM_BUFFERING]->use();
 		*_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("projection_matrix") = infos.projection;
 		*_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("view_matrix") = infos.view;
 
-		for (auto meshPaint : pipeline.keys)
+		for (auto &meshPaint : pipeline.keys)
 		{
 			auto painter = _painterManager->get_painter(Key<Painter>::createKey(meshPaint.first));
-			for (auto mode : meshPaint.second.drawables)
+			for (auto &mode : meshPaint.second.drawables)
+			{
+				if (mode.renderMode.at(AGE_OCCLUDER) == true)
+				{
+					painter->draw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], mode.properties, mode.vertices);
+				}
+			}
+		}
+
+		{
+			auto writableBuffer = GetRenderThread()->getDepthMapManager().getWritableMap();
+			auto mipmapLevel = GetRenderThread()->getDepthMapManager().getMipmapLevel();
+
+			if (writableBuffer.isValid())
+			{
+				glActiveTextureARB(GL_TEXTURE0_ARB);
+				_depth->bind();
+				glGenerateMipmap(GL_TEXTURE_2D);
+				_depth->get(mipmapLevel, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, writableBuffer.getWritableBuffer());
+				_depth->unbind();
+				writableBuffer.setMV(infos.view * infos.projection);
+			}
+		}
+
+		for (auto &meshPaint : pipeline.keys)
+		{
+			auto painter = _painterManager->get_painter(Key<Painter>::createKey(meshPaint.first));
+			for (auto &mode : meshPaint.second.drawables)
+			{
+				if (mode.renderMode.at(AGE_OCCLUDER) == false)
+				{
+					painter->draw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], mode.properties, mode.vertices);
+				}
+			}
+		}
+#else
+		_programs[PROGRAM_BUFFERING]->use();
+		*_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("projection_matrix") = infos.projection;
+		*_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("view_matrix") = infos.view;
+
+		for (auto &meshPaint : pipeline.keys)
+		{
+			auto painter = _painterManager->get_painter(Key<Painter>::createKey(meshPaint.first));
+			for (auto &mode : meshPaint.second.drawables)
 			{
 				if (renderModeCompatible(mode.renderMode))
 				{
@@ -87,6 +141,8 @@ namespace AGE
 				}
 			}
 		}
+#endif
+
 	}
 
 }

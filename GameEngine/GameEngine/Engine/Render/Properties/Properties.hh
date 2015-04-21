@@ -26,6 +26,18 @@ namespace AGE
 	public:
 		template <typename type_t> std::shared_ptr<type_t> get_property(Key<Property> const &key);
 
+		std::shared_ptr<IProperty> searchForProperty(const std::string &name) const
+		{
+			for (auto &e : _properties)
+			{
+				if (e->name() == "model_matrix")
+				{
+					return e;
+				}
+			}
+			return nullptr;
+		}
+
 	private:
 		std::vector<std::shared_ptr<IProperty>> _properties;
 	};
@@ -35,5 +47,4 @@ namespace AGE
 	{
 		return (std::static_pointer_cast<type_t>(_properties[key.getId()]));
 	}
-
 }

@@ -45,7 +45,7 @@ namespace AGE
 		void _selectMaterial();
 		void _selectSubMaterial();
 		void _editName();
-		void _editTexture(ModeTexture mode, std::string &current);
+		void _editTexture(std::string &texturePath, ModeTexture mode, MaterialData &current);
 		void _editData();
 		void _saveEdit();
 		void _resetEdition();
@@ -56,8 +56,6 @@ namespace AGE
 		int _indexSubMaterial;
 		MaterialDataSet _current;
 		bool _editModeName;
-		bool _editModeTexture[unsigned long long(ModeTexture::size)];
-		char _bufferTexture[unsigned long long(ModeTexture::size)][TEXTURE_LENGTH];
 		char _bufferName[NAME_LENGTH];
 	};
 }

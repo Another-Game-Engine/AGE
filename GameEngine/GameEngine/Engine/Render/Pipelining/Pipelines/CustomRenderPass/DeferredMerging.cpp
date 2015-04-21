@@ -15,14 +15,20 @@
 #include <Core/ConfigurationManager.hpp>
 #include <Core/Engine.hh>
 
+#include "Render/GeometryManagement/SimpleGeometry.hh"
+
 #define DEFERRED_SHADING_MERGING_VERTEX "deferred_shading/deferred_shading_merge.vp"
 #define DEFERRED_SHADING_MERGING_FRAG "deferred_shading/deferred_shading_merge.fp"
+
+#define DRAW_2D_LINE_VERTEX "deferred_shading/draw2DLine.vp"
+#define DRAW_2D_LINE_FRAG "deferred_shading/draw2DLine.fp"
 
 namespace AGE
 {
 	enum Programs
 	{
 		PROGRAM_MERGING = 0,
+		PROGRAM_DRAW_LINE,
 		PROGRAM_NBR
 	};
 
@@ -32,7 +38,7 @@ namespace AGE
 		std::shared_ptr<Texture2D> lightAccumulation) :
 					ScreenRender(painterManager)
 	{
-		_diffuseInput = diffuse;
+ 		_diffuseInput = diffuse;
 		_specularInput = specular;
 		_lightAccuInput = lightAccumulation;
 
@@ -52,6 +58,15 @@ namespace AGE
 		{
 			std::make_shared<UnitProg>(vertexShaderPath, GL_VERTEX_SHADER),
 			std::make_shared<UnitProg>(fragmentShaderPath, GL_FRAGMENT_SHADER)
+		}));
+
+		auto vertexDrawLine = shaderPath->getValue() + DRAW_2D_LINE_VERTEX;
+		auto fragDrawLine = shaderPath->getValue() + DRAW_2D_LINE_FRAG;
+
+		_programs[PROGRAM_DRAW_LINE] = std::make_shared<Program>(Program(std::string("draw2DLine"),
+		{
+			std::make_shared<UnitProg>(vertexDrawLine, GL_VERTEX_SHADER),
+			std::make_shared<UnitProg>(fragDrawLine, GL_FRAGMENT_SHADER)
 		}));
 
 		Key<Painter> quadPainterKey;
@@ -77,6 +92,14 @@ namespace AGE
 		OpenGLState::glEnable(GL_DEPTH_TEST);
 		OpenGLState::glEnable(GL_STENCIL_TEST);
 		_quadPainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_MERGING], Properties(), _quadVertices);
+
+		OpenGLState::glDisable(GL_DEPTH_TEST);
+		OpenGLState::glDisable(GL_STENCIL_TEST);
+		OpenGLState::glDepthMask(GL_FALSE);
+		_programs[PROGRAM_DRAW_LINE]->use();
+
+		_lines = _painterManager->get_painter(GetRenderThread()->debug2Dlines.painterKey);
+		_lines->uniqueDraw(GL_LINES, _programs[PROGRAM_DRAW_LINE], Properties(), GetRenderThread()->debug2Dlines.verticesKey);
 	}
 
 }

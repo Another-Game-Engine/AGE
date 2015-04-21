@@ -30,6 +30,7 @@ namespace AGE
 
 		Key<Vertices> _quadVertices;
 		std::shared_ptr<Painter> _quadPainter;
+		std::shared_ptr<Painter> _lines;
 
 		glm::vec3 _ambientColor;
 	};
