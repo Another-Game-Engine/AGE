@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GameEngine", "GameEngine\GameEngine.vcxproj", "{E24D022C-E33B-47A1-BBB4-33666C76DDA9}"
 EndProject
@@ -33,6 +33,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "deferred shading", "deferre
 		Shaders\deferred_shading\deferred_shading_merge_debug.vp = Shaders\deferred_shading\deferred_shading_merge_debug.vp
 		Shaders\deferred_shading\deferred_shading_point_light.fp = Shaders\deferred_shading\deferred_shading_point_light.fp
 		Shaders\deferred_shading\deferred_shading_point_light.vp = Shaders\deferred_shading\deferred_shading_point_light.vp
+		Shaders\deferred_shading\deferred_shading_spot_light.fp = Shaders\deferred_shading\deferred_shading_spot_light.fp
+		Shaders\deferred_shading\deferred_shading_spot_light.vp = Shaders\deferred_shading\deferred_shading_spot_light.vp
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "basic", "basic", "{6DD3E825-06AD-46C8-B671-745D01D240D0}"
@@ -119,11 +121,11 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{CB955D69-5F17-4705-BE34-81FBE92E26EB} = {B36A8443-1340-428D-AB0B-7AD47BC2531F}
 		{03E6B97B-B898-4A33-AB68-8455868D3A13} = {6823E483-DFC6-4750-920C-35DA2E87B060}
 		{6DD3E825-06AD-46C8-B671-745D01D240D0} = {6823E483-DFC6-4750-920C-35DA2E87B060}
 		{75A3DE7B-6A0B-41EE-AF28-195F60ABBF8B} = {018BFD87-A129-4BFF-83F3-35DD018A7770}
 		{FAE1C65E-9000-4902-AE4F-C5786810B9FD} = {75A3DE7B-6A0B-41EE-AF28-195F60ABBF8B}
 		{C3490639-BCED-4A06-9D1B-5C3BB25DA5A7} = {75A3DE7B-6A0B-41EE-AF28-195F60ABBF8B}
-		{CB955D69-5F17-4705-BE34-81FBE92E26EB} = {B36A8443-1340-428D-AB0B-7AD47BC2531F}
 	EndGlobalSection
 EndGlobal
