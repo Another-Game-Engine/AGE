@@ -73,6 +73,12 @@ namespace AGE
 			*_programs[PROGRAM_BUFFERING_LIGHT]->get_resource<Mat4>("model_matrix") = pl.light.transformation;
 			_quadPainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING_LIGHT], Properties(), _quadVertices);
 		}
+		for (auto &pl : renderLight.spotLights)
+		{
+			*_programs[PROGRAM_BUFFERING_LIGHT]->get_resource<Sampler2D>("sprite_light") = std::static_pointer_cast<Texture2D>(pl.light.map);
+			*_programs[PROGRAM_BUFFERING_LIGHT]->get_resource<Mat4>("model_matrix") = pl.light.transformation;
+			_quadPainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING_LIGHT], Properties(), _quadVertices);
+		}
 	}
 
 }
