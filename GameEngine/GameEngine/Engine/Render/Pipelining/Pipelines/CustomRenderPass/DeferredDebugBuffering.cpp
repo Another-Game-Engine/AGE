@@ -13,6 +13,7 @@
 #include <Render/ProgramResources/Types/Uniform/Sampler/Sampler2D.hh>
 #include <Threads/RenderThread.hpp>
 #include <Threads/ThreadManager.hpp>
+#include <Configuration.hpp>
 
 #define DEFERRED_SHADING_DEBUG_LIGHT_VERTEX "../../Shaders/deferred_shading/deferred_shading_debug_light.vp"
 #define DEFERRED_SHADING_DEBUG_LIGHT_FRAG "../../Shaders/deferred_shading/deferred_shading_debug_light.fp"
