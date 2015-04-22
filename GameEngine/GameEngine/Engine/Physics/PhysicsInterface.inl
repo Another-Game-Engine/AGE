@@ -16,6 +16,7 @@ namespace AGE
 				world = createWorld();
 				assert(world != nullptr && "Impossible to create world");
 				_dependencyManager->setInstance(world);
+				return true;
 			}
 			else
 			{
