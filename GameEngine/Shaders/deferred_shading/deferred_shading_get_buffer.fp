@@ -1,8 +1,10 @@
 #version 330
 
-in vec3 inter_normal;
-in vec2 vTexCoord;
-in vec3 inter_tangent;
+in VertexData {
+	vec3 inter_normal;
+	vec3 inter_tangent;
+	vec2 inter_texCoord;
+} VertexIn;
 
 uniform vec4 diffuse_color;
 uniform float diffuse_ratio;
@@ -19,16 +21,16 @@ layout (location = 2) out vec4 specular_frag;
 
 vec3 perturb_normal()
 {
-	vec3 perturbated_normal_ts = texture(normal_map, vTexCoord).xyz;
+	vec3 perturbated_normal_ts = texture(normal_map, VertexIn.inter_texCoord).xyz;
 	vec3 perturbated_normal = perturbated_normal_ts * 2.f - vec3(1.f);
-	vec3 bitangent = cross(inter_tangent, inter_normal);
-	mat3 TBN = mat3(inter_tangent, bitangent, inter_normal);
-	return mix(normalize(TBN * perturbated_normal), inter_normal, float(all(equal(perturbated_normal_ts, vec3(0.f)))));
+	vec3 bitangent = cross(VertexIn.inter_tangent, VertexIn.inter_normal);
+	mat3 TBN = mat3(VertexIn.inter_tangent, bitangent, VertexIn.inter_normal);
+	return mix(normalize(TBN * perturbated_normal), VertexIn.inter_normal, float(all(equal(perturbated_normal_ts, vec3(0.f)))));
 }
 
 void main(void)
 {
-	diffuse_frag = texture(diffuse_map, vTexCoord); // diffuse_color * diffuse_ratio
+	diffuse_frag = texture(diffuse_map, VertexIn.inter_texCoord); // diffuse_color * diffuse_ratio
 	vec3 normal = perturb_normal() * 0.5f + 0.5f;
 	normal_frag = vec4(normal, 1.0f);
 	// To replace with the real specular of the object

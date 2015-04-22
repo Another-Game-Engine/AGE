@@ -25,6 +25,7 @@
 #include <Render/Properties/Materials/Diffuse.hh>
 #include <Render/Properties/Materials/MapColor.hh>
 #include <Render/Properties/Materials/Specular.hh>
+#include <Render/Properties/Materials/ScaleUVs.hpp>
 
 #include <Configuration.hpp>
 
@@ -144,6 +145,10 @@ namespace AGE
 				auto specularTexPtr = std::static_pointer_cast<Texture2D>(loadTexture(material_data.specularTexPath, loadingChannel));
 				specularTex->set(specularTexPtr);
 
+				auto scaleUVs = std::make_shared<ScaleUVs>();
+				materialSubset._properties.push_back(scaleUVs);
+				scaleUVs->set(material_data.scaleUVs);
+
 //				auto futureSubMaterial = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<Tasks::Render::AddMaterial, MaterialInstance>(material_data);
 //				auto subMaterial = futureSubMaterial.get();
 //				material_set->datas.emplace_back(subMaterial);
@@ -188,6 +193,7 @@ namespace AGE
 			std::ifstream ifs(filePath.getFullName(), std::ios::binary);
 			cereal::PortableBinaryInputArchive ar(ifs);
 			ar(*data.get());
+
 			GLenum ct = GL_RGB32F;
 			GLenum color = GL_RGB;
 			switch (data->colorNumber)
@@ -213,12 +219,51 @@ namespace AGE
 			{
 				return AssetsLoadingResult(false, "Texture loading error");
 			}
+			texture->bind();
 			texture->set(data->data, 0, color, GL_UNSIGNED_BYTE);
 			texture->parameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 			texture->parameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-			texture->parameter(GL_TEXTURE_WRAP_T, GL_REPEAT);
-			texture->parameter(GL_TEXTURE_WRAP_S, GL_REPEAT);
+
+			switch (data->repeatX)
+			{
+			case TextureData::NoRepeat:
+				texture->parameter(GL_TEXTURE_WRAP_T, GL_REPEAT);
+				break;
+			case TextureData::Repeat:
+				texture->parameter(GL_TEXTURE_WRAP_T, GL_REPEAT);
+				break;
+			case TextureData::MirrorRepeat:
+				texture->parameter(GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
+				break;
+			case TextureData::ClampToBorder:
+				texture->parameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+				break;
+			case TextureData::ClampToEdge:
+				texture->parameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+				break;
+			}
+
+			switch (data->repeatY)
+			{
+			case TextureData::NoRepeat:
+				texture->parameter(GL_TEXTURE_WRAP_S, GL_REPEAT);
+				break;
+			case TextureData::Repeat:
+				texture->parameter(GL_TEXTURE_WRAP_S, GL_REPEAT);
+				break;
+			case TextureData::MirrorRepeat:
+				texture->parameter(GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
+				break;
+			case TextureData::ClampToBorder:
+				texture->parameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+				break;
+			case TextureData::ClampToEdge:
+				texture->parameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+				break;
+			}
+
 			texture->generateMipmaps();
+			texture->unbind();
 			return AssetsLoadingResult(true);
 		});
 		pushNewAsset(loadingChannel, _filePath.getFullName(), future);

@@ -23,6 +23,14 @@ namespace AGE
 			{
 			}
 
+			SetRenderMode::SetRenderMode(const PrepareKey &_key
+				, const RenderModeSet &_renderModes)
+				: key(_key)
+				, renderModes(_renderModes)
+			{
+			}
+
+
 			CreateMesh::CreateMesh(const PrepareKey &_key)
 				: key(_key)
 			{}

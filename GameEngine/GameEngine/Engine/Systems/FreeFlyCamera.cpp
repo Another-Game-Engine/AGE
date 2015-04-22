@@ -98,16 +98,16 @@ namespace AGE
 		Input *inputs = _scene->getInstance<Input>();
 
 		// On click, the context grab the mouse
-		if (inputs->getMouseButtonJustPressed(AGE_MOUSE_LEFT))
+		if (inputs->getMouseButtonJustPressed(AGE_MOUSE_RIGHT))
 		{
 			GetRenderThread()->getQueue()->emplaceTask<Tasks::Render::ContextGrabMouse>(true);
 		}
-		else if (inputs->getMouseButtonJustReleased(AGE_MOUSE_LEFT))
+		else if (inputs->getMouseButtonJustReleased(AGE_MOUSE_RIGHT))
 		{
 			GetRenderThread()->getQueue()->emplaceTask<Tasks::Render::ContextGrabMouse>(false);
 		}
 		// If clicked, handle the rotation with the mouse
-		if (inputs->getMouseButtonPressed(AGE_MOUSE_LEFT))
+		if (inputs->getMouseButtonPressed(AGE_MOUSE_RIGHT))
 		{
 			_cameraAngles[camIdx].y -= (float)inputs->getMouseDelta().x * camMouseRotationSpeed;
 			_cameraAngles[camIdx].x -= (float)inputs->getMouseDelta().y * camMouseRotationSpeed;

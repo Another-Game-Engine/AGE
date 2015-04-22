@@ -108,6 +108,18 @@ namespace AGE
 		_buffer.unbind();
 	}
 
+	void Painter::uniqueDraw(GLenum mode, const Key<Vertices> &vertice)
+	{
+		// to be sure that this function is only called in render thread
+		AGE_ASSERT(GetThreadManager()->getCurrentThread() == (AGE::Thread*)GetRenderThread());
+		_buffer.bind();
+		_buffer.update();
+
+		_vertices[vertice.getId()].draw(mode);
+
+		_buffer.unbind();
+	}
+
 	bool Painter::coherent(std::vector<std::pair<GLenum, std::string>> const &types) const
 	{
 		// to be sure that this function is only called in render thread

@@ -23,27 +23,6 @@ namespace AGE
 				glm::mat4 transform;
 			};
 
-			//struct SetPosition
-			//{
-			//	SetPosition(const PrepareKey &_key, const glm::vec3 &_position);
-			//	PrepareKey key;
-			//	glm::vec3 position;
-			//};
-
-			//struct SetScale
-			//{
-			//	SetScale(const PrepareKey &_key, const glm::vec3 &_scale);
-			//	PrepareKey key;
-			//	glm::vec3 scale;
-			//};
-
-			//struct SetOrientation
-			//{
-			//	SetOrientation(const PrepareKey &_key, const glm::quat &_orientation);
-			//	PrepareKey key;
-			//	glm::quat orientation;
-			//};
-
 			struct SetGeometry
 			{
 				SetGeometry(const PrepareKey &_key
@@ -52,6 +31,14 @@ namespace AGE
 				PrepareKey key;
 				std::vector<SubMeshInstance> submeshInstances;
 				std::vector<MaterialInstance> submaterialInstances;
+			};
+
+			struct SetRenderMode
+			{
+				SetRenderMode(const PrepareKey &_key
+					, const RenderModeSet &renderModes);
+				PrepareKey key;
+				RenderModeSet renderModes;
 			};
 
 			struct CreateMesh

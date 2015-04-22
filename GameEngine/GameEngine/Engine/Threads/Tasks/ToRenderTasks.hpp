@@ -85,6 +85,7 @@ namespace AGE
 					grabMouse(_grabMouse == true ? 1 : 0)
 				{ }
 			};
+
 		};
 	
 	}

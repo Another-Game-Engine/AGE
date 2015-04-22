@@ -149,6 +149,9 @@ namespace AGE
 				msg.setValue(false);
 				return;
 			}
+
+			_depthMapManager.init(1280, 720, 2);
+
 			msg.setValue(true);
 		});
 
@@ -196,6 +199,42 @@ namespace AGE
 			if (!_drawlistPtr) // nothing to draw
 				return;
 			AGE_ASSERT(_drawlistPtr != nullptr);
+
+
+			// DEBUG DRAW DEGUEULASSE
+
+			std::vector<unsigned int> indices;
+			auto type = std::make_pair<GLenum, std::string>(GL_FLOAT_VEC2, "position");
+			std::vector<std::pair < GLenum, std::string > > types;
+			types.push_back(type);
+
+			indices.resize(debug2DlinesPoints.size());
+			for (int i = 0; i < debug2DlinesPoints.size(); ++i)
+			{
+				indices[i] = i;
+			}
+			if (!paintingManager->has_painter(types))
+			{
+				debug2Dlines.painterKey = paintingManager->add_painter(std::move(types));
+			}
+			else
+			{
+				debug2Dlines.painterKey = paintingManager->get_painter(types);
+			}
+			Key<Painter> kk = debug2Dlines.painterKey;
+
+			auto &painterPtr = paintingManager->get_painter(debug2Dlines.painterKey);
+
+			debug2Dlines.verticesKey = painterPtr->add_vertices(debug2DlinesPoints.size(), indices.size());
+			auto vertices = painterPtr->get_vertices(debug2Dlines.verticesKey);
+
+			vertices->set_data<glm::vec2>(debug2DlinesPoints, std::string("position"));
+			vertices->set_indices(indices);
+
+			debug2DlinesPoints.clear();
+
+			// CEST VRAIMENT DEGUEULASSE...
+
 			auto &drawlist = _drawlistPtr->container.cameras;
 			for (auto &curCamera : drawlist)
 			{
@@ -203,6 +242,7 @@ namespace AGE
 				pipelines[curCamera.camInfos.renderType]->render(curCamera.pipeline, curCamera.lights, curCamera.camInfos);
 			}
 			_drawlistPtr = nullptr;
+			painterPtr->remove_vertices(debug2Dlines.verticesKey);
 		});
 
 		registerSharedCallback<AGE::Tasks::Basic::BoolFunction>([&](AGE::Tasks::Basic::BoolFunction& msg)
@@ -232,6 +272,12 @@ namespace AGE
 		registerCallback<AGE::Tasks::Render::ContextGrabMouse>([&](AGE::Tasks::Render::ContextGrabMouse &msg)
 		{
 			_context->grabMouse(msg.grabMouse == 1 ? true : false);
+		});
+
+		registerCallback<Commands::ToRender::Draw2DLine>([&](Commands::ToRender::Draw2DLine& msg)
+		{
+			debug2DlinesPoints.push_back(msg.start);
+			debug2DlinesPoints.push_back(msg.end);
 		});
 
 		return true;

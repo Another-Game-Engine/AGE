@@ -5,6 +5,7 @@
 #include <SpacePartitioning/Cullable/CullableShape.hh>
 #include <Utils/AABoundingBox.hh>
 #include <vector>
+#include <Render/Pipelining/Render/RenderModes.hh>
 
 namespace AGE
 {
@@ -28,6 +29,7 @@ namespace AGE
 		Key<AnimationInstance> animation;
 		std::vector<glm::mat4> bones; // we'll have to find a optimized solution than copy vector of mat4 oO
 		std::vector < Key<Property> > materialKeys;
+		RenderModeSet renderMode;
 		void reset();
 
 		Drawable();
