@@ -38,13 +38,17 @@ void main()
 	float dist = length(lightDir);
 	vec3 normal = normalize(vec3(texture(normal_buffer, interpolated_texCoord).xyz) * 2.0f - 1.0f);
 	float attenuation = attenuation_light.x + attenuation_light.y * dist + attenuation_light.z * dist * dist; 
-	float lambert = max(0.0f, dot(normal, normalize(-lightDir)));
-	float effect = max(0.0f, dot(normalize(-lightDir), normalize(spotDirection)));
-	effect = effect * mix(0.f, 1.f, float(int(lambert)));
-	effect = effect * (1.f - step(spot_cut_off, lambert));
-	effect = pow(effect, spot_exponent);
-	vec3 worldPosToEyes = normalize(eye_pos - worldPos);
-	vec3 reflection = reflect(normalize(-lightDir), normal);
-	float specularRatio = clamp(pow(max(dot(reflection, worldPosToEyes), 0.0f), 100.f), 0.0f, 1.0f);
+	float lambert = max(0.0f, dot(normal, normalize(lightDir)));
+	float effect = 0.f;
+	float specularRatio = 0.f;
+	if (lambert > 0.f) {
+		effect = max(0.0f, dot(normalize(-lightDir), normalize(spotDirection)));
+		if (effect > spot_cut_off) {
+			effect = pow(effect, spot_exponent);
+			vec3 worldPosToEyes = normalize(eye_pos - worldPos);
+			vec3 reflection = reflect(normalize(-lightDir), normal);
+			specularRatio = clamp(pow(max(dot(reflection, worldPosToEyes), 0.0f), 100.f), 0.0f, 1.0f);
+		}
+	}
 	color = vec4(vec3(ambient_color + effect * color_light), specularRatio) / (attenuation);
 }
