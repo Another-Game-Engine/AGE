@@ -20,6 +20,8 @@
 #include <Utils/Debug.hpp>
 #include <Render/GeometryManagement/SimpleGeometry.hh>
 
+#include <microprofile/microprofile.h>
+
 namespace AGE
 {
 	RenderThread::RenderThread()
@@ -168,6 +170,7 @@ namespace AGE
 		{
 			_context->swapContext();
 			glClear(GL_COLOR_BUFFER_BIT);
+			MicroProfileFlip();
 		});
 
 		registerCallback<Tasks::Render::ReloadShaders>([&](Tasks::Render::ReloadShaders& msg)
