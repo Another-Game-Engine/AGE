@@ -36,6 +36,7 @@ namespace AGE
 			_cameraAngles.resize(_cameras.getCollection().size());
 		for (auto cam : _cameras.getCollection())
 		{
+			FreeFlyComponent const *component = cam.getComponent<FreeFlyComponent>();
 			auto &camLink = cam.getLink();
 
 			if (camIndex == _cameraAngles.size())
@@ -44,9 +45,12 @@ namespace AGE
 				_cameraAngles.emplace_back(glm::vec2(glm::eulerAngles(camRotation)));
 			}
 
-			_handleKeyboard(time, camLink, camIndex);
-			_handleMouse(time, camLink, camIndex);
-			_handleController(time, camLink, camIndex);
+			if (component->handleKeyboard)
+				_handleKeyboard(time, camLink, camIndex, component);
+			if (component->handleMouse)
+				_handleMouse(time, camLink, camIndex, component);
+			if (component->handleController)
+				_handleController(time, camLink, camIndex, component);
 
 			_cameraAngles[camIndex].x = glm::clamp(_cameraAngles[camIndex].x, -verticalAngleLimit, verticalAngleLimit);
 
@@ -62,39 +66,36 @@ namespace AGE
 
 	}
 
-	void FreeFlyCamera::_handleKeyboard(float time, Link &camLink, size_t camIdx)
+	void FreeFlyCamera::_handleKeyboard(float time, Link &camLink, size_t camIdx, FreeFlyComponent const *component)
 	{
-		float camTranslationSpeed = 5.0f;
-		float maxAcceleration = 10.0f;
-		float camRotationSpeed = 2.0f;
+		float camTranslationSpeed = component->camTranslationSpeed;
 		Input *inputs = _scene->getInstance<Input>();
 
 		// If shift is pressed, we accelerate
-		if (inputs->getPhysicalKeyPressed(AGE_LSHIFT))
-			camTranslationSpeed += maxAcceleration;
+		if (inputs->getPhysicalKeyPressed(component->accelerate))
+			camTranslationSpeed += component->maxAcceleration;
 		// translations
-		if (inputs->getPhysicalKeyPressed(AGE_w))
+		if (inputs->getPhysicalKeyPressed(component->translateForward))
 			camLink.setForward(glm::vec3(0, 0, -camTranslationSpeed * time));
-		if (inputs->getPhysicalKeyPressed(AGE_s))
+		if (inputs->getPhysicalKeyPressed(component->translateBackward))
 			camLink.setForward(glm::vec3(0, 0, camTranslationSpeed * time));
-		if (inputs->getPhysicalKeyPressed(AGE_a))
+		if (inputs->getPhysicalKeyPressed(component->translateLeft))
 			camLink.setForward(glm::vec3(-camTranslationSpeed * time, 0, 0));
-		if (inputs->getPhysicalKeyPressed(AGE_d))
+		if (inputs->getPhysicalKeyPressed(component->translateRight))
 			camLink.setForward(glm::vec3(camTranslationSpeed * time, 0, 0));
 		// rotations
-		if (inputs->getPhysicalKeyPressed(AGE_UP))
-			_cameraAngles[camIdx].x += camRotationSpeed * time;
-		if (inputs->getPhysicalKeyPressed(AGE_DOWN))
-			_cameraAngles[camIdx].x -= camRotationSpeed * time;
-		if (inputs->getPhysicalKeyPressed(AGE_RIGHT))
-			_cameraAngles[camIdx].y -= camRotationSpeed * time;
-		if (inputs->getPhysicalKeyPressed(AGE_LEFT))
-			_cameraAngles[camIdx].y += camRotationSpeed * time;
+		if (inputs->getPhysicalKeyPressed(component->rotateUp))
+			_cameraAngles[camIdx].x += component->camRotationSpeed * time;
+		if (inputs->getPhysicalKeyPressed(component->rotateDown))
+			_cameraAngles[camIdx].x -= component->camRotationSpeed * time;
+		if (inputs->getPhysicalKeyPressed(component->rotateRight))
+			_cameraAngles[camIdx].y -= component->camRotationSpeed * time;
+		if (inputs->getPhysicalKeyPressed(component->rotateLeft))
+			_cameraAngles[camIdx].y += component->camRotationSpeed * time;
 	}
 
-	void FreeFlyCamera::_handleMouse(float time, Link &camLink, size_t camIdx)
+	void FreeFlyCamera::_handleMouse(float time, Link &camLink, size_t camIdx, FreeFlyComponent const *component)
 	{
-		float camMouseRotationSpeed = 0.0005f;
 		Input *inputs = _scene->getInstance<Input>();
 
 		// On click, the context grab the mouse
@@ -109,16 +110,14 @@ namespace AGE
 		// If clicked, handle the rotation with the mouse
 		if (inputs->getMouseButtonPressed(AGE_MOUSE_RIGHT))
 		{
-			_cameraAngles[camIdx].y -= (float)inputs->getMouseDelta().x * camMouseRotationSpeed;
-			_cameraAngles[camIdx].x -= (float)inputs->getMouseDelta().y * camMouseRotationSpeed;
+			_cameraAngles[camIdx].y -= (float)inputs->getMouseDelta().x * component->camMouseRotationSpeed;
+			_cameraAngles[camIdx].x -= (float)inputs->getMouseDelta().y * component->camMouseRotationSpeed;
 		}
 	}
 
-	void FreeFlyCamera::_handleController(float time, Link &camLink, size_t camIdx)
+	void FreeFlyCamera::_handleController(float time, Link &camLink, size_t camIdx, FreeFlyComponent const *component)
 	{
-		float camTranslationSpeed = 5.0f;
-		float maxAcceleration = 10.0f;
-		float camRotationSpeed = 2.0f;
+		float camTranslationSpeed = component->camTranslationSpeed;
 		Input *inputs = _scene->getInstance<Input>();
 		Joystick controller;
 
@@ -128,7 +127,7 @@ namespace AGE
 			float rightTrigger = controller.getAxis(AGE_JOYSTICK_AXIS_TRIGGERRIGHT) * 0.5f + 0.5f;
 
 			// If right trigger pressed, accelerate
-			camTranslationSpeed += rightTrigger * maxAcceleration;
+			camTranslationSpeed += rightTrigger * component->maxAcceleration;
 			// Handle translations
 			if (glm::abs(controller.getAxis(AGE_JOYSTICK_AXIS_LEFTY)) > 0.3)
 				camLink.setForward(glm::vec3(0.f, 0.f, controller.getAxis(AGE_JOYSTICK_AXIS_LEFTY) * camTranslationSpeed * time));
@@ -136,9 +135,9 @@ namespace AGE
 				camLink.setForward(glm::vec3(controller.getAxis(AGE_JOYSTICK_AXIS_LEFTX) * camTranslationSpeed * time, 0.f, 0.f));
 			// Handle rotations
 			if (glm::abs(controller.getAxis(AGE_JOYSTICK_AXIS_RIGHTX)) > 0.3)
-				_cameraAngles[camIdx].y -= controller.getAxis(AGE_JOYSTICK_AXIS_RIGHTX) * camRotationSpeed * time;
+				_cameraAngles[camIdx].y -= controller.getAxis(AGE_JOYSTICK_AXIS_RIGHTX) * component->camRotationSpeed * time;
 			if (glm::abs(controller.getAxis(AGE_JOYSTICK_AXIS_RIGHTY)) > 0.3)
-				_cameraAngles[camIdx].x -= controller.getAxis(AGE_JOYSTICK_AXIS_RIGHTY) * camRotationSpeed * time;
+				_cameraAngles[camIdx].x -= controller.getAxis(AGE_JOYSTICK_AXIS_RIGHTY) * component->camRotationSpeed * time;
 		}
 	}
 

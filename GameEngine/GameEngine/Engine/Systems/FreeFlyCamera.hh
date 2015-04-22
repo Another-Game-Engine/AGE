@@ -3,6 +3,7 @@
 #include <Systems/System.h>
 #include <Core/EntityFilter.hpp>
 #include <vector>
+#include <Engine/Components/FreeFlyComponent.hh>
 
 namespace AGE
 {
@@ -24,8 +25,8 @@ namespace AGE
 		virtual void mainUpdate(float time);
 		virtual void updateEnd(float time);
 
-		void _handleKeyboard(float time, Link &camLink, size_t camIdx);
-		void _handleMouse(float time, Link &camLink, size_t camIdx);
-		void _handleController(float time, Link &camLink, size_t camIdx);
+		void _handleKeyboard(float time, Link &camLink, size_t camIdx, FreeFlyComponent const *component);
+		void _handleMouse(float time, Link &camLink, size_t camIdx, FreeFlyComponent const *component);
+		void _handleController(float time, Link &camLink, size_t camIdx, FreeFlyComponent const *component);
 	};
 }
