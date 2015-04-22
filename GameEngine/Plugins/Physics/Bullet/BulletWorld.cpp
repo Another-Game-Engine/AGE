@@ -38,6 +38,116 @@ namespace AGE
 			return &world;
 		}
 
+		void BulletWorld::updateCollisions(void)
+		{
+			CollisionListener *listener = getCollisionListener();
+			std::vector<Contact> contacts;
+			for (std::pair<Collider * const, std::unordered_map<Collider *, std::size_t>> &collisionPairs : collisions)
+			{
+				for (std::pair<Collider * const, std::size_t> &pair : collisionPairs.second)
+				{
+					if (pair.second > 0)
+					{
+						--pair.second;
+						if (pair.second == 0)
+						{
+							listener->onCollision(collisionPairs.first, pair.first, contacts, CollisionType::Lost);
+						}
+					}
+				}
+			}
+		}
+
+		void BulletWorld::updateTriggers(void)
+		{
+			TriggerListener *listener = getTriggerListener();
+			for (std::pair<Collider * const, std::unordered_map<Collider *, std::size_t>> &triggerPairs : triggers)
+			{
+				for (std::pair<Collider * const, std::size_t> &pair : triggerPairs.second)
+				{
+					if (pair.second > 0)
+					{
+						--pair.second;
+						if (pair.second == 0)
+						{
+							listener->onTrigger(triggerPairs.first, pair.first, TriggerType::Lost);
+						}
+					}
+				}
+			}
+		}
+
+		void BulletWorld::processCollisionsAndTriggers(void)
+		{
+			const btDispatcher *dispatcher = world.getDispatcher();
+			const int numberOfManifolds = dispatcher->getNumManifolds();
+			for (int index = 0; index < numberOfManifolds; ++index)
+			{
+				const btPersistentManifold *contactManifold = const_cast<btDispatcher *>(dispatcher)->getManifoldByIndexInternal(index);
+				const btRigidBody *body0 = btRigidBody::upcast(contactManifold->getBody0());
+				const btRigidBody *body1 = btRigidBody::upcast(contactManifold->getBody1());
+				const bool body0IsTrigger = (body0->getCollisionFlags() & btCollisionObject::CF_NO_CONTACT_RESPONSE) != 0;
+				const bool body1IsTrigger = (body1->getCollisionFlags() & btCollisionObject::CF_NO_CONTACT_RESPONSE) != 0;
+				if (body0 == nullptr || body1 == nullptr || (body0IsTrigger && body1IsTrigger))
+				{
+					continue;
+				}
+				const int numberOfContacts = contactManifold->getNumContacts();
+				Collider *firstCollider = static_cast<ColliderInterface *>(static_cast<BulletCollider *>(body0->getUserPointer()))->getCollider();
+				Collider *secondCollider = static_cast<ColliderInterface *>(static_cast<BulletCollider *>(body0->getUserPointer()))->getCollider();
+				if (numberOfContacts > 0)
+				{
+					if (body0IsTrigger)
+					{
+						processTriggers(firstCollider, secondCollider);
+					}
+					else if (body1IsTrigger)
+					{
+						processTriggers(secondCollider, firstCollider);
+					}
+					else
+					{
+						processCollisions(firstCollider, secondCollider, contactManifold, numberOfContacts);
+					}
+				}
+			}
+		}
+
+		void BulletWorld::processCollisions(Collider *firstCollider, Collider *secondCollider, const btPersistentManifold *contactManifold, int numberOfContacts)
+		{
+			CollisionListener *collisionListener = getCollisionListener();
+			std::vector<Contact> firstColliderContacts;
+			std::vector<Contact> secondColliderContacts;
+			for (int contactNumber = 0; contactNumber < numberOfContacts; ++contactNumber)
+			{
+				const btManifoldPoint &contactPoint = contactManifold->getContactPoint(contactNumber);
+				if (contactPoint.getDistance() < 0.0f)
+				{
+					const btVector3 &positionOnBody0 = contactPoint.getPositionWorldOnA();
+					const btVector3 &positionOnBody1 = contactPoint.getPositionWorldOnB();
+					const btVector3 normalOnBody0 = -contactPoint.m_normalWorldOnB;
+					const btVector3 &normalOnBody1 = contactPoint.m_normalWorldOnB;
+					firstColliderContacts.push_back({ glm::vec3(positionOnBody0.x(), positionOnBody0.y(), positionOnBody0.z()), glm::vec3(normalOnBody0.x(), normalOnBody0.y(), normalOnBody0.z()) });
+					secondColliderContacts.push_back({ glm::vec3(positionOnBody1.x(), positionOnBody1.y(), positionOnBody1.z()), glm::vec3(normalOnBody1.x(), normalOnBody1.y(), normalOnBody1.z()) });
+				}
+			}
+			std::size_t &hint = collisions[firstCollider][secondCollider];
+			const CollisionType collisionType = hint == 0 ? CollisionType::New : CollisionType::Persistent;
+			hint = hint == 0 ? 2 : hint + 1;
+			collisions[secondCollider][firstCollider] = hint;
+			collisionListener->onCollision(firstCollider, secondCollider, firstColliderContacts, collisionType);
+			collisionListener->onCollision(secondCollider, firstCollider, secondColliderContacts, collisionType);
+		}
+
+		void BulletWorld::processTriggers(Collider *triggerCollider, Collider *otherCollider)
+		{
+			TriggerListener *triggerListener = getTriggerListener();
+			std::size_t &hint = triggers[triggerCollider][otherCollider];
+			const TriggerType triggerType = hint == 0 ? TriggerType::New : TriggerType::Persistent;
+			hint = hint == 0 ? 2 : hint + 1;
+			triggerListener->onTrigger(triggerCollider, otherCollider, triggerType);
+		}
+
 		// Inherited Methods
 		void BulletWorld::setGravity(const glm::vec3 &gravity)
 		{
@@ -65,6 +175,9 @@ namespace AGE
 		void BulletWorld::simulate(float stepSize)
 		{
 			world.stepSimulation(stepSize);
+			processCollisionsAndTriggers();
+			updateCollisions();
+			updateTriggers();
 		}
 
 		RigidBodyInterface *BulletWorld::createRigidBody(Private::GenericData *data)

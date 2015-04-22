@@ -70,13 +70,13 @@ namespace AGE
 		// Inherited Methods
 		void BulletCollider::setAsTrigger(bool mustBeATrigger)
 		{
-			// TO_DO
+			btRigidBody *body = getDataAs<btRigidBody>();
+			body->setCollisionFlags(mustBeATrigger ? body->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE : body->getCollisionFlags() & ~btCollisionObject::CF_NO_CONTACT_RESPONSE);
 		}
 
 		bool BulletCollider::isATrigger(void) const
 		{
-			// TO_DO
-			return false;
+			return (getDataAs<btRigidBody>()->getCollisionFlags() & btCollisionObject::CF_NO_CONTACT_RESPONSE) != 0;
 		}
 
 		void BulletCollider::setFilterGroup(FilterGroup group)

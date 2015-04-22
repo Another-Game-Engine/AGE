@@ -1,5 +1,7 @@
 #pragma once
 
+#include <unordered_map>
+
 #include <btBulletDynamicsCommon.h>
 
 #include "WorldInterface.hpp"
@@ -48,8 +50,23 @@ namespace AGE
 
 			std::uint32_t groupCollisionFlags[32];
 
+			std::unordered_map<Collider *, std::unordered_map<Collider *, std::size_t>> collisions;
+
+			std::unordered_map<Collider *, std::unordered_map<Collider *, std::size_t>> triggers;
+			
 			// Destructor
 			virtual ~BulletWorld(void);
+
+			// Methods
+			void processCollisionsAndTriggers(void);
+
+			void updateCollisions(void);
+
+			void updateTriggers(void);
+
+			void processCollisions(Collider *firstCollider, Collider *secondCollider, const btPersistentManifold *contactManifold, int numberOfContacts);
+
+			void processTriggers(Collider *triggerCollider, Collider *otherCollider);
 
 			// Inherited Methods
 			void setGravity(const glm::vec3 &gravity) override final;
