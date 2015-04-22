@@ -14,7 +14,10 @@
 namespace AGE
 {
 	SpotLightComponent::SpotLightComponent()
-		:  _color(1),
+		: _color(1),
+		_range(1.0f, 0.1f, 0.01f),
+		_exponent(5.f),
+		_cutOff(0.5f),
 		_map(nullptr)
 	{
 	}
