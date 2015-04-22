@@ -16,9 +16,13 @@ namespace AGE
 		BulletWorld::BulletWorld(BulletPhysics *physics)
 			: WorldInterface(physics)
 		{
-			world.setGravity(btVector3(GetDefaultGravity().x, GetDefaultGravity().y, GetDefaultGravity().z));
+			for (std::size_t index = 0; index < sizeof(groupCollisionFlags) / sizeof(*groupCollisionFlags); ++index)
+			{
+				groupCollisionFlags[index] = 0xFFFFFFFF;
+			}
 			world.getPairCache()->setOverlapFilterCallback(this);
 			world.getDispatchInfo().m_useContinuous = true;
+			setGravity(GetDefaultGravity());
 		}
 
 		// Destructor

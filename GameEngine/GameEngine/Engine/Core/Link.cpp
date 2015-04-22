@@ -51,11 +51,6 @@ void Link::setPosition(const glm::vec3 &v)
 {
 	_userModification = true;
 	internalSetPosition(v);
-	RigidBody *rigidBody = static_cast<RigidBody *>(_entityPtr->getComponent(Component<RigidBody>::getTypeId()));
-	if (rigidBody != nullptr)
-	{
-		rigidBody->setPosition(getPosition());
-	}
 }
 
 void Link::setScale(const glm::vec3 &v) {
@@ -78,11 +73,6 @@ void Link::setOrientation(const glm::quat &v)
 {
 	_userModification = true;
 	internalSetOrientation(v);
-	RigidBody *rigidBody = static_cast<RigidBody *>(_entityPtr->getComponent(Component<RigidBody>::getTypeId()));
-	if (rigidBody != nullptr)
-	{
-		rigidBody->setRotation(getOrientation());
-	}
 }
 
 void Link::setForward(const glm::vec3 &v)

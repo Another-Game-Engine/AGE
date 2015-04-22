@@ -6,12 +6,11 @@
 
 namespace AGE
 {
-	struct Link;
+	class PhysicsSystem;
 
 	class RigidBody final : public ComponentBase
 	{
-		// Friendships
-		friend Link;
+		friend PhysicsSystem;
 
 	public:
 		// Constructors

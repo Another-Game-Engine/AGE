@@ -8,7 +8,7 @@ namespace AGE
 	{
 		// Constructors
 		PhysXCapsuleCollider::PhysXCapsuleCollider(WorldInterface *world, Private::GenericData *data)
-			: ColliderInterface(world, data), CapsuleColliderInterface(world, data), PhysXCollider(world, data, static_cast<PhysXPhysics *>(world->getPhysics())->getPhysics()->createShape(physx::PxCapsuleGeometry(GetDefaultRadius(), GetDefaultHeight() / 2.0f), *static_cast<const PhysXMaterial *>(getMaterial())->material))
+			: ColliderInterface(world, data), CapsuleColliderInterface(world, data), PhysXCollider(world, data, static_cast<PhysXPhysics *>(world->getPhysics())->getPhysics()->createShape(physx::PxCapsuleGeometry(GetDefaultRadius(), GetDefaultHeight() / 2.0f), *static_cast<const PhysXMaterial *>(getMaterial())->material, true))
 		{
 			setCenter(GetDefaultCenter());
 		}

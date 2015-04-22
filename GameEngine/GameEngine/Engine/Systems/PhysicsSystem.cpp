@@ -71,7 +71,12 @@ namespace AGE
 	{
 		assert(physics != nullptr && "System already finalized");
 		Singleton<Logger>::getInstance()->log(Logger::Level::Normal, "Finalizing PhysicsSystem with plugin '", Physics::GetPluginNameForEngine(physics->getPluginType()), "'.");
+		const Physics::EngineType engineType = physics->getPluginType();
 		physics->shutdown();
+		if (engineType == Physics::EngineType::Null)
+		{
+			delete physics;
+		}
 		physics = nullptr;
 		// Set Dependency to the fallback plugin (physics disabled) --> Needed if a RigidBody is added while no PhysicsSystem exists
 		_scene->removeInstance<Physics::PhysicsInterface>();
@@ -82,6 +87,19 @@ namespace AGE
 	{
 		physics = pluginData->plugin;
 		return true;
+	}
+
+	void PhysicsSystem::updateBegin(float elapsedTime)
+	{
+		RigidBody *rigidBody = nullptr;
+		Link *link = nullptr;
+		for (Entity entity : entityFilter.getCollection())
+		{
+			rigidBody = entity.getComponent<RigidBody>();
+			link = entity.getLinkPtr();
+			rigidBody->setPosition(link->getPosition());
+			rigidBody->setRotation(link->getOrientation());
+		}
 	}
 
 	void PhysicsSystem::mainUpdate(float elapsedTime)

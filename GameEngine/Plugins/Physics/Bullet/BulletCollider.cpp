@@ -33,6 +33,7 @@ namespace AGE
 			btRigidBody *body = getDataAs<btRigidBody>();
 			body->setUserPointer(this);
 			body->setCollisionShape(collisionShape);
+			setAsTrigger(IsTriggerByDefault());
 		}
 
 		// Destructor

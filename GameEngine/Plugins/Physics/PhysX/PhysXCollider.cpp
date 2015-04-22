@@ -31,6 +31,7 @@ namespace AGE
 			physx::PxRigidDynamic *body = getDataAs<physx::PxRigidDynamic>();
 			body->userData = this;
 			body->attachShape(*shape);
+			setAsTrigger(IsTriggerByDefault());
 		}
 
 		// Destructor

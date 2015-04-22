@@ -161,7 +161,10 @@ namespace AGE
 			transform.p.y = position.y;
 			transform.p.z = position.z;
 			actor->setGlobalPose(transform);
-			actor->setKinematicTarget(transform);
+			if (isKinematic())
+			{
+				actor->setKinematicTarget(transform);
+			}
 		}
 
 		glm::vec3 PhysXRigidBody::getPosition(void) const
@@ -179,7 +182,10 @@ namespace AGE
 			transform.q.z = rotation.z;
 			transform.q.w = rotation.w;
 			actor->setGlobalPose(transform);
-			actor->setKinematicTarget(transform);
+			if (isKinematic())
+			{
+				actor->setKinematicTarget(transform);
+			}
 		}
 
 		glm::quat PhysXRigidBody::getRotation(void) const

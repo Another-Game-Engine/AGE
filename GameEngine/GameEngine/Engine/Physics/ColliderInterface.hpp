@@ -113,6 +113,9 @@ namespace AGE
 			// Destructor
 			virtual ~ColliderInterface(void);
 
+			// Static Methods
+			static bool IsTriggerByDefault(void);
+
 			// Virtual Methods
 			virtual void scale(const glm::vec3 &scaling) = 0;
 

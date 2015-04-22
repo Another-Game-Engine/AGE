@@ -48,6 +48,7 @@ namespace AGE
 			{
 				groupCollisionFlags[index] = 0xFFFFFFFF;
 			}
+			sceneDescription.broadPhaseCallback = this;
 			sceneDescription.filterShader = &PhysXWorld::FilterShader;
 			sceneDescription.filterShaderData = static_cast<const void *>(groupCollisionFlags);
 			sceneDescription.filterShaderDataSize = sizeof(groupCollisionFlags);
@@ -63,6 +64,7 @@ namespace AGE
 		{
 			if (scene)
 			{
+				scene->setBroadPhaseCallback(nullptr);
 				scene->setSimulationEventCallback(nullptr);
 				scene->release();
 				scene = nullptr;
@@ -258,6 +260,16 @@ namespace AGE
 				Collider *otherCollider = static_cast<ColliderInterface *>(static_cast<PhysXCollider *>(triggerPair.otherActor->userData))->getCollider();
 				triggerListener->onTrigger(triggerCollider, otherCollider, triggerType);
 			}
+		}
+
+		void PhysXWorld::onObjectOutOfBounds(physx::PxShape &shape, physx::PxActor &actor)
+		{
+			return;
+		}
+
+		void PhysXWorld::onObjectOutOfBounds(physx::PxAggregate &aggregate)
+		{
+			return;
 		}
 	}
 }

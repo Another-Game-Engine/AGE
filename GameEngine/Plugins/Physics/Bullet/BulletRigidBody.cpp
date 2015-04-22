@@ -147,7 +147,6 @@ namespace AGE
 
 		void BulletRigidBody::setMaxAngularVelocity(float maxAngularVelocity)
 		{
-			assert(!"Not supported by Bullet");
 			this->maxAngularVelocity = maxAngularVelocity;
 		}
 
@@ -158,7 +157,6 @@ namespace AGE
 
 		void BulletRigidBody::setMaxDepenetrationVelocity(float maxDepenetrationVelocity)
 		{
-			assert(!"Not supported by Bullet");
 			this->maxDepenetrationVelocity = maxDepenetrationVelocity;
 		}
 
@@ -241,14 +239,12 @@ namespace AGE
 					getDataAs<btRigidBody>()->applyCentralForce(btVector3(force.x, force.y, force.z));
 					break;
 				case AGE::Physics::ForceMode::Acceleration:
-					assert(!"Not supported by Bullet");
 					getDataAs<btRigidBody>()->applyCentralForce(btVector3(force.x, force.y, force.z));
 					break;
 				case AGE::Physics::ForceMode::Impulse:
 					getDataAs<btRigidBody>()->applyCentralImpulse(btVector3(force.x, force.y, force.z));
 					break;
 				case AGE::Physics::ForceMode::VelocityChange:
-					assert(!"Not supported by Bullet");
 					getDataAs<btRigidBody>()->applyCentralForce(btVector3(force.x, force.y, force.z));
 					break;
 				default:
@@ -266,14 +262,12 @@ namespace AGE
 					body->applyForce(btVector3(force.x, force.y, force.z), btVector3(worldPosition.x(), worldPosition.y(), worldPosition.z()));
 					break;
 				case AGE::Physics::ForceMode::Acceleration:
-					assert(!"Not supported by Bullet");
 					body->applyForce(btVector3(force.x, force.y, force.z), btVector3(worldPosition.x(), worldPosition.y(), worldPosition.z()));
 					break;
 				case AGE::Physics::ForceMode::Impulse:
 					body->applyImpulse(btVector3(force.x, force.y, force.z), btVector3(worldPosition.x(), worldPosition.y(), worldPosition.z()));
 					break;
 				case AGE::Physics::ForceMode::VelocityChange:
-					assert(!"Not supported by Bullet");
 					body->applyForce(btVector3(force.x, force.y, force.z), btVector3(worldPosition.x(), worldPosition.y(), worldPosition.z()));
 					break;
 				default:
@@ -289,14 +283,12 @@ namespace AGE
 					getDataAs<btRigidBody>()->applyForce(btVector3(force.x, force.y, force.z), btVector3(position.x, position.y, position.z));
 					break;
 				case AGE::Physics::ForceMode::Acceleration:
-					assert(!"Not supported by Bullet");
 					getDataAs<btRigidBody>()->applyForce(btVector3(force.x, force.y, force.z), btVector3(position.x, position.y, position.z));
 					break;
 				case AGE::Physics::ForceMode::Impulse:
 					getDataAs<btRigidBody>()->applyImpulse(btVector3(force.x, force.y, force.z), btVector3(position.x, position.y, position.z));
 					break;
 				case AGE::Physics::ForceMode::VelocityChange:
-					assert(!"Not supported by Bullet");
 					getDataAs<btRigidBody>()->applyForce(btVector3(force.x, force.y, force.z), btVector3(position.x, position.y, position.z));
 					break;
 				default:
@@ -312,14 +304,12 @@ namespace AGE
 					getDataAs<btRigidBody>()->applyTorque(btVector3(torque.x, torque.y, torque.z));
 					break;
 				case AGE::Physics::ForceMode::Acceleration:
-					assert(!"Not supported by Bullet");
 					getDataAs<btRigidBody>()->applyTorque(btVector3(torque.x, torque.y, torque.z));
 					break;
 				case AGE::Physics::ForceMode::Impulse:
 					getDataAs<btRigidBody>()->applyTorqueImpulse(btVector3(torque.x, torque.y, torque.z));
 					break;
 				case AGE::Physics::ForceMode::VelocityChange:
-					assert(!"Not supported by Bullet");
 					getDataAs<btRigidBody>()->applyTorque(btVector3(torque.x, torque.y, torque.z));
 					break;
 				default:

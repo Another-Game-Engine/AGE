@@ -85,7 +85,7 @@ namespace AGE
 		REGISTER_COMPONENT_TYPE(AGE::Collider);
 
 		addSystem<AGE::DebugSystem>(0);
-		addSystem<AGE::PhysicsSystem>(0, Physics::EngineType::PhysX);
+		addSystem<AGE::PhysicsSystem>(0, Physics::EngineType::Bullet);
 
 		addSystem<AGE::LifetimeSystem>(2);
 		addSystem<AGE::FreeFlyCamera>(0);
@@ -193,11 +193,11 @@ namespace AGE
 				mesh->enableMode(RenderModes::AGE_OPAQUE);
 
 				RigidBody *body = e.addComponent<RigidBody>();
-				if (i % 4 == 0)
+				if (i % 2 == 0)
 					e.addComponent<Collider>(Physics::ColliderType::Sphere);
 				else
 					e.addComponent<Collider>(Physics::ColliderType::Box);
-				body->addRelativeTorque(glm::vec3(std::fmod(rand(), 334.0f), std::fmod(rand(), 334.0f), std::fmod(rand(), 334.0f)));
+				body->addRelativeTorque(glm::vec3(std::fmod(rand(), 300.0f), std::fmod(rand(), 300.0f), std::fmod(rand(), 300.0f)), Physics::ForceMode::Acceleration);
 			}
 			_chunkCounter = 0;
 		}

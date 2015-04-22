@@ -16,13 +16,11 @@ namespace AGE
 		// Inherited Methods
 		void BulletBoxCollider::setCenter(const glm::vec3 &center)
 		{
-			assert(!"Not supported by Bullet");
 			this->center = center;
 		}
 
 		glm::vec3 BulletBoxCollider::getCenter(void) const
 		{
-			assert(!"Not supported by Bullet");
 			return center;
 		}
 

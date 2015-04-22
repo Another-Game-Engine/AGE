@@ -16,7 +16,7 @@ namespace AGE
 {
 	namespace Physics
 	{
-		class PhysXWorld final : public WorldInterface, public physx::PxSimulationEventCallback, public MemoryPoolHelper<PhysXRigidBody, PhysXMaterial, PhysXBoxCollider, PhysXCapsuleCollider, PhysXMeshCollider, PhysXSphereCollider>
+		class PhysXWorld final : public WorldInterface, public physx::PxSimulationEventCallback, public physx::PxBroadPhaseCallback, public MemoryPoolHelper<PhysXRigidBody, PhysXMaterial, PhysXBoxCollider, PhysXCapsuleCollider, PhysXMeshCollider, PhysXSphereCollider>
 		{
 		public:
 			// Constructors
@@ -79,6 +79,10 @@ namespace AGE
 			void onContact(const physx::PxContactPairHeader &pairHeader, const physx::PxContactPair *pairs, physx::PxU32 numberOfPairs) override final;
 
 			void onTrigger(physx::PxTriggerPair *pairs, physx::PxU32 numberOfPairs) override final;
+
+			void onObjectOutOfBounds(physx::PxShape &shape, physx::PxActor &actor) override final;
+
+			void onObjectOutOfBounds(physx::PxAggregate &aggregate) override final;
 		};
 	}
 }

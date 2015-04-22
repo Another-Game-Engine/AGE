@@ -11,6 +11,12 @@ namespace AGE
 {
 	namespace Physics
 	{
+		// Static Methods
+		inline bool ColliderInterface::IsTriggerByDefault(void)
+		{
+			return false;
+		}
+
 		// Constructors
 		inline ColliderInterface::ColliderInterface(WorldInterface *world, Private::GenericData *data)
 			: world(world), data(data), material(world->createMaterial(this))
