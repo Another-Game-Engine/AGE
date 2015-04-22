@@ -26,7 +26,7 @@ namespace AGE
 
 		private:
 			// Destructor
-			~BulletRigidBody(void) = default;
+			~BulletRigidBody(void);
 
 			// Attributes
 			float maxAngularVelocity = 0.0f;

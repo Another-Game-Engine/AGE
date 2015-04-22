@@ -43,7 +43,7 @@ namespace AGE
 			physx::PxMaterial *material = nullptr;
 
 			// Destructor
-			~PhysXMaterial(void) = default;
+			~PhysXMaterial(void);
 
 			// Inherited Methods
 			void setStaticFriction(float staticFriction) override final;

@@ -1,18 +1,26 @@
 #pragma once
 
+#include <btBulletDynamicsCommon.h>
+#include <btBulletCollisionCommon.h>
+
 #include "ColliderInterface.hpp"
 
 namespace AGE
 {
 	namespace Physics
 	{
+		class BulletRigidBody;
+
 		class BulletCollider : public virtual ColliderInterface
 		{
+			// Friendship
+			friend BulletRigidBody;
+
 		public:
 			// Constructors
 			BulletCollider(void) = delete;
 
-			BulletCollider(WorldInterface *world, Private::GenericData *data);
+			BulletCollider(WorldInterface *world, Private::GenericData *data, btCollisionShape *collisionShape);
 
 			BulletCollider(const BulletCollider &) = delete;
 
@@ -21,9 +29,21 @@ namespace AGE
 
 		protected:
 			// Destructor
-			virtual ~BulletCollider(void) = default;
+			virtual ~BulletCollider(void);
+
+			// Methods
+			btCollisionShape *getShape(void);
+
+			const btCollisionShape *getShape(void) const;
 
 		private:
+			// Attributes
+			btCollisionShape *collisionShape = nullptr;
+
+			BulletRigidBody *rigidBody = nullptr;
+
+			FilterGroup filterGroup = FilterGroup::GroupI;
+
 			// Inherited Methods
 			void setAsTrigger(bool mustBeATrigger) override final;
 

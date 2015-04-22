@@ -1,4 +1,5 @@
 #include "BulletRigidBody.hpp"
+#include "BulletCollider.hpp"
 #include "BulletWorld.hpp"
 
 namespace AGE
@@ -13,7 +14,18 @@ namespace AGE
 			{
 				getData()->data = new btRigidBody(static_cast<btScalar>(0.0f), new btDefaultMotionState(), nullptr);
 				assert(getData()->data != nullptr && "Impossible to create actor");
-				world->getWorld()->addRigidBody(getDataAs<btRigidBody>());
+				btRigidBody *body = getDataAs<btRigidBody>();
+				world->getWorld()->addRigidBody(body);
+				body->setUserPointer(this);
+			}
+			else
+			{
+				btRigidBody *body = getDataAs<btRigidBody>();
+				BulletCollider *collider = static_cast<BulletCollider *>(body->getUserPointer());
+				collider->rigidBody = this;
+				btDiscreteDynamicsWorld *bulletWorld = world->getWorld();
+				bulletWorld->removeRigidBody(body);
+				bulletWorld->addRigidBody(body, static_cast<short>(collider->getFilterGroup()), static_cast<short>(-1));
 			}
 			setAngularDrag(GetDefaultAngularDrag());
 			setAngularVelocity(GetDefaultAngularVelocity());
@@ -27,6 +39,26 @@ namespace AGE
 			affectByGravity(IsAffectedByGravityByDefault());
 			setAsKinematic(IsKinematicByDefault());
 			setCollisionDetectionMode(GetDefaultCollisionDetectionMode());
+		}
+
+		// Destructor
+		BulletRigidBody::~BulletRigidBody(void)
+		{
+			btRigidBody *body = getDataAs<btRigidBody>();
+			BulletCollider *collider = static_cast<BulletCollider *>(body->getUserPointer());
+			if (collider == nullptr || static_cast<void *>(collider) == this)
+			{
+				static_cast<BulletWorld *>(getWorld())->getWorld()->removeRigidBody(body);
+				delete body;
+				getData()->data = nullptr;
+			}
+			else
+			{
+				affectByGravity(false);
+				setAsKinematic(true);
+				setMass(0.0f);
+				collider->rigidBody = nullptr;
+			}
 		}
 
 		// Inherited Methods
@@ -161,35 +193,44 @@ namespace AGE
 
 		void BulletRigidBody::affectByGravity(bool mustBeAffectedByGravity)
 		{
-			// TO_DO
+			const glm::vec3 gravity = mustBeAffectedByGravity ? getWorld()->getGravity() : glm::vec3();
+			getDataAs<btRigidBody>()->setGravity(btVector3(gravity.x, gravity.y, gravity.z));
 		}
 
 		bool BulletRigidBody::isAffectedByGravity(void) const
 		{
-			// TO_DO
-			return false;
+			return !getDataAs<btRigidBody>()->getGravity().isZero();
 		}
 
 		void BulletRigidBody::setAsKinematic(bool mustBeKinematic)
 		{
-			// TO_DO
+			btRigidBody *body = getDataAs<btRigidBody>();
+			if (mustBeKinematic)
+			{
+				body->setCollisionFlags(body->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
+				body->setActivationState(DISABLE_DEACTIVATION);
+			}
+			else
+			{
+				body->setCollisionFlags(body->getCollisionFlags() & ~btCollisionObject::CF_KINEMATIC_OBJECT);
+				body->setActivationState(ACTIVE_TAG);
+			}
 		}
 
 		bool BulletRigidBody::isKinematic(void) const
 		{
-			// TO_DO
-			return false;
+			const btRigidBody *body = getDataAs<btRigidBody>();
+			return (body->getCollisionFlags() & btCollisionObject::CF_KINEMATIC_OBJECT) && body->getActivationState() == DISABLE_DEACTIVATION;
 		}
 
 		void BulletRigidBody::setCollisionDetectionMode(CollisionDetectionMode collisionDetectionMode)
 		{
-			// TO_DO
+			assert(collisionDetectionMode == CollisionDetectionMode::Continuous && "Bullet doesn't support this type of collision detection");
 		}
 
 		CollisionDetectionMode BulletRigidBody::getCollisionDetectionMode(void) const
 		{
-			// TO_DO
-			return CollisionDetectionMode::Discrete;
+			return CollisionDetectionMode::Continuous;
 		}
 
 		void BulletRigidBody::addForce(const glm::vec3 &force, ForceMode forceMode)
@@ -222,18 +263,18 @@ namespace AGE
 			switch (forceMode)
 			{
 				case AGE::Physics::ForceMode::Force:
-					body->applyForce(btVector3(force.x, force.y, force.z), btVector3(worldPosition.x, worldPosition.y, worldPosition.z));
+					body->applyForce(btVector3(force.x, force.y, force.z), btVector3(worldPosition.x(), worldPosition.y(), worldPosition.z()));
 					break;
 				case AGE::Physics::ForceMode::Acceleration:
 					assert(!"Not supported by Bullet");
-					body->applyForce(btVector3(force.x, force.y, force.z), btVector3(worldPosition.x, worldPosition.y, worldPosition.z));
+					body->applyForce(btVector3(force.x, force.y, force.z), btVector3(worldPosition.x(), worldPosition.y(), worldPosition.z()));
 					break;
 				case AGE::Physics::ForceMode::Impulse:
-					body->applyImpulse(btVector3(force.x, force.y, force.z), btVector3(worldPosition.x, worldPosition.y, worldPosition.z));
+					body->applyImpulse(btVector3(force.x, force.y, force.z), btVector3(worldPosition.x(), worldPosition.y(), worldPosition.z()));
 					break;
 				case AGE::Physics::ForceMode::VelocityChange:
 					assert(!"Not supported by Bullet");
-					body->applyForce(btVector3(force.x, force.y, force.z), btVector3(worldPosition.x, worldPosition.y, worldPosition.z));
+					body->applyForce(btVector3(force.x, force.y, force.z), btVector3(worldPosition.x(), worldPosition.y(), worldPosition.z()));
 					break;
 				default:
 					break;

@@ -8,7 +8,7 @@ namespace AGE
 	{
 		// Constructors
 		BulletMeshCollider::BulletMeshCollider(WorldInterface *world, Private::GenericData *data)
-			: ColliderInterface(world, data), MeshColliderInterface(world, data), BulletCollider(world, data)
+			: ColliderInterface(world, data), MeshColliderInterface(world, data), BulletCollider(world, data, nullptr)
 		{
 			// TO_DO
 			return;

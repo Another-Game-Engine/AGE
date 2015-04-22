@@ -1,5 +1,6 @@
 #include "PhysXRigidBody.hpp"
 #include "PhysXWorld.hpp"
+#include "PhysXCollider.hpp"
 
 namespace AGE
 {
@@ -13,7 +14,15 @@ namespace AGE
 			{
 				getData()->data = static_cast<PhysXPhysics *>(world->getPhysics())->getPhysics()->createRigidDynamic(physx::PxTransform(physx::PxIdentity));
 				assert(getData()->data != nullptr && "Impossible to create actor");
-				world->getScene()->addActor(*getDataAs<physx::PxRigidDynamic>());
+				physx::PxRigidDynamic *body = getDataAs<physx::PxRigidDynamic>();
+				world->getScene()->addActor(*body);
+				body->userData = this;
+			}
+			else
+			{
+				physx::PxRigidDynamic *body = getDataAs<physx::PxRigidDynamic>();
+				PhysXCollider *collider = static_cast<PhysXCollider *>(body->userData);
+				collider->rigidBody = this;
 			}
 			setAngularDrag(GetDefaultAngularDrag());
 			setAngularVelocity(GetDefaultAngularVelocity());
@@ -27,6 +36,26 @@ namespace AGE
 			affectByGravity(IsAffectedByGravityByDefault());
 			setAsKinematic(IsKinematicByDefault());
 			setCollisionDetectionMode(GetDefaultCollisionDetectionMode());
+		}
+
+		// Destructor
+		PhysXRigidBody::~PhysXRigidBody(void)
+		{
+			physx::PxRigidDynamic *body = getDataAs<physx::PxRigidDynamic>();
+			PhysXCollider *collider = static_cast<PhysXCollider *>(body->userData);
+			if (collider == nullptr || static_cast<void *>(collider) == this)
+			{
+				static_cast<PhysXWorld *>(getWorld())->getScene()->removeActor(*body);
+				body->release();
+				getData()->data = nullptr;
+			}
+			else
+			{
+				affectByGravity(false);
+				setAsKinematic(true);
+				setMass(0.0f);
+				collider->rigidBody = nullptr;
+			}
 		}
 
 		// Inherited Methods

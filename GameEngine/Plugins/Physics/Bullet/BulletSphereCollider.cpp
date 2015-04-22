@@ -8,7 +8,7 @@ namespace AGE
 	{
 		// Constructors
 		BulletSphereCollider::BulletSphereCollider(WorldInterface *world, Private::GenericData *data)
-			: ColliderInterface(world, data), SphereColliderInterface(world, data), BulletCollider(world, data)
+			: ColliderInterface(world, data), SphereColliderInterface(world, data), BulletCollider(world, data, new btSphereShape(GetDefaultRadius())), center(GetDefaultCenter())
 		{
 			return;
 		}
@@ -16,24 +16,24 @@ namespace AGE
 		// Inherited Methods
 		void BulletSphereCollider::setCenter(const glm::vec3 &center)
 		{
-			// TO_DO
+			assert(!"Not supported by Bullet");
+			this->center = center;
 		}
 
 		glm::vec3 BulletSphereCollider::getCenter(void) const
 		{
-			// TO_DO
-			return glm::vec3();
+			assert(!"Not supported by Bullet");
+			return center;
 		}
 
 		void BulletSphereCollider::setRadius(float radius)
 		{
-			// TO_DO
+			static_cast<btSphereShape *>(getShape())->setUnscaledRadius(radius);
 		}
 
 		float BulletSphereCollider::getRadius(void) const
 		{
-			// TO_DO
-			return 0.0f;
+			return static_cast<const btSphereShape *>(getShape())->getRadius();
 		}
 	}
 }

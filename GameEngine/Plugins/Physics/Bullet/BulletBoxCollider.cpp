@@ -8,7 +8,7 @@ namespace AGE
 	{
 		// Constructors
 		BulletBoxCollider::BulletBoxCollider(WorldInterface *world, Private::GenericData *data)
-			: ColliderInterface(world, data), BoxColliderInterface(world, data), BulletCollider(world, data)
+			: ColliderInterface(world, data), BoxColliderInterface(world, data), BulletCollider(world, data, new btBoxShape(btVector3(GetDefaultSize().x / 2.0f, GetDefaultSize().y / 2.0f, GetDefaultSize().z / 2.0f))), center(GetDefaultCenter())
 		{
 			return;
 		}
@@ -16,13 +16,14 @@ namespace AGE
 		// Inherited Methods
 		void BulletBoxCollider::setCenter(const glm::vec3 &center)
 		{
-			// TO_DO
+			assert(!"Not supported by Bullet");
+			this->center = center;
 		}
 
 		glm::vec3 BulletBoxCollider::getCenter(void) const
 		{
-			// TO_DO
-			return glm::vec3();
+			assert(!"Not supported by Bullet");
+			return center;
 		}
 
 		void BulletBoxCollider::setSize(const glm::vec3 &size)

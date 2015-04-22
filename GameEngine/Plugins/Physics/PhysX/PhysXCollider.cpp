@@ -3,6 +3,7 @@
 #include "PhysXCollider.hpp"
 #include "PhysXMaterial.hpp"
 #include "PhysXWorld.hpp"
+#include "PhysXRigidBody.hpp"
 
 namespace AGE
 {
@@ -17,27 +18,36 @@ namespace AGE
 			{
 				getData()->data = static_cast<PhysXPhysics *>(world->getPhysics())->getPhysics()->createRigidDynamic(physx::PxTransform(physx::PxIdentity));
 				assert(getData()->data != nullptr && "Impossible to create actor");
-				static_cast<PhysXWorld *>(world)->getScene()->addActor(*getDataAs<physx::PxRigidDynamic>());
 				physx::PxRigidDynamic *body = getDataAs<physx::PxRigidDynamic>();
+				static_cast<PhysXWorld *>(world)->getScene()->addActor(*body);
 				body->setActorFlag(physx::PxActorFlag::eDISABLE_GRAVITY, true);
 				body->setRigidBodyFlag(physx::PxRigidBodyFlag::eKINEMATIC, true);
 				body->setMass(0.0f);
 			}
-			physx::PxRigidDynamic *body = getDataAs<physx::PxRigidDynamic>();
-			if (body->userData == nullptr)
+			else
 			{
-				body->userData = static_cast<ColliderInterface *>(this);
+				rigidBody = static_cast<PhysXRigidBody *>(getDataAs<physx::PxRigidDynamic>()->userData);
 			}
+			physx::PxRigidDynamic *body = getDataAs<physx::PxRigidDynamic>();
+			body->userData = this;
 			body->attachShape(*shape);
 		}
 
 		// Destructor
 		PhysXCollider::~PhysXCollider(void)
 		{
-			assert(getData() != nullptr && "Impossible to get actor");
 			physx::PxRigidDynamic *body = getDataAs<physx::PxRigidDynamic>();
-			body->userData = nullptr;
-			body->detachShape(*shape);
+			if (rigidBody == nullptr)
+			{
+				static_cast<PhysXWorld *>(getWorld())->getScene()->removeActor(*body);
+				body->release();
+				getData()->data = nullptr;
+			}
+			else
+			{
+				body->userData = nullptr;
+				body->detachShape(*shape);
+			}
 			shape->release();
 			shape = nullptr;
 		}

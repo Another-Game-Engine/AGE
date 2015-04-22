@@ -27,6 +27,9 @@ namespace AGE
 			BulletBoxCollider &operator=(const BulletBoxCollider &) = delete;
 
 		private:
+			// Attributes
+			glm::vec3 center;
+
 			// Destructor
 			~BulletBoxCollider(void) = default;
 

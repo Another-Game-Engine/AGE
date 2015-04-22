@@ -26,7 +26,7 @@ namespace AGE
 
 		private:
 			// Destructor
-			~PhysXRigidBody(void) = default;
+			~PhysXRigidBody(void);
 
 			// Inherited Methods
 			void setAngularDrag(float angularDrag) override final;

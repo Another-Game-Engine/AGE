@@ -8,8 +8,13 @@ namespace AGE
 {
 	namespace Physics
 	{
+		class PhysXRigidBody;
+
 		class PhysXCollider : public virtual ColliderInterface
 		{
+			// Friendships
+			friend PhysXRigidBody;
+
 		public:
 			// Constructors
 			PhysXCollider(void) = delete;
@@ -33,6 +38,8 @@ namespace AGE
 		private:
 			// Attributes
 			physx::PxShape *shape = nullptr;
+
+			PhysXRigidBody *rigidBody = nullptr;
 
 			// Inherited Methods
 			void setAsTrigger(bool mustBeATrigger) override final;

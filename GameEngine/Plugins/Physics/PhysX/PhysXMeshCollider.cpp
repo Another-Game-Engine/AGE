@@ -10,7 +10,7 @@ namespace AGE
 		PhysXMeshCollider::PhysXMeshCollider(WorldInterface *world, Private::GenericData *data)
 			: ColliderInterface(world, data), MeshColliderInterface(world, data), PhysXCollider(world, data, nullptr)
 		{
-			// TO_DO --> /!\ PhysXCollider last constructor parameter
+			// TO_DO
 			return;
 		}
 

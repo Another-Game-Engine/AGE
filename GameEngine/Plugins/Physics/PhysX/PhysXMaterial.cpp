@@ -12,6 +12,16 @@ namespace AGE
 			assert(material != nullptr && "Impossible to create material");
 		}
 
+		// Destructor
+		PhysXMaterial::~PhysXMaterial(void)
+		{
+			if (material != nullptr)
+			{
+				material->release();
+				material = nullptr;
+			}
+		}
+
 		// Inherited Methods
 		void PhysXMaterial::setStaticFriction(float staticFriction)
 		{
