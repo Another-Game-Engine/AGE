@@ -137,10 +137,6 @@ namespace AGE
 				loadFromJson(sceneFileName);
 			}));
 			getInstance<AssetsManager>()->loadPackage(assetPackageFileName, assetPackageFileName);
-			auto entity = createEntity();
-			auto spotLight = entity.addComponent<SpotLightComponent>();
-			entity.getLink().setPosition(glm::vec3(0, 5.f, 2.0f));
-			spotLight->set(glm::vec3(0.0f, 1.f, 0.f), glm::vec3(1.f, 0.1f, 0.01f), 0.5f, 4.0f);
 		}
 
 		if (getInstance<Input>()->getPhysicalKeyJustReleased(AGE_ESCAPE))

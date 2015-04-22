@@ -15,7 +15,7 @@ namespace AGE
 {
 	SpotLightComponent::SpotLightComponent()
 		: _color(1),
-		_range(1.0f, 0.1f, 0.01f),
+		_range(1.0f, 0.01f, 0.001f),
 		_exponent(5.f),
 		_cutOff(0.5f),
 		_map(nullptr)
@@ -52,6 +52,7 @@ namespace AGE
 		_key = AGE::GetPrepareThread()->addSpotLight();
 		entity.getLink().registerOctreeObject(_key);
 		_map = entity.getScene()->getInstance<AssetsManager>()->getSpotLightTexture();
+		AGE::GetPrepareThread()->setSpotLight(_color, _range, _exponent, _cutOff, _map, _key);
 		assert(!_key.invalid());
 	}
 
