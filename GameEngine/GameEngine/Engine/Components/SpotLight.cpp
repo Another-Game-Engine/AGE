@@ -52,20 +52,20 @@ namespace AGE
 		assert(!_key.invalid());
 	}
 
-	SpotLightComponent &SpotLightComponent::set(glm::vec3 const &color, glm::vec3 const &direction, glm::vec3 const &range, float cutOff)
+	SpotLightComponent &SpotLightComponent::set(glm::vec3 const &color, glm::vec3 const &range, float cutOff, float exponent)
 	{
 		_color = color;
-		_direction = direction;
 		_range = range;
 		_cutOff = cutOff;
-		AGE::GetPrepareThread()->setSpotLight(_color, _direction, _range, _cutOff, _map, _key);
+		_exponent = exponent;
+		AGE::GetPrepareThread()->setSpotLight(_color, _range, _exponent, _cutOff, _map, _key);
 		return (*this);
 	}
 
 	void SpotLightComponent::postUnserialization()
 	{
 		init();
-		set(_color, _direction, _range, _cutOff);
+		set(_color, _range, _exponent, _cutOff);
 	}
 
 #ifdef EDITOR_ENABLED
