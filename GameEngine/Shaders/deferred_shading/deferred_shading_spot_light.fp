@@ -44,7 +44,8 @@ void main()
 	if (lambert > 0.f) {
 		effect = max(0.0f, dot(normalize(-lightDir), normalize(spotDirection)));
 		if (effect > spot_cut_off) {
-			effect = pow(effect, spot_exponent);
+			float distance_to_border = spot_cut_off - effect;
+			effect = distance_to_border / spot_cut_off;
 			vec3 worldPosToEyes = normalize(eye_pos - worldPos);
 			vec3 reflection = reflect(normalize(-lightDir), normal);
 			specularRatio = clamp(pow(max(dot(reflection, worldPosToEyes), 0.0f), 100.f), 0.0f, 1.0f);

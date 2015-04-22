@@ -85,7 +85,6 @@ namespace AGE
 			*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("attenuation_light") = pl.light.attenuation;
 			*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("direction_light") = pl.light.direction;
 			*_programs[PROGRAM_LIGHTNING]->get_resource<Vec1>("spot_cut_off") = pl.light.spotCutOff;
-			*_programs[PROGRAM_LIGHTNING]->get_resource<Vec1>("spot_exponent") = 10.0f;
 			*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("color_light") = pl.light.color;
 			*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("ambient_color") = glm::vec3(0);
 			_painterManager->get_painter(_quadPainter)->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_LIGHTNING], Properties(), _quad);
