@@ -3,7 +3,7 @@
 #include <imgui/imgui.h>
 #include <Core/Engine.hh>
 #include <Core/AScene.hh>
-#include <Systems/BulletDynamicSystem.hpp>
+#include <Systems/PhysicsSystem.hpp>
 
 namespace AGE
 {
@@ -35,16 +35,16 @@ namespace AGE
 			GetEngine()->setTimeMultiplier(_timeMultiplier);
 		}
 
-		static bool hasPhysics = _scene->getSystem<AGE::BulletDynamicSystem>() == nullptr ? true : false;
+		static bool hasPhysics = _scene->getSystem<AGE::PhysicsSystem>() == nullptr ? true : false;
 		if (ImGui::Checkbox("Physics activated", &hasPhysics))
 		{
 			if (hasPhysics)
 			{
-				_scene->activateSystem<AGE::BulletDynamicSystem>();
+				_scene->activateSystem<AGE::PhysicsSystem>();
 			}
 			else
 			{
-				_scene->deactivateSystem<AGE::BulletDynamicSystem>();
+				_scene->deactivateSystem<AGE::PhysicsSystem>();
 			}
 		}
 		

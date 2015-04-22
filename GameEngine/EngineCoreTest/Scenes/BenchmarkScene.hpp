@@ -7,7 +7,6 @@
 #include <Core/AScene.hh>
 #include <Systems/LifetimeSystem.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include <Systems/BulletDynamicSystem.hpp>
 #include <Components/MeshRenderer.hh>
 #include <Components/Light.hh>
 #include <Components/CameraComponent.hpp>

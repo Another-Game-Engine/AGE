@@ -1,12 +1,12 @@
 #pragma once
 
-#include <Components/NewRigidBody.hpp>
+#include <Components/RigidBody.hpp>
 
 namespace AGE
 {
 	// Methods
 	template <typename Archive>
-	inline void NewRigidBody::save(Archive &ar, const std::uint32_t version) const
+	inline void RigidBody::save(Archive &ar, const std::uint32_t version) const
 	{
 		ar(cereal::make_nvp("AngularDrag", getAngularDrag()));
 		ar(cereal::make_nvp("AngularVelocity", getAngularVelocity()));
@@ -23,7 +23,7 @@ namespace AGE
 	}
 
 	template <typename Archive>
-	inline void NewRigidBody::load(Archive &ar, const std::uint32_t version)
+	inline void RigidBody::load(Archive &ar, const std::uint32_t version)
 	{
 		reset();
 		init();

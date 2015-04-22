@@ -44,7 +44,7 @@
 
 
 #include <Systems/PhysicsSystem.hpp>
-#include <Components/NewRigidBody.hpp>
+#include <Components/RigidBody.hpp>
 #include <Components/Collider.hpp>
 
 
@@ -82,23 +82,16 @@ namespace AGE
 		REGISTER_COMPONENT_TYPE(AGE::PointLightComponent);
 		REGISTER_COMPONENT_TYPE(AGE::FreeFlyComponent);
 		REGISTER_COMPONENT_TYPE(AGE::RotationComponent);
-		REGISTER_COMPONENT_TYPE(AGE::NewRigidBody);
 		REGISTER_COMPONENT_TYPE(AGE::Collider);
 
-		// TO_DO: Remove the following line
-		setInstance<AGE::BulletDynamicManager, AGE::BulletCollisionManager>()->init();
 		addSystem<AGE::DebugSystem>(0);
 		addSystem<AGE::PhysicsSystem>(0, Physics::EngineType::PhysX);
-		
-		// TO_DO: Remove following line
-		addSystem<AGE::BulletDynamicSystem>(0);
 
 		addSystem<AGE::LifetimeSystem>(2);
 		addSystem<AGE::FreeFlyCamera>(0);
 		addSystem<AGE::RotationSystem>(0);
 
 		getInstance<AGE::AssetsManager>()->setAssetsDirectory(EngineCoreTestConfiguration::GetCookedDirectory());
-		getInstance<AGE::BulletCollisionManager>()->setAssetsDirectory(EngineCoreTestConfiguration::GetCookedDirectory());
 
 		getInstance<AGE::AssetsManager>()->loadMesh(OldFile("cube/cube.sage"), "DEMO_SCENE_BASIC_ASSETS");
 		getInstance<AGE::AssetsManager>()->loadMesh(OldFile("ball/ball.sage"), "DEMO_SCENE_BASIC_ASSETS");
@@ -162,11 +155,8 @@ namespace AGE
 			mesh = e.addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("cube/cube.sage")
 				, getInstance<AGE::AssetsManager>()->getMaterial(OldFile("cube/cube.mage")));
 			mesh->enableMode(RenderModes::AGE_OPAQUE);
-			auto rigidBody = e.addComponent<RigidBody>(1.0f);
-			rigidBody->setCollisionShape(RigidBody::BOX);
-			rigidBody->getBody().setFriction(0.5f);
-			rigidBody->getBody().setRestitution(0.5f);
-			rigidBody->getBody().applyCentralImpulse(convertGLMVectorToBullet(GLOBAL_CAMERA.getLink().getOrientation() * glm::vec3(0, 0, -10)));
+			e.addComponent<RigidBody>();
+			e.addComponent<Collider>(Physics::ColliderType::Box);
 		}
 		else
 			trigger = 0.0f;
@@ -202,14 +192,12 @@ namespace AGE
 
 				mesh->enableMode(RenderModes::AGE_OPAQUE);
 
-				auto rigidBody = e.addComponent<RigidBody>(1.0f);
+				RigidBody *body = e.addComponent<RigidBody>();
 				if (i % 4 == 0)
-					rigidBody->setCollisionShape(RigidBody::SPHERE);
+					e.addComponent<Collider>(Physics::ColliderType::Sphere);
 				else
-					rigidBody->setCollisionShape(RigidBody::BOX);
-				rigidBody->getBody().setFriction(0.5f);
-				rigidBody->getBody().setRestitution(0.5f);
-				rigidBody->getBody().applyTorque(btVector3(float(rand() % 1000) / 300.0f, float(rand() % 1000) / 300.0f, float(rand() % 1000) / 300.0f));
+					e.addComponent<Collider>(Physics::ColliderType::Box);
+				body->addRelativeTorque(glm::vec3(std::fmod(rand(), 334.0f), std::fmod(rand(), 334.0f), std::fmod(rand(), 334.0f)));
 			}
 			_chunkCounter = 0;
 		}

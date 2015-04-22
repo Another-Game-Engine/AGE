@@ -6,7 +6,7 @@
 #include <Utils/Debug.hpp>
 #include <Utils/MatrixConversion.hpp>
 #include <Core/AScene.hh>
-#include <Components/NewRigidBody.hpp>
+#include <Components/RigidBody.hpp>
 #include <Components/Collider.hpp>
 
 using namespace AGE;
@@ -51,7 +51,7 @@ void Link::setPosition(const glm::vec3 &v)
 {
 	_userModification = true;
 	internalSetPosition(v);
-	NewRigidBody *rigidBody = static_cast<NewRigidBody *>(_entityPtr->getComponent(Component<NewRigidBody>::getTypeId()));
+	RigidBody *rigidBody = static_cast<RigidBody *>(_entityPtr->getComponent(Component<RigidBody>::getTypeId()));
 	if (rigidBody != nullptr)
 	{
 		rigidBody->setPosition(getPosition());
@@ -78,7 +78,7 @@ void Link::setOrientation(const glm::quat &v)
 {
 	_userModification = true;
 	internalSetOrientation(v);
-	NewRigidBody *rigidBody = static_cast<NewRigidBody *>(_entityPtr->getComponent(Component<NewRigidBody>::getTypeId()));
+	RigidBody *rigidBody = static_cast<RigidBody *>(_entityPtr->getComponent(Component<RigidBody>::getTypeId()));
 	if (rigidBody != nullptr)
 	{
 		rigidBody->setRotation(getOrientation());

@@ -15,7 +15,7 @@
 
 namespace AGE
 {
-	class NewRigidBody;
+	class RigidBody;
 	class Collider;
 
 	namespace Physics
@@ -28,7 +28,7 @@ namespace AGE
 		class WorldInterface : public Dependency < WorldInterface >
 		{
 			// Friendship
-			friend NewRigidBody;
+			friend RigidBody;
 
 			friend Collider;
 

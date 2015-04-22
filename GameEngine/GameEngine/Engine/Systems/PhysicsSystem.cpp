@@ -4,7 +4,7 @@
 #include <Physics/EngineTypeToPluginName.hpp>
 #include <Physics/WorldInterface.hpp>
 #include <Physics/Fallback/NullPhysics.hpp>
-#include <Components/NewRigidBody.hpp>
+#include <Components/RigidBody.hpp>
 #include <Systems/CollisionSystem.hpp>
 #include <Systems/TriggerSystem.hpp>
 
@@ -15,7 +15,7 @@ namespace AGE
 		: System(scene), PluginManager("CreateInterface", "DestroyInterface"), entityFilter(scene)
 	{
 		_name = "PhysicsSystem";
-		entityFilter.requireComponent<NewRigidBody>();
+		entityFilter.requireComponent<RigidBody>();
 		if (physicsEngineType == Physics::EngineType::Null)
 		{
 			physics = new Physics::NullPhysics;
@@ -91,11 +91,11 @@ namespace AGE
 
 	void PhysicsSystem::updateEnd(float elapsedTime)
 	{
-		NewRigidBody *rigidBody = nullptr;
+		RigidBody *rigidBody = nullptr;
 		Link *link = nullptr;
 		for (Entity entity : entityFilter.getCollection())
 		{
-			rigidBody = entity.getComponent<NewRigidBody>();
+			rigidBody = entity.getComponent<RigidBody>();
 			link = entity.getLinkPtr();
 			link->setPosition(rigidBody->getPosition());
 			link->setOrientation(rigidBody->getRotation());

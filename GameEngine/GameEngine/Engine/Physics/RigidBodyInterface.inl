@@ -87,13 +87,13 @@ namespace AGE
 		}
 
 		// Methods
-		inline NewRigidBody *RigidBodyInterface::getRigidBody(void)
+		inline RigidBody *RigidBodyInterface::getRigidBody(void)
 		{
 			assert(rigidBody && "Invalid rigidBody");
 			return rigidBody;
 		}
 
-		inline const NewRigidBody *RigidBodyInterface::getRigidBody(void) const
+		inline const RigidBody *RigidBodyInterface::getRigidBody(void) const
 		{
 			assert(rigidBody && "Invalid rigidBody");
 			return rigidBody;

@@ -28,13 +28,17 @@ namespace AGE
 
 		void BulletBoxCollider::setSize(const glm::vec3 &size)
 		{
-			// TO_DO
+			btBoxShape *shape = static_cast<btBoxShape *>(getShape());
+			const btVector3 halfExtents(size.x / 2.0f, size.y / 2.0f, size.z / 2.0f);
+			shape->setSafeMargin(halfExtents);
+			const btVector3 margin(shape->getMargin(), shape->getMargin(), shape->getMargin());
+			shape->setImplicitShapeDimensions((halfExtents * shape->getLocalScaling()) - margin);
 		}
 
 		glm::vec3 BulletBoxCollider::getSize(void) const
 		{
-			// TO_DO
-			return glm::vec3();
+			const btVector3 &size = static_cast<const btBoxShape *>(getShape())->getImplicitShapeDimensions();
+			return glm::vec3(size.x(), size.y(), size.z());
 		}
 	}
 }
