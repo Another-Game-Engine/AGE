@@ -73,11 +73,33 @@ namespace AGE
 	{}
 
 	void SpotLightComponent::editorDelete()
-	{}
+	{
+	}
 
 	bool SpotLightComponent::editorUpdate()
 	{
-		return false;
+		bool modified = false;
+		if (ImGui::ColorEdit3("Color", getColorPtr()))
+		{
+			set(_color, _range, _cutOff, _exponent);
+			modified = true;
+		}
+		if (ImGui::SliderFloat3("Range", glm::value_ptr(_range), 0.0f, 1.0f))
+		{
+			set(_color, _range, _cutOff, _exponent);
+			modified = true;
+		}
+		if (ImGui::InputFloat("Exponent", &_exponent))
+		{
+			set(_color, _range, _cutOff, _exponent);
+			modified = true;
+		}
+		if (ImGui::InputFloat("cut off", &_cutOff))
+		{
+			set(_color, _range, _cutOff, _exponent);
+			modified = true;
+		}
+		return modified;
 	}
 #endif
 }
