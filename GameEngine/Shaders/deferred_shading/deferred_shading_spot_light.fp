@@ -46,7 +46,10 @@ void main()
 		effect = distance_to_border / spot_cut_off;
 		vec3 worldPosToEyes = normalize(eye_pos - worldPos);
 		vec3 reflection = reflect(normalize(-lightDir), normal);
-		specularRatio = clamp(pow(max(dot(reflection, worldPosToEyes), 0.0f), 100.f), 0.0f, 1.0f);
+		//specularRatio = clamp(pow(max(dot(reflection, worldPosToEyes), 0.0f), 100.f), 0.0f, 1.0f);
+	}
+	else {
+		effect = 0;
 	}
 	color = vec4(vec3(ambient_color + lambert * color_light), specularRatio) * effect / (attenuation);
 }
