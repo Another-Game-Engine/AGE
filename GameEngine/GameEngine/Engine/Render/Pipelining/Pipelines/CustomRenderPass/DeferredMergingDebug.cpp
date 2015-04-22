@@ -49,7 +49,7 @@ namespace AGE
 		*_programs[PROGRAM_MERGING]->get_resource<Sampler2D>("debug_light_map") = _debugLightRender;
 
 		OpenGLState::glEnable(GL_BLEND);
-		OpenGLState::glEnable(GL_DEPTH_TEST);
+		OpenGLState::glDisable(GL_DEPTH_TEST);
 		OpenGLState::glDisable(GL_CULL_FACE);
 		OpenGLState::glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		_quadPainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_MERGING], Properties(), _quadVertices);
