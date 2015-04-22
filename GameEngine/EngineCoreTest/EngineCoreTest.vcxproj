@@ -41,7 +41,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(Platform)\$(Configuration)\</IntDir>
-    <IncludePath>$(SolutionDir)Vendors/OpenGL/include;$(SolutionDir)GameEngine/Engine;$(SolutionDir)GameEngine;$(ProjectDir);$(SolutionDir)Vendors;$(SolutionDir)Vendors/TinyObjLoader;$(IncludePath);$(SolutionDir)Vendors/boost_1_55_0;$(SolutionDir)Vendors\bullet\src;$(SolutionDir)Vendors\fmod\inc</IncludePath>
+    <IncludePath>$(SolutionDir)Vendors/OpenGL/include;$(SolutionDir)GameEngine/Engine;$(SolutionDir)GameEngine;$(ProjectDir);$(SolutionDir)Vendors/microprofile;$(SolutionDir)Vendors/TinyObjLoader;$(IncludePath);$(SolutionDir)Vendors/boost_1_55_0;$(SolutionDir)Vendors\bullet\src;$(SolutionDir)Vendors\fmod\inc;$(SolutionDir)Vendors</IncludePath>
     <LibraryPath>$(SolutionDir)Vendors/OpenGL/lib/x64;$(SolutionDir)Vendors\fmod\lib;$(SolutionDir)Vendors/bullet\lib\x64Debug;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
     <SourcePath>$(SolutionDir)/ResourcesForTests;</SourcePath>
   </PropertyGroup>
@@ -58,7 +58,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_MBCS;EDITOR_ENABLED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_MBCS;EDITOR_ENABLED;_CRT_SECURE_NO_WARNINGS; MICROPROFILE_GPU_TIMERS = 1; MICROPROFILE_WEBSERVER = 1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -113,6 +113,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Vendors\microprofile\microprofile.h" />
     <ClInclude Include="Components\Lifetime.hpp" />
     <ClInclude Include="Components\lifetimeComponent.hh" />
     <ClInclude Include="Components\RotationComponent.hpp" />

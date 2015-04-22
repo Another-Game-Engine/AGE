@@ -2,6 +2,8 @@
 #define GLM_FORCE_SSE2 
 #define GLM_FORCE_AVX
 
+#include <Utils/Age_microprofile.hpp>
+
 #include <stdlib.h>
 #include <crtdbg.h>
 #include <stdint.h>
@@ -40,6 +42,8 @@ using namespace AGE;
 
 int			main(int ac, char **av)
 {
+	Age_microprofileInit();
+
 	///////////////////////////////////////////////////////////////////////////////////
 	/////////// NEW IMPLEMENTATION
 	///////////
