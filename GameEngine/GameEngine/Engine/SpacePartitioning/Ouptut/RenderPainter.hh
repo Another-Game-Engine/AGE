@@ -21,7 +21,7 @@ namespace AGE
 
 	struct RenderDrawableList
 	{
-		std::bitset<RENDER_MODE_NUMBER> renderMode;
+		RenderModeSet renderMode;
 		std::vector<Key<Vertices>> vertices;
 		std::vector<Properties> properties;
 	};

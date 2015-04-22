@@ -23,5 +23,6 @@ namespace AGE
 		std::shared_ptr<Texture2D> _debugLightRender;
 		Key<Vertices> _quadVertices;
 		std::shared_ptr<Painter> _quadPainter;
+		std::shared_ptr<Painter> _lines;
 	};
 }

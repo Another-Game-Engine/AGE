@@ -18,7 +18,7 @@ namespace AGE
 		bool recompilePrograms();
 		void setNextPass(std::shared_ptr<ARender> nextPass);
 
-		bool renderModeCompatible(std::bitset<RENDER_MODE_NUMBER> const &renderMode);
+		bool renderModeCompatible(RenderModeSet const &renderMode);
 
 	protected:
 		ARender(std::shared_ptr<PaintingManager> painterManager);
@@ -27,8 +27,8 @@ namespace AGE
 
 	protected:
 		// Bitsets to test the objects against
-		std::bitset<RENDER_MODE_NUMBER> _mandatory;
-		std::bitset<RENDER_MODE_NUMBER> _forbidden;
+		RenderModeSet _mandatory;
+		RenderModeSet _forbidden;
 		// Render pass utils
 		std::shared_ptr<PaintingManager> _painterManager;
 		std::vector<std::shared_ptr<Program>> _programs;

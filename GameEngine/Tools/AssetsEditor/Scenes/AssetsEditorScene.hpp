@@ -33,6 +33,8 @@ namespace AGE
 		static std::vector<const char *> &getCookedBulletListFullPath() { return _cookedBulletFullPath; }
 		static std::vector<const char *> &getCookedMaterialList() { return _cookedMaterialFiles; }
 		static std::vector<const char *> &getCookedMaterialListFullPath() { return _cookedMaterialFullPath; }
+		static std::vector<const char *> &getCookedTextureList() { return _cookedTextureFiles; }
+		static std::vector<const char *> &getCookedTextureListFullPath() { return _cookedTextureFullPath; }
 	private:
 		static AE::Folder _raw;
 	 	static AE::Folder _cook;
@@ -56,6 +58,9 @@ namespace AGE
 
 		static std::vector<const char *> _cookedMaterialFullPath;
 		static std::vector<const char *> _cookedMaterialFiles;
+
+		static std::vector<const char *> _cookedTextureFullPath;
+		static std::vector<const char *> _cookedTextureFiles;
 
 		std::shared_ptr<AE::RawFile> _selectedRaw;
 		std::set<std::shared_ptr<AE::CookConfig>> _configs;

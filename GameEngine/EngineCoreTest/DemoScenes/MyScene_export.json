@@ -3,23 +3,23 @@
     "Component type map": [
         {
             "key": 0,
-            "value": 5355615174208623061
+            "value": 9818697393957024739
         },
         {
             "key": 1,
-            "value": 1713135011246741269
+            "value": 5355615174208623061
         },
         {
             "key": 2,
-            "value": 573189261411184160
+            "value": 1713135011246741269
         },
         {
             "key": 3,
-            "value": 4665681159133520176
+            "value": 573189261411184160
         },
         {
             "key": 4,
-            "value": 9818697393957024739
+            "value": 4665681159133520176
         },
         {
             "key": 5,
@@ -58,11 +58,11 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
-            1
+            1,
+            2
         ],
         "AGE::MeshRenderer": {
-            "cereal_class_version": 0,
+            "cereal_class_version": 1,
             "value0": {
                 "ptr_wrapper": {
                     "valid": 1,
@@ -72,6 +72,10 @@
                         "value2": ""
                     }
                 }
+            },
+            "value1": {
+                "type": 0,
+                "data": 16
             }
         },
         "AGE::RigidBody": {
@@ -118,9 +122,9 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
             1,
-            2
+            2,
+            3
         ],
         "AGE::MeshRenderer": {
             "value0": {
@@ -132,6 +136,10 @@
                         "value2": ""
                     }
                 }
+            },
+            "value1": {
+                "type": 0,
+                "data": 16
             }
         },
         "AGE::RigidBody": {
@@ -190,9 +198,9 @@
         "children": [],
         "flags": 0,
         "components_number": [
-            0,
             1,
-            2
+            2,
+            3
         ],
         "AGE::MeshRenderer": {
             "value0": {
@@ -204,6 +212,10 @@
                         "value2": ""
                     }
                 }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
             }
         },
         "AGE::RigidBody": {

@@ -42,7 +42,7 @@ namespace AGE
 			auto extension = AGE::FileSystemHelpers::GetExtension(path);
 			if (extension == "obj" || extension == "fbx" || extension == "dae")
 				return true;
-			if (extension == "bmp" || extension == "jpg" || extension == "jpeg" || extension == "tga" || extension == "png")
+			if (extension == "bmp" || extension == "jpg" || extension == "jpeg" || extension == "tga" || extension == "png" || extension == "tif")
 				return true;
 			if (extension == "mtl")
 				return true;
@@ -58,7 +58,7 @@ namespace AGE
 				t = std::make_shared<MeshRawFile>(path, parent);
 				t->_type = AssetType::Raw | AssetType::Mesh;
 			}
-			else if (extension == "bmp" || extension == "jpg" || extension == "jpeg" || extension == "tga" || extension == "png")
+			else if (extension == "bmp" || extension == "jpg" || extension == "jpeg" || extension == "tga" || extension == "png" || extension == "tif")
 			{
 				t = std::make_shared<TextureRawFile>(path, parent);
 				t->_type = AssetType::Raw | AssetType::Texture;

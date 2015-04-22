@@ -53,6 +53,9 @@ namespace AGE
 	std::vector<const char *> AssetsEditorScene::_cookedMaterialFullPath = std::vector<const char *>();
 	std::vector<const char *> AssetsEditorScene::_cookedMaterialFiles = std::vector<const char *>();
 
+	std::vector<const char *> AssetsEditorScene::_cookedTextureFullPath = std::vector<const char *>();
+	std::vector<const char *> AssetsEditorScene::_cookedTextureFiles = std::vector<const char *>();
+
 	AssetsEditorScene::AssetsEditorScene(AGE::Engine *engine)
 		: AScene(engine)
 	{
@@ -83,6 +86,8 @@ namespace AGE
 			_cookedMeshFiles.clear();
 			_cookedMeshsFullPath.clear();
 			_cookedFiles.clear();
+			_cookedTextureFiles.clear();
+			_cookedTextureFullPath.clear();
 
 			_cookedBulletFiles.push_back("NONE");
 			_cookedBulletFullPath.push_back("NONE");
@@ -90,7 +95,9 @@ namespace AGE
 			_cookedMaterialFullPath.push_back("NONE");
 			_cookedMeshFiles.push_back("NONE");
 			_cookedMeshsFullPath.push_back("NONE");
-		
+			_cookedTextureFiles.push_back("NONE");
+			_cookedTextureFullPath.push_back("NONE");
+
 			const std::string currentDir = Directory::GetCurrentDirectory();
 			const std::string absPath = Path::AbsoluteName(currentDir.c_str(), WE::EditorConfiguration::GetCookedDirectory().c_str());
 			Directory dir;
@@ -117,6 +124,11 @@ namespace AGE
 					{
 						_cookedBulletFiles.push_back(_cookedFiles.back().fileName.c_str());
 						_cookedBulletFullPath.push_back(_cookedFiles.back().fullPath.c_str());
+					}
+					else if (extension == "tage")
+					{
+						_cookedTextureFiles.push_back(_cookedFiles.back().fileName.c_str());
+						_cookedTextureFullPath.push_back(_cookedFiles.back().fullPath.c_str());
 					}
 				}
 			}

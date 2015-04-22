@@ -83,7 +83,7 @@ namespace AGE
 		addSystem<AGE::PhysicsSystem>(0, Physics::EngineType::PhysX);
 		
 		// TODO: Remove following line
-		addSystem<AGE::BulletDynamicSystem>(0);
+		//addSystem<AGE::BulletDynamicSystem>(0);
 
 		addSystem<AGE::LifetimeSystem>(2);
 		addSystem<AGE::FreeFlyCamera>(0);
@@ -118,6 +118,7 @@ namespace AGE
 			, EngineCoreTestConfiguration::getScenesName().data()
 			, static_cast<int>(EngineCoreTestConfiguration::getScenesName().size())))
 		{
+			EngineCoreTestConfiguration::saveConfigurations();
 			clearAllEntities();
 
 			auto camera = createEntity();
@@ -153,7 +154,7 @@ namespace AGE
 			MeshRenderer *mesh;
 			mesh = e.addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("cube/cube.sage")
 				, getInstance<AGE::AssetsManager>()->getMaterial(OldFile("cube/cube.mage")));
-			mesh->enableMode(RenderModes::AGE_OPAQUE);
+			mesh->enableRenderMode(RenderModes::AGE_OPAQUE);
 			auto rigidBody = e.addComponent<RigidBody>(1.0f);
 			rigidBody->setCollisionShape(RigidBody::BOX);
 			rigidBody->getBody().setFriction(0.5f);
@@ -163,7 +164,7 @@ namespace AGE
 		else
 			trigger = 0.0f;
 
-		if (_chunkCounter >= _maxChunk)
+	/*	if (_chunkCounter >= _maxChunk)
 		{
 			for (auto i = 0; i < 10; ++i)
 			{
@@ -192,7 +193,7 @@ namespace AGE
 					e.addComponent<PointLightComponent>()->set(glm::vec3((float)(rand() % 1000) / 1000.0f, (float)(rand() % 1000) / 1000.0f, (float)(rand() % 1000) / 1000.0f), glm::vec3(1.f, 0.1f, 0.005f));
 				}
 
-				mesh->enableMode(RenderModes::AGE_OPAQUE);
+				mesh->enableRenderMode(RenderModes::AGE_OPAQUE);
 
 				auto rigidBody = e.addComponent<RigidBody>(1.0f);
 				if (i % 4 == 0)
@@ -204,7 +205,7 @@ namespace AGE
 				rigidBody->getBody().applyTorque(btVector3(float(rand() % 1000) / 300.0f, float(rand() % 1000) / 300.0f, float(rand() % 1000) / 300.0f));
 			}
 			_chunkCounter = 0;
-		}
+		}*/
 
 		if (ImGui::Button("Reload shaders or type R") || getInstance<Input>()->getPhysicalKeyPressed(AGE_r))
 		{
