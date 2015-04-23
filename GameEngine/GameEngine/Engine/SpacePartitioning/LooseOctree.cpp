@@ -54,6 +54,14 @@ namespace AGE
 #endif
 	}
 
+	void LooseOctree::getAllElements(AGE::Vector<Cullable *> &toFill)
+	{
+		_nodesPool.get(_root).getAllElements(*this, toFill);
+#if DEBUG_OCTREE
+		_nodesPool.get(_root).checkOctreeIntegrity(*this, _root);
+#endif
+	}
+
 	void LooseOctree::cleanOctree()
 	{
 		uint32_t newRoot = _root;

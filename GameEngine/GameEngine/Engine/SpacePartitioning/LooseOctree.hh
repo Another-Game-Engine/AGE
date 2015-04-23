@@ -20,6 +20,7 @@ namespace AGE
 		void removeElement(CullableShape<AABoundingBox> *toRm);
 		void moveElement(CullableShape<AABoundingBox> *toMv);
 		void getElementsCollide(CullableShape<Frustum> *toTest, AGE::Vector<Cullable *> &toFill);
+		void getAllElements(AGE::Vector<Cullable *> &toFill);
 		void cleanOctree();
 
 		MemoryPool<LooseOctreeNode, uint32_t> &getNodePool();
