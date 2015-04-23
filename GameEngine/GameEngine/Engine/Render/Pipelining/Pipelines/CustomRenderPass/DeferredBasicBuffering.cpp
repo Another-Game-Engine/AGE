@@ -81,8 +81,8 @@ namespace AGE
 		OpenGLState::glClearColor(glm::vec4(0.f, 0.0f, 0.0f, 0.0f));
 		OpenGLState::glEnable(GL_STENCIL_TEST);
 		OpenGLState::glClearStencil(0);
-		OpenGLState::glStencilFunc(GL_ALWAYS, 0, 1);
-		OpenGLState::glStencilOp(GL_KEEP, GL_KEEP, GL_ONE);
+		OpenGLState::glStencilFunc(GL_ALWAYS, 0, 0xFFFFFFFF);
+		OpenGLState::glStencilOp(GL_KEEP, GL_KEEP, GL_INCR);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 #ifdef OCCLUSION_CULLING
@@ -146,7 +146,8 @@ namespace AGE
 			}
 		}
 #endif
-
+		glFlush();
+		glFlush();
 	}
 
 }
