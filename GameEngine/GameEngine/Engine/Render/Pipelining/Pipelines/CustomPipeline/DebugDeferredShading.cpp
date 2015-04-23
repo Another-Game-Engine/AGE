@@ -36,10 +36,10 @@ namespace AGE
 		_rendering_list.emplace_back(basicBuffering);
 		// We link the entry point with the other pass
 		basicBuffering->setNextPass(debugBuffering);
-		debugBuffering->setNextPass(spotLightning);
-		spotLightning->setNextPass(directionalLightning);
-		directionalLightning->setNextPass(pointLightning);
-		pointLightning->setNextPass(_deferredMerging);
+		debugBuffering->setNextPass(pointLightning);
+		pointLightning->setNextPass(directionalLightning);
+		directionalLightning->setNextPass(spotLightning);
+		spotLightning->setNextPass(_deferredMerging);
 		_deferredMerging->setNextPass(debugMerging);
 
 		setAmbient(glm::vec3(0.2f));

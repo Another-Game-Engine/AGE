@@ -51,7 +51,6 @@ namespace AGE
 		_key = AGE::PrepareKey();
 		_color = glm::vec3(1);
 		_range = glm::vec3(1.0f, 0.01f, 0.001f);
-		set(_color, _range);
 	}
 
 	void PointLightComponent::init()

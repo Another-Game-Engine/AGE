@@ -110,7 +110,6 @@ namespace AGE
 		// Iterate throught each light
 		for (auto &pl : lights.pointLight)
 		{
-			_programs[PROGRAM_STENCIL]->use();
 			*_programs[PROGRAM_STENCIL]->get_resource<Mat4>("model_matrix") = pl.light.sphereTransform;
 
 			_programs[PROGRAM_LIGHTNING]->use();

@@ -106,6 +106,14 @@ namespace AGE
 			_pointLights.prepareDealloc(key.id);
 			_prepareThread->getQueue()->emplaceCommand<Commands::MainToPrepare::DeletePointLight>(key);
 			break;
+		case PrepareKey::Type::DirectionalLight:
+			_directionalLights.prepareDealloc(key.id);
+			_prepareThread->getQueue()->emplaceCommand<Commands::MainToPrepare::DeleteDirectionalLight>(key);
+			break;
+		case PrepareKey::Type::SpotLight:
+			_spotLights.prepareDealloc(key.id);
+			_prepareThread->getQueue()->emplaceCommand<Commands::MainToPrepare::DeleteSpotLight>(key);
+			break;
 		default:
 			break;
 		}

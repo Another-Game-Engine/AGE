@@ -79,7 +79,6 @@ namespace AGE
 		OpenGLState::glBlendFunc(GL_ONE, GL_ONE);
 		for (auto &pl : lights.spotLights)
 		{
-			_programs[PROGRAM_LIGHTNING]->use();
 			*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("position_light") = glm::vec3(pl.light.transformation[3]);
 			*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("attenuation_light") = pl.light.attenuation;
 			*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("direction_light") = glm::normalize(glm::transpose(glm::inverse(glm::mat3(pl.light.transformation))) * glm::vec3(0.f, -1.0f, 0.f));
