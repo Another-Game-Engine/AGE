@@ -63,7 +63,7 @@ namespace AGE
 		// Inherited Methods
 		void BulletRigidBody::setAngularDrag(float angularDrag)
 		{
-			getDataAs<btRigidBody>()->setAngularFactor(angularDrag);
+			getDataAs<btRigidBody>()->setAngularFactor(1.0f - angularDrag);
 		}
 
 		float BulletRigidBody::getAngularDrag(void) const
@@ -98,7 +98,8 @@ namespace AGE
 
 		void BulletRigidBody::setLinearDrag(float linearDrag)
 		{
-			getDataAs<btRigidBody>()->setLinearFactor(btVector3(linearDrag, linearDrag, linearDrag));
+			const float drag = 1.0f - linearDrag;
+			getDataAs<btRigidBody>()->setLinearFactor(btVector3(drag, drag, drag));
 		}
 
 		float BulletRigidBody::getLinearDrag(void) const

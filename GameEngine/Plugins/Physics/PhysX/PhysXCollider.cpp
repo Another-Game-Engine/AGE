@@ -32,6 +32,7 @@ namespace AGE
 			body->userData = this;
 			body->attachShape(*shape);
 			setAsTrigger(IsTriggerByDefault());
+			setFilterGroup(GetDefaultFilterGroup());
 		}
 
 		// Destructor

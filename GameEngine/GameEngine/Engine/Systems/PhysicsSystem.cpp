@@ -95,10 +95,14 @@ namespace AGE
 		Link *link = nullptr;
 		for (Entity entity : entityFilter.getCollection())
 		{
-			rigidBody = entity.getComponent<RigidBody>();
 			link = entity.getLinkPtr();
-			rigidBody->setPosition(link->getPosition());
-			rigidBody->setRotation(link->getOrientation());
+			if (link->isUserModified())
+			{
+				rigidBody = entity.getComponent<RigidBody>();
+				rigidBody->setPosition(link->getPosition());
+				rigidBody->setRotation(link->getOrientation());
+				link->setUserModified(false);
+			}
 		}
 	}
 

@@ -17,6 +17,11 @@ namespace AGE
 			return false;
 		}
 
+		inline FilterGroup ColliderInterface::GetDefaultFilterGroup(void)
+		{
+			return FilterGroup::GroupI;
+		}
+
 		// Constructors
 		inline ColliderInterface::ColliderInterface(WorldInterface *world, Private::GenericData *data)
 			: world(world), data(data), material(world->createMaterial(this))

@@ -1,5 +1,6 @@
 #include <cassert>
 #include <vector>
+#include <thread>
 
 #include "PhysXWorld.hpp"
 #include "PhysXRigidBody.hpp"
@@ -38,7 +39,10 @@ namespace AGE
 			sceneDescription.flags |= physx::PxSceneFlag::eENABLE_CCD | physx::PxSceneFlag::eENABLE_KINEMATIC_PAIRS | physx::PxSceneFlag::eENABLE_KINEMATIC_STATIC_PAIRS;
 			sceneDescription.broadPhaseType = physx::PxBroadPhaseType::eMBP;
 			sceneDescription.gravity = physx::PxVec3(GetDefaultGravity().x, GetDefaultGravity().y, GetDefaultGravity().z);
-			sceneDescription.cpuDispatcher = physx::PxDefaultCpuDispatcherCreate(1);
+			cpuDispatcher = physx::PxDefaultCpuDispatcherCreate(std::thread::hardware_concurrency());
+			sceneDescription.cpuDispatcher = cpuDispatcher;
+			cudaContextManager = physx::PxCreateCudaContextManager(*physics->getFoundation(), physx::PxCudaContextManagerDesc(), nullptr);
+			sceneDescription.gpuDispatcher = cudaContextManager->getGpuDispatcher();
 			if (sceneDescription.cpuDispatcher == nullptr)
 			{
 				assert(!"Impossible to create cpu dispatcher");
@@ -55,19 +59,27 @@ namespace AGE
 			sceneDescription.filterShaderDataSize = sizeof(groupCollisionFlags);
 			scene = physics->getPhysics()->createScene(sceneDescription);
 			assert(scene != nullptr && "Impossible to create scene");
-			scene->setFlag(physx::PxSceneFlag::eENABLE_KINEMATIC_PAIRS, true);
-			scene->setFlag(physx::PxSceneFlag::eENABLE_KINEMATIC_STATIC_PAIRS, true);
 		}
 
 		// Destructor
 		PhysXWorld::~PhysXWorld(void)
 		{
-			if (scene)
+			if (scene != nullptr)
 			{
 				scene->setBroadPhaseCallback(nullptr);
 				scene->setSimulationEventCallback(nullptr);
 				scene->release();
 				scene = nullptr;
+			}
+			if (cudaContextManager != nullptr)
+			{
+				cudaContextManager->release();
+				cudaContextManager = nullptr;
+			}
+			if (cpuDispatcher != nullptr)
+			{
+				cpuDispatcher->release();
+				cpuDispatcher = nullptr;
 			}
 		}
 
@@ -111,7 +123,7 @@ namespace AGE
 		void PhysXWorld::simulate(float stepSize)
 		{
 			assert(scene != nullptr && "Invalid scene");
-			scene->simulate(stepSize);
+			scene->simulate(stepSize, nullptr, scratchMemoryBlock, sizeof(scratchMemoryBlock));
 			scene->fetchResults(true);
 		}
 

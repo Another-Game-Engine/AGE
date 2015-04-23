@@ -8,7 +8,8 @@ namespace AGE
 		NullCollider::NullCollider(WorldInterface *world, Private::GenericData *data)
 			: ColliderInterface(world, data)
 		{
-			return;
+			setAsTrigger(IsTriggerByDefault());
+			setFilterGroup(GetDefaultFilterGroup());
 		}
 
 		// Inherited Methods

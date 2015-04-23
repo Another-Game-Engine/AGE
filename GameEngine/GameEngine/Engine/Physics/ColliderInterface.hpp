@@ -116,6 +116,8 @@ namespace AGE
 			// Static Methods
 			static bool IsTriggerByDefault(void);
 
+			static FilterGroup GetDefaultFilterGroup(void);
+
 			// Virtual Methods
 			virtual void scale(const glm::vec3 &scaling) = 0;
 

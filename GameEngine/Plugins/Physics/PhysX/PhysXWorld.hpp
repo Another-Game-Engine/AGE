@@ -40,6 +40,12 @@ namespace AGE
 
 			physx::PxU32 groupCollisionFlags[32];
 
+			__declspec(align(16)) std::uint8_t scratchMemoryBlock[65536];
+
+			physx::PxDefaultCpuDispatcher *cpuDispatcher = nullptr;
+
+			physx::PxCudaContextManager *cudaContextManager = nullptr;
+
 			// Static Methods
 			static physx::PxFilterFlags FilterShader(physx::PxFilterObjectAttributes attributes1, physx::PxFilterData filterData1, physx::PxFilterObjectAttributes attributes2,
 													 physx::PxFilterData filterData2, physx::PxPairFlags& pairFlags, const void *constantBlock, physx::PxU32 constantBlockSize);

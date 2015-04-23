@@ -71,7 +71,7 @@
     <TargetName>Physics_$(ProjectName)_x64_d</TargetName>
     <IntDir>$(ProjectDir)Dependencies\$(Platform)\$(Configuration)\</IntDir>
     <OutDir>$(ProjectDir)Binaries\$(Platform)\$(Configuration)\</OutDir>
-    <IncludePath>$(SolutionDir)GameEngine/Engine/Physics;$(ProjectDir);$(SolutionDir)Vendors;$(SolutionDir)Vendors/PhysX/Include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>$(SolutionDir)GameEngine/Engine/Physics;$(ProjectDir);$(SolutionDir)Vendors;$(SolutionDir)Vendors/PhysX/PhysXSDK/Include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
@@ -84,7 +84,7 @@
     <TargetName>Physics_$(ProjectName)_x64</TargetName>
     <IntDir>$(ProjectDir)Dependencies\$(Platform)\$(Configuration)\</IntDir>
     <OutDir>$(ProjectDir)Binaries\$(Platform)\$(Configuration)\</OutDir>
-    <IncludePath>$(SolutionDir)GameEngine/Engine/Physics;$(ProjectDir);$(SolutionDir)Vendors;$(SolutionDir)Vendors/PhysX/Include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>$(SolutionDir)GameEngine/Engine/Physics;$(ProjectDir);$(SolutionDir)Vendors;$(SolutionDir)Vendors/PhysX/PhysXSDK/Include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -105,8 +105,8 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)Vendors\PhysX\Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>PhysX3CookingDEBUG_x64.lib;PhysX3VehicleDEBUG.lib;PhysX3ExtensionsDEBUG.lib;PhysX3DEBUG_x64.lib;PhysX3CharacterKinematicDEBUG_x64.lib;PhysX3CommonDEBUG_x64.lib;PxTaskDEBUG.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)Vendors\PhysX\PhysXSDK\Lib\vc12win64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <ProjectReference>
       <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
@@ -152,8 +152,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(SolutionDir)Vendors\PhysX\Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>PhysX3Cooking_x64.lib;PhysX3Vehicle.lib;PhysX3Extensions.lib;PhysX3_x64.lib;PhysX3CharacterKinematic_x64.lib;PhysX3Common_x64.lib;PxTask.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)Vendors\PhysX\PhysXSDK\Lib\vc12win64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>LowLevel.lib;LowLevelCloth.lib;PhysX3_x64.lib;PhysX3CharacterKinematic_x64.lib;PhysX3Common_x64.lib;PhysX3Cooking_x64.lib;PhysX3Extensions.lib;PhysX3Gpu_x64.lib;PhysX3Vehicle.lib;PvdRuntime.lib;PxTask.lib;SceneQuery.lib;SimulationController.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>call "$(ProjectDir)/Scripts/PostBuildRelease.bat"</Command>
@@ -235,6 +235,50 @@
     <None Include="..\..\..\GameEngine\Engine\Physics\RigidBodyInterface.inl" />
     <None Include="..\..\..\GameEngine\Engine\Physics\SphereColliderInterface.inl" />
     <None Include="..\..\..\GameEngine\Engine\Physics\WorldInterface.inl" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Vendors\PhysX\PhysXSDK\Source\compiler\vc12win64\LowLevel.vcxproj">
+      <Project>{2a1f82af-85e5-26a0-bfe0-1f8d0006da7a}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Vendors\PhysX\PhysXSDK\Source\compiler\vc12win64\LowLevelCloth.vcxproj">
+      <Project>{24546e40-3140-20f4-c5ac-e4001b9880b8}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Vendors\PhysX\PhysXSDK\Source\compiler\vc12win64\PhysX.vcxproj">
+      <Project>{fc0c1e74-2be0-a8bc-4f0c-82d0f2eab9a4}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Vendors\PhysX\PhysXSDK\Source\compiler\vc12win64\PhysXCharacterKinematic.vcxproj">
+      <Project>{1e04f7a2-c8f8-3d62-46fe-8762d28ca9a4}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Vendors\PhysX\PhysXSDK\Source\compiler\vc12win64\PhysXCommon.vcxproj">
+      <Project>{653cc2cd-99f5-48d8-0e9c-46fa10b26447}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Vendors\PhysX\PhysXSDK\Source\compiler\vc12win64\PhysXCooking.vcxproj">
+      <Project>{c6474901-29f9-ef65-44e2-951696161e76}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Vendors\PhysX\PhysXSDK\Source\compiler\vc12win64\PhysXExtensions.vcxproj">
+      <Project>{2c6c10d1-f63d-b7f0-8390-afc3dc10ec90}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Vendors\PhysX\PhysXSDK\Source\compiler\vc12win64\PhysXProfileSDK.vcxproj">
+      <Project>{af7dd4b5-eec5-7b38-63e6-1b0bb06cbb23}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Vendors\PhysX\PhysXSDK\Source\compiler\vc12win64\PhysXVehicle.vcxproj">
+      <Project>{bc4778d3-142f-31d0-46ec-77203f28c874}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Vendors\PhysX\PhysXSDK\Source\compiler\vc12win64\PhysXVisualDebuggerSDK.vcxproj">
+      <Project>{7705fbf6-a4a8-e380-0e1a-25dac1d2c9a8}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Vendors\PhysX\PhysXSDK\Source\compiler\vc12win64\PvdRuntime.vcxproj">
+      <Project>{0e3011c9-0ba4-f916-54fe-f63a1ef0e12e}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Vendors\PhysX\PhysXSDK\Source\compiler\vc12win64\PxTask.vcxproj">
+      <Project>{5b1132f6-84f8-142e-b951-adb8505cc27f}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Vendors\PhysX\PhysXSDK\Source\compiler\vc12win64\SceneQuery.vcxproj">
+      <Project>{042daf3e-ff50-b73c-c9a4-53ac6d3cfcec}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Vendors\PhysX\PhysXSDK\Source\compiler\vc12win64\SimulationController.vcxproj">
+      <Project>{49c560c2-f59e-0a40-e1d5-e0f25960f1ab}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
