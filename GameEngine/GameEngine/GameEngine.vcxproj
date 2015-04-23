@@ -121,6 +121,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\Vendors\imgui\imgui.cpp" />
+    <ClCompile Include="Engine\Components\DirectionalLightComponent.cpp" />
     <ClCompile Include="Engine\Components\PhysicsData.cpp" />
     <ClCompile Include="Engine\Components\RigidBody.cpp" />
     <ClCompile Include="Engine\Physics\BulletCollisionManager.cpp" />
@@ -300,6 +301,7 @@
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
     <ClInclude Include="..\Vendors\imgui\imgui.h" />
     <ClInclude Include="..\Vendors\imgui\stb_textedit.h" />
+    <ClInclude Include="Engine\Components\DirectionalLightComponent.hh" />
     <ClInclude Include="Engine\Components\PhysicsData.hpp" />
     <ClInclude Include="Engine\Components\RigidBody.hpp" />
     <ClInclude Include="Engine\Physics\BoxColliderInterface.hpp" />

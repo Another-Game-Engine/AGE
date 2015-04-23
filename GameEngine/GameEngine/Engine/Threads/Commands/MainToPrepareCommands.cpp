@@ -39,6 +39,10 @@ namespace AGE
 				: key(key)
 			{}
 
+			CreateDirectionalLight::CreateDirectionalLight(PrepareKey const &key)
+				: key(key)
+			{}
+
 			CreateSpotLight::CreateSpotLight(PrepareKey const &key)
 				: key(key)
 			{}
@@ -48,6 +52,11 @@ namespace AGE
 				color(color),
 				texture(texture),
 				attenuation(attenuation)
+			{}
+
+			SetDirectionalLight::SetDirectionalLight(DirectionalLightData const &data, PrepareKey &key)
+				: key(key),
+				  data(data)
 			{}
 
 			SetSpotLight::SetSpotLight(glm::vec3 const &color, glm::vec3 const &direction, glm::vec3 const &range, float cutOff, std::shared_ptr<ITexture> const &texture, PrepareKey &key)
@@ -68,6 +77,10 @@ namespace AGE
 			{}
 
 			DeleteSpotLight::DeleteSpotLight(const PrepareKey &_key)
+				: key(_key)
+			{}
+
+			DeleteDirectionalLight::DeleteDirectionalLight(const PrepareKey &_key)
 				: key(_key)
 			{}
 

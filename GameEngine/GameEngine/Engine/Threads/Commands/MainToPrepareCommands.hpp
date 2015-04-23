@@ -4,6 +4,9 @@
 #include <glm/gtc/quaternion.hpp>
 #include <AssetManagement/Instance/MaterialInstance.hh>
 #include <AssetManagement/Instance/MeshInstance.hh>
+#include <Components/DirectionalLightComponent.hh>
+#include <Components/SpotLight.hh>
+#include <Components/Light.hh>
 #include <Core/PrepareKey.hpp>
 #include <vector>
 #include <set>
@@ -79,6 +82,12 @@ namespace AGE
 				PrepareKey key;
 			};
 
+			struct CreateDirectionalLight
+			{
+				CreateDirectionalLight(PrepareKey const &key);
+				PrepareKey key;
+			};
+
 			struct CreateSpotLight
 			{
 				CreateSpotLight(PrepareKey const &key);
@@ -92,6 +101,13 @@ namespace AGE
 				glm::vec3 color;
 				glm::vec3 attenuation;
 				std::shared_ptr<ITexture> texture;
+			};
+
+			struct SetDirectionalLight
+			{
+				SetDirectionalLight(DirectionalLightData const &data, PrepareKey &key);
+				PrepareKey key;
+				DirectionalLightData data;
 			};
 
 			struct SetSpotLight
@@ -115,6 +131,12 @@ namespace AGE
 			struct DeletePointLight
 			{
 				DeletePointLight(const PrepareKey &_key);
+				PrepareKey key;
+			};
+
+			struct DeleteDirectionalLight
+			{
+				DeleteDirectionalLight(const PrepareKey &_key);
 				PrepareKey key;
 			};
 

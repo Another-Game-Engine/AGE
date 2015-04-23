@@ -4,6 +4,9 @@
 #include "QueuePusher.hpp"
 #include "QueueOwner.hpp"
 #include <Threads/RenderScene.hpp>
+#include <Components/DirectionalLightComponent.hh>
+#include <Components/SpotLight.hh>
+#include <Components/Light.hh>
 #include <vector>
 #include <memory>
 #include <thread>
@@ -28,8 +31,10 @@ namespace AGE
 		PrepareKey addMesh();
 		PrepareKey addPointLight();
 		PrepareKey addSpotLight();
+		PrepareKey addDirectionalLight();
 		void setPointLight(glm::vec3 const &color, glm::vec3 const &range, std::shared_ptr<ITexture> const &texture, const PrepareKey &key);
 		void setSpotLight(glm::vec3 const &color, glm::vec3 const &direction, glm::vec3 const &range, float cutOff, std::shared_ptr<ITexture> const &texture, const PrepareKey &key);
+		void setDirectionalLight(DirectionalLightData const &data, PrepareKey const &key);
 	private:
 		PrepareRenderThread();
 		virtual ~PrepareRenderThread();

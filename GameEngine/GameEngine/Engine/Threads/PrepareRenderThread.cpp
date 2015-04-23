@@ -271,11 +271,28 @@ namespace AGE
 		return key;
 	}
 
+	PrepareKey PrepareRenderThread::addDirectionalLight()
+	{
+		auto scene = _getRenderScene(GetMainThread()->getActiveScene());
+		assert(scene != nullptr);
+		//auto key = scene->addDirectionalLight();
+		//getQueue()->emplaceCommand<Commands::MainToPrepare::CreateDirectionalLight>(key);
+		//return key;
+		return PrepareKey();
+	}
+
 	void PrepareRenderThread::setPointLight(glm::vec3 const &color, glm::vec3 const &range, std::shared_ptr<ITexture> const &texture, const PrepareKey &key)
 	{
 		auto scene = _getRenderScene(GetMainThread()->getActiveScene());
 		assert(scene != nullptr);
 		getQueue()->emplaceCommand<Commands::MainToPrepare::SetPointLight>(color, range, texture, key);
+	}
+
+	void PrepareRenderThread::setDirectionalLight(DirectionalLightData const &data, PrepareKey const &key)
+	{
+		auto scene = _getRenderScene(GetMainThread()->getActiveScene());
+		assert(scene != nullptr);
+		getQueue()->emplaceCommand<Commands::MainToPrepare::SetDirectionalLight>(data, key);
 	}
 
 	void PrepareRenderThread::setSpotLight(glm::vec3 const &color, glm::vec3 const &direction, glm::vec3 const &range, float cutOff, std::shared_ptr<ITexture> const &texture, const PrepareKey &key)
