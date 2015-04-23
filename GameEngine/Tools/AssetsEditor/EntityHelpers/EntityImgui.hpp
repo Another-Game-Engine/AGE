@@ -3,6 +3,7 @@
 #include <imgui/imgui.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <glm/gtx/euler_angles.hpp>
 
 namespace AGE
 {
@@ -49,11 +50,11 @@ namespace AGE
 				}
 			}
 
-			cpt->rotation = glm::eulerAngles(entity.getLink().getOrientation());
+			//cpt->rotation = glm::eulerAngleXYZ(glm::mat3_cast(entity.getLink().getOrientation())) * 3.14159f / 180.f;
 			if (ImGui::InputFloat3("Rotation", glm::value_ptr(cpt->rotation)))
 			{
 				modified = true;
-				entity.getLink().setOrientation(glm::quat(cpt->rotation));
+				entity.getLink().setOrientation(glm::quat(cpt->rotation * 3.14159f / 180.f));
 			}
 
 			cpt->scale = entity.getLink().getScale();
