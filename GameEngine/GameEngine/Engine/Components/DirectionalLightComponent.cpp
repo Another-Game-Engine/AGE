@@ -72,7 +72,13 @@ namespace AGE
 
 	bool DirectionalLightComponent::editorUpdate()
 	{
-		return false;
+		bool modified = false;
+		if (ImGui::ColorEdit3("Color", glm::value_ptr(_data.color)))
+		{
+			set(_data);
+			modified = true;
+		}
+		return modified;
 	}
 #endif
 }

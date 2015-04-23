@@ -77,7 +77,7 @@ namespace AGE
 	{
 		PrepareKey res;
 		res.type = PrepareKey::Type::DirectionalLight;
-		res.id = (AGE::PrepareKey::OctreeObjectId)(_pointLights.prepareAlloc());
+		res.id = (AGE::PrepareKey::OctreeObjectId)(_directionalLights.prepareAlloc());
 		return res;
 	}
 
@@ -237,7 +237,7 @@ namespace AGE
 		}
 	}
 
-	void RenderScene::_setDirectionLight(AGE::Commands::MainToPrepare::SetDirectionalLight &msg)
+	void RenderScene::_setDirectionalLight(AGE::Commands::MainToPrepare::SetDirectionalLight &msg)
 	{
 		DirectionalLight *l = &_directionalLights.get(msg.key.id);
 		l->data = msg.data;

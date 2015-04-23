@@ -30,7 +30,7 @@ namespace AGE
 		template <typename Archive>
 		void serialize(Archive &ar, const std::uint32_t version)
 		{
-			ar(cereal::make_nvp("data", _data));
+			ar(cereal::make_nvp("color", _data.color));
 		}
 
 		inline const DirectionalLightData &get() const { return _data; }

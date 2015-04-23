@@ -43,7 +43,7 @@ namespace AGE
 		void _createMesh(AGE::Commands::MainToPrepare::CreateMesh &msg);
 		void _setPointLight(AGE::Commands::MainToPrepare::SetPointLight &msg);
 		void _setSpotLight(AGE::Commands::MainToPrepare::SetSpotLight &msg);
-		void _setDirectionLight(AGE::Commands::MainToPrepare::SetDirectionalLight &msg);
+		void _setDirectionalLight(AGE::Commands::MainToPrepare::SetDirectionalLight &msg);
 		void _deleteCamera(AGE::Commands::MainToPrepare::DeleteCamera &msg);
 		void _deletePointLight(AGE::Commands::MainToPrepare::DeletePointLight &msg);
 		void _deleteSpotLight(AGE::Commands::MainToPrepare::DeleteSpotLight &msg);

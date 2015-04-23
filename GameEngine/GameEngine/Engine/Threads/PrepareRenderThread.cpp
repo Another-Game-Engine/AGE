@@ -55,6 +55,11 @@ namespace AGE
 			_activeScene->_createSpotLight(msg);
 		});
 
+		registerCallback<Commands::MainToPrepare::CreateDirectionalLight>([this](Commands::MainToPrepare::CreateDirectionalLight &msg){
+			assert(this->_activeScene != nullptr);
+			_activeScene->_createDirectionalLight(msg);
+		});
+
 		registerCallback<Commands::MainToPrepare::DeleteCamera>([this](Commands::MainToPrepare::DeleteCamera &msg){
 			assert(this->_activeScene != nullptr);
 			_activeScene->_deleteCamera(msg);
@@ -75,6 +80,11 @@ namespace AGE
 			_activeScene->_deleteSpotLight(msg);
 		});
 
+		registerCallback<Commands::MainToPrepare::DeleteDirectionalLight>([this](Commands::MainToPrepare::DeleteDirectionalLight &msg){
+			assert(this->_activeScene != nullptr);
+			_activeScene->_deleteDirectionalLight(msg);
+		});
+
 		registerCallback<Commands::MainToPrepare::PrepareDrawLists>([this](Commands::MainToPrepare::PrepareDrawLists &msg){
 			assert(this->_activeScene != nullptr);
 			_activeScene->_prepareDrawList(msg);
@@ -93,6 +103,11 @@ namespace AGE
 		registerCallback<Commands::MainToPrepare::SetPointLight>([this](Commands::MainToPrepare::SetPointLight &msg){
 			assert(this->_activeScene != nullptr);
 			_activeScene->_setPointLight(msg);
+		});
+
+		registerCallback<Commands::MainToPrepare::SetDirectionalLight>([this](Commands::MainToPrepare::SetDirectionalLight &msg){
+			assert(this->_activeScene != nullptr);
+			_activeScene->_setDirectionalLight(msg);
 		});
 
 		registerCallback<Commands::MainToPrepare::SetSpotLight>([this](Commands::MainToPrepare::SetSpotLight &msg){
@@ -288,10 +303,9 @@ namespace AGE
 	{
 		auto scene = _getRenderScene(GetMainThread()->getActiveScene());
 		assert(scene != nullptr);
-		//auto key = scene->addDirectionalLight();
-		//getQueue()->emplaceCommand<Commands::MainToPrepare::CreateDirectionalLight>(key);
-		//return key;
-		return PrepareKey();
+		auto key = scene->addDirectionalLight();
+		getQueue()->emplaceCommand<Commands::MainToPrepare::CreateDirectionalLight>(key);
+		return key;
 	}
 
 	void PrepareRenderThread::setPointLight(glm::vec3 const &color, glm::vec3 const &range, std::shared_ptr<ITexture> const &texture, const PrepareKey &key)

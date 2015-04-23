@@ -78,6 +78,7 @@ namespace AGE
 		OpenGLState::glEnable(GL_BLEND);
 		OpenGLState::glBlendFunc(GL_ONE, GL_ONE);
 		// Iterate throught each light
+		std::cout << lights.directionalLights.size() << std::endl;
 		for (auto &pl : lights.spotLights)
 		{
 			_programs[PROGRAM_LIGHTNING]->use();
