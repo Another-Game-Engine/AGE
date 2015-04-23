@@ -2,6 +2,7 @@
 #include <Render/Pipelining/Pipelines/CustomRenderPass/DeferredBasicBuffering.hh>
 #include <Render/Pipelining/Pipelines/CustomRenderPass/DeferredPointLightning.hh>
 #include <Render/Pipelining/Pipelines/CustomRenderPass/DeferredSpotLightning.hh>
+#include <Render/Pipelining/Pipelines/CustomRenderPass/DeferredDirectionalLightning.hh>
 #include <Render/Pipelining/Pipelines/CustomRenderPass/DeferredMerging.hh>
 #include <Render/Pipelining/Pipelines/PipelineTools.hh>
 
@@ -22,6 +23,8 @@ namespace AGE
 		std::shared_ptr<DeferredBasicBuffering> basicBuffering = std::make_shared<DeferredBasicBuffering>(_painter_manager, _diffuse, _normal, _specular, _depthStencil);
 		std::shared_ptr<DeferredPointLightning> pointLightning = std::make_shared<DeferredPointLightning>(_painter_manager, _normal, _depthStencil, _lightAccumulation);
 		std::shared_ptr<DeferredSpotLightning> spotLightning = std::make_shared<DeferredSpotLightning>(_painter_manager, _normal, _depthStencil, _lightAccumulation);
+		std::shared_ptr<DeferredDirectionalLightning> directionalLightning = std::make_shared<DeferredDirectionalLightning>(_painter_manager, _normal, _depthStencil, _lightAccumulation);
+
 		_deferredMerging = std::make_shared<DeferredMerging>(_painter_manager, _diffuse, _specular, _lightAccumulation);
 
 		// The entry point is the basic buffering pass
@@ -29,6 +32,8 @@ namespace AGE
 		// We link the entry point with the other pass
 		basicBuffering->setNextPass(pointLightning);
 		pointLightning->setNextPass(spotLightning);
+		spotLightning->setNextPass(directionalLightning);
+		directionalLightning->setNextPass(_deferredMerging);
 		spotLightning->setNextPass(_deferredMerging);
 
 		setAmbient(glm::vec3(0.2f));

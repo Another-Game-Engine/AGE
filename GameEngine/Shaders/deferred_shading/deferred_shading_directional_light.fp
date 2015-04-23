@@ -31,6 +31,6 @@ void main()
 	float lambert = max(0.0f, dot(normal, direction_light));
 	vec3 worldPosToEyes = normalize(eye_pos - worldPos);
 	vec3 reflection = reflect(normalize(-direction_light), normal);
-	specularRatio = clamp(pow(max(dot(reflection, worldPosToEyes), 0.0f), 100.f), 0.0f, 1.0f);
-	color = vec4(vec3(lambert * color_light), specularRatio) * effect / (attenuation);
+	float specularRatio = clamp(pow(max(dot(reflection, worldPosToEyes), 0.0f), 100.f), 0.0f, 1.0f);
+	color = vec4(vec3(lambert * color_light), specularRatio);
 }

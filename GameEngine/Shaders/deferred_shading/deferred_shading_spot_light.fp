@@ -37,7 +37,7 @@ void main()
 	float attenuation = attenuation_light.x + attenuation_light.y * dist + attenuation_light.z * dist * dist; 
 	lightDir = normalize(lightDir);
 	float lambert = max(0.0f, dot(normal, lightDir));
-	float effect = max(0.0f, dot(-lightDir, normalize(direction_light)));
+	float effect = max(0.0f, dot(-lightDir, direction_light));
 	effect = effect * step(spot_cut_off, effect);
 	effect = pow(effect, exponent_light);
 	vec3 worldPosToEyes = normalize(eye_pos - worldPos);
