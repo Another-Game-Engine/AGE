@@ -8,10 +8,24 @@
 namespace AGE
 {
 
+	struct SpotLightData
+	{
+		SpotLightData(glm::vec3 const &color = glm::vec3(1.0f), 
+					  glm::vec3 const &range = glm::vec3(1.0f, 0.1f, 0.01f), 
+					  float exponent = 5.0f, 
+					  float cutOff = 0.5f, 
+					  std::shared_ptr<ITexture> const &map = nullptr);
+		glm::vec3 color;
+		glm::vec3 range;
+		float exponent;
+		float cutOff;
+		std::shared_ptr<ITexture> map;
+	};
+
 	struct SpotLightComponent : public ComponentBase
 	{
 	public:
-		SpotLightComponent();
+		SpotLightComponent() = default;
 		virtual ~SpotLightComponent() = default;
 		SpotLightComponent(SpotLightComponent const &o);
 
@@ -20,20 +34,14 @@ namespace AGE
 		virtual void reset();
 		void init();
 
-		SpotLightComponent &set(glm::vec3 const &color, glm::vec3 const &range, float cutOff, float exponent);
+		SpotLightComponent &set(SpotLightData const &data);
 
 		template <typename Archive>
 		void serialize(Archive &ar, const std::uint32_t version)
 		{
-			ar(cereal::make_nvp("color", _color), cereal::make_nvp("exponent", _exponent), cereal::make_nvp("cutOff", _cutOff));
+			ar(cereal::make_nvp("color", _data.color), cereal::make_nvp("range", _data.range), cereal::make_nvp("exponent", _data.exponent), cereal::make_nvp("cutOff", _data.cutOff));
 		}
-
-		inline const glm::vec3 &getColor() const { return _color; }
-		inline const glm::vec3 &getRange() const { return _range;  }
-		inline float getCutOff() const { return _cutOff;  }
-		inline const float getExponent() const { return _exponent; }
-		inline float *getColorPtr() { return &_color.x; }
-		inline float *getRangePtr() { return &_range.x; }
+		inline const SpotLightData &get() const { return _data; }
 		virtual void postUnserialization();
 
 #ifdef EDITOR_ENABLED
@@ -44,11 +52,7 @@ namespace AGE
 
 	private:
 		AGE::PrepareKey _key;
-		glm::vec3 _color;
-		glm::vec3 _range;
-		float _exponent;
-		float _cutOff;
-		std::shared_ptr<ITexture> _map;
+		SpotLightData _data;
 
 	};
 }

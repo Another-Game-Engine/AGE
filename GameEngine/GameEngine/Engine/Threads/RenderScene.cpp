@@ -230,11 +230,7 @@ namespace AGE
 	void RenderScene::_setSpotLight(AGE::Commands::MainToPrepare::SetSpotLight &msg)
 	{
 		SpotLight *l = &_spotLights.get(msg.key.id);
-		l->color = msg.color;
-		l->spotCutOff = msg.cutOff;
-		l->exponent = msg.exponent;
-		l->map = msg.texture;
-		l->attenuation = msg.range;
+		l->data = msg.data;
 		if (l->hasMoved == false)
 		{
 			l->hasMoved = true;

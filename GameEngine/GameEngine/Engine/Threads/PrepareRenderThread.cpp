@@ -322,11 +322,11 @@ namespace AGE
 		getQueue()->emplaceCommand<Commands::MainToPrepare::SetDirectionalLight>(data, key);
 	}
 
-	void PrepareRenderThread::setSpotLight(glm::vec3 const &color, glm::vec3 const &range, float exponent, float cutOff, std::shared_ptr<ITexture> const &texture, const PrepareKey &key)
+	void PrepareRenderThread::setSpotLight(SpotLightData const &data, const PrepareKey &key)
 	{
 		auto scene = _getRenderScene(GetMainThread()->getActiveScene());
 		assert(scene != nullptr);
-		getQueue()->emplaceCommand<Commands::MainToPrepare::SetSpotLight>(color, range, exponent, cutOff, texture, key);
+		getQueue()->emplaceCommand<Commands::MainToPrepare::SetSpotLight>(data, key);
 	}
 
 	void PrepareRenderThread::_createRenderScene(AScene *scene)

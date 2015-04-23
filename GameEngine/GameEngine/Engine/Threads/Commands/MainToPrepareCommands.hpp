@@ -97,14 +97,9 @@ namespace AGE
 
 			struct SetSpotLight
 			{
-				SetSpotLight(glm::vec3 const &color, glm::vec3 const &range, float exponent, float cutOff, std::shared_ptr<ITexture> const &texture, PrepareKey &key);
+				SetSpotLight(SpotLightData const &data, PrepareKey &key);
 				PrepareKey key;
-				glm::vec3 color;
-				glm::vec3 range;
-				float exponent;
-				float cutOff;
-				std::shared_ptr<ITexture> texture;
-
+				SpotLightData data;
 			};
 
 			struct DeleteCamera

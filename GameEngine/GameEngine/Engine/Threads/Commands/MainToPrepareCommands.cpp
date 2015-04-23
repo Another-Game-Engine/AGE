@@ -65,13 +65,9 @@ namespace AGE
 				  data(data)
 			{}
 
-			SetSpotLight::SetSpotLight(glm::vec3 const &color, glm::vec3 const &range, float exponent, float cutOff, std::shared_ptr<ITexture> const &texture, PrepareKey &key)
+			SetSpotLight::SetSpotLight(SpotLightData const &data, PrepareKey &key)
 				: key(key),
-				color(color),
-				range(range),
-				cutOff(cutOff),
-				exponent(exponent),
-				texture(texture)
+				data(data)
 			{}
 
 			DeleteCamera::DeleteCamera(const PrepareKey &_key)

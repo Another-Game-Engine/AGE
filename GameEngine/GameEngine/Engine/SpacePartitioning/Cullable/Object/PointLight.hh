@@ -27,11 +27,7 @@ namespace AGE
 	{
 		// To remove when light will be in octree
 		uint32_t activeSpotLightIdx;
-		std::shared_ptr<ITexture> map;
-		glm::vec3 color;
-		glm::vec3 attenuation;
-		float spotCutOff;
-		float exponent;
+		SpotLightData data;
 		void computeDirectionTransform();
 	};
 

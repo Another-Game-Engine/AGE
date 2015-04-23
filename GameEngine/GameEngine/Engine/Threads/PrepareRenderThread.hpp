@@ -37,7 +37,7 @@ namespace AGE
 		PrepareKey addDirectionalLight();
 		void setPointLight(PointLightData const &data, const PrepareKey &key);
 		void setDirectionalLight(DirectionalLightData const &data, PrepareKey const &key);
-		void setSpotLight(glm::vec3 const &color, glm::vec3 const &range, float exponent, float cutOff, std::shared_ptr<ITexture> const &texture, const PrepareKey &key);
+		void setSpotLight(SpotLightData const &data, const PrepareKey &key);
 	private:
 		PrepareRenderThread();
 		virtual ~PrepareRenderThread();
