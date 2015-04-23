@@ -50,7 +50,6 @@ namespace AGE
 				}
 			}
 
-			//cpt->rotation = glm::eulerAngleXYZ(glm::mat3_cast(entity.getLink().getOrientation())) * 3.14159f / 180.f;
 			if (ImGui::InputFloat3("Rotation", glm::value_ptr(cpt->rotation)))
 			{
 				modified = true;

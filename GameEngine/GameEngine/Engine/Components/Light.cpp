@@ -14,7 +14,7 @@
 namespace AGE
 {
 	PointLightComponent::PointLightComponent()
-		: _range(1)
+		: _range(1.0f, 0.01f, 0.001f)
 		, _color(1),
 		_map(nullptr)
 	{
@@ -50,7 +50,8 @@ namespace AGE
 		}
 		_key = AGE::PrepareKey();
 		_color = glm::vec3(1);
-		_range = glm::vec3(1);
+		_range = glm::vec3(1.0f, 0.01f, 0.001f);
+		set(_color, _range);
 	}
 
 	void PointLightComponent::init()
@@ -59,6 +60,7 @@ namespace AGE
 		entity.getLink().registerOctreeObject(_key);
 		_map = entity.getScene()->getInstance<AssetsManager>()->getPointLightTexture();
 		assert(!_key.invalid());
+		set(_color, _range);
 	}
 
 	PointLightComponent &PointLightComponent::set(glm::vec3 const &color, glm::vec3 const &range)
