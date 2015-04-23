@@ -79,7 +79,11 @@ namespace AGE
 		OpenGLState::glDisable(GL_STENCIL_TEST);
 		OpenGLState::glEnable(GL_DEPTH_TEST);
 		OpenGLState::glClearColor(glm::vec4(0.f, 0.0f, 0.0f, 0.0f));
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		OpenGLState::glEnable(GL_STENCIL_TEST);
+		OpenGLState::glClearStencil(0);
+		OpenGLState::glStencilFunc(GL_ALWAYS, 0, 1);
+		OpenGLState::glStencilOp(GL_KEEP, GL_KEEP, GL_ONE);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 #ifdef OCCLUSION_CULLING
 
