@@ -71,12 +71,19 @@ namespace AGE
 		*_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("depth_buffer") = _depthInput;
 		*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("eye_pos") = cameraPosition;
 
+		// clear the light accumulation to zero
+		OpenGLState::glClearColor(glm::vec4(0));
+		glClear(GL_COLOR_BUFFER_BIT);
+
 		OpenGLState::glDisable(GL_CULL_FACE);
 		OpenGLState::glDisable(GL_DEPTH_TEST);
 		OpenGLState::glDisable(GL_STENCIL_TEST);
+
 		// And we set the blend mode to additive
+
 		OpenGLState::glEnable(GL_BLEND);
 		OpenGLState::glBlendFunc(GL_ONE, GL_ONE);
+
 		for (auto &pl : lights.directionalLights)
 		{
 			*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("direction_light") = glm::normalize(glm::transpose(glm::inverse(glm::mat3(pl.light.transformation))) * glm::vec3(0.f, 1.0f, 0.f));

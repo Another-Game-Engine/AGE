@@ -89,12 +89,10 @@ namespace AGE
 		_programs[PROGRAM_STENCIL]->use();
 		*_programs[PROGRAM_STENCIL]->get_resource<Mat4>("projection_matrix") = infos.projection;
 		*_programs[PROGRAM_STENCIL]->get_resource<Mat4>("view_matrix") = infos.view;
+
 		// Disable blending to clear the color buffer
 		OpenGLState::glDisable(GL_BLEND);
 		OpenGLState::glEnable(GL_CULL_FACE);
-		// clear the light accumulation to zero
-		OpenGLState::glClearColor(glm::vec4(0));
-		glClear(GL_COLOR_BUFFER_BIT);
 		// activate depth test and func to check if sphere_depth > current_depth (normal zfail)
 		OpenGLState::glEnable(GL_DEPTH_TEST);
 		OpenGLState::glDepthFunc(GL_GEQUAL);
@@ -110,6 +108,7 @@ namespace AGE
 		// Iterate throught each light
 		for (auto &pl : lights.pointLight)
 		{
+			_programs[PROGRAM_STENCIL]->use();
 			*_programs[PROGRAM_STENCIL]->get_resource<Mat4>("model_matrix") = pl.light.sphereTransform;
 
 			_programs[PROGRAM_LIGHTNING]->use();
