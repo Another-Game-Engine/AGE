@@ -73,6 +73,14 @@ namespace AGE
 		return res;
 	}
 
+	PrepareKey RenderScene::addDirectionalLight()
+	{
+		PrepareKey res;
+		res.type = PrepareKey::Type::DirectionalLight;
+		res.id = (AGE::PrepareKey::OctreeObjectId)(_pointLights.prepareAlloc());
+		return res;
+	}
+
 	PrepareKey RenderScene::addSpotLight()
 	{
 		PrepareKey res;
@@ -180,6 +188,18 @@ namespace AGE
 		toAdd.key.id = msg.key.id;
 	}
 
+	void RenderScene::_createDirectionalLight(AGE::Commands::MainToPrepare::CreateDirectionalLight &msg)
+	{
+		_directionalLights.allocPreparated(msg.key.id);
+		DirectionalLight &toAdd = _directionalLights.get(msg.key.id);
+
+		// TODO: remove this
+		toAdd.activeDirectionalLightIdx = (uint32_t)(_activeDirectionalLights.size());
+		_activeDirectionalLights.push_back(msg.key.id);
+		// ---
+		toAdd.key.id = msg.key.id;
+	}
+
 	void RenderScene::_createMesh(AGE::Commands::MainToPrepare::CreateMesh &msg)
 	{
 		_meshs.allocPreparated(msg.key.id);
@@ -217,6 +237,16 @@ namespace AGE
 		}
 	}
 
+	void RenderScene::_setDirectionLight(AGE::Commands::MainToPrepare::SetDirectionalLight &msg)
+	{
+		DirectionalLight *l = &_directionalLights.get(msg.key.id);
+		l->data = msg.data;
+		if (l->hasMoved == false)
+		{
+			l->hasMoved = true;
+		}
+	}
+
 	void RenderScene::_deleteCamera(AGE::Commands::MainToPrepare::DeleteCamera &msg)
 	{
 		Camera &toRm = _cameras.get(msg.key.id);
@@ -245,6 +275,17 @@ namespace AGE
 		}
 
 		_pointLights.deallocPreparated(msg.key.id);
+	}
+
+	void RenderScene::_deleteDirectionalLight(AGE::Commands::MainToPrepare::DeleteDirectionalLight&msg)
+	{
+		DirectionalLight &toRm = _directionalLights.get(msg.key.id);
+		_pointLights.deallocPreparated(msg.key.id);
+		// TODO: remove when point lights will be in octree
+		_activeDirectionalLights[toRm.activeDirectionalLightIdx] = _activeDirectionalLights[_activeDirectionalLights.size() - 1];
+		_directionalLights.get(_activeDirectionalLights[toRm.activeDirectionalLightIdx]).activeDirectionalLightIdx = toRm.activeDirectionalLightIdx;
+		_activeDirectionalLights.pop_back();
+		// ---
 	}
 
 	void RenderScene::_deleteSpotLight(AGE::Commands::MainToPrepare::DeleteSpotLight &msg)
@@ -359,6 +400,7 @@ namespace AGE
 		Mesh *uo = nullptr;
 		PointLight *l = nullptr;
 		SpotLight *s = nullptr;
+		DirectionalLight *d = nullptr;
 		switch (msg.key.type)
 		{
 
@@ -401,6 +443,10 @@ namespace AGE
 				s->moveBufferIdx = (uint32_t)_spotLightsToMove.size();
 				_spotLightsToMove.push_back(msg.key.id);
 			}
+			break;
+		case(PrepareKey::Type::DirectionalLight) :
+			d = &_directionalLights.get(msg.key.id);
+			d->transformation = msg.transform;
 			break;
 		default:
 			break;
@@ -507,6 +553,12 @@ namespace AGE
 				auto &p = _spotLights.get(spotLightIdx);
 				renderCamera.lights.spotLights.emplace_back();
 				renderCamera.lights.spotLights.back().light = p;
+			}
+			// no culling possible on directional light so paul you don't have to do it ! is it nice ?
+			for (uint32_t directionalLightIdx : _activeDirectionalLights) {
+				auto &p = _directionalLights.get(directionalLightIdx);
+				renderCamera.lights.directionalLights.emplace_back();
+				renderCamera.lights.directionalLights.back().light = p;
 			}
 			// Do the culling
 			_octree.getElementsCollide(&camera, toDraw);

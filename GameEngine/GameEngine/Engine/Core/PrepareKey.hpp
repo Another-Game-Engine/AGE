@@ -14,6 +14,7 @@ namespace AGE
 			, Mesh
 			, PointLight
 			, SpotLight
+			, DirectionalLight
 		};
 		
 		typedef std::uint8_t OctreeObjectType;

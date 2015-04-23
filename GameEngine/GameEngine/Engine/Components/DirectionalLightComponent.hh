@@ -10,7 +10,7 @@ namespace AGE
 
 	struct DirectionalLightData
 	{
-		DirectionalLightData(glm::vec3 const &color);
+		DirectionalLightData(glm::vec3 const &color = glm::vec3(1.0f));
 		glm::vec3 color;
 	};
 

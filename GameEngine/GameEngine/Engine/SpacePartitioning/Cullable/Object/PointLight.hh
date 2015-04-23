@@ -3,6 +3,9 @@
 #include <Utils/Sphere.hh>
 #include <Utils/Frustum.hh>
 #include <SpacePartitioning/Cullable/CullableShape.hh>
+#include <Components/DirectionalLightComponent.hh>
+#include <Components/SpotLight.hh>
+#include <Components/Light.hh>
 #include <glm/glm.hpp>
 #include <stdint.h>
 #include <Render/Textures/ITexture.hh>
@@ -32,6 +35,12 @@ namespace AGE
 		float spotCutOff;
 		float exponent;
 		void computeDirectionTransform();
+	};
+
+	struct DirectionalLight : public Cullable
+	{
+		uint32_t activeDirectionalLightIdx;
+		DirectionalLightData data;
 	};
 
 }

@@ -18,6 +18,7 @@ namespace AGE
 	{
 		std::vector<RenderLight<PointLight>> pointLight;
 		std::vector<RenderLight<SpotLight>> spotLights;
+		std::vector<RenderLight<DirectionalLight>> directionalLights;
 	};
 
 }
