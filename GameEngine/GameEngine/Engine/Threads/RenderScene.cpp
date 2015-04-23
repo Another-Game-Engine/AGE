@@ -553,16 +553,105 @@ namespace AGE
 			{
 				auto &p = _pointLights.get(pointLightIdx);
 				renderCamera.lights.pointLight.emplace_back();
-				renderCamera.lights.pointLight.back().light = p;
+				RenderLight<PointLight> *curLight = &renderCamera.lights.pointLight.back();
+				curLight->light = p;
 				// TODO: Cull the shadows
+				// VERY UGLY CULLING FOR THE MOMENT
+				AGE::Vector<Cullable*> objectsInShadow;
+				_octree.getAllElements(objectsInShadow);
+				for (Cullable *e : objectsInShadow)
+				{
+					switch (e->key.type)
+					{
+					case PrepareKey::Type::Drawable:
+					{
+						Drawable *currentDrawable = static_cast<Drawable*>(e);
+						RenderPainter *curRenderPainter = nullptr;
+						RenderDrawableList *curRenderDrawablelist = nullptr;
+
+						auto renderPainter = curLight->keys.find(currentDrawable->mesh.painter.getId());
+						// We find the good render painter
+						if (renderPainter == curLight->keys.end())
+						{
+							curRenderPainter = &curLight->keys[currentDrawable->mesh.painter.getId()];
+						}
+						else
+							curRenderPainter = &renderPainter->second;
+						// and the good render mode
+						for (auto &drawableList : curRenderPainter->drawables)
+						{
+							if (drawableList.renderMode == currentDrawable->renderMode)
+							{
+								curRenderDrawablelist = &drawableList;
+								break;
+							}
+						}
+						if (curRenderDrawablelist == nullptr)
+						{
+							curRenderPainter->drawables.emplace_back();
+							curRenderDrawablelist = &curRenderPainter->drawables.back();
+							curRenderDrawablelist->renderMode = currentDrawable->renderMode;
+						}
+						curRenderDrawablelist->vertices.emplace_back(currentDrawable->mesh.vertices);
+						curRenderDrawablelist->properties.emplace_back(_properties.get(currentDrawable->mesh.properties.getId()));
+					}
+					}
+				}
+				// END OF VERY UGLY CULLING
 			}
 			for (uint32_t spotLightIdx : _activeSpotLights) 
 			{
 				auto &p = _spotLights.get(spotLightIdx);
 				renderCamera.lights.spotLights.emplace_back();
-				renderCamera.lights.spotLights.back().light = p;
+				RenderLight<SpotLight> *curLight = &renderCamera.lights.spotLights.back();
+				curLight->light = p;
+				// TODO: Cull the shadows
+				// VERY UGLY CULLING FOR THE MOMENT
+				AGE::Vector<Cullable*> objectsInShadow;
+				_octree.getAllElements(objectsInShadow);
+				for (Cullable *e : objectsInShadow)
+				{
+					switch (e->key.type)
+					{
+					case PrepareKey::Type::Drawable:
+					{
+						Drawable *currentDrawable = static_cast<Drawable*>(e);
+						RenderPainter *curRenderPainter = nullptr;
+						RenderDrawableList *curRenderDrawablelist = nullptr;
+
+						auto renderPainter = curLight->keys.find(currentDrawable->mesh.painter.getId());
+						// We find the good render painter
+						if (renderPainter == curLight->keys.end())
+						{
+							curRenderPainter = &curLight->keys[currentDrawable->mesh.painter.getId()];
+						}
+						else
+							curRenderPainter = &renderPainter->second;
+						// and the good render mode
+						for (auto &drawableList : curRenderPainter->drawables)
+						{
+							if (drawableList.renderMode == currentDrawable->renderMode)
+							{
+								curRenderDrawablelist = &drawableList;
+								break;
+							}
+						}
+						if (curRenderDrawablelist == nullptr)
+						{
+							curRenderPainter->drawables.emplace_back();
+							curRenderDrawablelist = &curRenderPainter->drawables.back();
+							curRenderDrawablelist->renderMode = currentDrawable->renderMode;
+						}
+						curRenderDrawablelist->vertices.emplace_back(currentDrawable->mesh.vertices);
+						curRenderDrawablelist->properties.emplace_back(_properties.get(currentDrawable->mesh.properties.getId()));
+					}
+					}
+				}
+				// END OF VERY UGLY CULLING
 			}
 			// no culling possible on directional light so paul you don't have to do it ! is it nice ?
+			// ANSWER: Well, it's actually gonna be even harder to cull this...
+			// TODO: compute a box for the shadows (orthogonal frustum) and cull the objects :(
 			for (uint32_t directionalLightIdx : _activeDirectionalLights) {
 				auto &p = _directionalLights.get(directionalLightIdx);
 				renderCamera.lights.directionalLights.emplace_back();
