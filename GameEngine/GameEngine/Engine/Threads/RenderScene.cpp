@@ -218,9 +218,7 @@ namespace AGE
 	void RenderScene::_setPointLight(AGE::Commands::MainToPrepare::SetPointLight &msg)
 	{
 		PointLight *l = &_pointLights.get(msg.key.id);
-		l->color = msg.color;
-		l->attenuation = msg.attenuation;
-		l->map = msg.texture;
+		l->data = msg.data;
 		if (l->hasMoved == false)
 		{
 			l->hasMoved = true;

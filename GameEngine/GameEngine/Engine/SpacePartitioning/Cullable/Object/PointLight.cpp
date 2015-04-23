@@ -9,7 +9,7 @@ namespace AGE
 	{
 		float errorRate = 0.01f;
 		glm::vec3 lightRange;
-		glm::vec3 equation(attenuation.z, attenuation.y, attenuation.x);
+		glm::vec3 equation(data.range.z, data.range.y, data.range.x);
 
 		// if the value of equation.z + equation.y * dist + equation.x * dist * dist == 256
 		// then the pixels are not lighted anymore (pxlColor = final_color / attenuation)
