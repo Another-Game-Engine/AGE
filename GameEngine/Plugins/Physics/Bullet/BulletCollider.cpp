@@ -16,7 +16,6 @@ namespace AGE
 				getData()->data = new btRigidBody(static_cast<btScalar>(0.0f), new btDefaultMotionState(), nullptr);
 				assert(getData()->data != nullptr && "Impossible to create actor");
 				btRigidBody *body = getDataAs<btRigidBody>();
-				static_cast<BulletWorld *>(world)->getWorld()->addRigidBody(body, static_cast<short>(filterGroup), static_cast<short>(-1));
 				body->setGravity(btVector3(0.0f, 0.0f, 0.0f));
 				body->setCollisionFlags(body->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
 				body->setActivationState(DISABLE_DEACTIVATION);
@@ -25,14 +24,13 @@ namespace AGE
 			else
 			{
 				btRigidBody *body = getDataAs<btRigidBody>();
-				btDiscreteDynamicsWorld *bulletWorld = static_cast<BulletWorld *>(world)->getWorld();
-				bulletWorld->removeRigidBody(body);
-				bulletWorld->addRigidBody(body, static_cast<short>(filterGroup), static_cast<short>(-1));
+				static_cast<BulletWorld *>(world)->getWorld()->removeRigidBody(body);
 				rigidBody = static_cast<BulletRigidBody *>(body->getUserPointer());
 			}
 			btRigidBody *body = getDataAs<btRigidBody>();
 			body->setUserPointer(this);
 			body->setCollisionShape(collisionShape);
+			static_cast<BulletWorld *>(world)->getWorld()->addRigidBody(body, static_cast<short>(filterGroup), static_cast<short>(-1));
 			setAsTrigger(IsTriggerByDefault());
 		}
 
@@ -50,7 +48,7 @@ namespace AGE
 			else
 			{
 				body->setUserPointer(nullptr);
-				body->setCollisionShape(nullptr);
+				body->setCollisionShape(&BulletRigidBody::EmptyShape);
 				bulletWorld->addRigidBody(body);
 			}
 			delete collisionShape;

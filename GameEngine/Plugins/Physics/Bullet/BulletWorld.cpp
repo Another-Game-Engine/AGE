@@ -48,15 +48,19 @@ namespace AGE
 			std::vector<Contact> contacts;
 			for (std::pair<Collider * const, std::unordered_map<Collider *, std::size_t>> &collisionPairs : collisions)
 			{
-				for (std::pair<Collider * const, std::size_t> &pair : collisionPairs.second)
+				std::unordered_map<Collider *, std::size_t>::iterator it = collisionPairs.second.begin();
+				std::unordered_map<Collider *, std::size_t>::iterator end = collisionPairs.second.end();
+				while (it != end)
 				{
-					if (pair.second > 0)
+					--it->second;
+					if (it->second == 0)
 					{
-						--pair.second;
-						if (pair.second == 0)
-						{
-							listener->onCollision(collisionPairs.first, pair.first, contacts, CollisionType::Lost);
-						}
+						listener->onCollision(collisionPairs.first, it->first, contacts, CollisionType::Lost);
+						it = collisionPairs.second.erase(it);
+					}
+					else
+					{
+						++it;
 					}
 				}
 			}
@@ -67,15 +71,19 @@ namespace AGE
 			TriggerListener *listener = getTriggerListener();
 			for (std::pair<Collider * const, std::unordered_map<Collider *, std::size_t>> &triggerPairs : triggers)
 			{
-				for (std::pair<Collider * const, std::size_t> &pair : triggerPairs.second)
+				std::unordered_map<Collider *, std::size_t>::iterator it = triggerPairs.second.begin();
+				std::unordered_map<Collider *, std::size_t>::iterator end = triggerPairs.second.end();
+				while (it != end)
 				{
-					if (pair.second > 0)
+					--it->second;
+					if (it->second == 0)
 					{
-						--pair.second;
-						if (pair.second == 0)
-						{
-							listener->onTrigger(triggerPairs.first, pair.first, TriggerType::Lost);
-						}
+						listener->onTrigger(triggerPairs.first, it->first, TriggerType::Lost);
+						it = triggerPairs.second.erase(it);
+					}
+					else
+					{
+						++it;
 					}
 				}
 			}
@@ -98,7 +106,7 @@ namespace AGE
 				}
 				const int numberOfContacts = contactManifold->getNumContacts();
 				Collider *firstCollider = static_cast<ColliderInterface *>(static_cast<BulletCollider *>(body0->getUserPointer()))->getCollider();
-				Collider *secondCollider = static_cast<ColliderInterface *>(static_cast<BulletCollider *>(body0->getUserPointer()))->getCollider();
+				Collider *secondCollider = static_cast<ColliderInterface *>(static_cast<BulletCollider *>(body1->getUserPointer()))->getCollider();
 				if (numberOfContacts > 0)
 				{
 					if (body0IsTrigger)
@@ -178,7 +186,7 @@ namespace AGE
 
 		void BulletWorld::simulate(float stepSize)
 		{
-			world.stepSimulation(stepSize);
+			world.stepSimulation(stepSize, 1, 1.0f / static_cast<float>(getTargetFPS()));
 			processCollisionsAndTriggers();
 			updateCollisions();
 			updateTriggers();
@@ -214,6 +222,17 @@ namespace AGE
 
 		void BulletWorld::destroyCollider(ColliderInterface *collider)
 		{
+			Collider *colliderComponent = collider->getCollider();
+			for (std::pair<Collider * const, std::size_t> &pair : collisions[colliderComponent])
+			{
+				collisions[pair.first].erase(colliderComponent);
+			}
+			collisions.erase(colliderComponent);
+			for (std::pair<Collider * const, std::unordered_map<Collider *, std::size_t>> &triggerPairs : triggers)
+			{
+				triggerPairs.second.erase(colliderComponent);
+			}
+			triggers.erase(colliderComponent);
 			switch (collider->getColliderType())
 			{
 				case ColliderType::Box:

@@ -35,7 +35,7 @@ namespace AGE
 			: WorldInterface(physics)
 		{
 			physx::PxSceneDesc sceneDescription(physics->getPhysics()->getTolerancesScale());
-			sceneDescription.flags |= physx::PxSceneFlag::eENABLE_CCD;
+			sceneDescription.flags |= physx::PxSceneFlag::eENABLE_CCD | physx::PxSceneFlag::eENABLE_KINEMATIC_PAIRS | physx::PxSceneFlag::eENABLE_KINEMATIC_STATIC_PAIRS;
 			sceneDescription.broadPhaseType = physx::PxBroadPhaseType::eMBP;
 			sceneDescription.gravity = physx::PxVec3(GetDefaultGravity().x, GetDefaultGravity().y, GetDefaultGravity().z);
 			sceneDescription.cpuDispatcher = physx::PxDefaultCpuDispatcherCreate(1);
@@ -48,6 +48,7 @@ namespace AGE
 			{
 				groupCollisionFlags[index] = 0xFFFFFFFF;
 			}
+			sceneDescription.simulationEventCallback = this;
 			sceneDescription.broadPhaseCallback = this;
 			sceneDescription.filterShader = &PhysXWorld::FilterShader;
 			sceneDescription.filterShaderData = static_cast<const void *>(groupCollisionFlags);
@@ -56,7 +57,6 @@ namespace AGE
 			assert(scene != nullptr && "Impossible to create scene");
 			scene->setFlag(physx::PxSceneFlag::eENABLE_KINEMATIC_PAIRS, true);
 			scene->setFlag(physx::PxSceneFlag::eENABLE_KINEMATIC_STATIC_PAIRS, true);
-			scene->setSimulationEventCallback(this);
 		}
 
 		// Destructor

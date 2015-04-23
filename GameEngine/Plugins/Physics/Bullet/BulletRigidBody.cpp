@@ -6,6 +6,9 @@ namespace AGE
 {
 	namespace Physics
 	{
+		// Static Attributes
+		btEmptyShape BulletRigidBody::EmptyShape;
+
 		// Constructors
 		BulletRigidBody::BulletRigidBody(BulletWorld *world, Private::GenericData *data)
 			: RigidBodyInterface(world, data)
@@ -15,17 +18,13 @@ namespace AGE
 				getData()->data = new btRigidBody(static_cast<btScalar>(0.0f), new btDefaultMotionState(), nullptr);
 				assert(getData()->data != nullptr && "Impossible to create actor");
 				btRigidBody *body = getDataAs<btRigidBody>();
+				body->setCollisionShape(&BulletRigidBody::EmptyShape);
 				world->getWorld()->addRigidBody(body);
 				body->setUserPointer(this);
 			}
 			else
 			{
-				btRigidBody *body = getDataAs<btRigidBody>();
-				BulletCollider *collider = static_cast<BulletCollider *>(body->getUserPointer());
-				collider->rigidBody = this;
-				btDiscreteDynamicsWorld *bulletWorld = world->getWorld();
-				bulletWorld->removeRigidBody(body);
-				bulletWorld->addRigidBody(body, static_cast<short>(collider->getFilterGroup()), static_cast<short>(-1));
+				static_cast<BulletCollider *>(getDataAs<btRigidBody>()->getUserPointer())->rigidBody = this;
 			}
 			setAngularDrag(GetDefaultAngularDrag());
 			setAngularVelocity(GetDefaultAngularVelocity());
@@ -223,7 +222,7 @@ namespace AGE
 
 		void BulletRigidBody::setCollisionDetectionMode(CollisionDetectionMode collisionDetectionMode)
 		{
-			assert(collisionDetectionMode == CollisionDetectionMode::Continuous && "Bullet doesn't support this type of collision detection");
+			return;
 		}
 
 		CollisionDetectionMode BulletRigidBody::getCollisionDetectionMode(void) const

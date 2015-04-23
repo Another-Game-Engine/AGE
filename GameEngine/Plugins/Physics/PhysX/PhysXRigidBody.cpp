@@ -20,10 +20,9 @@ namespace AGE
 			}
 			else
 			{
-				physx::PxRigidDynamic *body = getDataAs<physx::PxRigidDynamic>();
-				PhysXCollider *collider = static_cast<PhysXCollider *>(body->userData);
-				collider->rigidBody = this;
+				static_cast<PhysXCollider *>(getDataAs<physx::PxRigidDynamic>()->userData)->rigidBody = this;
 			}
+			getDataAs<physx::PxRigidDynamic>()->setContactReportThreshold(0.0f);
 			setAngularDrag(GetDefaultAngularDrag());
 			setAngularVelocity(GetDefaultAngularVelocity());
 			setCenterOfMass(GetDefaultCenterOfMass());

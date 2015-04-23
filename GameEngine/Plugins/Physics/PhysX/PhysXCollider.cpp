@@ -81,6 +81,7 @@ namespace AGE
 			physx::PxFilterData filterData;
 			filterData.word0 = static_cast<physx::PxU32>(group);
 			shape->setSimulationFilterData(filterData);
+			shape->setQueryFilterData(filterData);
 		}
 
 		FilterGroup PhysXCollider::getFilterGroup(void) const

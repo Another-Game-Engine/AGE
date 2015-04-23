@@ -1,5 +1,8 @@
 #pragma once
 
+#include <btBulletDynamicsCommon.h>
+#include <btBulletCollisionCommon.h>
+
 #include "RigidBodyInterface.hpp"
 
 namespace AGE
@@ -7,11 +10,14 @@ namespace AGE
 	namespace Physics
 	{
 		class BulletWorld;
+		class BulletCollider;
 
 		class BulletRigidBody final : public RigidBodyInterface
 		{
 			// Friendships
 			friend ObjectPool < BulletRigidBody >;
+
+			friend BulletCollider;
 
 		public:
 			// Constructors
@@ -25,13 +31,16 @@ namespace AGE
 			BulletRigidBody &operator=(const BulletRigidBody &) = delete;
 
 		private:
-			// Destructor
-			~BulletRigidBody(void);
+			// Static Attributes
+			static btEmptyShape EmptyShape;
 
 			// Attributes
 			float maxAngularVelocity = 0.0f;
 
 			float maxDepenetrationVelocity = 0.0f;
+
+			// Destructor
+			~BulletRigidBody(void);
 
 			// Inherited Methods
 			void setAngularDrag(float angularDrag) override final;
