@@ -28,13 +28,16 @@ namespace AGE
 			const PrepareKey &key
 			, const std::vector<SubMeshInstance> &meshs
 			, const std::vector<MaterialInstance> &materials);
+		void updateRenderMode(
+			const PrepareKey &key
+			, const RenderModeSet &renderModes);
 		PrepareKey addMesh();
 		PrepareKey addPointLight();
 		PrepareKey addSpotLight();
 		PrepareKey addDirectionalLight();
 		void setPointLight(glm::vec3 const &color, glm::vec3 const &range, std::shared_ptr<ITexture> const &texture, const PrepareKey &key);
-		void setSpotLight(glm::vec3 const &color, glm::vec3 const &direction, glm::vec3 const &range, float cutOff, std::shared_ptr<ITexture> const &texture, const PrepareKey &key);
 		void setDirectionalLight(DirectionalLightData const &data, PrepareKey const &key);
+		void setSpotLight(glm::vec3 const &color, glm::vec3 const &range, float exponent, float cutOff, std::shared_ptr<ITexture> const &texture, const PrepareKey &key);
 	private:
 		PrepareRenderThread();
 		virtual ~PrepareRenderThread();

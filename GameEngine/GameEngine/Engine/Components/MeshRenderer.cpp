@@ -41,6 +41,8 @@ namespace AGE
 	{
 		_mesh = nullptr;
 		_material = nullptr;
+		_renderMode.reset();
+
 		if (!_key.invalid())
 		{
 			entity.getLink().unregisterOctreeObject(_key);
@@ -72,23 +74,15 @@ namespace AGE
 		return true;
 	}
 
-	void MeshRenderer::enableMode(RenderModes mode)
+	void MeshRenderer::enableRenderMode(RenderModes mode)
 	{
-		assert(_mesh != nullptr);
-		for (auto &subMesh : _mesh->subMeshs)
-		{
-			subMesh.renderMode[mode] = true;
-		}
+		_renderMode[mode] = true;
 		_updateGeometry();
 	}
 
-	void MeshRenderer::disableMode(RenderModes mode)
+	void MeshRenderer::disableRenderMode(RenderModes mode)
 	{
-		assert(_mesh != nullptr);
-		for (auto &subMesh : _mesh->subMeshs)
-		{
-			subMesh.renderMode[mode] = false;
-		}
+		_renderMode[mode] = false;
 		_updateGeometry();
 	}
 
@@ -98,6 +92,7 @@ namespace AGE
 
 		_material = o->_material;
 		_mesh = o->_mesh;
+		_renderMode = o->_renderMode;
 #ifdef EDITOR_ENABLED
 		selectedMeshIndex = o->selectedMeshIndex;
 		selectedMeshName = o->selectedMeshName;
@@ -128,6 +123,7 @@ namespace AGE
 			return;
 		}
 		AGE::GetPrepareThread()->updateGeometry(_key, _mesh->subMeshs, _material->datas);
+		AGE::GetPrepareThread()->updateRenderMode(_key, _renderMode);
 	}
 
 	void MeshRenderer::postUnserialization()
@@ -206,6 +202,23 @@ namespace AGE
 				}
 				++i;
 			}
+		}
+
+		std::string occlusionButtonStr = "Occluder : ";
+		
+		if (_renderMode.test(AGE_OCCLUDER))
+		{
+			occlusionButtonStr += "TOGGLE OFF";
+		}
+		else
+		{
+			occlusionButtonStr += "TOGGLE ON";
+		}
+
+		if (ImGui::Button(occlusionButtonStr.c_str()))
+		{
+			_renderMode[AGE_OCCLUDER].flip();
+			_updateGeometry();
 		}
 
 		ImGui::PushItemWidth(-1);

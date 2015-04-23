@@ -26,27 +26,6 @@ namespace AGE
 				glm::mat4 transform;
 			};
 
-			//struct SetPosition
-			//{
-			//	SetPosition(const PrepareKey &_key, const glm::vec3 &_position);
-			//	PrepareKey key;
-			//	glm::vec3 position;
-			//};
-
-			//struct SetScale
-			//{
-			//	SetScale(const PrepareKey &_key, const glm::vec3 &_scale);
-			//	PrepareKey key;
-			//	glm::vec3 scale;
-			//};
-
-			//struct SetOrientation
-			//{
-			//	SetOrientation(const PrepareKey &_key, const glm::quat &_orientation);
-			//	PrepareKey key;
-			//	glm::quat orientation;
-			//};
-
 			struct SetGeometry
 			{
 				SetGeometry(const PrepareKey &_key
@@ -55,6 +34,14 @@ namespace AGE
 				PrepareKey key;
 				std::vector<SubMeshInstance> submeshInstances;
 				std::vector<MaterialInstance> submaterialInstances;
+			};
+
+			struct SetRenderMode
+			{
+				SetRenderMode(const PrepareKey &_key
+					, const RenderModeSet &renderModes);
+				PrepareKey key;
+				RenderModeSet renderModes;
 			};
 
 			struct CreateMesh
@@ -112,11 +99,11 @@ namespace AGE
 
 			struct SetSpotLight
 			{
-				SetSpotLight(glm::vec3 const &color, glm::vec3 const &direction, glm::vec3 const &range, float cutOff, std::shared_ptr<ITexture> const &texture, PrepareKey &key);
+				SetSpotLight(glm::vec3 const &color, glm::vec3 const &range, float exponent, float cutOff, std::shared_ptr<ITexture> const &texture, PrepareKey &key);
 				PrepareKey key;
 				glm::vec3 color;
-				glm::vec3 direction;
 				glm::vec3 range;
+				float exponent;
 				float cutOff;
 				std::shared_ptr<ITexture> texture;
 

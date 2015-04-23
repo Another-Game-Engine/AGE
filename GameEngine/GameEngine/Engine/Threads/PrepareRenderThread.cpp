@@ -85,6 +85,11 @@ namespace AGE
 			_activeScene->_setGeometry(msg);
 		});
 
+		registerCallback<Commands::MainToPrepare::SetRenderMode>([this](Commands::MainToPrepare::SetRenderMode &msg){
+			assert(this->_activeScene != nullptr);
+			_activeScene->_setRenderMode(msg);
+		});
+
 		registerCallback<Commands::MainToPrepare::SetPointLight>([this](Commands::MainToPrepare::SetPointLight &msg){
 			assert(this->_activeScene != nullptr);
 			_activeScene->_setPointLight(msg);
@@ -244,6 +249,14 @@ namespace AGE
 		getQueue()->emplaceCommand<Commands::MainToPrepare::SetGeometry>(key, meshs, materials);
 	}
 
+	void PrepareRenderThread::updateRenderMode(
+		const PrepareKey &key
+		, const RenderModeSet &renderModes)
+	{
+		AGE_ASSERT(!key.invalid() || key.type != PrepareKey::Type::Mesh);
+		getQueue()->emplaceCommand<Commands::MainToPrepare::SetRenderMode>(key, renderModes);
+	}
+
 	PrepareKey PrepareRenderThread::addMesh()
 	{
 		auto scene = _getRenderScene(GetMainThread()->getActiveScene());
@@ -295,11 +308,11 @@ namespace AGE
 		getQueue()->emplaceCommand<Commands::MainToPrepare::SetDirectionalLight>(data, key);
 	}
 
-	void PrepareRenderThread::setSpotLight(glm::vec3 const &color, glm::vec3 const &direction, glm::vec3 const &range, float cutOff, std::shared_ptr<ITexture> const &texture, const PrepareKey &key)
+	void PrepareRenderThread::setSpotLight(glm::vec3 const &color, glm::vec3 const &range, float exponent, float cutOff, std::shared_ptr<ITexture> const &texture, const PrepareKey &key)
 	{
 		auto scene = _getRenderScene(GetMainThread()->getActiveScene());
 		assert(scene != nullptr);
-		getQueue()->emplaceCommand<Commands::MainToPrepare::SetSpotLight>(color, direction, range, cutOff, texture, key);
+		getQueue()->emplaceCommand<Commands::MainToPrepare::SetSpotLight>(color, range, exponent, cutOff, texture, key);
 	}
 
 	void PrepareRenderThread::_createRenderScene(AScene *scene)

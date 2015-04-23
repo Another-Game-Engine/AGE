@@ -24,9 +24,24 @@ namespace AGE
 		std::string specularTexPath;
 		std::string normalTexPath;
 		std::string bumpTexPath;
+		// will scale UVs based on the scale of the mesh
+		bool scaleUVs = false;
+
+#ifdef EDITOR_ENABLED
+		int selectedTextureIndex[7];
+#endif
 
 	public:
 		template <class Archive> void serialize(Archive &ar, const std::uint32_t version);
+		MaterialData()
+		{
+#ifdef EDITOR_ENABLED
+			for (auto i = 0; i < 7; ++i)
+			{
+				selectedTextureIndex[i] = 0;
+			}
+#endif
+		}
 	};
 
 	struct MaterialDataSet
@@ -34,7 +49,6 @@ namespace AGE
 	public:
 		std::vector<MaterialData> collection;
 		std::string name;
-
 	public:
 		template <class Archive> void serialize(Archive &ar, const std::uint32_t version);
 	};
@@ -49,8 +63,12 @@ namespace AGE
 	void MaterialData::serialize(Archive &ar, const std::uint32_t version)
 	{
 		ar(diffuse, ambient, emissive, reflective, specular, diffuseTexPath, ambientTexPath, emissiveTexPath, reflectiveTexPath, specularTexPath, normalTexPath, bumpTexPath);
+		if (version > 0)
+		{
+			ar(scaleUVs);
+		}
 	}
 }
 
-CEREAL_CLASS_VERSION(AGE::MaterialData, 0)
+CEREAL_CLASS_VERSION(AGE::MaterialData, 1)
 CEREAL_CLASS_VERSION(AGE::MaterialDataSet, 0)

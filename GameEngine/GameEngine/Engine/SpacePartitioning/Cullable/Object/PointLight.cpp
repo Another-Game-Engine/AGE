@@ -29,9 +29,4 @@ namespace AGE
 		assert(lightRange.x > 0);
 		sphereTransform = glm::scale(transformation, lightRange + lightRange * errorRate);
 	}
-
-	void SpotLight::computeDirectionTransform()
-	{
-		direction = glm::mat3(transformation) * direction;
-	}
 }

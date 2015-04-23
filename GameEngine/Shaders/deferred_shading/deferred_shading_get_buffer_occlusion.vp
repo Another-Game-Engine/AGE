@@ -1,0 +1,30 @@
+#version 330
+
+layout (location = 0) in vec3 position;
+layout (location = 1) in vec3 normal;
+layout (location = 2) in vec2 texCoord;
+layout (location = 3) in vec3 tangent;
+
+uniform mat4 projection_matrix;
+uniform mat4 view_matrix;
+uniform mat4 model_matrix;
+uniform vec3 AABB;
+
+out VertexData {
+	vec3 inter_normal;
+	vec3 inter_tangent;
+	vec2 inter_texCoord;
+} VertexOut;
+
+
+flat out int Visible;
+
+void main()
+{
+	mat3 normal_matrix = transpose(inverse(mat3(model_matrix)));
+	VertexOut.inter_normal = normalize(normal_matrix * normal);
+	VertexOut.inter_texCoord = texCoord;
+	VertexOut.inter_tangent = normalize(normal_matrix * tangent);
+	gl_Position = projection_matrix * view_matrix * model_matrix * vec4(position, 1);
+	Visible = 1;
+}

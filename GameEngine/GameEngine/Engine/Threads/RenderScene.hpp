@@ -11,6 +11,7 @@
 #include <SpacePartitioning/Cullable/Object/Mesh.hh>
 #include <SpacePartitioning/Ouptut/RenderCamera.hh>
 #include <array>
+#include <Configuration.hpp>
 
 namespace AGE
 {
@@ -46,6 +47,7 @@ namespace AGE
 		void _deleteSpotLight(AGE::Commands::MainToPrepare::DeleteSpotLight &msg);
 		void _deleteDrawable(AGE::Commands::MainToPrepare::DeleteMesh &msg);
 		void _setGeometry(AGE::Commands::MainToPrepare::SetGeometry &msg);
+		void _setRenderMode(AGE::Commands::MainToPrepare::SetRenderMode &msg);
 		void _setTransform(AGE::Commands::MainToPrepare::SetTransform &msg);
 		
 		void _prepareDrawList(AGE::Commands::MainToPrepare::PrepareDrawLists &msg);

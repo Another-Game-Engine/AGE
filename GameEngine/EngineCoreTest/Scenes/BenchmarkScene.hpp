@@ -43,5 +43,6 @@ namespace AGE
 		float _maxChunk = 0.25f;
 		std::size_t _chunkFrame = 0;
 		AGE::Entity GLOBAL_CAMERA;
+		int pipelineIndex = 1;
 	};
 }

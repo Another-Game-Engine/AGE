@@ -15,6 +15,8 @@
 #include <Core/ConfigurationManager.hpp>
 #include <Core/Engine.hh>
 
+#include "Render/GeometryManagement/SimpleGeometry.hh"
+
 #define DEFERRED_SHADING_MERGING_VERTEX "deferred_shading/deferred_shading_merge.vp"
 #define DEFERRED_SHADING_MERGING_FRAG "deferred_shading/deferred_shading_merge.fp"
 
@@ -32,7 +34,7 @@ namespace AGE
 		std::shared_ptr<Texture2D> lightAccumulation) :
 					ScreenRender(painterManager)
 	{
-		_diffuseInput = diffuse;
+ 		_diffuseInput = diffuse;
 		_specularInput = specular;
 		_lightAccuInput = lightAccumulation;
 

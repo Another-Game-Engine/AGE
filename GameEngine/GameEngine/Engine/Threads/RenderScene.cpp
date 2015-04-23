@@ -23,6 +23,10 @@
 #include <Render/Properties/IProperty.hh>
 #include <Render/Properties/Transformation.hh>
 
+#include <Render/DepthMap.hpp>
+#include <Render/DepthMapManager.hpp>
+#include <Render/DepthMapHandle.hpp>
+
 namespace AGE
 {
 	RenderScene::RenderScene(PrepareRenderThread *prepareThread, Engine *engine, AScene *scene)
@@ -201,8 +205,8 @@ namespace AGE
 	{
 		SpotLight *l = &_spotLights.get(msg.key.id);
 		l->color = msg.color;
-		l->direction = msg.direction;
 		l->spotCutOff = msg.cutOff;
+		l->exponent = msg.exponent;
 		l->map = msg.texture;
 		l->attenuation = msg.range;
 		if (l->hasMoved == false)
@@ -335,6 +339,20 @@ namespace AGE
 		}
 	}
 
+	void RenderScene::_setRenderMode(AGE::Commands::MainToPrepare::SetRenderMode &msg)
+	{
+		Mesh *uo = &_meshs.get(msg.key.id);
+
+		AGE_ASSERT(uo != nullptr);
+
+		for (auto &e : uo->drawableCollection)
+		{
+			Drawable &drawable = _drawables.get(e);
+
+			drawable.renderMode = msg.renderModes;
+		}
+	}
+
 	void RenderScene::_setTransform(AGE::Commands::MainToPrepare::SetTransform &msg)
 	{
 		Camera *co = nullptr;
@@ -420,7 +438,6 @@ namespace AGE
 		{
 			SpotLight &e = _spotLights.get(idx);
 			e.hasMoved = false;
-			e.computeDirectionTransform();
 			// TODO: move in octree
 		}
 		_drawablesToMove.clear();
@@ -454,6 +471,7 @@ namespace AGE
 
 		// clean empty nodes
 		_octree.cleanOctree();
+
 		for (uint32_t cameraIdx : _activeCameras)
 		{
 			Camera &camera = _cameras.get(cameraIdx);
@@ -470,6 +488,12 @@ namespace AGE
 			renderCamera.camInfos.view = view;
 			renderCamera.camInfos.projection = camera.projection;
 			renderCamera.camInfos.renderType = camera.pipeline;
+
+			auto VP = camera.projection * view;
+
+			auto &depthMapManager = GetRenderThread()->getDepthMapManager();
+			auto depthMap = depthMapManager.getReadableMap();
+
 			// no culling for the lights for the moment (TODO)
 			for (uint32_t pointLightIdx : _activePointLights)
 			{
@@ -499,6 +523,8 @@ namespace AGE
 					RenderPainter *curRenderPainter = nullptr;
 					RenderDrawableList *curRenderDrawablelist = nullptr;
 
+					bool drawObject = true;
+
 					auto renderPainter = curRenderPipeline->keys.find(currentDrawable->mesh.painter.getId());
 					// We find the good render painter
 					if (renderPainter == curRenderPipeline->keys.end())
@@ -510,7 +536,7 @@ namespace AGE
 					// and the good render mode
 					for (auto &drawableList : curRenderPainter->drawables)
 					{
-						if (drawableList.renderMode == currentDrawable->mesh.renderMode)
+						if (drawableList.renderMode == currentDrawable->renderMode)
 						{
 							curRenderDrawablelist = &drawableList;
 							break;
@@ -520,11 +546,72 @@ namespace AGE
 					{
 						curRenderPainter->drawables.emplace_back();
 						curRenderDrawablelist = &curRenderPainter->drawables.back();
-						curRenderDrawablelist->renderMode = currentDrawable->mesh.renderMode;
+						curRenderDrawablelist->renderMode = currentDrawable->renderMode;
 					}
-					// We find the good render mode
-					curRenderDrawablelist->vertices.emplace_back(currentDrawable->mesh.vertices);
-					curRenderDrawablelist->properties.emplace_back(_properties.get(currentDrawable->mesh.properties.getId()));
+
+
+#ifdef OCCLUSION_CULLING
+					if (depthMap.isValid() && curRenderDrawablelist->renderMode.at(AGE_OCCLUDER) == false)
+					{
+						drawObject = false;
+
+						auto BB = currentDrawable->mesh.boundingBox;
+
+						glm::vec2 minPoint = glm::vec2(1);
+						glm::vec2 maxPoint = glm::vec2(-1);
+
+						float minZ = std::numeric_limits<float>::max();
+
+						for (std::size_t i = 0; i < 8; ++i)
+						{
+							auto point = depthMap->getMV() * currentDrawable->transformation * glm::vec4(BB.getCornerPoint(i), 1.0f);
+							point /= point.w;
+
+							if (point.x < -1)
+							{
+								point.x = -1;
+							}
+							if (point.y < -1)
+							{
+								point.y = -1;
+							}
+							if (point.x > 1)
+							{
+								point.x = 1;
+							}
+							if (point.y > 1)
+							{
+								point.y = 1;
+							}
+
+							minPoint.x = std::min(minPoint.x, point.x);
+							minPoint.y = std::min(minPoint.y, point.y);
+							maxPoint.x = std::max(maxPoint.x, point.x);
+							maxPoint.y = std::max(maxPoint.y, point.y);
+
+							point.z = (point.z + 1) * 0.5;
+							minZ = std::min(minZ, point.z);
+						}
+
+						glm::uvec2 screenMin(((minPoint + glm::vec2(1)) / glm::vec2(2)) * glm::vec2(depthMap->getMipmapWidth(), depthMap->getMipmapHeight()));
+						glm::uvec2 screenMax(((maxPoint + glm::vec2(1)) / glm::vec2(2)) * glm::vec2(depthMap->getMipmapWidth(), depthMap->getMipmapHeight()));
+
+						drawObject |= depthMap->testBox((uint32_t)(minZ * (1 << 24)), screenMin, screenMax);
+
+						if (drawObject)
+						{
+							GetRenderThread()->getQueue()->emplaceCommand<AGE::Commands::ToRender::Draw2DLine>(glm::vec2(minPoint.x, minPoint.y), glm::vec2(minPoint.x, maxPoint.y));
+							GetRenderThread()->getQueue()->emplaceCommand<AGE::Commands::ToRender::Draw2DLine>(glm::vec2(minPoint.x, maxPoint.y), glm::vec2(maxPoint.x, maxPoint.y));
+							GetRenderThread()->getQueue()->emplaceCommand<AGE::Commands::ToRender::Draw2DLine>(glm::vec2(maxPoint.x, maxPoint.y), glm::vec2(maxPoint.x, minPoint.y));
+							GetRenderThread()->getQueue()->emplaceCommand<AGE::Commands::ToRender::Draw2DLine>(glm::vec2(maxPoint.x, minPoint.y), glm::vec2(minPoint.x, minPoint.y));
+						}
+					}
+#endif // OCCLUSION
+					if (drawObject)
+					{
+						curRenderDrawablelist->vertices.emplace_back(currentDrawable->mesh.vertices);
+						curRenderDrawablelist->properties.emplace_back(_properties.get(currentDrawable->mesh.properties.getId()));
+					}
 
 				}
 				break;

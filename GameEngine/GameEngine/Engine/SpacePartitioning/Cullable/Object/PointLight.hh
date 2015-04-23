@@ -29,8 +29,8 @@ namespace AGE
 		std::shared_ptr<ITexture> map;
 		glm::vec3 color;
 		glm::vec3 attenuation;
-		glm::vec3 direction;
 		float spotCutOff;
+		float exponent;
 		void computeDirectionTransform();
 	};
 

@@ -14,7 +14,10 @@
 namespace AGE
 {
 	SpotLightComponent::SpotLightComponent()
-		:  _color(1),
+		: _color(1),
+		_range(1.0f, 0.01f, 0.001f),
+		_exponent(5.f),
+		_cutOff(0.5f),
 		_map(nullptr)
 	{
 	}
@@ -49,23 +52,24 @@ namespace AGE
 		_key = AGE::GetPrepareThread()->addSpotLight();
 		entity.getLink().registerOctreeObject(_key);
 		_map = entity.getScene()->getInstance<AssetsManager>()->getSpotLightTexture();
+		AGE::GetPrepareThread()->setSpotLight(_color, _range, _exponent, _cutOff, _map, _key);
 		assert(!_key.invalid());
 	}
 
-	SpotLightComponent &SpotLightComponent::set(glm::vec3 const &color, glm::vec3 const &direction, glm::vec3 const &range, float cutOff)
+	SpotLightComponent &SpotLightComponent::set(glm::vec3 const &color, glm::vec3 const &range, float cutOff, float exponent)
 	{
 		_color = color;
-		_direction = direction;
 		_range = range;
 		_cutOff = cutOff;
-		AGE::GetPrepareThread()->setSpotLight(_color, _direction, _range, _cutOff, _map, _key);
+		_exponent = exponent;
+		AGE::GetPrepareThread()->setSpotLight(_color, _range, _exponent, _cutOff, _map, _key);
 		return (*this);
 	}
 
 	void SpotLightComponent::postUnserialization()
 	{
 		init();
-		set(_color, _direction, _range, _cutOff);
+		set(_color, _range, _exponent, _cutOff);
 	}
 
 #ifdef EDITOR_ENABLED
@@ -73,11 +77,33 @@ namespace AGE
 	{}
 
 	void SpotLightComponent::editorDelete()
-	{}
+	{
+	}
 
 	bool SpotLightComponent::editorUpdate()
 	{
-		return false;
+		bool modified = false;
+		if (ImGui::ColorEdit3("Color", getColorPtr()))
+		{
+			set(_color, _range, _cutOff, _exponent);
+			modified = true;
+		}
+		if (ImGui::SliderFloat3("Range", glm::value_ptr(_range), 0.0f, 1.0f))
+		{
+			set(_color, _range, _cutOff, _exponent);
+			modified = true;
+		}
+		if (ImGui::InputFloat("Exponent", &_exponent))
+		{
+			set(_color, _range, _cutOff, _exponent);
+			modified = true;
+		}
+		if (ImGui::InputFloat("cut off", &_cutOff))
+		{
+			set(_color, _range, _cutOff, _exponent);
+			modified = true;
+		}
+		return modified;
 	}
 #endif
 }
