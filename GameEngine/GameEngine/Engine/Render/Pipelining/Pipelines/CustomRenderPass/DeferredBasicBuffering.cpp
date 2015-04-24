@@ -16,8 +16,8 @@
 #include <Configuration.hpp>
 #include <Threads/RenderThread.hpp>
 #include <Threads/ThreadManager.hpp>
-#include <Render/DepthMapHandle.hpp>
-#include <Render/DepthMap.hpp>
+#include <Render/OcclusionTools/DepthMapHandle.hpp>
+#include <Render/OcclusionTools/DepthMap.hpp>
 
 #define DEFERRED_SHADING_BUFFERING_VERTEX "deferred_shading/deferred_shading_get_buffer.vp"
 #define DEFERRED_SHADING_BUFFERING_FRAG "deferred_shading/deferred_shading_get_buffer.fp"

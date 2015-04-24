@@ -2,9 +2,6 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="..\Vendors\imgui\imgui.cpp" />
-    <ClCompile Include="Engine\Render\DepthMap.cpp" />
-    <ClCompile Include="Engine\Render\DepthMapHandle.cpp" />
-    <ClCompile Include="Engine\Render\DepthMapManager.cpp" />
     <ClCompile Include="Engine\Render\Properties\AABB.cpp" />
     <ClCompile Include="Engine\Components\PhysicsData.cpp" />
     <ClCompile Include="Engine\Components\RigidBody.cpp" />
@@ -183,14 +180,14 @@
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredSpotLightning.cpp" />
     <ClCompile Include="Engine\Components\DirectionalLightComponent.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredDirectionalLightning.cpp" />
+    <ClCompile Include="Engine\Render\OcclusionTools\DepthMap.cpp" />
+    <ClCompile Include="Engine\Render\OcclusionTools\DepthMapHandle.cpp" />
+    <ClCompile Include="Engine\Render\OcclusionTools\DepthMapManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
     <ClInclude Include="..\Vendors\imgui\imgui.h" />
     <ClInclude Include="..\Vendors\imgui\stb_textedit.h" />
-    <ClInclude Include="Engine\Render\DepthMap.hpp" />
-    <ClInclude Include="Engine\Render\DepthMapHandle.hpp" />
-    <ClInclude Include="Engine\Render\DepthMapManager.hpp" />
     <ClInclude Include="Engine\Components\PhysicsData.hpp" />
     <ClInclude Include="Engine\Components\RigidBody.hpp" />
     <ClInclude Include="Engine\Physics\BoxColliderInterface.hpp" />
@@ -477,6 +474,9 @@
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredSpotLightning.hh" />
     <ClInclude Include="Engine\Components\DirectionalLightComponent.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredDirectionalLightning.hh" />
+    <ClInclude Include="Engine\Render\OcclusionTools\DepthMap.hpp" />
+    <ClInclude Include="Engine\Render\OcclusionTools\DepthMapHandle.hpp" />
+    <ClInclude Include="Engine\Render\OcclusionTools\DepthMapManager.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

@@ -11,7 +11,7 @@
 #include <Render/Properties/Properties.hh>
 #include <Engine/SpacePartitioning/Ouptut/RenderCamera.hh>
 #include <Render/PipelineTypes.hpp>
-#include <Render/DepthMapManager.hpp>
+#include <Render/OcclusionTools/DepthMapManager.hpp>
 #include <Render/GeometryManagement/SimpleGeometry.hh>
 
 namespace AGE
