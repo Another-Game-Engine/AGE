@@ -62,7 +62,6 @@ namespace AGE
 		OpenGLState::glDisable(GL_BLEND);
 		OpenGLState::glDisable(GL_STENCIL_TEST);
 		OpenGLState::glEnable(GL_DEPTH_TEST);
-		glClear(GL_DEPTH_BUFFER_BIT);
 
 		_programs[PROGRAM_BUFFERING]->use();
 
@@ -82,9 +81,11 @@ namespace AGE
 		// start to render to texture for each depth map
 		auto it = _depthBuffers.begin();
 		for (auto &spotLight : lights.spotLights) {
-			*_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("projection_matrix") = glm::perspective(45.f, float(RESOLUTION_SHADOW_X) / float(RESOLUTION_SHADOW_Y), 0.0f, 1000.0f);
-			*_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("view_matrix") = spotLight.light.transformation;
-			push_storage_output(GL_DEPTH_STENCIL_ATTACHMENT, *it);
+			//glViewport(0, 0, RESOLUTION_SHADOW_X, RESOLUTION_SHADOW_Y);
+			*_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("projection_matrix") = glm::perspective(60.0f, (float)RESOLUTION_SHADOW_X / (float)RESOLUTION_SHADOW_Y, 0.1f, 2000.0f);
+			*_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("view_matrix") = infos.view;// spotLight.light.transformation;
+			_frame_buffer.attachment(*(*it), GL_DEPTH_STENCIL_ATTACHMENT);
+			glClear(GL_DEPTH_BUFFER_BIT);
 			// draw for the spot light selected
 			for (auto &meshPaint : spotLight.keys)
 			{
@@ -98,9 +99,9 @@ namespace AGE
 				}
 			}
 			++it;
+			glFlush();
+			glFlush();
 		}
-		glFlush();
-		glFlush();
 	}
 
 }

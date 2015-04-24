@@ -34,12 +34,12 @@ namespace AGE
 	protected:
 		FrameBufferRender(std::shared_ptr<PaintingManager> painterManager);
 		virtual void renderPass(RenderPipeline const &, RenderLightList const &, CameraInfos const &) = 0;
-
-	private:
 		Framebuffer _frame_buffer;
 		std::unordered_map<GLenum, std::shared_ptr<IFramebufferStorage>> _frame_output;
-		bool _is_update;
 		std::vector<GLenum> _drawing_attach;
+
+	private:
+		bool _is_update;
 	};
 
 	template <typename type_t>
