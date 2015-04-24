@@ -4,8 +4,9 @@
 namespace AGE
 {
 
-	FrameBufferRender::FrameBufferRender(std::shared_ptr<PaintingManager> painterManager) :
-		ARender(painterManager)
+	FrameBufferRender::FrameBufferRender(GLint width, GLint height, std::shared_ptr<PaintingManager> painterManager) :
+		ARender(painterManager),
+		_frame_buffer(width, height)
 	{
 		_nextPass = nullptr;
 	}
@@ -20,6 +21,7 @@ namespace AGE
 	IRender & FrameBufferRender::render(RenderPipeline const &pipeline, RenderLightList const &lights, CameraInfos const &infos)
 	{
 		_frame_buffer.bind();
+		glViewport(0, 0, _frame_buffer.width(), _frame_buffer.height());
 		if (!_is_update)
 		{
 			if (_drawing_attach.size() == 0) {

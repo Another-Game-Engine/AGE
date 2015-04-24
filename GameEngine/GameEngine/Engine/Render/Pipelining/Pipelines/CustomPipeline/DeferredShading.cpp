@@ -5,6 +5,7 @@
 #include <Render/Pipelining/Pipelines/CustomRenderPass/DeferredDirectionalLightning.hh>
 #include <Render/Pipelining/Pipelines/CustomRenderPass/DeferredMerging.hh>
 #include <Render/Pipelining/Pipelines/PipelineTools.hh>
+#include <Configuration.hpp>
 
 namespace AGE
 {
@@ -20,12 +21,12 @@ namespace AGE
 		_lightAccumulation = createRenderPassOutput<Texture2D>(screen_size.x, screen_size.y, GL_RGBA8, true);
 		
 		// We create the render pass
-		std::shared_ptr<DeferredBasicBuffering> basicBuffering = std::make_shared<DeferredBasicBuffering>(_painter_manager, _diffuse, _normal, _specular, _depthStencil);
-		std::shared_ptr<DeferredPointLightning> pointLightning = std::make_shared<DeferredPointLightning>(_painter_manager, _normal, _depthStencil, _lightAccumulation);
-		std::shared_ptr<DeferredSpotLightning> spotLightning = std::make_shared<DeferredSpotLightning>(_painter_manager, _normal, _depthStencil, _lightAccumulation);
-		std::shared_ptr<DeferredDirectionalLightning> directionalLightning = std::make_shared<DeferredDirectionalLightning>(_painter_manager, _normal, _depthStencil, _lightAccumulation);
+		std::shared_ptr<DeferredBasicBuffering> basicBuffering = std::make_shared<DeferredBasicBuffering>(screen_size, _painter_manager, _diffuse, _normal, _specular, _depthStencil);
+		std::shared_ptr<DeferredPointLightning> pointLightning = std::make_shared<DeferredPointLightning>(screen_size, _painter_manager, _normal, _depthStencil, _lightAccumulation);
+		std::shared_ptr<DeferredSpotLightning> spotLightning = std::make_shared<DeferredSpotLightning>(screen_size, _painter_manager, _normal, _depthStencil, _lightAccumulation);
+		std::shared_ptr<DeferredDirectionalLightning> directionalLightning = std::make_shared<DeferredDirectionalLightning>(screen_size, _painter_manager, _normal, _depthStencil, _lightAccumulation);
 
-		_deferredMerging = std::make_shared<DeferredMerging>(_painter_manager, _diffuse, _specular, _lightAccumulation);
+		_deferredMerging = std::make_shared<DeferredMerging>(screen_size, _painter_manager, _diffuse, _specular, _lightAccumulation);
 
 		// The entry point is the basic buffering pass
 		_rendering_list.emplace_back(basicBuffering);

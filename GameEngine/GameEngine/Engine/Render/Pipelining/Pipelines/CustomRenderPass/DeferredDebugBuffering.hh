@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Render/Pipelining/Render/FrameBufferRender.hh>
+#include <glm\glm.hpp>
 
 namespace AGE
 {
@@ -9,7 +10,7 @@ namespace AGE
 	class DeferredDebugBuffering : public FrameBufferRender
 	{
 	public:
-		DeferredDebugBuffering(std::shared_ptr<PaintingManager> painterManager,
+		DeferredDebugBuffering(glm::uvec2 const &screenSize, std::shared_ptr<PaintingManager> painterManager,
 			std::shared_ptr<Texture2D> debugLights,
 			std::shared_ptr<Texture2D> depth);
 		virtual ~DeferredDebugBuffering() = default;

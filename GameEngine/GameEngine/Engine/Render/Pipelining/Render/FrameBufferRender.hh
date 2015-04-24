@@ -32,7 +32,7 @@ namespace AGE
 		std::vector<GLenum> const &drawing_attach() const;
 
 	protected:
-		FrameBufferRender(std::shared_ptr<PaintingManager> painterManager);
+		FrameBufferRender(GLint width, GLint height, std::shared_ptr<PaintingManager> painterManager);
 		virtual void renderPass(RenderPipeline const &, RenderLightList const &, CameraInfos const &) = 0;
 		Framebuffer _frame_buffer;
 		std::unordered_map<GLenum, std::shared_ptr<IFramebufferStorage>> _frame_output;

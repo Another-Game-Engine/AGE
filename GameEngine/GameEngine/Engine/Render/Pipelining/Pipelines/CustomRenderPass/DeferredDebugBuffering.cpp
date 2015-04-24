@@ -26,10 +26,10 @@ namespace AGE
 		PROGRAM_NBR
 	};
 
-	DeferredDebugBuffering::DeferredDebugBuffering(std::shared_ptr<PaintingManager> painterManager,
+	DeferredDebugBuffering::DeferredDebugBuffering(glm::uvec2 const &screenSize, std::shared_ptr<PaintingManager> painterManager,
 		std::shared_ptr<Texture2D> debugLights,
 		std::shared_ptr<Texture2D> depth) :
-		FrameBufferRender(painterManager)
+		FrameBufferRender(screenSize.x, screenSize.y, painterManager)
 	{
 		Key<Painter> quadPainterKey;
 		GetRenderThread()->getQuadGeometry(_quadVertices, quadPainterKey);

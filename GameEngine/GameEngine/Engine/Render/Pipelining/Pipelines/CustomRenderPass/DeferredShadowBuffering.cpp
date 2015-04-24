@@ -22,8 +22,6 @@
 
 #define DEFERRED_SHADING_SHADOW_BUFFERING_VERTEX "deferred_shading/deferred_shading_get_shadow_buffer.vp"
 #define DEFERRED_SHADING_SHADOW_BUFFERING_FRAG "deferred_shading/deferred_shading_get_shadow_buffer.fp"
-#define RESOLUTION_SHADOW_X 500
-#define RESOLUTION_SHADOW_Y 500
 
 namespace AGE
 {
@@ -33,8 +31,8 @@ namespace AGE
 		PROGRAM_NBR
 	};
 
-	DeferredShadowBuffering::DeferredShadowBuffering(std::shared_ptr<PaintingManager> painterManager) :
-		FrameBufferRender(painterManager)
+	DeferredShadowBuffering::DeferredShadowBuffering(glm::uvec2 const &screenSize, std::shared_ptr<PaintingManager> painterManager) :
+		FrameBufferRender(screenSize.x, screenSize.y, painterManager)
 	{
 		// We dont want to take the skinned or transparent meshes
 		_forbidden[AGE_SKINNED] = true;

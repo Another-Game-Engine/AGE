@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Render/Pipelining/Render/FrameBufferRender.hh>
+#include <glm\glm.hpp>
 
 namespace AGE
 {
@@ -10,7 +11,7 @@ namespace AGE
 	class DeferredDirectionalLightning : public FrameBufferRender
 	{
 	public:
-		DeferredDirectionalLightning(std::shared_ptr<PaintingManager> painterManager,
+		DeferredDirectionalLightning(glm::uvec2 const &screenSize, std::shared_ptr<PaintingManager> painterManager,
 			std::shared_ptr<Texture2D> normal,
 			std::shared_ptr<Texture2D> depth,
 			std::shared_ptr<Texture2D> lightAccumulation);

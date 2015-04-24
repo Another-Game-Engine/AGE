@@ -31,9 +31,9 @@ namespace AGE
 		PROGRAM_NBR
 	};
 
-	DeferredMergingDebug::DeferredMergingDebug(std::shared_ptr<PaintingManager> painterManager,
+	DeferredMergingDebug::DeferredMergingDebug(glm::uvec2 const &screenSize, std::shared_ptr<PaintingManager> painterManager,
 		std::shared_ptr<Texture2D> debugLightRender) :
-		ScreenRender(painterManager)
+		ScreenRender(screenSize, painterManager)
 	{
 		_debugLightRender = debugLightRender;
 		_programs.resize(PROGRAM_NBR);

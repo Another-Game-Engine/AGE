@@ -30,12 +30,12 @@ namespace AGE
 		PROGRAM_NBR
 	};
 
-	DeferredBasicBuffering::DeferredBasicBuffering(std::shared_ptr<PaintingManager> painterManager,
+	DeferredBasicBuffering::DeferredBasicBuffering(glm::uvec2 const &screenSize, std::shared_ptr<PaintingManager> painterManager,
 												std::shared_ptr<Texture2D> diffuse,
 												std::shared_ptr<Texture2D> normal,
 												std::shared_ptr<Texture2D> specular,
 												std::shared_ptr<Texture2D> depth) :
-		FrameBufferRender(painterManager)
+		FrameBufferRender(screenSize.x, screenSize.y, painterManager)
 		, _depth(depth)
 	{
 		AGE_ASSERT(depth != nullptr);

@@ -27,11 +27,11 @@ namespace AGE
 		PROGRAM_NBR
 	};
 
-	DeferredDirectionalLightning::DeferredDirectionalLightning(std::shared_ptr<PaintingManager> painterManager,
+	DeferredDirectionalLightning::DeferredDirectionalLightning(glm::uvec2 const &screenSize, std::shared_ptr<PaintingManager> painterManager,
 		std::shared_ptr<Texture2D> normal,
 		std::shared_ptr<Texture2D> depth,
 		std::shared_ptr<Texture2D> lightAccumulation) :
-		FrameBufferRender(painterManager)
+		FrameBufferRender(screenSize.x, screenSize.y, painterManager)
 	{
 		push_storage_output(GL_COLOR_ATTACHMENT0, lightAccumulation);
 		push_storage_output(GL_DEPTH_STENCIL_ATTACHMENT, depth);

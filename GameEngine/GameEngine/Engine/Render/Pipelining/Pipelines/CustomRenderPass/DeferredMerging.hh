@@ -12,7 +12,7 @@ namespace AGE
 	class DeferredMerging : public ScreenRender
 	{
 	public:
-		DeferredMerging(std::shared_ptr<PaintingManager> painterManager,
+		DeferredMerging(glm::uvec2 const &screenSize, std::shared_ptr<PaintingManager> painterManager,
 							std::shared_ptr<Texture2D> diffuse,
 							std::shared_ptr<Texture2D> specular,
 							std::shared_ptr<Texture2D> lightAccumulation);

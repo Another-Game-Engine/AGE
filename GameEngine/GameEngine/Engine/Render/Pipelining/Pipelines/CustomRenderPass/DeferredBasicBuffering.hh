@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Render/Pipelining/Render/FrameBufferRender.hh>
+#include <glm\glm.hpp>
 
 namespace AGE
 {
@@ -9,7 +10,8 @@ namespace AGE
 	class DeferredBasicBuffering : public FrameBufferRender
 	{
 	public:
-		DeferredBasicBuffering(std::shared_ptr<PaintingManager> painterManager,
+		DeferredBasicBuffering(glm::uvec2 const &screenSize, 
+								std::shared_ptr<PaintingManager> painterManager,
 								std::shared_ptr<Texture2D> diffuse,
 								std::shared_ptr<Texture2D> normal,
 								std::shared_ptr<Texture2D> specular,

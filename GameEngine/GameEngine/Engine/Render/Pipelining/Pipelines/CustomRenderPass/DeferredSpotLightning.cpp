@@ -27,27 +27,22 @@ namespace AGE
 		PROGRAM_NBR
 	};
 
-	DeferredSpotLightning::DeferredSpotLightning(std::shared_ptr<PaintingManager> painterManager,
+	DeferredSpotLightning::DeferredSpotLightning(glm::uvec2 const &screenSize, std::shared_ptr<PaintingManager> painterManager,
 		std::shared_ptr<Texture2D> normal,
 		std::shared_ptr<Texture2D> depth,
 		std::shared_ptr<Texture2D> lightAccumulation) :
-		FrameBufferRender(painterManager)
+		FrameBufferRender(screenSize.x, screenSize.y, painterManager)
 	{
 		push_storage_output(GL_COLOR_ATTACHMENT0, lightAccumulation);
 		push_storage_output(GL_DEPTH_STENCIL_ATTACHMENT, depth);
 
 		_normalInput = normal;
 		_depthInput = depth;
-
 		_programs.resize(PROGRAM_NBR);
-
 		auto confManager = GetEngine()->getInstance<ConfigurationManager>();
-
 		auto shaderPath = confManager->getConfiguration<std::string>("ShadersPath");
-
 		// you have to set shader directory in configuration path
 		AGE_ASSERT(shaderPath != nullptr);
-
 		auto vertexShaderPath = shaderPath->getValue() + DEFERRED_SHADING_SPOT_LIGHT_VERTEX;
 		auto fragmentShaderPath = shaderPath->getValue() + DEFERRED_SHADING_SPOT_LIGHT_FRAG;
 

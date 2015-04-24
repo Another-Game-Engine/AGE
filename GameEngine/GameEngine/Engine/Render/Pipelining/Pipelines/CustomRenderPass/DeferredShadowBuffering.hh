@@ -2,6 +2,7 @@
 
 #include <Render/Pipelining/Render/FrameBufferRender.hh>
 #include <list>
+#include <glm/glm.hpp>
 
 namespace AGE
 {
@@ -10,7 +11,7 @@ namespace AGE
 	class DeferredShadowBuffering : public FrameBufferRender
 	{
 	public:
-		DeferredShadowBuffering(std::shared_ptr<PaintingManager> painterManager);
+		DeferredShadowBuffering(glm::uvec2 const &screenSize, std::shared_ptr<PaintingManager> painterManager);
 		virtual ~DeferredShadowBuffering() = default;
 
 	protected:
