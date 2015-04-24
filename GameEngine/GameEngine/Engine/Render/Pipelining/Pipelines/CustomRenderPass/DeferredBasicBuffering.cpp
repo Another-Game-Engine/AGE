@@ -76,7 +76,6 @@ namespace AGE
 		OpenGLState::glDepthMask(GL_TRUE);
 		OpenGLState::glDepthFunc(GL_LEQUAL);
 		OpenGLState::glDisable(GL_BLEND);
-		OpenGLState::glDisable(GL_STENCIL_TEST);
 		OpenGLState::glEnable(GL_DEPTH_TEST);
 		OpenGLState::glClearColor(glm::vec4(0.f, 0.0f, 0.0f, 0.0f));
 		OpenGLState::glEnable(GL_STENCIL_TEST);
@@ -146,8 +145,6 @@ namespace AGE
 			}
 		}
 #endif
-		glFlush();
-		glFlush();
 	}
 
 }

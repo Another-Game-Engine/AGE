@@ -22,7 +22,12 @@ namespace AGE
 		_frame_buffer.bind();
 		if (!_is_update)
 		{
-			glDrawBuffers(GLint(_drawing_attach.size()), _drawing_attach.data());
+			if (_drawing_attach.size() == 0) {
+				glDrawBuffer(GL_NONE);
+			}
+			else {
+				glDrawBuffers(GLint(_drawing_attach.size()), _drawing_attach.data());
+			}
 			for (auto &storage : _frame_output)
 			{
 				_frame_buffer.attachment(*storage.second.get(), storage.first);

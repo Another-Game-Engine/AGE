@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <Render/Textures/Texture2D.hh>
 #include <SpacePartitioning/Cullable/Object/PointLight.hh>
 #include <SpacePartitioning/Ouptut/RenderPainter.hh>
 
