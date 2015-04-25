@@ -18,7 +18,7 @@ namespace AGE
 	{
 	}
 
-	IRender & FrameBufferRender::render(RenderPipeline const &pipeline, RenderLightList const &lights, CameraInfos const &infos)
+	IRender & FrameBufferRender::render(RenderPipeline const &pipeline, RenderLightList &lights, CameraInfos const &infos)
 	{
 		_frame_buffer.bind();
 		glViewport(0, 0, _frame_buffer.width(), _frame_buffer.height());

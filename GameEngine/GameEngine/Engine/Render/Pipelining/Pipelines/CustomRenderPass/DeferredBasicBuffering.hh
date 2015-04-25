@@ -19,7 +19,7 @@ namespace AGE
 		virtual ~DeferredBasicBuffering() = default;
 
 	protected:
-		virtual void renderPass(RenderPipeline const &, RenderLightList const &, CameraInfos const &);
+		virtual void renderPass(RenderPipeline const &, RenderLightList &, CameraInfos const &);
 		std::shared_ptr<Texture2D> _depth;
 		std::vector<uint32_t> _depthPixels;
 	};

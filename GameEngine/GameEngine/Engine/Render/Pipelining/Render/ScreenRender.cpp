@@ -16,7 +16,7 @@ namespace AGE
 
 	}
 
-	IRender & ScreenRender::render(RenderPipeline const &pipeline, RenderLightList const &lights, CameraInfos const &infos)
+	IRender & ScreenRender::render(RenderPipeline const &pipeline, RenderLightList &lights, CameraInfos const &infos)
 	{
 		glViewport(0, 0, viewport.x, viewport.y);
 		renderPass(pipeline, lights, infos);

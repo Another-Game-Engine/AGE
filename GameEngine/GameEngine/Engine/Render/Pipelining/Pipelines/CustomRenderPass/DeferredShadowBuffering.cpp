@@ -51,7 +51,7 @@ namespace AGE
 		}));
 	}
 
-	void DeferredShadowBuffering::renderPass(RenderPipeline const &, RenderLightList const &lights, CameraInfos const &infos)
+	void DeferredShadowBuffering::renderPass(RenderPipeline const &, RenderLightList &lights, CameraInfos const &infos)
 	{
 		OpenGLState::glEnable(GL_CULL_FACE);
 		OpenGLState::glCullFace(GL_BACK);

@@ -21,7 +21,7 @@ namespace AGE
 		void setAmbient(glm::vec3 const &ambient);
 
 	protected:
-		virtual void renderPass(RenderPipeline const &, RenderLightList const &, CameraInfos const &);
+		virtual void renderPass(RenderPipeline const &, RenderLightList &, CameraInfos const &);
 
 	private:
 		std::shared_ptr<Texture2D> _diffuseInput;

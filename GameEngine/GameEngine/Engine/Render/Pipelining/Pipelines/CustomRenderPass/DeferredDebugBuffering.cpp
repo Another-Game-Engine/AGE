@@ -51,7 +51,7 @@ namespace AGE
 		}));
 	}
 
-	void DeferredDebugBuffering::renderPass(RenderPipeline const &, RenderLightList const &renderLight, CameraInfos const &infos)
+	void DeferredDebugBuffering::renderPass(RenderPipeline const &, RenderLightList &renderLight, CameraInfos const &infos)
 	{
 		OpenGLState::glDisable(GL_CULL_FACE);
 		OpenGLState::glDepthMask(GL_TRUE);

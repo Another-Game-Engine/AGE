@@ -60,7 +60,7 @@ namespace AGE
 
 	}
 
-	void DeferredDirectionalLightning::renderPass(RenderPipeline const &, RenderLightList const &lights, CameraInfos const &infos)
+	void DeferredDirectionalLightning::renderPass(RenderPipeline const &, RenderLightList &lights, CameraInfos const &infos)
 	{
 		glm::vec3 cameraPosition = -glm::transpose(glm::mat3(infos.view)) * glm::vec3(infos.view[3]);
 

@@ -67,7 +67,7 @@ namespace AGE
 		_ambientColor = ambient;
 	}
 
-	void DeferredMerging::renderPass(RenderPipeline const &, RenderLightList const &, CameraInfos const &)
+	void DeferredMerging::renderPass(RenderPipeline const &, RenderLightList &, CameraInfos const &)
 	{
 		_programs[PROGRAM_MERGING]->use();
 		*_programs[PROGRAM_MERGING]->get_resource<Sampler2D>("diffuse_map") = _diffuseInput;

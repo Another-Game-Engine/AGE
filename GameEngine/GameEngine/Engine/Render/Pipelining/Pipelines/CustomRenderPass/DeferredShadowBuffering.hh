@@ -15,7 +15,7 @@ namespace AGE
 		virtual ~DeferredShadowBuffering() = default;
 
 	protected:
-		virtual void renderPass(RenderPipeline const &, RenderLightList const &, CameraInfos const &);
+		virtual void renderPass(RenderPipeline const &, RenderLightList &, CameraInfos const &);
 
 	private:
 		std::vector<uint32_t> _depthPixels;

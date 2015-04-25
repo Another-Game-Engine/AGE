@@ -43,7 +43,7 @@ namespace AGE
 		return true;
 	}
 
-	IRenderingPipeline & ARenderingPipeline::render(RenderPipeline const &pipeline, RenderLightList const &lights, CameraInfos const &camInfos)
+	IRenderingPipeline & ARenderingPipeline::render(RenderPipeline const &pipeline, RenderLightList &lights, CameraInfos const &camInfos)
 	{
 		// We iterate over the entry points
 		for (auto &renderPass : _rendering_list)

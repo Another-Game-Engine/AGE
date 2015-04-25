@@ -16,7 +16,7 @@ namespace AGE
 		virtual ~DeferredDebugBuffering() = default;
 
 	protected:
-		virtual void renderPass(RenderPipeline const &, RenderLightList const &, CameraInfos const &);
+		virtual void renderPass(RenderPipeline const &, RenderLightList &, CameraInfos const &);
 	
 	private:
 		Key<Vertices> _quadVertices;

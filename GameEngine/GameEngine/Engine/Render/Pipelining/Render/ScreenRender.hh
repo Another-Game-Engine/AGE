@@ -14,10 +14,10 @@ namespace AGE
 		virtual ~ScreenRender() {}
 
 	public:
-		virtual IRender &render(RenderPipeline const &pipeline, RenderLightList const &lights, CameraInfos const &infos) override final;
+		virtual IRender &render(RenderPipeline const &pipeline, RenderLightList &lights, CameraInfos const &infos) override final;
 	
 	protected:
-		virtual void renderPass(RenderPipeline const &, RenderLightList const &, CameraInfos const &) = 0;
+		virtual void renderPass(RenderPipeline const &, RenderLightList &, CameraInfos const &) = 0;
 		glm::uvec2 viewport;
 	};
 }
