@@ -12,6 +12,7 @@ namespace AGE
 	struct RenderLight
 	{
 		type_t light;
+		std::shared_ptr<ITexture> shadow_map;
 		std::unordered_map<size_t, RenderPainter> keys;
 	};
 

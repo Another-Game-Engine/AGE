@@ -79,11 +79,11 @@ namespace AGE
 		// start to render to texture for each depth map
 		auto it = _depthBuffers.begin();
 		for (auto &spotLight : lights.spotLights) {
-			//glViewport(0, 0, RESOLUTION_SHADOW_X, RESOLUTION_SHADOW_Y);
 			glViewport(0, 0, _frame_buffer.width(), _frame_buffer.height());
 			*_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("projection_matrix") = glm::perspective(180.f * (1.f - spotLight.light.data.cutOff), (float)_frame_buffer.width() / (float)_frame_buffer.height(), 0.1f, 2000.0f);
 			auto position = glm::vec3(spotLight.light.transformation[3]);
-			auto center = position + glm::transpose(glm::inverse(glm::mat3(spotLight.light.transformation))) * glm::vec3(0.f, -1.0f, 0.f);
+			auto direction = glm::transpose(glm::inverse(glm::mat3(spotLight.light.transformation))) * glm::vec3(0.f, -1.0f, 0.f);
+			auto center = position + direction;
 			*_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("view_matrix") = glm::lookAt(position, center, glm::vec3(0.f, 1.0f, 0.0f));
 			_frame_buffer.attachment(*(*it), GL_DEPTH_STENCIL_ATTACHMENT);
 			glClear(GL_DEPTH_BUFFER_BIT);
@@ -99,9 +99,8 @@ namespace AGE
 					}
 				}
 			}
+			spotLight.shadow_map = *it;
 			++it;
-			glFlush();
-			glFlush();
 		}
 	}
 

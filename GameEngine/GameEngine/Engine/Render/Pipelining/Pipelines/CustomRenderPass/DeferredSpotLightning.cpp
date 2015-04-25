@@ -14,6 +14,7 @@
 #include <Threads/RenderThread.hpp>
 #include <Threads/ThreadManager.hpp>
 #include <Core/ConfigurationManager.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 #include <Core/Engine.hh>
 
 #define DEFERRED_SHADING_SPOT_LIGHT_VERTEX "deferred_shading/deferred_shading_spot_light.vp"
@@ -77,9 +78,15 @@ namespace AGE
 		OpenGLState::glBlendFunc(GL_ONE, GL_ONE);
 		for (auto &pl : lights.spotLights)
 		{
-			*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("position_light") = glm::vec3(pl.light.transformation[3]);
+			auto position = glm::vec3(pl.light.transformation[3]);
+			auto direction = glm::transpose(glm::inverse(glm::mat3(pl.light.transformation))) * glm::vec3(0.f, -1.0f, 0.f);
+			auto center = position + direction;
+			auto projection = glm::perspective(180.f * (1.f - pl.light.data.cutOff), (float)_frame_buffer.width() / (float)_frame_buffer.height(), 0.1f, 2000.0f);
+			*_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("shadow_map") = std::static_pointer_cast<Texture2D>(pl.shadow_map);
+			//*_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("matrix_light") = projection * glm::lookAt(position, center, glm::vec3(0.f, 1.0f, 0.0f));
+			*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("position_light") = position;
 			*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("attenuation_light") = pl.light.data.range;
-			*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("direction_light") = glm::normalize(glm::transpose(glm::inverse(glm::mat3(pl.light.transformation))) * glm::vec3(0.f, -1.0f, 0.f));
+			*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("direction_light") = direction;
 			*_programs[PROGRAM_LIGHTNING]->get_resource<Vec1>("spot_cut_off") = pl.light.data.cutOff;
 			*_programs[PROGRAM_LIGHTNING]->get_resource<Vec1>("exponent_light") = pl.light.data.exponent;
 			*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("color_light") = pl.light.data.color;
