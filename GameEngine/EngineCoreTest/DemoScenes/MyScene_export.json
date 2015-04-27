@@ -1,5 +1,5 @@
 {
-    "Number_of_serialized_entities": 3,
+    "Number_of_serialized_entities": 4,
     "Component type map": [
         {
             "key": 0,
@@ -19,18 +19,26 @@
         },
         {
             "key": 4,
-            "value": 4665681159133520176
+            "value": 7027394074625422405
         },
         {
             "key": 5,
-            "value": 11405310106917468904
+            "value": 4665681159133520176
         },
         {
             "key": 6,
-            "value": 10104511821648614695
+            "value": 17578033133020839790
         },
         {
             "key": 7,
+            "value": 11405310106917468904
+        },
+        {
+            "key": 8,
+            "value": 10104511821648614695
+        },
+        {
+            "key": 9,
             "value": 16479542503635362968
         }
     ],
@@ -249,6 +257,46 @@
                 "value1": 1,
                 "value2": 1
             }
+        }
+    },
+    "Entity_4": {
+        "link": {
+            "Position": {
+                "value0": 15,
+                "value1": 15,
+                "value2": 20
+            },
+            "Scale": {
+                "value0": 1,
+                "value1": 1,
+                "value2": 1
+            },
+            "Orientation": {
+                "value0": 0.5416749119758606,
+                "value1": 0.45451998710632324,
+                "value2": -0.54167425632476807,
+                "value3": 0.45452055335044861
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            4
+        ],
+        "AGE::SpotLightComponent": {
+            "cereal_class_version": 0,
+            "color": {
+                "value0": 1,
+                "value1": 1,
+                "value2": 0.14117647707462311
+            },
+            "range": {
+                "value0": 0.13900001347064972,
+                "value1": 0,
+                "value2": 0
+            },
+            "exponent": 5,
+            "cutOff": 0.5
         }
     }
 }

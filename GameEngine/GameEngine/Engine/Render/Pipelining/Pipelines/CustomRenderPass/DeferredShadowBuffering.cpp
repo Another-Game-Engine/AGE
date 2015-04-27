@@ -80,7 +80,7 @@ namespace AGE
 		auto it = _depthBuffers.begin();
 		for (auto &spotLight : lights.spotLights) {
 			glViewport(0, 0, _frame_buffer.width(), _frame_buffer.height());
-			auto projection = glm::perspective(180.f * (1.f - spotLight.light.data.cutOff), (float)_frame_buffer.width() / (float)_frame_buffer.height(), 0.1f, 2000.0f);
+			auto projection = glm::perspective(180.f * (1.f - spotLight.light.data.cutOff) * 0.5f, (float)_frame_buffer.width() / (float)_frame_buffer.height(), 0.1f, 2000.0f);
 			auto position = glm::vec3(spotLight.light.transformation[3]);
 			auto direction = glm::transpose(glm::inverse(glm::mat3(spotLight.light.transformation))) * glm::vec3(0.f, -1.0f, 0.f);
 			auto center = position + direction;
