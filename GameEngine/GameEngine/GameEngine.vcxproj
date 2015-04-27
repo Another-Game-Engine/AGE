@@ -79,7 +79,7 @@
       </AdditionalDependencies>
       <AdditionalLibraryDirectories>
       </AdditionalLibraryDirectories>
-      <AdditionalOptions>/ignore:4006,4221 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/ignore:4006,4221,4099,4098,4075 %(AdditionalOptions)</AdditionalOptions>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -107,7 +107,7 @@
       </AdditionalDependencies>
       <AdditionalLibraryDirectories>
       </AdditionalLibraryDirectories>
-      <AdditionalOptions>/ignore:4006,4221 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/ignore:4006,4221,4099,4098,4075 %(AdditionalOptions)</AdditionalOptions>
     </Lib>
     <ProjectReference>
       <LinkLibraryDependencies>true</LinkLibraryDependencies>

@@ -85,7 +85,7 @@ namespace AGE
 		REGISTER_COMPONENT_TYPE(AGE::Collider);
 
 		addSystem<AGE::DebugSystem>(0);
-		addSystem<AGE::PhysicsSystem>(0, Physics::EngineType::PhysX);
+		addSystem<AGE::PhysicsSystem>(0, Physics::EngineType::Bullet);
 
 		addSystem<AGE::LifetimeSystem>(2);
 		addSystem<AGE::FreeFlyCamera>(0);

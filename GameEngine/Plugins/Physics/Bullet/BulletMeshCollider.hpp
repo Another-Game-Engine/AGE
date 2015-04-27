@@ -1,5 +1,7 @@
 #pragma once
 
+#include <vector>
+
 #include "MeshColliderInterface.hpp"
 #include "BulletCollider.hpp"
 
