@@ -6,14 +6,14 @@ uniform mat4 projection_matrix;
 uniform mat4 view_matrix;
 uniform sampler2D normal_buffer;
 uniform sampler2D depth_buffer;
+uniform sampler2D shadow_map;
 uniform vec3 eye_pos;
 
 uniform vec3 position_light;
 uniform vec3 attenuation_light;
 uniform vec3 direction_light;
 uniform vec3 color_light;
-uniform mat4 matrix_light;
-uniform sampler2D shadow_map;
+uniform mat4 light_matrix;
 
 uniform float spot_cut_off;
 uniform float exponent_light;
@@ -46,14 +46,13 @@ void main()
 	vec3 worldPosToEyes = normalize(eye_pos - worldPos);
 	vec3 reflection = reflect(normalize(-lightDir), normal);
 	float specularRatio = clamp(pow(max(dot(reflection, worldPosToEyes), 0.0f), 100.f), 0.0f, 1.0f);
-	vec4 shadowPos = matrix_light * vec4(worldPos, 1.0f);
-	shadowPos = shadowPos * 0.5 + 0.5;
-	shadowPos /= shadowPos.w;
+	vec4 shadowPos = light_matrix * vec4(worldPos, 1.0f);
+	shadowPos = vec4(vec3(shadowPos.xyz / shadowPos.w) * 0.5f + 0.5f, 1.0f);
+	float shadowMapDepth = texture(shadow_map, shadowPos.xy).x;
 	float visibility = 1.0f;
 	float bias = clamp(0.005f * tan(acos(cosTheta)), 0.f, 0.01f);
-	float get_depth = texture2D(shadow_map, shadowPos.xy).z;
-	if (get_depth < (shadowPos.z - bias)) {
+	if (shadowMapDepth < (shadowPos.z)) {
 		visibility = 0.f;
 	}
-	color = (vec4(vec3(lambert * color_light), specularRatio) * effect / (attenuation)) * visibility/** 0.001f + vec4(1.0f - (1.f - texture(shadow_map, 1 - interpolated_texCoord).x) * 25.0f, 0.f, 0.f, 0.f)*/;
+	color = (vec4(vec3(lambert * color_light), specularRatio) * effect / (attenuation)) * visibility;
 }

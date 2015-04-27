@@ -13,6 +13,7 @@ namespace AGE
 	{
 		type_t light;
 		std::shared_ptr<ITexture> shadow_map;
+		glm::mat4 shadow_matrix;
 		std::unordered_map<size_t, RenderPainter> keys;
 	};
 

@@ -16,7 +16,7 @@ namespace AGE
 // Comment to disable occlusion culling
 #define OCCLUSION_CULLING
 
-#define RESOLUTION_SHADOW_X 500
-#define RESOLUTION_SHADOW_Y 500
+#define RESOLUTION_SHADOW_X 1280
+#define RESOLUTION_SHADOW_Y 720
 
 }
