@@ -40,7 +40,9 @@ namespace AGE
 			physx::PxShape *shape = getShape();
 			const physx::PxVec3 realScaling(scaling.x, scaling.y, scaling.z);
 			physx::PxTransform localPose = shape->getLocalPose();
-			shape->getGeometry().sphere().radius *= std::pow(std::abs(realScaling.x * realScaling.y * realScaling.z), 1.0f / 3.0f);
+			float radius = shape->getGeometry().sphere().radius;
+			radius *= std::pow(std::abs(realScaling.x * realScaling.y * realScaling.z), 1.0f / 3.0f);
+			shape->setGeometry(physx::PxSphereGeometry(radius));
 			localPose.p = localPose.p.multiply(realScaling);
 			shape->setLocalPose(localPose);
 		}

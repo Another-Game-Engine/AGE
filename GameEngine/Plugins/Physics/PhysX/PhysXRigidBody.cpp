@@ -22,19 +22,18 @@ namespace AGE
 			{
 				static_cast<PhysXCollider *>(getDataAs<physx::PxRigidDynamic>()->userData)->rigidBody = this;
 			}
-			getDataAs<physx::PxRigidDynamic>()->setContactReportThreshold(0.0f);
+			setAsKinematic(IsKinematicByDefault());
+			setMass(GetDefaultMass());
+			affectByGravity(IsAffectedByGravityByDefault());
+			setCollisionDetectionMode(GetDefaultCollisionDetectionMode());
 			setAngularDrag(GetDefaultAngularDrag());
 			setAngularVelocity(GetDefaultAngularVelocity());
 			setCenterOfMass(GetDefaultCenterOfMass());
 			setLinearDrag(GetDefaultLinearDrag());
 			setLinearVelocity(GetDefaultLinearVelocity());
-			setMass(GetDefaultMass());
 			setDiagonalInertiaTensor(GetDefaultDiagonalInertiaTensor());
 			setMaxAngularVelocity(GetDefaultMaxAngularVelocity());
 			setMaxDepenetrationVelocity(GetDefaultMaxDepenetrationVelocity());
-			affectByGravity(IsAffectedByGravityByDefault());
-			setAsKinematic(IsKinematicByDefault());
-			setCollisionDetectionMode(GetDefaultCollisionDetectionMode());
 		}
 
 		// Destructor

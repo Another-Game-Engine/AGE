@@ -37,7 +37,8 @@ namespace AGE
 		{
 			physx::PxSceneDesc sceneDescription(physics->getPhysics()->getTolerancesScale());
 			sceneDescription.flags |= physx::PxSceneFlag::eENABLE_CCD | physx::PxSceneFlag::eENABLE_KINEMATIC_PAIRS | physx::PxSceneFlag::eENABLE_KINEMATIC_STATIC_PAIRS;
-			sceneDescription.broadPhaseType = physx::PxBroadPhaseType::eMBP;
+			sceneDescription.broadPhaseType = physx::PxBroadPhaseType::eSAP;
+			sceneDescription.frictionType = physx::PxFrictionType::eTWO_DIRECTIONAL;
 			sceneDescription.gravity = physx::PxVec3(GetDefaultGravity().x, GetDefaultGravity().y, GetDefaultGravity().z);
 			cpuDispatcher = physx::PxDefaultCpuDispatcherCreate(std::thread::hardware_concurrency());
 			sceneDescription.cpuDispatcher = cpuDispatcher;
@@ -94,6 +95,25 @@ namespace AGE
 			return scene;
 		}
 
+		void PhysXWorld::notifyTriggers(void)
+		{
+			TriggerListener *listener = getTriggerListener();
+			for (std::pair<Collider * const, std::unordered_map<Collider *, std::size_t>> &triggerPairs : triggers)
+			{
+				for (std::pair<Collider * const, std::size_t> &pair : triggerPairs.second)
+				{
+					if (pair.second == 0)
+					{
+						listener->onTrigger(triggerPairs.first, pair.first, TriggerType::Persistent);
+					}
+					else
+					{
+						pair.second = 0;
+					}
+				}
+			}
+		}
+
 		// Inherited Methods
 		void PhysXWorld::setGravity(const glm::vec3 &gravity)
 		{
@@ -125,6 +145,7 @@ namespace AGE
 			assert(scene != nullptr && "Invalid scene");
 			scene->simulate(stepSize, nullptr, scratchMemoryBlock, sizeof(scratchMemoryBlock));
 			scene->fetchResults(true);
+			notifyTriggers();
 		}
 
 		RigidBodyInterface *PhysXWorld::createRigidBody(Private::GenericData *data)
@@ -259,17 +280,24 @@ namespace AGE
 				{
 					continue;
 				}
+				Collider *triggerCollider = static_cast<ColliderInterface *>(static_cast<PhysXCollider *>(triggerPair.triggerActor->userData))->getCollider();
+				Collider *otherCollider = static_cast<ColliderInterface *>(static_cast<PhysXCollider *>(triggerPair.otherActor->userData))->getCollider();
 				TriggerType triggerType = TriggerType::Persistent;
 				if (triggerPair.status == physx::PxPairFlag::eNOTIFY_TOUCH_FOUND)
 				{
 					triggerType = TriggerType::New;
+					triggers[triggerCollider][otherCollider] = 1;
 				}
 				else if (triggerPair.status == physx::PxPairFlag::eNOTIFY_TOUCH_LOST)
 				{
 					triggerType = TriggerType::Lost;
+					std::unordered_map<Collider *, std::size_t> &currentTriggers = triggers[triggerCollider];
+					currentTriggers.erase(otherCollider);
+					if (currentTriggers.empty())
+					{
+						triggers.erase(triggerCollider);
+					}
 				}
-				Collider *triggerCollider = static_cast<ColliderInterface *>(static_cast<PhysXCollider *>(triggerPair.triggerActor->userData))->getCollider();
-				Collider *otherCollider = static_cast<ColliderInterface *>(static_cast<PhysXCollider *>(triggerPair.otherActor->userData))->getCollider();
 				triggerListener->onTrigger(triggerCollider, otherCollider, triggerType);
 			}
 		}

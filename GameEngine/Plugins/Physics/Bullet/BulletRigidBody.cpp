@@ -24,7 +24,10 @@ namespace AGE
 			}
 			else
 			{
-				static_cast<BulletCollider *>(getDataAs<btRigidBody>()->getUserPointer())->rigidBody = this;
+				btRigidBody *body = getDataAs<btRigidBody>();
+				static_cast<BulletCollider *>(body->getUserPointer())->rigidBody = this;
+				const glm::vec3 worldGravity = static_cast<WorldInterface *>(world)->getGravity();
+				body->setGravity(btVector3(worldGravity.x, worldGravity.y, worldGravity.z));
 			}
 			setAngularDrag(GetDefaultAngularDrag());
 			setAngularVelocity(GetDefaultAngularVelocity());
@@ -191,8 +194,8 @@ namespace AGE
 
 		void BulletRigidBody::affectByGravity(bool mustBeAffectedByGravity)
 		{
-			const glm::vec3 gravity = mustBeAffectedByGravity ? getWorld()->getGravity() : glm::vec3();
-			getDataAs<btRigidBody>()->setGravity(btVector3(gravity.x, gravity.y, gravity.z));
+			btRigidBody *body = getDataAs<btRigidBody>();
+			body->setFlags(mustBeAffectedByGravity ? body->getFlags() & ~BT_DISABLE_WORLD_GRAVITY : body->getFlags() | BT_DISABLE_WORLD_GRAVITY);
 		}
 
 		bool BulletRigidBody::isAffectedByGravity(void) const

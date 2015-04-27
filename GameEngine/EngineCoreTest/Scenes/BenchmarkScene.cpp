@@ -85,7 +85,7 @@ namespace AGE
 		REGISTER_COMPONENT_TYPE(AGE::Collider);
 
 		addSystem<AGE::DebugSystem>(0);
-		addSystem<AGE::PhysicsSystem>(0, Physics::EngineType::PhysX);
+		addSystem<AGE::PhysicsSystem>(0, Physics::EngineType::Bullet);
 
 		addSystem<AGE::LifetimeSystem>(2);
 		addSystem<AGE::FreeFlyCamera>(0);
@@ -140,26 +140,25 @@ namespace AGE
 		if (getInstance<Input>()->getPhysicalKeyJustReleased(AGE_ESCAPE))
 			return (false);
 
-		static float trigger = 0.0f;
-		if (getInstance<Input>()->getPhysicalKeyPressed(AGE_SPACE) && trigger == 0.0f)
+		static float trigger = 1.0f;
+		if (getInstance<Input>()->getPhysicalKeyPressed(AGE_SPACE) && trigger >= 0.25f)
 		{
-			trigger += time;
-			if (trigger >= 1.0f)
-				trigger = 0;
+			trigger = 0.0f;
 			auto e = createEntity();
 			e.addComponent<Lifetime>(30.0f);
 			auto &link = e.getLink();
-			link.setPosition(GLOBAL_CAMERA.getLink().getPosition() + glm::vec3(0, 0, -2) * GLOBAL_CAMERA.getLink().getOrientation());
+			auto &cameraLink = GLOBAL_CAMERA.getLink();
+			const glm::quat &cameraOrientation = cameraLink.getOrientation();
+			const glm::vec3 cameraForward = glm::vec3(glm::mat4(glm::toMat4(cameraOrientation) * glm::translate(glm::mat4(1), glm::vec3(0.0f, 0.0f, -1.0f)))[3]);
+			link.setPosition(cameraLink.getPosition());
+			link.setOrientation(cameraOrientation);
 			link.setScale(glm::vec3(0.2f));
-			MeshRenderer *mesh;
-			mesh = e.addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("cube/cube.sage")
-				, getInstance<AGE::AssetsManager>()->getMaterial(OldFile("cube/cube.mage")));
-			mesh->enableMode(RenderModes::AGE_OPAQUE);
-			e.addComponent<RigidBody>();
+			e.addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("cube/cube.sage"),
+										 getInstance<AGE::AssetsManager>()->getMaterial(OldFile("cube/cube.mage")))->enableMode(RenderModes::AGE_OPAQUE);
+			e.addComponent<RigidBody>()->addForce(10.0f * cameraForward, Physics::ForceMode::Impulse);
 			e.addComponent<Collider>(Physics::ColliderType::Box);
 		}
-		else
-			trigger = 0.0f;
+		trigger += time;
 
 		if (_chunkCounter >= _maxChunk)
 		{
@@ -178,26 +177,21 @@ namespace AGE
 				if (i % 4 == 0)
 				{
 					mesh = e.addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage"), getInstance<AGE::AssetsManager>()->getMaterial(OldFile("ball/ball.mage")));
+					e.addComponent<Collider>(Physics::ColliderType::Sphere);
 					link.setScale(glm::vec3(0.5f));
 				}
 				else
 				{
 					mesh = e.addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("cube/cube.sage"), getInstance<AGE::AssetsManager>()->getMaterial(OldFile("cube/cube.mage")));
+					e.addComponent<Collider>(Physics::ColliderType::Box);
 				}
 
 				if (i % 13 == 0)
 				{
 					e.addComponent<PointLightComponent>()->set(glm::vec3((float)(rand() % 1000) / 1000.0f, (float)(rand() % 1000) / 1000.0f, (float)(rand() % 1000) / 1000.0f), glm::vec3(1.f, 0.1f, 0.005f));
 				}
-
+				e.addComponent<RigidBody>();
 				mesh->enableMode(RenderModes::AGE_OPAQUE);
-
-				RigidBody *body = e.addComponent<RigidBody>();
-				if (i % 2 == 0)
-					e.addComponent<Collider>(Physics::ColliderType::Sphere);
-				else
-					e.addComponent<Collider>(Physics::ColliderType::Box);
-				body->addRelativeTorque(glm::vec3(std::fmod(rand(), 300.0f), std::fmod(rand(), 300.0f), std::fmod(rand(), 300.0f)), Physics::ForceMode::Acceleration);
 			}
 			_chunkCounter = 0;
 		}

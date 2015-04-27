@@ -51,9 +51,10 @@ namespace AGE
 			const physx::PxVec3 realScaling(scaling.x, scaling.y, scaling.z);
 			physx::PxTransform localPose = shape->getLocalPose();
 			const physx::PxMat33 scalingMatrix = physx::PxMat33::createDiagonal(realScaling) * physx::PxMat33(localPose.q);
-			physx::PxCapsuleGeometry &capsule = shape->getGeometry().capsule();
+			physx::PxCapsuleGeometry capsule = shape->getGeometry().capsule();
 			capsule.halfHeight *= scalingMatrix.column0.magnitude();
 			capsule.radius *= std::sqrt(scalingMatrix.column1.magnitude() * scalingMatrix.column2.magnitude());
+			shape->setGeometry(capsule);
 			localPose.p = localPose.p.multiply(realScaling);
 			shape->setLocalPose(localPose);
 		}
