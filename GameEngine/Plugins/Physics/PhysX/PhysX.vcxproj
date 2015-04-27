@@ -71,7 +71,7 @@
     <TargetName>Physics_$(ProjectName)_x64_d</TargetName>
     <IntDir>$(ProjectDir)Dependencies\$(Platform)\$(Configuration)\</IntDir>
     <OutDir>$(ProjectDir)Binaries\$(Platform)\$(Configuration)\</OutDir>
-    <IncludePath>$(SolutionDir)GameEngine/Engine/Physics;$(ProjectDir);$(SolutionDir)Vendors;$(SolutionDir)Vendors/PhysX/PhysXSDK/Include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>$(SolutionDir)Vendors/OpenGL/include;$(SolutionDir)GameEngine/Engine;$(SolutionDir)GameEngine/Engine/Physics;$(ProjectDir);$(SolutionDir)Vendors;$(SolutionDir)Vendors/PhysX/PhysXSDK/Include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
@@ -84,7 +84,7 @@
     <TargetName>Physics_$(ProjectName)_x64</TargetName>
     <IntDir>$(ProjectDir)Dependencies\$(Platform)\$(Configuration)\</IntDir>
     <OutDir>$(ProjectDir)Binaries\$(Platform)\$(Configuration)\</OutDir>
-    <IncludePath>$(SolutionDir)GameEngine/Engine/Physics;$(ProjectDir);$(SolutionDir)Vendors;$(SolutionDir)Vendors/PhysX/PhysXSDK/Include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>$(SolutionDir)Vendors/OpenGL/include;$(SolutionDir)GameEngine/Engine;$(SolutionDir)GameEngine/Engine/Physics;$(ProjectDir);$(SolutionDir)Vendors;$(SolutionDir)Vendors/PhysX/PhysXSDK/Include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>

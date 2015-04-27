@@ -110,7 +110,6 @@
     <ClCompile Include="Engine\Text\Font.cpp" />
     <ClCompile Include="Engine\Text\FontGlyph.cpp" />
     <ClCompile Include="Engine\Text\FontManager.cpp" />
-    <ClCompile Include="Engine\Utils\Serialization\btSerialization.cpp" />
     <ClCompile Include="Engine\Utils\StreamBuffer.cpp" />
     <ClCompile Include="Engine\Utils\CRC32.cpp" />
     <ClCompile Include="Engine\Utils\Directory.cpp" />
@@ -219,7 +218,6 @@
     <ClInclude Include="Engine\SpacePartitioning\Ouptut\RenderPainter.hh" />
     <ClInclude Include="Engine\SpacePartitioning\Ouptut\RenderPipeline.hh" />
     <ClInclude Include="Engine\Data\Material\MaterialData.hh" />
-    <ClInclude Include="Engine\Data\MeshData.hh" />
     <ClInclude Include="Engine\Data\TextureData.hh" />
     <ClInclude Include="Engine\Render\GeometryManagement\Buffer\Buffer.hh" />
     <ClInclude Include="Engine\Render\GeometryManagement\Buffer\BufferPrograms.hh" />
@@ -324,7 +322,6 @@
     <ClInclude Include="Engine\Utils\Architecture.hpp" />
     <ClInclude Include="Engine\Utils\BitOperations.hpp" />
     <ClInclude Include="Engine\Utils\BoundingInfos.hpp" />
-    <ClInclude Include="Engine\Utils\Serialization\btSerialization.hpp" />
     <ClInclude Include="Engine\Utils\StreamBuffer.hpp" />
     <ClInclude Include="Engine\Utils\BufferPool.hpp" />
     <ClInclude Include="Engine\Utils\Compiler.hpp" />

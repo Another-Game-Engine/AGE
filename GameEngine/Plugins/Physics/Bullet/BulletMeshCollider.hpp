@@ -19,7 +19,7 @@ namespace AGE
 			// Constructors
 			BulletMeshCollider(void) = delete;
 
-			BulletMeshCollider(WorldInterface *world, Private::GenericData *data);
+			BulletMeshCollider(WorldInterface *world, std::shared_ptr<MeshInstance> mesh, Private::GenericData *data);
 
 			BulletMeshCollider(const BulletMeshCollider &) = delete;
 
@@ -29,6 +29,9 @@ namespace AGE
 		private:
 			// Destructor
 			~BulletMeshCollider(void) = default;
+
+			// Inherited Methods
+			void setMesh(std::shared_ptr<MeshInstance> mesh) override final;
 		};
 	}
 }

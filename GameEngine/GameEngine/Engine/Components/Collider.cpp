@@ -3,14 +3,15 @@
 #include <Components/PhysicsData.hpp>
 #include <Core/AScene.hh>
 #include <Physics/WorldInterface.hpp>
+#include <AssetManagement/AssetManager.hh>
 
 namespace AGE
 {
 	// Methods
-	void Collider::init(Physics::ColliderType colliderType)
+	void Collider::init(Physics::ColliderType colliderType, const std::string &mesh)
 	{
 		assert(collider == nullptr && "Collider already initialized");
-		collider = entity.getScene()->getInstance<Physics::WorldInterface>()->createCollider(colliderType, entity.addComponent<Private::PhysicsData>()->getData());
+		collider = entity.getScene()->getInstance<Physics::WorldInterface>()->createCollider(colliderType, colliderType == Physics::ColliderType::Mesh ? entity.getScene()->getInstance<AGE::AssetsManager>()->getMesh(mesh) : nullptr, entity.addComponent<Private::PhysicsData>()->getData());
 		collider->collider = this;
 		scale(entity.getLink().getScale());
 	}
@@ -214,6 +215,46 @@ namespace AGE
 			default:
 				assert(!"Invalid collider type");
 				return glm::vec3();
+		}
+	}
+
+	void Collider::setMesh(std::shared_ptr<MeshInstance> mesh)
+	{
+		assert(collider != nullptr && "Invalid Collider");
+		switch (getColliderType())
+		{
+			case Physics::ColliderType::Mesh:
+				collider->as<Physics::ColliderType::Mesh>()->setMesh(mesh);
+				break;
+			default:
+				assert(!"Invalid collider type");
+				break;
+		}
+	}
+
+	std::shared_ptr<MeshInstance> Collider::getMesh(void)
+	{
+		assert(collider != nullptr && "Invalid Collider");
+		switch (getColliderType())
+		{
+			case Physics::ColliderType::Mesh:
+				return collider->as<Physics::ColliderType::Mesh>()->getMesh();
+			default:
+				assert(!"Invalid collider type");
+				return nullptr;
+		}
+	}
+
+	std::shared_ptr<const MeshInstance> Collider::getMesh(void) const
+	{
+		assert(collider != nullptr && "Invalid Collider");
+		switch (getColliderType())
+		{
+			case Physics::ColliderType::Mesh:
+				return collider->as<Physics::ColliderType::Mesh>()->getMesh();
+			default:
+				assert(!"Invalid collider type");
+				return nullptr;
 		}
 	}
 

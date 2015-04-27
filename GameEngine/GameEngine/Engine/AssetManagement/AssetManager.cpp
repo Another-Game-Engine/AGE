@@ -317,6 +317,7 @@ namespace AGE
 			cereal::PortableBinaryInputArchive ar(ifs);
 			std::shared_ptr<MeshData> data = std::make_shared<MeshData>();
 			ar(*data.get());
+			meshInstance->meshData = data;
 			meshInstance->subMeshs.resize(data->subMeshs.size());
 			meshInstance->name = data->name;
 			meshInstance->path = _filePath.getFullName();

@@ -158,7 +158,7 @@ namespace AGE
 			destroy(static_cast<PhysXRigidBody *>(rigidBody));
 		}
 
-		ColliderInterface *PhysXWorld::createCollider(ColliderType colliderType, Private::GenericData *data)
+		ColliderInterface *PhysXWorld::createCollider(ColliderType colliderType, std::shared_ptr<MeshInstance> mesh, Private::GenericData *data)
 		{
 			switch (colliderType)
 			{
@@ -167,7 +167,7 @@ namespace AGE
 				case ColliderType::Capsule:
 					return create<PhysXCapsuleCollider>(this, data);
 				case ColliderType::Mesh:
-					return create<PhysXMeshCollider>(this, data);
+					return create<PhysXMeshCollider>(this, mesh, data);
 				case ColliderType::Sphere:
 					return create<PhysXSphereCollider>(this, data);
 				default:
@@ -178,6 +178,12 @@ namespace AGE
 
 		void PhysXWorld::destroyCollider(ColliderInterface *collider)
 		{
+			Collider *colliderComponent = collider->getCollider();
+			for (std::pair<Collider * const, std::unordered_map<Collider *, std::size_t>> &triggerPairs : triggers)
+			{
+				triggerPairs.second.erase(colliderComponent);
+			}
+			triggers.erase(colliderComponent);
 			switch (collider->getColliderType())
 			{
 				case ColliderType::Box:

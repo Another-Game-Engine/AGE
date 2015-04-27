@@ -19,7 +19,7 @@ namespace AGE
 			// Constructors
 			NullMeshCollider(void) = delete;
 
-			NullMeshCollider(WorldInterface *world, Private::GenericData *data);
+			NullMeshCollider(WorldInterface *world, std::shared_ptr<MeshInstance> mesh, Private::GenericData *data);
 
 			NullMeshCollider(const NullMeshCollider &) = delete;
 

@@ -202,7 +202,7 @@ namespace AGE
 			destroy(static_cast<BulletRigidBody *>(rigidBody));
 		}
 
-		ColliderInterface *BulletWorld::createCollider(ColliderType colliderType, Private::GenericData *data)
+		ColliderInterface *BulletWorld::createCollider(ColliderType colliderType, std::shared_ptr<MeshInstance> mesh, Private::GenericData *data)
 		{
 			switch (colliderType)
 			{
@@ -211,7 +211,7 @@ namespace AGE
 				case ColliderType::Capsule:
 					return create<BulletCapsuleCollider>(this, data);
 				case ColliderType::Mesh:
-					return create<BulletMeshCollider>(this, data);
+					return create<BulletMeshCollider>(this, mesh, data);
 				case ColliderType::Sphere:
 					return create<BulletSphereCollider>(this, data);
 				default:

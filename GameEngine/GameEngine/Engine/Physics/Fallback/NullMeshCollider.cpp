@@ -7,8 +7,8 @@ namespace AGE
 	namespace Physics
 	{
 		// Constructors
-		NullMeshCollider::NullMeshCollider(WorldInterface *world, Private::GenericData *data)
-			: ColliderInterface(world, data), MeshColliderInterface(world, data), NullCollider(world, data)
+		NullMeshCollider::NullMeshCollider(WorldInterface *world, std::shared_ptr<MeshInstance> mesh, Private::GenericData *data)
+			: ColliderInterface(world, data), MeshColliderInterface(world, mesh, data), NullCollider(world, data)
 		{
 			return;
 		}
@@ -16,7 +16,7 @@ namespace AGE
 		// Inherited Methods
 		void NullMeshCollider::scale(const glm::vec3 &scaling)
 		{
-			// TO_DO
+			return;
 		}
 	}
 }

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 #include <Components/Component.hh>
 #include <Physics/ColliderInterface.hpp>
 #include <Physics/Collision.hpp>
@@ -38,7 +40,7 @@ namespace AGE
 		~Collider(void) = default;
 
 		// Methods
-		void init(Physics::ColliderType colliderType = Physics::ColliderType::Box);
+		void init(Physics::ColliderType colliderType = Physics::ColliderType::Box, const std::string &mesh = "");
 
 		void setStaticFriction(float staticFriction);
 
@@ -81,6 +83,12 @@ namespace AGE
 		void setSize(const glm::vec3 &size);
 
 		glm::vec3 getSize(void) const;
+
+		void setMesh(std::shared_ptr<MeshInstance> mesh);
+
+		std::shared_ptr<MeshInstance> getMesh(void);
+
+		std::shared_ptr<const MeshInstance> getMesh(void) const;
 
 		const std::vector<Physics::Collision> &getCollisions(void) const;
 

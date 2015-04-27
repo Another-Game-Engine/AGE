@@ -7,6 +7,7 @@
 # include <Render/GeometryManagement/Data/Vertices.hh>
 # include <Render/GeometryManagement/Painting/Painter.hh>
 # include <Render/Pipelining/Render/RenderModes.hh>
+# include <AssetManagement/Data/MeshData.hh>
 # include <bitset>
 
 namespace AGE
@@ -27,6 +28,7 @@ namespace AGE
 		std::string name;
 		std::string path;
 		std::vector<SubMeshInstance> subMeshs;
+		std::shared_ptr<MeshData> meshData;
 	};
 
 }

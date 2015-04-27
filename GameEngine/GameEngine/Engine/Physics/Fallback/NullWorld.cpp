@@ -51,7 +51,7 @@ namespace AGE
 			destroy(static_cast<NullRigidBody *>(rigidBody));
 		}
 
-		ColliderInterface *NullWorld::createCollider(ColliderType colliderType, Private::GenericData *data)
+		ColliderInterface *NullWorld::createCollider(ColliderType colliderType, std::shared_ptr<MeshInstance> mesh, Private::GenericData *data)
 		{
 			switch (colliderType)
 			{
@@ -60,7 +60,7 @@ namespace AGE
 				case ColliderType::Capsule:
 					return create<NullCapsuleCollider>(this, data);
 				case ColliderType::Mesh:
-					return create<NullMeshCollider>(this, data);
+					return create<NullMeshCollider>(this, mesh, data);
 				case ColliderType::Sphere:
 					return create<NullSphereCollider>(this, data);
 				default:

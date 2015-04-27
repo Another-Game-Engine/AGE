@@ -12,6 +12,7 @@
 #include "GenericData.hpp"
 #include "CollisionListener.hpp"
 #include "TriggerListener.hpp"
+#include "../AssetManagement/Instance/MeshInstance.hh"
 
 namespace AGE
 {
@@ -120,7 +121,7 @@ namespace AGE
 
 			virtual void destroyRigidBody(RigidBodyInterface *rigidBody) = 0;
 
-			virtual ColliderInterface *createCollider(ColliderType colliderType, Private::GenericData *data) = 0;
+			virtual ColliderInterface *createCollider(ColliderType colliderType, std::shared_ptr<MeshInstance> mesh, Private::GenericData *data) = 0;
 
 			virtual void destroyCollider(ColliderInterface *collider) = 0;
 

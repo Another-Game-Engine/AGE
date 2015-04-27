@@ -52,7 +52,8 @@ namespace AGE
 	template <typename Archive>
 	inline void Collider::saveMeshCollider(Archive &ar, const std::uint32_t version) const
 	{
-		// TO_DO
+		std::shared_ptr<const MeshInstance> mesh = getMesh();
+		ar(cereal::make_nvp("Mesh", mesh != nullptr ? mesh->path : ""));
 	}
 
 	template <typename Archive>
@@ -132,7 +133,9 @@ namespace AGE
 	template <typename Archive>
 	inline void Collider::loadMeshCollider(Archive &ar, const std::uint32_t version)
 	{
-		// TO_DO
+		std::string mesh;
+		ar(cereal::make_nvp("Mesh", mesh));
+		setMesh(mesh.empty() ? nullptr : entity.getScene()->getInstance<AGE::AssetsManager>()->getMesh(mesh));
 	}
 
 	template <typename Archive>

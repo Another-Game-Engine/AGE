@@ -42,11 +42,11 @@ namespace AGE
 			const physx::PxVec3 realScaling(scaling.x, scaling.y, scaling.z);
 			physx::PxTransform localPose = shape->getLocalPose();
 			const physx::PxMat33 scalingMatrix = physx::PxMat33::createDiagonal(realScaling) * physx::PxMat33(localPose.q);
-			physx::PxVec3 halfExtents = shape->getGeometry().box().halfExtents;
-			halfExtents.x *= scalingMatrix.column0.magnitude();
-			halfExtents.y *= scalingMatrix.column1.magnitude();
-			halfExtents.z *= scalingMatrix.column2.magnitude();
-			shape->setGeometry(physx::PxBoxGeometry(halfExtents));
+			physx::PxBoxGeometry &box = shape->getGeometry().box();
+			box.halfExtents.x *= scalingMatrix.column0.magnitude();
+			box.halfExtents.y *= scalingMatrix.column1.magnitude();
+			box.halfExtents.z *= scalingMatrix.column2.magnitude();
+			shape->setGeometry(box);
 			localPose.p = localPose.p.multiply(realScaling);
 			shape->setLocalPose(localPose);
 		}

@@ -19,7 +19,7 @@ namespace AGE
 			// Constructors
 			PhysXMeshCollider(void) = delete;
 
-			PhysXMeshCollider(WorldInterface *world, Private::GenericData *data);
+			PhysXMeshCollider(WorldInterface *world, std::shared_ptr<MeshInstance> mesh, Private::GenericData *data);
 
 			PhysXMeshCollider(const PhysXMeshCollider &) = delete;
 
@@ -27,11 +27,16 @@ namespace AGE
 			PhysXMeshCollider &operator=(const PhysXMeshCollider &) = delete;
 
 		private:
+			// Static Methods
+			static physx::PxConvexMesh *CreateConvexMesh(WorldInterface *world, std::shared_ptr<MeshInstance> mesh);
+
 			// Destructor
 			~PhysXMeshCollider(void) = default;
 
 			// Inherited Methods
 			void scale(const glm::vec3 &scaling) override final;
+
+			void setMesh(std::shared_ptr<MeshInstance> mesh) override final;
 		};
 	}
 }
