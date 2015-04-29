@@ -4,6 +4,7 @@
 #include <Render/Textures/Texture2D.hh>
 #include <SpacePartitioning/Cullable/Object/PointLight.hh>
 #include <SpacePartitioning/Ouptut/RenderPainter.hh>
+#include <glm/glm.hpp>
 
 namespace AGE
 {

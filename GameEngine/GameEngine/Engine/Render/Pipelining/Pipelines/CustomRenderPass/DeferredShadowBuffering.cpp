@@ -60,6 +60,8 @@ namespace AGE
 		OpenGLState::glDisable(GL_BLEND);
 		OpenGLState::glDisable(GL_STENCIL_TEST);
 		OpenGLState::glEnable(GL_DEPTH_TEST);
+		OpenGLState::glDepthMask(GL_TRUE);
+		OpenGLState::glDepthFunc(GL_LESS);
 
 		_programs[PROGRAM_BUFFERING]->use();
 
@@ -80,11 +82,9 @@ namespace AGE
 		auto it = _depthBuffers.begin();
 		for (auto &spotLight : lights.spotLights) {
 			glViewport(0, 0, _frame_buffer.width(), _frame_buffer.height());
-			auto projection = glm::perspective(180.f * (1.f - spotLight.light.data.cutOff), (float)_frame_buffer.width() / (float)_frame_buffer.height(), 0.1f, 2000.0f);
+			auto projection = glm::perspective(45.f, (float)_frame_buffer.width() / (float)_frame_buffer.height(), 0.01f, 2000.0f);
 			auto position = glm::vec3(spotLight.light.transformation[3]);
-			auto direction = glm::transpose(glm::inverse(glm::mat3(spotLight.light.transformation))) * glm::vec3(0.f, -1.0f, 0.f);
-			auto center = position + direction;
-			spotLight.shadow_matrix = projection * glm::lookAt(position, center, glm::vec3(0.f, 1.0f, 0.0f));
+			spotLight.shadow_matrix = projection * glm::inverse(spotLight.light.transformation);
 			*_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("light_matrix") = spotLight.shadow_matrix;
 			_frame_buffer.attachment(*(*it), GL_DEPTH_STENCIL_ATTACHMENT);
 			glClear(GL_DEPTH_BUFFER_BIT);

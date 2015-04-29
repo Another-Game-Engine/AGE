@@ -79,7 +79,7 @@ namespace AGE
 		for (auto &pl : lights.spotLights)
 		{
 			auto position = glm::vec3(pl.light.transformation[3]);
-			auto direction = glm::transpose(glm::inverse(glm::mat3(pl.light.transformation))) * glm::vec3(0.f, -1.0f, 0.f);
+			auto direction = glm::transpose(glm::inverse(glm::mat3(pl.light.transformation))) * glm::vec3(0.0f, 0.0f, -1.0f);
 			*_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("shadow_map") = std::static_pointer_cast<Texture2D>(pl.shadow_map);
 			*_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("light_matrix") = pl.shadow_matrix;
 			*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("position_light") = position;

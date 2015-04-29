@@ -48,10 +48,10 @@ void main()
 	float specularRatio = clamp(pow(max(dot(reflection, worldPosToEyes), 0.0f), 100.f), 0.0f, 1.0f);
 	vec4 shadowPos = light_matrix * vec4(worldPos, 1.0f);
 	shadowPos = vec4(vec3(shadowPos.xyz / shadowPos.w) * 0.5f + 0.5f, 1.0f);
-	float shadowMapDepth = texture(shadow_map, shadowPos.xy).x;
+	float shadowMapDepth = texture(shadow_map, shadowPos.xy).z;
 	float visibility = 1.0f;
 	float bias = clamp(0.005f * tan(acos(cosTheta)), 0.f, 0.01f);
-	if (shadowMapDepth < (shadowPos.z)) {
+	if (shadowMapDepth < (shadowPos.z - 0.00001)) {
 		visibility = 0.f;
 	}
 	color = (vec4(vec3(lambert * color_light), specularRatio) * effect / (attenuation)) * visibility;
