@@ -32,6 +32,8 @@ namespace AGE
 
 			// Inherited Methods
 			void scale(const glm::vec3 &scaling) override final;
+
+			void updateShape(void) override final;
 		};
 	}
 }

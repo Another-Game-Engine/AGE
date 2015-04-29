@@ -96,13 +96,9 @@ namespace AGE
 		for (Entity entity : entityFilter.getCollection())
 		{
 			link = entity.getLinkPtr();
-			if (link->isUserModified())
-			{
-				rigidBody = entity.getComponent<RigidBody>();
-				rigidBody->setPosition(link->getPosition());
-				rigidBody->setRotation(link->getOrientation());
-				link->setUserModified(false);
-			}
+			rigidBody = entity.getComponent<RigidBody>();
+			rigidBody->setPosition(link->getPosition());
+			rigidBody->setRotation(link->getOrientation());
 		}
 	}
 
@@ -119,7 +115,7 @@ namespace AGE
 		{
 			rigidBody = entity.getComponent<RigidBody>();
 			link = entity.getLinkPtr();
-			link->setPosition(rigidBody->getPosition());
+			link->setPosition(rigidBody->getPosition(), false);
 			link->setOrientation(rigidBody->getRotation());
 		}
 	}

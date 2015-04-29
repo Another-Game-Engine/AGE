@@ -27,6 +27,9 @@ namespace AGE
 			// Assignment Operators
 			BulletCollider &operator=(const BulletCollider &) = delete;
 
+			// Methods
+			void updateShape(btCollisionShape *shape);
+
 		protected:
 			// Destructor
 			virtual ~BulletCollider(void);

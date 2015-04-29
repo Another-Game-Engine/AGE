@@ -28,6 +28,11 @@ namespace AGE
 			}
 			btRigidBody *body = getDataAs<btRigidBody>();
 			body->setUserPointer(this);
+			if (collisionShape->isConcave())
+			{
+				body->setCollisionFlags(body->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
+				body->setActivationState(DISABLE_DEACTIVATION);
+			}
 			body->setCollisionShape(collisionShape);
 			setAsTrigger(IsTriggerByDefault());
 			setFilterGroup(GetDefaultFilterGroup());
@@ -63,6 +68,20 @@ namespace AGE
 		const btCollisionShape *BulletCollider::getShape(void) const
 		{
 			return collisionShape;
+		}
+
+		void BulletCollider::updateShape(btCollisionShape *shape)
+		{
+			assert(shape != nullptr && "Invalid shape");
+			btRigidBody *body = getDataAs<btRigidBody>();
+			if (shape->isConcave())
+			{
+				body->setCollisionFlags(body->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
+				body->setActivationState(DISABLE_DEACTIVATION);
+			}
+			body->setCollisionShape(shape);
+			delete collisionShape;
+			collisionShape = shape;
 		}
 
 		// Inherited Methods

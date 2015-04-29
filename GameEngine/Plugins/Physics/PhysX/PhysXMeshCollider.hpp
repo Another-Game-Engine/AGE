@@ -30,6 +30,8 @@ namespace AGE
 			// Static Methods
 			static physx::PxConvexMesh *CreateConvexMesh(WorldInterface *world, std::shared_ptr<MeshInstance> mesh);
 
+			static physx::PxTriangleMesh *CreateTriangleMesh(WorldInterface *world, std::shared_ptr<MeshInstance> mesh);
+
 			// Destructor
 			~PhysXMeshCollider(void) = default;
 
@@ -37,6 +39,8 @@ namespace AGE
 			void scale(const glm::vec3 &scaling) override final;
 
 			void setMesh(std::shared_ptr<MeshInstance> mesh) override final;
+
+			void updateShape(void) override final;
 		};
 	}
 }

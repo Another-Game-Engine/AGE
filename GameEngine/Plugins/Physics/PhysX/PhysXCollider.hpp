@@ -23,6 +23,9 @@ namespace AGE
 
 			PhysXCollider(const PhysXCollider &) = delete;
 
+			// Methods
+			void updateShape(physx::PxShape *newShape);
+
 			// Assignment Operators
 			PhysXCollider &operator=(const PhysXCollider &) = delete;
 

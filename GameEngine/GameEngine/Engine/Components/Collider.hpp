@@ -84,11 +84,15 @@ namespace AGE
 
 		glm::vec3 getSize(void) const;
 
-		void setMesh(std::shared_ptr<MeshInstance> mesh);
+		void setMesh(const std::string &mesh);
 
 		std::shared_ptr<MeshInstance> getMesh(void);
 
 		std::shared_ptr<const MeshInstance> getMesh(void) const;
+
+		void setAsConvex(bool mustBeConvex);
+
+		bool isConvex(void) const;
 
 		const std::vector<Physics::Collision> &getCollisions(void) const;
 

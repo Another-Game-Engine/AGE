@@ -41,6 +41,10 @@ namespace AGE
 				assert(!"Impossible to create cooking");
 				return false;
 			}
+			physx::PxCookingParams cookingParameters = cooking->getParams();
+			cookingParameters.meshPreprocessParams.set(physx::PxMeshPreprocessingFlag::eREMOVE_DUPLICATED_TRIANGLES);
+			cookingParameters.meshPreprocessParams.set(physx::PxMeshPreprocessingFlag::eREMOVE_UNREFERENCED_VERTICES);
+			cooking->setParams(cookingParameters);
 			physics = PxCreatePhysics(PX_PHYSICS_VERSION, *foundation, toleranceScale);
 			if (physics == nullptr)
 			{

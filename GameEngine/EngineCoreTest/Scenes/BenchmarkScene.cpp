@@ -85,7 +85,7 @@ namespace AGE
 		REGISTER_COMPONENT_TYPE(AGE::Collider);
 
 		addSystem<AGE::DebugSystem>(0);
-		addSystem<AGE::PhysicsSystem>(0, Physics::EngineType::Bullet);
+		addSystem<AGE::PhysicsSystem>(0, Physics::EngineType::PhysX);
 
 		addSystem<AGE::LifetimeSystem>(2);
 		addSystem<AGE::FreeFlyCamera>(0);
@@ -141,7 +141,7 @@ namespace AGE
 			return (false);
 
 		static float trigger = 1.0f;
-		if (getInstance<Input>()->getPhysicalKeyPressed(AGE_SPACE) && trigger >= 0.25f)
+		if (getInstance<Input>()->getPhysicalKeyPressed(AGE_SPACE) && trigger >= 0.15f)
 		{
 			trigger = 0.0f;
 			auto e = createEntity();

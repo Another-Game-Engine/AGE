@@ -54,6 +54,7 @@ namespace AGE
 	{
 		std::shared_ptr<const MeshInstance> mesh = getMesh();
 		ar(cereal::make_nvp("Mesh", mesh != nullptr ? mesh->path : ""));
+		ar(cereal::make_nvp("Convex", isConvex()));
 	}
 
 	template <typename Archive>
@@ -134,8 +135,11 @@ namespace AGE
 	inline void Collider::loadMeshCollider(Archive &ar, const std::uint32_t version)
 	{
 		std::string mesh;
+		bool convex;
 		ar(cereal::make_nvp("Mesh", mesh));
-		setMesh(mesh.empty() ? nullptr : entity.getScene()->getInstance<AGE::AssetsManager>()->getMesh(mesh));
+		setMesh(mesh);
+		ar(cereal::make_nvp("Convex", convex));
+		setAsConvex(convex);
 	}
 
 	template <typename Archive>
