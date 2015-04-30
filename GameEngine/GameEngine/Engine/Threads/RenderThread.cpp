@@ -199,6 +199,8 @@ namespace AGE
 
 		registerCallback<Commands::ToRender::RenderDrawLists>([&](Commands::ToRender::RenderDrawLists& msg)
 		{
+			MICROPROFILE_SCOPEGPUI("GPU TEST", 0xff00ff);
+			MICROPROFILE_SCOPEI("AGE::Commands::ToRender::RenderDrawLists", "RenderTimer", 0xcaca12);
 			if (!_drawlistPtr) // nothing to draw
 				return;
 			AGE_ASSERT(_drawlistPtr != nullptr);
@@ -265,7 +267,7 @@ namespace AGE
 			this->_insideRun = false;
 		});
 
-#ifdef USE_IMGUI
+#ifdef AGE_ENABLE_IMGUI
 		registerCallback<AGE::RenderImgui>([&](AGE::RenderImgui &msg)
 		{
 			AGE::Imgui::getInstance()->renderThreadRenderFn(msg.cmd_lists);

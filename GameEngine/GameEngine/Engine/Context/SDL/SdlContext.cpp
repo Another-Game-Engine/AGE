@@ -6,6 +6,8 @@
 #include <SDL/SDL.h>
 #include <Core/Inputs/Input.hh>
 #include <Threads/MainThread.hpp>
+#include <Utils/Age_microprofile.hpp>
+#include <microprofile/microprofile.h>
 
 namespace AGE
 {
@@ -28,6 +30,7 @@ namespace AGE
 			std::cerr << "glewInit Failed" << std::endl;
 			return (false);
 		}
+		MicroProfileGpuInitGL();
 		return (true);
 	}
 

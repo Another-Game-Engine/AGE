@@ -12,24 +12,24 @@
 
 // link the project with Ws2_32.lib
 
+#ifndef MICROPROFILE_ENABLED
+
+#ifdef AGE_ENABLE_PROFILING
+#define MICROPROFILE_ENABLED 1
+
 #define MICROPROFILE_MAX_FRAME_HISTORY (2<<10)
-#define MICROPROFILE_IMPL
 #define MICROPROFILE_GPU_TIMERS_GL 1
+#define _CRT_SECURE_NO_WARNINGS
+#define MICROPROFILE_GPU_TIMERS 1
+#define MICROPROFILE_WEBSERVER 1
 
-#include <microprofile/microprofile.h>
+#else
+#define MICROPROFILE_ENABLED 0
+#endif
 
-MICROPROFILE_DEFINE(MAIN, "MAIN", "Main", 0xff0000);
+#endif
+
 
 // Call to this function at  the begining of the main
-static void Age_microprofileInit()
-{
-	MicroProfileOnThreadCreate("Main");
-	printf("Micro profile is enabled\n");
-
-	//turn on profiling
-	MicroProfileSetForceEnable(true);
-	MicroProfileSetEnableAllGroups(true);
-	MicroProfileSetForceMetaCounters(true);
-
-	MicroProfileStartContextSwitchTrace();
-}
+void Age_microprofileInit();
+//const char* MicroProfileGetThreadName();

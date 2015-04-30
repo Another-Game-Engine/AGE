@@ -18,6 +18,5 @@
     <ClInclude Include="Components\RotationComponent.hpp" />
     <ClInclude Include="Systems\RotationSystem.hpp" />
     <ClInclude Include="EngineCoreTestConfiguration.hpp" />
-    <ClInclude Include="..\Vendors\microprofile\microprofile.h" />
   </ItemGroup>
 </Project>

@@ -29,7 +29,7 @@
 
 #include <Configuration.hpp>
 
-#ifdef USE_IMGUI
+#ifdef AGE_ENABLE_IMGUI
 #include <imgui/imgui.h>
 #endif
 
@@ -550,7 +550,7 @@ namespace AGE
 
 		if (toLoad != 0)
 		{
-#ifdef USE_IMGUI
+#ifdef AGE_ENABLE_IMGUI
 			if (!ImGui::Begin("ASSETS LOADING", (bool*)1, ImVec2(0, 0), 0.3f, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings))
 			{
 				ImGui::End();

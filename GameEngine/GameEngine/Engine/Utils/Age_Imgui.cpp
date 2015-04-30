@@ -29,7 +29,7 @@ namespace AGE
 
 	bool Imgui::init(Engine *en)
 	{
-#ifdef USE_IMGUI
+#ifdef AGE_ENABLE_IMGUI
 
 		GetMainThread()->registerCallback<ImGuiKeyEvent>([this](ImGuiKeyEvent &msg)
 		{
@@ -158,7 +158,7 @@ namespace AGE
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
 #else
 		UNUSED(di);
-#endif //USE_IMGUI
+#endif //AGE_ENABLE_IMGUI
 		return true;
 	}
 
@@ -168,7 +168,7 @@ namespace AGE
 
 	void Imgui::startUpdate()
 	{
-#ifdef USE_IMGUI
+#ifdef AGE_ENABLE_IMGUI
 		ImGuiIO& io = ImGui::GetIO();
 
 		auto input = this->_engine->getInstance<AGE::Input>();
@@ -197,7 +197,7 @@ namespace AGE
 
 	static void make_ortho(float *result, float const & left, float const & right, float const & bottom, float const & top, float const & zNear, float const & zFar)
 	{
-#ifdef USE_IMGUI
+#ifdef AGE_ENABLE_IMGUI
 		result[0] = static_cast<float>(2) / (right - left);
 		result[5] = static_cast<float>(2) / (top - bottom);
 		result[10] = -float(2) / (zFar - zNear);
@@ -217,7 +217,7 @@ namespace AGE
 
 	void Imgui::renderDrawLists(ImDrawList** const cmd_lists, int cmd_lists_count)
 	{
-#ifdef USE_IMGUI
+#ifdef AGE_ENABLE_IMGUI
 		AGE::GetPrepareThread()->getQueue()->emplaceCommand<AGE::RenderImgui>(cmd_lists, cmd_lists_count);
 #else
 		UNUSED(cmd_lists);
@@ -305,7 +305,7 @@ namespace AGE
 
 	void Imgui::initShader(int *pid, int *vert, int *frag, const char *vs, const char *fs)
 	{
-#ifdef USE_IMGUI
+#ifdef AGE_ENABLE_IMGUI
 		*pid = glCreateProgram();
 		*vert = glCreateShader(GL_VERTEX_SHADER);
 		*frag = glCreateShader(GL_FRAGMENT_SHADER);
