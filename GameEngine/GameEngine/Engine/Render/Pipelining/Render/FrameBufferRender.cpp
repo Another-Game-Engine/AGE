@@ -25,6 +25,8 @@ namespace AGE
 		_frame_buffer.bind();
 		if (!_is_update)
 		{
+			SCOPE_profile_gpu_i("glDrawBuffers");
+			SCOPE_profile_cpu_i("RenderTimer", "glDrawBuffers");
 			glDrawBuffers(GLint(_drawing_attach.size()), _drawing_attach.data());
 			for (auto &storage : _frame_output)
 			{

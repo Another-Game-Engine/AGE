@@ -129,7 +129,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;EDITOR_ENABLED;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;AGE_ENABLE_IMGUI;AGE_ENABLE_PROFILING = 1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;EDITOR_ENABLED;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;AGE_ENABLE_IMGUI;AGE_ENABLE_PROFILING;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4503;4099</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>

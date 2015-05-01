@@ -47,6 +47,8 @@ namespace AGE
 
 	void SdlContext::refreshInputs()
 	{
+		SCOPE_profile_cpu_i("RenderTimer", "Refresh inputs");
+
 		SDL_Event events;
 		auto input = _dependencyManager->getInstance<Input>();
 

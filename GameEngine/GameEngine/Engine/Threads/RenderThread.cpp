@@ -354,15 +354,21 @@ namespace AGE
 		{
 			waitStart = std::chrono::high_resolution_clock::now();
 			taskSuccess = commandSuccess = false;
-			do {
-				if (_context)
-					_context->refreshInputs();
-				getQueue()->getTaskAndCommandQueue(tasks, taskSuccess, commands, commandSuccess, TMQ::HybridQueue::Block);
-			} while (!taskSuccess && !commandSuccess);
+			{
+				SCOPE_profile_cpu_i("RenderTimer", "Wait and get commands");
+				do {
+					if (_context)
+					{
+						_context->refreshInputs();
+					}
+					getQueue()->getTaskAndCommandQueue(tasks, taskSuccess, commands, commandSuccess, TMQ::HybridQueue::Block);
+				} while (!taskSuccess && !commandSuccess);
+			}
 			waitEnd = std::chrono::high_resolution_clock::now();
 			workStart = std::chrono::high_resolution_clock::now();
 			if (taskSuccess)
 			{
+				SCOPE_profile_cpu_i("RenderTimer", "Execute tasks");
 				while (!tasks.empty() && _insideRun)
 				{
 					//pop all tasks
@@ -388,6 +394,7 @@ namespace AGE
 			}
 			if (commandSuccess)
 			{
+				SCOPE_profile_cpu_i("RenderTimer", "Execute commands");
 				// pop all commands
 				while (!commands.empty() && _insideRun)
 				{
