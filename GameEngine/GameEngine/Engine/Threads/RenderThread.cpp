@@ -19,8 +19,7 @@
 #include <SpacePartitioning/Ouptut/RenderPipeline.hh>
 #include <Utils/Debug.hpp>
 #include <Render/GeometryManagement/SimpleGeometry.hh>
-
-#include <microprofile/microprofile.h>
+#include <Utils/Profiler.hpp>
 
 namespace AGE
 {
@@ -168,8 +167,14 @@ namespace AGE
 
  		registerCallback<Commands::ToRender::Flush>([&](Commands::ToRender::Flush& msg)
 		{
-			_context->swapContext();
-			glClear(GL_COLOR_BUFFER_BIT);
+			{
+				SCOPE_profile_cpu_i("RenderTimer", "SwapContext");
+				_context->swapContext();
+				{
+					SCOPE_profile_gpu_i("Clear buffer");
+					glClear(GL_COLOR_BUFFER_BIT);
+				}
+			}
 			MicroProfileFlip();
 		});
 
@@ -199,8 +204,8 @@ namespace AGE
 
 		registerCallback<Commands::ToRender::RenderDrawLists>([&](Commands::ToRender::RenderDrawLists& msg)
 		{
-			MICROPROFILE_SCOPEGPUI("GPU TEST", 0xff00ff);
-			MICROPROFILE_SCOPEI("AGE::Commands::ToRender::RenderDrawLists", "RenderTimer", 0xcaca12);
+			SCOPE_profile_cpu_i("RenderTimer", "RenderDrawLists");
+
 			if (!_drawlistPtr) // nothing to draw
 				return;
 			AGE_ASSERT(_drawlistPtr != nullptr);
@@ -240,11 +245,15 @@ namespace AGE
 
 			// CEST VRAIMENT DEGUEULASSE...
 
-			auto &drawlist = _drawlistPtr->container.cameras;
-			for (auto &curCamera : drawlist)
 			{
-				AGE_ASSERT(!(pipelines[curCamera.camInfos.renderType] == nullptr));
-				pipelines[curCamera.camInfos.renderType]->render(curCamera.pipeline, curCamera.lights, curCamera.camInfos);
+				auto &drawlist = _drawlistPtr->container.cameras;
+				for (auto &curCamera : drawlist)
+				{
+					SCOPE_profile_gpu_i("RenderCameraDrawList");
+					SCOPE_profile_cpu_i("RenderTimer", "RenderCamera");
+					AGE_ASSERT(!(pipelines[curCamera.camInfos.renderType] == nullptr));
+					pipelines[curCamera.camInfos.renderType]->render(curCamera.pipeline, curCamera.lights, curCamera.camInfos);
+				}
 			}
 			_drawlistPtr = nullptr;
 			painterPtr->remove_vertices(debug2Dlines.verticesKey);
@@ -270,6 +279,7 @@ namespace AGE
 #ifdef AGE_ENABLE_IMGUI
 		registerCallback<AGE::RenderImgui>([&](AGE::RenderImgui &msg)
 		{
+			SCOPE_profile_cpu_i("RenderTimer", "Render IMGUI");
 			AGE::Imgui::getInstance()->renderThreadRenderFn(msg.cmd_lists);
 		});
 #endif
@@ -298,6 +308,7 @@ namespace AGE
 		if (!init())
 			return false;
 		_threadHandle = std::thread(&RenderThread::update, std::ref(*this));
+		MicroProfileOnThreadExit();
 		return true;
 	}
 

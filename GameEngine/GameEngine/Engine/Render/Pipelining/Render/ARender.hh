@@ -1,11 +1,13 @@
 #pragma once
 
-# include <Render/Pipelining/Render/IRender.hh>
+#include <Render/Pipelining/Render/IRender.hh>
 
 #include <Render/Pipelining/Render/RenderModes.hh>
 # include <functional>
 #include <vector>
 #include <bitset>
+
+#include <Utils/Profiler.hpp>
 
 namespace AGE
 {

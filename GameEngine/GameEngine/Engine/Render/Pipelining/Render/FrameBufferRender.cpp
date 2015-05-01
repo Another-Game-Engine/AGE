@@ -19,6 +19,9 @@ namespace AGE
 
 	IRender & FrameBufferRender::render(RenderPipeline const &pipeline, RenderLightList const &lights, CameraInfos const &infos)
 	{
+		SCOPE_profile_gpu_i("FrameBufferRender pass");
+		SCOPE_profile_cpu_i("RenderTimer", "FrameBufferRender pass");
+
 		_frame_buffer.bind();
 		if (!_is_update)
 		{

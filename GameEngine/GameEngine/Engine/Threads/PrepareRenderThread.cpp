@@ -7,6 +7,8 @@
 #include <Threads/Tasks/BasicTasks.hpp>
 #include <Threads/RenderThread.hpp>
 #include <Threads/Commands/ToRenderCommands.hpp>
+#include <microprofile/microprofile.h>
+
 
 namespace AGE
 {
@@ -114,6 +116,7 @@ namespace AGE
 		if (!init())
 			return false;
 		_threadHandle = std::thread(&PrepareRenderThread::update, std::ref(*this));
+		MicroProfileOnThreadExit();
 		return true;
 	}
 

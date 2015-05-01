@@ -17,6 +17,9 @@ namespace AGE
 
 	IRender & ScreenRender::render(RenderPipeline const &pipeline, RenderLightList const &lights, CameraInfos const &infos)
 	{
+		SCOPE_profile_gpu_i("ScreenRender pass");
+		SCOPE_profile_cpu_i("RenderTimer", "ScreenRender pass");
+
 		renderPass(pipeline, lights, infos);
 		if (_nextPass != nullptr)
 			_nextPass->render(pipeline, lights, infos);

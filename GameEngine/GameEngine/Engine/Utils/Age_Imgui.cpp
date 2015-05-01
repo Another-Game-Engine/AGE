@@ -10,6 +10,7 @@
 #include <Core/Inputs/Input.hh>
 #include <Core/Timer.hh>
 #include <Render/OpenGLTask/OpenGLState.hh>
+#include <Utils/Profiler.hpp>
 
 #define STB_TRUETYPE_IMPLEMENTATION
 #include <imgui/stb_truetype.h>
@@ -227,7 +228,7 @@ namespace AGE
 
 	void Imgui::renderThreadRenderFn(std::vector<Age_ImDrawList> const &cmd_lists)
 	{
-
+		SCOPE_profile_gpu_i("Render IMGUI");
 		if (cmd_lists.empty())
 			return;
 		OpenGLState::glEnable(GL_BLEND);

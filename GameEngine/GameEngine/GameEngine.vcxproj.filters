@@ -181,6 +181,7 @@
     <ClCompile Include="Engine\Render\OpenGLTask\OpenGLState.cpp" />
     <ClCompile Include="Engine\Render\Properties\Materials\ScaleUVs.cpp" />
     <ClCompile Include="Engine\Utils\Age_microprofile.cpp" />
+    <ClCompile Include="Engine\Utils\Profiler.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -474,6 +475,7 @@
     <ClInclude Include="Engine\Render\Properties\Materials\ScaleUVs.hpp" />
     <ClInclude Include="Engine\Utils\Age_microprofile.hpp" />
     <ClInclude Include="Engine\Utils\Profile.hpp" />
+    <ClInclude Include="Engine\Utils\Profiler.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />
