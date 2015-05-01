@@ -119,6 +119,7 @@ namespace AGE
 			, EngineCoreTestConfiguration::getScenesName().data()
 			, static_cast<int>(EngineCoreTestConfiguration::getScenesName().size())))
 		{
+			EngineCoreTestConfiguration::saveConfigurations();
 			clearAllEntities();
 
 			auto camera = createEntity();
@@ -154,7 +155,7 @@ namespace AGE
 			link.setOrientation(cameraOrientation);
 			link.setScale(glm::vec3(0.2f));
 			e.addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("cube/cube.sage"),
-										 getInstance<AGE::AssetsManager>()->getMaterial(OldFile("cube/cube.mage")))->enableMode(RenderModes::AGE_OPAQUE);
+										 getInstance<AGE::AssetsManager>()->getMaterial(OldFile("cube/cube.mage")))->enableRenderMode(RenderModes::AGE_OPAQUE);
 			e.addComponent<RigidBody>()->addForce(10.0f * cameraForward, Physics::ForceMode::Impulse);
 			e.addComponent<Collider>(Physics::ColliderType::Box);
 		}
@@ -191,7 +192,7 @@ namespace AGE
 					e.addComponent<PointLightComponent>()->set(glm::vec3((float)(rand() % 1000) / 1000.0f, (float)(rand() % 1000) / 1000.0f, (float)(rand() % 1000) / 1000.0f), glm::vec3(1.f, 0.1f, 0.005f));
 				}
 				e.addComponent<RigidBody>();
-				mesh->enableMode(RenderModes::AGE_OPAQUE);
+				mesh->enableRenderMode(RenderModes::AGE_OPAQUE);
 			}
 			_chunkCounter = 0;
 		}

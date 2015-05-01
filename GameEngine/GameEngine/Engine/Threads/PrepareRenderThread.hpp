@@ -25,6 +25,9 @@ namespace AGE
 			const PrepareKey &key
 			, const std::vector<SubMeshInstance> &meshs
 			, const std::vector<MaterialInstance> &materials);
+		void updateRenderMode(
+			const PrepareKey &key
+			, const RenderModeSet &renderModes);
 		PrepareKey addMesh();
 		PrepareKey addPointLight();
 		void setPointLight(glm::vec3 const &color, glm::vec3 const &range, std::shared_ptr<ITexture> const &texture, const PrepareKey &key);

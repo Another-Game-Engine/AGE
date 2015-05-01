@@ -183,7 +183,7 @@ namespace AGE
 		io.MouseDown[1] = _lastMouseState.mouseState[1];
 		io.MouseDown[2] = _lastMouseState.mouseState[2];
 		io.MousePos = ImVec2((float)_lastMouseState.mousePosition.x, (float)_lastMouseState.mousePosition.y);
-
+		io.MouseWheel = _lastMouseState.mouseWheel;
 		// Start the frame
 		ImGui::NewFrame();
 #endif

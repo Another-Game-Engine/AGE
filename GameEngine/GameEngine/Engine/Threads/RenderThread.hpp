@@ -11,6 +11,8 @@
 #include <Render/Properties/Properties.hh>
 #include <Engine/SpacePartitioning/Ouptut/RenderCamera.hh>
 #include <Render/PipelineTypes.hpp>
+#include <Render/DepthMapManager.hpp>
+#include <Render/GeometryManagement/SimpleGeometry.hh>
 
 namespace AGE
 {
@@ -24,6 +26,7 @@ namespace AGE
 
 	class RenderThread : public Thread, public QueueOwner
 	{
+
 	public:
 		virtual bool init();
 		virtual bool release();
@@ -31,10 +34,16 @@ namespace AGE
 		virtual bool launch();
 		virtual bool stop();
 
+		// temporary
+		SimpleGeometry::SimpleGeometryKeys debug2Dlines;
+		std::vector<glm::vec2> debug2DlinesPoints;
+
 		// used by render scene, maybe should be protected
 		void createMeshProperty(const Key<Painter> &painter, Key<Properties> &properties, Key<Property> &transformation);
 		void getQuadGeometry(Key<Vertices> &vertices, Key<Painter> &painter);
 		void getIcoSphereGeometry(Key<Vertices> &vertices, Key<Painter> &painter, uint32_t recursion);
+
+		inline DepthMapManager &getDepthMapManager() { return _depthMapManager; }
 	public:
 		std::vector<Material> _materials;
 		std::shared_ptr<PaintingManager> paintingManager;
@@ -57,6 +66,7 @@ namespace AGE
 
 		SdlContext *_context;
 		std::shared_ptr<RenderCameraListContainerHandle> _drawlistPtr;
+		DepthMapManager _depthMapManager;
 
 		friend class ThreadManager;
 	};

@@ -138,6 +138,6 @@
 // Code after that declaration will no be optimized
 // by the compiler, event in release
 // use that to debug parts of the code
-#define AGE_NOT_OPTIMIZED_BLOCK_BEGIN __pragma(optimize("",off))
+#define AGE_NOT_OPTIMIZED_BLOCK_BEGIN __pragma(optimize("",off));
 // cancel the effect of `AGE_NOT_OPTIMIZED_BLOCK_BEGIN`
-#define AGE_NOT_OPTIMIZED_BLOCK_END   __pragma(optimize("",on))
+#define AGE_NOT_OPTIMIZED_BLOCK_END   __pragma(optimize("",on));

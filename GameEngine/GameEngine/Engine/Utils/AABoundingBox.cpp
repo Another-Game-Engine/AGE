@@ -1,5 +1,6 @@
 
 #include <Utils/AABoundingBox.hh>
+#include <Utils/Debug.hpp>
 
 namespace AGE
 {
@@ -47,6 +48,32 @@ namespace AGE
 		if (normal.z >= 0)
 			ret.z = minPoint.z;
 		return (ret);
+	}
+
+	glm::vec3   AABoundingBox::getCornerPoint(std::size_t index /*from 0 to 7*/)
+	{
+		switch (index)
+		{
+			case 0:
+				return glm::vec3(minPoint.x, minPoint.y, minPoint.z);
+			case 1:
+				return glm::vec3(minPoint.x, minPoint.y, maxPoint.z);
+			case 2:
+				return glm::vec3(minPoint.x, maxPoint.y, minPoint.z);
+			case 3:
+				return glm::vec3(minPoint.x, maxPoint.y, maxPoint.z);
+			case 4:
+				return glm::vec3(maxPoint.x, minPoint.y, minPoint.z);
+			case 5:
+				return glm::vec3(maxPoint.x, minPoint.y, maxPoint.z);
+			case 6:
+				return glm::vec3(maxPoint.x, maxPoint.y, minPoint.z);
+			case 7:
+				return glm::vec3(maxPoint.x, maxPoint.y, maxPoint.z);
+			default:
+				assert(!"Should never be reached");
+				return glm::vec3();
+		}
 	}
 
 	void		AABoundingBox::fromTransformedBox(AABoundingBox const &aabb, glm::mat4 const &transform)
@@ -139,5 +166,14 @@ namespace AGE
 							(dif.y >= 0) ? 1 : -1,
 							(dif.z >= 0) ? 1 : -1));
 	}
+
+	glm::vec3 AABoundingBox::getSize() const
+	{
+		auto min = glm::vec4(minPoint, 1);
+		auto max = glm::vec4(maxPoint, 1);
+		
+		return glm::vec3(glm::distance(min, max));
+	}
+
 
 }

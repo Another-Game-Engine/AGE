@@ -75,6 +75,11 @@ namespace AGE
 			_activeScene->_setGeometry(msg);
 		});
 
+		registerCallback<Commands::MainToPrepare::SetRenderMode>([this](Commands::MainToPrepare::SetRenderMode &msg){
+			assert(this->_activeScene != nullptr);
+			_activeScene->_setRenderMode(msg);
+		});
+
 		registerCallback<Commands::MainToPrepare::SetPointLight>([this](Commands::MainToPrepare::SetPointLight &msg){
 			assert(this->_activeScene != nullptr);
 			_activeScene->_setPointLight(msg);
@@ -227,6 +232,14 @@ namespace AGE
 	{
 		assert(!key.invalid() || key.type != PrepareKey::Type::Mesh);
 		getQueue()->emplaceCommand<Commands::MainToPrepare::SetGeometry>(key, meshs, materials);
+	}
+
+	void PrepareRenderThread::updateRenderMode(
+		const PrepareKey &key
+		, const RenderModeSet &renderModes)
+	{
+		AGE_ASSERT(!key.invalid() || key.type != PrepareKey::Type::Mesh);
+		getQueue()->emplaceCommand<Commands::MainToPrepare::SetRenderMode>(key, renderModes);
 	}
 
 	PrepareKey PrepareRenderThread::addMesh()

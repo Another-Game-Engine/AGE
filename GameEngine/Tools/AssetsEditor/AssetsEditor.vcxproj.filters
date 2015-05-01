@@ -1,67 +1,202 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="..\..\EngineCoreTest\Components\Lifetime.cpp" />
-    <ClCompile Include="..\..\EngineCoreTest\Components\RotationComponent.cpp" />
-    <ClCompile Include="AssetFiles\AssetFileManager.cpp" />
-    <ClCompile Include="AssetFiles\CookedFile.cpp" />
-    <ClCompile Include="AssetFiles\MaterialRawFile.cpp" />
-    <ClCompile Include="AssetFiles\MeshRawFile.cpp" />
-    <ClCompile Include="AssetFiles\RawFile.cpp" />
-    <ClCompile Include="AssetFiles\TextureRawFile.cpp" />
-    <ClCompile Include="AssetsDatabase.cpp" />
-    <ClCompile Include="AssetFiles\File.cpp" />
-    <ClCompile Include="AssetFiles\Folder.cpp" />
-    <ClCompile Include="Components\EntityRepresentation.cpp" />
-    <ClCompile Include="Convertor\ConvertorStatusManager.cpp" />
-    <ClCompile Include="EditorConfiguration.cpp" />
-    <ClCompile Include="ImageUtils.cpp" />
-    <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Scenes\AssetsEditorScene.cpp" />
-    <ClCompile Include="Scenes\SceneSelectorScene.cpp" />
-    <ClCompile Include="Scenes\WorldEditorScene.cpp" />
-    <ClCompile Include="Systems\AssetsAndComponentRelationsSystem.cpp" />
-    <ClCompile Include="Systems\EntityManager.cpp" />
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AssetFiles\AssetFileManager.hpp" />
-    <ClInclude Include="AssetFiles\AssetsTypes.hpp" />
-    <ClInclude Include="AssetFiles\MaterialRawFile.hpp" />
-    <ClInclude Include="AssetFiles\MeshRawFile.hpp" />
-    <ClInclude Include="AssetFiles\RawFile.hpp" />
-    <ClInclude Include="AssetFiles\TextureRawFile.hpp" />
-    <ClInclude Include="Components\EntityRepresentation.hpp" />
-    <ClInclude Include="Convertor\ConvertorStatusManager.hpp" />
-    <ClInclude Include="AssetFiles\CookedFile.hpp" />
-    <ClInclude Include="AssetsDatabase.hpp" />
-    <ClInclude Include="Convertor\AnimationsLoader.hpp" />
-    <ClInclude Include="Convertor\AssetDataSet.hpp" />
-    <ClInclude Include="Convertor\AssimpLoader.hpp" />
-    <ClInclude Include="Convertor\BulletLoader.hpp" />
-    <ClInclude Include="Convertor\CookingTask.hpp" />
-    <ClInclude Include="Convertor\ImageLoader.hpp" />
-    <ClInclude Include="Convertor\MaterialConvertor.hpp" />
-    <ClInclude Include="Convertor\MeshLoader.hpp" />
-    <ClInclude Include="Convertor\SkeletonLoader.hpp" />
-    <ClInclude Include="AssetFiles\File.hpp" />
-    <ClInclude Include="AssetFiles\Folder.hpp" />
-    <ClInclude Include="EditorConfiguration.hpp" />
-    <ClInclude Include="EntityHelpers\EntityImgui.hpp" />
-    <ClInclude Include="ImageUtils.hh" />
-    <ClInclude Include="Managers\ArchetypesEditorManager.hpp" />
-    <ClInclude Include="resource.h" />
-    <ClInclude Include="Scenes\AssetsEditorScene.hpp" />
-    <ClInclude Include="Scenes\SceneSelectorScene.hpp" />
-    <ClInclude Include="Scenes\WorldEditorScene.hpp" />
-    <ClInclude Include="Systems\AssetsAndComponentRelationsSystem.hpp" />
-    <ClInclude Include="Systems\EntityManager.hpp" />
-    <ClInclude Include="Scenes\ArchetypeScenes.hpp" />
+    <ClCompile Include="Main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Scenes\AssetsEditorScene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Scenes\SceneSelectorScene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AssetsDatabase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AssetFiles\RawFile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AssetFiles\File.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AssetFiles\Folder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AssetFiles\AssetFileManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AssetFiles\CookedFile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Convertor\ConvertorStatusManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Scenes\WorldEditorScene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Systems\EntityManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\EntityRepresentation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageUtils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Systems\AssetsAndComponentRelationsSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\EngineCoreTest\Components\Lifetime.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\EngineCoreTest\Components\RotationComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EditorConfiguration.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Scenes\MaterialEditorScene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AssetFiles\MaterialRawFile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AssetFiles\MeshRawFile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AssetFiles\TextureRawFile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Convertor\MeshLoader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="AssetsEditor.rc" />
+    <ClInclude Include="Convertor\AssimpLoader.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Convertor\SkeletonLoader.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Convertor\AssetDataSet.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Convertor\AnimationsLoader.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Convertor\MeshLoader.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Convertor\MaterialConvertor.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Convertor\ImageLoader.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\AssetsEditorScene.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Convertor\BulletLoader.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\SceneSelectorScene.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AssetsDatabase.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AssetFiles\RawFile.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AssetFiles\File.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AssetFiles\Folder.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AssetFiles\AssetsTypes.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AssetFiles\AssetFileManager.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AssetFiles\CookedFile.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Convertor\ConvertorStatusManager.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Convertor\CookingTask.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\WorldEditorScene.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Systems\EntityManager.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\EntityRepresentation.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageUtils.hh">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Systems\AssetsAndComponentRelationsSystem.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EditorConfiguration.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\MaterialEditorScene.hh">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AssetFiles\MaterialRawFile.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AssetFiles\MeshRawFile.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AssetFiles\TextureRawFile.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EntityHelpers\EntityImgui.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Managers\ArchetypesEditorManager.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\ArchetypeScenes.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="app-icon.ico" />
-    <Image Include="icon1.ico" />
+    <ResourceCompile Include="AssetsEditor.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="app-icon.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icon1.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

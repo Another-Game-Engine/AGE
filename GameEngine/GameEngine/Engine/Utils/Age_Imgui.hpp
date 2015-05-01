@@ -26,17 +26,20 @@ namespace AGE
 	{
 		glm::ivec2 mousePosition;
 		bool mouseState[3];
+		float mouseWheel;
 
 		ImGuiMouseStateEvent() :
 			mousePosition(0)
+			, mouseWheel(0.0f)
 		{
 			mouseState[0] = false;
 			mouseState[1] = false;
 			mouseState[2] = false;
 		}
 
-		ImGuiMouseStateEvent(glm::ivec2 const &_mousePosition, bool leftClic, bool wheelClic, bool rightClic)
+		ImGuiMouseStateEvent(glm::ivec2 const &_mousePosition, bool leftClic, bool wheelClic, bool rightClic, float _mouseWheel)
 			: mousePosition(_mousePosition)
+			, mouseWheel(_mouseWheel)
 		{
 			mouseState[0] = leftClic;
 			mouseState[1] = wheelClic;

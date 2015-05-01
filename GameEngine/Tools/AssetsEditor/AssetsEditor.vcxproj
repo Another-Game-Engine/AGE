@@ -109,10 +109,12 @@
     <ClCompile Include="AssetFiles\Folder.cpp" />
     <ClCompile Include="Components\EntityRepresentation.cpp" />
     <ClCompile Include="Convertor\ConvertorStatusManager.cpp" />
+    <ClCompile Include="Convertor\MeshLoader.cpp" />
     <ClCompile Include="EditorConfiguration.cpp" />
     <ClCompile Include="ImageUtils.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Scenes\AssetsEditorScene.cpp" />
+    <ClCompile Include="Scenes\MaterialEditorScene.cpp" />
     <ClCompile Include="Scenes\SceneSelectorScene.cpp" />
     <ClCompile Include="Scenes\WorldEditorScene.cpp" />
     <ClCompile Include="Systems\AssetsAndComponentRelationsSystem.cpp" />
@@ -147,6 +149,7 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="Scenes\ArchetypeScenes.hpp" />
     <ClInclude Include="Scenes\AssetsEditorScene.hpp" />
+    <ClInclude Include="Scenes\MaterialEditorScene.hh" />
     <ClInclude Include="Scenes\SceneSelectorScene.hpp" />
     <ClInclude Include="Scenes\WorldEditorScene.hpp" />
     <ClInclude Include="Systems\AssetsAndComponentRelationsSystem.hpp" />

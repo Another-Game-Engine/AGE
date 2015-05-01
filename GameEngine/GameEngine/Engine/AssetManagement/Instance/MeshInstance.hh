@@ -8,7 +8,6 @@
 # include <Render/GeometryManagement/Painting/Painter.hh>
 # include <Render/Pipelining/Render/RenderModes.hh>
 # include <AssetManagement/Data/MeshData.hh>
-# include <bitset>
 
 namespace AGE
 {
@@ -18,7 +17,6 @@ namespace AGE
 		Key<Painter> painter;
 		Key<Vertices> vertices;
 		Key<Properties> properties;
-		std::bitset<RENDER_MODE_NUMBER> renderMode;
 		AGE::AABoundingBox boundingBox;
 		uint16_t defaultMaterialIndex;
 	};
