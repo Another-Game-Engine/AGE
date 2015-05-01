@@ -17,7 +17,7 @@ namespace AGE
 			// Constructors
 			NullMaterial(void) = delete;
 
-			NullMaterial(ColliderInterface *collider);
+			NullMaterial(const std::string &name);
 
 			NullMaterial(const NullMaterial &) = delete;
 

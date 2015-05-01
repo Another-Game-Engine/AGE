@@ -1,20 +1,18 @@
 #pragma once
 
+#include <string>
+
 namespace AGE
 {
 	namespace Physics
 	{
-		class RigidBodyInterface;
-		class ColliderInterface;
-		class WorldInterface;
-
 		class MaterialInterface
 		{
 		public:
 			// Constructors
 			MaterialInterface(void) = delete;
 
-			MaterialInterface(ColliderInterface *collider);
+			MaterialInterface(const std::string &name);
 
 			MaterialInterface(const MaterialInterface &) = delete;
 
@@ -22,9 +20,7 @@ namespace AGE
 			MaterialInterface &operator=(const MaterialInterface &) = delete;
 
 			// Methods
-			ColliderInterface *getCollider(void);
-
-			const ColliderInterface *getCollider(void) const;
+			const std::string &getName(void) const;
 
 			// Virtual Methods
 			virtual void setStaticFriction(float staticFriction) = 0;
@@ -52,7 +48,7 @@ namespace AGE
 
 		private:
 			// Attributes
-			ColliderInterface *collider = nullptr;
+			const std::string name;
 		};
 	}
 }

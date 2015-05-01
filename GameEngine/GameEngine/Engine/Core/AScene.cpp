@@ -21,7 +21,7 @@ namespace AGE
 		, _renderScene(nullptr)
 	{
 		// Set Dependency to the fallback plugin (physics disabled) --> Needed if a RigidBody is added while no PhysicsSystem exists
-		setInstance<Physics::NullPhysics, Physics::PhysicsInterface>()->startup();
+		setInstance<Physics::NullPhysics, Physics::PhysicsInterface>()->startup("");
 	}
 
 	AScene::~AScene()

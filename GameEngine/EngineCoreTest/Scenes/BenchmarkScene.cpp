@@ -85,7 +85,7 @@ namespace AGE
 		REGISTER_COMPONENT_TYPE(AGE::Collider);
 
 		addSystem<AGE::DebugSystem>(0);
-		addSystem<AGE::PhysicsSystem>(0, Physics::EngineType::PhysX);
+		addSystem<AGE::PhysicsSystem>(0, Physics::EngineType::PhysX, EngineCoreTestConfiguration::GetCookedDirectory());
 
 		addSystem<AGE::LifetimeSystem>(2);
 		addSystem<AGE::FreeFlyCamera>(0);
@@ -145,7 +145,7 @@ namespace AGE
 		{
 			trigger = 0.0f;
 			auto e = createEntity();
-			e.addComponent<Lifetime>(30.0f);
+			e.addComponent<Lifetime>(15.0f);
 			auto &link = e.getLink();
 			auto &cameraLink = GLOBAL_CAMERA.getLink();
 			const glm::quat &cameraOrientation = cameraLink.getOrientation();

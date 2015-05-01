@@ -6,8 +6,8 @@ namespace AGE
 	namespace Physics
 	{
 		// Constructors
-		BulletMaterial::BulletMaterial(ColliderInterface *collider)
-			: MaterialInterface(collider)
+		BulletMaterial::BulletMaterial(const std::string &name)
+			: MaterialInterface(name)
 		{
 			setStaticFriction(GetDefaultStaticFriction());
 			setDynamicFriction(GetDefaultDynamicFriction());

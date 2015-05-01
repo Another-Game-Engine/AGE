@@ -9,9 +9,7 @@ namespace AGE
 	{
 		const Physics::ColliderType colliderType = getColliderType();
 		ar(cereal::make_nvp("ColliderType", static_cast<std::uint8_t>(colliderType)));
-		ar(cereal::make_nvp("StaticFriction", getStaticFriction()));
-		ar(cereal::make_nvp("DynamicFriction", getDynamicFriction()));
-		ar(cereal::make_nvp("Restitution", getRestitution()));
+		ar(cereal::make_nvp("Material", getMaterial()->getName()));
 		ar(cereal::make_nvp("IsATrigger", isATrigger()));
 		ar(cereal::make_nvp("FilterGroup", static_cast<std::uint8_t>(getFilterGroup())));
 		switch (colliderType)
@@ -68,22 +66,16 @@ namespace AGE
 	inline void Collider::load(Archive &ar, const std::uint32_t version)
 	{
 		std::uint8_t colliderType;
-		float staticFriction;
-		float dynamicFriction;
-		float restitution;
+		std::string material;
 		bool isATrigger;
 		std::uint8_t filterGroup;
 		ar(cereal::make_nvp("ColliderType", colliderType));
 		reset();
 		init(static_cast<Physics::ColliderType>(colliderType));
-		ar(cereal::make_nvp("StaticFriction", staticFriction));
-		ar(cereal::make_nvp("DynamicFriction", dynamicFriction));
-		ar(cereal::make_nvp("Restitution", restitution));
+		ar(cereal::make_nvp("Material", material));
 		ar(cereal::make_nvp("IsATrigger", isATrigger));
 		ar(cereal::make_nvp("FilterGroup", filterGroup));
-		setStaticFriction(staticFriction);
-		setDynamicFriction(dynamicFriction);
-		setRestitution(restitution);
+		setMaterial(material);
 		setAsTrigger(isATrigger);
 		setFilterGroup(static_cast<Physics::FilterGroup>(filterGroup));
 		switch (static_cast<Physics::ColliderType>(colliderType))

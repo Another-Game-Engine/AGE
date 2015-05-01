@@ -6,8 +6,8 @@ namespace AGE
 	namespace Physics
 	{
 		// Constructors
-		NullMaterial::NullMaterial(ColliderInterface *collider)
-			: MaterialInterface(collider), staticFriction(GetDefaultStaticFriction()), dynamicFriction(GetDefaultDynamicFriction()), restitution(GetDefaultRestitution())
+		NullMaterial::NullMaterial(const std::string &name)
+			: MaterialInterface(name), staticFriction(GetDefaultStaticFriction()), dynamicFriction(GetDefaultDynamicFriction()), restitution(GetDefaultRestitution())
 		{
 			return;
 		}

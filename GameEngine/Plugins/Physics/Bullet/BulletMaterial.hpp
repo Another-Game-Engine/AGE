@@ -20,7 +20,7 @@ namespace AGE
 			// Constructors
 			BulletMaterial(void) = delete;
 
-			BulletMaterial(ColliderInterface *collider);
+			BulletMaterial(const std::string &name);
 
 			BulletMaterial(const BulletMaterial &) = delete;
 

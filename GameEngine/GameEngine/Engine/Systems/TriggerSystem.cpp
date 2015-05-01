@@ -1,5 +1,6 @@
 #include <Systems/TriggerSystem.hpp>
 #include <Physics/Trigger.hpp>
+#include <Physics/PhysicsInterface.hpp>
 
 namespace AGE
 {
@@ -27,13 +28,13 @@ namespace AGE
 		// Inherited Methods
 		bool TriggerSystem::initialize(void)
 		{
-			_scene->getInstance<Physics::WorldInterface>()->setTriggerListener(this);
+			_scene->getInstance<Physics::PhysicsInterface>()->getWorld()->setTriggerListener(this);
 			return true;
 		}
 
 		void TriggerSystem::finalize(void)
 		{
-			_scene->getInstance<Physics::WorldInterface>()->setTriggerListener(nullptr);
+			_scene->getInstance<Physics::PhysicsInterface>()->getWorld()->setTriggerListener(nullptr);
 		}
 
 		void TriggerSystem::mainUpdate(float elapsedTime)

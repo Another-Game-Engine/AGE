@@ -187,6 +187,7 @@
     <ClInclude Include="..\..\..\GameEngine\Engine\Physics\MemoryPoolHelper.hpp" />
     <ClInclude Include="..\..\..\GameEngine\Engine\Physics\MeshColliderInterface.hpp" />
     <ClInclude Include="..\..\..\GameEngine\Engine\Physics\PhysicsInterface.hpp" />
+    <ClInclude Include="..\..\..\GameEngine\Engine\Physics\RaycasterInterface.hpp" />
     <ClInclude Include="..\..\..\GameEngine\Engine\Physics\RigidBodyInterface.hpp" />
     <ClInclude Include="..\..\..\GameEngine\Engine\Physics\SphereColliderInterface.hpp" />
     <ClInclude Include="..\..\..\GameEngine\Engine\Physics\TriggerListener.hpp" />
@@ -198,6 +199,7 @@
     <ClInclude Include="BulletMaterial.hpp" />
     <ClInclude Include="BulletMeshCollider.hpp" />
     <ClInclude Include="BulletPhysics.hpp" />
+    <ClInclude Include="BulletRaycaster.hpp" />
     <ClInclude Include="BulletRigidBody.hpp" />
     <ClInclude Include="BulletSphereCollider.hpp" />
     <ClInclude Include="BulletWorld.hpp" />
@@ -210,6 +212,7 @@
     <ClCompile Include="BulletMaterial.cpp" />
     <ClCompile Include="BulletMeshCollider.cpp" />
     <ClCompile Include="BulletPhysics.cpp" />
+    <ClCompile Include="BulletRaycaster.cpp" />
     <ClCompile Include="BulletRigidBody.cpp" />
     <ClCompile Include="BulletSphereCollider.cpp" />
     <ClCompile Include="BulletWorld.cpp" />
@@ -222,6 +225,7 @@
     <None Include="..\..\..\GameEngine\Engine\Physics\MemoryPoolHelper.inl" />
     <None Include="..\..\..\GameEngine\Engine\Physics\MeshColliderInterface.inl" />
     <None Include="..\..\..\GameEngine\Engine\Physics\PhysicsInterface.inl" />
+    <None Include="..\..\..\GameEngine\Engine\Physics\RaycasterInterface.inl" />
     <None Include="..\..\..\GameEngine\Engine\Physics\RigidBodyInterface.inl" />
     <None Include="..\..\..\GameEngine\Engine\Physics\SphereColliderInterface.inl" />
     <None Include="..\..\..\GameEngine\Engine\Physics\WorldInterface.inl" />

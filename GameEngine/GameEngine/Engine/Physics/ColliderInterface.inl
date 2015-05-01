@@ -24,7 +24,7 @@ namespace AGE
 
 		// Constructors
 		inline ColliderInterface::ColliderInterface(WorldInterface *world, Private::GenericData *data)
-			: world(world), data(data), material(world->createMaterial(this))
+			: world(world), data(data), material(world->createMaterial())
 		{
 			assert(world != nullptr && "Invalid world");
 			assert(data != nullptr && "Invalid data");
@@ -83,6 +83,13 @@ namespace AGE
 		inline const T *ColliderInterface::getDataAs(void) const
 		{
 			return static_cast<const T *>(getData()->data);
+		}
+
+		inline void ColliderInterface::setMaterial(MaterialInterface *newMaterial)
+		{
+			assert(newMaterial != nullptr && "Invalid material");
+			world->destroyMaterial(material);
+			material = newMaterial;
 		}
 
 		inline MaterialInterface *ColliderInterface::getMaterial(void)

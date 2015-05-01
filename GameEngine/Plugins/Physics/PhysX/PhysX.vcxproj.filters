@@ -105,6 +105,12 @@
     <ClInclude Include="..\..\..\GameEngine\Engine\Physics\CollisionType.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\GameEngine\Engine\Physics\RaycasterInterface.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysXRaycaster.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PhysXWorld.cpp">
@@ -137,6 +143,9 @@
     <ClCompile Include="PhysXCollider.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="PhysXRaycaster.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\GameEngine\Engine\Physics\MaterialInterface.inl">
@@ -167,6 +176,9 @@
       <Filter>Header Files</Filter>
     </None>
     <None Include="..\..\..\GameEngine\Engine\Physics\MemoryPoolHelper.inl">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="..\..\..\GameEngine\Engine\Physics\RaycasterInterface.inl">
       <Filter>Header Files</Filter>
     </None>
   </ItemGroup>

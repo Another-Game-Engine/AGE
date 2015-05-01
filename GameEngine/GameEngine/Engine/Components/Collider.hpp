@@ -5,6 +5,7 @@
 #include <Components/Component.hh>
 #include <Physics/ColliderInterface.hpp>
 #include <Physics/Collision.hpp>
+#include <Physics/MaterialInterface.hpp>
 #include <Physics/Trigger.hpp>
 #include <Utils/Serialization/VectorSerialization.hpp>
 
@@ -42,19 +43,13 @@ namespace AGE
 		// Methods
 		void init(Physics::ColliderType colliderType = Physics::ColliderType::Box, const std::string &mesh = "");
 
-		void setStaticFriction(float staticFriction);
-
-		float getStaticFriction(void) const;
-
-		void setDynamicFriction(float dynamicFriction);
-
-		float getDynamicFriction(void) const;
-
-		void setRestitution(float restitution);
-
-		float getRestitution(void) const;
-
 		Physics::ColliderType getColliderType(void) const;
+
+		void setMaterial(const std::string &material);
+
+		Physics::MaterialInterface *getMaterial(void);
+
+		const Physics::MaterialInterface *getMaterial(void) const;
 
 		void setAsTrigger(bool mustBeATrigger);
 

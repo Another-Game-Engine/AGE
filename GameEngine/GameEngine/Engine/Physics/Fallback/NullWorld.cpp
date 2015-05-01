@@ -3,6 +3,7 @@
 #include "NullCapsuleCollider.hpp"
 #include "NullMeshCollider.hpp"
 #include "NullSphereCollider.hpp"
+#include "NullRaycaster.hpp"
 
 namespace AGE
 {
@@ -39,6 +40,11 @@ namespace AGE
 		void NullWorld::simulate(float stepSize)
 		{
 			return;
+		}
+
+		RaycasterInterface *NullWorld::createRaycaster(void)
+		{
+			return new NullRaycaster(this);
 		}
 
 		RigidBodyInterface *NullWorld::createRigidBody(Private::GenericData *data)
@@ -91,14 +97,33 @@ namespace AGE
 			}
 		}
 
-		MaterialInterface *NullWorld::createMaterial(ColliderInterface *collider)
+		MaterialInterface *NullWorld::createMaterial(const std::string &name)
 		{
-			return create<NullMaterial>(collider);
+			MaterialTable::iterator found = materials.find(name);
+			if (found != materials.end())
+			{
+				++found->second.second;
+				return found->second.first;
+			}
+			else
+			{
+				return materials.insert(std::make_pair(name, std::make_pair(create<NullMaterial>(name), 1))).first->second.first;
+			}
 		}
 
 		void NullWorld::destroyMaterial(MaterialInterface *material)
 		{
-			destroy(static_cast<NullMaterial *>(material));
+			assert(material != nullptr && "Invalid material");
+			MaterialTable::iterator found = materials.find(material->getName());
+			if (found != materials.end())
+			{
+				--found->second.second;
+				if (found->second.second == 0)
+				{
+					destroy(static_cast<NullMaterial *>(material));
+					materials.erase(found);
+				}
+			}
 		}
 	}
 }

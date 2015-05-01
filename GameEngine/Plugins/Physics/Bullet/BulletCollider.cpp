@@ -1,3 +1,5 @@
+#include <BulletCollision/CollisionShapes/btMultimaterialTriangleMeshShape.h>
+
 #include "BulletCollider.hpp"
 #include "BulletWorld.hpp"
 #include "BulletRigidBody.hpp"
@@ -113,6 +115,12 @@ namespace AGE
 		void BulletCollider::scale(const glm::vec3 &scaling)
 		{
 			collisionShape->setLocalScaling(collisionShape->getLocalScaling() * btVector3(scaling.x, scaling.y, scaling.z));
+		}
+
+		void BulletCollider::setMaterial(const std::string &name)
+		{
+			MaterialInterface *newMaterial = getWorld()->createMaterial(name);
+			static_cast<ColliderInterface *>(this)->setMaterial(newMaterial);
 		}
 	}
 }

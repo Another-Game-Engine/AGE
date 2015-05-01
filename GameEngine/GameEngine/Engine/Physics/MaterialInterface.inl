@@ -25,21 +25,16 @@ namespace AGE
 		}
 
 		// Constructors
-		inline MaterialInterface::MaterialInterface(ColliderInterface *collider)
-			: collider(collider)
+		inline MaterialInterface::MaterialInterface(const std::string &name)
+			: name(name)
 		{
 			return;
 		}
 
 		// Methods
-		inline ColliderInterface *MaterialInterface::getCollider(void)
+		inline const std::string &MaterialInterface::getName(void) const
 		{
-			return collider;
-		}
-
-		inline const ColliderInterface *MaterialInterface::getCollider(void) const
-		{
-			return collider;
+			return name;
 		}
 	}
 }

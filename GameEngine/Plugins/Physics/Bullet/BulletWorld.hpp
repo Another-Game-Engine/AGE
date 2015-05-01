@@ -79,6 +79,8 @@ namespace AGE
 
 			void simulate(float stepSize) override final;
 
+			RaycasterInterface *createRaycaster(void) override final;
+
 			RigidBodyInterface *createRigidBody(Private::GenericData *data) override final;
 
 			void destroyRigidBody(RigidBodyInterface *rigidBody) override final;
@@ -87,7 +89,7 @@ namespace AGE
 
 			void destroyCollider(ColliderInterface *collider) override final;
 
-			MaterialInterface *createMaterial(ColliderInterface *collider) override final;
+			MaterialInterface *createMaterial(const std::string &name) override final;
 
 			void destroyMaterial(MaterialInterface *material) override final;
 

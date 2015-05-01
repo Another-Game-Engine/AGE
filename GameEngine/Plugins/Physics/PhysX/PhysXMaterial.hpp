@@ -31,12 +31,17 @@ namespace AGE
 			// Constructors
 			PhysXMaterial(void) = delete;
 
-			PhysXMaterial(PhysXWorld *world, ColliderInterface *collider);
+			PhysXMaterial(PhysXWorld *world, const std::string &name);
 
 			PhysXMaterial(const PhysXMaterial &) = delete;
 
 			// Assignment Operators
 			PhysXMaterial &operator=(const PhysXMaterial &) = delete;
+
+			// Methods
+			physx::PxMaterial *getMaterial(void);
+
+			const physx::PxMaterial *getMaterial(void) const;
 
 		private:
 			// Attributes

@@ -107,5 +107,20 @@ namespace AGE
 		{
 			return static_cast<FilterGroup>(shape->getSimulationFilterData().word0);
 		}
+
+		void PhysXCollider::setMaterial(const std::string &name)
+		{
+			MaterialInterface *newMaterial = getWorld()->createMaterial(name);
+			static_cast<ColliderInterface *>(this)->setMaterial(newMaterial);
+			physx::PxMaterial *concreteMaterial = static_cast<PhysXMaterial *>(newMaterial)->getMaterial();
+			
+			const physx::PxU16 nbm = shape->getNbMaterials();
+			physx::PxMaterial *m[100];
+			shape->getMaterials(m, 100);
+
+			shape->setMaterials(&concreteMaterial, 1);
+
+			const physx::PxU16 nnbm = shape->getNbMaterials();
+		}
 	}
 }

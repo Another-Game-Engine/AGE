@@ -1,5 +1,6 @@
 #include <Systems/CollisionSystem.hpp>
 #include <Physics/Collision.hpp>
+#include <Physics/PhysicsInterface.hpp>
 
 namespace AGE
 {
@@ -27,13 +28,13 @@ namespace AGE
 		// Inherited Methods
 		bool CollisionSystem::initialize(void)
 		{
-			_scene->getInstance<Physics::WorldInterface>()->setCollisionListener(this);
+			_scene->getInstance<Physics::PhysicsInterface>()->getWorld()->setCollisionListener(this);
 			return true;
 		}
 
 		void CollisionSystem::finalize(void)
 		{
-			_scene->getInstance<Physics::WorldInterface>()->setCollisionListener(nullptr);
+			_scene->getInstance<Physics::PhysicsInterface>()->getWorld()->setCollisionListener(nullptr);
 		}
 
 		void CollisionSystem::mainUpdate(float elapsedTime)

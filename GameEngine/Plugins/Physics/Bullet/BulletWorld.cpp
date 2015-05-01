@@ -7,6 +7,7 @@
 #include "BulletCapsuleCollider.hpp"
 #include "BulletMeshCollider.hpp"
 #include "BulletSphereCollider.hpp"
+#include "BulletRaycaster.hpp"
 
 namespace AGE
 {
@@ -192,6 +193,11 @@ namespace AGE
 			updateTriggers();
 		}
 
+		RaycasterInterface *BulletWorld::createRaycaster(void)
+		{
+			return new BulletRaycaster(this);
+		}
+
 		RigidBodyInterface *BulletWorld::createRigidBody(Private::GenericData *data)
 		{
 			return create<BulletRigidBody>(this, data);
@@ -253,14 +259,33 @@ namespace AGE
 			}
 		}
 
-		MaterialInterface *BulletWorld::createMaterial(ColliderInterface *collider)
+		MaterialInterface *BulletWorld::createMaterial(const std::string &name)
 		{
-			return create<BulletMaterial>(collider);
+			MaterialTable::iterator found = materials.find(name);
+			if (found != materials.end())
+			{
+				++found->second.second;
+				return found->second.first;
+			}
+			else
+			{
+				return materials.insert(std::make_pair(name, std::make_pair(create<BulletMaterial>(name), 1))).first->second.first;
+			}
 		}
 
 		void BulletWorld::destroyMaterial(MaterialInterface *material)
 		{
-			destroy(static_cast<BulletMaterial *>(material));
+			assert(material != nullptr && "Invalid material");
+			MaterialTable::iterator found = materials.find(material->getName());
+			if (found != materials.end())
+			{
+				--found->second.second;
+				if (found->second.second == 0)
+				{
+					destroy(static_cast<BulletMaterial *>(material));
+					materials.erase(found);
+				}
+			}
 		}
 
 		bool BulletWorld::needBroadphaseCollision(btBroadphaseProxy *proxy1, btBroadphaseProxy *proxy2) const

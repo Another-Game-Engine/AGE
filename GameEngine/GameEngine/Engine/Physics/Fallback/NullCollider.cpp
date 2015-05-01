@@ -32,5 +32,10 @@ namespace AGE
 		{
 			return filterGroup;
 		}
+
+		void NullCollider::setMaterial(const std::string &name)
+		{
+			static_cast<ColliderInterface *>(this)->setMaterial(getWorld()->createMaterial(name));
+		}
 	}
 }

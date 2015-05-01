@@ -25,8 +25,9 @@ namespace AGE
 		class RigidBodyInterface;
 		class MaterialInterface;
 		class ColliderInterface;
+		class RaycasterInterface;
 
-		class WorldInterface : public Dependency < WorldInterface >
+		class WorldInterface
 		{
 			// Friendship
 			friend RigidBody;
@@ -35,12 +36,13 @@ namespace AGE
 
 			friend PhysicsInterface;
 
-			friend ColliderInterface;
-
 		public:
-			WorldInterface(void) = delete;
+			// Static Methods
+			static std::string GetDefaultMaterialName(void);
 
 			// Constructors
+			WorldInterface(void) = delete;
+
 			WorldInterface(PhysicsInterface *physics);
 
 			WorldInterface(const WorldInterface &) = delete;
@@ -52,6 +54,14 @@ namespace AGE
 			PhysicsInterface *getPhysics(void);
 
 			const PhysicsInterface *getPhysics(void) const;
+
+			RaycasterInterface *getRaycaster(void);
+
+			const RaycasterInterface *getRaycaster(void) const;
+
+			MaterialInterface *getMaterial(const std::string &name);
+
+			const MaterialInterface *getMaterial(const std::string &name) const;
 
 			void setCollisionListener(CollisionListener *listener);
 
@@ -92,7 +102,23 @@ namespace AGE
 
 			virtual void disableCollisionBetweenGroups(FilterGroup group1, FilterGroup group2) = 0;
 
+			virtual MaterialInterface *createMaterial(const std::string &name = GetDefaultMaterialName()) = 0;
+
+			virtual void destroyMaterial(MaterialInterface *material) = 0;
+
 		protected:
+			// Type Aliases
+			using MaterialTable = std::unordered_map < std::string, std::pair < MaterialInterface *, std::atomic_uint32_t > >;
+
+			using ShapeTable = std::unordered_map < std::string, std::pair < void *, std::atomic_uint32_t > >;
+
+			// Attributes
+			MaterialTable materials;
+
+			ShapeTable convexShapes;
+
+			ShapeTable concaveShapes;
+
 			// Destructor
 			virtual ~WorldInterface(void) = default;
 
@@ -106,6 +132,8 @@ namespace AGE
 			// Attributes
 			PhysicsInterface *physics = nullptr;
 
+			RaycasterInterface *raycaster = nullptr;
+
 			CollisionListener *collisionListener = nullptr;
 
 			TriggerListener *triggerListener = nullptr;
@@ -116,7 +144,23 @@ namespace AGE
 
 			HashTable filterNameToFilterGroup;
 
+			// Static Methods
+			static std::string GetMaterialsFileName(void);
+
+			// Methods
+			bool initialize(const std::string &assetDirectory);
+
+			void finalize(const std::string &assetDirectory);
+
+			void saveMaterials(const std::string &assetDirectory);
+
+			void loadMaterials(const std::string &assetDirectory);
+
+			void destroyRaycaster(void);
+
 			// Virtual Methods
+			virtual RaycasterInterface *createRaycaster(void) = 0;
+
 			virtual RigidBodyInterface *createRigidBody(Private::GenericData *data) = 0;
 
 			virtual void destroyRigidBody(RigidBodyInterface *rigidBody) = 0;
@@ -124,10 +168,6 @@ namespace AGE
 			virtual ColliderInterface *createCollider(ColliderType colliderType, std::shared_ptr<MeshInstance> mesh, Private::GenericData *data) = 0;
 
 			virtual void destroyCollider(ColliderInterface *collider) = 0;
-
-			virtual MaterialInterface *createMaterial(ColliderInterface *collider) = 0;
-
-			virtual void destroyMaterial(MaterialInterface *material) = 0;
 
 			virtual void simulate(float stepSize) = 0;
 		};

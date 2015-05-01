@@ -158,7 +158,6 @@
     <ClCompile Include="Engine\Physics\Fallback\NullPhysics.cpp" />
     <ClCompile Include="Engine\Physics\Fallback\NullMaterial.cpp" />
     <ClCompile Include="Engine\Physics\Fallback\NullRigidBody.cpp" />
-    <ClCompile Include="Engine\Physics\ContactInformation.cpp" />
     <ClCompile Include="Engine\Systems\CollisionSystem.cpp" />
     <ClCompile Include="Engine\Physics\Fallback\NullBoxCollider.cpp" />
     <ClCompile Include="Engine\Physics\Fallback\NullCapsuleCollider.cpp" />
@@ -173,6 +172,7 @@
     <ClCompile Include="Engine\Physics\ICollisionListener.cpp" />
     <ClCompile Include="Engine\Physics\ITriggerListener.cpp" />
     <ClCompile Include="Engine\Components\RigidBody.cpp" />
+    <ClCompile Include="Engine\Physics\Fallback\NullRaycaster.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -428,7 +428,6 @@
     <ClInclude Include="Engine\Physics\Fallback\NullRigidBody.hpp" />
     <ClInclude Include="Engine\Physics\MaterialInterface.hpp" />
     <ClInclude Include="Engine\Physics\RigidBodyInterface.hpp" />
-    <ClInclude Include="Engine\Physics\ContactInformation.hpp" />
     <ClInclude Include="Engine\Physics\ForceMode.hpp" />
     <ClInclude Include="Engine\Physics\CollisionDetectionMode.hpp" />
     <ClInclude Include="Engine\Physics\FilterGroup.hpp" />
@@ -459,6 +458,8 @@
     <ClInclude Include="Engine\Physics\ITriggerListener.hpp" />
     <ClInclude Include="Engine\Physics\CollisionType.hpp" />
     <ClInclude Include="Engine\Components\RigidBody.hpp" />
+    <ClInclude Include="Engine\Physics\RaycasterInterface.hpp" />
+    <ClInclude Include="Engine\Physics\Fallback\NullRaycaster.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />
@@ -490,5 +491,6 @@
     <None Include="Engine\Physics\MemoryPoolHelper.inl" />
     <None Include="Engine\Components\Collider.inl" />
     <None Include="Engine\Components\RigidBody.inl" />
+    <None Include="Engine\Physics\RaycasterInterface.inl" />
   </ItemGroup>
 </Project>

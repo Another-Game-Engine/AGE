@@ -9,6 +9,7 @@
 #include "PhysXCapsuleCollider.hpp"
 #include "PhysXMeshCollider.hpp"
 #include "PhysXSphereCollider.hpp"
+#include "PhysXRaycaster.hpp"
 
 namespace AGE
 {
@@ -148,6 +149,11 @@ namespace AGE
 			notifyTriggers();
 		}
 
+		RaycasterInterface *PhysXWorld::createRaycaster(void)
+		{
+			return new PhysXRaycaster(this);
+		}
+
 		RigidBodyInterface *PhysXWorld::createRigidBody(Private::GenericData *data)
 		{
 			return create<PhysXRigidBody>(this, data);
@@ -204,14 +210,33 @@ namespace AGE
 			}
 		}
 
-		MaterialInterface *PhysXWorld::createMaterial(ColliderInterface *collider)
+		MaterialInterface *PhysXWorld::createMaterial(const std::string &name)
 		{
-			return create<PhysXMaterial>(this, collider);
+			MaterialTable::iterator found = materials.find(name);
+			if (found != materials.end())
+			{
+				++found->second.second;
+				return found->second.first;
+			}
+			else
+			{
+				return materials.insert(std::make_pair(name, std::make_pair(create<PhysXMaterial>(this, name), 1))).first->second.first;
+			}
 		}
 
 		void PhysXWorld::destroyMaterial(MaterialInterface *material)
 		{
-			destroy(static_cast<PhysXMaterial *>(material));
+			assert(material != nullptr && "Invalid material");
+			MaterialTable::iterator found = materials.find(material->getName());
+			if (found != materials.end())
+			{
+				--found->second.second;
+				if (found->second.second == 0)
+				{
+					destroy(static_cast<PhysXMaterial *>(material));
+					materials.erase(found);
+				}
+			}
 		}
 
 		void PhysXWorld::onConstraintBreak(physx::PxConstraintInfo *constraints, physx::PxU32 numberOfConstraints)

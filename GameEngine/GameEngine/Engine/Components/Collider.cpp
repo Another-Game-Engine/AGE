@@ -2,6 +2,7 @@
 #include <Components/RigidBody.hpp>
 #include <Components/PhysicsData.hpp>
 #include <Core/AScene.hh>
+#include <Physics/PhysicsInterface.hpp>
 #include <Physics/WorldInterface.hpp>
 #include <AssetManagement/AssetManager.hh>
 
@@ -11,45 +12,27 @@ namespace AGE
 	void Collider::init(Physics::ColliderType colliderType, const std::string &mesh)
 	{
 		assert(collider == nullptr && "Collider already initialized");
-		collider = entity.getScene()->getInstance<Physics::WorldInterface>()->createCollider(colliderType, colliderType == Physics::ColliderType::Mesh ? entity.getScene()->getInstance<AGE::AssetsManager>()->getMesh(mesh) : nullptr, entity.addComponent<Private::PhysicsData>()->getData());
+		collider = entity.getScene()->getInstance<Physics::PhysicsInterface>()->getWorld()->createCollider(colliderType, colliderType == Physics::ColliderType::Mesh ? entity.getScene()->getInstance<AGE::AssetsManager>()->getMesh(mesh) : nullptr, entity.addComponent<Private::PhysicsData>()->getData());
 		collider->collider = this;
 		scale(entity.getLink().getScale());
 	}
 
-	void Collider::setStaticFriction(float staticFriction)
+	void Collider::setMaterial(const std::string &material)
 	{
 		assert(collider != nullptr && "Invalid Collider");
-		collider->getMaterial()->setStaticFriction(staticFriction);
+		collider->setMaterial(material);
 	}
 
-	float Collider::getStaticFriction(void) const
+	Physics::MaterialInterface *Collider::getMaterial(void)
 	{
 		assert(collider != nullptr && "Invalid Collider");
-		return collider->getMaterial()->getStaticFriction();
+		return collider->getMaterial();
 	}
 
-	void Collider::setDynamicFriction(float dynamicFriction)
+	const Physics::MaterialInterface *Collider::getMaterial(void) const
 	{
 		assert(collider != nullptr && "Invalid Collider");
-		collider->getMaterial()->setDynamicFriction(dynamicFriction);
-	}
-
-	float Collider::getDynamicFriction(void) const
-	{
-		assert(collider != nullptr && "Invalid Collider");
-		return collider->getMaterial()->getDynamicFriction();
-	}
-
-	void Collider::setRestitution(float restitution)
-	{
-		assert(collider != nullptr && "Invalid Collider");
-		collider->getMaterial()->setRestitution(restitution);
-	}
-
-	float Collider::getRestitution(void) const
-	{
-		assert(collider != nullptr && "Invalid Collider");
-		return collider->getMaterial()->getRestitution();
+		return collider->getMaterial();
 	}
 
 	Physics::ColliderType Collider::getColliderType(void) const
@@ -296,7 +279,7 @@ namespace AGE
 	{
 		if (collider != nullptr)
 		{
-			entity.getScene()->getInstance<Physics::WorldInterface>()->destroyCollider(collider);
+			entity.getScene()->getInstance<Physics::PhysicsInterface>()->getWorld()->destroyCollider(collider);
 			collider = nullptr;
 		}
 		if (!entity.haveComponent<RigidBody>())

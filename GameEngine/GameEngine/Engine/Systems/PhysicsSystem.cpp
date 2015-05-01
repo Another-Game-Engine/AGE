@@ -11,8 +11,8 @@
 namespace AGE
 {
 	// Constructors
-	PhysicsSystem::PhysicsSystem(AScene *scene, Physics::EngineType physicsEngineType)
-		: System(scene), PluginManager("CreateInterface", "DestroyInterface"), entityFilter(scene)
+	PhysicsSystem::PhysicsSystem(AScene *scene, Physics::EngineType physicsEngineType, const std::string &assetDirectory)
+		: System(scene), PluginManager("CreateInterface", "DestroyInterface"), assetDirectory(assetDirectory), entityFilter(scene)
 	{
 		_name = "PhysicsSystem";
 		entityFilter.requireComponent<RigidBody>();
@@ -51,11 +51,11 @@ namespace AGE
 	bool PhysicsSystem::initialize(void)
 	{
 		// Set Dependency to real plugin (physics enabled if plugin != NullPhysics)
-		_scene->getInstance<Physics::PhysicsInterface>()->shutdown();
+		_scene->getInstance<Physics::PhysicsInterface>()->shutdown(assetDirectory);
 		_scene->deleteInstance<Physics::PhysicsInterface>();
 		_scene->setInstance(physics);
 		Singleton<Logger>::getInstance()->log(Logger::Level::Normal, "Initializing PhysicsSystem with plugin '", Physics::GetPluginNameForEngine(physics->getPluginType()), "'.");
-		if (physics->startup())
+		if (physics->startup(assetDirectory))
 		{
 			_scene->addSystem<Private::CollisionSystem>(std::numeric_limits<std::size_t>::min());
 			_scene->addSystem<Private::TriggerSystem>(std::numeric_limits<std::size_t>::min());
@@ -72,7 +72,7 @@ namespace AGE
 		assert(physics != nullptr && "System already finalized");
 		Singleton<Logger>::getInstance()->log(Logger::Level::Normal, "Finalizing PhysicsSystem with plugin '", Physics::GetPluginNameForEngine(physics->getPluginType()), "'.");
 		const Physics::EngineType engineType = physics->getPluginType();
-		physics->shutdown();
+		physics->shutdown(assetDirectory);
 		if (engineType == Physics::EngineType::Null)
 		{
 			delete physics;
@@ -80,7 +80,7 @@ namespace AGE
 		physics = nullptr;
 		// Set Dependency to the fallback plugin (physics disabled) --> Needed if a RigidBody is added while no PhysicsSystem exists
 		_scene->removeInstance<Physics::PhysicsInterface>();
-		_scene->setInstance<Physics::NullPhysics, Physics::PhysicsInterface>()->startup();
+		_scene->setInstance<Physics::NullPhysics, Physics::PhysicsInterface>()->startup(assetDirectory);
 	}
 
 	bool PhysicsSystem::onPluginLoaded(PluginPtr pluginData)

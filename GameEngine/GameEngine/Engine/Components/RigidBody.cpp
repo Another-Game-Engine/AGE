@@ -2,6 +2,7 @@
 #include <Components/Collider.hpp>
 #include <Components/PhysicsData.hpp>
 #include <Core/AScene.hh>
+#include <Physics/PhysicsInterface.hpp>
 #include <Physics/WorldInterface.hpp>
 
 namespace AGE
@@ -10,7 +11,7 @@ namespace AGE
 	void RigidBody::init(void)
 	{
 		assert(rigidBody == nullptr && "RigidBody already initialized");
-		rigidBody = entity.getScene()->getInstance<Physics::WorldInterface>()->createRigidBody(entity.addComponent<Private::PhysicsData>()->getData());
+		rigidBody = entity.getScene()->getInstance<Physics::PhysicsInterface>()->getWorld()->createRigidBody(entity.addComponent<Private::PhysicsData>()->getData());
 		rigidBody->rigidBody = this;
 		Link *link = entity.getLinkPtr();
 		setPosition(link->getPosition());
@@ -238,7 +239,7 @@ namespace AGE
 	{
 		if (rigidBody != nullptr)
 		{
-			entity.getScene()->getInstance<Physics::WorldInterface>()->destroyRigidBody(rigidBody);
+			entity.getScene()->getInstance<Physics::PhysicsInterface>()->getWorld()->destroyRigidBody(rigidBody);
 			rigidBody = nullptr;
 		}
 		if (!entity.haveComponent<Collider>())

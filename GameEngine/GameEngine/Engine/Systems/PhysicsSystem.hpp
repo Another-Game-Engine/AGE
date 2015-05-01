@@ -16,7 +16,7 @@ namespace AGE
 		// Constructors
 		PhysicsSystem(void) = delete;
 
-		PhysicsSystem(AScene *scene, Physics::EngineType physicsEngineType);
+		PhysicsSystem(AScene *scene, Physics::EngineType physicsEngineType, const std::string &assetDirectory = "");
 
 		PhysicsSystem(PhysicsSystem const &) = delete;
 
@@ -33,6 +33,8 @@ namespace AGE
 
 	private:
 		// Attributes
+		const std::string assetDirectory;
+
 		Physics::PhysicsInterface *physics = nullptr;
 
 		EntityFilter entityFilter;

@@ -56,7 +56,9 @@ namespace AGE
 
 			FilterGroup getFilterGroup(void) const override final;
 
-			void scale(const glm::vec3 &scaling) override final;
+			virtual void scale(const glm::vec3 &scaling) override;
+
+			void setMaterial(const std::string &name) override final;
 		};
 	}
 }

@@ -30,9 +30,9 @@ namespace AGE
 			virtual ~PhysicsInterface(void) = default;
 
 			// Methods
-			bool startup(void);
+			bool startup(const std::string &assetDirectory);
 
-			void shutdown(void);
+			void shutdown(const std::string &assetDirectory);
 
 			WorldInterface *getWorld(void);
 

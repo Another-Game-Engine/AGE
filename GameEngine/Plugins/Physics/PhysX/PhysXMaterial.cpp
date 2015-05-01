@@ -6,8 +6,8 @@ namespace AGE
 	namespace Physics
 	{
 		// Constructors
-		PhysXMaterial::PhysXMaterial(PhysXWorld *world, ColliderInterface *collider)
-			: MaterialInterface(collider), material(static_cast<PhysXPhysics *>(world->getPhysics())->getPhysics()->createMaterial(GetDefaultStaticFriction(), GetDefaultDynamicFriction(), GetDefaultRestitution()))
+		PhysXMaterial::PhysXMaterial(PhysXWorld *world, const std::string &name)
+			: MaterialInterface(name), material(static_cast<PhysXPhysics *>(world->getPhysics())->getPhysics()->createMaterial(GetDefaultStaticFriction(), GetDefaultDynamicFriction(), GetDefaultRestitution()))
 		{
 			assert(material != nullptr && "Impossible to create material");
 		}
@@ -20,6 +20,17 @@ namespace AGE
 				material->release();
 				material = nullptr;
 			}
+		}
+
+		// Methods
+		physx::PxMaterial *PhysXMaterial::getMaterial(void)
+		{
+			return material;
+		}
+
+		const physx::PxMaterial *PhysXMaterial::getMaterial(void) const
+		{
+			return material;
 		}
 
 		// Inherited Methods

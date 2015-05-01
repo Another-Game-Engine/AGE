@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 #include <glm/glm.hpp>
 
 #include "ColliderType.hpp"
@@ -73,6 +75,8 @@ namespace AGE
 
 			const WorldInterface *getWorld(void) const;
 
+			void setMaterial(MaterialInterface *newMaterial);
+
 			MaterialInterface *getMaterial(void);
 
 			const MaterialInterface *getMaterial(void) const;
@@ -120,6 +124,8 @@ namespace AGE
 
 			// Virtual Methods
 			virtual void scale(const glm::vec3 &scaling) = 0;
+
+			virtual void setMaterial(const std::string &name) = 0;
 
 		private:
 			// Attributes

@@ -52,6 +52,8 @@ namespace AGE
 			void setFilterGroup(FilterGroup group) override final;
 
 			FilterGroup getFilterGroup(void) const override final;
+
+			void setMaterial(const std::string &name) override final;
 		};
 	}
 }
