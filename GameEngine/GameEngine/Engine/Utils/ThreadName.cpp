@@ -1,4 +1,5 @@
 #include "ThreadName.hpp"
+#include <microprofile/microprofile.h>
 
 #ifdef WIN32
 void SetThreadName( DWORD dwThreadID, const char* threadName)
@@ -8,6 +9,8 @@ void SetThreadName( DWORD dwThreadID, const char* threadName)
    info.szName = threadName;
    info.dwThreadID = dwThreadID;
    info.dwFlags = 0;
+
+   MicroProfileOnThreadCreate(threadName);
 
    __try
    {
