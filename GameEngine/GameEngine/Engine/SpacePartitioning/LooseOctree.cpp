@@ -3,6 +3,7 @@
 #include <SpacePartitioning/Cullable/Object/PointLight.hh>
 #include <SpacePartitioning/Cullable/Object/Mesh.hh>
 #include <Utils/AABoundingBox.hh>
+#include <Utils/Profiler.hpp>
 
 namespace AGE
 {
@@ -29,6 +30,8 @@ namespace AGE
 
 	void LooseOctree::removeElement(CullableShape<AABoundingBox> *toRm)
 	{
+		SCOPE_profile_cpu_i("OctreeTimer", "Remove element");
+
 		LooseOctreeNode::removeElementFromNode(toRm->currentNode, *this, toRm);
 #if DEBUG_OCTREE
 		_nodesPool.get(_root).checkOctreeIntegrity(*this, _root);
@@ -37,6 +40,8 @@ namespace AGE
 
 	void LooseOctree::moveElement(CullableShape<AABoundingBox> *toMv)
 	{
+		SCOPE_profile_cpu_i("OctreeTimer", "Move element");
+
 		uint32_t newRoot = LooseOctreeNode::moveElementFromNode(toMv->currentNode, *this, toMv);
 
 		if (newRoot != UNDEFINED_IDX)
@@ -48,6 +53,8 @@ namespace AGE
 
 	void LooseOctree::getElementsCollide(CullableShape<Frustum> *toTest, AGE::Vector<Cullable *> &toFill)
 	{
+		SCOPE_profile_cpu_i("OctreeTimer", "Get elements collide");
+
 		_nodesPool.get(_root).getElementsCollide(*this, toTest, toFill);
 #if DEBUG_OCTREE
 		_nodesPool.get(_root).checkOctreeIntegrity(*this, _root);
@@ -56,6 +63,8 @@ namespace AGE
 
 	void LooseOctree::getAllElements(AGE::Vector<Cullable *> &toFill)
 	{
+		SCOPE_profile_cpu_i("OctreeTimer", "Get all elements");
+
 		_nodesPool.get(_root).getAllElements(*this, toFill);
 #if DEBUG_OCTREE
 		_nodesPool.get(_root).checkOctreeIntegrity(*this, _root);
@@ -64,6 +73,8 @@ namespace AGE
 
 	void LooseOctree::cleanOctree()
 	{
+		SCOPE_profile_cpu_i("OctreeTimer", "Clean octree");
+
 		uint32_t newRoot = _root;
 
 		while (newRoot != UNDEFINED_IDX)
