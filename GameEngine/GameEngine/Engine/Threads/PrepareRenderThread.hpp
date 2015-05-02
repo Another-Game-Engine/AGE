@@ -30,7 +30,9 @@ namespace AGE
 			, const RenderModeSet &renderModes);
 		PrepareKey addMesh();
 		PrepareKey addPointLight();
+		PrepareKey addSpotLight();
 		void setPointLight(glm::vec3 const &color, glm::vec3 const &range, std::shared_ptr<ITexture> const &texture, const PrepareKey &key);
+		void setSpotLight(glm::vec3 const &color, glm::vec3 const &range, float exponent, float cutOff, std::shared_ptr<ITexture> const &texture, const PrepareKey &key);
 	private:
 		PrepareRenderThread();
 		virtual ~PrepareRenderThread();

@@ -50,6 +50,11 @@ namespace AGE
 			_activeScene->_createPointLight(msg);
 		});
 
+		registerCallback<Commands::MainToPrepare::CreateSpotLight>([this](Commands::MainToPrepare::CreateSpotLight &msg){
+			assert(this->_activeScene != nullptr);
+			_activeScene->_createSpotLight(msg);
+		});
+
 		registerCallback<Commands::MainToPrepare::DeleteCamera>([this](Commands::MainToPrepare::DeleteCamera &msg){
 			assert(this->_activeScene != nullptr);
 			_activeScene->_deleteCamera(msg);
@@ -63,6 +68,11 @@ namespace AGE
 		registerCallback<Commands::MainToPrepare::DeletePointLight>([this](Commands::MainToPrepare::DeletePointLight &msg){
 			assert(this->_activeScene != nullptr);
 			_activeScene->_deletePointLight(msg);
+		});
+
+		registerCallback<Commands::MainToPrepare::DeleteSpotLight>([this](Commands::MainToPrepare::DeleteSpotLight &msg){
+			assert(this->_activeScene != nullptr);
+			_activeScene->_deleteSpotLight(msg);
 		});
 
 		registerCallback<Commands::MainToPrepare::PrepareDrawLists>([this](Commands::MainToPrepare::PrepareDrawLists &msg){
@@ -83,6 +93,11 @@ namespace AGE
 		registerCallback<Commands::MainToPrepare::SetPointLight>([this](Commands::MainToPrepare::SetPointLight &msg){
 			assert(this->_activeScene != nullptr);
 			_activeScene->_setPointLight(msg);
+		});
+
+		registerCallback<Commands::MainToPrepare::SetSpotLight>([this](Commands::MainToPrepare::SetSpotLight &msg){
+			assert(this->_activeScene != nullptr);
+			_activeScene->_setSpotLight(msg);
 		});
 
 		registerCallback<Commands::MainToPrepare::SetTransform>([this](Commands::MainToPrepare::SetTransform &msg){
@@ -251,6 +266,15 @@ namespace AGE
 		return key;
 	}
 
+	PrepareKey PrepareRenderThread::addSpotLight()
+	{
+		auto scene = _getRenderScene(GetMainThread()->getActiveScene());
+		assert(scene != nullptr);
+		auto key = scene->addSpotLight();
+		getQueue()->emplaceCommand<Commands::MainToPrepare::CreateSpotLight>(key);
+		return key;
+	}
+
 	PrepareKey PrepareRenderThread::addPointLight()
 	{
 		auto scene = _getRenderScene(GetMainThread()->getActiveScene());
@@ -267,6 +291,12 @@ namespace AGE
 		getQueue()->emplaceCommand<Commands::MainToPrepare::SetPointLight>(color, range, texture, key);
 	}
 
+	void PrepareRenderThread::setSpotLight(glm::vec3 const &color, glm::vec3 const &range, float exponent, float cutOff, std::shared_ptr<ITexture> const &texture, const PrepareKey &key)
+	{
+		auto scene = _getRenderScene(GetMainThread()->getActiveScene());
+		assert(scene != nullptr);
+		getQueue()->emplaceCommand<Commands::MainToPrepare::SetSpotLight>(color, range, exponent, cutOff, texture, key);
+	}
 
 	void PrepareRenderThread::_createRenderScene(AScene *scene)
 	{

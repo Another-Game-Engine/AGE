@@ -619,4 +619,11 @@ namespace AGE
 			_pointLight = loadTexture("pointlight.tage", "");
 		return _pointLight;
 	}
+
+	std::shared_ptr<ITexture> const &AssetsManager::getSpotLightTexture()
+	{
+		if (!_spotLight)
+			_spotLight = loadTexture("spotlight.tage", "");
+		return _spotLight;
+	}
 }

@@ -66,6 +66,12 @@ namespace AGE
 				PrepareKey key;
 			};
 
+			struct CreateSpotLight
+			{
+				CreateSpotLight(PrepareKey const &key);
+				PrepareKey key;
+			};
+
 			struct SetPointLight
 			{
 				SetPointLight(glm::vec3 const &color, glm::vec3 const &attenuation, std::shared_ptr<ITexture> const &texture, PrepareKey &key);
@@ -73,6 +79,18 @@ namespace AGE
 				glm::vec3 color;
 				glm::vec3 attenuation;
 				std::shared_ptr<ITexture> texture;
+			};
+
+			struct SetSpotLight
+			{
+				SetSpotLight(glm::vec3 const &color, glm::vec3 const &range, float exponent, float cutOff, std::shared_ptr<ITexture> const &texture, PrepareKey &key);
+				PrepareKey key;
+				glm::vec3 color;
+				glm::vec3 range;
+				float exponent;
+				float cutOff;
+				std::shared_ptr<ITexture> texture;
+
 			};
 
 			struct DeleteCamera
@@ -84,6 +102,12 @@ namespace AGE
 			struct DeletePointLight
 			{
 				DeletePointLight(const PrepareKey &_key);
+				PrepareKey key;
+			};
+
+			struct DeleteSpotLight
+			{
+				DeleteSpotLight(const PrepareKey &_key);
 				PrepareKey key;
 			};
 

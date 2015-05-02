@@ -17,6 +17,7 @@ namespace AGE
 	struct RenderLightList
 	{
 		std::vector<RenderLight<PointLight>> pointLight;
+		std::vector<RenderLight<SpotLight>> spotLights;
 	};
 
 }

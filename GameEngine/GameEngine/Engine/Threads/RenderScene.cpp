@@ -73,6 +73,14 @@ namespace AGE
 		return res;
 	}
 
+	PrepareKey RenderScene::addSpotLight()
+	{
+		PrepareKey res;
+		res.type = PrepareKey::Type::SpotLight;
+		res.id = (AGE::PrepareKey::OctreeObjectId)(_spotLights.prepareAlloc());
+		return res;
+	}
+
 	RenderScene &RenderScene::removeElement(const PrepareKey &key)
 	{
 		assert(!key.invalid());
@@ -160,6 +168,18 @@ namespace AGE
 		toAdd.key.id = msg.key.id;
 	}
 
+	void RenderScene::_createSpotLight(AGE::Commands::MainToPrepare::CreateSpotLight &msg)
+	{
+		_spotLights.allocPreparated(msg.key.id);
+		SpotLight &toAdd = _spotLights.get(msg.key.id);
+
+		// TODO: remove this
+		toAdd.activeSpotLightIdx = (uint32_t)(_activeSpotLights.size());
+		_activeSpotLights.push_back(msg.key.id);
+		// ---
+		toAdd.key.id = msg.key.id;
+	}
+
 	void RenderScene::_createMesh(AGE::Commands::MainToPrepare::CreateMesh &msg)
 	{
 		_meshs.allocPreparated(msg.key.id);
@@ -178,6 +198,22 @@ namespace AGE
 			l->hasMoved = true;
 			l->moveBufferIdx = static_cast<uint32_t>(_pointLightsToMove.size());
 			_pointLightsToMove.push_back(msg.key.id);
+		}
+	}
+
+	void RenderScene::_setSpotLight(AGE::Commands::MainToPrepare::SetSpotLight &msg)
+	{
+		SpotLight *l = &_spotLights.get(msg.key.id);
+		l->color = msg.color;
+		l->spotCutOff = msg.cutOff;
+		l->exponent = msg.exponent;
+		l->map = msg.texture;
+		l->attenuation = msg.range;
+		if (l->hasMoved == false)
+		{
+			l->hasMoved = true;
+			l->moveBufferIdx = static_cast<uint32_t>(_spotLightsToMove.size());
+			_spotLightsToMove.push_back(msg.key.id);
 		}
 	}
 
@@ -209,6 +245,25 @@ namespace AGE
 		}
 
 		_pointLights.deallocPreparated(msg.key.id);
+	}
+
+	void RenderScene::_deleteSpotLight(AGE::Commands::MainToPrepare::DeleteSpotLight &msg)
+	{
+		SpotLight &toRm = _spotLights.get(msg.key.id);
+
+		// TODO: remove when point lights will be in octree
+		_activeSpotLights[toRm.activeSpotLightIdx] = _activeSpotLights[_activeSpotLights.size() - 1];
+		_spotLights.get(_activeSpotLights[toRm.activeSpotLightIdx]).activeSpotLightIdx = toRm.activeSpotLightIdx;
+		_activeSpotLights.pop_back();
+		// ---
+		if (toRm.hasMoved)
+		{
+			_spotLightsToMove[toRm.moveBufferIdx] = _spotLightsToMove[_spotLightsToMove.size() - 1];
+			_spotLights.get(_spotLightsToMove[toRm.moveBufferIdx]).moveBufferIdx = toRm.moveBufferIdx;
+			_spotLightsToMove.pop_back();
+		}
+
+		_spotLights.deallocPreparated(msg.key.id);
 	}
 
 	void RenderScene::_deleteDrawable(AGE::Commands::MainToPrepare::DeleteMesh &msg)
@@ -303,7 +358,7 @@ namespace AGE
 		Camera *co = nullptr;
 		Mesh *uo = nullptr;
 		PointLight *l = nullptr;
-
+		SpotLight *s = nullptr;
 		switch (msg.key.type)
 		{
 
@@ -335,6 +390,16 @@ namespace AGE
 				l->hasMoved = true;
 				l->moveBufferIdx = (uint32_t)_pointLightsToMove.size();
 				_pointLightsToMove.push_back(msg.key.id);
+			}
+			break;
+		case(PrepareKey::Type::SpotLight) :
+			s = &_spotLights.get(msg.key.id);
+			s->transformation = msg.transform;
+			if (s->hasMoved == false)
+			{
+				s->hasMoved = true;
+				s->moveBufferIdx = (uint32_t)_spotLightsToMove.size();
+				_spotLightsToMove.push_back(msg.key.id);
 			}
 			break;
 		default:
@@ -369,8 +434,15 @@ namespace AGE
 			e.computeSphereTransform();
 			// TODO: move in octree
 		}
+		for (uint32_t idx : _spotLightsToMove)
+		{
+			SpotLight &e = _spotLights.get(idx);
+			e.hasMoved = false;
+			// TODO: move in octree
+		}
 		_drawablesToMove.clear();
 		_pointLightsToMove.clear();
+		_spotLightsToMove.clear();
 	}
 
 	void RenderScene::_prepareDrawList(AGE::Commands::MainToPrepare::PrepareDrawLists &msg)
@@ -429,6 +501,12 @@ namespace AGE
 				renderCamera.lights.pointLight.emplace_back();
 				renderCamera.lights.pointLight.back().light = p;
 				// TODO: Cull the shadows
+			}
+			for (uint32_t spotLightIdx : _activeSpotLights) 
+			{
+				auto &p = _spotLights.get(spotLightIdx);
+				renderCamera.lights.spotLights.emplace_back();
+				renderCamera.lights.spotLights.back().light = p;
 			}
 			// Do the culling
 			_octree.getElementsCollide(&camera, toDraw);
@@ -543,6 +621,13 @@ namespace AGE
 					renderCamera.lights.pointLight.emplace_back();
 					renderCamera.lights.pointLight.back().light = *currentPointLight;
 					// TODO: Cull the shadows
+				}
+				break;
+				case PrepareKey::Type::SpotLight:
+				{
+					SpotLight *currentSpotLight = static_cast<SpotLight*>(e);
+					renderCamera.lights.spotLights.emplace_back();
+					renderCamera.lights.spotLights.back().light = *currentSpotLight;
 				}
 				break;
 				default:
