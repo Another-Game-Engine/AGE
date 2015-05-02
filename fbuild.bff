@@ -81,7 +81,7 @@ Compiler( 'Compiler-x64' )
               + ' /IGNORE:4001' ; don't complain about linking libs only
 
   // Optimizations
-  .CompilerDebugOptimizations   = ' /MTd /Od /RTC1 /GS /Oy- /GR- /analyze'
+  .CompilerDebugOptimizations   = ' /MTd /Od /RTC1 /GS /Oy- /GR-' //analyze
   .CompilerReleaseOptimizations = ' /MT /Ox /Oy /Oi /GS- /GF /GL /Gy /Gw /GR- ' //analyze
   .LibrarianDebugOptimizations  = ''
   .LibrarianReleaseOptimizations  = ' /LTCG'
@@ -147,7 +147,7 @@ Compiler( 'Compiler-x64' )
 [
   Using( .X64ReleaseConfig ) // Note: based on Release config
   .Config         = 'Profile'
-  .CompilerOptions    + ' /DEDITOR_ENABLED /DAGE_ENABLE_PROFILING'
+  .CompilerOptions    + ' /DEDITOR_ENABLED'
 
     .DeoptimizeWritableFilesWithToken = false
 ]
