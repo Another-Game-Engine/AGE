@@ -3,9 +3,18 @@
 {
 	.ProjectName		= 'AGEngine'
 	.ProjectDestPath	= './TMP_SOLUTIONS/GameEngine/Engine/'
-	.ProjectPath		= './GameEngine/GameEngine/Engine/'
+	.ProjectPath		= 'GameEngine/GameEngine/Engine'
 
-	.VendorsPath        = './GameEngine/Vendors\'
+	.VendorsPath        = 'GameEngine/Vendors'
+
+	.CompilerIncludesPaths = ' /I"$ProjectPath$"'
+						   + ' /I"$VendorsPath$"'
+						   + ' /I"$VendorsPath$"\OpenGL\include\'
+						   + ' /I"$VendorsPath$"\bullet\src\'
+						   + ' /I"$VendorsPath$"\fmod\inc\'
+						   + ' /I"$VendorsPath$"\minizip\include\'
+						   + ' /I"$VendorsPath$"\zlib\include\'
+
 
 	// Visual Studio Project Generation
 	//--------------------------------------------------------------------------
@@ -15,12 +24,13 @@
 		.ProjectInputPaths			= { '$ProjectPath$\'
 		                               , '$VendorsPath$\imgui\'}
 		.ProjectBasePath			= {'$ProjectPath$\'}
+        .ProjectBasePath            = { '$ProjectPath$\'
+                                        , '$VendorsPath$\' }
 
 		.ProjectAllowedFileExtensions = { '.h' '.cpp' '.c' '.hh' '.hpp' }
 
 		// Vendors
 		.IncludeSearchPath               = '$ProjectPath$\'
-										 + ';prout'
 										 + ';$ProjectPath$\'
 		                                 + ';$VendorsPath$\OpenGL\include\'
 		                                 + ';$VendorsPath$\bullet\src\'
@@ -61,7 +71,9 @@
 
 	}
 
-	// Windows (GameMSVC)
+
+
+	// Windows
 	//--------------------------------------------------------------------------
 	ForEach( .Config in .Configs_Windows_MSVC )
 	{
@@ -73,6 +85,10 @@
 		{
 			// Input (Unity)
 			.CompilerInputUnity			= '$ProjectName$-Unity-Windows'
+
+			.CompilerInputPath          = '$ProjectPath$'
+
+			.CompilerOptions            + ' $CompilerIncludesPaths$'
 
 			// Output
 			.CompilerOutputPath			= '$OutputBase$\$ProjectName$\'

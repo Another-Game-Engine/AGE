@@ -66,7 +66,7 @@ Compiler( 'Compiler-x64' )
               + ' /we4905' // wide string literal cast to 'LPSTR'
               + ' /we4906' // string literal cast to 'LPWSTR'
 
-  .CompilerOptions    = '"%1" /Z7 /d2Zi+ /nologo /c /W4 /WX'
+  .CompilerOptions    = '"%1" /Z7 /d2Zi+ /nologo /c /W4'
               + ' /Zc:inline'     // Remove unreferenced COMDATs at compile time (VS2013.2+)
               + ' /Zc:strictStrings'  // Require const only usage of string literals (VS2013+)
               + .AdditionalWarnings
@@ -76,8 +76,8 @@ Compiler( 'Compiler-x64' )
                             + ' /D"_WINSOCK_DEPRECATED_NO_WARNINGS"' // don't warn about deprecated winsock functions - TODO:C Update API use
 
   .CompilerOptions    + ' /Fo"%2"'
-  .LibrarianOptions   = '/NODEFAULTLIB /WX /NOLOGO /OUT:"%2" "%1"'
-  .LinkerOptions      = '/NODEFAULTLIB /WX /NOLOGO /INCREMENTAL:NO /OUT:"%2" "%1" /DEBUG'
+  .LibrarianOptions   = '/NODEFAULTLIB /NOLOGO /OUT:"%2" "%1"'
+  .LinkerOptions      = '/NODEFAULTLIB /NOLOGO /INCREMENTAL:NO /OUT:"%2" "%1" /DEBUG'
               + ' /IGNORE:4001' ; don't complain about linking libs only
 
   // Optimizations
