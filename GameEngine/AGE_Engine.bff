@@ -43,16 +43,17 @@
 
 	// Unity
 	//--------------------------------------------------------------------------
-	{
-		// Common options
-		.UnityInputPath				= '$ProjectPath$\'
-		.UnityOutputPath			= '$OutputBase$\Unity\$ProjectPath$\'
-		.UnityInputExcludePath		= '$ProjectPath$\CoreTest\' // Exclude Tests
 
+        .UnityNumFiles   = 12
+        .UnityInputPath  = { '$ProjectDestPath$\' }
+
+	{
 		// Windows
 		Unity( '$ProjectName$-Unity-Windows' )
 		{
-			// No PCH
+		    .UnityInputPath				= '$ProjectPath$\'
+		    .UnityOutputPath			= '$OutputBase$\Unity\$ProjectPath$\'
+		    //.UnityInputExcludePath		= '$ProjectPath$\CoreTest\' // Exclude Tests
 		}
 	}
 

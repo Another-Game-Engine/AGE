@@ -231,3 +231,5 @@ RailShooter
 tmp
 tmp2
 *.fdb
+FBuildWorker.exe.copy.settings
+FBuildWorker.exe.copy

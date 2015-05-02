@@ -12,7 +12,7 @@
 ; Windows Platform
 ;-------------------------------------------------------------------------------
 .VSBasePath     = 'C:\Program Files (x86)\Microsoft Visual Studio 12.0\'
-.WindowsSDKBasePath = '../External/SDK/Windows8.1'
+.WindowsSDKBasePath = 'C:\Program Files (x86)\Windows Kits\8.1'
 
 ;-------------------------------------------------------------------------------
 ; Settings
@@ -54,26 +54,26 @@ Compiler( 'Compiler-x64' )
 //------------------------------------------------------------------------------
 .MSVCBaseConfig =
 [
-  .AdditionalWarnings   = ' /we4062' // enumerator 'identifier' in a switch of enum 'enumeration' is not handled
-              + ' /we4263' // 'function' : member function does not override any base class virtual member function
-              + ' /we4265' // 'class': class has virtual functions, but destructor is not virtual
-              + ' /we4296' // 'operator': expression is always false
+  .AdditionalWarnings = ' /we4296' // 'operator': expression is always false
+              //' /we4062' // enumerator 'identifier' in a switch of enum 'enumeration' is not handled
+              // + ' /we4263' // 'function' : member function does not override any base class virtual member function
+              // + ' /we4265' // 'class': class has virtual functions, but destructor is not virtual
               + ' /we4555' // expression has no effect; expected expression with side-effect
               + ' /we4619' // #pragma warning : there is no warning number 'number'
-              + ' /we4640' // 'instance' : construction of local static object is not thread-safe
-              + ' /we4826' // Conversion from 'type1 ' to 'type_2' is sign-extended. This may cause unexpected runtime behavior.
+              // + ' /we4640' // 'instance' : construction of local static object is not thread-safe
+              // + ' /we4826' // Conversion from 'type1 ' to 'type_2' is sign-extended. This may cause unexpected runtime behavior.
               + ' /we4836' // nonstandard extension used : 'type' : local types or unnamed types cannot be used as template arguments
-              + ' /we4905' // wide string literal cast to 'LPSTR'
-              + ' /we4906' // string literal cast to 'LPWSTR'
+              //+ ' /we4905' // wide string literal cast to 'LPSTR'
+              //+ ' /we4906' // string literal cast to 'LPWSTR'
 
-  .CompilerOptions    = '"%1" /Z7 /d2Zi+ /nologo /c /W4'
+  .CompilerOptions    = '"%1" /Z7 /d2Zi+ /nologo /c /W3'
               + ' /Zc:inline'     // Remove unreferenced COMDATs at compile time (VS2013.2+)
-              + ' /Zc:strictStrings'  // Require const only usage of string literals (VS2013+)
+              //+ ' /Zc:strictStrings'  // Require const only usage of string literals (VS2013+)
               + .AdditionalWarnings
               + ' /fp:fast'
-              + ' /D"WIN32_LEAN_AND_MEAN" /D_WIN32 /D__WINDOWS__'
+              + ' /D_WIN32 /D__WINDOWS__'
               + ' /D"_CRT_SECURE_NO_WARNINGS"' // don't warn about unsafe functions
-                            + ' /D"_WINSOCK_DEPRECATED_NO_WARNINGS"' // don't warn about deprecated winsock functions - TODO:C Update API use
+              + ' /D"_WINSOCK_DEPRECATED_NO_WARNINGS"' // don't warn about deprecated winsock functions - TODO:C Update API use
 
   .CompilerOptions    + ' /Fo"%2"'
   .LibrarianOptions   = '/NODEFAULTLIB /NOLOGO /OUT:"%2" "%1"'
@@ -82,7 +82,7 @@ Compiler( 'Compiler-x64' )
 
   // Optimizations
   .CompilerDebugOptimizations   = ' /MTd /Od /RTC1 /GS /Oy- /GR- /analyze'
-  .CompilerReleaseOptimizations = ' /MT /Ox /Oy /Oi /GS- /GF /GL /Gy /Gw /GR- /analyze'
+  .CompilerReleaseOptimizations = ' /MT /Ox /Oy /Oi /GS- /GF /GL /Gy /Gw /GR- ' //analyze
   .LibrarianDebugOptimizations  = ''
   .LibrarianReleaseOptimizations  = ' /LTCG'
   .LinkerDebugOptimizations   = ''
@@ -92,6 +92,10 @@ Compiler( 'Compiler-x64' )
               + ' /I"$VSBasePath$/VC/include/"'
               + ' /I"$WindowsSDKBasePath$/include/um"'
               + ' /I"$WindowsSDKBasePath$/include/shared"'
+              + ' /I"$WindowsSDKBasePath$/include/winrt"'
+              + ' /I"$VSBasePath$/VC/include"'
+              + ' /I"$VSBasePath$/VC/atlmfc/include"'
+
   .CompilerOptions    + .BaseIncludePaths
 
   .WindowsLibPaths    = '$WindowsSDKBasePath$/lib/winv6.3/um'
@@ -110,6 +114,8 @@ Compiler( 'Compiler-x64' )
   .Librarian        = '$ToolsBasePath$\lib.exe'
   .Linker         = '$ToolsBasePath$\link.exe'
   .CompilerOptions    + ' /DWIN64'
+                      + ' /DMSVC'
+                      + ' /DWIN32'
   .LinkerOptions      + ' /MACHINE:X64'
   .Platform       = 'x64'
   .LinkerOptions      + ' /LIBPATH:"$WindowsLibPaths$/x64" /LIBPATH:"$VSBasePath$/VC/lib/amd64"'

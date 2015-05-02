@@ -754,14 +754,6 @@
     <None Include="Engine\ResourceManager\Texture.hh" />
     <None Include="Engine\Components\MeshRenderer.hh" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Plugins\Physics\Bullet\Bullet.vcxproj">
-      <Project>{c3490639-bced-4a06-9d1b-5c3bb25da5a7}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\Plugins\Physics\PhysX\PhysX.vcxproj">
-      <Project>{fae1c65e-9000-4902-ae4f-c5786810b9fd}</Project>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
