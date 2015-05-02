@@ -6,9 +6,12 @@
 #include "ForceMode.hpp"
 #include "CollisionDetectionMode.hpp"
 #include "FilterGroup.hpp"
+#include "GenericData.hpp"
 
 namespace AGE
 {
+	class RigidBody;
+
 	namespace Physics
 	{
 		class WorldInterface;
@@ -17,13 +20,13 @@ namespace AGE
 		class RigidBodyInterface
 		{
 			// Friendships
-			friend WorldInterface;
+			friend RigidBody;
 
 		public:
 			// Constructors
 			RigidBodyInterface(void) = delete;
 
-			RigidBodyInterface(WorldInterface *world, void *&data);
+			RigidBodyInterface(WorldInterface *world, Private::GenericData *data);
 
 			RigidBodyInterface(const RigidBodyInterface &) = delete;
 
@@ -31,13 +34,17 @@ namespace AGE
 			RigidBodyInterface &operator=(const RigidBodyInterface &) = delete;
 
 			// Methods
+			RigidBody *getRigidBody(void);
+
+			const RigidBody *getRigidBody(void) const;
+
 			WorldInterface *getWorld(void);
 
 			const WorldInterface *getWorld(void) const;
 
-			void *&getData(void);
+			Private::GenericData *getData(void);
 
-			void * const &getData(void) const;
+			const Private::GenericData *getData(void) const;
 
 			template <typename T>
 			T *getDataAs(void);
@@ -112,21 +119,50 @@ namespace AGE
 
 			virtual void addForceAtLocalPosition(const glm::vec3 &force, const glm::vec3 &position, ForceMode forceMode) = 0;
 
-			virtual void addTorque(const glm::vec3 &torque, ForceMode forceMode) = 0;
+			virtual void addAbsoluteTorque(const glm::vec3 &torque, ForceMode forceMode) = 0;
+
+			virtual void addRelativeTorque(const glm::vec3 &torque, ForceMode forceMode) = 0;
 
 			virtual glm::vec3 getVelocityAtWorldPosition(const glm::vec3 &position) const = 0;
 
 			virtual glm::vec3 getVelocityAtLocalPosition(const glm::vec3 &position) const = 0;
 
 		protected:
+			// Static Methods
+			static float GetDefaultAngularDrag(void);
+
+			static glm::vec3 GetDefaultAngularVelocity(void);
+
+			static glm::vec3 GetDefaultCenterOfMass(void);
+
+			static float GetDefaultLinearDrag(void);
+
+			static glm::vec3 GetDefaultLinearVelocity(void);
+
+			static float GetDefaultMass(void);
+
+			static glm::vec3 GetDefaultDiagonalInertiaTensor(void);
+
+			static float GetDefaultMaxAngularVelocity(void);
+
+			static float GetDefaultMaxDepenetrationVelocity(void);
+
+			static bool IsAffectedByGravityByDefault(void);
+
+			static bool IsKinematicByDefault(void);
+
+			static CollisionDetectionMode GetDefaultCollisionDetectionMode(void);
+
 			// Destructor
 			virtual ~RigidBodyInterface(void);
 
 		private:
 			// Attributes
+			RigidBody *rigidBody = nullptr;
+
 			WorldInterface *world = nullptr;
 
-			void *&data;
+			Private::GenericData *data;
 		};
 	}
 }

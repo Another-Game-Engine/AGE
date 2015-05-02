@@ -1,5 +1,8 @@
 #pragma once
 
+#include <btBulletDynamicsCommon.h>
+#include <btBulletCollisionCommon.h>
+
 #include "RigidBodyInterface.hpp"
 
 namespace AGE
@@ -7,24 +10,38 @@ namespace AGE
 	namespace Physics
 	{
 		class BulletWorld;
+		class BulletCollider;
 
 		class BulletRigidBody final : public RigidBodyInterface
 		{
+			// Friendships
+			friend ObjectPool < BulletRigidBody >;
+
+			friend BulletCollider;
+
 		public:
 			// Constructors
 			BulletRigidBody(void) = delete;
 
-			BulletRigidBody(BulletWorld *world, void *&data);
+			BulletRigidBody(BulletWorld *world, Private::GenericData *data);
 
 			BulletRigidBody(const BulletRigidBody &) = delete;
 
 			// Assignment Operators
 			BulletRigidBody &operator=(const BulletRigidBody &) = delete;
 
-			// Destructor
-			~BulletRigidBody(void) = default;
-
 		private:
+			// Static Attributes
+			static btEmptyShape EmptyShape;
+
+			// Attributes
+			float maxAngularVelocity = 0.0f;
+
+			float maxDepenetrationVelocity = 0.0f;
+
+			// Destructor
+			~BulletRigidBody(void);
+
 			// Inherited Methods
 			void setAngularDrag(float angularDrag) override final;
 
@@ -88,7 +105,9 @@ namespace AGE
 
 			void addForceAtLocalPosition(const glm::vec3 &force, const glm::vec3 &position, ForceMode forceMode) override final;
 
-			void addTorque(const glm::vec3 &torque, ForceMode forceMode) override final;
+			void addAbsoluteTorque(const glm::vec3 &torque, ForceMode forceMode) override final;
+
+			void addRelativeTorque(const glm::vec3 &torque, ForceMode forceMode) override final;
 
 			glm::vec3 getVelocityAtWorldPosition(const glm::vec3 &position) const override final;
 

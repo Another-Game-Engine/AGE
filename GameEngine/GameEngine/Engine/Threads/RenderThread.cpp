@@ -151,7 +151,11 @@ namespace AGE
 				return;
 			}
 
+#ifdef DEBUG
+			_depthMapManager.init(1280, 720, 4);
+#else
 			_depthMapManager.init(1280, 720, 2);
+#endif
 
 			msg.setValue(true);
 		});

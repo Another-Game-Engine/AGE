@@ -116,7 +116,7 @@ namespace AGE
 				glActiveTextureARB(GL_TEXTURE0_ARB);
 				_depth->bind();
 				glGenerateMipmap(GL_TEXTURE_2D);
-				_depth->get(mipmapLevel, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, writableBuffer.getWritableBuffer());
+				_depth->get(static_cast<GLint>(mipmapLevel), GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, writableBuffer.getWritableBuffer());
 				_depth->unbind();
 			}
 		}

@@ -76,7 +76,7 @@ namespace AGE
 					{
 						channel.translation.emplace_back(
 							glm::vec3(aiChannel->mPositionKeys[i].mValue.x, aiChannel->mPositionKeys[i].mValue.y, aiChannel->mPositionKeys[i].mValue.z)
-							, aiChannel->mPositionKeys[i].mTime);
+							, static_cast<float>(aiChannel->mPositionKeys[i].mTime));
 						if (i > 0)
 							channel.translation[i - 1].deltaTime = channel.translation[i].time - channel.translation[i - 1].time;
 					}
@@ -85,7 +85,7 @@ namespace AGE
 					{
 						channel.scale.emplace_back(
 							glm::vec3(aiChannel->mScalingKeys[i].mValue.x, aiChannel->mScalingKeys[i].mValue.y, aiChannel->mScalingKeys[i].mValue.z)
-							, aiChannel->mScalingKeys[i].mTime);
+							, static_cast<float>(aiChannel->mScalingKeys[i].mTime));
 						if (i > 0)
 							channel.scale[i - 1].deltaTime = channel.scale[i].time - channel.scale[i - 1].time;
 					}
@@ -94,7 +94,7 @@ namespace AGE
 					{
 						channel.rotation.emplace_back(
 							glm::normalize(glm::quat(aiChannel->mRotationKeys[i].mValue.w, aiChannel->mRotationKeys[i].mValue.x, aiChannel->mRotationKeys[i].mValue.y, aiChannel->mRotationKeys[i].mValue.z))
-							, aiChannel->mRotationKeys[i].mTime);
+							, static_cast<float>(aiChannel->mRotationKeys[i].mTime));
 						if (i > 0)
 							channel.rotation[i - 1].deltaTime = channel.rotation[i].time - channel.rotation[i - 1].time;
 					}

@@ -2,7 +2,7 @@
 #include <imgui\imgui.h>
 #include <Systems/EntityManager.hpp>
 #include <Systems/AssetsAndComponentRelationsSystem.hpp>
-#include <Physics/BulletDynamicManager.hpp>
+#include <Systems/PhysicsSystem.hpp>
 #include <AssetManagement/AssetManager.hh>
 
 #include <Components/CameraComponent.hpp>
@@ -16,7 +16,6 @@
 #include <Threads/Tasks/ToRenderTasks.hpp>
 #include <Components/FreeFlyComponent.hh>
 #include <Systems/FreeFlyCamera.hh>
-#include <Systems/BulletDynamicSystem.hpp>
 #include <Components/EntityRepresentation.hpp>
 #include <Managers/ArchetypesEditorManager.hpp>
 #include <EditorConfiguration.hpp>
@@ -37,14 +36,13 @@ namespace AGE
 	bool WorldEditorScene::_userStart()
 	{
 		WE::EditorConfiguration::RefreshScenesDirectoryListing();
-		setInstance<AGE::BulletDynamicManager, AGE::BulletCollisionManager>()->init();
 		getInstance<AGE::AssetsManager>()->setAssetsDirectory(WE::EditorConfiguration::GetCookedDirectory());
-		getInstance<AGE::BulletCollisionManager>()->setAssetsDirectory(WE::EditorConfiguration::GetCookedDirectory());
 
 		addSystem<WE::AssetsAndComponentRelationsSystem>(0);
 		addSystem<WE::EntityManager>(1);
 		addSystem<FreeFlyCamera>(2);
-		
+		addSystem<PhysicsSystem>(3, Physics::EngineType::PhysX);
+
 		return true;
 	}
 

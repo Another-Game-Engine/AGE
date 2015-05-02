@@ -8,10 +8,16 @@
 #include "../Utils/Dependency.hpp"
 #include "FilterGroup.hpp"
 #include "ColliderType.hpp"
+#include "MemoryPoolHelper.hpp"
+#include "GenericData.hpp"
+#include "CollisionListener.hpp"
+#include "TriggerListener.hpp"
+#include "../AssetManagement/Instance/MeshInstance.hh"
 
 namespace AGE
 {
-	class NewRigidBody;
+	class RigidBody;
+	class Collider;
 
 	namespace Physics
 	{
@@ -19,20 +25,24 @@ namespace AGE
 		class RigidBodyInterface;
 		class MaterialInterface;
 		class ColliderInterface;
+		class RaycasterInterface;
 
-		class WorldInterface : public Dependency < WorldInterface >
+		class WorldInterface
 		{
 			// Friendship
-			friend NewRigidBody;
+			friend RigidBody;
+
+			friend Collider;
 
 			friend PhysicsInterface;
 
-			friend ColliderInterface;
-
 		public:
-			WorldInterface(void) = delete;
+			// Static Methods
+			static std::string GetDefaultMaterialName(void);
 
 			// Constructors
+			WorldInterface(void) = delete;
+
 			WorldInterface(PhysicsInterface *physics);
 
 			WorldInterface(const WorldInterface &) = delete;
@@ -44,6 +54,26 @@ namespace AGE
 			PhysicsInterface *getPhysics(void);
 
 			const PhysicsInterface *getPhysics(void) const;
+
+			RaycasterInterface *getRaycaster(void);
+
+			const RaycasterInterface *getRaycaster(void) const;
+
+			MaterialInterface *getMaterial(const std::string &name);
+
+			const MaterialInterface *getMaterial(const std::string &name) const;
+
+			void setCollisionListener(CollisionListener *listener);
+
+			CollisionListener *getCollisionListener(void);
+
+			const CollisionListener *getCollisionListener(void) const;
+
+			void setTriggerListener(TriggerListener *listener);
+
+			TriggerListener *getTriggerListener(void);
+
+			const TriggerListener *getTriggerListener(void) const;
 
 			void setGravity(float x, float y, float z);
 
@@ -59,6 +89,10 @@ namespace AGE
 
 			const FilterGroup getFilterGroupForFilterName(const std::string &name) const;
 
+			void enableCollisionBetweenGroups(const std::string &group1, const std::string &group2);
+
+			void disableCollisionBetweenGroups(const std::string &group1, const std::string &group2);
+
 			// Virtual Methods
 			virtual void setGravity(const glm::vec3 &gravity) = 0;
 
@@ -68,9 +102,28 @@ namespace AGE
 
 			virtual void disableCollisionBetweenGroups(FilterGroup group1, FilterGroup group2) = 0;
 
+			virtual MaterialInterface *createMaterial(const std::string &name = GetDefaultMaterialName()) = 0;
+
+			virtual void destroyMaterial(MaterialInterface *material) = 0;
+
 		protected:
+			// Type Aliases
+			using MaterialTable = std::unordered_map < std::string, std::pair < MaterialInterface *, std::atomic_uint32_t > >;
+
+			using ShapeTable = std::unordered_map < std::string, std::pair < void *, std::atomic_uint32_t > >;
+
+			// Attributes
+			MaterialTable materials;
+
+			ShapeTable convexShapes;
+
+			ShapeTable concaveShapes;
+
 			// Destructor
 			virtual ~WorldInterface(void) = default;
+
+			// Static Methods
+			static glm::vec3 GetDefaultGravity(void);
 
 		private:
 			// Type Aliases
@@ -79,25 +132,42 @@ namespace AGE
 			// Attributes
 			PhysicsInterface *physics = nullptr;
 
+			RaycasterInterface *raycaster = nullptr;
+
+			CollisionListener *collisionListener = nullptr;
+
+			TriggerListener *triggerListener = nullptr;
+
 			std::size_t targetFPS = 60;
 
 			float accumulator = 0.0f;
 
 			HashTable filterNameToFilterGroup;
 
+			// Static Methods
+			static std::string GetMaterialsFileName(void);
+
 			// Methods
-			void destroyRigidBody(RigidBodyInterface *rigidBody);
+			bool initialize(const std::string &assetDirectory);
 
-			void destroyCollider(ColliderInterface *collider);
+			void finalize(const std::string &assetDirectory);
 
-			void destroyMaterial(MaterialInterface *material);
+			void saveMaterials(const std::string &assetDirectory);
+
+			void loadMaterials(const std::string &assetDirectory);
+
+			void destroyRaycaster(void);
 
 			// Virtual Methods
-			virtual RigidBodyInterface *createRigidBody(void *&data) = 0;
+			virtual RaycasterInterface *createRaycaster(void) = 0;
 
-			virtual ColliderInterface *createCollider(ColliderType colliderType, void *&data) = 0;
+			virtual RigidBodyInterface *createRigidBody(Private::GenericData *data) = 0;
 
-			virtual MaterialInterface *createMaterial(ColliderInterface *collider) = 0;
+			virtual void destroyRigidBody(RigidBodyInterface *rigidBody) = 0;
+
+			virtual ColliderInterface *createCollider(ColliderType colliderType, std::shared_ptr<MeshInstance> mesh, Private::GenericData *data) = 0;
+
+			virtual void destroyCollider(ColliderInterface *collider) = 0;
 
 			virtual void simulate(float stepSize) = 0;
 		};

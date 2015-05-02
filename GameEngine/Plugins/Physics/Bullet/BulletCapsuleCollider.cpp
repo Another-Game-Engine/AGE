@@ -7,8 +7,8 @@ namespace AGE
 	namespace Physics
 	{
 		// Constructors
-		BulletCapsuleCollider::BulletCapsuleCollider(WorldInterface *world, void *&data)
-			: ColliderInterface(world, data), CapsuleColliderInterface(world, data), BulletCollider(world, data)
+		BulletCapsuleCollider::BulletCapsuleCollider(WorldInterface *world, Private::GenericData *data)
+			: ColliderInterface(world, data), CapsuleColliderInterface(world, data), BulletCollider(world, data, new btCapsuleShape(GetDefaultRadius(), GetDefaultHeight())), center(GetDefaultCenter())
 		{
 			return;
 		}
@@ -16,35 +16,32 @@ namespace AGE
 		// Inherited Methods
 		void BulletCapsuleCollider::setCenter(const glm::vec3 &center)
 		{
-			// TO_DO
+			this->center = center;
 		}
 
 		glm::vec3 BulletCapsuleCollider::getCenter(void) const
 		{
-			// TO_DO
-			return glm::vec3();
+			return center;
 		}
 
 		void BulletCapsuleCollider::setHeight(float height)
 		{
-			// TO_DO
+			static_cast<btCapsuleShape *>(getShape())->setImplicitShapeDimensions(btVector3(getRadius(), 0.5f * height, getRadius()));
 		}
 
 		float BulletCapsuleCollider::getHeight(void) const
 		{
-			// TO_DO
-			return 0.0f;
+			return 2.0f * static_cast<const btCapsuleShape *>(getShape())->getImplicitShapeDimensions().y();
 		}
 
 		void BulletCapsuleCollider::setRadius(float radius)
 		{
-			// TO_DO
+			static_cast<btCapsuleShape *>(getShape())->setImplicitShapeDimensions(btVector3(radius, 0.5f * getHeight(), radius));
 		}
 
 		float BulletCapsuleCollider::getRadius(void) const
 		{
-			// TO_DO
-			return 0.0f;
+			return static_cast<const btCapsuleShape *>(getShape())->getImplicitShapeDimensions().x();
 		}
 	}
 }

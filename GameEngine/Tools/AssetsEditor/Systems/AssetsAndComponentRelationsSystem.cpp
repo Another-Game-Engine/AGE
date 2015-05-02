@@ -37,8 +37,8 @@ namespace AGE
 			}
 			for (auto e : _rigidBodies.getCollection())
 			{
-				e.getComponent<RigidBody>()->shapeFileList = &AssetsEditorScene::getCookedBulletList();
-				e.getComponent<RigidBody>()->shapePathList = &AssetsEditorScene::getCookedBulletListFullPath();
+				/*e.getComponent<RigidBody>()->shapeFileList = &AssetsEditorScene::getCookedBulletList();
+				e.getComponent<RigidBody>()->shapePathList = &AssetsEditorScene::getCookedBulletListFullPath();*/
 			}
 		}
 

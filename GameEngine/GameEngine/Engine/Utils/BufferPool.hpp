@@ -12,11 +12,6 @@ namespace AGE
 	class BufferPool
 	{
 	protected:
-		virtual ~BufferPool()
-		{
-			_destroy();
-		}
-
 		BufferPool()
 			: _objectPerChunk(0)
 			, _objectSize(0)
@@ -157,5 +152,14 @@ namespace AGE
 				_chunkAlignement = 0;
 			return true;
 		}
+
+		public:
+			virtual ~BufferPool()
+			{
+				_destroy();
+			}
+
+			virtual void destroy(void *ptr) = 0;
+			virtual void *allocateObject() = 0;
 	};
 }

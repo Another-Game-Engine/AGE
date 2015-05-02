@@ -12,11 +12,14 @@ namespace AGE
 	{
 		class PhysXBoxCollider final : public BoxColliderInterface, public PhysXCollider
 		{
+			// Friendships
+			friend ObjectPool < PhysXBoxCollider >;
+
 		public:
 			// Constructors
 			PhysXBoxCollider(void) = delete;
 
-			PhysXBoxCollider(WorldInterface *world, void *&data);
+			PhysXBoxCollider(WorldInterface *world, Private::GenericData *data);
 
 			PhysXBoxCollider(const PhysXBoxCollider &) = delete;
 
@@ -35,6 +38,8 @@ namespace AGE
 			void setSize(const glm::vec3 &size) override final;
 
 			glm::vec3 getSize(void) const override final;
+
+			void scale(const glm::vec3 &scaling) override final;
 		};
 	}
 }

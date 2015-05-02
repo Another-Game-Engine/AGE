@@ -549,6 +549,7 @@ namespace AGE
 				renderCamera.lights.pointLight.emplace_back();
 				RenderLight<PointLight> *curLight = &renderCamera.lights.pointLight.back();
 				curLight->light = p;
+			}
 				// TODO: Cull the shadows
 				// VERY UGLY CULLING FOR THE MOMENT
 				AGE::Vector<Cullable*> objectsInShadow;
@@ -589,7 +590,7 @@ namespace AGE
 						curRenderDrawablelist->vertices.emplace_back(currentDrawable->mesh.vertices);
 						curRenderDrawablelist->properties.emplace_back(_properties.get(currentDrawable->mesh.properties.getId()));
 					}
-					}
+
 				}
 				// END OF VERY UGLY CULLING
 			}
