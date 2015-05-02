@@ -226,3 +226,8 @@ Makefile*
 *.cd
 /GameEngine/EngineCoreTest/*.nvuser
 RailShooter
+
+#fbuild
+tmp
+tmp2
+*.fdb
