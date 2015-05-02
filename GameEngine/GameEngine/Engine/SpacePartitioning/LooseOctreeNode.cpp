@@ -136,6 +136,30 @@ namespace AGE
 		}
 	}
 
+	void LooseOctreeNode::getAllElements(LooseOctree &manager, AGE::Vector<Cullable *> &toFill) const
+	{
+		uint32_t curElementIdx = _firstElement;
+		SOctreeElement *curElement;
+		Cullable *curObject;
+
+		while (curElementIdx != UNDEFINED_IDX)
+		{
+			curElement = &manager.getElementPool().get(curElementIdx);
+			curObject = manager.getElementFromPool(curElement->object);
+			toFill.push_back(curObject);
+			curElementIdx = curElement->next;
+		}
+		if (!isLeaf())
+		{
+			for (uint32_t i = 0; i < 8; ++i)
+			{
+				assert(_sons[i] != UNDEFINED_IDX);
+				if (_sons[i] != LEAF_NODE_IDX)
+					manager.getNodePool().get(_sons[i]).getAllElements(manager, toFill);
+			}
+		}
+	}
+
 	bool		LooseOctreeNode::isLeaf() const
 	{
 		// If a node is not a leaf, all his sons are created

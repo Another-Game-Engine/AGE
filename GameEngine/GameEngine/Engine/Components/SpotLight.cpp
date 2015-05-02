@@ -13,19 +13,19 @@
 
 namespace AGE
 {
-	SpotLightComponent::SpotLightComponent()
-		: _color(1),
-		_range(1.0f, 0.01f, 0.001f),
-		_exponent(5.f),
-		_cutOff(0.5f),
-		_map(nullptr)
+	SpotLightData::SpotLightData(glm::vec3 const &color, glm::vec3 const &range, float exponent, float cutOff, std::shared_ptr<ITexture> const &map)
+		: color(color),
+		range(range),
+		exponent(exponent),
+		cutOff(cutOff),
+		map(map)
 	{
+
 	}
 
 	SpotLightComponent::SpotLightComponent(SpotLightComponent const &o)
 		: _key(o._key)
-		, _color(o._color),
-		_map(o._map)
+		, _data(o._data)
 	{
 		postUnserialization();
 	}
@@ -33,7 +33,7 @@ namespace AGE
 	void SpotLightComponent::_copyFrom(const ComponentBase *model)
 	{
 		auto o = static_cast<const SpotLightComponent*>(model);
-		_color = o->_color;
+		_data = o->_data;
 		postUnserialization();
 	}
 
@@ -44,32 +44,29 @@ namespace AGE
 			entity.getLink().unregisterOctreeObject(_key);
 		}
 		_key = AGE::PrepareKey();
-		_color = glm::vec3(1);
+		_data = SpotLightData();
 	}
 
 	void SpotLightComponent::init()
 	{
 		_key = AGE::GetPrepareThread()->addSpotLight();
 		entity.getLink().registerOctreeObject(_key);
-		_map = entity.getScene()->getInstance<AssetsManager>()->getSpotLightTexture();
-		AGE::GetPrepareThread()->setSpotLight(_color, _range, _exponent, _cutOff, _map, _key);
+		_data.map = entity.getScene()->getInstance<AssetsManager>()->getSpotLightTexture();
 		assert(!_key.invalid());
+		set(_data);
 	}
 
-	SpotLightComponent &SpotLightComponent::set(glm::vec3 const &color, glm::vec3 const &range, float cutOff, float exponent)
+	SpotLightComponent &SpotLightComponent::set(SpotLightData const &data)
 	{
-		_color = color;
-		_range = range;
-		_cutOff = cutOff;
-		_exponent = exponent;
-		AGE::GetPrepareThread()->setSpotLight(_color, _range, _exponent, _cutOff, _map, _key);
+		_data = data;
+		AGE::GetPrepareThread()->setSpotLight(_data, _key);
 		return (*this);
 	}
 
 	void SpotLightComponent::postUnserialization()
 	{
 		init();
-		set(_color, _range, _exponent, _cutOff);
+		set(_data);
 	}
 
 #ifdef EDITOR_ENABLED
@@ -83,24 +80,24 @@ namespace AGE
 	bool SpotLightComponent::editorUpdate()
 	{
 		bool modified = false;
-		if (ImGui::ColorEdit3("Color", getColorPtr()))
+		if (ImGui::ColorEdit3("Color", glm::value_ptr(_data.color)))
 		{
-			set(_color, _range, _cutOff, _exponent);
+			set(_data);
 			modified = true;
 		}
-		if (ImGui::SliderFloat3("Range", glm::value_ptr(_range), 0.0f, 1.0f))
+		if (ImGui::SliderFloat3("Range", glm::value_ptr(_data.range), 0.0f, 1.0f))
 		{
-			set(_color, _range, _cutOff, _exponent);
+			set(_data);
 			modified = true;
 		}
-		if (ImGui::InputFloat("Exponent", &_exponent))
+		if (ImGui::InputFloat("Exponent", &_data.exponent))
 		{
-			set(_color, _range, _cutOff, _exponent);
+			set(_data);
 			modified = true;
 		}
-		if (ImGui::InputFloat("cut off", &_cutOff))
+		if (ImGui::InputFloat("cut off", &_data.cutOff))
 		{
-			set(_color, _range, _cutOff, _exponent);
+			set(_data);
 			modified = true;
 		}
 		return modified;

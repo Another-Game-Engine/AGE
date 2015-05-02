@@ -3,6 +3,9 @@
 #include <Utils/Sphere.hh>
 #include <Utils/Frustum.hh>
 #include <SpacePartitioning/Cullable/CullableShape.hh>
+#include <Components/DirectionalLightComponent.hh>
+#include <Components/SpotLight.hh>
+#include <Components/Light.hh>
 #include <glm/glm.hpp>
 #include <stdint.h>
 #include <Render/Textures/ITexture.hh>
@@ -15,9 +18,7 @@ namespace AGE
 	{
 		// To remove when light will be in octree
 		uint32_t activePointLightIdx;
-		std::shared_ptr<ITexture> map;
-		glm::vec3 attenuation;
-		glm::vec3 color;
+		PointLightData data;
 		glm::mat4 sphereTransform;
 		void computeSphereTransform();
 	};
@@ -26,12 +27,14 @@ namespace AGE
 	{
 		// To remove when light will be in octree
 		uint32_t activeSpotLightIdx;
-		std::shared_ptr<ITexture> map;
-		glm::vec3 color;
-		glm::vec3 attenuation;
-		float spotCutOff;
-		float exponent;
+		SpotLightData data;
 		void computeDirectionTransform();
+	};
+
+	struct DirectionalLight : public Cullable
+	{
+		uint32_t activeDirectionalLightIdx;
+		DirectionalLightData data;
 	};
 
 }

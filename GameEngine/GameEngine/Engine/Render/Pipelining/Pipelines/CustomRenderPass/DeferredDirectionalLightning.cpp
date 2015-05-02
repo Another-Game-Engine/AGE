@@ -1,4 +1,4 @@
-#include <Render/Pipelining/Pipelines/CustomRenderPass/DeferredSpotLightning.hh>
+#include <Render/Pipelining/Pipelines/CustomRenderPass/DeferredDirectionalLightning.hh>
 
 #include <Render/Textures/Texture2D.hh>
 #include <Render/OpenGLTask/OpenGLState.hh>
@@ -16,8 +16,8 @@
 #include <Core/ConfigurationManager.hpp>
 #include <Core/Engine.hh>
 
-#define DEFERRED_SHADING_SPOT_LIGHT_VERTEX "deferred_shading/deferred_shading_spot_light.vp"
-#define DEFERRED_SHADING_SPOT_LIGHT_FRAG "deferred_shading/deferred_shading_spot_light.fp"
+#define DEFERRED_SHADING_DIRECTIONAL_LIGHT_VERTEX "deferred_shading/deferred_shading_directional_light.vp"
+#define DEFERRED_SHADING_DIRECTIONAL_LIGHT_FRAG "deferred_shading/deferred_shading_directional_light.fp"
 
 namespace AGE
 {
@@ -27,7 +27,7 @@ namespace AGE
 		PROGRAM_NBR
 	};
 
-	DeferredSpotLightning::DeferredSpotLightning(std::shared_ptr<PaintingManager> painterManager,
+	DeferredDirectionalLightning::DeferredDirectionalLightning(std::shared_ptr<PaintingManager> painterManager,
 		std::shared_ptr<Texture2D> normal,
 		std::shared_ptr<Texture2D> depth,
 		std::shared_ptr<Texture2D> lightAccumulation) :
@@ -48,10 +48,10 @@ namespace AGE
 		// you have to set shader directory in configuration path
 		AGE_ASSERT(shaderPath != nullptr);
 
-		auto vertexShaderPath = shaderPath->getValue() + DEFERRED_SHADING_SPOT_LIGHT_VERTEX;
-		auto fragmentShaderPath = shaderPath->getValue() + DEFERRED_SHADING_SPOT_LIGHT_FRAG;
+		auto vertexShaderPath = shaderPath->getValue() + DEFERRED_SHADING_DIRECTIONAL_LIGHT_VERTEX;
+		auto fragmentShaderPath = shaderPath->getValue() + DEFERRED_SHADING_DIRECTIONAL_LIGHT_FRAG;
 
-		_programs[PROGRAM_LIGHTNING] = std::make_shared<Program>(Program(std::string("program_spot_light"),
+		_programs[PROGRAM_LIGHTNING] = std::make_shared<Program>(Program(std::string("program_directional_light"),
 		{
 			std::make_shared<UnitProg>(vertexShaderPath, GL_VERTEX_SHADER),
 			std::make_shared<UnitProg>(fragmentShaderPath, GL_FRAGMENT_SHADER)
@@ -60,7 +60,7 @@ namespace AGE
 
 	}
 
-	void DeferredSpotLightning::renderPass(RenderPipeline const &, RenderLightList const &lights, CameraInfos const &infos)
+	void DeferredDirectionalLightning::renderPass(RenderPipeline const &, RenderLightList const &lights, CameraInfos const &infos)
 	{
 		glm::vec3 cameraPosition = -glm::transpose(glm::mat3(infos.view)) * glm::vec3(infos.view[3]);
 
@@ -71,22 +71,23 @@ namespace AGE
 		*_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("depth_buffer") = _depthInput;
 		*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("eye_pos") = cameraPosition;
 
+		// clear the light accumulation to zero
+		OpenGLState::glClearColor(glm::vec4(0));
+		glClear(GL_COLOR_BUFFER_BIT);
+
 		OpenGLState::glDisable(GL_CULL_FACE);
 		OpenGLState::glDisable(GL_DEPTH_TEST);
-		OpenGLState::glDisable(GL_STENCIL_TEST);
 		OpenGLState::glEnable(GL_STENCIL_TEST);
 		OpenGLState::glStencilFunc(GL_LESS, 0, 0xFFFFFFFF);
 		OpenGLState::glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
 		// And we set the blend mode to additive
+
 		OpenGLState::glEnable(GL_BLEND);
 		OpenGLState::glBlendFunc(GL_ONE, GL_ONE);
-		for (auto &pl : lights.spotLights)
+
+		for (auto &pl : lights.directionalLights)
 		{
-			*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("position_light") = glm::vec3(pl.light.transformation[3]);
-			*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("attenuation_light") = pl.light.data.range;
-			*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("direction_light") = glm::normalize(glm::transpose(glm::inverse(glm::mat3(pl.light.transformation))) * glm::vec3(0.f, -1.0f, 0.f));
-			*_programs[PROGRAM_LIGHTNING]->get_resource<Vec1>("spot_cut_off") = pl.light.data.cutOff;
-			*_programs[PROGRAM_LIGHTNING]->get_resource<Vec1>("exponent_light") = pl.light.data.exponent;
+			*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("direction_light") = glm::normalize(glm::transpose(glm::inverse(glm::mat3(pl.light.transformation))) * glm::vec3(0.f, 1.0f, 0.f));
 			*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("color_light") = pl.light.data.color;
 			_painterManager->get_painter(_quadPainter)->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_LIGHTNING], Properties(), _quad);
 		}

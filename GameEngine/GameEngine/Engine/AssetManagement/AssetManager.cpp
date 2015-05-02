@@ -92,6 +92,7 @@ namespace AGE
 			material->path = _filePath.getFullName();
 			for (auto &material_data : material_data_set->collection) 
 			{
+
 				material->datas.push_back(MaterialInstance());
 				auto &materialSubset = material->datas.back();
 

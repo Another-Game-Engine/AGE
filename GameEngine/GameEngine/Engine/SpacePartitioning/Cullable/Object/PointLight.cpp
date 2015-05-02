@@ -9,7 +9,7 @@ namespace AGE
 	{
 		float errorRate = 0.01f;
 		glm::vec3 lightRange;
-		glm::vec3 equation(attenuation.z, attenuation.y, attenuation.x);
+		glm::vec3 equation(data.range.z, data.range.y, data.range.x);
 
 		// if the value of equation.z + equation.y * dist + equation.x * dist * dist == 256
 		// then the pixels are not lighted anymore (pxlColor = final_color / attenuation)
@@ -24,7 +24,7 @@ namespace AGE
 		{
 			float d = Mathematic::secondDegreeDiscriminant(equation);
 			glm::vec2 res = Mathematic::resolveSecondDegree(equation, d);
-			lightRange = glm::vec3(max(res.x, res.y));
+			lightRange = glm::vec3(glm::max(res.x, res.y));
 		}
 		assert(lightRange.x > 0);
 		sphereTransform = glm::scale(transformation, lightRange + lightRange * errorRate);
