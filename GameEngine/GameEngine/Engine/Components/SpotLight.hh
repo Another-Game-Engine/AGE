@@ -2,44 +2,57 @@
 
 #include <Components/Component.hh>
 #include <glm/fwd.hpp>
+#include <Utils/Serialization/VectorSerialization.hpp>
+#include <Render/Textures/ITexture.hh>
 
 namespace AGE
 {
+
 	struct SpotLightData
 	{
-		glm::mat4		lightVP;
-		glm::vec4		positionPower;
-		glm::vec4		colorRange;
-		int				shadowId;
-		unsigned int	padding[3];
-
-		SpotLightData();
-		SpotLightData(SpotLightData const &o) = delete;
-		~SpotLightData();
-		SpotLightData &operator=(SpotLightData const &o) = delete;
+		SpotLightData(glm::vec3 const &color = glm::vec3(1.0f), 
+					  glm::vec3 const &range = glm::vec3(1.0f, 0.1f, 0.01f), 
+					  float exponent = 5.0f, 
+					  float cutOff = 0.5f, 
+					  std::shared_ptr<ITexture> const &map = nullptr);
+		glm::vec3 color;
+		glm::vec3 range;
+		float exponent;
+		float cutOff;
+		std::shared_ptr<ITexture> map;
 	};
 
-	struct SpotLight : public ComponentBase
+	struct SpotLightComponent : public ComponentBase
 	{
-		SpotLightData		lightData;
-		glm::mat4			projection;
+	public:
+		SpotLightComponent() = default;
+		virtual ~SpotLightComponent() = default;
+		SpotLightComponent(SpotLightComponent const &o);
 
-		SpotLight();
-
-		SpotLight(SpotLight const &o);
-
-		virtual ~SpotLight();
-
-		void		updateLightData(const glm::mat4 &globalTransform);
+		virtual void _copyFrom(const ComponentBase *model);
 
 		virtual void reset();
+		void init();
 
-		SpotLight &operator=(SpotLight const &o);
-
-		void	init();
+		SpotLightComponent &set(SpotLightData const &data);
 
 		template <typename Archive>
-		void serialize(Archive &ar);
+		void serialize(Archive &ar, const std::uint32_t version)
+		{
+			ar(cereal::make_nvp("color", _data.color), cereal::make_nvp("range", _data.range), cereal::make_nvp("exponent", _data.exponent), cereal::make_nvp("cutOff", _data.cutOff));
+		}
+		inline const SpotLightData &get() const { return _data; }
+		virtual void postUnserialization();
+
+#ifdef EDITOR_ENABLED
+		virtual void editorCreate();
+		virtual void editorDelete();
+		virtual bool editorUpdate();
+#endif
+
+	private:
+		AGE::PrepareKey _key;
+		SpotLightData _data;
 
 	};
 }

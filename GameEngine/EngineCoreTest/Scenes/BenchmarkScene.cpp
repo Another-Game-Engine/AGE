@@ -17,6 +17,7 @@
 #include <Components/FreeFlyComponent.hh>
 #include <Components/CameraComponent.hpp>
 #include <Components/Light.hh>
+#include <Components/SpotLight.hh>
 #include <Components/RigidBody.hpp>
 #include <Components/MeshRenderer.hh>
 #include <Components/Lifetime.hpp>
@@ -75,6 +76,7 @@ namespace AGE
 		REGISTER_COMPONENT_TYPE(AGE::Lifetime);
 		REGISTER_COMPONENT_TYPE(AGE::RigidBody);
 		REGISTER_COMPONENT_TYPE(AGE::PointLightComponent);
+		REGISTER_COMPONENT_TYPE(AGE::SpotLightComponent);
 		REGISTER_COMPONENT_TYPE(AGE::FreeFlyComponent);
 		REGISTER_COMPONENT_TYPE(AGE::RotationComponent);
 
@@ -213,15 +215,10 @@ namespace AGE
 		}
 
 		auto camComponent = GLOBAL_CAMERA.getComponent<CameraComponent>();
-		static bool cameraPipelines[RenderType::TOTAL] = {false, false};
-		cameraPipelines[camComponent->getPipeline()] = true;
-		if (ImGui::Checkbox("Deferred rendering", &cameraPipelines[RenderType::DEFERRED]))
-			if (cameraPipelines[RenderType::DEFERRED])
-				camComponent->setPipeline(RenderType::DEFERRED);
-		if (ImGui::Checkbox("Debug deferred rendering", &cameraPipelines[RenderType::DEBUG_DEFERRED]))
-			if (cameraPipelines[RenderType::DEBUG_DEFERRED])
-				camComponent->setPipeline(RenderType::DEBUG_DEFERRED);
-
+		static char const *pipelineNames[RenderType::TOTAL] = {"Debug deferred rendering", "Deferred rendering" };
+		ImGui::ListBox("Pipelines", &pipelineIndex, pipelineNames, int(RenderType::TOTAL));
+		if (camComponent->getPipeline() != (RenderType)pipelineIndex)
+			camComponent->setPipeline((RenderType)pipelineIndex);
 		AGE::GetPrepareThread()->getQueue()->emplaceCommand<AGE::Commands::MainToPrepare::PrepareDrawLists>();
 		AGE::GetPrepareThread()->getQueue()->emplaceCommand<AGE::Commands::ToRender::RenderDrawLists>();
 		return true;

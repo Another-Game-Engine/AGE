@@ -13,6 +13,7 @@
 #include <Render/ProgramResources/Types/Uniform/Sampler/Sampler2D.hh>
 #include <Threads/RenderThread.hpp>
 #include <Threads/ThreadManager.hpp>
+#include <Configuration.hpp>
 
 #define DEFERRED_SHADING_DEBUG_LIGHT_VERTEX "../../Shaders/deferred_shading/deferred_shading_debug_light.vp"
 #define DEFERRED_SHADING_DEBUG_LIGHT_FRAG "../../Shaders/deferred_shading/deferred_shading_debug_light.fp"
@@ -72,7 +73,13 @@ namespace AGE
 
 		for (auto &pl : renderLight.pointLight)
 		{
-			*_programs[PROGRAM_BUFFERING_LIGHT]->get_resource<Sampler2D>("sprite_light") = std::static_pointer_cast<Texture2D>(pl.light.map);
+			*_programs[PROGRAM_BUFFERING_LIGHT]->get_resource<Sampler2D>("sprite_light") = std::static_pointer_cast<Texture2D>(pl.light.data.map);
+			*_programs[PROGRAM_BUFFERING_LIGHT]->get_resource<Mat4>("model_matrix") = pl.light.transformation;
+			_quadPainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING_LIGHT], Properties(), _quadVertices);
+		}
+		for (auto &pl : renderLight.spotLights)
+		{
+			*_programs[PROGRAM_BUFFERING_LIGHT]->get_resource<Sampler2D>("sprite_light") = std::static_pointer_cast<Texture2D>(pl.light.data.map);
 			*_programs[PROGRAM_BUFFERING_LIGHT]->get_resource<Mat4>("model_matrix") = pl.light.transformation;
 			_quadPainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING_LIGHT], Properties(), _quadVertices);
 		}

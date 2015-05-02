@@ -11,12 +11,14 @@ namespace AGE
 	struct RenderLight
 	{
 		type_t light;
-		std::vector<RenderPainter> painters;
+		std::unordered_map<size_t, RenderPainter> keys;
 	};
 
 	struct RenderLightList
 	{
 		std::vector<RenderLight<PointLight>> pointLight;
+		std::vector<RenderLight<SpotLight>> spotLights;
+		std::vector<RenderLight<DirectionalLight>> directionalLights;
 	};
 
 }

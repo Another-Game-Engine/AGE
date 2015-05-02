@@ -38,10 +38,16 @@ namespace AGE
 		void _setCameraInfos(AGE::Commands::MainToPrepare::CameraInfos &msg);
 		void _createCamera(AGE::Commands::MainToPrepare::CreateCamera &msg);
 		void _createPointLight(AGE::Commands::MainToPrepare::CreatePointLight &msg);
+		void _createSpotLight(AGE::Commands::MainToPrepare::CreateSpotLight &msg);
+		void _createDirectionalLight(AGE::Commands::MainToPrepare::CreateDirectionalLight &msg);
 		void _createMesh(AGE::Commands::MainToPrepare::CreateMesh &msg);
 		void _setPointLight(AGE::Commands::MainToPrepare::SetPointLight &msg);
+		void _setSpotLight(AGE::Commands::MainToPrepare::SetSpotLight &msg);
+		void _setDirectionalLight(AGE::Commands::MainToPrepare::SetDirectionalLight &msg);
 		void _deleteCamera(AGE::Commands::MainToPrepare::DeleteCamera &msg);
 		void _deletePointLight(AGE::Commands::MainToPrepare::DeletePointLight &msg);
+		void _deleteSpotLight(AGE::Commands::MainToPrepare::DeleteSpotLight &msg);
+		void _deleteDirectionalLight(AGE::Commands::MainToPrepare::DeleteDirectionalLight &msg);
 		void _deleteDrawable(AGE::Commands::MainToPrepare::DeleteMesh &msg);
 		void _setGeometry(AGE::Commands::MainToPrepare::SetGeometry &msg);
 		void _setRenderMode(AGE::Commands::MainToPrepare::SetRenderMode &msg);
@@ -68,6 +74,8 @@ namespace AGE
 		PrepareKey addMesh();
 		PrepareKey addCamera();
 		PrepareKey addPointLight();
+		PrepareKey addSpotLight();
+		PrepareKey addDirectionalLight();
 		RenderScene &removeElement(const PrepareKey &key);
 		RenderScene &setTransform(const glm::mat4 &v, const PrepareKey &id);
 		RenderScene &setTransform(const glm::mat4&v, const std::array<PrepareKey, MAX_CPT_NUMBER> &ids);
@@ -83,16 +91,21 @@ namespace AGE
 
 		AGE::Vector<uint32_t> _drawablesToMove;
 		AGE::Vector<uint32_t> _pointLightsToMove;
+		AGE::Vector<uint32_t> _spotLightsToMove;
 
 		MemoryPool<Mesh> _meshs;
 		MemoryPool<Drawable> _drawables;
 		MemoryPool<Camera> _cameras;
 		MemoryPool<PointLight> _pointLights;
+		MemoryPool<SpotLight> _spotLights;
+		MemoryPool<DirectionalLight> _directionalLights;
 
 		AGE::Vector<uint32_t> _activeCameras;
 
 		// TODO: remove active point lights and put it in the octree
 		AGE::Vector<uint32_t> _activePointLights;
+		AGE::Vector<uint32_t> _activeSpotLights;
+		AGE::Vector<uint32_t> _activeDirectionalLights;
 
 		std::array<RenderCameraListContainer, 3> _octreeDrawLists;
 

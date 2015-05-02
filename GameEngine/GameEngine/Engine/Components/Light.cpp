@@ -13,23 +13,18 @@
 
 namespace AGE
 {
-	PointLightComponent::PointLightComponent()
-		: _range(1)
-		, _color(1),
-		_map(nullptr)
-	{
-	}
-
-	PointLightComponent::~PointLightComponent()
+	
+	PointLightData::PointLightData(glm::vec3 const &color, glm::vec3 const &range, std::shared_ptr<ITexture> const &map)
+		: color(color),
+		range(range),
+		map(map)
 	{
 
 	}
 
 	PointLightComponent::PointLightComponent(PointLightComponent const &o)
 		: _key(o._key)
-		, _range(o._range)
-		, _color(o._color),
-		_map(o._map)
+		, _data(o._data)
 	{
 		postUnserialization();
 	}
@@ -37,8 +32,8 @@ namespace AGE
 	void PointLightComponent::_copyFrom(const ComponentBase *model)
 	{
 		auto o = static_cast<const PointLightComponent*>(model);
-		_range = o->_range;
-		_color = o->_color;
+		_data.range = o->_data.range;
+		_data.color = o->_data.color;
 		postUnserialization();
 	}
 
@@ -49,23 +44,24 @@ namespace AGE
 			entity.getLink().unregisterOctreeObject(_key);
 		}
 		_key = AGE::PrepareKey();
-		_color = glm::vec3(1);
-		_range = glm::vec3(1);
+		_data.color = glm::vec3(1);
+		_data.range = glm::vec3(1.0f, 0.01f, 0.001f);
+		_data.map = nullptr;
 	}
 
 	void PointLightComponent::init()
 	{
 		_key = AGE::GetPrepareThread()->addPointLight();
 		entity.getLink().registerOctreeObject(_key);
-		_map = entity.getScene()->getInstance<AssetsManager>()->getPointLightTexture();
+		_data.map = entity.getScene()->getInstance<AssetsManager>()->getPointLightTexture();
 		assert(!_key.invalid());
+		set(_data);
 	}
 
-	PointLightComponent &PointLightComponent::set(glm::vec3 const &color, glm::vec3 const &range)
+	PointLightComponent &PointLightComponent::set(PointLightData const &data)
 	{
-		_color = color;
-		_range = range;
-		AGE::GetPrepareThread()->setPointLight(color, range, _map, _key);
+		_data = data;
+		AGE::GetPrepareThread()->setPointLight(_data, _key);
 		return (*this);
 	}
 
@@ -93,7 +89,7 @@ namespace AGE
 	void PointLightComponent::postUnserialization()
 	{
 		init();
-		set(_color, _range);
+		set(_data);
 	}
 
 #ifdef EDITOR_ENABLED
@@ -106,14 +102,14 @@ namespace AGE
 	bool PointLightComponent::editorUpdate()
 	{
 		bool modified = false;
-		if (ImGui::ColorEdit3("Color", getColorPtr()))
+		if (ImGui::ColorEdit3("Color", glm::value_ptr(_data.color)))
 		{
-			set(_color, _range);
+			set(_data);
 			modified = true;
 		}
-		if (ImGui::SliderFloat3("Range", glm::value_ptr(_range), 0.0f, 1.0f))
+		if (ImGui::SliderFloat3("Range", glm::value_ptr(_data.range), 0.0f, 1.0f))
 		{
-			set(_color, _range);
+			set(_data);
 			modified = true;
 		}
 		return modified;

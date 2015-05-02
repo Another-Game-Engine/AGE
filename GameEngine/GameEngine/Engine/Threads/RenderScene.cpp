@@ -73,6 +73,22 @@ namespace AGE
 		return res;
 	}
 
+	PrepareKey RenderScene::addDirectionalLight()
+	{
+		PrepareKey res;
+		res.type = PrepareKey::Type::DirectionalLight;
+		res.id = (AGE::PrepareKey::OctreeObjectId)(_directionalLights.prepareAlloc());
+		return res;
+	}
+
+	PrepareKey RenderScene::addSpotLight()
+	{
+		PrepareKey res;
+		res.type = PrepareKey::Type::SpotLight;
+		res.id = (AGE::PrepareKey::OctreeObjectId)(_spotLights.prepareAlloc());
+		return res;
+	}
+
 	RenderScene &RenderScene::removeElement(const PrepareKey &key)
 	{
 		assert(!key.invalid());
@@ -89,6 +105,14 @@ namespace AGE
 		case PrepareKey::Type::PointLight:
 			_pointLights.prepareDealloc(key.id);
 			_prepareThread->getQueue()->emplaceCommand<Commands::MainToPrepare::DeletePointLight>(key);
+			break;
+		case PrepareKey::Type::DirectionalLight:
+			_directionalLights.prepareDealloc(key.id);
+			_prepareThread->getQueue()->emplaceCommand<Commands::MainToPrepare::DeleteDirectionalLight>(key);
+			break;
+		case PrepareKey::Type::SpotLight:
+			_spotLights.prepareDealloc(key.id);
+			_prepareThread->getQueue()->emplaceCommand<Commands::MainToPrepare::DeleteSpotLight>(key);
 			break;
 		default:
 			break;
@@ -160,6 +184,30 @@ namespace AGE
 		toAdd.key.id = msg.key.id;
 	}
 
+	void RenderScene::_createSpotLight(AGE::Commands::MainToPrepare::CreateSpotLight &msg)
+	{
+		_spotLights.allocPreparated(msg.key.id);
+		SpotLight &toAdd = _spotLights.get(msg.key.id);
+
+		// TODO: remove this
+		toAdd.activeSpotLightIdx = (uint32_t)(_activeSpotLights.size());
+		_activeSpotLights.push_back(msg.key.id);
+		// ---
+		toAdd.key.id = msg.key.id;
+	}
+
+	void RenderScene::_createDirectionalLight(AGE::Commands::MainToPrepare::CreateDirectionalLight &msg)
+	{
+		_directionalLights.allocPreparated(msg.key.id);
+		DirectionalLight &toAdd = _directionalLights.get(msg.key.id);
+
+		// TODO: remove this
+		toAdd.activeDirectionalLightIdx = (uint32_t)(_activeDirectionalLights.size());
+		_activeDirectionalLights.push_back(msg.key.id);
+		// ---
+		toAdd.key.id = msg.key.id;
+	}
+
 	void RenderScene::_createMesh(AGE::Commands::MainToPrepare::CreateMesh &msg)
 	{
 		_meshs.allocPreparated(msg.key.id);
@@ -170,14 +218,34 @@ namespace AGE
 	void RenderScene::_setPointLight(AGE::Commands::MainToPrepare::SetPointLight &msg)
 	{
 		PointLight *l = &_pointLights.get(msg.key.id);
-		l->color = msg.color;
-		l->attenuation = msg.attenuation;
-		l->map = msg.texture;
+		l->data = msg.data;
 		if (l->hasMoved == false)
 		{
 			l->hasMoved = true;
 			l->moveBufferIdx = static_cast<uint32_t>(_pointLightsToMove.size());
 			_pointLightsToMove.push_back(msg.key.id);
+		}
+	}
+
+	void RenderScene::_setSpotLight(AGE::Commands::MainToPrepare::SetSpotLight &msg)
+	{
+		SpotLight *l = &_spotLights.get(msg.key.id);
+		l->data = msg.data;
+		if (l->hasMoved == false)
+		{
+			l->hasMoved = true;
+			l->moveBufferIdx = static_cast<uint32_t>(_spotLightsToMove.size());
+			_spotLightsToMove.push_back(msg.key.id);
+		}
+	}
+
+	void RenderScene::_setDirectionalLight(AGE::Commands::MainToPrepare::SetDirectionalLight &msg)
+	{
+		DirectionalLight *l = &_directionalLights.get(msg.key.id);
+		l->data = msg.data;
+		if (l->hasMoved == false)
+		{
+			l->hasMoved = true;
 		}
 	}
 
@@ -209,6 +277,36 @@ namespace AGE
 		}
 
 		_pointLights.deallocPreparated(msg.key.id);
+	}
+
+	void RenderScene::_deleteDirectionalLight(AGE::Commands::MainToPrepare::DeleteDirectionalLight&msg)
+	{
+		DirectionalLight &toRm = _directionalLights.get(msg.key.id);
+		_pointLights.deallocPreparated(msg.key.id);
+		// TODO: remove when point lights will be in octree
+		_activeDirectionalLights[toRm.activeDirectionalLightIdx] = _activeDirectionalLights[_activeDirectionalLights.size() - 1];
+		_directionalLights.get(_activeDirectionalLights[toRm.activeDirectionalLightIdx]).activeDirectionalLightIdx = toRm.activeDirectionalLightIdx;
+		_activeDirectionalLights.pop_back();
+		// ---
+	}
+
+	void RenderScene::_deleteSpotLight(AGE::Commands::MainToPrepare::DeleteSpotLight &msg)
+	{
+		SpotLight &toRm = _spotLights.get(msg.key.id);
+
+		// TODO: remove when point lights will be in octree
+		_activeSpotLights[toRm.activeSpotLightIdx] = _activeSpotLights[_activeSpotLights.size() - 1];
+		_spotLights.get(_activeSpotLights[toRm.activeSpotLightIdx]).activeSpotLightIdx = toRm.activeSpotLightIdx;
+		_activeSpotLights.pop_back();
+		// ---
+		if (toRm.hasMoved)
+		{
+			_spotLightsToMove[toRm.moveBufferIdx] = _spotLightsToMove[_spotLightsToMove.size() - 1];
+			_spotLights.get(_spotLightsToMove[toRm.moveBufferIdx]).moveBufferIdx = toRm.moveBufferIdx;
+			_spotLightsToMove.pop_back();
+		}
+
+		_spotLights.deallocPreparated(msg.key.id);
 	}
 
 	void RenderScene::_deleteDrawable(AGE::Commands::MainToPrepare::DeleteMesh &msg)
@@ -303,7 +401,8 @@ namespace AGE
 		Camera *co = nullptr;
 		Mesh *uo = nullptr;
 		PointLight *l = nullptr;
-
+		SpotLight *s = nullptr;
+		DirectionalLight *d = nullptr;
 		switch (msg.key.type)
 		{
 
@@ -337,6 +436,20 @@ namespace AGE
 				_pointLightsToMove.push_back(msg.key.id);
 			}
 			break;
+		case(PrepareKey::Type::SpotLight) :
+			s = &_spotLights.get(msg.key.id);
+			s->transformation = msg.transform;
+			if (s->hasMoved == false)
+			{
+				s->hasMoved = true;
+				s->moveBufferIdx = (uint32_t)_spotLightsToMove.size();
+				_spotLightsToMove.push_back(msg.key.id);
+			}
+			break;
+		case(PrepareKey::Type::DirectionalLight) :
+			d = &_directionalLights.get(msg.key.id);
+			d->transformation = msg.transform;
+			break;
 		default:
 			break;
 		}
@@ -369,8 +482,15 @@ namespace AGE
 			e.computeSphereTransform();
 			// TODO: move in octree
 		}
+		for (uint32_t idx : _spotLightsToMove)
+		{
+			SpotLight &e = _spotLights.get(idx);
+			e.hasMoved = false;
+			// TODO: move in octree
+		}
 		_drawablesToMove.clear();
 		_pointLightsToMove.clear();
+		_spotLightsToMove.clear();
 	}
 
 	void RenderScene::_prepareDrawList(AGE::Commands::MainToPrepare::PrepareDrawLists &msg)
@@ -427,8 +547,109 @@ namespace AGE
 			{
 				auto &p = _pointLights.get(pointLightIdx);
 				renderCamera.lights.pointLight.emplace_back();
-				renderCamera.lights.pointLight.back().light = p;
+				RenderLight<PointLight> *curLight = &renderCamera.lights.pointLight.back();
+				curLight->light = p;
 				// TODO: Cull the shadows
+				// VERY UGLY CULLING FOR THE MOMENT
+				AGE::Vector<Cullable*> objectsInShadow;
+				_octree.getAllElements(objectsInShadow);
+				for (Cullable *e : objectsInShadow)
+				{
+					switch (e->key.type)
+					{
+					case PrepareKey::Type::Drawable:
+					{
+						Drawable *currentDrawable = static_cast<Drawable*>(e);
+						RenderPainter *curRenderPainter = nullptr;
+						RenderDrawableList *curRenderDrawablelist = nullptr;
+
+						auto renderPainter = curLight->keys.find(currentDrawable->mesh.painter.getId());
+						// We find the good render painter
+						if (renderPainter == curLight->keys.end())
+						{
+							curRenderPainter = &curLight->keys[currentDrawable->mesh.painter.getId()];
+						}
+						else
+							curRenderPainter = &renderPainter->second;
+						// and the good render mode
+						for (auto &drawableList : curRenderPainter->drawables)
+						{
+							if (drawableList.renderMode == currentDrawable->renderMode)
+							{
+								curRenderDrawablelist = &drawableList;
+								break;
+							}
+						}
+						if (curRenderDrawablelist == nullptr)
+						{
+							curRenderPainter->drawables.emplace_back();
+							curRenderDrawablelist = &curRenderPainter->drawables.back();
+							curRenderDrawablelist->renderMode = currentDrawable->renderMode;
+						}
+						curRenderDrawablelist->vertices.emplace_back(currentDrawable->mesh.vertices);
+						curRenderDrawablelist->properties.emplace_back(_properties.get(currentDrawable->mesh.properties.getId()));
+					}
+					}
+				}
+				// END OF VERY UGLY CULLING
+			}
+			for (uint32_t spotLightIdx : _activeSpotLights) 
+			{
+				auto &p = _spotLights.get(spotLightIdx);
+				renderCamera.lights.spotLights.emplace_back();
+				RenderLight<SpotLight> *curLight = &renderCamera.lights.spotLights.back();
+				curLight->light = p;
+				// TODO: Cull the shadows
+				// VERY UGLY CULLING FOR THE MOMENT
+				AGE::Vector<Cullable*> objectsInShadow;
+				_octree.getAllElements(objectsInShadow);
+				for (Cullable *e : objectsInShadow)
+				{
+					switch (e->key.type)
+					{
+					case PrepareKey::Type::Drawable:
+					{
+						Drawable *currentDrawable = static_cast<Drawable*>(e);
+						RenderPainter *curRenderPainter = nullptr;
+						RenderDrawableList *curRenderDrawablelist = nullptr;
+
+						auto renderPainter = curLight->keys.find(currentDrawable->mesh.painter.getId());
+						// We find the good render painter
+						if (renderPainter == curLight->keys.end())
+						{
+							curRenderPainter = &curLight->keys[currentDrawable->mesh.painter.getId()];
+						}
+						else
+							curRenderPainter = &renderPainter->second;
+						// and the good render mode
+						for (auto &drawableList : curRenderPainter->drawables)
+						{
+							if (drawableList.renderMode == currentDrawable->renderMode)
+							{
+								curRenderDrawablelist = &drawableList;
+								break;
+							}
+						}
+						if (curRenderDrawablelist == nullptr)
+						{
+							curRenderPainter->drawables.emplace_back();
+							curRenderDrawablelist = &curRenderPainter->drawables.back();
+							curRenderDrawablelist->renderMode = currentDrawable->renderMode;
+						}
+						curRenderDrawablelist->vertices.emplace_back(currentDrawable->mesh.vertices);
+						curRenderDrawablelist->properties.emplace_back(_properties.get(currentDrawable->mesh.properties.getId()));
+					}
+					}
+				}
+				// END OF VERY UGLY CULLING
+			}
+			// no culling possible on directional light so paul you don't have to do it ! is it nice ?
+			// ANSWER: Well, it's actually gonna be even harder to cull this...
+			// TODO: compute a box for the shadows (orthogonal frustum) and cull the objects :(
+			for (uint32_t directionalLightIdx : _activeDirectionalLights) {
+				auto &p = _directionalLights.get(directionalLightIdx);
+				renderCamera.lights.directionalLights.emplace_back();
+				renderCamera.lights.directionalLights.back().light = p;
 			}
 			// Do the culling
 			_octree.getElementsCollide(&camera, toDraw);
@@ -543,6 +764,13 @@ namespace AGE
 					renderCamera.lights.pointLight.emplace_back();
 					renderCamera.lights.pointLight.back().light = *currentPointLight;
 					// TODO: Cull the shadows
+				}
+				break;
+				case PrepareKey::Type::SpotLight:
+				{
+					SpotLight *currentSpotLight = static_cast<SpotLight*>(e);
+					renderCamera.lights.spotLights.emplace_back();
+					renderCamera.lights.spotLights.back().light = *currentSpotLight;
 				}
 				break;
 				default:

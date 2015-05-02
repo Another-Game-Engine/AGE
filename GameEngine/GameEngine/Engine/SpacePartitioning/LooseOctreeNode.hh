@@ -49,6 +49,7 @@ namespace AGE
 
 		void checkOctreeIntegrity(LooseOctree &manager, uint32_t thisIdx) const;
 		void getElementsCollide(LooseOctree &manager, CullableShape<Frustum> *toTest, AGE::Vector<Cullable *> &toFill) const;
+		void getAllElements(LooseOctree &manager, AGE::Vector<Cullable *> &toFill) const;
 		bool isLeaf() const;
 
 	private:

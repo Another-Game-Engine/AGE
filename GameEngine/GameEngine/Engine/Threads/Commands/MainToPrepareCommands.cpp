@@ -47,11 +47,27 @@ namespace AGE
 				: key(key)
 			{}
 
-			SetPointLight::SetPointLight(glm::vec3 const &color, glm::vec3 const &attenuation, std::shared_ptr<ITexture> const &texture, PrepareKey &key)
+			CreateDirectionalLight::CreateDirectionalLight(PrepareKey const &key)
+				: key(key)
+			{}
+
+			CreateSpotLight::CreateSpotLight(PrepareKey const &key)
+				: key(key)
+			{}
+
+			SetPointLight::SetPointLight(PointLightData const &data, PrepareKey &key)
 				: key(key),
-				color(color),
-				texture(texture),
-				attenuation(attenuation)
+				  data(data)
+			{}
+
+			SetDirectionalLight::SetDirectionalLight(DirectionalLightData const &data, PrepareKey &key)
+				: key(key),
+				  data(data)
+			{}
+
+			SetSpotLight::SetSpotLight(SpotLightData const &data, PrepareKey &key)
+				: key(key),
+				data(data)
 			{}
 
 			DeleteCamera::DeleteCamera(const PrepareKey &_key)
@@ -59,6 +75,14 @@ namespace AGE
 			{}
 
 			DeletePointLight::DeletePointLight(const PrepareKey &_key)
+				: key(_key)
+			{}
+
+			DeleteSpotLight::DeleteSpotLight(const PrepareKey &_key)
+				: key(_key)
+			{}
+
+			DeleteDirectionalLight::DeleteDirectionalLight(const PrepareKey &_key)
 				: key(_key)
 			{}
 

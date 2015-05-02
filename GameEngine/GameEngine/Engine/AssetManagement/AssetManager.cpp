@@ -92,6 +92,7 @@ namespace AGE
 			material->path = _filePath.getFullName();
 			for (auto &material_data : material_data_set->collection) 
 			{
+
 				material->datas.push_back(MaterialInstance());
 				auto &materialSubset = material->datas.back();
 
@@ -618,5 +619,12 @@ namespace AGE
 		if (!_pointLight)
 			_pointLight = loadTexture("pointlight.tage", "");
 		return _pointLight;
+	}
+
+	std::shared_ptr<ITexture> const &AssetsManager::getSpotLightTexture()
+	{
+		if (!_spotLight)
+			_spotLight = loadTexture("spotlight.tage", "");
+		return _spotLight;
 	}
 }

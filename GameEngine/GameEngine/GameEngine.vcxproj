@@ -239,9 +239,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\Vendors\imgui\imgui.cpp" />
+    <ClCompile Include="Engine\Components\DirectionalLightComponent.cpp" />
     <ClCompile Include="Engine\Render\DepthMap.cpp" />
     <ClCompile Include="Engine\Render\DepthMapHandle.cpp" />
     <ClCompile Include="Engine\Render\DepthMapManager.cpp" />
+    <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredDirectionalLightning.cpp" />
     <ClCompile Include="Engine\Render\Properties\AABB.cpp" />
     <ClCompile Include="Engine\Components\PhysicsData.cpp" />
     <ClCompile Include="Engine\Components\RigidBody.cpp" />
@@ -273,6 +275,7 @@
     <ClCompile Include="Engine\Context\SDL\SdlToAgeInputs.cpp" />
     <ClCompile Include="Engine\Entities\Entity.cpp" />
     <ClCompile Include="Engine\Render\GeometryManagement\SimpleGeometry.cpp" />
+    <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredSpotLightning.cpp" />
     <ClCompile Include="Engine\Render\ProgramResources\Types\Uniform\Vec3.cpp" />
     <ClCompile Include="Engine\Render\Properties\Materials\ScaleUVs.cpp" />
     <ClCompile Include="Engine\Render\Properties\Materials\Specular.cpp" />
@@ -424,6 +427,7 @@
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
     <ClInclude Include="..\Vendors\imgui\imgui.h" />
     <ClInclude Include="..\Vendors\imgui\stb_textedit.h" />
+    <ClInclude Include="Engine\Components\DirectionalLightComponent.hh" />
     <ClInclude Include="Engine\Render\DepthMap.hpp" />
     <ClInclude Include="Engine\Render\DepthMapHandle.hpp" />
     <ClInclude Include="Engine\Render\DepthMapManager.hpp" />
@@ -461,6 +465,7 @@
     <ClInclude Include="Engine\Physics\WorldInterface.hpp" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomPipeline\DebugDeferredShading.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredDebugBuffering.hh" />
+    <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredDirectionalLightning.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredMerging.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredMergingDebug.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredPointLightning.hh" />
@@ -479,6 +484,7 @@
     <ClInclude Include="Engine\Entities\EntityData.hh" />
     <ClInclude Include="Engine\Render\GeometryManagement\SimpleGeometry.hh" />
     <ClInclude Include="Engine\Render\PipelineTypes.hpp" />
+    <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredSpotLightning.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\PipelineTools.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Render\RenderModes.hh" />
     <ClInclude Include="Engine\Render\ProgramResources\Types\Uniform\Vec3.hh" />

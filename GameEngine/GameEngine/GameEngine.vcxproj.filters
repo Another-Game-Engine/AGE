@@ -182,6 +182,9 @@
     <ClCompile Include="Engine\Render\Properties\Materials\ScaleUVs.cpp" />
     <ClCompile Include="Engine\Utils\Age_microprofile.cpp" />
     <ClCompile Include="Engine\Utils\Profiler.cpp" />
+    <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredSpotLightning.cpp" />
+    <ClCompile Include="Engine\Components\DirectionalLightComponent.cpp" />
+    <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredDirectionalLightning.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -476,6 +479,9 @@
     <ClInclude Include="Engine\Utils\Age_microprofile.hpp" />
     <ClInclude Include="Engine\Utils\Profile.hpp" />
     <ClInclude Include="Engine\Utils\Profiler.hpp" />
+    <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredSpotLightning.hh" />
+    <ClInclude Include="Engine\Components\DirectionalLightComponent.hh" />
+    <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredDirectionalLightning.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />
