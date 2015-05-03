@@ -212,7 +212,7 @@ Compiler( 'Compiler-x64' )
 
 // Core
 #include "GameEngine\AGE_Engine.bff"
-
+#include "GameEngine\AGE_Reader.bff"
 
 // Aliases : All-$Platform$
 //------------------------------------------------------------------------------
@@ -232,7 +232,8 @@ ForEach( .Platform in .Platforms )
 //------------------------------------------------------------------------------
 Alias( 'All' )
 {
-  .Targets    = { 'AGEngine-proj' }
+  .Targets    = { 'AGEngine-proj'
+                , 'AGEReader-proj' }
 }
 
 // Aliases : proj (all projects)
@@ -240,8 +241,8 @@ Alias( 'All' )
 Alias( 'proj' )
 {
   .Targets    = { 'All-proj',
-            'AGEngine-proj',
-;            'CoreTest-proj',
+             'AGEngine-proj',
+;            'AGEReader-proj',
             }
 }
 
