@@ -81,8 +81,8 @@ Compiler( 'Compiler-x64' )
               + ' /IGNORE:4001' ; don't complain about linking libs only
 
   // Optimizations
-  .CompilerDebugOptimizations   = ' /MTd /Od /RTC1 /GS /Oy- /GR-' //analyze
-  .CompilerReleaseOptimizations = ' /MT /Ox /Oy /Oi /GS- /GF /GL /Gy /Gw /GR- ' //analyze
+  .CompilerDebugOptimizations   = ' /MDd /Od /RTC1 /GS /Oy- /GR-' //analyze
+  .CompilerReleaseOptimizations = ' /MD /Ox /Oy /Oi /GS- /GF /GL /Gy /Gw /GR- ' //analyze
   .LibrarianDebugOptimizations  = ''
   .LibrarianReleaseOptimizations  = ' /LTCG'
   .LinkerDebugOptimizations   = ''
@@ -172,7 +172,7 @@ Compiler( 'Compiler-x64' )
 //------------------------------------------------------------------------------
 // 
 //------------------------------------------------------------------------------
-.OutputBase = './tmp'
+.OutputBase = './build'
 
 //------------------------------------------------------------------------------
 // Unity/Blob files (shared across configs)
@@ -184,10 +184,10 @@ Compiler( 'Compiler-x64' )
 //------------------------------------------------------------------------------
 .ProjectCommon = 
 [
-  .ProjectBuildCommand    = 'cd ^$(SolutionDir)\../../../ &amp; fbuild.exe -vs -verbose -cache -wrapper ^$(ProjectName)-^$(Configuration)'
-  .ProjectRebuildCommand    = 'cd ^$(SolutionDir)\../../../ &amp; fbuild.exe -vs -verbose -cache -clean -wrapper ^$(ProjectName)-^$(Configuration)'
-  .OutputDirectory      = '^$(SolutionDir)\..\..\..\tmp2'
-  .IntermediateDirectory    = '^$(SolutionDir)\..\..\..\tmp2'
+  .ProjectBuildCommand    = 'cd ^$(SolutionDir)/../ &amp; fbuild.exe -vs -verbose -cache -wrapper ^$(ProjectName)-^$(Configuration)'
+  .ProjectRebuildCommand    = 'cd ^$(SolutionDir)/../ &amp; fbuild.exe -vs -verbose -cache -clean -wrapper ^$(ProjectName)-^$(Configuration)'
+  .OutputDirectory      = '.\build'
+  .IntermediateDirectory    = '.\tmp2'
   .Platform = 'Win32' // unused
   .PlatformToolset = 'v120'
   .IncludeSearchPath      = '^$(SolutionDir);^$(ProjectDir);.\'
@@ -202,7 +202,7 @@ Compiler( 'Compiler-x64' )
 .ProjectX64Debug      = [ Using( .ProjectCommon ) .Config = 'x64-Debug' .PreprocessorDefinitions = .X64Defines + .DebugDefines ]
 .ProjectX64Profile    = [ Using( .ProjectCommon ) .Config = 'x64-Profile' .PreprocessorDefinitions = .X64Defines + .ProfileDefines ]
 .ProjectX64Release    = [ Using( .ProjectCommon ) .Config = 'x64-Release' .PreprocessorDefinitions = .X64Defines + .ReleaseDefines ]
-.ProjectX64Retail    = [ Using( .ProjectCommon ) .Config = 'x64-Retail' .PreprocessorDefinitions = .X64Defines + .RetailDefines ]
+.ProjectX64Retail     = [ Using( .ProjectCommon ) .Config = 'x64-Retail' .PreprocessorDefinitions = .X64Defines + .RetailDefines ]
 
 .ProjectConfigs = { .ProjectX64Debug, .ProjectX64Profile, .ProjectX64Release, .ProjectX64Retail }
 
@@ -224,6 +224,7 @@ ForEach( .Platform in .Platforms )
     .Targets    = { 'All-$Platform$-Debug',
               'All-$Platform$-Profile',
               'All-$Platform$-Release'
+              'All-$Platform$-Retail'
               }
   }
 }
@@ -232,18 +233,15 @@ ForEach( .Platform in .Platforms )
 //------------------------------------------------------------------------------
 Alias( 'All' )
 {
-  .Targets    = { 'AGEngine-proj'
-                , 'AGEReader-proj' }
+  .Targets    = { 'AGEReader-proj' }
 }
 
 // Aliases : proj (all projects)
 //------------------------------------------------------------------------------
 Alias( 'proj' )
 {
-  .Targets    = { 'All-proj',
-             'AGEngine-proj',
-;            'AGEReader-proj',
-            }
+  .Targets    = { 'AGEReader-proj'
+                }
 }
 
 //------------------------------------------------------------------------------
