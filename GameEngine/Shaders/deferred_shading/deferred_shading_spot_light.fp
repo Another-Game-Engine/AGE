@@ -31,7 +31,7 @@ vec3 getWorldPosition(float depth, vec2 screenPos, mat4 viewProj)
 void main()
 {
 	mat4 viewProj = projection_matrix * view_matrix;
-	float depth = texture2D(depth_buffer, interpolated_texCoord).x;
+	float depth = texture(depth_buffer, interpolated_texCoord).z;
 	vec3 worldPos = getWorldPosition(depth, interpolated_texCoord, viewProj);
 	vec3 lightDir = vec3(position_light - worldPos);
 	float dist = length(lightDir);
@@ -51,8 +51,8 @@ void main()
 	float shadowMapDepth = texture(shadow_map, shadowPos.xy).z;
 	float visibility = 1.0f;
 	float bias = clamp(0.005f * tan(acos(cosTheta)), 0.f, 0.01f);
-	if (shadowMapDepth < (shadowPos.z - 0.00001)) {
+	if (shadowMapDepth < (shadowPos.z - bias)) {
 		visibility = 0.f;
 	}
-	color = (vec4(vec3(lambert * color_light), specularRatio) * effect / (attenuation)) * visibility;
+	color = (vec4(vec3(lambert * color_light), specularRatio) * effect / (attenuation)) * (0.0001f * visibility);
 }
