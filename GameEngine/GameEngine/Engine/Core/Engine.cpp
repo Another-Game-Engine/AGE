@@ -28,7 +28,7 @@
 
 #endif
 
-#ifdef USE_IMGUI
+#ifdef AGE_ENABLE_IMGUI
 
 #include <Utils/Age_Imgui.hpp>
 
@@ -283,7 +283,7 @@ namespace AGE
 	{
 		bool res = false;
 
-#ifdef USE_IMGUI
+#ifdef AGE_ENABLE_IMGUI
 		AGE::Imgui::getInstance()->startUpdate();
 #endif
 		_timer->update();
@@ -330,7 +330,7 @@ namespace AGE
 		{
 			_renderFpsStatitstics();
 		}
-#ifdef USE_IMGUI
+#ifdef AGE_ENABLE_IMGUI
 		ImGui::Render();
 #endif
 		GetPrepareThread()->getQueue()->emplaceCommand<Commands::ToRender::Flush>();
@@ -340,7 +340,7 @@ namespace AGE
 
 	void Engine::_renderThreadsStatistics()
 	{
-#ifdef USE_IMGUI
+#ifdef AGE_ENABLE_IMGUI
 		if (ImGui::Begin("Threads statistics", (bool*)0, ImVec2(0, 0), -1.0f, ImGuiWindowFlags_AlwaysAutoResize))
 		{
 			auto &stats = GetThreadManager()->getStatistics();
@@ -382,7 +382,7 @@ namespace AGE
 
 	void Engine::_renderFpsStatitstics()
 	{
-#ifdef USE_IMGUI
+#ifdef AGE_ENABLE_IMGUI
 		if (!ImGui::Begin("Example: Fixed OverlayFPS OVERLAY", (bool*)1, ImVec2(0, 0), 0.3f, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings))
 		{
 			ImGui::End();

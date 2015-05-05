@@ -1,3 +1,5 @@
+#include <Utils/Age_microprofile.hpp>
+
 #include <Utils/Containers/Vector.hpp>
 #include <map>
 
@@ -37,7 +39,6 @@
 #include <EDITOR_COMPONENT_REGISTER.cpp>
 
 #include <Components/CameraComponent.hpp>
-#include <Components/FPController.hpp>
 #include <Components/MeshRenderer.hh>
 #include <Components/Light.hh>
 #include <Components/RigidBody.hpp>

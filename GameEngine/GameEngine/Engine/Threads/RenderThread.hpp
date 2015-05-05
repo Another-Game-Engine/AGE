@@ -9,7 +9,7 @@
 #include <memory>
 #include <vector>
 #include <Render/Properties/Properties.hh>
-#include <Engine/SpacePartitioning/Ouptut/RenderCamera.hh>
+#include <SpacePartitioning/Ouptut/RenderCamera.hh>
 #include <Render/PipelineTypes.hpp>
 #include <Render/DepthMapManager.hpp>
 #include <Render/GeometryManagement/SimpleGeometry.hh>

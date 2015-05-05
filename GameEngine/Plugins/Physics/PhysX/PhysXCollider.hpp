@@ -8,15 +8,23 @@ namespace AGE
 {
 	namespace Physics
 	{
+		class PhysXRigidBody;
+
 		class PhysXCollider : public virtual ColliderInterface
 		{
+			// Friendships
+			friend PhysXRigidBody;
+
 		public:
 			// Constructors
 			PhysXCollider(void) = delete;
 
-			PhysXCollider(WorldInterface *world, void *&data, physx::PxShape *shape);
+			PhysXCollider(WorldInterface *world, Private::GenericData *data, physx::PxShape *shape);
 
 			PhysXCollider(const PhysXCollider &) = delete;
+
+			// Methods
+			void updateShape(physx::PxShape *newShape);
 
 			// Assignment Operators
 			PhysXCollider &operator=(const PhysXCollider &) = delete;
@@ -34,6 +42,8 @@ namespace AGE
 			// Attributes
 			physx::PxShape *shape = nullptr;
 
+			PhysXRigidBody *rigidBody = nullptr;
+
 			// Inherited Methods
 			void setAsTrigger(bool mustBeATrigger) override final;
 
@@ -42,6 +52,8 @@ namespace AGE
 			void setFilterGroup(FilterGroup group) override final;
 
 			FilterGroup getFilterGroup(void) const override final;
+
+			void setMaterial(const std::string &name) override final;
 		};
 	}
 }

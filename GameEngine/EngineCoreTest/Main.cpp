@@ -15,7 +15,6 @@
 // DEPENDENCIES
 #include <Context/SDL/SdlContext.hh>
 #include <Core/ConfigurationManager.hpp>
-#include <Physics/BulletDynamicManager.hpp>
 #include <Core/Timer.hh>
 #include <Utils/PerformanceDebugger.hh>
 #include <AssetManagement/AssetManager.hh>
@@ -56,7 +55,7 @@ int			main(int ac, char **av)
 		engine->setInstance<Timer>();
 		engine->setInstance<AGE::AssetsManager>();
 
-#ifdef USE_IMGUI
+#ifdef AGE_ENABLE_IMGUI
 		AGE::GetRenderThread()->getQueue()->emplaceFutureTask<AGE::Tasks::Basic::BoolFunction, bool>([=](){
 			AGE::Imgui::getInstance()->init(engine);
 			return true;

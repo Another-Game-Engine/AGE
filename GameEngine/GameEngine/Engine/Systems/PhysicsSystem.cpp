@@ -4,17 +4,18 @@
 #include <Physics/EngineTypeToPluginName.hpp>
 #include <Physics/WorldInterface.hpp>
 #include <Physics/Fallback/NullPhysics.hpp>
-#include <Components/NewRigidBody.hpp>
+#include <Components/RigidBody.hpp>
 #include <Systems/CollisionSystem.hpp>
+#include <Systems/TriggerSystem.hpp>
 
 namespace AGE
 {
 	// Constructors
-	PhysicsSystem::PhysicsSystem(AScene *scene, Physics::EngineType physicsEngineType)
-		: System(scene), PluginManager("CreateInterface", "DestroyInterface"), entityFilter(scene)
+	PhysicsSystem::PhysicsSystem(AScene *scene, Physics::EngineType physicsEngineType, const std::string &assetDirectory)
+		: System(scene), PluginManager("CreateInterface", "DestroyInterface"), assetDirectory(assetDirectory), entityFilter(scene)
 	{
 		_name = "PhysicsSystem";
-		entityFilter.requireComponent<NewRigidBody>();
+		entityFilter.requireComponent<RigidBody>();
 		if (physicsEngineType == Physics::EngineType::Null)
 		{
 			physics = new Physics::NullPhysics;
@@ -24,7 +25,6 @@ namespace AGE
 			AGE_ERROR("Impossible to load physics plugin '", Physics::GetPluginNameForEngine(physicsEngineType), "'. Falling back to physics plugin '", Physics::GetPluginNameForEngine(Physics::EngineType::Null), "'.");
 			physics = new Physics::NullPhysics;
 		}
-		scene->addSystem<Private::CollisionSystem>(std::numeric_limits<std::size_t>::max(), physics);
 	}
 
 	// Destructor
@@ -51,22 +51,36 @@ namespace AGE
 	bool PhysicsSystem::initialize(void)
 	{
 		// Set Dependency to real plugin (physics enabled if plugin != NullPhysics)
-		_scene->getInstance<Physics::PhysicsInterface>()->shutdown();
+		_scene->getInstance<Physics::PhysicsInterface>()->shutdown(assetDirectory);
 		_scene->deleteInstance<Physics::PhysicsInterface>();
 		_scene->setInstance(physics);
 		Singleton<Logger>::getInstance()->log(Logger::Level::Normal, "Initializing PhysicsSystem with plugin '", Physics::GetPluginNameForEngine(physics->getPluginType()), "'.");
-		return physics->startup();
+		if (physics->startup(assetDirectory))
+		{
+			_scene->addSystem<Private::CollisionSystem>(std::numeric_limits<std::size_t>::min());
+			_scene->addSystem<Private::TriggerSystem>(std::numeric_limits<std::size_t>::min());
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 
 	void PhysicsSystem::finalize(void)
 	{
 		assert(physics != nullptr && "System already finalized");
 		Singleton<Logger>::getInstance()->log(Logger::Level::Normal, "Finalizing PhysicsSystem with plugin '", Physics::GetPluginNameForEngine(physics->getPluginType()), "'.");
-		physics->shutdown();
+		const Physics::EngineType engineType = physics->getPluginType();
+		physics->shutdown(assetDirectory);
+		if (engineType == Physics::EngineType::Null)
+		{
+			delete physics;
+		}
 		physics = nullptr;
 		// Set Dependency to the fallback plugin (physics disabled) --> Needed if a RigidBody is added while no PhysicsSystem exists
 		_scene->removeInstance<Physics::PhysicsInterface>();
-		_scene->setInstance<Physics::NullPhysics, Physics::PhysicsInterface>()->startup();
+		_scene->setInstance<Physics::NullPhysics, Physics::PhysicsInterface>()->startup(assetDirectory);
 	}
 
 	bool PhysicsSystem::onPluginLoaded(PluginPtr pluginData)
@@ -75,21 +89,33 @@ namespace AGE
 		return true;
 	}
 
-	void PhysicsSystem::mainUpdate(float elapsedTime)
+	void PhysicsSystem::updateBegin(float elapsedTime)
 	{
+		RigidBody *rigidBody = nullptr;
+		Link *link = nullptr;
 		for (Entity entity : entityFilter.getCollection())
 		{
-			NewRigidBody *rigidBody = entity.getComponent<NewRigidBody>();
-			Link *link = entity.getLinkPtr();
+			link = entity.getLinkPtr();
+			rigidBody = entity.getComponent<RigidBody>();
 			rigidBody->setPosition(link->getPosition());
 			rigidBody->setRotation(link->getOrientation());
 		}
+	}
+
+	void PhysicsSystem::mainUpdate(float elapsedTime)
+	{
 		physics->getWorld()->update(elapsedTime);
+	}
+
+	void PhysicsSystem::updateEnd(float elapsedTime)
+	{
+		RigidBody *rigidBody = nullptr;
+		Link *link = nullptr;
 		for (Entity entity : entityFilter.getCollection())
 		{
-			NewRigidBody *rigidBody = entity.getComponent<NewRigidBody>();
-			Link *link = entity.getLinkPtr();
-			link->setPosition(rigidBody->getPosition());
+			rigidBody = entity.getComponent<RigidBody>();
+			link = entity.getLinkPtr();
+			link->setPosition(rigidBody->getPosition(), false);
 			link->setOrientation(rigidBody->getRotation());
 		}
 	}

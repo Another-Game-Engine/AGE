@@ -45,7 +45,9 @@ namespace AGE
 
 	IRenderingPipeline & ARenderingPipeline::render(RenderPipeline const &pipeline, RenderLightList const &lights, CameraInfos const &camInfos)
 	{
-		// We iterate over the entry points
+		SCOPE_profile_gpu_i("RenderPipeline");
+		SCOPE_profile_cpu_i("RenderTimer", "RenderPipeline");
+		// We iterate over the entry points5
 		for (auto &renderPass : _rendering_list)
 		{
 			renderPass->render(pipeline, lights, camInfos);

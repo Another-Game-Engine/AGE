@@ -1,5 +1,5 @@
 #include <Threads/Tasks/ToRenderTasks.hpp>
-#include <Engine/Render/Properties/Properties.hh>
+#include <Render/Properties/Properties.hh>
 #include <glm/glm.hpp>
 
 namespace AGE

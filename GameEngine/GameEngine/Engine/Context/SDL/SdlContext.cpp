@@ -6,6 +6,8 @@
 #include <SDL/SDL.h>
 #include <Core/Inputs/Input.hh>
 #include <Threads/MainThread.hpp>
+#include <Utils/Age_microprofile.hpp>
+#include <Utils/Profiler.hpp>
 
 namespace AGE
 {
@@ -23,11 +25,13 @@ namespace AGE
 			std::cerr << "SDL_GL_CreateContext Failed : " << SDL_GetError() << std::endl;
 			return (false);
 		}
+		SDL_GL_SetSwapInterval(0);
 		if (glewInit() != GLEW_OK)
 		{
 			std::cerr << "glewInit Failed" << std::endl;
 			return (false);
 		}
+		MicroProfileGpuInitGL();
 		return (true);
 	}
 
@@ -37,11 +41,14 @@ namespace AGE
 
 	void SdlContext::swapContext()
 	{
+		SCOPE_profile_gpu_i("SwapContext");
 		SDL_GL_SwapWindow(_window);
 	}
 
 	void SdlContext::refreshInputs()
 	{
+		SCOPE_profile_cpu_i("RenderTimer", "Refresh inputs");
+
 		SDL_Event events;
 		auto input = _dependencyManager->getInstance<Input>();
 

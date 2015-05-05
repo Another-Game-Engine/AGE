@@ -83,7 +83,7 @@ namespace AGE
 					skeleton->bones.back().index = static_cast<uint32_t>(index);
 					skeleton->bones.back().name = boneName;
 					skeleton->bones.back().offset = AssimpLoader::aiMat4ToGlm(mesh->mBones[i]->mOffsetMatrix);
-					skeleton->bonesReferences.insert(std::make_pair(boneName, index));
+					skeleton->bonesReferences.insert(std::make_pair(boneName, static_cast<uint32_t>(index)));
 
 					auto boneNode = cookingTask->assimpScene->mRootNode->FindNode(boneName.c_str());
 					if (!boneNode)
@@ -175,7 +175,7 @@ namespace AGE
 			_skeleton->bones.back().name = _node->mName.data;
 			_skeleton->bones.back().transformation = AssimpLoader::aiMat4ToGlm(_node->mTransformation);
 			_skeleton->bones.back().offset = glm::inverse(AssimpLoader::aiMat4ToGlm(_node->mTransformation));
-			_skeleton->bonesReferences.insert(std::make_pair(_node->mName.data, index));
+			_skeleton->bonesReferences.insert(std::make_pair(_node->mName.data, static_cast<uint32_t>(index)));
 
 			std::uint32_t depth = getDepth(_node);
 			if (depth < minDepth)

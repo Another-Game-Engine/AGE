@@ -71,6 +71,9 @@ namespace AGE
 
 	void DeferredBasicBuffering::renderPass(RenderPipeline const &pipeline, RenderLightList const &, CameraInfos const &infos)
 	{
+		SCOPE_profile_gpu_i("DeferredBasicBuffering render pass");
+		SCOPE_profile_cpu_i("RenderTimer", "DeferredBasicBuffering render pass");
+
 		OpenGLState::glEnable(GL_CULL_FACE);
 		OpenGLState::glCullFace(GL_BACK);
 		OpenGLState::glDepthMask(GL_TRUE);
@@ -113,7 +116,7 @@ namespace AGE
 				glActiveTextureARB(GL_TEXTURE0_ARB);
 				_depth->bind();
 				glGenerateMipmap(GL_TEXTURE_2D);
-				_depth->get(mipmapLevel, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, writableBuffer.getWritableBuffer());
+				_depth->get(static_cast<GLint>(mipmapLevel), GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, writableBuffer.getWritableBuffer());
 				_depth->unbind();
 			}
 		}

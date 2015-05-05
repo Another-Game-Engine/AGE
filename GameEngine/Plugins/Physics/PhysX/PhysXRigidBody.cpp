@@ -1,19 +1,59 @@
 #include "PhysXRigidBody.hpp"
+#include "PhysXWorld.hpp"
+#include "PhysXCollider.hpp"
 
 namespace AGE
 {
 	namespace Physics
 	{
 		// Constructors
-		PhysXRigidBody::PhysXRigidBody(PhysXWorld *world, void *&data)
+		PhysXRigidBody::PhysXRigidBody(PhysXWorld *world, Private::GenericData *data)
 			: RigidBodyInterface(world, data)
 		{
-			if (getData() == nullptr)
+			if (getData()->data == nullptr)
 			{
-				getData() = static_cast<PhysXPhysics *>(world->getPhysics())->getPhysics()->createRigidDynamic(physx::PxTransform());
+				getData()->data = static_cast<PhysXPhysics *>(world->getPhysics())->getPhysics()->createRigidDynamic(physx::PxTransform(physx::PxIdentity));
+				assert(getData()->data != nullptr && "Impossible to create actor");
+				physx::PxRigidDynamic *body = getDataAs<physx::PxRigidDynamic>();
+				world->getScene()->addActor(*body);
+				body->userData = this;
 			}
-			assert(getData() != nullptr && "Impossible to create actor");
-			world->getScene()->addActor(*getDataAs<physx::PxRigidDynamic>());
+			else
+			{
+				static_cast<PhysXCollider *>(getDataAs<physx::PxRigidDynamic>()->userData)->rigidBody = this;
+			}
+			setAsKinematic(IsKinematicByDefault());
+			setMass(GetDefaultMass());
+			affectByGravity(IsAffectedByGravityByDefault());
+			setCollisionDetectionMode(GetDefaultCollisionDetectionMode());
+			setAngularDrag(GetDefaultAngularDrag());
+			setAngularVelocity(GetDefaultAngularVelocity());
+			setCenterOfMass(GetDefaultCenterOfMass());
+			setLinearDrag(GetDefaultLinearDrag());
+			setLinearVelocity(GetDefaultLinearVelocity());
+			setDiagonalInertiaTensor(GetDefaultDiagonalInertiaTensor());
+			setMaxAngularVelocity(GetDefaultMaxAngularVelocity());
+			setMaxDepenetrationVelocity(GetDefaultMaxDepenetrationVelocity());
+		}
+
+		// Destructor
+		PhysXRigidBody::~PhysXRigidBody(void)
+		{
+			physx::PxRigidDynamic *body = getDataAs<physx::PxRigidDynamic>();
+			PhysXCollider *collider = static_cast<PhysXCollider *>(body->userData);
+			if (collider == nullptr || static_cast<void *>(collider) == this)
+			{
+				static_cast<PhysXWorld *>(getWorld())->getScene()->removeActor(*body);
+				body->release();
+				getData()->data = nullptr;
+			}
+			else
+			{
+				affectByGravity(false);
+				setAsKinematic(true);
+				setMass(0.0f);
+				collider->rigidBody = nullptr;
+			}
 		}
 
 		// Inherited Methods
@@ -119,7 +159,10 @@ namespace AGE
 			transform.p.y = position.y;
 			transform.p.z = position.z;
 			actor->setGlobalPose(transform);
-			actor->setKinematicTarget(transform);
+			if (isKinematic())
+			{
+				actor->setKinematicTarget(transform);
+			}
 		}
 
 		glm::vec3 PhysXRigidBody::getPosition(void) const
@@ -137,7 +180,10 @@ namespace AGE
 			transform.q.z = rotation.z;
 			transform.q.w = rotation.w;
 			actor->setGlobalPose(transform);
-			actor->setKinematicTarget(transform);
+			if (isKinematic())
+			{
+				actor->setKinematicTarget(transform);
+			}
 		}
 
 		glm::quat PhysXRigidBody::getRotation(void) const
@@ -246,7 +292,7 @@ namespace AGE
 			}
 		}
 
-		void PhysXRigidBody::addTorque(const glm::vec3 &torque, ForceMode forceMode)
+		void PhysXRigidBody::addAbsoluteTorque(const glm::vec3 &torque, ForceMode forceMode)
 		{
 			switch (forceMode)
 			{
@@ -265,6 +311,12 @@ namespace AGE
 				default:
 					break;
 			}
+		}
+
+		void PhysXRigidBody::addRelativeTorque(const glm::vec3 &torque, ForceMode forceMode)
+		{
+			const physx::PxVec3 absoluteTorque = getDataAs<physx::PxRigidDynamic>()->getGlobalPose().transform(physx::PxVec3(torque.x, torque.y, torque.z));
+			addAbsoluteTorque(glm::vec3(absoluteTorque.x, absoluteTorque.y, absoluteTorque.z), forceMode);
 		}
 
 		glm::vec3 PhysXRigidBody::getVelocityAtWorldPosition(const glm::vec3 &position) const

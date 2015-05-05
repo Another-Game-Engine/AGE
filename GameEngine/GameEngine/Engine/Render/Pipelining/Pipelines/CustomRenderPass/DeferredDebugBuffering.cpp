@@ -53,6 +53,9 @@ namespace AGE
 
 	void DeferredDebugBuffering::renderPass(RenderPipeline const &, RenderLightList const &renderLight, CameraInfos const &infos)
 	{
+		SCOPE_profile_gpu_i("DeferredDebugBuffering render pass");
+		SCOPE_profile_cpu_i("RenderTimer", "DeferredDebugBuffering render pass");
+
 		OpenGLState::glDisable(GL_CULL_FACE);
 		OpenGLState::glDepthMask(GL_TRUE);
 		OpenGLState::glDepthFunc(GL_LEQUAL);

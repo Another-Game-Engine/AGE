@@ -12,7 +12,7 @@ namespace AGE
 			// Constructors
 			BoxColliderInterface(void) = delete;
 
-			BoxColliderInterface(WorldInterface *world, void *&data);
+			BoxColliderInterface(WorldInterface *world, Private::GenericData *data);
 
 			BoxColliderInterface(const BoxColliderInterface &) = delete;
 
@@ -29,6 +29,11 @@ namespace AGE
 			virtual glm::vec3 getSize(void) const = 0;
 
 		protected:
+			// Static Methods
+			static glm::vec3 GetDefaultCenter(void);
+
+			static glm::vec3 GetDefaultSize(void);
+
 			// Destructor
 			virtual ~BoxColliderInterface(void) = default;
 

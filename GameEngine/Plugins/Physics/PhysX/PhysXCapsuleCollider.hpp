@@ -12,11 +12,14 @@ namespace AGE
 	{
 		class PhysXCapsuleCollider final : public CapsuleColliderInterface, public PhysXCollider
 		{
+			// Friendships
+			friend ObjectPool < PhysXCapsuleCollider >;
+
 		public:
 			// Constructors
 			PhysXCapsuleCollider(void) = delete;
 
-			PhysXCapsuleCollider(WorldInterface *world, void *&data);
+			PhysXCapsuleCollider(WorldInterface *world, Private::GenericData *data);
 
 			PhysXCapsuleCollider(const PhysXCapsuleCollider &) = delete;
 
@@ -39,6 +42,8 @@ namespace AGE
 			void setRadius(float radius) override final;
 
 			float getRadius(void) const override final;
+
+			void scale(const glm::vec3 &scaling) override final;
 		};
 	}
 }

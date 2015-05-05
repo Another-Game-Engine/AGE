@@ -19,6 +19,7 @@
 #include <SpacePartitioning/Ouptut/RenderPipeline.hh>
 #include <Utils/Debug.hpp>
 #include <Render/GeometryManagement/SimpleGeometry.hh>
+#include <Utils/Profiler.hpp>
 
 namespace AGE
 {
@@ -150,7 +151,11 @@ namespace AGE
 				return;
 			}
 
+#ifdef DEBUG
+			_depthMapManager.init(1280, 720, 4);
+#else
 			_depthMapManager.init(1280, 720, 2);
+#endif
 
 			msg.setValue(true);
 		});
@@ -166,8 +171,15 @@ namespace AGE
 
  		registerCallback<Commands::ToRender::Flush>([&](Commands::ToRender::Flush& msg)
 		{
-			_context->swapContext();
-			glClear(GL_COLOR_BUFFER_BIT);
+			{
+				SCOPE_profile_cpu_i("RenderTimer", "SwapContext");
+				_context->swapContext();
+				{
+					SCOPE_profile_gpu_i("Clear buffer");
+					glClear(GL_COLOR_BUFFER_BIT);
+				}
+			}
+			MicroProfileFlip();
 		});
 
 		registerCallback<Tasks::Render::ReloadShaders>([&](Tasks::Render::ReloadShaders& msg)
@@ -196,6 +208,8 @@ namespace AGE
 
 		registerCallback<Commands::ToRender::RenderDrawLists>([&](Commands::ToRender::RenderDrawLists& msg)
 		{
+			SCOPE_profile_cpu_i("RenderTimer", "RenderDrawLists");
+
 			if (!_drawlistPtr) // nothing to draw
 				return;
 			AGE_ASSERT(_drawlistPtr != nullptr);
@@ -235,11 +249,15 @@ namespace AGE
 
 			// CEST VRAIMENT DEGUEULASSE...
 
-			auto &drawlist = _drawlistPtr->container.cameras;
-			for (auto &curCamera : drawlist)
 			{
-				AGE_ASSERT(!(pipelines[curCamera.camInfos.renderType] == nullptr));
-				pipelines[curCamera.camInfos.renderType]->render(curCamera.pipeline, curCamera.lights, curCamera.camInfos);
+				auto &drawlist = _drawlistPtr->container.cameras;
+				for (auto &curCamera : drawlist)
+				{
+					SCOPE_profile_gpu_i("RenderCameraDrawList");
+					SCOPE_profile_cpu_i("RenderTimer", "RenderCamera");
+					AGE_ASSERT(!(pipelines[curCamera.camInfos.renderType] == nullptr));
+					pipelines[curCamera.camInfos.renderType]->render(curCamera.pipeline, curCamera.lights, curCamera.camInfos);
+				}
 			}
 			_drawlistPtr = nullptr;
 			painterPtr->remove_vertices(debug2Dlines.verticesKey);
@@ -262,9 +280,10 @@ namespace AGE
 			this->_insideRun = false;
 		});
 
-#ifdef USE_IMGUI
+#ifdef AGE_ENABLE_IMGUI
 		registerCallback<AGE::RenderImgui>([&](AGE::RenderImgui &msg)
 		{
+			SCOPE_profile_cpu_i("RenderTimer", "Render IMGUI");
 			AGE::Imgui::getInstance()->renderThreadRenderFn(msg.cmd_lists);
 		});
 #endif
@@ -293,6 +312,7 @@ namespace AGE
 		if (!init())
 			return false;
 		_threadHandle = std::thread(&RenderThread::update, std::ref(*this));
+		MicroProfileOnThreadExit();
 		return true;
 	}
 
@@ -338,15 +358,21 @@ namespace AGE
 		{
 			waitStart = std::chrono::high_resolution_clock::now();
 			taskSuccess = commandSuccess = false;
-			do {
-				if (_context)
-					_context->refreshInputs();
-				getQueue()->getTaskAndCommandQueue(tasks, taskSuccess, commands, commandSuccess, TMQ::HybridQueue::Block);
-			} while (!taskSuccess && !commandSuccess);
+			{
+				SCOPE_profile_cpu_i("RenderTimer", "Wait and get commands");
+				do {
+					if (_context)
+					{
+						_context->refreshInputs();
+					}
+					getQueue()->getTaskAndCommandQueue(tasks, taskSuccess, commands, commandSuccess, TMQ::HybridQueue::Block);
+				} while (!taskSuccess && !commandSuccess);
+			}
 			waitEnd = std::chrono::high_resolution_clock::now();
 			workStart = std::chrono::high_resolution_clock::now();
 			if (taskSuccess)
 			{
+				SCOPE_profile_cpu_i("RenderTimer", "Execute tasks");
 				while (!tasks.empty() && _insideRun)
 				{
 					//pop all tasks
@@ -372,6 +398,7 @@ namespace AGE
 			}
 			if (commandSuccess)
 			{
+				SCOPE_profile_cpu_i("RenderTimer", "Execute commands");
 				// pop all commands
 				while (!commands.empty() && _insideRun)
 				{

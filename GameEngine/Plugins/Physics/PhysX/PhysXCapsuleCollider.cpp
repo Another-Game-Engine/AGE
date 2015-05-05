@@ -7,10 +7,10 @@ namespace AGE
 	namespace Physics
 	{
 		// Constructors
-		PhysXCapsuleCollider::PhysXCapsuleCollider(WorldInterface *world, void *&data)
-			: ColliderInterface(world, data), CapsuleColliderInterface(world, data), PhysXCollider(world, data, static_cast<PhysXPhysics *>(world->getPhysics())->getPhysics()->createShape(physx::PxCapsuleGeometry(0.5f, 0.5f), *static_cast<const PhysXMaterial *>(getMaterial())->material))
+		PhysXCapsuleCollider::PhysXCapsuleCollider(WorldInterface *world, Private::GenericData *data)
+			: ColliderInterface(world, data), CapsuleColliderInterface(world, data), PhysXCollider(world, data, static_cast<PhysXPhysics *>(world->getPhysics())->getPhysics()->createShape(physx::PxCapsuleGeometry(GetDefaultRadius(), GetDefaultHeight() / 2.0f), *static_cast<const PhysXMaterial *>(getMaterial())->material, true))
 		{
-			return;
+			setCenter(GetDefaultCenter());
 		}
 
 		// Inherited Methods
@@ -43,6 +43,20 @@ namespace AGE
 		float PhysXCapsuleCollider::getRadius(void) const
 		{
 			return getShape()->getGeometry().capsule().radius;
+		}
+
+		void PhysXCapsuleCollider::scale(const glm::vec3 &scaling)
+		{
+			physx::PxShape *shape = getShape();
+			const physx::PxVec3 realScaling(scaling.x, scaling.y, scaling.z);
+			physx::PxTransform localPose = shape->getLocalPose();
+			const physx::PxMat33 scalingMatrix = physx::PxMat33::createDiagonal(realScaling) * physx::PxMat33(localPose.q);
+			physx::PxCapsuleGeometry &capsule = shape->getGeometry().capsule();
+			capsule.halfHeight *= scalingMatrix.column0.magnitude();
+			capsule.radius *= std::sqrt(scalingMatrix.column1.magnitude() * scalingMatrix.column2.magnitude());
+			shape->setGeometry(capsule);
+			localPose.p = localPose.p.multiply(realScaling);
+			shape->setLocalPose(localPose);
 		}
 	}
 }

@@ -71,7 +71,7 @@
     <TargetName>Physics_$(ProjectName)_x64_d</TargetName>
     <IntDir>$(ProjectDir)Dependencies\$(Platform)\$(Configuration)\</IntDir>
     <OutDir>$(ProjectDir)Binaries\$(Platform)\$(Configuration)\</OutDir>
-    <IncludePath>$(SolutionDir)GameEngine/Engine/Physics;$(ProjectDir);$(SolutionDir)Vendors;$(SolutionDir)Vendors/bullet/src;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>$(SolutionDir)Vendors/OpenGL/include;$(SolutionDir)GameEngine/Engine;$(SolutionDir)GameEngine/Engine/Physics;$(ProjectDir);$(SolutionDir)Vendors;$(SolutionDir)Vendors/bullet/src;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
@@ -84,7 +84,7 @@
     <TargetName>Physics_$(ProjectName)_x64</TargetName>
     <IntDir>$(ProjectDir)Dependencies\$(Platform)\$(Configuration)\</IntDir>
     <OutDir>$(ProjectDir)Binaries\$(Platform)\$(Configuration)\</OutDir>
-    <IncludePath>$(SolutionDir)GameEngine/Engine/Physics;$(ProjectDir);$(SolutionDir)Vendors;$(SolutionDir)Vendors/bullet/src;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>$(SolutionDir)Vendors/OpenGL/include;$(SolutionDir)GameEngine/Engine;$(SolutionDir)GameEngine/Engine/Physics;$(ProjectDir);$(SolutionDir)Vendors;$(SolutionDir)Vendors/bullet/src;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -100,10 +100,14 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>Precompiled.hpp</PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(SolutionDir)Vendors\bullet\lib\x64Debug</AdditionalLibraryDirectories>
+      <AdditionalDependencies>LinearMath_Debug.lib;HACD_Debug.lib;GIMPACTUtils_Debug.lib;ConvexDecomposition_Debug.lib;BulletCollision_Debug.lib;BulletDynamics_Debug.lib;BulletMultiThreaded_Debug.lib;BulletSoftBody_Debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>/ignore:4099 %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <PostBuildEvent>
       <Command>call "$(ProjectDir)/Scripts/PostBuildDebug.bat"</Command>
@@ -133,12 +137,16 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>Precompiled.hpp</PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>$(SolutionDir)Vendors\bullet\lib\x64Release</AdditionalLibraryDirectories>
+      <AdditionalDependencies>LinearMath.lib;HACD.lib;GIMPACTUtils.lib;ConvexDecomposition.lib;BulletCollision.lib;BulletDynamics.lib;BulletMultiThreaded.lib;BulletSoftBody.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>/ignore:4099 %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <PostBuildEvent>
       <Command>call "$(ProjectDir)/Scripts/PostBuildRelease.bat"</Command>
@@ -168,14 +176,22 @@
     <ClInclude Include="..\..\..\GameEngine\Engine\Physics\ColliderInterface.hpp" />
     <ClInclude Include="..\..\..\GameEngine\Engine\Physics\ColliderType.hpp" />
     <ClInclude Include="..\..\..\GameEngine\Engine\Physics\CollisionDetectionMode.hpp" />
+    <ClInclude Include="..\..\..\GameEngine\Engine\Physics\CollisionListener.hpp" />
+    <ClInclude Include="..\..\..\GameEngine\Engine\Physics\CollisionType.hpp" />
+    <ClInclude Include="..\..\..\GameEngine\Engine\Physics\Contact.hpp" />
     <ClInclude Include="..\..\..\GameEngine\Engine\Physics\EngineType.hpp" />
     <ClInclude Include="..\..\..\GameEngine\Engine\Physics\FilterGroup.hpp" />
     <ClInclude Include="..\..\..\GameEngine\Engine\Physics\ForceMode.hpp" />
+    <ClInclude Include="..\..\..\GameEngine\Engine\Physics\GenericData.hpp" />
     <ClInclude Include="..\..\..\GameEngine\Engine\Physics\MaterialInterface.hpp" />
+    <ClInclude Include="..\..\..\GameEngine\Engine\Physics\MemoryPoolHelper.hpp" />
     <ClInclude Include="..\..\..\GameEngine\Engine\Physics\MeshColliderInterface.hpp" />
     <ClInclude Include="..\..\..\GameEngine\Engine\Physics\PhysicsInterface.hpp" />
+    <ClInclude Include="..\..\..\GameEngine\Engine\Physics\RaycasterInterface.hpp" />
     <ClInclude Include="..\..\..\GameEngine\Engine\Physics\RigidBodyInterface.hpp" />
     <ClInclude Include="..\..\..\GameEngine\Engine\Physics\SphereColliderInterface.hpp" />
+    <ClInclude Include="..\..\..\GameEngine\Engine\Physics\TriggerListener.hpp" />
+    <ClInclude Include="..\..\..\GameEngine\Engine\Physics\TriggerType.hpp" />
     <ClInclude Include="..\..\..\GameEngine\Engine\Physics\WorldInterface.hpp" />
     <ClInclude Include="BulletBoxCollider.hpp" />
     <ClInclude Include="BulletCapsuleCollider.hpp" />
@@ -183,6 +199,7 @@
     <ClInclude Include="BulletMaterial.hpp" />
     <ClInclude Include="BulletMeshCollider.hpp" />
     <ClInclude Include="BulletPhysics.hpp" />
+    <ClInclude Include="BulletRaycaster.hpp" />
     <ClInclude Include="BulletRigidBody.hpp" />
     <ClInclude Include="BulletSphereCollider.hpp" />
     <ClInclude Include="BulletWorld.hpp" />
@@ -195,6 +212,7 @@
     <ClCompile Include="BulletMaterial.cpp" />
     <ClCompile Include="BulletMeshCollider.cpp" />
     <ClCompile Include="BulletPhysics.cpp" />
+    <ClCompile Include="BulletRaycaster.cpp" />
     <ClCompile Include="BulletRigidBody.cpp" />
     <ClCompile Include="BulletSphereCollider.cpp" />
     <ClCompile Include="BulletWorld.cpp" />
@@ -204,8 +222,10 @@
     <None Include="..\..\..\GameEngine\Engine\Physics\CapsuleColliderInterface.inl" />
     <None Include="..\..\..\GameEngine\Engine\Physics\ColliderInterface.inl" />
     <None Include="..\..\..\GameEngine\Engine\Physics\MaterialInterface.inl" />
+    <None Include="..\..\..\GameEngine\Engine\Physics\MemoryPoolHelper.inl" />
     <None Include="..\..\..\GameEngine\Engine\Physics\MeshColliderInterface.inl" />
     <None Include="..\..\..\GameEngine\Engine\Physics\PhysicsInterface.inl" />
+    <None Include="..\..\..\GameEngine\Engine\Physics\RaycasterInterface.inl" />
     <None Include="..\..\..\GameEngine\Engine\Physics\RigidBodyInterface.inl" />
     <None Include="..\..\..\GameEngine\Engine\Physics\SphereColliderInterface.inl" />
     <None Include="..\..\..\GameEngine\Engine\Physics\WorldInterface.inl" />

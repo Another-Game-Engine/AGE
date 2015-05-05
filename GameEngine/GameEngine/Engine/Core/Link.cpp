@@ -6,38 +6,24 @@
 #include <Utils/Debug.hpp>
 #include <Utils/MatrixConversion.hpp>
 #include <Core/AScene.hh>
-#include <Components/NewRigidBody.hpp>
+#include <Components/RigidBody.hpp>
+#include <Components/Collider.hpp>
 
 using namespace AGE;
 
 void Link::registerOctreeObject(const PrepareKey &key)
 {
-	_octreeObjects.resize(_octreeObjects.size() + 1);
-	auto &b = _octreeObjects.back();
-	AGE_ASSERT(b.invalid());
-
-	b = key;
-	//_renderScene->setPosition(_position, key);
-	//_renderScene->setScale(_scale, key);
-	//_renderScene->setOrientation(_orientation, key);
+	_octreeObjects.insert(key);
 	_renderScene->setTransform(getGlobalTransform(), key);
 }
 
 void Link::unregisterOctreeObject(const PrepareKey &key)
 {
-	for (std::size_t i = 0; i < _octreeObjects.size(); ++i)
+	std::unordered_set<PrepareKey>::const_iterator found = _octreeObjects.find(key);
+	if (found != _octreeObjects.end())
 	{
-		auto &b = _octreeObjects[i];
-		if (b == key)
-		{
-			_renderScene->removeElement(b);
-			if (i != _octreeObjects.size() - 1)
-			{
-				std::swap(b, _octreeObjects.back());
-			}
-			_octreeObjects.pop_back();
-			return;
-		}
+		_renderScene->removeElement(*found);
+		_octreeObjects.erase(found);
 	}
 }
 
@@ -46,85 +32,73 @@ bool Link::hasParent() const { return _parent != nullptr && _parent != _renderSc
 bool Link::hasParent(const Link *parent) const { return _parent == parent; }
 const std::vector<Link*> &Link::getChildren() const { return _children; }
 
-void Link::setPosition(const glm::vec3 &v)
+void Link::setPosition(const glm::vec3 &v, bool recalculate)
 {
-	static bool FirstCall = true;
-	if (FirstCall)
+	_userModification = true;
+	internalSetPosition(v, recalculate);
+}
+
+void Link::setScale(const glm::vec3 &v, bool recalculate)
+{
+	const glm::vec3 oldScale = getScale();
+	_userModification = true;
+	internalSetScale(v, recalculate);
+	Collider *collider = static_cast<Collider *>(_entityPtr->getComponent(Component<Collider>::getTypeId()));
+	if (collider != nullptr)
 	{
-		FirstCall = false;
-		_userModification = true;
-		internalSetPosition(v);
-		NewRigidBody *rigidBody = static_cast<NewRigidBody *>(_entityPtr->getComponent(Component<NewRigidBody>::getTypeId()));
-		if (rigidBody != nullptr)
-		{
-			rigidBody->setPosition(v);
-		}
-		FirstCall = true;
+		collider->scale(getScale() / oldScale);
 	}
 }
 
-void Link::setScale(const glm::vec3 &v) {
-	_userModification = true;
-	internalSetScale(v);
-}
-
-void Link::setScale(float v) {
-	_userModification = true;
-	internalSetScale(glm::vec3(v));
-}
-
-
-void Link::setOrientation(const glm::quat &v)
+void Link::setScale(float v, bool recalculate)
 {
-	static bool FirstCall = true;
-	if (FirstCall)
-	{
-		FirstCall = false;
-		_userModification = true;
-		internalSetOrientation(v);
-		NewRigidBody *rigidBody = static_cast<NewRigidBody *>(_entityPtr->getComponent(Component<NewRigidBody>::getTypeId()));
-		if (rigidBody != nullptr)
-		{
-			rigidBody->setRotation(v);
-		}
-		FirstCall = true;
-	}
+	setScale(glm::vec3(v, v, v), recalculate);
 }
 
-void Link::setForward(const glm::vec3 &v)
+
+void Link::setOrientation(const glm::quat &v, bool recalculate)
 {
 	_userModification = true;
-	internalSetForward(v);
+	internalSetOrientation(v, recalculate);
 }
 
-void Link::setTransform(const glm::mat4 &t)
+void Link::setForward(const glm::vec3 &v, bool recalculate)
 {
 	_userModification = true;
-	internalSetTransform(t);
+	internalSetForward(v, recalculate);
+}
 
+void Link::setTransform(const glm::mat4 &t, bool recalculate)
+{
+	_userModification = true;
+	internalSetTransform(t, recalculate);
 }
 
 
-void Link::internalSetPosition(const glm::vec3 &v)
+void Link::internalSetPosition(const glm::vec3 &v, bool recalculate)
 {
 	_localDirty = true;
 	_position = v;
-
-	_updateGlobalTransform();
+	if (recalculate)
+	{
+		_updateGlobalTransform();
+	}
 }
 
-void Link::internalSetForward(const glm::vec3 &v)
+void Link::internalSetForward(const glm::vec3 &v, bool recalculate)
 {
 	_localDirty = true;
 	glm::vec4 get = glm::mat4(glm::toMat4(_orientation) * glm::translate(glm::mat4(1), v))[3];
 	_position.x = _position.x + get.x;
 	_position.y = _position.y + get.y;
 	_position.z = _position.z + get.z;
-
-	_updateGlobalTransform();
+	if (recalculate)
+	{
+		_updateGlobalTransform();
+	}
 }
 
-void Link::internalSetTransform(const glm::mat4 &t)
+void Link::internalSetTransform(const glm::mat4 &t, bool recalculate)
 {
 	//_localDirty = true;
 	//auto p = t * glm::vec4(1,1,1,1);
@@ -136,35 +110,34 @@ void Link::internalSetTransform(const glm::mat4 &t)
 	//_position = posFromMat4(t);
 	//_localTransformation = glm::translate(t, _position);
 	//_localTransformation = t;
-	_updateGlobalTransform();
+	if (recalculate)
+	{
+		_updateGlobalTransform();
+	}
 }
 
 
-void Link::internalSetScale(const glm::vec3 &v) {
+void Link::internalSetScale(const glm::vec3 &v, bool recalculate) {
 	_localDirty = true;
 	_scale = v;
-
-	_updateGlobalTransform();
+	if (recalculate)
+	{
+		_updateGlobalTransform();
+	}
 }
 
-void Link::internalSetOrientation(const glm::quat &v) {
+void Link::internalSetOrientation(const glm::quat &v, bool recalculate) {
 	_localDirty = true;
 	_orientation = v;
-
-	_updateGlobalTransform();
+	if (recalculate)
+	{
+		_updateGlobalTransform();
+	}
 }
 
 const glm::mat4 Link::getLocalTransform() const
 {
-	if (_localDirty)
-	{
-		auto trans = glm::mat4(1);
-		trans = glm::translate(_localTransformation, _position);
-		trans = _localTransformation * glm::toMat4(_orientation);
-		trans = glm::scale(_localTransformation, _scale);
-		return trans;
-	}
-	return _localTransformation;
+	return const_cast<Link *>(this)->getLocalTransform();
 }
 
 const glm::mat4 &Link::getLocalTransform()
@@ -376,6 +349,6 @@ void Link::_updateGlobalTransform()
 	}
 	for (auto &e : _children)
 	{
-		e->_updateGlobalTransform(); 
+		e->_updateGlobalTransform();
 	}
 }

@@ -1,11 +1,13 @@
 #pragma once
 
-#include <string>
-#include <Utils/AABoundingBox.hh>
-#include <vector>
-#include <Render/Key.hh>
-#include <Render/GeometryManagement/Data/Vertices.hh>
-#include <Render/GeometryManagement/Painting/Painter.hh>
+# include <string>
+# include <Utils/AABoundingBox.hh>
+# include <vector>
+# include <Render/Key.hh>
+# include <Render/GeometryManagement/Data/Vertices.hh>
+# include <Render/GeometryManagement/Painting/Painter.hh>
+# include <Render/Pipelining/Render/RenderModes.hh>
+# include <AssetManagement/Data/MeshData.hh>
 
 namespace AGE
 {
@@ -24,6 +26,7 @@ namespace AGE
 		std::string name;
 		std::string path;
 		std::vector<SubMeshInstance> subMeshs;
+		std::shared_ptr<MeshData> meshData;
 	};
 
 }

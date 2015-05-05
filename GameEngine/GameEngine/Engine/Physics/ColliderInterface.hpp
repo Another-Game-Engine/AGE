@@ -1,10 +1,17 @@
 #pragma once
 
+#include <string>
+
+#include <glm/glm.hpp>
+
 #include "ColliderType.hpp"
 #include "FilterGroup.hpp"
+#include "GenericData.hpp"
 
 namespace AGE
 {
+	class Collider;
+
 	namespace Physics
 	{
 		class WorldInterface;
@@ -17,7 +24,7 @@ namespace AGE
 		class ColliderInterface
 		{
 			// Friendships
-			friend WorldInterface;
+			friend Collider;
 
 		private:
 			// Type Traits
@@ -52,7 +59,7 @@ namespace AGE
 			// Constructors
 			ColliderInterface(void) = delete;
 
-			ColliderInterface(WorldInterface *world, void *&data);
+			ColliderInterface(WorldInterface *world, Private::GenericData *data);
 
 			ColliderInterface(const ColliderInterface &) = delete;
 
@@ -60,17 +67,23 @@ namespace AGE
 			ColliderInterface &operator=(const ColliderInterface &) = delete;
 
 			// Methods
+			Collider *getCollider(void);
+
+			const Collider *getCollider(void) const;
+
 			WorldInterface *getWorld(void);
 
 			const WorldInterface *getWorld(void) const;
+
+			void setMaterial(MaterialInterface *newMaterial);
 
 			MaterialInterface *getMaterial(void);
 
 			const MaterialInterface *getMaterial(void) const;
 
-			void *&getData(void);
+			Private::GenericData *getData(void);
 
-			void * const &getData(void) const;
+			const Private::GenericData *getData(void) const;
 
 			template <typename T>
 			T *getDataAs(void);
@@ -104,11 +117,23 @@ namespace AGE
 			// Destructor
 			virtual ~ColliderInterface(void);
 
+			// Static Methods
+			static bool IsTriggerByDefault(void);
+
+			static FilterGroup GetDefaultFilterGroup(void);
+
+			// Virtual Methods
+			virtual void scale(const glm::vec3 &scaling) = 0;
+
+			virtual void setMaterial(const std::string &name) = 0;
+
 		private:
 			// Attributes
+			Collider *collider = nullptr;
+
 			WorldInterface *world = nullptr;
 
-			void *&data;
+			Private::GenericData *data;
 
 			MaterialInterface *material = nullptr;
 		};
