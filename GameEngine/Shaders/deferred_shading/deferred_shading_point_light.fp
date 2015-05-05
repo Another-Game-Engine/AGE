@@ -14,8 +14,7 @@ uniform vec3 eye_pos;
 
 uniform sampler2D depth_buffer;
 uniform sampler2D normal_buffer;
-
-uniform float shininess;
+uniform sampler2D specular_buffer;
 
 noperspective in vec2 interpolated_texCoord;
 
@@ -39,7 +38,7 @@ void main()
 	float lambert = max(0.0f, dot(normal, normalize(lightDir)));
 	vec3 worldPosToEyes = normalize(eye_pos - worldPos);
 	vec3 reflection = reflect(normalize(-lightDir), normal);
-//	vec4 specular = texture(specular_buffer, interpolated_texCoord);
-	float specularRatio = clamp(pow(max(dot(reflection, worldPosToEyes), 0.0f), 100.f), 0.0f, 1.0f);
-	color = vec4(vec3(ambient_color + lambert * color_light), specularRatio) / (attenuation); // * (1.f - step(1.0f, depth));
+	float shininess = texture2D(specular_buffer, interpolated_texCoord).x;
+	float specularRatio = clamp(pow(max(dot(reflection, worldPosToEyes), 0.0f), shininess), 0.0f, 1.0f);
+	color = vec4(vec3(ambient_color + lambert * color_light), specularRatio) / (attenuation);;
 }

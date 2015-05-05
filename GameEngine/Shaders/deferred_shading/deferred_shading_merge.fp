@@ -17,5 +17,5 @@ void main()
 	vec3 specular = texture(specular_map, interpolated_texCoord).xyz;
 
 	light.rgb = clamp(light.rgb + ambient_color, 0, 1);
-	color = vec4(light.rgb * diffuse + vec3(light.a) /* * specular */, 1);
+	color = vec4(light.rgb * diffuse + vec3(light.a), 1);
 }

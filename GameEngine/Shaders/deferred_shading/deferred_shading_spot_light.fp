@@ -6,6 +6,7 @@ uniform mat4 projection_matrix;
 uniform mat4 view_matrix;
 uniform sampler2D normal_buffer;
 uniform sampler2D depth_buffer;
+uniform sampler2D specular_buffer;
 uniform vec3 eye_pos;
 
 uniform vec3 position_light;
@@ -42,6 +43,7 @@ void main()
 	effect = pow(effect, exponent_light);
 	vec3 worldPosToEyes = normalize(eye_pos - worldPos);
 	vec3 reflection = reflect(normalize(-lightDir), normal);
-	float specularRatio = clamp(pow(max(dot(reflection, worldPosToEyes), 0.0f), 100.f), 0.0f, 1.0f);
+	float shininess = texture2D(specular_buffer, interpolated_texCoord).x;
+	float specularRatio = clamp(pow(max(dot(reflection, worldPosToEyes), 0.0f), shininess), 0.0f, 1.0f);
 	color = vec4(vec3(lambert * color_light), specularRatio) * effect / (attenuation);
 }
