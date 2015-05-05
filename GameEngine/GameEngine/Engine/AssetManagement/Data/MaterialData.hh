@@ -17,6 +17,7 @@ namespace AGE
 		glm::vec4 emissive;
 		glm::vec4 reflective;
 		glm::vec4 specular;
+		float shininess;
 		std::string diffuseTexPath;
 		std::string ambientTexPath;
 		std::string emissiveTexPath;
@@ -67,8 +68,12 @@ namespace AGE
 		{
 			ar(scaleUVs);
 		}
+		if (version > 1)
+		{
+			ar(shininess);
+		}
 	}
 }
 
-CEREAL_CLASS_VERSION(AGE::MaterialData, 1)
+CEREAL_CLASS_VERSION(AGE::MaterialData, 2)
 CEREAL_CLASS_VERSION(AGE::MaterialDataSet, 0)
