@@ -33,6 +33,7 @@ namespace AGE
 	DeferredPointLightning::DeferredPointLightning(std::shared_ptr<PaintingManager> painterManager,
 												std::shared_ptr<Texture2D> normal,
 												std::shared_ptr<Texture2D> depth,
+												std::shared_ptr<Texture2D> specular,
 												std::shared_ptr<Texture2D> lightAccumulation) :
 										FrameBufferRender(painterManager)
 	{
@@ -41,6 +42,7 @@ namespace AGE
 
 		_normalInput = normal;
 		_depthInput = depth;
+		_specularInput = specular;
 
 		_programs.resize(PROGRAM_NBR);
 
@@ -84,6 +86,7 @@ namespace AGE
 		*_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("view_matrix") = infos.view;
 		*_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("normal_buffer") = _normalInput;
 		*_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("depth_buffer") = _depthInput;
+		*_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("specular_buffer") = _specularInput;
 		*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("eye_pos") = cameraPosition;
 
 		_programs[PROGRAM_STENCIL]->use();

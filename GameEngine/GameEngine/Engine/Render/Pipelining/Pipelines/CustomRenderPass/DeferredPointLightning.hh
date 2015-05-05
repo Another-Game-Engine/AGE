@@ -13,6 +13,7 @@ namespace AGE
 		DeferredPointLightning(std::shared_ptr<PaintingManager> painterManager,
 							std::shared_ptr<Texture2D> normal,
 							std::shared_ptr<Texture2D> depth,
+							std::shared_ptr<Texture2D> specular,
 							std::shared_ptr<Texture2D> lightAccumulation);
 		virtual ~DeferredPointLightning() = default;
 
@@ -22,6 +23,7 @@ namespace AGE
 	private:
 		std::shared_ptr<Texture2D> _normalInput;
 		std::shared_ptr<Texture2D> _depthInput;
+		std::shared_ptr<Texture2D> _specularInput;
 
 		Key<Vertices> _sphereVertices;
 		std::shared_ptr<Painter> _spherePainter;
