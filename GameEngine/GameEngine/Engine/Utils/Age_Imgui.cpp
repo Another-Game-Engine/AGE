@@ -169,6 +169,8 @@ namespace AGE
 
 	void Imgui::startUpdate()
 	{
+		SCOPE_profile_cpu_function("Main thread");
+
 #ifdef AGE_ENABLE_IMGUI
 		ImGuiIO& io = ImGui::GetIO();
 

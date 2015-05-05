@@ -74,39 +74,48 @@ namespace AGE
 		SCOPE_profile_gpu_i("DeferredBasicBuffering render pass");
 		SCOPE_profile_cpu_i("RenderTimer", "DeferredBasicBuffering render pass");
 
-		OpenGLState::glEnable(GL_CULL_FACE);
-		OpenGLState::glCullFace(GL_BACK);
-		OpenGLState::glDepthMask(GL_TRUE);
-		OpenGLState::glDepthFunc(GL_LEQUAL);
-		OpenGLState::glDisable(GL_BLEND);
-		OpenGLState::glDisable(GL_STENCIL_TEST);
-		OpenGLState::glEnable(GL_DEPTH_TEST);
-		OpenGLState::glClearColor(glm::vec4(0.f, 0.0f, 0.0f, 0.0f));
-		OpenGLState::glEnable(GL_STENCIL_TEST);
-		OpenGLState::glClearStencil(0);
-		OpenGLState::glStencilFunc(GL_ALWAYS, 0, 0xFFFFFFFF);
-		OpenGLState::glStencilOp(GL_KEEP, GL_KEEP, GL_INCR);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-
+		{
+			SCOPE_profile_gpu_i("Clear buffer");
+			OpenGLState::glEnable(GL_CULL_FACE);
+			OpenGLState::glCullFace(GL_BACK);
+			OpenGLState::glDepthMask(GL_TRUE);
+			OpenGLState::glDepthFunc(GL_LEQUAL);
+			OpenGLState::glDisable(GL_BLEND);
+			OpenGLState::glDisable(GL_STENCIL_TEST);
+			OpenGLState::glEnable(GL_DEPTH_TEST);
+			OpenGLState::glClearColor(glm::vec4(0.f, 0.0f, 0.0f, 0.0f));
+			OpenGLState::glEnable(GL_STENCIL_TEST);
+			OpenGLState::glClearStencil(0);
+			OpenGLState::glStencilFunc(GL_ALWAYS, 0, 0xFFFFFFFF);
+			OpenGLState::glStencilOp(GL_KEEP, GL_KEEP, GL_INCR);
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+		}
 #ifdef OCCLUSION_CULLING
 
-		_programs[PROGRAM_BUFFERING]->use();
-		*_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("projection_matrix") = infos.projection;
-		*_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("view_matrix") = infos.view;
-
-		for (auto &meshPaint : pipeline.keys)
 		{
-			auto painter = _painterManager->get_painter(Key<Painter>::createKey(meshPaint.first));
-			for (auto &mode : meshPaint.second.drawables)
+			SCOPE_profile_gpu_i("Occluders pass");
+
+			_programs[PROGRAM_BUFFERING]->use();
+			*_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("projection_matrix") = infos.projection;
+			*_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("view_matrix") = infos.view;
+
+			for (auto &meshPaint : pipeline.keys)
 			{
-				if (mode.renderMode.at(AGE_OCCLUDER) == true)
+				auto painter = _painterManager->get_painter(Key<Painter>::createKey(meshPaint.first));
+				for (auto &mode : meshPaint.second.drawables)
 				{
-					painter->draw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], mode.properties, mode.vertices);
+					if (mode.renderMode.at(AGE_OCCLUDER) == true)
+					{
+						painter->draw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], mode.properties, mode.vertices);
+					}
 				}
 			}
 		}
 
+
 		{
+			SCOPE_profile_gpu_i("Copy occlusion depth to CPU");
+
 			auto writableBuffer = GetRenderThread()->getDepthMapManager().getWritableMap();
 			auto mipmapLevel = GetRenderThread()->getDepthMapManager().getMipmapLevel();
 
@@ -121,36 +130,42 @@ namespace AGE
 			}
 		}
 
-		for (auto &meshPaint : pipeline.keys)
 		{
-			auto painter = _painterManager->get_painter(Key<Painter>::createKey(meshPaint.first));
-			for (auto &mode : meshPaint.second.drawables)
+			SCOPE_profile_gpu_i("Draw objects");
+
+			for (auto &meshPaint : pipeline.keys)
 			{
-				if (mode.renderMode.at(AGE_OCCLUDER) == false)
+				auto painter = _painterManager->get_painter(Key<Painter>::createKey(meshPaint.first));
+				for (auto &mode : meshPaint.second.drawables)
 				{
-					painter->draw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], mode.properties, mode.vertices);
+					if (mode.renderMode.at(AGE_OCCLUDER) == false)
+					{
+						painter->draw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], mode.properties, mode.vertices);
+					}
 				}
 			}
 		}
 #else
-		_programs[PROGRAM_BUFFERING]->use();
-		*_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("projection_matrix") = infos.projection;
-		*_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("view_matrix") = infos.view;
-
-		for (auto &meshPaint : pipeline.keys)
 		{
-			auto painter = _painterManager->get_painter(Key<Painter>::createKey(meshPaint.first));
-			for (auto &mode : meshPaint.second.drawables)
+			SCOPE_profile_gpu_i("Draw objects");
+
+			_programs[PROGRAM_BUFFERING]->use();
+			*_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("projection_matrix") = infos.projection;
+			*_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("view_matrix") = infos.view;
+
+			for (auto &meshPaint : pipeline.keys)
 			{
-				if (renderModeCompatible(mode.renderMode))
+				auto painter = _painterManager->get_painter(Key<Painter>::createKey(meshPaint.first));
+				for (auto &mode : meshPaint.second.drawables)
 				{
-					painter->draw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], mode.properties, mode.vertices);
+					if (renderModeCompatible(mode.renderMode))
+					{
+						painter->draw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], mode.properties, mode.vertices);
+					}
 				}
 			}
 		}
 #endif
-		glFlush();
-		glFlush();
 	}
 
 }

@@ -15,6 +15,8 @@ namespace AGE
 		template <typename T, typename ...Args>
 		T *create(Args &&...args)
 		{
+			SCOPE_profile_cpu_function("Memory");
+
 			auto id = TypeID::Get<T>();
 			if (_pools.find(id) == std::end(_pools))
 			{
@@ -25,6 +27,8 @@ namespace AGE
 
 		void destroy(void *ptr, UniqueTypeId typeId)
 		{
+			SCOPE_profile_cpu_function("Memory");
+
 			if (_pools.find(typeId) == std::end(_pools))
 			{
 				assert(false && "Unknown type");
@@ -35,6 +39,8 @@ namespace AGE
 		template <typename T>
 		void destroy(T *ptr)
 		{
+			SCOPE_profile_cpu_function("Memory");
+
 			auto typeId = TypeID::Get<T>();
 			if (_pools.find(typeId) == std::end(_pools))
 			{

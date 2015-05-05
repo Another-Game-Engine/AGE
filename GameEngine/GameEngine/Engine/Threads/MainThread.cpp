@@ -7,6 +7,7 @@
 #include <Threads/PrepareRenderThread.hpp>
 #include <Threads/Tasks/BasicTasks.hpp>
 #include <Utils/Debug.hpp>
+#include <Utils/Profiler.hpp>
 
 
 namespace AGE
@@ -31,6 +32,7 @@ namespace AGE
 
 	bool MainThread::update()
 	{
+		SCOPE_profile_cpu_function("Main thread");
 		std::chrono::system_clock::time_point waitStart;
 		std::chrono::system_clock::time_point waitEnd;
 		std::chrono::system_clock::time_point workStart;

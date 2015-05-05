@@ -7,6 +7,7 @@
 #include <Components/RigidBody.hpp>
 #include <Systems/CollisionSystem.hpp>
 #include <Systems/TriggerSystem.hpp>
+#include <Utils/Profiler.hpp>
 
 namespace AGE
 {
@@ -91,6 +92,8 @@ namespace AGE
 
 	void PhysicsSystem::updateBegin(float elapsedTime)
 	{
+		SCOPE_profile_cpu_function("Physic");
+
 		RigidBody *rigidBody = nullptr;
 		Link *link = nullptr;
 		for (Entity entity : entityFilter.getCollection())
@@ -104,11 +107,15 @@ namespace AGE
 
 	void PhysicsSystem::mainUpdate(float elapsedTime)
 	{
+		SCOPE_profile_cpu_function("Physic");
+
 		physics->getWorld()->update(elapsedTime);
 	}
 
 	void PhysicsSystem::updateEnd(float elapsedTime)
 	{
+		SCOPE_profile_cpu_function("Physic");
+
 		RigidBody *rigidBody = nullptr;
 		Link *link = nullptr;
 		for (Entity entity : entityFilter.getCollection())

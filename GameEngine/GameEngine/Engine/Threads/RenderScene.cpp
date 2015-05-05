@@ -136,6 +136,8 @@ namespace AGE
 
 	void RenderScene::removeDrawableObject(DRAWABLE_ID id)
 	{
+		SCOPE_profile_cpu_i("PrepareTimer", "Remove drawable object");
+
 		Drawable &toRm = _drawables.get(id);
 		_removeProperties(toRm.mesh.properties);
 		if (toRm.hasMoved)
@@ -155,6 +157,8 @@ namespace AGE
 
 	void RenderScene::_setCameraInfos(AGE::Commands::MainToPrepare::CameraInfos &msg)
 	{
+		SCOPE_profile_cpu_i("PrepareTimer", "Set camera infos");
+
 		Camera *co = nullptr;
 		co = &_cameras.get(msg.key.id);
 		co->hasMoved = true;
@@ -164,6 +168,8 @@ namespace AGE
 
 	void RenderScene::_createCamera(AGE::Commands::MainToPrepare::CreateCamera &msg)
 	{
+		SCOPE_profile_cpu_i("PrepareTimer", "Create camera");
+
 		_cameras.allocPreparated(msg.key.id);
 		Camera &toAdd = _cameras.get(msg.key.id);
 
@@ -175,6 +181,8 @@ namespace AGE
 
 	void RenderScene::_createPointLight(AGE::Commands::MainToPrepare::CreatePointLight &msg)
 	{
+		SCOPE_profile_cpu_i("PrepareTimer", "Create point light");
+
 		_pointLights.allocPreparated(msg.key.id);
 		PointLight &toAdd = _pointLights.get(msg.key.id);
 
@@ -187,6 +195,8 @@ namespace AGE
 
 	void RenderScene::_createSpotLight(AGE::Commands::MainToPrepare::CreateSpotLight &msg)
 	{
+		SCOPE_profile_cpu_i("PrepareTimer", "Create spotlight");
+
 		_spotLights.allocPreparated(msg.key.id);
 		SpotLight &toAdd = _spotLights.get(msg.key.id);
 
@@ -199,6 +209,8 @@ namespace AGE
 
 	void RenderScene::_createDirectionalLight(AGE::Commands::MainToPrepare::CreateDirectionalLight &msg)
 	{
+		SCOPE_profile_cpu_i("PrepareTimer", "Create directional light");
+
 		_directionalLights.allocPreparated(msg.key.id);
 		DirectionalLight &toAdd = _directionalLights.get(msg.key.id);
 
@@ -211,6 +223,8 @@ namespace AGE
 
 	void RenderScene::_createMesh(AGE::Commands::MainToPrepare::CreateMesh &msg)
 	{
+		SCOPE_profile_cpu_i("PrepareTimer", "Create mesh");
+
 		_meshs.allocPreparated(msg.key.id);
 		Mesh &toAdd = _meshs.get(msg.key.id);
 		toAdd.key.id = msg.key.id;
@@ -218,6 +232,8 @@ namespace AGE
 
 	void RenderScene::_setPointLight(AGE::Commands::MainToPrepare::SetPointLight &msg)
 	{
+		SCOPE_profile_cpu_i("PrepareTimer", "Set pointlight");
+
 		PointLight *l = &_pointLights.get(msg.key.id);
 		l->data = msg.data;
 		if (l->hasMoved == false)
@@ -230,6 +246,8 @@ namespace AGE
 
 	void RenderScene::_setSpotLight(AGE::Commands::MainToPrepare::SetSpotLight &msg)
 	{
+		SCOPE_profile_cpu_i("PrepareTimer", "Set spotlight");
+
 		SpotLight *l = &_spotLights.get(msg.key.id);
 		l->data = msg.data;
 		if (l->hasMoved == false)
@@ -242,6 +260,8 @@ namespace AGE
 
 	void RenderScene::_setDirectionalLight(AGE::Commands::MainToPrepare::SetDirectionalLight &msg)
 	{
+		SCOPE_profile_cpu_i("PrepareTimer", "Set directional light");
+
 		DirectionalLight *l = &_directionalLights.get(msg.key.id);
 		l->data = msg.data;
 		if (l->hasMoved == false)
@@ -252,6 +272,8 @@ namespace AGE
 
 	void RenderScene::_deleteCamera(AGE::Commands::MainToPrepare::DeleteCamera &msg)
 	{
+		SCOPE_profile_cpu_i("PrepareTimer", "Delete camera");
+
 		Camera &toRm = _cameras.get(msg.key.id);
 
 		_activeCameras[toRm.activeCameraIdx] = _activeCameras[_activeCameras.size() - 1];
@@ -263,6 +285,8 @@ namespace AGE
 
 	void RenderScene::_deletePointLight(AGE::Commands::MainToPrepare::DeletePointLight &msg)
 	{
+		SCOPE_profile_cpu_i("PrepareTimer", "Delete point light");
+
 		PointLight &toRm = _pointLights.get(msg.key.id);
 
 		// TODO: remove when point lights will be in octree
@@ -282,6 +306,8 @@ namespace AGE
 
 	void RenderScene::_deleteDirectionalLight(AGE::Commands::MainToPrepare::DeleteDirectionalLight&msg)
 	{
+		SCOPE_profile_cpu_i("PrepareTimer", "Delete directionnal");
+
 		DirectionalLight &toRm = _directionalLights.get(msg.key.id);
 		_pointLights.deallocPreparated(msg.key.id);
 		// TODO: remove when point lights will be in octree
@@ -293,6 +319,8 @@ namespace AGE
 
 	void RenderScene::_deleteSpotLight(AGE::Commands::MainToPrepare::DeleteSpotLight &msg)
 	{
+		SCOPE_profile_cpu_i("PrepareTimer", "Delete spotlight");
+
 		SpotLight &toRm = _spotLights.get(msg.key.id);
 
 		// TODO: remove when point lights will be in octree
@@ -312,6 +340,8 @@ namespace AGE
 
 	void RenderScene::_deleteDrawable(AGE::Commands::MainToPrepare::DeleteMesh &msg)
 	{
+		SCOPE_profile_cpu_i("PrepareTimer", "Delete drawable");
+
 		Mesh &toRm = _meshs.get(msg.key.id);
 		for (auto &e : toRm.drawableCollection)
 		{
@@ -322,6 +352,8 @@ namespace AGE
 
 	void RenderScene::_setGeometry(AGE::Commands::MainToPrepare::SetGeometry &msg)
 	{
+		SCOPE_profile_cpu_i("PrepareTimer", "Set geometry");
+
 		Mesh *uo = &_meshs.get(msg.key.id);
 
 		for (auto &e : uo->drawableCollection)
@@ -399,6 +431,8 @@ namespace AGE
 
 	void RenderScene::_setTransform(AGE::Commands::MainToPrepare::SetTransform &msg)
 	{
+		SCOPE_profile_cpu_i("PrepareTimer", "Set transform");
+
 		Camera *co = nullptr;
 		Mesh *uo = nullptr;
 		PointLight *l = nullptr;
@@ -458,6 +492,8 @@ namespace AGE
 
 	void RenderScene::_moveElementsInOctree()
 	{
+		SCOPE_profile_cpu_i("PrepareTimer", "Move element in octree");
+
 		for (uint32_t idx : _drawablesToMove)
 		{
 			Drawable &e = _drawables.get(idx);
@@ -660,7 +696,8 @@ namespace AGE
 			// no culling possible on directional light so paul you don't have to do it ! is it nice ?
 			// ANSWER: Well, it's actually gonna be even harder to cull this...
 			// TODO: compute a box for the shadows (orthogonal frustum) and cull the objects :(
-			for (uint32_t directionalLightIdx : _activeDirectionalLights) {
+			for (uint32_t directionalLightIdx : _activeDirectionalLights)
+			{
 				auto &p = _directionalLights.get(directionalLightIdx);
 				renderCamera.lights.directionalLights.emplace_back();
 				renderCamera.lights.directionalLights.back().light = p;
@@ -711,59 +748,63 @@ namespace AGE
 
 
 #ifdef OCCLUSION_CULLING
-						if (depthMap.isValid() && curRenderDrawablelist->renderMode.at(AGE_OCCLUDER) == false)
 						{
-							drawObject = false;
+							SCOPE_profile_cpu_i("PrepareTimer", "Occlusion culling");
 
-							auto BB = currentDrawable->mesh.boundingBox;
-
-							glm::vec2 minPoint = glm::vec2(1);
-							glm::vec2 maxPoint = glm::vec2(-1);
-
-							float minZ = std::numeric_limits<float>::max();
-
-							for (std::size_t i = 0; i < 8; ++i)
+							if (depthMap.isValid() && curRenderDrawablelist->renderMode.at(AGE_OCCLUDER) == false)
 							{
-								auto point = depthMap->getMV() * currentDrawable->transformation * glm::vec4(BB.getCornerPoint(i), 1.0f);
-								point /= point.w;
+								drawObject = false;
 
-								if (point.x < -1)
+								auto BB = currentDrawable->mesh.boundingBox;
+
+								glm::vec2 minPoint = glm::vec2(1);
+								glm::vec2 maxPoint = glm::vec2(-1);
+
+								float minZ = std::numeric_limits<float>::max();
+
+								for (std::size_t i = 0; i < 8; ++i)
 								{
-									point.x = -1;
+									auto point = depthMap->getMV() * currentDrawable->transformation * glm::vec4(BB.getCornerPoint(i), 1.0f);
+									point /= point.w;
+
+									if (point.x < -1)
+									{
+										point.x = -1;
+									}
+									if (point.y < -1)
+									{
+										point.y = -1;
+									}
+									if (point.x > 1)
+									{
+										point.x = 1;
+									}
+									if (point.y > 1)
+									{
+										point.y = 1;
+									}
+
+									minPoint.x = std::min(minPoint.x, point.x);
+									minPoint.y = std::min(minPoint.y, point.y);
+									maxPoint.x = std::max(maxPoint.x, point.x);
+									maxPoint.y = std::max(maxPoint.y, point.y);
+
+									point.z = (point.z + 1.0f) * 0.5f;
+									minZ = std::min(minZ, point.z);
 								}
-								if (point.y < -1)
+
+								glm::uvec2 screenMin(((minPoint + glm::vec2(1)) / glm::vec2(2)) * glm::vec2(depthMap->getMipmapWidth(), depthMap->getMipmapHeight()));
+								glm::uvec2 screenMax(((maxPoint + glm::vec2(1)) / glm::vec2(2)) * glm::vec2(depthMap->getMipmapWidth(), depthMap->getMipmapHeight()));
+
+								drawObject |= depthMap->testBox((uint32_t)(minZ * (1 << 24)), screenMin, screenMax);
+
+								if (drawObject)
 								{
-									point.y = -1;
+									GetRenderThread()->getQueue()->emplaceCommand<AGE::Commands::ToRender::Draw2DLine>(glm::vec2(minPoint.x, minPoint.y), glm::vec2(minPoint.x, maxPoint.y));
+									GetRenderThread()->getQueue()->emplaceCommand<AGE::Commands::ToRender::Draw2DLine>(glm::vec2(minPoint.x, maxPoint.y), glm::vec2(maxPoint.x, maxPoint.y));
+									GetRenderThread()->getQueue()->emplaceCommand<AGE::Commands::ToRender::Draw2DLine>(glm::vec2(maxPoint.x, maxPoint.y), glm::vec2(maxPoint.x, minPoint.y));
+									GetRenderThread()->getQueue()->emplaceCommand<AGE::Commands::ToRender::Draw2DLine>(glm::vec2(maxPoint.x, minPoint.y), glm::vec2(minPoint.x, minPoint.y));
 								}
-								if (point.x > 1)
-								{
-									point.x = 1;
-								}
-								if (point.y > 1)
-								{
-									point.y = 1;
-								}
-
-								minPoint.x = std::min(minPoint.x, point.x);
-								minPoint.y = std::min(minPoint.y, point.y);
-								maxPoint.x = std::max(maxPoint.x, point.x);
-								maxPoint.y = std::max(maxPoint.y, point.y);
-
-								point.z = (point.z + 1) * 0.5;
-								minZ = std::min(minZ, point.z);
-							}
-
-							glm::uvec2 screenMin(((minPoint + glm::vec2(1)) / glm::vec2(2)) * glm::vec2(depthMap->getMipmapWidth(), depthMap->getMipmapHeight()));
-							glm::uvec2 screenMax(((maxPoint + glm::vec2(1)) / glm::vec2(2)) * glm::vec2(depthMap->getMipmapWidth(), depthMap->getMipmapHeight()));
-
-							drawObject |= depthMap->testBox((uint32_t)(minZ * (1 << 24)), screenMin, screenMax);
-
-							if (drawObject)
-							{
-								GetRenderThread()->getQueue()->emplaceCommand<AGE::Commands::ToRender::Draw2DLine>(glm::vec2(minPoint.x, minPoint.y), glm::vec2(minPoint.x, maxPoint.y));
-								GetRenderThread()->getQueue()->emplaceCommand<AGE::Commands::ToRender::Draw2DLine>(glm::vec2(minPoint.x, maxPoint.y), glm::vec2(maxPoint.x, maxPoint.y));
-								GetRenderThread()->getQueue()->emplaceCommand<AGE::Commands::ToRender::Draw2DLine>(glm::vec2(maxPoint.x, maxPoint.y), glm::vec2(maxPoint.x, minPoint.y));
-								GetRenderThread()->getQueue()->emplaceCommand<AGE::Commands::ToRender::Draw2DLine>(glm::vec2(maxPoint.x, minPoint.y), glm::vec2(minPoint.x, minPoint.y));
 							}
 						}
 #endif // OCCLUSION
