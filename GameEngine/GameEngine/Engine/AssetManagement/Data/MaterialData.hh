@@ -17,7 +17,6 @@ namespace AGE
 		glm::vec4 emissive;
 		glm::vec4 reflective;
 		glm::vec4 specular;
-		float shininess;
 		std::string diffuseTexPath;
 		std::string ambientTexPath;
 		std::string emissiveTexPath;
@@ -27,7 +26,7 @@ namespace AGE
 		std::string bumpTexPath;
 		// will scale UVs based on the scale of the mesh
 		bool scaleUVs = false;
-
+		float shininess = 50.0f;
 #ifdef EDITOR_ENABLED
 		int selectedTextureIndex[7];
 #endif
