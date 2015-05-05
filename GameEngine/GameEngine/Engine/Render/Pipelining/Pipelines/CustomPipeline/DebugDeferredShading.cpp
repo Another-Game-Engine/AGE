@@ -25,10 +25,10 @@ namespace AGE
 		// We create the render pass
 		std::shared_ptr<DeferredBasicBuffering> basicBuffering = std::make_shared<DeferredBasicBuffering>(_painter_manager, _diffuse, _normal, _specular, _depthStencil);
 		std::shared_ptr<DeferredDebugBuffering> debugBuffering = std::make_shared<DeferredDebugBuffering>(_painter_manager, _debugLights, _depthStencil);
-		std::shared_ptr<DeferredSpotLightning> spotLightning = std::make_shared<DeferredSpotLightning>(_painter_manager, _normal, _depthStencil, _lightAccumulation);
+		std::shared_ptr<DeferredSpotLightning> spotLightning = std::make_shared<DeferredSpotLightning>(_painter_manager, _normal, _depthStencil, _specular, _lightAccumulation);
 
-		std::shared_ptr<DeferredPointLightning> pointLightning = std::make_shared<DeferredPointLightning>(_painter_manager, _normal, _depthStencil, _lightAccumulation);
-		std::shared_ptr<DeferredDirectionalLightning> directionalLightning = std::make_shared<DeferredDirectionalLightning>(_painter_manager, _normal, _depthStencil, _lightAccumulation);
+		std::shared_ptr<DeferredPointLightning> pointLightning = std::make_shared<DeferredPointLightning>(_painter_manager, _normal, _depthStencil, _specular, _lightAccumulation);
+		std::shared_ptr<DeferredDirectionalLightning> directionalLightning = std::make_shared<DeferredDirectionalLightning>(_painter_manager, _normal, _depthStencil, _specular, _lightAccumulation);
 
 		_deferredMerging = std::make_shared<DeferredMerging>(_painter_manager, _diffuse, _specular, _lightAccumulation);
 		std::shared_ptr<DeferredMergingDebug> debugMerging = std::make_shared<DeferredMergingDebug>(_painter_manager, _debugLights);

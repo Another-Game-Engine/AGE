@@ -12,7 +12,7 @@ uniform sampler2D diffuse_map;
 uniform vec3 specular_color;
 uniform float specular_ratio;
 uniform sampler2D specular_map;
-uniform float shininess;
+uniform float shininess_ratio;
 uniform sampler2D normal_map;
 
 layout (location = 0) out vec4 diffuse_frag;
@@ -34,5 +34,5 @@ void main(void)
 	vec3 normal = perturb_normal() * 0.5f + 0.5f;
 	normal_frag = vec4(normal, 1.0f);
 	// To replace with the real specular of the object
-	specular_frag = vec4(vec3(1), shininess);
+	specular_frag = vec4(shininess_ratio);
 }
