@@ -1,3 +1,5 @@
+#include <Utils/Age_microprofile.hpp>
+#include <Utils/Profiler.hpp>
 #include <context/SDL/SdlContext.hh>
 #include <Utils/OpenGL.hh>
 #include <iostream>
@@ -6,8 +8,6 @@
 #include <SDL/SDL.h>
 #include <Core/Inputs/Input.hh>
 #include <Threads/MainThread.hpp>
-#include <Utils/Age_microprofile.hpp>
-#include <Utils/Profiler.hpp>
 
 namespace AGE
 {

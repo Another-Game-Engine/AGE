@@ -47,34 +47,45 @@ namespace AGE
 		}
 		workEnd = std::chrono::high_resolution_clock::now();
 		workCount += std::chrono::duration_cast<std::chrono::microseconds>(workEnd - workStart).count();
-		waitStart = std::chrono::high_resolution_clock::now();
-		while (!_next->getQueue()->releaseCommandReadability(TMQ::HybridQueue::WaitType::Block))
+
 		{
-			if (getQueue()->getTaskQueue(taskQueue, TMQ::HybridQueue::NoWait))
+			SCOPE_profile_cpu_i("MainThread", "Release commands");
+			waitStart = std::chrono::high_resolution_clock::now();
 			{
-				workStart = std::chrono::high_resolution_clock::now();
-				while (!taskQueue.empty())
+				while (!_next->getQueue()->releaseCommandReadability(TMQ::HybridQueue::WaitType::Block))
 				{
-					auto task = taskQueue.front();
-					assert(execute(task)); // we receive a task that we cannot handle
-					taskQueue.pop();
-					taskCounter--;
+					if (getQueue()->getTaskQueue(taskQueue, TMQ::HybridQueue::NoWait))
+					{
+						SCOPE_profile_cpu_i("MainThread", "Execute tasks");
+						workStart = std::chrono::high_resolution_clock::now();
+						while (!taskQueue.empty())
+						{
+							auto task = taskQueue.front();
+							assert(execute(task)); // we receive a task that we cannot handle
+							taskQueue.pop();
+							taskCounter--;
+						}
+						workEnd = std::chrono::high_resolution_clock::now();
+						workCount += std::chrono::duration_cast<std::chrono::microseconds>(workEnd - workStart).count();
+					}
 				}
-				workEnd = std::chrono::high_resolution_clock::now();
-				workCount += std::chrono::duration_cast<std::chrono::microseconds>(workEnd - workStart).count();
 			}
 		}
 		waitEnd = std::chrono::high_resolution_clock::now();
 
-		bool hasCommand = getQueue()->getTaskQueue(taskQueue, TMQ::HybridQueue::NoWait);
+		bool hasTasks = getQueue()->getTaskQueue(taskQueue, TMQ::HybridQueue::NoWait);
 		workStart = std::chrono::high_resolution_clock::now();
-		while (!taskQueue.empty())
+		if (hasTasks)
 		{
-			auto task = taskQueue.front();
-			auto success  = execute(task); // we receive a task that we cannot handle
-			AGE_ASSERT(success);
-			taskQueue.pop();
-			taskCounter--;
+			SCOPE_profile_cpu_i("MainThread", "Execute tasks");
+			while (!taskQueue.empty())
+			{
+				auto task = taskQueue.front();
+				auto success = execute(task); // we receive a task that we cannot handle
+				AGE_ASSERT(success);
+				taskQueue.pop();
+				taskCounter--;
+			}
 		}
 		workEnd = std::chrono::high_resolution_clock::now();
 		workCount += std::chrono::duration_cast<std::chrono::microseconds>(workEnd - workStart).count();
