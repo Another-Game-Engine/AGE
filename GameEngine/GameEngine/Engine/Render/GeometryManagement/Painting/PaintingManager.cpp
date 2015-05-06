@@ -27,7 +27,7 @@ namespace AGE
 		return (Key<Painter>::createKey(sizeOfArray));
 	}
 
-	std::shared_ptr<Painter> const & PaintingManager::get_painter(Key<Painter> const &key)
+	std::shared_ptr<Painter> PaintingManager::get_painter(Key<Painter> const &key)
 	{
 		std::lock_guard<AGE::SpinLock> lock(_mutex);
 		return (_painters[key.getId()]);

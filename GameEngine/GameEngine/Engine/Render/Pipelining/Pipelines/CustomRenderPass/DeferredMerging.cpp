@@ -69,6 +69,8 @@ namespace AGE
 
 	void DeferredMerging::renderPass(RenderPipeline const &, RenderLightList const &, CameraInfos const &)
 	{
+		SCOPE_profile_cpu_function("RenderTimer");
+		SCOPE_profile_gpu_i("DefferedMerging pass");
 		_programs[PROGRAM_MERGING]->use();
 		*_programs[PROGRAM_MERGING]->get_resource<Sampler2D>("diffuse_map") = _diffuseInput;
 		*_programs[PROGRAM_MERGING]->get_resource<Sampler2D>("light_buffer") = _lightAccuInput;

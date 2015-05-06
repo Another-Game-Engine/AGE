@@ -203,53 +203,60 @@ namespace AGE
 
 		registerCallback<Commands::ToRender::CopyDrawLists>([&](Commands::ToRender::CopyDrawLists& msg)
 		{
+			SCOPE_profile_cpu_i("RenderTimer", "CopyDrawLists");
 			_drawlistPtr = msg.listContainer;
 		});
 
 		registerCallback<Commands::ToRender::RenderDrawLists>([&](Commands::ToRender::RenderDrawLists& msg)
 		{
-			SCOPE_profile_cpu_i("RenderTimer", "RenderDrawLists");
-
 			if (!_drawlistPtr) // nothing to draw
 				return;
 			AGE_ASSERT(_drawlistPtr != nullptr);
 
+			SCOPE_profile_cpu_i("RenderTimer", "RenderDrawLists");
+
 
 			// DEBUG DRAW DEGUEULASSE
-
-			std::vector<unsigned int> indices;
-			auto type = std::make_pair<GLenum, std::string>(GL_FLOAT_VEC2, "position");
-			std::vector<std::pair < GLenum, std::string > > types;
-			types.push_back(type);
-
-			indices.resize(debug2DlinesPoints.size());
-			for (int i = 0; i < debug2DlinesPoints.size(); ++i)
+			std::shared_ptr<Painter> painterPtr = nullptr;
 			{
-				indices[i] = i;
+
+				SCOPE_profile_cpu_i("RenderTimer", "RenderDebugLines");
+				std::vector<unsigned int> indices;
+				auto type = std::make_pair<GLenum, std::string>(GL_FLOAT_VEC2, "position");
+				std::vector<std::pair < GLenum, std::string > > types;
+				types.push_back(type);
+
+				indices.resize(debug2DlinesPoints.size());
+				for (int i = 0; i < debug2DlinesPoints.size(); ++i)
+				{
+					indices[i] = i;
+				}
+				if (!paintingManager->has_painter(types))
+				{
+					debug2Dlines.painterKey = paintingManager->add_painter(std::move(types));
+				}
+				else
+				{
+					debug2Dlines.painterKey = paintingManager->get_painter(types);
+				}
+				Key<Painter> kk = debug2Dlines.painterKey;
+
+				painterPtr = paintingManager->get_painter(debug2Dlines.painterKey);
+
+				debug2Dlines.verticesKey = painterPtr->add_vertices(debug2DlinesPoints.size(), indices.size());
+				auto vertices = painterPtr->get_vertices(debug2Dlines.verticesKey);
+
+				vertices->set_data<glm::vec2>(debug2DlinesPoints, std::string("position"));
+				vertices->set_indices(indices);
+
+				debug2DlinesPoints.clear();
 			}
-			if (!paintingManager->has_painter(types))
-			{
-				debug2Dlines.painterKey = paintingManager->add_painter(std::move(types));
-			}
-			else
-			{
-				debug2Dlines.painterKey = paintingManager->get_painter(types);
-			}
-			Key<Painter> kk = debug2Dlines.painterKey;
-
-			auto &painterPtr = paintingManager->get_painter(debug2Dlines.painterKey);
-
-			debug2Dlines.verticesKey = painterPtr->add_vertices(debug2DlinesPoints.size(), indices.size());
-			auto vertices = painterPtr->get_vertices(debug2Dlines.verticesKey);
-
-			vertices->set_data<glm::vec2>(debug2DlinesPoints, std::string("position"));
-			vertices->set_indices(indices);
-
-			debug2DlinesPoints.clear();
 
 			// CEST VRAIMENT DEGUEULASSE...
 
 			{
+				SCOPE_profile_cpu_i("RenderTimer", "Render cameras");
+
 				auto &drawlist = _drawlistPtr->container.cameras;
 				for (auto &curCamera : drawlist)
 				{
@@ -259,17 +266,21 @@ namespace AGE
 					pipelines[curCamera.camInfos.renderType]->render(curCamera.pipeline, curCamera.lights, curCamera.camInfos);
 				}
 			}
+
 			_drawlistPtr = nullptr;
 			painterPtr->remove_vertices(debug2Dlines.verticesKey);
+	
 		});
 
 		registerSharedCallback<AGE::Tasks::Basic::BoolFunction>([&](AGE::Tasks::Basic::BoolFunction& msg)
 		{
+			SCOPE_profile_cpu_i("RenderTimer", "Bool function");
 			msg.setValue(msg.function());
 		});
 
 		registerCallback<AGE::Tasks::Basic::VoidFunction>([&](AGE::Tasks::Basic::VoidFunction& msg)
 		{
+			SCOPE_profile_cpu_i("RenderTimer", "Void function");
 			if (msg.function)
 				msg.function();
 		});
@@ -283,7 +294,6 @@ namespace AGE
 #ifdef AGE_ENABLE_IMGUI
 		registerCallback<AGE::RenderImgui>([&](AGE::RenderImgui &msg)
 		{
-			SCOPE_profile_cpu_i("RenderTimer", "Render IMGUI");
 			AGE::Imgui::getInstance()->renderThreadRenderFn(msg.cmd_lists);
 		});
 #endif
@@ -356,6 +366,8 @@ namespace AGE
 
 		while (_run && _insideRun)
 		{
+			SCOPE_profile_cpu_i("RenderTimer", "Update");
+
 			waitStart = std::chrono::high_resolution_clock::now();
 			taskSuccess = commandSuccess = false;
 			{
@@ -402,6 +414,7 @@ namespace AGE
 				// pop all commands
 				while (!commands.empty() && _insideRun)
 				{
+					SCOPE_profile_cpu_i("RenderTimer", "Execute one command");
 					auto command = commands.front();
 					auto success = execute(command);
 					AGE_ASSERT(success);

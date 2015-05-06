@@ -65,7 +65,7 @@ namespace AGE
 		bool _run;
 
 		SdlContext *_context;
-		std::shared_ptr<RenderCameraListContainerHandle> _drawlistPtr;
+		std::shared_ptr<RenderCameraListContainerHandle> _drawlistPtr = nullptr;
 		DepthMapManager _depthMapManager;
 
 		friend class ThreadManager;

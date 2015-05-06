@@ -230,6 +230,7 @@ namespace AGE
 
 	void Imgui::renderThreadRenderFn(std::vector<Age_ImDrawList> const &cmd_lists)
 	{
+		SCOPE_profile_cpu_function("RenderTimer");
 		SCOPE_profile_gpu_i("Render IMGUI");
 		if (cmd_lists.empty())
 			return;
@@ -287,6 +288,7 @@ namespace AGE
 		int cmd_offset = 0;
 		for (int n = 0; n < cmd_lists.size(); n++)
 		{
+			SCOPE_profile_cpu_i("RenderTimer", "Render ImGui command list");
 			auto &cmd_list = cmd_lists[n];
 			int vtx_offset = cmd_offset;
 			auto &pcmd_end = std::end(cmd_list.commands);

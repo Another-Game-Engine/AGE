@@ -20,7 +20,7 @@ namespace AGE
 
 	public:
 		Key<Painter> add_painter(std::vector<std::pair<GLenum, std::string>> &&types);
-		std::shared_ptr<Painter> const &get_painter(Key<Painter> const &key);
+		std::shared_ptr<Painter> get_painter(Key<Painter> const &key);
 		Key<Painter> get_painter(std::vector<std::pair<GLenum, std::string>> const &types);
 		bool has_painter(std::vector<std::pair<GLenum, std::string>> const &types);
 	private:

@@ -1,3 +1,4 @@
+#include <Utils/Profiler.hpp>
 #include <Render/Buffer/VertexArray.hh>
 
 GLuint VertexArray::_current_id = -1;
@@ -23,15 +24,14 @@ _id(move._id)
 
 void VertexArray::bind() const
 {
-//	if (_current_id != _id) {
-//		_current_id = _id;
-//	}
+	SCOPE_profile_cpu_function("RenderTimer");
 	glBindVertexArray(_id);
 
 }
 
 void VertexArray::unbind() const
 {
+	SCOPE_profile_cpu_function("RenderTimer");
 	_current_id = 0;
 	glBindVertexArray(0);
 }
