@@ -198,7 +198,7 @@ namespace AGE
 		ImGui::ColorEdit3("emissive", glm::value_ptr(mat.emissive));
 		ImGui::ColorEdit3("reflective", glm::value_ptr(mat.reflective));
 		ImGui::ColorEdit3("specular", glm::value_ptr(mat.specular));
-		ImGui::SliderFloat("shininess", &mat.shininess, 0.0f, 100.0f);
+		ImGui::SliderFloat("shininess", &mat.shininess, 0.0f, 1.0f);
 		_editTexture(mat.diffuseTexPath, ModeTexture::diffuse, mat);
 		_editTexture(mat.specularTexPath, ModeTexture::specular, mat);
 		_editTexture(mat.ambientTexPath, ModeTexture::ambient, mat);

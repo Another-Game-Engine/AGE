@@ -26,7 +26,7 @@ namespace AGE
 		std::string bumpTexPath;
 		// will scale UVs based on the scale of the mesh
 		bool scaleUVs = false;
-		float shininess = 50.0f;
+		float shininess = 1.0f;
 #ifdef EDITOR_ENABLED
 		int selectedTextureIndex[7];
 #endif
