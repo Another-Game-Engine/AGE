@@ -546,7 +546,10 @@ namespace AGE
 		{
 			if (e.used == false)
 			{
+				SCOPE_profile_cpu_i("PrepareTimer", "Clear old draw list");
 				drawContainer = &e;
+				drawContainer->used = true;
+				drawContainer->cameras.clear();
 				break;
 			}
 		}
@@ -838,7 +841,6 @@ namespace AGE
 				}
 			}
 		}
-		drawContainer->used = true;
 		GetRenderThread()->getQueue()->emplaceCommand<Commands::ToRender::CopyDrawLists>(std::make_shared<RenderCameraListContainerHandle>(*drawContainer));
 	}
 

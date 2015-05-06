@@ -46,8 +46,6 @@ namespace AGE
 		}
 		~RenderCameraListContainerHandle()
 		{
-			SCOPE_profile_cpu_function("RenderTimer");
-			container.cameras.clear();
 			container.used = false;
 		}
 	};
