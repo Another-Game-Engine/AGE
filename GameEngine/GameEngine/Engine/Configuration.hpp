@@ -11,5 +11,5 @@ namespace AGE
 #define USE_DEFAULT_ENGINE_CONFIGURATION
 
 // Comment to disable occlusion culling
-//#define OCCLUSION_CULLING
+#define OCCLUSION_CULLING
 }
