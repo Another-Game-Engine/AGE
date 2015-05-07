@@ -76,6 +76,8 @@ namespace AGE
 
 		{
 			SCOPE_profile_gpu_i("Clear buffer");
+			SCOPE_profile_cpu_i("RenderTimer", "Clear buffer");
+
 			OpenGLState::glEnable(GL_CULL_FACE);
 			OpenGLState::glCullFace(GL_BACK);
 			OpenGLState::glDepthMask(GL_TRUE);
@@ -94,6 +96,7 @@ namespace AGE
 
 		{
 			SCOPE_profile_gpu_i("Occluders pass");
+			SCOPE_profile_cpu_i("RenderTimer", "Occluders pass");
 
 			_programs[PROGRAM_BUFFERING]->use();
 			*_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("projection_matrix") = infos.projection;
@@ -115,6 +118,7 @@ namespace AGE
 
 		{
 			SCOPE_profile_gpu_i("Copy occlusion depth to CPU");
+			SCOPE_profile_cpu_i("RenderTimer", "Copy occlusion depth to CPU");
 
 			auto writableBuffer = GetRenderThread()->getDepthMapManager().getWritableMap();
 			auto mipmapLevel = GetRenderThread()->getDepthMapManager().getMipmapLevel();
@@ -132,6 +136,7 @@ namespace AGE
 
 		{
 			SCOPE_profile_gpu_i("Draw objects");
+			SCOPE_profile_cpu_i("RenderTimer", "Draw objects");
 
 			for (auto &meshPaint : pipeline.keys)
 			{
@@ -148,6 +153,8 @@ namespace AGE
 #else
 		{
 			SCOPE_profile_gpu_i("Draw objects");
+			SCOPE_profile_cpu_i("RenderTimer", "Clear buffer");
+
 
 			_programs[PROGRAM_BUFFERING]->use();
 			*_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("projection_matrix") = infos.projection;
