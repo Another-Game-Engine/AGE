@@ -155,7 +155,6 @@ namespace AGE
 			SCOPE_profile_gpu_i("Draw objects");
 			SCOPE_profile_cpu_i("RenderTimer", "Clear buffer");
 
-
 			_programs[PROGRAM_BUFFERING]->use();
 			*_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("projection_matrix") = infos.projection;
 			*_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("view_matrix") = infos.view;
