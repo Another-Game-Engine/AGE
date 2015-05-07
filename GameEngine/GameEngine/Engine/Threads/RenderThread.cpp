@@ -113,7 +113,7 @@ namespace AGE
 			p = SimpleGeometry::icosphereMeshes[recursion].painterKey;
 			return;
 		}
-		
+
 		SimpleGeometry::generateIcoSphere(recursion, positions, indices);
 
 		auto type = std::make_pair<GLenum, std::string>(GL_FLOAT_VEC3, "position");
@@ -169,7 +169,7 @@ namespace AGE
 			msg.setValue(true);
 		});
 
- 		registerCallback<Commands::ToRender::Flush>([&](Commands::ToRender::Flush& msg)
+		registerCallback<Commands::ToRender::Flush>([&](Commands::ToRender::Flush& msg)
 		{
 			{
 				SCOPE_profile_cpu_i("RenderTimer", "SwapContext");
@@ -204,72 +204,74 @@ namespace AGE
 		registerCallback<Commands::ToRender::CopyDrawLists>([&](Commands::ToRender::CopyDrawLists& msg)
 		{
 			SCOPE_profile_cpu_i("RenderTimer", "CopyDrawLists");
-			_drawlistPtr = msg.listContainer;
+			_drawlists.push_back(msg.listContainer);
 		});
 
 		registerCallback<Commands::ToRender::RenderDrawLists>([&](Commands::ToRender::RenderDrawLists& msg)
 		{
-			if (!_drawlistPtr) // nothing to draw
+			if (_drawlists.empty()) // nothing to draw
 				return;
-			AGE_ASSERT(_drawlistPtr != nullptr);
 
 			SCOPE_profile_cpu_i("RenderTimer", "RenderDrawLists");
 
-
-			// DEBUG DRAW DEGUEULASSE
-			std::shared_ptr<Painter> painterPtr = nullptr;
+			for (auto &_drawlistPtr : _drawlists)
 			{
+				SCOPE_profile_cpu_i("RenderTimer", "Render one DrawList");
 
-				SCOPE_profile_cpu_i("RenderTimer", "RenderDebugLines");
-				std::vector<unsigned int> indices;
-				auto type = std::make_pair<GLenum, std::string>(GL_FLOAT_VEC2, "position");
-				std::vector<std::pair < GLenum, std::string > > types;
-				types.push_back(type);
-
-				indices.resize(debug2DlinesPoints.size());
-				for (int i = 0; i < debug2DlinesPoints.size(); ++i)
+				// DEBUG DRAW DEGUEULASSE
+				std::shared_ptr<Painter> painterPtr = nullptr;
 				{
-					indices[i] = i;
+
+					SCOPE_profile_cpu_i("RenderTimer", "RenderDebugLines");
+					std::vector<unsigned int> indices;
+					auto type = std::make_pair<GLenum, std::string>(GL_FLOAT_VEC2, "position");
+					std::vector<std::pair < GLenum, std::string > > types;
+					types.push_back(type);
+
+					indices.resize(debug2DlinesPoints.size());
+					for (int i = 0; i < debug2DlinesPoints.size(); ++i)
+					{
+						indices[i] = i;
+					}
+					if (!paintingManager->has_painter(types))
+					{
+						debug2Dlines.painterKey = paintingManager->add_painter(std::move(types));
+					}
+					else
+					{
+						debug2Dlines.painterKey = paintingManager->get_painter(types);
+					}
+					Key<Painter> kk = debug2Dlines.painterKey;
+
+					painterPtr = paintingManager->get_painter(debug2Dlines.painterKey);
+
+					debug2Dlines.verticesKey = painterPtr->add_vertices(debug2DlinesPoints.size(), indices.size());
+					auto vertices = painterPtr->get_vertices(debug2Dlines.verticesKey);
+
+					vertices->set_data<glm::vec2>(debug2DlinesPoints, std::string("position"));
+					vertices->set_indices(indices);
+
+					debug2DlinesPoints.clear();
 				}
-				if (!paintingManager->has_painter(types))
+
+				// CEST VRAIMENT DEGUEULASSE...
+
 				{
-					debug2Dlines.painterKey = paintingManager->add_painter(std::move(types));
+					SCOPE_profile_cpu_i("RenderTimer", "Render cameras");
+
+					auto &drawlist = _drawlistPtr->container.cameras;
+					for (auto &curCamera : drawlist)
+					{
+						SCOPE_profile_gpu_i("RenderCameraDrawList");
+						SCOPE_profile_cpu_i("RenderTimer", "RenderCamera");
+						AGE_ASSERT(!(pipelines[curCamera.camInfos.renderType] == nullptr));
+						pipelines[curCamera.camInfos.renderType]->render(curCamera.pipeline, curCamera.lights, curCamera.camInfos);
+					}
 				}
-				else
-				{
-					debug2Dlines.painterKey = paintingManager->get_painter(types);
-				}
-				Key<Painter> kk = debug2Dlines.painterKey;
 
-				painterPtr = paintingManager->get_painter(debug2Dlines.painterKey);
-
-				debug2Dlines.verticesKey = painterPtr->add_vertices(debug2DlinesPoints.size(), indices.size());
-				auto vertices = painterPtr->get_vertices(debug2Dlines.verticesKey);
-
-				vertices->set_data<glm::vec2>(debug2DlinesPoints, std::string("position"));
-				vertices->set_indices(indices);
-
-				debug2DlinesPoints.clear();
+				painterPtr->remove_vertices(debug2Dlines.verticesKey);
 			}
-
-			// CEST VRAIMENT DEGUEULASSE...
-
-			{
-				SCOPE_profile_cpu_i("RenderTimer", "Render cameras");
-
-				auto &drawlist = _drawlistPtr->container.cameras;
-				for (auto &curCamera : drawlist)
-				{
-					SCOPE_profile_gpu_i("RenderCameraDrawList");
-					SCOPE_profile_cpu_i("RenderTimer", "RenderCamera");
-					AGE_ASSERT(!(pipelines[curCamera.camInfos.renderType] == nullptr));
-					pipelines[curCamera.camInfos.renderType]->render(curCamera.pipeline, curCamera.lights, curCamera.camInfos);
-				}
-			}
-
-			_drawlistPtr = nullptr;
-			painterPtr->remove_vertices(debug2Dlines.verticesKey);
-	
+			_drawlists.clear();
 		});
 
 		registerSharedCallback<AGE::Tasks::Basic::BoolFunction>([&](AGE::Tasks::Basic::BoolFunction& msg)
