@@ -60,6 +60,7 @@ namespace AGE
 			})));
 
 			_jsonLoadMap.insert(std::make_pair(ageId, LoadJsonFn([=](void *ptr, cereal::JSONInputArchive &ar){
+				std::cout << "Loading component of type : " << name << std::endl;
 				T *c = new(ptr)T();
 				ar(*c);
 			})));

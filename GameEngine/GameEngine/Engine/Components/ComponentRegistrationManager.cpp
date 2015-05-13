@@ -27,6 +27,7 @@ namespace AGE
 
 	void ComponentRegistrationManager::loadJson(std::size_t componentHashId, Entity &e, cereal::JSONInputArchive &ar)
 	{
+		AGE_ASSERT(_typeIds.find(componentHashId) != std::end(_typeIds) && "Component type has not been registered. Use REGISTER_COMPONENT_TYPE");
 		auto id = _typeIds[componentHashId];
 
 		auto voidCpt = e.getScene()->allocateComponent(id);
