@@ -9,6 +9,7 @@
 #include <condition_variable>
 #include <mutex>
 #include <list>
+#include <Utils/Profiler.hpp>
 
 namespace TMQ
 {
@@ -280,6 +281,7 @@ namespace TMQ
 		/// COMMANDS
 		void moveCommand(MessageBase *e, std::size_t size)
 		{
+			SCOPE_profile_cpu_function("TMQ");
 			assert(_reservedPublisher != -1 && std::this_thread::get_id().hash() == _reservedPublisher);
 			_commandQueue.move(e, size);
 		}
@@ -287,6 +289,7 @@ namespace TMQ
 		template <typename T>
 		void pushCommand(const T& e)
 		{
+			SCOPE_profile_cpu_function("TMQ");
 			assert(_reservedPublisher != -1 && std::this_thread::get_id().hash() == _reservedPublisher);
 			_commandQueue.push(e);
 		}
@@ -294,6 +297,7 @@ namespace TMQ
 		template <typename T, typename ...Args>
 		void emplaceCommand(Args ...args)
 		{
+			SCOPE_profile_cpu_function("TMQ");
 			assert(_reservedPublisher != -1 && std::this_thread::get_id().hash() == _reservedPublisher);
 			_commandQueue.emplace<T>(args...);
 		}
@@ -301,6 +305,7 @@ namespace TMQ
 		template <typename T, typename F>
 		std::future<F> pushFutureCommand(const T &e)
 		{
+			SCOPE_profile_cpu_function("TMQ");
 			assert(_reservedPublisher != -1 && std::this_thread::get_id().hash() == _reservedPublisher);
 			return _commandQueue.push(e)->getFuture();
 		}
@@ -308,6 +313,7 @@ namespace TMQ
 		template <typename T, typename F, typename ...Args>
 		std::future<F> emplaceFutureCommand(Args ...args)
 		{
+			SCOPE_profile_cpu_function("TMQ");
 			assert(_reservedPublisher != -1 && std::this_thread::get_id().hash() == _reservedPublisher);
 			return _commandQueue.emplace<T>(args...)->getFuture();
 		}
@@ -317,6 +323,7 @@ namespace TMQ
 
 		void moveTask(MessageBase *e, std::size_t size)
 		{
+			SCOPE_profile_cpu_function("TMQ");
 			{
 				std::lock_guard<std::mutex> lock(_mutex);
 				_taskQueue.move(e, size);
@@ -327,6 +334,7 @@ namespace TMQ
 		template <typename T>
 		void pushTask(const T& e)
 		{
+			SCOPE_profile_cpu_function("TMQ");
 			{
 				std::lock_guard<std::mutex> lock(_mutex);
 				_taskQueue.push(e);
@@ -337,6 +345,7 @@ namespace TMQ
 		template <typename T, typename ...Args>
 		void emplaceTask(Args ...args)
 		{
+			SCOPE_profile_cpu_function("TMQ");
 			{
 				std::lock_guard<std::mutex> lock(_mutex);
 				_taskQueue.emplace<T>(args...);
@@ -347,6 +356,7 @@ namespace TMQ
 		template <typename T, typename F>
 		std::future<F> pushFutureTask(const T &e)
 		{
+			SCOPE_profile_cpu_function("TMQ");
 			std::future < F > f;
 			{
 				std::lock_guard<std::mutex> lock(_mutex);
@@ -359,6 +369,7 @@ namespace TMQ
 		template <typename T, typename F, typename ...Args>
 		std::future<F> emplaceFutureTask(Args ...args)
 		{
+			SCOPE_profile_cpu_function("TMQ");
 			std::future< F > f;
 			{
 				std::lock_guard<std::mutex> lock(_mutex);

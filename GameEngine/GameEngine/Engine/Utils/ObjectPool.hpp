@@ -23,6 +23,8 @@ namespace AGE
 		// Allocate object space but do not call new()
 		void *allocateObject() override final
 		{
+			SCOPE_profile_cpu_function("Memory");
+
 			void *res;
 			const bool error = _allocateObject(res);
 			assert(error);
@@ -32,16 +34,22 @@ namespace AGE
 		template <typename ...Args>
 		T *create(Args &&...args)
 		{
+			SCOPE_profile_cpu_function("Memory");
+
 			return new (allocateObject()) T(std::forward<Args>(args)...);
 		}
 
 		void destroy(void *ptr) override final
 		{
+			SCOPE_profile_cpu_function("Memory");
+
 			destroy(static_cast<T *>(ptr));
 		}
 
 		void destroy(T *ptr)
 		{
+			SCOPE_profile_cpu_function("Memory");
+
 			ptr->~T();
 			_dealocateObject(ptr);
 		}

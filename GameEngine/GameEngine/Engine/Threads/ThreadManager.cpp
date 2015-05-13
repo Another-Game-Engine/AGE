@@ -126,6 +126,7 @@ namespace AGE
 
 	void ThreadManager::updateThreadStatistics(Thread::ThreadType id, std::size_t workTime, std::size_t sleepTime)
 	{
+		SCOPE_profile_cpu_function("Threads manager");
 		auto &s = _threadsStatistics[id];
 		if (s.frameCounter >= s.work.size())
 		{

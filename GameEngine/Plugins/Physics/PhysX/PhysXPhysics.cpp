@@ -32,8 +32,12 @@ namespace AGE
 			foundation = PxCreateFoundation(PX_PHYSICS_VERSION, defaultAllocatorCallback, defaultErrorCallback);
 			if (foundation == nullptr)
 			{
-				assert(!"Impossible to create foundation");
-				return false;
+				foundation = &PxGetFoundation();
+				if (foundation == nullptr)
+				{
+					assert(!"Impossible to create foundation");
+					return false;
+				}
 			}
 			cooking = PxCreateCooking(PX_PHYSICS_VERSION, *foundation, physx::PxCookingParams(toleranceScale));
 			if (cooking == nullptr)

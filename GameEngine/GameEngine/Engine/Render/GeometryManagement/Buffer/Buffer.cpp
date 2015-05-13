@@ -1,3 +1,4 @@
+#include <Utils/Profiler.hpp>
 #include <Render/GeometryManagement/Buffer/Buffer.hh>
 
 namespace AGE

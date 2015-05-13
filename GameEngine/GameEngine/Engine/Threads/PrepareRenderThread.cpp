@@ -188,6 +188,8 @@ namespace AGE
 
 		while (this->_run && _insideRun)
 		{
+			SCOPE_profile_cpu_i("PrepareTimer", "Update");
+
 			std::chrono::system_clock::time_point waitStart;
 			std::chrono::system_clock::time_point waitEnd;
 			std::chrono::system_clock::time_point workStart;

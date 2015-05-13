@@ -8,6 +8,7 @@
 #include <Utils/Directory.hpp>
 #include <Utils/FileSystem.hpp>
 #include <Utils/Path.hpp>
+#include <Utils/Profiler.hpp>
 
 #include <Threads/ThreadManager.hpp>
 #include <Threads/MainThread.hpp>
@@ -281,6 +282,8 @@ namespace AGE
 
 	bool Engine::update()
 	{
+		SCOPE_profile_cpu_function("Main thread");
+
 		bool res = false;
 
 #ifdef AGE_ENABLE_IMGUI
@@ -293,7 +296,8 @@ namespace AGE
 		assetsManager->update();
 #endif //USE_DEFAULT_ENGINE_CONFIGURATION
 
-		res = updateScenes(_timer->getElapsed() * _timeMultiplier);
+			res = updateScenes(_timer->getElapsed() * _timeMultiplier);
+
 		if (!res)
 		{
 			return false;

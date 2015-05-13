@@ -1,3 +1,4 @@
+#include <Utils/Profiler.hpp>
 #include <Render/GeometryManagement/Buffer/BufferPrograms.hh>
 #include <Render/Buffer/VertexBuffer.hh>
 #include <Render/Buffer/IndexBuffer.hh>
@@ -35,6 +36,7 @@ namespace AGE
 
 	bool BufferPrograms::insert(Vertices &vertices)
 	{
+		SCOPE_profile_cpu_function("RenderTimer");
 		if (vertices.nbr_buffer() != _types.size()) {
 			return (false);
 		}
@@ -57,18 +59,21 @@ namespace AGE
 
 	BufferPrograms & BufferPrograms::bind()
 	{
+		SCOPE_profile_cpu_function("RenderTimer");
 		_vertex_array.bind();
 		return (*this);
 	}
 
 	BufferPrograms & BufferPrograms::unbind()
 	{
+		SCOPE_profile_cpu_function("RenderTimer");
 		_vertex_array.unbind();
 		return (*this);
 	}
 
 	BufferPrograms & BufferPrograms::update()
 	{
+		SCOPE_profile_cpu_function("RenderTimer");
 		for (auto &buffer : _buffers) {
 			buffer->update();
 		}
@@ -78,6 +83,7 @@ namespace AGE
 
 	BufferPrograms & BufferPrograms::clear()
 	{
+		SCOPE_profile_cpu_function("RenderTimer");
 		for (auto &buffer : _buffers) {
 			buffer->clear();
 		}

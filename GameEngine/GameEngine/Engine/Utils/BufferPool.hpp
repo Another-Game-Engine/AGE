@@ -2,6 +2,7 @@
 
 #include <cassert>
 #include <forward_list>
+#include <Utils/Profiler.hpp>
 
 namespace AGE
 {

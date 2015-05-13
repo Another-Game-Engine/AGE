@@ -91,6 +91,8 @@ namespace AGE
 
 	bool            SceneManager::updateScenes(float time)
 	{
+		SCOPE_profile_cpu_function("Main thread");
+
 		for (auto &e : _actives)
 		{
 			GetMainThread()->setSceneAsActive(e.second.get());

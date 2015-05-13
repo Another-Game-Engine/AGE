@@ -11,6 +11,7 @@
 #include <Threads/PrepareRenderThread.hpp>
 #include <Components/ComponentRegistrationManager.hpp>
 #include <Physics/Fallback/NullPhysics.hpp>
+#include <Utils/Profiler.hpp>
 
 namespace AGE
 {
@@ -31,6 +32,7 @@ namespace AGE
 
 	void 							AScene::update(float time)
 	{
+		SCOPE_profile_cpu_function("Scenes");
 		for (auto &e : _systems)
 		{
 			if (e.second->isActivated())
@@ -40,6 +42,7 @@ namespace AGE
 
 	bool                    AScene::userStart()
 	{
+		SCOPE_profile_cpu_function("Scenes");
 		auto succes = _userStart();
 		if (!succes)
 		{
@@ -51,26 +54,31 @@ namespace AGE
 
 	bool                    AScene::userUpdateBegin(float time)
 	{
+		SCOPE_profile_cpu_function("Scenes");
 		return _userUpdateBegin(time);
 	}
 
 	bool                    AScene::userUpdateEnd(float time)
 	{
+		SCOPE_profile_cpu_function("Scenes");
 		return _userUpdateEnd(time);
 	}
 
 	bool                           AScene::start()
 	{
+		SCOPE_profile_cpu_function("Scenes");
 		return userStart();
 	}
 
 	void                    AScene::registerFilter(EntityFilter *filter)
 	{
+		SCOPE_profile_cpu_function("Scenes");
 		_allFilters.push_back(filter);
 	}
 
 	void                    AScene::filterSubscribe(ComponentType id, EntityFilter* filter)
 	{
+		SCOPE_profile_cpu_function("Scenes");
 		auto findIter = std::find(_filters[id].begin(), _filters[id].end(), filter);
 		if (findIter == std::end(_filters[id]))
 			_filters[id].push_back(filter);
@@ -78,11 +86,13 @@ namespace AGE
 
 	void                    AScene::filterUnsubscribe(ComponentType id, EntityFilter* filter)
 	{
+		SCOPE_profile_cpu_function("Scenes");
 		_filters[id].remove(filter);
 	}
 
 	void                    AScene::informFiltersTagAddition(TAG_ID id, const EntityData &entity)
 	{
+		SCOPE_profile_cpu_function("Scenes");
 		for (auto &&f : _filters[id])
 		{
 			f->tagAdded(entity, id);
@@ -90,6 +100,7 @@ namespace AGE
 	}
 	void                    AScene::informFiltersTagDeletion(TAG_ID id, const EntityData &entity)
 	{
+		SCOPE_profile_cpu_function("Scenes");
 		for (auto &&f : _filters[id])
 		{
 			f->tagRemoved(entity, id);
@@ -98,6 +109,7 @@ namespace AGE
 
 	void                    AScene::informFiltersComponentAddition(ComponentType id, const EntityData &entity)
 	{
+		SCOPE_profile_cpu_function("Scenes");
 		for (auto &&f : _filters[id])
 		{
 			f->componentAdded(entity, id);
@@ -106,6 +118,7 @@ namespace AGE
 
 	void                    AScene::informFiltersComponentDeletion(ComponentType id, const EntityData &entity)
 	{
+		SCOPE_profile_cpu_function("Scenes");
 		for (auto &&f : _filters[id])
 		{
 			f->componentRemoved(entity, id);
@@ -115,6 +128,7 @@ namespace AGE
 
 	void                    AScene::informFiltersEntityCreation(const EntityData &entity)
 	{
+		SCOPE_profile_cpu_function("Scenes");
 		for (auto &f : _allFilters)
 		{
 			f->entityAdded(entity);
@@ -123,6 +137,7 @@ namespace AGE
 
 	void                    AScene::informFiltersEntityDeletion(const EntityData &entity)
 	{
+		SCOPE_profile_cpu_function("Scenes");
 		for (auto &f : _allFilters)
 		{
 			f->entityRemoved(entity);
@@ -131,6 +146,7 @@ namespace AGE
 
 	Entity &AScene::createEntity(bool outContext /* = false */)
 	{
+		SCOPE_profile_cpu_function("Scenes");
 		auto e = _entityPool.create(this);
 
 		if (_freeEntityId.empty())
@@ -157,6 +173,7 @@ namespace AGE
 
 	void AScene::destroy(const Entity &e, bool deep /*= false*/)
 	{
+		SCOPE_profile_cpu_function("Scenes");
 		auto &data = e.ptr;
 		auto find = _entities.find(e);
 		assert(data->entity == e && find != std::end(_entities));
@@ -201,6 +218,7 @@ namespace AGE
 
 	bool AScene::copyEntity(const Entity &source, Entity &destination, bool deep /*= true*/, bool outContext /*= false*/)
 	{
+		SCOPE_profile_cpu_function("Scenes");
 		if (!source.isValid())
 		{
 			return false;
@@ -238,6 +256,7 @@ namespace AGE
 
 	void AScene::clearAllEntities()
 	{
+		SCOPE_profile_cpu_function("Scenes");
 		auto copy = _entities;
 		for (auto &e : copy)
 		{
@@ -248,11 +267,13 @@ namespace AGE
 
 	void AScene::saveToJson(const std::string &fileName)
 	{
+		SCOPE_profile_cpu_function("Scenes");
 		saveSelectionToJson<std::unordered_set<Entity>>(fileName, _entities);
 	}
 
 	void AScene::loadFromJson(const std::string &fileName)
 	{
+		SCOPE_profile_cpu_function("Scenes");
 		std::ifstream file(fileName, std::ios::binary);
 		auto success = file.is_open();
 		assert(success);
@@ -291,6 +312,7 @@ namespace AGE
 
 	void AScene::saveToBinary(const std::string &fileName)
 	{
+		SCOPE_profile_cpu_function("Scenes");
 		std::ofstream file(fileName, std::ios::binary);
 		assert(file.is_open());
 
@@ -299,6 +321,7 @@ namespace AGE
 
 	void AScene::loadFromBinary(const std::string &fileName)
 	{
+		SCOPE_profile_cpu_function("Scenes");
 		std::ifstream file(fileName, std::ios::binary);
 		assert(file.is_open());
 
@@ -308,6 +331,7 @@ namespace AGE
 
 	void AScene::addTag(Entity &e, TAG_ID tag)
 	{
+		SCOPE_profile_cpu_function("Scenes");
 		// @ECS TODO
 
 		//auto data = e.ptr;
@@ -319,6 +343,7 @@ namespace AGE
 
 	void AScene::removeTag(Entity &e, TAG_ID tag)
 	{
+		SCOPE_profile_cpu_function("Scenes");
 		// @ECS TODO
 
 		//auto &data = e.ptr;
@@ -330,6 +355,7 @@ namespace AGE
 
 	bool AScene::isTagged(Entity &e, TAG_ID tag)
 	{
+		SCOPE_profile_cpu_function("Scenes");
 		// @ECS TODO
 
 		//auto &data = e.ptr;

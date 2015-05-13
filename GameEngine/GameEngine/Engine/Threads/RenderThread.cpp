@@ -113,7 +113,7 @@ namespace AGE
 			p = SimpleGeometry::icosphereMeshes[recursion].painterKey;
 			return;
 		}
-		
+
 		SimpleGeometry::generateIcoSphere(recursion, positions, indices);
 
 		auto type = std::make_pair<GLenum, std::string>(GL_FLOAT_VEC3, "position");
@@ -169,7 +169,7 @@ namespace AGE
 			msg.setValue(true);
 		});
 
- 		registerCallback<Commands::ToRender::Flush>([&](Commands::ToRender::Flush& msg)
+		registerCallback<Commands::ToRender::Flush>([&](Commands::ToRender::Flush& msg)
 		{
 			{
 				SCOPE_profile_cpu_i("RenderTimer", "SwapContext");
@@ -203,73 +203,86 @@ namespace AGE
 
 		registerCallback<Commands::ToRender::CopyDrawLists>([&](Commands::ToRender::CopyDrawLists& msg)
 		{
-			_drawlistPtr = msg.listContainer;
+			SCOPE_profile_cpu_i("RenderTimer", "CopyDrawLists");
+			_drawlists.push_back(msg.listContainer);
 		});
 
 		registerCallback<Commands::ToRender::RenderDrawLists>([&](Commands::ToRender::RenderDrawLists& msg)
 		{
+			if (_drawlists.empty()) // nothing to draw
+				return;
+
 			SCOPE_profile_cpu_i("RenderTimer", "RenderDrawLists");
 
-			if (!_drawlistPtr) // nothing to draw
-				return;
-			AGE_ASSERT(_drawlistPtr != nullptr);
-
-
-			// DEBUG DRAW DEGUEULASSE
-
-			std::vector<unsigned int> indices;
-			auto type = std::make_pair<GLenum, std::string>(GL_FLOAT_VEC2, "position");
-			std::vector<std::pair < GLenum, std::string > > types;
-			types.push_back(type);
-
-			indices.resize(debug2DlinesPoints.size());
-			for (int i = 0; i < debug2DlinesPoints.size(); ++i)
+			for (auto &_drawlistPtr : _drawlists)
 			{
-				indices[i] = i;
-			}
-			if (!paintingManager->has_painter(types))
-			{
-				debug2Dlines.painterKey = paintingManager->add_painter(std::move(types));
-			}
-			else
-			{
-				debug2Dlines.painterKey = paintingManager->get_painter(types);
-			}
-			Key<Painter> kk = debug2Dlines.painterKey;
+				SCOPE_profile_cpu_i("RenderTimer", "Render one DrawList");
 
-			auto &painterPtr = paintingManager->get_painter(debug2Dlines.painterKey);
-
-			debug2Dlines.verticesKey = painterPtr->add_vertices(debug2DlinesPoints.size(), indices.size());
-			auto vertices = painterPtr->get_vertices(debug2Dlines.verticesKey);
-
-			vertices->set_data<glm::vec2>(debug2DlinesPoints, std::string("position"));
-			vertices->set_indices(indices);
-
-			debug2DlinesPoints.clear();
-
-			// CEST VRAIMENT DEGUEULASSE...
-
-			{
-				auto &drawlist = _drawlistPtr->container.cameras;
-				for (auto &curCamera : drawlist)
+				// DEBUG DRAW DEGUEULASSE
+				std::shared_ptr<Painter> painterPtr = nullptr;
 				{
-					SCOPE_profile_gpu_i("RenderCameraDrawList");
-					SCOPE_profile_cpu_i("RenderTimer", "RenderCamera");
-					AGE_ASSERT(!(pipelines[curCamera.camInfos.renderType] == nullptr));
-					pipelines[curCamera.camInfos.renderType]->render(curCamera.pipeline, curCamera.lights, curCamera.camInfos);
+
+					SCOPE_profile_cpu_i("RenderTimer", "RenderDebugLines");
+					std::vector<unsigned int> indices;
+					auto type = std::make_pair<GLenum, std::string>(GL_FLOAT_VEC2, "position");
+					std::vector<std::pair < GLenum, std::string > > types;
+					types.push_back(type);
+
+					indices.resize(debug2DlinesPoints.size());
+					for (int i = 0; i < debug2DlinesPoints.size(); ++i)
+					{
+						indices[i] = i;
+					}
+					if (!paintingManager->has_painter(types))
+					{
+						debug2Dlines.painterKey = paintingManager->add_painter(std::move(types));
+					}
+					else
+					{
+						debug2Dlines.painterKey = paintingManager->get_painter(types);
+					}
+					Key<Painter> kk = debug2Dlines.painterKey;
+
+					painterPtr = paintingManager->get_painter(debug2Dlines.painterKey);
+
+					debug2Dlines.verticesKey = painterPtr->add_vertices(debug2DlinesPoints.size(), indices.size());
+					auto vertices = painterPtr->get_vertices(debug2Dlines.verticesKey);
+
+					vertices->set_data<glm::vec2>(debug2DlinesPoints, std::string("position"));
+					vertices->set_indices(indices);
+
+					debug2DlinesPoints.clear();
 				}
+
+				// CEST VRAIMENT DEGUEULASSE...
+
+				{
+					SCOPE_profile_cpu_i("RenderTimer", "Render cameras");
+
+					auto &drawlist = _drawlistPtr->container.cameras;
+					for (auto &curCamera : drawlist)
+					{
+						SCOPE_profile_gpu_i("RenderCameraDrawList");
+						SCOPE_profile_cpu_i("RenderTimer", "RenderCamera");
+						AGE_ASSERT(!(pipelines[curCamera.camInfos.renderType] == nullptr));
+						pipelines[curCamera.camInfos.renderType]->render(curCamera.pipeline, curCamera.lights, curCamera.camInfos);
+					}
+				}
+
+				painterPtr->remove_vertices(debug2Dlines.verticesKey);
 			}
-			_drawlistPtr = nullptr;
-			painterPtr->remove_vertices(debug2Dlines.verticesKey);
+			_drawlists.clear();
 		});
 
 		registerSharedCallback<AGE::Tasks::Basic::BoolFunction>([&](AGE::Tasks::Basic::BoolFunction& msg)
 		{
+			SCOPE_profile_cpu_i("RenderTimer", "Bool function");
 			msg.setValue(msg.function());
 		});
 
 		registerCallback<AGE::Tasks::Basic::VoidFunction>([&](AGE::Tasks::Basic::VoidFunction& msg)
 		{
+			SCOPE_profile_cpu_i("RenderTimer", "Void function");
 			if (msg.function)
 				msg.function();
 		});
@@ -283,7 +296,6 @@ namespace AGE
 #ifdef AGE_ENABLE_IMGUI
 		registerCallback<AGE::RenderImgui>([&](AGE::RenderImgui &msg)
 		{
-			SCOPE_profile_cpu_i("RenderTimer", "Render IMGUI");
 			AGE::Imgui::getInstance()->renderThreadRenderFn(msg.cmd_lists);
 		});
 #endif
@@ -356,6 +368,8 @@ namespace AGE
 
 		while (_run && _insideRun)
 		{
+			SCOPE_profile_cpu_i("RenderTimer", "Update");
+
 			waitStart = std::chrono::high_resolution_clock::now();
 			taskSuccess = commandSuccess = false;
 			{
@@ -402,6 +416,7 @@ namespace AGE
 				// pop all commands
 				while (!commands.empty() && _insideRun)
 				{
+					SCOPE_profile_cpu_i("RenderTimer", "Execute one command");
 					auto command = commands.front();
 					auto success = execute(command);
 					AGE_ASSERT(success);
