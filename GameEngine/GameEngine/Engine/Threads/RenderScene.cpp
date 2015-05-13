@@ -309,7 +309,7 @@ namespace AGE
 		SCOPE_profile_cpu_i("PrepareTimer", "Delete directionnal");
 
 		DirectionalLight &toRm = _directionalLights.get(msg.key.id);
-		_pointLights.deallocPreparated(msg.key.id);
+		_directionalLights.deallocPreparated(msg.key.id);
 		// TODO: remove when point lights will be in octree
 		_activeDirectionalLights[toRm.activeDirectionalLightIdx] = _activeDirectionalLights[_activeDirectionalLights.size() - 1];
 		_directionalLights.get(_activeDirectionalLights[toRm.activeDirectionalLightIdx]).activeDirectionalLightIdx = toRm.activeDirectionalLightIdx;
