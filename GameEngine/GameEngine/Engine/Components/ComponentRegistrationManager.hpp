@@ -45,7 +45,7 @@ namespace AGE
 		template <class T>
 		void registerComponentType(const char *name)
 		{
-			std::size_t key = typeid(T).hash_code();
+			std::size_t key = T::getSerializableId();
 			auto ageId = Component<T>::getTypeId();
 			auto it = _creationFunctions.find(key);
 			if (it != std::end(_creationFunctions))
