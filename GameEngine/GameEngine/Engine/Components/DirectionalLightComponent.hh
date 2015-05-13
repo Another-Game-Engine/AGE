@@ -16,6 +16,7 @@ namespace AGE
 
 	struct DirectionalLightComponent : public ComponentBase
 	{
+		AGE_COMPONENT_UNIQUE_IDENTIFIER("AGE_CORE_DirectionnalLightComponent");
 	public:
 		DirectionalLightComponent();
 		virtual ~DirectionalLightComponent() = default;

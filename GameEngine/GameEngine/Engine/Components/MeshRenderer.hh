@@ -25,6 +25,8 @@ namespace AGE
 
 	struct MeshRenderer : public ComponentBase
 	{
+		AGE_COMPONENT_UNIQUE_IDENTIFIER("AGE_CORE_MeshRenderer");
+
 		MeshRenderer();
 		virtual ~MeshRenderer();
 

@@ -8,6 +8,8 @@ namespace AGE
 {
 	struct RotationComponent : public ComponentBase
 	{
+		AGE_COMPONENT_UNIQUE_IDENTIFIER("AGE_CORE_RotationComponent");
+
 		RotationComponent();
 		virtual ~RotationComponent(void);
 		RotationComponent &operator=(const RotationComponent &o) = delete;

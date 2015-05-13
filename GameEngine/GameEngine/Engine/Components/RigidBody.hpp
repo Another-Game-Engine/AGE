@@ -10,6 +10,8 @@ namespace AGE
 
 	class RigidBody final : public ComponentBase
 	{
+		AGE_COMPONENT_UNIQUE_IDENTIFIER("AGE_CORE_RigidBody");
+	private:
 		friend PhysicsSystem;
 
 	public:

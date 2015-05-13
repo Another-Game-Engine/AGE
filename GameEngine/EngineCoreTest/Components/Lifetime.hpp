@@ -6,6 +6,8 @@ namespace AGE
 {
 	struct Lifetime : public ComponentBase
 	{
+		AGE_COMPONENT_UNIQUE_IDENTIFIER("AGE_CORE_LifetimeComponent");
+
 		Lifetime();
 		virtual ~Lifetime(void);
 		Lifetime &operator=(const Lifetime &o) = delete;

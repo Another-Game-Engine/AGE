@@ -17,6 +17,8 @@ namespace AGE
 
 		struct EntityRepresentation : public ComponentBase
 		{
+			AGE_COMPONENT_UNIQUE_IDENTIFIER("AGE_CORE_EntityRepresentationComponent");
+
 			EntityRepresentation();
 
 			virtual ~EntityRepresentation(void);

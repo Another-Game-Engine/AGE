@@ -24,6 +24,7 @@ namespace AGE
 
 	struct SpotLightComponent : public ComponentBase
 	{
+		AGE_COMPONENT_UNIQUE_IDENTIFIER("AGE_CORE_SpotLightComponent");
 	public:
 		SpotLightComponent() = default;
 		virtual ~SpotLightComponent() = default;
