@@ -56,7 +56,7 @@ namespace AGE
 
 			_jsonSaveMap.insert(std::make_pair(ageId, RegisterJsonFn([=](ComponentBase *c, cereal::JSONOutputArchive &ar)
 			{
-				ar(cereal::make_nvp(name,*(static_cast<T*>(c))));
+				ar(cereal::make_nvp(T::getSerializableName(),*(static_cast<T*>(c))));
 			})));
 
 			_jsonLoadMap.insert(std::make_pair(ageId, LoadJsonFn([=](void *ptr, cereal::JSONInputArchive &ar){

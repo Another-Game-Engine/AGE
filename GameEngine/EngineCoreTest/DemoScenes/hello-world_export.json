@@ -1,0 +1,98 @@
+{
+    "Number_of_serialized_entities": 1,
+    "Component type map": [
+        {
+            "key": 0,
+            "value": 2633202538906912002
+        },
+        {
+            "key": 1,
+            "value": 4279995424560007376
+        },
+        {
+            "key": 2,
+            "value": 9228130898566333550
+        },
+        {
+            "key": 3,
+            "value": 2719950380395641793
+        },
+        {
+            "key": 4,
+            "value": 12568265209258137674
+        },
+        {
+            "key": 5,
+            "value": 7226899121077071394
+        },
+        {
+            "key": 6,
+            "value": 11957752261005749183
+        },
+        {
+            "key": 7,
+            "value": 8685391846632613471
+        },
+        {
+            "key": 8,
+            "value": 8718854852507163888
+        },
+        {
+            "key": 9,
+            "value": 13917482855567903631
+        }
+    ],
+    "Entity_1": {
+        "cereal_class_version": 0,
+        "link": {
+            "cereal_class_version": 0,
+            "Position": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0
+            },
+            "Scale": {
+                "value0": 1,
+                "value1": 1,
+                "value2": 1
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1,
+            6
+        ],
+        "AGE::MeshRenderer": {
+            "cereal_class_version": 1,
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "ball/ball.sage",
+                        "value1": "ball/ball.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        },
+        "AGE::DirectionalLightComponent": {
+            "cereal_class_version": 0,
+            "color": {
+                "value0": 1,
+                "value1": 1,
+                "value2": 1
+            }
+        }
+    }
+}

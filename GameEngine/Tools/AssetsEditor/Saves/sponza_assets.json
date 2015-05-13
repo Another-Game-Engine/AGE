@@ -1,0 +1,13 @@
+{
+    "value0": {
+        "cereal_class_version": 0,
+        "value0": [
+            "sponza/sponza.sage",
+            "cube/cube.sage"
+        ],
+        "value1": [
+            "sponza/sponza.mage",
+            "pixar128 library/wood/american-oak.mage"
+        ]
+    }
+}
