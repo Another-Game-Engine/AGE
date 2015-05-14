@@ -42,7 +42,7 @@
             "value": 13917482855567903631
         }
     ],
-    "Entity_1": {
+    "Entity_0": {
         "cereal_class_version": 0,
         "link": {
             "cereal_class_version": 0,
@@ -52,15 +52,15 @@
                 "value2": 0
             },
             "Scale": {
-                "value0": 1,
-                "value1": 1,
-                "value2": 1
+                "value0": 0.10000000149011612,
+                "value1": 0.10000000149011612,
+                "value2": 0.10000000149011612
             },
             "Orientation": {
-                "value0": 0,
-                "value1": 0,
+                "value0": -0.70710635185241699,
+                "value1": -0,
                 "value2": 0,
-                "value3": 1
+                "value3": 0.70710724592208862
             }
         },
         "children": [],
@@ -91,7 +91,7 @@
             }
         }
     },
-    "Entity_2": {
+    "Entity_1": {
         "link": {
             "Position": {
                 "value0": 0,
