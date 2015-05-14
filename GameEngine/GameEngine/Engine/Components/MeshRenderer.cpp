@@ -189,6 +189,7 @@ namespace AGE
 				++i;
 			}
 		}
+		//---
 		if ((*materialPathList)[selectedMaterialIndex] != selectedMaterialPath)
 		{
 			std::size_t i = 0;
@@ -252,6 +253,7 @@ namespace AGE
 			}
 		}
 		ImGui::PopItemWidth();
+		//---
 		ImGui::PushItemWidth(-1);
 		if (!materialFileList->empty() && ImGui::ListBox("Material", (int*)&selectedMaterialIndex, &(materialFileList->front()), (int)(materialFileList->size())))
 		{
@@ -282,8 +284,8 @@ namespace AGE
 				}
 			}
 		}
-		//ImGui::ListBoxFooter();
 		ImGui::PopItemWidth();
+		//---
 		return modified;
 	}
 #endif

@@ -100,6 +100,10 @@ namespace AGE
 		getInstance<AGE::AssetsManager>()->loadMesh(OldFile("ball/ball.sage"), "DEMO_SCENE_BASIC_ASSETS");
 		getInstance<AGE::AssetsManager>()->loadMaterial(OldFile("cube/cube.mage"), "DEMO_SCENE_BASIC_ASSETS");
 		getInstance<AGE::AssetsManager>()->loadMaterial(OldFile("ball/ball.mage"), "DEMO_SCENE_BASIC_ASSETS");
+		getInstance<AGE::AssetsManager>()->loadAnimation(OldFile("hexapod/animation/hexapod@attack(1).aage"), "DEMO_SCENE_BASIC_ASSETS");
+		getInstance<AGE::AssetsManager>()->loadSkeleton(OldFile("hexapod/animation/hexapod@attack(1).skage"), "DEMO_SCENE_BASIC_ASSETS");
+
+		setInstance<AGE::AnimationManager>();
 
 		srand(42);
 
@@ -139,6 +143,23 @@ namespace AGE
 				loadFromJson(sceneFileName);
 			}));
 			getInstance<AssetsManager>()->loadPackage(assetPackageFileName, assetPackageFileName);
+
+
+			auto skeleton = getInstance<AssetsManager>()->getSkeleton("hexapod/animation/hexapod@attack(1).skage");
+			auto animation = getInstance<AssetsManager>()->getAnimation("hexapod/animation/hexapod@attack(1).aage");
+
+			animationTestInstance = getInstance<AGE::AnimationManager>()->createAnimationInstance(skeleton, animation);
+
+			auto &bones = getInstance<AGE::AnimationManager>()->getBones(animationTestInstance);
+			for (auto &e : bones)
+			{
+				auto entity = createEntity();
+				entity.addComponent<MeshRenderer>(
+					getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage")
+					, getInstance<AGE::AssetsManager>()->getMaterial("ball/ball.mage"));
+				bonesEntities.push_back(entity);
+			}
+
 		}
 
 		if (getInstance<Input>()->getPhysicalKeyJustReleased(AGE_ESCAPE))
@@ -204,6 +225,19 @@ namespace AGE
 		{
 			GetRenderThread()->getQueue()->emplaceTask<Tasks::Render::ReloadShaders>();
 		}
+
+		////////////////////////////////////
+
+		static float ttime = 0;
+		getInstance<AGE::AnimationManager>()->update(ttime);
+		ttime += time;
+		auto &bones = getInstance<AGE::AnimationManager>()->getBones(animationTestInstance);
+		for (std::size_t i = 0; i < bones.size(); ++i)
+		{
+			bonesEntities[i].getLink().setTransform(bones[i]);
+		}
+
+		////////////////////////////////////
 
 		auto camComponent = GLOBAL_CAMERA.getComponent<CameraComponent>();
 		static char const *pipelineNames[RenderType::TOTAL] = {"Debug deferred rendering", "Deferred rendering" };
