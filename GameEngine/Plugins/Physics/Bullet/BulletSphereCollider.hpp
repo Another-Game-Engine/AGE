@@ -12,11 +12,14 @@ namespace AGE
 	{
 		class BulletSphereCollider final : public SphereColliderInterface, public BulletCollider
 		{
+			// Friendships
+			friend ObjectPool < BulletSphereCollider > ;
+
 		public:
 			// Constructors
 			BulletSphereCollider(void) = delete;
 
-			BulletSphereCollider(WorldInterface *world, void *&data);
+			BulletSphereCollider(WorldInterface *world, Private::GenericData *data);
 
 			BulletSphereCollider(const BulletSphereCollider &) = delete;
 
@@ -24,6 +27,9 @@ namespace AGE
 			BulletSphereCollider &operator=(const BulletSphereCollider &) = delete;
 
 		private:
+			// Attributes
+			glm::vec3 center;
+
 			// Destructor
 			~BulletSphereCollider(void) = default;
 

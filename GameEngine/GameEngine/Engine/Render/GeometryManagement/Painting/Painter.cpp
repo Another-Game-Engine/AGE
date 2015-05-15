@@ -3,6 +3,7 @@
 
 #include <Utils/Debug.hpp>
 #include <Threads/ThreadManager.hpp>
+#include <Utils/Profiler.hpp>
 
 namespace AGE
 {
@@ -24,6 +25,8 @@ namespace AGE
 
 	Key<Vertices> Painter::add_vertices(size_t nbrVertex, size_t nbrIndices)
 	{
+		SCOPE_profile_cpu_function("PainterTimer");
+
 		// to be sure that this function is only called in render thread
 		AGE_ASSERT(GetThreadManager()->getCurrentThread() == (AGE::Thread*)GetRenderThread());
 
@@ -38,6 +41,8 @@ namespace AGE
 
 	Painter & Painter::remove_vertices(Key<Vertices> &key)
 	{
+		SCOPE_profile_cpu_function("PainterTimer");
+
 		// to be sure that this function is only called in render thread
 		AGE_ASSERT(GetThreadManager()->getCurrentThread() == (AGE::Thread*)GetRenderThread());
 
@@ -59,6 +64,8 @@ namespace AGE
 
 	Vertices * Painter::get_vertices(Key<Vertices> const &key)
 	{
+		SCOPE_profile_cpu_function("PainterTimer");
+
 		// to be sure that this function is only called in render thread
 		AGE_ASSERT(GetThreadManager()->getCurrentThread() == (AGE::Thread*)GetRenderThread());
 
@@ -71,6 +78,8 @@ namespace AGE
 
 	Painter & Painter::draw(GLenum mode, std::shared_ptr<Program> const &program, std::vector<Properties> const &propertiesList, std::vector<Key<Vertices>> const &drawList)
 	{
+		SCOPE_profile_cpu_function("PainterTimer");
+
 		// to be sure that this function is only called in render thread
 		AGE_ASSERT(GetThreadManager()->getCurrentThread() == (AGE::Thread*)GetRenderThread());
 		program->set_attributes(_buffer);
@@ -95,6 +104,8 @@ namespace AGE
 
 	void Painter::uniqueDraw(GLenum mode, std::shared_ptr<Program> const &program, Properties const &properties, const Key<Vertices> &vertice)
 	{
+		SCOPE_profile_cpu_function("PainterTimer");
+
 		// to be sure that this function is only called in render thread
 		AGE_ASSERT(GetThreadManager()->getCurrentThread() == (AGE::Thread*)GetRenderThread());
 		program->set_attributes(_buffer);
@@ -110,6 +121,8 @@ namespace AGE
 
 	void Painter::uniqueDraw(GLenum mode, const Key<Vertices> &vertice)
 	{
+		SCOPE_profile_cpu_function("PainterTimer");
+
 		// to be sure that this function is only called in render thread
 		AGE_ASSERT(GetThreadManager()->getCurrentThread() == (AGE::Thread*)GetRenderThread());
 		_buffer.bind();
@@ -122,6 +135,8 @@ namespace AGE
 
 	bool Painter::coherent(std::vector<std::pair<GLenum, std::string>> const &types) const
 	{
+		SCOPE_profile_cpu_function("PainterTimer");
+
 		// to be sure that this function is only called in render thread
 		AGE_ASSERT(GetThreadManager()->getCurrentThread() == (AGE::Thread*)GetRenderThread());
 
@@ -139,6 +154,8 @@ namespace AGE
 
 	bool Painter::coherent(std::shared_ptr<Program> const &prog) const
 	{
+		SCOPE_profile_cpu_function("PainterTimer");
+
 		return (prog->coherent_attributes(_buffer.get_types()));
 	}
 }

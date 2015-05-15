@@ -10,11 +10,14 @@ namespace AGE
 
 		class NullMaterial final : public MaterialInterface
 		{
+			// Friendships
+			friend ObjectPool < NullMaterial >;
+
 		public:
 			// Constructors
 			NullMaterial(void) = delete;
 
-			NullMaterial(ColliderInterface *collider);
+			NullMaterial(const std::string &name);
 
 			NullMaterial(const NullMaterial &) = delete;
 
@@ -24,6 +27,13 @@ namespace AGE
 		private:
 			// Destructor
 			~NullMaterial(void) = default;
+
+			// Attributes
+			float staticFriction = 0.0f;
+
+			float dynamicFriction = 0.0f;
+
+			float restitution = 0.0f;
 
 			// Inherited Methods
 			void setStaticFriction(float staticFriction) override final;

@@ -28,7 +28,7 @@ namespace AGE
 
 			void finalize(void) override final;
 
-			WorldInterface *createWorld(const glm::vec3 &gravity) override final;
+			WorldInterface *createWorld(void) override final;
 		};
 	}
 }

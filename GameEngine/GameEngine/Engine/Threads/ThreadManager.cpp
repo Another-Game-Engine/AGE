@@ -8,6 +8,7 @@
 #include <TMQ/queue.hpp>
 #include <limits>
 #include <Utils/Debug.hpp>
+#include <Utils/Age_microprofile.hpp>
 
 namespace AGE
 {
@@ -125,6 +126,7 @@ namespace AGE
 
 	void ThreadManager::updateThreadStatistics(Thread::ThreadType id, std::size_t workTime, std::size_t sleepTime)
 	{
+		SCOPE_profile_cpu_function("Threads manager");
 		auto &s = _threadsStatistics[id];
 		if (s.frameCounter >= s.work.size())
 		{
@@ -222,6 +224,7 @@ namespace AGE
 			res = threadManager->initAndLaunch();
 			return res;
 		});
+		Age_microprofileInit();
 		return res;
 	}
 

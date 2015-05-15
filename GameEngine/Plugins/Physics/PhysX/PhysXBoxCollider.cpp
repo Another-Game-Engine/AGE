@@ -7,10 +7,10 @@ namespace AGE
 	namespace Physics
 	{
 		// Constructors
-		PhysXBoxCollider::PhysXBoxCollider(WorldInterface *world, void *&data)
-			: ColliderInterface(world, data), BoxColliderInterface(world, data), PhysXCollider(world, data, static_cast<PhysXPhysics *>(world->getPhysics())->getPhysics()->createShape(physx::PxBoxGeometry(0.5f, 0.5f, 0.5f), *static_cast<const PhysXMaterial *>(getMaterial())->material))
+		PhysXBoxCollider::PhysXBoxCollider(WorldInterface *world, Private::GenericData *data)
+			: ColliderInterface(world, data), BoxColliderInterface(world, data), PhysXCollider(world, data, static_cast<PhysXPhysics *>(world->getPhysics())->getPhysics()->createShape(physx::PxBoxGeometry(GetDefaultSize().x / 2.0f, GetDefaultSize().y / 2.0f, GetDefaultSize().z / 2.0f), *static_cast<const PhysXMaterial *>(getMaterial())->material, true))
 		{
-			return;
+			setCenter(GetDefaultCenter());
 		}
 
 		// Inherited Methods
@@ -34,6 +34,21 @@ namespace AGE
 		{
 			const physx::PxVec3 size = 2.0f * getShape()->getGeometry().box().halfExtents;
 			return glm::vec3(size.x, size.y, size.z);
+		}
+
+		void PhysXBoxCollider::scale(const glm::vec3 &scaling)
+		{
+			physx::PxShape *shape = getShape();
+			const physx::PxVec3 realScaling(scaling.x, scaling.y, scaling.z);
+			physx::PxTransform localPose = shape->getLocalPose();
+			const physx::PxMat33 scalingMatrix = physx::PxMat33::createDiagonal(realScaling) * physx::PxMat33(localPose.q);
+			physx::PxBoxGeometry &box = shape->getGeometry().box();
+			box.halfExtents.x *= scalingMatrix.column0.magnitude();
+			box.halfExtents.y *= scalingMatrix.column1.magnitude();
+			box.halfExtents.z *= scalingMatrix.column2.magnitude();
+			shape->setGeometry(box);
+			localPose.p = localPose.p.multiply(realScaling);
+			shape->setLocalPose(localPose);
 		}
 	}
 }

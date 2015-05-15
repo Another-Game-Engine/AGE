@@ -6,7 +6,7 @@ namespace AGE
 	{
 		void PhysicsData::reset(void)
 		{
-			data = nullptr;
+			data.data = nullptr;
 		}
 
 		void PhysicsData::init(void)
@@ -14,14 +14,14 @@ namespace AGE
 			return;
 		}
 
-		void *&PhysicsData::getData(void)
+		Physics::Private::GenericData *PhysicsData::getData(void)
 		{
-			return data;
+			return &data;
 		}
 
-		void * const &PhysicsData::getData(void) const
+		const Physics::Private::GenericData *PhysicsData::getData(void) const
 		{
-			return data;
+			return &data;
 		}
 	}
 }

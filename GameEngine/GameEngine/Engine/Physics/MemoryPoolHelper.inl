@@ -7,26 +7,18 @@ namespace AGE
 	namespace Physics
 	{
 		// Methods
-		template <std::size_t Alignment, std::size_t ObjectNumberPerChunk>
-		template <typename T>
-		ObjectPool<T, Alignment, ObjectNumberPerChunk> &MemoryPoolHelper<Alignment, ObjectNumberPerChunk>::getMemoryPool(void)
+		template <class RigidBodyType, class MaterialType, class BoxColliderType, class CapsuleColliderType, class MeshColliderType, class SphereColliderType, std::size_t Alignment, std::size_t ObjectNumberPerChunk>
+		template <typename T, typename... Args, class Enable>
+		inline T *MemoryPoolHelper<RigidBodyType, MaterialType, BoxColliderType, CapsuleColliderType, MeshColliderType, SphereColliderType, Alignment, ObjectNumberPerChunk>::create(Args &&...args)
 		{
-			static ObjectPool<T, Alignment, ObjectNumberPerChunk> MemoryPool;
-			return MemoryPool;
+			return PoolHelper<T>(*this).create(std::forward<Args>(args)...);
 		}
 
-		template <std::size_t Alignment, std::size_t ObjectNumberPerChunk>
-		template <typename T, typename... Args>
-		T *MemoryPoolHelper<Alignment, ObjectNumberPerChunk>::create(Args &&...args)
+		template <class RigidBodyType, class MaterialType, class BoxColliderType, class CapsuleColliderType, class MeshColliderType, class SphereColliderType, std::size_t Alignment, std::size_t ObjectNumberPerChunk>
+		template <typename T, class Enable>
+		inline void MemoryPoolHelper<RigidBodyType, MaterialType, BoxColliderType, CapsuleColliderType, MeshColliderType, SphereColliderType, Alignment, ObjectNumberPerChunk>::destroy(T *instance)
 		{
-			return getMemoryPool<T>().create(std::forward<Args>(args)...);
-		}
-
-		template <std::size_t Alignment, std::size_t ObjectNumberPerChunk>
-		template <typename T>
-		void MemoryPoolHelper<Alignment, ObjectNumberPerChunk>::destroy(T *instance)
-		{
-			return getMemoryPool<T>().destroy(instance);
+			PoolHelper<T>(*this).destroy(instance);
 		}
 	}
 }

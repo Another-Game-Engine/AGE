@@ -5,31 +5,37 @@ namespace AGE
 	namespace Physics
 	{
 		// Constructors
-		NullCollider::NullCollider(WorldInterface *world, void *&data)
+		NullCollider::NullCollider(WorldInterface *world, Private::GenericData *data)
 			: ColliderInterface(world, data)
 		{
-			return;
+			setAsTrigger(IsTriggerByDefault());
+			setFilterGroup(GetDefaultFilterGroup());
 		}
 
 		// Inherited Methods
 		void NullCollider::setAsTrigger(bool mustBeATrigger)
 		{
-			return;
+			isTrigger = mustBeATrigger;
 		}
 
 		bool NullCollider::isATrigger(void) const
 		{
-			return false;
+			return isTrigger;
 		}
 
 		void NullCollider::setFilterGroup(FilterGroup group)
 		{
-			return;
+			filterGroup = group;
 		}
 
 		FilterGroup NullCollider::getFilterGroup(void) const
 		{
-			return FilterGroup::GroupI;
+			return filterGroup;
+		}
+
+		void NullCollider::setMaterial(const std::string &name)
+		{
+			static_cast<ColliderInterface *>(this)->setMaterial(getWorld()->createMaterial(name));
 		}
 	}
 }

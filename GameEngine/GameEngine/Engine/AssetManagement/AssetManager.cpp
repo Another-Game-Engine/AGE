@@ -27,9 +27,11 @@
 #include <Render/Properties/Materials/Specular.hh>
 #include <Render/Properties/Materials/ScaleUVs.hpp>
 
+#include <Utils/Profiler.hpp>
+
 #include <Configuration.hpp>
 
-#ifdef USE_IMGUI
+#ifdef AGE_ENABLE_IMGUI
 #include <imgui/imgui.h>
 #endif
 
@@ -80,6 +82,7 @@ namespace AGE
 		}
 		auto future = AGE::EmplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]()
 		{
+			SCOPE_profile_cpu_i("AssetsLoad", "LoadMaterial");
 			if (!filePath.exists()) 
 			{
 				return AssetsLoadingResult(true, std::string("AssetsManager : Mesh File [" + filePath.getFullName() + "] does not exists.\n"));
@@ -189,6 +192,7 @@ namespace AGE
 
 		auto future = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]()
 		{
+			SCOPE_profile_cpu_i("AssetsLoad", "LoadTexture");
 			std::shared_ptr<TextureData> data = std::make_shared<TextureData>();
 
 			std::ifstream ifs(filePath.getFullName(), std::ios::binary);
@@ -289,6 +293,7 @@ namespace AGE
 			_animations.insert(std::make_pair(filePath.getFullName(), animation));
 		}
 		auto future = AGE::EmplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=](){
+			SCOPE_profile_cpu_i("AssetsLoad", "LoadAnimation");
 			std::ifstream ifs(filePath.getFullName(), std::ios::binary);
 			cereal::PortableBinaryInputArchive ar(ifs);
 			ar(*animation.get());
@@ -324,6 +329,7 @@ namespace AGE
 			_skeletons.insert(std::make_pair(filePath.getFullName(), skeleton));
 		}
 		auto future = AGE::EmplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=](){
+			SCOPE_profile_cpu_i("AssetsLoad", "LoadSkeleton");
 			std::ifstream ifs(filePath.getFullName(), std::ios::binary);
 			cereal::PortableBinaryInputArchive ar(ifs);
 			ar(*skeleton.get());
@@ -354,7 +360,10 @@ namespace AGE
 			}
 			_meshs.insert(std::make_pair(filePath.getFullName(), meshInstance));
 		}
-		auto future = AGE::EmplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=](){
+		auto future = AGE::EmplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]()
+		{
+			SCOPE_profile_cpu_i("AssetsLoad", "LoadMesh");
+
 			if (!filePath.exists())
 			{
 				return AssetsLoadingResult(true, std::string("AssetsManager : Mesh File [" + filePath.getFullName() + "] does not exists.\n"));
@@ -363,6 +372,7 @@ namespace AGE
 			cereal::PortableBinaryInputArchive ar(ifs);
 			std::shared_ptr<MeshData> data = std::make_shared<MeshData>();
 			ar(*data.get());
+			meshInstance->meshData = data;
 			meshInstance->subMeshs.resize(data->subMeshs.size());
 			meshInstance->name = data->name;
 			meshInstance->path = _filePath.getFullName();
@@ -393,6 +403,8 @@ namespace AGE
 		mesh->boundingBox = data.boundingBox;
 		mesh->defaultMaterialIndex = data.defaultMaterialIndex;
 		auto future = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]() {
+			SCOPE_profile_cpu_i("AssetsLoad", "LoadSubMesh");
+
 			auto &paintingManager = GetRenderThread()->paintingManager;
 			std::vector<std::pair<GLenum, std::string>> types;
 			for (auto i = 0ull; i < data.infos.size(); ++i)
@@ -516,6 +528,8 @@ namespace AGE
 	// has to be called only once per frame
 	void AssetsManager::update()
 	{
+		SCOPE_profile_cpu_function("Main thread");
+
 		std::vector<std::string> toErase;
 		int total = 0;
 		int toLoad = 0;
@@ -551,7 +565,7 @@ namespace AGE
 
 		if (toLoad != 0)
 		{
-#ifdef USE_IMGUI
+#ifdef AGE_ENABLE_IMGUI
 			if (!ImGui::Begin("ASSETS LOADING", (bool*)1, ImVec2(0, 0), 0.3f, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings))
 			{
 				ImGui::End();

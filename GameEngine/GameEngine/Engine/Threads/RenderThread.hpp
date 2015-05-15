@@ -9,7 +9,7 @@
 #include <memory>
 #include <vector>
 #include <Render/Properties/Properties.hh>
-#include <Engine/SpacePartitioning/Ouptut/RenderCamera.hh>
+#include <SpacePartitioning/Ouptut/RenderCamera.hh>
 #include <Render/PipelineTypes.hpp>
 #include <Render/OcclusionTools/DepthMapManager.hpp>
 #include <Render/GeometryManagement/SimpleGeometry.hh>
@@ -65,7 +65,7 @@ namespace AGE
 		bool _run;
 
 		SdlContext *_context;
-		std::shared_ptr<RenderCameraListContainerHandle> _drawlistPtr;
+		std::list<std::shared_ptr<RenderCameraListContainerHandle>> _drawlists;
 		DepthMapManager _depthMapManager;
 
 		friend class ThreadManager;

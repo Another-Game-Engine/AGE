@@ -52,39 +52,27 @@ namespace AGE
 
 	glm::vec3   AABoundingBox::getCornerPoint(std::size_t index /*from 0 to 7*/)
 	{
-		AGE_ASSERT(index <= 7);
-
-		if (index == 0)
+		switch (index)
 		{
-			return glm::vec3(minPoint.x, minPoint.y, minPoint.z);
-		}
-		else if (index == 1)
-		{
-			return glm::vec3(minPoint.x, minPoint.y, maxPoint.z);
-		}
-		else if (index == 2)
-		{
-			return glm::vec3(minPoint.x, maxPoint.y, minPoint.z);
-		}
-		else if (index == 3)
-		{
-			return glm::vec3(minPoint.x, maxPoint.y, maxPoint.z);
-		}
-		else if (index == 4)
-		{
-			return glm::vec3(maxPoint.x, minPoint.y, minPoint.z);
-		}
-		else if (index == 5)
-		{
-			return glm::vec3(maxPoint.x, minPoint.y, maxPoint.z);
-		}
-		else if (index == 6)
-		{
-			return glm::vec3(maxPoint.x, maxPoint.y, minPoint.z);
-		}
-		else if (index == 7)
-		{
-			return glm::vec3(maxPoint.x, maxPoint.y, maxPoint.z);
+			case 0:
+				return glm::vec3(minPoint.x, minPoint.y, minPoint.z);
+			case 1:
+				return glm::vec3(minPoint.x, minPoint.y, maxPoint.z);
+			case 2:
+				return glm::vec3(minPoint.x, maxPoint.y, minPoint.z);
+			case 3:
+				return glm::vec3(minPoint.x, maxPoint.y, maxPoint.z);
+			case 4:
+				return glm::vec3(maxPoint.x, minPoint.y, minPoint.z);
+			case 5:
+				return glm::vec3(maxPoint.x, minPoint.y, maxPoint.z);
+			case 6:
+				return glm::vec3(maxPoint.x, maxPoint.y, minPoint.z);
+			case 7:
+				return glm::vec3(maxPoint.x, maxPoint.y, maxPoint.z);
+			default:
+				assert(!"Should never be reached");
+				return glm::vec3();
 		}
 	}
 

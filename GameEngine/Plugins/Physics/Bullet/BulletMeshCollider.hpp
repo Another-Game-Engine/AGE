@@ -1,5 +1,7 @@
 #pragma once
 
+#include <vector>
+
 #include "MeshColliderInterface.hpp"
 #include "BulletCollider.hpp"
 
@@ -12,20 +14,31 @@ namespace AGE
 	{
 		class BulletMeshCollider final : public MeshColliderInterface, public BulletCollider
 		{
+			// Friendships
+			friend ObjectPool < BulletMeshCollider > ;
+
 		public:
 			// Constructors
 			BulletMeshCollider(void) = delete;
 
-			BulletMeshCollider(WorldInterface *world, void *&data);
+			BulletMeshCollider(WorldInterface *world, std::shared_ptr<MeshInstance> mesh, Private::GenericData *data);
 
 			BulletMeshCollider(const BulletMeshCollider &) = delete;
 
 			// Assignment Operators
 			BulletMeshCollider &operator=(const BulletMeshCollider &) = delete;
 
-		protected:
+		private:
+			// Static Methods
+			static btTriangleMesh *CreateTriangleMesh(std::shared_ptr<MeshInstance> mesh);
+
 			// Destructor
 			~BulletMeshCollider(void) = default;
+
+			// Inherited Methods
+			void setMesh(std::shared_ptr<MeshInstance> mesh) override final;
+
+			void updateShape(void) override final;
 		};
 	}
 }

@@ -215,6 +215,7 @@ void HybridQueue::launch()
 
 bool HybridQueue::getTaskQueue(TMQ::PtrQueue &q, WaitType waitType)
 {
+	SCOPE_profile_cpu_function("TMQ");
 	if (waitType == WaitType::NoWait)
 	{
 		if (!_releasable)
@@ -252,6 +253,7 @@ void HybridQueue::getTaskAndCommandQueue(
 	bool &commandQueueSuccess,
 	WaitType waitType)
 {
+	SCOPE_profile_cpu_function("TMQ");
 	taskQueueSuccess = commandQueueSuccess = false;
 	if (waitType == WaitType::NoWait)
 	{
@@ -298,6 +300,7 @@ void HybridQueue::getTaskAndCommandQueue(
 
 bool HybridQueue::releaseTaskReadability()
 {
+	SCOPE_profile_cpu_function("TMQ");
 	_releasable = true;
 	_readCondition.notify_one();
 	return true;
@@ -305,6 +308,7 @@ bool HybridQueue::releaseTaskReadability()
 
 bool HybridQueue::releaseCommandReadability(WaitType waitType)
 {
+	SCOPE_profile_cpu_function("TMQ");
 	if (waitType == WaitType::NoWait)
 	{
 		std::unique_lock<std::mutex> lock(_mutex, std::try_to_lock);
@@ -352,6 +356,7 @@ std::size_t HybridQueue::getWaitingTime()
 
 void HybridQueue::clear()
 {
+	SCOPE_profile_cpu_function("TMQ");
 	std::unique_lock<std::mutex> lock(_mutex);
 	//while (!lock.owns_lock())
 	//{

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Components/Component.hh>
+#include <Physics/GenericData.hpp>
 
 namespace AGE
 {
@@ -26,13 +27,13 @@ namespace AGE
 			// Methods
 			void init(void);
 
-			void *&getData(void);
+			Physics::Private::GenericData *getData(void);
 
-			void * const &getData(void) const;
+			const Physics::Private::GenericData *getData(void) const;
 
 		private:
 			// Attributes
-			void *data = nullptr;
+			Physics::Private::GenericData data;
 		};
 	}
 }

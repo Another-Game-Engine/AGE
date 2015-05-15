@@ -1,129 +1,120 @@
 #pragma once
 
 #include <Components/Component.hh>
-#include <Utils/UniqueTypeId.hpp>
-#include <Utils/Serialization/btSerialization.hpp>
-#ifdef EDITOR_ENABLED
-#include <WorldEditorGlobal.hpp>
-#endif
-#include <Physics/ContactInformation.hpp>
-
-class btCollisionShape;
-class btMotionState;
-class btRigidBody;
+#include <Physics/RigidBodyInterface.hpp>
+#include <Utils/Serialization/VectorSerialization.hpp>
 
 namespace AGE
 {
-	class BulletDynamicManager;
+	class PhysicsSystem;
 
-	struct RigidBody : public ComponentBase
+	class RigidBody final : public ComponentBase
 	{
-		friend class BulletDynamicSystem;
-
-		using ContactInformationList = std::vector < ContactInformation >;
-		using ContactInformationsType = std::unordered_map < Entity, ContactInformationList > ;
-
-		enum CollisionShape
-		{
-			SPHERE = 0,
-			BOX = 1,
-			UNDEFINED = 2
-		};
-
-	private:
-		btCollisionShape *_collisionShape;
-		btMotionState *_motionState;
-		btRigidBody *_rigidBody;
-		BulletDynamicManager *_manager;
-		btScalar _mass;
-		btVector3 _inertia;
-		glm::uvec3 _rotationConstraint;
-		glm::uvec3 _transformConstraint;
-		UniqueTypeId _shapeType;
-		std::string _shapePath;
-		CollisionShape _collisionShapeType;
-		ContactInformationsType _contactInformations;
-
-		void _clearBulletObjects();
-		void _addContactInformation(const Entity &entity, const btVector3 &contactPoint, const btVector3 &contactNormal);
+		friend PhysicsSystem;
 
 	public:
-		RigidBody();
-		void init(float mass = 1.0f);
-		virtual void reset();
-		void setTransformation(const AGE::Link *link);
-		btMotionState &getMotionState();
-		btCollisionShape &getShape();
-		btRigidBody &getBody();
+		// Constructors
+		RigidBody(void) = default;
+
+		RigidBody(const RigidBody &) = delete;
+
+		// Assignment Operators
+		RigidBody &operator=(const RigidBody &) = delete;
+
+		// Destructor
+		~RigidBody(void) = default;
+
+		// Methods
+		void init(void);
+
+		void setAngularDrag(float angularDrag);
+
+		float getAngularDrag(void) const;
+
+		void setAngularVelocity(const glm::vec3 &angularVelocity);
+
+		glm::vec3 getAngularVelocity(void) const;
+
+		void setCenterOfMass(const glm::vec3 &centerOfMass);
+
+		glm::vec3 getCenterOfMass(void) const;
+
+		void setLinearDrag(float linearDrag);
+
+		float getLinearDrag(void) const;
+
+		void setLinearVelocity(const glm::vec3 &linearVelocity);
+
+		glm::vec3 getLinearVelocity(void) const;
+
 		void setMass(float mass);
-		float getMass() const;
-		void setInertia(const glm::vec3 &inertia);
-		void setCollisionMesh(
-			const std::string &meshPath
-			, short filterGroup = 1
-			, short filterMask = -1);
-		void setCollisionShape(
-			CollisionShape c
-			, short filterGroup = 1
-			, short filterMask = -1);
-		void setRotationConstraint(bool x, bool y, bool z);
-		void setTransformConstraint(bool x, bool y, bool z);
-		const ContactInformationsType &getContactInformations(void) const;
-		virtual ~RigidBody(void);
-		RigidBody(RigidBody &&o) = delete;
-		//////
-		////
-		// Serialization
+
+		float getMass(void) const;
+
+		void setDiagonalInertiaTensor(const glm::vec3 &diagonalInertiaTensor);
+
+		glm::vec3 getDiagonalInertiaTensor(void) const;
+
+		void setMaxAngularVelocity(float maxAngularVelocity);
+
+		float getMaxAngularVelocity(void) const;
+
+		void setMaxDepenetrationVelocity(float maxDepenetrationVelocity);
+
+		float getMaxDepenetrationVelocity(void) const;
+
+		glm::vec3 getPosition(void) const;
+
+		glm::quat getRotation(void) const;
+
+		void affectByGravity(bool mustBeAffectedByGravity);
+
+		bool isAffectedByGravity(void) const;
+
+		void setAsKinematic(bool mustBeKinematic);
+
+		bool isKinematic(void) const;
+
+		void setCollisionDetectionMode(Physics::CollisionDetectionMode collisionDetectionMode);
+
+		Physics::CollisionDetectionMode getCollisionDetectionMode(void) const;
+
+		void addExplosionForce(float explosionForce, const glm::vec3 &explosionPosition, float explosionRadius, Physics::ForceMode forceMode = Physics::ForceMode::Force);
+
+		void addForce(const glm::vec3 &force, Physics::ForceMode forceMode = Physics::ForceMode::Force);
+
+		void addForceAtWorldPosition(const glm::vec3 &force, const glm::vec3 &position, Physics::ForceMode forceMode = Physics::ForceMode::Force);
+
+		void addForceAtLocalPosition(const glm::vec3 &force, const glm::vec3 &position, Physics::ForceMode forceMode = Physics::ForceMode::Force);
+
+		void addAbsoluteTorque(const glm::vec3 &torque, Physics::ForceMode forceMode = Physics::ForceMode::Force);
+		
+		void addRelativeTorque(const glm::vec3 &torque, Physics::ForceMode forceMode = Physics::ForceMode::Force);
+
+		glm::vec3 getVelocityAtWorldPosition(const glm::vec3 &position) const;
+
+		glm::vec3 getVelocityAtLocalPosition(const glm::vec3 &position) const;
 
 		template <typename Archive>
-		void serialize(Archive &ar, std::uint32_t const version)
-		{
-			ar(cereal::make_nvp("Mass", _mass));
-			ar(cereal::make_nvp("Inertia", _inertia));
-			ar(cereal::make_nvp("Rotation constraint", _rotationConstraint));
-			ar(cereal::make_nvp("Transform constraint", _transformConstraint));
-			ar(cereal::make_nvp("Collision shape path", _shapePath));
-			ar(cereal::make_nvp("Collision shape type", _collisionShapeType));
-#ifdef EDITOR_ENABLED
-			if (WESerialization::SerializeForEditor() == true)
-			{
-				if (version > 0)
-				{
-					ar(cereal::make_nvp("Selected mesh shape index", selectedShapeIndex));
-					ar(cereal::make_nvp("Selected mesh shape path", selectedShapePath));
-					ar(cereal::make_nvp("Selected mesh shape name", selectedShapeName));
-					ar(cereal::make_nvp("Simple shape", simpleShapes));
-				}
-			}
-#endif
-		}
+		void save(Archive &ar, const std::uint32_t version) const;
 
-		// !Serialization
-		////
-		//////
+		template <typename Archive>
+		void load(Archive &ar, const std::uint32_t version);
 
-		virtual void postUnserialization();
-
-#ifdef EDITOR_ENABLED
-		std::vector<const char*> *shapeFileList = nullptr;
-		std::vector<const char*> *shapePathList = nullptr;
-		std::size_t selectedShapeIndex = 0;
-		std::string selectedShapeName = "";
-		std::string selectedShapePath = "";
-		bool simpleShapes = true;
-
-		virtual void editorCreate();
-		virtual void editorDelete();
-		virtual bool editorUpdate();
-#endif
-	protected:
-		virtual void _copyFrom(const ComponentBase *model)
-		{
-			// !!! TODO TODO TODO
-		}
 	private:
-		RigidBody(RigidBody const &o) = delete;
+		// Attributes
+		Physics::RigidBodyInterface *rigidBody = nullptr;
+
+		// Methods
+		void setPosition(const glm::vec3 &position);
+
+		void setRotation(const glm::quat &rotation);
+
+		// Inherited Methods
+		void reset(void);
 	};
 }
 
 CEREAL_CLASS_VERSION(AGE::RigidBody, 1);
+
+#include <Components/RigidBody.inl>

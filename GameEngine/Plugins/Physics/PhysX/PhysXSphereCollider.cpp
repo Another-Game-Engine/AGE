@@ -7,10 +7,10 @@ namespace AGE
 	namespace Physics
 	{
 		// Constructors
-		PhysXSphereCollider::PhysXSphereCollider(WorldInterface *world, void *&data)
-			: ColliderInterface(world, data), SphereColliderInterface(world, data), PhysXCollider(world, data, static_cast<PhysXPhysics *>(world->getPhysics())->getPhysics()->createShape(physx::PxSphereGeometry(1.0f), *static_cast<const PhysXMaterial *>(getMaterial())->material))
+		PhysXSphereCollider::PhysXSphereCollider(WorldInterface *world, Private::GenericData *data)
+			: ColliderInterface(world, data), SphereColliderInterface(world, data), PhysXCollider(world, data, static_cast<PhysXPhysics *>(world->getPhysics())->getPhysics()->createShape(physx::PxSphereGeometry(GetDefaultRadius()), *static_cast<const PhysXMaterial *>(getMaterial())->material, true))
 		{
-			return;
+			setCenter(GetDefaultCenter());
 		}
 
 		// Inherited Methods
@@ -33,6 +33,18 @@ namespace AGE
 		float PhysXSphereCollider::getRadius(void) const
 		{
 			return getShape()->getGeometry().sphere().radius;
+		}
+
+		void PhysXSphereCollider::scale(const glm::vec3 &scaling)
+		{
+			physx::PxShape *shape = getShape();
+			const physx::PxVec3 realScaling(scaling.x, scaling.y, scaling.z);
+			physx::PxTransform localPose = shape->getLocalPose();
+			physx::PxSphereGeometry &sphere = shape->getGeometry().sphere();
+			sphere.radius *= std::pow(std::abs(realScaling.x * realScaling.y * realScaling.z), 1.0f / 3.0f);
+			shape->setGeometry(sphere);
+			localPose.p = localPose.p.multiply(realScaling);
+			shape->setLocalPose(localPose);
 		}
 	}
 }

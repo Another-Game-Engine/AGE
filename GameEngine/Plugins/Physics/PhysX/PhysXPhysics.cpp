@@ -32,8 +32,12 @@ namespace AGE
 			foundation = PxCreateFoundation(PX_PHYSICS_VERSION, defaultAllocatorCallback, defaultErrorCallback);
 			if (foundation == nullptr)
 			{
-				assert(!"Impossible to create foundation");
-				return false;
+				foundation = &PxGetFoundation();
+				if (foundation == nullptr)
+				{
+					assert(!"Impossible to create foundation");
+					return false;
+				}
 			}
 			cooking = PxCreateCooking(PX_PHYSICS_VERSION, *foundation, physx::PxCookingParams(toleranceScale));
 			if (cooking == nullptr)
@@ -41,6 +45,10 @@ namespace AGE
 				assert(!"Impossible to create cooking");
 				return false;
 			}
+			physx::PxCookingParams cookingParameters = cooking->getParams();
+			cookingParameters.meshPreprocessParams.set(physx::PxMeshPreprocessingFlag::eREMOVE_DUPLICATED_TRIANGLES);
+			cookingParameters.meshPreprocessParams.set(physx::PxMeshPreprocessingFlag::eREMOVE_UNREFERENCED_VERTICES);
+			cooking->setParams(cookingParameters);
 			physics = PxCreatePhysics(PX_PHYSICS_VERSION, *foundation, toleranceScale);
 			if (physics == nullptr)
 			{
@@ -80,9 +88,9 @@ namespace AGE
 			}
 		}
 
-		WorldInterface *PhysXPhysics::createWorld(const glm::vec3 &gravity)
+		WorldInterface *PhysXPhysics::createWorld(void)
 		{
-			return new PhysXWorld(this, gravity);
+			return new PhysXWorld(this);
 		}
 	}
 }
