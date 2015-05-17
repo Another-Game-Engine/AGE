@@ -145,20 +145,20 @@ namespace AGE
 			getInstance<AssetsManager>()->loadPackage(assetPackageFileName, assetPackageFileName);
 
 
-			auto skeleton = getInstance<AssetsManager>()->getSkeleton("hexapod/animation/hexapod@attack(1).skage");
-			auto animation = getInstance<AssetsManager>()->getAnimation("hexapod/animation/hexapod@attack(1).aage");
+			//auto skeleton = getInstance<AssetsManager>()->getSkeleton("hexapod/animation/hexapod@attack(1).skage");
+			//auto animation = getInstance<AssetsManager>()->getAnimation("hexapod/animation/hexapod@attack(1).aage");
 
-			animationTestInstance = getInstance<AGE::AnimationManager>()->createAnimationInstance(skeleton, animation);
+			//animationTestInstance = getInstance<AGE::AnimationManager>()->createAnimationInstance(skeleton, animation);
 
-			auto &bones = getInstance<AGE::AnimationManager>()->getBones(animationTestInstance);
-			for (auto &e : bones)
-			{
-				auto entity = createEntity();
-				entity.addComponent<MeshRenderer>(
-					getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage")
-					, getInstance<AGE::AssetsManager>()->getMaterial("ball/ball.mage"));
-				bonesEntities.push_back(entity);
-			}
+			//auto &bones = getInstance<AGE::AnimationManager>()->getBones(animationTestInstance);
+			//for (auto &e : bones)
+			//{
+			//	auto entity = createEntity();
+			//	entity.addComponent<MeshRenderer>(
+			//		getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage")
+			//		, getInstance<AGE::AssetsManager>()->getMaterial("ball/ball.mage"));
+			//	bonesEntities.push_back(entity);
+			//}
 
 		}
 
@@ -228,14 +228,14 @@ namespace AGE
 
 		////////////////////////////////////
 
-		static float ttime = 0;
-		getInstance<AGE::AnimationManager>()->update(ttime);
-		ttime += time;
-		auto &bones = getInstance<AGE::AnimationManager>()->getBones(animationTestInstance);
-		for (std::size_t i = 0; i < bones.size(); ++i)
-		{
-			bonesEntities[i].getLink().setTransform(bones[i]);
-		}
+		//static float ttime = 0;
+		//getInstance<AGE::AnimationManager>()->update(ttime);
+		//ttime += time;
+		//auto &bones = getInstance<AGE::AnimationManager>()->getBones(animationTestInstance);
+		//for (std::size_t i = 0; i < bones.size(); ++i)
+		//{
+		//	bonesEntities[i].getLink().setTransform(bones[i]);
+		//}
 
 		////////////////////////////////////
 
