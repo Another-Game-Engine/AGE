@@ -1,0 +1,98 @@
+
+/*!
+\class		File
+\brief
+
+\fn     File (const File &other)
+\brief Constructor
+\param  const File &other
+
+\fn File (File &&other)
+\brief   Constructor
+\param   File &&other
+
+\fn     File & 	operator= (const File &other)
+\brief  Operator = overload
+\return File &
+\param  const File &other
+
+\fn     File & 	operator= (File &&other)
+\brief  Operator = overload
+\return File &
+\param  const File &&other
+
+\fn     File & 	swap (File &other)
+\brief  Swap values
+\return File &
+\param  File &other
+
+\fn     bool 	open (const char *name, const char *mode)
+\brief  Open the file
+\return bool
+\param  const char *name
+\param  const char *mode
+
+\fn     bool 	execute (const char *command, const char *mode)
+\brief  excute a command
+\return bool
+\param  const char *command
+\param  const char *mode
+
+\fn     void 	close (void)
+\brief  Close file and free the memory
+
+\fn     const char * 	getName (void) const
+\brief  Get the file name's
+\return const char*
+
+\fn     std::size_t 	getSize (void) const
+\brief  Get the file size's
+\return std::size_t
+
+\fn     virtual bool 	isOpened (void) const overridefinal
+\brief  tests if file is opened
+\return bool
+
+\fn     virtual std::size_t 	read (void *ptr, std::size_t size, std::size_t nmemb) const overridefinal
+\brief  Read data
+\return std::size_t
+\param  const void *ptr
+\param  std:size_t size
+\param  std::size_t nmemb
+
+\fn     virtual std::size_t 	write (const void *ptr, std::size_t size, std::size_t nmemb) const overridefinal
+\brief  Write data
+\return std::size_t
+\param  const void *ptr
+\param  std::size_t size
+\param  std::size_t nmemb
+
+
+\fn     virtual bool 	endOfFile (void) const overridefinal
+\brief  check EOF char
+\return bool
+
+\fn     virtual int 	getCharacter (void) const overridefinal
+\brief
+\return int
+
+\fn     virtual void 	seekSet (int offset) const overridefinal
+\brief   Seek to the offset
+\param  int offset
+
+\fn     virtual void 	seekEnd (int offset) const overridefinal
+\brief
+\param  int offset
+
+\fn    virtual void 	seekCurrent (int offset) const overridefinal
+\brief
+\param int offset
+
+\fn     virtual std::size_t 	tell (void) const overridefinal
+\brief
+\return std::size_t
+
+\fn     virtual bool 	flush (void) const overridefinal
+\brief  flush file 
+\return bool
+*/
