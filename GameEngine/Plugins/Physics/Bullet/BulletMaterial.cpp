@@ -6,44 +6,43 @@ namespace AGE
 	namespace Physics
 	{
 		// Constructors
-		BulletMaterial::BulletMaterial(ColliderInterface *collider)
-			: MaterialInterface(collider)
+		BulletMaterial::BulletMaterial(const std::string &name)
+			: MaterialInterface(name)
 		{
-			return;
+			setStaticFriction(GetDefaultStaticFriction());
+			setDynamicFriction(GetDefaultDynamicFriction());
+			setRestitution(GetDefaultRestitution());
 		}
 
 		// Inherited Methods
 		void BulletMaterial::setStaticFriction(float staticFriction)
 		{
-			// TO_DO
+			material.m_friction = staticFriction;
 		}
 
 		float BulletMaterial::getStaticFriction(void) const
 		{
-			// TO_DO
-			return 0.0f;
+			return material.m_friction;
 		}
 
 		void BulletMaterial::setDynamicFriction(float dynamicFriction)
 		{
-			// TO_DO
+			material.m_friction = dynamicFriction;
 		}
 
 		float BulletMaterial::getDynamicFriction(void) const
 		{
-			// TO_DO
-			return 0.0f;
+			return material.m_friction;
 		}
 
 		void BulletMaterial::setRestitution(float restitution)
 		{
-			// TO_DO
+			material.m_restitution = restitution;
 		}
 
 		float BulletMaterial::getRestitution(void) const
 		{
-			// TO_DO
-			return 0.0f;
+			return material.m_restitution;
 		}
 	}
 }

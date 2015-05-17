@@ -22,6 +22,7 @@
 #include <Utils/MemoryPool.hpp>
 #include <Render/Properties/IProperty.hh>
 #include <Render/Properties/Transformation.hh>
+#include <Utils/Profiler.hpp>
 
 #include <Render/OcclusionTools/DepthMap.hpp>
 #include <Render/OcclusionTools/DepthMapManager.hpp>
@@ -135,6 +136,8 @@ namespace AGE
 
 	void RenderScene::removeDrawableObject(DRAWABLE_ID id)
 	{
+		SCOPE_profile_cpu_i("PrepareTimer", "Remove drawable object");
+
 		Drawable &toRm = _drawables.get(id);
 		_removeProperties(toRm.mesh.properties);
 		if (toRm.hasMoved)
@@ -154,6 +157,8 @@ namespace AGE
 
 	void RenderScene::_setCameraInfos(AGE::Commands::MainToPrepare::CameraInfos &msg)
 	{
+		SCOPE_profile_cpu_i("PrepareTimer", "Set camera infos");
+
 		Camera *co = nullptr;
 		co = &_cameras.get(msg.key.id);
 		co->hasMoved = true;
@@ -163,6 +168,8 @@ namespace AGE
 
 	void RenderScene::_createCamera(AGE::Commands::MainToPrepare::CreateCamera &msg)
 	{
+		SCOPE_profile_cpu_i("PrepareTimer", "Create camera");
+
 		_cameras.allocPreparated(msg.key.id);
 		Camera &toAdd = _cameras.get(msg.key.id);
 
@@ -174,6 +181,8 @@ namespace AGE
 
 	void RenderScene::_createPointLight(AGE::Commands::MainToPrepare::CreatePointLight &msg)
 	{
+		SCOPE_profile_cpu_i("PrepareTimer", "Create point light");
+
 		_pointLights.allocPreparated(msg.key.id);
 		PointLight &toAdd = _pointLights.get(msg.key.id);
 
@@ -186,6 +195,8 @@ namespace AGE
 
 	void RenderScene::_createSpotLight(AGE::Commands::MainToPrepare::CreateSpotLight &msg)
 	{
+		SCOPE_profile_cpu_i("PrepareTimer", "Create spotlight");
+
 		_spotLights.allocPreparated(msg.key.id);
 		SpotLight &toAdd = _spotLights.get(msg.key.id);
 
@@ -198,6 +209,8 @@ namespace AGE
 
 	void RenderScene::_createDirectionalLight(AGE::Commands::MainToPrepare::CreateDirectionalLight &msg)
 	{
+		SCOPE_profile_cpu_i("PrepareTimer", "Create directional light");
+
 		_directionalLights.allocPreparated(msg.key.id);
 		DirectionalLight &toAdd = _directionalLights.get(msg.key.id);
 
@@ -210,6 +223,8 @@ namespace AGE
 
 	void RenderScene::_createMesh(AGE::Commands::MainToPrepare::CreateMesh &msg)
 	{
+		SCOPE_profile_cpu_i("PrepareTimer", "Create mesh");
+
 		_meshs.allocPreparated(msg.key.id);
 		Mesh &toAdd = _meshs.get(msg.key.id);
 		toAdd.key.id = msg.key.id;
@@ -217,6 +232,8 @@ namespace AGE
 
 	void RenderScene::_setPointLight(AGE::Commands::MainToPrepare::SetPointLight &msg)
 	{
+		SCOPE_profile_cpu_i("PrepareTimer", "Set pointlight");
+
 		PointLight *l = &_pointLights.get(msg.key.id);
 		l->data = msg.data;
 		if (l->hasMoved == false)
@@ -229,6 +246,8 @@ namespace AGE
 
 	void RenderScene::_setSpotLight(AGE::Commands::MainToPrepare::SetSpotLight &msg)
 	{
+		SCOPE_profile_cpu_i("PrepareTimer", "Set spotlight");
+
 		SpotLight *l = &_spotLights.get(msg.key.id);
 		l->data = msg.data;
 		if (l->hasMoved == false)
@@ -241,6 +260,8 @@ namespace AGE
 
 	void RenderScene::_setDirectionalLight(AGE::Commands::MainToPrepare::SetDirectionalLight &msg)
 	{
+		SCOPE_profile_cpu_i("PrepareTimer", "Set directional light");
+
 		DirectionalLight *l = &_directionalLights.get(msg.key.id);
 		l->data = msg.data;
 		if (l->hasMoved == false)
@@ -251,6 +272,8 @@ namespace AGE
 
 	void RenderScene::_deleteCamera(AGE::Commands::MainToPrepare::DeleteCamera &msg)
 	{
+		SCOPE_profile_cpu_i("PrepareTimer", "Delete camera");
+
 		Camera &toRm = _cameras.get(msg.key.id);
 
 		_activeCameras[toRm.activeCameraIdx] = _activeCameras[_activeCameras.size() - 1];
@@ -262,6 +285,8 @@ namespace AGE
 
 	void RenderScene::_deletePointLight(AGE::Commands::MainToPrepare::DeletePointLight &msg)
 	{
+		SCOPE_profile_cpu_i("PrepareTimer", "Delete point light");
+
 		PointLight &toRm = _pointLights.get(msg.key.id);
 
 		// TODO: remove when point lights will be in octree
@@ -281,6 +306,8 @@ namespace AGE
 
 	void RenderScene::_deleteDirectionalLight(AGE::Commands::MainToPrepare::DeleteDirectionalLight&msg)
 	{
+		SCOPE_profile_cpu_i("PrepareTimer", "Delete directionnal");
+
 		DirectionalLight &toRm = _directionalLights.get(msg.key.id);
 		_pointLights.deallocPreparated(msg.key.id);
 		// TODO: remove when point lights will be in octree
@@ -292,6 +319,8 @@ namespace AGE
 
 	void RenderScene::_deleteSpotLight(AGE::Commands::MainToPrepare::DeleteSpotLight &msg)
 	{
+		SCOPE_profile_cpu_i("PrepareTimer", "Delete spotlight");
+
 		SpotLight &toRm = _spotLights.get(msg.key.id);
 
 		// TODO: remove when point lights will be in octree
@@ -311,6 +340,8 @@ namespace AGE
 
 	void RenderScene::_deleteDrawable(AGE::Commands::MainToPrepare::DeleteMesh &msg)
 	{
+		SCOPE_profile_cpu_i("PrepareTimer", "Delete drawable");
+
 		Mesh &toRm = _meshs.get(msg.key.id);
 		for (auto &e : toRm.drawableCollection)
 		{
@@ -321,6 +352,8 @@ namespace AGE
 
 	void RenderScene::_setGeometry(AGE::Commands::MainToPrepare::SetGeometry &msg)
 	{
+		SCOPE_profile_cpu_i("PrepareTimer", "Set geometry");
+
 		Mesh *uo = &_meshs.get(msg.key.id);
 
 		for (auto &e : uo->drawableCollection)
@@ -328,7 +361,7 @@ namespace AGE
 			removeDrawableObject(e);
 		}
 		uo->drawableCollection.clear();
-		
+
 		for (std::size_t i = 0; i < msg.submeshInstances.size(); ++i)
 		{
 			auto id = _drawables.alloc();
@@ -398,6 +431,8 @@ namespace AGE
 
 	void RenderScene::_setTransform(AGE::Commands::MainToPrepare::SetTransform &msg)
 	{
+		SCOPE_profile_cpu_i("PrepareTimer", "Set transform");
+
 		Camera *co = nullptr;
 		Mesh *uo = nullptr;
 		PointLight *l = nullptr;
@@ -457,6 +492,8 @@ namespace AGE
 
 	void RenderScene::_moveElementsInOctree()
 	{
+		SCOPE_profile_cpu_i("PrepareTimer", "Move element in octree");
+
 		for (uint32_t idx : _drawablesToMove)
 		{
 			Drawable &e = _drawables.get(idx);
@@ -495,6 +532,8 @@ namespace AGE
 
 	void RenderScene::_prepareDrawList(AGE::Commands::MainToPrepare::PrepareDrawLists &msg)
 	{
+		SCOPE_profile_cpu_i("PrepareTimer", "Prepare draw list");
+
 		AGE::Vector<Cullable*> toDraw;
 
 		_moveElementsInOctree();
@@ -507,7 +546,10 @@ namespace AGE
 		{
 			if (e.used == false)
 			{
+				SCOPE_profile_cpu_i("PrepareTimer", "Clear old draw list");
 				drawContainer = &e;
+				drawContainer->used = true;
+				drawContainer->cameras.clear();
 				break;
 			}
 		}
@@ -522,6 +564,9 @@ namespace AGE
 
 		for (uint32_t cameraIdx : _activeCameras)
 		{
+			auto scopeName = "Prepare camera " + std::to_string(cameraIdx);
+			SCOPE_profile_cpu_i("PrepareTimer", scopeName.c_str());
+
 			Camera &camera = _cameras.get(cameraIdx);
 			//				auto view = glm::inverse(glm::scale(glm::translate(glm::mat4(1), camera.position) * glm::toMat4(camera.orientation), camera.scale));
 			auto view = glm::inverse(camera.transformation);
@@ -543,243 +588,259 @@ namespace AGE
 			auto depthMap = depthMapManager.getReadableMap();
 
 			// no culling for the lights for the moment (TODO)
-			for (uint32_t pointLightIdx : _activePointLights)
 			{
-				auto &p = _pointLights.get(pointLightIdx);
-				renderCamera.lights.pointLight.emplace_back();
-				RenderLight<PointLight> *curLight = &renderCamera.lights.pointLight.back();
-				curLight->light = p;
-				// TODO: Cull the shadows
-				// VERY UGLY CULLING FOR THE MOMENT
-				AGE::Vector<Cullable*> objectsInShadow;
-				_octree.getAllElements(objectsInShadow);
-				for (Cullable *e : objectsInShadow)
+				SCOPE_profile_cpu_i("PrepareTimer", "Pointlights preparation");
+				for (uint32_t pointLightIdx : _activePointLights)
 				{
-					switch (e->key.type)
-					{
-					case PrepareKey::Type::Drawable:
-					{
-						Drawable *currentDrawable = static_cast<Drawable*>(e);
-						RenderPainter *curRenderPainter = nullptr;
-						RenderDrawableList *curRenderDrawablelist = nullptr;
+					auto &p = _pointLights.get(pointLightIdx);
+					renderCamera.lights.pointLight.emplace_back();
+					RenderLight<PointLight> *curLight = &renderCamera.lights.pointLight.back();
+					curLight->light = p;
+					// TODO: Cull the shadows
+					// VERY UGLY CULLING FOR THE MOMENT
+					AGE::Vector<Cullable*> objectsInShadow;
+					_octree.getAllElements(objectsInShadow);
 
-						auto renderPainter = curLight->keys.find(currentDrawable->mesh.painter.getId());
-						// We find the good render painter
-						if (renderPainter == curLight->keys.end())
+					for (Cullable *e : objectsInShadow)
+					{
+						switch (e->key.type)
 						{
-							curRenderPainter = &curLight->keys[currentDrawable->mesh.painter.getId()];
-						}
-						else
-							curRenderPainter = &renderPainter->second;
-						// and the good render mode
-						for (auto &drawableList : curRenderPainter->drawables)
+						case PrepareKey::Type::Drawable:
 						{
-							if (drawableList.renderMode == currentDrawable->renderMode)
+							Drawable *currentDrawable = static_cast<Drawable*>(e);
+							RenderPainter *curRenderPainter = nullptr;
+							RenderDrawableList *curRenderDrawablelist = nullptr;
+
+							auto renderPainter = curLight->keys.find(currentDrawable->mesh.painter.getId());
+							// We find the good render painter
+							if (renderPainter == curLight->keys.end())
 							{
-								curRenderDrawablelist = &drawableList;
-								break;
+								curRenderPainter = &curLight->keys[currentDrawable->mesh.painter.getId()];
 							}
+							else
+								curRenderPainter = &renderPainter->second;
+							// and the good render mode
+							for (auto &drawableList : curRenderPainter->drawables)
+							{
+								if (drawableList.renderMode == currentDrawable->renderMode)
+								{
+									curRenderDrawablelist = &drawableList;
+									break;
+								}
+							}
+							if (curRenderDrawablelist == nullptr)
+							{
+								curRenderPainter->drawables.emplace_back();
+								curRenderDrawablelist = &curRenderPainter->drawables.back();
+								curRenderDrawablelist->renderMode = currentDrawable->renderMode;
+							}
+							curRenderDrawablelist->vertices.emplace_back(currentDrawable->mesh.vertices);
+							curRenderDrawablelist->properties.emplace_back(_properties.get(currentDrawable->mesh.properties.getId()));
 						}
-						if (curRenderDrawablelist == nullptr)
-						{
-							curRenderPainter->drawables.emplace_back();
-							curRenderDrawablelist = &curRenderPainter->drawables.back();
-							curRenderDrawablelist->renderMode = currentDrawable->renderMode;
 						}
-						curRenderDrawablelist->vertices.emplace_back(currentDrawable->mesh.vertices);
-						curRenderDrawablelist->properties.emplace_back(_properties.get(currentDrawable->mesh.properties.getId()));
 					}
-					}
+					// END OF VERY UGLY CULLING
 				}
-				// END OF VERY UGLY CULLING
 			}
-			for (uint32_t spotLightIdx : _activeSpotLights) 
 			{
-				auto &p = _spotLights.get(spotLightIdx);
-				renderCamera.lights.spotLights.emplace_back();
-				RenderLight<SpotLight> *curLight = &renderCamera.lights.spotLights.back();
-				curLight->light = p;
-				// TODO: Cull the shadows
-				// VERY UGLY CULLING FOR THE MOMENT
-				AGE::Vector<Cullable*> objectsInShadow;
-				_octree.getAllElements(objectsInShadow);
-				for (Cullable *e : objectsInShadow)
+				SCOPE_profile_cpu_i("PrepareTimer", "Spotlights preparation");
+				for (uint32_t spotLightIdx : _activeSpotLights)
 				{
-					switch (e->key.type)
+					auto &p = _spotLights.get(spotLightIdx);
+					renderCamera.lights.spotLights.emplace_back();
+					RenderLight<SpotLight> *curLight = &renderCamera.lights.spotLights.back();
+					curLight->light = p;
+					// TODO: Cull the shadows
+					// VERY UGLY CULLING FOR THE MOMENT
+					AGE::Vector<Cullable*> objectsInShadow;
+					_octree.getAllElements(objectsInShadow);
+					for (Cullable *e : objectsInShadow)
 					{
-					case PrepareKey::Type::Drawable:
-					{
-						Drawable *currentDrawable = static_cast<Drawable*>(e);
-						RenderPainter *curRenderPainter = nullptr;
-						RenderDrawableList *curRenderDrawablelist = nullptr;
+						switch (e->key.type)
+						{
+						case PrepareKey::Type::Drawable:
+						{
+							Drawable *currentDrawable = static_cast<Drawable*>(e);
+							RenderPainter *curRenderPainter = nullptr;
+							RenderDrawableList *curRenderDrawablelist = nullptr;
 
-						auto renderPainter = curLight->keys.find(currentDrawable->mesh.painter.getId());
-						// We find the good render painter
-						if (renderPainter == curLight->keys.end())
-						{
-							curRenderPainter = &curLight->keys[currentDrawable->mesh.painter.getId()];
-						}
-						else
-							curRenderPainter = &renderPainter->second;
-						// and the good render mode
-						for (auto &drawableList : curRenderPainter->drawables)
-						{
-							if (drawableList.renderMode == currentDrawable->renderMode)
+							auto renderPainter = curLight->keys.find(currentDrawable->mesh.painter.getId());
+							// We find the good render painter
+							if (renderPainter == curLight->keys.end())
 							{
-								curRenderDrawablelist = &drawableList;
-								break;
+								curRenderPainter = &curLight->keys[currentDrawable->mesh.painter.getId()];
 							}
+							else
+								curRenderPainter = &renderPainter->second;
+							// and the good render mode
+							for (auto &drawableList : curRenderPainter->drawables)
+							{
+								if (drawableList.renderMode == currentDrawable->renderMode)
+								{
+									curRenderDrawablelist = &drawableList;
+									break;
+								}
+							}
+							if (curRenderDrawablelist == nullptr)
+							{
+								curRenderPainter->drawables.emplace_back();
+								curRenderDrawablelist = &curRenderPainter->drawables.back();
+								curRenderDrawablelist->renderMode = currentDrawable->renderMode;
+							}
+							curRenderDrawablelist->vertices.emplace_back(currentDrawable->mesh.vertices);
+							curRenderDrawablelist->properties.emplace_back(_properties.get(currentDrawable->mesh.properties.getId()));
 						}
-						if (curRenderDrawablelist == nullptr)
-						{
-							curRenderPainter->drawables.emplace_back();
-							curRenderDrawablelist = &curRenderPainter->drawables.back();
-							curRenderDrawablelist->renderMode = currentDrawable->renderMode;
 						}
-						curRenderDrawablelist->vertices.emplace_back(currentDrawable->mesh.vertices);
-						curRenderDrawablelist->properties.emplace_back(_properties.get(currentDrawable->mesh.properties.getId()));
 					}
-					}
+					// END OF VERY UGLY CULLING
 				}
-				// END OF VERY UGLY CULLING
 			}
+
 			// no culling possible on directional light so paul you don't have to do it ! is it nice ?
 			// ANSWER: Well, it's actually gonna be even harder to cull this...
 			// TODO: compute a box for the shadows (orthogonal frustum) and cull the objects :(
-			for (uint32_t directionalLightIdx : _activeDirectionalLights) {
+			for (uint32_t directionalLightIdx : _activeDirectionalLights)
+			{
 				auto &p = _directionalLights.get(directionalLightIdx);
 				renderCamera.lights.directionalLights.emplace_back();
 				renderCamera.lights.directionalLights.back().light = p;
 			}
-			// Do the culling
-			_octree.getElementsCollide(&camera, toDraw);
-			RenderPipeline *curRenderPipeline = &renderCamera.pipeline;
-			// iter on elements to draw
-			for (Cullable *e : toDraw)
+
 			{
-				switch (e->key.type)
+				SCOPE_profile_cpu_i("PrepareTimer", "Drawable culling");
+				// Do the culling
+				_octree.getElementsCollide(&camera, toDraw);
+				RenderPipeline *curRenderPipeline = &renderCamera.pipeline;
+				// iter on elements to draw
+				for (Cullable *e : toDraw)
 				{
-				case PrepareKey::Type::Drawable:
-				{
-					Drawable *currentDrawable = static_cast<Drawable*>(e);
-
-					RenderPainter *curRenderPainter = nullptr;
-					RenderDrawableList *curRenderDrawablelist = nullptr;
-
-					bool drawObject = true;
-
-					auto renderPainter = curRenderPipeline->keys.find(currentDrawable->mesh.painter.getId());
-					// We find the good render painter
-					if (renderPainter == curRenderPipeline->keys.end())
+					switch (e->key.type)
 					{
-						curRenderPainter = &curRenderPipeline->keys[currentDrawable->mesh.painter.getId()];
-					}
-					else
-						curRenderPainter = &renderPainter->second;
-					// and the good render mode
-					for (auto &drawableList : curRenderPainter->drawables)
+					case PrepareKey::Type::Drawable:
 					{
-						if (drawableList.renderMode == currentDrawable->renderMode)
+						Drawable *currentDrawable = static_cast<Drawable*>(e);
+
+						RenderPainter *curRenderPainter = nullptr;
+						RenderDrawableList *curRenderDrawablelist = nullptr;
+
+						bool drawObject = true;
+
+						auto renderPainter = curRenderPipeline->keys.find(currentDrawable->mesh.painter.getId());
+						// We find the good render painter
+						if (renderPainter == curRenderPipeline->keys.end())
 						{
-							curRenderDrawablelist = &drawableList;
-							break;
+							curRenderPainter = &curRenderPipeline->keys[currentDrawable->mesh.painter.getId()];
 						}
-					}
-					if (curRenderDrawablelist == nullptr)
-					{
-						curRenderPainter->drawables.emplace_back();
-						curRenderDrawablelist = &curRenderPainter->drawables.back();
-						curRenderDrawablelist->renderMode = currentDrawable->renderMode;
-					}
+						else
+							curRenderPainter = &renderPainter->second;
+						// and the good render mode
+						for (auto &drawableList : curRenderPainter->drawables)
+						{
+							if (drawableList.renderMode == currentDrawable->renderMode)
+							{
+								curRenderDrawablelist = &drawableList;
+								break;
+							}
+						}
+						if (curRenderDrawablelist == nullptr)
+						{
+							curRenderPainter->drawables.emplace_back();
+							curRenderDrawablelist = &curRenderPainter->drawables.back();
+							curRenderDrawablelist->renderMode = currentDrawable->renderMode;
+						}
 
 
 #ifdef OCCLUSION_CULLING
-					if (depthMap.isValid() && curRenderDrawablelist->renderMode.at(AGE_OCCLUDER) == false)
-					{
-						drawObject = false;
-
-						auto BB = currentDrawable->mesh.boundingBox;
-
-						glm::vec2 minPoint = glm::vec2(1);
-						glm::vec2 maxPoint = glm::vec2(-1);
-
-						float minZ = std::numeric_limits<float>::max();
-
-						for (std::size_t i = 0; i < 8; ++i)
 						{
-							auto point = depthMap->getMV() * currentDrawable->transformation * glm::vec4(BB.getCornerPoint(i), 1.0f);
-							point /= point.w;
+							SCOPE_profile_cpu_i("PrepareTimer", "Occlusion culling");
 
-							if (point.x < -1)
+							if (depthMap.isValid() && curRenderDrawablelist->renderMode.at(AGE_OCCLUDER) == false)
 							{
-								point.x = -1;
-							}
-							if (point.y < -1)
-							{
-								point.y = -1;
-							}
-							if (point.x > 1)
-							{
-								point.x = 1;
-							}
-							if (point.y > 1)
-							{
-								point.y = 1;
-							}
+								drawObject = false;
 
-							minPoint.x = std::min(minPoint.x, point.x);
-							minPoint.y = std::min(minPoint.y, point.y);
-							maxPoint.x = std::max(maxPoint.x, point.x);
-							maxPoint.y = std::max(maxPoint.y, point.y);
+								auto BB = currentDrawable->mesh.boundingBox;
 
-							point.z = (point.z + 1) * 0.5;
-							minZ = std::min(minZ, point.z);
+								glm::vec2 minPoint = glm::vec2(1);
+								glm::vec2 maxPoint = glm::vec2(-1);
+
+								float minZ = std::numeric_limits<float>::max();
+
+								for (std::size_t i = 0; i < 8; ++i)
+								{
+									auto point = depthMap->getMV() * currentDrawable->transformation * glm::vec4(BB.getCornerPoint(i), 1.0f);
+									point /= point.w;
+
+									if (point.x < -1)
+									{
+										point.x = -1;
+									}
+									if (point.y < -1)
+									{
+										point.y = -1;
+									}
+									if (point.x > 1)
+									{
+										point.x = 1;
+									}
+									if (point.y > 1)
+									{
+										point.y = 1;
+									}
+
+									minPoint.x = std::min(minPoint.x, point.x);
+									minPoint.y = std::min(minPoint.y, point.y);
+									maxPoint.x = std::max(maxPoint.x, point.x);
+									maxPoint.y = std::max(maxPoint.y, point.y);
+
+									point.z = (point.z + 1.0f) * 0.5f;
+									minZ = std::min(minZ, point.z);
+								}
+
+								glm::uvec2 screenMin(((minPoint + glm::vec2(1)) / glm::vec2(2)) * glm::vec2(depthMap->getMipmapWidth(), depthMap->getMipmapHeight()));
+								glm::uvec2 screenMax(((maxPoint + glm::vec2(1)) / glm::vec2(2)) * glm::vec2(depthMap->getMipmapWidth(), depthMap->getMipmapHeight()));
+
+								drawObject |= depthMap->testBox((uint32_t)(minZ * (1 << 24)), screenMin, screenMax);
+
+								if (drawObject)
+								{
+									GetRenderThread()->getQueue()->emplaceCommand<AGE::Commands::ToRender::Draw2DLine>(glm::vec2(minPoint.x, minPoint.y), glm::vec2(minPoint.x, maxPoint.y));
+									GetRenderThread()->getQueue()->emplaceCommand<AGE::Commands::ToRender::Draw2DLine>(glm::vec2(minPoint.x, maxPoint.y), glm::vec2(maxPoint.x, maxPoint.y));
+									GetRenderThread()->getQueue()->emplaceCommand<AGE::Commands::ToRender::Draw2DLine>(glm::vec2(maxPoint.x, maxPoint.y), glm::vec2(maxPoint.x, minPoint.y));
+									GetRenderThread()->getQueue()->emplaceCommand<AGE::Commands::ToRender::Draw2DLine>(glm::vec2(maxPoint.x, minPoint.y), glm::vec2(minPoint.x, minPoint.y));
+								}
+							}
 						}
-
-						glm::uvec2 screenMin(((minPoint + glm::vec2(1)) / glm::vec2(2)) * glm::vec2(depthMap->getMipmapWidth(), depthMap->getMipmapHeight()));
-						glm::uvec2 screenMax(((maxPoint + glm::vec2(1)) / glm::vec2(2)) * glm::vec2(depthMap->getMipmapWidth(), depthMap->getMipmapHeight()));
-
-						drawObject |= depthMap->testBox((uint32_t)(minZ * (1 << 24)), screenMin, screenMax);
-
+#endif // OCCLUSION
 						if (drawObject)
 						{
-							GetRenderThread()->getQueue()->emplaceCommand<AGE::Commands::ToRender::Draw2DLine>(glm::vec2(minPoint.x, minPoint.y), glm::vec2(minPoint.x, maxPoint.y));
-							GetRenderThread()->getQueue()->emplaceCommand<AGE::Commands::ToRender::Draw2DLine>(glm::vec2(minPoint.x, maxPoint.y), glm::vec2(maxPoint.x, maxPoint.y));
-							GetRenderThread()->getQueue()->emplaceCommand<AGE::Commands::ToRender::Draw2DLine>(glm::vec2(maxPoint.x, maxPoint.y), glm::vec2(maxPoint.x, minPoint.y));
-							GetRenderThread()->getQueue()->emplaceCommand<AGE::Commands::ToRender::Draw2DLine>(glm::vec2(maxPoint.x, minPoint.y), glm::vec2(minPoint.x, minPoint.y));
+							curRenderDrawablelist->vertices.emplace_back(currentDrawable->mesh.vertices);
+							curRenderDrawablelist->properties.emplace_back(_properties.get(currentDrawable->mesh.properties.getId()));
 						}
-					}
-#endif // OCCLUSION
-					if (drawObject)
-					{
-						curRenderDrawablelist->vertices.emplace_back(currentDrawable->mesh.vertices);
-						curRenderDrawablelist->properties.emplace_back(_properties.get(currentDrawable->mesh.properties.getId()));
-					}
 
-				}
-				break;
-				case PrepareKey::Type::PointLight:
-				{
-					PointLight *currentPointLight = static_cast<PointLight*>(e);
-					renderCamera.lights.pointLight.emplace_back();
-					renderCamera.lights.pointLight.back().light = *currentPointLight;
-					// TODO: Cull the shadows
-				}
-				break;
-				case PrepareKey::Type::SpotLight:
-				{
-					SpotLight *currentSpotLight = static_cast<SpotLight*>(e);
-					renderCamera.lights.spotLights.emplace_back();
-					renderCamera.lights.spotLights.back().light = *currentSpotLight;
-				}
-				break;
-				default:
-					assert(!"Type cannot be added to the render queue.");
+					}
 					break;
+					case PrepareKey::Type::PointLight:
+					{
+						PointLight *currentPointLight = static_cast<PointLight*>(e);
+						renderCamera.lights.pointLight.emplace_back();
+						renderCamera.lights.pointLight.back().light = *currentPointLight;
+						// TODO: Cull the shadows
+					}
+					break;
+					case PrepareKey::Type::SpotLight:
+					{
+						SpotLight *currentSpotLight = static_cast<SpotLight*>(e);
+						renderCamera.lights.spotLights.emplace_back();
+						renderCamera.lights.spotLights.back().light = *currentSpotLight;
+					}
+					break;
+					default:
+						assert(!"Type cannot be added to the render queue.");
+						break;
+					}
 				}
 			}
 		}
-		drawContainer->used = true;
 		GetRenderThread()->getQueue()->emplaceCommand<Commands::ToRender::CopyDrawLists>(std::make_shared<RenderCameraListContainerHandle>(*drawContainer));
 	}
 

@@ -18,5 +18,6 @@
     <ClInclude Include="Components\RotationComponent.hpp" />
     <ClInclude Include="Systems\RotationSystem.hpp" />
     <ClInclude Include="EngineCoreTestConfiguration.hpp" />
+    <ClInclude Include="..\GameEngine\Engine\Physics\ContactType.hpp" />
   </ItemGroup>
 </Project>

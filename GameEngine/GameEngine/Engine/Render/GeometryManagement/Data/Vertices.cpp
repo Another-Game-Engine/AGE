@@ -1,3 +1,4 @@
+#include <Utils/Profiler.hpp>
 #include <Render/GeometryManagement/Data/Vertices.hh>
 #include <Render/ProgramResources/Types/ProgramResourcesType.hh>
 #include <Render/GeometryManagement/Data/BlockMemory.hh>

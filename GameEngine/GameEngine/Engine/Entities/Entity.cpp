@@ -188,26 +188,31 @@ namespace AGE
 
 	ComponentBase *Entity::getComponent(ComponentType id)
 	{
+		SCOPE_profile_cpu_function("Entity");
 		return ptr->getComponent(id);
 	}
 
 	void Entity::removeComponent(ComponentType id)
 	{
+		SCOPE_profile_cpu_function("Entity");
 		ptr->removeComponent(id);
 	}
 
 	bool Entity::haveComponent(ComponentType id) const
 	{
+		SCOPE_profile_cpu_function("Entity");
 		return ptr->haveComponent(id);
 	}
 
 	void Entity::addComponentPtr(ComponentBase *cpt)
 	{
+		SCOPE_profile_cpu_function("Entity");
 		ptr->addComponentPtr(cpt);
 	}
 
 	void Entity::copyComponent(ComponentBase *cpt)
 	{
+		SCOPE_profile_cpu_function("Entity");
 		ptr->copyComponent(cpt);
 	}
 

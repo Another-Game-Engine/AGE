@@ -1,7 +1,8 @@
 #pragma once
 
+#include <PxPhysicsAPI.h>
+
 #include "MaterialInterface.hpp"
-#include "PhysXWorld.hpp"
 
 namespace AGE
 {
@@ -11,7 +12,7 @@ namespace AGE
 		class PhysXCapsuleCollider;
 		class PhysXMeshCollider;
 		class PhysXSphereCollider;
-
+		class PhysXWorld;
 
 		class PhysXMaterial final : public MaterialInterface
 		{
@@ -24,23 +25,30 @@ namespace AGE
 
 			friend PhysXSphereCollider;
 
+			friend ObjectPool < PhysXMaterial >;
+
 		public:
 			// Constructors
 			PhysXMaterial(void) = delete;
 
-			PhysXMaterial(PhysXWorld *world, ColliderInterface *collider);
+			PhysXMaterial(PhysXWorld *world, const std::string &name);
 
 			PhysXMaterial(const PhysXMaterial &) = delete;
 
 			// Assignment Operators
 			PhysXMaterial &operator=(const PhysXMaterial &) = delete;
 
-			// Destructor
-			~PhysXMaterial(void) = default;
+			// Methods
+			physx::PxMaterial *getMaterial(void);
+
+			const physx::PxMaterial *getMaterial(void) const;
 
 		private:
 			// Attributes
 			physx::PxMaterial *material = nullptr;
+
+			// Destructor
+			~PhysXMaterial(void);
 
 			// Inherited Methods
 			void setStaticFriction(float staticFriction) override final;

@@ -7,8 +7,8 @@ namespace AGE
 	namespace Physics
 	{
 		// Constructors
-		NullSphereCollider::NullSphereCollider(WorldInterface *world, void *&data)
-			: ColliderInterface(world, data), SphereColliderInterface(world, data), NullCollider(world, data)
+		NullSphereCollider::NullSphereCollider(WorldInterface *world, Private::GenericData *data)
+			: ColliderInterface(world, data), SphereColliderInterface(world, data), NullCollider(world, data), center(GetDefaultCenter()), radius(GetDefaultRadius())
 		{
 			return;
 		}
@@ -16,22 +16,27 @@ namespace AGE
 		// Inherited Methods
 		void NullSphereCollider::setCenter(const glm::vec3 &center)
 		{
-			return;
+			this->center = center;
 		}
 
 		glm::vec3 NullSphereCollider::getCenter(void) const
 		{
-			return glm::vec3();
+			return center;
 		}
 
 		void NullSphereCollider::setRadius(float radius)
 		{
-			return;
+			this->radius = radius;
 		}
 
 		float NullSphereCollider::getRadius(void) const
 		{
-			return 0.0f;
+			return radius;
+		}
+
+		void NullSphereCollider::scale(const glm::vec3 &scaling)
+		{
+			radius *= std::pow(std::abs(scaling.x * scaling.y * scaling.z), 1.0f / 3.0f);
 		}
 	}
 }

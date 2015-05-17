@@ -12,11 +12,14 @@ namespace AGE
 	{
 		class NullCapsuleCollider final : public CapsuleColliderInterface, public NullCollider
 		{
+			// Friendships
+			friend ObjectPool < NullCapsuleCollider >;
+
 		public:
 			// Constructors
 			NullCapsuleCollider(void) = delete;
 
-			NullCapsuleCollider(WorldInterface *world, void *&data);
+			NullCapsuleCollider(WorldInterface *world, Private::GenericData *data);
 
 			NullCapsuleCollider(const NullCapsuleCollider &) = delete;
 
@@ -24,6 +27,13 @@ namespace AGE
 			NullCapsuleCollider &operator=(const NullCapsuleCollider &) = delete;
 
 		private:
+			// Attributes
+			glm::vec3 center;
+
+			float height = 0.0f;
+
+			float radius = 0.0f;
+
 			// Destructor
 			~NullCapsuleCollider(void) = default;
 			
@@ -39,6 +49,8 @@ namespace AGE
 			void setRadius(float radius) override final;
 
 			float getRadius(void) const override final;
+
+			void scale(const glm::vec3 &scaling) override final;
 		};
 	}
 }

@@ -20,16 +20,22 @@ namespace AGE
 
 	IRender & FrameBufferRender::render(RenderPipeline const &pipeline, RenderLightList &lights, CameraInfos const &infos)
 	{
+		SCOPE_profile_cpu_i("RenderTimer", "FrameBufferRender pass");
+
 		_frame_buffer.bind();
 		glViewport(0, 0, _frame_buffer.width(), _frame_buffer.height());
 		if (!_is_update)
 		{
+			SCOPE_profile_gpu_i("glDrawBuffers");
+			SCOPE_profile_cpu_i("RenderTimer", "glDrawBuffers");
+
 			if (_drawing_attach.size() == 0) {
 				glDrawBuffer(GL_NONE);
 			}
 			else {
 				glDrawBuffers(GLint(_drawing_attach.size()), _drawing_attach.data());
 			}
+
 			for (auto &storage : _frame_output)
 			{
 				_frame_buffer.attachment(*storage.second.get(), storage.first);

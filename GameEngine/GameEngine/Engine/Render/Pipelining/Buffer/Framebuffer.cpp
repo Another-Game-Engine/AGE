@@ -1,6 +1,7 @@
 #include <Render/Pipelining/Buffer/Framebuffer.hh>
 #include <Render/Pipelining/Buffer/IFramebufferStorage.hh>
 #include <Utils/Debug.hpp>
+#include <Utils/Profiler.hpp>
 
 namespace AGE
 {
@@ -36,6 +37,8 @@ namespace AGE
 
 	Framebuffer const &Framebuffer::bind() const
 	{
+		SCOPE_profile_gpu_i("Bind frame buffer");
+		SCOPE_profile_cpu_i("RenderTimer", "Bind frame buffer");
 		glBindFramebuffer(_mode, _id);
 		return (*this);
 	}

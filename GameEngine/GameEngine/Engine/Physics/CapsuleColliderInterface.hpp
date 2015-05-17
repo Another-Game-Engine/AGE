@@ -12,7 +12,7 @@ namespace AGE
 			// Constructors
 			CapsuleColliderInterface(void) = delete;
 
-			CapsuleColliderInterface(WorldInterface *world, void *&data);
+			CapsuleColliderInterface(WorldInterface *world, Private::GenericData *data);
 
 			CapsuleColliderInterface(const CapsuleColliderInterface &) = delete;
 
@@ -33,6 +33,13 @@ namespace AGE
 			virtual float getRadius(void) const = 0;
 
 		protected:
+			// Static Methods
+			static glm::vec3 GetDefaultCenter(void);
+
+			static float GetDefaultHeight(void);
+
+			static float GetDefaultRadius(void);
+
 			// Destructor
 			virtual ~CapsuleColliderInterface(void) = default;
 

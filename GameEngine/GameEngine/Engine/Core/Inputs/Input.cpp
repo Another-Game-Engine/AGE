@@ -4,7 +4,7 @@
 #include <Threads/ThreadManager.hpp>
 #include <Threads/MainThread.hpp>
 
-#ifdef USE_IMGUI
+#ifdef AGE_ENABLE_IMGUI
 #include <Utils/Age_Imgui.hpp>
 #endif
 
@@ -205,7 +205,7 @@ namespace AGE
 		_keyInputs[physicalInput] = AGE_RESET_PHYSICAL_KEY_STATE(_keyInputs[physicalInput]);
 		_keyInputs[physicalInput] = AGE_SET_PHYSICAL_KEY_JUST_PRESSED(_keyInputs[physicalInput]);
 		_keyInputs[physicalInput] = AGE_SET_PHYSICAL_KEY_PRESSED(_keyInputs[physicalInput]);
-#ifdef USE_IMGUI
+#ifdef AGE_ENABLE_IMGUI
 		GetMainThread()->getQueue()->emplaceTask<ImGuiKeyEvent>(mappedInput, true);
 #endif
 	}
@@ -217,7 +217,7 @@ namespace AGE
 		_keyInputs[mappedInput] = AGE_SET_KEY_JUST_RELEASED(_keyInputs[mappedInput]);
 		_keyInputs[physicalInput] = AGE_RESET_PHYSICAL_KEY_STATE(_keyInputs[physicalInput]);
 		_keyInputs[physicalInput] = AGE_SET_PHYSICAL_KEY_JUST_RELEASED(_keyInputs[physicalInput]);
-#ifdef USE_IMGUI
+#ifdef AGE_ENABLE_IMGUI
 		GetMainThread()->getQueue()->emplaceTask<ImGuiKeyEvent>(mappedInput, false);
 #endif
 	}
@@ -296,7 +296,7 @@ namespace AGE
 
 	void Input::sendMouseStateToIMGUI()
 	{
-#ifdef USE_IMGUI
+#ifdef AGE_ENABLE_IMGUI
 		glm::ivec2 mousePosition;
 		{
 			std::lock_guard<AGE::SpinLock> lock(_mutex);

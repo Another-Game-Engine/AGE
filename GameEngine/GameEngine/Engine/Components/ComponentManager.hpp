@@ -9,7 +9,7 @@ namespace AGE
 	class ComponentManager
 	{
 	private:
-		std::vector<std::shared_ptr<IObjectPool>> _pools;
+		std::vector<std::shared_ptr<BufferPool>> _pools;
 	public:
 		template <typename T>
 		void createComponentPool()

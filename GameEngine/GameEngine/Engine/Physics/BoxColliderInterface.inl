@@ -6,8 +6,19 @@ namespace AGE
 {
 	namespace Physics
 	{
+		// Static Methods
+		inline glm::vec3 BoxColliderInterface::GetDefaultCenter(void)
+		{
+			return glm::vec3();
+		}
+
+		inline glm::vec3 BoxColliderInterface::GetDefaultSize(void)
+		{
+			return glm::vec3(1.0f, 1.0f, 1.0f);
+		}
+
 		// Constructors
-		inline BoxColliderInterface::BoxColliderInterface(WorldInterface *world, void *&data)
+		inline BoxColliderInterface::BoxColliderInterface(WorldInterface *world, Private::GenericData *data)
 			: ColliderInterface(world, data)
 		{
 			return;

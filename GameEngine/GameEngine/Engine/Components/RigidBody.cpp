@@ -1,417 +1,250 @@
-#include "RigidBody.hpp"
+#include <Components/RigidBody.hpp>
+#include <Components/Collider.hpp>
+#include <Components/PhysicsData.hpp>
 #include <Core/AScene.hh>
-#include <Physics/BulletDynamicManager.hpp>
-#include <Physics/DynamicMotionState.hpp>
-#ifdef EDITOR_ENABLED
-#include <imgui/imgui.h>
-#include <glm/gtc/type_ptr.hpp>
-#endif
+#include <Physics/PhysicsInterface.hpp>
+#include <Physics/WorldInterface.hpp>
 
 namespace AGE
 {
-	RigidBody::RigidBody()
-		: ComponentBase(),
-		_collisionShape(nullptr),
-		_motionState(nullptr),
-		_rigidBody(nullptr),
-		_manager(nullptr),
-		_mass(0.0f),
-		_inertia(btVector3(0.0f, 0.0f, 0.0f)),
-		_rotationConstraint(glm::uvec3(1, 1, 1)),
-		_transformConstraint(glm::uvec3(1, 1, 1)),
-		_shapeType(UndefinedTypeId),
-		_shapePath(""),
-		_collisionShapeType(UNDEFINED)
+	// Methods
+	void RigidBody::init(void)
 	{
+		assert(rigidBody == nullptr && "RigidBody already initialized");
+		rigidBody = entity.getScene()->getInstance<Physics::PhysicsInterface>()->getWorld()->createRigidBody(entity.addComponent<Private::PhysicsData>()->getData());
+		rigidBody->rigidBody = this;
+		Link *link = entity.getLinkPtr();
+		setPosition(link->getPosition());
+		setRotation(link->getOrientation());
 	}
 
-	void RigidBody::init(float mass/* = 1.0f*/)
+	void RigidBody::setAngularDrag(float angularDrag)
 	{
-		auto scene = entity.getScene();
-		_manager = dynamic_cast<BulletDynamicManager*>(scene->getInstance<BulletCollisionManager>());
-		assert(_manager != nullptr);
-		_mass = mass;
+		assert(rigidBody != nullptr && "Invalid RigidBody");
+		rigidBody->setAngularDrag(angularDrag);
 	}
 
-	void RigidBody::reset()
+	float RigidBody::getAngularDrag(void) const
 	{
-		_clearBulletObjects();
-
-		_shapeType = UNDEFINED;
-		_mass = 0.0f;
-		_rotationConstraint = glm::uvec3(1, 1, 1);
-		_transformConstraint = glm::uvec3(1, 1, 1);
-		_inertia.setValue(0, 0, 0);
+		assert(rigidBody != nullptr && "Invalid RigidBody");
+		return rigidBody->getAngularDrag();
 	}
 
-	void RigidBody::setTransformation(const AGE::Link *link)
+	void RigidBody::setAngularVelocity(const glm::vec3 &angularVelocity)
 	{
-		if (_shapeType == UNDEFINED || !_rigidBody)
-			return;
-		btTransform tt = _rigidBody->getCenterOfMassTransform();
-		tt.setOrigin(convertGLMVectorToBullet(link->getPosition()));
-		glm::quat rot = link->getOrientation();
-		tt.setRotation(btQuaternion(rot.x, rot.y, rot.z, rot.w));
-		_rigidBody->setWorldTransform(tt);
-		_collisionShape->setLocalScaling(convertGLMVectorToBullet(link->getScale()));
+		assert(rigidBody != nullptr && "Invalid RigidBody");
+		rigidBody->setAngularVelocity(angularVelocity);
 	}
 
-	btMotionState &RigidBody::getMotionState()
+	glm::vec3 RigidBody::getAngularVelocity(void) const
 	{
-		assert(_motionState != nullptr && "Motion state is NULL, RigidBody error. Tips : Have you setAcollisionShape to Component ?.");
-		return *_motionState;
+		assert(rigidBody != nullptr && "Invalid RigidBody");
+		return rigidBody->getAngularVelocity();
 	}
 
-	btCollisionShape &RigidBody::getShape()
+	void RigidBody::setCenterOfMass(const glm::vec3 &centerOfMass)
 	{
-		assert(_collisionShape != nullptr && "Shape is NULL, RigidBody error. Tips : Have you setAcollisionShape to Component ?.");
-		return *_collisionShape;
+		assert(rigidBody != nullptr && "Invalid RigidBody");
+		rigidBody->setCenterOfMass(centerOfMass);
 	}
 
-	btRigidBody &RigidBody::getBody()
+	glm::vec3 RigidBody::getCenterOfMass(void) const
 	{
-		assert(_rigidBody != nullptr && "RigidBody is NULL. Tips : Have you setAcollisionShape to Component ?.");
-		return *_rigidBody;
+		assert(rigidBody != nullptr && "Invalid RigidBody");
+		return rigidBody->getCenterOfMass();
+	}
+
+	void RigidBody::setLinearDrag(float linearDrag)
+	{
+		assert(rigidBody != nullptr && "Invalid RigidBody");
+		rigidBody->setLinearDrag(linearDrag);
+	}
+
+	float RigidBody::getLinearDrag(void) const
+	{
+		assert(rigidBody != nullptr && "Invalid RigidBody");
+		return rigidBody->getLinearDrag();
+	}
+
+	void RigidBody::setLinearVelocity(const glm::vec3 &linearVelocity)
+	{
+		assert(rigidBody != nullptr && "Invalid RigidBody");
+		rigidBody->setLinearVelocity(linearVelocity);
+	}
+
+	glm::vec3 RigidBody::getLinearVelocity(void) const
+	{
+		assert(rigidBody != nullptr && "Invalid RigidBody");
+		return rigidBody->getLinearVelocity();
 	}
 
 	void RigidBody::setMass(float mass)
 	{
-		if (_rigidBody)
-		{
-			_rigidBody->setMassProps(mass, _inertia);
-			_rigidBody->activate(true);
-		}
-		_mass = btScalar(mass);
+		assert(rigidBody != nullptr && "Invalid RigidBody");
+		rigidBody->setMass(mass);
 	}
 
-	float RigidBody::getMass() const
+	float RigidBody::getMass(void) const
 	{
-		return _mass;
+		assert(rigidBody != nullptr && "Invalid RigidBody");
+		return rigidBody->getMass();
 	}
 
-	void RigidBody::setInertia(const glm::vec3 &inertia)
+	void RigidBody::setDiagonalInertiaTensor(const glm::vec3 &diagonalInertiaTensor)
 	{
-		_inertia = convertGLMVectorToBullet(inertia);
-		if (_rigidBody)
-		{
-			_rigidBody->setMassProps(_mass, _inertia);
-		}
+		assert(rigidBody != nullptr && "Invalid RigidBody");
+		rigidBody->setDiagonalInertiaTensor(diagonalInertiaTensor);
 	}
 
-	void RigidBody::setCollisionMesh(
-		const std::string &meshPath
-		, short filterGroup /*= 1*/
-		, short filterMask /*= -1*/)
+	glm::vec3 RigidBody::getDiagonalInertiaTensor(void) const
 	{
-		_clearBulletObjects();
-
-		_shapePath = meshPath;
-
-		auto e = entity;
-		_motionState = _manager->getObjectPool().create<DynamicMotionState>(&this->entity.getLink());
-		auto media = _manager->loadShape(meshPath);
-		if (!media)
-			return;
-		auto s = dynamic_cast<btConvexHullShape*>(media.get());
-		if (s) // dynamic
-		{
-			_collisionShape = _manager->getObjectPool().create<btConvexHullShape>(*s);
-			_shapeType = TypeID::Get<btConvexHullShape>();
-		}
-		else // static
-		{
-			auto m = dynamic_cast<btBvhTriangleMeshShape*>(media.get());
-			_collisionShape = _manager->getObjectPool().create<btScaledBvhTriangleMeshShape>(m, btVector3(1, 1, 1));
-			_shapeType = TypeID::Get<btScaledBvhTriangleMeshShape>();
-		}
-		
-		if (_mass != 0)
-			_collisionShape->calculateLocalInertia(_mass, _inertia);
-		if (((size_t)(this) & 0x3) == 0)
-		{
-			int i = 0;
-		}
-		else
-		{
-		//	assert(false);
-		}
-		_rigidBody = _manager->getObjectPool().create<btRigidBody>(_mass, _motionState, _collisionShape, _inertia);
-		_rigidBody->setUserPointer((void*)(entity.getPtr()));
-		_rigidBody->setAngularFactor(convertGLMVectorToBullet(_rotationConstraint));
-		_rigidBody->setLinearFactor(convertGLMVectorToBullet(_transformConstraint));
-
-		if (_rigidBody->isStaticObject())
-		{
-			//_rigidBody->setActivationState(DISABLE_SIMULATION);
-		}
-		_manager->getWorld()->addRigidBody(_rigidBody, filterGroup, filterMask);
-		setTransformation(&e.getLink());
+		assert(rigidBody != nullptr && "Invalid RigidBody");
+		return rigidBody->getDiagonalInertiaTensor();
 	}
 
-	void RigidBody::setCollisionShape(
-		CollisionShape c
-		, short filterGroup /*= 1*/
-		, short filterMask /* = -1*/)
+	void RigidBody::setMaxAngularVelocity(float maxAngularVelocity)
 	{
-		if (c == UNDEFINED)
-			return;
-		_shapePath = "";
-		_clearBulletObjects();
-
-		auto e = entity;
-		_motionState = _manager->getObjectPool().create<DynamicMotionState>(&e.getLink());
-		if (c == BOX)
-		{
-			_collisionShape = _manager->getObjectPool().create<btBoxShape>(btVector3(0.5, 0.5, 0.5));
-			_shapeType = TypeID::Get<btBoxShape>();
-		}
-		else if (c == SPHERE)
-		{
-			_collisionShape = _manager->getObjectPool().create<btSphereShape>(btSphereShape(0.5));
-			_shapeType = TypeID::Get<btSphereShape>();
-		}
-		else
-		{
-			assert(false);
-		}
-
-		if (_mass != 0)
-			_collisionShape->calculateLocalInertia(_mass, _inertia);
-		_rigidBody = _manager->getObjectPool().create<btRigidBody>(_mass, _motionState, _collisionShape, _inertia);
-		_rigidBody->setUserPointer((void*)(entity.getPtr()));
-		_rigidBody->setAngularFactor(convertGLMVectorToBullet(_rotationConstraint));
-		_rigidBody->setLinearFactor(convertGLMVectorToBullet(_transformConstraint));
-
-		if (_rigidBody->isStaticObject())
-		{
-			//_rigidBody->setActivationState(DISABLE_SIMULATION);
-		}
-		_manager->getWorld()->addRigidBody(_rigidBody, filterGroup, filterMask);
-		setTransformation(&e.getLink());
+		assert(rigidBody != nullptr && "Invalid RigidBody");
+		rigidBody->setMaxAngularVelocity(maxAngularVelocity);
 	}
 
-	void RigidBody::setRotationConstraint(bool x, bool y, bool z)
+	float RigidBody::getMaxAngularVelocity(void) const
 	{
-		_rotationConstraint = glm::uvec3(static_cast<unsigned int>(x),
-			static_cast<unsigned int>(y),
-			static_cast<unsigned int>(z));
-		if (!_rigidBody)
-			return;
-		_rigidBody->setAngularFactor(convertGLMVectorToBullet(_rotationConstraint));
+		assert(rigidBody != nullptr && "Invalid RigidBody");
+		return rigidBody->getMaxAngularVelocity();
 	}
 
-	void RigidBody::_clearBulletObjects()
+	void RigidBody::setMaxDepenetrationVelocity(float maxDepenetrationVelocity)
 	{
-		if (_rigidBody != nullptr)
-		{
-			_manager->getWorld()->removeRigidBody(_rigidBody);
-			_manager->getObjectPool().destroy<btRigidBody>(_rigidBody);
-		}
-		_rigidBody = nullptr;
-
-		if (_motionState != nullptr)
-		{
-			_manager->getObjectPool().destroy<DynamicMotionState>((DynamicMotionState*)_motionState);
-		}
-		_motionState = nullptr;
-
-		if (_collisionShape != nullptr)
-		{
-			if (_shapeType == TypeID::Get<btScaledBvhTriangleMeshShape>())
-				_manager->getObjectPool().destroy<btScaledBvhTriangleMeshShape>((btScaledBvhTriangleMeshShape*)_collisionShape);
-			else if (_shapeType == TypeID::Get<btConvexHullShape>())
-				_manager->getObjectPool().destroy<btConvexHullShape>((btConvexHullShape*)_collisionShape);
-			else if (_shapeType == TypeID::Get<btSphereShape>())
-				_manager->getObjectPool().destroy<btSphereShape>((btSphereShape*)_collisionShape);
-			else if (_shapeType == TypeID::Get<btBoxShape>())
-				_manager->getObjectPool().destroy<btBoxShape>((btBoxShape*)_collisionShape);
-			else
-				assert(false);
-		}
-		_collisionShape = nullptr;
+		assert(rigidBody != nullptr && "Invalid RigidBody");
+		rigidBody->setMaxDepenetrationVelocity(maxDepenetrationVelocity);
 	}
 
-	void RigidBody::_addContactInformation(const Entity &entity, const btVector3 &contactPoint, const btVector3 &contactNormal)
+	float RigidBody::getMaxDepenetrationVelocity(void) const
 	{
-		ContactInformationsType::iterator found = _contactInformations.find(entity);
-		if (found != _contactInformations.end())
-		{
-			found->second.emplace_back(contactPoint, contactNormal);
-		}
-		else
-		{
-			_contactInformations.emplace(entity, ContactInformationList()).first->second.emplace_back(contactPoint, contactNormal);
-		}
+		assert(rigidBody != nullptr && "Invalid RigidBody");
+		return rigidBody->getMaxDepenetrationVelocity();
 	}
 
-	const RigidBody::ContactInformationsType &RigidBody::getContactInformations(void) const
+	void RigidBody::setPosition(const glm::vec3 &position)
 	{
-		return _contactInformations;
+		assert(rigidBody != nullptr && "Invalid RigidBody");
+		rigidBody->setPosition(position);
 	}
 
-	void RigidBody::setTransformConstraint(bool x, bool y, bool z)
+	glm::vec3 RigidBody::getPosition(void) const
 	{
-		_transformConstraint = glm::uvec3(static_cast<unsigned int>(x),
-			static_cast<unsigned int>(y),
-			static_cast<unsigned int>(z));
-		if (!_rigidBody)
-			return;
-		_rigidBody->setLinearFactor(convertGLMVectorToBullet(_transformConstraint));
+		assert(rigidBody != nullptr && "Invalid RigidBody");
+		return rigidBody->getPosition();
 	}
 
-	RigidBody::~RigidBody(void)
+	void RigidBody::setRotation(const glm::quat &rotation)
 	{
+		assert(rigidBody != nullptr && "Invalid RigidBody");
+		rigidBody->setRotation(rotation);
 	}
 
-	void RigidBody::postUnserialization()
+	glm::quat RigidBody::getRotation(void) const
 	{
-		_manager = dynamic_cast<BulletDynamicManager*>(entity.getScene()->getInstance<BulletCollisionManager>());
-#ifdef EDITOR_ENABLED
-		if (WESerialization::SerializeForEditor())
-		{
-			if (_collisionShapeType != UNDEFINED)
-			{
-				setCollisionShape((CollisionShape)_collisionShapeType);
-			}
-			else if (!selectedShapePath.empty())
-			{
-				setCollisionMesh(selectedShapePath);
-			}
-		}
-		else		
-		{
-			if (_collisionShapeType != UNDEFINED)
-			{
-				setCollisionShape((CollisionShape)_collisionShapeType);
-			}
-			else if (!_shapePath.empty())
-			{
-				setCollisionMesh(_shapePath);
-			}
-		}
-#else
-		if (_collisionShapeType != UNDEFINED)
-		{
-			setCollisionShape((CollisionShape)_collisionShapeType);
-		}
-		else if (!_shapePath.empty())
-		{
-			setCollisionMesh(_shapePath);
-		}
-#endif
-
+		assert(rigidBody != nullptr && "Invalid RigidBody");
+		return rigidBody->getRotation();
 	}
 
-#ifdef EDITOR_ENABLED
-	void RigidBody::editorCreate()
+	void RigidBody::affectByGravity(bool mustBeAffectedByGravity)
 	{
-		setMass(0.0f);
+		assert(rigidBody != nullptr && "Invalid RigidBody");
+		rigidBody->affectByGravity(mustBeAffectedByGravity);
 	}
 
-	void RigidBody::editorDelete()
-	{}
-
-	bool RigidBody::editorUpdate()
+	bool RigidBody::isAffectedByGravity(void) const
 	{
-		bool modified = false;
-
-		if (ImGui::InputFloat("Mass", &_mass))
-		{
-			setMass(_mass);
-			modified = true;
-		}
-
-		ImGui::Text("Rotation constraint");
-		ImGui::SameLine();
-		bool rotationConstraint = false;
-		rotationConstraint ^= ImGui::CheckboxFlags("x", &(_rotationConstraint.x), 0);
-		ImGui::SameLine();
-		rotationConstraint ^= ImGui::CheckboxFlags("y", &(_rotationConstraint.y), 0);
-		ImGui::SameLine();
-		rotationConstraint ^= ImGui::CheckboxFlags("z", &(_rotationConstraint.z), 0);
-
-		if (rotationConstraint)
-		{
-			setRotationConstraint(_rotationConstraint.x == 1, _rotationConstraint.y == 1, _rotationConstraint.z == 1);
-			modified = true;
-		}
-
-		ImGui::Text("Transformation constraint");
-		ImGui::SameLine();
-		bool transformConstraint = false;
-		transformConstraint ^= ImGui::CheckboxFlags("x", &(_transformConstraint.x), 0);
-		ImGui::SameLine();
-		transformConstraint ^= ImGui::CheckboxFlags("y", &(_transformConstraint.y), 0);
-		ImGui::SameLine();
-		transformConstraint ^= ImGui::CheckboxFlags("z", &(_transformConstraint.z), 0);
-
-		if (transformConstraint)
-		{
-			setTransformConstraint(_transformConstraint.x == 1, _transformConstraint.y == 1, _transformConstraint.z == 1);
-			modified = true;
-		}
-
-		//ImGui::InputFloat3("Rotation constraint", glm::value_ptr(_rotationConstraint));
-		//ImGui::InputFloat3("Transform constraint", glm::value_ptr(_transformConstraint));
-
-
-		if ((*shapePathList)[selectedShapeIndex] != selectedShapePath)
-		{
-			std::size_t i = 0;
-			for (auto &e : *shapePathList)
-			{
-				if (e == selectedShapePath)
-				{
-					selectedShapeIndex = i;
-					break;
-				}
-				++i;
-			}
-		}
-
-		if(ImGui::Checkbox("Simple shape", &simpleShapes))
-		{
-			modified = true;
-			if (simpleShapes)
-			{
-				reset();
-				selectedShapeName = "";
-				selectedShapePath = "";
-				selectedShapeIndex = 0;
-			}
-			else
-			{
-				reset();
-				_collisionShapeType = UNDEFINED;
-			}
-		}
-
-		if (!simpleShapes) // if mesh
-		{
-			ImGui::PushItemWidth(-1);
-			if (ImGui::ListBox("Shapes", (int*)&selectedShapeIndex, &(shapeFileList->front()), (int)(shapeFileList->size())))
-			{
-				modified = true;
-				selectedShapeName = (*shapeFileList)[selectedShapeIndex];
-				selectedShapePath = (*shapePathList)[selectedShapeIndex];
-
-				setCollisionMesh(selectedShapePath);
-			}
-			ImGui::PopItemWidth();
-		}
-		else
-		{
-			static const char *CollisionShapeStr[] = { "Sphere", "Box" };
-			ImGui::PushItemWidth(-1);
-			if (ImGui::ListBox("Shapes", (int*)&selectedShapeIndex, CollisionShapeStr, CollisionShape::UNDEFINED))
-			{
-				modified = true;
-				_collisionShapeType = (CollisionShape)selectedShapeIndex;
-				setCollisionShape((CollisionShape)selectedShapeIndex);
-			}
-			ImGui::PopItemWidth();
-		}
-		return modified;
+		assert(rigidBody != nullptr && "Invalid RigidBody");
+		return rigidBody->isAffectedByGravity();
 	}
-#endif
+
+	void RigidBody::setAsKinematic(bool mustBeKinematic)
+	{
+		assert(rigidBody != nullptr && "Invalid RigidBody");
+		rigidBody->setAsKinematic(mustBeKinematic);
+	}
+
+	bool RigidBody::isKinematic(void) const
+	{
+		assert(rigidBody != nullptr && "Invalid RigidBody");
+		return rigidBody->isKinematic();
+	}
+
+	void RigidBody::setCollisionDetectionMode(Physics::CollisionDetectionMode collisionDetectionMode)
+	{
+		assert(rigidBody != nullptr && "Invalid RigidBody");
+		rigidBody->setCollisionDetectionMode(collisionDetectionMode);
+	}
+
+	Physics::CollisionDetectionMode RigidBody::getCollisionDetectionMode(void) const
+	{
+		assert(rigidBody != nullptr && "Invalid RigidBody");
+		return rigidBody->getCollisionDetectionMode();
+	}
+
+	void RigidBody::addExplosionForce(float explosionForce, const glm::vec3 &explosionPosition, float explosionRadius, Physics::ForceMode forceMode)
+	{
+		assert(rigidBody != nullptr && "Invalid RigidBody");
+		rigidBody->addExplosionForce(explosionForce, explosionPosition, explosionRadius, forceMode);
+	}
+
+	void RigidBody::addForce(const glm::vec3 &force, Physics::ForceMode forceMode)
+	{
+		assert(rigidBody != nullptr && "Invalid RigidBody");
+		rigidBody->addForce(force, forceMode);
+	}
+
+	void RigidBody::addForceAtWorldPosition(const glm::vec3 &force, const glm::vec3 &position, Physics::ForceMode forceMode)
+	{
+		assert(rigidBody != nullptr && "Invalid RigidBody");
+		rigidBody->addForceAtWorldPosition(force, position, forceMode);
+	}
+
+	void RigidBody::addForceAtLocalPosition(const glm::vec3 &force, const glm::vec3 &position, Physics::ForceMode forceMode)
+	{
+		assert(rigidBody != nullptr && "Invalid RigidBody");
+		rigidBody->addForceAtLocalPosition(force, position, forceMode);
+	}
+
+	void RigidBody::addAbsoluteTorque(const glm::vec3 &torque, Physics::ForceMode forceMode)
+	{
+		assert(rigidBody != nullptr && "Invalid RigidBody");
+		rigidBody->addAbsoluteTorque(torque, forceMode);
+	}
+
+	void RigidBody::addRelativeTorque(const glm::vec3 &torque, Physics::ForceMode forceMode)
+	{
+		assert(rigidBody != nullptr && "Invalid RigidBody");
+		rigidBody->addRelativeTorque(torque, forceMode);
+	}
+
+	glm::vec3 RigidBody::getVelocityAtWorldPosition(const glm::vec3 &position) const
+	{
+		assert(rigidBody != nullptr && "Invalid RigidBody");
+		return rigidBody->getVelocityAtWorldPosition(position);
+	}
+
+	glm::vec3 RigidBody::getVelocityAtLocalPosition(const glm::vec3 &position) const
+	{
+		assert(rigidBody != nullptr && "Invalid RigidBody");
+		return rigidBody->getVelocityAtLocalPosition(position);
+	}
+
+	// Inherited Methods
+	void RigidBody::reset(void)
+	{
+		if (rigidBody != nullptr)
+		{
+			entity.getScene()->getInstance<Physics::PhysicsInterface>()->getWorld()->destroyRigidBody(rigidBody);
+			rigidBody = nullptr;
+		}
+		if (!entity.haveComponent<Collider>())
+		{
+			entity.removeComponent<Private::PhysicsData>();
+		}
+	}
 }

@@ -12,7 +12,7 @@ namespace AGE
 			// Constructors
 			NullCollider(void) = delete;
 
-			NullCollider(WorldInterface *world, void *&data);
+			NullCollider(WorldInterface *world, Private::GenericData *data);
 
 			NullCollider(const NullCollider &) = delete;
 
@@ -24,6 +24,11 @@ namespace AGE
 			virtual ~NullCollider(void) = default;
 
 		private:
+			// Attributes
+			bool isTrigger = false;
+
+			FilterGroup filterGroup = FilterGroup::GroupI;
+
 			// Inherited Methods
 			void setAsTrigger(bool mustBeATrigger) override final;
 
@@ -32,6 +37,8 @@ namespace AGE
 			void setFilterGroup(FilterGroup group) override final;
 
 			FilterGroup getFilterGroup(void) const override final;
+
+			void setMaterial(const std::string &name) override final;
 		};
 	}
 }

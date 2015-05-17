@@ -185,6 +185,9 @@
     <ClInclude Include="Scenes\ArchetypeScenes.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Vendors\microprofile\microprofile.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="AssetsEditor.rc">

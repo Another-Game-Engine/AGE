@@ -3,7 +3,7 @@
 #include <tmq/message.hpp>
 #include <Configuration.hpp>
 
-#ifdef USE_IMGUI
+#ifdef AGE_ENABLE_IMGUI
 #include <Utils/Age_Imgui.hpp>
 #endif
 

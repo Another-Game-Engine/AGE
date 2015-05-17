@@ -30,11 +30,9 @@ namespace AGE
 			virtual ~PhysicsInterface(void) = default;
 
 			// Methods
-			bool startup(void);
+			bool startup(const std::string &assetDirectory);
 
-			void shutdown(void);
-
-			WorldInterface *createWorld(void);
+			void shutdown(const std::string &assetDirectory);
 
 			WorldInterface *getWorld(void);
 
@@ -54,7 +52,7 @@ namespace AGE
 
 			virtual void finalize(void) = 0;
 
-			virtual WorldInterface *createWorld(const glm::vec3 &gravity) = 0;
+			virtual WorldInterface *createWorld(void) = 0;
 		};
 	}
 }
