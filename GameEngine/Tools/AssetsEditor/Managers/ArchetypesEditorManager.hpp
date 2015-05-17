@@ -11,6 +11,7 @@
 #include <Scenes/ArchetypeScenes.hpp>
 #include <Threads/MainThread.hpp>
 #include <Threads/ThreadManager.hpp>
+#include <Entities/ArchetypeLibrary.hpp>
 
 namespace AGE
 {
@@ -50,8 +51,8 @@ namespace AGE
 				//for that we set the ArchetypeScene as the current scene
 				//so that messages will be not passed to the renderScene of the WE's scene
 				//but to the ArchetypeScene.
-				GetMainThread()->setSceneAsActive(_archetypesScene.get());
-				bool success = _archetypesScene->copyEntity(entity, destination, true, false);
+				GetMainThread()->setSceneAsActive(getDependencyManager()->getInstance<ArchetypeLibrary>()->getScene().get());
+				bool success = getDependencyManager()->getInstance<ArchetypeLibrary>()->getScene()->copyEntity(entity, destination, true, false);
 				GetMainThread()->setSceneAsActive(scene);
 				AGE_ASSERT(success);
 
@@ -105,14 +106,6 @@ namespace AGE
 
 			void update(AScene *scene)
 			{
-				if (_archetypesScene == nullptr)
-				{
-					_archetypesScene = std::make_shared<ArchetypeScene>(GetEngine());
-					GetEngine()->addScene(_archetypesScene, "ARCHETYPES_SCENE");
-					GetEngine()->initScene("ARCHETYPES_SCENE");
-					GetEngine()->enableScene("ARCHETYPES_SCENE", 0);
-				}
-
 				ImGui::SameLine();
 				ImGui::BeginChild("Archetypes", ImVec2(ImGui::GetWindowWidth() * 0.35f, 0));
 
@@ -152,7 +145,7 @@ namespace AGE
 					auto entity = _selectedArchetype->archetype.getEntity();
 					auto modified = false;
 					
-					GetMainThread()->setSceneAsActive(_archetypesScene.get());
+					GetMainThread()->setSceneAsActive(getDependencyManager()->getInstance<ArchetypeLibrary>()->getScene().get());
 					if (_graphNodeDisplay)
 					{
 						modified |= recursiveDisplayList(entity, _selectedEntity, _selectParent, false);
@@ -237,10 +230,21 @@ namespace AGE
 
 						_selectedArchetype->entities.insert(duplicate);
 					}
+
+					if (ImGui::SmallButton("Save archetype library"))
+					{
+						saveArchetypesLibrary();
+					}
 				}
 
 				ImGui::EndChild();
 			}
+
+			void saveArchetypesLibrary()
+			{
+				auto archetypeLibrary = getDependencyManager()->getInstance<ArchetypeLibrary>();
+			}
+
 		private:
 			std::map<std::string, std::shared_ptr<ArchetypeEditorRepresentation>> _archetypesCollection;
 			std::vector<const char*> _archetypesImGuiNamesList;
@@ -251,7 +255,6 @@ namespace AGE
 			Entity *_selectedEntity = nullptr;
 			bool _graphNodeDisplay = false;
 			bool _selectParent = false;
-			std::shared_ptr<AScene> _archetypesScene = nullptr;
 
 			void _copyArchetypeToInstanciedEntity(Entity &archetype, Entity &entity)
 			{

@@ -535,6 +535,9 @@
     <ClInclude Include="Engine\Components\DirectionalLightComponent.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredDirectionalLightning.hh" />
     <ClInclude Include="Engine\Utils\Serialization\btSerialization.hpp" />
+    <ClInclude Include="Engine\Entities\ArchetypeLibrary.hpp" />
+    <ClInclude Include="Engine\Components\ArchetypeComponent.hpp" />
+    <ClInclude Include="Engine\Core\SceneChunkSerialization.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

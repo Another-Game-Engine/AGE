@@ -1,3 +1,5 @@
+#pragma once
+
 #include "Entity.hh"
 #include <Components/Component.hh>
 #include <vector>

@@ -20,9 +20,8 @@
 #include <Components/ComponentManager.hpp>
 #include <Utils/Debug.hpp>
 #include <fstream>
-#ifdef EDITOR_ENABLED
-#include <WorldEditorGlobal.hpp>
-#endif
+#include "SceneChunkSerialization.hpp"
+
 
 namespace AGE
 {
@@ -174,45 +173,23 @@ namespace AGE
 		void saveSelectionToJson(const std::string &fileName, Container &selection)
 		{
 			SCOPE_profile_cpu_function("Scenes");
+
+			std::vector<EntitySerializationInfos> list;
+			std::vector<EntitySerializationInfos> listToSerialize;
+
+			for (auto &e : selection)
+			{
+				graphnodeToFlatVector(list, e);
+			}
+			auto &typesMap = ComponentRegistrationManager::getInstance().getAgeIdToSystemIdMap();
+
+			auto toSerialize = SceneChunkSerialization::CreateForSerialization(typesMap, list);
+
 			std::ofstream file(fileName.c_str(), std::ios::binary);
 			AGE_ASSERT(file.is_open());
 			{
 				auto ar = cereal::JSONOutputArchive(file);
-
-				std::vector<EntitySerializationInfos> list;
-
-				for (auto &e : selection)
-				{
-					graphnodeToFlatVector(list, e);
-				}
-
-				std::size_t entityNbr = list.size();
-
-				ar(cereal::make_nvp("Number_of_serialized_entities", entityNbr));
-
-				auto &typesMap = ComponentRegistrationManager::getInstance().getAgeIdToSystemIdMap();
-				ar(cereal::make_nvp("Component type map", typesMap));
-
-
-				for (auto &e : list)
-				{
-					auto &components = e.entity.getComponentList();
-					for (auto &c : components)
-					{
-						if (c)
-						{
-#ifdef EDITOR_ENABLED
-							if (WESerialization::SerializeForEditor() == false && !c->serializeInExport())
-							{
-								continue;
-							}
-#endif
-							e.componentTypes.push_back(c->getType());
-							e.components.push_back(c);
-						}
-					}
-					ar(cereal::make_nvp("Entity_" + std::to_string(e.entity.getId()), e));
-				}
+				ar(toSerialize);
 			}
 			file.close();
 		}

@@ -68,6 +68,7 @@ int			main(int ac, char **av)
 		engine->setInstance<AGE::Timer>();
 		engine->setInstance<AGE::AssetsManager>();
 
+		engine->setInstance<AGE::ArchetypeLibrary>();
 		engine->setInstance<AGE::WE::ArchetypesEditorManager>();
 
 		AGE::GetRenderThread()->getQueue()->emplaceFutureTask<AGE::Tasks::Basic::BoolFunction, bool>([=](){

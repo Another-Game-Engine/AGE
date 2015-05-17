@@ -427,8 +427,11 @@
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
     <ClInclude Include="..\Vendors\imgui\imgui.h" />
     <ClInclude Include="..\Vendors\imgui\stb_textedit.h" />
+    <ClInclude Include="Engine\Components\ArchetypeComponent.hpp" />
     <ClInclude Include="Engine\Components\DirectionalLightComponent.hh" />
     <ClInclude Include="Engine\Components\Collider.hpp" />
+    <ClInclude Include="Engine\Core\SceneChunkSerialization.hpp" />
+    <ClInclude Include="Engine\Entities\ArchetypeLibrary.hpp" />
     <ClInclude Include="Engine\Render\DepthMap.hpp" />
     <ClInclude Include="Engine\Render\DepthMapHandle.hpp" />
     <ClInclude Include="Engine\Render\DepthMapManager.hpp" />
