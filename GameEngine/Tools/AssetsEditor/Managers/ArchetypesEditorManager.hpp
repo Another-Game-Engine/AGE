@@ -42,19 +42,8 @@ namespace AGE
 				for (auto &e : lib)
 				{
 					_archetypesCollection[e.first] = std::make_shared<ArchetypeEditorRepresentation>();
-					bool first = true;
-					for (auto &f : e.second.collection.list)
-					{
-						_archetypesCollection[e.first]->entities.insert(f.entity);
-						_archetypesImGuiNamesList.push_back(e.first.c_str());
-
-						// we set the first entity of the list as Archetype root
-						if (first)
-						{
-							first = false;
-							_archetypesCollection[e.first]->archetype.getEntity() = f.entity;
-						}
-					}
+					_archetypesCollection[e.first]->archetype.getEntity() = e.second.collection.list.front().entity;
+					_archetypesImGuiNamesList.push_back(e.first.c_str());
 				}
 			}
 
@@ -268,7 +257,7 @@ namespace AGE
 				auto archetypeLibrary = getDependencyManager()->getInstance<ArchetypeLibrary>();
 				for (auto &e : _archetypesCollection)
 				{
-					archetypeLibrary->addArchetype(e.first, e.second->entities);
+					archetypeLibrary->addArchetype(e.first, e.second->archetype.getEntity());
 				}
 				archetypeLibrary->save();
 			}

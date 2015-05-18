@@ -85,13 +85,15 @@ namespace AGE
 			_library.clear();
 		}
 
-		void addArchetype(const std::string &name, const std::set<Entity> &entities)
+		void addArchetype(const std::string &name, const Entity &entity)
 		{
 			_library[name] = ArchetypeFileModel();
 			auto &e = _library[name];
 
 			e.name = name;
-			e.collection = AScene::BuildSceneChunkFromSelection(entities);
+			std::set<Entity> set;
+			set.insert(entity);
+			e.collection = AScene::BuildSceneChunkFromSelection(set);
 		}
 
 		std::shared_ptr<AScene> getScene()
