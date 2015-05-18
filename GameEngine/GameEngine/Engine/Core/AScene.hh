@@ -155,18 +155,37 @@ namespace AGE
 		void saveToBinary(const std::string &fileName);
 		void loadFromBinary(const std::string &fileName);
 
-		void graphnodeToFlatVector(std::vector<EntitySerializationInfos> &vector, const Entity &e)
+		static void GraphnodeToFlatVector(std::vector<EntitySerializationInfos> &vector, const Entity &e)
 		{
 			SCOPE_profile_cpu_function("Scenes");
-			vector.push_back(e.ptr);
+
+			vector.push_back(EntitySerializationInfos(e.ptr, nullptr));
 			auto &children = e.getLink().getChildren();
 			auto parentId = vector.size() - 1;
 			for (auto &c : children)
 			{
 				vector[parentId].children.push_back(vector.size());
 				auto child = c->getEntity()->getEntity();
-				graphnodeToFlatVector(vector, child);
+				GraphnodeToFlatVector(vector, child);
 			}
+		}
+
+		template <typename Container>
+		static SceneChunkSerialization BuildSceneChunkFromSelection(const Container &selectionRef)
+		{
+			SCOPE_profile_cpu_function("Scenes");
+
+			auto selection = selectionRef;
+
+			std::vector<EntitySerializationInfos> list;
+
+			for (auto &e : selection)
+			{
+				GraphnodeToFlatVector(list, e);
+			}
+			auto &typesMap = ComponentRegistrationManager::getInstance().getAgeIdToSystemIdMap();
+
+			return SceneChunkSerialization::CreateForSerialization(typesMap, list);
 		}
 
 		template <typename Container>
@@ -174,16 +193,7 @@ namespace AGE
 		{
 			SCOPE_profile_cpu_function("Scenes");
 
-			std::vector<EntitySerializationInfos> list;
-			std::vector<EntitySerializationInfos> listToSerialize;
-
-			for (auto &e : selection)
-			{
-				graphnodeToFlatVector(list, e);
-			}
-			auto &typesMap = ComponentRegistrationManager::getInstance().getAgeIdToSystemIdMap();
-
-			auto toSerialize = SceneChunkSerialization::CreateForSerialization(typesMap, list);
+			auto toSerialize = BuildSceneChunkFromSelection(selection);
 
 			std::ofstream file(fileName.c_str(), std::ios::binary);
 			AGE_ASSERT(file.is_open());

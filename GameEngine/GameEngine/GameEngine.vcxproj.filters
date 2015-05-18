@@ -201,6 +201,7 @@
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredSpotLightning.cpp" />
     <ClCompile Include="Engine\Components\DirectionalLightComponent.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredDirectionalLightning.cpp" />
+    <ClCompile Include="Engine\Core\SceneChunkSerialization.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />

@@ -292,9 +292,8 @@ namespace AGE
 			for (std::size_t i = 0; i < entityNbr; ++i)
 			{
 				auto entity = createEntity();
-				list.push_back(entity.ptr);
+				list.push_back(EntitySerializationInfos(entity.ptr, &typesMap));
 				auto &es = list.back();
-				es.typesMap = &typesMap;
 				ar(es);
 			}
 

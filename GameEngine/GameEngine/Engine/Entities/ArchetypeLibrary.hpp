@@ -1,6 +1,11 @@
 #pragma once
 
 #include <Utils/Dependency.hpp>
+#include <Utils/Directory.hpp>
+#include <Utils/FileSystemHelpers.hpp>
+#include <Entities/Entity.hh>
+#include <cereal/types/set.hpp>
+#include <Utils/Path.hpp>
 
 namespace AGE
 {
@@ -10,7 +15,7 @@ namespace AGE
 
 		struct ArchetypeFileModel
 		{
-			std::set<Entity> collection;
+			SceneChunkSerialization collection;
 			std::string name;
 
 			template <typename Archive>
@@ -21,7 +26,7 @@ namespace AGE
 			}
 		};
 
-		bool setPath(const std::string &library)
+		void setPath(const std::string &library)
 		{
 			_libraryPath = library;
 		}
@@ -48,9 +53,9 @@ namespace AGE
 					}
 
 					ArchetypeFileModel model;
-
+					model.collection = SceneChunkSerialization::CreateForLoad(getScene().get());
 					{
-						std::ifstream file(Path::BaseName(*it), std::ios::binary);
+						std::ifstream file(*it, std::ios::binary);
 						auto ar = cereal::JSONInputArchive(file);
 						ar(model);
 						file.close();
@@ -62,23 +67,32 @@ namespace AGE
 			dir.close();
 		}
 
-		bool save()
+		void save()
 		{
-			Directory dir;
-			bool success = dir.open(_libraryPath.c_str());
-			AGE_ASSERT(success);
-
 			for (auto &e : _library)
 			{
-				success = dir.open(e.name + ".archetype");
-				AGE_ASSERT(success);
-
-
+				std::ofstream file(std::string(_libraryPath + "/" + e.second.name + ".archetype").c_str(), std::ios::binary);
+				{
+					auto ar = cereal::JSONOutputArchive(file);
+					ar(e.second);
+				}
+				file.close();
 			}
 		}
 
 		void clear()
-		{}
+		{
+			_library.clear();
+		}
+
+		void addArchetype(const std::string &name, const std::set<Entity> &entities)
+		{
+			_library[name] = ArchetypeFileModel();
+			auto &e = _library[name];
+
+			e.name = name;
+			e.collection = AScene::BuildSceneChunkFromSelection(entities);
+		}
 
 		std::shared_ptr<AScene> getScene()
 		{
@@ -100,6 +114,11 @@ namespace AGE
 		void disableScene()
 		{
 			GetEngine()->enableScene("ARCHETYPES_SCENE", 0);
+		}
+
+		const std::map<std::string, ArchetypeFileModel> &getLibrary() const
+		{
+			return _library;
 		}
 	private:
 		std::string _libraryPath = "";

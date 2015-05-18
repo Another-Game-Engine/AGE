@@ -35,6 +35,21 @@ namespace AGE
 
 			}
 
+			// Have to be called after ArchetypeLibrary is created and has loaded the library
+			void init()
+			{
+				auto &lib = getDependencyManager()->getInstance<ArchetypeLibrary>()->getLibrary();
+				for (auto &e : lib)
+				{
+					_archetypesCollection[e.first] = std::make_shared<ArchetypeEditorRepresentation>();
+					for (auto &f : e.second.collection.list)
+					{
+						_archetypesCollection[e.first]->entities.insert(f.entity);
+						_archetypesImGuiNamesList.push_back(e.first.c_str());
+					}
+				}
+			}
+
 			void transformToArchetype(Entity &entity, const std::string &name)
 			{
 				if (_archetypesCollection.find(name) != std::end(_archetypesCollection))
@@ -243,6 +258,11 @@ namespace AGE
 			void saveArchetypesLibrary()
 			{
 				auto archetypeLibrary = getDependencyManager()->getInstance<ArchetypeLibrary>();
+				for (auto &e : _archetypesCollection)
+				{
+					archetypeLibrary->addArchetype(e.first, e.second->entities);
+				}
+				archetypeLibrary->save();
 			}
 
 		private:

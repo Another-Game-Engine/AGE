@@ -13,12 +13,15 @@ namespace AGE
 		std::vector <std::size_t> children;
 		std::vector <ComponentBase*> components;
 		std::vector <ComponentType> componentTypes;
-		Entity &entity;
+		Entity entity;
 		std::map<ComponentType, std::size_t> *typesMap; // used to unserialize
 
-		EntitySerializationInfos(EntityData *e)
+		EntitySerializationInfos(EntityData *e, std::map<ComponentType, std::size_t> *_typesMap)
 			: entity(e->entity)
-			, typesMap(nullptr)
+			, typesMap(_typesMap)
+		{}
+
+		EntitySerializationInfos()
 		{}
 
 		template < typename Archive >

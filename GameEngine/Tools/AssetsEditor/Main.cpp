@@ -62,14 +62,12 @@ int			main(int ac, char **av)
 		auto configurationManager = engine->getInstance<AGE::ConfigurationManager>();
 		configurationManager->setConfiguration<std::string>(std::string("ShadersPath"), std::string(engine->getApplicationPath() + "/../../Shaders/"));
 
+
 		engine->displayThreadsStatistics(false);
 
 		AGE::GetThreadManager()->setAsWorker(false, false, false);
 		engine->setInstance<AGE::Timer>();
 		engine->setInstance<AGE::AssetsManager>();
-
-		engine->setInstance<AGE::ArchetypeLibrary>();
-		engine->setInstance<AGE::WE::ArchetypesEditorManager>();
 
 		AGE::GetRenderThread()->getQueue()->emplaceFutureTask<AGE::Tasks::Basic::BoolFunction, bool>([=](){
 			AGE::Imgui::getInstance()->init(engine);
@@ -86,6 +84,12 @@ int			main(int ac, char **av)
 		REGISTER_COMPONENT_TYPE(AGE::FreeFlyComponent);
 
 		RegisterComponents();
+
+		engine->setInstance<AGE::ArchetypeLibrary>();
+		engine->getInstance<AGE::ArchetypeLibrary>()->setPath("../../Archetypes/");
+		engine->getInstance<AGE::ArchetypeLibrary>()->load();
+
+		engine->setInstance<AGE::WE::ArchetypesEditorManager>()->init();
 
 		engine->addScene(std::make_shared<AGE::AssetsEditorScene>(engine), AGE::AssetsEditorScene::Name);
 		engine->addScene(std::make_shared<AGE::SceneSelectorScene>(engine), AGE::SceneSelectorScene::Name);

@@ -243,6 +243,7 @@
     <ClCompile Include="..\Vendors\imgui\imgui.cpp" />
     <ClCompile Include="Engine\Components\DirectionalLightComponent.cpp" />
     <ClCompile Include="Engine\Components\Collider.cpp" />
+    <ClCompile Include="Engine\Core\SceneChunkSerialization.cpp" />
     <ClCompile Include="Engine\Render\DepthMap.cpp" />
     <ClCompile Include="Engine\Render\DepthMapHandle.cpp" />
     <ClCompile Include="Engine\Render\DepthMapManager.cpp" />
