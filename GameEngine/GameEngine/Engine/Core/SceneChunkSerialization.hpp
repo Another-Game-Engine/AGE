@@ -29,10 +29,14 @@ namespace AGE
 		template <typename Archive>
 		void save(Archive &ar, const std::uint32_t version) const
 		{
-			ar(entityNbr, componentsIdReferenceTable);
+			ar(cereal::make_nvp("Entity number" ,entityNbr)
+				, cereal::make_nvp("Components type ref table", componentsIdReferenceTable));
+
+			int counter = 0;
 			for (auto &e : list)
 			{
-				ar(e);
+				ar(cereal::make_nvp(std::string("Entity_" + std::to_string(counter)).c_str(), e));
+				++counter;
 			}
 		}
 

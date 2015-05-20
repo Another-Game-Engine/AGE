@@ -21,8 +21,8 @@ namespace AGE
 			template <typename Archive>
 			void serialize(Archive &ar, const std::uint32_t version)
 			{
-				ar(name);
-				ar(collection);
+				ar(CEREAL_NVP(name));
+				ar(CEREAL_NVP(collection));
 			}
 		};
 
