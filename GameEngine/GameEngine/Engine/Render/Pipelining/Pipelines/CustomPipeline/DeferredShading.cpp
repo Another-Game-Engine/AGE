@@ -4,6 +4,7 @@
 #include <Render/Pipelining/Pipelines/CustomRenderPass/DeferredSpotLightning.hh>
 #include <Render/Pipelining/Pipelines/CustomRenderPass/DeferredDirectionalLightning.hh>
 #include <Render/Pipelining/Pipelines/CustomRenderPass/DeferredMerging.hh>
+#include <Render/Pipelining/Pipelines/CustomRenderPass/DeferredShadowBuffering.hh>
 #include <Render/Pipelining/Pipelines/PipelineTools.hh>
 #include <Configuration.hpp>
 
@@ -25,11 +26,13 @@ namespace AGE
 		std::shared_ptr<DeferredPointLightning> pointLightning = std::make_shared<DeferredPointLightning>(screen_size, _painter_manager, _normal, _depthStencil, _lightAccumulation);
 		std::shared_ptr<DeferredSpotLightning> spotLightning = std::make_shared<DeferredSpotLightning>(screen_size, _painter_manager, _normal, _depthStencil, _lightAccumulation);
 		std::shared_ptr<DeferredDirectionalLightning> directionalLightning = std::make_shared<DeferredDirectionalLightning>(screen_size, _painter_manager, _normal, _depthStencil, _lightAccumulation);
+		std::shared_ptr<DeferredShadowBuffering> shadowBuffering = std::make_shared<DeferredShadowBuffering>(glm::uvec2(RESOLUTION_SHADOW_X, RESOLUTION_SHADOW_Y), _painter_manager);
 
 		_deferredMerging = std::make_shared<DeferredMerging>(screen_size, _painter_manager, _diffuse, _specular, _lightAccumulation);
 
 		// The entry point is the basic buffering pass
-		_rendering_list.emplace_back(basicBuffering);
+		_rendering_list.emplace_back(shadowBuffering);
+		shadowBuffering->setNextPass(basicBuffering);
 		// We link the entry point with the other pass
 		basicBuffering->setNextPass(directionalLightning);
 		directionalLightning->setNextPass(spotLightning);
