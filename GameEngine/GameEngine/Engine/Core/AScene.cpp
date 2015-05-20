@@ -279,32 +279,9 @@ namespace AGE
 		assert(success);
 
 		{
+			auto sceneChunk = SceneChunkSerialization::CreateForLoad(this);
 			auto ar = cereal::JSONInputArchive(file);
-
-			std::size_t entityNbr;
-			ar(entityNbr);
-
-			std::map<ComponentType, std::size_t> typesMap;
-			ar(typesMap);
-
-			std::vector<EntitySerializationInfos> list;
-
-			for (std::size_t i = 0; i < entityNbr; ++i)
-			{
-				auto entity = createEntity();
-				list.push_back(EntitySerializationInfos(entity.ptr, &typesMap));
-				auto &es = list.back();
-				ar(es);
-			}
-
-			for (auto &e : list)
-			{
-				for (auto &c : e.children)
-				{
-					e.entity.getLink().attachChild(list[c].entity.getLinkPtr());
-				}
-			}
-
+			ar(sceneChunk);
 		}
 		file.close();
 	}
