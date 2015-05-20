@@ -19,7 +19,7 @@ namespace AGE
 	{
 		typedef std::map<ComponentType, std::size_t> CptIdsRefTable;
 		CptIdsRefTable componentsIdReferenceTable;
-		std::list<EntitySerializationInfos> list;
+		std::vector<EntitySerializationInfos> list;
 		std::size_t entityNbr = 0;
 		AScene *sceneToLoad = nullptr;
 
@@ -52,6 +52,13 @@ namespace AGE
 			{
 				e = EntitySerializationInfos(sceneToLoad->createEntity().getDataPtr(), &componentsIdReferenceTable);
 				ar(e);
+			}
+			for (auto &e : list)
+			{
+				for (auto &c : e.children)
+				{
+					e.entity.getLink().attachChild(list[c].entity.getLinkPtr());
+				}
 			}
 		}
 	};
