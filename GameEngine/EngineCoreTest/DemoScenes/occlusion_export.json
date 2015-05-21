@@ -1,5 +1,5 @@
 {
-    "Number_of_serialized_entities": 120,
+    "Number_of_serialized_entities": 119,
     "Component type map": [
         {
             "key": 0,
@@ -1637,8 +1637,8 @@
         "AGE::SpotLightComponent": {
             "cereal_class_version": 0,
             "color": {
-                "value0": 1,
-                "value1": 0,
+                "value0": 0,
+                "value1": 1,
                 "value2": 0
             },
             "range": {
@@ -1646,49 +1646,11 @@
                 "value1": 0,
                 "value2": 0
             },
-            "exponent": 1,
-            "cutOff": 0.89999997615814209
+            "exponent": 0,
+            "cutOff": 0.60000002384185791
         }
     },
     "Entity_41": {
-        "link": {
-            "Position": {
-                "value0": 0,
-                "value1": 8,
-                "value2": -10
-            },
-            "Scale": {
-                "value0": 1,
-                "value1": 1,
-                "value2": 1
-            },
-            "Orientation": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 0,
-                "value3": 1
-            }
-        },
-        "children": [],
-        "flags": 0,
-        "components_number": [
-            3
-        ],
-        "AGE::PointLightComponent": {
-            "cereal_class_version": 0,
-            "color": {
-                "value0": 1,
-                "value1": 1,
-                "value2": 1
-            },
-            "range": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 0.013000000268220901
-            }
-        }
-    },
-    "Entity_42": {
         "link": {
             "Position": {
                 "value0": 0,
@@ -1708,6 +1670,7 @@
             }
         },
         "children": [
+            41,
             42,
             43,
             44,
@@ -1716,18 +1679,58 @@
             47,
             48,
             49,
-            50,
-            51
+            50
         ],
         "flags": 0,
         "components_number": []
+    },
+    "Entity_42": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -4
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
     },
     "Entity_43": {
         "link": {
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -4
+                "value2": -10
             },
             "Scale": {
                 "value0": 3,
@@ -1768,7 +1771,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -10
+                "value2": -9
             },
             "Scale": {
                 "value0": 3,
@@ -1809,7 +1812,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -9
+                "value2": -8
             },
             "Scale": {
                 "value0": 3,
@@ -1850,7 +1853,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -8
+                "value2": -7
             },
             "Scale": {
                 "value0": 3,
@@ -1891,7 +1894,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -7
+                "value2": -6
             },
             "Scale": {
                 "value0": 3,
@@ -1932,7 +1935,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -6
+                "value2": -5
             },
             "Scale": {
                 "value0": 3,
@@ -1973,7 +1976,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -5
+                "value2": -11
             },
             "Scale": {
                 "value0": 3,
@@ -2014,7 +2017,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -11
+                "value2": -2
             },
             "Scale": {
                 "value0": 3,
@@ -2055,7 +2058,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -2
+                "value2": -3
             },
             "Scale": {
                 "value0": 3,
@@ -2094,9 +2097,43 @@
     "Entity_52": {
         "link": {
             "Position": {
+                "value0": -2,
+                "value1": 0,
+                "value2": -6
+            },
+            "Scale": {
+                "value0": 1,
+                "value1": 1,
+                "value2": 1
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [
+            52,
+            53,
+            54,
+            55,
+            56,
+            57,
+            58,
+            59,
+            60,
+            61
+        ],
+        "flags": 0,
+        "components_number": []
+    },
+    "Entity_53": {
+        "link": {
+            "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -3
+                "value2": -4
             },
             "Scale": {
                 "value0": 3,
@@ -2132,46 +2169,12 @@
             }
         }
     },
-    "Entity_53": {
-        "link": {
-            "Position": {
-                "value0": -2,
-                "value1": 0,
-                "value2": -6
-            },
-            "Scale": {
-                "value0": 1,
-                "value1": 1,
-                "value2": 1
-            },
-            "Orientation": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 0,
-                "value3": 1
-            }
-        },
-        "children": [
-            53,
-            54,
-            55,
-            56,
-            57,
-            58,
-            59,
-            60,
-            61,
-            62
-        ],
-        "flags": 0,
-        "components_number": []
-    },
     "Entity_54": {
         "link": {
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -4
+                "value2": -10
             },
             "Scale": {
                 "value0": 3,
@@ -2212,7 +2215,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -10
+                "value2": -9
             },
             "Scale": {
                 "value0": 3,
@@ -2253,7 +2256,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -9
+                "value2": -8
             },
             "Scale": {
                 "value0": 3,
@@ -2294,7 +2297,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -8
+                "value2": -7
             },
             "Scale": {
                 "value0": 3,
@@ -2335,7 +2338,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -7
+                "value2": -6
             },
             "Scale": {
                 "value0": 3,
@@ -2376,7 +2379,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -6
+                "value2": -5
             },
             "Scale": {
                 "value0": 3,
@@ -2417,7 +2420,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -5
+                "value2": -11
             },
             "Scale": {
                 "value0": 3,
@@ -2458,7 +2461,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -11
+                "value2": -2
             },
             "Scale": {
                 "value0": 3,
@@ -2499,7 +2502,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -2
+                "value2": -3
             },
             "Scale": {
                 "value0": 3,
@@ -2538,9 +2541,43 @@
     "Entity_63": {
         "link": {
             "Position": {
+                "value0": -2,
+                "value1": 3,
+                "value2": -6
+            },
+            "Scale": {
+                "value0": 1,
+                "value1": 1,
+                "value2": 1
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [
+            63,
+            64,
+            65,
+            66,
+            67,
+            68,
+            69,
+            70,
+            71,
+            72
+        ],
+        "flags": 0,
+        "components_number": []
+    },
+    "Entity_64": {
+        "link": {
+            "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -3
+                "value2": -4
             },
             "Scale": {
                 "value0": 3,
@@ -2576,46 +2613,12 @@
             }
         }
     },
-    "Entity_64": {
-        "link": {
-            "Position": {
-                "value0": -2,
-                "value1": 3,
-                "value2": -6
-            },
-            "Scale": {
-                "value0": 1,
-                "value1": 1,
-                "value2": 1
-            },
-            "Orientation": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 0,
-                "value3": 1
-            }
-        },
-        "children": [
-            64,
-            65,
-            66,
-            67,
-            68,
-            69,
-            70,
-            71,
-            72,
-            73
-        ],
-        "flags": 0,
-        "components_number": []
-    },
     "Entity_65": {
         "link": {
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -4
+                "value2": -10
             },
             "Scale": {
                 "value0": 3,
@@ -2656,7 +2659,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -10
+                "value2": -9
             },
             "Scale": {
                 "value0": 3,
@@ -2697,7 +2700,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -9
+                "value2": -8
             },
             "Scale": {
                 "value0": 3,
@@ -2738,7 +2741,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -8
+                "value2": -7
             },
             "Scale": {
                 "value0": 3,
@@ -2779,7 +2782,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -7
+                "value2": -6
             },
             "Scale": {
                 "value0": 3,
@@ -2820,7 +2823,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -6
+                "value2": -5
             },
             "Scale": {
                 "value0": 3,
@@ -2861,7 +2864,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -5
+                "value2": -11
             },
             "Scale": {
                 "value0": 3,
@@ -2902,7 +2905,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -11
+                "value2": -2
             },
             "Scale": {
                 "value0": 3,
@@ -2943,7 +2946,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -2
+                "value2": -3
             },
             "Scale": {
                 "value0": 3,
@@ -2982,9 +2985,43 @@
     "Entity_74": {
         "link": {
             "Position": {
+                "value0": -4,
+                "value1": 0,
+                "value2": -6
+            },
+            "Scale": {
+                "value0": 1,
+                "value1": 1,
+                "value2": 1
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [
+            74,
+            75,
+            76,
+            77,
+            78,
+            79,
+            80,
+            81,
+            82,
+            83
+        ],
+        "flags": 0,
+        "components_number": []
+    },
+    "Entity_75": {
+        "link": {
+            "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -3
+                "value2": -4
             },
             "Scale": {
                 "value0": 3,
@@ -3020,46 +3057,12 @@
             }
         }
     },
-    "Entity_75": {
-        "link": {
-            "Position": {
-                "value0": -4,
-                "value1": 0,
-                "value2": -6
-            },
-            "Scale": {
-                "value0": 1,
-                "value1": 1,
-                "value2": 1
-            },
-            "Orientation": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 0,
-                "value3": 1
-            }
-        },
-        "children": [
-            75,
-            76,
-            77,
-            78,
-            79,
-            80,
-            81,
-            82,
-            83,
-            84
-        ],
-        "flags": 0,
-        "components_number": []
-    },
     "Entity_76": {
         "link": {
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -4
+                "value2": -10
             },
             "Scale": {
                 "value0": 3,
@@ -3100,7 +3103,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -10
+                "value2": -9
             },
             "Scale": {
                 "value0": 3,
@@ -3141,7 +3144,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -9
+                "value2": -8
             },
             "Scale": {
                 "value0": 3,
@@ -3182,7 +3185,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -8
+                "value2": -7
             },
             "Scale": {
                 "value0": 3,
@@ -3223,7 +3226,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -7
+                "value2": -6
             },
             "Scale": {
                 "value0": 3,
@@ -3264,7 +3267,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -6
+                "value2": -5
             },
             "Scale": {
                 "value0": 3,
@@ -3305,7 +3308,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -5
+                "value2": -11
             },
             "Scale": {
                 "value0": 3,
@@ -3346,7 +3349,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -11
+                "value2": -2
             },
             "Scale": {
                 "value0": 3,
@@ -3387,7 +3390,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -2
+                "value2": -3
             },
             "Scale": {
                 "value0": 3,
@@ -3426,9 +3429,43 @@
     "Entity_85": {
         "link": {
             "Position": {
+                "value0": -4,
+                "value1": 3,
+                "value2": -6
+            },
+            "Scale": {
+                "value0": 1,
+                "value1": 1,
+                "value2": 1
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [
+            85,
+            86,
+            87,
+            88,
+            89,
+            90,
+            91,
+            92,
+            93,
+            94
+        ],
+        "flags": 0,
+        "components_number": []
+    },
+    "Entity_86": {
+        "link": {
+            "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -3
+                "value2": -4
             },
             "Scale": {
                 "value0": 3,
@@ -3464,46 +3501,12 @@
             }
         }
     },
-    "Entity_86": {
-        "link": {
-            "Position": {
-                "value0": -4,
-                "value1": 3,
-                "value2": -6
-            },
-            "Scale": {
-                "value0": 1,
-                "value1": 1,
-                "value2": 1
-            },
-            "Orientation": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 0,
-                "value3": 1
-            }
-        },
-        "children": [
-            86,
-            87,
-            88,
-            89,
-            90,
-            91,
-            92,
-            93,
-            94,
-            95
-        ],
-        "flags": 0,
-        "components_number": []
-    },
     "Entity_87": {
         "link": {
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -4
+                "value2": -10
             },
             "Scale": {
                 "value0": 3,
@@ -3544,7 +3547,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -10
+                "value2": -9
             },
             "Scale": {
                 "value0": 3,
@@ -3585,7 +3588,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -9
+                "value2": -8
             },
             "Scale": {
                 "value0": 3,
@@ -3626,7 +3629,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -8
+                "value2": -7
             },
             "Scale": {
                 "value0": 3,
@@ -3667,7 +3670,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -7
+                "value2": -6
             },
             "Scale": {
                 "value0": 3,
@@ -3708,7 +3711,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -6
+                "value2": -5
             },
             "Scale": {
                 "value0": 3,
@@ -3749,7 +3752,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -5
+                "value2": -11
             },
             "Scale": {
                 "value0": 3,
@@ -3790,7 +3793,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -11
+                "value2": -2
             },
             "Scale": {
                 "value0": 3,
@@ -3831,7 +3834,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -2
+                "value2": -3
             },
             "Scale": {
                 "value0": 3,
@@ -3870,9 +3873,43 @@
     "Entity_96": {
         "link": {
             "Position": {
+                "value0": -6,
+                "value1": 0,
+                "value2": -6
+            },
+            "Scale": {
+                "value0": 1,
+                "value1": 1,
+                "value2": 1
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [
+            96,
+            97,
+            98,
+            99,
+            100,
+            101,
+            102,
+            103,
+            104,
+            105
+        ],
+        "flags": 0,
+        "components_number": []
+    },
+    "Entity_97": {
+        "link": {
+            "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -3
+                "value2": -4
             },
             "Scale": {
                 "value0": 3,
@@ -3908,46 +3945,12 @@
             }
         }
     },
-    "Entity_97": {
-        "link": {
-            "Position": {
-                "value0": -6,
-                "value1": 0,
-                "value2": -6
-            },
-            "Scale": {
-                "value0": 1,
-                "value1": 1,
-                "value2": 1
-            },
-            "Orientation": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 0,
-                "value3": 1
-            }
-        },
-        "children": [
-            97,
-            98,
-            99,
-            100,
-            101,
-            102,
-            103,
-            104,
-            105,
-            106
-        ],
-        "flags": 0,
-        "components_number": []
-    },
     "Entity_98": {
         "link": {
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -4
+                "value2": -10
             },
             "Scale": {
                 "value0": 3,
@@ -3988,7 +3991,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -10
+                "value2": -9
             },
             "Scale": {
                 "value0": 3,
@@ -4029,7 +4032,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -9
+                "value2": -8
             },
             "Scale": {
                 "value0": 3,
@@ -4070,7 +4073,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -8
+                "value2": -7
             },
             "Scale": {
                 "value0": 3,
@@ -4111,7 +4114,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -7
+                "value2": -6
             },
             "Scale": {
                 "value0": 3,
@@ -4152,7 +4155,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -6
+                "value2": -5
             },
             "Scale": {
                 "value0": 3,
@@ -4193,7 +4196,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -5
+                "value2": -11
             },
             "Scale": {
                 "value0": 3,
@@ -4234,7 +4237,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -11
+                "value2": -2
             },
             "Scale": {
                 "value0": 3,
@@ -4275,7 +4278,7 @@
             "Position": {
                 "value0": 0,
                 "value1": 1,
-                "value2": -2
+                "value2": -3
             },
             "Scale": {
                 "value0": 3,
@@ -4314,47 +4317,6 @@
     "Entity_107": {
         "link": {
             "Position": {
-                "value0": 0,
-                "value1": 1,
-                "value2": -3
-            },
-            "Scale": {
-                "value0": 3,
-                "value1": 3,
-                "value2": 3
-            },
-            "Orientation": {
-                "value0": 0,
-                "value1": 0,
-                "value2": 0,
-                "value3": 1
-            }
-        },
-        "children": [],
-        "flags": 0,
-        "components_number": [
-            1
-        ],
-        "AGE::MeshRenderer": {
-            "value0": {
-                "ptr_wrapper": {
-                    "valid": 1,
-                    "data": {
-                        "value0": "flash/flash.sage",
-                        "value1": "flash/flash.mage",
-                        "value2": ""
-                    }
-                }
-            },
-            "value1": {
-                "type": 0,
-                "data": 0
-            }
-        }
-    },
-    "Entity_108": {
-        "link": {
-            "Position": {
                 "value0": -6,
                 "value1": 3,
                 "value2": -6
@@ -4372,6 +4334,7 @@
             }
         },
         "children": [
+            107,
             108,
             109,
             110,
@@ -4380,13 +4343,12 @@
             113,
             114,
             115,
-            116,
-            117
+            116
         ],
         "flags": 0,
         "components_number": []
     },
-    "Entity_109": {
+    "Entity_108": {
         "link": {
             "Position": {
                 "value0": 0,
@@ -4427,7 +4389,7 @@
             }
         }
     },
-    "Entity_110": {
+    "Entity_109": {
         "link": {
             "Position": {
                 "value0": 0,
@@ -4468,7 +4430,7 @@
             }
         }
     },
-    "Entity_111": {
+    "Entity_110": {
         "link": {
             "Position": {
                 "value0": 0,
@@ -4509,7 +4471,7 @@
             }
         }
     },
-    "Entity_112": {
+    "Entity_111": {
         "link": {
             "Position": {
                 "value0": 0,
@@ -4550,7 +4512,7 @@
             }
         }
     },
-    "Entity_113": {
+    "Entity_112": {
         "link": {
             "Position": {
                 "value0": 0,
@@ -4591,7 +4553,7 @@
             }
         }
     },
-    "Entity_114": {
+    "Entity_113": {
         "link": {
             "Position": {
                 "value0": 0,
@@ -4632,7 +4594,7 @@
             }
         }
     },
-    "Entity_115": {
+    "Entity_114": {
         "link": {
             "Position": {
                 "value0": 0,
@@ -4673,7 +4635,7 @@
             }
         }
     },
-    "Entity_116": {
+    "Entity_115": {
         "link": {
             "Position": {
                 "value0": 0,
@@ -4714,7 +4676,7 @@
             }
         }
     },
-    "Entity_117": {
+    "Entity_116": {
         "link": {
             "Position": {
                 "value0": 0,
@@ -4755,7 +4717,7 @@
             }
         }
     },
-    "Entity_118": {
+    "Entity_117": {
         "link": {
             "Position": {
                 "value0": 0,
@@ -4796,7 +4758,7 @@
             }
         }
     },
-    "Entity_119": {
+    "Entity_118": {
         "link": {
             "Position": {
                 "value0": 0,
@@ -4837,7 +4799,7 @@
             }
         }
     },
-    "Entity_120": {
+    "Entity_119": {
         "link": {
             "Position": {
                 "value0": 0,

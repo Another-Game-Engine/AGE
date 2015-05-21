@@ -133,8 +133,8 @@ namespace AGE
 		}
 
 		{
-			SCOPE_profile_gpu_i("Draw objects");
-			SCOPE_profile_cpu_i("RenderTimer", "Draw objects");
+			SCOPE_profile_gpu_i("Draw occluded objects");
+			SCOPE_profile_cpu_i("RenderTimer", "Draw occluded objects");
 
 			for (auto &meshPaint : pipeline.keys)
 			{
@@ -150,8 +150,8 @@ namespace AGE
 		}
 #else
 		{
-			SCOPE_profile_gpu_i("Draw objects");
-			SCOPE_profile_cpu_i("RenderTimer", "Clear buffer");
+			SCOPE_profile_gpu_i("Draw all objects");
+			SCOPE_profile_cpu_i("RenderTimer", "Draw all objects");
 
 			_programs[PROGRAM_BUFFERING]->use();
 			*_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("projection_matrix") = infos.projection;

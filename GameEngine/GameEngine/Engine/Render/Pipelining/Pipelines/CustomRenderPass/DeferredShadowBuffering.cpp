@@ -53,6 +53,9 @@ namespace AGE
 
 	void DeferredShadowBuffering::renderPass(RenderPipeline const &, RenderLightList &lights, CameraInfos const &infos)
 	{
+		SCOPE_profile_gpu_i("DeferredShadowBuffering render pass");
+		SCOPE_profile_cpu_i("RenderTimer", "DeferredShadowBuffering render pass");
+
 		OpenGLState::glEnable(GL_CULL_FACE);
 		OpenGLState::glCullFace(GL_BACK);
 		OpenGLState::glDepthMask(GL_TRUE);
@@ -80,7 +83,11 @@ namespace AGE
 		}
 		// start to render to texture for each depth map
 		auto it = _depthBuffers.begin();
-		for (auto &spotLight : lights.spotLights) {
+		for (auto &spotLight : lights.spotLights)
+		{
+			SCOPE_profile_gpu_i("Spotlight pass");
+			SCOPE_profile_cpu_i("RenderTimer", "Spotlight pass");
+
 			glViewport(0, 0, _frame_buffer.width(), _frame_buffer.height());
 			auto projection = glm::perspective(60.f, (float)_frame_buffer.width() / (float)_frame_buffer.height(), 0.1f, 2000.0f);
 			spotLight.shadow_matrix = projection * glm::inverse(spotLight.light.transformation);
@@ -90,6 +97,9 @@ namespace AGE
 			// draw for the spot light selected
 			for (auto &meshPaint : spotLight.keys)
 			{
+				SCOPE_profile_gpu_i("Draw mesh");
+				SCOPE_profile_cpu_i("RenderTimer", "Draw mesh");
+
 				auto painter = _painterManager->get_painter(Key<Painter>::createKey(meshPaint.first));
 				for (auto &mode : meshPaint.second.drawables)
 				{

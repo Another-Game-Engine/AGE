@@ -38,13 +38,13 @@ namespace AGE
 		// The entry point is the basic buffering pass
 		_rendering_list.emplace_back(shadowBuffering);
 		// We link the entry point with the other pass
-		shadowBuffering->setNextPass(basicBuffering);
-		basicBuffering->setNextPass(debugBuffering);
-		debugBuffering->setNextPass(directionalLightning);
-		directionalLightning->setNextPass(spotLightning);
-		spotLightning->setNextPass(pointLightning);
-		pointLightning->setNextPass(_deferredMerging);
-		_deferredMerging->setNextPass(debugMerging);
+		_rendering_list.emplace_back(basicBuffering);
+		_rendering_list.emplace_back(debugBuffering);
+		_rendering_list.emplace_back(directionalLightning);
+		_rendering_list.emplace_back(spotLightning);
+		_rendering_list.emplace_back(pointLightning);
+		_rendering_list.emplace_back(_deferredMerging);
+		_rendering_list.emplace_back(debugMerging);
 
 		setAmbient(glm::vec3(0.2f));
 	}

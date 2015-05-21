@@ -58,6 +58,9 @@ namespace AGE
 
 	void DeferredSpotLightning::renderPass(RenderPipeline const &, RenderLightList &lights, CameraInfos const &infos)
 	{
+		SCOPE_profile_gpu_i("DeferredSpotLightning render pass");
+		SCOPE_profile_cpu_i("RenderTimer", "DeferredSpotLightning render pass");
+
 		glm::vec3 cameraPosition = -glm::transpose(glm::mat3(infos.view)) * glm::vec3(infos.view[3]);
 
 		_programs[PROGRAM_LIGHTNING]->use();

@@ -62,6 +62,9 @@ namespace AGE
 
 	void DeferredDirectionalLightning::renderPass(RenderPipeline const &, RenderLightList &lights, CameraInfos const &infos)
 	{
+		SCOPE_profile_gpu_i("DeferredDirectionalLightning render pass");
+		SCOPE_profile_cpu_i("RenderTimer", "DeferredDirectionalLightning render pass");
+
 		glm::vec3 cameraPosition = -glm::transpose(glm::mat3(infos.view)) * glm::vec3(infos.view[3]);
 
 		_programs[PROGRAM_LIGHTNING]->use();
@@ -87,6 +90,9 @@ namespace AGE
 
 		for (auto &pl : lights.directionalLights)
 		{
+			SCOPE_profile_gpu_i("Directional light");
+			SCOPE_profile_cpu_i("RenderTimer", "Directional light");
+
 			*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("direction_light") = glm::normalize(glm::transpose(glm::inverse(glm::mat3(pl.light.transformation))) * glm::vec3(0.f, 1.0f, 0.f));
 			*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("color_light") = pl.light.data.color;
 			_painterManager->get_painter(_quadPainter)->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_LIGHTNING], Properties(), _quad);

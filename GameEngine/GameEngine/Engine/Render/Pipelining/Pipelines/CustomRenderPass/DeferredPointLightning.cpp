@@ -111,6 +111,9 @@ namespace AGE
 		// Iterate throught each light
 		for (auto &pl : lights.pointLight)
 		{
+			SCOPE_profile_gpu_i("Lightpoints");
+			SCOPE_profile_cpu_i("RenderTimer", "Lightpoints");
+
 			_programs[PROGRAM_STENCIL]->use();
 			*_programs[PROGRAM_STENCIL]->get_resource<Mat4>("model_matrix") = pl.light.sphereTransform;
 
