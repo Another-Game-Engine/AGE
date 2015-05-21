@@ -57,7 +57,7 @@ namespace AGE
 		SCOPE_profile_cpu_i("RenderTimer", "DeferredShadowBuffering render pass");
 
 		OpenGLState::glEnable(GL_CULL_FACE);
-		OpenGLState::glCullFace(GL_BACK);
+		OpenGLState::glCullFace(GL_FRONT);
 		OpenGLState::glDepthMask(GL_TRUE);
 		OpenGLState::glDepthFunc(GL_LEQUAL);
 		OpenGLState::glDisable(GL_BLEND);

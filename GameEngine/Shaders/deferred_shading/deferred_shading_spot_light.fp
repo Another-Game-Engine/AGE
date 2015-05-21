@@ -50,8 +50,8 @@ void main()
 	shadowPos = vec4(vec3(shadowPos.xyz / shadowPos.w) * 0.5f + 0.5f, 1.0f);
 	float shadowMapDepth = texture(shadow_map, shadowPos.xy).z;
 	float visibility = 1.0f;
-	float bias = clamp(0.005f * tan(acos(cosTheta)), 0.f, 0.01f);
-	if (shadowMapDepth < (shadowPos.z - 0.001)) {
+	float bias = clamp(0.005f * tan(acos(cosTheta)), 0.f, 0.000001f);
+	if (shadowMapDepth < (shadowPos.z - bias)) {
 		visibility = 0.f;
 	}
 	color = (vec4(vec3(lambert * color_light), specularRatio) * effect / attenuation) * visibility;

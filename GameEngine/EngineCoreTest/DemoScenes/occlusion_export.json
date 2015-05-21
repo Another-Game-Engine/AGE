@@ -1,5 +1,5 @@
 {
-    "Number_of_serialized_entities": 119,
+    "Number_of_serialized_entities": 120,
     "Component type map": [
         {
             "key": 0,
@@ -1614,8 +1614,8 @@
         "link": {
             "Position": {
                 "value0": 18,
-                "value1": 2,
-                "value2": 3
+                "value1": 5,
+                "value2": 4
             },
             "Scale": {
                 "value0": 1,
@@ -1637,16 +1637,16 @@
         "AGE::SpotLightComponent": {
             "cereal_class_version": 0,
             "color": {
-                "value0": 0,
+                "value0": 1,
                 "value1": 1,
-                "value2": 0
+                "value2": 0.59215688705444336
             },
             "range": {
                 "value0": 0,
-                "value1": 0,
+                "value1": 0.063000001013278961,
                 "value2": 0
             },
-            "exponent": 0,
+            "exponent": 0.20000000298023224,
             "cutOff": 0.60000002384185791
         }
     },
@@ -4848,6 +4848,45 @@
                 "value2": 0
             },
             "Speed": 100
+        }
+    },
+    "Entity_120": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 5,
+                "value2": -5
+            },
+            "Scale": {
+                "value0": 1,
+                "value1": 1,
+                "value2": 1
+            },
+            "Orientation": {
+                "value0": -0.17364804446697235,
+                "value1": 0,
+                "value2": 0,
+                "value3": 0.98480778932571411
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            4
+        ],
+        "AGE::SpotLightComponent": {
+            "color": {
+                "value0": 0.3803921639919281,
+                "value1": 0,
+                "value2": 1
+            },
+            "range": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0
+            },
+            "exponent": 0.20000000298023224,
+            "cutOff": 0.5
         }
     }
 }
