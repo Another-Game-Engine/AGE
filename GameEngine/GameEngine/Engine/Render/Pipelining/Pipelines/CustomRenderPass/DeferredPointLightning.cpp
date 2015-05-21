@@ -83,15 +83,15 @@ namespace AGE
 		glm::vec3 cameraPosition = -glm::transpose(glm::mat3(infos.view)) * glm::vec3(infos.view[3]);
 
 		_programs[PROGRAM_LIGHTNING]->use();
-		*_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("projection_matrix") = infos.projection;
-		*_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("view_matrix") = infos.view;
-		*_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("normal_buffer") = _normalInput;
-		*_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("depth_buffer") = _depthInput;
-		*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("eye_pos") = cameraPosition;
+		_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("projection_matrix").set(infos.projection);
+		_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("view_matrix").set(infos.view);
+		_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("normal_buffer").set(_normalInput);
+		_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("depth_buffer").set(_depthInput);
+		_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("eye_pos").set(cameraPosition);
 
 		_programs[PROGRAM_STENCIL]->use();
-		*_programs[PROGRAM_STENCIL]->get_resource<Mat4>("projection_matrix") = infos.projection;
-		*_programs[PROGRAM_STENCIL]->get_resource<Mat4>("view_matrix") = infos.view;
+		_programs[PROGRAM_STENCIL]->get_resource<Mat4>("projection_matrix").set(infos.projection);
+		_programs[PROGRAM_STENCIL]->get_resource<Mat4>("view_matrix").set(infos.view);
 
 		// Disable blending to clear the color buffer
 		OpenGLState::glDisable(GL_BLEND);
@@ -115,14 +115,14 @@ namespace AGE
 			SCOPE_profile_cpu_i("RenderTimer", "Lightpoints");
 
 			_programs[PROGRAM_STENCIL]->use();
-			*_programs[PROGRAM_STENCIL]->get_resource<Mat4>("model_matrix") = pl.light.sphereTransform;
+			_programs[PROGRAM_STENCIL]->get_resource<Mat4>("model_matrix").set(pl.light.sphereTransform);
 
 			_programs[PROGRAM_LIGHTNING]->use();
-			*_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("model_matrix") = pl.light.sphereTransform;
-			*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("position_light") = glm::vec3(pl.light.sphereTransform[3]);
-			*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("attenuation_light") = pl.light.data.range;
-			*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("color_light") = pl.light.data.color;
-			*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("ambient_color") = glm::vec3(0);
+			_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("model_matrix").set(pl.light.sphereTransform);
+			_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("position_light").set(glm::vec3(pl.light.sphereTransform[3]));
+			_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("attenuation_light").set(pl.light.data.range);
+			_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("color_light").set(pl.light.data.color);
+			_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("ambient_color").set(glm::vec3(0));
 
 			// We clear the stencil buffer
 			glClear(GL_STENCIL_BUFFER_BIT);

@@ -46,7 +46,7 @@ void main()
 	vec3 worldPosToEyes = normalize(eye_pos - worldPos);
 	vec3 reflection = reflect(normalize(-lightDir), normal);
 	float specularRatio = clamp(pow(max(dot(reflection, worldPosToEyes), 0.0f), 100.f), 0.0f, 1.0f);
-	vec4 shadowPos = light_matrix * vec4(1.0f);
+	vec4 shadowPos = light_matrix * vec4(lightDir, 1.0f);
 	shadowPos = vec4(vec3(shadowPos.xyz / shadowPos.w) * 0.5f + 0.5f, 1.0f);
 	float shadowMapDepth = texture2D(shadow_map, shadowPos.xy).z;
 	float visibility = 1.0f;

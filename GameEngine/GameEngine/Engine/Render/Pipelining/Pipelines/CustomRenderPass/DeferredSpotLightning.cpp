@@ -64,11 +64,11 @@ namespace AGE
 		glm::vec3 cameraPosition = -glm::transpose(glm::mat3(infos.view)) * glm::vec3(infos.view[3]);
 
 		_programs[PROGRAM_LIGHTNING]->use();
-		*_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("projection_matrix") = infos.projection;
-		*_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("view_matrix") = infos.view;
-		*_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("normal_buffer") = _normalInput;
-		*_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("depth_buffer") = _depthInput;
-		*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("eye_pos") = cameraPosition;
+		_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("projection_matrix").set(infos.projection);
+		_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("view_matrix").set(infos.view);
+		_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("normal_buffer").set(_normalInput);
+		_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("depth_buffer").set(_depthInput);
+		_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("eye_pos").set(cameraPosition);
 
 		OpenGLState::glDisable(GL_CULL_FACE);
 		OpenGLState::glDisable(GL_DEPTH_TEST);
@@ -83,14 +83,14 @@ namespace AGE
 		{
 			auto position = glm::vec3(pl.light.transformation[3]);
 			auto direction = glm::transpose(glm::inverse(glm::mat3(pl.light.transformation))) * glm::vec3(0.0f, 0.0f, -1.0f);
-			*_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("shadow_map") = std::static_pointer_cast<Texture2D>(pl.shadow_map);
-			*_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("light_matrix") = pl.shadow_matrix;
-			*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("position_light") = position;
-			*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("attenuation_light") = pl.light.data.range;
-			*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("direction_light") = direction;
-			*_programs[PROGRAM_LIGHTNING]->get_resource<Vec1>("spot_cut_off") = pl.light.data.cutOff;
-			*_programs[PROGRAM_LIGHTNING]->get_resource<Vec1>("exponent_light") = pl.light.data.exponent;
-			*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("color_light") = pl.light.data.color;
+			_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("shadow_map").set(std::static_pointer_cast<Texture2D>(pl.shadow_map));
+			_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("light_matrix").set(pl.shadow_matrix);
+			_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("position_light").set(position);
+			_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("attenuation_light").set(pl.light.data.range);
+			_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("direction_light").set(direction);
+			_programs[PROGRAM_LIGHTNING]->get_resource<Vec1>("spot_cut_off").set(pl.light.data.cutOff);
+			_programs[PROGRAM_LIGHTNING]->get_resource<Vec1>("exponent_light").set(pl.light.data.exponent);
+			_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("color_light").set(pl.light.data.color);
 			_painterManager->get_painter(_quadPainter)->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_LIGHTNING], Properties(), _quad);
 		}
 	}

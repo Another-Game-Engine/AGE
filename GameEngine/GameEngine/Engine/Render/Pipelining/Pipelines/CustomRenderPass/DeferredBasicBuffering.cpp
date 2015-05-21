@@ -97,8 +97,8 @@ namespace AGE
 			SCOPE_profile_cpu_i("RenderTimer", "Occluders pass");
 
 			_programs[PROGRAM_BUFFERING]->use();
-			*_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("projection_matrix") = infos.projection;
-			*_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("view_matrix") = infos.view;
+			_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("projection_matrix").set(infos.projection);
+			_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("view_matrix").set(infos.view);
 
 			for (auto &meshPaint : pipeline.keys)
 			{
@@ -154,8 +154,8 @@ namespace AGE
 			SCOPE_profile_cpu_i("RenderTimer", "Draw all objects");
 
 			_programs[PROGRAM_BUFFERING]->use();
-			*_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("projection_matrix") = infos.projection;
-			*_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("view_matrix") = infos.view;
+			_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("projection_matrix").set(infos.projection);
+			_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("view_matrix").set(infos.view);
 
 			for (auto &meshPaint : pipeline.keys)
 			{

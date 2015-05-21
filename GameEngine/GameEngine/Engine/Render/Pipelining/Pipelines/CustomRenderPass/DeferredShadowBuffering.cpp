@@ -91,7 +91,7 @@ namespace AGE
 			glViewport(0, 0, _frame_buffer.width(), _frame_buffer.height());
 			auto projection = glm::perspective(60.f, (float)_frame_buffer.width() / (float)_frame_buffer.height(), 0.1f, 2000.0f);
 			spotLight.shadow_matrix = projection * glm::inverse(spotLight.light.transformation);
-			*_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("light_matrix") = spotLight.shadow_matrix;
+			_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("light_matrix").set(spotLight.shadow_matrix);
 			_frame_buffer.attachment(*(*it), GL_DEPTH_STENCIL_ATTACHMENT);
 			glClear(GL_DEPTH_BUFFER_BIT);
 			// draw for the spot light selected

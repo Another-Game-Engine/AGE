@@ -46,7 +46,7 @@ namespace AGE
 		_rendering_list.emplace_back(_deferredMerging);
 		_rendering_list.emplace_back(debugMerging);
 
-		setAmbient(glm::vec3(0.2f));
+		setAmbient(glm::vec3(0.0f));
 	}
 
 	DebugDeferredShading::DebugDeferredShading(DebugDeferredShading &&move) :
