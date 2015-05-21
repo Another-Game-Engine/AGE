@@ -6,7 +6,7 @@ uniform mat4 projection_matrix;
 uniform mat4 view_matrix;
 uniform sampler2D normal_buffer;
 uniform sampler2D depth_buffer;
-uniform sampler2D shadow_map;
+uniform sampler2DShadow shadow_map;
 uniform vec3 eye_pos;
 
 uniform vec3 position_light;
@@ -28,6 +28,8 @@ vec3 getWorldPosition(float depth, vec2 screenPos, mat4 viewProj)
 	return (vec3(worldPos));
 }
 
+const int samplingNbr = 4;
+
 void main()
 {
 	mat4 viewProj = projection_matrix * view_matrix;
@@ -48,11 +50,12 @@ void main()
 	float specularRatio = clamp(pow(max(dot(reflection, worldPosToEyes), 0.0f), 100.f), 0.0f, 1.0f);
 	vec4 shadowPos = light_matrix * vec4(worldPos, 1.0f);
 	shadowPos = vec4(vec3(shadowPos.xyz / shadowPos.w) * 0.5f + 0.5f, 1.0f);
-	float shadowMapDepth = texture(shadow_map, shadowPos.xy).z;
-	float visibility = 1.0f;
 	float bias = clamp(0.005f * tan(acos(cosTheta)), 0.f, 0.000001f);
-	if (shadowMapDepth < (shadowPos.z - bias)) {
-		visibility = 0.f;
+	vec2 poissonDisk[samplingNbr] = vec2[](vec2(-0.94201624, -0.39906216), vec2(0.94558609, -0.74890725), vec2(-0.094184101, -0.92938870) , vec2(0.34495938, 0.29387760));
+	float visibility = 0.0f;
+	for (int index = 0; index < samplingNbr; ++index) {
+		vec4 samplingPos = vec4(shadowPos.xy + poissonDisk[index] / 700.0f, shadowPos.zw);
+		visibility += (1.0f / float(samplingNbr)) * textureProj(shadow_map, samplingPos, bias);
 	}
 	color = (vec4(vec3(lambert * color_light), specularRatio) * effect / attenuation) * visibility;
 }
