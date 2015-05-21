@@ -83,7 +83,7 @@ namespace AGE
 				if (entity.haveComponent(i))
 				{
 					auto ptr = entity.getComponent(i);
-					if (ptr->exposedInEditor)
+					if (ptr->isExposedInEditor())
 					{
 						bool opened = ImGui::TreeNode(ComponentRegistrationManager::getInstance().getComponentName(ptr->getType()).c_str());
 						bool deleted = false;

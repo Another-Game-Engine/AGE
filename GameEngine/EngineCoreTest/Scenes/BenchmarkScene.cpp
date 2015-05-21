@@ -22,6 +22,8 @@
 #include <Components/MeshRenderer.hh>
 #include <Components/Lifetime.hpp>
 #include <Components/RotationComponent.hpp>
+#include <Components/Collider.hpp>
+#include <Components/ArchetypeComponent.hpp>
 
 #include <Systems/RotationSystem.hpp>
 
@@ -45,8 +47,7 @@
 
 
 #include <Systems/PhysicsSystem.hpp>
-#include <Components/RigidBody.hpp>
-#include <Components/Collider.hpp>
+
 
 
 namespace AGE
@@ -86,6 +87,7 @@ namespace AGE
 		REGISTER_COMPONENT_TYPE(AGE::RotationComponent);
 		REGISTER_COMPONENT_TYPE(AGE::Collider);
 		REGISTER_COMPONENT_TYPE(AGE::DirectionalLightComponent);
+		REGISTER_COMPONENT_TYPE(AGE::ArchetypeComponent);
 
 		addSystem<AGE::DebugSystem>(0);
 		addSystem<AGE::PhysicsSystem>(0, Physics::EngineType::PhysX, EngineCoreTestConfiguration::GetCookedDirectory());

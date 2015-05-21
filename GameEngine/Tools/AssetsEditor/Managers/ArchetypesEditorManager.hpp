@@ -12,6 +12,7 @@
 #include <Threads/MainThread.hpp>
 #include <Threads/ThreadManager.hpp>
 #include <Entities/ArchetypeLibrary.hpp>
+#include <Components/ArchetypeComponent.hpp>
 
 namespace AGE
 {
@@ -204,7 +205,7 @@ namespace AGE
 
 					if (_selectedEntity)
 					{
-						auto &types = ComponentRegistrationManager::getInstance().getSystemIdToAgeIdMap();
+						auto &types = ComponentRegistrationManager::getInstance().getExposedType();
 						auto &creationFn = ComponentRegistrationManager::getInstance().getCreationFunctions();
 
 						for (auto &t : types)
@@ -241,6 +242,7 @@ namespace AGE
 						representation->_archetypeLinked = _selectedArchetype;
 
 						_selectedArchetype->entities.insert(duplicate);
+						duplicate.addComponent<AGE::ArchetypeComponent>(_archetypesImGuiNamesList[_selectedArchetypeIndex]);
 					}
 
 					if (ImGui::SmallButton("Save archetype library"))

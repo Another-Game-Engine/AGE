@@ -45,6 +45,7 @@
 #include <Components/SpotLight.hh>
 #include <Components/DirectionalLightComponent.hh>
 #include <Components/FreeFlyComponent.hh>
+#include <Components/ArchetypeComponent.hpp>
 
 //COMPONENTS
 #include <Components/EntityRepresentation.hpp>
@@ -82,6 +83,7 @@ int			main(int ac, char **av)
 		REGISTER_COMPONENT_TYPE(AGE::CameraComponent);
 		REGISTER_COMPONENT_TYPE(AGE::DirectionalLightComponent);
 		REGISTER_COMPONENT_TYPE(AGE::FreeFlyComponent);
+		REGISTER_COMPONENT_TYPE(AGE::ArchetypeComponent);
 
 		RegisterComponents();
 

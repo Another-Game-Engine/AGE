@@ -121,7 +121,7 @@ namespace AGE
 
 					if (representation->isLinkedToArchetype() == false && representation->parentIsArchetype() == false)
 					{
-						auto &types = ComponentRegistrationManager::getInstance().getSystemIdToAgeIdMap();
+						auto &types = ComponentRegistrationManager::getInstance().getExposedType();
 						auto &creationFn = ComponentRegistrationManager::getInstance().getCreationFunctions();
 
 						for (auto &t : types)

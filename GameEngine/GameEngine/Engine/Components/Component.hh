@@ -50,7 +50,7 @@ namespace AGE
 		virtual void editorDelete(){}
 		// return true if modified
 		virtual bool editorUpdate(){ return false; }
-		bool exposedInEditor = true;
+		virtual bool isExposedInEditor(){ return true; }
 		bool deletableInEditor = true;
 		// if serialized in final export
 		virtual bool serializeInExport() { return true; }
