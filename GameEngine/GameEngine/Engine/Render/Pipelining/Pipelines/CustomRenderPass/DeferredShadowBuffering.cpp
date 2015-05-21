@@ -73,6 +73,11 @@ namespace AGE
 			int count = lights.spotLights.size() - _depthBuffers.size();
 			for (int index = 0; index < count; ++index) {
 				_depthBuffers.push_back(createRenderPassOutput<Texture2D>(_frame_buffer.width(), _frame_buffer.height(), GL_DEPTH24_STENCIL8, true));
+				_depthBuffers.back()->bind();
+				_depthBuffers.back()->parameter(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+				_depthBuffers.back()->parameter(GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+				_depthBuffers.back()->parameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+				_depthBuffers.back()->parameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 			}
 		}
 		else if (_depthBuffers.size() > lights.spotLights.size()) {
@@ -89,7 +94,7 @@ namespace AGE
 			SCOPE_profile_cpu_i("RenderTimer", "Spotlight pass");
 
 			glViewport(0, 0, _frame_buffer.width(), _frame_buffer.height());
-			auto projection = glm::perspective(60.f, (float)_frame_buffer.width() / (float)_frame_buffer.height(), 0.1f, 2000.0f);
+			auto projection = glm::perspective(60.f, (float)_frame_buffer.width() / (float)_frame_buffer.height(), 0.1f, 1000.0f);
 			spotLight.shadow_matrix = projection * glm::inverse(spotLight.light.transformation);
 			_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("light_matrix").set(spotLight.shadow_matrix);
 			_frame_buffer.attachment(*(*it), GL_DEPTH_STENCIL_ATTACHMENT);
