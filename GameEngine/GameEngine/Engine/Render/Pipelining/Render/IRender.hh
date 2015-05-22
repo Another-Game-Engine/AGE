@@ -17,7 +17,7 @@ namespace AGE
 	{
 	public:
 		virtual ~IRender() {}
-		virtual IRender &render(RenderPipeline const &pipeline, RenderLightList const &lights, CameraInfos const &infos) = 0;
+		virtual IRender &render(RenderPipeline const &pipeline, RenderLightList &lights, CameraInfos const &infos) = 0;
 	};
 
 }

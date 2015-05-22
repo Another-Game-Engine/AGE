@@ -28,6 +28,10 @@ std::make_pair(GL_FLOAT, LAMBDA_PROTO\
 std::make_pair(GL_SAMPLER_2D, LAMBDA_PROTO\
 {\
 	return (std::make_shared<Sampler2D>(id, std::move(name))); \
+}), \
+std::make_pair(GL_SAMPLER_2D_SHADOW, LAMBDA_PROTO\
+{\
+return (std::make_shared<Sampler2D>(id, std::move(name))); \
 })
 
 namespace AGE
@@ -36,7 +40,6 @@ namespace AGE
 	UniformsFactory::UniformsFactory() :
 		_blue_prints({ DECLAR_BUILDERS })
 	{
-
 	}
 
 	std::shared_ptr<IProgramResources> UniformsFactory::build(GLenum mode, GLint id, std::string &&name)

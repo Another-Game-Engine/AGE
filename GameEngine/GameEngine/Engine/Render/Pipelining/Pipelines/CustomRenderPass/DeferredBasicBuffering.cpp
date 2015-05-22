@@ -16,8 +16,8 @@
 #include <Configuration.hpp>
 #include <Threads/RenderThread.hpp>
 #include <Threads/ThreadManager.hpp>
-#include <Render/DepthMapHandle.hpp>
-#include <Render/DepthMap.hpp>
+#include <Render/OcclusionTools/DepthMapHandle.hpp>
+#include <Render/OcclusionTools/DepthMap.hpp>
 
 #define DEFERRED_SHADING_BUFFERING_VERTEX "deferred_shading/deferred_shading_get_buffer.vp"
 #define DEFERRED_SHADING_BUFFERING_FRAG "deferred_shading/deferred_shading_get_buffer.fp"
@@ -30,12 +30,12 @@ namespace AGE
 		PROGRAM_NBR
 	};
 
-	DeferredBasicBuffering::DeferredBasicBuffering(std::shared_ptr<PaintingManager> painterManager,
+	DeferredBasicBuffering::DeferredBasicBuffering(glm::uvec2 const &screenSize, std::shared_ptr<PaintingManager> painterManager,
 												std::shared_ptr<Texture2D> diffuse,
 												std::shared_ptr<Texture2D> normal,
 												std::shared_ptr<Texture2D> specular,
 												std::shared_ptr<Texture2D> depth) :
-		FrameBufferRender(painterManager)
+		FrameBufferRender(screenSize.x, screenSize.y, painterManager)
 		, _depth(depth)
 	{
 		AGE_ASSERT(depth != nullptr);
@@ -69,11 +69,10 @@ namespace AGE
 		}));
 	}
 
-	void DeferredBasicBuffering::renderPass(RenderPipeline const &pipeline, RenderLightList const &, CameraInfos const &infos)
+	void DeferredBasicBuffering::renderPass(RenderPipeline const &pipeline, RenderLightList &, CameraInfos const &infos)
 	{
 		SCOPE_profile_gpu_i("DeferredBasicBuffering render pass");
 		SCOPE_profile_cpu_i("RenderTimer", "DeferredBasicBuffering render pass");
-
 		{
 			SCOPE_profile_gpu_i("Clear buffer");
 			SCOPE_profile_cpu_i("RenderTimer", "Clear buffer");
@@ -83,7 +82,6 @@ namespace AGE
 			OpenGLState::glDepthMask(GL_TRUE);
 			OpenGLState::glDepthFunc(GL_LEQUAL);
 			OpenGLState::glDisable(GL_BLEND);
-			OpenGLState::glDisable(GL_STENCIL_TEST);
 			OpenGLState::glEnable(GL_DEPTH_TEST);
 			OpenGLState::glClearColor(glm::vec4(0.f, 0.0f, 0.0f, 0.0f));
 			OpenGLState::glEnable(GL_STENCIL_TEST);
@@ -99,8 +97,8 @@ namespace AGE
 			SCOPE_profile_cpu_i("RenderTimer", "Occluders pass");
 
 			_programs[PROGRAM_BUFFERING]->use();
-			*_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("projection_matrix") = infos.projection;
-			*_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("view_matrix") = infos.view;
+			_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("projection_matrix").set(infos.projection);
+			_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("view_matrix").set(infos.view);
 
 			for (auto &meshPaint : pipeline.keys)
 			{
@@ -135,8 +133,8 @@ namespace AGE
 		}
 
 		{
-			SCOPE_profile_gpu_i("Draw objects");
-			SCOPE_profile_cpu_i("RenderTimer", "Draw objects");
+			SCOPE_profile_gpu_i("Draw occluded objects");
+			SCOPE_profile_cpu_i("RenderTimer", "Draw occluded objects");
 
 			for (auto &meshPaint : pipeline.keys)
 			{
@@ -152,12 +150,12 @@ namespace AGE
 		}
 #else
 		{
-			SCOPE_profile_gpu_i("Draw objects");
-			SCOPE_profile_cpu_i("RenderTimer", "Clear buffer");
+			SCOPE_profile_gpu_i("Draw all objects");
+			SCOPE_profile_cpu_i("RenderTimer", "Draw all objects");
 
 			_programs[PROGRAM_BUFFERING]->use();
-			*_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("projection_matrix") = infos.projection;
-			*_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("view_matrix") = infos.view;
+			_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("projection_matrix").set(infos.projection);
+			_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("view_matrix").set(infos.view);
 
 			for (auto &meshPaint : pipeline.keys)
 			{

@@ -26,10 +26,10 @@ namespace AGE
 		PROGRAM_NBR
 	};
 
-	DeferredDebugBuffering::DeferredDebugBuffering(std::shared_ptr<PaintingManager> painterManager,
+	DeferredDebugBuffering::DeferredDebugBuffering(glm::uvec2 const &screenSize, std::shared_ptr<PaintingManager> painterManager,
 		std::shared_ptr<Texture2D> debugLights,
 		std::shared_ptr<Texture2D> depth) :
-		FrameBufferRender(painterManager)
+		FrameBufferRender(screenSize.x, screenSize.y, painterManager)
 	{
 		Key<Painter> quadPainterKey;
 		GetRenderThread()->getQuadGeometry(_quadVertices, quadPainterKey);
@@ -51,7 +51,7 @@ namespace AGE
 		}));
 	}
 
-	void DeferredDebugBuffering::renderPass(RenderPipeline const &, RenderLightList const &renderLight, CameraInfos const &infos)
+	void DeferredDebugBuffering::renderPass(RenderPipeline const &, RenderLightList &renderLight, CameraInfos const &infos)
 	{
 		SCOPE_profile_gpu_i("DeferredDebugBuffering render pass");
 		SCOPE_profile_cpu_i("RenderTimer", "DeferredDebugBuffering render pass");
@@ -68,20 +68,28 @@ namespace AGE
 		OpenGLState::glDepthMask(GL_FALSE);
 
 		_programs[PROGRAM_BUFFERING_LIGHT]->use();
-		*_programs[PROGRAM_BUFFERING_LIGHT]->get_resource<Mat4>("projection_matrix") = infos.projection;
-		*_programs[PROGRAM_BUFFERING_LIGHT]->get_resource<Mat4>("view_matrix") = infos.view;
+		_programs[PROGRAM_BUFFERING_LIGHT]->get_resource<Mat4>("projection_matrix").set(infos.projection);
+		_programs[PROGRAM_BUFFERING_LIGHT]->get_resource<Mat4>("view_matrix").set(infos.view);
 
-		for (auto &pl : renderLight.pointLight)
 		{
-			*_programs[PROGRAM_BUFFERING_LIGHT]->get_resource<Sampler2D>("sprite_light") = std::static_pointer_cast<Texture2D>(pl.light.data.map);
-			*_programs[PROGRAM_BUFFERING_LIGHT]->get_resource<Mat4>("model_matrix") = pl.light.transformation;
-			_quadPainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING_LIGHT], Properties(), _quadVertices);
+			SCOPE_profile_gpu_i("Render point lights");
+			SCOPE_profile_cpu_i("RenderTimer", "Render point lights");
+			for (auto &pl : renderLight.pointLight)
+			{
+				_programs[PROGRAM_BUFFERING_LIGHT]->get_resource<Sampler2D>("sprite_light").set(std::static_pointer_cast<Texture2D>(pl.light.data.map));
+				_programs[PROGRAM_BUFFERING_LIGHT]->get_resource<Mat4>("model_matrix").set(pl.light.transformation);
+				_quadPainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING_LIGHT], Properties(), _quadVertices);
+			}
 		}
-		for (auto &pl : renderLight.spotLights)
 		{
-			*_programs[PROGRAM_BUFFERING_LIGHT]->get_resource<Sampler2D>("sprite_light") = std::static_pointer_cast<Texture2D>(pl.light.data.map);
-			*_programs[PROGRAM_BUFFERING_LIGHT]->get_resource<Mat4>("model_matrix") = pl.light.transformation;
-			_quadPainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING_LIGHT], Properties(), _quadVertices);
+			SCOPE_profile_gpu_i("Render spot lights");
+			SCOPE_profile_cpu_i("RenderTimer", "Render spot lights");
+			for (auto &pl : renderLight.spotLights)
+			{
+				_programs[PROGRAM_BUFFERING_LIGHT]->get_resource<Sampler2D>("sprite_light").set(std::static_pointer_cast<Texture2D>(pl.light.data.map));
+				_programs[PROGRAM_BUFFERING_LIGHT]->get_resource<Mat4>("model_matrix").set(pl.light.transformation);
+				_quadPainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING_LIGHT], Properties(), _quadVertices);
+			}
 		}
 	}
 

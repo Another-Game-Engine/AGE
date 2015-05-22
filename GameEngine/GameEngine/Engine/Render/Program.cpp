@@ -129,9 +129,9 @@ namespace AGE
 	{
 		for (auto &buffer : buffers.get_buffers()) {
 			auto resource = Program::get_resource<Attribute>(buffer->name());
-			if (resource)
+			if (resource.isValid())
 			{
-				*resource = buffer;
+				resource.set(buffer);
 			}
 		}
 		return *this;

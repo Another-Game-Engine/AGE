@@ -31,9 +31,9 @@ namespace AGE
 		PROGRAM_NBR
 	};
 
-	DeferredMergingDebug::DeferredMergingDebug(std::shared_ptr<PaintingManager> painterManager,
+	DeferredMergingDebug::DeferredMergingDebug(glm::uvec2 const &screenSize, std::shared_ptr<PaintingManager> painterManager,
 		std::shared_ptr<Texture2D> debugLightRender) :
-		ScreenRender(painterManager)
+		ScreenRender(screenSize, painterManager)
 	{
 		_debugLightRender = debugLightRender;
 		_programs.resize(PROGRAM_NBR);
@@ -64,10 +64,10 @@ namespace AGE
 		_quadPainter = _painterManager->get_painter(quadPainterKey);
 	}
 
-	void DeferredMergingDebug::renderPass(RenderPipeline const &, RenderLightList const &, CameraInfos const &)
+	void DeferredMergingDebug::renderPass(RenderPipeline const &, RenderLightList &, CameraInfos const &)
 	{
 		_programs[PROGRAM_MERGING]->use();
-		*_programs[PROGRAM_MERGING]->get_resource<Sampler2D>("debug_light_map") = _debugLightRender;
+		_programs[PROGRAM_MERGING]->get_resource<Sampler2D>("debug_light_map").set(_debugLightRender);
 
 		OpenGLState::glEnable(GL_BLEND);
 		OpenGLState::glDisable(GL_DEPTH_TEST);
