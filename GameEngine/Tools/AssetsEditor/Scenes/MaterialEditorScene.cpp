@@ -182,7 +182,7 @@ namespace AGE
 		if (ImGui::Button("Save Edition")) {
 			const std::string currentDir = Directory::GetCurrentDirectory();
 			const std::string absPath = Path::AbsoluteName(currentDir.c_str(), WE::EditorConfiguration::GetCookedDirectory().c_str());
-			std::ofstream file(absPath + _current.name + ".mage");
+			std::ofstream file(absPath + _current.name + ".mage", std::ios::trunc | std::ios::binary);
 			cereal::PortableBinaryOutputArchive ar(file);
 			ar(_current);
 		}
@@ -198,7 +198,7 @@ namespace AGE
 		ImGui::ColorEdit3("emissive", glm::value_ptr(mat.emissive));
 		ImGui::ColorEdit3("reflective", glm::value_ptr(mat.reflective));
 		ImGui::ColorEdit3("specular", glm::value_ptr(mat.specular));
-		ImGui::SliderFloat("shininess", &mat.shininess, 0.0f, 1.0f);
+		ImGui::SliderFloat("shininess", &mat.shininess, 0.0f, 1000.0f);
 		_editTexture(mat.diffuseTexPath, ModeTexture::diffuse, mat);
 		_editTexture(mat.specularTexPath, ModeTexture::specular, mat);
 		_editTexture(mat.ambientTexPath, ModeTexture::ambient, mat);

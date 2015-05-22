@@ -39,6 +39,6 @@ void main()
 	vec3 worldPosToEyes = normalize(eye_pos - worldPos);
 	vec3 reflection = reflect(normalize(-lightDir), normal);
 	float shininess = texture2D(specular_buffer, interpolated_texCoord).a;
-	float specularRatio = clamp(pow(max(dot(reflection, worldPosToEyes), 0.0f), 1000.f * shininess), 0.0f, 1.0f);
+	float specularRatio = clamp(pow(max(dot(reflection, worldPosToEyes), 0.0f), shininess), 0.0f, 1.0f);
 	color = vec4(vec3(ambient_color + lambert * color_light), specularRatio) / (attenuation);;
 }

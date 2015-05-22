@@ -40,11 +40,8 @@ namespace AGE
 
 		_normalInput = normal;
 		_depthInput = depth;
-<<<<<<< HEAD
 		_specularInput = specular;
 
-=======
->>>>>>> hard_shadow
 		_programs.resize(PROGRAM_NBR);
 		auto confManager = GetEngine()->getInstance<ConfigurationManager>();
 		auto shaderPath = confManager->getConfiguration<std::string>("ShadersPath");
@@ -70,20 +67,12 @@ namespace AGE
 		glm::vec3 cameraPosition = -glm::transpose(glm::mat3(infos.view)) * glm::vec3(infos.view[3]);
 
 		_programs[PROGRAM_LIGHTNING]->use();
-<<<<<<< HEAD
-		*_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("projection_matrix") = infos.projection;
-		*_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("view_matrix") = infos.view;
-		*_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("normal_buffer") = _normalInput;
-		*_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("depth_buffer") = _depthInput;
-		*_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("specular_buffer") = _specularInput;
-		*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("eye_pos") = cameraPosition;
-=======
 		_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("projection_matrix").set(infos.projection);
 		_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("view_matrix").set(infos.view);
 		_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("normal_buffer").set(_normalInput);
+		_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("specular_buffer").set(_specularInput);
 		_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("depth_buffer").set(_depthInput);
 		_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("eye_pos").set(cameraPosition);
->>>>>>> hard_shadow
 
 		OpenGLState::glDisable(GL_CULL_FACE);
 		OpenGLState::glDisable(GL_DEPTH_TEST);

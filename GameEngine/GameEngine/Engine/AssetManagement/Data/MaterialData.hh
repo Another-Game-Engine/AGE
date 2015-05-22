@@ -12,6 +12,9 @@ namespace AGE
 	struct MaterialData
 	{
 	public:
+		// will scale UVs based on the scale of the mesh
+		bool scaleUVs = false;
+		float shininess = 100.0f;
 		glm::vec4 diffuse;
 		glm::vec4 ambient;
 		glm::vec4 emissive;
@@ -24,9 +27,6 @@ namespace AGE
 		std::string specularTexPath;
 		std::string normalTexPath;
 		std::string bumpTexPath;
-		// will scale UVs based on the scale of the mesh
-		bool scaleUVs = false;
-		float shininess = 1.0f;
 #ifdef EDITOR_ENABLED
 		int selectedTextureIndex[7];
 #endif
@@ -62,14 +62,17 @@ namespace AGE
 	template <class Archive>
 	void MaterialData::serialize(Archive &ar, const std::uint32_t version)
 	{
-		ar(diffuse, ambient, emissive, reflective, specular, diffuseTexPath, ambientTexPath, emissiveTexPath, reflectiveTexPath, specularTexPath, normalTexPath, bumpTexPath);
-		if (version > 0)
+		if (version == 0)
 		{
-			ar(scaleUVs);
+			ar(diffuse, ambient, emissive, reflective, specular, diffuseTexPath, ambientTexPath, emissiveTexPath, reflectiveTexPath, specularTexPath, normalTexPath, bumpTexPath);
 		}
-		if (version > 1)
+		else if (version == 1)
 		{
-			ar(shininess);
+			ar(scaleUVs, diffuse, ambient, emissive, reflective, specular, diffuseTexPath, ambientTexPath, emissiveTexPath, reflectiveTexPath, specularTexPath, normalTexPath, bumpTexPath);
+		}
+		else if (version == 2)
+		{
+			ar(scaleUVs, shininess, diffuse, ambient, emissive, reflective, specular, diffuseTexPath, ambientTexPath, emissiveTexPath, reflectiveTexPath, specularTexPath, normalTexPath, bumpTexPath);
 		}
 	}
 }
