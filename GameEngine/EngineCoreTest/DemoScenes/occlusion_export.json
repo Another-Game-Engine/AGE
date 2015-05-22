@@ -1646,7 +1646,7 @@
                 "value1": 0.063000001013278961,
                 "value2": 0
             },
-            "exponent": 0.20000000298023224,
+            "exponent": 7,
             "cutOff": 0.60000002384185791
         }
     },
@@ -4876,8 +4876,8 @@
         ],
         "AGE::SpotLightComponent": {
             "color": {
-                "value0": 0.3803921639919281,
-                "value1": 0,
+                "value0": 1,
+                "value1": 1,
                 "value2": 1
             },
             "range": {
@@ -4885,7 +4885,7 @@
                 "value1": 0,
                 "value2": 0
             },
-            "exponent": 0.20000000298023224,
+            "exponent": 7,
             "cutOff": 0.5
         }
     }
