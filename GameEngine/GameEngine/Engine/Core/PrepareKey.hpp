@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <functional>
 
 namespace AGE
 {
@@ -31,9 +32,21 @@ namespace AGE
 			return (type == NO_TYPE || id == NO_ID);
 		}
 
-		bool operator==(const PrepareKey &o)
+		bool operator==(const PrepareKey &o) const
 		{
 			return o.id == id && o.type == type;
+		}
+	};
+}
+
+namespace std
+{
+	template <>
+	struct hash < AGE::PrepareKey > final
+	{
+		std::size_t operator()(const AGE::PrepareKey &key) const
+		{
+			return std::hash<decltype(key.type)>()(key.type) ^ (std::hash<decltype(key.id)>()(key.id) << 1);
 		}
 	};
 }

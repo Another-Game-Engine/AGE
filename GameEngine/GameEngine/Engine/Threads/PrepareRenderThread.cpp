@@ -7,6 +7,8 @@
 #include <Threads/Tasks/BasicTasks.hpp>
 #include <Threads/RenderThread.hpp>
 #include <Threads/Commands/ToRenderCommands.hpp>
+#include <microprofile/microprofile.h>
+#include <Utils/Profiler.hpp>
 
 namespace AGE
 {
@@ -144,6 +146,7 @@ namespace AGE
 		if (!init())
 			return false;
 		_threadHandle = std::thread(&PrepareRenderThread::update, std::ref(*this));
+		MicroProfileOnThreadExit();
 		return true;
 	}
 
@@ -185,17 +188,24 @@ namespace AGE
 
 		while (this->_run && _insideRun)
 		{
+			SCOPE_profile_cpu_i("PrepareTimer", "Update");
+
 			std::chrono::system_clock::time_point waitStart;
 			std::chrono::system_clock::time_point waitEnd;
 			std::chrono::system_clock::time_point workStart;
 			std::chrono::system_clock::time_point workEnd;
 
 			waitStart = std::chrono::high_resolution_clock::now();
-			getQueue()->getTaskAndCommandQueue(tasks, taskSuccess, commands, commandSucces, TMQ::HybridQueue::WaitType::Block);
+			{
+				SCOPE_profile_cpu_i("PrepareTimer", "Wait and get commands and tasks");
+				getQueue()->getTaskAndCommandQueue(tasks, taskSuccess, commands, commandSucces, TMQ::HybridQueue::WaitType::Block);
+			}
 			waitEnd = std::chrono::high_resolution_clock::now();
 			workStart = std::chrono::high_resolution_clock::now();
+
 			if (taskSuccess)
 			{
+				SCOPE_profile_cpu_i("PrepareTimer", "Execute tasks");
 				while (!tasks.empty())
 				{
 					auto task = tasks.front();
@@ -207,6 +217,7 @@ namespace AGE
 			}
 			if (commandSucces)
 			{
+				SCOPE_profile_cpu_i("PrepareTimer", "Execute commands");
 				while (!commands.empty())
 				{
 					auto command = commands.front();
@@ -218,9 +229,12 @@ namespace AGE
 					}
 					commands.pop();
 				}
-				if (!_next->getQueue()->releaseCommandReadability(TMQ::HybridQueue::WaitType::NoWait))
 				{
-					_next->getQueue()->clear();
+					SCOPE_profile_cpu_i("PrepareTimer", "Release commands for render thread");
+					if (!_next->getQueue()->releaseCommandReadability(TMQ::HybridQueue::WaitType::NoWait))
+					{
+						_next->getQueue()->clear();
+					}
 				}
 			}
 			workEnd = std::chrono::high_resolution_clock::now();

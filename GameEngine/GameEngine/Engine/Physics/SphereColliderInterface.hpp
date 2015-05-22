@@ -12,7 +12,7 @@ namespace AGE
 			// Constructors
 			SphereColliderInterface(void) = delete;
 
-			SphereColliderInterface(WorldInterface *world, void *&data);
+			SphereColliderInterface(WorldInterface *world, Private::GenericData *data);
 
 			SphereColliderInterface(const SphereColliderInterface &) = delete;
 
@@ -29,6 +29,11 @@ namespace AGE
 			virtual float getRadius(void) const = 0;
 
 		protected:
+			// Static Methods
+			static glm::vec3 GetDefaultCenter(void);
+
+			static float GetDefaultRadius(void);
+
 			// Destructor
 			virtual ~SphereColliderInterface(void) = default;
 

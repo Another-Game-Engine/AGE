@@ -12,7 +12,7 @@ namespace AGE
 	std::function<bool()> DefaultEngineConfiguration(Engine *engine, std::function<bool()> &userConfigs)
 	{
 		return std::function<bool()>([&](){
-			#ifdef USE_IMGUI
+			#ifdef AGE_ENABLE_IMGUI
 				GetRenderThread()->getQueue()->emplaceFutureTask<AGE::Tasks::Basic::BoolFunction, bool>([=](){
 					AGE::Imgui::getInstance()->init(engine);
 					return true;

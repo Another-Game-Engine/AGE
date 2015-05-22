@@ -23,12 +23,38 @@ namespace AGE
 		bool operator==(Program const &p) const;
 		bool operator!=(Program const &p) const;
 
+		template <typename T>
+		class ResourceHandle
+		{
+		public:
+			ResourceHandle(std::shared_ptr<T> ptr)
+				: _ptr(ptr)
+			{}
+
+			bool isValid() const
+			{
+				return _ptr != nullptr;
+			}
+
+			template <typename U>
+			void set(const U &v)
+			{
+				if (_ptr != nullptr)
+				{
+					*_ptr = v;
+				}
+			}
+
+		private:
+			std::shared_ptr<T> _ptr = nullptr;
+		};
+
 	public:
 		std::string const &name() const;
 		GLuint id() const;
 		Key<ProgramResource> &get_key(std::string const &name);
-		template <typename type_t> std::shared_ptr<type_t> get_resource(Key<ProgramResource> const &key);
-		template <typename type_t> std::shared_ptr<type_t> get_resource(std::string const &name);
+		template <typename type_t> ResourceHandle<type_t> get_resource(Key<ProgramResource> const &key);
+		template <typename type_t> ResourceHandle<type_t> get_resource(std::string const &name);
 		std::shared_ptr<IProgramResources> get_resource_interface(std::string const &name);
 		bool has_resource(Key<ProgramResource> const &key);
 		Program const &use() const;
@@ -60,25 +86,25 @@ namespace AGE
 	};
 
 	template <typename type_t>
-	std::shared_ptr<type_t> Program::get_resource(std::string const &name)
+	Program::ResourceHandle<type_t> Program::get_resource(std::string const &name)
 	{
 		for (size_t index = 0; index < _program_resources.size(); ++index)
 		{
 			if (name == _program_resources[index]->name())
 			{
 				auto &resource = _program_resources[index];
-				return (resource->safe(sizeof(type_t::type_t)) ? std::static_pointer_cast<type_t>(resource) : nullptr);
+				return Program::ResourceHandle<type_t>(resource->safe(sizeof(type_t::type_t)) ? std::static_pointer_cast<type_t>(resource) : nullptr);
 			}
 		}
-		return (nullptr);
+		return Program::ResourceHandle<type_t>(nullptr);
 	}
 
 	template <typename type_t>
-	std::shared_ptr<type_t> Program::get_resource(Key<ProgramResource> const &key)
+	Program::ResourceHandle<type_t> Program::get_resource(Key<ProgramResource> const &key)
 	{
 		if (key) {
-			return (nullptr);
+			return Program::ResourceHandle<type_t>(nullptr);
 		}
-		return (_program_resources[key.getId()]->safe(sizeof(type_t::type_t)) ? _program_resources[key.getId()].get() : nullptr);
+		return Program::ResourceHandle<type_t>(_program_resources[key.getId()]->safe(sizeof(type_t::type_t)) ? _program_resources[key.getId()].get() : nullptr);
 	}
 }

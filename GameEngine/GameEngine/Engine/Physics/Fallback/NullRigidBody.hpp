@@ -10,11 +10,14 @@ namespace AGE
 
 		class NullRigidBody final : public RigidBodyInterface
 		{
+			// Friendships
+			friend ObjectPool < NullRigidBody >;
+
 		public:
 			// Constructors
 			NullRigidBody(void) = delete;
 
-			NullRigidBody(NullWorld *world, void *&data);
+			NullRigidBody(NullWorld *world, Private::GenericData *data);
 
 			NullRigidBody(const NullRigidBody &) = delete;
 
@@ -23,9 +26,33 @@ namespace AGE
 
 		private:
 			// Attributes
-			glm::vec3 bodyPosition;
+			float angularDrag = 0.0f;
 
-			glm::quat bodyRotation;
+			glm::vec3 angularVelocity;
+
+			glm::vec3 centerOfMass;
+
+			float linearDrag = 0.0f;
+
+			glm::vec3 linearVelocity;
+
+			float mass = 0.0f;
+
+			glm::vec3 diagonalInertiaTensor;
+
+			float maxAngularVelocity = std::numeric_limits<float>::max();
+
+			float maxDepenetrationVelocity = std::numeric_limits<float>::max();
+
+			glm::vec3 position;
+
+			glm::quat rotation;
+
+			bool affectedByGravity = true;
+
+			bool kinematic = false;
+
+			CollisionDetectionMode collisionDetectionMode = CollisionDetectionMode::Continuous;
 
 			// Destructor
 			~NullRigidBody(void) = default;
@@ -93,7 +120,9 @@ namespace AGE
 
 			void addForceAtLocalPosition(const glm::vec3 &force, const glm::vec3 &position, ForceMode forceMode) override final;
 
-			void addTorque(const glm::vec3 &torque, ForceMode forceMode) override final;
+			void addAbsoluteTorque(const glm::vec3 &torque, ForceMode forceMode) override final;
+
+			void addRelativeTorque(const glm::vec3 &torque, ForceMode forceMode) override final;
 
 			glm::vec3 getVelocityAtWorldPosition(const glm::vec3 &position) const override final;
 

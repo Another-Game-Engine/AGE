@@ -93,6 +93,7 @@ namespace AGE
 		template <typename T, typename... Args>
 		std::shared_ptr<T> addSystem(std::size_t priority, Args &&...args)
 		{
+			SCOPE_profile_cpu_function("Scenes");
 			auto tmp = std::make_shared<T>((AScene*)(this), std::forward<Args>(args)...);
 			if (!tmp->init())
 				return nullptr;
@@ -103,6 +104,7 @@ namespace AGE
 		template <typename T>
 		std::shared_ptr<T> getSystem()
 		{
+			SCOPE_profile_cpu_function("Scenes");
 			for (auto &e : _systems)
 			{
 				if (typeid(*e.second.get()).name() == typeid(T).name())
@@ -114,6 +116,7 @@ namespace AGE
 		template <typename T>
 		void deleteSystem()
 		{
+			SCOPE_profile_cpu_function("Scenes");
 			for (auto &e : _systems)
 			{
 				if (typeid(*e.second.get()).name() == typeid(T).name())
@@ -128,6 +131,7 @@ namespace AGE
 		template <typename T>
 		bool activateSystem()
 		{
+			SCOPE_profile_cpu_function("Scenes");
 			for (auto &e : _systems)
 			{
 				if (typeid(*e.second.get()).name() == typeid(T).name())
@@ -154,6 +158,7 @@ namespace AGE
 
 		void graphnodeToFlatVector(std::vector<EntitySerializationInfos> &vector, const Entity &e)
 		{
+			SCOPE_profile_cpu_function("Scenes");
 			vector.push_back(e.ptr);
 			auto &children = e.getLink().getChildren();
 			auto parentId = vector.size() - 1;
@@ -168,6 +173,7 @@ namespace AGE
 		template <typename Container>
 		void saveSelectionToJson(const std::string &fileName, Container &selection)
 		{
+			SCOPE_profile_cpu_function("Scenes");
 			std::ofstream file(fileName.c_str(), std::ios::binary);
 			AGE_ASSERT(file.is_open());
 			{
@@ -214,6 +220,7 @@ namespace AGE
 		template <typename Archive>
 		void load(std::ifstream &s)
 		{
+			SCOPE_profile_cpu_function("Scenes");
 			// @ECS TODO
 			
 			//Archive ar(s);
@@ -254,6 +261,7 @@ namespace AGE
 		template <typename T>
 		void clearComponentsType()
 		{
+			SCOPE_profile_cpu_function("Scenes");
 			//TODO
 			auto id = Component<T>::getTypeId();
 			if (_componentsManagers[id] == nullptr)

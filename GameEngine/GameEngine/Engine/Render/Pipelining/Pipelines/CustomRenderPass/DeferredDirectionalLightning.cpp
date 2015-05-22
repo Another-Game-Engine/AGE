@@ -27,19 +27,17 @@ namespace AGE
 		PROGRAM_NBR
 	};
 
-	DeferredDirectionalLightning::DeferredDirectionalLightning(std::shared_ptr<PaintingManager> painterManager,
+	DeferredDirectionalLightning::DeferredDirectionalLightning(glm::uvec2 const &screenSize, std::shared_ptr<PaintingManager> painterManager,
 		std::shared_ptr<Texture2D> normal,
 		std::shared_ptr<Texture2D> depth,
-		std::shared_ptr<Texture2D> specular,
 		std::shared_ptr<Texture2D> lightAccumulation) :
-		FrameBufferRender(painterManager)
+		FrameBufferRender(screenSize.x, screenSize.y, painterManager)
 	{
 		push_storage_output(GL_COLOR_ATTACHMENT0, lightAccumulation);
 		push_storage_output(GL_DEPTH_STENCIL_ATTACHMENT, depth);
 
 		_normalInput = normal;
 		_depthInput = depth;
-		_specularInput = specular;
 
 		_programs.resize(PROGRAM_NBR);
 
@@ -62,17 +60,19 @@ namespace AGE
 
 	}
 
-	void DeferredDirectionalLightning::renderPass(RenderPipeline const &, RenderLightList const &lights, CameraInfos const &infos)
+	void DeferredDirectionalLightning::renderPass(RenderPipeline const &, RenderLightList &lights, CameraInfos const &infos)
 	{
+		SCOPE_profile_gpu_i("DeferredDirectionalLightning render pass");
+		SCOPE_profile_cpu_i("RenderTimer", "DeferredDirectionalLightning render pass");
+
 		glm::vec3 cameraPosition = -glm::transpose(glm::mat3(infos.view)) * glm::vec3(infos.view[3]);
 
 		_programs[PROGRAM_LIGHTNING]->use();
-		*_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("projection_matrix") = infos.projection;
-		*_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("view_matrix") = infos.view;
-		*_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("normal_buffer") = _normalInput;
-		*_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("depth_buffer") = _depthInput;
-		*_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("specular_buffer") = _specularInput;
-		*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("eye_pos") = cameraPosition;
+		_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("projection_matrix").set(infos.projection);
+		_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("view_matrix").set(infos.view);
+		_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("normal_buffer").set(_normalInput);
+		_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("depth_buffer").set(_depthInput);
+		_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("eye_pos").set(cameraPosition);
 
 		// clear the light accumulation to zero
 		OpenGLState::glClearColor(glm::vec4(0));
@@ -90,8 +90,11 @@ namespace AGE
 
 		for (auto &pl : lights.directionalLights)
 		{
-			*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("direction_light") = glm::normalize(glm::transpose(glm::inverse(glm::mat3(pl.light.transformation))) * glm::vec3(0.f, 1.0f, 0.f));
-			*_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("color_light") = pl.light.data.color;
+			SCOPE_profile_gpu_i("Directional light");
+			SCOPE_profile_cpu_i("RenderTimer", "Directional light");
+
+			_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("direction_light").set(glm::normalize(glm::transpose(glm::inverse(glm::mat3(pl.light.transformation))) * glm::vec3(0.f, 1.0f, 0.f)));
+			_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("color_light").set(pl.light.data.color);
 			_painterManager->get_painter(_quadPainter)->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_LIGHTNING], Properties(), _quad);
 		}
 	}

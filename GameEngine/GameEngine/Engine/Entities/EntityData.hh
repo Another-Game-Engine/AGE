@@ -38,7 +38,7 @@ namespace AGE
 			{
 				scene->informFiltersComponentAddition(id, *this);
 			}
-			ptr->reset();
+			components[id]->reset();
 			ptr->init(std::forward<Args>(args)...);
 			return ptr;
 		}

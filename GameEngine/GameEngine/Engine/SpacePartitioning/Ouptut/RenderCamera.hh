@@ -5,6 +5,7 @@
 #include <SpacePartitioning/Ouptut/RenderPipeline.hh>
 #include <Render/PipelineTypes.hpp>
 #include <glm/glm.hpp>
+#include <Utils/Profiler.hpp>
 
 namespace AGE
 {
@@ -45,7 +46,6 @@ namespace AGE
 		}
 		~RenderCameraListContainerHandle()
 		{
-			container.cameras.clear();
 			container.used = false;
 		}
 	};

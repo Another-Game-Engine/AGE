@@ -1,5 +1,9 @@
 #include "PhysXPhysics.hpp"
 
+#ifdef interface
+# undef interface
+#endif
+
 extern "C"
 {
 	__declspec(dllexport) AGE::Physics::PhysicsInterface *CreateInterface(void)

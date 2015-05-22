@@ -1,29 +1,33 @@
 #pragma once
 
 #include "RigidBodyInterface.hpp"
-#include "PhysXWorld.hpp"
 
 namespace AGE
 {
 	namespace Physics
 	{
+		class PhysXWorld;
+
 		class PhysXRigidBody final : public RigidBodyInterface
 		{
+			// Friendships
+			friend ObjectPool < PhysXRigidBody >;
+
 		public:
 			// Constructors
 			PhysXRigidBody(void) = delete;
 
-			PhysXRigidBody(PhysXWorld *world, void *&data);
+			PhysXRigidBody(PhysXWorld *world, Private::GenericData *data);
 
 			PhysXRigidBody(const PhysXRigidBody &) = delete;
 
 			// Assignment Operators
 			PhysXRigidBody &operator=(const PhysXRigidBody &) = delete;
 
-			// Destructor
-			~PhysXRigidBody(void) = default;
-
 		private:
+			// Destructor
+			~PhysXRigidBody(void);
+
 			// Inherited Methods
 			void setAngularDrag(float angularDrag) override final;
 
@@ -87,7 +91,9 @@ namespace AGE
 
 			void addForceAtLocalPosition(const glm::vec3 &force, const glm::vec3 &position, ForceMode forceMode) override final;
 
-			void addTorque(const glm::vec3 &torque, ForceMode forceMode) override final;
+			void addAbsoluteTorque(const glm::vec3 &torque, ForceMode forceMode) override final;
+
+			void addRelativeTorque(const glm::vec3 &torque, ForceMode forceMode) override final;
 
 			glm::vec3 getVelocityAtWorldPosition(const glm::vec3 &position) const override final;
 

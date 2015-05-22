@@ -1,11 +1,13 @@
 #pragma once
 
-# include <Render/Pipelining/Render/IRender.hh>
+#include <Render/Pipelining/Render/IRender.hh>
 
 #include <Render/Pipelining/Render/RenderModes.hh>
 # include <functional>
 #include <vector>
 #include <bitset>
+
+#include <Utils/Profiler.hpp>
 
 namespace AGE
 {
@@ -23,7 +25,7 @@ namespace AGE
 	protected:
 		ARender(std::shared_ptr<PaintingManager> painterManager);
 		ARender(ARender &&move);
-		virtual void renderPass(RenderPipeline const &, RenderLightList const &, CameraInfos const &) = 0;
+		virtual void renderPass(RenderPipeline const &, RenderLightList &, CameraInfos const &) = 0;
 
 	protected:
 		// Bitsets to test the objects against

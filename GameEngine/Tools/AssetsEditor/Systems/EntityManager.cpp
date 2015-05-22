@@ -259,6 +259,13 @@ namespace AGE
 				ImGui::EndChild();
 
 				ImGui::EndChild(); // Entity List
+				ImGui::SameLine(); 
+				if (_cam != nullptr) {
+					static char const *pipelineNames[RenderType::TOTAL] = { "Debug deferred rendering", "Deferred rendering" };
+					ImGui::ListBox("Pipelines", &pipelineIndex, pipelineNames, int(RenderType::TOTAL));
+					if (_cam->getPipeline() != (RenderType)pipelineIndex)
+						_cam->setPipeline((RenderType)pipelineIndex);
+				}
 			}
 
 			bool EntityManager::initialize()
@@ -269,8 +276,7 @@ namespace AGE
 			void EntityManager::generateBasicEntities()
 			{
 				auto camera = _scene->createEntity();
-				auto cam = camera.addComponent<CameraComponent>();
-				cam->setPipeline(RenderType::DEBUG_DEFERRED);
+				_cam = camera.addComponent<CameraComponent>();
 				camera.getLink().setPosition(glm::vec3(0, 3, 5));
 				camera.getLink().setForward(glm::vec3(0, 0, 0));
 				camera.addComponent<FreeFlyComponent>();

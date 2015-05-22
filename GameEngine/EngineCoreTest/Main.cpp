@@ -15,7 +15,6 @@
 // DEPENDENCIES
 #include <Context/SDL/SdlContext.hh>
 #include <Core/ConfigurationManager.hpp>
-#include <Physics/BulletDynamicManager.hpp>
 #include <Core/Timer.hh>
 #include <Utils/PerformanceDebugger.hh>
 #include <AssetManagement/AssetManager.hh>
@@ -56,7 +55,7 @@ int			main(int ac, char **av)
 		engine->setInstance<Timer>();
 		engine->setInstance<AGE::AssetsManager>();
 
-#ifdef USE_IMGUI
+#ifdef AGE_ENABLE_IMGUI
 		AGE::GetRenderThread()->getQueue()->emplaceFutureTask<AGE::Tasks::Basic::BoolFunction, bool>([=](){
 			AGE::Imgui::getInstance()->init(engine);
 			return true;
@@ -64,14 +63,14 @@ int			main(int ac, char **av)
 #endif
 		// add main scene
 		engine->addScene(std::make_shared<BenchmarkScene>(engine), "BenchmarkScene");
-//		engine->addScene(std::make_shared<BenchmarkScene>(engine), "BenchmarkScene2");
+		//engine->addScene(std::make_shared<BenchmarkScene>(engine), "BenchmarkScene2");
 		// bind scene
 		if (!engine->initScene("BenchmarkScene"))
 			return false;
-		//if (!engine.lock()->initScene("BenchmarkScene2"))
+		//if (!engine->initScene("BenchmarkScene2"))
 		//	return false;
 		engine->enableScene("BenchmarkScene", 100);
-//		engine.lock()->enableScene("BenchmarkScene2", 101);
+		//engine->enableScene("BenchmarkScene2", 101);
 		return true;
 	}));
 	return (EXIT_SUCCESS);

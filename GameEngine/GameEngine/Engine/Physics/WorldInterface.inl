@@ -1,14 +1,37 @@
 #pragma once
 
+#include <fstream>
+
+#include <cereal/cereal.hpp>
+#include <cereal/types/string.hpp>
+#include <cereal/archives/binary.hpp>
+
 #include "WorldInterface.hpp"
 #include "RigidBodyInterface.hpp"
 #include "MaterialInterface.hpp"
 #include "ColliderInterface.hpp"
+#include "RaycasterInterface.hpp"
 
 namespace AGE
 {
 	namespace Physics
 	{
+		// Static Methods
+		inline std::string WorldInterface::GetDefaultMaterialName(void)
+		{
+			return "DefaultMaterial";
+		}
+
+		inline glm::vec3 WorldInterface::GetDefaultGravity(void)
+		{
+			return glm::vec3(0.0f, -9.81f, 0.0f);
+		}
+
+		inline std::string WorldInterface::GetMaterialsFileName(void)
+		{
+			return "materials.page";
+		}
+
 		// Constructors
 		inline WorldInterface::WorldInterface(PhysicsInterface *physics)
 			: physics(physics)
@@ -48,6 +71,20 @@ namespace AGE
 		}
 
 		// Methods
+		inline bool WorldInterface::initialize(const std::string &assetDirectory)
+		{
+			loadMaterials(assetDirectory);
+			raycaster = createRaycaster();
+			assert(raycaster != nullptr && "Impossible to create raycaster");
+			return raycaster != nullptr;
+		}
+
+		inline void WorldInterface::finalize(const std::string &assetDirectory)
+		{
+			saveMaterials(assetDirectory);
+			destroyRaycaster();
+		}
+
 		inline PhysicsInterface *WorldInterface::getPhysics(void)
 		{
 			return physics;
@@ -56,6 +93,62 @@ namespace AGE
 		inline const PhysicsInterface *WorldInterface::getPhysics(void) const
 		{
 			return physics;
+		}
+
+		inline RaycasterInterface *WorldInterface::getRaycaster(void)
+		{
+			return raycaster;
+		}
+
+		inline const RaycasterInterface *WorldInterface::getRaycaster(void) const
+		{
+			return raycaster;
+		}
+
+		inline MaterialInterface *WorldInterface::getMaterial(const std::string &name)
+		{
+			MaterialTable::iterator found = materials.find(name);
+			return found != materials.end() ? found->second.first : nullptr;
+		}
+
+		inline const MaterialInterface *WorldInterface::getMaterial(const std::string &name) const
+		{
+			MaterialTable::const_iterator found = materials.find(name);
+			return found != materials.end() ? found->second.first : nullptr;
+		}
+
+		inline void WorldInterface::setCollisionListener(CollisionListener *listener)
+		{
+			collisionListener = listener;
+		}
+
+		inline CollisionListener *WorldInterface::getCollisionListener(void)
+		{
+			assert(collisionListener != nullptr && "Invalid collisionListener");
+			return collisionListener;
+		}
+
+		inline const CollisionListener *WorldInterface::getCollisionListener(void) const
+		{
+			assert(collisionListener != nullptr && "Invalid collisionListener");
+			return collisionListener;
+		}
+
+		inline void WorldInterface::setTriggerListener(TriggerListener *listener)
+		{
+			triggerListener = listener;
+		}
+
+		inline TriggerListener *WorldInterface::getTriggerListener(void)
+		{
+			assert(triggerListener != nullptr && "Invalid triggerListener");
+			return triggerListener;
+		}
+
+		inline const TriggerListener *WorldInterface::getTriggerListener(void) const
+		{
+			assert(triggerListener != nullptr && "Invalid triggerListener");
+			return triggerListener;
 		}
 
 		inline void WorldInterface::setGravity(float x, float y, float z)
@@ -113,19 +206,74 @@ namespace AGE
 			return found != filterNameToFilterGroup.end() ? found->second : FilterGroup::GroupI;
 		}
 
-		inline void WorldInterface::destroyRigidBody(RigidBodyInterface *rigidBody)
+		inline void WorldInterface::enableCollisionBetweenGroups(const std::string &group1, const std::string &group2)
 		{
-			delete rigidBody;
+			enableCollisionBetweenGroups(getFilterGroupForFilterName(group1), getFilterGroupForFilterName(group2));
 		}
 
-		inline void WorldInterface::destroyCollider(ColliderInterface *collider)
+		inline void WorldInterface::disableCollisionBetweenGroups(const std::string &group1, const std::string &group2)
 		{
-			delete collider;
+			disableCollisionBetweenGroups(getFilterGroupForFilterName(group1), getFilterGroupForFilterName(group2));
 		}
 
-		inline void WorldInterface::destroyMaterial(MaterialInterface *material)
+		inline void WorldInterface::saveMaterials(const std::string &assetDirectory)
 		{
-			delete material;
+			const std::string path = assetDirectory + GetMaterialsFileName();
+			std::ofstream stream(path.c_str(), std::ios::binary);
+			assert(stream.is_open() && "Impossible to open stream");
+			if (!stream.is_open())
+			{
+				return;
+			}
+			cereal::BinaryOutputArchive archive(stream);
+			archive(materials.size());
+			for (MaterialTable::value_type &value : materials)
+			{
+				MaterialInterface *material = value.second.first;
+				archive(material->getName());
+				archive(material->getStaticFriction());
+				archive(material->getDynamicFriction());
+				archive(material->getRestitution());
+			}
+			while (!materials.empty())
+			{
+				destroyMaterial(materials.begin()->second.first);
+			}
+		}
+
+		inline void WorldInterface::loadMaterials(const std::string &assetDirectory)
+		{
+			const std::string path = assetDirectory + GetMaterialsFileName();
+			std::ifstream stream(path.c_str(), std::ios::binary);
+			if (!stream.is_open())
+			{
+				return;
+			}
+			cereal::BinaryInputArchive archive(stream);
+			std::size_t size = 0;
+			archive(size);
+			for (std::size_t index = 0; index < size; ++index)
+			{
+				std::string name;
+				float staticFriction;
+				float dynamicFriction;
+				float restitution;
+				archive(name);
+				archive(staticFriction);
+				archive(dynamicFriction);
+				archive(restitution);
+				MaterialInterface *material = createMaterial(name);
+				material->setStaticFriction(staticFriction);
+				material->setDynamicFriction(dynamicFriction);
+				material->setRestitution(restitution);
+			}
+		}
+
+		inline void WorldInterface::destroyRaycaster(void)
+		{
+			assert(raycaster != nullptr && "Invalid raycaster");
+			delete raycaster;
+			raycaster = nullptr;
 		}
 	}
 }

@@ -16,6 +16,8 @@
 
 #include <Core/Link.hpp>
 
+#include <Utils/Profiler.hpp>
+
 namespace AGE
 {
 	class EntityData;
@@ -59,6 +61,7 @@ namespace AGE
 		template <typename T, typename... Args>
 		T *addComponent(Args &&...args)
 		{
+			SCOPE_profile_cpu_function("Entity");
 			return ptr->addComponent<T>(args...);
 		}
 
@@ -67,6 +70,7 @@ namespace AGE
 		template <typename T>
 		void removeComponent()
 		{
+			SCOPE_profile_cpu_function("Entity");
 			ptr->removeComponent(Component<T>::getTypeId());
 		}
 
@@ -77,6 +81,7 @@ namespace AGE
 		template <typename T>
 		bool haveComponent() const
 		{
+			SCOPE_profile_cpu_function("Entity");
 			return ptr->haveComponent(Component<T>::getTypeId());
 		}
 

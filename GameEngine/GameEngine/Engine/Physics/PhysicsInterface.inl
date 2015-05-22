@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cereal/cereal.hpp>
+
 #include "PhysicsInterface.hpp"
 #include "WorldInterface.hpp"
 
@@ -8,26 +10,29 @@ namespace AGE
 	namespace Physics
 	{
 		// Methods
-		inline bool PhysicsInterface::startup(void)
+		inline bool PhysicsInterface::startup(const std::string &assetDirectory)
 		{
-			return initialize() && createWorld() != nullptr;
-		}
-
-		inline void PhysicsInterface::shutdown(void)
-		{
-			finalize();
-			if (world != nullptr)
+			if (initialize())
 			{
-				destroyWorld();
+				assert(world == nullptr && "World already created");
+				world = createWorld();
+				assert(world != nullptr && "Impossible to create world");
+				return world->initialize(assetDirectory);
+			}
+			else
+			{
+				return false;
 			}
 		}
 
-		inline WorldInterface *PhysicsInterface::createWorld(void)
+		inline void PhysicsInterface::shutdown(const std::string &assetDirectory)
 		{
-			assert(world == nullptr && "World already created");
-			world = createWorld(glm::vec3(0.0f, -9.81f, 0.0f));
-			_dependencyManager->setInstance(world);
-			return world;
+			if (world != nullptr)
+			{
+				world->finalize(assetDirectory);
+				destroyWorld();
+			}
+			finalize();
 		}
 
 		inline WorldInterface *PhysicsInterface::getWorld(void)
@@ -45,7 +50,6 @@ namespace AGE
 		inline void PhysicsInterface::destroyWorld(void)
 		{
 			assert(world != nullptr && "Invalid world");
-			_dependencyManager->removeInstance<WorldInterface>();
 			delete world;
 			world = nullptr;
 		}
