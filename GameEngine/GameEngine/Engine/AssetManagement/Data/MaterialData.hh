@@ -14,7 +14,7 @@ namespace AGE
 	public:
 		// will scale UVs based on the scale of the mesh
 		bool scaleUVs = false;
-		float shininess = 150.0f;
+		float shininess = 1.0f;
 		glm::vec4 diffuse = glm::vec4(1.0f);
 		glm::vec4 ambient = glm::vec4(1.0f);
 		glm::vec4 emissive = glm::vec4(1.0f);
