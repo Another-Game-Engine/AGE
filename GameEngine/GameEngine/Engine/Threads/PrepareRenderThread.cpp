@@ -231,7 +231,7 @@ namespace AGE
 				}
 				{
 					SCOPE_profile_cpu_i("PrepareTimer", "Release commands for render thread");
-					if (!_next->getQueue()->releaseCommandReadability(TMQ::HybridQueue::WaitType::NoWait))
+					if (!_next->getQueue()->releaseCommandReadability(TMQ::HybridQueue::WaitType::Block))
 					{
 						_next->getQueue()->clear();
 					}
