@@ -19,6 +19,7 @@ namespace AGE
 			{
 				e.componentTypes.push_back(Component<ArchetypeComponent>::getTypeId());
 				e.components.push_back(e.entity.getComponent<ArchetypeComponent>());
+				e.archetypesDependency.push_back(e.entity.getComponent<ArchetypeComponent>()->archetypeName);
 				continueEntityFiltering = false;
 				pushEntity = true;
 			}

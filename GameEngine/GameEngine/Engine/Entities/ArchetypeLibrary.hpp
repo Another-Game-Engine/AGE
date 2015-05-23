@@ -30,6 +30,7 @@ namespace AGE
 		void setPath(const std::string &library);
 		const std::string &getPath() const;
 		void load();
+		void loadOne(const std::string &name);
 		void save();
 		void clear();
 		void addArchetype(const std::string &name, const Entity &entity);

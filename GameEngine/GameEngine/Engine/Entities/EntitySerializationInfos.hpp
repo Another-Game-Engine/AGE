@@ -15,6 +15,7 @@ namespace AGE
 		std::vector <std::size_t> children;
 		std::vector <ComponentBase*> components;
 		std::vector <ComponentType> componentTypes;
+		std::vector<std::string> archetypesDependency;
 		Entity entity;
 		std::map<ComponentType, std::size_t> *typesMap; // used to unserialize
 
@@ -35,6 +36,7 @@ namespace AGE
 				, cereal::make_nvp("children", children)
 				, cereal::make_nvp("flags", flags)
 				, cereal::make_nvp("components_number", componentTypes)
+				, CEREAL_NVP(archetypesDependency)
 				);
 			for (auto &e : components)
 			{
@@ -53,7 +55,8 @@ namespace AGE
 				l
 				, children
 				, f
-				, componentTypes);
+				, componentTypes
+				, archetypesDependency);
 
 			_postLoad(l, f, ar);
 		}

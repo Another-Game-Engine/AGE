@@ -53,6 +53,26 @@ namespace AGE
 		dir.close();
 	}
 
+	void ArchetypeLibrary::loadOne(const std::string &name)
+	{
+		if (_library.find(name) != std::end(_library))
+		{
+			return;
+		}
+		auto path = _libraryPath + "/" + name + ".archetype";
+
+		ArchetypeFileModel model;
+		model.collection = SceneChunkSerialization::CreateForLoad(getScene().get());
+		{
+			std::ifstream file(path.c_str(), std::ios::binary);
+			auto ar = cereal::JSONInputArchive(file);
+			ar(model);
+			file.close();
+		}
+
+		_library[name] = model;
+	}
+
 	void ArchetypeLibrary::save()
 	{
 		for (auto &e : _library)

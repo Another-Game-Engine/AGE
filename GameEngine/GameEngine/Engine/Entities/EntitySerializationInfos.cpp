@@ -7,6 +7,13 @@ namespace AGE
 {
 	void EntitySerializationInfos::_postLoad(Link &link, ENTITY_FLAGS flags, cereal::JSONInputArchive &ar)
 	{
+		// we load archetypes dependency
+		auto archetypeLibrary = entity.getScene()->getInstance<AGE::ArchetypeLibrary>();
+		for (auto &dep : archetypesDependency)
+		{
+			archetypeLibrary->loadOne(dep);
+		}
+
 		entity.getLink().setPosition(link.getPosition());
 		entity.getLink().setOrientation(link.getOrientation());
 		entity.getLink().setScale(link.getScale());
