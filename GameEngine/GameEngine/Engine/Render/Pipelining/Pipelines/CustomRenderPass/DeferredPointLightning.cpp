@@ -34,10 +34,12 @@ namespace AGE
 												std::shared_ptr<Texture2D> normal,
 												std::shared_ptr<Texture2D> depth,
 												std::shared_ptr<Texture2D> specular,
-												std::shared_ptr<Texture2D> lightAccumulation) :
+												std::shared_ptr<Texture2D> lightAccumulation,
+												std::shared_ptr<Texture2D> shinyAccumulation) :
 										FrameBufferRender(screenSize.x, screenSize.y, painterManager)
 	{
 		push_storage_output(GL_COLOR_ATTACHMENT0, lightAccumulation);
+		push_storage_output(GL_COLOR_ATTACHMENT1, shinyAccumulation);
 		push_storage_output(GL_DEPTH_STENCIL_ATTACHMENT, depth);
 
 		_normalInput = normal;
@@ -145,6 +147,7 @@ namespace AGE
 			OpenGLState::glCullFace(GL_FRONT);
 
 			_spherePainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_LIGHTNING], Properties(), _sphereVertices);
+
 		}
 	}
 }

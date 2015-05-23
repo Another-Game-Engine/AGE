@@ -1,6 +1,7 @@
 #version 330
 
 layout (location = 0) out vec4 color;
+layout (location = 1) out vec4 shiny;
 
 uniform mat4 projection_matrix;
 uniform mat4 view_matrix;
@@ -38,7 +39,9 @@ void main()
 	float lambert = max(0.0f, dot(normal, normalize(lightDir)));
 	vec3 worldPosToEyes = normalize(eye_pos - worldPos);
 	vec3 reflection = reflect(normalize(-lightDir), normal);
-	float shininess = texture2D(specular_buffer, interpolated_texCoord).a;
+	vec4 shininessColor = texture2D(specular_buffer, interpolated_texCoord);
+	float shininess = shininessColor.a;
 	float specularRatio = clamp(pow(max(dot(reflection, worldPosToEyes), 0.0f), shininess), 0.0f, 1.0f);
-	color = vec4(vec3(ambient_color + lambert * color_light), specularRatio) / (attenuation);;
+	color = vec4(lambert * color_light, 0.f) / attenuation;
+	shiny = vec4(shininessColor.xyz * specularRatio, 0.f) / attenuation;
 }
