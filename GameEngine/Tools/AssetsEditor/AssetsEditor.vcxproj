@@ -111,8 +111,10 @@
     <ClCompile Include="Convertor\ConvertorStatusManager.cpp" />
     <ClCompile Include="Convertor\MeshLoader.cpp" />
     <ClCompile Include="EditorConfiguration.cpp" />
+    <ClCompile Include="EntityHelpers\EntityImgui.cpp" />
     <ClCompile Include="ImageUtils.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Managers\ArchetypesEditorManager.cpp" />
     <ClCompile Include="Scenes\AssetsEditorScene.cpp" />
     <ClCompile Include="Scenes\MaterialEditorScene.cpp" />
     <ClCompile Include="Scenes\SceneSelectorScene.cpp" />

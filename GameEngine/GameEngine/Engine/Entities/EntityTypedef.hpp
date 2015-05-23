@@ -8,6 +8,7 @@ namespace AGE
 #define MAX_TAG_NUMBER (32)
 #define MAX_CPT_NUMBER (96)
 #define MAX_CHILDREN   (32)
+#define ENTITY_NAME_LENGTH (128)
 
 	typedef std::uint16_t ENTITY_ID;
 	typedef std::uint8_t  TAG_ID;

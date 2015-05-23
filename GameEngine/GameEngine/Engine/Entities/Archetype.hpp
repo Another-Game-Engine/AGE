@@ -2,6 +2,7 @@
 
 #include <Entities/Entity.hh>
 #include <Core/AScene.hh>
+#include <Entities\EntityTypedef.hpp>
 
 namespace AGE
 {

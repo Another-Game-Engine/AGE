@@ -202,6 +202,8 @@
     <ClCompile Include="Engine\Components\DirectionalLightComponent.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredDirectionalLightning.cpp" />
     <ClCompile Include="Engine\Core\SceneChunkSerialization.cpp" />
+    <ClCompile Include="Engine\Entities\ArchetypeLibrary.cpp" />
+    <ClCompile Include="Engine\Entities\EntitySerializationInfos.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -539,6 +541,7 @@
     <ClInclude Include="Engine\Entities\ArchetypeLibrary.hpp" />
     <ClInclude Include="Engine\Core\SceneChunkSerialization.hpp" />
     <ClInclude Include="Engine\Components\ArchetypeComponent.hpp" />
+    <ClInclude Include="Engine\Entities\Archetype.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

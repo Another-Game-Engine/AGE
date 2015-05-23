@@ -28,6 +28,7 @@
 #include <Threads/Tasks/BasicTasks.hpp>
 #include <Threads/TaskScheduler.hpp>
 #include <Core/ConfigurationManager.hpp>
+#include <Entities/ArchetypeLibrary.hpp>
 
 //SCENE
 #include <Scenes/AssetsEditorScene.hpp>

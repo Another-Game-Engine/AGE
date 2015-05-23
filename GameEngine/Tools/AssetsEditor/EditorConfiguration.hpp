@@ -131,7 +131,8 @@ namespace AGE
 			static void RefreshScenesDirectoryListing()
 			{
 				Directory dir;
-				const bool succeed = dir.open(GetEditedSceneDirectory().c_str());
+				auto editedSceneDirectory = GetEditedSceneDirectory();
+				const bool succeed = dir.open(editedSceneDirectory.c_str());
 				AGE_ASSERT(succeed && "Impossible to open directory");
 
 				_getConfigurations()->_scenesPaths.clear();

@@ -5,6 +5,8 @@
 #include <vector>
 #include <cereal/types/vector.hpp>
 #include <Entities/EntityData.hh>
+#include <Components/ArchetypeComponent.hpp>
+#include <Utils/Debug.hpp>
 
 namespace AGE
 {
@@ -43,7 +45,6 @@ namespace AGE
 		template < typename Archive >
 		void load(Archive &ar, const std::uint32_t version)
 		{
-			std::size_t cptNbr = 0;
 			Link l;
 			ENTITY_FLAGS f;
 
@@ -53,22 +54,12 @@ namespace AGE
 				, children
 				, f
 				, componentTypes);
-			entity.getLink().setPosition(l.getPosition());
-			entity.getLink().setOrientation(l.getOrientation());
-			entity.getLink().setScale(l.getScale());
-			//entity.setFlags(f);
-			for (auto &e : componentTypes)
-			{
-				auto hashType = (*typesMap)[e];
-				ComponentRegistrationManager::getInstance().loadJson(hashType, entity, ar);
-				if (e == Component<ArchetypeComponent>::getTypeId())
-				{
-					auto archetypeName = entity.getComponent<ArchetypeComponent>()->archetypeName;
-					bool success = entity.getScene()->getInstance<ArchetypeLibrary>()->spawn(archetypeName, entity);
-					AGE_ASSERT(success);
-				}
-			}
+
+			_postLoad(l, f, ar);
 		}
+
+	private:
+		void _postLoad(Link &link, ENTITY_FLAGS flags, cereal::JSONInputArchive &ar);
 	};
 }
 

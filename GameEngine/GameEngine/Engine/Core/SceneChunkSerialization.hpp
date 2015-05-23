@@ -7,6 +7,7 @@
 #include <cereal/types/list.hpp>
 
 #include <Entities/EntitySerializationInfos.hpp>
+#include <Utils/Debug.hpp>
 
 #ifdef EDITOR_ENABLED
 #include <WorldEditorGlobal.hpp>

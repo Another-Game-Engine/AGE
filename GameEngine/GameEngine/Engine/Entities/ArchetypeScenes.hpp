@@ -3,11 +3,10 @@
 #include <Core/AScene.hh>
 #include <Core/Engine.hh>
 #include <memory>
-#include <systems/AssetsAndComponentRelationsSystem.hpp>
 
 ///////////////////////////
 // This scene is used to keep archetypes in
-// a different scene that World Editor
+// a different scene that others
 //
 //////////////////////////
 
@@ -20,7 +19,6 @@ namespace AGE
 
 		ArchetypeScene(AGE::Engine *engine)
 			:AScene(engine)
-			, _filter(this)
 		{}
 
 		virtual ~ArchetypeScene(void)
@@ -28,7 +26,6 @@ namespace AGE
 
 		virtual bool _userStart()
 		{
-			addSystem<WE::AssetsAndComponentRelationsSystem>(0);
 			return true;
 		}
 
@@ -42,8 +39,5 @@ namespace AGE
 		{
 			return true;
 		}
-
-	private:
-		EntityFilter _filter;
 	};
 }

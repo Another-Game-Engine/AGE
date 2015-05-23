@@ -7,8 +7,6 @@
 #include <cereal/types/array.hpp>
 #include <Core/AScene.hh>
 
-#define ENTITY_NAME_LENGTH 128
-
 namespace AGE
 {
 	namespace WE
