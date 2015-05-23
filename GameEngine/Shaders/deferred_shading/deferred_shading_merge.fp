@@ -15,6 +15,6 @@ void main()
 	vec3 diffuse = texture2D(diffuse_map, interpolated_texCoord).xyz;
 	vec3 light = texture2D(light_buffer, interpolated_texCoord).xyz;
 	vec3 specular = texture2D(shiny_buffer, interpolated_texCoord).xyz;
-	diffuse = diffuse * light;
-	color = vec4(ambient_color + diffuse + specular, 1);
+	diffuse = diffuse * (light + ambient_color);
+	color = vec4(diffuse + specular, 1);
 }

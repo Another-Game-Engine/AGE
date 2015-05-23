@@ -15,7 +15,8 @@ namespace AGE
 			std::shared_ptr<Texture2D> normal,
 			std::shared_ptr<Texture2D> depth,
 			std::shared_ptr<Texture2D> specular,
-			std::shared_ptr<Texture2D> lightAccumulation);
+			std::shared_ptr<Texture2D> lightAccumulation,
+			std::shared_ptr<Texture2D> shinyAccumulation);
 		virtual ~DeferredDirectionalLightning() = default;
 
 	protected:

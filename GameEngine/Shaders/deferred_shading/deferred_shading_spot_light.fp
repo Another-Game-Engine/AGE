@@ -1,6 +1,7 @@
 #version 330
 
-out vec4 color;
+layout (location = 0) out vec4 color;
+layout (location = 1) out vec4 shiny;
 
 uniform mat4 projection_matrix;
 uniform mat4 view_matrix;
@@ -48,8 +49,8 @@ void main()
 	effect = pow(effect, exponent_light);
 	vec3 worldPosToEyes = normalize(eye_pos - worldPos);
 	vec3 reflection = reflect(normalize(-lightDir), normal);
-	float shininess = texture2D(specular_buffer, interpolated_texCoord).a;
-	float specularRatio = clamp(pow(max(dot(reflection, worldPosToEyes), 0.0f), shininess), 0.0f, 1.0f);
+	vec4 shininessColor = texture2D(specular_buffer, interpolated_texCoord);
+	float specularRatio = clamp(pow(max(dot(reflection, worldPosToEyes), 0.0f), shininessColor.a), 0.0f, 1.0f);
 	vec4 shadowPos = light_matrix * vec4(worldPos, 1.0f);
 	shadowPos = vec4(vec3(shadowPos.xyz / shadowPos.w) * 0.5f + 0.5f, 1.0f);
 	float bias = clamp(0.005f * tan(acos(cosTheta)), 0.f, 0.000001f);
@@ -59,5 +60,6 @@ void main()
 		vec4 samplingPos = vec4(shadowPos.xy + poissonDisk[index] / 700.0f, shadowPos.zw);
 		visibility += (1.0f / float(samplingNbr)) * textureProj(shadow_map, samplingPos, bias);
 	}
-	color = (vec4(vec3(lambert * color_light), specularRatio) * effect / attenuation) * visibility;
+	color = (vec4(vec3(lambert * color_light), 0.f) * effect / attenuation) * visibility;
+	shiny= (vec4(shininessColor.xyz * specularRatio, 0.f) * effect / attenuation) * visibility;
 }
