@@ -7,6 +7,8 @@
 #include <cereal/types/set.hpp>
 #include <Utils/Path.hpp>
 
+#include <Components/ArchetypeComponent.hpp>
+
 namespace AGE
 {
 	class ArchetypeLibrary : public Dependency<ArchetypeLibrary>
@@ -122,6 +124,21 @@ namespace AGE
 		{
 			return _library;
 		}
+
+		// Entity needs to be created before ! (scene->createEntity())
+		bool spawn(const std::string &archetypeName, Entity &entity) const
+		{
+			auto it = _library.find(archetypeName);
+			if (it == std::end(_library))
+			{
+				return false;
+			}
+			auto &entityRoot = it->second.collection.list.front().entity;
+			entity.getScene()->copyEntity(entityRoot, entity, true, false);
+			entity.addComponent<AGE::ArchetypeComponent>(archetypeName);
+			return true;
+		}
+
 	private:
 		std::string _libraryPath = "";
 		std::shared_ptr<AScene> _archetypesScene = nullptr;

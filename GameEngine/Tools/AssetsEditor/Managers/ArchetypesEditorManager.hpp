@@ -14,6 +14,8 @@
 #include <Entities/ArchetypeLibrary.hpp>
 #include <Components/ArchetypeComponent.hpp>
 
+#include <Entities/ArchetypeLibrary.hpp>
+
 namespace AGE
 {
 	namespace WE
@@ -234,15 +236,20 @@ namespace AGE
 
 					if (ImGui::SmallButton("Create an instance"))
 					{
-						Entity duplicate;
-						scene->copyEntity(_selectedArchetype->archetype.getEntity(), duplicate, true, false);
+						updateArchetypeLibrary();
+						auto archetypeLibrary = getDependencyManager()->getInstance<ArchetypeLibrary>();
+						auto &name = _archetypesImGuiNamesList[_selectedArchetypeIndex];
+
+						Entity duplicate = scene->createEntity();
+
+						archetypeLibrary->spawn(name, duplicate);
+
 						auto representation = duplicate.getComponent<EntityRepresentation>();
 
 						representation->editorOnly = false;
 						representation->_archetypeLinked = _selectedArchetype;
 
 						_selectedArchetype->entities.insert(duplicate);
-						duplicate.addComponent<AGE::ArchetypeComponent>(_archetypesImGuiNamesList[_selectedArchetypeIndex]);
 					}
 
 					if (ImGui::SmallButton("Save archetype library"))
@@ -254,13 +261,19 @@ namespace AGE
 				ImGui::EndChild();
 			}
 
-			void saveArchetypesLibrary()
+			void updateArchetypeLibrary() const
 			{
 				auto archetypeLibrary = getDependencyManager()->getInstance<ArchetypeLibrary>();
 				for (auto &e : _archetypesCollection)
 				{
 					archetypeLibrary->addArchetype(e.first, e.second->archetype.getEntity());
 				}
+			}
+
+			void saveArchetypesLibrary() const
+			{
+				updateArchetypeLibrary();
+				auto archetypeLibrary = getDependencyManager()->getInstance<ArchetypeLibrary>();
 				archetypeLibrary->save();
 			}
 
