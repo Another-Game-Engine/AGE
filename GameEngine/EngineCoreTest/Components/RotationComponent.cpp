@@ -7,6 +7,7 @@
 namespace AGE
 {
 	RotationComponent::RotationComponent()
+		: _angles(0)
 	{
 
 	}
@@ -26,7 +27,10 @@ namespace AGE
 
 	void RotationComponent::init(const glm::vec3 &angles, float speed)
 	{
-		_angles = glm::normalize(angles);
+		if (glm::length(angles) != 0)
+		{
+			_angles = glm::normalize(angles);
+		}
 		_speed = speed;
 	}
 
