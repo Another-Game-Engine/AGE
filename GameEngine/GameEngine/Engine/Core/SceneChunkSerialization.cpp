@@ -13,7 +13,6 @@ namespace AGE
 			auto &components = e.entity.getComponentList();
 
 			bool continueEntityFiltering = true;
-			bool pushEntity = false;
 
 			if (e.entity.haveComponent<ArchetypeComponent>() && continueEntityFiltering)
 			{
@@ -21,7 +20,6 @@ namespace AGE
 				e.components.push_back(e.entity.getComponent<ArchetypeComponent>());
 				e.archetypesDependency.push_back(e.entity.getComponent<ArchetypeComponent>()->archetypeName);
 				continueEntityFiltering = false;
-				pushEntity = true;
 			}
 
 			if (continueEntityFiltering)
@@ -38,17 +36,13 @@ namespace AGE
 #endif
 						e.componentTypes.push_back(c->getType());
 						e.components.push_back(c);
-						pushEntity = true;
 					}
 				}
 			}
-			if (pushEntity)
-			{
-				instance.list.push_back(e);
-			}
+			instance.list.push_back(e);
 		}
 
-		instance.entityNbr = entities.size();
+		instance.entityNbr = instance.list.size();
 		return instance;
 	}
 

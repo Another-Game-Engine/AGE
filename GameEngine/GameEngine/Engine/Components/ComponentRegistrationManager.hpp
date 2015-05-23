@@ -91,7 +91,7 @@ namespace AGE
 
 		const std::string &getComponentName(ComponentType type);
 		void serializeJson(ComponentBase *c, cereal::JSONOutputArchive &ar);
-		void loadJson(std::size_t componentHashId, Entity &e, cereal::JSONInputArchive &ar);
+		ComponentBase *loadJson(std::size_t componentHashId, Entity &e, cereal::JSONInputArchive &ar);
 		std::size_t getSystemIdForAgeId(ComponentType id);
 		ComponentBase *copyComponent(ComponentBase *c, AScene *scene);
 

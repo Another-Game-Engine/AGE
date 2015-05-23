@@ -25,7 +25,7 @@ namespace AGE
 		find->second(c, ar);
 	}
 
-	void ComponentRegistrationManager::loadJson(std::size_t componentHashId, Entity &e, cereal::JSONInputArchive &ar)
+	ComponentBase *ComponentRegistrationManager::loadJson(std::size_t componentHashId, Entity &e, cereal::JSONInputArchive &ar)
 	{
 		AGE_ASSERT(_typeIds.find(componentHashId) != std::end(_typeIds) && "Component type has not been registered. Use REGISTER_COMPONENT_TYPE");
 		auto id = _typeIds[componentHashId];
@@ -33,7 +33,7 @@ namespace AGE
 		auto voidCpt = e.getScene()->allocateComponent(id);
 
 		auto find = _jsonLoadMap.find(id);
-		assert(find != std::end(_jsonLoadMap));
+		AGE_ASSERT(find != std::end(_jsonLoadMap));
 		find->second(voidCpt, ar);
 
 		auto cpt = (AGE::ComponentBase*)voidCpt;
@@ -43,6 +43,7 @@ namespace AGE
 		cpt->postUnserialization();
 
 		e.addComponentPtr(cpt);
+		return cpt;
 	}
 
 	ComponentBase *ComponentRegistrationManager::copyComponent(ComponentBase *src, AScene *scene)
