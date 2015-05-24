@@ -37,7 +37,7 @@ namespace AGE
 		//////
 
 #ifdef EDITOR_ENABLED
-		virtual void editorUpdate(AScene *scene);
+		virtual bool editorUpdate();
 #endif
 
 		glm::vec3 _angles;

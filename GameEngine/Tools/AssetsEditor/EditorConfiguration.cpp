@@ -97,7 +97,7 @@ namespace AGE
 				if (Directory::IsFile(*it))
 				{
 					auto file = std::string(*it);
-					auto find = file.find("_scene_description.json");
+					auto find = file.find(".raw_scene");
 					if (find != std::string::npos)
 					{
 						_getConfigurations()->_scenesNamesCache.push_back(Path::BaseName(file.substr(0, find).c_str()));

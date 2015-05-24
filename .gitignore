@@ -27,6 +27,8 @@ Cereal/
 *.skage
 *.sage
 *.aage
+*.scene
+*.archetype
 
 # User-specific files
 *.suo
