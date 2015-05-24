@@ -211,6 +211,7 @@
     <ClCompile Include="Engine\Entities\BinaryEntity.cpp" />
     <ClCompile Include="Engine\Entities\EntityBinaryPacker.cpp" />
     <ClCompile Include="Engine\Entities\BinaryEntityPack.cpp" />
+    <ClCompile Include="Engine\Components\ArchetypeComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />

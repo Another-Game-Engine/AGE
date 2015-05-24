@@ -13,16 +13,14 @@ namespace AGE
 	{
 		AGE_COMPONENT_UNIQUE_IDENTIFIER("AGE_CORE_ArchetypeComponent");
 
-		ArchetypeComponent()
-		{
-		}
-
+		ArchetypeComponent();
 		std::string archetypeName;
-
-		void init(const std::string &_archetypeName = "AGE_INVALID_ARCHETYPE")
-		{
-			archetypeName = _archetypeName;
-		}
+#ifdef EDITOR_ENABLED
+		bool synchronizePosition;
+		bool synchronizeRotation;
+		bool synchronizeScale;
+#endif
+		void init(const std::string &_archetypeName = "AGE_INVALID_ARCHETYPE");
 
 		//////
 		////
@@ -32,14 +30,22 @@ namespace AGE
 		void serialize(Archive &ar, const std::uint32_t version)
 		{
 			ar(CEREAL_NVP(archetypeName));
+			if (version > 0)
+			{
+#ifdef EDITOR_ENABLED
+				ar(synchronizePosition, synchronizeRotation, synchronizeScale);
+#endif
+			}
 		}
-
-		virtual bool isExposedInEditor(){ return false; }
-
+		virtual void postUnserialization();
+#ifdef EDITOR_ENABLED
+		virtual bool isExposedInEditor();
+		virtual bool editorUpdate();
+#endif
 		// !Serialization
 		////
 		//////
 	};
 }
 
-CEREAL_CLASS_VERSION(AGE::ArchetypeComponent, 0)
+CEREAL_CLASS_VERSION(AGE::ArchetypeComponent, 1)

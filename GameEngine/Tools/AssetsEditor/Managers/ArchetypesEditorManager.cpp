@@ -10,6 +10,7 @@
 #include <Utils/FileSystemHelpers.hpp>
 #include <Entities/ReadableEntityPack.hpp>
 #include <Entities/EntityReadablePacker.hpp>
+#include <Systems\AssetsAndComponentRelationsSystem.hpp>
 
 namespace AGE
 {
@@ -304,15 +305,27 @@ namespace AGE
 			auto &componentList = archetype.getComponentList();
 
 			auto representation = entity.getComponent<EntityRepresentation>();
+			auto archetypeCpt = entity.getComponent<ArchetypeComponent>();
+
 			auto &copyComponentList = entity.getComponentList();
 
-			entity.getLink().setOrientation(archetype.getLink().getOrientation());
-			entity.getLink().setScale(archetype.getLink().getScale());
+			if (archetypeCpt->synchronizePosition)
+			{
+				entity.getLink().setPosition(archetype.getLink().getPosition());
+			}
+			if (archetypeCpt->synchronizeRotation)
+			{
+				entity.getLink().setOrientation(archetype.getLink().getOrientation());
+			}
+			if (archetypeCpt->synchronizeScale)
+			{
+				entity.getLink().setScale(archetype.getLink().getScale());
+			}
 
 			// we delete all existing components
 			for (auto c : copyComponentList)
 			{
-				if (c != nullptr && c != representation)
+				if (c != nullptr && c != representation && c != archetypeCpt)
 				{
 					entity.removeComponent(c->getType());
 				}
@@ -322,7 +335,7 @@ namespace AGE
 			representation = archetype.getComponent<EntityRepresentation>();
 			for (auto c : componentList)
 			{
-				if (c != nullptr && c != representation)
+				if (c != nullptr && c != representation && c != archetypeCpt)
 				{
 					entity.copyComponent(c);
 				}
@@ -354,6 +367,7 @@ namespace AGE
 			{
 				_archetypesScene = std::make_shared<ArchetypeScene>(GetEngine());
 				GetEngine()->addScene(_archetypesScene, "EDITOR_ARCHETYPES_SCENE");
+				_archetypesScene->addSystem<WE::AssetsAndComponentRelationsSystem>(0);
 				GetEngine()->initScene("EDITOR_ARCHETYPES_SCENE");
 				GetEngine()->enableScene("EDITOR_ARCHETYPES_SCENE", 0);
 			}

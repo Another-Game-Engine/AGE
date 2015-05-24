@@ -220,6 +220,7 @@ namespace AGE
 		{
 			_renderMode[AGE_OCCLUDER].flip();
 			_updateGeometry();
+			modified = true;
 		}
 
 		ImGui::PushItemWidth(-1);

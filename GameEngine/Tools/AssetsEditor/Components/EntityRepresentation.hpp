@@ -70,10 +70,9 @@ namespace AGE
 
 
 			// component is not serialized in export
-#ifdef EDITOR_ENABLED
 			virtual bool serializeInExport() { return false; }
 			virtual bool isExposedInEditor(){ return false; }
-#endif
+		
 			// entity is not displayed in entity list
 			bool editorOnly = false;
 		};
