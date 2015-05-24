@@ -202,6 +202,10 @@
     <ClCompile Include="Engine\Render\OcclusionTools\DepthMapHandle.cpp" />
     <ClCompile Include="Engine\Render\OcclusionTools\DepthMapManager.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredShadowBuffering.cpp" />
+    <ClCompile Include="Engine\Render\DepthMap.cpp" />
+    <ClCompile Include="Engine\Render\DepthMapHandle.cpp" />
+    <ClCompile Include="Engine\Render\DepthMapManager.cpp" />
+    <ClCompile Include="Engine\Render\Textures\Texture3D.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -537,6 +541,10 @@
     <ClInclude Include="Engine\Render\OcclusionTools\DepthMapManager.hpp" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredShadowBuffering.hh" />
     <ClInclude Include="Engine\Utils\Serialization\btSerialization.hpp" />
+    <ClInclude Include="Engine\Render\DepthMap.hpp" />
+    <ClInclude Include="Engine\Render\DepthMapHandle.hpp" />
+    <ClInclude Include="Engine\Render\DepthMapManager.hpp" />
+    <ClInclude Include="Engine\Render\Textures\Texture3D.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />
