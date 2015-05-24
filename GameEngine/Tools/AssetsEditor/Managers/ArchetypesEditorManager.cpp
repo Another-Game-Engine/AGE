@@ -158,7 +158,7 @@ namespace AGE
 			representation->editorOnly = false;
 			representation->_archetypeLinked = _selectedArchetype;
 
-			_selectedArchetype->entities.insert(entity);
+			it->second->entities.insert(entity);
 		}
 
 		void ArchetypesEditorManager::update(AScene *scene)

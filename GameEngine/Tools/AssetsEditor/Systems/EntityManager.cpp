@@ -11,6 +11,10 @@
 #include <Entities/Archetype.hpp>
 #include <Managers/ArchetypesEditorManager.hpp>
 #include <EntityHelpers/EntityImgui.hpp>
+#include <Entities/EntityReadablePacker.hpp>
+#include <Entities/ReadableEntityPack.hpp>
+#include <Entities/EntityBinaryPacker.hpp>
+#include <Entities/BinaryEntityPack.hpp>
 
 namespace AGE
 {
@@ -177,17 +181,21 @@ namespace AGE
 
 						WESerialization::SetSerializeForEditor(true);
 
-						auto sceneFileName = WE::EditorConfiguration::getSelectedScenePath() + "_scene_description.json";
+						auto sceneFileName = WE::EditorConfiguration::getSelectedScenePath() + ".raw_scene";
 						auto assetPackageFileName = WE::EditorConfiguration::getSelectedScenePath() + "_assets.json";
 
 						strcpy_s(_sceneName, WE::EditorConfiguration::getSelectedSceneName().c_str());
 						strcpy_s(_exportName, WE::EditorConfiguration::getSelectedSceneName().c_str());
 
-						_scene->getInstance<AssetsManager>()->pushNewCallback(assetPackageFileName, _scene, std::function<void()>([=](){
-							_scene->loadFromJson(sceneFileName);
-							WESerialization::SetSerializeForEditor(false);
-						}));
-						_scene->getInstance<AssetsManager>()->loadPackage(assetPackageFileName, assetPackageFileName);
+						ReadableEntityPack pack;
+						pack.scene = _scene;
+						pack.loadFromFile(sceneFileName);
+
+						//_scene->getInstance<AssetsManager>()->pushNewCallback(assetPackageFileName, _scene, std::function<void()>([=](){
+						//	_scene->loadFromJson(sceneFileName);
+						//	WESerialization::SetSerializeForEditor(false);
+						//}));
+						//_scene->getInstance<AssetsManager>()->loadPackage(assetPackageFileName, assetPackageFileName);
 					}
 					ImGui::TreePop();
 				}
@@ -227,7 +235,12 @@ namespace AGE
 						_scene->getInstance<AssetsManager>()->savePackage(package, WE::EditorConfiguration::GetEditedSceneDirectory() + std::string(_sceneName) + "_assets.json");
 					}
 
-					_scene->saveSelectionToJson(WE::EditorConfiguration::GetEditedSceneDirectory() + std::string(_sceneName) + "_scene_description.json", _entities);
+					//_scene->saveSelectionToJson(WE::EditorConfiguration::GetEditedSceneDirectory() + std::string(_sceneName) + "_scene_description.json", _entities);
+					
+					ReadableEntityPack pack;
+					CreateReadableEntityPack(pack, _entities);
+					pack.saveToFile(WE::EditorConfiguration::GetEditedSceneDirectory() + std::string(_sceneName) + ".raw_scene");
+
 					WESerialization::SetSerializeForEditor(false);
 				}
 				ImGui::InputText("Export name", _exportName, MAX_SCENE_NAME_LENGTH);
@@ -253,7 +266,11 @@ namespace AGE
 						_scene->getInstance<AssetsManager>()->savePackage(package, WE::EditorConfiguration::GetExportedSceneDirectory() + std::string(_exportName) + "_assets.json");
 					}
 
-					_scene->saveSelectionToJson(WE::EditorConfiguration::GetExportedSceneDirectory() + std::string(_exportName) + "_export.json", _entities);
+					BinaryEntityPack pack;
+					CreateBinaryEntityPack(pack, _entities);
+					pack.saveToFile(WE::EditorConfiguration::GetExportedSceneDirectory() + std::string(_exportName) + ".scene");
+
+					//_scene->saveSelectionToJson(WE::EditorConfiguration::GetExportedSceneDirectory() + std::string(_exportName) + "_export.json", _entities);
 				}
 
 				ImGui::EndChild();
