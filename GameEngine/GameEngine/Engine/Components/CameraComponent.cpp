@@ -39,6 +39,12 @@ namespace AGE
 		AGE::GetPrepareThread()->setCameraInfos(_projection, _key, _pipeline);
 	}
 
+	void CameraComponent::setTexture(std::shared_ptr<Texture3D> const &texture)
+	{
+		_texture = texture;
+		AGE::GetPrepareThread()->setCameraInfos(_projection, _key, _pipeline);
+	}
+
 	//void CameraComponent::addPipeline(RenderType pipeline)
 	//{
 	//	auto haveIt = havePipeline(pipeline);
