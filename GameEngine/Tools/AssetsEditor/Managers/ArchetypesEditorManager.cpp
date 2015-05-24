@@ -156,7 +156,20 @@ namespace AGE
 			auto representation = entity.getComponent<EntityRepresentation>();
 
 			representation->editorOnly = false;
-			representation->_archetypeLinked = _selectedArchetype;
+			representation->_archetypeLinked = it->second;
+
+			std::vector<Entity*> tmpEntitiesList;
+			std::vector<const char*> tmpEntitiesNameList;
+			listEntityTree(entity, tmpEntitiesNameList, tmpEntitiesList);
+
+			for (auto &e : tmpEntitiesList)
+			{
+				auto er = e->getComponent<EntityRepresentation>();
+				if (er != representation)
+				{
+					er->_parentIsArchetype = true;
+				}
+			}
 
 			it->second->entities.insert(entity);
 		}

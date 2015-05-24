@@ -68,11 +68,11 @@ namespace AGE
 		{
 			auto hashType = (*typesMap)[e];
 			auto newComponent = ComponentRegistrationManager::getInstance().loadJson(hashType, entity, ar);
-			if (newComponent->getType() == Component<ArchetypeComponent>::getTypeId())
-			{
-				auto archetypeName = entity.getComponent<ArchetypeComponent>()->archetypeName;
-				archetypeManager->spawn(entity, archetypeName);
-			}
+		}
+		if (entity.haveComponent<ArchetypeComponent>())
+		{
+			auto archetypeName = entity.getComponent<ArchetypeComponent>()->archetypeName;
+			archetypeManager->spawn(entity, archetypeName);
 		}
 	}
 }
