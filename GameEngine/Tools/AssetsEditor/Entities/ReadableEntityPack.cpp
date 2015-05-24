@@ -42,6 +42,13 @@ namespace AGE
 			entities[i].typesMap = &componentsIdReferenceTable;
 			ar(entities[i]);
 		}
+		for (auto &e : entities)
+		{
+			for (auto &c : e.children)
+			{
+				e.entity.getLink().attachChild(entities[c].entity.getLinkPtr());
+			}
+		}
 	}
 
 	void ReadableEntityPack::loadFromFile(const std::string &filePath)
