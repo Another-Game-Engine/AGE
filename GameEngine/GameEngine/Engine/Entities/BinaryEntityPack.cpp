@@ -25,16 +25,20 @@ namespace AGE
 	void BinaryEntityPack::loadFromFile(const std::string &filePath)
 	{
 		std::ifstream file(filePath.c_str(), std::ios::binary);
-		auto ar = cereal::PortableBinaryInputArchive(file);
-		ar(*this);
+		{
+			auto ar = cereal::PortableBinaryInputArchive(file);
+			ar(*this);
+		}
 		file.close();
 	}
 
 	void BinaryEntityPack::saveToFile(const std::string &filePath)
 	{
 		std::ofstream file(filePath.c_str(), std::ios::binary);
-		auto ar = cereal::PortableBinaryOutputArchive(file);
-		ar(*this);
+		{
+			auto ar = cereal::PortableBinaryOutputArchive(file);
+			ar(*this);
+		}
 		file.close();
 	}
 }

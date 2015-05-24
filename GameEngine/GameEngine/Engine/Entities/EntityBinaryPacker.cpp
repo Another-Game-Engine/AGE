@@ -23,11 +23,10 @@ namespace AGE
 
 		pack.componentsIdReferenceTable = typesMap;
 
-		for (auto &entity : selection)
+		for (auto &representation : pack.entities)
 		{
+			auto &entity = representation.entity;
 			auto &components = entity.getComponentList();
-			pack.entities.resize(pack.entities.size() + 1);
-			auto &representation = pack.entities.back();
 
 			representation.entity = entity;
 

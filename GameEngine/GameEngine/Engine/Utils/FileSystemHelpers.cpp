@@ -30,12 +30,33 @@ namespace AGE
 				return "";
 		}
 
+		std::string GetName(const std::string &path)
+		{
+			auto copy = CleanPath(path);
+			std::string::size_type		pos;
+			pos = copy.find_last_of("/");
+			if (pos != std::string::npos)
+				return copy.substr(pos + 1, std::string::npos);
+			else
+				return path;
+		}
+
 		std::string GetDateStr(const std::string &path, const char *format /*= "%Y/%m/%d %H:%M:%S"*/)
 		{
 			std::stringstream res;
 			auto timeinfo = GetLastWriteTime(path);
 			res << std::put_time(&timeinfo, format);
 			return res.str();
+		}
+
+		std::string RemoveExtension(const std::string &path)
+		{
+			std::string::size_type		pos;
+			pos = path.find_last_of(".");
+			if (pos != std::string::npos)
+				return path.substr(0, pos - 1);
+			else
+				return "";
 		}
 
 		struct tm GetLastWriteTime(const std::string &path)

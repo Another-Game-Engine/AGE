@@ -5,6 +5,7 @@
 #include <map>
 #include <Entities/Archetype.hpp>
 #include <Entities/ReadableEntityPack.hpp>
+#include <Entities/IArchetypeManager.hpp>
 
 //#include <Components/EntityRepresentation.hpp>
 //#include <Entities/Entity.hh>
@@ -23,18 +24,25 @@ namespace AGE
 		struct ArchetypeEditorRepresentation
 		{
 			std::set<Entity> entities;
-			ReadableEntityPack collection;
-			Archetype archetype;
+			Entity root;
+			std::string name;
 		};
 
-		class ArchetypesEditorManager : public Dependency < ArchetypesEditorManager >
+		class ArchetypesEditorManager : public Dependency < ArchetypesEditorManager >, public IArchetypeManager
 		{
 		public:
 			ArchetypesEditorManager();
 			virtual ~ArchetypesEditorManager();
-			void load();
-			void transformToArchetype(Entity &entity, const std::string &name);
 			void update(AScene *scene);
+			virtual void save();
+			virtual void load();
+			virtual void loadOne(const std::string &name);
+			virtual void addOne(const std::string &name, Entity &entity);
+			virtual void spawn(Entity &entity, const std::string &name);
+
+			std::shared_ptr<AScene> getScene();
+			void enableScene();
+			void disableScene();
 		private:
 			std::map<std::string, std::shared_ptr<ArchetypeEditorRepresentation>> _archetypesCollection;
 			std::vector<const char*> _archetypesImGuiNamesList;
@@ -49,10 +57,6 @@ namespace AGE
 
 			void _copyArchetypeToInstanciedEntity(Entity &archetype, Entity &entity);
 			void _regenerateImGuiNamesList();
-			
-			std::shared_ptr<AScene> getScene();
-			void enableScene();
-			void disableScene();
 		};
 	}
 }

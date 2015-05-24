@@ -157,7 +157,7 @@ namespace AGE
 						if (ImGui::SmallButton("Convert to Archetype"))
 						{
 							auto manager = _scene->getInstance<AGE::WE::ArchetypesEditorManager>();
-							manager->transformToArchetype(*_selectedEntity, _archetypeName);
+							manager->addOne(_archetypeName, *_selectedEntity);
 						}
 					}
 				}
@@ -260,12 +260,12 @@ namespace AGE
 
 				ImGui::EndChild(); // Entity List
 				ImGui::SameLine(); 
-				if (_cam != nullptr) {
-					static char const *pipelineNames[RenderType::TOTAL] = { "Debug deferred rendering", "Deferred rendering" };
-					ImGui::ListBox("Pipelines", &pipelineIndex, pipelineNames, int(RenderType::TOTAL));
-					if (_cam->getPipeline() != (RenderType)pipelineIndex)
-						_cam->setPipeline((RenderType)pipelineIndex);
-				}
+				//if (_cam != nullptr) {
+				//	static char const *pipelineNames[RenderType::TOTAL] = { "Debug deferred rendering", "Deferred rendering" };
+				//	ImGui::ListBox("Pipelines", &pipelineIndex, pipelineNames, int(RenderType::TOTAL));
+				//	if (_cam->getPipeline() != (RenderType)pipelineIndex)
+				//		_cam->setPipeline((RenderType)pipelineIndex);
+				//}
 			}
 
 			bool EntityManager::initialize()

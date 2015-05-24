@@ -557,6 +557,8 @@
     <ClInclude Include="Engine\Entities\BinaryEntity.hpp" />
     <ClInclude Include="Engine\Entities\BinaryEntityPack.hpp" />
     <ClInclude Include="Engine\Entities\EntityPacker.hpp" />
+    <ClInclude Include="Engine\Entities\ArchetypeScenes.hpp" />
+    <ClInclude Include="Engine\Entities\IArchetypeManager.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

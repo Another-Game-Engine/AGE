@@ -7,5 +7,6 @@ namespace AGE
 	class Entity;
 	struct ReadableEntityPack;
 
-	static void CreateReadableEntityPack(ReadableEntityPack &pack, std::vector<Entity> &selection);
+	void CreateReadableEntityPack(ReadableEntityPack &pack, std::vector<Entity> &selection);
+	void CreateReadableEntityPack(ReadableEntityPack &pack, Entity &selection);
 }

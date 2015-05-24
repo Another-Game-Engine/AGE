@@ -29,7 +29,7 @@ namespace AGE
 		ReadableEntity();
 		~ReadableEntity();
 		void save(cereal::JSONOutputArchive  &ar, const std::uint32_t version) const;
-		void load(const cereal::JSONInputArchive &ar, const std::uint32_t version);
+		void load(cereal::JSONInputArchive &ar, const std::uint32_t version);
 	};
 }
 
