@@ -5,6 +5,10 @@
 
 #include <fstream>
 
+#include <Utils/Debug.hpp>
+
+#include <Core/AScene.hh>
+
 namespace AGE
 {
 	ReadableEntityPack::ReadableEntityPack()
@@ -16,15 +20,28 @@ namespace AGE
 	void ReadableEntityPack::save(cereal::JSONOutputArchive  &ar, const std::uint32_t version) const
 	{
 		std::size_t entityNumber = entities.size();
-		ar(CEREAL_NVP(componentsIdReferenceTable)
-			, CEREAL_NVP(entityNumber)
-			, CEREAL_NVP(entities));
+		ar(CEREAL_NVP(componentsIdReferenceTable));
+		ar(CEREAL_NVP(entityNumber));
+
+		for (std::size_t i = 0; i < entities.size(); ++i)
+		{
+			ar(cereal::make_nvp(std::string(std::string("Entity_") + std::to_string(i)).c_str(), entities[i]));
+		}
 	}
 
 	void ReadableEntityPack::load(cereal::JSONInputArchive &ar, const std::uint32_t version)
 	{
+		AGE_ASSERT(scene != nullptr);
 		std::size_t entityNumber;
-		ar(componentsIdReferenceTable, entityNumber, entities);
+		ar(componentsIdReferenceTable);
+		ar(entityNumber);
+		entities.resize(entityNumber);
+		for (std::size_t i = 0; i < entities.size(); ++i)
+		{
+			entities[i].entity = scene->createEntity();
+			entities[i].typesMap = &componentsIdReferenceTable;
+			ar(entities[i]);
+		}
 	}
 
 	void ReadableEntityPack::loadFromFile(const std::string &filePath)

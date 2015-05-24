@@ -10,6 +10,8 @@
 #include <Core/AScene.hh>
 #include <Managers/ArchetypesEditorManager.hpp>
 
+#include <Utils/Debug.hpp>
+
 namespace AGE
 {
 	ReadableEntity::ReadableEntity()
@@ -39,7 +41,7 @@ namespace AGE
 		Link link;
 		ENTITY_FLAGS flags;
 
-		assert(typesMap != nullptr);
+		AGE_ASSERT(typesMap != nullptr);
 
 		ar(link
 			, children

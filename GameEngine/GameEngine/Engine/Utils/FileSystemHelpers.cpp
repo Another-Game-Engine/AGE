@@ -54,7 +54,7 @@ namespace AGE
 			std::string::size_type		pos;
 			pos = path.find_last_of(".");
 			if (pos != std::string::npos)
-				return path.substr(0, pos - 1);
+				return path.substr(0, pos);
 			else
 				return "";
 		}

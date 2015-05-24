@@ -59,7 +59,21 @@ namespace AGE
 
 		void ArchetypesEditorManager::loadOne(const std::string &name)
 		{
+			if (_archetypesCollection.find(name) != std::end(_archetypesCollection))
+			{
+				return;
+			}
+			auto representation = std::make_shared<ArchetypeEditorRepresentation>();
+			representation->name = name;
 
+			auto path = _libraryFolder + "/" + name + ".raw_archetype";
+			ReadableEntityPack pack;
+			pack.scene = getScene().get();
+			pack.loadFromFile(path);
+
+			representation->root = pack.entities.front().entity;
+			_archetypesCollection.insert(std::make_pair(name, representation));
+			_regenerateImGuiNamesList();
 		}
 
 		void ArchetypesEditorManager::addOne(const std::string &name, Entity &entity)

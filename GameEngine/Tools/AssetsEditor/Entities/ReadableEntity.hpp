@@ -24,7 +24,7 @@ namespace AGE
 		std::vector <ComponentType> componentTypes;
 		std::vector<std::string> archetypesDependency;
 		Entity entity;
-		std::map<ComponentType, std::size_t> *typesMap; // used to unserialize
+		std::map<ComponentType, std::size_t> *typesMap = nullptr; // used to unserialize
 
 		ReadableEntity();
 		~ReadableEntity();
