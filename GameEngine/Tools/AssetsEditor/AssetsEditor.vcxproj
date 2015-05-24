@@ -111,7 +111,6 @@
     <ClCompile Include="Convertor\ConvertorStatusManager.cpp" />
     <ClCompile Include="Convertor\MeshLoader.cpp" />
     <ClCompile Include="EditorConfiguration.cpp" />
-    <ClCompile Include="EntityHelpers\EditorConfiguration.cpp" />
     <ClCompile Include="EntityHelpers\EntityImgui.cpp" />
     <ClCompile Include="ImageUtils.cpp" />
     <ClCompile Include="Main.cpp" />

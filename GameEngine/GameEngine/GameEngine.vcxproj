@@ -242,6 +242,9 @@
   <ItemGroup>
     <ClCompile Include="..\Vendors\imgui\imgui.cpp" />
     <ClCompile Include="Engine\Components\DirectionalLightComponent.cpp" />
+    <ClCompile Include="Engine\Entities\BinaryEntity.cpp" />
+    <ClCompile Include="Engine\Entities\BinaryEntityPack.cpp" />
+    <ClCompile Include="Engine\Entities\EntityBinaryPacker.cpp" />
     <ClCompile Include="Engine\Render\OcclusionTools\DepthMap.cpp" />
     <ClCompile Include="Engine\Render\OcclusionTools\DepthMapHandle.cpp" />
     <ClCompile Include="Engine\Render\OcclusionTools\DepthMapManager.cpp" />
@@ -440,6 +443,10 @@
     <ClInclude Include="Engine\Core\SceneChunkSerialization.hpp" />
     <ClInclude Include="Engine\Entities\Archetype.hpp" />
     <ClInclude Include="Engine\Entities\ArchetypeLibrary.hpp" />
+    <ClInclude Include="Engine\Entities\BinaryEntity.hpp" />
+    <ClInclude Include="Engine\Entities\BinaryEntityPack.hpp" />
+    <ClInclude Include="Engine\Entities\EntityBinaryPacker.hpp" />
+    <ClInclude Include="Engine\Entities\EntityPacker.hpp" />
     <ClInclude Include="Engine\Render\DepthMap.hpp" />
     <ClInclude Include="Engine\Render\DepthMapHandle.hpp" />
     <ClInclude Include="Engine\Render\DepthMapManager.hpp" />
