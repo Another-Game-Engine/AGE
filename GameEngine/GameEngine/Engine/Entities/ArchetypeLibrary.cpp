@@ -9,6 +9,8 @@
 #include <Core/AScene.hh>
 #include <Entities/ArchetypeScenes.hpp>
 #include <Core/SceneChunkSerialization.hpp>
+#include <Entities/BinaryEntityPack.hpp>
+#include <Entities/EntityBinaryPacker.hpp>
 
 namespace AGE
 {
@@ -39,14 +41,10 @@ namespace AGE
 				}
 
 				ArchetypeFileModel model;
-				model.collection = SceneChunkSerialization::CreateForLoad(getScene().get());
-				{
-					std::ifstream file(*it, std::ios::binary);
-					auto ar = cereal::JSONInputArchive(file);
-					ar(model);
-					file.close();
-				}
-
+				BinaryEntityPack pack;
+				pack.loadFromFile(*it);
+				
+				model.entity = pack.entities.front().entity;
 				_library[model.name] = model;
 			}
 		}
@@ -62,13 +60,11 @@ namespace AGE
 		auto path = _libraryPath + "/" + name + ".archetype";
 
 		ArchetypeFileModel model;
-		model.collection = SceneChunkSerialization::CreateForLoad(getScene().get());
-		{
-			std::ifstream file(path.c_str(), std::ios::binary);
-			auto ar = cereal::JSONInputArchive(file);
-			ar(model);
-			file.close();
-		}
+
+		BinaryEntityPack pack;
+		pack.loadFromFile(path);
+
+		model.entity = pack.entities.front().entity;
 
 		_library[name] = model;
 	}
@@ -77,9 +73,10 @@ namespace AGE
 	{
 		for (auto &e : _library)
 		{
+
 			std::ofstream file(std::string(_libraryPath + "/" + e.second.name + ".archetype").c_str(), std::ios::binary);
 			{
-				auto ar = cereal::JSONOutputArchive(file);
+				auto ar = cereal::PortableBinaryOutputArchive(file);
 				ar(e.second);
 			}
 			file.close();
@@ -97,9 +94,7 @@ namespace AGE
 		auto &e = _library[name];
 
 		e.name = name;
-		std::set<Entity> set;
-		set.insert(entity);
-		e.collection = AScene::BuildSceneChunkFromSelection(set);
+		e.entity = entity;
 	}
 
 	std::shared_ptr<AScene> ArchetypeLibrary::getScene()
@@ -124,11 +119,6 @@ namespace AGE
 		GetEngine()->enableScene("ARCHETYPES_SCENE", 0);
 	}
 
-	const std::map<std::string, ArchetypeLibrary::ArchetypeFileModel> &ArchetypeLibrary::getLibrary() const
-	{
-		return _library;
-	}
-
 	// Entity needs to be created before ! (scene->createEntity())
 	bool ArchetypeLibrary::spawn(const std::string &archetypeName, Entity &entity) const
 	{
@@ -137,7 +127,7 @@ namespace AGE
 		{
 			return false;
 		}
-		auto &entityRoot = it->second.collection.list.front().entity;
+		auto &entityRoot = it->second.entity;
 		entity.getScene()->copyEntity(entityRoot, entity, true, false);
 		entity.addComponent<AGE::ArchetypeComponent>(archetypeName);
 		return true;

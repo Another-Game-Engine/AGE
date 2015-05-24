@@ -4,6 +4,7 @@
 #include <set>
 #include <map>
 #include <Entities/Archetype.hpp>
+#include <Entities/ReadableEntityPack.hpp>
 
 //#include <Components/EntityRepresentation.hpp>
 //#include <Entities/Entity.hh>
@@ -22,6 +23,7 @@ namespace AGE
 		struct ArchetypeEditorRepresentation
 		{
 			std::set<Entity> entities;
+			ReadableEntityPack collection;
 			Archetype archetype;
 		};
 
@@ -30,12 +32,9 @@ namespace AGE
 		public:
 			ArchetypesEditorManager();
 			virtual ~ArchetypesEditorManager();
-			// Have to be called after ArchetypeLibrary is created and has loaded the library
-			void init();
+			void load();
 			void transformToArchetype(Entity &entity, const std::string &name);
 			void update(AScene *scene);
-			void updateArchetypeLibrary();
-			void saveArchetypesLibrary();
 		private:
 			std::map<std::string, std::shared_ptr<ArchetypeEditorRepresentation>> _archetypesCollection;
 			std::vector<const char*> _archetypesImGuiNamesList;
@@ -46,10 +45,14 @@ namespace AGE
 			Entity *_selectedEntity = nullptr;
 			bool _graphNodeDisplay = false;
 			bool _selectParent = false;
+			std::shared_ptr<AScene> _archetypesScene;
 
 			void _copyArchetypeToInstanciedEntity(Entity &archetype, Entity &entity);
 			void _regenerateImGuiNamesList();
-
+			
+			std::shared_ptr<AScene> getScene();
+			void enableScene();
+			void disableScene();
 		};
 	}
 }

@@ -5,7 +5,6 @@
 namespace AGE
 {
 	class AScene;
-	struct BinaryEntity;
 
 	struct BinaryEntityPack
 	{
@@ -17,6 +16,10 @@ namespace AGE
 		BinaryEntityPack();
 		~BinaryEntityPack();
 		void save(cereal::PortableBinaryOutputArchive  &ar, const std::uint32_t version) const;
-		void load(const cereal::PortableBinaryInputArchive &ar, const std::uint32_t version);
+		void load(cereal::PortableBinaryInputArchive &ar, const std::uint32_t version);
+		void loadFromFile(const std::string &filePath);
+		void saveToFile(const std::string &filePath);
 	};
 }
+
+CEREAL_CLASS_VERSION(AGE::BinaryEntityPack, 0);

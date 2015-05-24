@@ -111,6 +111,9 @@
     <ClCompile Include="Convertor\ConvertorStatusManager.cpp" />
     <ClCompile Include="Convertor\MeshLoader.cpp" />
     <ClCompile Include="EditorConfiguration.cpp" />
+    <ClCompile Include="Entities\EntityReadablePacker.cpp" />
+    <ClCompile Include="Entities\ReadableEntity.cpp" />
+    <ClCompile Include="Entities\ReadableEntityPack.cpp" />
     <ClCompile Include="EntityHelpers\EntityImgui.cpp" />
     <ClCompile Include="ImageUtils.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -146,6 +149,9 @@
     <ClInclude Include="AssetFiles\File.hpp" />
     <ClInclude Include="AssetFiles\Folder.hpp" />
     <ClInclude Include="EditorConfiguration.hpp" />
+    <ClInclude Include="Entities\EntityReadablePacker.hpp" />
+    <ClInclude Include="Entities\ReadableEntity.hpp" />
+    <ClInclude Include="Entities\ReadableEntityPack.hpp" />
     <ClInclude Include="EntityHelpers\EntityImgui.hpp" />
     <ClInclude Include="ImageUtils.hh" />
     <ClInclude Include="Managers\ArchetypesEditorManager.hpp" />

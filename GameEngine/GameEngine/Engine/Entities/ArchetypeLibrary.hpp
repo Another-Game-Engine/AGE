@@ -4,6 +4,7 @@
 #include <Utils/Directory.hpp>
 #include <Core/SceneChunkSerialization.hpp>
 #include <map>
+#include <Entities/EntityBinaryPacker.hpp>
 
 class Entity;
 class AScene;
@@ -16,14 +17,27 @@ namespace AGE
 
 		struct ArchetypeFileModel
 		{
-			SceneChunkSerialization collection;
+			Entity entity;
 			std::string name;
 
 			template <typename Archive>
-			void serialize(Archive &ar, const std::uint32_t version)
+			void load(Archive &ar, const std::uint32_t version)
 			{
 				ar(CEREAL_NVP(name));
-				ar(CEREAL_NVP(collection));
+				BinaryEntityPack pack;
+				ar(CEREAL_NVP(pack));
+				entity = pack.entities.front().entity;
+			}
+
+			template <typename Archive>
+			void save(Archive &ar, const std::uint32_t version) const
+			{
+				ar(CEREAL_NVP(name));
+				BinaryEntityPack pack;
+				std::vector<Entity> vec;
+				vec.push_back(entity);
+				CreateBinaryEntityPack(pack, vec);
+				ar(CEREAL_NVP(pack));
 			}
 		};
 
