@@ -2,7 +2,7 @@
 
 #include <AssetManagement/Instance/AnimationInstance.hh>
 #include <AssetManagement/Instance/MeshInstance.hh>
-#include <SpacePartitioning/Cullable/CullableShape.hh>
+#include <Culling/Cullable/CullableShape.hh>
 #include <Utils/AABoundingBox.hh>
 #include <vector>
 #include <Render/Pipelining/Render/RenderModes.hh>

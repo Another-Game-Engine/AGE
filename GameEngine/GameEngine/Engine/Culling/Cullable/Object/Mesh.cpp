@@ -1,4 +1,4 @@
-#include <SpacePartitioning/Cullable/Object/Mesh.hh>
+#include <Culling/Cullable/Object/Mesh.hh>
 
 namespace AGE
 {

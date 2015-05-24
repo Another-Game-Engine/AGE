@@ -1,5 +1,5 @@
-#include <SpacePartitioning/Cullable/Cullable.hh>
-#include <SpacePartitioning/LooseOctreeNode.hh>
+#include <Culling/Cullable/Cullable.hh>
+#include <SpacePartitioning/Octree/LooseOctreeNode.hh>
 
 namespace AGE
 {

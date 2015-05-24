@@ -3,7 +3,7 @@
 #include <Utils/Plane.hh>
 #include <Utils/AABoundingBox.hh>
 #include <Utils/Sphere.hh>
-#include <SpacePartitioning/Cullable/Cullable.hh>
+#include <Culling/Cullable/Cullable.hh>
 
 namespace AGE
 {

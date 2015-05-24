@@ -1,4 +1,4 @@
-#include <SpacePartitioning/Cullable/Object/PointLight.hh>
+#include <Culling/Cullable/Object/PointLight.hh>
 #include <Utils/MathematicTools.hh>
 #include <glm/gtc/matrix_transform.hpp>
 
