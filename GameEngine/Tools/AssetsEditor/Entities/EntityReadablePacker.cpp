@@ -63,9 +63,6 @@ namespace AGE
 					{
 						if (
 							WESerialization::SerializeForEditor() == false
-#ifdef EDITOR_ENABLED
-							&& !c->serializeInExport()
-#endif
 							)
 						{
 							continue;
