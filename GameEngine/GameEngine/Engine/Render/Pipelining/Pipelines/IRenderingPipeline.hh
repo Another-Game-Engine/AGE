@@ -20,7 +20,7 @@ namespace AGE
 	public:
 		virtual ~IRenderingPipeline() {}
 		virtual std::string const &name() const = 0;
-		virtual IRenderingPipeline &render(RenderPipeline const &pipeline, RenderLightList const &lights, CameraInfos const &camera) = 0;
+		virtual IRenderingPipeline &render(RenderPipeline const &pipeline, RenderLightList &lights, CameraInfos const &camera) = 0;
 		virtual bool recompileShaders() = 0;
 	};
 

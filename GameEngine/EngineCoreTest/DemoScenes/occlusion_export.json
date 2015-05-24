@@ -1,0 +1,4892 @@
+{
+    "Number_of_serialized_entities": 120,
+    "Component type map": [
+        {
+            "key": 0,
+            "value": 9818697393957024739
+        },
+        {
+            "key": 1,
+            "value": 5355615174208623061
+        },
+        {
+            "key": 2,
+            "value": 10805761389466649664
+        },
+        {
+            "key": 3,
+            "value": 573189261411184160
+        },
+        {
+            "key": 4,
+            "value": 7027394074625422405
+        },
+        {
+            "key": 5,
+            "value": 4665681159133520176
+        },
+        {
+            "key": 6,
+            "value": 17578033133020839790
+        },
+        {
+            "key": 7,
+            "value": 11405310106917468904
+        },
+        {
+            "key": 8,
+            "value": 10104511821648614695
+        },
+        {
+            "key": 9,
+            "value": 16479542503635362968
+        }
+    ],
+    "Entity_1": {
+        "cereal_class_version": 0,
+        "link": {
+            "cereal_class_version": 0,
+            "Position": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0
+            },
+            "Scale": {
+                "value0": 100,
+                "value1": 1,
+                "value2": 100
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "cereal_class_version": 1,
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "cube/cube.sage",
+                        "value1": "pixar128 library/wood/american_cherry.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 16
+            }
+        }
+    },
+    "Entity_2": {
+        "link": {
+            "Position": {
+                "value0": 2,
+                "value1": 0,
+                "value2": -6
+            },
+            "Scale": {
+                "value0": 1,
+                "value1": 1,
+                "value2": 1
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11
+        ],
+        "flags": 0,
+        "components_number": []
+    },
+    "Entity_3": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -4
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_4": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -10
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_5": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -9
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_6": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -8
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_7": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -7
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_8": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -6
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_9": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -5
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_10": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -11
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_11": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -2
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_12": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -3
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_13": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 30
+            },
+            "Scale": {
+                "value0": 1,
+                "value1": 1,
+                "value2": 1
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [
+            13,
+            14,
+            15,
+            16
+        ],
+        "flags": 0,
+        "components_number": []
+    },
+    "Entity_14": {
+        "link": {
+            "Position": {
+                "value0": -10,
+                "value1": 4,
+                "value2": -20
+            },
+            "Scale": {
+                "value0": 18,
+                "value1": 10,
+                "value2": 2
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "cube/cube.sage",
+                        "value1": "pixar128 library/wood/american-oak.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 16
+            }
+        }
+    },
+    "Entity_15": {
+        "link": {
+            "Position": {
+                "value0": 10,
+                "value1": 4,
+                "value2": -20
+            },
+            "Scale": {
+                "value0": 18,
+                "value1": 10,
+                "value2": 2
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "cube/cube.sage",
+                        "value1": "pixar128 library/wood/american-oak.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 16
+            }
+        }
+    },
+    "Entity_16": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 7,
+                "value2": -20
+            },
+            "Scale": {
+                "value0": 5,
+                "value1": 5,
+                "value2": 1
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "cube/cube.sage",
+                        "value1": "pixar128 library/wood/american-oak.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 16
+            }
+        }
+    },
+    "Entity_17": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -20
+            },
+            "Scale": {
+                "value0": 5,
+                "value1": 5,
+                "value2": 1
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "cube/cube.sage",
+                        "value1": "pixar128 library/wood/american-oak.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 16
+            }
+        }
+    },
+    "Entity_18": {
+        "link": {
+            "Position": {
+                "value0": 2,
+                "value1": 3,
+                "value2": -6
+            },
+            "Scale": {
+                "value0": 1,
+                "value1": 1,
+                "value2": 1
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27
+        ],
+        "flags": 0,
+        "components_number": []
+    },
+    "Entity_19": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -4
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_20": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -10
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_21": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -9
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_22": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -8
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_23": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -7
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_24": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -6
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_25": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -5
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_26": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -11
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_27": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -2
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_28": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -3
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_29": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 0,
+                "value2": -6
+            },
+            "Scale": {
+                "value0": 1,
+                "value1": 1,
+                "value2": 1
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38
+        ],
+        "flags": 0,
+        "components_number": []
+    },
+    "Entity_30": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -4
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_31": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -10
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_32": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -9
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_33": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -8
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_34": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -7
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_35": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -6
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_36": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -5
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_37": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -11
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_38": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -2
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_39": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -3
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_40": {
+        "link": {
+            "Position": {
+                "value0": 18,
+                "value1": 5,
+                "value2": 4
+            },
+            "Scale": {
+                "value0": 1,
+                "value1": 1,
+                "value2": 1
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0.2588188648223877,
+                "value2": 0,
+                "value3": 0.96592587232589722
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            4
+        ],
+        "AGE::SpotLightComponent": {
+            "cereal_class_version": 0,
+            "color": {
+                "value0": 1,
+                "value1": 1,
+                "value2": 0.59215688705444336
+            },
+            "range": {
+                "value0": 0,
+                "value1": 0.063000001013278961,
+                "value2": 0
+            },
+            "exponent": 7,
+            "cutOff": 0.60000002384185791
+        }
+    },
+    "Entity_41": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 3,
+                "value2": -6
+            },
+            "Scale": {
+                "value0": 1,
+                "value1": 1,
+                "value2": 1
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50
+        ],
+        "flags": 0,
+        "components_number": []
+    },
+    "Entity_42": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -4
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_43": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -10
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_44": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -9
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_45": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -8
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_46": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -7
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_47": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -6
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_48": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -5
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_49": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -11
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_50": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -2
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_51": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -3
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_52": {
+        "link": {
+            "Position": {
+                "value0": -2,
+                "value1": 0,
+                "value2": -6
+            },
+            "Scale": {
+                "value0": 1,
+                "value1": 1,
+                "value2": 1
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [
+            52,
+            53,
+            54,
+            55,
+            56,
+            57,
+            58,
+            59,
+            60,
+            61
+        ],
+        "flags": 0,
+        "components_number": []
+    },
+    "Entity_53": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -4
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_54": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -10
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_55": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -9
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_56": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -8
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_57": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -7
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_58": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -6
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_59": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -5
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_60": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -11
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_61": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -2
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_62": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -3
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_63": {
+        "link": {
+            "Position": {
+                "value0": -2,
+                "value1": 3,
+                "value2": -6
+            },
+            "Scale": {
+                "value0": 1,
+                "value1": 1,
+                "value2": 1
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [
+            63,
+            64,
+            65,
+            66,
+            67,
+            68,
+            69,
+            70,
+            71,
+            72
+        ],
+        "flags": 0,
+        "components_number": []
+    },
+    "Entity_64": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -4
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_65": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -10
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_66": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -9
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_67": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -8
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_68": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -7
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_69": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -6
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_70": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -5
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_71": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -11
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_72": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -2
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_73": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -3
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_74": {
+        "link": {
+            "Position": {
+                "value0": -4,
+                "value1": 0,
+                "value2": -6
+            },
+            "Scale": {
+                "value0": 1,
+                "value1": 1,
+                "value2": 1
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [
+            74,
+            75,
+            76,
+            77,
+            78,
+            79,
+            80,
+            81,
+            82,
+            83
+        ],
+        "flags": 0,
+        "components_number": []
+    },
+    "Entity_75": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -4
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_76": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -10
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_77": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -9
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_78": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -8
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_79": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -7
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_80": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -6
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_81": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -5
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_82": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -11
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_83": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -2
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_84": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -3
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_85": {
+        "link": {
+            "Position": {
+                "value0": -4,
+                "value1": 3,
+                "value2": -6
+            },
+            "Scale": {
+                "value0": 1,
+                "value1": 1,
+                "value2": 1
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [
+            85,
+            86,
+            87,
+            88,
+            89,
+            90,
+            91,
+            92,
+            93,
+            94
+        ],
+        "flags": 0,
+        "components_number": []
+    },
+    "Entity_86": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -4
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_87": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -10
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_88": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -9
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_89": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -8
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_90": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -7
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_91": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -6
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_92": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -5
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_93": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -11
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_94": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -2
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_95": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -3
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_96": {
+        "link": {
+            "Position": {
+                "value0": -6,
+                "value1": 0,
+                "value2": -6
+            },
+            "Scale": {
+                "value0": 1,
+                "value1": 1,
+                "value2": 1
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [
+            96,
+            97,
+            98,
+            99,
+            100,
+            101,
+            102,
+            103,
+            104,
+            105
+        ],
+        "flags": 0,
+        "components_number": []
+    },
+    "Entity_97": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -4
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_98": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -10
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_99": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -9
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_100": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -8
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_101": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -7
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_102": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -6
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_103": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -5
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_104": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -11
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_105": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -2
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_106": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -3
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_107": {
+        "link": {
+            "Position": {
+                "value0": -6,
+                "value1": 3,
+                "value2": -6
+            },
+            "Scale": {
+                "value0": 1,
+                "value1": 1,
+                "value2": 1
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [
+            107,
+            108,
+            109,
+            110,
+            111,
+            112,
+            113,
+            114,
+            115,
+            116
+        ],
+        "flags": 0,
+        "components_number": []
+    },
+    "Entity_108": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -4
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_109": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -10
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_110": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -9
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_111": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -8
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_112": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -7
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_113": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -6
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_114": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -5
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_115": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -11
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_116": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -2
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_117": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": -3
+            },
+            "Scale": {
+                "value0": 3,
+                "value1": 3,
+                "value2": 3
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "flash/flash.sage",
+                        "value1": "flash/flash.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        }
+    },
+    "Entity_118": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 4,
+                "value2": -4
+            },
+            "Scale": {
+                "value0": 20,
+                "value1": 10,
+                "value2": 1
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "cube/cube.sage",
+                        "value1": "pixar128 library/brick/red_dutch.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 16
+            }
+        }
+    },
+    "Entity_119": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 1,
+                "value2": 17
+            },
+            "Scale": {
+                "value0": 8,
+                "value1": 8,
+                "value2": 8
+            },
+            "Orientation": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0,
+                "value3": 1
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            1,
+            9
+        ],
+        "AGE::MeshRenderer": {
+            "value0": {
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": "borderland_zero/zero.sage",
+                        "value1": "borderland_zero/zero.mage",
+                        "value2": ""
+                    }
+                }
+            },
+            "value1": {
+                "type": 0,
+                "data": 0
+            }
+        },
+        "AGE::RotationComponent": {
+            "cereal_class_version": 1,
+            "Angles": {
+                "value0": 0,
+                "value1": 1,
+                "value2": 0
+            },
+            "Speed": 100
+        }
+    },
+    "Entity_120": {
+        "link": {
+            "Position": {
+                "value0": 0,
+                "value1": 5,
+                "value2": -5
+            },
+            "Scale": {
+                "value0": 1,
+                "value1": 1,
+                "value2": 1
+            },
+            "Orientation": {
+                "value0": -0.17364804446697235,
+                "value1": 0,
+                "value2": 0,
+                "value3": 0.98480778932571411
+            }
+        },
+        "children": [],
+        "flags": 0,
+        "components_number": [
+            4
+        ],
+        "AGE::SpotLightComponent": {
+            "color": {
+                "value0": 1,
+                "value1": 1,
+                "value2": 1
+            },
+            "range": {
+                "value0": 0,
+                "value1": 0,
+                "value2": 0
+            },
+            "exponent": 7,
+            "cutOff": 0.5
+        }
+    }
+}

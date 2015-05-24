@@ -23,7 +23,7 @@ namespace AGE
 		virtual ~FrameBufferRender(){}
 
 	public:
-		virtual IRender &render(RenderPipeline const &pipeline, RenderLightList const &lights, CameraInfos const &infos) override final;
+		virtual IRender &render(RenderPipeline const &pipeline, RenderLightList &lights, CameraInfos const &infos) override final;
 
 	public:
 		template <typename type_t> FrameBufferRender &push_storage_output(GLenum attach, std::shared_ptr<type_t> storage);
@@ -32,14 +32,14 @@ namespace AGE
 		std::vector<GLenum> const &drawing_attach() const;
 
 	protected:
-		FrameBufferRender(std::shared_ptr<PaintingManager> painterManager);
-		virtual void renderPass(RenderPipeline const &, RenderLightList const &, CameraInfos const &) = 0;
-
-	private:
+		FrameBufferRender(GLint width, GLint height, std::shared_ptr<PaintingManager> painterManager);
+		virtual void renderPass(RenderPipeline const &, RenderLightList &, CameraInfos const &) = 0;
 		Framebuffer _frame_buffer;
 		std::unordered_map<GLenum, std::shared_ptr<IFramebufferStorage>> _frame_output;
-		bool _is_update;
 		std::vector<GLenum> _drawing_attach;
+
+	private:
+		bool _is_update;
 	};
 
 	template <typename type_t>

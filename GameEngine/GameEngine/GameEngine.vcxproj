@@ -242,6 +242,9 @@
   <ItemGroup>
     <ClCompile Include="..\Vendors\imgui\imgui.cpp" />
     <ClCompile Include="Engine\Components\DirectionalLightComponent.cpp" />
+    <ClCompile Include="Engine\Render\OcclusionTools\DepthMap.cpp" />
+    <ClCompile Include="Engine\Render\OcclusionTools\DepthMapHandle.cpp" />
+    <ClCompile Include="Engine\Render\OcclusionTools\DepthMapManager.cpp" />
     <ClCompile Include="Engine\Components\Collider.cpp" />
     <ClCompile Include="Engine\Core\SceneChunkSerialization.cpp" />
     <ClCompile Include="Engine\Entities\ArchetypeLibrary.cpp" />
@@ -250,6 +253,7 @@
     <ClCompile Include="Engine\Render\DepthMapHandle.cpp" />
     <ClCompile Include="Engine\Render\DepthMapManager.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredDirectionalLightning.cpp" />
+    <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredShadowBuffering.cpp" />
     <ClCompile Include="Engine\Render\Properties\AABB.cpp" />
     <ClCompile Include="Engine\Components\PhysicsData.cpp" />
     <ClCompile Include="Engine\Physics\Collision.cpp" />
@@ -477,6 +481,9 @@
     <ClInclude Include="Engine\Physics\TriggerListener.hpp" />
     <ClInclude Include="Engine\Physics\TriggerType.hpp" />
     <ClInclude Include="Engine\Physics\WorldInterface.hpp" />
+    <ClInclude Include="Engine\Render\OcclusionTools\DepthMap.hpp" />
+    <ClInclude Include="Engine\Render\OcclusionTools\DepthMapHandle.hpp" />
+    <ClInclude Include="Engine\Render\OcclusionTools\DepthMapManager.hpp" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomPipeline\DebugDeferredShading.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredDebugBuffering.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredDirectionalLightning.hh" />
@@ -498,6 +505,7 @@
     <ClInclude Include="Engine\Entities\EntityData.hh" />
     <ClInclude Include="Engine\Render\GeometryManagement\SimpleGeometry.hh" />
     <ClInclude Include="Engine\Render\PipelineTypes.hpp" />
+    <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredShadowBuffering.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredSpotLightning.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\PipelineTools.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Render\RenderModes.hh" />

@@ -24,9 +24,9 @@
 #include <Render/Properties/Transformation.hh>
 #include <Utils/Profiler.hpp>
 
-#include <Render/DepthMap.hpp>
-#include <Render/DepthMapManager.hpp>
-#include <Render/DepthMapHandle.hpp>
+#include <Render/OcclusionTools/DepthMap.hpp>
+#include <Render/OcclusionTools/DepthMapManager.hpp>
+#include <Render/OcclusionTools/DepthMapHandle.hpp>
 
 namespace AGE
 {
