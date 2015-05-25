@@ -25,7 +25,7 @@ namespace AGE
 	protected:
 		ARender(std::shared_ptr<PaintingManager> painterManager);
 		ARender(ARender &&move);
-		virtual void renderPass(RenderPipeline const &, RenderLightList const &, CameraInfos const &) = 0;
+		virtual void renderPass(RenderPipeline const &, RenderLightList &, CameraInfos const &) = 0;
 
 	protected:
 		// Bitsets to test the objects against

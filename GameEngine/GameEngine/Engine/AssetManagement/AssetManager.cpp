@@ -99,6 +99,10 @@ namespace AGE
 				material->datas.push_back(MaterialInstance());
 				auto &materialSubset = material->datas.back();
 
+				auto &shininess = std::make_shared<Ratio>("shininess");
+				materialSubset._properties.push_back(shininess);
+				shininess->set(material_data.shininess);
+
 				auto diffuse = std::make_shared<Color>("diffuse");
 				materialSubset._properties.push_back(diffuse);
 				diffuse->set(material_data.diffuse);

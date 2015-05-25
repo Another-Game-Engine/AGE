@@ -12,12 +12,12 @@ namespace AGE
 	class DeferredMergingDebug : public ScreenRender
 	{
 	public:
-		DeferredMergingDebug(std::shared_ptr<PaintingManager> painterManager,
+		DeferredMergingDebug(glm::uvec2 const &screenSize, std::shared_ptr<PaintingManager> painterManager,
 			std::shared_ptr<Texture2D> debugLightRender);
 		virtual ~DeferredMergingDebug() = default;
 
 	protected:
-		virtual void renderPass(RenderPipeline const &, RenderLightList const &, CameraInfos const &);
+		virtual void renderPass(RenderPipeline const &, RenderLightList &, CameraInfos const &);
 
 	private:
 		std::shared_ptr<Texture2D> _debugLightRender;

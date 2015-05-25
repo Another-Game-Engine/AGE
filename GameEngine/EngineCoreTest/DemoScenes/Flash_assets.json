@@ -2,10 +2,12 @@
     "value0": {
         "cereal_class_version": 0,
         "value0": [
-            "Flash/Flash.sage"
+            "Flash/Flash.sage",
+            "cube/cube.sage"
         ],
         "value1": [
-            "Flash/Flash.mage"
+            "Flash/Flash.mage",
+            "cube/cube.mage"
         ]
     }
 }

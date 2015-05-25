@@ -4,7 +4,7 @@
 namespace AGE
 {
 	Ratio::Ratio(std::string const &add_name) :
-		AProperty(add_name + "ratio"),
+		AProperty(add_name + "_ratio"),
 		_ratio(1.f)
 	{
 

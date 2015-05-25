@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Systems/System.h>
+#include <Components\CameraComponent.hpp>
 
 #define MAX_SCENE_NAME_LENGTH 255
 
@@ -16,8 +17,10 @@ namespace AGE
 		private:
 			EntityFilter _filter;
 			EntityFilter _meshRenderers;
+			int pipelineIndex = 0;
 			bool _graphNodeDisplay;
 			bool _selectParent;
+			CameraComponent *_cam = nullptr;
 
 			std::vector<const char*> _entityNames;
 			std::vector<Entity> _entities;
