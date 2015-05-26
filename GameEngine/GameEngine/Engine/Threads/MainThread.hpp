@@ -23,7 +23,7 @@ namespace AGE
 		AGE::Engine *createEngine();
 		AGE::Engine *getEngine();
 		void setSceneAsActive(AScene *scene);
-		inline const AScene *getActiveScene() const { return _activeScene; }
+		inline AScene *getActiveScene() { return _activeScene; }
 	private:
 		MainThread();
 		virtual ~MainThread();

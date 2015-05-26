@@ -67,6 +67,10 @@ namespace AGE
 			{
 				return;
 			}
+
+			auto currentScene = GetMainThread()->getActiveScene();
+			GetMainThread()->setSceneAsActive(getScene().get());
+
 			auto representation = std::make_shared<ArchetypeEditorRepresentation>();
 			representation->name = name;
 
@@ -78,6 +82,11 @@ namespace AGE
 			representation->root = pack.entities.front().entity;
 			_archetypesCollection.insert(std::make_pair(name, representation));
 			_regenerateImGuiNamesList();
+
+			if (currentScene)
+			{
+				GetMainThread()->setSceneAsActive(currentScene);
+			}
 		}
 
 		void ArchetypeEditorManager::addOne(const std::string &name, Entity &entity)

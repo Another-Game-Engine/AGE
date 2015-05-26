@@ -5,6 +5,9 @@
 #include <Entities/BinaryEntityPack.hpp>
 #include <Entities\ArchetypeScenes.hpp>
 #include <Core/Engine.hh>
+#include <Threads/MainThread.hpp>
+#include <Threads/ThreadManager.hpp>
+#include <Core/AScene.hh>
 
 namespace AGE
 {
@@ -45,13 +48,21 @@ namespace AGE
 			return;
 		}
 
+		auto currentScene = GetMainThread()->getActiveScene();
+		GetMainThread()->setSceneAsActive(getScene().get());
+
 		auto path = _libraryFolder + "/" + name + ".archetype";
 		BinaryEntityPack pack;
 		pack.scene = getScene().get();
+
 		pack.loadFromFile(path);
 
 		auto &entity = pack.entities.front().entity;
 		_archetypesCollection.insert(std::make_pair(name, entity));
+		if (currentScene)
+		{
+			GetMainThread()->setSceneAsActive(currentScene);
+		}
 	}
 
 	void ArchetypeManager::spawn(Entity &entity, const std::string &name)

@@ -122,12 +122,13 @@ namespace AGE
 		{
 			return true;
 		}
-
-		if (this->getNumberOfEntities() == 0
+		static int toto = 0;
+		++toto;
+		if (this->getNumberOfEntities() == 0 && toto > 10
 			|| ImGui::ListBox("Scenes"
 			, &EngineCoreTestConfiguration::getSelectedSceneIndex()
 			, EngineCoreTestConfiguration::getScenesName().data()
-			, static_cast<int>(EngineCoreTestConfiguration::getScenesName().size())))
+			, static_cast<int>(EngineCoreTestConfiguration::getScenesName().size())) && toto > 10)
 		{
 			EngineCoreTestConfiguration::saveConfigurations();
 			clearAllEntities();

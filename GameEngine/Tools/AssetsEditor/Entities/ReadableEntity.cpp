@@ -84,6 +84,8 @@ namespace AGE
 
 		bin.entity = entity;
 
+		bin.children = children;
+
 		if (entity.haveComponent<ArchetypeComponent>())
 		{
 			auto archetypeCpt = entity.getComponent<ArchetypeComponent>();
