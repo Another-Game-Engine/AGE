@@ -73,7 +73,6 @@ namespace AGE
 	{
 		for (auto &e : _library)
 		{
-
 			std::ofstream file(std::string(_libraryPath + "/" + e.second.name + ".archetype").c_str(), std::ios::binary);
 			{
 				auto ar = cereal::PortableBinaryOutputArchive(file);

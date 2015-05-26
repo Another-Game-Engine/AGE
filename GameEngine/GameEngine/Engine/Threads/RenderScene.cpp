@@ -442,6 +442,11 @@ namespace AGE
 		{
 
 		case(PrepareKey::Type::Camera) :
+			if (!_cameras.exists(msg.key.id))
+			{
+				//if camera has been created then deleted in the same frame
+				return;
+			}
 			co = &_cameras.get(msg.key.id);
 			co->transformation = msg.transform;
 			co->hasMoved = true;

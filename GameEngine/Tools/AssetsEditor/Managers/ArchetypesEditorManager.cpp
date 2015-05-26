@@ -11,6 +11,7 @@
 #include <Entities/ReadableEntityPack.hpp>
 #include <Entities/EntityReadablePacker.hpp>
 #include <Systems\AssetsAndComponentRelationsSystem.hpp>
+#include <Entities\BinaryEntityPack.hpp>
 
 namespace AGE
 {
@@ -55,6 +56,8 @@ namespace AGE
 				auto path = _libraryFolder + "/" + arch.second->name + ".raw_archetype";
 				pack.saveToFile(path);
 				
+				BinaryEntityPack binPack = pack.toBinary();
+				binPack.saveToFile(_libraryFolder + "/" + arch.second->name + ".archetype");
 			}
 		}
 

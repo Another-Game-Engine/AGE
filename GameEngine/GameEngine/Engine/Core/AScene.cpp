@@ -12,6 +12,8 @@
 #include <Components/ComponentRegistrationManager.hpp>
 #include <Physics/Fallback/NullPhysics.hpp>
 #include <Utils/Profiler.hpp>
+#include <Entities/BinaryEntityPack.hpp>
+#include <Entities/EntityBinaryPacker.hpp>
 
 namespace AGE
 {
@@ -265,44 +267,27 @@ namespace AGE
 		_entities.clear();
 	}
 
-	void AScene::saveToJson(const std::string &fileName)
+	void AScene::save(const std::string &fileName)
 	{
 		SCOPE_profile_cpu_function("Scenes");
-		saveSelectionToJson<std::unordered_set<Entity>>(fileName, _entities);
-	}
-
-	void AScene::loadFromJson(const std::string &fileName)
-	{
-		SCOPE_profile_cpu_function("Scenes");
-		std::ifstream file(fileName, std::ios::binary);
-		auto success = file.is_open();
-		assert(success);
-
+		BinaryEntityPack pack;
+		std::vector<Entity> vec;
+		for (auto &e : _entities)
 		{
-			auto sceneChunk = SceneChunkSerialization::CreateForLoad(this);
-			auto ar = cereal::JSONInputArchive(file);
-			ar(sceneChunk);
+			vec.push_back(e);
 		}
-		file.close();
+		CreateBinaryEntityPack(pack, vec);
+		pack.saveToFile(fileName);
 	}
 
-	void AScene::saveToBinary(const std::string &fileName)
+	void AScene::load(const std::string &fileName)
 	{
 		SCOPE_profile_cpu_function("Scenes");
-		std::ofstream file(fileName, std::ios::binary);
-		assert(file.is_open());
-
-		file.close();
+		BinaryEntityPack pack;
+		pack.scene = this;
+		pack.loadFromFile(fileName);
 	}
 
-	void AScene::loadFromBinary(const std::string &fileName)
-	{
-		SCOPE_profile_cpu_function("Scenes");
-		std::ifstream file(fileName, std::ios::binary);
-		assert(file.is_open());
-
-		file.close();
-	}
 	///////////////////////////////////////////////////////////
 
 	void AScene::addTag(Entity &e, TAG_ID tag)

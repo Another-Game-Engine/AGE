@@ -57,6 +57,11 @@ namespace AGE
 	void ArchetypeManager::spawn(Entity &entity, const std::string &name)
 	{
 		auto it = _archetypesCollection.find(name);
+		if (it != std::end(_archetypesCollection))
+		{
+			load();
+			it = _archetypesCollection.find(name);
+		}
 		AGE_ASSERT(it != std::end(_archetypesCollection));
 
 		entity.getScene()->copyEntity(it->second, entity, true, false);

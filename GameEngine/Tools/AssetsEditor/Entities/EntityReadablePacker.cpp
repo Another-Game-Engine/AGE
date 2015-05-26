@@ -4,6 +4,7 @@
 #include <Entities/EntityPacker.hpp>
 #include <Entities/ReadableEntityPack.hpp>
 #include <Entities/ReadableEntity.hpp>
+#include <Managers/ArchetypesEditorManager.hpp>
 
 #include <Components/ComponentRegistrationManager.hpp>
 #include <Components/ArchetypeComponent.hpp>
@@ -35,12 +36,16 @@ namespace AGE
 
 			bool continueEntityFiltering = true;
 
+			bool saveArchetypes = false;
+
 			// If entity is an Archetype
 			// We save only :
 			// - The archetype component
 			// - The entity representation (used in editor)
 			if (entity.haveComponent<ArchetypeComponent>() && continueEntityFiltering)
 			{
+				saveArchetypes = true;
+
 				auto archetypeCpt = entity.getComponent<ArchetypeComponent>();
 				representation.componentTypes.push_back(archetypeCpt->getType());
 				representation.components.push_back(archetypeCpt);
@@ -61,16 +66,16 @@ namespace AGE
 				{
 					if (c)
 					{
-						if (
-							WESerialization::SerializeForEditor() == false
-							)
-						{
-							continue;
-						}
 						representation.componentTypes.push_back(c->getType());
 						representation.components.push_back(c);
 					}
 				}
+			}
+
+			if (saveArchetypes)
+			{
+				auto archetypeManager = entity.getScene()->getInstance<AGE::WE::ArchetypeEditorManager>();
+				archetypeManager->save();
 			}
 		}
 	}

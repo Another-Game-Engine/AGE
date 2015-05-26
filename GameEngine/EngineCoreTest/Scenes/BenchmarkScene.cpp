@@ -139,13 +139,12 @@ namespace AGE
 			cam->setPipeline(RenderType::DEFERRED);
 			camera.getLink().setPosition(glm::vec3(0, 2.5f, 4.5f));
 
-			auto sceneFileName = EngineCoreTestConfiguration::getSelectedScenePath() + "_export.json";
-			auto assetPackageFileName = EngineCoreTestConfiguration::getSelectedScenePath() + "_assets.json";
+			auto sceneFileName = EngineCoreTestConfiguration::getSelectedScenePath();
 
-			getInstance<AssetsManager>()->pushNewCallback(assetPackageFileName, this, std::function<void()>([=](){
-				loadFromJson(sceneFileName);
-			}));
-			getInstance<AssetsManager>()->loadPackage(assetPackageFileName, assetPackageFileName);
+			if (!sceneFileName.empty())
+			{
+				load(sceneFileName);
+			}
 
 
 			//auto skeleton = getInstance<AssetsManager>()->getSkeleton("hexapod/animation/hexapod@attack(1).skage");
@@ -167,6 +166,12 @@ namespace AGE
 
 		if (getInstance<Input>()->getPhysicalKeyJustReleased(AGE_ESCAPE))
 			return (false);
+
+
+		if (getNumberOfEntities() == 0)
+		{
+			return true;
+		}
 
 		static float trigger = 1.0f;
 		if (getInstance<Input>()->getPhysicalKeyPressed(AGE_SPACE) && trigger >= 0.15f)
