@@ -100,6 +100,7 @@ namespace AGE
 		getInstance<AGE::AssetsManager>()->loadMesh(OldFile("ball/ball.sage"), "DEMO_SCENE_BASIC_ASSETS");
 		getInstance<AGE::AssetsManager>()->loadMaterial(OldFile("cube/cube.mage"), "DEMO_SCENE_BASIC_ASSETS");
 		getInstance<AGE::AssetsManager>()->loadMaterial(OldFile("ball/ball.mage"), "DEMO_SCENE_BASIC_ASSETS");
+		_skybox = getInstance<AGE::AssetsManager>()->loadSkybox("space", OldFile("skyboxes/space/"), { {"pink_planet_pos_x.mage", "pink_planet_neg_x.mage", "pink_planet_pos_y.mage", "pink_planet_neg_y.mage", "pink_planet_pos_z.mage", "pink_planet_neg_z.mage"} }, "DEMO_SCENE_BASIC_ASSETS");
 
 		srand(42);
 
