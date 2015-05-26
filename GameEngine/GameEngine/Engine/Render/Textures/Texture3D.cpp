@@ -1,6 +1,5 @@
 #include <Render/Textures/Texture3D.hh>
 #include <glm/glm.hpp>
-#include <Render/Textures/PixelTypesFormats.hh>
 
 namespace AGE
 {
