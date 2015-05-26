@@ -251,6 +251,7 @@
     <ClCompile Include="Engine\Render\DepthMapManager.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredDirectionalLightning.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredShadowBuffering.cpp" />
+    <ClCompile Include="Engine\Render\ProgramResources\Types\Uniform\Sampler\Sampler3D.cpp" />
     <ClCompile Include="Engine\Render\Properties\AABB.cpp" />
     <ClCompile Include="Engine\Components\PhysicsData.cpp" />
     <ClCompile Include="Engine\Physics\Collision.cpp" />
@@ -503,6 +504,7 @@
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredSpotLightning.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\PipelineTools.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Render\RenderModes.hh" />
+    <ClInclude Include="Engine\Render\ProgramResources\Types\Uniform\Sampler\Sampler3D.hh" />
     <ClInclude Include="Engine\Render\ProgramResources\Types\Uniform\Vec3.hh" />
     <ClInclude Include="Engine\Render\Properties\AABB.hpp" />
     <ClInclude Include="Engine\Render\Properties\Materials\ScaleUVs.hpp" />

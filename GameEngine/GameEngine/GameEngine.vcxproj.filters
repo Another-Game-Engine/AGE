@@ -206,6 +206,7 @@
     <ClCompile Include="Engine\Render\DepthMapHandle.cpp" />
     <ClCompile Include="Engine\Render\DepthMapManager.cpp" />
     <ClCompile Include="Engine\Render\Textures\Texture3D.cpp" />
+    <ClCompile Include="Engine\Render\ProgramResources\Types\Uniform\Sampler\Sampler3D.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -545,6 +546,7 @@
     <ClInclude Include="Engine\Render\DepthMapHandle.hpp" />
     <ClInclude Include="Engine\Render\DepthMapManager.hpp" />
     <ClInclude Include="Engine\Render\Textures\Texture3D.hh" />
+    <ClInclude Include="Engine\Render\ProgramResources\Types\Uniform\Sampler\Sampler3D.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

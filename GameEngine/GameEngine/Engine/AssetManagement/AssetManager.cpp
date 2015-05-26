@@ -312,7 +312,7 @@ namespace AGE
 			for (int index = 0; index < 6; ++index)
 			{
 				std::shared_ptr<TextureData> data = std::make_shared<TextureData>();
-				OldFile filePath(_assetsDirectory + textures[index]);
+				OldFile filePath(_assetsDirectory + std::string(_filePath.getFullName()) + textures[index]);
 				assert(filePath.exists());
 				std::ifstream ifs(filePath.getFullName(), std::ios::binary);
 				cereal::PortableBinaryInputArchive ar(ifs);

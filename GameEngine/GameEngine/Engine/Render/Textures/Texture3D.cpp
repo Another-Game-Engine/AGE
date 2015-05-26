@@ -16,12 +16,7 @@ namespace AGE
 			return false;
 		}
 		glBindTexture(GL_TEXTURE_CUBE_MAP, _id);
-		glTexStorage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, _nbr_mip_map, _internal_format, _width, _height);
-		glTexStorage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, _nbr_mip_map, _internal_format, _width, _height);
-		glTexStorage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, _nbr_mip_map, _internal_format, _width, _height);
-		glTexStorage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X, _nbr_mip_map, _internal_format, _width, _height);
-		glTexStorage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Y, _nbr_mip_map, _internal_format, _width, _height);
-		glTexStorage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, _nbr_mip_map, _internal_format, _width, _height);
+		glTexStorage2D(GL_TEXTURE_CUBE_MAP, _nbr_mip_map, _internal_format, _width, _height);
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
