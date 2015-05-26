@@ -162,8 +162,7 @@ namespace AGE
 		Camera *co = nullptr;
 		co = &_cameras.get(msg.key.id);
 		co->hasMoved = true;
-		co->projection = msg.projection;
-		co->pipeline = msg.pipeline;
+		co->data = msg.data;
 	}
 
 	void RenderScene::_createCamera(AGE::Commands::MainToPrepare::CreateCamera &msg)
@@ -572,17 +571,17 @@ namespace AGE
 			auto view = glm::inverse(camera.transformation);
 
 			// update frustum infos for culling
-			camera.shape.setMatrix(camera.projection * view);
+			camera.shape.setMatrix(camera.data.projection * view);
 
 			auto &drawList = drawContainer->cameras;
 
 			drawList.emplace_back();
 			auto &renderCamera = drawList.back();
 			renderCamera.camInfos.view = view;
-			renderCamera.camInfos.projection = camera.projection;
-			renderCamera.camInfos.renderType = camera.pipeline;
+			renderCamera.camInfos.projection = camera.data.projection;
+			renderCamera.camInfos.renderType = camera.data.pipeline;
 
-			auto VP = camera.projection * view;
+			auto VP = camera.data.projection * view;
 
 			auto &depthMapManager = GetRenderThread()->getDepthMapManager();
 			auto depthMap = depthMapManager.getReadableMap();

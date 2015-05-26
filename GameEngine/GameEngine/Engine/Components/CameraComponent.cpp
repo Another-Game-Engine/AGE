@@ -27,19 +27,19 @@ namespace AGE
 	void CameraComponent::setProjection(const glm::mat4 &projection)
 	{
 		_data.projection = projection;
-		AGE::GetPrepareThread()->setCameraInfos(_data.projection, _key, _data.pipeline);
+		AGE::GetPrepareThread()->setCameraInfos(_data, _key);
 	}
 
 	void CameraComponent::setPipeline(RenderType pipeline)
 	{
 		_data.pipeline = pipeline;
-		AGE::GetPrepareThread()->setCameraInfos(_data.projection, _key, _data.pipeline);
+		AGE::GetPrepareThread()->setCameraInfos(_data, _key);
 	}
 
 	void CameraComponent::setTexture(std::shared_ptr<Texture3D> const &texture)
 	{
 		_data.texture = texture;
-		AGE::GetPrepareThread()->setCameraInfos(_data.projection, _key, _data.pipeline);
+		AGE::GetPrepareThread()->setCameraInfos(_data, _key);
 	}
 
 	void CameraComponent::init()
@@ -63,7 +63,7 @@ namespace AGE
 	void CameraComponent::postUnserialization()
 	{
 		init();
-		AGE::GetPrepareThread()->setCameraInfos(_data.projection, _key, _data.pipeline);
+		AGE::GetPrepareThread()->setCameraInfos(_data, _key);
 	}
 
 #ifdef EDITOR_ENABLED

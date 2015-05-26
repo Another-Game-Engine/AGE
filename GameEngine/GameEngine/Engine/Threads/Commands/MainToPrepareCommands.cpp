@@ -86,12 +86,9 @@ namespace AGE
 				: key(_key)
 			{}
 
-			CameraInfos::CameraInfos(const PrepareKey &_key
-				, const glm::mat4 &_projection
-				, RenderType pipeline)
+			CameraInfos::CameraInfos(const PrepareKey &_key, CameraData const &data)
 				: key(_key)
-				, projection(_projection)
-				, pipeline(pipeline)
+				, data(data)
 			{}
 
 			SetCurrentScene::SetCurrentScene(AScene *_scene)

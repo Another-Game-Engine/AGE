@@ -7,6 +7,7 @@
 #include <Components/DirectionalLightComponent.hh>
 #include <Components/SpotLight.hh>
 #include <Components/Light.hh>
+#include <Components/CameraComponent.hpp>
 #include <vector>
 #include <memory>
 #include <thread>
@@ -22,7 +23,7 @@ namespace AGE
 		virtual bool launch();
 		virtual bool stop();
 
-		void setCameraInfos(const glm::mat4& projection, const PrepareKey &key, RenderType pipeline);
+		void setCameraInfos(CameraData const &data, const PrepareKey &key);
 		PrepareKey addCamera();
 		void updateGeometry(
 			const PrepareKey &key

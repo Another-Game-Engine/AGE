@@ -7,6 +7,7 @@
 #include <Components/DirectionalLightComponent.hh>
 #include <Components/SpotLight.hh>
 #include <Components/Light.hh>
+#include <Components/CameraComponent.hpp>
 #include <Core/PrepareKey.hpp>
 #include <vector>
 #include <set>
@@ -128,10 +129,9 @@ namespace AGE
 
 			struct CameraInfos
 			{
-				CameraInfos(const PrepareKey &_key, const glm::mat4 &_projection, RenderType pipeline);
+				CameraInfos(const PrepareKey &_key, CameraData const &data);
 				PrepareKey key;
-				glm::mat4 projection;
-				RenderType pipeline;
+				CameraData data;
 			};
 
 			struct PrepareDrawLists
