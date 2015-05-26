@@ -68,7 +68,7 @@ namespace AGE
 		OpenGLState::glDepthMask(GL_FALSE);
 
 		_programs[PROGRAM_BUFFERING_LIGHT]->use();
-		_programs[PROGRAM_BUFFERING_LIGHT]->get_resource<Mat4>("projection_matrix").set(infos.projection);
+		_programs[PROGRAM_BUFFERING_LIGHT]->get_resource<Mat4>("projection_matrix").set(infos.data.projection);
 		_programs[PROGRAM_BUFFERING_LIGHT]->get_resource<Mat4>("view_matrix").set(infos.view);
 
 		{

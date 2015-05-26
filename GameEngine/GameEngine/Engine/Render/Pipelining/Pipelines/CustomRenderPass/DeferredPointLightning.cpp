@@ -87,7 +87,7 @@ namespace AGE
 		glm::vec3 cameraPosition = -glm::transpose(glm::mat3(infos.view)) * glm::vec3(infos.view[3]);
 
 		_programs[PROGRAM_LIGHTNING]->use();
-		_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("projection_matrix").set(infos.projection);
+		_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("projection_matrix").set(infos.data.projection);
 		_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("view_matrix").set(infos.view);
 		_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("normal_buffer").set(_normalInput);
 		_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("depth_buffer").set(_depthInput);
@@ -95,7 +95,7 @@ namespace AGE
 		_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("eye_pos").set(cameraPosition);
 
 		_programs[PROGRAM_STENCIL]->use();
-		_programs[PROGRAM_STENCIL]->get_resource<Mat4>("projection_matrix").set(infos.projection);
+		_programs[PROGRAM_STENCIL]->get_resource<Mat4>("projection_matrix").set(infos.data.projection);
 		_programs[PROGRAM_STENCIL]->get_resource<Mat4>("view_matrix").set(infos.view);
 
 		// Disable blending to clear the color buffer

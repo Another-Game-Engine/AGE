@@ -578,8 +578,7 @@ namespace AGE
 			drawList.emplace_back();
 			auto &renderCamera = drawList.back();
 			renderCamera.camInfos.view = view;
-			renderCamera.camInfos.projection = camera.data.projection;
-			renderCamera.camInfos.renderType = camera.data.pipeline;
+			renderCamera.camInfos.data = camera.data;
 
 			auto VP = camera.data.projection * view;
 

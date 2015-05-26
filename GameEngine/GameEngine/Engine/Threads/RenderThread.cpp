@@ -264,8 +264,8 @@ namespace AGE
 					{
 						SCOPE_profile_gpu_i("RenderCameraDrawList");
 						SCOPE_profile_cpu_i("RenderTimer", "RenderCamera");
-						AGE_ASSERT(!(pipelines[curCamera.camInfos.renderType] == nullptr));
-						pipelines[curCamera.camInfos.renderType]->render(curCamera.pipeline, curCamera.lights, curCamera.camInfos);
+						AGE_ASSERT(!(pipelines[curCamera.camInfos.data.pipeline] == nullptr));
+						pipelines[curCamera.camInfos.data.pipeline]->render(curCamera.pipeline, curCamera.lights, curCamera.camInfos);
 					}
 				}
 
