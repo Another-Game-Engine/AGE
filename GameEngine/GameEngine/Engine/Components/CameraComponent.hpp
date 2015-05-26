@@ -9,6 +9,12 @@
 
 namespace AGE
 {
+	struct CameraData
+	{
+		std::shared_ptr<Texture3D> texture;
+		glm::mat4 projection = glm::mat4(1.0f);
+		RenderType pipeline = RenderType::DEFERRED;
+	};
 
 	struct CameraComponent : public ComponentBase
 	{
@@ -23,13 +29,10 @@ namespace AGE
 		virtual void reset();
 
 		void setProjection(const glm::mat4 &);
-		const glm::mat4 &getProjection() const;
+		const glm::mat4 &getProjection() const { return _data.projection; }
 		void setPipeline(RenderType pipeline);
-		RenderType getPipeline() const { return _pipeline; }
+		RenderType getPipeline() const { return _data.pipeline; }
 		void setTexture(std::shared_ptr<Texture3D> const &texture);
-		//void addPipeline(RenderType pipeline);
-		//void removePipeline(RenderType pipeline);
-		//bool havePipeline(RenderType pipeline) const;
 
 		template <typename Archive> void save(Archive &ar, const std::uint32_t version) const;
 		template <typename Archive> void load(Archive &ar, const std::uint32_t version);
@@ -41,22 +44,20 @@ namespace AGE
 		virtual bool editorUpdate();
 #endif
 	private:
-		std::shared_ptr<Texture3D> _texture;
-		glm::mat4 _projection;
+		CameraData _data;
 		AGE::PrepareKey _key;
-		RenderType _pipeline;
 	};
 
 	template <typename Archive>
 	void CameraComponent::save(Archive &ar, const std::uint32_t version) const
 	{
-		ar(cereal::make_nvp("projection", _projection));
+		ar(cereal::make_nvp("projection", _data.projection));
 	}
 
 	template <typename Archive>
 	void CameraComponent::load(Archive &ar, const std::uint32_t version)
 	{
-		ar(_projection);
+		ar(_data.projection);
 	}
 }
 

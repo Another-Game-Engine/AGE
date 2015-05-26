@@ -10,8 +10,7 @@
 namespace AGE
 {
 	CameraComponent::CameraComponent()
-		: ComponentBase(),
-		_pipeline(RenderType::DEFERRED)
+		: ComponentBase()
 	{
 	}
 
@@ -22,59 +21,25 @@ namespace AGE
 	void CameraComponent::_copyFrom(const ComponentBase *model)
 	{
 		auto o = static_cast<const CameraComponent*>(model);
-		_projection = o->_projection;
-		_pipeline = o->_pipeline;
+		_data = o->_data;
 	}
 
 	void CameraComponent::setProjection(const glm::mat4 &projection)
 	{
-		_projection = projection;
-
-		AGE::GetPrepareThread()->setCameraInfos(_projection, _key, _pipeline);
+		_data.projection = projection;
+		AGE::GetPrepareThread()->setCameraInfos(_data.projection, _key, _data.pipeline);
 	}
 
 	void CameraComponent::setPipeline(RenderType pipeline)
 	{
-		_pipeline = pipeline;
-		AGE::GetPrepareThread()->setCameraInfos(_projection, _key, _pipeline);
+		_data.pipeline = pipeline;
+		AGE::GetPrepareThread()->setCameraInfos(_data.projection, _key, _data.pipeline);
 	}
 
 	void CameraComponent::setTexture(std::shared_ptr<Texture3D> const &texture)
 	{
-		_texture = texture;
-		AGE::GetPrepareThread()->setCameraInfos(_projection, _key, _pipeline);
-	}
-
-	//void CameraComponent::addPipeline(RenderType pipeline)
-	//{
-	//	auto haveIt = havePipeline(pipeline);
-	//	if (haveIt == false)
-	//	{
-	//		_pipelines.insert(pipeline);
-	//		AGE::GetPrepareThread()->setCameraInfos(_projection, _key, _pipelines);
-	//	}
-	//}
-
-	//void CameraComponent::removePipeline(RenderType pipeline)
-	//{
-	//	auto it = _pipelines.find(pipeline);
-	//	if (it  != std::end(_pipelines))
-	//	{
-	//		_pipelines.erase(it);
-	//		AGE::GetPrepareThread()->setCameraInfos(_projection, _key, _pipelines);
-	//	}
-	//}
-
-	//bool CameraComponent::havePipeline(RenderType pipeline) const
-	//{
-	//	auto it = _pipelines.find(pipeline);
-	//	return (it != std::end(_pipelines));
-	//}
-
-
-	const glm::mat4 &CameraComponent::getProjection() const
-	{
-		return _projection;
+		_data.texture = texture;
+		AGE::GetPrepareThread()->setCameraInfos(_data.projection, _key, _data.pipeline);
 	}
 
 	void CameraComponent::init()
@@ -92,13 +57,13 @@ namespace AGE
 		{
 			entity.getLink().unregisterOctreeObject(_key);
 		}
-		_projection = glm::mat4(1);
+		_data = CameraData();
 	}
 
 	void CameraComponent::postUnserialization()
 	{
 		init();
-		setProjection(_projection);
+		AGE::GetPrepareThread()->setCameraInfos(_data.projection, _key, _data.pipeline);
 	}
 
 #ifdef EDITOR_ENABLED
