@@ -10,12 +10,11 @@
 #include <cereal/cereal.hpp>
 #include <cereal/archives/json.hpp>
 
-
-
 namespace AGE
 {
 	struct ComponentBase;
 	class Entity;
+	struct BinaryEntity;
 
 	struct ReadableEntity
 	{
@@ -30,6 +29,7 @@ namespace AGE
 		~ReadableEntity();
 		void save(cereal::JSONOutputArchive  &ar, const std::uint32_t version) const;
 		void load(cereal::JSONInputArchive &ar, const std::uint32_t version);
+		BinaryEntity toBinary();
 	};
 }
 

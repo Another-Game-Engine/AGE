@@ -16,10 +16,12 @@ namespace AGE
 	{
 		typedef std::function<void(ComponentBase *, cereal::JSONOutputArchive &)> RegisterJsonFn;
 		typedef std::function<void(void *, cereal::JSONInputArchive &)> LoadJsonFn;
+
 		typedef std::function<void(AScene *)> CreateComponentPoolFn;
 		typedef std::function<void(void *, ComponentBase *)> CopyFn;
 
 		typedef std::function<void(ComponentBase *, cereal::PortableBinaryOutputArchive &)> RegisterBinaryFn;
+		typedef std::function<void(void *, cereal::PortableBinaryInputArchive&)> LoadBinaryFn;
 
 	private:
 		ComponentRegistrationManager();
@@ -76,6 +78,12 @@ namespace AGE
 				ar(*(static_cast<T*>(c)));
 			})));
 
+			_binaryLoadMap.insert(std::make_pair(ageId, LoadBinaryFn([=](void *ptr, cereal::PortableBinaryInputArchive &ar){
+				std::cout << "Loading component of type : " << name << std::endl;
+				T *c = new(ptr)T();
+				ar(*c);
+			})));
+
 			_createComponentPoolMap.insert(std::make_pair(ageId, CreateComponentPoolFn([](AScene *scene)
 			{
 				scene->createComponentPool<T>();
@@ -91,7 +99,9 @@ namespace AGE
 
 		const std::string &getComponentName(ComponentType type);
 		void serializeJson(ComponentBase *c, cereal::JSONOutputArchive &ar);
+		void serializeBinary(ComponentBase *c, cereal::PortableBinaryOutputArchive &ar);
 		ComponentBase *loadJson(std::size_t componentHashId, Entity &e, cereal::JSONInputArchive &ar);
+		ComponentBase *loadBinary(std::size_t componentHashId, Entity &e, cereal::PortableBinaryInputArchive &ar);
 		std::size_t getSystemIdForAgeId(ComponentType id);
 		ComponentBase *copyComponent(ComponentBase *c, AScene *scene);
 
@@ -109,6 +119,7 @@ namespace AGE
 		std::map < ComponentType, RegisterJsonFn> _jsonSaveMap;
 		std::map < ComponentType, LoadJsonFn> _jsonLoadMap;
 		std::map < ComponentType, RegisterBinaryFn> _binarySaveMap;
+		std::map < ComponentType, LoadBinaryFn> _binaryLoadMap;
 		std::map < ComponentType, CopyFn> _copyMap;
 		std::map < ComponentType, CreateComponentPoolFn> _createComponentPoolMap;
 		std::map < ComponentType, std::string> _componentNames;

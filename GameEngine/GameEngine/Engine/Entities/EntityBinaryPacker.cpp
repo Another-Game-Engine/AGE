@@ -13,6 +13,13 @@
 
 namespace AGE
 {
+	void CreateBinaryEntityPack(BinaryEntityPack &pack, Entity &selection)
+	{
+		std::vector<Entity> c;
+		c.push_back(selection);
+		CreateBinaryEntityPack(pack, c);
+	}
+
 	void CreateBinaryEntityPack(BinaryEntityPack &pack, std::vector<Entity> &selection)
 	{
 		SCOPE_profile_cpu_function("Entity packer");
@@ -51,15 +58,6 @@ namespace AGE
 				{
 					if (c)
 					{
-						if (
-							WESerialization::SerializeForEditor() == false
-#ifdef EDITOR_ENABLED
-							&& !c->serializeInExport()
-#endif
-							)
-						{
-							continue;
-						}
 						representation.componentTypes.push_back(c->getType());
 						representation.components.push_back(c);
 					}

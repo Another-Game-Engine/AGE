@@ -16,16 +16,16 @@ namespace AGE
 {
 	namespace WE
 	{
-		ArchetypesEditorManager::ArchetypesEditorManager()
+		ArchetypeEditorManager::ArchetypeEditorManager()
 		{
 		}
 
-		ArchetypesEditorManager::~ArchetypesEditorManager()
+		ArchetypeEditorManager::~ArchetypeEditorManager()
 		{
 
 		}
 
-		void ArchetypesEditorManager::load()
+		void ArchetypeEditorManager::load()
 		{
 			Directory dir;
 			const bool success = dir.open(_libraryFolder.c_str());
@@ -46,7 +46,7 @@ namespace AGE
 			dir.close();
 		}
 
-		void ArchetypesEditorManager::save()
+		void ArchetypeEditorManager::save()
 		{
 			for (auto &arch : _archetypesCollection)
 			{
@@ -58,7 +58,7 @@ namespace AGE
 			}
 		}
 
-		void ArchetypesEditorManager::loadOne(const std::string &name)
+		void ArchetypeEditorManager::loadOne(const std::string &name)
 		{
 			if (_archetypesCollection.find(name) != std::end(_archetypesCollection))
 			{
@@ -77,7 +77,7 @@ namespace AGE
 			_regenerateImGuiNamesList();
 		}
 
-		void ArchetypesEditorManager::addOne(const std::string &name, Entity &entity)
+		void ArchetypeEditorManager::addOne(const std::string &name, Entity &entity)
 		{
 			if (_archetypesCollection.find(name) != std::end(_archetypesCollection))
 			{
@@ -146,7 +146,7 @@ namespace AGE
 			_regenerateImGuiNamesList();
 		}
 
-		void ArchetypesEditorManager::spawn(Entity &entity, const std::string &name)
+		void ArchetypeEditorManager::spawn(Entity &entity, const std::string &name)
 		{
 			auto it = _archetypesCollection.find(name);
 			AGE_ASSERT(it != std::end(_archetypesCollection));
@@ -175,7 +175,7 @@ namespace AGE
 			it->second->entities.insert(entity);
 		}
 
-		void ArchetypesEditorManager::update(AScene *scene)
+		void ArchetypeEditorManager::update(AScene *scene)
 		{
 			ImGui::SameLine();
 			ImGui::BeginChild("Archetypes", ImVec2(ImGui::GetWindowWidth() * 0.35f, 0));
@@ -300,7 +300,7 @@ namespace AGE
 			ImGui::EndChild();
 		}
 
-		void ArchetypesEditorManager::_copyArchetypeToInstanciedEntity(Entity &archetype, Entity &entity)
+		void ArchetypeEditorManager::_copyArchetypeToInstanciedEntity(Entity &archetype, Entity &entity)
 		{
 			auto &componentList = archetype.getComponentList();
 
@@ -352,7 +352,7 @@ namespace AGE
 			}
 		}
 
-		void ArchetypesEditorManager::_regenerateImGuiNamesList()
+		void ArchetypeEditorManager::_regenerateImGuiNamesList()
 		{
 			_archetypesImGuiNamesList.clear();
 			for (auto &e : _archetypesCollection)
@@ -361,7 +361,7 @@ namespace AGE
 			}
 		}
 
-		std::shared_ptr<AScene> ArchetypesEditorManager::getScene()
+		std::shared_ptr<AScene> ArchetypeEditorManager::getScene()
 		{
 			if (_archetypesScene == nullptr)
 			{
@@ -374,12 +374,12 @@ namespace AGE
 			return _archetypesScene;
 		}
 
-		void ArchetypesEditorManager::enableScene()
+		void ArchetypeEditorManager::enableScene()
 		{
 			GetEngine()->enableScene("EDITOR_ARCHETYPES_SCENE", 0);
 		}
 
-		void ArchetypesEditorManager::disableScene()
+		void ArchetypeEditorManager::disableScene()
 		{
 			GetEngine()->enableScene("EDITOR_ARCHETYPES_SCENE", 0);
 		}

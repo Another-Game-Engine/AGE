@@ -29,7 +29,7 @@ namespace AGE
 		BinaryEntity();
 		~BinaryEntity();
 		void save(cereal::PortableBinaryOutputArchive  &ar, const std::uint32_t version) const;
-		void load(const cereal::PortableBinaryInputArchive &ar, const std::uint32_t version);
+		void load(cereal::PortableBinaryInputArchive &ar, const std::uint32_t version);
 	};
 }
 

@@ -7,16 +7,6 @@
 #include <Entities/ReadableEntityPack.hpp>
 #include <Entities/IArchetypeManager.hpp>
 
-//#include <Components/EntityRepresentation.hpp>
-//#include <Entities/Entity.hh>
-//#include <Core/AScene.hh>
-//#include <EntityHelpers/EntityImgui.hpp>
-//#include <Scenes/ArchetypeScenes.hpp>
-//#include <Threads/MainThread.hpp>
-//#include <Threads/ThreadManager.hpp>
-//#include <Entities/ArchetypeLibrary.hpp>
-//#include <Components/ArchetypeComponent.hpp>
-
 namespace AGE
 {
 	namespace WE
@@ -28,11 +18,11 @@ namespace AGE
 			std::string name;
 		};
 
-		class ArchetypesEditorManager : public Dependency < ArchetypesEditorManager >, public IArchetypeManager
+		class ArchetypeEditorManager : public Dependency < ArchetypeEditorManager >, public IArchetypeManager
 		{
 		public:
-			ArchetypesEditorManager();
-			virtual ~ArchetypesEditorManager();
+			ArchetypeEditorManager();
+			virtual ~ArchetypeEditorManager();
 			void update(AScene *scene);
 			virtual void save();
 			virtual void load();

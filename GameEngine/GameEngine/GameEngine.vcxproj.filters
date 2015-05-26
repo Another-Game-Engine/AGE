@@ -212,6 +212,7 @@
     <ClCompile Include="Engine\Entities\EntityBinaryPacker.cpp" />
     <ClCompile Include="Engine\Entities\BinaryEntityPack.cpp" />
     <ClCompile Include="Engine\Components\ArchetypeComponent.cpp" />
+    <ClCompile Include="Engine\Entities\ArchetypeManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -560,6 +561,7 @@
     <ClInclude Include="Engine\Entities\EntityPacker.hpp" />
     <ClInclude Include="Engine\Entities\ArchetypeScenes.hpp" />
     <ClInclude Include="Engine\Entities\IArchetypeManager.hpp" />
+    <ClInclude Include="Engine\Entities\ArchetypeManager.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

@@ -9,6 +9,8 @@
 
 #include <Core/AScene.hh>
 
+#include <Entities/BinaryEntityPack.hpp>
+
 namespace AGE
 {
 	ReadableEntityPack::ReadableEntityPack()
@@ -69,5 +71,19 @@ namespace AGE
 			ar(*this);
 		}
 		file.close();
+	}
+
+	BinaryEntityPack ReadableEntityPack::toBinary()
+	{
+		BinaryEntityPack pack;
+		
+		pack.componentsIdReferenceTable = ComponentRegistrationManager::getInstance().getAgeIdToSystemIdMap();
+
+		for (auto &e : entities)
+		{
+			pack.entities.push_back(e.toBinary());
+		}
+
+		return pack;
 	}
 }

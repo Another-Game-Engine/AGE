@@ -12,6 +12,8 @@
 
 #include <Utils/Debug.hpp>
 
+#include <Entities/BinaryEntity.hpp>
+
 namespace AGE
 {
 	ReadableEntity::ReadableEntity()
@@ -49,7 +51,7 @@ namespace AGE
 			, componentTypes
 			, archetypesDependency);
 
-		auto archetypeManager = entity.getScene()->getInstance<AGE::WE::ArchetypesEditorManager>();
+		auto archetypeManager = entity.getScene()->getInstance<AGE::WE::ArchetypeEditorManager>();
 
 		// we load archetypes dependency
 		if (!archetypesDependency.empty())
@@ -74,5 +76,32 @@ namespace AGE
 			auto archetypeName = entity.getComponent<ArchetypeComponent>()->archetypeName;
 			archetypeManager->spawn(entity, archetypeName);
 		}
+	}
+
+	BinaryEntity ReadableEntity::toBinary()
+	{
+		BinaryEntity bin;
+
+		bin.entity = entity;
+
+		if (entity.haveComponent<ArchetypeComponent>())
+		{
+			auto archetypeCpt = entity.getComponent<ArchetypeComponent>();
+			bin.componentTypes.push_back(archetypeCpt->getType());
+			bin.components.push_back(archetypeCpt);
+			bin.archetypesDependency.push_back(archetypeCpt->archetypeName);
+			return bin;
+		}
+
+		for (auto &c : components)
+		{
+			if (!c->serializeInExport())
+			{
+				continue;
+			}
+			bin.componentTypes.push_back(c->getType());
+			bin.components.push_back(c);
+		}
+		return bin;
 	}
 }

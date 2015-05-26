@@ -5,6 +5,7 @@
 namespace AGE
 {
 	class AScene;
+	struct BinaryEntityPack;
 
 	struct ReadableEntityPack
 	{
@@ -19,6 +20,8 @@ namespace AGE
 		void load(cereal::JSONInputArchive &ar, const std::uint32_t version);
 		void loadFromFile(const std::string &filePath);
 		void saveToFile(const std::string &filePath);
+
+		BinaryEntityPack toBinary();
 	};
 }
 

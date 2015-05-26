@@ -88,9 +88,9 @@ int			main(int ac, char **av)
 
 		RegisterComponents();
 
-		engine->setInstance<AGE::WE::ArchetypesEditorManager>();
-		engine->setInstance<AGE::WE::ArchetypesEditorManager>()->setLibraryFolder("../../Archetypes/");
-		engine->getInstance<AGE::WE::ArchetypesEditorManager>()->load();
+		engine->setInstance<AGE::WE::ArchetypeEditorManager>();
+		engine->setInstance<AGE::WE::ArchetypeEditorManager>()->setLibraryFolder("../../Archetypes/");
+		engine->getInstance<AGE::WE::ArchetypeEditorManager>()->load();
 
 		engine->addScene(std::make_shared<AGE::AssetsEditorScene>(engine), AGE::AssetsEditorScene::Name);
 		engine->addScene(std::make_shared<AGE::SceneSelectorScene>(engine), AGE::SceneSelectorScene::Name);

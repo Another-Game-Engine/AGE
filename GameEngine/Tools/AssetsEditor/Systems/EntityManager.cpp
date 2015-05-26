@@ -160,7 +160,7 @@ namespace AGE
 						ImGui::InputText("Archetype name", _archetypeName, MAX_SCENE_NAME_LENGTH);
 						if (ImGui::SmallButton("Convert to Archetype"))
 						{
-							auto manager = _scene->getInstance<AGE::WE::ArchetypesEditorManager>();
+							auto manager = _scene->getInstance<AGE::WE::ArchetypeEditorManager>();
 							manager->addOne(_archetypeName, *_selectedEntity);
 						}
 					}
@@ -222,9 +222,10 @@ namespace AGE
 				{
 					WESerialization::SetSerializeForEditor(false);
 
-					BinaryEntityPack pack;
-					CreateBinaryEntityPack(pack, _entities);
-					pack.saveToFile(WE::EditorConfiguration::GetExportedSceneDirectory() + std::string(_exportName) + ".scene");
+					ReadableEntityPack pack;
+					CreateReadableEntityPack(pack, _entities);
+					BinaryEntityPack binaryPack = pack.toBinary();
+					binaryPack.saveToFile(WE::EditorConfiguration::GetExportedSceneDirectory() + std::string(_exportName) + ".scene");
 				}
 
 				ImGui::EndChild();

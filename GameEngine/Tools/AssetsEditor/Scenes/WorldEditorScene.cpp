@@ -53,7 +53,7 @@ namespace AGE
 
 	bool WorldEditorScene::_userUpdateEnd(float time)
 	{
-		getInstance<AGE::WE::ArchetypesEditorManager>()->update(this);
+		getInstance<AGE::WE::ArchetypeEditorManager>()->update(this);
 
 		ImGui::End();
 
