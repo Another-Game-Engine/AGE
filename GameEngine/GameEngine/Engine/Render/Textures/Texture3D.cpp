@@ -5,7 +5,8 @@
 namespace AGE
 {
 	Texture3D::Texture3D() :
-		ATexture()
+		ATexture(),
+		_referenceTexture(GL_TEXTURE_CUBE_MAP_NEGATIVE_X)
 	{
 	}
 
@@ -62,6 +63,19 @@ namespace AGE
 	ITexture const &Texture3D::parameter(GLenum mode, GLint param) const
 	{
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, mode, param);
+		return (*this);
+	}
+
+	Texture3D &Texture3D::referencedAttachmentFace(GLenum mode)
+	{
+		_referenceTexture = mode;
+		return *this;
+	}
+
+	IFramebufferStorage const & Texture3D::attachment(Framebuffer const &framebuffer, GLenum attach) const
+	{
+		bind();
+		glFramebufferTexture2D(framebuffer.type(), attach, _referenceTexture, _id, 0);
 		return (*this);
 	}
 
