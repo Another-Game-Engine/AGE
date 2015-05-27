@@ -20,6 +20,7 @@
 #include <Utils/Debug.hpp>
 #include <Render/GeometryManagement/SimpleGeometry.hh>
 #include <Utils/Profiler.hpp>
+#include <utility>
 
 namespace AGE
 {
@@ -47,6 +48,59 @@ namespace AGE
 			}
 			e->recompileShaders();
 		}
+	}
+
+	void RenderThread::getCube(Key<Vertices> &v, Key<Painter> &p)
+	{
+		static const std::vector<glm::vec3> positions =
+		{
+			glm::vec3(-1.0f, 1.0f, 1.0f),
+			glm::vec3(-1.0f, -1.0f, 1.0f),
+			glm::vec3(1.0f, -1.0f, 1.0f),
+			glm::vec3(1.0f, 1.0f, 1.0f),
+			glm::vec3(-1.0f, 1.0f, -1.0f),
+			glm::vec3(-1.0f, -1.0f, -1.0f),
+			glm::vec3(1.0f, -1.0f, -1.0f),
+			glm::vec3(1.0f, 1.0f, -1.0f)
+		};
+		static const std::vector<unsigned int> indices =
+		{
+			0, 1, 2, 3, 0, 3, 7, 4, 4, 7, 6, 5, 6, 5, 1, 2, 2, 3, 7, 6, 4, 0, 1, 5
+		};
+
+		// to be sure that this function is only called in render thread
+		AGE_ASSERT(GetThreadManager()->getCurrentThread() == (AGE::Thread*)GetRenderThread());
+
+		if (SimpleGeometry::quadMesh.verticesKey.isValid() &&
+			SimpleGeometry::quadMesh.painterKey.isValid())
+		{
+			v = SimpleGeometry::quadMesh.verticesKey;
+			p = SimpleGeometry::quadMesh.painterKey;
+			return;
+		}
+
+		auto type = std::make_pair<GLenum, std::string>(GL_FLOAT_VEC3, "position");
+		std::vector<std::pair < GLenum, std::string > > types;
+		types.push_back(type);
+
+		if (!paintingManager->has_painter(types))
+		{
+			SimpleGeometry::cubeMesh.painterKey = paintingManager->add_painter(std::move(types));
+		}
+		else
+		{
+			SimpleGeometry::cubeMesh.painterKey = paintingManager->get_painter(types);
+		}
+		auto &painterPtr = paintingManager->get_painter(SimpleGeometry::cubeMesh.painterKey);
+
+		SimpleGeometry::cubeMesh.verticesKey = painterPtr->add_vertices(positions.size(), indices.size());
+		auto vertices = painterPtr->get_vertices(SimpleGeometry::cubeMesh.verticesKey);
+
+		vertices->set_data<glm::vec3>(positions, std::string("position"));
+		vertices->set_indices(indices);
+
+		v = SimpleGeometry::cubeMesh.verticesKey;
+		p = SimpleGeometry::cubeMesh.painterKey;
 	}
 
 	void RenderThread::getQuadGeometry(Key<Vertices> &v, Key<Painter> &p)

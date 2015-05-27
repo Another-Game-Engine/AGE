@@ -19,6 +19,7 @@ namespace AGE
 		};
 
 		static SimpleGeometryKeys quadMesh;
+		static SimpleGeometryKeys cubeMesh;
 		static std::map<std::size_t, SimpleGeometryKeys> icosphereMeshes;
 
 		void generateIcoSphere(std::size_t recursion, std::vector<glm::vec3> &vertex, std::vector<unsigned int> &indices);
