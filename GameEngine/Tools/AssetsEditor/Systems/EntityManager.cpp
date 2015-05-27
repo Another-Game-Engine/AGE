@@ -211,21 +211,16 @@ namespace AGE
 					WESerialization::SetSerializeForEditor(true);
 
 					ReadableEntityPack pack;
-					CreateReadableEntityPack(pack, _entities);
-					pack.saveToFile(WE::EditorConfiguration::GetEditedSceneDirectory() + std::string(_sceneName) + ".raw_scene");
+					{
+						CreateReadableEntityPack(pack, _entities);
+						pack.saveToFile(WE::EditorConfiguration::GetEditedSceneDirectory() + std::string(_sceneName) + ".raw_scene");
+					}
+					{
+						BinaryEntityPack binaryPack = pack.toBinary();
+						binaryPack.saveToFile(WE::EditorConfiguration::GetExportedSceneDirectory() + std::string(_exportName) + ".scene");
+					}
 
 					WESerialization::SetSerializeForEditor(false);
-				}
-				ImGui::InputText("Export name", _exportName, MAX_SCENE_NAME_LENGTH);
-				ImGui::SameLine();
-				if (ImGui::Button("Export scene"))
-				{
-					WESerialization::SetSerializeForEditor(false);
-
-					ReadableEntityPack pack;
-					CreateReadableEntityPack(pack, _entities);
-					BinaryEntityPack binaryPack = pack.toBinary();
-					binaryPack.saveToFile(WE::EditorConfiguration::GetExportedSceneDirectory() + std::string(_exportName) + ".scene");
 				}
 
 				ImGui::EndChild();

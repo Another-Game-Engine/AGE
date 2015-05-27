@@ -303,10 +303,6 @@ namespace AGE
 						Entity duplicate = scene->createEntity();
 						spawn(duplicate, name);
 				}
-				if (ImGui::SmallButton("Save archetype library"))
-				{
-					save();
-				}
 			}
 
 			ImGui::EndChild();

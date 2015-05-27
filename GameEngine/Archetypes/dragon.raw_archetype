@@ -73,7 +73,8 @@
             "flags": 0,
             "components_number": [
                 0,
-                1
+                1,
+                10
             ],
             "archetypesDependency": [],
             "AGE_CORE_EntityRepresentationComponent": {
@@ -96,6 +97,15 @@
                     "type": 0,
                     "data": 0
                 }
+            },
+            "AGE_CORE_RotationComponent": {
+                "cereal_class_version": 1,
+                "Angles": {
+                    "value0": 0,
+                    "value1": 1,
+                    "value2": 0
+                },
+                "Speed": 5
             }
         }
     }
