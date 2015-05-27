@@ -10,6 +10,7 @@
 #include <SpacePartitioning/Ouptut/RenderPainter.hh>
 #include <SpacePartitioning/Ouptut/RenderCamera.hh>
 #include <Render/ProgramResources/Types/Uniform/Mat4.hh>
+#include <Render/ProgramResources/Types/Uniform/Sampler/Sampler3D.hh>
 #include <Core/ConfigurationManager.hpp>
 #include <Core/Engine.hh>
 #include <Configuration.hpp>
@@ -74,6 +75,7 @@ namespace AGE
 
 			_programs[PROGRAM_SKYBOX]->use();
 			// uniform
+			_programs[PROGRAM_SKYBOX]->get_resource<Sampler3D>("skybox").set(infos.data.texture);
 			_painterManager->get_painter(_painterCube)->uniqueDraw(GL_QUADS, _programs[PROGRAM_SKYBOX], Properties(), _cube);
 		}
 	}

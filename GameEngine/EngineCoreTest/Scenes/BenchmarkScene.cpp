@@ -131,6 +131,7 @@ namespace AGE
 			auto cam = camera.addComponent<CameraComponent>();
 			camera.addComponent<FreeFlyComponent>();
 			cam->setPipeline(RenderType::DEFERRED);
+			cam->setTexture(_skybox);
 			camera.getLink().setPosition(glm::vec3(0, 2.5f, 4.5f));
 
 			auto sceneFileName = EngineCoreTestConfiguration::getSelectedScenePath() + "_export.json";

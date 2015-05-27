@@ -38,6 +38,7 @@ namespace AGE
 		_deferredMerging = std::make_shared<DeferredMerging>(screen_size, _painter_manager, _diffuse, _lightAccumulation, _shinyAccumulation);
 		std::shared_ptr<DeferredMergingDebug> debugMerging = std::make_shared<DeferredMergingDebug>(screen_size, _painter_manager, _debugLights);
 
+		setAmbient(glm::vec3(0.2f));
 		// The entry point is the basic buffering pass
 		_rendering_list.emplace_back(shadowBuffering);
 		// We link the entry point with the other pass
@@ -50,7 +51,6 @@ namespace AGE
 		_rendering_list.emplace_back(_deferredMerging);
 		_rendering_list.emplace_back(debugMerging);
 
-		setAmbient(glm::vec3(0.2f));
 	}
 
 	DebugDeferredShading::DebugDeferredShading(DebugDeferredShading &&move) :

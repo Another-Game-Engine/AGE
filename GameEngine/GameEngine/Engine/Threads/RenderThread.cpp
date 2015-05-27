@@ -71,11 +71,11 @@ namespace AGE
 		// to be sure that this function is only called in render thread
 		AGE_ASSERT(GetThreadManager()->getCurrentThread() == (AGE::Thread*)GetRenderThread());
 
-		if (SimpleGeometry::quadMesh.verticesKey.isValid() &&
-			SimpleGeometry::quadMesh.painterKey.isValid())
+		if (SimpleGeometry::cubeMesh.verticesKey.isValid() &&
+			SimpleGeometry::cubeMesh.painterKey.isValid())
 		{
-			v = SimpleGeometry::quadMesh.verticesKey;
-			p = SimpleGeometry::quadMesh.painterKey;
+			v = SimpleGeometry::cubeMesh.verticesKey;
+			p = SimpleGeometry::cubeMesh.painterKey;
 			return;
 		}
 
