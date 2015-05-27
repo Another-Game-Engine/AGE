@@ -17,5 +17,7 @@ namespace AGE
 
 	protected:
 		virtual void renderPass(RenderPipeline const &, RenderLightList &, CameraInfos const &);
+		Key<Painter> _painterCube;
+		Key<Vertices> _cube;
 	};
 }

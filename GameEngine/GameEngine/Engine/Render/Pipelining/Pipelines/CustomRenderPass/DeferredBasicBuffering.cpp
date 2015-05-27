@@ -88,7 +88,7 @@ namespace AGE
 			OpenGLState::glClearStencil(0);
 			OpenGLState::glStencilFunc(GL_ALWAYS, 0, 0xFFFFFFFF);
 			OpenGLState::glStencilOp(GL_KEEP, GL_KEEP, GL_INCR);
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+			glClear(GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 		}
 #ifdef OCCLUSION_CULLING
 
@@ -112,8 +112,6 @@ namespace AGE
 				}
 			}
 		}
-
-
 		{
 			SCOPE_profile_gpu_i("Copy occlusion depth to CPU");
 			SCOPE_profile_cpu_i("RenderTimer", "Copy occlusion depth to CPU");

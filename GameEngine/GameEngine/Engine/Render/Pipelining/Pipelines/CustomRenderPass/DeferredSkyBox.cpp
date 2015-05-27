@@ -51,6 +51,7 @@ namespace AGE
 			std::make_shared<UnitProg>(vertexShaderPath, GL_VERTEX_SHADER),
 			std::make_shared<UnitProg>(fragmentShaderPath, GL_FRAGMENT_SHADER)
 		}));
+		GetRenderThread()->getCube(_cube, _painterCube);
 	}
 
 	void DeferredSkyBox::renderPass(RenderPipeline const &pipeline, RenderLightList &, CameraInfos const &infos)
@@ -73,7 +74,7 @@ namespace AGE
 
 			_programs[PROGRAM_SKYBOX]->use();
 			// uniform
-			// draw
+			_painterManager->get_painter(_painterCube)->uniqueDraw(GL_QUADS, _programs[PROGRAM_SKYBOX], Properties(), _cube);
 		}
 	}
 

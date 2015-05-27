@@ -7,6 +7,7 @@
 #include <Render/Pipelining/Pipelines/CustomRenderPass/DeferredMerging.hh>
 #include <Render/Pipelining/Pipelines/CustomRenderPass/DeferredMergingDebug.hh>
 #include <Render/Pipelining/Pipelines/CustomRenderPass/DeferredShadowBuffering.hh>
+#include <Render/Pipelining/Pipelines/CustomRenderPass/DeferredSkyBox.hh>
 #include <Render/Pipelining/Pipelines/PipelineTools.hh>
 #include <Configuration.hpp>
 
@@ -26,6 +27,7 @@ namespace AGE
 		_shinyAccumulation = createRenderPassOutput<Texture2D>(screen_size.x, screen_size.y, GL_RGBA8, true);
 
 		// We create the render pass
+		std::shared_ptr<DeferredSkyBox> skybox = std::make_shared<DeferredSkyBox>(screen_size, _painter_manager, _diffuse);
 		std::shared_ptr<DeferredBasicBuffering> basicBuffering = std::make_shared<DeferredBasicBuffering>(screen_size, _painter_manager, _diffuse, _normal, _specular, _depthStencil);
 		std::shared_ptr<DeferredDebugBuffering> debugBuffering = std::make_shared<DeferredDebugBuffering>(screen_size, _painter_manager, _debugLights, _depthStencil);
 		std::shared_ptr<DeferredSpotLightning> spotLightning = std::make_shared<DeferredSpotLightning>(screen_size, _painter_manager, _normal, _depthStencil, _specular, _lightAccumulation, _shinyAccumulation);
@@ -39,6 +41,7 @@ namespace AGE
 		// The entry point is the basic buffering pass
 		_rendering_list.emplace_back(shadowBuffering);
 		// We link the entry point with the other pass
+		_rendering_list.emplace_back(skybox);
 		_rendering_list.emplace_back(basicBuffering);
 		_rendering_list.emplace_back(debugBuffering);
 		_rendering_list.emplace_back(directionalLightning);
