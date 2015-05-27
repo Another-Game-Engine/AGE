@@ -32,7 +32,6 @@ namespace AGE
 				//
 				auto name = "\0";
 				strcpy_s(_sceneName, name);
-				strcpy_s(_exportName, name);
 				_meshRenderers.requireComponent<MeshRenderer>();
 
 				generateBasicEntities();
@@ -217,7 +216,7 @@ namespace AGE
 					}
 					{
 						BinaryEntityPack binaryPack = pack.toBinary();
-						binaryPack.saveToFile(WE::EditorConfiguration::GetExportedSceneDirectory() + std::string(_exportName) + ".scene");
+						binaryPack.saveToFile(WE::EditorConfiguration::GetExportedSceneDirectory() + std::string(_sceneName) + ".scene");
 					}
 
 					WESerialization::SetSerializeForEditor(false);

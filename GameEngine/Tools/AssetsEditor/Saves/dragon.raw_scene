@@ -47,7 +47,7 @@
                 "value": 13917482855567903631
             }
         ],
-        "entityNumber": 4,
+        "entityNumber": 3,
         "Entity_0": {
             "cereal_class_version": 0,
             "link": {
@@ -58,134 +58,9 @@
                     "value2": 0
                 },
                 "Scale": {
-                    "value0": 1,
-                    "value1": 1,
-                    "value2": 1
-                },
-                "Orientation": {
-                    "value0": 0,
-                    "value1": -0.70710635185241699,
-                    "value2": 0,
-                    "value3": 0.70710724592208862
-                }
-            },
-            "children": [
-                1,
-                2
-            ],
-            "flags": 0,
-            "components_number": [
-                0
-            ],
-            "archetypesDependency": [],
-            "AGE_CORE_EntityRepresentationComponent": {
-                "cereal_class_version": 0,
-                "name": "root"
-            }
-        },
-        "Entity_1": {
-            "link": {
-                "Position": {
-                    "value0": 6,
-                    "value1": 0,
-                    "value2": 0
-                },
-                "Scale": {
-                    "value0": 1,
-                    "value1": 1,
-                    "value2": 1
-                },
-                "Orientation": {
-                    "value0": 0,
-                    "value1": 0.70710635185241699,
-                    "value2": 0,
-                    "value3": 0.70710724592208862
-                }
-            },
-            "children": [],
-            "flags": 0,
-            "components_number": [
-                0,
-                4
-            ],
-            "archetypesDependency": [],
-            "AGE_CORE_EntityRepresentationComponent": {
-                "name": "spot"
-            },
-            "AGE_CORE_SpotLightComponent": {
-                "cereal_class_version": 0,
-                "color": {
-                    "value0": 1,
-                    "value1": 0.61568629741668701,
-                    "value2": 1
-                },
-                "range": {
-                    "value0": 0.038000002503395081,
-                    "value1": 0.02500000037252903,
-                    "value2": 0
-                },
-                "exponent": 0,
-                "cutOff": 0
-            }
-        },
-        "Entity_2": {
-            "link": {
-                "Position": {
-                    "value0": -3,
-                    "value1": 1,
-                    "value2": 0
-                },
-                "Scale": {
-                    "value0": 1,
-                    "value1": 4,
-                    "value2": 10
-                },
-                "Orientation": {
-                    "value0": 0,
-                    "value1": 0,
-                    "value2": 0,
-                    "value3": 1
-                }
-            },
-            "children": [],
-            "flags": 0,
-            "components_number": [
-                0,
-                1
-            ],
-            "archetypesDependency": [],
-            "AGE_CORE_EntityRepresentationComponent": {
-                "name": "wall"
-            },
-            "AGE_CORE_MeshRenderer": {
-                "cereal_class_version": 1,
-                "value0": {
-                    "ptr_wrapper": {
-                        "valid": 1,
-                        "data": {
-                            "value0": "cube/cube.sage",
-                            "value1": "pixar128 library/brick/red_dutch.mage",
-                            "value2": ""
-                        }
-                    }
-                },
-                "value1": {
-                    "type": 0,
-                    "data": 16
-                }
-            }
-        },
-        "Entity_3": {
-            "link": {
-                "Position": {
-                    "value0": 0,
-                    "value1": 0,
-                    "value2": 0
-                },
-                "Scale": {
-                    "value0": 6,
-                    "value1": 6,
-                    "value2": 6
+                    "value0": 5,
+                    "value1": 5,
+                    "value2": 5
                 },
                 "Orientation": {
                     "value0": 0,
@@ -211,7 +86,89 @@
                 "value2": false
             },
             "AGE_CORE_EntityRepresentationComponent": {
-                "name": "Entity 0-Copy"
+                "cereal_class_version": 0,
+                "name": "dragon-Copy"
+            }
+        },
+        "Entity_1": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 0.5,
+                    "value2": 3
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                4
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "light"
+            },
+            "AGE_CORE_SpotLightComponent": {
+                "cereal_class_version": 0,
+                "color": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "range": {
+                    "value0": 1,
+                    "value1": 0.10000000149011612,
+                    "value2": 0.0099999997764825821
+                },
+                "exponent": 5,
+                "cutOff": 0.5
+            }
+        },
+        "Entity_2": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": -7
+                },
+                "Scale": {
+                    "value0": 18,
+                    "value1": 8,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "wall"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "cereal_class_version": 2,
+                "value0": "pixar128 library/brick/red_dutch.mage",
+                "value1": "cube/cube.sage",
+                "value2": ""
             }
         }
     }

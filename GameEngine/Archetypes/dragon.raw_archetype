@@ -58,9 +58,9 @@
                     "value2": 0
                 },
                 "Scale": {
-                    "value0": 6,
-                    "value1": 6,
-                    "value2": 6
+                    "value0": 4,
+                    "value1": 4,
+                    "value2": 4
                 },
                 "Orientation": {
                     "value0": 0,
@@ -79,24 +79,13 @@
             "archetypesDependency": [],
             "AGE_CORE_EntityRepresentationComponent": {
                 "cereal_class_version": 0,
-                "name": "Entity 0"
+                "name": "dragon"
             },
             "AGE_CORE_MeshRenderer": {
-                "cereal_class_version": 1,
-                "value0": {
-                    "ptr_wrapper": {
-                        "valid": 1,
-                        "data": {
-                            "value0": "alduin/alduin.sage",
-                            "value1": "alduin/alduin.mage",
-                            "value2": ""
-                        }
-                    }
-                },
-                "value1": {
-                    "type": 0,
-                    "data": 0
-                }
+                "cereal_class_version": 2,
+                "value0": "alduin/alduin.mage",
+                "value1": "alduin/alduin.sage",
+                "value2": ""
             },
             "AGE_CORE_RotationComponent": {
                 "cereal_class_version": 1,

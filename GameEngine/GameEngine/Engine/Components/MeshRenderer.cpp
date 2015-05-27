@@ -19,7 +19,6 @@ namespace AGE
 {
 	MeshRenderer::MeshRenderer() :
 		ComponentBase()
-		, _serializationInfos(nullptr)
 	{
 	}
 
@@ -59,6 +58,9 @@ namespace AGE
 		{
 			return false;
 		}
+		_meshPath = mesh->path;
+		_materialPath = material->path;
+
 		if (!_key.invalid())
 		{
 			entity.getLink().unregisterOctreeObject(_key);
@@ -93,16 +95,17 @@ namespace AGE
 		_material = o->_material;
 		_mesh = o->_mesh;
 		_renderMode = o->_renderMode;
+		_materialPath = o->_materialPath;
+		_meshPath = o->_meshPath;
 #ifdef EDITOR_ENABLED
 		selectedMeshIndex = o->selectedMeshIndex;
 		selectedMeshName = o->selectedMeshName;
-		selectedMeshPath = o->selectedMeshPath;
 
 		selectedMaterialIndex = o->selectedMaterialIndex;
 		selectedMaterialName = o->selectedMaterialName;
-		selectedMaterialPath = o->selectedMaterialPath;
 #endif
 		setMeshAndMaterial(_mesh, _material);
+		postUnserialization();
 	}
 
 	std::shared_ptr<AGE::MeshInstance> MeshRenderer::getMesh()
@@ -129,38 +132,38 @@ namespace AGE
 	void MeshRenderer::postUnserialization()
 	{
 		auto scene = entity.getScene();
-		
-		if (_serializationInfos)
+
+		auto meshptr = scene->getInstance<AGE::AssetsManager>()->getMesh(_meshPath);
+		if (!_meshPath.empty() && (!meshptr || !meshptr->isValid()))
 		{
-			_mesh = scene->getInstance<AGE::AssetsManager>()->getMesh(_serializationInfos->mesh);
-			if (!_serializationInfos->mesh.empty() && !_mesh)
-			{
-				scene->getInstance<AGE::AssetsManager>()->pushNewCallback(_serializationInfos->mesh, scene,
-					std::function<void()>([=](){
-					_mesh = scene->getInstance<AGE::AssetsManager>()->getMesh(_serializationInfos->mesh);
-					setMeshAndMaterial(_mesh, _material);
-				}));
-				scene->getInstance<AGE::AssetsManager>()->loadMesh(_serializationInfos->mesh
-					, _serializationInfos->mesh);
-			}
-
-			_material = scene->getInstance<AGE::AssetsManager>()->getMaterial(_serializationInfos->material);
-			if (!_serializationInfos->material.empty() && !_material)
-			{
-				scene->getInstance<AGE::AssetsManager>()->pushNewCallback(_serializationInfos->material, scene,
-					std::function<void()>([=](){
-					_material = scene->getInstance<AGE::AssetsManager>()->getMaterial(_serializationInfos->material);
-					setMeshAndMaterial(_mesh, _material);
-				}));
-				scene->getInstance<AGE::AssetsManager>()->loadMaterial(_serializationInfos->material, _serializationInfos->material);
-			}
-
-			setMeshAndMaterial(_mesh, _material);
-#ifdef EDITOR_ENABLED
-			selectedMaterialPath = _serializationInfos->material;
-			selectedMeshPath = _serializationInfos->mesh;
-#endif
+			scene->getInstance<AGE::AssetsManager>()->pushNewCallback(_meshPath, scene,
+				std::function<void()>([=](){
+				_mesh = scene->getInstance<AGE::AssetsManager>()->getMesh(_meshPath);
+				setMeshAndMaterial(_mesh, _material);
+			}));
+			scene->getInstance<AGE::AssetsManager>()->loadMesh(_meshPath, _meshPath);
 		}
+		else
+		{
+			_mesh = meshptr;
+		}
+
+		auto materialptr = scene->getInstance<AGE::AssetsManager>()->getMaterial(_materialPath);
+		if (!_materialPath.empty() && (!materialptr || !materialptr->isValid()))
+		{
+			scene->getInstance<AGE::AssetsManager>()->pushNewCallback(_materialPath, scene,
+				std::function<void()>([=](){
+				_material = scene->getInstance<AGE::AssetsManager>()->getMaterial(_materialPath);
+				setMeshAndMaterial(_mesh, _material);
+			}));
+			scene->getInstance<AGE::AssetsManager>()->loadMaterial(_materialPath, _materialPath);
+		}
+		else
+		{
+			_material = materialptr;
+		}
+
+		setMeshAndMaterial(_mesh, _material);
 	}
 
 #ifdef EDITOR_ENABLED
@@ -175,12 +178,12 @@ namespace AGE
 		bool modified = false;
 		auto scene = entity.getScene();
 
-		if ((*meshPathList)[selectedMeshIndex] != selectedMeshPath)
+		if ((*meshPathList)[selectedMeshIndex] != _meshPath)
 		{
 			std::size_t i = 0;
 			for (auto &e : *meshPathList)
 			{
-				if (e == selectedMeshPath)
+				if (e == _meshPath)
 				{
 					selectedMeshIndex = i;
 					modified = true;
@@ -190,12 +193,12 @@ namespace AGE
 			}
 		}
 		//---
-		if ((*materialPathList)[selectedMaterialIndex] != selectedMaterialPath)
+		if ((*materialPathList)[selectedMaterialIndex] != _materialPath)
 		{
 			std::size_t i = 0;
 			for (auto &e : *materialPathList)
 			{
-				if (e == selectedMaterialPath)
+				if (e == _materialPath)
 				{
 					selectedMaterialIndex = i;
 					modified = true;
@@ -229,21 +232,21 @@ namespace AGE
 			modified = true;
 
 			selectedMeshName = (*meshFileList)[selectedMeshIndex];
-			selectedMeshPath = (*meshPathList)[selectedMeshIndex];
+			_meshPath = (*meshPathList)[selectedMeshIndex];
 
-			_mesh = scene->getInstance<AGE::AssetsManager>()->getMesh(selectedMeshPath);
+			_mesh = scene->getInstance<AGE::AssetsManager>()->getMesh(_meshPath);
 
 			if (!_mesh)
 			{
-				scene->getInstance<AGE::AssetsManager>()->pushNewCallback(selectedMeshPath, scene,
+				scene->getInstance<AGE::AssetsManager>()->pushNewCallback(_meshPath, scene,
 					std::function<void()>([=](){
-					_mesh = scene->getInstance<AGE::AssetsManager>()->getMesh(selectedMeshPath);
+					_mesh = scene->getInstance<AGE::AssetsManager>()->getMesh(_meshPath);
 					if (_mesh && _material)
 					{
 						setMeshAndMaterial(_mesh, _material);
 					}
 				}));
-				scene->getInstance<AGE::AssetsManager>()->loadMesh(OldFile(selectedMeshPath), selectedMeshPath);
+				scene->getInstance<AGE::AssetsManager>()->loadMesh(OldFile(_meshPath), _meshPath);
 			}
 			else
 			{
@@ -261,21 +264,21 @@ namespace AGE
 			modified = true;
 
 			selectedMaterialName = (*materialFileList)[selectedMaterialIndex];
-			selectedMaterialPath = (*materialPathList)[selectedMaterialIndex];
+			_materialPath = (*materialPathList)[selectedMaterialIndex];
 
-			_material = scene->getInstance<AGE::AssetsManager>()->getMaterial(selectedMaterialPath);
+			_material = scene->getInstance<AGE::AssetsManager>()->getMaterial(_materialPath);
 
 			if (!_material)
 			{
-				scene->getInstance<AGE::AssetsManager>()->pushNewCallback(selectedMaterialPath, scene,
+				scene->getInstance<AGE::AssetsManager>()->pushNewCallback(_materialPath, scene,
 					std::function<void()>([=](){
-					_material = scene->getInstance<AGE::AssetsManager>()->getMaterial(selectedMaterialPath);
+					_material = scene->getInstance<AGE::AssetsManager>()->getMaterial(_materialPath);
 					if (_mesh && _material)
 					{
 						setMeshAndMaterial(_mesh, _material);
 					}
 				}));
-				scene->getInstance<AGE::AssetsManager>()->loadMaterial(OldFile(selectedMaterialPath), selectedMaterialPath);
+				scene->getInstance<AGE::AssetsManager>()->loadMaterial(OldFile(_materialPath), _materialPath);
 			}
 			else
 			{

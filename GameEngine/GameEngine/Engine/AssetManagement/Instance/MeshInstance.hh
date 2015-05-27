@@ -11,6 +11,7 @@
 
 namespace AGE
 {
+	class AssetsManager;
 
 	struct SubMeshInstance
 	{
@@ -23,10 +24,22 @@ namespace AGE
 
 	struct MeshInstance
 	{
+		MeshInstance()
+		{
+			_valid = false;
+		}
 		std::string name;
 		std::string path;
 		std::vector<SubMeshInstance> subMeshs;
 		std::shared_ptr<MeshData> meshData;
+
+		bool isValid()
+		{
+			return _valid;
+		}
+	private:
+		std::atomic<bool> _valid;
+		friend class AssetsManager;
 	};
 
 }
