@@ -105,10 +105,9 @@ namespace AGE
 			//but to the ArchetypeScene.
 			GetMainThread()->setSceneAsActive(getScene().get());
 			bool success = getScene()->copyEntity(entity, representation->root, true, false);
+
 			GetMainThread()->setSceneAsActive(scene);
 			AGE_ASSERT(success);
-
-
 
 			representation->root.getComponent<EntityRepresentation>()->editorOnly = true;
 
@@ -152,6 +151,8 @@ namespace AGE
 			entityRepresentationComponent->_archetypeLinked = representation;
 
 			representation->entities.insert(entity);
+
+			entity.addComponent<ArchetypeComponent>(name);
 
 			_archetypesCollection.insert(std::make_pair(name, representation));
 
