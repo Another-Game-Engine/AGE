@@ -39,19 +39,9 @@ namespace AGE
 
 			virtual void postUnserialization();
 
-			inline bool isLinkedToArchetype() const
-			{
-				return _archetypeLinked != nullptr;
-			}
-
 			inline bool isArchetype() const
 			{
 				return _isArchetype;
-			}
-
-			inline bool parentIsArchetype() const
-			{
-				return _parentIsArchetype;
 			}
 
 			char name[ENTITY_NAME_LENGTH];
@@ -64,10 +54,6 @@ namespace AGE
 
 			//if it's an archetype
 			bool _isArchetype = false;
-
-			//if is the child of an instance of an archetype
-			bool _parentIsArchetype = false;
-
 
 			// component is not serialized in export
 			virtual bool serializeInExport() { return false; }

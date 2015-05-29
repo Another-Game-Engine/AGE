@@ -86,14 +86,18 @@ namespace AGE
 	template <typename Archive>
 	void MeshRenderer::save(Archive &ar, const std::uint32_t version) const
 	{
-		ar(_materialPath, _meshPath, _animationPath);
+		ar(_materialPath, _meshPath, _animationPath, _renderMode);
 	}
 
 	template <typename Archive>
 	void MeshRenderer::load(Archive &ar, const std::uint32_t version)
 	{
 		ar(_materialPath, _meshPath, _animationPath);
+		if (version >= 3)
+		{
+			ar(_renderMode);
+		}
 	}
 }
 
-CEREAL_CLASS_VERSION(AGE::MeshRenderer, 2)
+CEREAL_CLASS_VERSION(AGE::MeshRenderer, 3)

@@ -15,6 +15,7 @@ namespace AGE
 
 		ArchetypeComponent();
 		std::string archetypeName;
+		bool parentIsAnArchetype = false;
 #ifdef EDITOR_ENABLED
 		bool synchronizePosition;
 		bool synchronizeRotation;
@@ -30,10 +31,10 @@ namespace AGE
 		void serialize(Archive &ar, const std::uint32_t version)
 		{
 			ar(CEREAL_NVP(archetypeName));
-			if (version > 0)
+			if (version > 1)
 			{
 #ifdef EDITOR_ENABLED
-				ar(synchronizePosition, synchronizeRotation, synchronizeScale);
+				ar(synchronizePosition, synchronizeRotation, synchronizeScale, parentIsAnArchetype);
 #endif
 			}
 		}
@@ -48,4 +49,4 @@ namespace AGE
 	};
 }
 
-CEREAL_CLASS_VERSION(AGE::ArchetypeComponent, 1)
+CEREAL_CLASS_VERSION(AGE::ArchetypeComponent, 2)

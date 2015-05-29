@@ -40,17 +40,16 @@ namespace AGE
 			bool modified = false;
 
 			auto cpt = entity.getComponent<AGE::WE::EntityRepresentation>();
+			auto archetypeCpt = entity.getComponent<AGE::ArchetypeComponent>();
+
 
 			ImGui::InputText("Name", cpt->name, ENTITY_NAME_LENGTH);
 
-			if (cpt->isArchetype() == false)
+			cpt->position = entity.getLink().getPosition();
+			if (ImGui::InputFloat3("Position", glm::value_ptr(cpt->position)))
 			{
-				cpt->position = entity.getLink().getPosition();
-				if (ImGui::InputFloat3("Position", glm::value_ptr(cpt->position)))
-				{
-					modified = true;
-					entity.getLink().setPosition(cpt->position);
-				}
+				modified = true;
+				entity.getLink().setPosition(cpt->position);
 			}
 
 			if (ImGui::InputFloat3("Rotation", glm::value_ptr(cpt->rotation)))
@@ -68,7 +67,7 @@ namespace AGE
 
 			ImGui::Separator();
 
-			if (cpt->isLinkedToArchetype())
+			if (archetypeCpt && archetypeCpt->parentIsAnArchetype == false)
 			{
 				ImGui::TextColored(ImVec4(0.8f, 0.4f, 0.5f, 1.0f), "Entity is Archetype, edit the proper archetype.");
 
@@ -77,8 +76,7 @@ namespace AGE
 
 				return modified;
 			}
-
-			if (cpt->parentIsArchetype())
+			else if (archetypeCpt && archetypeCpt->parentIsAnArchetype == true)
 			{
 				ImGui::TextColored(ImVec4(0.8f, 0.4f, 0.5f, 1.0f), "Entity's parent is Archetype, edit the proper archetype.");
 
@@ -131,6 +129,8 @@ namespace AGE
 			bool modified = false;
 
 			auto cpt = entity.getComponent<AGE::WE::EntityRepresentation>();
+			auto archetypeComponent = entity.getComponent<AGE::ArchetypeComponent>();
+
 			bool opened = false;
 			opened = ImGui::TreeNode(cpt->name);
 			ImGui::PushID(entity.getPtr());
@@ -144,7 +144,7 @@ namespace AGE
 						selectedEntity = entity.getPtr();
 					}
 				}
-				else if (editableHierarchy && !cpt->isLinkedToArchetype())
+				else if (editableHierarchy && archetypeComponent == nullptr)
 				{
 					ImGui::SameLine();
 					if (ImGui::SmallButton("Set as parent"))
@@ -157,7 +157,8 @@ namespace AGE
 			}
 			else
 			{
-				if (!selectParent && editableHierarchy)
+				auto canChangeHierarchy = archetypeComponent == nullptr || (archetypeComponent->parentIsAnArchetype == false);
+				if (!selectParent && editableHierarchy && canChangeHierarchy)
 				{
 					ImGui::SameLine();
 					if (ImGui::SmallButton("Set parent"))
@@ -165,7 +166,7 @@ namespace AGE
 						selectParent = true;
 					}
 				}
-				else if (editableHierarchy)
+				else if (editableHierarchy && canChangeHierarchy)
 				{
 					ImGui::SameLine();
 					if (ImGui::SmallButton("Root"))

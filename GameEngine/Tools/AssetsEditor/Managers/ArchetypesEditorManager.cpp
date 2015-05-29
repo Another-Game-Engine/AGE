@@ -133,9 +133,11 @@ namespace AGE
 			for (auto &e : tmpEntitiesList)
 			{
 				auto er = e->getComponent<EntityRepresentation>();
+				e->addComponent<ArchetypeComponent>(name);
+				e->getComponent<ArchetypeComponent>()->parentIsAnArchetype = false;
 				if (er != entityRepresentationComponent)
 				{
-					er->_parentIsArchetype = true;
+					e->getComponent<ArchetypeComponent>()->parentIsAnArchetype = true;
 				}
 			}
 
@@ -152,8 +154,6 @@ namespace AGE
 
 			representation->entities.insert(entity);
 
-			entity.addComponent<ArchetypeComponent>(name);
-
 			_archetypesCollection.insert(std::make_pair(name, representation));
 
 			_regenerateImGuiNamesList();
@@ -165,7 +165,6 @@ namespace AGE
 			AGE_ASSERT(it != std::end(_archetypesCollection));
 
 			entity.getScene()->copyEntity(it->second->root, entity, true, false);
-			entity.addComponent<AGE::ArchetypeComponent>(name);
 
 			auto representation = entity.getComponent<EntityRepresentation>();
 
@@ -178,10 +177,10 @@ namespace AGE
 
 			for (auto &e : tmpEntitiesList)
 			{
-				auto er = e->getComponent<EntityRepresentation>();
-				if (er != representation)
+				e->addComponent<ArchetypeComponent>(name);
+				if (e != = entity)
 				{
-					er->_parentIsArchetype = true;
+					e->getComponent<ArchetypeComponent>()->parentIsAnArchetype = true;
 				}
 			}
 
@@ -276,7 +275,8 @@ namespace AGE
 
 					for (auto &t : types)
 					{
-						if (!_selectedEntity->haveComponent(t.second))
+						if (!_selectedEntity->haveComponent(t.second)
+							&& t.second != Component<ArchetypeComponent>::getTypeId())
 						{
 							if (ImGui::SmallButton(std::string("Add : " + ComponentRegistrationManager::getInstance().getComponentName(t.second)).c_str()))
 							{

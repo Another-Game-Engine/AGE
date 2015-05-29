@@ -121,8 +121,9 @@ namespace AGE
 					ImGui::Separator();
 
 					auto representation = entity.getComponent<AGE::WE::EntityRepresentation>();
+					auto archetypeCpt = entity.getComponent<AGE::ArchetypeComponent>();
 
-					if (representation->isLinkedToArchetype() == false && representation->parentIsArchetype() == false)
+					if (archetypeCpt == nullptr)
 					{
 						auto &types = ComponentRegistrationManager::getInstance().getExposedType();
 						auto &creationFn = ComponentRegistrationManager::getInstance().getCreationFunctions();
@@ -141,20 +142,24 @@ namespace AGE
 						ImGui::Separator();
 					}
 
-					if (representation->parentIsArchetype() == false && ImGui::SmallButton("Delete entity"))
+					auto isAnArchetype = archetypeCpt != nullptr;
+					auto isAnArchetypeChild = isAnArchetype && archetypeCpt->parentIsAnArchetype;
+
+					if (!isAnArchetypeChild && ImGui::SmallButton("Delete entity"))
 					{
-						_scene->destroy(entity);
+						auto destroyAllHierarchy = archetypeCpt != nullptr;
+						_scene->destroy(entity, destroyAllHierarchy);
 						_selectedEntity = nullptr;
 						_selectedEntityIndex = 0;
 					}
 
-					if (representation->isLinkedToArchetype() == false && representation->parentIsArchetype() == false && ImGui::SmallButton("Duplicate"))
+					if (isAnArchetypeChild == false && ImGui::SmallButton("Duplicate"))
 					{
 						Entity duplicate;
 						_scene->copyEntity(entity, duplicate, true, false);
 					}
 
-					if (representation->isLinkedToArchetype() == false && representation->parentIsArchetype() == false)
+					if (isAnArchetypeChild == false)
 					{
 						ImGui::InputText("Archetype name", _archetypeName, MAX_SCENE_NAME_LENGTH);
 						if (ImGui::SmallButton("Convert to Archetype"))
