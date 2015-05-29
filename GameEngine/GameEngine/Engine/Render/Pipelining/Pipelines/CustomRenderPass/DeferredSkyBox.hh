@@ -12,7 +12,8 @@ namespace AGE
 	public:
 		DeferredSkyBox(glm::uvec2 const &screenSize,
 			std::shared_ptr<PaintingManager> painterManager,
-			std::shared_ptr<Texture2D> diffuse);
+			std::shared_ptr<Texture2D> diffuse,
+			std::shared_ptr<Texture2D> depth);
 		virtual ~DeferredSkyBox() = default;
 
 	protected:
