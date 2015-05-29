@@ -24,6 +24,7 @@ namespace AGE
 
 	void ReadableEntity::save(cereal::JSONOutputArchive &ar, const std::uint32_t version) const
 	{
+
 		AGE::Link link = entity.getLink();
 		ENTITY_FLAGS flags = entity.getFlags();
 		ar(cereal::make_nvp("link", link)

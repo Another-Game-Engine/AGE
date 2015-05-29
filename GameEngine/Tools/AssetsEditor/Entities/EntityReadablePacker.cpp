@@ -1,7 +1,6 @@
 #include "EntityReadablePacker.hpp"
 #include <Entities/EntityData.hh>
 #include <Entities/Entity.hh>
-#include <Entities/EntityPacker.hpp>
 #include <Entities/ReadableEntityPack.hpp>
 #include <Entities/ReadableEntity.hpp>
 #include <Managers/ArchetypesEditorManager.hpp>
@@ -23,14 +22,22 @@ namespace AGE
 
 	void CreateReadableEntityPack(ReadableEntityPack &pack, std::vector<Entity> &selection)
 	{
-		SelectionToFlatVector<ReadableEntity>(selection, pack.entities);
+		std::vector<ReadableEntity> entities;
+		SelectionToFlatReadableVector(selection, entities);
 
 		auto &typesMap = ComponentRegistrationManager::getInstance().getAgeIdToSystemIdMap();
 
 		pack.componentsIdReferenceTable = typesMap;
 
-		for (auto &representation : pack.entities)
+		for (auto &e : entities)
 		{
+			if (e.entity.haveComponent<ArchetypeComponent>()
+				&& e.entity.getComponent<ArchetypeComponent>()->parentIsAnArchetype == true)
+			{
+				continue;
+			}
+			pack.entities.push_back(e);
+			auto &representation = pack.entities.back();
 			auto &entity = representation.entity;
 			auto &components = entity.getComponentList();
 
@@ -79,4 +86,36 @@ namespace AGE
 			}
 		}
 	}
+
+	void EntityToFlatReadableVector(std::vector<ReadableEntity> &vector, const Entity &e)
+	{
+		SCOPE_profile_cpu_function("Entity packer");
+
+		vector.push_back(ReadableEntity());
+		vector.back().entity = e;
+		auto &children = e.getLink().getChildren();
+		auto parentId = vector.size() - 1;
+		for (auto &c : children)
+		{
+			auto archetypeComponent = c->getEntity()->getEntity().getComponent<ArchetypeComponent>();
+			if (archetypeComponent && archetypeComponent->parentIsAnArchetype)
+			{
+				continue;
+			}
+			vector[parentId].children.push_back(vector.size());
+			auto child = c->getEntity()->getEntity();
+			EntityToFlatReadableVector(vector, child);
+		}
+	}
+
+	void SelectionToFlatReadableVector(const std::vector<Entity> &selection, std::vector<ReadableEntity> &result)
+	{
+		SCOPE_profile_cpu_function("Entity packer");
+
+		for (auto &e : selection)
+		{
+			EntityToFlatReadableVector(result, e);
+		}
+	}
+
 }

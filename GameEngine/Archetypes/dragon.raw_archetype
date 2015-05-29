@@ -58,9 +58,9 @@
                     "value2": 0
                 },
                 "Scale": {
-                    "value0": 4,
-                    "value1": 4,
-                    "value2": 4
+                    "value0": 6,
+                    "value1": 6,
+                    "value2": 6
                 },
                 "Orientation": {
                     "value0": 0,
@@ -82,10 +82,14 @@
                 "name": "dragon"
             },
             "AGE_CORE_MeshRenderer": {
-                "cereal_class_version": 2,
+                "cereal_class_version": 3,
                 "value0": "alduin/alduin.mage",
                 "value1": "alduin/alduin.sage",
-                "value2": ""
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 16
+                }
             },
             "AGE_CORE_RotationComponent": {
                 "cereal_class_version": 1,
