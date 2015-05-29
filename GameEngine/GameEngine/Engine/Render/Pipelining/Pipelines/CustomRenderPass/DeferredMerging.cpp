@@ -32,7 +32,7 @@ namespace AGE
 		std::shared_ptr<Texture2D> diffuse,
 		std::shared_ptr<Texture2D> lightAccumulation,
 		std::shared_ptr<Texture2D> shinyAccumulation) :
-					ScreenRender(screenSize, painterManager)
+					FrameBufferRender(screenSize.x, screenSize.y, painterManager)
 	{
  		_diffuseInput = diffuse;
 		_lightAccuInput = lightAccumulation;
@@ -79,8 +79,8 @@ namespace AGE
 
 		OpenGLState::glDisable(GL_BLEND);
 		OpenGLState::glDisable(GL_CULL_FACE);
-		OpenGLState::glEnable(GL_DEPTH_TEST);
-		OpenGLState::glEnable(GL_STENCIL_TEST);
+		OpenGLState::glDisable(GL_DEPTH_TEST);
+		OpenGLState::glDisable(GL_STENCIL_TEST);
 		_quadPainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_MERGING], Properties(), _quadVertices);
 	}
 
