@@ -6,6 +6,7 @@
 #include <Render/Pipelining/Pipelines/CustomRenderPass/DeferredMerging.hh>
 #include <Render/Pipelining/Pipelines/CustomRenderPass/DeferredShadowBuffering.hh>
 #include <Render/Pipelining/Pipelines/CustomRenderPass/DeferredSkyBox.hh>
+#include <Render/Pipelining/Pipelines/CustomRenderPass/DeferredOnScreen.hh>
 #include <Render/Pipelining/Pipelines/PipelineTools.hh>
 #include <Configuration.hpp>
 
@@ -31,6 +32,7 @@ namespace AGE
 		std::shared_ptr<DeferredPointLightning> pointLightning = std::make_shared<DeferredPointLightning>(screen_size, _painter_manager, _normal, _depthStencil, _specular, _lightAccumulation, _shinyAccumulation);
 		std::shared_ptr<DeferredDirectionalLightning> directionalLightning = std::make_shared<DeferredDirectionalLightning>(screen_size, _painter_manager, _normal, _depthStencil, _specular, _lightAccumulation, _shinyAccumulation);
 		_deferredMerging = std::make_shared<DeferredMerging>(screen_size, _painter_manager, _diffuse, _lightAccumulation, _shinyAccumulation);
+		std::shared_ptr<DeferredOnScreen> deferredOnScreen = std::make_shared<DeferredOnScreen>(screen_size, _painter_manager, _diffuse);
 
 		// The entry point is the basic buffering pass
 		setAmbient(glm::vec3(0.2f));
@@ -41,6 +43,7 @@ namespace AGE
 		_rendering_list.emplace_back(spotLightning);
 		_rendering_list.emplace_back(pointLightning);
 		_rendering_list.emplace_back(_deferredMerging);
+		_rendering_list.emplace_back(deferredOnScreen);
 	}
 
 	DeferredShading::DeferredShading(DeferredShading &&move) :

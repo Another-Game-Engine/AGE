@@ -1,0 +1,11 @@
+#version 330
+
+layout (location = 0) in vec2 position;
+
+out vec2 texCoord;
+
+void main()
+{
+	texCoord = position * 0.5f + 0.5f;
+	gl_Position = position;
+}

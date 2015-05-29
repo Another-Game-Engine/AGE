@@ -38,12 +38,12 @@ namespace AGE
 		_lightAccuInput = lightAccumulation;
 		_shinyAccuInput = shinyAccumulation;
 
+		push_storage_output(GL_COLOR_ATTACHMENT0, diffuse);
+
 		_programs.resize(PROGRAM_NBR);
 
 		auto confManager = GetEngine()->getInstance<ConfigurationManager>();
-
 		auto shaderPath = confManager->getConfiguration<std::string>("ShadersPath");
-
 		// you have to set shader directory in configuration path
 		AGE_ASSERT(shaderPath != nullptr);
 

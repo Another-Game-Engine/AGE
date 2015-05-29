@@ -250,6 +250,7 @@
     <ClCompile Include="Engine\Render\DepthMapHandle.cpp" />
     <ClCompile Include="Engine\Render\DepthMapManager.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredDirectionalLightning.cpp" />
+    <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredOnScreen.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredShadowBuffering.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredSkyBox.cpp" />
     <ClCompile Include="Engine\Render\ProgramResources\Types\Uniform\Sampler\Sampler3D.cpp" />
@@ -485,6 +486,7 @@
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredDirectionalLightning.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredMerging.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredMergingDebug.hh" />
+    <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredOnScreen.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredPointLightning.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredBasicBuffering.hh" />
     <ClInclude Include="Engine\Core\Inputs\ActionManager.hh" />
