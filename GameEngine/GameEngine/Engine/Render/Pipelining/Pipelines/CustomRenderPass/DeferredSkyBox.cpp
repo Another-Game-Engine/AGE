@@ -78,6 +78,8 @@ namespace AGE
 			SCOPE_profile_cpu_i("RenderTimer", "Draw all objects");
 
 			_programs[PROGRAM_SKYBOX]->use();
+			_programs[PROGRAM_SKYBOX]->get_resource<Mat4>("projection").set(infos.data.projection);
+			_programs[PROGRAM_SKYBOX]->get_resource<Mat4>("view").set(infos.view);
 			_programs[PROGRAM_SKYBOX]->get_resource<Sampler3D>("skybox").set(infos.data.texture);
 			_painterManager->get_painter(_painterCube)->uniqueDraw(GL_QUADS, _programs[PROGRAM_SKYBOX], Properties(), _cube);
 		}
