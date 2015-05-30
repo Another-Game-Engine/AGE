@@ -191,10 +191,12 @@ namespace AGE
 		{
 			ImGui::SameLine();
 			ImGui::BeginChild("Archetypes", ImVec2(ImGui::GetWindowWidth() * 0.35f, 0));
+			bool treeNodeOpen;
 
-			if (ImGui::TreeNode("Archetypes") && !_archetypesImGuiNamesList.empty()
+			if ((treeNodeOpen = ImGui::TreeNode("Archetypes") && !_archetypesImGuiNamesList.empty())
 				&& ImGui::Combo("", &_selectedArchetypeIndex, &_archetypesImGuiNamesList[0], static_cast<int>(_archetypesImGuiNamesList.size())))
 			{
+				treeNodeOpen = true;
 				if (_selectedArchetypeIndex < _archetypesImGuiNamesList.size())
 				{
 					auto name = _archetypesImGuiNamesList[_selectedArchetypeIndex];
@@ -211,7 +213,7 @@ namespace AGE
 				ImGui::TreePop();
 			}
 
-			if (_selectedArchetype != nullptr)
+			if (treeNodeOpen && _selectedArchetype != nullptr)
 			{
 				if (_selectedEntity == nullptr)
 				{
