@@ -69,6 +69,8 @@ namespace AGE
 		bool compressTextures = false;
 		int textureCompressionQuality = 2;
 		bool generateMipmap = true;
+		bool flipH = false;
+		bool flipV = false;
 
 		// Material options
 		bool bumpToNormal = true;
