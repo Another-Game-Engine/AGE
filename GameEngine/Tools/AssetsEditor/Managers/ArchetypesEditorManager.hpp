@@ -16,6 +16,7 @@ namespace AGE
 			std::set<Entity> entities;
 			Entity root;
 			std::string name;
+			bool loaded = false;
 		};
 
 		class ArchetypeEditorManager : public Dependency < ArchetypeEditorManager >, public IArchetypeManager
@@ -29,6 +30,8 @@ namespace AGE
 			virtual void loadOne(const std::string &name);
 			virtual void addOne(const std::string &name, Entity &entity);
 			virtual void spawn(Entity &entity, const std::string &name);
+
+			void loadFromFile(std::shared_ptr<ArchetypeEditorRepresentation> ptr);
 
 			std::shared_ptr<AScene> getScene();
 			void enableScene();

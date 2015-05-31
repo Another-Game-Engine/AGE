@@ -68,25 +68,11 @@ namespace AGE
 				return;
 			}
 
-			auto currentScene = GetMainThread()->getActiveScene();
-			GetMainThread()->setSceneAsActive(getScene().get());
-
 			auto representation = std::make_shared<ArchetypeEditorRepresentation>();
 			representation->name = name;
-
-			auto path = _libraryFolder + "/" + name + ".raw_archetype";
-			ReadableEntityPack pack;
-			pack.scene = getScene().get();
-			pack.loadFromFile(path);
-
-			representation->root = pack.entities.front().entity;
+			representation->loaded = false;
 			_archetypesCollection.insert(std::make_pair(name, representation));
 			_regenerateImGuiNamesList();
-
-			if (currentScene)
-			{
-				GetMainThread()->setSceneAsActive(currentScene);
-			}
 		}
 
 		void ArchetypeEditorManager::addOne(const std::string &name, Entity &entity)
@@ -159,11 +145,35 @@ namespace AGE
 			_regenerateImGuiNamesList();
 		}
 
+		void ArchetypeEditorManager::loadFromFile(std::shared_ptr<ArchetypeEditorRepresentation> ptr)
+		{
+			AGE_ASSERT(ptr != nullptr);
+
+			if (ptr->loaded == false)
+			{
+				auto currentScene = GetMainThread()->getActiveScene();
+				GetMainThread()->setSceneAsActive(getScene().get());
+
+				auto path = _libraryFolder + "/" + ptr->name + ".raw_archetype";
+				ReadableEntityPack pack;
+				pack.scene = getScene().get();
+				pack.loadFromFile(path);
+
+				ptr->root = pack.entities.front().entity;
+				ptr->loaded = true;
+
+				if (currentScene)
+				{
+					GetMainThread()->setSceneAsActive(currentScene);
+				}
+			}
+		}
+
 		void ArchetypeEditorManager::spawn(Entity &entity, const std::string &name)
 		{
 			auto it = _archetypesCollection.find(name);
 			AGE_ASSERT(it != std::end(_archetypesCollection));
-
+			loadFromFile(it->second);
 			entity.getScene()->copyEntity(it->second->root, entity, true, false);
 
 			auto representation = entity.getComponent<EntityRepresentation>();
@@ -224,6 +234,10 @@ namespace AGE
 					else
 					{
 						_selectedArchetype = find->second;
+						if (_selectedArchetype->loaded == false)
+						{
+							loadFromFile(_selectedArchetype);
+						}
 					}
 				}
 			}
