@@ -51,6 +51,10 @@ namespace AGE
 		{
 			for (auto &arch : _archetypesCollection)
 			{
+				if (arch.second->loaded == false)
+				{
+					continue;
+				}
 				ReadableEntityPack pack;
 				CreateReadableEntityPack(pack, arch.second->root);
 				auto path = _libraryFolder + "/" + arch.second->name + ".raw_archetype";
@@ -202,10 +206,20 @@ namespace AGE
 		{
 			if (ImGui::MenuItem("Show", nullptr, &_displayWindow)) {}
 			if (ImGui::MenuItem("Graphnode display", nullptr, &_graphNodeDisplay, _displayWindow)) {}
+			if (ImGui::MenuItem("Save library"))
+			{
+				_save = true;
+			}
 		}
 
 		void ArchetypeEditorManager::update(AScene *scene)
 		{
+			if (_save == true)
+			{
+				_save = false;
+				save();
+			}
+
 			if (_displayWindow == false)
 			{
 				return;

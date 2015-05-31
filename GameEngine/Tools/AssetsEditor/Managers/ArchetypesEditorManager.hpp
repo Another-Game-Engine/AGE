@@ -49,6 +49,7 @@ namespace AGE
 			bool _selectParent = false;
 			bool _displayWindow = true;
 			std::shared_ptr<AScene> _archetypesScene;
+			bool _save = false;
 
 			void _copyArchetypeToInstanciedEntity(Entity &archetype, Entity &entity);
 			void _regenerateImGuiNamesList();
