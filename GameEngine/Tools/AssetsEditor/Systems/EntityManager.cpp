@@ -15,6 +15,7 @@
 #include <Entities/ReadableEntityPack.hpp>
 #include <Entities/EntityBinaryPacker.hpp>
 #include <Entities/BinaryEntityPack.hpp>
+#include <Core/Inputs/Input.hh>
 
 namespace AGE
 {
@@ -42,6 +43,23 @@ namespace AGE
 			{
 				if (ImGui::MenuItem("Show", nullptr, &_displayWindow)) {}
 				if (ImGui::MenuItem("Graphnode display", nullptr, &_graphNodeDisplay, _displayWindow)) {}
+				if (_cam != nullptr && ImGui::BeginMenu("Render options"))
+				{
+					static char const *pipelineNames[RenderType::TOTAL] =
+					{ "Debug deferred rendering"
+					, "Deferred rendering" };
+
+					for (auto i = 0; i < RenderType::TOTAL; ++i)
+					{
+						auto enabled = _cam->getPipeline() != RenderType(i);
+						if (ImGui::MenuItem(pipelineNames[i], nullptr, nullptr, enabled) && enabled)
+						{
+							_pipelineToSet = i;
+						}
+					}
+
+					ImGui::EndMenu();
+				}
 				ImGui::Separator();
 				bool saveSceneEnabled = _sceneName[0] != '\0';
 				if (ImGui::MenuItem("Save scene", "CTRL+S", nullptr, saveSceneEnabled))
@@ -101,6 +119,12 @@ namespace AGE
 
 					WESerialization::SetSerializeForEditor(false);
 					_saveScene = false;
+				}
+
+				if (_cam && _pipelineToSet > -1)
+				{
+					_cam->setPipeline(RenderType(_pipelineToSet));
+					_pipelineToSet = -1;
 				}
 
 				if (_displayWindow == false)
@@ -270,12 +294,19 @@ namespace AGE
 				ImGui::EndChild();
 
 				ImGui::End();
-				//if (_cam != nullptr) {
-				//	static char const *pipelineNames[RenderType::TOTAL] = { "Debug deferred rendering", "Deferred rendering" };
-				//	ImGui::ListBox("Pipelines", &pipelineIndex, pipelineNames, int(RenderType::TOTAL));
-				//	if (_cam->getPipeline() != (RenderType)pipelineIndex)
-				//		_cam->setPipeline((RenderType)pipelineIndex);
-				//}
+
+				auto input = _scene->getInstance<Input>();
+
+				auto ctrl = input->getPhysicalKeyPressed(AGE_LCTRL);
+				ctrl |= input->getPhysicalKeyPressed(AGE_RCTRL);
+
+				auto sKey = input->getPhysicalKeyPressed(AGE_s);
+
+				if (ctrl && sKey && _sceneName[0])
+				{
+					_saveScene = true;
+				}
+
 			}
 
 			bool EntityManager::initialize()

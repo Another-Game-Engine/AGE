@@ -18,7 +18,7 @@ namespace AGE
 		private:
 			EntityFilter _filter;
 			EntityFilter _meshRenderers;
-			int pipelineIndex = 0;
+			int _pipelineToSet = -1;
 			bool _graphNodeDisplay;
 			bool _selectParent;
 			CameraComponent *_cam = nullptr;
