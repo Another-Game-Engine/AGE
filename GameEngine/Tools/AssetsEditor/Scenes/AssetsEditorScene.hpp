@@ -5,6 +5,7 @@
 #include <memory>
 #include <AssetFiles/Folder.hpp>
 #include <set>
+#include "IMenuInheritrance.hpp"
 
 namespace AGE
 {
@@ -13,7 +14,7 @@ namespace AGE
 		class RawFile;
 		struct CookConfig;
 	}
-	class AssetsEditorScene : public AScene
+	class AssetsEditorScene : public AScene, public IMenuInheritance
 	{
 	public:
 		static const std::string Name;
@@ -35,6 +36,9 @@ namespace AGE
 		static std::vector<const char *> &getCookedMaterialListFullPath() { return _cookedMaterialFullPath; }
 		static std::vector<const char *> &getCookedTextureList() { return _cookedTextureFiles; }
 		static std::vector<const char *> &getCookedTextureListFullPath() { return _cookedTextureFullPath; }
+
+		virtual void updateMenu();
+
 	private:
 		static AE::Folder _raw;
 	 	static AE::Folder _cook;
