@@ -22,6 +22,8 @@
 #include <Components/MeshRenderer.hh>
 #include <Components/Lifetime.hpp>
 #include <Components/RotationComponent.hpp>
+#include <Components/Collider.hpp>
+#include <Components/ArchetypeComponent.hpp>
 
 #include <Systems/RotationSystem.hpp>
 
@@ -45,8 +47,7 @@
 
 
 #include <Systems/PhysicsSystem.hpp>
-#include <Components/RigidBody.hpp>
-#include <Components/Collider.hpp>
+
 
 
 namespace AGE
@@ -86,6 +87,8 @@ namespace AGE
 		REGISTER_COMPONENT_TYPE(AGE::FreeFlyComponent);
 		REGISTER_COMPONENT_TYPE(AGE::RotationComponent);
 		REGISTER_COMPONENT_TYPE(AGE::Collider);
+		REGISTER_COMPONENT_TYPE(AGE::DirectionalLightComponent);
+		REGISTER_COMPONENT_TYPE(AGE::ArchetypeComponent);
 
 		addSystem<AGE::DebugSystem>(0);
 		addSystem<AGE::PhysicsSystem>(0, Physics::EngineType::PhysX, EngineCoreTestConfiguration::GetCookedDirectory());
@@ -102,6 +105,11 @@ namespace AGE
 		getInstance<AGE::AssetsManager>()->loadMaterial(OldFile("ball/ball.mage"), "DEMO_SCENE_BASIC_ASSETS");
 		_skyboxTest = getInstance<AGE::AssetsManager>()->loadSkybox("test", OldFile("skyboxes/test/"), { { "test_pos_x.tage", "test_neg_x.tage", "test_pos_y.tage", "test_neg_y.tage", "test_pos_z.tage", "test_neg_z.tage" } }, "DEMO_SCENE_BASIC_ASSETS");
 		_skyboxSpace = getInstance<AGE::AssetsManager>()->loadSkybox("space", OldFile("skyboxes/space/"), { { "pink_planet_pos_x.tage", "pink_planet_neg_x.tage", "pink_planet_pos_y.tage", "pink_planet_neg_y.tage", "pink_planet_pos_z.tage", "pink_planet_neg_z.tage" } }, "DEMO_SCENE_BASIC_ASSETS");
+		//getInstance<AGE::AssetsManager>()->loadAnimation(OldFile("hexapod/animation/hexapod@attack(1).aage"), "DEMO_SCENE_BASIC_ASSETS");
+		//getInstance<AGE::AssetsManager>()->loadSkeleton(OldFile("hexapod/animation/hexapod@attack(1).skage"), "DEMO_SCENE_BASIC_ASSETS");
+
+		setInstance<AGE::AnimationManager>();
+
 		srand(42);
 
 		return true;
@@ -116,12 +124,13 @@ namespace AGE
 		{
 			return true;
 		}
-
-		if (this->getNumberOfEntities() == 0
+		static int toto = 0;
+		++toto;
+		if (this->getNumberOfEntities() == 0 && toto > 10
 			|| ImGui::ListBox("Scenes"
 			, &EngineCoreTestConfiguration::getSelectedSceneIndex()
 			, EngineCoreTestConfiguration::getScenesName().data()
-			, static_cast<int>(EngineCoreTestConfiguration::getScenesName().size())))
+			, static_cast<int>(EngineCoreTestConfiguration::getScenesName().size())) && toto > 10)
 		{
 			EngineCoreTestConfiguration::saveConfigurations();
 			clearAllEntities();
@@ -136,17 +145,39 @@ namespace AGE
 			cam->addSkyBoxToChoice("test", _skyboxTest);
 			camera.getLink().setPosition(glm::vec3(0, 2.5f, 4.5f));
 
-			auto sceneFileName = EngineCoreTestConfiguration::getSelectedScenePath() + "_export.json";
-			auto assetPackageFileName = EngineCoreTestConfiguration::getSelectedScenePath() + "_assets.json";
+			auto sceneFileName = EngineCoreTestConfiguration::getSelectedScenePath();
 
-			getInstance<AssetsManager>()->pushNewCallback(assetPackageFileName, this, std::function<void()>([=](){
-				loadFromJson(sceneFileName);
-			}));
-			getInstance<AssetsManager>()->loadPackage(assetPackageFileName, assetPackageFileName);
+			if (!sceneFileName.empty())
+			{
+				load(sceneFileName);
+			}
+
+
+			//auto skeleton = getInstance<AssetsManager>()->getSkeleton("hexapod/animation/hexapod@attack(1).skage");
+			//auto animation = getInstance<AssetsManager>()->getAnimation("hexapod/animation/hexapod@attack(1).aage");
+
+			//animationTestInstance = getInstance<AGE::AnimationManager>()->createAnimationInstance(skeleton, animation);
+
+			//auto &bones = getInstance<AGE::AnimationManager>()->getBones(animationTestInstance);
+			//for (auto &e : bones)
+			//{
+			//	auto entity = createEntity();
+			//	entity.addComponent<MeshRenderer>(
+			//		getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage")
+			//		, getInstance<AGE::AssetsManager>()->getMaterial("ball/ball.mage"));
+			//	bonesEntities.push_back(entity);
+			//}
+
 		}
 
 		if (getInstance<Input>()->getPhysicalKeyJustReleased(AGE_ESCAPE))
 			return (false);
+
+
+		if (getNumberOfEntities() == 0)
+		{
+			return true;
+		}
 
 		static float trigger = 1.0f;
 		if (getInstance<Input>()->getPhysicalKeyPressed(AGE_SPACE) && trigger >= 0.15f)
@@ -210,6 +241,18 @@ namespace AGE
 		}
 
 		GLOBAL_CAMERA.getComponent<CameraComponent>()->editorUpdate();
+		////////////////////////////////////
+
+		//static float ttime = 0;
+		//getInstance<AGE::AnimationManager>()->update(ttime);
+		//ttime += time;
+		//auto &bones = getInstance<AGE::AnimationManager>()->getBones(animationTestInstance);
+		//for (std::size_t i = 0; i < bones.size(); ++i)
+		//{
+		//	bonesEntities[i].getLink().setTransform(bones[i]);
+		//}
+
+		////////////////////////////////////
 
 		auto camComponent = GLOBAL_CAMERA.getComponent<CameraComponent>();
 		static char const *pipelineNames[RenderType::TOTAL] = {"Debug deferred rendering", "Deferred rendering" };

@@ -25,6 +25,8 @@ namespace AGE
 
 	struct MeshRenderer : public ComponentBase
 	{
+		AGE_COMPONENT_UNIQUE_IDENTIFIER("AGE_CORE_MeshRenderer");
+
 		MeshRenderer();
 		virtual ~MeshRenderer();
 
@@ -52,13 +54,11 @@ namespace AGE
 		std::vector<const char*> *meshPathList = nullptr;
 		std::size_t selectedMeshIndex = 0;
 		std::string selectedMeshName = "";
-		std::string selectedMeshPath = "";
 
 		std::vector<const char*> *materialFileList = nullptr;
 		std::vector<const char*> *materialPathList = nullptr;
 		std::size_t selectedMaterialIndex = 0;
 		std::string selectedMaterialName = "";
-		std::string selectedMaterialPath = "";
 
 		virtual void editorCreate();
 		virtual void editorDelete();
@@ -73,21 +73,11 @@ namespace AGE
 		AGE::PrepareKey _key;
 		std::shared_ptr<AGE::MeshInstance> _mesh;
 		std::shared_ptr<AGE::MaterialSetInstance> _material;
+		std::string _meshPath;
+		std::string _materialPath;
+		std::string _animationPath;
+
 		RenderModeSet _renderMode;
-
-		struct SerializationInfos
-		{
-			std::string mesh;
-			std::string material;
-			std::string animation;
-			template < typename Archive >
-			void serialize(Archive &ar)
-			{
-				ar(mesh, material, animation);
-			}
-		};
-
-		std::unique_ptr<SerializationInfos> _serializationInfos;
 
 		void _updateGeometry();
 		MeshRenderer(MeshRenderer const &) = delete;
@@ -96,45 +86,18 @@ namespace AGE
 	template <typename Archive>
 	void MeshRenderer::save(Archive &ar, const std::uint32_t version) const
 	{
-		auto serializationInfos = std::make_unique<SerializationInfos>();
-
-		if (_material)
-		{
-			serializationInfos->material = _material->path;
-		}
-		if (_mesh)
-		{
-			serializationInfos->mesh = _mesh->path;
-		}
-#ifdef EDITOR_ENABLED
-		if (WESerialization::SerializeForEditor() == true)
-		{
-			serializationInfos->material = selectedMaterialPath;
-			serializationInfos->mesh = selectedMeshPath;
-		}
-#endif
-		if (version < 1)
-		{
-			ar(serializationInfos);
-		}
-		else
-		{
-			ar(serializationInfos, _renderMode);
-		}
+		ar(_materialPath, _meshPath, _animationPath, _renderMode);
 	}
 
 	template <typename Archive>
 	void MeshRenderer::load(Archive &ar, const std::uint32_t version)
 	{
-		if (version < 1)
+		ar(_materialPath, _meshPath, _animationPath);
+		if (version >= 3)
 		{
-			ar(_serializationInfos);
-		}
-		else
-		{
-			ar(_serializationInfos, _renderMode);
+			ar(_renderMode);
 		}
 	}
 }
 
-CEREAL_CLASS_VERSION(AGE::MeshRenderer, 1)
+CEREAL_CLASS_VERSION(AGE::MeshRenderer, 3)

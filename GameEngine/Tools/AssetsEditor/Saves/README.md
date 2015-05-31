@@ -1,0 +1,1 @@
+Here raw scenes (json) created and used by editor are saved.

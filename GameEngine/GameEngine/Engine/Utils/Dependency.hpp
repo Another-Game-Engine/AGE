@@ -39,6 +39,8 @@ public:
 	}
 
 	inline DependenciesInjector *getDependencyManager() { return _dependencyManager; }
+	inline const DependenciesInjector *getDependencyManager() const { return _dependencyManager; }
+
 protected:
 	DependenciesInjector *_dependencyManager;
 	friend DependenciesInjector;

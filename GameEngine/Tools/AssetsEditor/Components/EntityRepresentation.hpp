@@ -7,8 +7,6 @@
 #include <cereal/types/array.hpp>
 #include <Core/AScene.hh>
 
-#define ENTITY_NAME_LENGTH 128
-
 namespace AGE
 {
 	namespace WE
@@ -17,6 +15,8 @@ namespace AGE
 
 		struct EntityRepresentation : public ComponentBase
 		{
+			AGE_COMPONENT_UNIQUE_IDENTIFIER("AGE_CORE_EntityRepresentationComponent");
+
 			EntityRepresentation();
 
 			virtual ~EntityRepresentation(void);
@@ -39,19 +39,9 @@ namespace AGE
 
 			virtual void postUnserialization();
 
-			inline bool isLinkedToArchetype() const
-			{
-				return _archetypeLinked != nullptr;
-			}
-
 			inline bool isArchetype() const
 			{
 				return _isArchetype;
-			}
-
-			inline bool parentIsArchetype() const
-			{
-				return _parentIsArchetype;
 			}
 
 			char name[ENTITY_NAME_LENGTH];
@@ -65,14 +55,10 @@ namespace AGE
 			//if it's an archetype
 			bool _isArchetype = false;
 
-			//if is the child of an instance of an archetype
-			bool _parentIsArchetype = false;
-
-
 			// component is not serialized in export
-#ifdef EDITOR_ENABLED
 			virtual bool serializeInExport() { return false; }
-#endif
+			virtual bool isExposedInEditor(){ return false; }
+		
 			// entity is not displayed in entity list
 			bool editorOnly = false;
 		};

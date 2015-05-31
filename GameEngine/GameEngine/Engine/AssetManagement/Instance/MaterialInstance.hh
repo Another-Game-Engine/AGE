@@ -10,6 +10,8 @@
 
 namespace AGE
 {
+	class AssetsManager;
+
 	struct MaterialInstance
 	{
 		//Key<Material> _material_key;
@@ -20,9 +22,21 @@ namespace AGE
 	struct MaterialSetInstance
 	{
 	public:
+		MaterialSetInstance()
+		{
+			_valid = false;
+		}
 		std::string name;
 		std::string path;
 		std::vector<MaterialInstance> datas;
+
+		bool isValid()
+		{
+			return _valid;
+		}
+	private:
+		std::atomic<bool> _valid;
+		friend class AssetsManager;
 	};
 
 }
