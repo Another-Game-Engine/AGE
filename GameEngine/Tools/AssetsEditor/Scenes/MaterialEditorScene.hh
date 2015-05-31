@@ -4,6 +4,7 @@
 #include <Core/Engine.hh>
 #include <AssetManagement\Data\MaterialData.hh>
 #include <memory>
+#include "IMenuInheritrance.hpp"
 
 #define NAME_LENGTH 50
 #define TEXTURE_LENGTH 255
@@ -31,12 +32,14 @@ namespace AGE
 		size
 	};
 
-	class MaterialEditorScene : public AScene
+	class MaterialEditorScene : public AScene, public IMenuInheritance
 	{
 	public:
 		static const std::string Name;
 
 		MaterialEditorScene(Engine *engine);
+
+		virtual void updateMenu();
 
 		virtual ~MaterialEditorScene(void);
 		virtual bool _userStart();

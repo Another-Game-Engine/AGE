@@ -75,15 +75,15 @@ namespace AGE
 	{
 		auto input = getInstance<Input>();
 		
-		auto ctrl = input->getPhysicalKeyJustReleased(AGE_LCTRL);
-		ctrl |= input->getPhysicalKeyJustReleased(AGE_RCTRL);
+		auto ctrl = input->getPhysicalKeyPressed(AGE_LCTRL);
+		ctrl |= input->getPhysicalKeyPressed(AGE_RCTRL);
 
-		auto shift = input->getPhysicalKeyJustReleased(AGE_LSHIFT);
-		shift |= input->getPhysicalKeyJustReleased(AGE_RSHIFT);
+		auto shift = input->getPhysicalKeyPressed(AGE_LSHIFT);
+		shift |= input->getPhysicalKeyPressed(AGE_RSHIFT);
 
-		auto qKey = input->getPhysicalKeyJustReleased(AGE_q);
+		auto qKey = input->getPhysicalKeyPressed(AGE_q);
 
-		if (ctrl + shift + qKey)
+		if (ctrl && shift && qKey)
 		{
 			_exitApp = true;
 		}
