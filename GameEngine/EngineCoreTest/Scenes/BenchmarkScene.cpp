@@ -132,6 +132,8 @@ namespace AGE
 			camera.addComponent<FreeFlyComponent>();
 			cam->setPipeline(RenderType::DEFERRED);
 			cam->setTexture(_skyboxSpace);
+			cam->addSkyBoxToChoice("space", _skyboxSpace);
+			cam->addSkyBoxToChoice("test", _skyboxTest);
 			camera.getLink().setPosition(glm::vec3(0, 2.5f, 4.5f));
 
 			auto sceneFileName = EngineCoreTestConfiguration::getSelectedScenePath() + "_export.json";
@@ -142,11 +144,6 @@ namespace AGE
 			}));
 			getInstance<AssetsManager>()->loadPackage(assetPackageFileName, assetPackageFileName);
 		}
-
-		if (getInstance<Input>()->getPhysicalKeyJustReleased(AGE_t))
-			GLOBAL_CAMERA.getComponent<CameraComponent>()->setTexture(_skyboxTest);
-		if (getInstance<Input>()->getPhysicalKeyJustReleased(AGE_y))
-			GLOBAL_CAMERA.getComponent<CameraComponent>()->setTexture(_skyboxSpace);
 
 		if (getInstance<Input>()->getPhysicalKeyJustReleased(AGE_ESCAPE))
 			return (false);
@@ -211,6 +208,8 @@ namespace AGE
 		{
 			GetRenderThread()->getQueue()->emplaceTask<Tasks::Render::ReloadShaders>();
 		}
+
+		GLOBAL_CAMERA.getComponent<CameraComponent>()->editorUpdate();
 
 		auto camComponent = GLOBAL_CAMERA.getComponent<CameraComponent>();
 		static char const *pipelineNames[RenderType::TOTAL] = {"Debug deferred rendering", "Deferred rendering" };

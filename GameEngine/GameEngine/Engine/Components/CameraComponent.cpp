@@ -66,6 +66,11 @@ namespace AGE
 		AGE::GetPrepareThread()->setCameraInfos(_data, _key);
 	}
 
+	void CameraComponent::addSkyBoxToChoice(std::string const &type, std::shared_ptr<Texture3D> const &texture)
+	{
+		_choicesSkymap[type] = texture;
+	}
+
 #ifdef EDITOR_ENABLED
 	void CameraComponent::editorCreate()
 	{}
@@ -75,7 +80,27 @@ namespace AGE
 
 	bool CameraComponent::editorUpdate()
 	{
-		return false;
+		bool modified = false;
+		int countChoices = _choicesSkymap.size();
+		char  **choices = new char *[countChoices];
+		int index = 0;
+		int current_item = 0;
+		for (auto &choice : _choicesSkymap) {
+			choices[index] = new char[50];
+			memset(choices[index], 0, 50);
+			char const *tmp = choice.first.c_str();
+			memcpy(choices[index], tmp, choice.first.size());
+			++index;
+		}
+		if (ImGui::ListBox("Skybox", &current_item, (char const **)choices, countChoices))
+		{
+			setTexture(_choicesSkymap[std::string(choices[current_item])]);
+			modified = true;
+		}
+		for (int i = 0; i < countChoices; ++i)
+			delete[] choices[i];
+		delete[] choices;
+		return modified;
 	}
 #endif
 
