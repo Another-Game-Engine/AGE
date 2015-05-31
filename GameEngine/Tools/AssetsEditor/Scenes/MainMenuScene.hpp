@@ -3,6 +3,7 @@
 #include <Core/AScene.hh>
 #include <Core/Engine.hh>
 #include <memory>
+#include "IMenuInheritrance.hpp"
 
 namespace AGE
 {
@@ -16,8 +17,8 @@ namespace AGE
 			, TOOLS_NUMBER
 		};
 
-		ToolType _selectedTool;
 		std::string _toolsName[TOOLS_NUMBER];
+		IMenuInheritance* _scenes[TOOLS_NUMBER];
 
 		bool _exitApp;
 

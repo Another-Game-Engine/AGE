@@ -218,6 +218,10 @@ namespace AGE
 
 	bool MaterialEditorScene::_userUpdateBegin(float time)
 	{
+		if (_displayWindow == false)
+		{
+			return true;
+		}
 		ImGui::Begin("Material editor");
 		switch (_mode) {
 		case ModeMaterialEditor::selectMaterial:

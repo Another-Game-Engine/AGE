@@ -142,6 +142,11 @@ namespace AGE
 		}
 		refreshCounter += time;
 
+		if (_displayWindow == false)
+		{
+			return true;
+		}
+
 		ImGui::Begin("Assets browser");
 		{
 			{

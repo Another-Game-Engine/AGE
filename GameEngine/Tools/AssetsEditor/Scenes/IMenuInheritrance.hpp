@@ -7,5 +7,6 @@ namespace AGE
 	public:
 		virtual void updateMenu() = 0;
 		virtual ~IMenuInheritance(){}
+		bool _displayWindow = false;
 	};
 }

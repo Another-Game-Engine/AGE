@@ -21,13 +21,23 @@ namespace AGE
 
 	bool MainMenuScene::_userStart()
 	{
-		_selectedTool = WorldEditor;
-		getEngine()->enableScene(AGE::WorldEditorScene::Name, 1000);
+		getEngine()->enableScene(AGE::WorldEditorScene::Name, 10);
+		getEngine()->enableScene(AGE::AssetsEditorScene::Name, 100);
+		getEngine()->enableScene(AGE::MaterialEditorScene::Name, 1000);
 
 		// we register tools names
 		_toolsName[WorldEditor] = WorldEditorScene::Name;
 		_toolsName[MaterialEditor] = MaterialEditorScene::Name;
 		_toolsName[AssetsEditor] = AssetsEditorScene::Name;
+
+
+		for (auto i = 0; i < TOOLS_NUMBER; ++i)
+		{
+			_scenes[i] = std::dynamic_pointer_cast<IMenuInheritance>(getEngine()->getScene(_toolsName[i])).get();
+			AGE_ASSERT(_scenes[i] != nullptr);
+		}
+
+		_scenes[WorldEditor]->_displayWindow = true;
 
 		_exitApp = false;
 		
@@ -42,13 +52,23 @@ namespace AGE
 			{
 				for (auto i = 0; i < TOOLS_NUMBER; ++i)
 				{
-					bool notAlreadyActive = ToolType(i) != _selectedTool;
+					bool notAlreadyActive = _scenes[i]->_displayWindow == false;
 
-					if (ImGui::MenuItem(_toolsName[i].c_str(), nullptr, nullptr, notAlreadyActive))
+					if (ImGui::MenuItem(_toolsName[i].c_str(), nullptr, !notAlreadyActive))
 					{
-						getEngine()->disableScene(_toolsName[_selectedTool]);
-						_selectedTool = ToolType(i);
-						getEngine()->enableScene(_toolsName[_selectedTool], 1000);
+						_scenes[i]->_displayWindow = !_scenes[i]->_displayWindow;
+						// hack
+						if (ToolType(i) == WorldEditor)
+						{
+							if (_scenes[i]->_displayWindow)
+							{
+								getEngine()->enableScene(AGE::WorldEditorScene::Name, 10);
+							}
+							else
+							{
+								getEngine()->disableScene(AGE::WorldEditorScene::Name);
+							}
+						}
 					}
 				}
 
@@ -62,9 +82,13 @@ namespace AGE
 				ImGui::EndMenu();
 			}
 			
-			auto currentToolScene = getEngine()->getScene(_toolsName[_selectedTool]);
-
-			std::dynamic_pointer_cast<IMenuInheritance>(currentToolScene)->updateMenu();
+			for (auto i = 0; i < TOOLS_NUMBER; ++i)
+			{
+				if (_scenes[i]->_displayWindow)
+				{
+					_scenes[i]->updateMenu();
+				}
+			}
 
 			ImGui::EndMainMenuBar();
 		}
