@@ -35,19 +35,19 @@ namespace AGE
 		void setPipeline(RenderType pipeline);
 		RenderType getPipeline() const { return _data.pipeline; }
 		void setTexture(std::shared_ptr<Texture3D> const &texture);
-		void addSkyBoxToChoice(std::string const &type, std::shared_ptr<Texture3D> const &texture);
 
 		template <typename Archive> void save(Archive &ar, const std::uint32_t version) const;
 		template <typename Archive> void load(Archive &ar, const std::uint32_t version);
 		virtual void postUnserialization();
 
 #ifdef EDITOR_ENABLED
+		void addSkyBoxToChoice(std::string const &type, std::shared_ptr<Texture3D> const &texture);
 		virtual void editorCreate();
 		virtual void editorDelete();
 		virtual bool editorUpdate();
+		std::unordered_map<std::string, std::shared_ptr<Texture3D>> _choicesSkymap;
 #endif
 	private:
-		std::unordered_map<std::string, std::shared_ptr<Texture3D>> _choicesSkymap;
 		CameraData _data;
 		AGE::PrepareKey _key;
 	};

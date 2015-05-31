@@ -66,12 +66,12 @@ namespace AGE
 		AGE::GetPrepareThread()->setCameraInfos(_data, _key);
 	}
 
+#ifdef EDITOR_ENABLED
 	void CameraComponent::addSkyBoxToChoice(std::string const &type, std::shared_ptr<Texture3D> const &texture)
 	{
 		_choicesSkymap[type] = texture;
 	}
 
-#ifdef EDITOR_ENABLED
 	void CameraComponent::editorCreate()
 	{}
 
