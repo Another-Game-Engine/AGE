@@ -37,7 +37,7 @@
 
 namespace AGE
 {
-	const std::string AssetsEditorScene::Name = "AssetsEditor";
+	const std::string AssetsEditorScene::Name = "Assets Editor";
 	AE::Folder AssetsEditorScene::_raw = AE::Folder();
 	AE::Folder AssetsEditorScene::_cook = AE::Folder();
 

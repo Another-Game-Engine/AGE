@@ -35,6 +35,7 @@
 #include <Scenes/SceneSelectorScene.hpp>
 #include <Scenes/WorldEditorScene.hpp>
 #include <Scenes/MaterialEditorScene.hh>
+#include <Scenes/MainMenuScene.hpp>
 
 //COMPONENT REGISTRAR
 #include <EDITOR_COMPONENT_REGISTER.cpp>
@@ -92,20 +93,19 @@ int			main(int ac, char **av)
 		engine->setInstance<AGE::WE::ArchetypeEditorManager>()->setLibraryFolder("../../Archetypes/");
 		engine->getInstance<AGE::WE::ArchetypeEditorManager>()->load();
 
+		engine->addScene(std::make_shared<AGE::MainMenuScene>(engine), AGE::MainMenuScene::Name);
 		engine->addScene(std::make_shared<AGE::AssetsEditorScene>(engine), AGE::AssetsEditorScene::Name);
-		engine->addScene(std::make_shared<AGE::SceneSelectorScene>(engine), AGE::SceneSelectorScene::Name);
 		engine->addScene(std::make_shared<AGE::WorldEditorScene>(engine), AGE::WorldEditorScene::Name);
 		engine->addScene(std::make_shared<AGE::MaterialEditorScene>(engine), AGE::MaterialEditorScene::Name);
-		if (!engine->initScene(AGE::AssetsEditorScene::Name))
+		if (!engine->initScene(AGE::MainMenuScene::Name))
 			return false;
-		if (!engine->initScene(AGE::SceneSelectorScene::Name))
+		if (!engine->initScene(AGE::AssetsEditorScene::Name))
 			return false;
 		if (!engine->initScene(AGE::WorldEditorScene::Name))
 			return false;
 		if (!engine->initScene(AGE::MaterialEditorScene::Name))
 			return false;
-		engine->enableScene(AGE::AssetsEditorScene::Name, 1000);
-		engine->enableScene(AGE::SceneSelectorScene::Name, 1);
+		engine->enableScene(AGE::MainMenuScene::Name, 1);
 		return true;
 	}));
 

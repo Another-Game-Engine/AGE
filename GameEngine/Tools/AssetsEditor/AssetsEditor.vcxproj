@@ -119,6 +119,7 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Managers\ArchetypesEditorManager.cpp" />
     <ClCompile Include="Scenes\AssetsEditorScene.cpp" />
+    <ClCompile Include="Scenes\MainMenuScene.cpp" />
     <ClCompile Include="Scenes\MaterialEditorScene.cpp" />
     <ClCompile Include="Scenes\SceneSelectorScene.cpp" />
     <ClCompile Include="Scenes\WorldEditorScene.cpp" />
@@ -158,6 +159,7 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="Scenes\ArchetypeScenes.hpp" />
     <ClInclude Include="Scenes\AssetsEditorScene.hpp" />
+    <ClInclude Include="Scenes\MainMenuScene.hpp" />
     <ClInclude Include="Scenes\MaterialEditorScene.hh" />
     <ClInclude Include="Scenes\SceneSelectorScene.hpp" />
     <ClInclude Include="Scenes\WorldEditorScene.hpp" />

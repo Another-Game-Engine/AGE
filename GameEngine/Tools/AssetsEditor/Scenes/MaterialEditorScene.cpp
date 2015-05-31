@@ -22,7 +22,7 @@ namespace AGE
 		"bump texture"
 	};
 
-	const std::string MaterialEditorScene::Name = "MaterialEditor";
+	const std::string MaterialEditorScene::Name = "Material Editor";
 
 	MaterialEditorScene::MaterialEditorScene(AGE::Engine *engine)
 		: AScene(engine),
