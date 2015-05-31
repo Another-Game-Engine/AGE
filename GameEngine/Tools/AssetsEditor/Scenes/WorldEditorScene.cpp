@@ -62,4 +62,18 @@ namespace AGE
 
 		return true;
 	}
+
+	void WorldEditorScene::updateMenu()
+	{
+		if (ImGui::BeginMenu("Scene"))
+		{
+			getSystem<WE::EntityManager>()->updateMenu();
+			ImGui::EndMenu();
+		}
+		if (ImGui::BeginMenu("Archetypes"))
+		{
+			getInstance<AGE::WE::ArchetypeEditorManager>()->updateMenu();
+			ImGui::EndMenu();
+		}
+	}
 }

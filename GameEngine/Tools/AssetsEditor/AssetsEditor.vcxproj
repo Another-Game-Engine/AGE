@@ -159,6 +159,7 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="Scenes\ArchetypeScenes.hpp" />
     <ClInclude Include="Scenes\AssetsEditorScene.hpp" />
+    <ClInclude Include="Scenes\IMenuInheritrance.hpp" />
     <ClInclude Include="Scenes\MainMenuScene.hpp" />
     <ClInclude Include="Scenes\MaterialEditorScene.hh" />
     <ClInclude Include="Scenes\SceneSelectorScene.hpp" />

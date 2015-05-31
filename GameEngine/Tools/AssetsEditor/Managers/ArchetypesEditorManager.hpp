@@ -33,6 +33,7 @@ namespace AGE
 			std::shared_ptr<AScene> getScene();
 			void enableScene();
 			void disableScene();
+			void updateMenu();
 		private:
 			std::map<std::string, std::shared_ptr<ArchetypeEditorRepresentation>> _archetypesCollection;
 			std::vector<const char*> _archetypesImGuiNamesList;
@@ -43,6 +44,7 @@ namespace AGE
 			Entity *_selectedEntity = nullptr;
 			bool _graphNodeDisplay = false;
 			bool _selectParent = false;
+			bool _displayWindow = true;
 			std::shared_ptr<AScene> _archetypesScene;
 
 			void _copyArchetypeToInstanciedEntity(Entity &archetype, Entity &entity);

@@ -112,4 +112,15 @@ namespace AGE
 			list.push_back(e.first);
 		}
 	}
+
+	std::shared_ptr<AScene> SceneManager::getScene(const std::string &name)
+	{
+		
+		auto it = _scenes.find(name);
+		if (it == std::end(_scenes))
+		{
+			return nullptr;
+		}
+		return it->second;
+	}
 }

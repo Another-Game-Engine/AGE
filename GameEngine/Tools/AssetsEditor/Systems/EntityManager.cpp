@@ -33,10 +33,25 @@ namespace AGE
 				auto name = "\0";
 				strcpy_s(_sceneName, name);
 				_meshRenderers.requireComponent<MeshRenderer>();
-
+				_displayWindow = true;
 				generateBasicEntities();
 			}
 			EntityManager::~EntityManager(){}
+
+			void EntityManager::updateMenu()
+			{
+				if (ImGui::MenuItem("Show", nullptr, &_displayWindow)) {}
+				if (ImGui::MenuItem("Graphnode display", nullptr, &_graphNodeDisplay, _displayWindow)) {}
+				ImGui::Separator();
+				if (ImGui::BeginMenu("Open scene"))
+				{
+					if (ImGui::ListBox("Scenes", &WE::EditorConfiguration::getSelectedSceneIndex(), WE::EditorConfiguration::getScenesName().data(), static_cast<int>(WE::EditorConfiguration::getScenesName().size())))
+					{
+						_reloadScene = true;
+					}
+					ImGui::EndMenu();
+				}
+			}
 
 			void EntityManager::updateBegin(float time)
 			{}
@@ -47,7 +62,39 @@ namespace AGE
 			void EntityManager::mainUpdate(float time)
 			{
 
-				ImGui::Begin("Entity list");
+				if (_reloadScene)
+				{
+					_scene->clearAllEntities();
+
+					generateBasicEntities();
+
+					WESerialization::SetSerializeForEditor(true);
+
+					auto sceneFileName = WE::EditorConfiguration::getSelectedScenePath() + ".raw_scene";
+
+					strcpy_s(_sceneName, WE::EditorConfiguration::getSelectedSceneName().c_str());
+
+					ReadableEntityPack pack;
+					pack.scene = _scene;
+					pack.loadFromFile(sceneFileName);
+					_reloadScene = false;
+				}
+
+				if (_displayWindow == false)
+				{
+					return;
+				}
+				ImGui::Begin("Entity list", nullptr, ImGuiWindowFlags_MenuBar);
+
+				if (ImGui::BeginMenuBar())
+				{
+					if (ImGui::BeginMenu("Options"))
+					{
+						updateMenu();
+						ImGui::EndMenu();
+					}
+					ImGui::EndMenuBar();
+				}
 
 				ImGui::Checkbox("Graphnode display", &_graphNodeDisplay);
 
@@ -176,26 +223,7 @@ namespace AGE
 				{
 					_scene->createEntity();
 				}
-				if (ImGui::TreeNode("Scenes list"))
-				{
-					if (ImGui::ListBox("Scenes", &WE::EditorConfiguration::getSelectedSceneIndex(), WE::EditorConfiguration::getScenesName().data(), static_cast<int>(WE::EditorConfiguration::getScenesName().size())))
-					{
-						_scene->clearAllEntities();
 
-						generateBasicEntities();
-
-						WESerialization::SetSerializeForEditor(true);
-
-						auto sceneFileName = WE::EditorConfiguration::getSelectedScenePath() + ".raw_scene";
-
-						strcpy_s(_sceneName, WE::EditorConfiguration::getSelectedSceneName().c_str());
-
-						ReadableEntityPack pack;
-						pack.scene = _scene;
-						pack.loadFromFile(sceneFileName);
-					}
-					ImGui::TreePop();
-				}
 				_entities.clear();
 				{
 					EntityFilter::Lock lock(_filter);

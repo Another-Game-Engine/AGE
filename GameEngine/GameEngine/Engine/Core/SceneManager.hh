@@ -40,6 +40,7 @@ namespace AGE
 		void        resetScene(std::string const &name);
 		bool        initScene(std::string const &name);
 		void        getSceneList(std::vector<std::string> &list) const;
+		std::shared_ptr<AScene> getScene(const std::string &name);
 
 		bool        updateScenes(float time);
 	};

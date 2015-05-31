@@ -187,16 +187,32 @@ namespace AGE
 			it->second->entities.insert(entity);
 		}
 
+		void ArchetypeEditorManager::updateMenu()
+		{
+			if (ImGui::MenuItem("Show", nullptr, &_displayWindow)) {}
+			if (ImGui::MenuItem("Graphnode display", nullptr, &_graphNodeDisplay, _displayWindow)) {}
+		}
+
 		void ArchetypeEditorManager::update(AScene *scene)
 		{
-			ImGui::SameLine();
-			ImGui::Begin("Archetypes");
-			bool treeNodeOpen;
-
-			if ((treeNodeOpen = ImGui::TreeNode("Archetypes") && !_archetypesImGuiNamesList.empty())
-				&& ImGui::Combo("", &_selectedArchetypeIndex, &_archetypesImGuiNamesList[0], static_cast<int>(_archetypesImGuiNamesList.size())))
+			if (_displayWindow == false)
 			{
-				treeNodeOpen = true;
+				return;
+			}
+
+			ImGui::Begin("Archetypes", nullptr, ImGuiWindowFlags_MenuBar);
+			if (ImGui::BeginMenuBar())
+			{
+				if (ImGui::BeginMenu("Options"))
+				{
+					updateMenu();
+					ImGui::EndMenu();
+				}
+				ImGui::EndMenuBar();
+			}
+
+			if (ImGui::Combo("", &_selectedArchetypeIndex, &_archetypesImGuiNamesList[0], static_cast<int>(_archetypesImGuiNamesList.size())))
+			{
 				if (_selectedArchetypeIndex < _archetypesImGuiNamesList.size())
 				{
 					auto name = _archetypesImGuiNamesList[_selectedArchetypeIndex];
@@ -210,17 +226,14 @@ namespace AGE
 						_selectedArchetype = find->second;
 					}
 				}
-				ImGui::TreePop();
 			}
 
-			if (treeNodeOpen && _selectedArchetype != nullptr)
+			if (_selectedArchetype != nullptr)
 			{
 				if (_selectedEntity == nullptr)
 				{
 					_selectedEntity = &_selectedArchetype->root;
 				}
-
-				ImGui::Checkbox("Graphnode display", &_graphNodeDisplay);
 
 				auto entity = _selectedArchetype->root;
 				auto modified = false;
