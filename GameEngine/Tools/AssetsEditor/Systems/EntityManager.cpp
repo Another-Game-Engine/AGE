@@ -46,7 +46,8 @@ namespace AGE
 
 			void EntityManager::mainUpdate(float time)
 			{
-				ImGui::BeginChild("Entity list", ImVec2(ImGui::GetWindowWidth() * 0.35f, 0));
+
+				ImGui::Begin("Entity list");
 
 				ImGui::Checkbox("Graphnode display", &_graphNodeDisplay);
 
@@ -229,8 +230,7 @@ namespace AGE
 
 				ImGui::EndChild();
 
-				ImGui::EndChild(); // Entity List
-				ImGui::SameLine(); 
+				ImGui::End();
 				//if (_cam != nullptr) {
 				//	static char const *pipelineNames[RenderType::TOTAL] = { "Debug deferred rendering", "Deferred rendering" };
 				//	ImGui::ListBox("Pipelines", &pipelineIndex, pipelineNames, int(RenderType::TOTAL));

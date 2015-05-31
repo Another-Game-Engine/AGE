@@ -55,8 +55,6 @@ namespace AGE
 	{
 		getInstance<AGE::WE::ArchetypeEditorManager>()->update(this);
 
-		ImGui::End();
-
 		// TODO
 		AGE::GetPrepareThread()->getQueue()->emplaceCommand<AGE::Commands::MainToPrepare::PrepareDrawLists>();
 		// TODO

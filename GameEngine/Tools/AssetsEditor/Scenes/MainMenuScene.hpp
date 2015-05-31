@@ -19,6 +19,8 @@ namespace AGE
 		ToolType _selectedTool;
 		std::string _toolsName[TOOLS_NUMBER];
 
+		bool _exitApp;
+
 	public:
 		static const std::string Name;
 

@@ -3,6 +3,8 @@
 #include "AssetsEditorScene.hpp"
 #include "WorldEditorScene.hpp"
 #include "MaterialEditorScene.hh"
+#include <Core/Inputs/Input.hh>
+
 
 namespace AGE
 {
@@ -20,12 +22,14 @@ namespace AGE
 	bool MainMenuScene::_userStart()
 	{
 		_selectedTool = WorldEditor;
-		//getEngine()->enableScene(AGE::WorldEditorScene::Name, 1000);
+		getEngine()->enableScene(AGE::WorldEditorScene::Name, 1000);
 
 		// we register tools names
 		_toolsName[WorldEditor] = WorldEditorScene::Name;
 		_toolsName[MaterialEditor] = MaterialEditorScene::Name;
 		_toolsName[AssetsEditor] = AssetsEditorScene::Name;
+
+		_exitApp = false;
 		
 		return true;
 	}
@@ -34,19 +38,27 @@ namespace AGE
 	{
 		if (ImGui::BeginMainMenuBar())
 		{
-			if (ImGui::BeginMenu(_toolsName[_selectedTool].c_str()))
+			if (ImGui::BeginMenu("Tools"))
 			{
 				for (auto i = 0; i < TOOLS_NUMBER; ++i)
 				{
 					bool notAlreadyActive = ToolType(i) != _selectedTool;
 
-					if (notAlreadyActive && ImGui::MenuItem(_toolsName[i].c_str()))
+					if (ImGui::MenuItem(_toolsName[i].c_str(), nullptr, nullptr, notAlreadyActive))
 					{
 						getEngine()->disableScene(_toolsName[_selectedTool]);
 						_selectedTool = ToolType(i);
 						getEngine()->enableScene(_toolsName[_selectedTool], 1000);
 					}
 				}
+
+				ImGui::Separator();
+
+				if (ImGui::MenuItem("Exit", "CTRL+SHIFT+Q"))
+				{
+					_exitApp = true;
+				}
+
 				ImGui::EndMenu();
 			}
 			if (ImGui::BeginMenu("Edit"))
@@ -61,41 +73,25 @@ namespace AGE
 			}
 			ImGui::EndMainMenuBar();
 		}
-
-
-		ImGui::Begin("Assets Convertor"/*, (bool*)1, ImGui::GetIO().DisplaySize, 0, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoTitleBar*/);
-
-
-		//ImGui::BeginChild("Global Options", ImVec2(ImGui::GetIO().DisplaySize.x, 30), false);
-		//if (ImGui::Button("Asset Editor"))
-		//{
-		//	getEngine()->disableScene(WorldEditorScene::Name);
-		//	getEngine()->disableScene(MaterialEditorScene::Name);
-		//	getEngine()->enableScene(AssetsEditorScene::Name, 1000);
-		//}
-		//ImGui::SameLine();
-		//if (ImGui::Button("World Editor"))
-		//{
-		//	getEngine()->enableScene(WorldEditorScene::Name, 1000);
-		//	getEngine()->disableScene(MaterialEditorScene::Name);
-		//	getEngine()->disableScene(AssetsEditorScene::Name);
-		//}
-		//ImGui::SameLine();
-		//if (ImGui::Button("Material Editor"))
-		//{
-		//	getEngine()->disableScene(WorldEditorScene::Name);
-		//	getEngine()->enableScene(MaterialEditorScene::Name, 1000);
-		//	getEngine()->disableScene(AssetsEditorScene::Name);
-		//}
-		//ImGui::EndChild();
 		return true;
 	}
 
 	bool MainMenuScene::_userUpdateEnd(float time)
 	{
-		ImGui::End();
-		//if (getInstance<Input>()->getPhysicalKeyJustReleased(AGE_ESCAPE))
-		//	return (false);
-		return true;
+		auto input = getInstance<Input>();
+		
+		auto ctrl = input->getPhysicalKeyJustReleased(AGE_LCTRL);
+		ctrl |= input->getPhysicalKeyJustReleased(AGE_RCTRL);
+
+		auto shift = input->getPhysicalKeyJustReleased(AGE_LSHIFT);
+		shift |= input->getPhysicalKeyJustReleased(AGE_RSHIFT);
+
+		auto qKey = input->getPhysicalKeyJustReleased(AGE_q);
+
+		if (ctrl + shift + qKey)
+		{
+			_exitApp = true;
+		}
+		return !_exitApp;
 	}
 }

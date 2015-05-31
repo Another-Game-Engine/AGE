@@ -190,7 +190,7 @@ namespace AGE
 		void ArchetypeEditorManager::update(AScene *scene)
 		{
 			ImGui::SameLine();
-			ImGui::BeginChild("Archetypes", ImVec2(ImGui::GetWindowWidth() * 0.35f, 0));
+			ImGui::Begin("Archetypes");
 			bool treeNodeOpen;
 
 			if ((treeNodeOpen = ImGui::TreeNode("Archetypes") && !_archetypesImGuiNamesList.empty())
@@ -308,7 +308,7 @@ namespace AGE
 				}
 			}
 
-			ImGui::EndChild();
+			ImGui::End();
 		}
 
 		void ArchetypeEditorManager::_copyArchetypeToInstanciedEntity(Entity &archetype, Entity &entity)
