@@ -43,6 +43,11 @@ namespace AGE
 				if (ImGui::MenuItem("Show", nullptr, &_displayWindow)) {}
 				if (ImGui::MenuItem("Graphnode display", nullptr, &_graphNodeDisplay, _displayWindow)) {}
 				ImGui::Separator();
+				bool saveSceneEnabled = _sceneName[0] != '\0';
+				if (ImGui::MenuItem("Save scene", "CTRL+S", nullptr, saveSceneEnabled))
+				{
+					_saveScene = true;
+				}
 				if (ImGui::BeginMenu("Open scene"))
 				{
 					if (ImGui::ListBox("Scenes", &WE::EditorConfiguration::getSelectedSceneIndex(), WE::EditorConfiguration::getScenesName().data(), static_cast<int>(WE::EditorConfiguration::getScenesName().size())))
@@ -78,6 +83,24 @@ namespace AGE
 					pack.scene = _scene;
 					pack.loadFromFile(sceneFileName);
 					_reloadScene = false;
+				}
+
+				if (_saveScene)
+				{
+					WESerialization::SetSerializeForEditor(true);
+
+					ReadableEntityPack pack;
+					{
+						CreateReadableEntityPack(pack, _entities);
+						pack.saveToFile(WE::EditorConfiguration::GetEditedSceneDirectory() + std::string(_sceneName) + ".raw_scene");
+					}
+					{
+						BinaryEntityPack binaryPack = pack.toBinary();
+						binaryPack.saveToFile(WE::EditorConfiguration::GetExportedSceneDirectory() + std::string(_sceneName) + ".scene");
+					}
+
+					WESerialization::SetSerializeForEditor(false);
+					_saveScene = false;
 				}
 
 				if (_displayWindow == false)
@@ -237,23 +260,11 @@ namespace AGE
 						_entities.push_back(e);
 					}
 				}
-				ImGui::InputText("File name", _sceneName, MAX_SCENE_NAME_LENGTH);
+				ImGui::InputText("Scene name", _sceneName, MAX_SCENE_NAME_LENGTH, ImGuiInputTextFlags_CharsNoBlank);
 				ImGui::SameLine();
-				if (ImGui::Button("Save"))
+				if (_sceneName[0] && ImGui::Button("Save"))
 				{
-					WESerialization::SetSerializeForEditor(true);
-
-					ReadableEntityPack pack;
-					{
-						CreateReadableEntityPack(pack, _entities);
-						pack.saveToFile(WE::EditorConfiguration::GetEditedSceneDirectory() + std::string(_sceneName) + ".raw_scene");
-					}
-					{
-						BinaryEntityPack binaryPack = pack.toBinary();
-						binaryPack.saveToFile(WE::EditorConfiguration::GetExportedSceneDirectory() + std::string(_sceneName) + ".scene");
-					}
-
-					WESerialization::SetSerializeForEditor(false);
+					_saveScene = true;
 				}
 
 				ImGui::EndChild();

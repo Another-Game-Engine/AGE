@@ -31,6 +31,7 @@ namespace AGE
 			char _archetypeName[MAX_SCENE_NAME_LENGTH];
 			bool _displayWindow;
 			bool _reloadScene = false;
+			bool _saveScene = false;
 
 			virtual void updateBegin(float time);
 			virtual void updateEnd(float time);
