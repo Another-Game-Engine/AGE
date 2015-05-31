@@ -18,6 +18,7 @@ namespace AGE
 		std::string _cookedAssetsDirectory = "../../Assets/Serialized/";
 		std::string _exportSceneFolder = "../../EngineCoreTest/DemoScenes/";
 		std::string _exportArchetypeFolder = "../../EngineCoreTest/Archetypes/";
+		std::string _lastSceneOpened = "";
 		int _selectedScene = 0;
 
 		// not serialized
@@ -32,7 +33,14 @@ namespace AGE
 		{
 			ar(cereal::make_nvp("Cooked assets directory", _cookedAssetsDirectory));
 			ar(cereal::make_nvp("Exported scenes directory", _exportSceneFolder));
-			ar(cereal::make_nvp("Selected scene index", _selectedScene));
+			if (version == 0)
+			{
+				ar(cereal::make_nvp("deprecated", _selectedScene));
+			}
+			else
+			{
+				ar(cereal::make_nvp("Last scene opened", _lastSceneOpened));
+			}
 			ar(cereal::make_nvp("Archetypes directory", _exportArchetypeFolder));
 		}
 	};
@@ -143,27 +151,47 @@ namespace AGE
 				if (Directory::IsFile(*it))
 				{
 					auto file = std::string(*it);
-					auto find = file.find("_export.json");
+					auto find = file.find(".scene");
 					if (find != std::string::npos)
 					{
 						_getConfigurations()->_scenesNamesCache.push_back(Path::BaseName(file.substr(0, find).c_str()));
 						_getConfigurations()->_scenesNames.push_back(_getConfigurations()->_scenesNamesCache.back().c_str());
-						_getConfigurations()->_scenesPaths.push_back(_getConfigurations()->_exportSceneFolder + _getConfigurations()->_scenesNames.back());
+						_getConfigurations()->_scenesPaths.push_back(_getConfigurations()->_exportSceneFolder + _getConfigurations()->_scenesNames.back() + ".scene");
 					}
 				}
 			}
 			dir.close();
 
 			auto &selectedIndex = _getConfigurations()->_selectedScene;
+			selectedIndex = 0;
+
+			if (!_getConfigurations()->_lastSceneOpened.empty())
+			{
+				for (auto &e : _getConfigurations()->_scenesNames)
+				{
+					if (e == _getConfigurations()->_lastSceneOpened)
+					{
+						break;
+					}
+					++selectedIndex;
+				}
+			}
+
 			if (selectedIndex >= _getConfigurations()->_scenesNames.size())
 			{
 				selectedIndex = 0;
 			}
+
 			_dirty = true;
 		}
 
 		static void saveConfigurations()
 		{
+			if (_configurations && !_configurations->_scenesNames.empty())
+			{
+				_configurations->_lastSceneOpened = _configurations->_scenesNames[_configurations->_selectedScene];
+			}
+
 			std::ofstream file("EngineCoreTestConfiguration.json", std::ios::binary);
 			assert(file.is_open());
 			{
@@ -176,4 +204,4 @@ namespace AGE
 	};
 }
 
-CEREAL_CLASS_VERSION(AGE::ECTConfigurations, 0);
+CEREAL_CLASS_VERSION(AGE::ECTConfigurations, 1);

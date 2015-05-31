@@ -161,6 +161,7 @@ namespace AGE
 //				auto subMaterial = futureSubMaterial.get();
 //				material_set->datas.emplace_back(subMaterial);
 			}
+			material->_valid = true;
 			return AssetsLoadingResult(false);
 		});
 		pushNewAsset(loadingChannel, _filePath.getFullName(), future);
@@ -389,6 +390,7 @@ namespace AGE
 				});
 				pushNewAsset(loadingChannel, data->subMeshs[i].name, future);
 			}
+			meshInstance->_valid = true;
 			return AssetsLoadingResult(false);
 		});
 		pushNewAsset(loadingChannel, _filePath.getFullName(), future);

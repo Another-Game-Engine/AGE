@@ -22,6 +22,7 @@ namespace AGE
 
 	struct PointLightComponent : public ComponentBase
 	{
+		AGE_COMPONENT_UNIQUE_IDENTIFIER("AGE_CORE_PointLightComponent");
 	public:
 		PointLightComponent() = default;
 		virtual ~PointLightComponent() = default;

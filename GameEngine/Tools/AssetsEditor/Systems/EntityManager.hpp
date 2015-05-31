@@ -27,7 +27,6 @@ namespace AGE
 			Entity *_selectedEntity;
 			int _selectedEntityIndex;
 			char _sceneName[MAX_SCENE_NAME_LENGTH];
-			char _exportName[MAX_SCENE_NAME_LENGTH];
 			char _archetypeName[MAX_SCENE_NAME_LENGTH];
 
 			virtual void updateBegin(float time);

@@ -56,17 +56,15 @@ namespace AGE
 		set(_data);
 	}
 
-	SpotLightComponent &SpotLightComponent::set(SpotLightData const &data)
+	void SpotLightComponent::set(SpotLightData const &data)
 	{
 		_data = data;
 		AGE::GetPrepareThread()->setSpotLight(_data, _key);
-		return (*this);
 	}
 
 	void SpotLightComponent::postUnserialization()
 	{
 		init();
-		set(_data);
 	}
 
 #ifdef EDITOR_ENABLED

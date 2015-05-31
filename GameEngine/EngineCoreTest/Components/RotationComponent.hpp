@@ -8,6 +8,8 @@ namespace AGE
 {
 	struct RotationComponent : public ComponentBase
 	{
+		AGE_COMPONENT_UNIQUE_IDENTIFIER("AGE_CORE_RotationComponent");
+
 		RotationComponent();
 		virtual ~RotationComponent(void);
 		RotationComponent &operator=(const RotationComponent &o) = delete;
@@ -35,7 +37,7 @@ namespace AGE
 		//////
 
 #ifdef EDITOR_ENABLED
-		virtual void editorUpdate(AScene *scene);
+		virtual bool editorUpdate();
 #endif
 
 		glm::vec3 _angles;

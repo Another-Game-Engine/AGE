@@ -11,6 +11,8 @@ namespace AGE
 
 	struct CameraComponent : public ComponentBase
 	{
+		AGE_COMPONENT_UNIQUE_IDENTIFIER("AGE_CORE_CameraComponent");
+	public:
 		CameraComponent();
 		virtual ~CameraComponent();
 		CameraComponent(CameraComponent const &o) = delete;

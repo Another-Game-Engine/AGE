@@ -99,6 +99,11 @@ public:
 		return (_pool[idx]);
 	}
 
+	bool exists(IndexType idx) const
+	{
+		return idx < _pool.size();
+	}
+
 private:
 	std::vector<T>	_pool;
 	std::queue<IndexType>	_freeIdx;

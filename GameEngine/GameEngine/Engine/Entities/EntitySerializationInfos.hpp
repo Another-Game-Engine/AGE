@@ -1,8 +1,12 @@
+#pragma once
+
 #include "Entity.hh"
 #include <Components/Component.hh>
 #include <vector>
 #include <cereal/types/vector.hpp>
 #include <Entities/EntityData.hh>
+#include <Components/ArchetypeComponent.hpp>
+#include <Utils/Debug.hpp>
 
 namespace AGE
 {
@@ -11,12 +15,16 @@ namespace AGE
 		std::vector <std::size_t> children;
 		std::vector <ComponentBase*> components;
 		std::vector <ComponentType> componentTypes;
-		Entity &entity;
+		std::vector<std::string> archetypesDependency;
+		Entity entity;
 		std::map<ComponentType, std::size_t> *typesMap; // used to unserialize
 
-		EntitySerializationInfos(EntityData *e)
+		EntitySerializationInfos(EntityData *e, std::map<ComponentType, std::size_t> *_typesMap)
 			: entity(e->entity)
-			, typesMap(nullptr)
+			, typesMap(_typesMap)
+		{}
+
+		EntitySerializationInfos()
 		{}
 
 		template < typename Archive >
@@ -28,6 +36,7 @@ namespace AGE
 				, cereal::make_nvp("children", children)
 				, cereal::make_nvp("flags", flags)
 				, cereal::make_nvp("components_number", componentTypes)
+				, CEREAL_NVP(archetypesDependency)
 				);
 			for (auto &e : components)
 			{
@@ -38,7 +47,6 @@ namespace AGE
 		template < typename Archive >
 		void load(Archive &ar, const std::uint32_t version)
 		{
-			std::size_t cptNbr = 0;
 			Link l;
 			ENTITY_FLAGS f;
 
@@ -47,17 +55,14 @@ namespace AGE
 				l
 				, children
 				, f
-				, componentTypes);
-			entity.getLink().setPosition(l.getPosition());
-			entity.getLink().setOrientation(l.getOrientation());
-			entity.getLink().setScale(l.getScale());
-			//entity.setFlags(f);
-			for (auto &e : componentTypes)
-			{
-				auto hashType = (*typesMap)[e];
-				ComponentRegistrationManager::getInstance().loadJson(hashType, entity, ar);
-			}
+				, componentTypes
+				, archetypesDependency);
+
+			_postLoad(l, f, ar);
 		}
+
+	private:
+		void _postLoad(Link &link, ENTITY_FLAGS flags, cereal::JSONInputArchive &ar);
 	};
 }
 
