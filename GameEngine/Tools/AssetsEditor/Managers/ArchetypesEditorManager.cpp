@@ -84,6 +84,7 @@ namespace AGE
 			auto scene = entity.getScene();
 			auto representation = std::make_shared<ArchetypeEditorRepresentation>();
 			representation->name = name;
+			representation->loaded = true;
 
 			//we copy the original entity into the archetype entity
 			//for that we set the ArchetypeScene as the current scene
