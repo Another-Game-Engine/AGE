@@ -22,7 +22,7 @@
 
 namespace AGE
 {
-	const std::string WorldEditorScene::Name = "WorldEditor";
+	const std::string WorldEditorScene::Name = "World Editor";
 
 	WorldEditorScene::WorldEditorScene(AGE::Engine *engine)
 		: AScene(engine)
@@ -53,15 +53,28 @@ namespace AGE
 
 	bool WorldEditorScene::_userUpdateEnd(float time)
 	{
-		getInstance<AGE::WE::ArchetypeEditorManager>()->update(this);
-
-		ImGui::End();
-
+		if (_displayWindow)
+		{
+			getInstance<AGE::WE::ArchetypeEditorManager>()->update(this);
+		}
 		// TODO
 		AGE::GetPrepareThread()->getQueue()->emplaceCommand<AGE::Commands::MainToPrepare::PrepareDrawLists>();
 		// TODO
 		AGE::GetPrepareThread()->getQueue()->emplaceCommand<AGE::Commands::ToRender::RenderDrawLists>();
-
 		return true;
+	}
+
+	void WorldEditorScene::updateMenu()
+	{
+		if (ImGui::BeginMenu("Scene"))
+		{
+			getSystem<WE::EntityManager>()->updateMenu();
+			ImGui::EndMenu();
+		}
+		if (ImGui::BeginMenu("Archetypes"))
+		{
+			getInstance<AGE::WE::ArchetypeEditorManager>()->updateMenu();
+			ImGui::EndMenu();
+		}
 	}
 }

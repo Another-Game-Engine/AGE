@@ -22,7 +22,7 @@ namespace AGE
 		"bump texture"
 	};
 
-	const std::string MaterialEditorScene::Name = "MaterialEditor";
+	const std::string MaterialEditorScene::Name = "Material Editor";
 
 	MaterialEditorScene::MaterialEditorScene(AGE::Engine *engine)
 		: AScene(engine),
@@ -34,6 +34,11 @@ namespace AGE
 
 	MaterialEditorScene::~MaterialEditorScene(void)
 	{
+	}
+
+	void MaterialEditorScene::updateMenu()
+	{
+
 	}
 
 	bool MaterialEditorScene::_userStart()
@@ -213,8 +218,11 @@ namespace AGE
 
 	bool MaterialEditorScene::_userUpdateBegin(float time)
 	{
-		glClear(GL_COLOR_BUFFER_BIT);
-		ImGui::BeginChild("Material editor", ImVec2(0, 0), true);
+		if (_displayWindow == false)
+		{
+			return true;
+		}
+		ImGui::Begin("Material editor");
 		switch (_mode) {
 		case ModeMaterialEditor::selectMaterial:
 			_selectMaterial();
@@ -226,13 +234,12 @@ namespace AGE
 			_editData();
 			break;
 		}
+		ImGui::End();
 		return true;
 	}
 
 	bool MaterialEditorScene::_userUpdateEnd(float time)
 	{
-		ImGui::EndChild();
-		ImGui::End();
 		return true;
 	}
 }

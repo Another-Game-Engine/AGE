@@ -15,6 +15,7 @@
 #include <Entities/ReadableEntityPack.hpp>
 #include <Entities/EntityBinaryPacker.hpp>
 #include <Entities/BinaryEntityPack.hpp>
+#include <Core/Inputs/Input.hh>
 
 namespace AGE
 {
@@ -33,10 +34,47 @@ namespace AGE
 				auto name = "\0";
 				strcpy_s(_sceneName, name);
 				_meshRenderers.requireComponent<MeshRenderer>();
-
+				_displayWindow = true;
 				generateBasicEntities();
 			}
 			EntityManager::~EntityManager(){}
+
+			void EntityManager::updateMenu()
+			{
+				if (ImGui::MenuItem("Show", nullptr, &_displayWindow)) {}
+				if (ImGui::MenuItem("Graphnode display", nullptr, &_graphNodeDisplay, _displayWindow)) {}
+				if (_cam != nullptr && ImGui::BeginMenu("Render options"))
+				{
+					static char const *pipelineNames[RenderType::TOTAL] =
+					{ "Debug deferred rendering"
+					, "Deferred rendering" };
+
+					for (auto i = 0; i < RenderType::TOTAL; ++i)
+					{
+						auto enabled = _cam->getPipeline() != RenderType(i);
+						if (ImGui::MenuItem(pipelineNames[i], nullptr, nullptr, enabled) && enabled)
+						{
+							_pipelineToSet = i;
+						}
+					}
+
+					ImGui::EndMenu();
+				}
+				ImGui::Separator();
+				bool saveSceneEnabled = _sceneName[0] != '\0';
+				if (ImGui::MenuItem("Save scene", "CTRL+S", nullptr, saveSceneEnabled))
+				{
+					_saveScene = true;
+				}
+				if (ImGui::BeginMenu("Open scene"))
+				{
+					if (ImGui::ListBox("Scenes", &WE::EditorConfiguration::getSelectedSceneIndex(), WE::EditorConfiguration::getScenesName().data(), static_cast<int>(WE::EditorConfiguration::getScenesName().size())))
+					{
+						_reloadScene = true;
+					}
+					ImGui::EndMenu();
+				}
+			}
 
 			void EntityManager::updateBegin(float time)
 			{}
@@ -46,7 +84,64 @@ namespace AGE
 
 			void EntityManager::mainUpdate(float time)
 			{
-				ImGui::BeginChild("Entity list", ImVec2(ImGui::GetWindowWidth() * 0.35f, 0));
+
+				if (_reloadScene)
+				{
+					_scene->clearAllEntities();
+
+					generateBasicEntities();
+
+					WESerialization::SetSerializeForEditor(true);
+
+					auto sceneFileName = WE::EditorConfiguration::getSelectedScenePath() + ".raw_scene";
+
+					strcpy_s(_sceneName, WE::EditorConfiguration::getSelectedSceneName().c_str());
+
+					ReadableEntityPack pack;
+					pack.scene = _scene;
+					pack.loadFromFile(sceneFileName);
+					_reloadScene = false;
+				}
+
+				if (_saveScene)
+				{
+					WESerialization::SetSerializeForEditor(true);
+
+					ReadableEntityPack pack;
+					{
+						CreateReadableEntityPack(pack, _entities);
+						pack.saveToFile(WE::EditorConfiguration::GetEditedSceneDirectory() + std::string(_sceneName) + ".raw_scene");
+					}
+					{
+						BinaryEntityPack binaryPack = pack.toBinary();
+						binaryPack.saveToFile(WE::EditorConfiguration::GetExportedSceneDirectory() + std::string(_sceneName) + ".scene");
+					}
+
+					WESerialization::SetSerializeForEditor(false);
+					_saveScene = false;
+				}
+
+				if (_cam && _pipelineToSet > -1)
+				{
+					_cam->setPipeline(RenderType(_pipelineToSet));
+					_pipelineToSet = -1;
+				}
+
+				if (_displayWindow == false)
+				{
+					return;
+				}
+				ImGui::Begin("Entity list", nullptr, ImGuiWindowFlags_MenuBar);
+
+				if (ImGui::BeginMenuBar())
+				{
+					if (ImGui::BeginMenu("Options"))
+					{
+						updateMenu();
+						ImGui::EndMenu();
+					}
+					ImGui::EndMenuBar();
+				}
 
 				ImGui::Checkbox("Graphnode display", &_graphNodeDisplay);
 
@@ -175,26 +270,7 @@ namespace AGE
 				{
 					_scene->createEntity();
 				}
-				if (ImGui::TreeNode("Scenes list"))
-				{
-					if (ImGui::ListBox("Scenes", &WE::EditorConfiguration::getSelectedSceneIndex(), WE::EditorConfiguration::getScenesName().data(), static_cast<int>(WE::EditorConfiguration::getScenesName().size())))
-					{
-						_scene->clearAllEntities();
 
-						generateBasicEntities();
-
-						WESerialization::SetSerializeForEditor(true);
-
-						auto sceneFileName = WE::EditorConfiguration::getSelectedScenePath() + ".raw_scene";
-
-						strcpy_s(_sceneName, WE::EditorConfiguration::getSelectedSceneName().c_str());
-
-						ReadableEntityPack pack;
-						pack.scene = _scene;
-						pack.loadFromFile(sceneFileName);
-					}
-					ImGui::TreePop();
-				}
 				_entities.clear();
 				{
 					EntityFilter::Lock lock(_filter);
@@ -208,35 +284,29 @@ namespace AGE
 						_entities.push_back(e);
 					}
 				}
-				ImGui::InputText("File name", _sceneName, MAX_SCENE_NAME_LENGTH);
+				ImGui::InputText("Scene name", _sceneName, MAX_SCENE_NAME_LENGTH, ImGuiInputTextFlags_CharsNoBlank);
 				ImGui::SameLine();
-				if (ImGui::Button("Save"))
+				if (_sceneName[0] && ImGui::Button("Save"))
 				{
-					WESerialization::SetSerializeForEditor(true);
-
-					ReadableEntityPack pack;
-					{
-						CreateReadableEntityPack(pack, _entities);
-						pack.saveToFile(WE::EditorConfiguration::GetEditedSceneDirectory() + std::string(_sceneName) + ".raw_scene");
-					}
-					{
-						BinaryEntityPack binaryPack = pack.toBinary();
-						binaryPack.saveToFile(WE::EditorConfiguration::GetExportedSceneDirectory() + std::string(_sceneName) + ".scene");
-					}
-
-					WESerialization::SetSerializeForEditor(false);
+					_saveScene = true;
 				}
 
 				ImGui::EndChild();
 
-				ImGui::EndChild(); // Entity List
-				ImGui::SameLine(); 
-				//if (_cam != nullptr) {
-				//	static char const *pipelineNames[RenderType::TOTAL] = { "Debug deferred rendering", "Deferred rendering" };
-				//	ImGui::ListBox("Pipelines", &pipelineIndex, pipelineNames, int(RenderType::TOTAL));
-				//	if (_cam->getPipeline() != (RenderType)pipelineIndex)
-				//		_cam->setPipeline((RenderType)pipelineIndex);
-				//}
+				ImGui::End();
+
+				auto input = _scene->getInstance<Input>();
+
+				auto ctrl = input->getPhysicalKeyPressed(AGE_LCTRL);
+				ctrl |= input->getPhysicalKeyPressed(AGE_RCTRL);
+
+				auto sKey = input->getPhysicalKeyPressed(AGE_s);
+
+				if (ctrl && sKey && _sceneName[0])
+				{
+					_saveScene = true;
+				}
+
 			}
 
 			bool EntityManager::initialize()

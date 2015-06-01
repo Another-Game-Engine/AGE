@@ -51,6 +51,10 @@ namespace AGE
 		{
 			for (auto &arch : _archetypesCollection)
 			{
+				if (arch.second->loaded == false)
+				{
+					continue;
+				}
 				ReadableEntityPack pack;
 				CreateReadableEntityPack(pack, arch.second->root);
 				auto path = _libraryFolder + "/" + arch.second->name + ".raw_archetype";
@@ -68,25 +72,11 @@ namespace AGE
 				return;
 			}
 
-			auto currentScene = GetMainThread()->getActiveScene();
-			GetMainThread()->setSceneAsActive(getScene().get());
-
 			auto representation = std::make_shared<ArchetypeEditorRepresentation>();
 			representation->name = name;
-
-			auto path = _libraryFolder + "/" + name + ".raw_archetype";
-			ReadableEntityPack pack;
-			pack.scene = getScene().get();
-			pack.loadFromFile(path);
-
-			representation->root = pack.entities.front().entity;
+			representation->loaded = false;
 			_archetypesCollection.insert(std::make_pair(name, representation));
 			_regenerateImGuiNamesList();
-
-			if (currentScene)
-			{
-				GetMainThread()->setSceneAsActive(currentScene);
-			}
 		}
 
 		void ArchetypeEditorManager::addOne(const std::string &name, Entity &entity)
@@ -98,6 +88,7 @@ namespace AGE
 			auto scene = entity.getScene();
 			auto representation = std::make_shared<ArchetypeEditorRepresentation>();
 			representation->name = name;
+			representation->loaded = true;
 
 			//we copy the original entity into the archetype entity
 			//for that we set the ArchetypeScene as the current scene
@@ -159,11 +150,35 @@ namespace AGE
 			_regenerateImGuiNamesList();
 		}
 
+		void ArchetypeEditorManager::loadFromFile(std::shared_ptr<ArchetypeEditorRepresentation> ptr)
+		{
+			AGE_ASSERT(ptr != nullptr);
+
+			if (ptr->loaded == false)
+			{
+				auto currentScene = GetMainThread()->getActiveScene();
+				GetMainThread()->setSceneAsActive(getScene().get());
+
+				auto path = _libraryFolder + "/" + ptr->name + ".raw_archetype";
+				ReadableEntityPack pack;
+				pack.scene = getScene().get();
+				pack.loadFromFile(path);
+
+				ptr->root = pack.entities.front().entity;
+				ptr->loaded = true;
+
+				if (currentScene)
+				{
+					GetMainThread()->setSceneAsActive(currentScene);
+				}
+			}
+		}
+
 		void ArchetypeEditorManager::spawn(Entity &entity, const std::string &name)
 		{
 			auto it = _archetypesCollection.find(name);
 			AGE_ASSERT(it != std::end(_archetypesCollection));
-
+			loadFromFile(it->second);
 			entity.getScene()->copyEntity(it->second->root, entity, true, false);
 
 			auto representation = entity.getComponent<EntityRepresentation>();
@@ -187,16 +202,42 @@ namespace AGE
 			it->second->entities.insert(entity);
 		}
 
+		void ArchetypeEditorManager::updateMenu()
+		{
+			if (ImGui::MenuItem("Show", nullptr, &_displayWindow)) {}
+			if (ImGui::MenuItem("Graphnode display", nullptr, &_graphNodeDisplay, _displayWindow)) {}
+			if (ImGui::MenuItem("Save library"))
+			{
+				_save = true;
+			}
+		}
+
 		void ArchetypeEditorManager::update(AScene *scene)
 		{
-			ImGui::SameLine();
-			ImGui::BeginChild("Archetypes", ImVec2(ImGui::GetWindowWidth() * 0.35f, 0));
-			bool treeNodeOpen;
-
-			if ((treeNodeOpen = ImGui::TreeNode("Archetypes") && !_archetypesImGuiNamesList.empty())
-				&& ImGui::Combo("", &_selectedArchetypeIndex, &_archetypesImGuiNamesList[0], static_cast<int>(_archetypesImGuiNamesList.size())))
+			if (_save == true)
 			{
-				treeNodeOpen = true;
+				_save = false;
+				save();
+			}
+
+			if (_displayWindow == false)
+			{
+				return;
+			}
+
+			ImGui::Begin("Archetypes", nullptr, ImGuiWindowFlags_MenuBar);
+			if (ImGui::BeginMenuBar())
+			{
+				if (ImGui::BeginMenu("Options"))
+				{
+					updateMenu();
+					ImGui::EndMenu();
+				}
+				ImGui::EndMenuBar();
+			}
+
+			if (ImGui::Combo("", &_selectedArchetypeIndex, &_archetypesImGuiNamesList[0], static_cast<int>(_archetypesImGuiNamesList.size())))
+			{
 				if (_selectedArchetypeIndex < _archetypesImGuiNamesList.size())
 				{
 					auto name = _archetypesImGuiNamesList[_selectedArchetypeIndex];
@@ -208,19 +249,20 @@ namespace AGE
 					else
 					{
 						_selectedArchetype = find->second;
+						if (_selectedArchetype->loaded == false)
+						{
+							loadFromFile(_selectedArchetype);
+						}
 					}
 				}
-				ImGui::TreePop();
 			}
 
-			if (treeNodeOpen && _selectedArchetype != nullptr)
+			if (_selectedArchetype != nullptr)
 			{
 				if (_selectedEntity == nullptr)
 				{
 					_selectedEntity = &_selectedArchetype->root;
 				}
-
-				ImGui::Checkbox("Graphnode display", &_graphNodeDisplay);
 
 				auto entity = _selectedArchetype->root;
 				auto modified = false;
@@ -308,7 +350,7 @@ namespace AGE
 				}
 			}
 
-			ImGui::EndChild();
+			ImGui::End();
 		}
 
 		void ArchetypeEditorManager::_copyArchetypeToInstanciedEntity(Entity &archetype, Entity &entity)
