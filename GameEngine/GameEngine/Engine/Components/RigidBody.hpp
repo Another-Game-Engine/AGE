@@ -59,7 +59,7 @@ namespace AGE
 
 		void setMaxAngularVelocity(float maxAngularVelocity);
 
-		float getMaxAngularVelocity(void) const;
+		double getMaxAngularVelocity(void) const;
 
 		void setMaxDepenetrationVelocity(float maxDepenetrationVelocity);
 
@@ -117,7 +117,7 @@ namespace AGE
 			glm::vec3 linearVelocity;
 			float mass;
 			glm::vec3 diagonalInertia;
-			float maxAngularVelocity;
+			double maxAngularVelocity;
 			float maxDepenetrationVelocity;
 			bool isAffectedByGravity;
 			bool kinematic;

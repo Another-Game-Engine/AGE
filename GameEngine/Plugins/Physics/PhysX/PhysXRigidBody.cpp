@@ -136,7 +136,7 @@ namespace AGE
 			getDataAs<physx::PxRigidDynamic>()->setMaxAngularVelocity(maxAngularVelocity);
 		}
 
-		float PhysXRigidBody::getMaxAngularVelocity(void) const
+		double PhysXRigidBody::getMaxAngularVelocity(void) const
 		{
 			return getDataAs<physx::PxRigidDynamic>()->getMaxAngularVelocity();
 		}

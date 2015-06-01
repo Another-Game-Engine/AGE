@@ -71,7 +71,7 @@ namespace AGE
 			{
 				for (auto &c : components)
 				{
-					if (c)
+					if (c && c->doSerialize())
 					{
 						representation.componentTypes.push_back(c->getType());
 						representation.components.push_back(c);

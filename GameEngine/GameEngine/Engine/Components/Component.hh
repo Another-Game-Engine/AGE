@@ -45,6 +45,8 @@ namespace AGE
 			return _typeId;
 		}
 
+		virtual bool doSerialize() { return true; }
+
 #ifdef EDITOR_ENABLED
 		virtual void editorCreate(){}
 		virtual void editorDelete(){}

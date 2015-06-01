@@ -112,7 +112,7 @@ namespace AGE
 		rigidBody->setMaxAngularVelocity(maxAngularVelocity);
 	}
 
-	float RigidBody::getMaxAngularVelocity(void) const
+	double RigidBody::getMaxAngularVelocity(void) const
 	{
 		assert(rigidBody != nullptr && "Invalid RigidBody");
 		return rigidBody->getMaxAngularVelocity();
@@ -318,10 +318,10 @@ namespace AGE
 		{
 			ptr->setDiagonalInertiaTensor(diagonalInertia);
 		}
-		if (ImGui::InputFloat("Max angular velocity", &maxAngularVelocity))
-		{
-			ptr->setMaxAngularVelocity(maxAngularVelocity);
-		}
+		//if (ImGui::InputFloat("Max angular velocity", (float*)&maxAngularVelocity))
+		//{
+		//	ptr->setMaxAngularVelocity(maxAngularVelocity);
+		//}
 		if (ImGui::InputFloat("Max depenetration velocity", &maxDepenetrationVelocity))
 		{
 			ptr->setMaxDepenetrationVelocity(maxDepenetrationVelocity);

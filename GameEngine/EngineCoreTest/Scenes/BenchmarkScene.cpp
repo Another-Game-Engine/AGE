@@ -89,6 +89,8 @@ namespace AGE
 		REGISTER_COMPONENT_TYPE(AGE::Collider);
 		REGISTER_COMPONENT_TYPE(AGE::DirectionalLightComponent);
 		REGISTER_COMPONENT_TYPE(AGE::ArchetypeComponent);
+		REGISTER_COMPONENT_TYPE(AGE::RigidBody);
+
 
 		addSystem<AGE::DebugSystem>(0);
 		addSystem<AGE::PhysicsSystem>(0, Physics::EngineType::PhysX, EngineCoreTestConfiguration::GetCookedDirectory());
