@@ -18,10 +18,10 @@ void main()
 	texCoord = position * 0.5f + 0.5f;
 	vec2 fragCoord = texCoord * resolution;
 	vec2 inverseVP = 1.0f / resolution;
-	fragCoordNW = (fragCoordNW + vec2(-1.0f, -1.0f)) * inverseVP;
-	fragCoordNE = (fragCoordNE + vec2(1.0f, -1.0f)) * inverseVP;
-	fragCoordSW = (fragCoordSW + vec2(-1.0f, 1.0f)) * inverseVP;
-	fragCoordSE = (fragCoordSE + vec2(1.0f, 1.0f)) * inverseVP;
+	fragCoordNW = (fragCoord + vec2(-1.0f, -1.0f)) * inverseVP;
+	fragCoordNE = (fragCoord + vec2(1.0f, -1.0f)) * inverseVP;
+	fragCoordSW = (fragCoord + vec2(-1.0f, 1.0f)) * inverseVP;
+	fragCoordSE = (fragCoord + vec2(1.0f, 1.0f)) * inverseVP;
 	fragCoordM = fragCoord;
 	gl_Position = vec4(position, 0.f, 1.0f);
 }
