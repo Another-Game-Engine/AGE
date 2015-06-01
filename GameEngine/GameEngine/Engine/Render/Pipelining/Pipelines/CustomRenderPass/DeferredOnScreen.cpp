@@ -10,6 +10,7 @@
 #include <Render/ProgramResources/Types/Uniform/Mat4.hh>
 #include <Render/ProgramResources/Types/Uniform/Sampler/Sampler2D.hh>
 #include <Render/ProgramResources/Types/Uniform/Vec3.hh>
+#include <Render/ProgramResources/Types/Uniform/Vec2.hh>
 #include <Threads/RenderThread.hpp>
 #include <Threads/ThreadManager.hpp>
 #include <Core/ConfigurationManager.hpp>
@@ -69,6 +70,7 @@ namespace AGE
 		OpenGLState::glDisable(GL_CULL_FACE);
 		OpenGLState::glDisable(GL_DEPTH_TEST);
 		OpenGLState::glDisable(GL_STENCIL_TEST);
+		_programs[PROGRAM_SCREEN]->get_resource<Vec2>("resolution").set(glm::vec2(viewport.x, viewport.y));
 		_quadPainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_SCREEN], Properties(), _quadVertices);
 	}
 
