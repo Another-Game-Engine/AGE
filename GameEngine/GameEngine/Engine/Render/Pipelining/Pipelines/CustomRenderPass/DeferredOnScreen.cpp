@@ -11,6 +11,7 @@
 #include <Render/ProgramResources/Types/Uniform/Sampler/Sampler2D.hh>
 #include <Render/ProgramResources/Types/Uniform/Vec3.hh>
 #include <Render/ProgramResources/Types/Uniform/Vec2.hh>
+#include <Render/ProgramResources/Types/Uniform/Vec1.hh>
 #include <Threads/RenderThread.hpp>
 #include <Threads/ThreadManager.hpp>
 #include <Core/ConfigurationManager.hpp>
@@ -59,7 +60,7 @@ namespace AGE
 		_quadPainter = _painterManager->get_painter(quadPainterKey);
 	}
 
-	void DeferredOnScreen::renderPass(RenderPipeline const &, RenderLightList &, CameraInfos const &)
+	void DeferredOnScreen::renderPass(RenderPipeline const &, RenderLightList &, CameraInfos const &infos)
 	{
 		SCOPE_profile_cpu_function("RenderTimer");
 		SCOPE_profile_gpu_i("DefferedOnScreen pass");
@@ -71,6 +72,7 @@ namespace AGE
 		OpenGLState::glDisable(GL_DEPTH_TEST);
 		OpenGLState::glDisable(GL_STENCIL_TEST);
 		_programs[PROGRAM_SCREEN]->get_resource<Vec2>("resolution").set(glm::vec2(viewport.x, viewport.y));
+		_programs[PROGRAM_SCREEN]->get_resource<Vec1>("activated").set(infos.data.activated == true ? 1.0f : 0.f);
 		_quadPainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_SCREEN], Properties(), _quadVertices);
 	}
 

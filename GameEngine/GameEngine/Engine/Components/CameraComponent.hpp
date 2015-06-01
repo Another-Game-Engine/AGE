@@ -11,6 +11,7 @@ namespace AGE
 {
 	struct CameraData
 	{
+		bool activated = true;
 		std::shared_ptr<Texture3D> texture;
 		glm::mat4 projection = glm::mat4(1.0f);
 		RenderType pipeline = RenderType::DEFERRED;

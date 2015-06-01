@@ -6,7 +6,7 @@
 
 uniform sampler2D screen;
 uniform vec2 resolution;
-//uniform float activated;
+uniform float activated;
 
 layout (location = 0) out vec4 color;
 
@@ -54,6 +54,5 @@ vec4 fxaa(sampler2D tex, vec2 fragCoord, vec2 resolution, vec2 v_rgbNW, vec2 v_r
 void main(void)
 {
 	vec2 fragCoord = texCoord * resolution;
-//	color = mix(texture(screen, texCoord), fxaa(screen, fragCoord, resolution, fragCoordNW, fragCoordNE, fragCoordSW, fragCoordSE, fragCoordM), activated);
-	color = fxaa(screen, fragCoord, resolution, fragCoordNW, fragCoordNE, fragCoordSW, fragCoordSE, fragCoordM);
+	color = mix(texture(screen, texCoord), fxaa(screen, fragCoord, resolution, fragCoordNW, fragCoordNE, fragCoordSW, fragCoordSE, fragCoordM), activated);
 }
