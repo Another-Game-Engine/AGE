@@ -258,7 +258,10 @@
     <ClCompile Include="Engine\Render\DepthMapHandle.cpp" />
     <ClCompile Include="Engine\Render\DepthMapManager.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredDirectionalLightning.cpp" />
+    <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredOnScreen.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredShadowBuffering.cpp" />
+    <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredSkyBox.cpp" />
+    <ClCompile Include="Engine\Render\ProgramResources\Types\Uniform\Sampler\Sampler3D.cpp" />
     <ClCompile Include="Engine\Render\Properties\AABB.cpp" />
     <ClCompile Include="Engine\Components\PhysicsData.cpp" />
     <ClCompile Include="Engine\Physics\Collision.cpp" />
@@ -297,6 +300,7 @@
     <ClCompile Include="Engine\Render\ProgramResources\Types\Uniform\Mat4Array255.cpp" />
     <ClCompile Include="Engine\Render\Properties\Properties.cpp" />
     <ClCompile Include="Engine\Render\PropertyManager.cpp" />
+    <ClCompile Include="Engine\Render\Textures\Texture3D.cpp" />
     <ClCompile Include="Engine\Systems\CollisionSystem.cpp" />
     <ClCompile Include="Engine\Systems\DebugSystem.cpp" />
     <ClCompile Include="Engine\Systems\FreeFlyCamera.cpp" />
@@ -501,6 +505,7 @@
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredDirectionalLightning.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredMerging.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredMergingDebug.hh" />
+    <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredOnScreen.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredPointLightning.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredBasicBuffering.hh" />
     <ClInclude Include="Engine\Core\Inputs\ActionManager.hh" />
@@ -518,15 +523,18 @@
     <ClInclude Include="Engine\Render\GeometryManagement\SimpleGeometry.hh" />
     <ClInclude Include="Engine\Render\PipelineTypes.hpp" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredShadowBuffering.hh" />
+    <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredSkyBox.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredSpotLightning.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\PipelineTools.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Render\RenderModes.hh" />
+    <ClInclude Include="Engine\Render\ProgramResources\Types\Uniform\Sampler\Sampler3D.hh" />
     <ClInclude Include="Engine\Render\ProgramResources\Types\Uniform\Vec3.hh" />
     <ClInclude Include="Engine\Render\Properties\AABB.hpp" />
     <ClInclude Include="Engine\Render\Properties\Materials\ScaleUVs.hpp" />
     <ClInclude Include="Engine\Render\Properties\Materials\Specular.hh" />
     <ClInclude Include="Engine\Render\ProgramResources\Types\Uniform\Mat4Array255.hh" />
     <ClInclude Include="Engine\Render\Properties\Properties.hh" />
+    <ClInclude Include="Engine\Render\Textures\Texture3D.hh" />
     <ClInclude Include="Engine\Systems\CollisionSystem.hpp" />
     <ClInclude Include="Engine\Systems\DebugSystem.hpp" />
     <ClInclude Include="Engine\Systems\FreeFlyCamera.hh" />

@@ -60,6 +60,8 @@ namespace AGE
 				ImGui::SliderInt("Compression quality", &dataset->textureCompressionQuality, 0, 4);
 				ImGui::Checkbox("Generate mipmaps", &dataset->generateMipmap);
 			}
+			ImGui::Checkbox("Flipping Horizontal", &dataset->flipH);
+			ImGui::Checkbox("Flipping Vertical", &dataset->flipV);
 		}
 
 	}

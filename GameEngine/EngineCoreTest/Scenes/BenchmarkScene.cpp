@@ -103,8 +103,10 @@ namespace AGE
 		getInstance<AGE::AssetsManager>()->loadMesh(OldFile("ball/ball.sage"), "DEMO_SCENE_BASIC_ASSETS");
 		getInstance<AGE::AssetsManager>()->loadMaterial(OldFile("cube/cube.mage"), "DEMO_SCENE_BASIC_ASSETS");
 		getInstance<AGE::AssetsManager>()->loadMaterial(OldFile("ball/ball.mage"), "DEMO_SCENE_BASIC_ASSETS");
-		getInstance<AGE::AssetsManager>()->loadAnimation(OldFile("hexapod/animation/hexapod@attack(1).aage"), "DEMO_SCENE_BASIC_ASSETS");
-		getInstance<AGE::AssetsManager>()->loadSkeleton(OldFile("hexapod/animation/hexapod@attack(1).skage"), "DEMO_SCENE_BASIC_ASSETS");
+		_skyboxTest = getInstance<AGE::AssetsManager>()->loadSkybox("test", OldFile("skyboxes/test/"), { { "test_pos_x.tage", "test_neg_x.tage", "test_pos_y.tage", "test_neg_y.tage", "test_pos_z.tage", "test_neg_z.tage" } }, "DEMO_SCENE_BASIC_ASSETS");
+		_skyboxSpace = getInstance<AGE::AssetsManager>()->loadSkybox("space", OldFile("skyboxes/space/"), { { "pink_planet_pos_x.tage", "pink_planet_neg_x.tage", "pink_planet_pos_y.tage", "pink_planet_neg_y.tage", "pink_planet_pos_z.tage", "pink_planet_neg_z.tage" } }, "DEMO_SCENE_BASIC_ASSETS");
+		//getInstance<AGE::AssetsManager>()->loadAnimation(OldFile("hexapod/animation/hexapod@attack(1).aage"), "DEMO_SCENE_BASIC_ASSETS");
+		//getInstance<AGE::AssetsManager>()->loadSkeleton(OldFile("hexapod/animation/hexapod@attack(1).skage"), "DEMO_SCENE_BASIC_ASSETS");
 
 		setInstance<AGE::AnimationManager>();
 
@@ -138,6 +140,9 @@ namespace AGE
 			auto cam = camera.addComponent<CameraComponent>();
 			camera.addComponent<FreeFlyComponent>();
 			cam->setPipeline(RenderType::DEFERRED);
+			cam->setTexture(_skyboxSpace);
+			cam->addSkyBoxToChoice("space", _skyboxSpace);
+			cam->addSkyBoxToChoice("test", _skyboxTest);
 			camera.getLink().setPosition(glm::vec3(0, 2.5f, 4.5f));
 
 			auto sceneFileName = EngineCoreTestConfiguration::getSelectedScenePath();
@@ -235,6 +240,7 @@ namespace AGE
 			GetRenderThread()->getQueue()->emplaceTask<Tasks::Render::ReloadShaders>();
 		}
 
+		GLOBAL_CAMERA.getComponent<CameraComponent>()->editorUpdate();
 		////////////////////////////////////
 
 		//static float ttime = 0;

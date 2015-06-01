@@ -280,6 +280,128 @@ namespace AGE
 		return texture;
 	}
 
+	std::shared_ptr<Texture3D> AssetsManager::loadSkybox(std::string const &name, OldFile &_filePath, std::array<std::string, 6> const &textures,  const std::string &loadingChannel)
+	{
+		{
+			std::lock_guard<std::mutex> lock(_mutex);
+			if (_skyboxes.find(name) != std::end(_skyboxes))
+			{
+				return _skyboxes[name];
+			}
+		}
+
+		auto texture = std::make_shared<Texture3D>();
+		{
+			std::lock_guard<std::mutex> lock(_mutex);
+			_skyboxes.insert(std::make_pair(name, texture));
+		}
+
+		auto future = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]()
+		{
+			static const GLenum textureFaces[6] = {
+				GL_TEXTURE_CUBE_MAP_POSITIVE_X,
+				GL_TEXTURE_CUBE_MAP_NEGATIVE_X,
+				GL_TEXTURE_CUBE_MAP_POSITIVE_Y,
+				GL_TEXTURE_CUBE_MAP_NEGATIVE_Y,
+				GL_TEXTURE_CUBE_MAP_POSITIVE_Z,
+				GL_TEXTURE_CUBE_MAP_NEGATIVE_Z
+			};
+
+			SCOPE_profile_cpu_i("AssetsLoad", "LoadSkybox");
+			
+
+			for (int index = 0; index < 6; ++index)
+			{
+				std::shared_ptr<TextureData> data = std::make_shared<TextureData>();
+				OldFile filePath(_assetsDirectory + std::string(_filePath.getFullName()) + textures[index]);
+				assert(filePath.exists());
+				std::ifstream ifs(filePath.getFullName(), std::ios::binary);
+				cereal::PortableBinaryInputArchive ar(ifs);
+				ar(*data.get());
+
+				GLenum ct = GL_RGB32F;
+				GLenum color = GL_RGB;
+				switch (data->colorNumber)
+				{
+				case 3:
+					ct = GL_RGB32F;
+					color = GL_BGR;
+					break;
+				case 4:
+					ct = GL_RGBA32F;
+					color = GL_BGRA;
+					break;
+				case 1:
+					ct = GL_RGB32F;
+					color = GL_LUMINANCE;
+					break;
+				default:
+					return AssetsLoadingResult(true, "Image format not found.\n");
+					break;
+				}
+				if (index == 0)
+				{
+					auto success = texture->init(data->width, data->height, ct, true);
+					if (success == false)
+					{
+						return AssetsLoadingResult(false, "Texture loading error");
+					}
+				}
+				texture->bind();
+				texture->set(textureFaces[index], data->data, 0, color, GL_UNSIGNED_BYTE);
+				if (index == 5)
+				{
+					texture->parameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+					texture->parameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+					switch (data->repeatX)
+					{
+					case TextureData::NoRepeat:
+						texture->parameter(GL_TEXTURE_WRAP_T, GL_REPEAT);
+						break;
+					case TextureData::Repeat:
+						texture->parameter(GL_TEXTURE_WRAP_T, GL_REPEAT);
+						break;
+					case TextureData::MirrorRepeat:
+						texture->parameter(GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
+						break;
+					case TextureData::ClampToBorder:
+						texture->parameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+						break;
+					case TextureData::ClampToEdge:
+						texture->parameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+						break;
+					}
+
+					switch (data->repeatY)
+					{
+					case TextureData::NoRepeat:
+						texture->parameter(GL_TEXTURE_WRAP_S, GL_REPEAT);
+						break;
+					case TextureData::Repeat:
+						texture->parameter(GL_TEXTURE_WRAP_S, GL_REPEAT);
+						break;
+					case TextureData::MirrorRepeat:
+						texture->parameter(GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
+						break;
+					case TextureData::ClampToBorder:
+						texture->parameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+						break;
+					case TextureData::ClampToEdge:
+						texture->parameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+						break;
+					}
+					texture->generateMipmaps();
+				}
+				texture->unbind();
+
+			}
+			return AssetsLoadingResult(true);
+		});
+		pushNewAsset(loadingChannel, _filePath.getFullName(), future);
+		return texture;
+	}
+
 	bool AssetsManager::loadAnimation(const OldFile &_filePath, const std::string &loadingChannel)
 	{
 		OldFile filePath(_assetsDirectory + _filePath.getFullName());

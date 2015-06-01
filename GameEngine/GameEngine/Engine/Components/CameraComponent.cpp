@@ -10,8 +10,7 @@
 namespace AGE
 {
 	CameraComponent::CameraComponent()
-		: ComponentBase(),
-		_pipeline(RenderType::DEFERRED)
+		: ComponentBase()
 	{
 	}
 
@@ -22,53 +21,25 @@ namespace AGE
 	void CameraComponent::_copyFrom(const ComponentBase *model)
 	{
 		auto o = static_cast<const CameraComponent*>(model);
-		_projection = o->_projection;
-		_pipeline = o->_pipeline;
+		_data = o->_data;
 	}
 
 	void CameraComponent::setProjection(const glm::mat4 &projection)
 	{
-		_projection = projection;
-
-		AGE::GetPrepareThread()->setCameraInfos(_projection, _key, _pipeline);
+		_data.projection = projection;
+		AGE::GetPrepareThread()->setCameraInfos(_data, _key);
 	}
 
 	void CameraComponent::setPipeline(RenderType pipeline)
 	{
-		_pipeline = pipeline;
-		AGE::GetPrepareThread()->setCameraInfos(_projection, _key, _pipeline);
+		_data.pipeline = pipeline;
+		AGE::GetPrepareThread()->setCameraInfos(_data, _key);
 	}
 
-	//void CameraComponent::addPipeline(RenderType pipeline)
-	//{
-	//	auto haveIt = havePipeline(pipeline);
-	//	if (haveIt == false)
-	//	{
-	//		_pipelines.insert(pipeline);
-	//		AGE::GetPrepareThread()->setCameraInfos(_projection, _key, _pipelines);
-	//	}
-	//}
-
-	//void CameraComponent::removePipeline(RenderType pipeline)
-	//{
-	//	auto it = _pipelines.find(pipeline);
-	//	if (it  != std::end(_pipelines))
-	//	{
-	//		_pipelines.erase(it);
-	//		AGE::GetPrepareThread()->setCameraInfos(_projection, _key, _pipelines);
-	//	}
-	//}
-
-	//bool CameraComponent::havePipeline(RenderType pipeline) const
-	//{
-	//	auto it = _pipelines.find(pipeline);
-	//	return (it != std::end(_pipelines));
-	//}
-
-
-	const glm::mat4 &CameraComponent::getProjection() const
+	void CameraComponent::setTexture(std::shared_ptr<Texture3D> const &texture)
 	{
-		return _projection;
+		_data.texture = texture;
+		AGE::GetPrepareThread()->setCameraInfos(_data, _key);
 	}
 
 	void CameraComponent::init()
@@ -86,13 +57,18 @@ namespace AGE
 		{
 			entity.getLink().unregisterOctreeObject(_key);
 		}
-		_projection = glm::mat4(1);
+		_data = CameraData();
 	}
 
 	void CameraComponent::postUnserialization()
 	{
 		init();
-		setProjection(_projection);
+		AGE::GetPrepareThread()->setCameraInfos(_data, _key);
+	}
+
+	void CameraComponent::addSkyBoxToChoice(std::string const &type, std::shared_ptr<Texture3D> const &texture)
+	{
+		_choicesSkymap[type] = texture;
 	}
 
 #ifdef EDITOR_ENABLED
@@ -104,7 +80,27 @@ namespace AGE
 
 	bool CameraComponent::editorUpdate()
 	{
-		return false;
+		bool modified = false;
+		int countChoices = _choicesSkymap.size();
+		char  **choices = new char *[countChoices];
+		int index = 0;
+		int current_item = 0;
+		for (auto &choice : _choicesSkymap) {
+			choices[index] = new char[50];
+			memset(choices[index], 0, 50);
+			char const *tmp = choice.first.c_str();
+			memcpy(choices[index], tmp, choice.first.size());
+			++index;
+		}
+		if (ImGui::ListBox("Skybox", &current_item, (char const **)choices, countChoices))
+		{
+			setTexture(_choicesSkymap[std::string(choices[current_item])]);
+			modified = true;
+		}
+		for (int i = 0; i < countChoices; ++i)
+			delete[] choices[i];
+		delete[] choices;
+		return modified;
 	}
 #endif
 

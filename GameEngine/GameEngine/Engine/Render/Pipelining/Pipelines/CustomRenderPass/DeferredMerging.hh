@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Render/Pipelining/Render/ScreenRender.hh>
+#include <Render/Pipelining/Render/FrameBufferRender.hh>
 
 #include <glm/glm.hpp>
 
@@ -9,7 +9,7 @@ namespace AGE
 	class Texture2D;
 	class Program;
 
-	class DeferredMerging : public ScreenRender
+	class DeferredMerging : public FrameBufferRender
 	{
 	public:
 		DeferredMerging(glm::uvec2 const &screenSize, std::shared_ptr<PaintingManager> painterManager,

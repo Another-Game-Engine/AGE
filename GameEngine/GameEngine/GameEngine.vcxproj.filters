@@ -213,6 +213,13 @@
     <ClCompile Include="Engine\Entities\BinaryEntityPack.cpp" />
     <ClCompile Include="Engine\Components\ArchetypeComponent.cpp" />
     <ClCompile Include="Engine\Entities\ArchetypeManager.cpp" />
+    <ClCompile Include="Engine\Render\DepthMap.cpp" />
+    <ClCompile Include="Engine\Render\DepthMapHandle.cpp" />
+    <ClCompile Include="Engine\Render\DepthMapManager.cpp" />
+    <ClCompile Include="Engine\Render\Textures\Texture3D.cpp" />
+    <ClCompile Include="Engine\Render\ProgramResources\Types\Uniform\Sampler\Sampler3D.cpp" />
+    <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredSkyBox.cpp" />
+    <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredOnScreen.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -562,6 +569,13 @@
     <ClInclude Include="Engine\Entities\ArchetypeScenes.hpp" />
     <ClInclude Include="Engine\Entities\IArchetypeManager.hpp" />
     <ClInclude Include="Engine\Entities\ArchetypeManager.hpp" />
+    <ClInclude Include="Engine\Render\DepthMap.hpp" />
+    <ClInclude Include="Engine\Render\DepthMapHandle.hpp" />
+    <ClInclude Include="Engine\Render\DepthMapManager.hpp" />
+    <ClInclude Include="Engine\Render\Textures\Texture3D.hh" />
+    <ClInclude Include="Engine\Render\ProgramResources\Types\Uniform\Sampler\Sampler3D.hh" />
+    <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredSkyBox.hh" />
+    <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredOnScreen.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

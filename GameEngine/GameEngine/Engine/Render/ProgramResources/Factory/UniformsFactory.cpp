@@ -4,7 +4,7 @@
 #include <Render/ProgramResources/Types/Uniform/Mat4.hh>
 #include <Render/ProgramResources/Types/Uniform/Vec1.hh>
 #include <Render/ProgramResources/Types/Uniform/Sampler/Sampler2D.hh>
-
+#include <Render/ProgramResources/Types/Uniform/Sampler/Sampler3D.hh>
 
 #define LAMBDA_PROTO [this](GLint id, std::string &&name)
 
@@ -32,6 +32,10 @@ std::make_pair(GL_SAMPLER_2D, LAMBDA_PROTO\
 std::make_pair(GL_SAMPLER_2D_SHADOW, LAMBDA_PROTO\
 {\
 return (std::make_shared<Sampler2D>(id, std::move(name))); \
+}),\
+std::make_pair(GL_SAMPLER_CUBE, LAMBDA_PROTO\
+{\
+return (std::make_shared<Sampler3D>(id, std::move(name))); \
 })
 
 namespace AGE
@@ -40,6 +44,7 @@ namespace AGE
 	UniformsFactory::UniformsFactory() :
 		_blue_prints({ DECLAR_BUILDERS })
 	{
+		
 	}
 
 	std::shared_ptr<IProgramResources> UniformsFactory::build(GLenum mode, GLint id, std::string &&name)
