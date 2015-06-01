@@ -103,6 +103,31 @@ namespace AGE
 		template <typename Archive>
 		void load(Archive &ar, const std::uint32_t version);
 
+#ifdef EDITOR_ENABLED
+		virtual void editorCreate();
+		virtual void editorDelete();
+		virtual bool editorUpdate();
+
+		struct EditorStruct
+		{
+			float angularDrag;
+			glm::vec3 angularVelocity;
+			glm::vec3 centerOfMass;
+			float linearDrag;
+			glm::vec3 linearVelocity;
+			float mass;
+			glm::vec3 diagonalInertia;
+			float maxAngularVelocity;
+			float maxDepenetrationVelocity;
+			bool isAffectedByGravity;
+			bool kinematic;
+			Physics::CollisionDetectionMode collisionDetectionMode;
+			void copyDatas(RigidBody *ptr);
+			void editorUpdate(RigidBody *ptr);
+		};
+		std::unique_ptr<EditorStruct> editorStruct;
+#endif
+
 	private:
 		// Attributes
 		Physics::RigidBodyInterface *rigidBody = nullptr;

@@ -4,6 +4,10 @@
 #include <Core/AScene.hh>
 #include <Physics/PhysicsInterface.hpp>
 #include <Physics/WorldInterface.hpp>
+#ifdef EDITOR_ENABLED
+#include <imgui/imgui.h>
+#include <glm/gtc/type_ptr.hpp>
+#endif
 
 namespace AGE
 {
@@ -247,4 +251,92 @@ namespace AGE
 			entity.removeComponent<Private::PhysicsData>();
 		}
 	}
+
+#ifdef EDITOR_ENABLED
+	void RigidBody::editorCreate()
+	{
+
+	}
+	void RigidBody::editorDelete()
+	{
+
+	}
+	bool RigidBody::editorUpdate()
+	{
+		if (!editorStruct)
+		{
+			editorStruct = std::make_unique<EditorStruct>();
+		}
+		editorStruct->copyDatas(this);
+		editorStruct->editorUpdate(this);
+		return false;
+	}
+
+	void RigidBody::EditorStruct::copyDatas(RigidBody *ptr)
+	{
+		angularDrag = ptr->getAngularDrag();
+		angularVelocity = ptr->getAngularVelocity();
+		centerOfMass = ptr->getCenterOfMass();
+		linearDrag = ptr->getLinearDrag();
+		linearVelocity = ptr->getLinearVelocity();
+		mass = ptr->getMass();
+		diagonalInertia = ptr->getDiagonalInertiaTensor();
+		maxAngularVelocity = ptr->getMaxAngularVelocity();
+		maxDepenetrationVelocity = ptr->getMaxDepenetrationVelocity();
+		isAffectedByGravity = ptr->isAffectedByGravity();
+		kinematic = ptr->isKinematic();
+		collisionDetectionMode = ptr->getCollisionDetectionMode();
+	}
+
+	void RigidBody::EditorStruct::editorUpdate(RigidBody *ptr)
+	{
+		if (ImGui::InputFloat("Angular drag", &angularDrag))
+		{
+			ptr->setAngularDrag(angularDrag);
+		}
+		if (ImGui::InputFloat3("Angular velocity", glm::value_ptr(angularVelocity)))
+		{
+			ptr->setAngularVelocity(angularVelocity);
+		}
+		if (ImGui::InputFloat3("Center if mass", glm::value_ptr(centerOfMass)))
+		{
+			ptr->setCenterOfMass(centerOfMass);
+		}
+		if (ImGui::InputFloat("Linear drag", &linearDrag))
+		{
+			ptr->setLinearDrag(linearDrag);
+		}
+		if (ImGui::InputFloat3("Linear velocity", glm::value_ptr(linearVelocity)))
+		{
+			ptr->setLinearVelocity(linearVelocity);
+		}
+		if (ImGui::InputFloat("Mass", &mass))
+		{
+			ptr->setMass(mass);
+		}
+		if (ImGui::InputFloat3("Diagonal inertia", glm::value_ptr(diagonalInertia)))
+		{
+			ptr->setDiagonalInertiaTensor(diagonalInertia);
+		}
+		if (ImGui::InputFloat("Max angular velocity", &maxAngularVelocity))
+		{
+			ptr->setMaxAngularVelocity(maxAngularVelocity);
+		}
+		if (ImGui::InputFloat("Max depenetration velocity", &maxDepenetrationVelocity))
+		{
+			ptr->setMaxDepenetrationVelocity(maxDepenetrationVelocity);
+		}
+		if (ImGui::Checkbox("Affected by gravity", &isAffectedByGravity))
+		{
+			ptr->affectByGravity(isAffectedByGravity);
+		}
+		if (ImGui::Checkbox("Kinematic", &kinematic))
+		{
+			ptr->setAsKinematic(kinematic);
+		}
+		// todo, la flemme
+		collisionDetectionMode = ptr->getCollisionDetectionMode();
+	}
+#endif
+
 }

@@ -11,5 +11,10 @@ namespace AGE
 			Discrete,
 			Continuous
 		};
+
+		static const char *CollisionDetectionModeStr[2] = {
+			"Discrete"
+			, "Continuous"
+		};
 	}
 }
