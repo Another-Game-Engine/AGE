@@ -2,6 +2,8 @@
 
 uniform mat4 projection;
 uniform mat4 model;
+//uniform float resolution_x;
+//uniform float resolution_y;
 
 layout (location = 0) in vec2 position;
 
@@ -10,5 +12,7 @@ out vec2 texCoord;
 void main()
 {
 	texCoord = position * 0.5f + 0.5f;
+	//vec2 fragCoord = vec2(texCoord.x * resolution_x, texCoord.y * resolution_y);
+	//vec2 inverseVP = vec2(1.0f / resolution_x, 1.0f / resolution_y);
 	gl_Position = vec4(position, 0.f, 1.0f);
 }

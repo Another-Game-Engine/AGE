@@ -3,6 +3,7 @@
 #include <Render/ProgramResources/Types/Uniform/Vec3.hh>
 #include <Render/ProgramResources/Types/Uniform/Mat4.hh>
 #include <Render/ProgramResources/Types/Uniform/Vec1.hh>
+#include <Render/ProgramResources/Types/Uniform/Vec2.hh>
 #include <Render/ProgramResources/Types/Uniform/Sampler/Sampler2D.hh>
 #include <Render/ProgramResources/Types/Uniform/Sampler/Sampler3D.hh>
 
@@ -24,6 +25,10 @@ std::make_pair(GL_FLOAT_MAT4, LAMBDA_PROTO\
 std::make_pair(GL_FLOAT, LAMBDA_PROTO\
 { \
 	return (std::make_shared<Vec1>(0.0f, id, std::move(name))); \
+}), \
+std::make_pair(GL_FLOAT_VEC2, LAMBDA_PROTO\
+{ \
+	return (std::make_shared<Vec2>(glm::vec2(0.0f), id, std::move(name))); \
 }), \
 std::make_pair(GL_SAMPLER_2D, LAMBDA_PROTO\
 {\
