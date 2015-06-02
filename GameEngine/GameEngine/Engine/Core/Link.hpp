@@ -9,12 +9,14 @@
 #include <Utils/Serialization/VectorSerialization.hpp>
 #include <glm/gtc/quaternion.hpp>
 #include <cereal/cereal.hpp>
+#include <Configuration.hpp>
 
 namespace AGE
 {
 	class RenderScene;
 	class AScene;
 	class EntityData;
+	class BFCLinkTracker;
 	struct Link
 	{
 		inline const glm::vec3 &getPosition() const { return _position; }
@@ -35,7 +37,7 @@ namespace AGE
 		void internalSetForward(const glm::vec3 &v, bool recalculate);
 		// Used by modules like physic, do not use it to set object transform, use setTransform instead
 		void internalSetTransform(const glm::mat4 &t, bool recalculate);
-	
+
 		inline bool isUserModified() const
 		{
 			return _userModification;
@@ -73,7 +75,23 @@ namespace AGE
 		const glm::mat4 &getGlobalTransform();
 		const glm::mat4 getLocalTransform() const;
 		const glm::mat4 &getLocalTransform();
+
+#ifdef AGE_BFC
+		void setBFCTrackerIndex(std::size_t index) { _bfcIndex = index; }
+		std::size_t getBFCTrackerIndex() const { return _bfcIndex; }
+#endif
 	private:
+#ifdef AGE_BFC
+		std::size_t _bfcIndex = -1;
+		BFCLinkTracker *_bfcTracker = nullptr;
+
+		void BFC_ADD();
+		void BFC_REMOVE();
+#else
+		void BFC_ADD(){}
+		void BFC_REMOVE(){}
+#endif
+
 		EntityData *_entityPtr;
 		bool _userModification = false;
 

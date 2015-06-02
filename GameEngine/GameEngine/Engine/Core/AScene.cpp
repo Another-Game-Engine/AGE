@@ -14,6 +14,7 @@
 #include <Utils/Profiler.hpp>
 #include <Entities/BinaryEntityPack.hpp>
 #include <Entities/EntityBinaryPacker.hpp>
+#include <BFC/BFCLinkTracker.hpp>
 
 namespace AGE
 {
@@ -25,10 +26,16 @@ namespace AGE
 	{
 		// Set Dependency to the fallback plugin (physics disabled) --> Needed if a RigidBody is added while no PhysicsSystem exists
 		setInstance<Physics::NullPhysics, Physics::PhysicsInterface>()->startup("");
+#ifdef AGE_BFC
+		_bfcLinkTracker = new BFCLinkTracker();
+#endif
 	}
 
 	AScene::~AScene()
 	{
+#ifdef AGE_BFC
+		delete _bfcLinkTracker;
+#endif
 		_systems.clear();
 	}
 
@@ -63,7 +70,11 @@ namespace AGE
 	bool                    AScene::userUpdateEnd(float time)
 	{
 		SCOPE_profile_cpu_function("Scenes");
-		return _userUpdateEnd(time);
+		auto ret = _userUpdateEnd(time);
+#ifdef AGE_BFC
+		_bfcLinkTracker->reset();
+#endif
+		return ret;
 	}
 
 	bool                           AScene::start()

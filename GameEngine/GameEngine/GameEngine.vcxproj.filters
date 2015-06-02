@@ -221,6 +221,8 @@
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredSkyBox.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredOnScreen.cpp" />
     <ClCompile Include="Engine\Core\PrepareKey.cpp" />
+    <ClCompile Include="Engine\BFC\BFCLinkTracker.cpp" />
+    <ClCompile Include="Engine\BFC\BFCItem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -577,6 +579,9 @@
     <ClInclude Include="Engine\Render\ProgramResources\Types\Uniform\Sampler\Sampler3D.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredSkyBox.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredOnScreen.hh" />
+    <ClInclude Include="Engine\BFC\BFCBlock.hpp" />
+    <ClInclude Include="Engine\BFC\BFCItem.hpp" />
+    <ClInclude Include="Engine\BFC\BFCLinkTracker.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

@@ -30,6 +30,9 @@ namespace AGE
 	class EntityFilter;
 	class System;
 	class SceneManager;
+#ifdef AGE_BFC
+	class BFCLinkTracker;
+#endif
 
 	class AScene : public DependenciesInjector, public EntityIdRegistrationManager, public ComponentManager
 	{
@@ -43,6 +46,9 @@ namespace AGE
 		ENTITY_ID                                                               _entityNumber;
 		AGE::RenderScene                                                        *_renderScene;
 		bool                                                                    _active;
+#ifdef AGE_BFC
+		BFCLinkTracker                                                          *_bfcLinkTracker;
+#endif
 		friend EntityFilter;
 		friend class AGE::RenderScene;
 		friend class AGE::SceneManager;
@@ -50,6 +56,9 @@ namespace AGE
 		AGE::Engine *                                              _engine;
 		inline void setActive(bool tof) { _active = tof; }
 	public:
+#ifdef AGE_BFC
+		BFCLinkTracker *getBfcLinkTracker() { return _bfcLinkTracker; }
+#endif
 		AScene(AGE::Engine *engine);
 		virtual ~AScene();
 		inline std::size_t      getNumberOfEntities() const { return _entities.size(); }
