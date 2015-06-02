@@ -47,20 +47,20 @@
                 "value": 13917482855567903631
             }
         ],
-        "entityNumber": 3,
+        "entityNumber": 18,
         "Entity_0": {
             "cereal_class_version": 0,
             "link": {
                 "cereal_class_version": 0,
                 "Position": {
                     "value0": 0,
-                    "value1": 0,
-                    "value2": 0
+                    "value1": 2,
+                    "value2": -2.5999999046325684
                 },
                 "Scale": {
-                    "value0": 5,
-                    "value1": 5,
-                    "value2": 5
+                    "value0": 6,
+                    "value1": 6,
+                    "value2": 6
                 },
                 "Orientation": {
                     "value0": 0,
@@ -100,7 +100,7 @@
                 },
                 "Scale": {
                     "value0": 18,
-                    "value1": 8,
+                    "value1": 15,
                     "value2": 1
                 },
                 "Orientation": {
@@ -168,6 +168,590 @@
             },
             "AGE_CORE_EntityRepresentationComponent": {
                 "name": "girophare-Copy-Copy"
+            }
+        },
+        "Entity_3": {
+            "link": {
+                "Position": {
+                    "value0": -2,
+                    "value1": 0,
+                    "value2": -4
+                },
+                "Scale": {
+                    "value0": 10,
+                    "value1": 10,
+                    "value2": 10
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0.70710635185241699,
+                    "value2": 0,
+                    "value3": 0.70710724592208862
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "bridge"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "stone bridge/bridge.mage",
+                "value1": "stone bridge/bridge.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 16
+                }
+            }
+        },
+        "Entity_4": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0.38268312811851501,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 0.92387968301773071
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                6
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "directional"
+            },
+            "AGE_CORE_DirectionnalLightComponent": {
+                "cereal_class_version": 0,
+                "color": {
+                    "value0": 0.32549020648002625,
+                    "value1": 0.3333333432674408,
+                    "value2": 0.31764706969261169
+                }
+            }
+        },
+        "Entity_5": {
+            "link": {
+                "Position": {
+                    "value0": -6,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "dragon"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "dragon",
+                "value0": false,
+                "value1": false,
+                "value2": false,
+                "value3": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "dragon-Copy"
+            }
+        },
+        "Entity_6": {
+            "link": {
+                "Position": {
+                    "value0": -5,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "dragon"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "dragon",
+                "value0": false,
+                "value1": false,
+                "value2": false,
+                "value3": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "dragon-Copy"
+            }
+        },
+        "Entity_7": {
+            "link": {
+                "Position": {
+                    "value0": -4,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "dragon"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "dragon",
+                "value0": false,
+                "value1": false,
+                "value2": false,
+                "value3": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "dragon-Copy"
+            }
+        },
+        "Entity_8": {
+            "link": {
+                "Position": {
+                    "value0": -3,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "dragon"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "dragon",
+                "value0": false,
+                "value1": false,
+                "value2": false,
+                "value3": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "dragon-Copy"
+            }
+        },
+        "Entity_9": {
+            "link": {
+                "Position": {
+                    "value0": -1,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "dragon"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "dragon",
+                "value0": false,
+                "value1": false,
+                "value2": false,
+                "value3": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "dragon-Copy"
+            }
+        },
+        "Entity_10": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "dragon"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "dragon",
+                "value0": false,
+                "value1": false,
+                "value2": false,
+                "value3": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "dragon-Copy"
+            }
+        },
+        "Entity_11": {
+            "link": {
+                "Position": {
+                    "value0": 1,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "dragon"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "dragon",
+                "value0": false,
+                "value1": false,
+                "value2": false,
+                "value3": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "dragon-Copy"
+            }
+        },
+        "Entity_12": {
+            "link": {
+                "Position": {
+                    "value0": 2,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "dragon"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "dragon",
+                "value0": false,
+                "value1": false,
+                "value2": false,
+                "value3": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "dragon-Copy"
+            }
+        },
+        "Entity_13": {
+            "link": {
+                "Position": {
+                    "value0": 3,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "dragon"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "dragon",
+                "value0": false,
+                "value1": false,
+                "value2": false,
+                "value3": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "dragon-Copy"
+            }
+        },
+        "Entity_14": {
+            "link": {
+                "Position": {
+                    "value0": 4,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "dragon"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "dragon",
+                "value0": false,
+                "value1": false,
+                "value2": false,
+                "value3": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "dragon-Copy"
+            }
+        },
+        "Entity_15": {
+            "link": {
+                "Position": {
+                    "value0": -2,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "dragon"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "dragon",
+                "value0": false,
+                "value1": false,
+                "value2": false,
+                "value3": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "dragon-Copy"
+            }
+        },
+        "Entity_16": {
+            "link": {
+                "Position": {
+                    "value0": 5,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "dragon"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "dragon",
+                "value0": false,
+                "value1": false,
+                "value2": false,
+                "value3": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "dragon-Copy"
+            }
+        },
+        "Entity_17": {
+            "link": {
+                "Position": {
+                    "value0": 6,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "dragon"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "dragon",
+                "value0": false,
+                "value1": false,
+                "value2": false,
+                "value3": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "dragon-Copy"
             }
         }
     }
