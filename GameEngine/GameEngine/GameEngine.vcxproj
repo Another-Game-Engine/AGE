@@ -377,9 +377,7 @@
     <ClCompile Include="Engine\Utils\Age_microprofile.cpp" />
     <ClCompile Include="Engine\Utils\BitOperations.cpp" />
     <ClCompile Include="Engine\Utils\BoundingInfos.cpp" />
-    <ClCompile Include="Engine\Audio\Audio.cpp" />
     <ClCompile Include="Engine\Audio\AudioManager.cpp" />
-    <ClCompile Include="Engine\Audio\FmodError.cpp" />
     <ClCompile Include="Engine\Components\CameraComponent.cpp" />
     <ClCompile Include="Engine\Components\Component.cpp" />
     <ClCompile Include="Engine\Components\ComponentRegistrationManager.cpp" />
@@ -681,8 +679,6 @@
     <ClInclude Include="Engine\Utils\DrawQuad.hh" />
     <ClInclude Include="Engine\Audio\AudioManager.hh" />
     <ClInclude Include="Engine\Audio\ChannelGroupType.hpp" />
-    <ClInclude Include="Engine\Audio\FmodError.hpp" />
-    <ClInclude Include="Engine\Audio\Audio.hh" />
     <ClInclude Include="Engine\Components\CameraComponent.hpp" />
     <ClInclude Include="Engine\Components\CameraComponentTemplates.hpp" />
     <ClInclude Include="Engine\Components\ComponentRegistrationManager.hpp" />
