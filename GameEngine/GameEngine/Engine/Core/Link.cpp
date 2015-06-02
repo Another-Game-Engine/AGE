@@ -211,6 +211,7 @@ Link::Link(EntityData *entity, AScene *scene)
 	reset();
 #ifdef AGE_BFC
 	_bfcTracker = scene->getBfcLinkTracker();
+	_bfcBlockManager = scene->getBfcBlockManager();
 #endif
 }
 

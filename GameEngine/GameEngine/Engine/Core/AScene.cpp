@@ -15,6 +15,7 @@
 #include <Entities/BinaryEntityPack.hpp>
 #include <Entities/EntityBinaryPacker.hpp>
 #include <BFC/BFCLinkTracker.hpp>
+#include <BFC/BFCBlockManager.hpp>
 
 namespace AGE
 {
@@ -28,6 +29,7 @@ namespace AGE
 		setInstance<Physics::NullPhysics, Physics::PhysicsInterface>()->startup("");
 #ifdef AGE_BFC
 		_bfcLinkTracker = new BFCLinkTracker();
+		_bfcBlockManager = new BFCBlockManager();
 #endif
 	}
 
@@ -35,6 +37,7 @@ namespace AGE
 	{
 #ifdef AGE_BFC
 		delete _bfcLinkTracker;
+		delete _bfcBlockManager;
 #endif
 		_systems.clear();
 	}

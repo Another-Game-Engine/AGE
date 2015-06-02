@@ -241,6 +241,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\Vendors\imgui\imgui.cpp" />
+    <ClCompile Include="Engine\BFC\BFCBlock.cpp" />
     <ClCompile Include="Engine\BFC\BFCItem.cpp" />
     <ClCompile Include="Engine\BFC\BFCLinkTracker.cpp" />
     <ClCompile Include="Engine\Components\ArchetypeComponent.cpp" />
@@ -447,6 +448,7 @@
     <ClInclude Include="..\Vendors\imgui\imgui.h" />
     <ClInclude Include="..\Vendors\imgui\stb_textedit.h" />
     <ClInclude Include="Engine\BFC\BFCBlock.hpp" />
+    <ClInclude Include="Engine\BFC\BFCBlockManager.hpp" />
     <ClInclude Include="Engine\BFC\BFCLinkTracker.hpp" />
     <ClInclude Include="Engine\BFC\BFCItem.hpp" />
     <ClInclude Include="Engine\Components\ArchetypeComponent.hpp" />

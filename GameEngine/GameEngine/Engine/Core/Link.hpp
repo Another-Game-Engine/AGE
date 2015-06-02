@@ -17,6 +17,8 @@ namespace AGE
 	class AScene;
 	class EntityData;
 	class BFCLinkTracker;
+	class BFCBlockManager;
+
 	struct Link
 	{
 		inline const glm::vec3 &getPosition() const { return _position; }
@@ -84,6 +86,7 @@ namespace AGE
 #ifdef AGE_BFC
 		std::size_t _bfcIndex = -1;
 		BFCLinkTracker *_bfcTracker = nullptr;
+		BFCBlockManager *_bfcBlockManager = nullptr;
 
 		void BFC_ADD();
 		void BFC_REMOVE();
