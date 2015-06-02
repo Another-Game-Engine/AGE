@@ -51,6 +51,7 @@
 
 //COMPONENTS
 #include <Components/EntityRepresentation.hpp>
+#include <Components\PhysicsData.hpp>
 
 #include <Managers/ArchetypesEditorManager.hpp>
 
@@ -86,6 +87,7 @@ int			main(int ac, char **av)
 		REGISTER_COMPONENT_TYPE(AGE::DirectionalLightComponent);
 		REGISTER_COMPONENT_TYPE(AGE::FreeFlyComponent);
 		REGISTER_COMPONENT_TYPE(AGE::ArchetypeComponent);
+		REGISTER_COMPONENT_TYPE(AGE::RigidBody);
 
 		RegisterComponents();
 

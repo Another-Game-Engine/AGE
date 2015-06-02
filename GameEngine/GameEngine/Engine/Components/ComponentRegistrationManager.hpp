@@ -15,13 +15,13 @@ namespace AGE
 	class ComponentRegistrationManager
 	{
 		typedef std::function<void(ComponentBase *, cereal::JSONOutputArchive &)> RegisterJsonFn;
-		typedef std::function<void(void *, cereal::JSONInputArchive &)> LoadJsonFn;
+		typedef std::function<void(void *, cereal::JSONInputArchive &, Entity &)> LoadJsonFn;
 
 		typedef std::function<void(AScene *)> CreateComponentPoolFn;
 		typedef std::function<void(void *, ComponentBase *)> CopyFn;
 
 		typedef std::function<void(ComponentBase *, cereal::PortableBinaryOutputArchive &)> RegisterBinaryFn;
-		typedef std::function<void(void *, cereal::PortableBinaryInputArchive&)> LoadBinaryFn;
+		typedef std::function<void(void *, cereal::PortableBinaryInputArchive&, Entity &)> LoadBinaryFn;
 
 	private:
 		ComponentRegistrationManager();
@@ -67,9 +67,10 @@ namespace AGE
 				ar(cereal::make_nvp(T::getSerializableName(),*(static_cast<T*>(c))));
 			})));
 
-			_jsonLoadMap.insert(std::make_pair(ageId, LoadJsonFn([=](void *ptr, cereal::JSONInputArchive &ar){
+			_jsonLoadMap.insert(std::make_pair(ageId, LoadJsonFn([=](void *ptr, cereal::JSONInputArchive &ar, Entity &entity){
 				std::cout << "Loading component of type : " << name << std::endl;
 				T *c = new(ptr)T();
+				c->entity = entity;
 				ar(*c);
 			})));
 
@@ -78,9 +79,10 @@ namespace AGE
 				ar(*(static_cast<T*>(c)));
 			})));
 
-			_binaryLoadMap.insert(std::make_pair(ageId, LoadBinaryFn([=](void *ptr, cereal::PortableBinaryInputArchive &ar){
+			_binaryLoadMap.insert(std::make_pair(ageId, LoadBinaryFn([=](void *ptr, cereal::PortableBinaryInputArchive &ar, Entity &entity){
 				std::cout << "Loading component of type : " << name << std::endl;
 				T *c = new(ptr)T();
+				c->entity = entity;
 				ar(*c);
 			})));
 
