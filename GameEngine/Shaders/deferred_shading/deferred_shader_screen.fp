@@ -46,8 +46,8 @@ void main(void)
         texture2D(screen, texCoord + dir * 0.5f).xyz);
     float lumaB = dot(rgbB, luma);
     if ((lumaB < lumaMin) || (lumaB > lumaMax)){
-        color = mix(vec4(1.0f), vec4(rgbA, 1.0f), activated);
+        color = mix(texture(screen, texCoord), vec4(rgbA, 1.0f), activated);
     }else{
-		color = mix(vec4(1.0f), vec4(rgbB, 1.0f), activated);
+		color = mix(texture(screen, texCoord), vec4(rgbB, 1.0f), activated);
     }
 }
