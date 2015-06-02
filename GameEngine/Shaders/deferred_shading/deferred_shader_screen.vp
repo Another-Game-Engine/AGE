@@ -7,21 +7,9 @@ uniform vec2 resolution;
 layout (location = 0) in vec2 position;
 
 out vec2 texCoord;
-out vec2 fragCoordM;
-out vec2 fragCoordNW;
-out vec2 fragCoordNE;
-out vec2 fragCoordSW;
-out vec2 fragCoordSE;
 
 void main()
 {
 	texCoord = position * 0.5f + 0.5f;
-	vec2 fragCoord = texCoord * resolution;
-	vec2 inverseVP = 1.0f / resolution;
-	fragCoordNW = (fragCoord + vec2(-1.0f, -1.0f)) * inverseVP;
-	fragCoordNE = (fragCoord + vec2(1.0f, -1.0f)) * inverseVP;
-	fragCoordSW = (fragCoord + vec2(-1.0f, 1.0f)) * inverseVP;
-	fragCoordSE = (fragCoord + vec2(1.0f, 1.0f)) * inverseVP;
-	fragCoordM = fragCoord;
 	gl_Position = vec4(position, 0.f, 1.0f);
 }
