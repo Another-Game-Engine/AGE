@@ -243,6 +243,7 @@
     <ClCompile Include="..\Vendors\imgui\imgui.cpp" />
     <ClCompile Include="Engine\Components\ArchetypeComponent.cpp" />
     <ClCompile Include="Engine\Components\DirectionalLightComponent.cpp" />
+    <ClCompile Include="Engine\Core\PrepareKey.cpp" />
     <ClCompile Include="Engine\Entities\ArchetypeManager.cpp" />
     <ClCompile Include="Engine\Entities\BinaryEntity.cpp" />
     <ClCompile Include="Engine\Entities\BinaryEntityPack.cpp" />
