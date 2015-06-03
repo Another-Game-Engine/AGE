@@ -1,6 +1,8 @@
 #pragma once
 
 #include <cstddef>
+#include <queue>
+
 #include "BFCItem.hpp"
 
 namespace AGE
@@ -12,8 +14,10 @@ namespace AGE
 		BFCBlock();
 		bool isEmpty() const;
 		bool isFull() const;
+		std::uint8_t createItem(void *drawable);
 	private:
 		BFCItem _items[BlockMaxSize];
 		std::size_t _counter;
+		std::queue<std::uint8_t> _free;
 	};
 }

@@ -221,6 +221,8 @@
     <ClCompile Include="Engine\BFC\BFCLinkTracker.cpp" />
     <ClCompile Include="Engine\BFC\BFCItem.cpp" />
     <ClCompile Include="Engine\BFC\BFCBlock.cpp" />
+    <ClCompile Include="Engine\Graphic\GraphicElementManager.cpp" />
+    <ClCompile Include="Engine\BFC\BFCBlockManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -578,6 +580,9 @@
     <ClInclude Include="Engine\BFC\BFCItem.hpp" />
     <ClInclude Include="Engine\BFC\BFCLinkTracker.hpp" />
     <ClInclude Include="Engine\BFC\BFCBlockManager.hpp" />
+    <ClInclude Include="Engine\Graphic\GraphicElementManager.hpp" />
+    <ClInclude Include="Engine\Graphic\DRBMesh.hpp" />
+    <ClInclude Include="Engine\BFC\BFCKey.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

@@ -4,14 +4,13 @@
 
 namespace AGE
 {
-	class DrawablePtr;
-
 	class BFCItem
 	{
 	public:
 		BFCItem();
+		void setDrawable(void *drawable);
 	private:
-		DrawablePtr *_drawable = nullptr;  // 64
+		void        *_drawable = nullptr;  // 64
 		void        *_transformationInfos; //64
 		glm::vec4   _position; // 128
 	};

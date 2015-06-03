@@ -242,6 +242,7 @@
   <ItemGroup>
     <ClCompile Include="..\Vendors\imgui\imgui.cpp" />
     <ClCompile Include="Engine\BFC\BFCBlock.cpp" />
+    <ClCompile Include="Engine\BFC\BFCBlockManager.cpp" />
     <ClCompile Include="Engine\BFC\BFCItem.cpp" />
     <ClCompile Include="Engine\BFC\BFCLinkTracker.cpp" />
     <ClCompile Include="Engine\Components\ArchetypeComponent.cpp" />
@@ -251,6 +252,7 @@
     <ClCompile Include="Engine\Entities\BinaryEntity.cpp" />
     <ClCompile Include="Engine\Entities\BinaryEntityPack.cpp" />
     <ClCompile Include="Engine\Entities\EntityBinaryPacker.cpp" />
+    <ClCompile Include="Engine\Graphic\GraphicElementManager.cpp" />
     <ClCompile Include="Engine\Render\OcclusionTools\DepthMap.cpp" />
     <ClCompile Include="Engine\Render\OcclusionTools\DepthMapHandle.cpp" />
     <ClCompile Include="Engine\Render\OcclusionTools\DepthMapManager.cpp" />
@@ -446,6 +448,7 @@
     <ClInclude Include="..\Vendors\imgui\stb_textedit.h" />
     <ClInclude Include="Engine\BFC\BFCBlock.hpp" />
     <ClInclude Include="Engine\BFC\BFCBlockManager.hpp" />
+    <ClInclude Include="Engine\BFC\BFCKey.hpp" />
     <ClInclude Include="Engine\BFC\BFCLinkTracker.hpp" />
     <ClInclude Include="Engine\BFC\BFCItem.hpp" />
     <ClInclude Include="Engine\Components\ArchetypeComponent.hpp" />
@@ -462,6 +465,8 @@
     <ClInclude Include="Engine\Entities\EntityPacker.hpp" />
     <ClInclude Include="Engine\Entities\IArchetypeManager.hpp" />
     <ClInclude Include="Engine\Components\PhysicsData.hpp" />
+    <ClInclude Include="Engine\Graphic\DRBMesh.hpp" />
+    <ClInclude Include="Engine\Graphic\GraphicElementManager.hpp" />
     <ClInclude Include="Engine\Physics\BoxColliderInterface.hpp" />
     <ClInclude Include="Engine\Physics\CapsuleColliderInterface.hpp" />
     <ClInclude Include="Engine\Physics\ColliderInterface.hpp" />

@@ -9,4 +9,9 @@ namespace AGE
 	{
 
 	}
+
+	void BFCItem::setDrawable(void *drawable)
+	{
+		_drawable = drawable;
+	}
 }
