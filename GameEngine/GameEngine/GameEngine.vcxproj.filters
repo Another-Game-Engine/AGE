@@ -583,6 +583,7 @@
     <ClInclude Include="Engine\Graphic\GraphicElementManager.hpp" />
     <ClInclude Include="Engine\Graphic\DRBMesh.hpp" />
     <ClInclude Include="Engine\BFC\BFCKey.hpp" />
+    <ClInclude Include="Engine\BFC\BFCRootType.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

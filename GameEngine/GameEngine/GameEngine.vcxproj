@@ -451,6 +451,7 @@
     <ClInclude Include="Engine\BFC\BFCKey.hpp" />
     <ClInclude Include="Engine\BFC\BFCLinkTracker.hpp" />
     <ClInclude Include="Engine\BFC\BFCItem.hpp" />
+    <ClInclude Include="Engine\BFC\BFCRootType.hpp" />
     <ClInclude Include="Engine\Components\ArchetypeComponent.hpp" />
     <ClInclude Include="Engine\Components\DirectionalLightComponent.hh" />
     <ClInclude Include="Engine\Components\Collider.hpp" />

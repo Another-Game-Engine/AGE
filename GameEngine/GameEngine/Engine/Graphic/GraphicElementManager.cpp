@@ -17,11 +17,11 @@ namespace AGE
 
 		BFCKey result;
 		
-		_bfcBlockManager->createItem((void*)(drbMesh), result.blockId, result.itemId);
+		_bfcBlockManager->createItem(drbMesh, result.blockId, result.itemId);
 		// We don't set the type in the key, it's not the job of GraphicElementManager,
 		// it has to be done by the client who ask for the creation
 
-		result.elementPtr = (void*)(drbMesh);
+		result.elementPtr = drbMesh;
 		return result;
 	}
 }

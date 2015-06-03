@@ -14,7 +14,7 @@ namespace AGE
 		BFCBlock();
 		bool isEmpty() const;
 		bool isFull() const;
-		std::uint8_t createItem(void *drawable);
+		std::uint8_t createItem(BFCRootType *drawable);
 	private:
 		BFCItem _items[BlockMaxSize];
 		std::size_t _counter;

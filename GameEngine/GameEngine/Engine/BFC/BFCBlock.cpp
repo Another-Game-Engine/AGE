@@ -18,7 +18,7 @@ namespace AGE
 		return _counter == BlockMaxSize - 1;
 	}
 
-	std::uint8_t BFCBlock::createItem(void *drawable)
+	std::uint8_t BFCBlock::createItem(BFCRootType *drawable)
 	{
 		AGE_ASSERT(_free.empty() == false);
 		std::uint8_t index = _free.back();

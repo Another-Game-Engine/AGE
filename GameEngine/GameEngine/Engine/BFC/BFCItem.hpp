@@ -4,13 +4,15 @@
 
 namespace AGE
 {
+	struct BFCRootType;
+
 	class BFCItem
 	{
 	public:
 		BFCItem();
-		void setDrawable(void *drawable);
+		void setDrawable(BFCRootType *drawable);
 	private:
-		void        *_drawable = nullptr;  // 64
+		BFCRootType *_drawable = nullptr;  // 64
 		void        *_transformationInfos; //64
 		glm::vec4   _position; // 128
 	};
