@@ -116,6 +116,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PxTask", "Vendors\PhysX\Phy
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PhysX", "PhysX", "{FF5DF4D7-4AAB-4EE3-9539-6A7F08CE6726}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tool", "tool", "{F80CD93E-B35D-42B1-B65C-2322D6148808}"
+	ProjectSection(SolutionItems) = preProject
+		Shaders\tool\Fxaa3_11.h = Shaders\tool\Fxaa3_11.h
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		checked|Mixed Platforms = checked|Mixed Platforms
@@ -586,5 +591,6 @@ Global
 		{24546E40-3140-20F4-C5AC-E4001B9880B8} = {FF5DF4D7-4AAB-4EE3-9539-6A7F08CE6726}
 		{5B1132F6-84F8-142E-B951-ADB8505CC27F} = {FF5DF4D7-4AAB-4EE3-9539-6A7F08CE6726}
 		{FF5DF4D7-4AAB-4EE3-9539-6A7F08CE6726} = {8FD58CA8-8812-4B8D-85DC-B42B9D75D0CB}
+		{F80CD93E-B35D-42B1-B65C-2322D6148808} = {6823E483-DFC6-4750-920C-35DA2E87B060}
 	EndGlobalSection
 EndGlobal
