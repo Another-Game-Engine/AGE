@@ -12,6 +12,7 @@
 #include <Entities/EntityReadablePacker.hpp>
 #include <Systems\AssetsAndComponentRelationsSystem.hpp>
 #include <Entities\BinaryEntityPack.hpp>
+#include <Components/ComponentRegistrationManager.hpp>
 
 namespace AGE
 {

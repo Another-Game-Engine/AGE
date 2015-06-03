@@ -258,9 +258,6 @@
     <ClCompile Include="Engine\Core\SceneChunkSerialization.cpp" />
     <ClCompile Include="Engine\Entities\ArchetypeLibrary.cpp" />
     <ClCompile Include="Engine\Entities\EntitySerializationInfos.cpp" />
-    <ClCompile Include="Engine\Render\DepthMap.cpp" />
-    <ClCompile Include="Engine\Render\DepthMapHandle.cpp" />
-    <ClCompile Include="Engine\Render\DepthMapManager.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredDirectionalLightning.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredOnScreen.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredShadowBuffering.cpp" />
@@ -464,9 +461,6 @@
     <ClInclude Include="Engine\Entities\EntityBinaryPacker.hpp" />
     <ClInclude Include="Engine\Entities\EntityPacker.hpp" />
     <ClInclude Include="Engine\Entities\IArchetypeManager.hpp" />
-    <ClInclude Include="Engine\Render\DepthMap.hpp" />
-    <ClInclude Include="Engine\Render\DepthMapHandle.hpp" />
-    <ClInclude Include="Engine\Render\DepthMapManager.hpp" />
     <ClInclude Include="Engine\Components\PhysicsData.hpp" />
     <ClInclude Include="Engine\Physics\BoxColliderInterface.hpp" />
     <ClInclude Include="Engine\Physics\CapsuleColliderInterface.hpp" />

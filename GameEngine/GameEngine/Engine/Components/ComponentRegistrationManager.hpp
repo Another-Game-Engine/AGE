@@ -55,10 +55,12 @@ namespace AGE
 			_creationFunctions.insert(std::make_pair(key, [](Entity *e){return e->addComponent<T>(); }));
 			
 			T tmpInstance;
+
 			if (tmpInstance.isExposedInEditor())
 			{
 				_exposedTypes.insert(std::make_pair(key, ageId));
 			}
+
 			_typeIds.insert(std::make_pair(key, ageId));
 			_ageTypeIds.insert(std::make_pair(ageId, key));
 
@@ -67,19 +69,21 @@ namespace AGE
 				ar(cereal::make_nvp(T::getSerializableName(),*(static_cast<T*>(c))));
 			})));
 
-			_jsonLoadMap.insert(std::make_pair(ageId, LoadJsonFn([=](void *ptr, cereal::JSONInputArchive &ar, Entity &entity){
+			_jsonLoadMap.insert(std::make_pair(ageId, LoadJsonFn([=](void *ptr, cereal::JSONInputArchive &ar, Entity &entity)
+			{
 				std::cout << "Loading component of type : " << name << std::endl;
 				T *c = new(ptr)T();
 				c->entity = entity;
 				ar(*c);
 			})));
 
-			_binarySaveMap.insert(std::make_pair(ageId, RegisterBinaryFn([](ComponentBase *c, cereal::PortableBinaryOutputArchive &ar)
+			_binarySaveMap.insert(std::make_pair(ageId, RegisterBinaryFn([=](ComponentBase *c, cereal::PortableBinaryOutputArchive &ar)
 			{
 				ar(*(static_cast<T*>(c)));
 			})));
 
-			_binaryLoadMap.insert(std::make_pair(ageId, LoadBinaryFn([=](void *ptr, cereal::PortableBinaryInputArchive &ar, Entity &entity){
+			_binaryLoadMap.insert(std::make_pair(ageId, LoadBinaryFn([=](void *ptr, cereal::PortableBinaryInputArchive &ar, Entity &entity)
+			{
 				std::cout << "Loading component of type : " << name << std::endl;
 				T *c = new(ptr)T();
 				c->entity = entity;

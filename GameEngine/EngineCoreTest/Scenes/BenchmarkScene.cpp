@@ -25,6 +25,8 @@
 #include <Components/Collider.hpp>
 #include <Components/ArchetypeComponent.hpp>
 
+#include <Components/ComponentRegistrationManager.hpp>
+
 #include <Systems/RotationSystem.hpp>
 
 #include <Systems/DebugSystem.hpp>

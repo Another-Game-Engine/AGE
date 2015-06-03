@@ -1,5 +1,6 @@
 #include "Entity.hh"
 #include <Core/AScene.hh>
+#include <Components/ComponentRegistrationManager.hpp>
 
 namespace AGE
 {

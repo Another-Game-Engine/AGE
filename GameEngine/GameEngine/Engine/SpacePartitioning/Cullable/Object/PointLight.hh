@@ -13,7 +13,6 @@
 
 namespace AGE
 {
-
 	struct PointLight : public CullableShape<Sphere>
 	{
 		// To remove when light will be in octree

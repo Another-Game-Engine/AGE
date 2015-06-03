@@ -28,11 +28,11 @@
             },
             {
                 "key": 6,
-                "value": 11957752261005749183
+                "value": 8685391846632613471
             },
             {
                 "key": 7,
-                "value": 8685391846632613471
+                "value": 11957752261005749183
             },
             {
                 "key": 8,
@@ -232,7 +232,7 @@
             "flags": 0,
             "components_number": [
                 0,
-                6
+                7
             ],
             "archetypesDependency": [],
             "AGE_CORE_EntityRepresentationComponent": {

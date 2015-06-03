@@ -25,6 +25,10 @@ namespace AGE
 	{
 	}
 
+	DirectionalLightComponent::~DirectionalLightComponent()
+	{
+	}
+
 	void DirectionalLightComponent::_copyFrom(const ComponentBase *model)
 	{
 		auto o = static_cast<const DirectionalLightComponent*>(model);

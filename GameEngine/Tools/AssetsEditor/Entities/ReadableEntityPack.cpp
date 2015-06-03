@@ -11,6 +11,8 @@
 
 #include <Entities/BinaryEntityPack.hpp>
 
+#include <Components/ComponentRegistrationManager.hpp>
+
 namespace AGE
 {
 	ReadableEntityPack::ReadableEntityPack()

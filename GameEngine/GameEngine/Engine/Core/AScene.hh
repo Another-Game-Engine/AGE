@@ -2,7 +2,6 @@
 
 #include <Utils/DependenciesInjector.hpp>
 #include <memory>
-#include <Components/ComponentRegistrationManager.hpp>
 #include <Core/EntityIdRegistrationManager.hh>
 #include <list>
 #include <array>

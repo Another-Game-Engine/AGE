@@ -2,6 +2,7 @@
 
 #include <Entities/Entity.hh>
 #include <Components/EntityRepresentation.hpp>
+#include <Components/ComponentRegistrationManager.hpp>
 
 #include <imgui/imgui.h>
 #include <glm/glm.hpp>
