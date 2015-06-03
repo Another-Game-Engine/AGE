@@ -18,8 +18,10 @@ public:
 	GLuint getId() const;
 	bool compile();
 	void destroy();
+
 private:
 	bool compileUnitProg(char const *fileName);
+	void handleRequireToken(std::string const &data);
 
 private:
 	std::string _filename;
