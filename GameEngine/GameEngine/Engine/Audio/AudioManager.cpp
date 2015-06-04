@@ -7,6 +7,7 @@ AudioManager::AudioManager()
 
 AudioManager::~AudioManager()
 {
+	this->_soloud.deinit();
 	/*
 	_audios.clear();
 	for (auto &&e : _channelGroups)
@@ -23,6 +24,7 @@ AudioManager::~AudioManager()
 
 bool AudioManager::init()
 {
+	this->_soloud.init();
 	return true;
 }
 /*

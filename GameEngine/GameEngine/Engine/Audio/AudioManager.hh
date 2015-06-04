@@ -5,6 +5,7 @@
 #include <memory>
 #include <map>
 #include <iostream>
+#include <soloud.h>
 
 class AudioManager : public std::enable_shared_from_this<AudioManager>, public Dependency<AudioManager>
 {
@@ -19,10 +20,8 @@ public:
 	FMOD::ChannelGroup* getChannelGroup(ChannelGroupType type);
 	inline std::shared_ptr<Audio> getAudio(const std::string &name){ auto r = _audios.find(name); if (r == std::end(_audios)) return nullptr; return r->second; }*/
 private:
+	SoLoud::Soloud soloud;
 	/*
-	FMOD::System *_system;
-	FMOD_SPEAKERMODE _speakerMode;
-	FMOD_CAPS _caps;
 	std::map<ChannelGroupType, FMOD::ChannelGroup*> _channelGroups;
 	std::map<std::string, std::shared_ptr<Audio>> _audios;*/
 };
