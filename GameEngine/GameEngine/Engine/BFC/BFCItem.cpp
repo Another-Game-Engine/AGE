@@ -10,7 +10,7 @@ namespace AGE
 
 	}
 
-	void BFCItem::setDrawable(BFCRootType *drawable)
+	void BFCItem::setDrawable(BFCCullableObject *drawable)
 	{
 		_drawable = drawable;
 	}

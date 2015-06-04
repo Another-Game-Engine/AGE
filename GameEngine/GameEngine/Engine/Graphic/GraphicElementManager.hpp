@@ -7,7 +7,7 @@
 
 namespace AGE
 {
-	struct BFCKey;
+	class BFCCullableHandle;
 	struct MeshInstance;
 
 	class BFCBlockManager;
@@ -15,7 +15,7 @@ namespace AGE
 	class GraphicElementManager
 	{
 	public:
-		BFCKey addMesh(std::shared_ptr<MeshInstance> meshInstance);
+		BFCCullableHandle addMesh(std::shared_ptr<MeshInstance> meshInstance);
 	private:
 		
 		BFCBlockManager *_bfcBlockManager = nullptr;

@@ -4,20 +4,20 @@
 #include <queue>
 
 #include "BFCItem.hpp"
+#include "BFCItemID.hpp"
 
 namespace AGE
 {
 	class BFCBlock
 	{
 	public:
-		static const std::size_t BlockMaxSize = 256;
 		BFCBlock();
 		bool isEmpty() const;
 		bool isFull() const;
-		std::uint8_t createItem(BFCRootType *drawable);
+		ItemID createItem(BFCCullableObject *object);
 	private:
-		BFCItem _items[BlockMaxSize];
+		BFCItem _items[MaxItemID];
 		std::size_t _counter;
-		std::queue<std::uint8_t> _free;
+		std::queue<ItemID> _free;
 	};
 }

@@ -14,16 +14,16 @@ namespace AGE
 
 	bool BFCBlock::isFull() const
 	{
-		AGE_ASSERT(_counter <= BlockMaxSize);
-		return _counter == BlockMaxSize - 1;
+		AGE_ASSERT(_counter < MaxItemID);
+		return _counter == MaxItemID - 1;
 	}
 
-	std::uint8_t BFCBlock::createItem(BFCRootType *drawable)
+	ItemID BFCBlock::createItem(BFCCullableObject *object)
 	{
 		AGE_ASSERT(_free.empty() == false);
-		std::uint8_t index = _free.back();
+		ItemID index = _free.back();
 		_free.pop();
-		_items[index].setDrawable(drawable);
+		_items[index].setDrawable(object);
 		++_counter;
 		return index;
 	}

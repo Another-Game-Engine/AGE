@@ -1,6 +1,6 @@
 #include "GraphicElementManager.hpp"
 
-#include "BFC/BFCKey.hpp"
+#include "BFC/BFCCullableHandle.hpp"
 
 #include "AssetManagement/Instance/MeshInstance.hh"
 
@@ -10,18 +10,19 @@ namespace AGE
 {
 	struct MeshInstance;
 
-	BFCKey GraphicElementManager::addMesh(std::shared_ptr<MeshInstance> meshInstance)
+	BFCCullableHandle GraphicElementManager::addMesh(std::shared_ptr<MeshInstance> meshInstance)
 	{
 		DRBMesh *drbMesh = _meshPool.create();
 		drbMesh->subMeshs = meshInstance->subMeshs;
 
-		BFCKey result;
+		BFCCullableHandle result;
 		
-		_bfcBlockManager->createItem(drbMesh, result.blockId, result.itemId);
+		//_bfcBlockManager->createItem(drbMesh, result.blockId, result.itemId);
+
 		// We don't set the type in the key, it's not the job of GraphicElementManager,
 		// it has to be done by the client who ask for the creation
 
-		result.elementPtr = drbMesh;
+		//result.elementPtr = drbMesh;
 		return result;
 	}
 }
