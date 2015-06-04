@@ -1,7 +1,7 @@
 #include <Render/UnitProg.hh>
 #include <assert.h>
 #include <fstream>
-#include <vector>
+#include <sstream>
 
 #include <direct.h>
 
@@ -30,17 +30,31 @@ UnitProg::~UnitProg()
 
 #include <string>
 
-void UnitProg::handleRequireToken(std::string const &data)
+char const *UnitProg::handleRequireToken(std::vector<char> const &data)
 {
-	auto start = data.find("#include(");
-	if (start == std::string::npos)
-	{ 
-		return;
-	}
-	auto end = data.find(")", start);
-	assert(end == std::string::npos);
-	auto file = data.substr(start, end);
-	std::cout << "----> " << file << std::endl;
+//	std::string data;
+//	data.str();
+//	auto &start = std::find(data.begin(), data.end(), '@');
+//	if (start == data.end())
+//	{ 
+//		return data.data();
+//	}
+//	auto &end = std::find(++start, data.end(), '@');
+//	assert(end != data.end());
+//	std::string file(start, end);
+//	--start;
+//	std::cout << "[" << file << "]" << std::endl;
+//	std::vector<char> ret(data.size() - 2 - file.size());
+//	auto after = std::copy(data.begin(), --start, ret.begin());
+//	std::copy(++end, data.end(), after);
+	//	auto file = data.substr(start, start - end);
+//	std::cout << "file ----> " << file << std::endl;
+//	ret = data.substr(0, start);
+//	std::cout << "cpnt 1 ----> " << ret << std::endl;
+//	ret += data.substr(end, data.size() - end);
+//	std::cout << "cpnt 2 ----> " << std::endl;
+//	return ret.data();
+	return nullptr;
 }
 
 bool UnitProg::compileUnitProg(char const *fileName)
@@ -51,11 +65,10 @@ bool UnitProg::compileUnitProg(char const *fileName)
 	file.seekg(0, file.end);
 	fileSize = static_cast<GLint>(file.tellg()) + 1;
 	file.seekg(0, file.beg);
-	std::vector<char> content(fileSize);
-	file.read(content.data(), fileSize - 1);
-	content[fileSize - 1] = 0;
-	handleRequireToken(content.data());
-	GLchar const *convertionSource = content.data();
+	std::ostringstream stream;
+	stream << file.rdbuf();
+	std::string data = stream.str();
+	GLchar const *convertionSource = data.c_str();
 	glShaderSource(_id, 1, &convertionSource, NULL);
 	glCompileShader(_id);
 	GLint compileRet = 0;

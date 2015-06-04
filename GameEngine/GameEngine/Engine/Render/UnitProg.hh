@@ -2,6 +2,7 @@
 
 # include <Utils/OpenGL.hh>
 # include <iostream>
+# include <vector>
 
 class UnitProg
 {
@@ -21,7 +22,7 @@ public:
 
 private:
 	bool compileUnitProg(char const *fileName);
-	void handleRequireToken(std::string const &data);
+	char const *handleRequireToken(std::vector<char> const &data);
 
 private:
 	std::string _filename;
