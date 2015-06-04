@@ -42,7 +42,7 @@ namespace AGE
 
 		auto find = _jsonLoadMap.find(id);
 		AGE_ASSERT(find != std::end(_jsonLoadMap));
-		find->second(voidCpt, ar);
+		find->second(voidCpt, ar, e);
 
 		auto cpt = (AGE::ComponentBase*)voidCpt;
 
@@ -63,7 +63,7 @@ namespace AGE
 
 		auto find = _binaryLoadMap.find(id);
 		AGE_ASSERT(find != std::end(_binaryLoadMap));
-		find->second(voidCpt, ar);
+		find->second(voidCpt, ar, e);
 
 		auto cpt = (AGE::ComponentBase*)voidCpt;
 

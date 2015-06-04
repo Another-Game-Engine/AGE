@@ -153,7 +153,7 @@ namespace AGE
 			this->maxAngularVelocity = maxAngularVelocity;
 		}
 
-		float BulletRigidBody::getMaxAngularVelocity(void) const
+		double BulletRigidBody::getMaxAngularVelocity(void) const
 		{
 			return maxAngularVelocity;
 		}

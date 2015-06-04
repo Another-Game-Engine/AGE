@@ -98,7 +98,7 @@ namespace AGE
 
 		for (auto &c : components)
 		{
-			if (!c->serializeInExport())
+			if (!c->serializeInExport() || !c->doSerialize())
 			{
 				continue;
 			}
