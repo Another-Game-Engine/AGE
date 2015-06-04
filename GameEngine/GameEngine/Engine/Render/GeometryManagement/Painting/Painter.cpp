@@ -91,9 +91,21 @@ namespace AGE
 			if (draw_element.isValid())
 			{
 				auto &property = propertiesList[index];
-				property.update_properties(program);
-				program->update();
-				_vertices[draw_element.getId()].draw(mode);
+				{
+					SCOPE_profile_gpu_i("Update properties");
+					SCOPE_profile_cpu_i("RenderTimer", "Update properties");
+					property.update_properties(program);
+				}
+				{
+					SCOPE_profile_gpu_i("Update Shader memory");
+					SCOPE_profile_cpu_i("RenderTimer", "Update Shader memory");
+					program->update();
+				}
+				{
+					SCOPE_profile_gpu_i("Draw");
+					SCOPE_profile_cpu_i("RenderTimer", "Draw");
+					_vertices[draw_element.getId()].draw(mode);
+				}
 			}
 			++index;
 		}
@@ -111,10 +123,21 @@ namespace AGE
 		program->set_attributes(_buffer);
 		_buffer.bind();
 		_buffer.update();
-
-		properties.update_properties(program);
-		program->update();
-		_vertices[vertice.getId()].draw(mode);
+		{
+			SCOPE_profile_gpu_i("Update properties");
+			SCOPE_profile_cpu_i("RenderTimer", "Update properties");
+			properties.update_properties(program);
+		}
+		{
+			SCOPE_profile_gpu_i("Update Shader memory");
+			SCOPE_profile_cpu_i("RenderTimer", "Update Shader memory");
+			program->update();
+		}
+		{
+			SCOPE_profile_gpu_i("Unique draw");
+			SCOPE_profile_cpu_i("RenderTimer", "Unique draw");
+			_vertices[vertice.getId()].draw(mode);
+		}
 
 		_buffer.unbind();
 	}
@@ -126,9 +149,16 @@ namespace AGE
 		// to be sure that this function is only called in render thread
 		AGE_ASSERT(GetThreadManager()->getCurrentThread() == (AGE::Thread*)GetRenderThread());
 		_buffer.bind();
-		_buffer.update();
-
-		_vertices[vertice.getId()].draw(mode);
+		{
+			SCOPE_profile_gpu_i("Update Shader memory");
+			SCOPE_profile_cpu_i("RenderTimer", "Update Shader memory");
+			_buffer.update();
+		}
+		{
+			SCOPE_profile_gpu_i("Unique draw");
+			SCOPE_profile_cpu_i("RenderTimer", "Unique draw");
+			_vertices[vertice.getId()].draw(mode);
+		}
 
 		_buffer.unbind();
 	}

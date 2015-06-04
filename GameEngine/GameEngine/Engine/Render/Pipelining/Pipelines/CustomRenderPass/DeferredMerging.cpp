@@ -69,14 +69,17 @@ namespace AGE
 
 	void DeferredMerging::renderPass(RenderPipeline const &, RenderLightList &, CameraInfos const &)
 	{
-		SCOPE_profile_cpu_function("RenderTimer");
 		SCOPE_profile_gpu_i("DefferedMerging pass");
-		_programs[PROGRAM_MERGING]->use();
-		_programs[PROGRAM_MERGING]->get_resource<Sampler2D>("diffuse_map").set(_diffuseInput);
-		_programs[PROGRAM_MERGING]->get_resource<Sampler2D>("light_buffer").set(_lightAccuInput);
-		_programs[PROGRAM_MERGING]->get_resource<Sampler2D>("shiny_buffer").set(_shinyAccuInput);
-		_programs[PROGRAM_MERGING]->get_resource<Vec3>("ambient_color").set(_ambientColor);
-
+		SCOPE_profile_cpu_i("RenderTimer", "DefferedMerging pass");
+		{
+			SCOPE_profile_gpu_i("Overhead Pipeline");
+			SCOPE_profile_cpu_i("RenderTimer", "Overhead Pipeline");
+			_programs[PROGRAM_MERGING]->use();
+			_programs[PROGRAM_MERGING]->get_resource<Sampler2D>("diffuse_map").set(_diffuseInput);
+			_programs[PROGRAM_MERGING]->get_resource<Sampler2D>("light_buffer").set(_lightAccuInput);
+			_programs[PROGRAM_MERGING]->get_resource<Sampler2D>("shiny_buffer").set(_shinyAccuInput);
+			_programs[PROGRAM_MERGING]->get_resource<Vec3>("ambient_color").set(_ambientColor);
+		}
 		OpenGLState::glDisable(GL_BLEND);
 		OpenGLState::glDisable(GL_CULL_FACE);
 		OpenGLState::glDisable(GL_DEPTH_TEST);

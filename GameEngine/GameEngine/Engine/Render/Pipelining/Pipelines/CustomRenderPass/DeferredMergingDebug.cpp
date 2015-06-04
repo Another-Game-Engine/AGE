@@ -68,6 +68,8 @@ namespace AGE
 
 	void DeferredMergingDebug::renderPass(RenderPipeline const &, RenderLightList &, CameraInfos const &)
 	{
+		SCOPE_profile_gpu_i("DeferredMergingDebug pass");
+		SCOPE_profile_cpu_i("RenderTimer", "DeferredMergingDebug pass");
 		_programs[PROGRAM_MERGING]->use();
 		_programs[PROGRAM_MERGING]->get_resource<Sampler2D>("debug_light_map").set(_debugLightRender);
 
