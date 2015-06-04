@@ -221,6 +221,7 @@
     <ClCompile Include="Engine\Graphic\GraphicElementManager.cpp" />
     <ClCompile Include="Engine\BFC\BFCBlockManager.cpp" />
     <ClCompile Include="Engine\BFC\BFCBlockManagerFactory.cpp" />
+    <ClCompile Include="Engine\BFC\BFCLink.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />

@@ -24,4 +24,10 @@ namespace AGE
 		AGE_ASSERT(_blockCounter >= MaxBlockID);
 		createItem(object, blockID, itemId);
 	}
+
+	void BFCBlockManager::deleteItem(BlockID &blockID, ItemID &itemId)
+	{
+		AGE_ASSERT(blockID < _blockCounter);
+		_blocks[blockID]->deleteItem(itemId);
+	}
 }

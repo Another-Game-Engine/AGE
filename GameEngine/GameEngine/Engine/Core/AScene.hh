@@ -31,7 +31,7 @@ namespace AGE
 	class SceneManager;
 #ifdef AGE_BFC
 	class BFCLinkTracker;
-	class BFCBlockManager;
+	class BFCBlockManagerFactory;
 #endif
 
 	class AScene : public DependenciesInjector, public EntityIdRegistrationManager, public ComponentManager
@@ -48,7 +48,7 @@ namespace AGE
 		bool                                                                    _active;
 #ifdef AGE_BFC
 		BFCLinkTracker                                                          *_bfcLinkTracker;
-		BFCBlockManager                                                         *_bfcBlockManager;
+		BFCBlockManagerFactory                                                  *_bfcBlockManagerFactory;
 #endif
 		friend EntityFilter;
 		friend class AGE::RenderScene;
@@ -59,7 +59,7 @@ namespace AGE
 	public:
 #ifdef AGE_BFC
 		BFCLinkTracker *getBfcLinkTracker() { return _bfcLinkTracker; }
-		BFCBlockManager *getBfcBlockManager() { return _bfcBlockManager; }
+		BFCBlockManagerFactory *getBfcBlockManagerFactory() { return _bfcBlockManagerFactory; }
 #endif
 		AScene(AGE::Engine *engine);
 		virtual ~AScene();

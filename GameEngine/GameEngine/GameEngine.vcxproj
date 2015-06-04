@@ -245,6 +245,7 @@
     <ClCompile Include="Engine\BFC\BFCBlockManager.cpp" />
     <ClCompile Include="Engine\BFC\BFCBlockManagerFactory.cpp" />
     <ClCompile Include="Engine\BFC\BFCItem.cpp" />
+    <ClCompile Include="Engine\BFC\BFCLink.cpp" />
     <ClCompile Include="Engine\BFC\BFCLinkTracker.cpp" />
     <ClCompile Include="Engine\Components\ArchetypeComponent.cpp" />
     <ClCompile Include="Engine\Components\DirectionalLightComponent.cpp" />

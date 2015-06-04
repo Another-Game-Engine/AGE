@@ -17,6 +17,7 @@ namespace AGE
 	public:
 	private:
 		void createItem(BFCCullableObject *object, BlockID &blockID, ItemID &itemId);
+		void deleteItem(BlockID &blockID, ItemID &itemId);
 		std::size_t _blockCounter;
 		std::vector<std::shared_ptr<BFCBlock>> _blocks;
 

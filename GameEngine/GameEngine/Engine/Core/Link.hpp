@@ -11,6 +11,9 @@
 #include <cereal/cereal.hpp>
 #include <Configuration.hpp>
 
+#include <BFC/BFCLink.hpp>
+
+
 namespace AGE
 {
 	class RenderScene;
@@ -19,7 +22,11 @@ namespace AGE
 	class BFCLinkTracker;
 	class BFCBlockManager;
 
+#ifdef AGE_BFC
+	struct Link : public BFCLink
+#else
 	struct Link
+#endif
 	{
 		inline const glm::vec3 &getPosition() const { return _position; }
 		inline const glm::vec3 &getScale() const { return _scale; }
@@ -77,17 +84,8 @@ namespace AGE
 		const glm::mat4 &getGlobalTransform();
 		const glm::mat4 getLocalTransform() const;
 		const glm::mat4 &getLocalTransform();
-
-#ifdef AGE_BFC
-		void setBFCTrackerIndex(std::size_t index) { _bfcIndex = index; }
-		std::size_t getBFCTrackerIndex() const { return _bfcIndex; }
-#endif
 	private:
 #ifdef AGE_BFC
-		std::size_t _bfcIndex = -1;
-		BFCLinkTracker *_bfcTracker = nullptr;
-		BFCBlockManager *_bfcBlockManager = nullptr;
-
 		void BFC_ADD();
 		void BFC_REMOVE();
 #else

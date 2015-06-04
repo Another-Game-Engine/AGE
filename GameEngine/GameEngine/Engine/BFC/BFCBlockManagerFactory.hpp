@@ -8,13 +8,13 @@ namespace AGE
 	struct BFCCullableObject;
 	class  BFCCullableHandle;
 
-	typedef BlockManagerID CullableTypeID;
 	static const CullableTypeID MaxCullableTypeID = MaxBlockManagerID;
 
 	class BFCBlockManagerFactory
 	{
 	public:
-		BFCCullableHandle createItem(CullableTypeID typeId, BFCCullableObject *object);
+		BFCCullableHandle createItem(BFCCullableObject *object);
+		void deleteItem(const BFCCullableHandle &handle);
 	private:
 		std::vector<BFCBlockManager> _managers;
 	};

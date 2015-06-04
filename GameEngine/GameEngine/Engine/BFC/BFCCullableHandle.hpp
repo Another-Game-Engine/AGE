@@ -7,7 +7,7 @@
 
 namespace AGE
 {
-	class BFCCullableObject;
+	struct BFCCullableObject;
 	class BFCBlockManagerFactory;
 
 	class BFCCullableHandle
@@ -22,6 +22,9 @@ namespace AGE
 		{
 			return o._itemID == _itemID && o._elementPtr == _elementPtr;
 		}
+
+		const BFCCullableObject *getPtr() const { return _elementPtr; }
+		const BFCItemID getItemId() const { return _itemID; }
 	private:
 		BFCItemID              _itemID;
 		BFCCullableObject*     _elementPtr = nullptr;

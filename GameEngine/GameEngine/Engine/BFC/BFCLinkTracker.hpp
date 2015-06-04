@@ -1,22 +1,21 @@
 #pragma once
 
 #include <vector>
-
-
+#include <queue>
 
 namespace AGE
 {
-	struct Link;
+	struct BFCLink;
 
 	class BFCLinkTracker
 	{
 	public:
 		BFCLinkTracker();
-		void addLink(Link *link);
-		void removeLink(Link *link);
+		std::size_t addLink(BFCLink *link);
+		void removeLink(std::size_t link);
 		void reset();
 	private:
-		std::vector<Link*> _links;
-		std::size_t        _vectorEnd;
+		std::vector<BFCLink*> _links;
+		std::queue<std::size_t> _free;
 	};
 }

@@ -6,45 +6,51 @@
 namespace AGE
 {
 	BFCLinkTracker::BFCLinkTracker()
-		: _vectorEnd(0)
 	{}
 
-	void BFCLinkTracker::addLink(Link *link)
+	std::size_t BFCLinkTracker::addLink(BFCLink *link)
 	{
 		SCOPE_profile_cpu_function("BFC");
-		if (link->getBFCTrackerIndex() == -1)
+
+		std::size_t result = -1;
+
+		if (_free.empty() == false)
 		{
-			return;
+			result == _free.front();
+			_free.pop();
 		}
-		link->setBFCTrackerIndex(_vectorEnd);
-		if (_links.size() <= _vectorEnd)
+		else
 		{
-			_links.resize(_links.size() + 16);
+			result = _links.size();
+			_links.push_back(link);
 		}
-		_links[_vectorEnd] = link;
-		++_vectorEnd;
+		return result;
 	}
 
-	void BFCLinkTracker::removeLink(Link *link)
+	void BFCLinkTracker::removeLink(std::size_t index)
 	{
 		SCOPE_profile_cpu_function("BFC");
-		auto index = link->getBFCTrackerIndex();
-		AGE_ASSERT(index != -1 && index < _vectorEnd);
-		if (index == --_vectorEnd)
-		{
-			return;
-		}
-		std::swap(_links[index], _links[_vectorEnd + 1]);
-		link->setBFCTrackerIndex(-1);
+
+		AGE_ASSERT(index != -1 && index < _links.size());
+		_links[index] = nullptr;
+		_free.push(index);
 	}
 
 	void BFCLinkTracker::reset()
 	{
 		SCOPE_profile_cpu_function("BFC");
-		for (auto i = 0; i < _vectorEnd; ++i)
+		for (auto &e : _links)
 		{
-			_links[i]->setBFCTrackerIndex(-1);
+			// beurk
+			if (e != nullptr)
+			{
+				e->resetBFCTrackerIndex();
+			}
 		}
-		_vectorEnd = 0;
+		_links.clear();
+
+		//beurk
+		while (!_free.empty())
+			_free.pop();
 	}
 }

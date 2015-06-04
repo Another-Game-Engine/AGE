@@ -15,6 +15,9 @@
 #include <Utils/Debug.hpp>
 #endif
 
+//tmp
+#include "Configuration.hpp"
+
 namespace AGE
 {
 	MeshRenderer::MeshRenderer() :
@@ -60,7 +63,9 @@ namespace AGE
 		}
 		_meshPath = mesh->path;
 		_materialPath = material->path;
-
+		_mesh = mesh;
+		_material = material;
+#ifndef AGE_BFC
 		if (!_key.invalid())
 		{
 			entity.getLink().unregisterOctreeObject(_key);
@@ -69,9 +74,8 @@ namespace AGE
 		//create key
 		_key = AGE::GetPrepareThread()->addMesh();
 		entity.getLink().registerOctreeObject(_key);
-
-		_mesh = mesh;
-		_material = material;
+#else
+#endif
 		_updateGeometry();
 		return true;
 	}
@@ -125,8 +129,12 @@ namespace AGE
 		{
 			return;
 		}
+#ifndef AGE_BFC
 		AGE::GetPrepareThread()->updateGeometry(_key, _mesh->subMeshs, _material->datas);
 		AGE::GetPrepareThread()->updateRenderMode(_key, _renderMode);
+#else
+		//entity.getLink().addObject(mesh);
+#endif
 	}
 
 	void MeshRenderer::postUnserialization()

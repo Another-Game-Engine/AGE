@@ -16,20 +16,12 @@ using namespace AGE;
 #ifdef AGE_BFC
 void Link::BFC_ADD()
 {
-	if (_bfcIndex != -1 || _octreeObjects.empty())
-	{
-		return;
-	}
-	_bfcTracker->addLink(this);
+	registerToTracker();
 }
 
 void Link::BFC_REMOVE()
 {
-	if (_bfcIndex == -1)
-	{
-		return;
-	}
-	_bfcTracker->addLink(this);
+	unregisterFromTracker();
 }
 #endif
 
@@ -210,8 +202,7 @@ Link::Link(EntityData *entity, AScene *scene)
 	_entityPtr = entity;
 	reset();
 #ifdef AGE_BFC
-	_bfcTracker = scene->getBfcLinkTracker();
-	_bfcBlockManager = scene->getBfcBlockManager();
+	initBFC(scene->getBfcBlockManagerFactory(), scene->getBfcLinkTracker());
 #endif
 }
 
@@ -224,9 +215,6 @@ void Link::reset()
 	_globalTransformation = glm::mat4(1);
 	_localDirty = true;
 	_parent = nullptr;
-#ifdef AGE_BFC
-	_bfcTracker = nullptr;
-#endif
 }
 
 void Link::attachChild(Link *child)
