@@ -2,6 +2,7 @@
 #include <assert.h>
 #include <fstream>
 #include <sstream>
+#include <string>
 
 #include <direct.h>
 
@@ -28,8 +29,6 @@ UnitProg::~UnitProg()
 	destroy();
 }
 
-#include <string>
-
 char const *UnitProg::handleRequireToken(std::string &sources)
 {
 	auto offset = 0;
@@ -44,8 +43,14 @@ char const *UnitProg::handleRequireToken(std::string &sources)
 		auto end = sources.find(")", startFile);
 		assert(end != std::string::npos);
 		auto file = sources.substr(startFile, end - startFile);
-		std::cout << std::endl << file << std::endl;
 		sources.erase(start, 9 + file.size() + 1);
+		file = std::string("../../Shaders/tool/" + file);
+		std::fstream f(file.c_str());
+		assert(!f.fail()); //Fail to open the 'file' inside Shaders/tool/
+		std::ostringstream stream;
+		stream << f.rdbuf();
+		std::string includeSources = stream.str();
+		sources.insert(start, includeSources);
 	} while (true);
 	return sources.c_str();
 }
