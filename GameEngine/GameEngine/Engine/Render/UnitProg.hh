@@ -22,7 +22,7 @@ public:
 
 private:
 	bool compileUnitProg(char const *fileName);
-	char const *handleRequireToken(std::vector<char> const &data);
+	char const *handleRequireToken(std::string &sources);
 
 private:
 	std::string _filename;

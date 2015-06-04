@@ -30,31 +30,24 @@ UnitProg::~UnitProg()
 
 #include <string>
 
-char const *UnitProg::handleRequireToken(std::vector<char> const &data)
+char const *UnitProg::handleRequireToken(std::string &sources)
 {
-//	std::string data;
-//	data.str();
-//	auto &start = std::find(data.begin(), data.end(), '@');
-//	if (start == data.end())
-//	{ 
-//		return data.data();
-//	}
-//	auto &end = std::find(++start, data.end(), '@');
-//	assert(end != data.end());
-//	std::string file(start, end);
-//	--start;
-//	std::cout << "[" << file << "]" << std::endl;
-//	std::vector<char> ret(data.size() - 2 - file.size());
-//	auto after = std::copy(data.begin(), --start, ret.begin());
-//	std::copy(++end, data.end(), after);
-	//	auto file = data.substr(start, start - end);
-//	std::cout << "file ----> " << file << std::endl;
-//	ret = data.substr(0, start);
-//	std::cout << "cpnt 1 ----> " << ret << std::endl;
-//	ret += data.substr(end, data.size() - end);
-//	std::cout << "cpnt 2 ----> " << std::endl;
-//	return ret.data();
-	return nullptr;
+	auto offset = 0;
+	do
+	{
+		auto start = sources.find("#include(", offset);
+		if (start == std::string::npos)
+		{
+			return sources.c_str();
+		}
+		auto startFile = start + 9;
+		auto end = sources.find(")", startFile);
+		assert(end != std::string::npos);
+		auto file = sources.substr(startFile, end - startFile);
+		std::cout << std::endl << file << std::endl;
+		sources.erase(start, 9 + file.size() + 1);
+	} while (true);
+	return sources.c_str();
 }
 
 bool UnitProg::compileUnitProg(char const *fileName)
@@ -67,8 +60,8 @@ bool UnitProg::compileUnitProg(char const *fileName)
 	file.seekg(0, file.beg);
 	std::ostringstream stream;
 	stream << file.rdbuf();
-	std::string data = stream.str();
-	GLchar const *convertionSource = data.c_str();
+	std::string sources = stream.str();
+	GLchar const *convertionSource = handleRequireToken(sources);
 	glShaderSource(_id, 1, &convertionSource, NULL);
 	glCompileShader(_id);
 	GLint compileRet = 0;
