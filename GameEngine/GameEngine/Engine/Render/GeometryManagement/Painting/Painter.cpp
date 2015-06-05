@@ -78,8 +78,8 @@ namespace AGE
 
 	Painter & Painter::draw(GLenum mode, std::shared_ptr<Program> const &program, std::vector<Properties> const &propertiesList, std::vector<Key<Vertices>> const &drawList)
 	{
+		SCOPE_profile_gpu_i("Draw");
 		SCOPE_profile_cpu_function("PainterTimer");
-
 		// to be sure that this function is only called in render thread
 		AGE_ASSERT(GetThreadManager()->getCurrentThread() == (AGE::Thread*)GetRenderThread());
 		program->set_attributes(_buffer);
@@ -91,21 +91,9 @@ namespace AGE
 			if (draw_element.isValid())
 			{
 				auto &property = propertiesList[index];
-				{
-					SCOPE_profile_gpu_i("Update properties");
-					SCOPE_profile_cpu_i("RenderTimer", "Update properties");
-					property.update_properties(program);
-				}
-				{
-					SCOPE_profile_gpu_i("Update Shader memory");
-					SCOPE_profile_cpu_i("RenderTimer", "Update Shader memory");
-					program->update();
-				}
-				{
-					SCOPE_profile_gpu_i("Draw");
-					SCOPE_profile_cpu_i("RenderTimer", "Draw");
-					_vertices[draw_element.getId()].draw(mode);
-				}
+				property.update_properties(program);
+				program->update();
+				_vertices[draw_element.getId()].draw(mode);
 			}
 			++index;
 		}
@@ -116,6 +104,7 @@ namespace AGE
 
 	void Painter::uniqueDraw(GLenum mode, std::shared_ptr<Program> const &program, Properties const &properties, const Key<Vertices> &vertice)
 	{
+		SCOPE_profile_gpu_i("Unique Draw");
 		SCOPE_profile_cpu_function("PainterTimer");
 
 		// to be sure that this function is only called in render thread
@@ -123,43 +112,22 @@ namespace AGE
 		program->set_attributes(_buffer);
 		_buffer.bind();
 		_buffer.update();
-		{
-			SCOPE_profile_gpu_i("Update properties");
-			SCOPE_profile_cpu_i("RenderTimer", "Update properties");
-			properties.update_properties(program);
-		}
-		{
-			SCOPE_profile_gpu_i("Update Shader memory");
-			SCOPE_profile_cpu_i("RenderTimer", "Update Shader memory");
-			program->update();
-		}
-		{
-			SCOPE_profile_gpu_i("Unique draw");
-			SCOPE_profile_cpu_i("RenderTimer", "Unique draw");
-			_vertices[vertice.getId()].draw(mode);
-		}
-
+		properties.update_properties(program);
+		program->update();
+		_vertices[vertice.getId()].draw(mode);
 		_buffer.unbind();
 	}
 
 	void Painter::uniqueDraw(GLenum mode, const Key<Vertices> &vertice)
 	{
+		SCOPE_profile_gpu_i("Unique Draw");
 		SCOPE_profile_cpu_function("PainterTimer");
 
 		// to be sure that this function is only called in render thread
 		AGE_ASSERT(GetThreadManager()->getCurrentThread() == (AGE::Thread*)GetRenderThread());
 		_buffer.bind();
-		{
-			SCOPE_profile_gpu_i("Update Shader memory");
-			SCOPE_profile_cpu_i("RenderTimer", "Update Shader memory");
-			_buffer.update();
-		}
-		{
-			SCOPE_profile_gpu_i("Unique draw");
-			SCOPE_profile_cpu_i("RenderTimer", "Unique draw");
-			_vertices[vertice.getId()].draw(mode);
-		}
-
+		_buffer.update();
+		_vertices[vertice.getId()].draw(mode);
 		_buffer.unbind();
 	}
 
