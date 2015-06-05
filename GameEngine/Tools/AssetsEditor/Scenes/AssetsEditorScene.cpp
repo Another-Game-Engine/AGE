@@ -37,7 +37,7 @@
 
 namespace AGE
 {
-	const std::string AssetsEditorScene::Name = "AssetsEditor";
+	const std::string AssetsEditorScene::Name = "Assets Editor";
 	AE::Folder AssetsEditorScene::_raw = AE::Folder();
 	AE::Folder AssetsEditorScene::_cook = AE::Folder();
 
@@ -65,6 +65,11 @@ namespace AGE
 
 	AssetsEditorScene::~AssetsEditorScene(void)
 	{
+	}
+
+	void AssetsEditorScene::updateMenu()
+	{
+
 	}
 
 	bool AssetsEditorScene::_userStart()
@@ -137,7 +142,12 @@ namespace AGE
 		}
 		refreshCounter += time;
 
-		ImGui::BeginChild("Assets browser", ImVec2(ImGui::GetWindowWidth() * 0.333333f, 0), true);
+		if (_displayWindow == false)
+		{
+			return true;
+		}
+
+		ImGui::Begin("Assets browser");
 		{
 			{
 				ImGui::BeginChild("Raw", ImVec2(0, 0), false);
@@ -166,11 +176,12 @@ namespace AGE
 			//	ImGui::EndChild();
 			//}
 		}
-		ImGui::EndChild();
-		ImGui::SameLine();
-		ImGui::BeginChild("Selected Raw", ImVec2(ImGui::GetWindowWidth() * 0.33333333f, 0), false);
+		Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->DisplayTasks();
+		ImGui::End();
+
+		if (_selectedRaw != nullptr)
 		{
-			if (_selectedRaw != nullptr)
+			ImGui::Begin("Selected Raw");
 			{
 				if (_selectedRaw->dataSet == nullptr)
 				{
@@ -192,18 +203,13 @@ namespace AGE
 					ImGui::TextColored(ImVec4(1, 0, 0, 1), "Currently cooking : %s", _selectedRaw->getFileName().c_str());
 				}
 			}
+			ImGui::End();
 		}
-		ImGui::EndChild();
-		ImGui::SameLine();
-		ImGui::BeginChild("Todo", ImVec2(ImGui::GetWindowWidth() * 0.33333333f, 0), false);
-		Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->DisplayTasks();
-		ImGui::EndChild();
 		return true;
 	}
 
 	bool AssetsEditorScene::_userUpdateEnd(float time)
 	{
-		ImGui::End();
 		return true;
 	}
 }

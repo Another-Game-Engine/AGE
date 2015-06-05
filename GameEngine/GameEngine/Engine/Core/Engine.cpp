@@ -26,6 +26,7 @@
 #include <Core/Inputs/Input.hh>
 #include <Skinning/AnimationManager.hpp>
 #include <Core/ConfigurationManager.hpp>
+#include <Entities/ArchetypeManager.hpp>
 
 #endif
 
@@ -168,6 +169,8 @@ namespace AGE
 		setInstance<AGE::AssetsManager>();
 		setInstance<AGE::AnimationManager>();
 		setInstance<ConfigurationManager>("../../Configuration.json");
+		setInstance<ArchetypeManager>()->setLibraryFolder("../../Archetypes/");
+
 		getInstance<ConfigurationManager>()->loadFile();
 		auto assetsFilePath = getInstance<ConfigurationManager>()->getConfiguration<std::string>("AssetsPath");
 		if (assetsFilePath != nullptr)

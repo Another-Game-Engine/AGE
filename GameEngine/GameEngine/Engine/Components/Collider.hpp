@@ -21,6 +21,8 @@ namespace AGE
 
 	class Collider final : public ComponentBase
 	{
+		AGE_COMPONENT_UNIQUE_IDENTIFIER("AGE_CORE_PhysicCollider");
+	private:
 		// Friendships
 		friend Private::CollisionSystem;
 

@@ -9,6 +9,7 @@ namespace AGE
 	// It might contain more information in the future
 	struct FreeFlyComponent : public ComponentBase
 	{
+		AGE_COMPONENT_UNIQUE_IDENTIFIER("AGE_CORE_FreeFlyComponent");
 		size_t notEmpty;
 
 		void init();

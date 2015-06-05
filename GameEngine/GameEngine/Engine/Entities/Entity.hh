@@ -8,7 +8,6 @@
 #include "EntityTypedef.hpp"
 
 #include <cereal/cereal.hpp>
-#include <cereal/archives/binary.hpp>
 #include <cereal/archives/portable_binary.hpp>
 #include <cereal/archives/json.hpp>
 #include <cereal/types/bitset.hpp>
@@ -49,6 +48,7 @@ namespace AGE
 		const AGE::Entity *getPtr() const;
 		AGE::Entity *getPtr();
 		AScene *getScene();
+		EntityData *getDataPtr() { return ptr; }
 
 		ComponentBase *getComponent(ComponentType id);
 

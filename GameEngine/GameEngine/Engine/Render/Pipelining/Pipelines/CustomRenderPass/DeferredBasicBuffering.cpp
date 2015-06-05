@@ -88,7 +88,7 @@ namespace AGE
 			OpenGLState::glClearStencil(0);
 			OpenGLState::glStencilFunc(GL_ALWAYS, 0, 0xFFFFFFFF);
 			OpenGLState::glStencilOp(GL_KEEP, GL_KEEP, GL_INCR);
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+			glClear(GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 		}
 #ifdef OCCLUSION_CULLING
 
@@ -97,7 +97,7 @@ namespace AGE
 			SCOPE_profile_cpu_i("RenderTimer", "Occluders pass");
 
 			_programs[PROGRAM_BUFFERING]->use();
-			_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("projection_matrix").set(infos.projection);
+			_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("projection_matrix").set(infos.data.projection);
 			_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("view_matrix").set(infos.view);
 
 			for (auto &meshPaint : pipeline.keys)
@@ -112,8 +112,6 @@ namespace AGE
 				}
 			}
 		}
-
-
 		{
 			SCOPE_profile_gpu_i("Copy occlusion depth to CPU");
 			SCOPE_profile_cpu_i("RenderTimer", "Copy occlusion depth to CPU");
@@ -123,7 +121,7 @@ namespace AGE
 
 			if (writableBuffer.isValid())
 			{
-				writableBuffer.setMV(infos.projection * infos.view);
+				writableBuffer.setMV(infos.data.projection * infos.view);
 				glActiveTextureARB(GL_TEXTURE0_ARB);
 				_depth->bind();
 				glGenerateMipmap(GL_TEXTURE_2D);

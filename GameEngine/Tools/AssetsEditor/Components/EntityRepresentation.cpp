@@ -8,7 +8,6 @@ namespace AGE
 	{
 		EntityRepresentation::EntityRepresentation()
 		{
-			exposedInEditor = false;
 			editorOnly = false;
 		}
 
@@ -20,7 +19,6 @@ namespace AGE
 		void EntityRepresentation::_copyFrom(const ComponentBase *model)
 		{
 			auto o = static_cast<const EntityRepresentation*>(model);
-			exposedInEditor = o->exposedInEditor;
 			editorOnly = o->editorOnly;
 			auto copyName = std::string(o->name);
 			copyName += "-Copy";
@@ -36,7 +34,6 @@ namespace AGE
 
 		void EntityRepresentation::init(const char *_name, const std::string &layerName /*= ""*/)
 		{
-			exposedInEditor = false;
 			editorOnly = false;
 			auto len = strlen(_name);
 			if (len >= ENTITY_NAME_LENGTH)

@@ -33,6 +33,16 @@ namespace AGE
 					continue;
 				}
 
+				// Handle the flipping if it is set by the user from the editor
+				if (cookingTask->dataSet->flipH)
+				{
+					image.flipHorizontal();
+				}
+				if (cookingTask->dataSet->flipV)
+				{
+					image.flipVertical();
+				}
+
 				if (cookingTask->dataSet->bumpToNormal)
 				{
 					for (auto material : cookingTask->materials)

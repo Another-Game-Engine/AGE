@@ -12,6 +12,8 @@
 #include <Components/ComponentRegistrationManager.hpp>
 #include <Physics/Fallback/NullPhysics.hpp>
 #include <Utils/Profiler.hpp>
+#include <Entities/BinaryEntityPack.hpp>
+#include <Entities/EntityBinaryPacker.hpp>
 
 namespace AGE
 {
@@ -265,68 +267,27 @@ namespace AGE
 		_entities.clear();
 	}
 
-	void AScene::saveToJson(const std::string &fileName)
+	void AScene::save(const std::string &fileName)
 	{
 		SCOPE_profile_cpu_function("Scenes");
-		saveSelectionToJson<std::unordered_set<Entity>>(fileName, _entities);
-	}
-
-	void AScene::loadFromJson(const std::string &fileName)
-	{
-		SCOPE_profile_cpu_function("Scenes");
-		std::ifstream file(fileName, std::ios::binary);
-		auto success = file.is_open();
-		assert(success);
-
+		BinaryEntityPack pack;
+		std::vector<Entity> vec;
+		for (auto &e : _entities)
 		{
-			auto ar = cereal::JSONInputArchive(file);
-
-			std::size_t entityNbr;
-			ar(entityNbr);
-
-			std::map<ComponentType, std::size_t> typesMap;
-			ar(typesMap);
-
-			std::vector<EntitySerializationInfos> list;
-
-			for (std::size_t i = 0; i < entityNbr; ++i)
-			{
-				auto entity = createEntity();
-				list.push_back(entity.ptr);
-				auto &es = list.back();
-				es.typesMap = &typesMap;
-				ar(es);
-			}
-
-			for (auto &e : list)
-			{
-				for (auto &c : e.children)
-				{
-					e.entity.getLink().attachChild(list[c].entity.getLinkPtr());
-				}
-			}
-
+			vec.push_back(e);
 		}
-		file.close();
+		CreateBinaryEntityPack(pack, vec);
+		pack.saveToFile(fileName);
 	}
 
-	void AScene::saveToBinary(const std::string &fileName)
+	void AScene::load(const std::string &fileName)
 	{
 		SCOPE_profile_cpu_function("Scenes");
-		std::ofstream file(fileName, std::ios::binary);
-		assert(file.is_open());
-
-		file.close();
+		BinaryEntityPack pack;
+		pack.scene = this;
+		pack.loadFromFile(fileName);
 	}
 
-	void AScene::loadFromBinary(const std::string &fileName)
-	{
-		SCOPE_profile_cpu_function("Scenes");
-		std::ifstream file(fileName, std::ios::binary);
-		assert(file.is_open());
-
-		file.close();
-	}
 	///////////////////////////////////////////////////////////
 
 	void AScene::addTag(Entity &e, TAG_ID tag)

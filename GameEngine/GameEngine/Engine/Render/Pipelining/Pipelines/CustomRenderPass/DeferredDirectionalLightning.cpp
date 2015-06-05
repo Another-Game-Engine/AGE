@@ -30,14 +30,18 @@ namespace AGE
 	DeferredDirectionalLightning::DeferredDirectionalLightning(glm::uvec2 const &screenSize, std::shared_ptr<PaintingManager> painterManager,
 		std::shared_ptr<Texture2D> normal,
 		std::shared_ptr<Texture2D> depth,
-		std::shared_ptr<Texture2D> lightAccumulation) :
+		std::shared_ptr<Texture2D> specular,
+		std::shared_ptr<Texture2D> lightAccumulation,
+		std::shared_ptr<Texture2D> shinyAccumulation) :
 		FrameBufferRender(screenSize.x, screenSize.y, painterManager)
 	{
 		push_storage_output(GL_COLOR_ATTACHMENT0, lightAccumulation);
+		push_storage_output(GL_COLOR_ATTACHMENT1, shinyAccumulation);
 		push_storage_output(GL_DEPTH_STENCIL_ATTACHMENT, depth);
 
 		_normalInput = normal;
 		_depthInput = depth;
+		_specularInput = specular;
 
 		_programs.resize(PROGRAM_NBR);
 
@@ -68,10 +72,11 @@ namespace AGE
 		glm::vec3 cameraPosition = -glm::transpose(glm::mat3(infos.view)) * glm::vec3(infos.view[3]);
 
 		_programs[PROGRAM_LIGHTNING]->use();
-		_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("projection_matrix").set(infos.projection);
+		_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("projection_matrix").set(infos.data.projection);
 		_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("view_matrix").set(infos.view);
 		_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("normal_buffer").set(_normalInput);
 		_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("depth_buffer").set(_depthInput);
+		_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("specular_buffer").set(_specularInput);
 		_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("eye_pos").set(cameraPosition);
 
 		// clear the light accumulation to zero

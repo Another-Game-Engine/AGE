@@ -20,9 +20,8 @@
 #include <Components/ComponentManager.hpp>
 #include <Utils/Debug.hpp>
 #include <fstream>
-#ifdef EDITOR_ENABLED
-#include <WorldEditorGlobal.hpp>
-#endif
+#include "SceneChunkSerialization.hpp"
+
 
 namespace AGE
 {
@@ -151,108 +150,8 @@ namespace AGE
 			return false;
 		}
 
-		void saveToJson(const std::string &fileName);
-		void loadFromJson(const std::string &fileName);
-		void saveToBinary(const std::string &fileName);
-		void loadFromBinary(const std::string &fileName);
-
-		void graphnodeToFlatVector(std::vector<EntitySerializationInfos> &vector, const Entity &e)
-		{
-			SCOPE_profile_cpu_function("Scenes");
-			vector.push_back(e.ptr);
-			auto &children = e.getLink().getChildren();
-			auto parentId = vector.size() - 1;
-			for (auto &c : children)
-			{
-				vector[parentId].children.push_back(vector.size());
-				auto child = c->getEntity()->getEntity();
-				graphnodeToFlatVector(vector, child);
-			}
-		}
-
-		template <typename Container>
-		void saveSelectionToJson(const std::string &fileName, Container &selection)
-		{
-			SCOPE_profile_cpu_function("Scenes");
-			std::ofstream file(fileName.c_str(), std::ios::binary);
-			AGE_ASSERT(file.is_open());
-			{
-				auto ar = cereal::JSONOutputArchive(file);
-
-				std::vector<EntitySerializationInfos> list;
-
-				for (auto &e : selection)
-				{
-					graphnodeToFlatVector(list, e);
-				}
-
-				std::size_t entityNbr = list.size();
-
-				ar(cereal::make_nvp("Number_of_serialized_entities", entityNbr));
-
-				auto &typesMap = ComponentRegistrationManager::getInstance().getAgeIdToSystemIdMap();
-				ar(cereal::make_nvp("Component type map", typesMap));
-
-
-				for (auto &e : list)
-				{
-					auto &components = e.entity.getComponentList();
-					for (auto &c : components)
-					{
-						if (c)
-						{
-#ifdef EDITOR_ENABLED
-							if (WESerialization::SerializeForEditor() == false && !c->serializeInExport())
-							{
-								continue;
-							}
-#endif
-							e.componentTypes.push_back(c->getType());
-							e.components.push_back(c);
-						}
-					}
-					ar(cereal::make_nvp("Entity_" + std::to_string(e.entity.getId()), e));
-				}
-			}
-			file.close();
-		}
-
-		template <typename Archive>
-		void load(std::ifstream &s)
-		{
-			SCOPE_profile_cpu_function("Scenes");
-			// @ECS TODO
-			
-			//Archive ar(s);
-
-			//std::uint16_t size = 0;
-			//ar(size);
-			//for (unsigned int i = 0; i < size; ++i)
-			//{
-			//	auto &e = createEntity();
-			//	auto &ed = *e.ptr;
-
-			//	EntitySerializationInfos infos(ed);
-			//	ar(infos);
-			//	e.flags = infos.flags;
-			//	ed.link.setPosition(infos.link.getPosition());
-			//	ed.link.setOrientation(infos.link.getOrientation());
-			//	ed.link.setScale(infos.link.getScale());
-
-			//	for (auto &hash : infos.componentsHash)
-			//	{
-			//		std::size_t componentTypeId;
-			//		auto ptr = ComponentRegistrar::getInstance().createComponentFromType(hash, ar, componentTypeId, this);
-			//		ed.barcode.setComponent(componentTypeId);
-			//		assert(_componentsManagers[componentTypeId] != nullptr);
-			//		_componentsManagers[componentTypeId]->addComponentPtr(e, ptr);
-			//		informFiltersComponentAddition(componentTypeId, ed);
-			//	}
-			//	//	ar(*e.get());
-			//}
-			////updateEntityHandles();
-		}
-
+		void save(const std::string &fileName);
+		void load(const std::string &fileName);
 
 		////////////////////////
 		///////

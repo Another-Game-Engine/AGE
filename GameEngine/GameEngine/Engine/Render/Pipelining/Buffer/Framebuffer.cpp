@@ -14,9 +14,11 @@ namespace AGE
 		_sample(sample)
 	{
 		glGenFramebuffers(1, &_id);
+		glBindFramebuffer(_mode, _id);
 		glFramebufferParameteri(_mode, GL_FRAMEBUFFER_DEFAULT_WIDTH, width);
 		glFramebufferParameteri(_mode, GL_FRAMEBUFFER_DEFAULT_HEIGHT, height);
 		glFramebufferParameteri(_mode, GL_FRAMEBUFFER_DEFAULT_SAMPLES, sample);
+		glBindFramebuffer(_mode, 0);
 	}
 
 	Framebuffer::Framebuffer(Framebuffer &&move)
@@ -54,9 +56,11 @@ namespace AGE
 		_width = width;
 		_height = height;
 		_sample = sample;
+		glBindFramebuffer(_mode, _id);
 		glFramebufferParameteri(_mode, GL_FRAMEBUFFER_DEFAULT_WIDTH, width);
 		glFramebufferParameteri(_mode, GL_FRAMEBUFFER_DEFAULT_HEIGHT, height);
 		glFramebufferParameteri(_mode, GL_FRAMEBUFFER_DEFAULT_SAMPLES, sample);
+		glBindFramebuffer(_mode, 0);
 		return (*this);
 	}
 

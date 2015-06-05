@@ -24,6 +24,7 @@ namespace AGE
 
 	struct SpotLightComponent : public ComponentBase
 	{
+		AGE_COMPONENT_UNIQUE_IDENTIFIER("AGE_CORE_SpotLightComponent");
 	public:
 		SpotLightComponent() = default;
 		virtual ~SpotLightComponent() = default;
@@ -34,7 +35,7 @@ namespace AGE
 		virtual void reset();
 		void init();
 
-		SpotLightComponent &set(SpotLightData const &data);
+		void set(SpotLightData const &data);
 
 		template <typename Archive>
 		void serialize(Archive &ar, const std::uint32_t version)

@@ -32,7 +32,7 @@ namespace AGE
 		std::shared_ptr<Texture2D> _normal;
 		std::shared_ptr<Texture2D> _specular;
 		std::shared_ptr<Texture2D> _lightAccumulation;
-		
+		std::shared_ptr<Texture2D> _shinyAccumulation;
 		std::shared_ptr<DeferredMerging> _deferredMerging;
 	};
 

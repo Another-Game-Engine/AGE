@@ -3,6 +3,7 @@
 #include <vector>
 #include <Culling/Ouptut/RenderLight.hh>
 #include <Culling/Ouptut/RenderPipeline.hh>
+#include <Components/CameraComponent.hpp>
 #include <Render/PipelineTypes.hpp>
 #include <glm/glm.hpp>
 #include <Utils/Profiler.hpp>
@@ -11,9 +12,8 @@ namespace AGE
 {
 	struct CameraInfos
 	{
-		RenderType renderType;
 		glm::mat4 view;
-		glm::mat4 projection;
+		CameraData data;
 	};
 
 	struct RenderCamera

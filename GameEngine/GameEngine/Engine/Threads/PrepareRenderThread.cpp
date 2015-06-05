@@ -257,9 +257,9 @@ namespace AGE
 		return nullptr;
 	}
 
-	void PrepareRenderThread::setCameraInfos(const glm::mat4& projection, const PrepareKey &key, RenderType pipeline)
+	void PrepareRenderThread::setCameraInfos(CameraData const &data, const PrepareKey &key)
 	{
-		getQueue()->emplaceCommand<Commands::MainToPrepare::CameraInfos>(key, projection, pipeline);
+		getQueue()->emplaceCommand<Commands::MainToPrepare::CameraInfos>(key, data);
 	}
 
 	PrepareKey PrepareRenderThread::addCamera()

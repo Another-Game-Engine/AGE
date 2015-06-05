@@ -1,0 +1,15 @@
+#version 330
+
+uniform mat4 projection;
+uniform mat4 view;
+
+layout (location = 0) in vec3 position;
+
+out vec3 texCoord;
+
+void main()
+{
+	vec4 viewProj = projection * view * vec4(position, 0.f);
+	texCoord = position;
+	gl_Position = viewProj.xyww;
+}

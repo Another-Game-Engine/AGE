@@ -7,6 +7,7 @@
 namespace AGE
 {
 	RotationComponent::RotationComponent()
+		: _angles(0)
 	{
 
 	}
@@ -26,7 +27,10 @@ namespace AGE
 
 	void RotationComponent::init(const glm::vec3 &angles, float speed)
 	{
-		_angles = glm::normalize(angles);
+		if (glm::length(angles) != 0)
+		{
+			_angles = glm::normalize(angles);
+		}
 		_speed = speed;
 	}
 
@@ -37,10 +41,16 @@ namespace AGE
 
 
 #ifdef EDITOR_ENABLED
-	void RotationComponent::editorUpdate(AScene *scene)
+	bool RotationComponent::editorUpdate()
 	{
-		ImGui::SliderFloat3("Angle", glm::value_ptr(_angles), 0.0f, 1.0f);
-		ImGui::InputFloat("Speed", &_speed);
+		bool modified = false;
+		modified |= ImGui::SliderFloat3("Angle", glm::value_ptr(_angles), 0.0f, 1.0f);
+		modified |= ImGui::InputFloat("Speed", &_speed);
+		if (modified)
+		{
+			init(_angles, _speed);
+		}
+		return modified;
 	}
 #endif
 }

@@ -42,6 +42,7 @@ namespace AGE
 		void createMeshProperty(const Key<Painter> &painter, Key<Properties> &properties, Key<Property> &transformation);
 		void getQuadGeometry(Key<Vertices> &vertices, Key<Painter> &painter);
 		void getIcoSphereGeometry(Key<Vertices> &vertices, Key<Painter> &painter, uint32_t recursion);
+		void getCube(Key<Vertices> &vertices, Key<Painter> &painter);
 
 		inline DepthMapManager &getDepthMapManager() { return _depthMapManager; }
 	public:

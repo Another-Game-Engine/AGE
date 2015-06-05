@@ -30,20 +30,20 @@ namespace AGE
 
 	DeferredMerging::DeferredMerging(glm::uvec2 const &screenSize, std::shared_ptr<PaintingManager> painterManager,
 		std::shared_ptr<Texture2D> diffuse,
-		std::shared_ptr<Texture2D> specular,
-		std::shared_ptr<Texture2D> lightAccumulation) :
-					ScreenRender(screenSize, painterManager)
+		std::shared_ptr<Texture2D> lightAccumulation,
+		std::shared_ptr<Texture2D> shinyAccumulation) :
+					FrameBufferRender(screenSize.x, screenSize.y, painterManager)
 	{
  		_diffuseInput = diffuse;
-		_specularInput = specular;
 		_lightAccuInput = lightAccumulation;
+		_shinyAccuInput = shinyAccumulation;
+
+		push_storage_output(GL_COLOR_ATTACHMENT0, diffuse);
 
 		_programs.resize(PROGRAM_NBR);
 
 		auto confManager = GetEngine()->getInstance<ConfigurationManager>();
-
 		auto shaderPath = confManager->getConfiguration<std::string>("ShadersPath");
-
 		// you have to set shader directory in configuration path
 		AGE_ASSERT(shaderPath != nullptr);
 
@@ -74,12 +74,13 @@ namespace AGE
 		_programs[PROGRAM_MERGING]->use();
 		_programs[PROGRAM_MERGING]->get_resource<Sampler2D>("diffuse_map").set(_diffuseInput);
 		_programs[PROGRAM_MERGING]->get_resource<Sampler2D>("light_buffer").set(_lightAccuInput);
+		_programs[PROGRAM_MERGING]->get_resource<Sampler2D>("shiny_buffer").set(_shinyAccuInput);
 		_programs[PROGRAM_MERGING]->get_resource<Vec3>("ambient_color").set(_ambientColor);
 
 		OpenGLState::glDisable(GL_BLEND);
 		OpenGLState::glDisable(GL_CULL_FACE);
-		OpenGLState::glEnable(GL_DEPTH_TEST);
-		OpenGLState::glEnable(GL_STENCIL_TEST);
+		OpenGLState::glDisable(GL_DEPTH_TEST);
+		OpenGLState::glDisable(GL_STENCIL_TEST);
 		_quadPainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_MERGING], Properties(), _quadVertices);
 	}
 

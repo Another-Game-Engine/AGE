@@ -14,6 +14,7 @@
 #include <Context/IRenderContext.hh>
 #include <CONFIGS.hh>
 #include <AssetManagement/Instance/AnimationInstance.hh>
+#include <Render/Textures/Texture3D.hh>
 
 # define VERTEX_SHADER "../../Shaders/test_pipeline_1.vp"
 # define FRAG_SHADER "../../Shaders/test_pipeline_1.fp"
@@ -43,5 +44,7 @@ namespace AGE
 		std::size_t _chunkFrame = 0;
 		AGE::Entity GLOBAL_CAMERA;
 		int pipelineIndex = 1;
+		std::shared_ptr<Texture3D> _skyboxTest;
+		std::shared_ptr<Texture3D> _skyboxSpace;
 	};
 }

@@ -109,7 +109,7 @@ void Link::internalSetTransform(const glm::mat4 &t, bool recalculate)
 	//_orientation = glm::quat(rot);
 	//_position = posFromMat4(t);
 	//_localTransformation = glm::translate(t, _position);
-	//_localTransformation = t;
+	_localTransformation = t;
 	if (recalculate)
 	{
 		_updateGlobalTransform();

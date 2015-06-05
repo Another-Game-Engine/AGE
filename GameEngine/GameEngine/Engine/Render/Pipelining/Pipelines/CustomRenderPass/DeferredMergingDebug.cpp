@@ -32,12 +32,14 @@ namespace AGE
 	};
 
 	DeferredMergingDebug::DeferredMergingDebug(glm::uvec2 const &screenSize, std::shared_ptr<PaintingManager> painterManager,
-		std::shared_ptr<Texture2D> debugLightRender) :
-		ScreenRender(screenSize, painterManager)
+		std::shared_ptr<Texture2D> debugLightRender,
+		std::shared_ptr<Texture2D> diffuse) :
+		FrameBufferRender(screenSize.x, screenSize.y, painterManager)
 	{
 		_debugLightRender = debugLightRender;
 		_programs.resize(PROGRAM_NBR);
 
+		push_storage_output(GL_COLOR_ATTACHMENT0, diffuse);
 
 		auto confManager = GetEngine()->getInstance<ConfigurationManager>();
 

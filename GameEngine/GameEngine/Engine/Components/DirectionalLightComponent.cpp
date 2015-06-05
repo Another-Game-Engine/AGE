@@ -14,8 +14,8 @@
 namespace AGE
 {
 
-	DirectionalLightData::DirectionalLightData(glm::vec3 const &color)
-		: color(color)
+	DirectionalLightData::DirectionalLightData(glm::vec3 const &_color)
+		: color(_color)
 	{
 
 	}

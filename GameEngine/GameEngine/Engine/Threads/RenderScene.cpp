@@ -162,8 +162,7 @@ namespace AGE
 		Camera *co = nullptr;
 		co = &_cameras.get(msg.key.id);
 		co->hasMoved = true;
-		co->projection = msg.projection;
-		co->pipeline = msg.pipeline;
+		co->data = msg.data;
 	}
 
 	void RenderScene::_createCamera(AGE::Commands::MainToPrepare::CreateCamera &msg)
@@ -309,7 +308,7 @@ namespace AGE
 		SCOPE_profile_cpu_i("PrepareTimer", "Delete directionnal");
 
 		DirectionalLight &toRm = _directionalLights.get(msg.key.id);
-		_pointLights.deallocPreparated(msg.key.id);
+		_directionalLights.deallocPreparated(msg.key.id);
 		// TODO: remove when point lights will be in octree
 		_activeDirectionalLights[toRm.activeDirectionalLightIdx] = _activeDirectionalLights[_activeDirectionalLights.size() - 1];
 		_directionalLights.get(_activeDirectionalLights[toRm.activeDirectionalLightIdx]).activeDirectionalLightIdx = toRm.activeDirectionalLightIdx;
@@ -442,6 +441,11 @@ namespace AGE
 		{
 
 		case(PrepareKey::Type::Camera) :
+			if (!_cameras.exists(msg.key.id))
+			{
+				//if camera has been created then deleted in the same frame
+				return;
+			}
 			co = &_cameras.get(msg.key.id);
 			co->transformation = msg.transform;
 			co->hasMoved = true;
@@ -572,17 +576,16 @@ namespace AGE
 			auto view = glm::inverse(camera.transformation);
 
 			// update frustum infos for culling
-			camera.shape.setMatrix(camera.projection * view);
+			camera.shape.setMatrix(camera.data.projection * view);
 
 			auto &drawList = drawContainer->cameras;
 
 			drawList.emplace_back();
 			auto &renderCamera = drawList.back();
 			renderCamera.camInfos.view = view;
-			renderCamera.camInfos.projection = camera.projection;
-			renderCamera.camInfos.renderType = camera.pipeline;
+			renderCamera.camInfos.data = camera.data;
 
-			auto VP = camera.projection * view;
+			auto VP = camera.data.projection * view;
 
 			auto &depthMapManager = GetRenderThread()->getDepthMapManager();
 			auto depthMap = depthMapManager.getReadableMap();
@@ -798,6 +801,11 @@ namespace AGE
 
 								glm::uvec2 screenMin(((minPoint + glm::vec2(1)) / glm::vec2(2)) * glm::vec2(depthMap->getMipmapWidth(), depthMap->getMipmapHeight()));
 								glm::uvec2 screenMax(((maxPoint + glm::vec2(1)) / glm::vec2(2)) * glm::vec2(depthMap->getMipmapWidth(), depthMap->getMipmapHeight()));
+
+								if (minZ < 0)
+								{
+									minZ = 0;
+								}
 
 								drawObject |= depthMap->testBox((uint32_t)(minZ * (1 << 24)), screenMin, screenMax);
 

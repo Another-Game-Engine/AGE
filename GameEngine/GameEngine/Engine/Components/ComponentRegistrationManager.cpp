@@ -21,19 +21,28 @@ namespace AGE
 	{
 		auto id = c->getType();
 		auto find = _jsonSaveMap.find(id);
-		assert(find != std::end(_jsonSaveMap));
+		AGE_ASSERT(find != std::end(_jsonSaveMap));
 		find->second(c, ar);
 	}
 
-	void ComponentRegistrationManager::loadJson(std::size_t componentHashId, Entity &e, cereal::JSONInputArchive &ar)
+	void ComponentRegistrationManager::serializeBinary(ComponentBase *c, cereal::PortableBinaryOutputArchive &ar)
 	{
+		auto id = c->getType();
+		auto find = _binarySaveMap.find(id);
+		AGE_ASSERT(find != std::end(_binarySaveMap));
+		find->second(c, ar);
+	}
+
+	ComponentBase *ComponentRegistrationManager::loadJson(std::size_t componentHashId, Entity &e, cereal::JSONInputArchive &ar)
+	{
+		AGE_ASSERT(_typeIds.find(componentHashId) != std::end(_typeIds) && "Component type has not been registered. Use REGISTER_COMPONENT_TYPE");
 		auto id = _typeIds[componentHashId];
 
 		auto voidCpt = e.getScene()->allocateComponent(id);
 
 		auto find = _jsonLoadMap.find(id);
-		assert(find != std::end(_jsonLoadMap));
-		find->second(voidCpt, ar);
+		AGE_ASSERT(find != std::end(_jsonLoadMap));
+		find->second(voidCpt, ar, e);
 
 		auto cpt = (AGE::ComponentBase*)voidCpt;
 
@@ -42,6 +51,28 @@ namespace AGE
 		cpt->postUnserialization();
 
 		e.addComponentPtr(cpt);
+		return cpt;
+	}
+
+	ComponentBase *ComponentRegistrationManager::loadBinary(std::size_t componentHashId, Entity &e, cereal::PortableBinaryInputArchive &ar)
+	{
+		AGE_ASSERT(_typeIds.find(componentHashId) != std::end(_typeIds) && "Component type has not been registered. Use REGISTER_COMPONENT_TYPE");
+		auto id = _typeIds[componentHashId];
+
+		auto voidCpt = e.getScene()->allocateComponent(id);
+
+		auto find = _binaryLoadMap.find(id);
+		AGE_ASSERT(find != std::end(_binaryLoadMap));
+		find->second(voidCpt, ar, e);
+
+		auto cpt = (AGE::ComponentBase*)voidCpt;
+
+		cpt->_typeId = id;
+		cpt->entity = e;
+		cpt->postUnserialization();
+
+		e.addComponentPtr(cpt);
+		return cpt;
 	}
 
 	ComponentBase *ComponentRegistrationManager::copyComponent(ComponentBase *src, AScene *scene)
