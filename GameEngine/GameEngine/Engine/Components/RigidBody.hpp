@@ -11,7 +11,9 @@ namespace AGE
 	class RigidBody final : public ComponentBase
 	{
 		AGE_COMPONENT_UNIQUE_IDENTIFIER("AGE_CORE_RigidBody");
+
 	private:
+		// Friendships
 		friend PhysicsSystem;
 
 	public:
@@ -59,7 +61,7 @@ namespace AGE
 
 		void setMaxAngularVelocity(float maxAngularVelocity);
 
-		double getMaxAngularVelocity(void) const;
+		float getMaxAngularVelocity(void) const;
 
 		void setMaxDepenetrationVelocity(float maxDepenetrationVelocity);
 
@@ -116,8 +118,8 @@ namespace AGE
 			float linearDrag;
 			glm::vec3 linearVelocity;
 			float mass;
-			glm::vec3 diagonalInertia;
-			double maxAngularVelocity;
+			glm::vec3 diagonalInertiaTensor;
+			float maxAngularVelocity;
 			float maxDepenetrationVelocity;
 			bool isAffectedByGravity;
 			bool kinematic;

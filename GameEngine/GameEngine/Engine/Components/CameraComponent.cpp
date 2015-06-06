@@ -81,7 +81,7 @@ namespace AGE
 	bool CameraComponent::editorUpdate()
 	{
 		bool modified = false;
-		int countChoices = _choicesSkymap.size();
+		const int countChoices = static_cast<int>(_choicesSkymap.size());
 		char  **choices = new char *[countChoices];
 		int index = 0;
 		int current_item = 0;

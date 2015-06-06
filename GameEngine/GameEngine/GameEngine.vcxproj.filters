@@ -205,9 +205,6 @@
     <ClCompile Include="Engine\Render\OcclusionTools\DepthMapHandle.cpp" />
     <ClCompile Include="Engine\Render\OcclusionTools\DepthMapManager.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredShadowBuffering.cpp" />
-    <ClCompile Include="Engine\Render\DepthMap.cpp" />
-    <ClCompile Include="Engine\Render\DepthMapHandle.cpp" />
-    <ClCompile Include="Engine\Render\DepthMapManager.cpp" />
     <ClCompile Include="Engine\Entities\BinaryEntity.cpp" />
     <ClCompile Include="Engine\Entities\EntityBinaryPacker.cpp" />
     <ClCompile Include="Engine\Entities\BinaryEntityPack.cpp" />
@@ -559,9 +556,6 @@
     <ClInclude Include="Engine\Core\SceneChunkSerialization.hpp" />
     <ClInclude Include="Engine\Components\ArchetypeComponent.hpp" />
     <ClInclude Include="Engine\Entities\Archetype.hpp" />
-    <ClInclude Include="Engine\Render\DepthMap.hpp" />
-    <ClInclude Include="Engine\Render\DepthMapHandle.hpp" />
-    <ClInclude Include="Engine\Render\DepthMapManager.hpp" />
     <ClInclude Include="Engine\Entities\EntityBinaryPacker.hpp" />
     <ClInclude Include="Engine\Entities\BinaryEntity.hpp" />
     <ClInclude Include="Engine\Entities\BinaryEntityPack.hpp" />

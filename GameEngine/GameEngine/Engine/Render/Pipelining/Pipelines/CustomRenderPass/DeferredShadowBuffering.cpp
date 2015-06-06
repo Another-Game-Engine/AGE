@@ -70,8 +70,8 @@ namespace AGE
 
 		// handle the number of sample
 		if (_depthBuffers.size() < lights.spotLights.size()) {
-			int count = lights.spotLights.size() - _depthBuffers.size();
-			for (int index = 0; index < count; ++index) {
+			const std::size_t count = lights.spotLights.size() - _depthBuffers.size();
+			for (std::size_t index = 0; index < count; ++index) {
 				_depthBuffers.push_back(createRenderPassOutput<Texture2D>(_frame_buffer.width(), _frame_buffer.height(), GL_DEPTH24_STENCIL8, true));
 				_depthBuffers.back()->bind();
 				_depthBuffers.back()->parameter(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -82,8 +82,8 @@ namespace AGE
 			}
 		}
 		else if (_depthBuffers.size() > lights.spotLights.size()) {
-			int count = _depthBuffers.size() - lights.spotLights.size();
-			for (int index = 0; index < count; ++index) {
+			const std::size_t count = _depthBuffers.size() - lights.spotLights.size();
+			for (std::size_t index = 0; index < count; ++index) {
 				_depthBuffers.pop_back();
 			}
 		}

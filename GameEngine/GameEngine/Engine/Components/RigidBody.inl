@@ -15,7 +15,7 @@ namespace AGE
 		ar(cereal::make_nvp("LinearVelocity", getLinearVelocity()));
 		ar(cereal::make_nvp("Mass", getMass()));
 		ar(cereal::make_nvp("DiagonalInertiaTensor", getDiagonalInertiaTensor()));
-		//ar(cereal::make_nvp("MaxAngularVelocity", getMaxAngularVelocity()));
+		ar(cereal::make_nvp("MaxAngularVelocity", getMaxAngularVelocity()));
 		ar(cereal::make_nvp("MaxDepenetrationVelocity", getMaxDepenetrationVelocity()));
 		ar(cereal::make_nvp("IsAffectedByGravity", isAffectedByGravity()));
 		ar(cereal::make_nvp("IsKinematic", isKinematic()));
@@ -33,7 +33,7 @@ namespace AGE
 		glm::vec3 linearVelocity;
 		float mass;
 		glm::vec3 diagonalInertiaTensor;
-		double maxAngularVelocity;
+		float maxAngularVelocity;
 		float maxDepenetrationVelocity;
 		bool isAffectedByGravity;
 		bool isKinematic;
@@ -45,7 +45,7 @@ namespace AGE
 		ar(cereal::make_nvp("LinearVelocity", linearVelocity));
 		ar(cereal::make_nvp("Mass", mass));
 		ar(cereal::make_nvp("DiagonalInertiaTensor", diagonalInertiaTensor));
-		//ar(cereal::make_nvp("MaxAngularVelocity", maxAngularVelocity));
+		ar(cereal::make_nvp("MaxAngularVelocity", maxAngularVelocity));
 		ar(cereal::make_nvp("MaxDepenetrationVelocity", maxDepenetrationVelocity));
 		ar(cereal::make_nvp("IsAffectedByGravity", isAffectedByGravity));
 		ar(cereal::make_nvp("IsKinematic", isKinematic));
@@ -57,7 +57,7 @@ namespace AGE
 		setLinearVelocity(linearVelocity);
 		setMass(mass);
 		setDiagonalInertiaTensor(diagonalInertiaTensor);
-		//setMaxAngularVelocity(maxAngularVelocity);
+		setMaxAngularVelocity(maxAngularVelocity);
 		setMaxDepenetrationVelocity(maxDepenetrationVelocity);
 		affectByGravity(isAffectedByGravity);
 		setAsKinematic(isKinematic);

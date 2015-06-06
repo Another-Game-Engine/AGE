@@ -112,7 +112,7 @@ namespace AGE
 		rigidBody->setMaxAngularVelocity(maxAngularVelocity);
 	}
 
-	double RigidBody::getMaxAngularVelocity(void) const
+	float RigidBody::getMaxAngularVelocity(void) const
 	{
 		assert(rigidBody != nullptr && "Invalid RigidBody");
 		return rigidBody->getMaxAngularVelocity();
@@ -280,7 +280,7 @@ namespace AGE
 		linearDrag = ptr->getLinearDrag();
 		linearVelocity = ptr->getLinearVelocity();
 		mass = ptr->getMass();
-		diagonalInertia = ptr->getDiagonalInertiaTensor();
+		diagonalInertiaTensor = ptr->getDiagonalInertiaTensor();
 		maxAngularVelocity = ptr->getMaxAngularVelocity();
 		maxDepenetrationVelocity = ptr->getMaxDepenetrationVelocity();
 		isAffectedByGravity = ptr->isAffectedByGravity();
@@ -290,23 +290,23 @@ namespace AGE
 
 	void RigidBody::EditorStruct::editorUpdate(RigidBody *ptr)
 	{
-		if (ImGui::InputFloat("Angular drag", &angularDrag))
+		if (ImGui::InputFloat("Angular Drag", &angularDrag))
 		{
 			ptr->setAngularDrag(angularDrag);
 		}
-		if (ImGui::InputFloat3("Angular velocity", glm::value_ptr(angularVelocity)))
+		if (ImGui::InputFloat3("Angular Velocity", glm::value_ptr(angularVelocity)))
 		{
 			ptr->setAngularVelocity(angularVelocity);
 		}
-		if (ImGui::InputFloat3("Center if mass", glm::value_ptr(centerOfMass)))
+		if (ImGui::InputFloat3("Center of Mass", glm::value_ptr(centerOfMass)))
 		{
 			ptr->setCenterOfMass(centerOfMass);
 		}
-		if (ImGui::InputFloat("Linear drag", &linearDrag))
+		if (ImGui::InputFloat("Linear Drag", &linearDrag))
 		{
 			ptr->setLinearDrag(linearDrag);
 		}
-		if (ImGui::InputFloat3("Linear velocity", glm::value_ptr(linearVelocity)))
+		if (ImGui::InputFloat3("Linear Velocity", glm::value_ptr(linearVelocity)))
 		{
 			ptr->setLinearVelocity(linearVelocity);
 		}
@@ -314,28 +314,40 @@ namespace AGE
 		{
 			ptr->setMass(mass);
 		}
-		if (ImGui::InputFloat3("Diagonal inertia", glm::value_ptr(diagonalInertia)))
+		if (ImGui::InputFloat3("Diagonal Inertia Tensor", glm::value_ptr(diagonalInertiaTensor)))
 		{
-			ptr->setDiagonalInertiaTensor(diagonalInertia);
+			ptr->setDiagonalInertiaTensor(diagonalInertiaTensor);
 		}
-		//if (ImGui::InputFloat("Max angular velocity", (float*)&maxAngularVelocity))
-		//{
-		//	ptr->setMaxAngularVelocity(maxAngularVelocity);
-		//}
-		if (ImGui::InputFloat("Max depenetration velocity", &maxDepenetrationVelocity))
+		if (ImGui::InputFloat("Max Angular Velocity", &maxAngularVelocity))
+		{
+			ptr->setMaxAngularVelocity(maxAngularVelocity);
+		}
+		if (ImGui::InputFloat("Max Depenetration Velocity", &maxDepenetrationVelocity))
 		{
 			ptr->setMaxDepenetrationVelocity(maxDepenetrationVelocity);
 		}
-		if (ImGui::Checkbox("Affected by gravity", &isAffectedByGravity))
+		if (ImGui::Checkbox("Is Affected By Gravity", &isAffectedByGravity))
 		{
 			ptr->affectByGravity(isAffectedByGravity);
 		}
-		if (ImGui::Checkbox("Kinematic", &kinematic))
+		if (ImGui::Checkbox("Is Kinematic", &kinematic))
 		{
 			ptr->setAsKinematic(kinematic);
 		}
-		// todo, la flemme
-		collisionDetectionMode = ptr->getCollisionDetectionMode();
+		static const std::string collisionDetectionModeNames[] =
+		{
+			"Discrete",
+			"Continuous"
+		};
+		ImGui::Text("Collision Detection Mode");
+		for (unsigned int index = 0; index < sizeof(collisionDetectionModeNames) / sizeof(*collisionDetectionModeNames); ++index)
+		{
+			if (ImGui::RadioButton(collisionDetectionModeNames[index].c_str(), static_cast<unsigned int>(collisionDetectionMode) == index))
+			{
+				collisionDetectionMode = static_cast<Physics::CollisionDetectionMode>(index);
+				ptr->setCollisionDetectionMode(collisionDetectionMode);
+			}
+		}
 	}
 #endif
 
