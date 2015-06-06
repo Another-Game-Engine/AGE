@@ -8,6 +8,8 @@
 
 namespace AGE
 {
+	class BFCBlockManagerFactory;
+
 	class BFCBlock
 	{
 	public:
@@ -20,5 +22,7 @@ namespace AGE
 		BFCItem _items[MaxItemID];
 		std::size_t _counter;
 		std::queue<ItemID> _free;
+
+		friend class BFCBlockManagerFactory;
 	};
 }

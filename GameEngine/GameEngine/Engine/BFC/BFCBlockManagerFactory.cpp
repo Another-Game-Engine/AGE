@@ -1,13 +1,17 @@
 #include "BFCBlockManagerFactory.hpp"
 #include "BFCCullableHandle.hpp"
 #include "BFCCullableObject.hpp"
+#include "BFCBlock.hpp"
 
 #include "Utils/Debug.hpp"
+#include "Utils/Profiler.hpp"
 
 namespace AGE
 {
 	BFCCullableHandle BFCBlockManagerFactory::createItem(BFCCullableObject *object)
 	{
+		SCOPE_profile_cpu_function("BFC");
+
 		auto typeId = object->getBFCType();
 
 		AGE_ASSERT(typeId < MaxCullableTypeID);
@@ -32,6 +36,8 @@ namespace AGE
 
 	void BFCBlockManagerFactory::deleteItem(const BFCCullableHandle &handle)
 	{
+		SCOPE_profile_cpu_function("BFC");
+
 		AGE_ASSERT(handle.invalid() == false);
 
 		auto itemId = handle.getItemId();
@@ -41,4 +47,13 @@ namespace AGE
 
 		_managers[itemId._blockManagerID].deleteItem(itemId._blockID, itemId._itemID);
 	}
+
+	BFCItem &BFCBlockManagerFactory::getItem(const BFCItemID &id)
+	{
+		SCOPE_profile_cpu_function("BFC");
+
+		AGE_ASSERT(id._blockManagerID < _managers.size());
+		return _managers[id._blockManagerID]._blocks[id._blockID]->_items[id._itemID];
+	}
+
 }

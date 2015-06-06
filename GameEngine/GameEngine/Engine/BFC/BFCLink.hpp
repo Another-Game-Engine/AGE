@@ -14,11 +14,19 @@ namespace AGE
 	class BFCLink
 	{
 	public:
-		virtual ~BFCLink() {}
+		virtual ~BFCLink();
 		void initBFC(BFCBlockManagerFactory *blockFactory
 			, BFCLinkTracker *linkTracker);
 		void addObject(BFCCullableObject *object);
+		// dangerous !
+		// Be sure to not push duplicates
+		// It's safer to use the other method
+		void pushAnObject(const BFCCullableHandle &handle);
 		void removeObject(const BFCCullableHandle &handle);
+		// dangerous !
+		// Be sure to not pop items without removing them from blockfactory
+		// It's safer to use the other method
+		void popAnObject(const BFCCullableHandle &handle);
 		inline void setTransform(const glm::mat4 &transformation) { _globalTransformation = transformation; }
 		inline glm::mat4 getTransform() const { return _globalTransformation; }
 	protected:

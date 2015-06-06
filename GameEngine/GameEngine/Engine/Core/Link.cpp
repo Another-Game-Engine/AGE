@@ -29,7 +29,6 @@ void Link::registerOctreeObject(const PrepareKey &key)
 {
 	_octreeObjects.insert(key);
 	_renderScene->setTransform(getGlobalTransform(), key);
-	BFC_ADD();
 }
 
 void Link::unregisterOctreeObject(const PrepareKey &key)

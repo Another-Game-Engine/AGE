@@ -139,9 +139,11 @@ namespace AGE
 		auto manager = entity->getScene()->getInstance<GraphicElementManager>();
 		if (_drawableHandle.invalid() == false)
 		{
-			entity->getLink().removeObject(_drawableHandle);
+			manager->removeMesh(_drawableHandle);
+			entity->getLink().popAnObject(_drawableHandle);
 		}
 		_drawableHandle = manager->addMesh(_mesh, _material);
+		entity->getLink().pushAnObject(_drawableHandle);
 #endif
 	}
 
