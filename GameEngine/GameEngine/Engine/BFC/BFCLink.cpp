@@ -37,17 +37,15 @@ namespace AGE
 		_cullables.push_back(handle);
 	}
 
-	void BFCLink::removeObject(BFCCullableObject *object)
+	void BFCLink::removeObject(const BFCCullableHandle &handle)
 	{
-		AGE_ASSERT(object != nullptr);
-		BFCCullableHandle handle;
+		AGE_ASSERT(_cullables.empty() == false);
 
 		std::size_t i = 0;
 		for (auto &e : _cullables)
 		{
-			if (e.getPtr() == object)
+			if (e == handle)
 			{
-				handle = e;
 				break;
 			}
 			++i;

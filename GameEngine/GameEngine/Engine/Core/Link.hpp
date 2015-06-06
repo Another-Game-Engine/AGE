@@ -100,8 +100,9 @@ namespace AGE
 		glm::vec3 _scale;
 		glm::quat _orientation;
 		glm::mat4 _localTransformation;
+#ifndef AGE_BFC
 		glm::mat4 _globalTransformation;
-
+#endif
 		bool _localDirty;
 		std::unordered_set<PrepareKey> _octreeObjects;
 		Link *_parent;

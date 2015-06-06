@@ -16,6 +16,7 @@
 
 #include <BFC/BFCLinkTracker.hpp>
 #include <BFC/BFCBlockManagerFactory.hpp>
+#include "Graphic/GraphicElementManager.hpp"
 
 namespace AGE
 {
@@ -30,6 +31,7 @@ namespace AGE
 #ifdef AGE_BFC
 		_bfcLinkTracker = new BFCLinkTracker();
 		_bfcBlockManagerFactory = new BFCBlockManagerFactory();
+		setInstance<GraphicElementManager>(_bfcBlockManagerFactory);
 #endif
 	}
 

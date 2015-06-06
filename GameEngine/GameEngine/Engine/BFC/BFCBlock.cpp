@@ -21,8 +21,6 @@ namespace AGE
 
 	ItemID BFCBlock::createItem(BFCCullableObject *object)
 	{
-		AGE_ASSERT(_free.empty() == false);
-		
 		ItemID index;
 		if (_free.empty() == false)
 		{

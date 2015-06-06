@@ -6,6 +6,7 @@
 namespace AGE
 {
 	struct SubMeshInstance;
+	struct MaterialInstance;
 
 	struct DRBMesh : public BFCCullableObject
 	{
@@ -14,6 +15,6 @@ namespace AGE
 		virtual CullableTypeID getBFCType() const { return 0; }
 
 		std::vector<SubMeshInstance> subMeshs;
-		// other stuff plus tard, genre transformation et tout
+		std::vector<MaterialInstance> subMaterials;
 	};
 }

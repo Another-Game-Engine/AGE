@@ -21,7 +21,7 @@ namespace AGE
 	struct PrepareKey;
 	struct AnimationInstance;
 	class AScene;
-
+	class BFCCullableHandle;
 
 	struct MeshRenderer : public ComponentBase
 	{
@@ -76,6 +76,9 @@ namespace AGE
 		std::string _meshPath;
 		std::string _materialPath;
 		std::string _animationPath;
+#ifdef AGE_BFC
+		BFCCullableHandle _drawableHandle;
+#endif
 
 		RenderModeSet _renderMode;
 

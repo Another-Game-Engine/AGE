@@ -18,6 +18,9 @@
 //tmp
 #include "Configuration.hpp"
 
+//BFC
+#include "Graphic/GraphicElementManager.hpp"
+
 namespace AGE
 {
 	MeshRenderer::MeshRenderer() :
@@ -133,7 +136,12 @@ namespace AGE
 		AGE::GetPrepareThread()->updateGeometry(_key, _mesh->subMeshs, _material->datas);
 		AGE::GetPrepareThread()->updateRenderMode(_key, _renderMode);
 #else
-		//entity->getLink().addObject(mesh);
+		auto manager = entity->getScene()->getInstance<GraphicElementManager>();
+		if (_drawableHandle.invalid() == false)
+		{
+			entity->getLink().removeObject(_drawableHandle);
+		}
+		_drawableHandle = manager->addMesh(_mesh, _material);
 #endif
 	}
 

@@ -9,7 +9,7 @@ namespace AGE
 {
 	void BFCBlockManager::createItem(BFCCullableObject *object, BlockID &blockID, ItemID &itemId)
 	{
-		for (std::size_t i = 0; i < _blockCounter; ++i)
+		for (std::size_t i = _firstBlockWithSpace; i < _blocks.size(); ++i)
 		{
 			auto &block = _blocks[i];
 			if (block->isFull())
@@ -18,16 +18,19 @@ namespace AGE
 			}
 			itemId = block->createItem(object);
 			blockID = std::uint8_t(i);
+			_firstBlockWithSpace = i;
 			return;
 		}
-		_blockCounter++;
-		AGE_ASSERT(_blockCounter >= MaxBlockID);
+		_firstBlockWithSpace = _blocks.size();
+		_blocks.push_back(std::make_shared<BFCBlock>());
+		AGE_ASSERT(_blocks.size() < MaxBlockID);
 		createItem(object, blockID, itemId);
 	}
 
 	void BFCBlockManager::deleteItem(BlockID &blockID, ItemID &itemId)
 	{
-		AGE_ASSERT(blockID < _blockCounter);
+		AGE_ASSERT(blockID < _blocks.size());
+		_firstBlockWithSpace = blockID;
 		_blocks[blockID]->deleteItem(itemId);
 	}
 }
