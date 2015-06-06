@@ -1,6 +1,7 @@
 #include "LifetimeSystem.hpp"
 #include <Components/Lifetime.hpp>
 #include <Entities/Entity.hh>
+#include <Core/AScene.hh>
 
 namespace AGE
 {
@@ -27,8 +28,8 @@ namespace AGE
 		auto &collection = _filter.getCollection();
 		for (auto e : collection)
 		{
-			e.getComponent<Lifetime>()->_t -= time;
-			if (e.getComponent<Lifetime>()->_t <= 0.0f)
+			e->getComponent<Lifetime>()->_t -= time;
+			if (e->getComponent<Lifetime>()->_t <= 0.0f)
 				scene->destroy(e);
 		}
 	}

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <SpacePartitioning/PreparableObject.hh>
+#include <Culling/PreparableObject.hh>
 
 namespace AGE
 {

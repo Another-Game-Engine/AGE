@@ -1,4 +1,3 @@
-
 #include <Core/Engine.hh>
 #include <limits>
 #include <Core/AScene.hh>
@@ -14,6 +13,7 @@
 #include <Utils/Profiler.hpp>
 #include <Entities/BinaryEntityPack.hpp>
 #include <Entities/EntityBinaryPacker.hpp>
+
 #include <BFC/BFCLinkTracker.hpp>
 #include <BFC/BFCBlockManagerFactory.hpp>
 
@@ -176,7 +176,6 @@ namespace AGE
 			_freeEntityId.pop();
 			e->entity.id = id;
 		}
-		//e->link._renderScene = _renderScene;
 		e->entity.ptr = e;
 		e->outOfContext = outContext;
 		if (!outContext)
@@ -203,19 +202,13 @@ namespace AGE
 			{
 				data->removeComponent(i);
 			}
-
-			// @ECS TODO
-			//if (i >= MAX_CPT_NUMBER && cachedCode.code.test(i))
-			//{
-			//	informFiltersTagDeletion(TAG_ID(i - MAX_CPT_NUMBER), *data);
-			//}
 		}
 		if (!data->outOfContext)
 		{
 			informFiltersEntityDeletion(*data);
 		}
 
-		auto children = e.getLink().getChildren();
+		auto children = e->getLink().getChildren();
 		for (auto &c : children)
 		{
 			if (deep)
@@ -242,14 +235,14 @@ namespace AGE
 		if (!destination.isValid())
 		{
 			destination = createEntity(outContext);
-			destination.getLink().setPosition(source.getLink().getPosition());
-			destination.getLink().setOrientation(source.getLink().getOrientation());
-			destination.getLink().setScale(source.getLink().getScale());
+			destination->getLink().setPosition(source->getLink().getPosition());
+			destination->getLink().setOrientation(source->getLink().getOrientation());
+			destination->getLink().setScale(source->getLink().getScale());
 		}
 
 		if (deep)
 		{
-			auto link = source.getLink();
+			auto link = source->getLink();
 			for (auto &e : link.getChildren())
 			{
 				Entity tmp;
@@ -257,13 +250,13 @@ namespace AGE
 				{
 					return false;
 				}
-				destination.getLink().attachChild(tmp.getLinkPtr());
+				destination->getLink().attachChild(tmp.getLinkPtr());
 			}
-			for (auto e : source.getComponentList())
+			for (auto e : source->getComponentList())
 			{
 				if (e != nullptr)
 				{
-					destination.copyComponent(e);
+					destination->copyComponent(e);
 				}
 			}
 		}
@@ -300,43 +293,5 @@ namespace AGE
 		BinaryEntityPack pack;
 		pack.scene = this;
 		pack.loadFromFile(fileName);
-	}
-
-	///////////////////////////////////////////////////////////
-
-	void AScene::addTag(Entity &e, TAG_ID tag)
-	{
-		SCOPE_profile_cpu_function("Scenes");
-		// @ECS TODO
-
-		//auto data = e.ptr;
-		//if (data->entity != e)
-		//	return;
-		//data->barcode.setTag(tag);
-		//informFiltersTagAddition(tag, *data);
-	}
-
-	void AScene::removeTag(Entity &e, TAG_ID tag)
-	{
-		SCOPE_profile_cpu_function("Scenes");
-		// @ECS TODO
-
-		//auto &data = e.ptr;
-		//if (data->entity != e)
-		//	return;
-		//data->barcode.unsetTag(tag);
-		//informFiltersTagDeletion(tag, *data);
-	}
-
-	bool AScene::isTagged(Entity &e, TAG_ID tag)
-	{
-		SCOPE_profile_cpu_function("Scenes");
-		// @ECS TODO
-
-		//auto &data = e.ptr;
-		//if (data->entity != e)
-		//	return false;
-		//return data->barcode.hasTag(tag);
-		return true;
 	}
 }

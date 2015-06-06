@@ -44,10 +44,10 @@ namespace AGE
 
 	void CameraComponent::init()
 	{
-		auto scene = entity.getScene();
+		auto scene = entity->getScene();
 		_key = AGE::GetPrepareThread()->addCamera();
-		entity.getLink().registerOctreeObject(_key);
-		auto screenSize = entity.getScene()->getInstance<IRenderContext>()->getScreenSize();
+		entity->getLink().registerOctreeObject(_key);
+		auto screenSize = entity->getScene()->getInstance<IRenderContext>()->getScreenSize();
 		setProjection(glm::perspective(60.0f, (float)screenSize.x / (float)screenSize.y, 0.1f, 2000.0f));
 	}
 
@@ -55,7 +55,7 @@ namespace AGE
 	{
 		if (!_key.invalid())
 		{
-			entity.getLink().unregisterOctreeObject(_key);
+			entity->getLink().unregisterOctreeObject(_key);
 		}
 		_data = CameraData();
 	}

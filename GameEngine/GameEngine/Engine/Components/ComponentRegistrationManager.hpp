@@ -52,7 +52,7 @@ namespace AGE
 			auto it = _creationFunctions.find(key);
 			if (it != std::end(_creationFunctions))
 				return;
-			_creationFunctions.insert(std::make_pair(key, [](Entity *e){return e->addComponent<T>(); }));
+			_creationFunctions.insert(std::make_pair(key, [](Entity *e){return (*e)->addComponent<T>(); }));
 			
 			T tmpInstance;
 

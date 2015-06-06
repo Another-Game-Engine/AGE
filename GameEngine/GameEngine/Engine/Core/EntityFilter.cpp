@@ -1,4 +1,5 @@
 #include <Core/EntityFilter.hpp>
+#include <Core/AScene.hh>
 
 namespace AGE
 {
@@ -17,6 +18,18 @@ namespace AGE
 	std::set<Entity> &EntityFilter::getCollection()
 	{
 		return _collection;
+	}
+
+	void EntityFilter::requireComponent(ComponentType typeId)
+	{
+		_barcode.insert(typeId);
+		_scene->filterSubscribe(typeId, this);
+	}
+
+	void EntityFilter::unRequireComponent(ComponentType typeId)
+	{
+		_barcode.erase(typeId);
+		_scene->filterUnsubscribe(typeId, this);
 	}
 
 	void EntityFilter::requireTag(TAG_ID id)

@@ -6,12 +6,14 @@
 #include <list>
 #include <array>
 #include <glm/fwd.hpp>
+
 #include <cereal/cereal.hpp>
 #include <cereal/archives/binary.hpp>
 #include <cereal/archives/json.hpp>
 #include <cereal/archives/portable_binary.hpp>
 #include <cereal/archives/xml.hpp>
 #include <cereal/types/map.hpp>
+
 #include <Utils/Containers/Queue.hpp>
 #include <Entities/EntitySerializationInfos.hpp>
 #include <Utils/ObjectPool.hpp>
@@ -163,34 +165,5 @@ namespace AGE
 
 		void save(const std::string &fileName);
 		void load(const std::string &fileName);
-
-		////////////////////////
-		///////
-		// Component Manager Get / Set
-
-		template <typename T>
-		void clearComponentsType()
-		{
-			SCOPE_profile_cpu_function("Scenes");
-			//TODO
-			auto id = Component<T>::getTypeId();
-			if (_componentsManagers[id] == nullptr)
-				return;
-			auto &manager = *static_cast<ComponentManager<T>*>(_componentsManagers[id]);
-			auto &col = manager.getComponents();
-			for (std::size_t i = 0; i < manager.getSize(); ++i)
-			{
-				_entityPool[col[i].entityId].barcode.unsetComponent(ComponentType(id));
-			}
-			manager.clearComponents();
-			for (auto filter : _filters[id])
-			{
-				filter->clearCollection();
-			}
-		}
-
-		void addTag(Entity &e, TAG_ID tag);
-		void removeTag(Entity &e, TAG_ID tag);
-		bool isTagged(Entity &e, TAG_ID tag);
 	};
 }

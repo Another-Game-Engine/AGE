@@ -16,7 +16,7 @@ namespace AGE
 
 		if (_free.empty() == false)
 		{
-			result == _free.front();
+			result = _free.front();
 			_free.pop();
 		}
 		else

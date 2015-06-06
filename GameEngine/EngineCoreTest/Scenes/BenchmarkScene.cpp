@@ -141,13 +141,13 @@ namespace AGE
 
 			auto camera = createEntity();
 			GLOBAL_CAMERA = camera;
-			auto cam = camera.addComponent<CameraComponent>();
-			camera.addComponent<FreeFlyComponent>();
+			auto cam = camera->addComponent<CameraComponent>();
+			camera->addComponent<FreeFlyComponent>();
 			cam->setPipeline(RenderType::DEFERRED);
 			cam->setTexture(_skyboxSpace);
 			cam->addSkyBoxToChoice("space", _skyboxSpace);
 			cam->addSkyBoxToChoice("test", _skyboxTest);
-			camera.getLink().setPosition(glm::vec3(0, 2.5f, 4.5f));
+			camera->getLink().setPosition(glm::vec3(0, 2.5f, 4.5f));
 
 			auto sceneFileName = EngineCoreTestConfiguration::getSelectedScenePath();
 
@@ -166,7 +166,7 @@ namespace AGE
 			//for (auto &e : bones)
 			//{
 			//	auto entity = createEntity();
-			//	entity.addComponent<MeshRenderer>(
+			//	entity->addComponent<MeshRenderer>(
 			//		getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage")
 			//		, getInstance<AGE::AssetsManager>()->getMaterial("ball/ball.mage"));
 			//	bonesEntities.push_back(entity);
@@ -188,18 +188,18 @@ namespace AGE
 		{
 			trigger = 0.0f;
 			auto e = createEntity();
-			e.addComponent<Lifetime>(15.0f);
-			auto &link = e.getLink();
-			auto &cameraLink = GLOBAL_CAMERA.getLink();
+			e->addComponent<Lifetime>(15.0f);
+			auto &link = e->getLink();
+			auto &cameraLink = GLOBAL_CAMERA->getLink();
 			const glm::quat &cameraOrientation = cameraLink.getOrientation();
 			const glm::vec3 cameraForward = glm::vec3(glm::mat4(glm::toMat4(cameraOrientation) * glm::translate(glm::mat4(1), glm::vec3(0.0f, 0.0f, -1.0f)))[3]);
 			link.setPosition(cameraLink.getPosition());
 			link.setOrientation(cameraOrientation);
 			link.setScale(glm::vec3(0.2f));
-			e.addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("cube/cube.sage"),
+			e->addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("cube/cube.sage"),
 										 getInstance<AGE::AssetsManager>()->getMaterial(OldFile("cube/cube.mage")))->enableRenderMode(RenderModes::AGE_OPAQUE);
-			e.addComponent<RigidBody>()->addForce(10.0f * cameraForward, Physics::ForceMode::Impulse);
-			e.addComponent<Collider>(Physics::ColliderType::Box);
+			e->addComponent<RigidBody>()->addForce(10.0f * cameraForward, Physics::ForceMode::Impulse);
+			e->addComponent<Collider>(Physics::ColliderType::Box);
 		}
 		trigger += time;
 
@@ -208,9 +208,9 @@ namespace AGE
 			for (auto i = 0; i < 10; ++i)
 			{
 				auto e = createEntity();
-				e.addComponent<Lifetime>(5.0f);
+				e->addComponent<Lifetime>(5.0f);
 
-				auto &link = e.getLink();
+				auto &link = e->getLink();
 				link.setPosition(glm::vec3((rand() % 100) - 50, (rand() % 50) - 5, (rand() % 100) - 50));
 				link.setOrientation(glm::quat(glm::vec3(rand() % 360, rand() % 360, rand() % 360)));
 				link.setScale(glm::vec3(1.0f));
@@ -219,21 +219,21 @@ namespace AGE
 				MeshRenderer *mesh;
 				if (i % 4 == 0)
 				{
-					mesh = e.addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage"), getInstance<AGE::AssetsManager>()->getMaterial(OldFile("ball/ball.mage")));
-					e.addComponent<Collider>(Physics::ColliderType::Sphere);
+					mesh = e->addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage"), getInstance<AGE::AssetsManager>()->getMaterial(OldFile("ball/ball.mage")));
+					e->addComponent<Collider>(Physics::ColliderType::Sphere);
 					link.setScale(glm::vec3(0.5f));
 				}
 				else
 				{
-					mesh = e.addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("cube/cube.sage"), getInstance<AGE::AssetsManager>()->getMaterial(OldFile("cube/cube.mage")));
-					e.addComponent<Collider>(Physics::ColliderType::Box);
+					mesh = e->addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("cube/cube.sage"), getInstance<AGE::AssetsManager>()->getMaterial(OldFile("cube/cube.mage")));
+					e->addComponent<Collider>(Physics::ColliderType::Box);
 				}
 
 				if (i % 13 == 0)
 				{
-					//e.addComponent<PointLightComponent>()->set(PointLightData(glm::vec3((float)(rand() % 1000) / 1000.0f, (float)(rand() % 1000) / 1000.0f, (float)(rand() % 1000) / 1000.0f), glm::vec3(1.f, 0.1f, 0.005f)));
+					//e->addComponent<PointLightComponent>()->set(PointLightData(glm::vec3((float)(rand() % 1000) / 1000.0f, (float)(rand() % 1000) / 1000.0f, (float)(rand() % 1000) / 1000.0f), glm::vec3(1.f, 0.1f, 0.005f)));
 				}
-				e.addComponent<RigidBody>();
+				e->addComponent<RigidBody>();
 				mesh->enableRenderMode(RenderModes::AGE_OPAQUE);
 			}
 			_chunkCounter = 0;
@@ -246,7 +246,7 @@ namespace AGE
 
 		ImGui::Text("%i entities", getNumberOfEntities());
 
-		GLOBAL_CAMERA.getComponent<CameraComponent>()->editorUpdate();
+		GLOBAL_CAMERA->getComponent<CameraComponent>()->editorUpdate();
 		////////////////////////////////////
 
 		//static float ttime = 0;
@@ -255,12 +255,12 @@ namespace AGE
 		//auto &bones = getInstance<AGE::AnimationManager>()->getBones(animationTestInstance);
 		//for (std::size_t i = 0; i < bones.size(); ++i)
 		//{
-		//	bonesEntities[i].getLink().setTransform(bones[i]);
+		//	bonesEntities[i]->getLink().setTransform(bones[i]);
 		//}
 
 		////////////////////////////////////
 
-		auto camComponent = GLOBAL_CAMERA.getComponent<CameraComponent>();
+		auto camComponent = GLOBAL_CAMERA->getComponent<CameraComponent>();
 		static char const *pipelineNames[RenderType::TOTAL] = {"Debug deferred rendering", "Deferred rendering" };
 		ImGui::ListBox("Pipelines", &pipelineIndex, pipelineNames, int(RenderType::TOTAL));
 		if (camComponent->getPipeline() != (RenderType)pipelineIndex)

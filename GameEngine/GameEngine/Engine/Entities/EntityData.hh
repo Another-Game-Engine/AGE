@@ -23,6 +23,29 @@ namespace AGE
 		AGE::Link &getLink();
 		AScene *getScene();
 		ComponentBase *getComponent(ComponentType id);
+		void addComponentPtr(ComponentBase *cpt);
+		void copyComponent(ComponentBase *cpt);
+		void removeComponent(ComponentType id);
+		bool haveComponent(ComponentType id) const;
+
+		template <typename T>
+		inline T *getComponent()
+		{
+			return (T*)(getComponent(Component<T>::getTypeId()));
+		}
+
+		template <typename T>
+		inline bool haveComponent() const
+		{
+			return haveComponent(Component<T>::getTypeId());
+		}
+
+		template <typename T>
+		inline void removeComponent()
+		{
+			removeComponent(Component<T>::getTypeId());
+		}
+
 
 		template <typename T, typename... Args>
 		T *addComponent(Args &&...args)
@@ -43,10 +66,6 @@ namespace AGE
 			return ptr;
 		}
 
-		void addComponentPtr(ComponentBase *cpt);
-		void copyComponent(ComponentBase *cpt);
-		void removeComponent(ComponentType id);
-		bool haveComponent(ComponentType id) const;
 		const std::vector<ComponentBase*> &getComponentList() const
 		{
 			return components;

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <glm/glm.hpp>
-#include <SpacePartitioning/Cullable/Cullable.hh>
+#include <Culling/Cullable/Cullable.hh>
 
 namespace AGE
 {

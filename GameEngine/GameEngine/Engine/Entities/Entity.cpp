@@ -162,21 +162,6 @@ namespace AGE
 		return &ptr->getEntity();
 	}
 
-	AScene *Entity::getScene()
-	{
-		return ptr->getScene();
-	}
-
-	AGE::Link &Entity::getLink()
-	{
-		return ptr->getLink();
-	}
-
-	const AGE::Link &Entity::getLink() const
-	{
-		return ptr->getLink();
-	}
-
 	AGE::Link *Entity::getLinkPtr()
 	{
 		return &ptr->getLink();
@@ -185,40 +170,5 @@ namespace AGE
 	const AGE::Link *Entity::getLinkPtr() const
 	{
 		return &ptr->getLink();
-	}
-
-	ComponentBase *Entity::getComponent(ComponentType id)
-	{
-		SCOPE_profile_cpu_function("Entity");
-		return ptr->getComponent(id);
-	}
-
-	void Entity::removeComponent(ComponentType id)
-	{
-		SCOPE_profile_cpu_function("Entity");
-		ptr->removeComponent(id);
-	}
-
-	bool Entity::haveComponent(ComponentType id) const
-	{
-		SCOPE_profile_cpu_function("Entity");
-		return ptr->haveComponent(id);
-	}
-
-	void Entity::addComponentPtr(ComponentBase *cpt)
-	{
-		SCOPE_profile_cpu_function("Entity");
-		ptr->addComponentPtr(cpt);
-	}
-
-	void Entity::copyComponent(ComponentBase *cpt)
-	{
-		SCOPE_profile_cpu_function("Entity");
-		ptr->copyComponent(cpt);
-	}
-
-	const std::vector<ComponentBase*> &Entity::getComponentList() const
-	{
-		return ptr->getComponentList();
 	}
 }

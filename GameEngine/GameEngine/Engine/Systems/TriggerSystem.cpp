@@ -41,7 +41,7 @@ namespace AGE
 		{
 			for (Entity entity : entityFilter.getCollection())
 			{
-				entity.getComponent<Collider>()->triggers.clear();
+				entity->getComponent<Collider>()->triggers.clear();
 			}
 		}
 
