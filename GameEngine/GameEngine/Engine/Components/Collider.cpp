@@ -287,4 +287,39 @@ namespace AGE
 			entity.removeComponent<Private::PhysicsData>();
 		}
 	}
+
+#ifdef EDITOR_ENABLED
+
+	void Collider::editorCreate(void)
+	{
+		return;
+	}
+
+	void Collider::editorDelete(void)
+	{
+		return;
+	}
+
+	bool Collider::editorUpdate(void)
+	{
+		if (editorStruct == nullptr)
+		{
+			editorStruct = std::make_unique<EditorStruct>();
+		}
+		editorStruct->copyDatas(this);
+		editorStruct->editorUpdate(this);
+		return false;
+	}
+
+	void Collider::EditorStruct::copyDatas(Collider *ptr)
+	{
+		// TO_DO
+	}
+
+	void Collider::EditorStruct::editorUpdate(Collider *ptr)
+	{
+		// TO_DO
+	}
+
+#endif
 }

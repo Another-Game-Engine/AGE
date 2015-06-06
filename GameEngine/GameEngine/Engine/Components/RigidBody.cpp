@@ -253,17 +253,20 @@ namespace AGE
 	}
 
 #ifdef EDITOR_ENABLED
-	void RigidBody::editorCreate()
-	{
 
-	}
-	void RigidBody::editorDelete()
+	void RigidBody::editorCreate(void)
 	{
+		return;
+	}
 
-	}
-	bool RigidBody::editorUpdate()
+	void RigidBody::editorDelete(void)
 	{
-		if (!editorStruct)
+		return;
+	}
+
+	bool RigidBody::editorUpdate(void)
+	{
+		if (editorStruct == nullptr)
 		{
 			editorStruct = std::make_unique<EditorStruct>();
 		}
@@ -349,6 +352,6 @@ namespace AGE
 			}
 		}
 	}
-#endif
 
+#endif
 }
