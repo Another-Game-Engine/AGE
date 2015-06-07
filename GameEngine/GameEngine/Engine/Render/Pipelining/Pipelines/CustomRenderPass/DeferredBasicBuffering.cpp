@@ -165,7 +165,7 @@ namespace AGE
 				for (auto &m : meshPaint->subMeshs)
 				{
 					auto painter = _painterManager->get_painter(m.painter);
-					painter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], Properties()/*m.properties*/, m.vertices);
+					painter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], m.properties, m.vertices);
 					//if (renderModeCompatible(mode.renderMode))
 					//{
 

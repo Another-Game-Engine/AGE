@@ -14,8 +14,6 @@ namespace AGE
 
 	struct MaterialInstance
 	{
-		//Key<Material> _material_key;
-		//std::map<std::string, Key<Property>> _properties;
 		std::vector<std::shared_ptr<Property>> _properties;
 	};
 

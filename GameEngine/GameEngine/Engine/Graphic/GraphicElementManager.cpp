@@ -19,8 +19,18 @@ namespace AGE
 	{
 		DRBMesh *drbMesh = _meshPool.create();
 		drbMesh->subMeshs = meshInstance->subMeshs;
-		drbMesh->subMaterials = materialInstance->datas;
-		
+
+		for (auto &submesh : drbMesh->subMeshs)
+		{
+			std::size_t materialIndex = submesh.defaultMaterialIndex < materialInstance->datas.size() ? submesh.defaultMaterialIndex : 0;
+			auto &material = materialInstance->datas[materialIndex];
+
+			for (auto &matProperty : material._properties)
+			{
+				submesh.properties.add_property(matProperty);
+			}
+		}
+
 		BFCCullableHandle result = _bfcBlockManager->createItem(drbMesh);
 
 		return result;

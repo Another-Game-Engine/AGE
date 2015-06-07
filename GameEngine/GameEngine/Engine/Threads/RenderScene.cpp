@@ -138,21 +138,21 @@ namespace AGE
 	{
 		SCOPE_profile_cpu_i("PrepareTimer", "Remove drawable object");
 
-		Drawable &toRm = _drawables.get(id);
-		_removeProperties(toRm.mesh.properties);
-		if (toRm.hasMoved)
-		{
-			uint32_t idxMoveBuffer = toRm.moveBufferIdx;
+		//Drawable &toRm = _drawables.get(id);
+		//_removeProperties(toRm.mesh.properties);
+		//if (toRm.hasMoved)
+		//{
+		//	uint32_t idxMoveBuffer = toRm.moveBufferIdx;
 
-			_drawablesToMove[idxMoveBuffer] = _drawablesToMove[_drawablesToMove.size() - 1];
-			_drawables.get(_drawablesToMove[idxMoveBuffer]).moveBufferIdx = idxMoveBuffer;
-			_drawablesToMove.pop_back();
-		}
-		// remove drawable from octree
-		if (toRm.currentNode != UNDEFINED_IDX)
-			_octree.removeElement(&toRm);
-		_drawables.dealloc((uint32_t)(id));
-		assert(id != (std::size_t)(-1));
+		//	_drawablesToMove[idxMoveBuffer] = _drawablesToMove[_drawablesToMove.size() - 1];
+		//	_drawables.get(_drawablesToMove[idxMoveBuffer]).moveBufferIdx = idxMoveBuffer;
+		//	_drawablesToMove.pop_back();
+		//}
+		//// remove drawable from octree
+		//if (toRm.currentNode != UNDEFINED_IDX)
+		//	_octree.removeElement(&toRm);
+		//_drawables.dealloc((uint32_t)(id));
+		//assert(id != (std::size_t)(-1));
 	}
 
 	void RenderScene::_setCameraInfos(AGE::Commands::MainToPrepare::CameraInfos &msg)
@@ -353,65 +353,65 @@ namespace AGE
 	{
 		SCOPE_profile_cpu_i("PrepareTimer", "Set geometry");
 
-		Mesh *uo = &_meshs.get(msg.key.id);
+		//Mesh *uo = &_meshs.get(msg.key.id);
 
-		for (auto &e : uo->drawableCollection)
-		{
-			removeDrawableObject(e);
-		}
-		uo->drawableCollection.clear();
+		//for (auto &e : uo->drawableCollection)
+		//{
+		//	removeDrawableObject(e);
+		//}
+		//uo->drawableCollection.clear();
 
-		for (std::size_t i = 0; i < msg.submeshInstances.size(); ++i)
-		{
-			auto id = _drawables.alloc();
-			Drawable &added = _drawables.get(id);
-			auto &submesh = msg.submeshInstances[i];
-			MaterialInstance *material = nullptr;
-			if (submesh.defaultMaterialIndex < msg.submaterialInstances.size())
-			{
-				// correct material
-				material = &(msg.submaterialInstances[submesh.defaultMaterialIndex]);
-			}
-			else
-			{
-				// material not found, first one
-				material = &(msg.submaterialInstances[0]);
-			}
+		//for (std::size_t i = 0; i < msg.submeshInstances.size(); ++i)
+		//{
+		//	auto id = _drawables.alloc();
+		//	Drawable &added = _drawables.get(id);
+		//	auto &submesh = msg.submeshInstances[i];
+		//	MaterialInstance *material = nullptr;
+		//	if (submesh.defaultMaterialIndex < msg.submaterialInstances.size())
+		//	{
+		//		// correct material
+		//		material = &(msg.submaterialInstances[submesh.defaultMaterialIndex]);
+		//	}
+		//	else
+		//	{
+		//		// material not found, first one
+		//		material = &(msg.submaterialInstances[0]);
+		//	}
 
-			uo->drawableCollection.push_back(id);
+		//	uo->drawableCollection.push_back(id);
 
-			added.key.type = PrepareKey::Type::Drawable;
-			added.key.id = (PrepareKey::OctreeObjectId)(id);
+		//	added.key.type = PrepareKey::Type::Drawable;
+		//	added.key.id = (PrepareKey::OctreeObjectId)(id);
 
-			added.mesh = msg.submeshInstances[i];
+		//	added.mesh = msg.submeshInstances[i];
 
-			added.transformation = uo->transformation;
+		//	added.transformation = uo->transformation;
 
-			//				added.animation = msg.animation;
-			added.currentNode = UNDEFINED_IDX;
-			_drawablesToMove.push_back((PrepareKey::OctreeObjectId)(id));
-			added.hasMoved = true;
-			added.moveBufferIdx = (uint32_t)(_drawablesToMove.size() - 1);
+		//	//				added.animation = msg.animation;
+		//	added.currentNode = UNDEFINED_IDX;
+		//	_drawablesToMove.push_back((PrepareKey::OctreeObjectId)(id));
+		//	added.hasMoved = true;
+		//	added.moveBufferIdx = (uint32_t)(_drawablesToMove.size() - 1);
 
-			//if (added.mesh.properties.invalu)
-			added.mesh.properties = _createPropertiesContainer();
-			added.transformationProperty = _addTransformationProperty(added.mesh.properties, glm::mat4(1));
+		//	//if (added.mesh.properties.invalu)
+		//	added.mesh.properties = _createPropertiesContainer();
+		//	added.transformationProperty = _addTransformationProperty(added.mesh.properties, glm::mat4(1));
 
-			// we remove old material properties
-			for (auto &e : added.materialKeys)
-			{
-				_detachProperty(added.mesh.properties, e);
-			}
-			// we clear the old material key array
-			added.materialKeys.clear();
+		//	// we remove old material properties
+		//	for (auto &e : added.materialKeys)
+		//	{
+		//		_detachProperty(added.mesh.properties, e);
+		//	}
+		//	// we clear the old material key array
+		//	added.materialKeys.clear();
 
-			// we create new material properties and push keys in oldmaterial property array
-			for (auto &e : material->_properties)
-			{
-				auto materialKey = _attachProperty(added.mesh.properties, e);
-				added.materialKeys.push_back(materialKey);
-			}
-		}
+		//	// we create new material properties and push keys in oldmaterial property array
+		//	for (auto &e : material->_properties)
+		//	{
+		//		auto materialKey = _attachProperty(added.mesh.properties, e);
+		//		added.materialKeys.push_back(materialKey);
+		//	}
+		//}
 	}
 
 	void RenderScene::_setRenderMode(AGE::Commands::MainToPrepare::SetRenderMode &msg)
@@ -498,40 +498,40 @@ namespace AGE
 	{
 		SCOPE_profile_cpu_i("PrepareTimer", "Move element in octree");
 
-		for (uint32_t idx : _drawablesToMove)
-		{
-			Drawable &e = _drawables.get(idx);
-			e.hasMoved = false;
-			e.shape.fromTransformedBox(e.mesh.boundingBox, e.transformation);
-			if (e.currentNode == UNDEFINED_IDX)
-				_octree.addElement(&e);
-			else
-				_octree.moveElement(&e);
+		//for (uint32_t idx : _drawablesToMove)
+		//{
+		//	Drawable &e = _drawables.get(idx);
+		//	e.hasMoved = false;
+		//	e.shape.fromTransformedBox(e.mesh.boundingBox, e.transformation);
+		//	if (e.currentNode == UNDEFINED_IDX)
+		//		_octree.addElement(&e);
+		//	else
+		//		_octree.moveElement(&e);
 
-			auto &properties = _properties.get(e.mesh.properties.getId());
+		//	auto &properties = _properties.get(e.mesh.properties.getId());
 
-			auto transformationProperty = properties.get_property<Transformation>(e.transformationProperty);
-			transformationProperty->set(e.transformation);
+		//	auto transformationProperty = properties.get_property<Transformation>(e.transformationProperty);
+		//	transformationProperty->set(e.transformation);
 
-			assert(e.currentNode != UNDEFINED_IDX);
-		}
-		for (uint32_t idx : _pointLightsToMove)
-		{
-			PointLight &e = _pointLights.get(idx);
+		//	assert(e.currentNode != UNDEFINED_IDX);
+		//}
+		//for (uint32_t idx : _pointLightsToMove)
+		//{
+		//	PointLight &e = _pointLights.get(idx);
 
-			e.hasMoved = false;
-			e.computeSphereTransform();
-			// TODO: move in octree
-		}
-		for (uint32_t idx : _spotLightsToMove)
-		{
-			SpotLight &e = _spotLights.get(idx);
-			e.hasMoved = false;
-			// TODO: move in octree
-		}
-		_drawablesToMove.clear();
-		_pointLightsToMove.clear();
-		_spotLightsToMove.clear();
+		//	e.hasMoved = false;
+		//	e.computeSphereTransform();
+		//	// TODO: move in octree
+		//}
+		//for (uint32_t idx : _spotLightsToMove)
+		//{
+		//	SpotLight &e = _spotLights.get(idx);
+		//	e.hasMoved = false;
+		//	// TODO: move in octree
+		//}
+		//_drawablesToMove.clear();
+		//_pointLightsToMove.clear();
+		//_spotLightsToMove.clear();
 	}
 
 	void RenderScene::_prepareDrawList(AGE::Commands::MainToPrepare::PrepareDrawLists &msg)
@@ -638,7 +638,7 @@ namespace AGE
 								curRenderDrawablelist->renderMode = currentDrawable->renderMode;
 							}
 							curRenderDrawablelist->vertices.emplace_back(currentDrawable->mesh.vertices);
-							curRenderDrawablelist->properties.emplace_back(_properties.get(currentDrawable->mesh.properties.getId()));
+							//curRenderDrawablelist->properties.emplace_back(_properties.get(currentDrawable->mesh.properties.getId()));
 						}
 						}
 					}
@@ -691,7 +691,7 @@ namespace AGE
 								curRenderDrawablelist->renderMode = currentDrawable->renderMode;
 							}
 							curRenderDrawablelist->vertices.emplace_back(currentDrawable->mesh.vertices);
-							curRenderDrawablelist->properties.emplace_back(_properties.get(currentDrawable->mesh.properties.getId()));
+							//curRenderDrawablelist->properties.emplace_back(_properties.get(currentDrawable->mesh.properties.getId()));
 						}
 						}
 					}
@@ -822,7 +822,7 @@ namespace AGE
 						if (drawObject)
 						{
 							curRenderDrawablelist->vertices.emplace_back(currentDrawable->mesh.vertices);
-							curRenderDrawablelist->properties.emplace_back(_properties.get(currentDrawable->mesh.properties.getId()));
+							//curRenderDrawablelist->properties.emplace_back(_properties.get(currentDrawable->mesh.properties.getId()));
 						}
 
 					}

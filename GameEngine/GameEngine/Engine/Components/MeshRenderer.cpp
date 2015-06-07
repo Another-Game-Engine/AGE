@@ -48,12 +48,12 @@ namespace AGE
 		_material = nullptr;
 		_renderMode.reset();
 
-		if (!_key.invalid())
+		if (_drawableHandle.invalid() == false)
 		{
-			entity->getLink().unregisterOctreeObject(_key);
+			auto manager = entity->getScene()->getInstance<GraphicElementManager>();
+			manager->removeMesh(_drawableHandle);
+			entity->getLink().popAnObject(_drawableHandle);
 		}
-		//scene->getInstance<AGE::Threads::Prepare>()->removeElement(_key);
-		_key = AGE::PrepareKey();
 	}
 
 	bool MeshRenderer::setMeshAndMaterial(
@@ -86,7 +86,7 @@ namespace AGE
 	void MeshRenderer::enableRenderMode(RenderModes mode)
 	{
 		_renderMode[mode] = true;
-		_updateGeometry();
+		//_updateGeometry();
 	}
 
 	void MeshRenderer::disableRenderMode(RenderModes mode)

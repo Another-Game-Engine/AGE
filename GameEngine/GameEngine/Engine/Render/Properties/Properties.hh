@@ -30,7 +30,7 @@ namespace AGE
 		{
 			for (auto &e : _properties)
 			{
-				if (e->name() == "model_matrix")
+				if (e->name() == name)
 				{
 					return e;
 				}
