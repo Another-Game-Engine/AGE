@@ -58,7 +58,7 @@ namespace AGE
 			{
 				for (auto &c : e.children)
 				{
-					e.entity.getLink().attachChild(list[c].entity.getLinkPtr());
+					e.entity->getLink().attachChild(list[c].entity.getLinkPtr());
 				}
 			}
 		}

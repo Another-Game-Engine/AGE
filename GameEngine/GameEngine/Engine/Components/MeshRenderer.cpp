@@ -15,6 +15,9 @@
 #include <Utils/Debug.hpp>
 #endif
 
+//tmp
+#include "Configuration.hpp"
+
 namespace AGE
 {
 	MeshRenderer::MeshRenderer() :
@@ -44,7 +47,7 @@ namespace AGE
 
 		if (!_key.invalid())
 		{
-			entity.getLink().unregisterOctreeObject(_key);
+			entity->getLink().unregisterOctreeObject(_key);
 		}
 		//scene->getInstance<AGE::Threads::Prepare>()->removeElement(_key);
 		_key = AGE::PrepareKey();
@@ -60,18 +63,19 @@ namespace AGE
 		}
 		_meshPath = mesh->path;
 		_materialPath = material->path;
-
+		_mesh = mesh;
+		_material = material;
+#ifndef AGE_BFC
 		if (!_key.invalid())
 		{
-			entity.getLink().unregisterOctreeObject(_key);
+			entity->getLink().unregisterOctreeObject(_key);
 		}
 
 		//create key
 		_key = AGE::GetPrepareThread()->addMesh();
-		entity.getLink().registerOctreeObject(_key);
-
-		_mesh = mesh;
-		_material = material;
+		entity->getLink().registerOctreeObject(_key);
+#else
+#endif
 		_updateGeometry();
 		return true;
 	}
@@ -125,13 +129,17 @@ namespace AGE
 		{
 			return;
 		}
+#ifndef AGE_BFC
 		AGE::GetPrepareThread()->updateGeometry(_key, _mesh->subMeshs, _material->datas);
 		AGE::GetPrepareThread()->updateRenderMode(_key, _renderMode);
+#else
+		//entity->getLink().addObject(mesh);
+#endif
 	}
 
 	void MeshRenderer::postUnserialization()
 	{
-		auto scene = entity.getScene();
+		auto scene = entity->getScene();
 
 		auto meshptr = scene->getInstance<AGE::AssetsManager>()->getMesh(_meshPath);
 		if (!_meshPath.empty() && (!meshptr || !meshptr->isValid()))
@@ -176,7 +184,7 @@ namespace AGE
 	bool MeshRenderer::editorUpdate()
 	{
 		bool modified = false;
-		auto scene = entity.getScene();
+		auto scene = entity->getScene();
 
 		if ((*meshPathList)[selectedMeshIndex] != _meshPath)
 		{

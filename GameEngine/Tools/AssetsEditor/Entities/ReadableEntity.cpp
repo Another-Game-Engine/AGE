@@ -25,7 +25,7 @@ namespace AGE
 	void ReadableEntity::save(cereal::JSONOutputArchive &ar, const std::uint32_t version) const
 	{
 
-		AGE::Link link = entity.getLink();
+		AGE::Link link = entity->getLink();
 		ENTITY_FLAGS flags = entity.getFlags();
 		ar(cereal::make_nvp("link", link)
 			, cereal::make_nvp("children", children)
@@ -52,7 +52,7 @@ namespace AGE
 			, componentTypes
 			, archetypesDependency);
 
-		auto archetypeManager = entity.getScene()->getInstance<AGE::WE::ArchetypeEditorManager>();
+		auto archetypeManager = entity->getScene()->getInstance<AGE::WE::ArchetypeEditorManager>();
 
 		// we load archetypes dependency
 		if (!archetypesDependency.empty())
@@ -63,18 +63,18 @@ namespace AGE
 			}
 		}
 
-		entity.getLink().setPosition(link.getPosition());
-		entity.getLink().setOrientation(link.getOrientation());
-		entity.getLink().setScale(link.getScale());
+		entity->getLink().setPosition(link.getPosition());
+		entity->getLink().setOrientation(link.getOrientation());
+		entity->getLink().setScale(link.getScale());
 		//entity.setFlags(f);
 		for (auto &e : componentTypes)
 		{
 			auto hashType = (*typesMap)[e];
 			auto newComponent = ComponentRegistrationManager::getInstance().loadJson(hashType, entity, ar);
 		}
-		if (entity.haveComponent<ArchetypeComponent>())
+		if (entity->haveComponent<ArchetypeComponent>())
 		{
-			auto archetypeName = entity.getComponent<ArchetypeComponent>()->archetypeName;
+			auto archetypeName = entity->getComponent<ArchetypeComponent>()->archetypeName;
 			archetypeManager->spawn(entity, archetypeName);
 		}
 	}
@@ -87,9 +87,9 @@ namespace AGE
 
 		bin.children = children;
 
-		if (entity.haveComponent<ArchetypeComponent>())
+		if (entity->haveComponent<ArchetypeComponent>())
 		{
-			auto archetypeCpt = entity.getComponent<ArchetypeComponent>();
+			auto archetypeCpt = entity->getComponent<ArchetypeComponent>();
 			bin.componentTypes.push_back(archetypeCpt->getType());
 			bin.components.push_back(archetypeCpt);
 			bin.archetypesDependency.push_back(archetypeCpt->archetypeName);

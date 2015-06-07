@@ -41,7 +41,7 @@ namespace AGE
 	{
 		if (!_key.invalid())
 		{
-			entity.getLink().unregisterOctreeObject(_key);
+			entity->getLink().unregisterOctreeObject(_key);
 		}
 		_key = AGE::PrepareKey();
 		_data.color = glm::vec3(1);
@@ -52,8 +52,8 @@ namespace AGE
 	void PointLightComponent::init()
 	{
 		_key = AGE::GetPrepareThread()->addPointLight();
-		entity.getLink().registerOctreeObject(_key);
-		_data.map = entity.getScene()->getInstance<AssetsManager>()->getPointLightTexture();
+		entity->getLink().registerOctreeObject(_key);
+		_data.map = entity->getScene()->getInstance<AssetsManager>()->getPointLightTexture();
 		assert(!_key.invalid());
 		set(_data);
 	}

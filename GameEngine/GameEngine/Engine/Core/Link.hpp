@@ -9,13 +9,24 @@
 #include <Utils/Serialization/VectorSerialization.hpp>
 #include <glm/gtc/quaternion.hpp>
 #include <cereal/cereal.hpp>
+#include <Configuration.hpp>
+
+#include <BFC/BFCLink.hpp>
+
 
 namespace AGE
 {
 	class RenderScene;
 	class AScene;
 	class EntityData;
+	class BFCLinkTracker;
+	class BFCBlockManager;
+
+#ifdef AGE_BFC
+	struct Link : public BFCLink
+#else
 	struct Link
+#endif
 	{
 		inline const glm::vec3 &getPosition() const { return _position; }
 		inline const glm::vec3 &getScale() const { return _scale; }
@@ -35,7 +46,7 @@ namespace AGE
 		void internalSetForward(const glm::vec3 &v, bool recalculate);
 		// Used by modules like physic, do not use it to set object transform, use setTransform instead
 		void internalSetTransform(const glm::mat4 &t, bool recalculate);
-	
+
 		inline bool isUserModified() const
 		{
 			return _userModification;
@@ -74,6 +85,14 @@ namespace AGE
 		const glm::mat4 getLocalTransform() const;
 		const glm::mat4 &getLocalTransform();
 	private:
+#ifdef AGE_BFC
+		void BFC_ADD();
+		void BFC_REMOVE();
+#else
+		void BFC_ADD(){}
+		void BFC_REMOVE(){}
+#endif
+
 		EntityData *_entityPtr;
 		bool _userModification = false;
 

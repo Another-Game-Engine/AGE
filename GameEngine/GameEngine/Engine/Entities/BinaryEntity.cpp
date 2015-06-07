@@ -23,7 +23,7 @@ namespace AGE
 
 	void BinaryEntity::save(cereal::PortableBinaryOutputArchive  &ar, const std::uint32_t version) const
 	{
-		AGE::Link link = entity.getLink();
+		AGE::Link link = entity->getLink();
 		ENTITY_FLAGS flags = entity.getFlags();
 		ar(cereal::make_nvp("link", link)
 			, cereal::make_nvp("children", children)
@@ -50,7 +50,7 @@ namespace AGE
 			, componentTypes
 			, archetypesDependency);
 
-		auto archetypeManager = entity.getScene()->getInstance<AGE::ArchetypeManager>();
+		auto archetypeManager = entity->getScene()->getInstance<AGE::ArchetypeManager>();
 
 		// we load archetypes dependency
 		if (!archetypesDependency.empty())
@@ -61,18 +61,18 @@ namespace AGE
 			}
 		}
 
-		entity.getLink().setPosition(link.getPosition());
-		entity.getLink().setOrientation(link.getOrientation());
-		entity.getLink().setScale(link.getScale());
+		entity->getLink().setPosition(link.getPosition());
+		entity->getLink().setOrientation(link.getOrientation());
+		entity->getLink().setScale(link.getScale());
 		//entity.setFlags(f);
 		for (auto &e : componentTypes)
 		{
 			auto hashType = (*typesMap)[e];
 			auto newComponent = ComponentRegistrationManager::getInstance().loadBinary(hashType, entity, ar);
 		}
-		if (entity.haveComponent<ArchetypeComponent>())
+		if (entity->haveComponent<ArchetypeComponent>())
 		{
-			auto archetypeName = entity.getComponent<ArchetypeComponent>()->archetypeName;
+			auto archetypeName = entity->getComponent<ArchetypeComponent>()->archetypeName;
 			archetypeManager->spawn(entity, archetypeName);
 		}
 	}
