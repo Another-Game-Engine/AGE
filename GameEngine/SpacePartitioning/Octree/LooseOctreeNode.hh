@@ -1,8 +1,8 @@
 #pragma once
 
-#include <Utils/MemoryPool.hpp>
-#include <Utils/AABoundingBox.hh>
-#include <Utils/Containers/Vector.hpp>
+#include <GameEngine/Engine/Utils/MemoryPool.hpp>
+#include <GameEngine/Engine/Utils/AABoundingBox.hh>
+#include <GameEngine/Engine/Utils/Containers/Vector.hpp>
 
 #define POOL_NODE_ARGS uint32_t thisIdx, LooseOctree &manager
 #define CREATE_THIS_PTR LooseOctreeNode *thisPtr = &manager.getNodePool().get(thisIdx);

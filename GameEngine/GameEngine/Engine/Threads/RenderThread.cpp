@@ -14,9 +14,9 @@
 #include <Utils/OpenGL.hh>
 #include <Utils/Age_Imgui.hpp>
 #include <Render/Properties/Transformation.hh>
-#include <SpacePartitioning/Ouptut/RenderCamera.hh>
-#include <SpacePartitioning/Ouptut/RenderLight.hh>
-#include <SpacePartitioning/Ouptut/RenderPipeline.hh>
+#include <Culling/Ouptut/RenderCamera.hh>
+#include <Culling/Ouptut/RenderLight.hh>
+#include <Culling/Ouptut/RenderPipeline.hh>
 #include <Utils/Debug.hpp>
 #include <Render/GeometryManagement/SimpleGeometry.hh>
 #include <Utils/Profiler.hpp>

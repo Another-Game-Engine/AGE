@@ -1,6 +1,6 @@
 #pragma once
 
-#include <SpacePartitioning/Cullable/CullableShape.hh>
+#include <Culling/Cullable/CullableShape.hh>
 #include <Utils/Frustum.hh>
 #include <glm/glm.hpp>
 #include <Components/CameraComponent.hpp>

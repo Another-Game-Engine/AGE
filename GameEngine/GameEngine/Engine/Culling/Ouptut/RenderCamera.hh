@@ -1,8 +1,8 @@
 #pragma once
 
 #include <vector>
-#include <SpacePartitioning/Ouptut/RenderLight.hh>
-#include <SpacePartitioning/Ouptut/RenderPipeline.hh>
+#include <Culling/Ouptut/RenderLight.hh>
+#include <Culling/Ouptut/RenderPipeline.hh>
 #include <Components/CameraComponent.hpp>
 #include <Render/PipelineTypes.hpp>
 #include <glm/glm.hpp>

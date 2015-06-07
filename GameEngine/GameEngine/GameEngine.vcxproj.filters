@@ -41,7 +41,6 @@
     <ClCompile Include="Engine\Core\ConfigurationManager.cpp" />
     <ClCompile Include="Engine\Core\DefaultConfiguration.cpp" />
     <ClCompile Include="Engine\Core\Link.cpp" />
-    <ClCompile Include="Engine\SpacePartitioning\PreparableObject.cpp" />
     <ClCompile Include="Engine\Threads\Tasks\ToRenderTasks.cpp" />
     <ClCompile Include="Engine\Render\Buffer\ABuffer.cpp" />
     <ClCompile Include="Engine\Render\Buffer\IndexBuffer.cpp" />
@@ -90,11 +89,6 @@
     <ClCompile Include="Engine\Skinning\Bone.cpp" />
     <ClCompile Include="Engine\Skinning\Skeleton.cpp" />
     <ClCompile Include="Engine\Components\SpotLight.cpp" />
-    <ClCompile Include="Engine\SpacePartitioning\Cullable\Cullable.cpp" />
-    <ClCompile Include="Engine\SpacePartitioning\Cullable\Object\Mesh.cpp" />
-    <ClCompile Include="Engine\SpacePartitioning\Cullable\Object\PointLight.cpp" />
-    <ClCompile Include="Engine\SpacePartitioning\LooseOctree.cpp" />
-    <ClCompile Include="Engine\SpacePartitioning\LooseOctreeNode.cpp" />
     <ClCompile Include="Engine\Threads\CallbackContainer.cpp" />
     <ClCompile Include="Engine\Threads\MainThread.cpp" />
     <ClCompile Include="Engine\Threads\PrepareRenderThread.cpp" />
@@ -205,6 +199,12 @@
     <ClCompile Include="Engine\Render\OcclusionTools\DepthMapHandle.cpp" />
     <ClCompile Include="Engine\Render\OcclusionTools\DepthMapManager.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredShadowBuffering.cpp" />
+<<<<<<< HEAD
+    <ClCompile Include="Engine\Culling\Cullable\Object\Mesh.cpp" />
+    <ClCompile Include="Engine\Culling\Cullable\Object\PointLight.cpp" />
+    <ClCompile Include="Engine\Culling\Cullable\Cullable.cpp" />
+    <ClCompile Include="Engine\Culling\PreparableObject.cpp" />
+=======
     <ClCompile Include="Engine\Render\DepthMap.cpp" />
     <ClCompile Include="Engine\Render\DepthMapHandle.cpp" />
     <ClCompile Include="Engine\Render\DepthMapManager.cpp" />
@@ -220,6 +220,7 @@
     <ClCompile Include="Engine\Render\ProgramResources\Types\Uniform\Sampler\Sampler3D.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredSkyBox.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredOnScreen.cpp" />
+>>>>>>> master
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -290,15 +291,7 @@
     <ClInclude Include="Engine\Core\Material\MaterialData.hh" />
     <ClInclude Include="Engine\Core\Material\MaterialInstance.hh" />
     <ClInclude Include="Engine\Core\Material\MaterialSetInstance.hh" />
-    <ClInclude Include="Engine\SpacePartitioning\PreparableObject.hh" />
     <ClInclude Include="Engine\Skinning\AnimationManager.hpp" />
-    <ClInclude Include="Engine\SpacePartitioning\Cullable\Object\Camera.hh" />
-    <ClInclude Include="Engine\SpacePartitioning\Cullable\Object\Mesh.hh" />
-    <ClInclude Include="Engine\SpacePartitioning\Cullable\Object\PointLight.hh" />
-    <ClInclude Include="Engine\SpacePartitioning\Ouptut\RenderCamera.hh" />
-    <ClInclude Include="Engine\SpacePartitioning\Ouptut\RenderLight.hh" />
-    <ClInclude Include="Engine\SpacePartitioning\Ouptut\RenderPainter.hh" />
-    <ClInclude Include="Engine\SpacePartitioning\Ouptut\RenderPipeline.hh" />
     <ClInclude Include="Engine\Data\Material\MaterialData.hh" />
     <ClInclude Include="Engine\Data\TextureData.hh" />
     <ClInclude Include="Engine\Render\GeometryManagement\Buffer\Buffer.hh" />
@@ -332,10 +325,6 @@
     <ClInclude Include="Engine\Render\Textures\ITexture.hh" />
     <ClInclude Include="Engine\Render\Textures\PixelTypesFormats.hh" />
     <ClInclude Include="Engine\Render\Textures\Texture2D.hh" />
-    <ClInclude Include="Engine\SpacePartitioning\Cullable\Cullable.hh" />
-    <ClInclude Include="Engine\SpacePartitioning\Cullable\CullableShape.hh" />
-    <ClInclude Include="Engine\SpacePartitioning\LooseOctree.hh" />
-    <ClInclude Include="Engine\SpacePartitioning\LooseOctreeNode.hh" />
     <ClInclude Include="Engine\Threads\TaskScheduler.hpp" />
     <ClInclude Include="Engine\Threads\Tasks\BasicTasks.hpp" />
     <ClInclude Include="Engine\Threads\Tasks\MainToPrepareTasks.hpp" />
@@ -555,6 +544,18 @@
     <ClInclude Include="Engine\Render\OcclusionTools\DepthMapManager.hpp" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredShadowBuffering.hh" />
     <ClInclude Include="Engine\Utils\Serialization\btSerialization.hpp" />
+<<<<<<< HEAD
+    <ClInclude Include="Engine\Culling\Cullable\Object\Camera.hh" />
+    <ClInclude Include="Engine\Culling\Cullable\Object\Mesh.hh" />
+    <ClInclude Include="Engine\Culling\Cullable\Object\PointLight.hh" />
+    <ClInclude Include="Engine\Culling\Cullable\Cullable.hh" />
+    <ClInclude Include="Engine\Culling\Cullable\CullableShape.hh" />
+    <ClInclude Include="Engine\Culling\Ouptut\RenderCamera.hh" />
+    <ClInclude Include="Engine\Culling\Ouptut\RenderLight.hh" />
+    <ClInclude Include="Engine\Culling\Ouptut\RenderPainter.hh" />
+    <ClInclude Include="Engine\Culling\Ouptut\RenderPipeline.hh" />
+    <ClInclude Include="Engine\Culling\PreparableObject.hh" />
+=======
     <ClInclude Include="Engine\Entities\ArchetypeLibrary.hpp" />
     <ClInclude Include="Engine\Core\SceneChunkSerialization.hpp" />
     <ClInclude Include="Engine\Components\ArchetypeComponent.hpp" />
@@ -576,6 +577,7 @@
     <ClInclude Include="Engine\Render\ProgramResources\Types\Uniform\Sampler\Sampler3D.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredSkyBox.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredOnScreen.hh" />
+>>>>>>> master
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

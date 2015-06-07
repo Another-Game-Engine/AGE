@@ -5,10 +5,10 @@
 #include <Render/Textures/Texture2D.hh>
 #include <Render/OpenGLTask/OpenGLState.hh>
 #include <Render/GeometryManagement/Painting/Painter.hh>
-#include <SpacePartitioning/Ouptut/RenderLight.hh>
-#include <SpacePartitioning/Ouptut/RenderPipeline.hh>
-#include <SpacePartitioning/Ouptut/RenderPainter.hh>
-#include <SpacePartitioning/Ouptut/RenderCamera.hh>
+#include <Culling/Ouptut/RenderLight.hh>
+#include <Culling/Ouptut/RenderPipeline.hh>
+#include <Culling/Ouptut/RenderPainter.hh>
+#include <Culling/Ouptut/RenderCamera.hh>
 #include <Render/ProgramResources/Types/Uniform/Mat4.hh>
 #include <Render/ProgramResources/Types/Uniform/Sampler/Sampler3D.hh>
 #include <Core/ConfigurationManager.hpp>
