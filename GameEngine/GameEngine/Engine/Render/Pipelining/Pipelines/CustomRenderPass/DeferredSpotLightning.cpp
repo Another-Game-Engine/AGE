@@ -61,7 +61,7 @@ namespace AGE
 
 	}
 
-	void DeferredSpotLightning::renderPass(RenderPipeline const &, RenderLightList &lights, CameraInfos const &infos)
+	void DeferredSpotLightning::renderPass(std::list<BFCCullableObject*> const &, RenderLightList &lights, CameraInfos const &infos)
 	{
 		SCOPE_profile_gpu_i("DeferredSpotLightning render pass");
 		SCOPE_profile_cpu_i("RenderTimer", "DeferredSpotLightning render pass");

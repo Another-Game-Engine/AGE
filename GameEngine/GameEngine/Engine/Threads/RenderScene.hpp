@@ -16,7 +16,6 @@
 namespace AGE
 {
 	struct Drawable;
-	struct Mesh;
 	struct PointLight;
 	struct Camera;
 	struct DrawableCollection;
@@ -93,7 +92,7 @@ namespace AGE
 		AGE::Vector<uint32_t> _pointLightsToMove;
 		AGE::Vector<uint32_t> _spotLightsToMove;
 
-		MemoryPool<Mesh> _meshs;
+		MemoryPool<AGE::Mesh> _meshs;
 		MemoryPool<Drawable> _drawables;
 		MemoryPool<Camera> _cameras;
 		MemoryPool<PointLight> _pointLights;

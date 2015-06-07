@@ -79,7 +79,7 @@ namespace AGE
 		_spherePainter = _painterManager->get_painter(spherePainterkey);
 	}
 
-	void DeferredPointLightning::renderPass(RenderPipeline const &, RenderLightList &lights, CameraInfos const &infos)
+	void DeferredPointLightning::renderPass(std::list<BFCCullableObject*> const &, RenderLightList &lights, CameraInfos const &infos)
 	{
 		SCOPE_profile_gpu_i("DeferredPointLightning render pass");
 		SCOPE_profile_cpu_i("RenderTimer", "DeferredPointLightning render pass");

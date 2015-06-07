@@ -19,6 +19,9 @@
 #include <Render/OcclusionTools/DepthMapHandle.hpp>
 #include <Render/OcclusionTools/DepthMap.hpp>
 
+#include "Graphic/DRBMesh.hpp"
+#include "AssetManagement\Instance\MeshInstance.hh"
+
 #define DEFERRED_SHADING_BUFFERING_VERTEX "deferred_shading/deferred_shading_get_buffer.vp"
 #define DEFERRED_SHADING_BUFFERING_FRAG "deferred_shading/deferred_shading_get_buffer.fp"
 
@@ -69,8 +72,10 @@ namespace AGE
 		}));
 	}
 
-	void DeferredBasicBuffering::renderPass(RenderPipeline const &pipeline, RenderLightList &, CameraInfos const &infos)
+	void DeferredBasicBuffering::renderPass(std::list<BFCCullableObject*> const &meshs, RenderLightList &, CameraInfos const &infos)
 	{
+		auto &meshList = (std::list<DRBMesh*>&)(meshs);
+
 		SCOPE_profile_gpu_i("DeferredBasicBuffering render pass");
 		SCOPE_profile_cpu_i("RenderTimer", "DeferredBasicBuffering render pass");
 		{
@@ -90,84 +95,85 @@ namespace AGE
 			OpenGLState::glStencilOp(GL_KEEP, GL_KEEP, GL_INCR);
 			glClear(GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 		}
-#ifdef OCCLUSION_CULLING
-
-		{
-			SCOPE_profile_gpu_i("Occluders pass");
-			SCOPE_profile_cpu_i("RenderTimer", "Occluders pass");
-
-			_programs[PROGRAM_BUFFERING]->use();
-			_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("projection_matrix").set(infos.data.projection);
-			_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("view_matrix").set(infos.view);
-
-			for (auto &meshPaint : pipeline.keys)
-			{
-				auto painter = _painterManager->get_painter(Key<Painter>::createKey(meshPaint.first));
-				for (auto &mode : meshPaint.second.drawables)
-				{
-					if (mode.renderMode.at(AGE_OCCLUDER) == true)
-					{
-						painter->draw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], mode.properties, mode.vertices);
-					}
-				}
-			}
-		}
-		{
-			SCOPE_profile_gpu_i("Copy occlusion depth to CPU");
-			SCOPE_profile_cpu_i("RenderTimer", "Copy occlusion depth to CPU");
-
-			auto writableBuffer = GetRenderThread()->getDepthMapManager().getWritableMap();
-			auto mipmapLevel = GetRenderThread()->getDepthMapManager().getMipmapLevel();
-
-			if (writableBuffer.isValid())
-			{
-				writableBuffer.setMV(infos.data.projection * infos.view);
-				glActiveTextureARB(GL_TEXTURE0_ARB);
-				_depth->bind();
-				glGenerateMipmap(GL_TEXTURE_2D);
-				_depth->get(static_cast<GLint>(mipmapLevel), GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, writableBuffer.getWritableBuffer());
-				_depth->unbind();
-			}
-		}
-
-		{
-			SCOPE_profile_gpu_i("Draw occluded objects");
-			SCOPE_profile_cpu_i("RenderTimer", "Draw occluded objects");
-
-			for (auto &meshPaint : pipeline.keys)
-			{
-				auto painter = _painterManager->get_painter(Key<Painter>::createKey(meshPaint.first));
-				for (auto &mode : meshPaint.second.drawables)
-				{
-					if (mode.renderMode.at(AGE_OCCLUDER) == false)
-					{
-						painter->draw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], mode.properties, mode.vertices);
-					}
-				}
-			}
-		}
-#else
+//#ifdef OCCLUSION_CULLING
+//
+//		{
+//			SCOPE_profile_gpu_i("Occluders pass");
+//			SCOPE_profile_cpu_i("RenderTimer", "Occluders pass");
+//
+//			_programs[PROGRAM_BUFFERING]->use();
+//			_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("projection_matrix").set(infos.data.projection);
+//			_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("view_matrix").set(infos.view);
+//
+//			for (auto &meshPaint : pipeline.keys)
+//			{
+//				auto painter = _painterManager->get_painter(Key<Painter>::createKey(meshPaint.first));
+//				for (auto &mode : meshPaint.second.drawables)
+//				{
+//					if (mode.renderMode.at(AGE_OCCLUDER) == true)
+//					{
+//						painter->draw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], mode.properties, mode.vertices);
+//					}
+//				}
+//			}
+//		}
+//		{
+//			SCOPE_profile_gpu_i("Copy occlusion depth to CPU");
+//			SCOPE_profile_cpu_i("RenderTimer", "Copy occlusion depth to CPU");
+//
+//			auto writableBuffer = GetRenderThread()->getDepthMapManager().getWritableMap();
+//			auto mipmapLevel = GetRenderThread()->getDepthMapManager().getMipmapLevel();
+//
+//			if (writableBuffer.isValid())
+//			{
+//				writableBuffer.setMV(infos.data.projection * infos.view);
+//				glActiveTextureARB(GL_TEXTURE0_ARB);
+//				_depth->bind();
+//				glGenerateMipmap(GL_TEXTURE_2D);
+//				_depth->get(static_cast<GLint>(mipmapLevel), GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, writableBuffer.getWritableBuffer());
+//				_depth->unbind();
+//			}
+//		}
+//
+//		{
+//			SCOPE_profile_gpu_i("Draw occluded objects");
+//			SCOPE_profile_cpu_i("RenderTimer", "Draw occluded objects");
+//
+//			for (auto &meshPaint : pipeline.keys)
+//			{
+//				auto painter = _painterManager->get_painter(Key<Painter>::createKey(meshPaint.first));
+//				for (auto &mode : meshPaint.second.drawables)
+//				{
+//					if (mode.renderMode.at(AGE_OCCLUDER) == false)
+//					{
+//						painter->draw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], mode.properties, mode.vertices);
+//					}
+//				}
+//			}
+//		}
+//#else
 		{
 			SCOPE_profile_gpu_i("Draw all objects");
 			SCOPE_profile_cpu_i("RenderTimer", "Draw all objects");
 
 			_programs[PROGRAM_BUFFERING]->use();
-			_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("projection_matrix").set(infos.projection);
+			_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("projection_matrix").set(infos.data.projection);
 			_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("view_matrix").set(infos.view);
 
-			for (auto &meshPaint : pipeline.keys)
+			for (auto &meshPaint : meshList)
 			{
-				auto painter = _painterManager->get_painter(Key<Painter>::createKey(meshPaint.first));
-				for (auto &mode : meshPaint.second.drawables)
+				for (auto &m : meshPaint->subMeshs)
 				{
-					if (renderModeCompatible(mode.renderMode))
-					{
-						painter->draw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], mode.properties, mode.vertices);
-					}
+					auto painter = _painterManager->get_painter(m.painter);
+					painter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], Properties()/*m.properties*/, m.vertices);
+					//if (renderModeCompatible(mode.renderMode))
+					//{
+
+					//}
 				}
 			}
 		}
-#endif
+//#endif
 	}
 
 }

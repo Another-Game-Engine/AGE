@@ -17,7 +17,7 @@ namespace AGE
 		virtual ~DeferredSkyBox() = default;
 
 	protected:
-		virtual void renderPass(RenderPipeline const &, RenderLightList &, CameraInfos const &);
+		virtual void renderPass(std::list<BFCCullableObject*> const &, RenderLightList &, CameraInfos const &);
 		Key<Painter> _painterCube;
 		Key<Vertices> _cube;
 	};

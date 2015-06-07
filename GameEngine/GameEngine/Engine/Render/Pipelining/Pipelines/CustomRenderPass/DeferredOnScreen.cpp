@@ -58,7 +58,7 @@ namespace AGE
 		_quadPainter = _painterManager->get_painter(quadPainterKey);
 	}
 
-	void DeferredOnScreen::renderPass(RenderPipeline const &, RenderLightList &, CameraInfos const &)
+	void DeferredOnScreen::renderPass(std::list<BFCCullableObject*> const &, RenderLightList &, CameraInfos const &)
 	{
 		SCOPE_profile_cpu_function("RenderTimer");
 		SCOPE_profile_gpu_i("DefferedOnScreen pass");

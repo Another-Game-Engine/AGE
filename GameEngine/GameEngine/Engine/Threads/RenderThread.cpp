@@ -22,6 +22,9 @@
 #include <Utils/Profiler.hpp>
 #include <utility>
 
+//BFC
+#include "Graphic/DRBCameraDrawableList.hpp"
+
 namespace AGE
 {
 	RenderThread::RenderThread()
@@ -319,13 +322,17 @@ namespace AGE
 						SCOPE_profile_gpu_i("RenderCameraDrawList");
 						SCOPE_profile_cpu_i("RenderTimer", "RenderCamera");
 						AGE_ASSERT(!(pipelines[curCamera.camInfos.data.pipeline] == nullptr));
-						pipelines[curCamera.camInfos.data.pipeline]->render(curCamera.pipeline, curCamera.lights, curCamera.camInfos);
+						//pipelines[curCamera.camInfos.data.pipeline]->render(curCamera.pipeline, curCamera.lights, curCamera.camInfos);
 					}
 				}
 
 				painterPtr->remove_vertices(debug2Dlines.verticesKey);
 			}
 			_drawlists.clear();
+		});
+
+		registerCallback<AGE::DRBCameraDrawableListCommand>([&](AGE::DRBCameraDrawableListCommand &msg){
+			pipelines[RenderType::DEFERRED]->render(msg.list->meshs, RenderLightList(), msg.list->cameraInfos);
 		});
 
 		registerSharedCallback<AGE::Tasks::Basic::BoolFunction>([&](AGE::Tasks::Basic::BoolFunction& msg)

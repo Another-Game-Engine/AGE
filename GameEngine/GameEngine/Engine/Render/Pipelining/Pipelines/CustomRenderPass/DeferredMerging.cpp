@@ -67,7 +67,7 @@ namespace AGE
 		_ambientColor = ambient;
 	}
 
-	void DeferredMerging::renderPass(RenderPipeline const &, RenderLightList &, CameraInfos const &)
+	void DeferredMerging::renderPass(std::list<BFCCullableObject*> const &, RenderLightList &, CameraInfos const &)
 	{
 		SCOPE_profile_cpu_function("RenderTimer");
 		SCOPE_profile_gpu_i("DefferedMerging pass");

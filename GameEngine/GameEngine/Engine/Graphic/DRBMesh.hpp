@@ -1,7 +1,10 @@
 #pragma once
 
 #include <vector>
+
 #include "BFC/BFCCullableObject.hpp"
+
+#include "BFCCullableTypes.hpp"
 
 namespace AGE
 {
@@ -11,8 +14,7 @@ namespace AGE
 	struct DRBMesh : public BFCCullableObject
 	{
 	public:
-		// we have to define an enum
-		virtual CullableTypeID getBFCType() const { return 0; }
+		virtual CullableTypeID getBFCType() const { return BFCCullableType::CullableMesh; }
 
 		std::vector<SubMeshInstance> subMeshs;
 		std::vector<MaterialInstance> subMaterials;

@@ -18,7 +18,7 @@ namespace AGE
 	{
 	}
 
-	IRender & FrameBufferRender::render(RenderPipeline const &pipeline, RenderLightList &lights, CameraInfos const &infos)
+	IRender & FrameBufferRender::render(std::list<BFCCullableObject*> const &meshs, RenderLightList &lights, CameraInfos const &infos)
 	{
 		SCOPE_profile_cpu_i("RenderTimer", "FrameBufferRender pass");
 
@@ -42,10 +42,8 @@ namespace AGE
 			}
 			_is_update = true;
 		}
-		renderPass(pipeline, lights, infos);
+		renderPass(meshs, lights, infos);
 		_frame_buffer.unbind();
-		if (_nextPass != nullptr)
-			_nextPass->render(pipeline, lights, infos);
 		return (*this);
 	}
 

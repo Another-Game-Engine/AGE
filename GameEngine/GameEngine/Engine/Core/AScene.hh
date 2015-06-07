@@ -49,8 +49,10 @@ namespace AGE
 		AGE::RenderScene                                                        *_renderScene;
 		bool                                                                    _active;
 #ifdef AGE_BFC
+	protected:
 		BFCLinkTracker                                                          *_bfcLinkTracker;
 		BFCBlockManagerFactory                                                  *_bfcBlockManagerFactory;
+	private:
 #endif
 		friend EntityFilter;
 		friend class AGE::RenderScene;

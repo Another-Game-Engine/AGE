@@ -1,5 +1,7 @@
 #pragma once
 
+#include <list>
+
 #include "BFCBlockManager.hpp"
 #include "BFCItemID.hpp"
 
@@ -17,6 +19,7 @@ namespace AGE
 		BFCCullableHandle createItem(BFCCullableObject *object);
 		void deleteItem(const BFCCullableHandle &handle);
 		BFCItem &getItem(const BFCItemID &id);
+		void cullOnChannel(CullableTypeID channel, std::list<BFCCullableObject*> &result);
 	private:
 		std::vector<BFCBlockManager> _managers;
 	};

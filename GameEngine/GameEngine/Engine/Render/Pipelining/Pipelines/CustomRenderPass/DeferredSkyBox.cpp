@@ -57,7 +57,7 @@ namespace AGE
 		GetRenderThread()->getCube(_cube, _painterCube);
 	}
 
-	void DeferredSkyBox::renderPass(RenderPipeline const &pipeline, RenderLightList &, CameraInfos const &infos)
+	void DeferredSkyBox::renderPass(std::list<BFCCullableObject*> const &, RenderLightList &, CameraInfos const &infos)
 	{
 		SCOPE_profile_gpu_i("DeferredSkybox render pass");
 		SCOPE_profile_cpu_i("RenderTimer", "DeferredSkybox render pass");

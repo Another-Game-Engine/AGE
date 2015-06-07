@@ -220,6 +220,7 @@
     <ClCompile Include="Engine\BFC\BFCBlockManager.cpp" />
     <ClCompile Include="Engine\BFC\BFCBlockManagerFactory.cpp" />
     <ClCompile Include="Engine\BFC\BFCLink.cpp" />
+    <ClCompile Include="Engine\Systems\RenderCameraSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -579,6 +580,9 @@
     <ClInclude Include="Engine\BFC\BFCItemID.hpp" />
     <ClInclude Include="Engine\BFC\BFCLink.hpp" />
     <ClInclude Include="Engine\BFC\BFCBlockManagerFactory.hpp" />
+    <ClInclude Include="Engine\Graphic\BFCCullableTypes.hpp" />
+    <ClInclude Include="Engine\Graphic\DRBCameraDrawableList.hpp" />
+    <ClInclude Include="Engine\Systems\RenderCameraSystem.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

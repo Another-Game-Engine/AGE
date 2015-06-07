@@ -35,6 +35,7 @@ namespace AGE
 		void setPipeline(RenderType pipeline);
 		RenderType getPipeline() const { return _data.pipeline; }
 		void setTexture(std::shared_ptr<Texture3D> const &texture);
+		const CameraData &getData() const { return _data; }
 
 		template <typename Archive> void save(Archive &ar, const std::uint32_t version) const;
 		template <typename Archive> void load(Archive &ar, const std::uint32_t version);

@@ -14,10 +14,10 @@ namespace AGE
 		virtual ~ScreenRender() {}
 
 	public:
-		virtual IRender &render(RenderPipeline const &pipeline, RenderLightList &lights, CameraInfos const &infos) override final;
+		virtual IRender &render(std::list<BFCCullableObject*> const &meshs, RenderLightList &lights, CameraInfos const &infos) override final;
 	
 	protected:
-		virtual void renderPass(RenderPipeline const &, RenderLightList &, CameraInfos const &) = 0;
+		virtual void renderPass(std::list<BFCCullableObject*> const &, RenderLightList &, CameraInfos const &) = 0;
 		glm::uvec2 viewport;
 	};
 }

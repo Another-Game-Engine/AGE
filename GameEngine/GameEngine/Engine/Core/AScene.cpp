@@ -76,9 +76,6 @@ namespace AGE
 	{
 		SCOPE_profile_cpu_function("Scenes");
 		auto ret = _userUpdateEnd(time);
-#ifdef AGE_BFC
-		_bfcLinkTracker->reset();
-#endif
 		return ret;
 	}
 

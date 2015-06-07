@@ -6,11 +6,14 @@
 # include <functional>
 #include <vector>
 #include <bitset>
+#include <list>
 
 #include <Utils/Profiler.hpp>
 
 namespace AGE
 {
+	struct BFCCullableObject;
+
 	class ARender : public IRender
 	{
 	public:
@@ -25,7 +28,7 @@ namespace AGE
 	protected:
 		ARender(std::shared_ptr<PaintingManager> painterManager);
 		ARender(ARender &&move);
-		virtual void renderPass(RenderPipeline const &, RenderLightList &, CameraInfos const &) = 0;
+		virtual void renderPass(std::list<BFCCullableObject*> const &meshs, RenderLightList &, CameraInfos const &) = 0;
 
 	protected:
 		// Bitsets to test the objects against

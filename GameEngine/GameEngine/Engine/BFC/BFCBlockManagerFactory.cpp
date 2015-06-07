@@ -56,4 +56,29 @@ namespace AGE
 		return _managers[id._blockManagerID]._blocks[id._blockID]->_items[id._itemID];
 	}
 
+	void BFCBlockManagerFactory::cullOnChannel(CullableTypeID channel, std::list<BFCCullableObject*> &result)
+	{
+		SCOPE_profile_cpu_function("BFC");
+
+		AGE_ASSERT(channel < MaxCullableTypeID);
+
+		if (channel >= _managers.size())
+		{
+			return;
+		}
+
+		auto &manager = _managers[channel];
+
+		for (auto &block : manager._blocks)
+		{
+			for (auto &item : block->_items)
+			{
+				if (item.getDrawable())
+				{
+					result.push_back(item.getDrawable());
+				}
+			}
+		}
+	}
+
 }

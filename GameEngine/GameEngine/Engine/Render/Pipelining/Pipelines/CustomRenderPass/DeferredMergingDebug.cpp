@@ -66,7 +66,7 @@ namespace AGE
 		_quadPainter = _painterManager->get_painter(quadPainterKey);
 	}
 
-	void DeferredMergingDebug::renderPass(RenderPipeline const &, RenderLightList &, CameraInfos const &)
+	void DeferredMergingDebug::renderPass(std::list<BFCCullableObject*> const &, RenderLightList &, CameraInfos const &)
 	{
 		_programs[PROGRAM_MERGING]->use();
 		_programs[PROGRAM_MERGING]->get_resource<Sampler2D>("debug_light_map").set(_debugLightRender);

@@ -28,8 +28,8 @@
 #include <Components/ComponentRegistrationManager.hpp>
 
 #include <Systems/RotationSystem.hpp>
-
 #include <Systems/DebugSystem.hpp>
+#include <Systems/RenderCameraSystem.hpp>
 
 #include <Render/Program.hh>
 #include <Render/ProgramResources/Types/Uniform/Vec1.hh>
@@ -50,7 +50,10 @@
 
 #include <Systems/PhysicsSystem.hpp>
 
-
+#include <Graphic/DRBCameraDrawableList.hpp>
+#include <Graphic/BFCCullableTypes.hpp>
+#include <BFC/BFCBlockManagerFactory.hpp>
+#include <BFC/BFCLinkTracker.hpp>
 
 namespace AGE
 {
@@ -100,6 +103,7 @@ namespace AGE
 		addSystem<AGE::LifetimeSystem>(2);
 		addSystem<AGE::FreeFlyCamera>(0);
 		addSystem<AGE::RotationSystem>(0);
+		addSystem<AGE::RenderCameraSystem>(1000000);
 
 		getInstance<AGE::AssetsManager>()->setAssetsDirectory(EngineCoreTestConfiguration::GetCookedDirectory());
 
@@ -273,6 +277,9 @@ namespace AGE
 
 	bool BenchmarkScene::_userUpdateEnd(float time)
 	{
+#ifdef AGE_BFC
+
+#endif
 		return true;
 	}
 }
