@@ -544,10 +544,10 @@
     <ClInclude Include="Engine\Culling\Cullable\Object\Camera.hh" />
     <ClInclude Include="Engine\Culling\Cullable\Object\Mesh.hh" />
     <ClInclude Include="Engine\Culling\Cullable\Object\PointLight.hh" />
-    <ClInclude Include="Engine\Culling\Ouptut\RenderCamera.hh" />
-    <ClInclude Include="Engine\Culling\Ouptut\RenderLight.hh" />
-    <ClInclude Include="Engine\Culling\Ouptut\RenderPainter.hh" />
-    <ClInclude Include="Engine\Culling\Ouptut\RenderPipeline.hh" />
+    <ClInclude Include="Engine\Culling\Output\RenderCamera.hh" />
+    <ClInclude Include="Engine\Culling\Output\RenderLight.hh" />
+    <ClInclude Include="Engine\Culling\Output\RenderPainter.hh" />
+    <ClInclude Include="Engine\Culling\Output\RenderPipeline.hh" />
     <ClInclude Include="Engine\Data\Material\MaterialData.hh" />
     <ClInclude Include="Engine\Data\TextureData.hh" />
     <ClInclude Include="Engine\Render\GeometryManagement\Buffer\Buffer.hh" />
