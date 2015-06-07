@@ -127,8 +127,8 @@ namespace AGE
 			return false;
 		}
 		auto &entityRoot = it->second.entity;
-		entity.getScene()->copyEntity(entityRoot, entity, true, false);
-		entity.addComponent<AGE::ArchetypeComponent>(archetypeName);
+		entity->getScene()->copyEntity(entityRoot, entity, true, false);
+		entity->addComponent<AGE::ArchetypeComponent>(archetypeName);
 		return true;
 	}
 }

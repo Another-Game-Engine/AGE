@@ -38,7 +38,7 @@ namespace AGE
 		AGE_ASSERT(_typeIds.find(componentHashId) != std::end(_typeIds) && "Component type has not been registered. Use REGISTER_COMPONENT_TYPE");
 		auto id = _typeIds[componentHashId];
 
-		auto voidCpt = e.getScene()->allocateComponent(id);
+		auto voidCpt = e->getScene()->allocateComponent(id);
 
 		auto find = _jsonLoadMap.find(id);
 		AGE_ASSERT(find != std::end(_jsonLoadMap));
@@ -50,7 +50,7 @@ namespace AGE
 		cpt->entity = e;
 		cpt->postUnserialization();
 
-		e.addComponentPtr(cpt);
+		e->addComponentPtr(cpt);
 		return cpt;
 	}
 
@@ -59,7 +59,7 @@ namespace AGE
 		AGE_ASSERT(_typeIds.find(componentHashId) != std::end(_typeIds) && "Component type has not been registered. Use REGISTER_COMPONENT_TYPE");
 		auto id = _typeIds[componentHashId];
 
-		auto voidCpt = e.getScene()->allocateComponent(id);
+		auto voidCpt = e->getScene()->allocateComponent(id);
 
 		auto find = _binaryLoadMap.find(id);
 		AGE_ASSERT(find != std::end(_binaryLoadMap));
@@ -71,7 +71,7 @@ namespace AGE
 		cpt->entity = e;
 		cpt->postUnserialization();
 
-		e.addComponentPtr(cpt);
+		e->addComponentPtr(cpt);
 		return cpt;
 	}
 

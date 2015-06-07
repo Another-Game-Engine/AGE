@@ -10,15 +10,15 @@ namespace AGE
 
 		for (auto &e : entities)
 		{
-			auto &components = e.entity.getComponentList();
+			auto &components = e.entity->getComponentList();
 
 			bool continueEntityFiltering = true;
 
-			if (e.entity.haveComponent<ArchetypeComponent>() && continueEntityFiltering)
+			if (e.entity->haveComponent<ArchetypeComponent>() && continueEntityFiltering)
 			{
 				e.componentTypes.push_back(Component<ArchetypeComponent>::getTypeId());
-				e.components.push_back(e.entity.getComponent<ArchetypeComponent>());
-				e.archetypesDependency.push_back(e.entity.getComponent<ArchetypeComponent>()->archetypeName);
+				e.components.push_back(e.entity->getComponent<ArchetypeComponent>());
+				e.archetypesDependency.push_back(e.entity->getComponent<ArchetypeComponent>()->archetypeName);
 				continueEntityFiltering = false;
 			}
 

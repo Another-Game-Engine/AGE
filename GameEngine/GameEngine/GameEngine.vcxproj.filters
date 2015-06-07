@@ -199,28 +199,27 @@
     <ClCompile Include="Engine\Render\OcclusionTools\DepthMapHandle.cpp" />
     <ClCompile Include="Engine\Render\OcclusionTools\DepthMapManager.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredShadowBuffering.cpp" />
-<<<<<<< HEAD
     <ClCompile Include="Engine\Culling\Cullable\Object\Mesh.cpp" />
     <ClCompile Include="Engine\Culling\Cullable\Object\PointLight.cpp" />
     <ClCompile Include="Engine\Culling\Cullable\Cullable.cpp" />
     <ClCompile Include="Engine\Culling\PreparableObject.cpp" />
-=======
-    <ClCompile Include="Engine\Render\DepthMap.cpp" />
-    <ClCompile Include="Engine\Render\DepthMapHandle.cpp" />
-    <ClCompile Include="Engine\Render\DepthMapManager.cpp" />
     <ClCompile Include="Engine\Entities\BinaryEntity.cpp" />
     <ClCompile Include="Engine\Entities\EntityBinaryPacker.cpp" />
     <ClCompile Include="Engine\Entities\BinaryEntityPack.cpp" />
     <ClCompile Include="Engine\Components\ArchetypeComponent.cpp" />
     <ClCompile Include="Engine\Entities\ArchetypeManager.cpp" />
-    <ClCompile Include="Engine\Render\DepthMap.cpp" />
-    <ClCompile Include="Engine\Render\DepthMapHandle.cpp" />
-    <ClCompile Include="Engine\Render\DepthMapManager.cpp" />
     <ClCompile Include="Engine\Render\Textures\Texture3D.cpp" />
     <ClCompile Include="Engine\Render\ProgramResources\Types\Uniform\Sampler\Sampler3D.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredSkyBox.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredOnScreen.cpp" />
->>>>>>> master
+    <ClCompile Include="Engine\Core\PrepareKey.cpp" />
+    <ClCompile Include="Engine\BFC\BFCLinkTracker.cpp" />
+    <ClCompile Include="Engine\BFC\BFCItem.cpp" />
+    <ClCompile Include="Engine\BFC\BFCBlock.cpp" />
+    <ClCompile Include="Engine\Graphic\GraphicElementManager.cpp" />
+    <ClCompile Include="Engine\BFC\BFCBlockManager.cpp" />
+    <ClCompile Include="Engine\BFC\BFCBlockManagerFactory.cpp" />
+    <ClCompile Include="Engine\BFC\BFCLink.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -544,7 +543,6 @@
     <ClInclude Include="Engine\Render\OcclusionTools\DepthMapManager.hpp" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredShadowBuffering.hh" />
     <ClInclude Include="Engine\Utils\Serialization\btSerialization.hpp" />
-<<<<<<< HEAD
     <ClInclude Include="Engine\Culling\Cullable\Object\Camera.hh" />
     <ClInclude Include="Engine\Culling\Cullable\Object\Mesh.hh" />
     <ClInclude Include="Engine\Culling\Cullable\Object\PointLight.hh" />
@@ -555,14 +553,10 @@
     <ClInclude Include="Engine\Culling\Ouptut\RenderPainter.hh" />
     <ClInclude Include="Engine\Culling\Ouptut\RenderPipeline.hh" />
     <ClInclude Include="Engine\Culling\PreparableObject.hh" />
-=======
     <ClInclude Include="Engine\Entities\ArchetypeLibrary.hpp" />
     <ClInclude Include="Engine\Core\SceneChunkSerialization.hpp" />
     <ClInclude Include="Engine\Components\ArchetypeComponent.hpp" />
     <ClInclude Include="Engine\Entities\Archetype.hpp" />
-    <ClInclude Include="Engine\Render\DepthMap.hpp" />
-    <ClInclude Include="Engine\Render\DepthMapHandle.hpp" />
-    <ClInclude Include="Engine\Render\DepthMapManager.hpp" />
     <ClInclude Include="Engine\Entities\EntityBinaryPacker.hpp" />
     <ClInclude Include="Engine\Entities\BinaryEntity.hpp" />
     <ClInclude Include="Engine\Entities\BinaryEntityPack.hpp" />
@@ -570,14 +564,21 @@
     <ClInclude Include="Engine\Entities\ArchetypeScenes.hpp" />
     <ClInclude Include="Engine\Entities\IArchetypeManager.hpp" />
     <ClInclude Include="Engine\Entities\ArchetypeManager.hpp" />
-    <ClInclude Include="Engine\Render\DepthMap.hpp" />
-    <ClInclude Include="Engine\Render\DepthMapHandle.hpp" />
-    <ClInclude Include="Engine\Render\DepthMapManager.hpp" />
     <ClInclude Include="Engine\Render\Textures\Texture3D.hh" />
     <ClInclude Include="Engine\Render\ProgramResources\Types\Uniform\Sampler\Sampler3D.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredSkyBox.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredOnScreen.hh" />
->>>>>>> master
+    <ClInclude Include="Engine\BFC\BFCBlock.hpp" />
+    <ClInclude Include="Engine\BFC\BFCItem.hpp" />
+    <ClInclude Include="Engine\BFC\BFCLinkTracker.hpp" />
+    <ClInclude Include="Engine\BFC\BFCBlockManager.hpp" />
+    <ClInclude Include="Engine\Graphic\GraphicElementManager.hpp" />
+    <ClInclude Include="Engine\Graphic\DRBMesh.hpp" />
+    <ClInclude Include="Engine\BFC\BFCCullableObject.hpp" />
+    <ClInclude Include="Engine\BFC\BFCCullableHandle.hpp" />
+    <ClInclude Include="Engine\BFC\BFCItemID.hpp" />
+    <ClInclude Include="Engine\BFC\BFCLink.hpp" />
+    <ClInclude Include="Engine\BFC\BFCBlockManagerFactory.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

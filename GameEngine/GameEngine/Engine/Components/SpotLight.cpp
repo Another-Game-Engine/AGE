@@ -41,7 +41,7 @@ namespace AGE
 	{
 		if (!_key.invalid())
 		{
-			entity.getLink().unregisterOctreeObject(_key);
+			entity->getLink().unregisterOctreeObject(_key);
 		}
 		_key = AGE::PrepareKey();
 		_data = SpotLightData();
@@ -50,8 +50,8 @@ namespace AGE
 	void SpotLightComponent::init()
 	{
 		_key = AGE::GetPrepareThread()->addSpotLight();
-		entity.getLink().registerOctreeObject(_key);
-		_data.map = entity.getScene()->getInstance<AssetsManager>()->getSpotLightTexture();
+		entity->getLink().registerOctreeObject(_key);
+		_data.map = entity->getScene()->getInstance<AssetsManager>()->getSpotLightTexture();
 		assert(!_key.invalid());
 		set(_data);
 	}

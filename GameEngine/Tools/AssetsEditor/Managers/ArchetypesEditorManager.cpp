@@ -12,6 +12,7 @@
 #include <Entities/EntityReadablePacker.hpp>
 #include <Systems\AssetsAndComponentRelationsSystem.hpp>
 #include <Entities\BinaryEntityPack.hpp>
+#include <Components/ComponentRegistrationManager.hpp>
 
 namespace AGE
 {
@@ -85,7 +86,7 @@ namespace AGE
 			{
 				return;
 			}
-			auto scene = entity.getScene();
+			auto scene = entity->getScene();
 			auto representation = std::make_shared<ArchetypeEditorRepresentation>();
 			representation->name = name;
 			representation->loaded = true;
@@ -100,11 +101,11 @@ namespace AGE
 			GetMainThread()->setSceneAsActive(scene);
 			AGE_ASSERT(success);
 
-			representation->root.getComponent<EntityRepresentation>()->editorOnly = true;
+			representation->root->getComponent<EntityRepresentation>()->editorOnly = true;
 
-			auto componentsCopy = entity.getComponentList();
+			auto componentsCopy = entity->getComponentList();
 
-			auto entityRepresentationComponent = entity.getComponent<EntityRepresentation>();
+			auto entityRepresentationComponent = entity->getComponent<EntityRepresentation>();
 			AGE_ASSERT(entityRepresentationComponent != nullptr);
 
 			//we remove original entity's components
@@ -113,7 +114,7 @@ namespace AGE
 			{
 				if (e != nullptr && e != entityRepresentationComponent)
 				{
-					entity.copyComponent(representation->root.getComponent(e->getType()));
+					entity->copyComponent(representation->root->getComponent(e->getType()));
 				}
 			}
 
@@ -121,8 +122,9 @@ namespace AGE
 			std::vector<const char*> tmpEntitiesNameList;
 			listEntityTree(entity, tmpEntitiesNameList, tmpEntitiesList);
 
-			for (auto &e : tmpEntitiesList)
+			for (auto &entity : tmpEntitiesList)
 			{
+				auto &e = *entity;
 				auto er = e->getComponent<EntityRepresentation>();
 				e->addComponent<ArchetypeComponent>(name);
 				e->getComponent<ArchetypeComponent>()->parentIsAnArchetype = false;
@@ -135,8 +137,10 @@ namespace AGE
 			tmpEntitiesList.clear(); tmpEntitiesNameList.clear();
 			listEntityTree(representation->root, tmpEntitiesNameList, tmpEntitiesList);
 
-			for (auto &e : tmpEntitiesList)
+			for (auto &entity : tmpEntitiesList)
 			{
+				auto &e = *entity;
+
 				auto er = e->getComponent<EntityRepresentation>();
 				er->_isArchetype = true;
 			}
@@ -179,9 +183,9 @@ namespace AGE
 			auto it = _archetypesCollection.find(name);
 			AGE_ASSERT(it != std::end(_archetypesCollection));
 			loadFromFile(it->second);
-			entity.getScene()->copyEntity(it->second->root, entity, true, false);
+			entity->getScene()->copyEntity(it->second->root, entity, true, false);
 
-			auto representation = entity.getComponent<EntityRepresentation>();
+			auto representation = entity->getComponent<EntityRepresentation>();
 
 			representation->editorOnly = false;
 			representation->_archetypeLinked = it->second;
@@ -190,10 +194,11 @@ namespace AGE
 			std::vector<const char*> tmpEntitiesNameList;
 			listEntityTree(entity, tmpEntitiesNameList, tmpEntitiesList);
 
-			for (auto &e : tmpEntitiesList)
+			for (auto &en: tmpEntitiesList)
 			{
+				auto &e = *en;
 				e->addComponent<ArchetypeComponent>(name);
-				if (*e != entity)
+				if (e != entity)
 				{
 					e->getComponent<ArchetypeComponent>()->parentIsAnArchetype = true;
 				}
@@ -319,7 +324,7 @@ namespace AGE
 
 					for (auto &t : types)
 					{
-						if (!_selectedEntity->haveComponent(t.second)
+						if (!(*_selectedEntity)->haveComponent(t.second)
 							&& t.second != Component<ArchetypeComponent>::getTypeId())
 						{
 							if (ImGui::SmallButton(std::string("Add : " + ComponentRegistrationManager::getInstance().getComponentName(t.second)).c_str()))
@@ -355,24 +360,24 @@ namespace AGE
 
 		void ArchetypeEditorManager::_copyArchetypeToInstanciedEntity(Entity &archetype, Entity &entity)
 		{
-			auto &componentList = archetype.getComponentList();
+			auto &componentList = archetype->getComponentList();
 
-			auto representation = entity.getComponent<EntityRepresentation>();
-			auto archetypeCpt = entity.getComponent<ArchetypeComponent>();
+			auto representation = entity->getComponent<EntityRepresentation>();
+			auto archetypeCpt = entity->getComponent<ArchetypeComponent>();
 
-			auto &copyComponentList = entity.getComponentList();
+			auto &copyComponentList = entity->getComponentList();
 
 			if (archetypeCpt->synchronizePosition)
 			{
-				entity.getLink().setPosition(archetype.getLink().getPosition());
+				entity->getLink().setPosition(archetype->getLink().getPosition());
 			}
 			if (archetypeCpt->synchronizeRotation)
 			{
-				entity.getLink().setOrientation(archetype.getLink().getOrientation());
+				entity->getLink().setOrientation(archetype->getLink().getOrientation());
 			}
 			if (archetypeCpt->synchronizeScale)
 			{
-				entity.getLink().setScale(archetype.getLink().getScale());
+				entity->getLink().setScale(archetype->getLink().getScale());
 			}
 
 			// we delete all existing components
@@ -380,22 +385,22 @@ namespace AGE
 			{
 				if (c != nullptr && c != representation && c != archetypeCpt)
 				{
-					entity.removeComponent(c->getType());
+					entity->removeComponent(c->getType());
 				}
 			}
 
 			// and replace them by fresh copy
-			representation = archetype.getComponent<EntityRepresentation>();
+			representation = archetype->getComponent<EntityRepresentation>();
 			for (auto c : componentList)
 			{
 				if (c != nullptr && c != representation && c != archetypeCpt)
 				{
-					entity.copyComponent(c);
+					entity->copyComponent(c);
 				}
 			}
 
-			const auto &archetypesChild = archetype.getLink().getChildren();
-			const auto &entityChild = entity.getLink().getChildren();
+			const auto &archetypesChild = archetype->getLink().getChildren();
+			const auto &entityChild = entity->getLink().getChildren();
 
 			AGE_ASSERT(archetypesChild.size() == entityChild.size());
 

@@ -99,11 +99,13 @@
       <PreprocessorDefinitions>WIN32;_SCL_SECURE_NO_WARNINGS;EDITOR_ENABLED;_CRT_SECURE_NO_WARNINGS;AGE_ENABLE_IMGUI;AGE_ENABLE_PROFILING;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MultiProcessorCompilation>false</MultiProcessorCompilation>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <OpenMPSupport>true</OpenMPSupport>
+      <OpenMPSupport>
+      </OpenMPSupport>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <RuntimeTypeInfo>
+      </RuntimeTypeInfo>
       <DisableSpecificWarnings>4503;4099</DisableSpecificWarnings>
       <TreatWarningAsError>false</TreatWarningAsError>
       <SDLCheck>true</SDLCheck>
@@ -241,12 +243,20 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\Vendors\imgui\imgui.cpp" />
+    <ClCompile Include="Engine\BFC\BFCBlock.cpp" />
+    <ClCompile Include="Engine\BFC\BFCBlockManager.cpp" />
+    <ClCompile Include="Engine\BFC\BFCBlockManagerFactory.cpp" />
+    <ClCompile Include="Engine\BFC\BFCItem.cpp" />
+    <ClCompile Include="Engine\BFC\BFCLink.cpp" />
+    <ClCompile Include="Engine\BFC\BFCLinkTracker.cpp" />
     <ClCompile Include="Engine\Components\ArchetypeComponent.cpp" />
     <ClCompile Include="Engine\Components\DirectionalLightComponent.cpp" />
+    <ClCompile Include="Engine\Core\PrepareKey.cpp" />
     <ClCompile Include="Engine\Entities\ArchetypeManager.cpp" />
     <ClCompile Include="Engine\Entities\BinaryEntity.cpp" />
     <ClCompile Include="Engine\Entities\BinaryEntityPack.cpp" />
     <ClCompile Include="Engine\Entities\EntityBinaryPacker.cpp" />
+    <ClCompile Include="Engine\Graphic\GraphicElementManager.cpp" />
     <ClCompile Include="Engine\Render\OcclusionTools\DepthMap.cpp" />
     <ClCompile Include="Engine\Render\OcclusionTools\DepthMapHandle.cpp" />
     <ClCompile Include="Engine\Render\OcclusionTools\DepthMapManager.cpp" />
@@ -438,6 +448,15 @@
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
     <ClInclude Include="..\Vendors\imgui\imgui.h" />
     <ClInclude Include="..\Vendors\imgui\stb_textedit.h" />
+    <ClInclude Include="Engine\BFC\BFCBlock.hpp" />
+    <ClInclude Include="Engine\BFC\BFCBlockManager.hpp" />
+    <ClInclude Include="Engine\BFC\BFCBlockManagerFactory.hpp" />
+    <ClInclude Include="Engine\BFC\BFCCullableHandle.hpp" />
+    <ClInclude Include="Engine\BFC\BFCItemID.hpp" />
+    <ClInclude Include="Engine\BFC\BFCLink.hpp" />
+    <ClInclude Include="Engine\BFC\BFCLinkTracker.hpp" />
+    <ClInclude Include="Engine\BFC\BFCItem.hpp" />
+    <ClInclude Include="Engine\BFC\BFCCullableObject.hpp" />
     <ClInclude Include="Engine\Components\ArchetypeComponent.hpp" />
     <ClInclude Include="Engine\Components\DirectionalLightComponent.hh" />
     <ClInclude Include="Engine\Components\Collider.hpp" />
@@ -452,6 +471,8 @@
     <ClInclude Include="Engine\Entities\EntityPacker.hpp" />
     <ClInclude Include="Engine\Entities\IArchetypeManager.hpp" />
     <ClInclude Include="Engine\Components\PhysicsData.hpp" />
+    <ClInclude Include="Engine\Graphic\DRBMesh.hpp" />
+    <ClInclude Include="Engine\Graphic\GraphicElementManager.hpp" />
     <ClInclude Include="Engine\Physics\BoxColliderInterface.hpp" />
     <ClInclude Include="Engine\Physics\CapsuleColliderInterface.hpp" />
     <ClInclude Include="Engine\Physics\ColliderInterface.hpp" />

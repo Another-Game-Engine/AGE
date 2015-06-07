@@ -30,7 +30,7 @@ namespace AGE
 		template < typename Archive >
 		void save(Archive &ar, const std::uint32_t version) const
 		{
-			AGE::Link link = entity.getLink();
+			AGE::Link link = entity->getLink();
 			ENTITY_FLAGS flags = entity.getFlags();
 			ar(cereal::make_nvp("link", link)
 				, cereal::make_nvp("children", children)
