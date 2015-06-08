@@ -18,7 +18,7 @@ namespace AGE
 	{
 	}
 
-	IRender & FrameBufferRender::render(std::list<BFCCullableObject*> const &meshs, RenderLightList &lights, CameraInfos const &infos)
+	IRender & FrameBufferRender::render(std::list<std::shared_ptr<DRBData>> const &meshs, RenderLightList &lights, CameraInfos const &infos)
 	{
 		SCOPE_profile_cpu_i("RenderTimer", "FrameBufferRender pass");
 

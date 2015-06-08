@@ -11,12 +11,16 @@
 namespace AGE
 {
 	struct SubMeshInstance;
+	struct DRBMeshData;
 
 	struct DRBMesh : public BFCCullableObject
 	{
 	public:
+		DRBMesh();
 		virtual CullableTypeID getBFCType() const { return BFCCullableType::CullableMesh; }
 		virtual glm::vec4 setBFCTransform(const glm::mat4 &transformation);
-		std::vector<SubMeshInstance> subMeshs;
-	};
+		virtual const std::shared_ptr<DRBData> getDatas() const;
+
+		std::shared_ptr<DRBMeshData> datas;
+	}; 
 }

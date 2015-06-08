@@ -1,11 +1,15 @@
 #include "GraphicElementManager.hpp"
 
 #include "BFC/BFCCullableHandle.hpp"
+#include "BFC/BFCBlockManagerFactory.hpp"
+
+#include "Graphic/DRBMeshData.hpp"
 
 #include "AssetManagement/Instance/MeshInstance.hh"
 #include "AssetManagement/Instance/MaterialInstance.hh"
 
-#include "BFC/BFCBlockManagerFactory.hpp"
+
+
 
 namespace AGE
 {
@@ -15,29 +19,34 @@ namespace AGE
 		AGE_ASSERT(factory != nullptr);
 	}
 
-	BFCCullableHandle GraphicElementManager::addMesh(std::shared_ptr<MeshInstance> meshInstance, std::shared_ptr<MaterialSetInstance> materialInstance)
+	BFCCullableHandle GraphicElementManager::addMesh(const SubMeshInstance &meshInstance, std::shared_ptr<MaterialSetInstance> materialInstance)
 	{
+		SCOPE_profile_cpu_function("DRB");
+
 		DRBMesh *drbMesh = _meshPool.create();
-		drbMesh->subMeshs = meshInstance->subMeshs;
 
-		for (auto &submesh : drbMesh->subMeshs)
+		drbMesh->datas->vertices = meshInstance.vertices;
+		drbMesh->datas->painter = meshInstance.painter;
+		
+		// TODO merge Mesh properties with global properties
+		//drbMesh->datas->globalProperties = meshInstance.properties;
+		
+		std::size_t materialIndex = meshInstance.defaultMaterialIndex < materialInstance->datas.size() ? meshInstance.defaultMaterialIndex : 0;
+		auto &material = materialInstance->datas[materialIndex];
+
+		for (auto &p : material._properties)
 		{
-			std::size_t materialIndex = submesh.defaultMaterialIndex < materialInstance->datas.size() ? submesh.defaultMaterialIndex : 0;
-			auto &material = materialInstance->datas[materialIndex];
-
-			for (auto &matProperty : material._properties)
-			{
-				submesh.properties.add_property(matProperty);
-			}
+			drbMesh->datas->globalProperties.add_property(p);
 		}
 
 		BFCCullableHandle result = _bfcBlockManager->createItem(drbMesh);
-
 		return result;
 	}
 
 	void GraphicElementManager::removeMesh(BFCCullableHandle &handle)
 	{
+		SCOPE_profile_cpu_function("DRB");
+
 		_meshPool.destroy(handle.getPtr());
 		_bfcBlockManager->deleteItem(handle);
 	}

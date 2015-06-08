@@ -338,7 +338,10 @@ namespace AGE
 			_renderFpsStatitstics();
 		}
 #ifdef AGE_ENABLE_IMGUI
-		ImGui::Render();
+		{
+			SCOPE_profile_cpu_i("ImGui", "Render");
+			ImGui::Render();
+		}
 #endif
 		GetPrepareThread()->getQueue()->emplaceCommand<Commands::ToRender::Flush>();
 		++frame;
@@ -347,6 +350,7 @@ namespace AGE
 
 	void Engine::_renderThreadsStatistics()
 	{
+		SCOPE_profile_cpu_function("Engine");
 #ifdef AGE_ENABLE_IMGUI
 		if (ImGui::Begin("Threads statistics", (bool*)0, ImVec2(0, 0), -1.0f, ImGuiWindowFlags_AlwaysAutoResize))
 		{
@@ -389,6 +393,7 @@ namespace AGE
 
 	void Engine::_renderFpsStatitstics()
 	{
+		SCOPE_profile_cpu_function("Engine");
 #ifdef AGE_ENABLE_IMGUI
 		if (!ImGui::Begin("Example: Fixed OverlayFPS OVERLAY", (bool*)1, ImVec2(0, 0), 0.3f, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings))
 		{

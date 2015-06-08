@@ -17,7 +17,7 @@ namespace AGE
 		virtual ~DeferredOnScreen() = default;
 
 	protected:
-		virtual void renderPass(std::list<BFCCullableObject*> const &, RenderLightList &, CameraInfos const &);
+		virtual void renderPass(std::list<std::shared_ptr<DRBData>> const &, RenderLightList &, CameraInfos const &);
 
 	private:
 		std::shared_ptr<Texture2D> _diffuseInput;

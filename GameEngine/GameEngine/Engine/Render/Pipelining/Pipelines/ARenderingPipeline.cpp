@@ -43,7 +43,7 @@ namespace AGE
 		return true;
 	}
 
-	IRenderingPipeline & ARenderingPipeline::render(std::list<BFCCullableObject*> const &meshs, RenderLightList &lights, CameraInfos const &camInfos)
+	IRenderingPipeline & ARenderingPipeline::render(std::list<std::shared_ptr<DRBData>> const &meshs, RenderLightList &lights, CameraInfos const &camInfos)
 	{
 		SCOPE_profile_cpu_i("RenderTimer", "RenderPipeline");
 		// We iterate over the entry points5

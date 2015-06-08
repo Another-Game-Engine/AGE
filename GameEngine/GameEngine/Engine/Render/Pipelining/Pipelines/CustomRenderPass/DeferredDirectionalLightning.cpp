@@ -64,7 +64,7 @@ namespace AGE
 
 	}
 
-	void DeferredDirectionalLightning::renderPass(std::list<BFCCullableObject*> const &, RenderLightList &lights, CameraInfos const &infos)
+	void DeferredDirectionalLightning::renderPass(std::list<std::shared_ptr<DRBData>> const &, RenderLightList &lights, CameraInfos const &infos)
 	{
 		SCOPE_profile_gpu_i("DeferredDirectionalLightning render pass");
 		SCOPE_profile_cpu_i("RenderTimer", "DeferredDirectionalLightning render pass");

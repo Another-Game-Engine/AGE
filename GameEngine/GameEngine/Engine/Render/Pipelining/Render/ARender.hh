@@ -28,7 +28,7 @@ namespace AGE
 	protected:
 		ARender(std::shared_ptr<PaintingManager> painterManager);
 		ARender(ARender &&move);
-		virtual void renderPass(std::list<BFCCullableObject*> const &meshs, RenderLightList &, CameraInfos const &) = 0;
+		virtual void renderPass(std::list<std::shared_ptr<DRBData>> const &meshs, RenderLightList &, CameraInfos const &) = 0;
 
 	protected:
 		// Bitsets to test the objects against

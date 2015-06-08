@@ -20,6 +20,8 @@
 #include <Render/OcclusionTools/DepthMap.hpp>
 
 #include "Graphic/DRBMesh.hpp"
+#include "Graphic/DRBMeshData.hpp"
+
 #include "AssetManagement\Instance\MeshInstance.hh"
 
 #define DEFERRED_SHADING_BUFFERING_VERTEX "deferred_shading/deferred_shading_get_buffer.vp"
@@ -72,9 +74,9 @@ namespace AGE
 		}));
 	}
 
-	void DeferredBasicBuffering::renderPass(std::list<BFCCullableObject*> const &meshs, RenderLightList &, CameraInfos const &infos)
+	void DeferredBasicBuffering::renderPass(std::list<std::shared_ptr<DRBData>> const &meshs, RenderLightList &, CameraInfos const &infos)
 	{
-		auto &meshList = (std::list<DRBMesh*>&)(meshs);
+		auto &meshList = (std::list<std::shared_ptr<DRBMeshData>>&)(meshs);
 
 		SCOPE_profile_gpu_i("DeferredBasicBuffering render pass");
 		SCOPE_profile_cpu_i("RenderTimer", "DeferredBasicBuffering render pass");
@@ -162,15 +164,10 @@ namespace AGE
 
 			for (auto &meshPaint : meshList)
 			{
-				for (auto &m : meshPaint->subMeshs)
-				{
-					auto painter = _painterManager->get_painter(m.painter);
-					painter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], m.properties, m.vertices);
-					//if (renderModeCompatible(mode.renderMode))
-					//{
+				auto painter = _painterManager->get_painter(meshPaint->painter);
+				meshPaint->globalProperties.update_properties(_programs[PROGRAM_BUFFERING]);
+				painter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], meshPaint->individualProperties, meshPaint->vertices);
 
-					//}
-				}
 			}
 		}
 //#endif

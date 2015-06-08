@@ -77,7 +77,7 @@ namespace AGE
 		std::string _materialPath;
 		std::string _animationPath;
 #ifdef AGE_BFC
-		BFCCullableHandle _drawableHandle;
+		std::vector<BFCCullableHandle> _drawableHandle;
 #endif
 
 		RenderModeSet _renderMode;

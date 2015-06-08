@@ -10,6 +10,7 @@ namespace AGE
 	struct BFCCullableObject;
 	class  BFCCullableHandle;
 	class  BFCItem;
+	struct DRBData;
 
 	static const CullableTypeID MaxCullableTypeID = MaxBlockManagerID;
 
@@ -19,7 +20,7 @@ namespace AGE
 		BFCCullableHandle createItem(BFCCullableObject *object);
 		void deleteItem(const BFCCullableHandle &handle);
 		BFCItem &getItem(const BFCItemID &id);
-		void cullOnChannel(CullableTypeID channel, std::list<BFCCullableObject*> &result);
+		void cullOnChannel(CullableTypeID channel, std::list<std::shared_ptr<DRBData>> &result);
 	private:
 		std::vector<BFCBlockManager> _managers;
 	};

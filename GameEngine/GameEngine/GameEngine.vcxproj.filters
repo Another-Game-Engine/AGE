@@ -222,6 +222,7 @@
     <ClCompile Include="Engine\BFC\BFCLink.cpp" />
     <ClCompile Include="Engine\Systems\RenderCameraSystem.cpp" />
     <ClCompile Include="Engine\Graphic\DRBMesh.cpp" />
+    <ClCompile Include="Engine\Graphic\DRBData.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -584,6 +585,8 @@
     <ClInclude Include="Engine\Graphic\BFCCullableTypes.hpp" />
     <ClInclude Include="Engine\Graphic\DRBCameraDrawableList.hpp" />
     <ClInclude Include="Engine\Systems\RenderCameraSystem.hpp" />
+    <ClInclude Include="Engine\Graphic\DRBData.hpp" />
+    <ClInclude Include="Engine\Graphic\DRBMeshData.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

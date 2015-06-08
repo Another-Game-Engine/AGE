@@ -48,11 +48,15 @@ namespace AGE
 		_material = nullptr;
 		_renderMode.reset();
 
-		if (_drawableHandle.invalid() == false)
+		if (_drawableHandle.size() != 0)
 		{
-			auto manager = entity->getScene()->getInstance<GraphicElementManager>();
-			manager->removeMesh(_drawableHandle);
-			entity->getLink().popAnObject(_drawableHandle);
+			for (auto &drawable : _drawableHandle)
+			{
+				auto manager = entity->getScene()->getInstance<GraphicElementManager>();
+				manager->removeMesh(drawable);
+				entity->getLink().popAnObject(drawable);
+			}
+			_drawableHandle.clear();
 		}
 	}
 
@@ -137,13 +141,21 @@ namespace AGE
 		AGE::GetPrepareThread()->updateRenderMode(_key, _renderMode);
 #else
 		auto manager = entity->getScene()->getInstance<GraphicElementManager>();
-		if (_drawableHandle.invalid() == false)
+		if (_drawableHandle.size() != 0)
 		{
-			manager->removeMesh(_drawableHandle);
-			entity->getLink().popAnObject(_drawableHandle);
+			for (auto &drawable : _drawableHandle)
+			{
+				manager->removeMesh(drawable);
+				entity->getLink().popAnObject(drawable);
+			}
+			_drawableHandle.clear();
 		}
-		_drawableHandle = manager->addMesh(_mesh, _material);
-		entity->getLink().pushAnObject(_drawableHandle);
+		for (auto &submesh : _mesh->subMeshs)
+		{
+			auto handle = manager->addMesh(submesh, _material);
+			entity->getLink().pushAnObject(handle);
+			_drawableHandle.push_back(handle);
+		}
 #endif
 	}
 

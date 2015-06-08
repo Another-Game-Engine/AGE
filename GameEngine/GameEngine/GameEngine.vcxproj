@@ -256,6 +256,7 @@
     <ClCompile Include="Engine\Entities\BinaryEntity.cpp" />
     <ClCompile Include="Engine\Entities\BinaryEntityPack.cpp" />
     <ClCompile Include="Engine\Entities\EntityBinaryPacker.cpp" />
+    <ClCompile Include="Engine\Graphic\DRBData.cpp" />
     <ClCompile Include="Engine\Graphic\DRBMesh.cpp" />
     <ClCompile Include="Engine\Graphic\GraphicElementManager.cpp" />
     <ClCompile Include="Engine\Render\OcclusionTools\DepthMap.cpp" />
@@ -475,7 +476,9 @@
     <ClInclude Include="Engine\Components\PhysicsData.hpp" />
     <ClInclude Include="Engine\Graphic\BFCCullableTypes.hpp" />
     <ClInclude Include="Engine\Graphic\DRBCameraDrawableList.hpp" />
+    <ClInclude Include="Engine\Graphic\DRBData.hpp" />
     <ClInclude Include="Engine\Graphic\DRBMesh.hpp" />
+    <ClInclude Include="Engine\Graphic\DRBMeshData.hpp" />
     <ClInclude Include="Engine\Graphic\GraphicElementManager.hpp" />
     <ClInclude Include="Engine\Physics\BoxColliderInterface.hpp" />
     <ClInclude Include="Engine\Physics\CapsuleColliderInterface.hpp" />

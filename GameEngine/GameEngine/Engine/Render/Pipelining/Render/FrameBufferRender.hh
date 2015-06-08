@@ -23,7 +23,7 @@ namespace AGE
 		virtual ~FrameBufferRender(){}
 
 	public:
-		virtual IRender &render(std::list<BFCCullableObject*> const &meshs, RenderLightList &lights, CameraInfos const &infos) override final;
+		virtual IRender &render(std::list<std::shared_ptr<DRBData>> const &meshs, RenderLightList &lights, CameraInfos const &infos) override final;
 
 	public:
 		template <typename type_t> FrameBufferRender &push_storage_output(GLenum attach, std::shared_ptr<type_t> storage);
@@ -33,7 +33,7 @@ namespace AGE
 
 	protected:
 		FrameBufferRender(GLint width, GLint height, std::shared_ptr<PaintingManager> painterManager);
-		virtual void renderPass(std::list<BFCCullableObject*> const &, RenderLightList &, CameraInfos const &) = 0;
+		virtual void renderPass(std::list<std::shared_ptr<DRBData>> const &, RenderLightList &, CameraInfos const &) = 0;
 		Framebuffer _frame_buffer;
 		std::unordered_map<GLenum, std::shared_ptr<IFramebufferStorage>> _frame_output;
 		std::vector<GLenum> _drawing_attach;

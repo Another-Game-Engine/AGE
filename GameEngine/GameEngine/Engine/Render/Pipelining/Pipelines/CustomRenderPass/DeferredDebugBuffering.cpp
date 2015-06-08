@@ -51,7 +51,7 @@ namespace AGE
 		}));
 	}
 
-	void DeferredDebugBuffering::renderPass(std::list<BFCCullableObject*> const &meshs, RenderLightList &renderLight, CameraInfos const &infos)
+	void DeferredDebugBuffering::renderPass(std::list<std::shared_ptr<DRBData>> const &meshs, RenderLightList &renderLight, CameraInfos const &infos)
 	{
 		SCOPE_profile_gpu_i("DeferredDebugBuffering render pass");
 		SCOPE_profile_cpu_i("RenderTimer", "DeferredDebugBuffering render pass");

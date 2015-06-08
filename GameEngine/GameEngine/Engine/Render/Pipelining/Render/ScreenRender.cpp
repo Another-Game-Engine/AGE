@@ -16,7 +16,7 @@ namespace AGE
 
 	}
 
-	IRender & ScreenRender::render(std::list<BFCCullableObject*> const &meshs, RenderLightList &lights, CameraInfos const &infos)
+	IRender & ScreenRender::render(std::list<std::shared_ptr<DRBData>> const &meshs, RenderLightList &lights, CameraInfos const &infos)
 	{
 		SCOPE_profile_gpu_i("ScreenRender pass");
 		SCOPE_profile_cpu_i("RenderTimer", "ScreenRender pass");

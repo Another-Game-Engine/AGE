@@ -118,6 +118,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PhysX", "PhysX", "{FF5DF4D7
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SpacePartitioning", "SpacePartitioning\SpacePartitioning.vcxproj", "{FF05ACC8-441B-4E65-866C-FE72A1CDE27D}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{56123164-A219-4B81-977C-9EA97AEF3ADA}"
+	ProjectSection(SolutionItems) = preProject
+		Performance1.psess = Performance1.psess
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		checked|Mixed Platforms = checked|Mixed Platforms
@@ -205,7 +210,6 @@ Global
 		{CB955D69-5F17-4705-BE34-81FBE92E26EB}.Release|Mixed Platforms.Build.0 = Release|x64
 		{CB955D69-5F17-4705-BE34-81FBE92E26EB}.Release|Win32.ActiveCfg = Release|x64
 		{CB955D69-5F17-4705-BE34-81FBE92E26EB}.Release|x64.ActiveCfg = Release|x64
-		{CB955D69-5F17-4705-BE34-81FBE92E26EB}.Release|x64.Build.0 = Release|x64
 		{CB955D69-5F17-4705-BE34-81FBE92E26EB}.Retail|Mixed Platforms.ActiveCfg = Release|x64
 		{CB955D69-5F17-4705-BE34-81FBE92E26EB}.Retail|Mixed Platforms.Build.0 = Release|x64
 		{CB955D69-5F17-4705-BE34-81FBE92E26EB}.Retail|Win32.ActiveCfg = Release|x64
@@ -615,5 +619,8 @@ Global
 		{24546E40-3140-20F4-C5AC-E4001B9880B8} = {FF5DF4D7-4AAB-4EE3-9539-6A7F08CE6726}
 		{5B1132F6-84F8-142E-B951-ADB8505CC27F} = {FF5DF4D7-4AAB-4EE3-9539-6A7F08CE6726}
 		{FF5DF4D7-4AAB-4EE3-9539-6A7F08CE6726} = {8FD58CA8-8812-4B8D-85DC-B42B9D75D0CB}
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
 	EndGlobalSection
 EndGlobal

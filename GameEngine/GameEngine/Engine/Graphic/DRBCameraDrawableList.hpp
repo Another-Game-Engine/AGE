@@ -5,11 +5,11 @@
 
 namespace AGE
 {
-	struct BFCCullableObject;
+	struct DRBData;
 
 	struct DRBCameraDrawableList
 	{
-		std::list<BFCCullableObject*> meshs;
+		std::list<std::shared_ptr<DRBData>> meshs;
 		CameraInfos cameraInfos;
 	};
 

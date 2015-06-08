@@ -56,7 +56,7 @@ namespace AGE
 		return _managers[id._blockManagerID]._blocks[id._blockID]->_items[id._itemID];
 	}
 
-	void BFCBlockManagerFactory::cullOnChannel(CullableTypeID channel, std::list<BFCCullableObject*> &result)
+	void BFCBlockManagerFactory::cullOnChannel(CullableTypeID channel, std::list<std::shared_ptr<DRBData>> &result)
 	{
 		SCOPE_profile_cpu_function("BFC");
 
@@ -75,7 +75,7 @@ namespace AGE
 			{
 				if (item.getDrawable())
 				{
-					result.push_back(item.getDrawable());
+					result.push_back(item.getDrawable()->getDatas());
 				}
 			}
 		}
