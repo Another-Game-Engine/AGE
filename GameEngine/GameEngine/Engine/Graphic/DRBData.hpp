@@ -10,7 +10,6 @@ namespace AGE
 		Key<Property> transformationPropertyKey;
 
 		Properties globalProperties;
-		Properties individualProperties;
 
 		DRBData();
 		virtual ~DRBData(){}

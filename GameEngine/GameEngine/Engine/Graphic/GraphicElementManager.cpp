@@ -28,8 +28,7 @@ namespace AGE
 		drbMesh->datas->setVerticesKey(meshInstance.vertices);
 		drbMesh->datas->setPainterKey(meshInstance.painter);
 		
-		// TODO merge Mesh properties with global properties
-		//drbMesh->datas->globalProperties = meshInstance.properties;
+		drbMesh->datas->globalProperties.merge_properties(meshInstance.properties);
 		
 		std::size_t materialIndex = meshInstance.defaultMaterialIndex < materialInstance->datas.size() ? meshInstance.defaultMaterialIndex : 0;
 		auto &material = materialInstance->datas[materialIndex];

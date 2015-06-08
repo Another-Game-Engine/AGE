@@ -31,6 +31,21 @@ namespace AGE
 		return (Key<Property>::createKey(int(_properties.size()) - 1));
 	}
 
+	void Properties::merge_properties(const Properties &other)
+	{
+		_lock.ReadLock();
+		RWLockGuard lockO(other._lock, false);
+		for (auto &p : other._properties)
+		{
+			_lock.ReadUnlock();
+			add_property(p);
+			_lock.ReadLock();
+		}
+		_lock.ReadUnlock();
+	}
+
+	// @Dorian !
+	// NOT WORKING -> you invalid Key doing that !
 	void Properties::remove_property(Key<IProperty> const &prop)
 	{
 		RWLockGuard lock(_lock, true);

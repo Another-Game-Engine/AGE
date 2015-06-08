@@ -40,7 +40,7 @@ namespace AGE
 
 			auto cameraList = std::make_shared<DRBCameraDrawableList>();
 			cameraList->cameraInfos.data = camera->getData();
-			cameraList->cameraInfos.view = cameraEntity->getLink().getGlobalTransform();
+			cameraList->cameraInfos.view = glm::inverse(cameraEntity->getLink().getGlobalTransform());
 			_scene->getBfcBlockManagerFactory()->cullOnChannel(BFCCullableType::CullableMesh, cameraList->meshs);
 			AGE::GetPrepareThread()->getQueue()->emplaceCommand<AGE::DRBCameraDrawableListCommand>(cameraList);
 		}
