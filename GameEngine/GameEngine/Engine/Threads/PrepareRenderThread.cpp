@@ -23,68 +23,42 @@ namespace AGE
 	bool PrepareRenderThread::init()
 	{
 		registerCallback<Tasks::MainToPrepare::CreateScene>([this](Tasks::MainToPrepare::CreateScene &msg){
-			this->_createRenderScene(msg.scene);
-			msg.setValue(true);
 		});
 
 		registerCallback<Commands::MainToPrepare::SetCurrentScene>([this](Commands::MainToPrepare::SetCurrentScene &msg){
-			this->_activeScene = _getRenderScene(msg.scene);
-			assert(this->_activeScene != nullptr);
 		});
 
 		registerCallback<Commands::MainToPrepare::CameraInfos>([this](Commands::MainToPrepare::CameraInfos &msg){
-			assert(this->_activeScene != nullptr);
-			_activeScene->_setCameraInfos(msg);
 		});
 
 		registerCallback<Commands::MainToPrepare::CreateCamera>([this](Commands::MainToPrepare::CreateCamera &msg){
-			assert(this->_activeScene != nullptr);
-			_activeScene->_createCamera(msg);
 		});
 
 		registerCallback<Commands::MainToPrepare::CreateMesh>([this](Commands::MainToPrepare::CreateMesh &msg){
-			assert(this->_activeScene != nullptr);
-			_activeScene->_createMesh(msg);
 		});
 
 		registerCallback<Commands::MainToPrepare::CreatePointLight>([this](Commands::MainToPrepare::CreatePointLight &msg){
-			assert(this->_activeScene != nullptr);
-			_activeScene->_createPointLight(msg);
 		});
 
 		registerCallback<Commands::MainToPrepare::CreateSpotLight>([this](Commands::MainToPrepare::CreateSpotLight &msg){
-			assert(this->_activeScene != nullptr);
-			_activeScene->_createSpotLight(msg);
 		});
 
 		registerCallback<Commands::MainToPrepare::CreateDirectionalLight>([this](Commands::MainToPrepare::CreateDirectionalLight &msg){
-			assert(this->_activeScene != nullptr);
-			_activeScene->_createDirectionalLight(msg);
 		});
 
 		registerCallback<Commands::MainToPrepare::DeleteCamera>([this](Commands::MainToPrepare::DeleteCamera &msg){
-			assert(this->_activeScene != nullptr);
-			_activeScene->_deleteCamera(msg);
 		});
 
 		registerCallback<Commands::MainToPrepare::DeleteMesh>([this](Commands::MainToPrepare::DeleteMesh &msg){
-			assert(this->_activeScene != nullptr);
-			_activeScene->_deleteDrawable(msg);
 		});
 
 		registerCallback<Commands::MainToPrepare::DeletePointLight>([this](Commands::MainToPrepare::DeletePointLight &msg){
-			assert(this->_activeScene != nullptr);
-			_activeScene->_deletePointLight(msg);
 		});
 
 		registerCallback<Commands::MainToPrepare::DeleteSpotLight>([this](Commands::MainToPrepare::DeleteSpotLight &msg){
-			assert(this->_activeScene != nullptr);
-			_activeScene->_deleteSpotLight(msg);
 		});
 
 		registerCallback<Commands::MainToPrepare::DeleteDirectionalLight>([this](Commands::MainToPrepare::DeleteDirectionalLight &msg){
-			assert(this->_activeScene != nullptr);
-			_activeScene->_deleteDirectionalLight(msg);
 		});
 
 		registerCallback<Commands::MainToPrepare::PrepareDrawLists>([this](Commands::MainToPrepare::PrepareDrawLists &msg){
@@ -93,33 +67,21 @@ namespace AGE
 		});
 
 		registerCallback<Commands::MainToPrepare::SetGeometry>([this](Commands::MainToPrepare::SetGeometry &msg){
-			assert(this->_activeScene != nullptr);
-			_activeScene->_setGeometry(msg);
 		});
 
 		registerCallback<Commands::MainToPrepare::SetRenderMode>([this](Commands::MainToPrepare::SetRenderMode &msg){
-			assert(this->_activeScene != nullptr);
-			_activeScene->_setRenderMode(msg);
 		});
 
 		registerCallback<Commands::MainToPrepare::SetPointLight>([this](Commands::MainToPrepare::SetPointLight &msg){
-			assert(this->_activeScene != nullptr);
-			_activeScene->_setPointLight(msg);
 		});
 
 		registerCallback<Commands::MainToPrepare::SetDirectionalLight>([this](Commands::MainToPrepare::SetDirectionalLight &msg){
-			assert(this->_activeScene != nullptr);
-			_activeScene->_setDirectionalLight(msg);
 		});
 
 		registerCallback<Commands::MainToPrepare::SetSpotLight>([this](Commands::MainToPrepare::SetSpotLight &msg){
-			assert(this->_activeScene != nullptr);
-			_activeScene->_setSpotLight(msg);
 		});
 
 		registerCallback<Commands::MainToPrepare::SetTransform>([this](Commands::MainToPrepare::SetTransform &msg){
-			assert(this->_activeScene != nullptr);
-			_activeScene->_setTransform(msg);
 		});
 
 		registerCallback<Tasks::Basic::VoidFunction>([this](Tasks::Basic::VoidFunction &msg){
