@@ -630,7 +630,6 @@ namespace AGE
 		{
 			if (e.callback && e.scene != nullptr)
 			{
-				GetMainThread()->setSceneAsActive(e.scene);
 				e.callback();
 			}
 		}

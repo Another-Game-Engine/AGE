@@ -64,9 +64,6 @@ namespace AGE
 		void setOrientation(const glm::quat &v, bool recalculate = true);
 		void setTransform(const glm::mat4 &t, bool recalculate = true);
 
-		void registerOctreeObject(const PrepareKey &key);
-		void unregisterOctreeObject(const PrepareKey &key);
-
 		bool hasChildren() const;
 		bool hasParent() const;
 		bool hasParent(const Link *parent) const;
@@ -104,7 +101,6 @@ namespace AGE
 		glm::mat4 _globalTransformation;
 #endif
 		bool _localDirty;
-		std::unordered_set<PrepareKey> _octreeObjects;
 		Link *_parent;
 		std::vector<Link*> _children;
 
@@ -115,8 +111,8 @@ namespace AGE
 		void _detachFromRoot();
 		void _attachToRoot();
 		void _updateGlobalTransform();
-	public:
-		RenderScene *_renderScene;
+
+		AScene *_scene;
 	public:
 		Link();
 		Link(EntityData *entity, AScene *_scene);

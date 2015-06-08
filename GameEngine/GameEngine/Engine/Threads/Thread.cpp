@@ -34,9 +34,6 @@ namespace AGE
 		case AGE::Thread::Main:
 			res = "MainThread";
 			break;
-		case AGE::Thread::PrepareRender:
-			res = "AGE_PrepareRenderThread";
-			break;
 		case AGE::Thread::Render:
 			res = "AGE_RenderThread";
 			break;

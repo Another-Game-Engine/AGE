@@ -12,7 +12,6 @@
 
 #include <Threads/ThreadManager.hpp>
 #include <Threads/MainThread.hpp>
-#include <Threads/PrepareRenderThread.hpp>
 #include <Threads/RenderThread.hpp>
 #include <Threads/Commands/ToRenderCommands.hpp>
 #include <Threads/Tasks/ToRenderTasks.hpp>
@@ -343,7 +342,7 @@ namespace AGE
 			ImGui::Render();
 		}
 #endif
-		GetPrepareThread()->getQueue()->emplaceCommand<Commands::ToRender::Flush>();
+		GetRenderThread()->getQueue()->emplaceCommand<Commands::ToRender::Flush>();
 		++frame;
 		return true;
 	}
@@ -406,11 +405,6 @@ namespace AGE
 				auto &e = GetThreadManager()->getStatistics()[Thread::Main];
 				if (e.averageWaitTimeCopy + e.averageWorkTimeCopy > 0)
 					ImGui::Text("Main : %i fps", (int)(1000 / (e.averageWaitTimeCopy + e.averageWorkTimeCopy)));
-			}
-			{
-				auto &e = GetThreadManager()->getStatistics()[Thread::PrepareRender];
-				if (e.averageWaitTimeCopy + e.averageWorkTimeCopy > 0)
-					ImGui::Text("Prepare : %i fps", (int)(1000 / (e.averageWaitTimeCopy + e.averageWorkTimeCopy)));
 			}
 			{
 				auto &e = GetThreadManager()->getStatistics()[Thread::Render];

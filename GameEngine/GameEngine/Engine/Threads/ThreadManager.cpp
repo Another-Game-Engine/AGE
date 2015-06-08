@@ -1,6 +1,5 @@
 #include "ThreadManager.hpp"
 #include "MainThread.hpp"
-#include "PrepareRenderThread.hpp"
 #include "RenderThread.hpp"
 #include "TaskThread.hpp"
 #include "QueueOwner.hpp"
@@ -21,13 +20,10 @@ namespace AGE
 		_threads.resize(Thread::hardwareConcurency(), nullptr);
 		_threadIdReference.resize(Thread::hardwareConcurency(), -1);
 		auto mt = new MainThread();
-		auto pt = new PrepareRenderThread();
 		auto rt = new RenderThread();
 		_threads[Thread::Main] = mt;
-		_threads[Thread::PrepareRender] = pt;
 		_threads[Thread::Render] = rt;
-		mt->linkToNext(pt);
-		pt->linkToNext(rt);
+		mt->linkToNext(rt);
 		for (std::size_t i = Thread::Worker1; i < Thread::hardwareConcurency(); ++i)
 		{
 			_threads[i] = new TaskThread(Thread::ThreadType(i));
@@ -119,10 +115,6 @@ namespace AGE
 	{
 		return static_cast<RenderThread*>(_threads[Thread::Render]);
 	}
-	PrepareRenderThread *ThreadManager::getPrepareThread() const
-	{
-		return static_cast<PrepareRenderThread*>(_threads[Thread::PrepareRender]);
-	}
 
 	void ThreadManager::updateThreadStatistics(Thread::ThreadType id, std::size_t workTime, std::size_t sleepTime)
 	{
@@ -167,8 +159,6 @@ namespace AGE
 			return static_cast<TaskThread*>(_threads[res])->getQueue();
 		else if (res == 0)
 			return static_cast<MainThread*>(_threads[res])->getQueue();
-		else if (res == 1)
-			return static_cast<PrepareRenderThread*>(_threads[res])->getQueue();
 		else
 			return static_cast<RenderThread*>(_threads[res])->getQueue();
 	}
@@ -184,7 +174,6 @@ namespace AGE
 	void ThreadManager::setAsWorker(bool mainThread, bool prepareThread, bool renderThread)
 	{
 		_threads[Thread::Main]->setAsWorker(mainThread);
-		_threads[Thread::PrepareRender]->setAsWorker(prepareThread);
 		_threads[Thread::Render]->setAsWorker(renderThread);
 	}
 
@@ -206,11 +195,6 @@ namespace AGE
 	RenderThread *GetRenderThread()
 	{
 		return Singleton<ThreadManager>::getInstance()->getRenderThread();
-	}
-
-	PrepareRenderThread *GetPrepareThread()
-	{
-		return Singleton<ThreadManager>::getInstance()->getPrepareThread();
 	}
 
 	bool InitAGE()

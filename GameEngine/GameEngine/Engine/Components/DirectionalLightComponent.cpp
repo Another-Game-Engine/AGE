@@ -1,7 +1,6 @@
 #include <Components/DirectionalLightComponent.hh>
 #include <Core/AScene.hh>
 #include <Utils/MathematicTools.hh>
-#include <Threads/PrepareRenderThread.hpp>
 #include <Threads/ThreadManager.hpp>
 #include <glm/glm.hpp>
 #include <AssetManagement/AssetManager.hh>
@@ -40,7 +39,7 @@ namespace AGE
 	{
 		if (!_key.invalid())
 		{
-			entity->getLink().unregisterOctreeObject(_key);
+			//entity->getLink().unregisterOctreeObject(_key);
 		}
 		_key = AGE::PrepareKey();
 		_data.color = glm::vec3(1);
@@ -48,16 +47,16 @@ namespace AGE
 
 	void DirectionalLightComponent::init()
 	{
-		_key = AGE::GetPrepareThread()->addDirectionalLight();
-		entity->getLink().registerOctreeObject(_key);
-		assert(!_key.invalid());
+		//_key = AGE::GetPrepareThread()->addDirectionalLight();
+		//entity->getLink().registerOctreeObject(_key);
+		//assert(!_key.invalid());
 		set(_data);
 	}
 
 	DirectionalLightComponent &DirectionalLightComponent::set(DirectionalLightData const &data)
 	{
 		_data = data;
-		AGE::GetPrepareThread()->setDirectionalLight(data, _key);
+		//AGE::GetPrepareThread()->setDirectionalLight(data, _key);
 		return (*this);
 	}
 

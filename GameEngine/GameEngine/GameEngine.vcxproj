@@ -328,7 +328,6 @@
     <ClCompile Include="Engine\Render\Buffer\UniformBuffer.cpp" />
     <ClCompile Include="Engine\Render\Buffer\VertexArray.cpp" />
     <ClCompile Include="Engine\Render\Buffer\VertexBuffer.cpp" />
-    <ClCompile Include="Engine\Threads\RenderScene.cpp" />
     <ClCompile Include="Engine\Threads\Tasks\MainToPrepareTasks.cpp" />
     <ClCompile Include="Engine\Render\GeometryManagement\Buffer\Buffer.cpp" />
     <ClCompile Include="Engine\Render\GeometryManagement\Buffer\BufferPrograms.cpp" />
@@ -375,7 +374,6 @@
     <ClCompile Include="Engine\Culling\Cullable\Object\PointLight.cpp" />
     <ClCompile Include="Engine\Threads\CallbackContainer.cpp" />
     <ClCompile Include="Engine\Threads\MainThread.cpp" />
-    <ClCompile Include="Engine\Threads\PrepareRenderThread.cpp" />
     <ClCompile Include="Engine\Threads\QueueOwner.cpp" />
     <ClCompile Include="Engine\Threads\QueuePusher.cpp" />
     <ClCompile Include="Engine\Threads\RenderThread.cpp" />
@@ -624,7 +622,6 @@
     <ClInclude Include="Engine\Core\OctreeCommands.hpp" />
     <ClInclude Include="Engine\Core\OctreeKey.hpp" />
     <ClInclude Include="Engine\Core\PrepareKey.hpp" />
-    <ClInclude Include="Engine\Threads\RenderScene.hpp" />
     <ClInclude Include="Engine\Entities\EntitySerializationInfos.hpp" />
     <ClInclude Include="Engine\Entities\EntityTypedef.hpp" />
     <ClInclude Include="Engine\Geometry\MeshManager.hpp" />
@@ -667,7 +664,6 @@
     <ClInclude Include="Engine\Texture\Texture.hpp" />
     <ClInclude Include="Engine\Threads\CallbackContainer.hpp" />
     <ClInclude Include="Engine\Threads\MainThread.hpp" />
-    <ClInclude Include="Engine\Threads\PrepareRenderThread.hpp" />
     <ClInclude Include="Engine\Threads\QueueOwner.hpp" />
     <ClInclude Include="Engine\Threads\QueuePusher.hpp" />
     <ClInclude Include="Engine\Threads\RenderThread.hpp" />

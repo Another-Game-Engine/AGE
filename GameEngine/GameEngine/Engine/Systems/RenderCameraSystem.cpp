@@ -7,8 +7,9 @@
 #include <BFC/BFCBlockManagerFactory.hpp>
 #include <Graphic/DRBCameraDrawableList.hpp>
 #include <Graphic/BFCCullableTypes.hpp>
-#include <Threads/PrepareRenderThread.hpp>
+
 #include <Threads/ThreadManager.hpp>
+#include <Threads/RenderThread.hpp>
 
 namespace AGE
 {
@@ -42,7 +43,7 @@ namespace AGE
 			cameraList->cameraInfos.data = camera->getData();
 			cameraList->cameraInfos.view = glm::inverse(cameraEntity->getLink().getGlobalTransform());
 			_scene->getBfcBlockManagerFactory()->cullOnChannel(BFCCullableType::CullableMesh, cameraList->meshs);
-			AGE::GetPrepareThread()->getQueue()->emplaceCommand<AGE::DRBCameraDrawableListCommand>(cameraList);
+			AGE::GetRenderThread()->getQueue()->emplaceCommand<AGE::DRBCameraDrawableListCommand>(cameraList);
 		}
 	}
 

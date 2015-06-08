@@ -49,7 +49,6 @@ namespace AGE
 		}
 
 		auto currentScene = GetMainThread()->getActiveScene();
-		GetMainThread()->setSceneAsActive(getScene().get());
 
 		auto path = _libraryFolder + "/" + name + ".archetype";
 		BinaryEntityPack pack;
@@ -59,10 +58,6 @@ namespace AGE
 
 		auto &entity = pack.entities.front().entity;
 		_archetypesCollection.insert(std::make_pair(name, entity));
-		if (currentScene)
-		{
-			GetMainThread()->setSceneAsActive(currentScene);
-		}
 	}
 
 	void ArchetypeManager::spawn(Entity &entity, const std::string &name)

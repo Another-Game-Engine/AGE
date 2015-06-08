@@ -9,7 +9,6 @@
 
 #include <Threads/ThreadManager.hpp>
 #include <Threads/RenderThread.hpp>
-#include <Threads/PrepareRenderThread.hpp>
 #include <Threads/Commands/MainToPrepareCommands.hpp>
 #include <Threads/Commands/ToRenderCommands.hpp>
 #include <Threads/Tasks/BasicTasks.hpp>
@@ -58,9 +57,7 @@ namespace AGE
 			getInstance<AGE::WE::ArchetypeEditorManager>()->update(this);
 		}
 		// TODO
-		AGE::GetPrepareThread()->getQueue()->emplaceCommand<AGE::Commands::MainToPrepare::PrepareDrawLists>();
-		// TODO
-		AGE::GetPrepareThread()->getQueue()->emplaceCommand<AGE::Commands::ToRender::RenderDrawLists>();
+		//AGE::GetPrepareThread()->getQueue()->emplaceCommand<AGE::Commands::ToRender::RenderDrawLists>();
 		return true;
 	}
 

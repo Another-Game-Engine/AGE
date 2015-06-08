@@ -201,6 +201,7 @@ Global
 		{CB955D69-5F17-4705-BE34-81FBE92E26EB}.Debug|Mixed Platforms.Build.0 = Debug|x64
 		{CB955D69-5F17-4705-BE34-81FBE92E26EB}.Debug|Win32.ActiveCfg = Debug|x64
 		{CB955D69-5F17-4705-BE34-81FBE92E26EB}.Debug|x64.ActiveCfg = Debug|x64
+		{CB955D69-5F17-4705-BE34-81FBE92E26EB}.Debug|x64.Build.0 = Debug|x64
 		{CB955D69-5F17-4705-BE34-81FBE92E26EB}.Profile|Mixed Platforms.ActiveCfg = Release|x64
 		{CB955D69-5F17-4705-BE34-81FBE92E26EB}.Profile|Mixed Platforms.Build.0 = Release|x64
 		{CB955D69-5F17-4705-BE34-81FBE92E26EB}.Profile|Win32.ActiveCfg = Release|x64

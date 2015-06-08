@@ -27,10 +27,10 @@
 namespace AGE
 {
 	class Engine;
-	class RenderScene;
 	class EntityFilter;
 	class System;
 	class SceneManager;
+	struct Link;
 #ifdef AGE_BFC
 	class BFCLinkTracker;
 	class BFCBlockManagerFactory;
@@ -46,8 +46,8 @@ namespace AGE
 		AGE::Queue<std::uint16_t>                                               _freeEntityId;
 		std::unordered_set<Entity>                                              _entities;
 		ENTITY_ID                                                               _entityNumber;
-		AGE::RenderScene                                                        *_renderScene;
 		bool                                                                    _active;
+		std::unique_ptr<Link>                                                   _rootLink;
 #ifdef AGE_BFC
 	protected:
 		BFCLinkTracker                                                          *_bfcLinkTracker;
@@ -55,7 +55,6 @@ namespace AGE
 	private:
 #endif
 		friend EntityFilter;
-		friend class AGE::RenderScene;
 		friend class AGE::SceneManager;
 	protected:
 		AGE::Engine *                                              _engine;
@@ -77,9 +76,7 @@ namespace AGE
 		void 					update(float time);
 		bool                    start();
 		inline AGE::Engine *getEngine() { return _engine; }
-		inline void setRenderScene(AGE::RenderScene *renderScene) { _renderScene = renderScene; }
 		inline bool isActive() const { return _active; }
-		inline RenderScene *getRenderScene() { return _renderScene; }
 
 		void                    registerFilter(EntityFilter *filter);
 		void                    filterSubscribe(ComponentType id, EntityFilter* filter);
@@ -103,6 +100,8 @@ namespace AGE
 		bool copyEntity(const Entity &source, Entity &destination, bool deep = true, bool outContext = false);
 
 		void clearAllEntities();
+
+		Link *getRootLink();
 
 		template <typename T, typename... Args>
 		std::shared_ptr<T> addSystem(std::size_t priority, Args &&...args)

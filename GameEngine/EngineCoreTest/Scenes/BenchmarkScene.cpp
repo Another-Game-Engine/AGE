@@ -5,7 +5,6 @@
 #include <Skinning/AnimationManager.hpp>
 #include <Threads/ThreadManager.hpp>
 #include <Threads/RenderThread.hpp>
-#include <Threads/PrepareRenderThread.hpp>
 #include <Threads/Commands/MainToPrepareCommands.hpp>
 #include <Threads/Commands/ToRenderCommands.hpp>
 #include <Threads/Tasks/BasicTasks.hpp>
@@ -269,8 +268,6 @@ namespace AGE
 		ImGui::ListBox("Pipelines", &pipelineIndex, pipelineNames, int(RenderType::TOTAL));
 		if (camComponent->getPipeline() != (RenderType)pipelineIndex)
 			camComponent->setPipeline((RenderType)pipelineIndex);
-		AGE::GetPrepareThread()->getQueue()->emplaceCommand<AGE::Commands::MainToPrepare::PrepareDrawLists>();
-		AGE::GetPrepareThread()->getQueue()->emplaceCommand<AGE::Commands::ToRender::RenderDrawLists>();
 		return true;
 	}
 

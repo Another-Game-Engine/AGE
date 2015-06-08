@@ -6,7 +6,6 @@
 #include <AssetManagement/AssetManager.hh>
 #include <assert.h>
 #include <Threads/ThreadManager.hpp>
-#include <Threads/PrepareRenderThread.hpp>
 #include <Threads/RenderThread.hpp>
 #include <Threads/Tasks/ToRenderTasks.hpp>
 #ifdef EDITOR_ENABLED

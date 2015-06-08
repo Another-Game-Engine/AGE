@@ -22,7 +22,6 @@ namespace AGE
 		bool update();
 		AGE::Engine *createEngine();
 		AGE::Engine *getEngine();
-		void setSceneAsActive(AScene *scene);
 		inline AScene *getActiveScene() { return _activeScene; }
 	private:
 		MainThread();

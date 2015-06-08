@@ -1,7 +1,6 @@
 #include <Components/SpotLight.hh>
 #include <Core/AScene.hh>
 #include <Utils/MathematicTools.hh>
-#include <Threads/PrepareRenderThread.hpp>
 #include <Threads/ThreadManager.hpp>
 #include <glm/glm.hpp>
 #include <AssetManagement/AssetManager.hh>
@@ -41,7 +40,7 @@ namespace AGE
 	{
 		if (!_key.invalid())
 		{
-			entity->getLink().unregisterOctreeObject(_key);
+			//entity->getLink().unregisterOctreeObject(_key);
 		}
 		_key = AGE::PrepareKey();
 		_data = SpotLightData();
@@ -49,17 +48,17 @@ namespace AGE
 
 	void SpotLightComponent::init()
 	{
-		_key = AGE::GetPrepareThread()->addSpotLight();
-		entity->getLink().registerOctreeObject(_key);
+		//_key = AGE::GetPrepareThread()->addSpotLight();
+		//entity->getLink().registerOctreeObject(_key);
 		_data.map = entity->getScene()->getInstance<AssetsManager>()->getSpotLightTexture();
-		assert(!_key.invalid());
+		//assert(!_key.invalid());
 		set(_data);
 	}
 
 	void SpotLightComponent::set(SpotLightData const &data)
 	{
 		_data = data;
-		AGE::GetPrepareThread()->setSpotLight(_data, _key);
+		//AGE::GetPrepareThread()->setSpotLight(_data, _key);
 	}
 
 	void SpotLightComponent::postUnserialization()

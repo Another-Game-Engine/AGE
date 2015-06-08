@@ -2,7 +2,6 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include <Threads/RenderScene.hpp>
 #include <Utils/Debug.hpp>
 #include <Utils/MatrixConversion.hpp>
 #include <Core/AScene.hh>
@@ -25,26 +24,8 @@ void Link::BFC_REMOVE()
 }
 #endif
 
-void Link::registerOctreeObject(const PrepareKey &key)
-{
-	_octreeObjects.insert(key);
-	_renderScene->setTransform(getGlobalTransform(), key);
-}
-
-void Link::unregisterOctreeObject(const PrepareKey &key)
-{
-	std::unordered_set<PrepareKey>::const_iterator found = _octreeObjects.find(key);
-	if (found != _octreeObjects.end())
-	{
-		_renderScene->removeElement(*found);
-		_octreeObjects.erase(found);
-	}
-	// ?? CESAR TODO
-	// BFC_REMOVE();
-}
-
 bool Link::hasChildren() const { return _children.size() > 0; };
-bool Link::hasParent() const { return _parent != nullptr && _parent != _renderScene->getRootLink(); }
+bool Link::hasParent() const { return _parent != nullptr && _parent != _scene->getRootLink(); }
 bool Link::hasParent(const Link *parent) const { return _parent == parent; }
 const std::vector<Link*> &Link::getChildren() const { return _children; }
 
@@ -189,7 +170,7 @@ const glm::mat4 &Link::getGlobalTransform()
 
 
 Link::Link()
-	:_renderScene(nullptr)
+	:_scene(nullptr)
 	, _entityPtr(nullptr)
 {
 	reset();
@@ -197,8 +178,8 @@ Link::Link()
 
 Link::Link(EntityData *entity, AScene *scene)
 {
-	_renderScene = scene->getRenderScene();
 	_entityPtr = entity;
+	_scene = scene;
 	reset();
 #ifdef AGE_BFC
 	initBFC(scene->getBfcBlockManagerFactory(), scene->getBfcLinkTracker());
@@ -333,9 +314,9 @@ void Link::_removeChild(Link *ptr)
 
 void Link::_detachFromRoot()
 {
-	if (!_renderScene || !_parent)
+	if (!_scene || !_parent)
 		return; // because it's root
-	auto root = _renderScene->getRootLink();
+	auto root = _scene->getRootLink();
 	if (_parent == root)
 	{
 		root->_removeChild(this);
@@ -345,11 +326,11 @@ void Link::_detachFromRoot()
 
 void Link::_attachToRoot()
 {
-	if (!_renderScene)
+	if (!_scene)
 		return; // because it's root
 	if (!hasParent())
 	{
-		auto root = _renderScene->getRootLink();
+		auto root = _scene->getRootLink();
 		root->_setChild(this);
 	}
 }
@@ -369,11 +350,6 @@ void Link::_updateGlobalTransform()
 		p = _parent->getGlobalTransform();
 	}
 	_globalTransformation = p * getLocalTransform();
-	for (auto &e : _octreeObjects)
-	{
-		AGE_ASSERT(!e.invalid());
-		_renderScene->setTransform(_globalTransformation, e);
-	}
 	for (auto &e : _children)
 	{
 		e->_updateGlobalTransform();

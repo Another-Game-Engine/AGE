@@ -258,78 +258,72 @@ namespace AGE
 			_context->setScreenSize(msg.size);
 		});
 
-		registerCallback<Commands::ToRender::CopyDrawLists>([&](Commands::ToRender::CopyDrawLists& msg)
-		{
-			SCOPE_profile_cpu_i("RenderTimer", "CopyDrawLists");
-			_drawlists.push_back(msg.listContainer);
-		});
+		//registerCallback<Commands::ToRender::RenderDrawLists>([&](Commands::ToRender::RenderDrawLists& msg)
+		//{
+		//	if (_drawlists.empty()) // nothing to draw
+		//		return;
 
-		registerCallback<Commands::ToRender::RenderDrawLists>([&](Commands::ToRender::RenderDrawLists& msg)
-		{
-			if (_drawlists.empty()) // nothing to draw
-				return;
+		//	SCOPE_profile_cpu_i("RenderTimer", "RenderDrawLists");
 
-			SCOPE_profile_cpu_i("RenderTimer", "RenderDrawLists");
+		//	for (auto &_drawlistPtr : _drawlists)
+		//	{
+		//		SCOPE_profile_cpu_i("RenderTimer", "Render one DrawList");
 
-			for (auto &_drawlistPtr : _drawlists)
-			{
-				SCOPE_profile_cpu_i("RenderTimer", "Render one DrawList");
+		//		// DEBUG DRAW DEGUEULASSE
+		//		std::shared_ptr<Painter> painterPtr = nullptr;
+		//		{
 
-				// DEBUG DRAW DEGUEULASSE
-				std::shared_ptr<Painter> painterPtr = nullptr;
-				{
+		//			SCOPE_profile_cpu_i("RenderTimer", "RenderDebugLines");
+		//			std::vector<unsigned int> indices;
+		//			auto type = std::make_pair<GLenum, std::string>(GL_FLOAT_VEC2, "position");
+		//			std::vector<std::pair < GLenum, std::string > > types;
+		//			types.push_back(type);
 
-					SCOPE_profile_cpu_i("RenderTimer", "RenderDebugLines");
-					std::vector<unsigned int> indices;
-					auto type = std::make_pair<GLenum, std::string>(GL_FLOAT_VEC2, "position");
-					std::vector<std::pair < GLenum, std::string > > types;
-					types.push_back(type);
+		//			indices.resize(debug2DlinesPoints.size());
+		//			for (int i = 0; i < debug2DlinesPoints.size(); ++i)
+		//			{
+		//				indices[i] = i;
+		//			}
+		//			if (!paintingManager->has_painter(types))
+		//			{
+		//				debug2Dlines.painterKey = paintingManager->add_painter(std::move(types));
+		//			}
+		//			else
+		//			{
+		//				debug2Dlines.painterKey = paintingManager->get_painter(types);
+		//			}
+		//			Key<Painter> kk = debug2Dlines.painterKey;
 
-					indices.resize(debug2DlinesPoints.size());
-					for (int i = 0; i < debug2DlinesPoints.size(); ++i)
-					{
-						indices[i] = i;
-					}
-					if (!paintingManager->has_painter(types))
-					{
-						debug2Dlines.painterKey = paintingManager->add_painter(std::move(types));
-					}
-					else
-					{
-						debug2Dlines.painterKey = paintingManager->get_painter(types);
-					}
-					Key<Painter> kk = debug2Dlines.painterKey;
+		//			painterPtr = paintingManager->get_painter(debug2Dlines.painterKey);
 
-					painterPtr = paintingManager->get_painter(debug2Dlines.painterKey);
+		//			debug2Dlines.verticesKey = painterPtr->add_vertices(debug2DlinesPoints.size(), indices.size());
+		//			auto vertices = painterPtr->get_vertices(debug2Dlines.verticesKey);
 
-					debug2Dlines.verticesKey = painterPtr->add_vertices(debug2DlinesPoints.size(), indices.size());
-					auto vertices = painterPtr->get_vertices(debug2Dlines.verticesKey);
+		//			vertices->set_data<glm::vec2>(debug2DlinesPoints, std::string("position"));
+		//			vertices->set_indices(indices);
 
-					vertices->set_data<glm::vec2>(debug2DlinesPoints, std::string("position"));
-					vertices->set_indices(indices);
+		//			debug2DlinesPoints.clear();
+		//		}
 
-					debug2DlinesPoints.clear();
-				}
+		//		// CEST VRAIMENT DEGUEULASSE...
 
-				// CEST VRAIMENT DEGUEULASSE...
+		//		{
+		//			SCOPE_profile_cpu_i("RenderTimer", "Render cameras");
 
-				{
-					SCOPE_profile_cpu_i("RenderTimer", "Render cameras");
+		//			auto &drawlist = _drawlistPtr->container.cameras;
+		//			for (auto &curCamera : drawlist)
+		//			{
+		//				SCOPE_profile_gpu_i("RenderCameraDrawList");
+		//				SCOPE_profile_cpu_i("RenderTimer", "RenderCamera");
+		//				AGE_ASSERT(!(pipelines[curCamera.camInfos.data.pipeline] == nullptr));
+		//				//pipelines[curCamera.camInfos.data.pipeline]->render(curCamera.pipeline, curCamera.lights, curCamera.camInfos);
+		//			}
+		//		}
 
-					auto &drawlist = _drawlistPtr->container.cameras;
-					for (auto &curCamera : drawlist)
-					{
-						SCOPE_profile_gpu_i("RenderCameraDrawList");
-						SCOPE_profile_cpu_i("RenderTimer", "RenderCamera");
-						AGE_ASSERT(!(pipelines[curCamera.camInfos.data.pipeline] == nullptr));
-						//pipelines[curCamera.camInfos.data.pipeline]->render(curCamera.pipeline, curCamera.lights, curCamera.camInfos);
-					}
-				}
-
-				painterPtr->remove_vertices(debug2Dlines.verticesKey);
-			}
-			_drawlists.clear();
-		});
+		//		painterPtr->remove_vertices(debug2Dlines.verticesKey);
+		//	}
+		//	_drawlists.clear();
+		//});
 
 		registerCallback<AGE::DRBCameraDrawableListCommand>([&](AGE::DRBCameraDrawableListCommand &msg){
 			pipelines[RenderType::DEFERRED]->render(msg.list->meshs, RenderLightList(), msg.list->cameraInfos);

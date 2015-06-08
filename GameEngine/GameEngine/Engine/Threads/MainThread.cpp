@@ -4,7 +4,6 @@
 #include "ThreadManager.hpp"
 #include "RenderThread.hpp"
 #include <Threads/Tasks/ToRenderTasks.hpp>
-#include <Threads/PrepareRenderThread.hpp>
 #include <Threads/Tasks/BasicTasks.hpp>
 #include <Utils/Debug.hpp>
 #include <Utils/Profiler.hpp>
@@ -151,14 +150,7 @@ namespace AGE
 	{
 		if (!release())
 			return false;
-		GetPrepareThread()->stop();
+		GetRenderThread()->stop();
 		return true;
 	}
-
-	void MainThread::setSceneAsActive(AScene *scene)
-	{
-		_activeScene = scene;
-		GetPrepareThread()->getQueue()->emplaceCommand<Commands::MainToPrepare::SetCurrentScene>(scene);
-	}
-
 }
