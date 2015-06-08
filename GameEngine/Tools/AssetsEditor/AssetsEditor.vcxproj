@@ -110,6 +110,7 @@
     <ClCompile Include="Components\EntityRepresentation.cpp" />
     <ClCompile Include="Convertor\ConvertorStatusManager.cpp" />
     <ClCompile Include="Convertor\MeshLoader.cpp" />
+    <ClCompile Include="Convertor\PhysicsLoader.cpp" />
     <ClCompile Include="EditorConfiguration.cpp" />
     <ClCompile Include="Entities\EntityReadablePacker.cpp" />
     <ClCompile Include="Entities\ReadableEntity.cpp" />
@@ -141,7 +142,7 @@
     <ClInclude Include="Convertor\AnimationsLoader.hpp" />
     <ClInclude Include="Convertor\AssetDataSet.hpp" />
     <ClInclude Include="Convertor\AssimpLoader.hpp" />
-    <ClInclude Include="Convertor\BulletLoader.hpp" />
+    <ClInclude Include="Convertor\PhysicsLoader.hpp" />
     <ClInclude Include="Convertor\CookingTask.hpp" />
     <ClInclude Include="Convertor\ImageLoader.hpp" />
     <ClInclude Include="Convertor\MaterialConvertor.hpp" />

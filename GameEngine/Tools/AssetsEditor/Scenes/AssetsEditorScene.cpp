@@ -18,7 +18,7 @@
 #include <Convertor/MeshLoader.hpp>
 #include <Convertor/MaterialConvertor.hpp>
 #include <Convertor/ImageLoader.hpp>
-#include <Convertor/BulletLoader.hpp>
+#include <Convertor/PhysicsLoader.hpp>
 #include <Convertor/ConvertorStatusManager.hpp>
 
 #include <AssetFiles/Folder.hpp>
@@ -47,8 +47,8 @@ namespace AGE
 	std::vector<const char *> AssetsEditorScene::_cookedMeshsFullPath = std::vector<const char *>();
 	std::vector<const char *> AssetsEditorScene::_cookedMeshFiles = std::vector<const char *>();
 
-	std::vector<const char *> AssetsEditorScene::_cookedBulletFullPath = std::vector<const char *>();
-	std::vector<const char *> AssetsEditorScene::_cookedBulletFiles = std::vector<const char *>();
+	std::vector<const char *> AssetsEditorScene::_cookedPhysicsFullPath = std::vector<const char *>();
+	std::vector<const char *> AssetsEditorScene::_cookedPhysicsFiles = std::vector<const char *>();
 
 	std::vector<const char *> AssetsEditorScene::_cookedMaterialFullPath = std::vector<const char *>();
 	std::vector<const char *> AssetsEditorScene::_cookedMaterialFiles = std::vector<const char *>();
@@ -84,8 +84,8 @@ namespace AGE
 		static float refreshCounter = 1.0f;
 		if (refreshCounter >= 1.0f)
 		{
-			_cookedBulletFiles.clear();
-			_cookedBulletFullPath.clear();
+			_cookedPhysicsFiles.clear();
+			_cookedPhysicsFullPath.clear();
 			_cookedMaterialFiles.clear();
 			_cookedMaterialFullPath.clear();
 			_cookedMeshFiles.clear();
@@ -94,8 +94,8 @@ namespace AGE
 			_cookedTextureFiles.clear();
 			_cookedTextureFullPath.clear();
 
-			_cookedBulletFiles.push_back("NONE");
-			_cookedBulletFullPath.push_back("NONE");
+			_cookedPhysicsFiles.push_back("NONE");
+			_cookedPhysicsFullPath.push_back("NONE");
 			_cookedMaterialFiles.push_back("NONE");
 			_cookedMaterialFullPath.push_back("NONE");
 			_cookedMeshFiles.push_back("NONE");
@@ -127,8 +127,8 @@ namespace AGE
 					}
 					else if (extension == "phage")
 					{
-						_cookedBulletFiles.push_back(_cookedFiles.back().fileName.c_str());
-						_cookedBulletFullPath.push_back(_cookedFiles.back().fullPath.c_str());
+						_cookedPhysicsFiles.push_back(_cookedFiles.back().fileName.c_str());
+						_cookedPhysicsFullPath.push_back(_cookedFiles.back().fullPath.c_str());
 					}
 					else if (extension == "tage")
 					{

@@ -63,7 +63,6 @@ namespace AGE
 
 		//Physic Options
 		bool staticConcave = true;
-		bool dynamicConcave = true;
 
 		// Textures options
 		bool compressTextures = false;
