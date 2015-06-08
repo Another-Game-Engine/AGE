@@ -72,17 +72,6 @@ namespace AGE
 		_materialPath = material->path;
 		_mesh = mesh;
 		_material = material;
-#ifndef AGE_BFC
-		if (!_key.invalid())
-		{
-			entity->getLink().unregisterOctreeObject(_key);
-		}
-
-		//create key
-		_key = AGE::GetPrepareThread()->addMesh();
-		entity->getLink().registerOctreeObject(_key);
-#else
-#endif
 		_updateGeometry();
 		return true;
 	}
@@ -90,13 +79,11 @@ namespace AGE
 	void MeshRenderer::enableRenderMode(RenderModes mode)
 	{
 		_renderMode[mode] = true;
-		//_updateGeometry();
 	}
 
 	void MeshRenderer::disableRenderMode(RenderModes mode)
 	{
 		_renderMode[mode] = false;
-		_updateGeometry();
 	}
 
 	void MeshRenderer::_copyFrom(const ComponentBase *model)
@@ -136,10 +123,6 @@ namespace AGE
 		{
 			return;
 		}
-#ifndef AGE_BFC
-		AGE::GetPrepareThread()->updateGeometry(_key, _mesh->subMeshs, _material->datas);
-		AGE::GetPrepareThread()->updateRenderMode(_key, _renderMode);
-#else
 		auto manager = entity->getScene()->getInstance<GraphicElementManager>();
 		if (_drawableHandle.size() != 0)
 		{
@@ -156,7 +139,6 @@ namespace AGE
 			entity->getLink().pushAnObject(handle);
 			_drawableHandle.push_back(handle);
 		}
-#endif
 	}
 
 	void MeshRenderer::postUnserialization()

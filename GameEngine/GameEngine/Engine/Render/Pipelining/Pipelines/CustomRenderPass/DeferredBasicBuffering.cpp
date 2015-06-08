@@ -164,9 +164,9 @@ namespace AGE
 
 			for (auto &meshPaint : meshList)
 			{
-				auto painter = _painterManager->get_painter(meshPaint->painter);
+				auto painter = _painterManager->get_painter(meshPaint->getPainterKey());
 				meshPaint->globalProperties.update_properties(_programs[PROGRAM_BUFFERING]);
-				painter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], meshPaint->individualProperties, meshPaint->vertices);
+				painter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], meshPaint->individualProperties, meshPaint->getVerticesKey());
 
 			}
 		}

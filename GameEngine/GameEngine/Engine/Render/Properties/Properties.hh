@@ -4,6 +4,7 @@
 #include <memory>
 #include <Render/Properties/IProperty.hh>
 #include <Render/Key.hh>
+#include <Utils/RWLock.hpp>
 
 namespace AGE
 {
@@ -14,7 +15,7 @@ namespace AGE
 		Properties() = default;
 		Properties(std::vector<std::shared_ptr<IProperty>> const &properties);
 		Properties(Properties &&other);
-		Properties(Properties const &) = default;
+		Properties(Properties const &);
 		Properties &operator=(Properties const &) = default;
 		~Properties() = default;
 
@@ -40,11 +41,13 @@ namespace AGE
 
 	private:
 		std::vector<std::shared_ptr<IProperty>> _properties;
+		mutable RWLock _lock;
 	};
 
 	template <typename type_t>
 	std::shared_ptr<type_t> Properties::get_property(Key<Property> const &key)
 	{
+		RWLockGuard lock(_lock, false);
 		return (std::static_pointer_cast<type_t>(_properties[key.getId()]));
 	}
 }

@@ -25,8 +25,8 @@ namespace AGE
 
 		DRBMesh *drbMesh = _meshPool.create();
 
-		drbMesh->datas->vertices = meshInstance.vertices;
-		drbMesh->datas->painter = meshInstance.painter;
+		drbMesh->datas->setVerticesKey(meshInstance.vertices);
+		drbMesh->datas->setPainterKey(meshInstance.painter);
 		
 		// TODO merge Mesh properties with global properties
 		//drbMesh->datas->globalProperties = meshInstance.properties;

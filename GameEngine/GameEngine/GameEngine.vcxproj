@@ -258,6 +258,7 @@
     <ClCompile Include="Engine\Entities\EntityBinaryPacker.cpp" />
     <ClCompile Include="Engine\Graphic\DRBData.cpp" />
     <ClCompile Include="Engine\Graphic\DRBMesh.cpp" />
+    <ClCompile Include="Engine\Graphic\DRBMeshData.cpp" />
     <ClCompile Include="Engine\Graphic\GraphicElementManager.cpp" />
     <ClCompile Include="Engine\Render\OcclusionTools\DepthMap.cpp" />
     <ClCompile Include="Engine\Render\OcclusionTools\DepthMapHandle.cpp" />
@@ -444,6 +445,7 @@
     <ClCompile Include="Engine\Utils\UniqueTypeId.cpp" />
     <ClCompile Include="Engine\Core\Inputs\Joystick.cpp" />
     <ClCompile Include="Engine\Components\FreeFlyComponent.cpp" />
+    <ClCompile Include="Engine\Utils\RWLock.cpp" />
     <ClCompile Include="Engine\WorldEditorGlobal.cpp" />
     <ClCompile Include="Engine\Render\OpenGLTask\OpenGLState.cpp" />
   </ItemGroup>
@@ -684,6 +686,7 @@
     <ClInclude Include="Engine\Utils\Debug.hpp" />
     <ClInclude Include="Engine\Utils\Profile.hpp" />
     <ClInclude Include="Engine\Utils\Profiler.hpp" />
+    <ClInclude Include="Engine\Utils\RWLock.hpp" />
     <ClInclude Include="Engine\Utils\Serialization\btSerialization.hpp" />
     <ClInclude Include="Engine\Utils\StreamBuffer.hpp" />
     <ClInclude Include="Engine\Utils\BufferPool.hpp" />

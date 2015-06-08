@@ -70,7 +70,6 @@ namespace AGE
 
 	private:
 		friend class cereal::access;
-		AGE::PrepareKey _key;
 		std::shared_ptr<AGE::MeshInstance> _mesh;
 		std::shared_ptr<AGE::MaterialSetInstance> _material;
 		std::string _meshPath;

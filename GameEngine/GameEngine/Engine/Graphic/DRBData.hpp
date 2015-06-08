@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Render\Properties\Properties.hh"
+#include "Utils/RWLock.hpp"
 
 namespace AGE
 {
@@ -13,5 +14,8 @@ namespace AGE
 
 		DRBData();
 		virtual ~DRBData(){}
+
+	protected:
+		mutable RWLock _lock;
 	};
 }
