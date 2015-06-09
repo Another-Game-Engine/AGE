@@ -586,6 +586,9 @@
     <ClInclude Include="Engine\Graphic\DRBData.hpp" />
     <ClInclude Include="Engine\Graphic\DRBMeshData.hpp" />
     <ClInclude Include="Engine\Utils\RWLock.hpp" />
+    <ClInclude Include="Engine\Graphic\DRBLightElementManager.hpp" />
+    <ClInclude Include="Engine\Graphic\DRBPointLight.hpp" />
+    <ClInclude Include="Engine\Graphic\DRBPointLightData.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

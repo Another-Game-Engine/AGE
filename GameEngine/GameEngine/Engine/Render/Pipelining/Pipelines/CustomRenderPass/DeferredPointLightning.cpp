@@ -125,8 +125,10 @@ namespace AGE
 			_programs[PROGRAM_LIGHTNING]->use();
 			_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("model_matrix").set(pl.light.sphereTransform);
 			_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("position_light").set(glm::vec3(pl.light.sphereTransform[3]));
-			_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("attenuation_light").set(pl.light.data.range);
-			_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("color_light").set(pl.light.data.color);
+			// @TRC to fix
+			//_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("attenuation_light").set(pl.light.data.range);
+			// @TRC to fix
+			//_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("color_light").set(pl.light.data.color);
 			_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("ambient_color").set(glm::vec3(0));
 
 			// We clear the stencil buffer

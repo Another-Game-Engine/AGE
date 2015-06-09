@@ -479,7 +479,10 @@
     <ClInclude Include="Engine\Graphic\DRBData.hpp" />
     <ClInclude Include="Engine\Graphic\DRBMesh.hpp" />
     <ClInclude Include="Engine\Graphic\DRBMeshData.hpp" />
+    <ClInclude Include="Engine\Graphic\DRBPointLight.hpp" />
+    <ClInclude Include="Engine\Graphic\DRBPointLightData.hpp" />
     <ClInclude Include="Engine\Graphic\GraphicElementManager.hpp" />
+    <ClInclude Include="Engine\Graphic\DRBLightElementManager.hpp" />
     <ClInclude Include="Engine\Physics\BoxColliderInterface.hpp" />
     <ClInclude Include="Engine\Physics\CapsuleColliderInterface.hpp" />
     <ClInclude Include="Engine\Physics\ColliderInterface.hpp" />

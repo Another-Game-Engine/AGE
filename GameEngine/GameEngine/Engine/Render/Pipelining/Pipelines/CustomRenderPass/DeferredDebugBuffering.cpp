@@ -76,7 +76,8 @@ namespace AGE
 			SCOPE_profile_cpu_i("RenderTimer", "Render point lights");
 			for (auto &pl : renderLight.pointLight)
 			{
-				_programs[PROGRAM_BUFFERING_LIGHT]->get_resource<Sampler2D>("sprite_light").set(std::static_pointer_cast<Texture2D>(pl.light.data.map));
+				// @TRC to fix
+				//_programs[PROGRAM_BUFFERING_LIGHT]->get_resource<Sampler2D>("sprite_light").set(std::static_pointer_cast<Texture2D>(pl.light.data.map));
 				_programs[PROGRAM_BUFFERING_LIGHT]->get_resource<Mat4>("model_matrix").set(pl.light.transformation);
 				_quadPainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING_LIGHT], Properties(), _quadVertices);
 			}

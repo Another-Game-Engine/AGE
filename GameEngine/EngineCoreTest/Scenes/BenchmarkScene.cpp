@@ -234,7 +234,6 @@ namespace AGE
 
 				if (i % 13 == 0)
 				{
-					//e->addComponent<PointLightComponent>()->set(PointLightData(glm::vec3((float)(rand() % 1000) / 1000.0f, (float)(rand() % 1000) / 1000.0f, (float)(rand() % 1000) / 1000.0f), glm::vec3(1.f, 0.1f, 0.005f)));
 				}
 				e->addComponent<RigidBody>();
 				mesh->enableRenderMode(RenderModes::AGE_OPAQUE);

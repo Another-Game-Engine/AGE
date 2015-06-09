@@ -13,17 +13,10 @@
 namespace AGE
 {
 	
-	PointLightData::PointLightData(glm::vec3 const &color, glm::vec3 const &range, std::shared_ptr<ITexture> const &map)
-		: color(color),
-		range(range),
-		map(map)
-	{
-
-	}
-
 	PointLightComponent::PointLightComponent(PointLightComponent const &o)
-		: _key(o._key)
-		, _data(o._data)
+		: color(o.color),
+		range(o.range),
+		map(o.map)
 	{
 		postUnserialization();
 	}
@@ -31,37 +24,24 @@ namespace AGE
 	void PointLightComponent::_copyFrom(const ComponentBase *model)
 	{
 		auto o = static_cast<const PointLightComponent*>(model);
-		_data.range = o->_data.range;
-		_data.color = o->_data.color;
+		range = o->range;
+		color = o->color;
 		postUnserialization();
 	}
 
 	void PointLightComponent::reset()
 	{
-		if (!_key.invalid())
-		{
-			//entity->getLink().unregisterOctreeObject(_key);
-		}
-		_key = AGE::PrepareKey();
-		_data.color = glm::vec3(1);
-		_data.range = glm::vec3(1.0f, 0.01f, 0.001f);
-		_data.map = nullptr;
+		color = glm::vec3(1);
+		range = glm::vec3(1.0f, 0.01f, 0.001f);
+		map = nullptr;
 	}
 
 	void PointLightComponent::init()
 	{
 		//_key = AGE::GetPrepareThread()->addPointLight();
 		//entity->getLink().registerOctreeObject(_key);
-		_data.map = entity->getScene()->getInstance<AssetsManager>()->getPointLightTexture();
-		assert(!_key.invalid());
-		set(_data);
-	}
-
-	PointLightComponent &PointLightComponent::set(PointLightData const &data)
-	{
-		_data = data;
-		//AGE::GetPrepareThread()->setPointLight(_data, _key);
-		return (*this);
+		map = entity->getScene()->getInstance<AssetsManager>()->getPointLightTexture();
+		//set(_data);
 	}
 
 	float		PointLightComponent::computePointLightRange(float minValue, glm::vec3 const &attenuation)
@@ -88,7 +68,7 @@ namespace AGE
 	void PointLightComponent::postUnserialization()
 	{
 		init();
-		set(_data);
+		//set(_data);
 	}
 
 #ifdef EDITOR_ENABLED
@@ -101,14 +81,14 @@ namespace AGE
 	bool PointLightComponent::editorUpdate()
 	{
 		bool modified = false;
-		if (ImGui::ColorEdit3("Color", glm::value_ptr(_data.color)))
+		if (ImGui::ColorEdit3("Color", glm::value_ptr(color)))
 		{
-			set(_data);
+			//set(_data);
 			modified = true;
 		}
-		if (ImGui::SliderFloat3("Range", glm::value_ptr(_data.range), 0.0f, 1.0f))
+		if (ImGui::SliderFloat3("Range", glm::value_ptr(range), 0.0f, 1.0f))
 		{
-			set(_data);
+			//set(_data);
 			modified = true;
 		}
 		return modified;
