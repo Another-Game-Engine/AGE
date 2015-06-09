@@ -1,6 +1,4 @@
 #include <Audio/AudioManager.hh>
-#include <cassert>
-#include <iostream>
 
 AudioManager::AudioManager() :
 	_isInit(false)
@@ -24,7 +22,7 @@ bool AudioManager::isInitialized()
 	return this->_isInit;
 }
 
-bool AudioManager::loadFile(std::string const path, std::string soundName)
+bool AudioManager::loadFile(std::string const& path, std::string const& soundName)
 {
 	SoLoud::Wav* sample = new SoLoud::Wav();
 	auto res = sample->load(path.c_str());
@@ -33,7 +31,7 @@ bool AudioManager::loadFile(std::string const path, std::string soundName)
 	return true;
 }
 
-bool AudioManager::loadMem(std::string path, std::string soundName)
+bool AudioManager::loadMem(std::string const& path, std::string const& soundName)
 {
 	std::cerr << "ERROR: The memberfunction AudioManager::loadMem() is not yet implemented | "
 		<< __FILE__ << ":"
@@ -41,7 +39,7 @@ bool AudioManager::loadMem(std::string path, std::string soundName)
 	return false;
 }
 
-bool AudioManager::loadStream(std::string path, std::string soundName)
+bool AudioManager::loadStream(std::string const& path, std::string const& soundName)
 {
 	std::cerr << "ERROR: The memberfunction AudioManager::loadStream() is not yet implemented | "
 		<< __FILE__ << ":"
@@ -63,7 +61,7 @@ void AudioManager::setVolume(float volume)
 		this->_soloud.setGlobalVolume(volume);
 }
 
-void AudioManager::play(std::string soundName)
+void AudioManager::play(std::string const& soundName)
 {
 	if (_isInit)
 	{
@@ -76,7 +74,7 @@ void AudioManager::play(std::string soundName)
 	}
 }
 
-void AudioManager::pause(std::string soundName)
+void AudioManager::pause(std::string const& soundName)
 {
 	if (_isInit)
 	{
@@ -89,7 +87,7 @@ void AudioManager::pause(std::string soundName)
 	}
 }
 
-void AudioManager::stop(std::string soundName)
+void AudioManager::stop(std::string const& soundName)
 {
 	if (_isInit)
 	{
@@ -99,7 +97,7 @@ void AudioManager::stop(std::string soundName)
 	}
 }
 
-void AudioManager::setLooping(std::string soundName, bool looping)
+void AudioManager::setLooping(std::string const& soundName, bool looping)
 {
 	auto sound = _audios.find(soundName)->second;
 	if (sound->getState() != Audio::STOP)
@@ -107,7 +105,7 @@ void AudioManager::setLooping(std::string soundName, bool looping)
 	sound->setLooping(looping);
 }
 
-void AudioManager::setVolume(std::string soundName, float volume)
+void AudioManager::setVolume(std::string const& soundName, float volume)
 {
 	auto sound = _audios.find(soundName)->second;
 	if (sound->getState() != Audio::STOP)
@@ -115,7 +113,7 @@ void AudioManager::setVolume(std::string soundName, float volume)
 	sound->setVolume(volume);
 }
 
-void AudioManager::setSpeed(std::string soundName, float speed)
+void AudioManager::setSpeed(std::string const& soundName, float speed)
 {
 	auto sound = _audios.find(soundName)->second;
 	if (sound->getState() != Audio::STOP)
@@ -123,7 +121,7 @@ void AudioManager::setSpeed(std::string soundName, float speed)
 	sound->setSpeed(speed);
 }
 
-void AudioManager::setPan(std::string soundName, float pan)
+void AudioManager::setPan(std::string const& soundName, float pan)
 {
 	auto sound = _audios.find(soundName)->second;
 	if (sound->getState() != Audio::STOP)

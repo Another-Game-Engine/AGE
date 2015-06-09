@@ -235,7 +235,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\Vendors\imgui\imgui.cpp" />
-    <ClCompile Include="Audio.cpp" />
+    <ClCompile Include="Engine\Audio\Audio.cpp" />
     <ClCompile Include="Engine\BFC\BFCBlock.cpp" />
     <ClCompile Include="Engine\BFC\BFCBlockManager.cpp" />
     <ClCompile Include="Engine\BFC\BFCBlockManagerFactory.cpp" />
@@ -439,7 +439,7 @@
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
     <ClInclude Include="..\Vendors\imgui\imgui.h" />
     <ClInclude Include="..\Vendors\imgui\stb_textedit.h" />
-    <ClInclude Include="Audio.hh" />
+    <ClInclude Include="Engine\Audio\Audio.hh" />
     <ClInclude Include="Engine\BFC\BFCBlock.hpp" />
     <ClInclude Include="Engine\BFC\BFCBlockManager.hpp" />
     <ClInclude Include="Engine\BFC\BFCBlockManagerFactory.hpp" />

@@ -218,7 +218,7 @@
     <ClCompile Include="Engine\BFC\BFCBlockManager.cpp" />
     <ClCompile Include="Engine\BFC\BFCBlockManagerFactory.cpp" />
     <ClCompile Include="Engine\BFC\BFCLink.cpp" />
-    <ClCompile Include="Audio.cpp" />
+    <ClCompile Include="Engine\Audio\Audio.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -576,7 +576,7 @@
     <ClInclude Include="Engine\BFC\BFCItemID.hpp" />
     <ClInclude Include="Engine\BFC\BFCLink.hpp" />
     <ClInclude Include="Engine\BFC\BFCBlockManagerFactory.hpp" />
-    <ClInclude Include="Audio.hh" />
+    <ClInclude Include="Engine\Audio\Audio.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />
