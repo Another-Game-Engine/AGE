@@ -2,75 +2,131 @@
 #include <cassert>
 #include <iostream>
 
-AudioManager::AudioManager()
+AudioManager::AudioManager() :
+	_isInit(false)
 {}
 
 AudioManager::~AudioManager()
 {
+	this->_isInit = false;
 	this->_soloud.deinit();
-	/*
-	_audios.clear();
-	for (auto &&e : _channelGroups)
-	{
-		e.second->release();
-	}
-	_channelGroups.clear();
-	if (_system)
-	{
-		_system->close();
-		_system->release();
-	}*/
 }
 
 bool AudioManager::init()
 {
 	this->_soloud.init();
+	this->_isInit = true;
 	return true;
 }
-/*
-void AudioManager::update()
+
+bool AudioManager::isInitialized()
 {
-	_system->update();
+	return this->_isInit;
 }
 
-std::shared_ptr<Audio> AudioManager::loadSound(const OldFile &file, Audio::AudioSpatialType spacialType, const std::string &name)
+bool AudioManager::loadFile(std::string const path, std::string soundName)
 {
-	std::string tname = name.empty() ? file.getShortFileName() : name;
-	if (_audios.find(tname) != std::end(_audios))
-		return _audios[tname];
+	SoLoud::Wav* sample = new SoLoud::Wav();
+	auto res = sample->load(path.c_str());
+	Audio* sound = new Audio(*sample);
+	this->_audios.insert(std::pair<const std::string, Audio*>(soundName, sound));
+	return true;
+}
 
-	std::shared_ptr<Audio> audio{ new Audio(shared_from_this(), file, Audio::AudioType::AUDIO_SOUND, name) };
-	if (!audio->load(spacialType))
+bool AudioManager::loadMem(std::string path, std::string soundName)
+{
+	std::cerr << "ERROR: The memberfunction AudioManager::loadMem() is not yet implemented | "
+		<< __FILE__ << ":"
+		<< __LINE__ << std::endl;
+	return false;
+}
+
+bool AudioManager::loadStream(std::string path, std::string soundName)
+{
+	std::cerr << "ERROR: The memberfunction AudioManager::loadStream() is not yet implemented | "
+		<< __FILE__ << ":"
+		<< __LINE__ << std::endl;
+	return false;
+}
+
+float AudioManager::getVolume(void)
+{
+	if (_isInit)
+		return this->_soloud.getGlobalVolume();
+	else
+		return 0.f;
+}
+
+void AudioManager::setVolume(float volume)
+{
+	if (_isInit)
+		this->_soloud.setGlobalVolume(volume);
+}
+
+void AudioManager::play(std::string soundName)
+{
+	if (_isInit)
 	{
-//		std::cout << "Audio load failed : " << tname << std::endl;
-		return nullptr;
+		auto sound = _audios.find(soundName)->second;
+		if (sound->getState() == Audio::STOP)
+			_soloud.play(sound->getSample(), sound->getVolume(), sound->getPan(), 0);
+		if (sound->getState() == Audio::PAUSE)
+			_soloud.setPause(sound->getHandle(), 0);
+		sound->setState(Audio::PLAY);
 	}
-	_audios.insert(std::make_pair(tname, audio));
-	return audio;
 }
 
-std::shared_ptr<Audio> AudioManager::loadStream(const OldFile &file, Audio::AudioSpatialType spacialType, const std::string &name)
+void AudioManager::pause(std::string soundName)
 {
-	std::string tname = name.empty() ? file.getShortFileName() : name;
-	if (_audios.find(tname) != std::end(_audios))
-		return _audios[tname];
-	std::shared_ptr<Audio> audio{ new Audio(shared_from_this() , file, Audio::AudioType::AUDIO_STREAM, name) };
-	if (!audio->load(spacialType))
+	if (_isInit)
 	{
-//		std::cout << "Audio load failed : " << tname << std::endl;
-		return nullptr;
+		auto sound = _audios.find(soundName)->second;
+		if (sound->getState() == Audio::STOP)
+			_soloud.play(sound->getSample(), sound->getVolume(), sound->getPan(), 1);
+		if (sound->getState() == Audio::PLAY)
+			_soloud.setPause(sound->getHandle(), 1);
+		sound->setState(Audio::PAUSE);
 	}
-	_audios.insert(std::make_pair(tname, audio));
-	return audio;
 }
 
-FMOD::System *AudioManager::getSystem()
+void AudioManager::stop(std::string soundName)
 {
-	return _system;
+	if (_isInit)
+	{
+		auto sound = _audios.find(soundName)->second;
+		_soloud.stop(sound->getHandle());
+		sound->setState(Audio::STOP);
+	}
 }
 
-FMOD::ChannelGroup *AudioManager::getChannelGroup(ChannelGroupType type)
+void AudioManager::setLooping(std::string soundName, bool looping)
 {
-	assert(_channelGroups.find(type) != std::end(_channelGroups) && "Channel goup not found.");
-	return _channelGroups[type];
-}*/
+	auto sound = _audios.find(soundName)->second;
+	if (sound->getState() != Audio::STOP)
+		_soloud.setLooping(sound->getHandle(), looping);
+	sound->setLooping(looping);
+}
+
+void AudioManager::setVolume(std::string soundName, float volume)
+{
+	auto sound = _audios.find(soundName)->second;
+	if (sound->getState() != Audio::STOP)
+		_soloud.setVolume(sound->getHandle(), volume);
+	sound->setVolume(volume);
+}
+
+void AudioManager::setSpeed(std::string soundName, float speed)
+{
+	auto sound = _audios.find(soundName)->second;
+	if (sound->getState() != Audio::STOP)
+		_soloud.setRelativePlaySpeed(sound->getHandle(), speed);
+	sound->setSpeed(speed);
+}
+
+void AudioManager::setPan(std::string soundName, float pan)
+{
+	auto sound = _audios.find(soundName)->second;
+	if (sound->getState() != Audio::STOP)
+		_soloud.setPan(sound->getHandle(), pan);
+	sound->setPan(pan);
+}

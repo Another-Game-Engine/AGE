@@ -1,27 +1,39 @@
 #pragma once
 
+#include <soloud.h>
+#include <soloud_wav.h>
 #include <Audio/ChannelGroupType.hpp>
 #include <Utils/Dependency.hpp>
 #include <memory>
 #include <map>
+#include <audio.hh>
 #include <iostream>
-#include <soloud.h>
 
 class AudioManager : public std::enable_shared_from_this<AudioManager>, public Dependency<AudioManager>
 {
 public:
-	AudioManager();
-	virtual ~AudioManager();
+	AudioManager(void);
+	virtual ~AudioManager(void);
+
 	bool init();
-	void update();
-	/*std::shared_ptr<Audio> loadSound(const OldFile &file, Audio::AudioSpatialType spacialType, const std::string &name = "");
-	std::shared_ptr<Audio> loadStream(const OldFile &file, Audio::AudioSpatialType spacialType, const std::string &name = "");
-	FMOD::System *getSystem();
-	FMOD::ChannelGroup* getChannelGroup(ChannelGroupType type);
-	inline std::shared_ptr<Audio> getAudio(const std::string &name){ auto r = _audios.find(name); if (r == std::end(_audios)) return nullptr; return r->second; }*/
+	bool isInitialized();
+	bool loadFile(std::string path, std::string soundName);
+	bool loadMem(std::string path, std::string soundName);
+	bool loadStream(std::string path, std::string soundName);
+	float getVolume(void);
+	void  setVolume(float volume);
+
+	void play(std::string soundName);
+	void pause(std::string soundName);
+	void stop(std::string soundName);
+
+	void setLooping(std::string soundName, bool looping);
+	void setVolume(std::string soundName, float volume);
+	void setSpeed(std::string soundName, float speed);
+	void setPan(std::string soundName, float pan);
+
 private:
-	SoLoud::Soloud soloud;
-	/*
-	std::map<ChannelGroupType, FMOD::ChannelGroup*> _channelGroups;
-	std::map<std::string, std::shared_ptr<Audio>> _audios;*/
+	bool							_isInit;
+	SoLoud::Soloud					_soloud;
+	std::map<const std::string, Audio*>	_audios;
 };
