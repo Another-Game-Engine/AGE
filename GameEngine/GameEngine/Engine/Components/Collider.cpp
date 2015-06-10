@@ -282,7 +282,7 @@ namespace AGE
 			entity->getScene()->getInstance<Physics::PhysicsInterface>()->getWorld()->destroyCollider(collider);
 			collider = nullptr;
 		}
-		if (!entity->addComponent<RigidBody>())
+		if (!entity->haveComponent<RigidBody>())
 		{
 			entity->removeComponent<Private::PhysicsData>();
 		}
