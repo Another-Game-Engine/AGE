@@ -1,5 +1,7 @@
 #ifdef  SINGLETON_HH_
 
+#include <cassert>
+
 template<class T>
 T 	*Singleton<T>::_instance = nullptr;
 
