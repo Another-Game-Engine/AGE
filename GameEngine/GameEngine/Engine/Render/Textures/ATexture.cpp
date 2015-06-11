@@ -59,6 +59,12 @@ namespace AGE
 		return (_height);
 	}
 
+
+	GLint ATexture::nbrMipMap() const
+	{
+		return (_nbr_mip_map);
+	}
+
 	GLenum ATexture::internal_format() const
 	{
 		return (_internal_format);

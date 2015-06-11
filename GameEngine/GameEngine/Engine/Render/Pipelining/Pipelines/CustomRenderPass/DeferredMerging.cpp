@@ -80,6 +80,17 @@ namespace AGE
 			_programs[PROGRAM_MERGING]->get_resource<Sampler2D>("shiny_buffer").set(_shinyAccuInput);
 			_programs[PROGRAM_MERGING]->get_resource<Vec3>("ambient_color").set(_ambientColor);
 		}
+		{
+			SCOPE_profile_gpu_i("Get pixel value");
+			SCOPE_profile_cpu_i("RenderTimer", "Get pixel value");
+			std::vector<float> data_light;
+			_lightAccuInput->generateMipmaps();
+			_lightAccuInput->get(_lightAccuInput->nbrMipMap() - 2, GL_LUMINANCE, GL_FLOAT, data_light);
+			std::vector<float> data_shiny;
+			_shinyAccuInput->generateMipmaps();
+			_shinyAccuInput->get(_shinyAccuInput->nbrMipMap() - 2, GL_LUMINANCE, GL_FLOAT, data_shiny);
+			std::cout << data_shiny[0] + data_light[0] << std::endl;
+		}
 		OpenGLState::glDisable(GL_BLEND);
 		OpenGLState::glDisable(GL_CULL_FACE);
 		OpenGLState::glDisable(GL_DEPTH_TEST);
