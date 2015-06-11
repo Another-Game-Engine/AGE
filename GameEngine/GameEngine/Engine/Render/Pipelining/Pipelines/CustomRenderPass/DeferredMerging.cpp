@@ -81,8 +81,8 @@ namespace AGE
 			std::vector<glm::vec4> data_shiny;
 			_shinyAccuInput->generateMipmaps();
 			_shinyAccuInput->get(_shinyAccuInput->nbrMipMap() - 1, GL_RGBA, GL_FLOAT, data_shiny);
-			avgLogLuminance = (data_light[0].x + data_light[0].y + data_light[0].z) / 3.0f + (data_shiny[0].x + data_shiny[0].y + data_light[0].z) * 3.0f;
-			assert(avgLogLuminance != 0);
+			avgLogLuminance = 0.5f / ((data_light[0].x + data_light[0].y + data_light[0].z) / 3.0f + (data_shiny[0].x + data_shiny[0].y + data_light[0].z) / 3.0f) / 2.0f;
+			//std::cout << avgLogLuminance << std::endl;
 		}
 		SCOPE_profile_cpu_i("RenderTimer", "DefferedMerging pass");
 		{
