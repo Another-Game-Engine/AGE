@@ -15,7 +15,7 @@ namespace AGE
 	class DRBLightElementManager : public Dependency<DRBLightElementManager>
 	{
 	public:
-		GraphicElementManager(BFCBlockManagerFactory *factory);
+		DRBLightElementManager(BFCBlockManagerFactory *factory);
 		BFCCullableHandle addPointLight();
 		void removePointLight(BFCCullableHandle &handle);
 	private:

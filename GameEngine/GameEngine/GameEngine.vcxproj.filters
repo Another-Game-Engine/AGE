@@ -223,6 +223,7 @@
     <ClCompile Include="Engine\Graphic\DRBData.cpp" />
     <ClCompile Include="Engine\Graphic\DRBMeshData.cpp" />
     <ClCompile Include="Engine\Utils\RWLock.cpp" />
+    <ClCompile Include="Engine\Graphic\DRBLightElementManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -589,6 +590,7 @@
     <ClInclude Include="Engine\Graphic\DRBLightElementManager.hpp" />
     <ClInclude Include="Engine\Graphic\DRBPointLight.hpp" />
     <ClInclude Include="Engine\Graphic\DRBPointLightData.hpp" />
+    <ClInclude Include="Engine\Systems\RenderSpotLightSystem.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

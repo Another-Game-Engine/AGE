@@ -4,6 +4,10 @@
 #include <Threads/ThreadManager.hpp>
 #include <glm/glm.hpp>
 #include <AssetManagement/AssetManager.hh>
+#include "Render\Properties\Materials\Color.hh"
+#include "Render\Properties\Materials\MapColor.hh"
+#include "Graphic\DRBLightElementManager.hpp"
+
 
 #ifdef EDITOR_ENABLED
 #include <imgui\imgui.h>
@@ -34,14 +38,30 @@ namespace AGE
 		color = glm::vec3(1);
 		range = glm::vec3(1.0f, 0.01f, 0.001f);
 		map = nullptr;
+		_colorProp = nullptr;
+		_rangeProp = nullptr;
+		_mapProp = nullptr;
+
+		if (_graphicHandle.invalid() == false)
+		{
+			auto manager = entity->getScene()->getInstance<DRBLightElementManager>();
+			_graphicHandle = manager->removePointLight(_graphicHandle);
+		}
 	}
 
 	void PointLightComponent::init()
 	{
-		//_key = AGE::GetPrepareThread()->addPointLight();
-		//entity->getLink().registerOctreeObject(_key);
+		_colorProp = std::make_shared<Color>();
+		//_rangeProp = std::make_shared<Ratio>();
+		_mapProp = std::make_shared<MapColor>();
+
+		auto manager = entity->getScene()->getInstance<DRBLightElementManager>();
+		_graphicHandle = manager->addPointLight();
+
+		_graphicHandle->getPtr()->getDatas()->globalProperties.add_property(_colorProp);
+		_graphicHandle->getPtr()->getDatas()->globalProperties.add_property(_mapProp);
+
 		map = entity->getScene()->getInstance<AssetsManager>()->getPointLightTexture();
-		//set(_data);
 	}
 
 	float		PointLightComponent::computePointLightRange(float minValue, glm::vec3 const &attenuation)
