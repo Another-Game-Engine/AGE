@@ -17,13 +17,18 @@ namespace AGE
 		ARenderingPipeline(std::string("deferred shading"), painter_manager)
 	{
 		_diffuse = createRenderPassOutput<Texture2D>(screen_size.x, screen_size.y, GL_RGBA16F, true);
+		_diffuse->parameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		_diffuse->parameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		_normal = createRenderPassOutput<Texture2D>(screen_size.x, screen_size.y, GL_RGBA8, true);
 		_specular = createRenderPassOutput<Texture2D>(screen_size.x, screen_size.y, GL_RGBA8, true);
 		_depthStencil = createRenderPassOutput<Texture2D>(screen_size.x, screen_size.y, GL_DEPTH24_STENCIL8, true);
 		// RGB = light color, A = specular power
 		_lightAccumulation = createRenderPassOutput<Texture2D>(screen_size.x, screen_size.y, GL_RGBA16F, true);
+		_lightAccumulation->parameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		_lightAccumulation->parameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		_shinyAccumulation = createRenderPassOutput<Texture2D>(screen_size.x, screen_size.y, GL_RGBA16F, true);
-
+		_shinyAccumulation->parameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		_shinyAccumulation->parameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		// We create the render pass
 		std::shared_ptr<DeferredSkyBox> skybox = std::make_shared<DeferredSkyBox>(screen_size, _painter_manager, _diffuse, _depthStencil);
 		std::shared_ptr<DeferredBasicBuffering> basicBuffering = std::make_shared<DeferredBasicBuffering>(screen_size, _painter_manager, _diffuse, _normal, _specular, _depthStencil);
