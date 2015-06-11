@@ -75,13 +75,13 @@ namespace AGE
 		{
 			SCOPE_profile_gpu_i("Get pixel value");
 			SCOPE_profile_cpu_i("RenderTimer", "Get pixel value");
-			std::vector<float> data_light;
+			std::vector<glm::vec4> data_light;
 			_lightAccuInput->generateMipmaps();
-			_lightAccuInput->get(_lightAccuInput->nbrMipMap() - 2, GL_LUMINANCE, GL_FLOAT, data_light);
-			std::vector<float> data_shiny;
+			_lightAccuInput->get(_lightAccuInput->nbrMipMap() - 1, GL_RGBA, GL_FLOAT, data_light);
+			std::vector<glm::vec4> data_shiny;
 			_shinyAccuInput->generateMipmaps();
-			_shinyAccuInput->get(_shinyAccuInput->nbrMipMap() - 2, GL_LUMINANCE, GL_FLOAT, data_shiny);
-			avgLogLuminance = data_light[0] + data_shiny[0];
+			_shinyAccuInput->get(_shinyAccuInput->nbrMipMap() - 1, GL_RGBA, GL_FLOAT, data_shiny);
+			avgLogLuminance = (data_light[0].x + data_light[0].y + data_light[0].z) / 3.0f + (data_shiny[0].x + data_shiny[0].y + data_light[0].z) * 3.0f;
 			assert(avgLogLuminance != 0);
 		}
 		SCOPE_profile_cpu_i("RenderTimer", "DefferedMerging pass");
