@@ -16,7 +16,7 @@ namespace AGE
 	DeferredShading::DeferredShading(glm::uvec2 const &screen_size, std::shared_ptr<PaintingManager> const &painter_manager) :
 		ARenderingPipeline(std::string("deferred shading"), painter_manager)
 	{
-		_diffuse = createRenderPassOutput<Texture2D>(screen_size.x, screen_size.y, GL_RGBA16F, true);
+		_diffuse = createRenderPassOutput<Texture2D>(screen_size.x, screen_size.y, GL_RGBA8, true);
 		_diffuse->parameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		_diffuse->parameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		_normal = createRenderPassOutput<Texture2D>(screen_size.x, screen_size.y, GL_RGBA8, true);

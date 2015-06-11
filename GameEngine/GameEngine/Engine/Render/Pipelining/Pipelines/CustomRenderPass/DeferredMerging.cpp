@@ -10,6 +10,7 @@
 #include <Render/ProgramResources/Types/Uniform/Mat4.hh>
 #include <Render/ProgramResources/Types/Uniform/Sampler/Sampler2D.hh>
 #include <Render/ProgramResources/Types/Uniform/Vec3.hh>
+#include <Render/ProgramResources/Types/Uniform/Vec1.hh>
 #include <Threads/RenderThread.hpp>
 #include <Threads/ThreadManager.hpp>
 #include <Core/ConfigurationManager.hpp>
@@ -70,16 +71,7 @@ namespace AGE
 	void DeferredMerging::renderPass(RenderPipeline const &, RenderLightList &, CameraInfos const &)
 	{
 		SCOPE_profile_gpu_i("DefferedMerging pass");
-		SCOPE_profile_cpu_i("RenderTimer", "DefferedMerging pass");
-		{
-			SCOPE_profile_gpu_i("Overhead Pipeline");
-			SCOPE_profile_cpu_i("RenderTimer", "Overhead Pipeline");
-			_programs[PROGRAM_MERGING]->use();
-			_programs[PROGRAM_MERGING]->get_resource<Sampler2D>("diffuse_map").set(_diffuseInput);
-			_programs[PROGRAM_MERGING]->get_resource<Sampler2D>("light_buffer").set(_lightAccuInput);
-			_programs[PROGRAM_MERGING]->get_resource<Sampler2D>("shiny_buffer").set(_shinyAccuInput);
-			_programs[PROGRAM_MERGING]->get_resource<Vec3>("ambient_color").set(_ambientColor);
-		}
+		float avgLogLuminance = 1.0f;
 		{
 			SCOPE_profile_gpu_i("Get pixel value");
 			SCOPE_profile_cpu_i("RenderTimer", "Get pixel value");
@@ -89,8 +81,21 @@ namespace AGE
 			std::vector<float> data_shiny;
 			_shinyAccuInput->generateMipmaps();
 			_shinyAccuInput->get(_shinyAccuInput->nbrMipMap() - 2, GL_LUMINANCE, GL_FLOAT, data_shiny);
-			std::cout << data_shiny[0] + data_light[0] << std::endl;
+			avgLogLuminance = glm::log(data_light[0] + data_shiny[0]);
+			assert(avgLogLuminance != 0);
 		}
+		SCOPE_profile_cpu_i("RenderTimer", "DefferedMerging pass");
+		{
+			SCOPE_profile_gpu_i("Overhead Pipeline");
+			SCOPE_profile_cpu_i("RenderTimer", "Overhead Pipeline");
+			_programs[PROGRAM_MERGING]->use();
+			_programs[PROGRAM_MERGING]->get_resource<Sampler2D>("diffuse_map").set(_diffuseInput);
+			_programs[PROGRAM_MERGING]->get_resource<Sampler2D>("light_buffer").set(_lightAccuInput);
+			_programs[PROGRAM_MERGING]->get_resource<Sampler2D>("shiny_buffer").set(_shinyAccuInput);
+			_programs[PROGRAM_MERGING]->get_resource<Vec3>("ambient_color").set(_ambientColor);
+			_programs[PROGRAM_MERGING]->get_resource<Vec1>("avg_log_luminance").set(avgLogLuminance);
+		}
+
 		OpenGLState::glDisable(GL_BLEND);
 		OpenGLState::glDisable(GL_CULL_FACE);
 		OpenGLState::glDisable(GL_DEPTH_TEST);
