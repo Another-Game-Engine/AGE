@@ -57,6 +57,7 @@ namespace AGE
 		_rendering_list.emplace_back(spotLightning);
 		_rendering_list.emplace_back(pointLightning);
 		_rendering_list.emplace_back(_deferredMerging);
+		_rendering_list.emplace_back(toneMapping);
 		_rendering_list.emplace_back(skybox);
 		_rendering_list.emplace_back(debugMerging);
 		_rendering_list.emplace_back(deferredOnScreen);
