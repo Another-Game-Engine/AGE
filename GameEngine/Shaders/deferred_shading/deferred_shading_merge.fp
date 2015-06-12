@@ -7,7 +7,6 @@ uniform sampler2D shiny_buffer;
 uniform sampler2D diffuse_map;
 
 uniform vec3 ambient_color;
-uniform float avg_log_luminance;
 
 in vec2 interpolated_texCoord;
 

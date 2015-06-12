@@ -6,6 +6,7 @@
 #include <Render/Pipelining/Pipelines/CustomRenderPass/DeferredDirectionalLightning.hh>
 #include <Render/Pipelining/Pipelines/CustomRenderPass/DeferredMerging.hh>
 #include <Render/Pipelining/Pipelines/CustomRenderPass/DeferredMergingDebug.hh>
+#include <Render/Pipelining/Pipelines/CustomRenderPass/DeferredToneMapping.hh>
 #include <Render/Pipelining/Pipelines/CustomRenderPass/DeferredShadowBuffering.hh>
 #include <Render/Pipelining/Pipelines/CustomRenderPass/DeferredSkyBox.hh>
 #include <Render/Pipelining/Pipelines/CustomRenderPass/DeferredOnScreen.hh>
@@ -19,13 +20,19 @@ namespace AGE
 		ARenderingPipeline(std::string("deferred shading"), painter_manager)
 	{
 		_diffuse = createRenderPassOutput<Texture2D>(screen_size.x, screen_size.y, GL_RGBA16F, true);
+		_diffuse->parameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		_diffuse->parameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		_normal = createRenderPassOutput<Texture2D>(screen_size.x, screen_size.y, GL_RGBA8, true);
 		_specular = createRenderPassOutput<Texture2D>(screen_size.x, screen_size.y, GL_RGBA8, true);
 		_depthStencil = createRenderPassOutput<Texture2D>(screen_size.x, screen_size.y, GL_DEPTH24_STENCIL8, true);
 		_debugLights = createRenderPassOutput<Texture2D>(screen_size.x, screen_size.y, GL_RGBA8, true);
 		// RGB = light color, A = specular power
 		_lightAccumulation = createRenderPassOutput<Texture2D>(screen_size.x, screen_size.y, GL_RGBA16F, true);
+		_lightAccumulation->parameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		_lightAccumulation->parameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR); 
 		_shinyAccumulation = createRenderPassOutput<Texture2D>(screen_size.x, screen_size.y, GL_RGBA16F, true);
+		_shinyAccumulation->parameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		_shinyAccumulation->parameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 		// We create the render pass
 		std::shared_ptr<DeferredSkyBox> skybox = std::make_shared<DeferredSkyBox>(screen_size, _painter_manager, _diffuse, _depthStencil);
@@ -37,6 +44,7 @@ namespace AGE
 		std::shared_ptr<DeferredDirectionalLightning> directionalLightning = std::make_shared<DeferredDirectionalLightning>(screen_size, _painter_manager, _normal, _depthStencil, _specular, _lightAccumulation, _shinyAccumulation);
 		_deferredMerging = std::make_shared<DeferredMerging>(screen_size, _painter_manager, _diffuse, _lightAccumulation, _shinyAccumulation);
 		std::shared_ptr<DeferredMergingDebug> debugMerging = std::make_shared<DeferredMergingDebug>(screen_size, _painter_manager, _debugLights, _diffuse);
+		std::shared_ptr<DeferredToneMapping> toneMapping = std::make_shared<DeferredToneMapping>(screen_size, _painter_manager, _diffuse, _lightAccumulation, _shinyAccumulation);
 		std::shared_ptr<DeferredOnScreen> deferredOnScreen = std::make_shared<DeferredOnScreen>(screen_size, _painter_manager, _diffuse);
 
 		setAmbient(glm::vec3(0.2f));

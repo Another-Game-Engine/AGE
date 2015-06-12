@@ -48,6 +48,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "deferred shading", "deferre
 		Shaders\deferred_shading\deferred_shading_skybox.vp = Shaders\deferred_shading\deferred_shading_skybox.vp
 		Shaders\deferred_shading\deferred_shading_spot_light.fp = Shaders\deferred_shading\deferred_shading_spot_light.fp
 		Shaders\deferred_shading\deferred_shading_spot_light.vp = Shaders\deferred_shading\deferred_shading_spot_light.vp
+		Shaders\deferred_shading\deferred_shading_tone_mapping.fp = Shaders\deferred_shading\deferred_shading_tone_mapping.fp
+		Shaders\deferred_shading\deferred_shading_tone_mapping.vp = Shaders\deferred_shading\deferred_shading_tone_mapping.vp
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "basic", "basic", "{6DD3E825-06AD-46C8-B671-745D01D240D0}"

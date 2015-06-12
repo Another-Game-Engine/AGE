@@ -5,6 +5,7 @@
 #include <Render/Pipelining/Pipelines/CustomRenderPass/DeferredDirectionalLightning.hh>
 #include <Render/Pipelining/Pipelines/CustomRenderPass/DeferredMerging.hh>
 #include <Render/Pipelining/Pipelines/CustomRenderPass/DeferredShadowBuffering.hh>
+#include <Render/Pipelining/Pipelines/CustomRenderPass/DeferredToneMapping.hh>
 #include <Render/Pipelining/Pipelines/CustomRenderPass/DeferredSkyBox.hh>
 #include <Render/Pipelining/Pipelines/CustomRenderPass/DeferredOnScreen.hh>
 #include <Render/Pipelining/Pipelines/PipelineTools.hh>
@@ -16,7 +17,7 @@ namespace AGE
 	DeferredShading::DeferredShading(glm::uvec2 const &screen_size, std::shared_ptr<PaintingManager> const &painter_manager) :
 		ARenderingPipeline(std::string("deferred shading"), painter_manager)
 	{
-		_diffuse = createRenderPassOutput<Texture2D>(screen_size.x, screen_size.y, GL_RGBA8, true);
+		_diffuse = createRenderPassOutput<Texture2D>(screen_size.x, screen_size.y, GL_RGBA16F, true);
 		_diffuse->parameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		_diffuse->parameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		_normal = createRenderPassOutput<Texture2D>(screen_size.x, screen_size.y, GL_RGBA8, true);
@@ -37,6 +38,7 @@ namespace AGE
 		std::shared_ptr<DeferredPointLightning> pointLightning = std::make_shared<DeferredPointLightning>(screen_size, _painter_manager, _normal, _depthStencil, _specular, _lightAccumulation, _shinyAccumulation);
 		std::shared_ptr<DeferredDirectionalLightning> directionalLightning = std::make_shared<DeferredDirectionalLightning>(screen_size, _painter_manager, _normal, _depthStencil, _specular, _lightAccumulation, _shinyAccumulation);
 		_deferredMerging = std::make_shared<DeferredMerging>(screen_size, _painter_manager, _diffuse, _lightAccumulation, _shinyAccumulation);
+		std::shared_ptr<DeferredToneMapping> _deferredMerging = std::make_shared<DeferredToneMapping>(screen_size, _painter_manager, _diffuse, _lightAccumulation, _shinyAccumulation);
 		std::shared_ptr<DeferredOnScreen> deferredOnScreen = std::make_shared<DeferredOnScreen>(screen_size, _painter_manager, _diffuse);
 
 		// The entry point is the basic buffering pass
@@ -48,6 +50,7 @@ namespace AGE
 		_rendering_list.emplace_back(spotLightning);
 		_rendering_list.emplace_back(pointLightning);
 		_rendering_list.emplace_back(_deferredMerging);
+		// tone mapping
 		_rendering_list.emplace_back(skybox);
 		_rendering_list.emplace_back(deferredOnScreen);
 	}
