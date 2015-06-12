@@ -31,7 +31,9 @@ namespace AGE
 
 	DeferredToneMapping::DeferredToneMapping(glm::uvec2 const &screenSize, std::shared_ptr<PaintingManager> painterManager,
 		std::shared_ptr<Texture2D> diffuse) :
-		FrameBufferRender(screenSize.x, screenSize.y, painterManager)
+		FrameBufferRender(screenSize.x, screenSize.y, painterManager),
+		_targetLuminance(1.0f),
+		_currentLuminance(0.0f)
 	{
 		_diffuseInput = diffuse;
 
@@ -62,18 +64,18 @@ namespace AGE
 	void DeferredToneMapping::renderPass(RenderPipeline const &, RenderLightList &, CameraInfos const &)
 	{
 		SCOPE_profile_gpu_i("DeferredToneMapping pass");
-		float avgLogLuminance = 1.0f;
-		float const maxBrightness = 4.f;
-		float const minBrightness = 0.1f;
+		_targetLuminance = 1.0f;
+		float const maxBrightness = MAX_TONE_MAPPING;
+		float const minBrightness = MIN_TONE_MAPPING;
+		float const speed = SPEED_TONE_MAPPING;
 		{
 			SCOPE_profile_gpu_i("Get pixel value");
 			SCOPE_profile_cpu_i("RenderTimer", "Get pixel value");
 			std::vector<glm::vec4> data;
 			_diffuseInput->generateMipmaps();
 			_diffuseInput->get(_diffuseInput->nbrMipMap() - 1, GL_RGBA, GL_FLOAT, data);
-			avgLogLuminance = glm::dot(glm::vec4(0.30, 0.59, 0.11, 0.0), data[0]);
-			std::cout << data[0].x + data[0].y + data[0].z << std::endl;
-			avgLogLuminance = avgLogLuminance == 0.f ? maxBrightness : glm::max((0.5f / avgLogLuminance), minBrightness);
+			_targetLuminance = glm::dot(glm::vec4(0.30, 0.59, 0.11, 0.0), data[0]);
+			_targetLuminance = _targetLuminance == 0.f ? maxBrightness : glm::clamp((MIDDLE_GRAY_TONE_MAPPING / _targetLuminance), minBrightness, maxBrightness);
 		}
 		SCOPE_profile_cpu_i("RenderTimer", "DeferredToneMapping pass");
 		{
@@ -81,7 +83,7 @@ namespace AGE
 			SCOPE_profile_cpu_i("RenderTimer", "Overhead Pipeline");
 			_programs[PROGRAM_TONE_MAPPING]->use();
 			_programs[PROGRAM_TONE_MAPPING]->get_resource<Sampler2D>("diffuse_map").set(_diffuseInput);
-			_programs[PROGRAM_TONE_MAPPING]->get_resource<Vec1>("avg_log_luminance").set(avgLogLuminance);
+			_programs[PROGRAM_TONE_MAPPING]->get_resource<Vec1>("avg_log_luminance").set(_targetLuminance);
 		}
 
 		OpenGLState::glDisable(GL_BLEND);

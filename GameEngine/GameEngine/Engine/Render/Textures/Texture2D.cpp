@@ -64,6 +64,7 @@ namespace AGE
 
 	void Texture2D::generateMipmaps() const
 	{
+		bind();
 		glGenerateMipmap(GL_TEXTURE_2D);
 	}
 

@@ -4,6 +4,11 @@
 
 #include <glm/glm.hpp>
 
+#define MAX_TONE_MAPPING 4.0f
+#define MIN_TONE_MAPPING 0.1f
+#define SPEED_TONE_MAPPING 0.1f
+#define MIDDLE_GRAY_TONE_MAPPING 0.8f
+
 namespace AGE
 {
 	class Texture2D;
@@ -24,6 +29,8 @@ namespace AGE
 	private:
 		std::shared_ptr<Texture2D> _diffuseInput;
 
+		float _targetLuminance;
+		float _currentLuminance;
 		Key<Vertices> _quadVertices;
 		std::shared_ptr<Painter> _quadPainter;
 	};
