@@ -14,4 +14,5 @@ void main()
 	float L = Linput * avg_log_luminance;
 	float Loutput = L / (1 + L);
 	color = diffuse * Loutput;
+	//color = diffuse;
 }

@@ -44,7 +44,7 @@ namespace AGE
 		std::shared_ptr<DeferredDirectionalLightning> directionalLightning = std::make_shared<DeferredDirectionalLightning>(screen_size, _painter_manager, _normal, _depthStencil, _specular, _lightAccumulation, _shinyAccumulation);
 		_deferredMerging = std::make_shared<DeferredMerging>(screen_size, _painter_manager, _diffuse, _lightAccumulation, _shinyAccumulation);
 		std::shared_ptr<DeferredMergingDebug> debugMerging = std::make_shared<DeferredMergingDebug>(screen_size, _painter_manager, _debugLights, _diffuse);
-		std::shared_ptr<DeferredToneMapping> toneMapping = std::make_shared<DeferredToneMapping>(screen_size, _painter_manager, _diffuse, _lightAccumulation, _shinyAccumulation);
+		std::shared_ptr<DeferredToneMapping> toneMapping = std::make_shared<DeferredToneMapping>(screen_size, _painter_manager, _diffuse);
 		std::shared_ptr<DeferredOnScreen> deferredOnScreen = std::make_shared<DeferredOnScreen>(screen_size, _painter_manager, _diffuse);
 
 		setAmbient(glm::vec3(0.2f));

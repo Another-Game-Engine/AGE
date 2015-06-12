@@ -30,14 +30,10 @@ namespace AGE
 	};
 
 	DeferredToneMapping::DeferredToneMapping(glm::uvec2 const &screenSize, std::shared_ptr<PaintingManager> painterManager,
-		std::shared_ptr<Texture2D> diffuse,
-		std::shared_ptr<Texture2D> lightAccumulation,
-		std::shared_ptr<Texture2D> shinyAccumulation) :
+		std::shared_ptr<Texture2D> diffuse) :
 		FrameBufferRender(screenSize.x, screenSize.y, painterManager)
 	{
 		_diffuseInput = diffuse;
-		_lightAccuInput = lightAccumulation;
-		_shinyAccuInput = shinyAccumulation;
 
 		push_storage_output(GL_COLOR_ATTACHMENT0, diffuse);
 
@@ -67,17 +63,17 @@ namespace AGE
 	{
 		SCOPE_profile_gpu_i("DeferredToneMapping pass");
 		float avgLogLuminance = 1.0f;
+		float const maxBrightness = 4.f;
+		float const minBrightness = 0.1f;
 		{
 			SCOPE_profile_gpu_i("Get pixel value");
 			SCOPE_profile_cpu_i("RenderTimer", "Get pixel value");
-			std::vector<glm::vec4> data_light;
-			_lightAccuInput->generateMipmaps();
-			_lightAccuInput->get(_lightAccuInput->nbrMipMap() - 1, GL_RGBA, GL_FLOAT, data_light);
-			std::vector<glm::vec4> data_shiny;
-			_shinyAccuInput->generateMipmaps();
-			_shinyAccuInput->get(_shinyAccuInput->nbrMipMap() - 1, GL_RGBA, GL_FLOAT, data_shiny);
-			avgLogLuminance = ((data_light[0].x + data_light[0].y + data_light[0].z) / 3.0f + (data_shiny[0].x + data_shiny[0].y + data_light[0].z) / 3.0f) / 2.0f;
-			avgLogLuminance = avgLogLuminance == 0.f ? 0.f : (0.5f / avgLogLuminance) ;
+			std::vector<glm::vec4> data;
+			_diffuseInput->generateMipmaps();
+			_diffuseInput->get(_diffuseInput->nbrMipMap() - 1, GL_RGBA, GL_FLOAT, data);
+			avgLogLuminance = glm::dot(glm::vec4(0.30, 0.59, 0.11, 0.0), data[0]);
+			std::cout << data[0].x + data[0].y + data[0].z << std::endl;
+			avgLogLuminance = avgLogLuminance == 0.f ? maxBrightness : glm::max((0.5f / avgLogLuminance), minBrightness);
 		}
 		SCOPE_profile_cpu_i("RenderTimer", "DeferredToneMapping pass");
 		{
