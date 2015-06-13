@@ -24,6 +24,8 @@
 
 #include "AssetManagement\Instance\MeshInstance.hh"
 
+#include <Graphic/DRBCameraDrawableList.hpp>
+
 #define DEFERRED_SHADING_BUFFERING_VERTEX "deferred_shading/deferred_shading_get_buffer.vp"
 #define DEFERRED_SHADING_BUFFERING_FRAG "deferred_shading/deferred_shading_get_buffer.fp"
 
@@ -154,21 +156,22 @@ namespace AGE
 //			}
 //		}
 //#else
-		//{
-		//	SCOPE_profile_gpu_i("Draw all objects");
-		//	SCOPE_profile_cpu_i("RenderTimer", "Draw all objects");
+		{
+			SCOPE_profile_gpu_i("Draw all objects");
+			SCOPE_profile_cpu_i("RenderTimer", "Draw all objects");
 
-		//	_programs[PROGRAM_BUFFERING]->use();
-		//	_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("projection_matrix").set(infos.data.projection);
-		//	_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("view_matrix").set(infos.view);
+			_programs[PROGRAM_BUFFERING]->use();
+			_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("projection_matrix").set(infos.cameraInfos. data.projection);
+			_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("view_matrix").set(infos.cameraInfos.view);
 
-		//	for (auto &meshPaint : meshList)
-		//	{
-		//		auto painter = _painterManager->get_painter(meshPaint->getPainterKey());
-		//		painter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], meshPaint->globalProperties, meshPaint->getVerticesKey());
+			auto &meshList = (std::list<std::shared_ptr<DRBMeshData>>&)(infos.meshs);
+			for (auto &meshPaint : meshList)
+			{
+				auto painter = _painterManager->get_painter(meshPaint->getPainterKey());
+				painter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], meshPaint->globalProperties, meshPaint->getVerticesKey());
 
-		//	}
-		//}
+			}
+		}
 //#endif
 	}
 
