@@ -40,7 +40,6 @@ namespace AGE
 		std::shared_ptr<ITexture> map;
 
 		std::shared_ptr<IProperty>  _colorProp;
-		std::shared_ptr<IProperty>  _rangeProp;
 		std::shared_ptr<IProperty>  _mapProp;
 		BFCCullableHandle           _graphicHandle;
 

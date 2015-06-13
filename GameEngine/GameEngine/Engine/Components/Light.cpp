@@ -8,6 +8,8 @@
 #include "Render\Properties\Materials\MapColor.hh"
 #include "Graphic\DRBLightElementManager.hpp"
 
+#include "Graphic/DRBData.hpp"
+#include "Graphic/DRBPointLightData.hpp"
 
 #ifdef EDITOR_ENABLED
 #include <imgui\imgui.h>
@@ -39,27 +41,26 @@ namespace AGE
 		range = glm::vec3(1.0f, 0.01f, 0.001f);
 		map = nullptr;
 		_colorProp = nullptr;
-		_rangeProp = nullptr;
 		_mapProp = nullptr;
 
 		if (_graphicHandle.invalid() == false)
 		{
 			auto manager = entity->getScene()->getInstance<DRBLightElementManager>();
-			_graphicHandle = manager->removePointLight(_graphicHandle);
+			manager->removePointLight(_graphicHandle);
 		}
 	}
 
 	void PointLightComponent::init()
 	{
-		_colorProp = std::make_shared<Color>();
-		//_rangeProp = std::make_shared<Ratio>();
-		_mapProp = std::make_shared<MapColor>();
+		_colorProp = std::make_shared<Color>("color");
+		_mapProp = std::make_shared<MapColor>("sprite_light");
 
 		auto manager = entity->getScene()->getInstance<DRBLightElementManager>();
-		_graphicHandle = manager->addPointLight();
+		_graphicHandle = manager->addPointLight(_colorProp, _mapProp);
 
-		_graphicHandle->getPtr()->getDatas()->globalProperties.add_property(_colorProp);
-		_graphicHandle->getPtr()->getDatas()->globalProperties.add_property(_mapProp);
+		_graphicHandle.getPtr()->getDatas()->globalProperties.add_property(_colorProp);
+		_graphicHandle.getPtr()->getDatas()->globalProperties.add_property(_mapProp);
+		std::static_pointer_cast<DRBPointLightData>(_graphicHandle.getPtr()->getDatas())->setRange(range);
 
 		map = entity->getScene()->getInstance<AssetsManager>()->getPointLightTexture();
 	}

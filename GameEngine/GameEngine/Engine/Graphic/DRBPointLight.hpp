@@ -16,7 +16,7 @@ namespace AGE
 		DRBPointLight();
 		virtual CullableTypeID getBFCType() const { return BFCCullableType::CullablePointLight; }
 		virtual const std::shared_ptr<DRBData> getDatas() const;
-
-		std::shared_ptr<DRBPointLightData> datas;
+	private:
+		std::shared_ptr<DRBPointLightData> _datas;
 	};
 }

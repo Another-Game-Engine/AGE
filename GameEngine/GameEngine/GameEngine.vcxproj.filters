@@ -224,6 +224,8 @@
     <ClCompile Include="Engine\Graphic\DRBMeshData.cpp" />
     <ClCompile Include="Engine\Utils\RWLock.cpp" />
     <ClCompile Include="Engine\Graphic\DRBLightElementManager.cpp" />
+    <ClCompile Include="Engine\Graphic\DRBPointLightData.cpp" />
+    <ClCompile Include="Engine\Graphic\DRBPointLight.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />

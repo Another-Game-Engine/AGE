@@ -260,6 +260,8 @@
     <ClCompile Include="Engine\Graphic\DRBLightElementManager.cpp" />
     <ClCompile Include="Engine\Graphic\DRBMesh.cpp" />
     <ClCompile Include="Engine\Graphic\DRBMeshData.cpp" />
+    <ClCompile Include="Engine\Graphic\DRBPointLight.cpp" />
+    <ClCompile Include="Engine\Graphic\DRBPointLightData.cpp" />
     <ClCompile Include="Engine\Graphic\GraphicElementManager.cpp" />
     <ClCompile Include="Engine\Render\OcclusionTools\DepthMap.cpp" />
     <ClCompile Include="Engine\Render\OcclusionTools\DepthMapHandle.cpp" />
