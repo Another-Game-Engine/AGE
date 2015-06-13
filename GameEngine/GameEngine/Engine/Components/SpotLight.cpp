@@ -49,8 +49,11 @@ namespace AGE
 		_propDirection = nullptr;
 		_propColorLight = nullptr;
 		_propAttenuation = nullptr;
-		auto manager = entity->getScene()->getInstance<DRBLightElementManager>();
-		manager->removeSpotLight(_graphicHandle);
+		if (_graphicHandle.invalid() == false)
+		{
+			auto manager = entity->getScene()->getInstance<DRBLightElementManager>();
+			manager->removeSpotLight(_graphicHandle);
+		}
 	}
 
 	void SpotLightComponent::init()
