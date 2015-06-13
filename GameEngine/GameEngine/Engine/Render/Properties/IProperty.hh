@@ -26,7 +26,7 @@ namespace AGE
 		virtual std::string const &name() const = 0;
 	protected:
 		virtual void _update(std::shared_ptr<Program> const &p) = 0;
-		AGE::SpinLock _mutex;
+		mutable AGE::SpinLock _mutex;
 	};
 
 	typedef IProperty Property;

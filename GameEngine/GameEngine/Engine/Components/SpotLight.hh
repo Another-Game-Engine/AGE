@@ -8,6 +8,11 @@
 namespace AGE
 {
 
+	class Sampler2D;
+	class Mat4;
+	class Vec3;
+	class Vec1;
+
 	struct SpotLightData
 	{
 		SpotLightData(glm::vec3 const &color = glm::vec3(1.0f), 
@@ -35,14 +40,11 @@ namespace AGE
 		virtual void reset();
 		void init();
 
-		void set(SpotLightData const &data);
-
 		template <typename Archive>
 		void serialize(Archive &ar, const std::uint32_t version)
 		{
-			ar(cereal::make_nvp("color", _data.color), cereal::make_nvp("range", _data.range), cereal::make_nvp("exponent", _data.exponent), cereal::make_nvp("cutOff", _data.cutOff));
+			ar(cereal::make_nvp("color", color), cereal::make_nvp("range", range), cereal::make_nvp("exponent", exponent), cereal::make_nvp("cutOff", cutOff));
 		}
-		inline const SpotLightData &get() const { return _data; }
 		virtual void postUnserialization();
 
 #ifdef EDITOR_ENABLED
@@ -52,8 +54,20 @@ namespace AGE
 #endif
 
 	private:
-		AGE::PrepareKey _key;
-		SpotLightData _data;
+		glm::vec3 color;
+		glm::vec3 range;
+		float exponent;
+		float cutOff;
 
+		//std::shared_ptr<Sampler2D> _propShadowMap;
+		//std::shared_ptr<Mat4>      _propShadowMatrix;
+		//std::shared_ptr<Vec3>      _propPosition;
+		//std::shared_ptr<Vec3>      _propAttenuation;
+		//std::shared_ptr<Vec3>      _propDirection;
+		//std::shared_ptr<Vec1>      _propSpotCutOff;
+		//std::shared_ptr<Vec1>      _propExponentLight;
+		//std::shared_ptr<Vec3>      _propColorLight;
 	};
 }
+
+CEREAL_CLASS_VERSION(AGE::SpotLightComponent, 0);

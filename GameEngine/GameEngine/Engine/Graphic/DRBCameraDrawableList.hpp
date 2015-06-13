@@ -10,6 +10,7 @@ namespace AGE
 	struct DRBCameraDrawableList
 	{
 		std::list<std::shared_ptr<DRBData>> meshs;
+		std::list<std::shared_ptr<DRBData>> pointLights;
 		CameraInfos cameraInfos;
 	};
 

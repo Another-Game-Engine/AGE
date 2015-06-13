@@ -47,7 +47,7 @@
                 "value": 13917482855567903631
             }
         ],
-        "entityNumber": 18,
+        "entityNumber": 19,
         "Entity_0": {
             "cereal_class_version": 0,
             "link": {
@@ -752,6 +752,49 @@
             },
             "AGE_CORE_EntityRepresentationComponent": {
                 "name": "dragon-Copy"
+            }
+        },
+        "Entity_18": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                3
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "pointlight"
+            },
+            "AGE_CORE_PointLightComponent": {
+                "cereal_class_version": 1,
+                "color": {
+                    "value0": 1,
+                    "value1": 0,
+                    "value2": 1
+                },
+                "range": {
+                    "value0": 1,
+                    "value1": 0.0099999997764825821,
+                    "value2": 0.0010000000474974513
+                }
             }
         }
     }

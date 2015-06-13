@@ -43,6 +43,7 @@ namespace AGE
 			cameraList->cameraInfos.data = camera->getData();
 			cameraList->cameraInfos.view = glm::inverse(cameraEntity->getLink().getGlobalTransform());
 			_scene->getBfcBlockManagerFactory()->cullOnChannel(BFCCullableType::CullableMesh, cameraList->meshs);
+			_scene->getBfcBlockManagerFactory()->cullOnChannel(BFCCullableType::CullablePointLight, cameraList->pointLights);
 			AGE::GetRenderThread()->getQueue()->emplaceCommand<AGE::DRBCameraDrawableListCommand>(cameraList);
 		}
 	}

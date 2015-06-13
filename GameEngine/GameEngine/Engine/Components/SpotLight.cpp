@@ -1,7 +1,6 @@
 #include <Components/SpotLight.hh>
 #include <Core/AScene.hh>
 #include <Utils/MathematicTools.hh>
-#include <Threads/ThreadManager.hpp>
 #include <glm/glm.hpp>
 #include <AssetManagement/AssetManager.hh>
 
@@ -23,8 +22,6 @@ namespace AGE
 	}
 
 	SpotLightComponent::SpotLightComponent(SpotLightComponent const &o)
-		: _key(o._key)
-		, _data(o._data)
 	{
 		postUnserialization();
 	}
@@ -32,33 +29,37 @@ namespace AGE
 	void SpotLightComponent::_copyFrom(const ComponentBase *model)
 	{
 		auto o = static_cast<const SpotLightComponent*>(model);
-		_data = o->_data;
 		postUnserialization();
 	}
 
 	void SpotLightComponent::reset()
 	{
-		if (!_key.invalid())
-		{
-			//entity->getLink().unregisterOctreeObject(_key);
-		}
-		_key = AGE::PrepareKey();
-		_data = SpotLightData();
 	}
 
 	void SpotLightComponent::init()
 	{
-		//_key = AGE::GetPrepareThread()->addSpotLight();
-		//entity->getLink().registerOctreeObject(_key);
-		_data.map = entity->getScene()->getInstance<AssetsManager>()->getSpotLightTexture();
-		//assert(!_key.invalid());
-		set(_data);
-	}
+		color = glm::vec3(1.0f);
+		range = glm::vec3(1.0f, 0.1f, 0.01f);
+		exponent = 5.0f;
+		cutOff = 0.5f;
 
-	void SpotLightComponent::set(SpotLightData const &data)
-	{
-		_data = data;
-		//AGE::GetPrepareThread()->setSpotLight(_data, _key);
+		//_propShadowMap = std::make_shared<Sampler2D>("shadow_map");
+
+		// TODO DORIAN -> fix spotlight texture
+		//auto shadowMapTexture = entity->getScene()->getInstance<AssetsManager>()->getSpotLightTexture();
+		//_propShadowMap->set(shadowMapTexture);
+
+		//_propShadowMatrix = std::make_shared<Mat4>("light_matrix");
+		//_propPosition = std::make_shared<Vec3>("position_light");
+		//_propAttenuation = std::make_shared<Vec3>("attenuation_light");
+		//_propAttenuation->set(range);
+		//_propDirection = std::make_shared<Vec3>("direction_light");
+		//_propSpotCutOff = std::make_shared<Vec1>("spot_cuf_off");
+		//_propSpotCutOff->set(cutOff);
+		//_propExponentLight = std::make_shared<Vec1>("exponent_light");
+		//_propExponentLight->set(exponent);
+		//_propColorLight = std::make_shared<Vec3>("color_light");
+		//_propColorLight->set(glm::vec4(color.x, color.y, color.z, 1.0f));
 	}
 
 	void SpotLightComponent::postUnserialization()
@@ -77,24 +78,20 @@ namespace AGE
 	bool SpotLightComponent::editorUpdate()
 	{
 		bool modified = false;
-		if (ImGui::ColorEdit3("Color", glm::value_ptr(_data.color)))
+		if (ImGui::ColorEdit3("Color", glm::value_ptr(color)))
 		{
-			set(_data);
 			modified = true;
 		}
-		if (ImGui::SliderFloat3("Range", glm::value_ptr(_data.range), 0.0f, 1.0f))
+		if (ImGui::SliderFloat3("Range", glm::value_ptr(range), 0.0f, 1.0f))
 		{
-			set(_data);
 			modified = true;
 		}
-		if (ImGui::InputFloat("Exponent", &_data.exponent))
+		if (ImGui::InputFloat("Exponent", &exponent))
 		{
-			set(_data);
 			modified = true;
 		}
-		if (ImGui::InputFloat("cut off", &_data.cutOff))
+		if (ImGui::InputFloat("cut off", &cutOff))
 		{
-			set(_data);
 			modified = true;
 		}
 		return modified;
