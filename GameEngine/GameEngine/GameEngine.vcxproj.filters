@@ -594,6 +594,7 @@
     <ClInclude Include="Engine\Graphic\DRBPointLightData.hpp" />
     <ClInclude Include="Engine\Systems\RenderSpotLightSystem.hpp" />
     <ClInclude Include="Engine\Render\Properties\Materials\SpotLightProperty.hpp" />
+    <ClInclude Include="Engine\Render\Properties\AutoProperty.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

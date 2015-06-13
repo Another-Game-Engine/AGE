@@ -125,11 +125,12 @@
                 "name": "north-Copy"
             },
             "AGE_CORE_SpotLightComponent": {
-                "cereal_class_version": 0,
+                "cereal_class_version": 1,
                 "color": {
                     "value0": 1,
                     "value1": 1,
-                    "value2": 1
+                    "value2": 1,
+                    "value3": 1
                 },
                 "range": {
                     "value0": 1,
@@ -173,7 +174,8 @@
                 "color": {
                     "value0": 1,
                     "value1": 1,
-                    "value2": 1
+                    "value2": 1,
+                    "value3": 1
                 },
                 "range": {
                     "value0": 1,
@@ -217,7 +219,8 @@
                 "color": {
                     "value0": 1,
                     "value1": 1,
-                    "value2": 1
+                    "value2": 1,
+                    "value3": 1
                 },
                 "range": {
                     "value0": 1,
@@ -261,7 +264,8 @@
                 "color": {
                     "value0": 1,
                     "value1": 1,
-                    "value2": 1
+                    "value2": 1,
+                    "value3": 1
                 },
                 "range": {
                     "value0": 1,

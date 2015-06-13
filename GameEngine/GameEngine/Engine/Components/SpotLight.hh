@@ -7,7 +7,7 @@
 
 namespace AGE
 {
-
+	class IProperty;
 	class Sampler2D;
 	class Mat4;
 	class Vec3;
@@ -54,19 +54,20 @@ namespace AGE
 #endif
 
 	private:
-		glm::vec3 color;
+		glm::vec4 color;
 		glm::vec3 range;
 		float exponent;
 		float cutOff;
 
+		// TODO
 		//std::shared_ptr<Sampler2D> _propShadowMap;
-		//std::shared_ptr<Mat4>      _propShadowMatrix;
-		//std::shared_ptr<Vec3>      _propPosition;
-		//std::shared_ptr<Vec3>      _propAttenuation;
-		//std::shared_ptr<Vec3>      _propDirection;
-		//std::shared_ptr<Vec1>      _propSpotCutOff;
-		//std::shared_ptr<Vec1>      _propExponentLight;
-		//std::shared_ptr<Vec3>      _propColorLight;
+		std::shared_ptr<IProperty>      _propShadowMatrix;
+		std::shared_ptr<IProperty>      _propPosition;
+		std::shared_ptr<IProperty>      _propAttenuation;
+		std::shared_ptr<IProperty>      _propDirection;
+		std::shared_ptr<IProperty>      _propSpotCutOff;
+		std::shared_ptr<IProperty>      _propExponentLight;
+		std::shared_ptr<IProperty>      _propColorLight;
 	};
 }
 

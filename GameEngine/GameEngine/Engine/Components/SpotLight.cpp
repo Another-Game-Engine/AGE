@@ -4,6 +4,11 @@
 #include <glm/glm.hpp>
 #include <AssetManagement/AssetManager.hh>
 
+#include "Render/Properties/AutoProperty.hpp"
+#include "Render/ProgramResources/Types/Uniform/Vec4.hh"
+#include "Render/ProgramResources/Types/Uniform/Vec3.hh"
+#include "Render/ProgramResources/Types/Uniform/Vec1.hh"
+
 #ifdef EDITOR_ENABLED
 #	include <imgui\imgui.h>
 #	include <glm/gtc/type_ptr.hpp>
@@ -34,11 +39,18 @@ namespace AGE
 
 	void SpotLightComponent::reset()
 	{
+		_propShadowMatrix = nullptr;
+		_propSpotCutOff = nullptr;
+		_propPosition = nullptr;
+		_propExponentLight = nullptr;
+		_propDirection = nullptr;
+		_propColorLight = nullptr;
+		_propAttenuation = nullptr;
 	}
 
 	void SpotLightComponent::init()
 	{
-		color = glm::vec3(1.0f);
+		color = glm::vec4(1.0f);
 		range = glm::vec3(1.0f, 0.1f, 0.01f);
 		exponent = 5.0f;
 		cutOff = 0.5f;
@@ -49,17 +61,17 @@ namespace AGE
 		//auto shadowMapTexture = entity->getScene()->getInstance<AssetsManager>()->getSpotLightTexture();
 		//_propShadowMap->set(shadowMapTexture);
 
-		//_propShadowMatrix = std::make_shared<Mat4>("light_matrix");
-		//_propPosition = std::make_shared<Vec3>("position_light");
-		//_propAttenuation = std::make_shared<Vec3>("attenuation_light");
-		//_propAttenuation->set(range);
-		//_propDirection = std::make_shared<Vec3>("direction_light");
-		//_propSpotCutOff = std::make_shared<Vec1>("spot_cuf_off");
-		//_propSpotCutOff->set(cutOff);
-		//_propExponentLight = std::make_shared<Vec1>("exponent_light");
-		//_propExponentLight->set(exponent);
-		//_propColorLight = std::make_shared<Vec3>("color_light");
-		//_propColorLight->set(glm::vec4(color.x, color.y, color.z, 1.0f));
+		_propShadowMatrix = std::make_shared<AutoProperty<glm::vec4, Vec4>>("light_matrix");
+		_propPosition = std::make_shared<AutoProperty<glm::vec3, Vec3>>("position_light");
+		_propAttenuation = std::make_shared<AutoProperty<glm::vec3, Vec3>>("attenuation_light");
+		_propAttenuation->autoSet(range);
+		_propDirection = std::make_shared<AutoProperty<glm::vec3, Vec3>>("direction_light");
+		_propSpotCutOff = std::make_shared<AutoProperty<float, Vec1>>("spot_cuf_off");
+		_propSpotCutOff->autoSet(cutOff);
+		_propExponentLight = std::make_shared<AutoProperty<float, Vec1>>("exponent_light");
+		_propExponentLight->autoSet(exponent);
+		_propColorLight = std::make_shared<AutoProperty<glm::vec4, Vec4>>("color_light");
+		_propColorLight->autoSet(color);
 	}
 
 	void SpotLightComponent::postUnserialization()
@@ -80,18 +92,22 @@ namespace AGE
 		bool modified = false;
 		if (ImGui::ColorEdit3("Color", glm::value_ptr(color)))
 		{
+			_propColorLight->autoSet(color);
 			modified = true;
 		}
 		if (ImGui::SliderFloat3("Range", glm::value_ptr(range), 0.0f, 1.0f))
 		{
+			_propAttenuation->autoSet(range);
 			modified = true;
 		}
 		if (ImGui::InputFloat("Exponent", &exponent))
 		{
+			_propExponentLight->autoSet(exponent);
 			modified = true;
 		}
 		if (ImGui::InputFloat("cut off", &cutOff))
 		{
+			_propSpotCutOff->autoSet(cutOff);
 			modified = true;
 		}
 		return modified;
