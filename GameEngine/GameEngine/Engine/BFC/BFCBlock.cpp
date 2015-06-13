@@ -44,5 +44,6 @@ namespace AGE
 
 		_items[itemId].setDrawable(nullptr);
 		_free.push(itemId);
+		--_counter;
 	}
 }

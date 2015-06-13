@@ -16,6 +16,8 @@
 #include <Core/ConfigurationManager.hpp>
 #include <Core/Engine.hh>
 
+#include "Graphic/DRBCameraDrawableList.hpp"
+
 #define DEFERRED_SHADING_DIRECTIONAL_LIGHT_VERTEX "deferred_shading/deferred_shading_directional_light.vp"
 #define DEFERRED_SHADING_DIRECTIONAL_LIGHT_FRAG "deferred_shading/deferred_shading_directional_light.fp"
 
@@ -66,34 +68,36 @@ namespace AGE
 
 	void DeferredDirectionalLightning::renderPass(const DRBCameraDrawableList &infos)
 	{
-		//@PROUT
-		//SCOPE_profile_gpu_i("DeferredDirectionalLightning render pass");
-		//SCOPE_profile_cpu_i("RenderTimer", "DeferredDirectionalLightning render pass");
+		SCOPE_profile_gpu_i("DeferredDirectionalLightning render pass");
+		SCOPE_profile_cpu_i("RenderTimer", "DeferredDirectionalLightning render pass");
 
-		//glm::vec3 cameraPosition = -glm::transpose(glm::mat3(infos.view)) * glm::vec3(infos.view[3]);
+		//auto &meshList = (std::list<std::shared_ptr<DRBMeshData>>&)(infos.meshs);
 
-		//_programs[PROGRAM_LIGHTNING]->use();
-		//_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("projection_matrix").set(infos.data.projection);
-		//_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("view_matrix").set(infos.view);
-		//_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("normal_buffer").set(_normalInput);
-		//_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("depth_buffer").set(_depthInput);
-		//_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("specular_buffer").set(_specularInput);
-		//_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("eye_pos").set(cameraPosition);
+		glm::vec3 cameraPosition = -glm::transpose(glm::mat3(infos.cameraInfos.view)) * glm::vec3(infos.cameraInfos.view[3]);
 
-		//// clear the light accumulation to zero
-		//OpenGLState::glClearColor(glm::vec4(0));
-		//glClear(GL_COLOR_BUFFER_BIT);
+		_programs[PROGRAM_LIGHTNING]->use();
+		_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("projection_matrix").set(infos.cameraInfos.data.projection);
+		_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("view_matrix").set(infos.cameraInfos.view);
+		_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("normal_buffer").set(_normalInput);
+		_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("depth_buffer").set(_depthInput);
+		_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("specular_buffer").set(_specularInput);
+		_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("eye_pos").set(cameraPosition);
 
-		//OpenGLState::glDisable(GL_CULL_FACE);
-		//OpenGLState::glDisable(GL_DEPTH_TEST);
-		//OpenGLState::glEnable(GL_STENCIL_TEST);
-		//OpenGLState::glStencilFunc(GL_LESS, 0, 0xFFFFFFFF);
-		//OpenGLState::glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
-		//// And we set the blend mode to additive
+		// clear the light accumulation to zero
+		OpenGLState::glClearColor(glm::vec4(0));
+		glClear(GL_COLOR_BUFFER_BIT);
 
-		//OpenGLState::glEnable(GL_BLEND);
-		//OpenGLState::glBlendFunc(GL_ONE, GL_ONE);
+		OpenGLState::glDisable(GL_CULL_FACE);
+		OpenGLState::glDisable(GL_DEPTH_TEST);
+		OpenGLState::glEnable(GL_STENCIL_TEST);
+		OpenGLState::glStencilFunc(GL_LESS, 0, 0xFFFFFFFF);
+		OpenGLState::glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
+		// And we set the blend mode to additive
 
+		OpenGLState::glEnable(GL_BLEND);
+		OpenGLState::glBlendFunc(GL_ONE, GL_ONE);
+
+		//@PROUT TODO -> PASS DIRECTIONNAL LIGHT INFOS
 		//for (auto &pl : lights.directionalLights)
 		//{
 		//	SCOPE_profile_gpu_i("Directional light");

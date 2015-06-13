@@ -78,27 +78,25 @@ namespace AGE
 
 	void DeferredBasicBuffering::renderPass(const DRBCameraDrawableList &infos)
 	{
-		//auto &meshList = (std::list<std::shared_ptr<DRBMeshData>>&)(meshs);
+		SCOPE_profile_gpu_i("DeferredBasicBuffering render pass");
+		SCOPE_profile_cpu_i("RenderTimer", "DeferredBasicBuffering render pass");
+		{
+			SCOPE_profile_gpu_i("Clear buffer");
+			SCOPE_profile_cpu_i("RenderTimer", "Clear buffer");
 
-		//SCOPE_profile_gpu_i("DeferredBasicBuffering render pass");
-		//SCOPE_profile_cpu_i("RenderTimer", "DeferredBasicBuffering render pass");
-		//{
-		//	SCOPE_profile_gpu_i("Clear buffer");
-		//	SCOPE_profile_cpu_i("RenderTimer", "Clear buffer");
-
-		//	OpenGLState::glEnable(GL_CULL_FACE);
-		//	OpenGLState::glCullFace(GL_BACK);
-		//	OpenGLState::glDepthMask(GL_TRUE);
-		//	OpenGLState::glDepthFunc(GL_LEQUAL);
-		//	OpenGLState::glDisable(GL_BLEND);
-		//	OpenGLState::glEnable(GL_DEPTH_TEST);
-		//	OpenGLState::glClearColor(glm::vec4(0.f, 0.0f, 0.0f, 0.0f));
-		//	OpenGLState::glEnable(GL_STENCIL_TEST);
-		//	OpenGLState::glClearStencil(0);
-		//	OpenGLState::glStencilFunc(GL_ALWAYS, 0, 0xFFFFFFFF);
-		//	OpenGLState::glStencilOp(GL_KEEP, GL_KEEP, GL_INCR);
-		//	glClear(GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-		//}
+			OpenGLState::glEnable(GL_CULL_FACE);
+			OpenGLState::glCullFace(GL_BACK);
+			OpenGLState::glDepthMask(GL_TRUE);
+			OpenGLState::glDepthFunc(GL_LEQUAL);
+			OpenGLState::glDisable(GL_BLEND);
+			OpenGLState::glEnable(GL_DEPTH_TEST);
+			OpenGLState::glClearColor(glm::vec4(0.f, 0.0f, 0.0f, 0.0f));
+			OpenGLState::glEnable(GL_STENCIL_TEST);
+			OpenGLState::glClearStencil(0);
+			OpenGLState::glStencilFunc(GL_ALWAYS, 0, 0xFFFFFFFF);
+			OpenGLState::glStencilOp(GL_KEEP, GL_KEEP, GL_INCR);
+			glClear(GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+		}
 //#ifdef OCCLUSION_CULLING
 //
 //		{
