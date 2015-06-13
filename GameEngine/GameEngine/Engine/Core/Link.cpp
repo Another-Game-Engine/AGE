@@ -8,13 +8,28 @@
 #include <Core/AScene.hh>
 #include <Components/RigidBody.hpp>
 #include <Components/Collider.hpp>
+#include <BFC/BFCLinkTracker.hpp>
+
 
 using namespace AGE;
+
+#ifdef AGE_BFC
+void Link::BFC_ADD()
+{
+	registerToTracker();
+}
+
+void Link::BFC_REMOVE()
+{
+	unregisterFromTracker();
+}
+#endif
 
 void Link::registerOctreeObject(const PrepareKey &key)
 {
 	_octreeObjects.insert(key);
 	_renderScene->setTransform(getGlobalTransform(), key);
+	BFC_ADD();
 }
 
 void Link::unregisterOctreeObject(const PrepareKey &key)
@@ -25,6 +40,8 @@ void Link::unregisterOctreeObject(const PrepareKey &key)
 		_renderScene->removeElement(*found);
 		_octreeObjects.erase(found);
 	}
+	// ?? CESAR TODO
+	// BFC_REMOVE();
 }
 
 bool Link::hasChildren() const { return _children.size() > 0; };
@@ -77,6 +94,7 @@ void Link::setTransform(const glm::mat4 &t, bool recalculate)
 
 void Link::internalSetPosition(const glm::vec3 &v, bool recalculate)
 {
+    BFC_ADD();
 	_localDirty = true;
 	_position = v;
 	if (recalculate)
@@ -87,6 +105,7 @@ void Link::internalSetPosition(const glm::vec3 &v, bool recalculate)
 
 void Link::internalSetForward(const glm::vec3 &v, bool recalculate)
 {
+	BFC_ADD();
 	_localDirty = true;
 	glm::vec4 get = glm::mat4(glm::toMat4(_orientation) * glm::translate(glm::mat4(1), v))[3];
 	_position.x = _position.x + get.x;
@@ -100,6 +119,7 @@ void Link::internalSetForward(const glm::vec3 &v, bool recalculate)
 
 void Link::internalSetTransform(const glm::mat4 &t, bool recalculate)
 {
+	BFC_ADD();
 	//_localDirty = true;
 	//auto p = t * glm::vec4(1,1,1,1);
 	//_position = glm::vec3(p.x, p.y, p.z);
@@ -117,7 +137,9 @@ void Link::internalSetTransform(const glm::mat4 &t, bool recalculate)
 }
 
 
-void Link::internalSetScale(const glm::vec3 &v, bool recalculate) {
+void Link::internalSetScale(const glm::vec3 &v, bool recalculate)
+{
+	BFC_ADD();
 	_localDirty = true;
 	_scale = v;
 	if (recalculate)
@@ -126,7 +148,9 @@ void Link::internalSetScale(const glm::vec3 &v, bool recalculate) {
 	}
 }
 
-void Link::internalSetOrientation(const glm::quat &v, bool recalculate) {
+void Link::internalSetOrientation(const glm::quat &v, bool recalculate)
+{
+	BFC_ADD();
 	_localDirty = true;
 	_orientation = v;
 	if (recalculate)
@@ -177,6 +201,9 @@ Link::Link(EntityData *entity, AScene *scene)
 	_renderScene = scene->getRenderScene();
 	_entityPtr = entity;
 	reset();
+#ifdef AGE_BFC
+	initBFC(scene->getBfcBlockManagerFactory(), scene->getBfcLinkTracker());
+#endif
 }
 
 void Link::reset()
@@ -336,6 +363,7 @@ void Link::_removeParent()
 
 void Link::_updateGlobalTransform()
 {
+	BFC_ADD();
 	glm::mat4 p = glm::mat4(1);
 	if (hasParent())
 	{

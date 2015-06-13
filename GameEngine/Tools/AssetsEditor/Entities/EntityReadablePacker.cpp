@@ -31,15 +31,15 @@ namespace AGE
 
 		for (auto &e : entities)
 		{
-			if (e.entity.haveComponent<ArchetypeComponent>()
-				&& e.entity.getComponent<ArchetypeComponent>()->parentIsAnArchetype == true)
+			if (e.entity->haveComponent<ArchetypeComponent>()
+				&& e.entity->getComponent<ArchetypeComponent>()->parentIsAnArchetype == true)
 			{
 				continue;
 			}
 			pack.entities.push_back(e);
 			auto &representation = pack.entities.back();
 			auto &entity = representation.entity;
-			auto &components = entity.getComponentList();
+			auto &components = entity->getComponentList();
 
 			bool continueEntityFiltering = true;
 
@@ -49,16 +49,16 @@ namespace AGE
 			// We save only :
 			// - The archetype component
 			// - The entity representation (used in editor)
-			if (entity.haveComponent<ArchetypeComponent>() && continueEntityFiltering)
+			if (entity->haveComponent<ArchetypeComponent>() && continueEntityFiltering)
 			{
 				saveArchetypes = true;
 
-				auto archetypeCpt = entity.getComponent<ArchetypeComponent>();
+				auto archetypeCpt = entity->getComponent<ArchetypeComponent>();
 				representation.componentTypes.push_back(archetypeCpt->getType());
 				representation.components.push_back(archetypeCpt);
 				representation.archetypesDependency.push_back(archetypeCpt->archetypeName);
 
-				auto representationCpt = entity.getComponent<WE::EntityRepresentation>();
+				auto representationCpt = entity->getComponent<WE::EntityRepresentation>();
 				AGE_ASSERT(representationCpt != nullptr);
 
 				representation.componentTypes.push_back(representationCpt->getType());
@@ -81,7 +81,7 @@ namespace AGE
 
 			if (saveArchetypes)
 			{
-				auto archetypeManager = entity.getScene()->getInstance<AGE::WE::ArchetypeEditorManager>();
+				auto archetypeManager = entity->getScene()->getInstance<AGE::WE::ArchetypeEditorManager>();
 				archetypeManager->save();
 			}
 		}
@@ -93,11 +93,11 @@ namespace AGE
 
 		vector.push_back(ReadableEntity());
 		vector.back().entity = e;
-		auto &children = e.getLink().getChildren();
+		auto &children = e->getLink().getChildren();
 		auto parentId = vector.size() - 1;
 		for (auto &c : children)
 		{
-			auto archetypeComponent = c->getEntity()->getEntity().getComponent<ArchetypeComponent>();
+			auto archetypeComponent = c->getEntity()->getEntity()->getComponent<ArchetypeComponent>();
 			if (archetypeComponent && archetypeComponent->parentIsAnArchetype)
 			{
 				continue;

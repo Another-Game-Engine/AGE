@@ -154,7 +154,7 @@ namespace AGE
 					EntityFilter::Lock lock(_filter);
 					for (auto e : _filter.getCollection())
 					{
-						auto representation = e.getComponent<AGE::WE::EntityRepresentation>();
+						auto representation = e->getComponent<AGE::WE::EntityRepresentation>();
 						if (representation->editorOnly)
 						{
 							_filter.manuallyRemoveEntity(e);
@@ -164,7 +164,7 @@ namespace AGE
 						if (_graphNodeDisplay)
 						{
 							// if it's not attached to root
-							if (e.getLink().hasParent())
+							if (e->getLink().hasParent())
 							{
 								continue;
 							}
@@ -215,8 +215,8 @@ namespace AGE
 
 					ImGui::Separator();
 
-					auto representation = entity.getComponent<AGE::WE::EntityRepresentation>();
-					auto archetypeCpt = entity.getComponent<AGE::ArchetypeComponent>();
+					auto representation = entity->getComponent<AGE::WE::EntityRepresentation>();
+					auto archetypeCpt = entity->getComponent<AGE::ArchetypeComponent>();
 
 					if (archetypeCpt == nullptr)
 					{
@@ -225,7 +225,7 @@ namespace AGE
 
 						for (auto &t : types)
 						{
-							if (!entity.haveComponent(t.second))
+							if (!entity->haveComponent(t.second))
 							{
 								if (ImGui::SmallButton(std::string("Add : " + ComponentRegistrationManager::getInstance().getComponentName(t.second)).c_str()))
 								{
@@ -277,7 +277,7 @@ namespace AGE
 					for (auto e : _filter.getCollection())
 					{
 						// if it's not attached to root
-						if (e.getLink().hasParent())
+						if (e->getLink().hasParent())
 						{
 							continue;
 						}
@@ -317,11 +317,11 @@ namespace AGE
 			void EntityManager::generateBasicEntities()
 			{
 				auto camera = _scene->createEntity();
-				_cam = camera.addComponent<CameraComponent>();
-				camera.getLink().setPosition(glm::vec3(0, 3, 5));
-				camera.getLink().setForward(glm::vec3(0, 0, 0));
-				camera.addComponent<FreeFlyComponent>();
-				camera.addComponent<AGE::WE::EntityRepresentation>()->editorOnly = true;
+				_cam = camera->addComponent<CameraComponent>();
+				camera->getLink().setPosition(glm::vec3(0, 3, 5));
+				camera->getLink().setForward(glm::vec3(0, 0, 0));
+				camera->addComponent<FreeFlyComponent>();
+				camera->addComponent<AGE::WE::EntityRepresentation>()->editorOnly = true;
 			}
 	}
 }

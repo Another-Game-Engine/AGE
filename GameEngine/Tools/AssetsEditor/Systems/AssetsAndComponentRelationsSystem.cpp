@@ -30,15 +30,15 @@ namespace AGE
 		{
 			for (auto e : _meshRenderer.getCollection())
 			{
-				e.getComponent<MeshRenderer>()->meshFileList = &AssetsEditorScene::getCookedMeshsList();
-				e.getComponent<MeshRenderer>()->meshPathList = &AssetsEditorScene::getCookedMeshsListFullPath();
-				e.getComponent<MeshRenderer>()->materialFileList = &AssetsEditorScene::getCookedMaterialList();
-				e.getComponent<MeshRenderer>()->materialPathList = &AssetsEditorScene::getCookedMaterialListFullPath();
+				e->getComponent<MeshRenderer>()->meshFileList = &AssetsEditorScene::getCookedMeshsList();
+				e->getComponent<MeshRenderer>()->meshPathList = &AssetsEditorScene::getCookedMeshsListFullPath();
+				e->getComponent<MeshRenderer>()->materialFileList = &AssetsEditorScene::getCookedMaterialList();
+				e->getComponent<MeshRenderer>()->materialPathList = &AssetsEditorScene::getCookedMaterialListFullPath();
 			}
 			for (auto e : _rigidBodies.getCollection())
 			{
-				/*e.getComponent<RigidBody>()->shapeFileList = &AssetsEditorScene::getCookedBulletList();
-				e.getComponent<RigidBody>()->shapePathList = &AssetsEditorScene::getCookedBulletListFullPath();*/
+				/*e->getComponent<RigidBody>()->shapeFileList = &AssetsEditorScene::getCookedBulletList();
+				e->getComponent<RigidBody>()->shapePathList = &AssetsEditorScene::getCookedBulletListFullPath();*/
 			}
 		}
 
@@ -49,7 +49,7 @@ namespace AGE
 
 			_all.setOnAdd(std::function<void(Entity e)>([this](Entity en)
 			{
-				en.addComponent<AGE::WE::EntityRepresentation>(std::string("Entity " + std::to_string(en.getId()) + "\0").c_str());
+				en->addComponent<AGE::WE::EntityRepresentation>(std::string("Entity " + std::to_string(en.getId()) + "\0").c_str());
 			}));
 
 			_all.setOnRemove(std::function<void(Entity e)>([this](Entity en)

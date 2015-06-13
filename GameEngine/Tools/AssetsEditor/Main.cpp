@@ -84,8 +84,8 @@ int			main(int ac, char **av)
 		REGISTER_COMPONENT_TYPE(AGE::PointLightComponent);
 		REGISTER_COMPONENT_TYPE(AGE::SpotLightComponent);
 		REGISTER_COMPONENT_TYPE(AGE::CameraComponent);
-		REGISTER_COMPONENT_TYPE(AGE::DirectionalLightComponent);
 		REGISTER_COMPONENT_TYPE(AGE::FreeFlyComponent);
+		REGISTER_COMPONENT_TYPE(AGE::DirectionalLightComponent);
 		REGISTER_COMPONENT_TYPE(AGE::ArchetypeComponent);
 		REGISTER_COMPONENT_TYPE(AGE::RigidBody);
 

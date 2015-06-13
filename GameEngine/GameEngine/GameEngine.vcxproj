@@ -55,38 +55,38 @@
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\AgeLibProperties.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\AgeLibProperties.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Retail|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\AgeLibProperties.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Profile|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\AgeLibProperties.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <SourcePath>$(SolutionDir)Vendors/TinyThread;$(SolutionDir)Vendors/TinyObjLoader;$(SourcePath);$(SolutionDir)Vendors/imgui/</SourcePath>
-    <IncludePath>$(ProjectDir)Engine;$(ProjectDir);$(SolutionDir)Vendors;$(SolutionDir)Vendors/TinyObjLoader;$(SolutionDir)Vendors/TinyThread;$(SolutionDir)Vendors/OpenGL/include;$(IncludePath);$(SolutionDir)Vendors/boost_1_55_0;$(SolutionDir)Vendors\fmod\inc;$(SolutionDir)Vendors/minizip/include/;$(SolutionDir)Vendors/zlib/include/</IncludePath>
     <LibraryPath>$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(ProjectDir)Engine;$(ProjectDir);$(SolutionDir)Vendors;$(SolutionDir)Vendors/TinyObjLoader;$(SolutionDir)Vendors/TinyThread;$(SolutionDir)Vendors/OpenGL/include;$(IncludePath);$(SolutionDir)Vendors/boost_1_55_0;$(SolutionDir)Vendors\fmod\inc;$(SolutionDir)Vendors/minizip/include/;$(SolutionDir)Vendors/zlib/include/</IncludePath>
     <LibraryPath>$(LibraryPath)</LibraryPath>
     <TargetExt>.lib</TargetExt>
     <SourcePath>$(SolutionDir)Vendors/TinyThread;$(SolutionDir)Vendors/TinyObjLoader;$(SourcePath);$(SolutionDir)Vendors/imgui/</SourcePath>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Retail|x64'">
-    <IncludePath>$(ProjectDir)Engine;$(ProjectDir);$(SolutionDir)Vendors;$(SolutionDir)Vendors/TinyObjLoader;$(SolutionDir)Vendors/TinyThread;$(SolutionDir)Vendors/OpenGL/include;$(IncludePath);$(SolutionDir)Vendors/boost_1_55_0;$(SolutionDir)Vendors/bullet/src;$(SolutionDir)Vendors\fmod\inc;$(SolutionDir)Vendors/minizip/include/;$(SolutionDir)Vendors/zlib/include/</IncludePath>
     <LibraryPath>$(LibraryPath)</LibraryPath>
     <TargetExt>.lib</TargetExt>
     <SourcePath>$(SolutionDir)Vendors/TinyThread;$(SolutionDir)Vendors/TinyObjLoader;$(SourcePath);$(SolutionDir)Vendors/imgui/</SourcePath>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">
-    <IncludePath>$(ProjectDir)Engine;$(ProjectDir);$(SolutionDir)Vendors;$(SolutionDir)Vendors/TinyObjLoader;$(SolutionDir)Vendors/TinyThread;$(SolutionDir)Vendors/OpenGL/include;$(IncludePath);$(SolutionDir)Vendors/boost_1_55_0;$(SolutionDir)Vendors/bullet/src;$(SolutionDir)Vendors\fmod\inc;$(SolutionDir)Vendors/minizip/include/;$(SolutionDir)Vendors/zlib/include/</IncludePath>
     <LibraryPath>$(LibraryPath)</LibraryPath>
     <TargetExt>.lib</TargetExt>
     <SourcePath>$(SolutionDir)Vendors/TinyThread;$(SolutionDir)Vendors/TinyObjLoader;$(SourcePath);$(SolutionDir)Vendors/imgui/</SourcePath>
@@ -99,11 +99,13 @@
       <PreprocessorDefinitions>WIN32;_SCL_SECURE_NO_WARNINGS;EDITOR_ENABLED;_CRT_SECURE_NO_WARNINGS;AGE_ENABLE_IMGUI;AGE_ENABLE_PROFILING;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MultiProcessorCompilation>false</MultiProcessorCompilation>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <OpenMPSupport>true</OpenMPSupport>
+      <OpenMPSupport>
+      </OpenMPSupport>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <RuntimeTypeInfo>
+      </RuntimeTypeInfo>
       <DisableSpecificWarnings>4503;4099</DisableSpecificWarnings>
       <TreatWarningAsError>false</TreatWarningAsError>
       <SDLCheck>true</SDLCheck>
@@ -241,12 +243,20 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\Vendors\imgui\imgui.cpp" />
+    <ClCompile Include="Engine\BFC\BFCBlock.cpp" />
+    <ClCompile Include="Engine\BFC\BFCBlockManager.cpp" />
+    <ClCompile Include="Engine\BFC\BFCBlockManagerFactory.cpp" />
+    <ClCompile Include="Engine\BFC\BFCItem.cpp" />
+    <ClCompile Include="Engine\BFC\BFCLink.cpp" />
+    <ClCompile Include="Engine\BFC\BFCLinkTracker.cpp" />
     <ClCompile Include="Engine\Components\ArchetypeComponent.cpp" />
     <ClCompile Include="Engine\Components\DirectionalLightComponent.cpp" />
+    <ClCompile Include="Engine\Core\PrepareKey.cpp" />
     <ClCompile Include="Engine\Entities\ArchetypeManager.cpp" />
     <ClCompile Include="Engine\Entities\BinaryEntity.cpp" />
     <ClCompile Include="Engine\Entities\BinaryEntityPack.cpp" />
     <ClCompile Include="Engine\Entities\EntityBinaryPacker.cpp" />
+    <ClCompile Include="Engine\Graphic\GraphicElementManager.cpp" />
     <ClCompile Include="Engine\Render\OcclusionTools\DepthMap.cpp" />
     <ClCompile Include="Engine\Render\OcclusionTools\DepthMapHandle.cpp" />
     <ClCompile Include="Engine\Render\OcclusionTools\DepthMapManager.cpp" />
@@ -254,9 +264,6 @@
     <ClCompile Include="Engine\Core\SceneChunkSerialization.cpp" />
     <ClCompile Include="Engine\Entities\ArchetypeLibrary.cpp" />
     <ClCompile Include="Engine\Entities\EntitySerializationInfos.cpp" />
-    <ClCompile Include="Engine\Render\DepthMap.cpp" />
-    <ClCompile Include="Engine\Render\DepthMapHandle.cpp" />
-    <ClCompile Include="Engine\Render\DepthMapManager.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredDirectionalLightning.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredOnScreen.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredShadowBuffering.cpp" />
@@ -312,7 +319,7 @@
     <ClCompile Include="Engine\Core\ConfigurationManager.cpp" />
     <ClCompile Include="Engine\Core\DefaultConfiguration.cpp" />
     <ClCompile Include="Engine\Core\Link.cpp" />
-    <ClCompile Include="Engine\SpacePartitioning\PreparableObject.cpp" />
+    <ClCompile Include="Engine\Culling\PreparableObject.cpp" />
     <ClCompile Include="Engine\Threads\Tasks\ToRenderTasks.cpp" />
     <ClCompile Include="Engine\Render\Buffer\ABuffer.cpp" />
     <ClCompile Include="Engine\Render\Buffer\IndexBuffer.cpp" />
@@ -361,11 +368,9 @@
     <ClCompile Include="Engine\Skinning\Bone.cpp" />
     <ClCompile Include="Engine\Skinning\Skeleton.cpp" />
     <ClCompile Include="Engine\Components\SpotLight.cpp" />
-    <ClCompile Include="Engine\SpacePartitioning\Cullable\Cullable.cpp" />
-    <ClCompile Include="Engine\SpacePartitioning\Cullable\Object\Mesh.cpp" />
-    <ClCompile Include="Engine\SpacePartitioning\Cullable\Object\PointLight.cpp" />
-    <ClCompile Include="Engine\SpacePartitioning\LooseOctree.cpp" />
-    <ClCompile Include="Engine\SpacePartitioning\LooseOctreeNode.cpp" />
+    <ClCompile Include="Engine\Culling\Cullable\Cullable.cpp" />
+    <ClCompile Include="Engine\Culling\Cullable\Object\Mesh.cpp" />
+    <ClCompile Include="Engine\Culling\Cullable\Object\PointLight.cpp" />
     <ClCompile Include="Engine\Threads\CallbackContainer.cpp" />
     <ClCompile Include="Engine\Threads\MainThread.cpp" />
     <ClCompile Include="Engine\Threads\PrepareRenderThread.cpp" />
@@ -445,6 +450,15 @@
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
     <ClInclude Include="..\Vendors\imgui\imgui.h" />
     <ClInclude Include="..\Vendors\imgui\stb_textedit.h" />
+    <ClInclude Include="Engine\BFC\BFCBlock.hpp" />
+    <ClInclude Include="Engine\BFC\BFCBlockManager.hpp" />
+    <ClInclude Include="Engine\BFC\BFCBlockManagerFactory.hpp" />
+    <ClInclude Include="Engine\BFC\BFCCullableHandle.hpp" />
+    <ClInclude Include="Engine\BFC\BFCItemID.hpp" />
+    <ClInclude Include="Engine\BFC\BFCLink.hpp" />
+    <ClInclude Include="Engine\BFC\BFCLinkTracker.hpp" />
+    <ClInclude Include="Engine\BFC\BFCItem.hpp" />
+    <ClInclude Include="Engine\BFC\BFCCullableObject.hpp" />
     <ClInclude Include="Engine\Components\ArchetypeComponent.hpp" />
     <ClInclude Include="Engine\Components\DirectionalLightComponent.hh" />
     <ClInclude Include="Engine\Components\Collider.hpp" />
@@ -458,10 +472,9 @@
     <ClInclude Include="Engine\Entities\EntityBinaryPacker.hpp" />
     <ClInclude Include="Engine\Entities\EntityPacker.hpp" />
     <ClInclude Include="Engine\Entities\IArchetypeManager.hpp" />
-    <ClInclude Include="Engine\Render\DepthMap.hpp" />
-    <ClInclude Include="Engine\Render\DepthMapHandle.hpp" />
-    <ClInclude Include="Engine\Render\DepthMapManager.hpp" />
     <ClInclude Include="Engine\Components\PhysicsData.hpp" />
+    <ClInclude Include="Engine\Graphic\DRBMesh.hpp" />
+    <ClInclude Include="Engine\Graphic\GraphicElementManager.hpp" />
     <ClInclude Include="Engine\Physics\BoxColliderInterface.hpp" />
     <ClInclude Include="Engine\Physics\CapsuleColliderInterface.hpp" />
     <ClInclude Include="Engine\Physics\ColliderInterface.hpp" />
@@ -551,15 +564,15 @@
     <ClInclude Include="Engine\Core\Material\MaterialData.hh" />
     <ClInclude Include="Engine\Core\Material\MaterialInstance.hh" />
     <ClInclude Include="Engine\Core\Material\MaterialSetInstance.hh" />
-    <ClInclude Include="Engine\SpacePartitioning\PreparableObject.hh" />
+    <ClInclude Include="Engine\Culling\PreparableObject.hh" />
     <ClInclude Include="Engine\Skinning\AnimationManager.hpp" />
-    <ClInclude Include="Engine\SpacePartitioning\Cullable\Object\Camera.hh" />
-    <ClInclude Include="Engine\SpacePartitioning\Cullable\Object\Mesh.hh" />
-    <ClInclude Include="Engine\SpacePartitioning\Cullable\Object\PointLight.hh" />
-    <ClInclude Include="Engine\SpacePartitioning\Ouptut\RenderCamera.hh" />
-    <ClInclude Include="Engine\SpacePartitioning\Ouptut\RenderLight.hh" />
-    <ClInclude Include="Engine\SpacePartitioning\Ouptut\RenderPainter.hh" />
-    <ClInclude Include="Engine\SpacePartitioning\Ouptut\RenderPipeline.hh" />
+    <ClInclude Include="Engine\Culling\Cullable\Object\Camera.hh" />
+    <ClInclude Include="Engine\Culling\Cullable\Object\Mesh.hh" />
+    <ClInclude Include="Engine\Culling\Cullable\Object\PointLight.hh" />
+    <ClInclude Include="Engine\Culling\Ouptut\RenderCamera.hh" />
+    <ClInclude Include="Engine\Culling\Ouptut\RenderLight.hh" />
+    <ClInclude Include="Engine\Culling\Ouptut\RenderPainter.hh" />
+    <ClInclude Include="Engine\Culling\Ouptut\RenderPipeline.hh" />
     <ClInclude Include="Engine\Data\Material\MaterialData.hh" />
     <ClInclude Include="Engine\Data\TextureData.hh" />
     <ClInclude Include="Engine\Render\GeometryManagement\Buffer\Buffer.hh" />
@@ -593,10 +606,8 @@
     <ClInclude Include="Engine\Render\Textures\ITexture.hh" />
     <ClInclude Include="Engine\Render\Textures\PixelTypesFormats.hh" />
     <ClInclude Include="Engine\Render\Textures\Texture2D.hh" />
-    <ClInclude Include="Engine\SpacePartitioning\Cullable\Cullable.hh" />
-    <ClInclude Include="Engine\SpacePartitioning\Cullable\CullableShape.hh" />
-    <ClInclude Include="Engine\SpacePartitioning\LooseOctree.hh" />
-    <ClInclude Include="Engine\SpacePartitioning\LooseOctreeNode.hh" />
+    <ClInclude Include="Engine\Culling\Cullable\Cullable.hh" />
+    <ClInclude Include="Engine\Culling\Cullable\CullableShape.hh" />
     <ClInclude Include="Engine\Threads\TaskScheduler.hpp" />
     <ClInclude Include="Engine\Threads\Tasks\BasicTasks.hpp" />
     <ClInclude Include="Engine\Threads\Tasks\MainToPrepareTasks.hpp" />
@@ -792,6 +803,11 @@
     <None Include="Engine\ResourceManager\SharedMesh.hh" />
     <None Include="Engine\ResourceManager\Texture.hh" />
     <None Include="Engine\Components\MeshRenderer.hh" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SpacePartitioning\SpacePartitioning.vcxproj">
+      <Project>{ff05acc8-441b-4e65-866c-fe72a1cde27d}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -25,6 +25,10 @@ namespace AGE
 	{
 	}
 
+	DirectionalLightComponent::~DirectionalLightComponent()
+	{
+	}
+
 	void DirectionalLightComponent::_copyFrom(const ComponentBase *model)
 	{
 		auto o = static_cast<const DirectionalLightComponent*>(model);
@@ -36,7 +40,7 @@ namespace AGE
 	{
 		if (!_key.invalid())
 		{
-			entity.getLink().unregisterOctreeObject(_key);
+			entity->getLink().unregisterOctreeObject(_key);
 		}
 		_key = AGE::PrepareKey();
 		_data.color = glm::vec3(1);
@@ -45,7 +49,7 @@ namespace AGE
 	void DirectionalLightComponent::init()
 	{
 		_key = AGE::GetPrepareThread()->addDirectionalLight();
-		entity.getLink().registerOctreeObject(_key);
+		entity->getLink().registerOctreeObject(_key);
 		assert(!_key.invalid());
 		set(_data);
 	}

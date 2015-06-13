@@ -19,7 +19,6 @@
 
 namespace AGE
 {
-	class EntityData;
 	class EntityFilter;
 	struct ComponentBase;
 	class ComponentManager;
@@ -39,51 +38,14 @@ namespace AGE
 		bool operator<=(const Entity &o) const;
 		bool operator>(const Entity &o) const;
 		bool operator>=(const Entity &o) const;
+		const EntityData *operator->() const { return ptr; }
+		EntityData *operator->() { return ptr; }
 
-
-		const AGE::Link &getLink() const;
-		AGE::Link &getLink();
 		const AGE::Link *getLinkPtr() const;
 		AGE::Link *getLinkPtr();
 		const AGE::Entity *getPtr() const;
 		AGE::Entity *getPtr();
-		AScene *getScene();
 		EntityData *getDataPtr() { return ptr; }
-
-		ComponentBase *getComponent(ComponentType id);
-
-		template <typename T>
-		T *getComponent()
-		{
-			return static_cast<T*>(ptr->getComponent(Component<T>::getTypeId()));
-		}
-
-		template <typename T, typename... Args>
-		T *addComponent(Args &&...args)
-		{
-			SCOPE_profile_cpu_function("Entity");
-			return ptr->addComponent<T>(args...);
-		}
-
-		void removeComponent(ComponentType id);
-
-		template <typename T>
-		void removeComponent()
-		{
-			SCOPE_profile_cpu_function("Entity");
-			ptr->removeComponent(Component<T>::getTypeId());
-		}
-
-		bool haveComponent(ComponentType id) const;
-		void addComponentPtr(ComponentBase *cpt);
-		void copyComponent(ComponentBase *cpt);
-
-		template <typename T>
-		bool haveComponent() const
-		{
-			SCOPE_profile_cpu_function("Entity");
-			return ptr->haveComponent(Component<T>::getTypeId());
-		}
 
 		inline ENTITY_ID getId() const
 		{
@@ -109,13 +71,11 @@ namespace AGE
 		{
 			return id != MAX_ENTITY_NUMBER && ptr != nullptr;
 		}
-
-		const std::vector<ComponentBase*> &getComponentList() const;
 	private:
+		EntityData *ptr;
 		ENTITY_ID id;
 		ENTITY_VERSION version;
 		ENTITY_FLAGS flags;
-		EntityData *ptr;
 
 		friend AScene;
 		friend EntityFilter;

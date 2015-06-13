@@ -10,16 +10,16 @@ namespace AGE
 		// we load archetypes dependency
 		if (!archetypesDependency.empty())
 		{
-			auto archetypeLibrary = entity.getScene()->getInstance<AGE::ArchetypeLibrary>();
+			auto archetypeLibrary = entity->getScene()->getInstance<AGE::ArchetypeLibrary>();
 			for (auto &dep : archetypesDependency)
 			{
 				archetypeLibrary->loadOne(dep);
 			}
 		}
 
-		entity.getLink().setPosition(link.getPosition());
-		entity.getLink().setOrientation(link.getOrientation());
-		entity.getLink().setScale(link.getScale());
+		entity->getLink().setPosition(link.getPosition());
+		entity->getLink().setOrientation(link.getOrientation());
+		entity->getLink().setScale(link.getScale());
 		//entity.setFlags(f);
 		for (auto &e : componentTypes)
 		{
@@ -27,8 +27,8 @@ namespace AGE
 			auto newComponent = ComponentRegistrationManager::getInstance().loadJson(hashType, entity, ar);
 			if (newComponent->getType() == Component<ArchetypeComponent>::getTypeId())
 			{
-				auto archetypeName = entity.getComponent<ArchetypeComponent>()->archetypeName;
-				bool success = entity.getScene()->getInstance<AGE::ArchetypeLibrary>()->spawn(archetypeName, entity);
+				auto archetypeName = entity->getComponent<ArchetypeComponent>()->archetypeName;
+				bool success = entity->getScene()->getInstance<AGE::ArchetypeLibrary>()->spawn(archetypeName, entity);
 				AGE_ASSERT(success);
 			}
 		}

@@ -1,6 +1,5 @@
 #pragma once
 
-
 #include <Components/Component.hh>
 #include <glm/fwd.hpp>
 #include <Utils/Serialization/VectorSerialization.hpp>
@@ -10,7 +9,7 @@ namespace AGE
 
 	struct DirectionalLightData
 	{
-		DirectionalLightData(glm::vec3 const &color = glm::vec3(1.0f));
+		DirectionalLightData(glm::vec3 const &_color = glm::vec3(1.0f));
 		glm::vec3 color;
 	};
 
@@ -19,8 +18,7 @@ namespace AGE
 		AGE_COMPONENT_UNIQUE_IDENTIFIER("AGE_CORE_DirectionnalLightComponent");
 	public:
 		DirectionalLightComponent();
-		virtual ~DirectionalLightComponent() = default;
-		DirectionalLightComponent(DirectionalLightComponent const &o) = default;
+		virtual ~DirectionalLightComponent();
 
 		virtual void _copyFrom(const ComponentBase *model);
 
@@ -45,7 +43,9 @@ namespace AGE
 #endif
 
 	private:
-		AGE::PrepareKey _key;
 		DirectionalLightData _data;
+		AGE::PrepareKey _key;
 	};
 }
+
+CEREAL_CLASS_VERSION(AGE::DirectionalLightComponent, 0);

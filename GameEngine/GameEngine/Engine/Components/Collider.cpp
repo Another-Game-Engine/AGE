@@ -12,9 +12,9 @@ namespace AGE
 	void Collider::init(Physics::ColliderType colliderType, const std::string &mesh)
 	{
 		assert(collider == nullptr && "Collider already initialized");
-		collider = entity.getScene()->getInstance<Physics::PhysicsInterface>()->getWorld()->createCollider(colliderType, colliderType == Physics::ColliderType::Mesh ? entity.getScene()->getInstance<AGE::AssetsManager>()->getMesh(mesh) : nullptr, entity.addComponent<Private::PhysicsData>()->getData());
+		collider = entity->getScene()->getInstance<Physics::PhysicsInterface>()->getWorld()->createCollider(colliderType, colliderType == Physics::ColliderType::Mesh ? entity->getScene()->getInstance<AGE::AssetsManager>()->getMesh(mesh) : nullptr, entity->addComponent<Private::PhysicsData>()->getData());
 		collider->collider = this;
-		scale(entity.getLink().getScale());
+		scale(entity->getLink().getScale());
 	}
 
 	void Collider::setMaterial(const std::string &material)
@@ -207,7 +207,7 @@ namespace AGE
 		switch (getColliderType())
 		{
 			case Physics::ColliderType::Mesh:
-				collider->as<Physics::ColliderType::Mesh>()->setMesh(entity.getScene()->getInstance<AGE::AssetsManager>()->getMesh(mesh));
+				collider->as<Physics::ColliderType::Mesh>()->setMesh(entity->getScene()->getInstance<AGE::AssetsManager>()->getMesh(mesh));
 				break;
 			default:
 				assert(!"Invalid collider type");
@@ -279,12 +279,12 @@ namespace AGE
 	{
 		if (collider != nullptr)
 		{
-			entity.getScene()->getInstance<Physics::PhysicsInterface>()->getWorld()->destroyCollider(collider);
+			entity->getScene()->getInstance<Physics::PhysicsInterface>()->getWorld()->destroyCollider(collider);
 			collider = nullptr;
 		}
-		if (!entity.haveComponent<RigidBody>())
+		if (!entity->haveComponent<RigidBody>())
 		{
-			entity.removeComponent<Private::PhysicsData>();
+			entity->removeComponent<Private::PhysicsData>();
 		}
 	}
 }

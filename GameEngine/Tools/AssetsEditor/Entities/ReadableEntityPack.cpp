@@ -11,6 +11,8 @@
 
 #include <Entities/BinaryEntityPack.hpp>
 
+#include <Components/ComponentRegistrationManager.hpp>
+
 namespace AGE
 {
 	ReadableEntityPack::ReadableEntityPack()
@@ -48,7 +50,7 @@ namespace AGE
 		{
 			for (auto &c : e.children)
 			{
-				e.entity.getLink().attachChild(entities[c].entity.getLinkPtr());
+				e.entity->getLink().attachChild(entities[c].entity.getLinkPtr());
 			}
 		}
 	}
