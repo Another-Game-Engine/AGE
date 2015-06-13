@@ -5,6 +5,7 @@
 
 namespace AGE
 {
+	struct DRBCameraDrawableList;
 
 	class ScreenRender : public ARender
 	{
@@ -14,10 +15,10 @@ namespace AGE
 		virtual ~ScreenRender() {}
 
 	public:
-		virtual IRender &render(std::list<std::shared_ptr<DRBData>> const &meshs, RenderLightList &lights, CameraInfos const &infos) override final;
+		virtual IRender &render(const DRBCameraDrawableList &infos) override final;
 	
 	protected:
-		virtual void renderPass(std::list<std::shared_ptr<DRBData>> const &, RenderLightList &, CameraInfos const &) = 0;
+		virtual void renderPass(const DRBCameraDrawableList &infos) = 0;
 		glm::uvec2 viewport;
 	};
 }

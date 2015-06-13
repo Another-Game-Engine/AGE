@@ -79,77 +79,78 @@ namespace AGE
 		_spherePainter = _painterManager->get_painter(spherePainterkey);
 	}
 
-	void DeferredPointLightning::renderPass(std::list<std::shared_ptr<DRBData>> const &, RenderLightList &lights, CameraInfos const &infos)
+	void DeferredPointLightning::renderPass(const DRBCameraDrawableList &infos)
 	{
-		SCOPE_profile_gpu_i("DeferredPointLightning render pass");
-		SCOPE_profile_cpu_i("RenderTimer", "DeferredPointLightning render pass");
+		//@PROUT
+		//SCOPE_profile_gpu_i("DeferredPointLightning render pass");
+		//SCOPE_profile_cpu_i("RenderTimer", "DeferredPointLightning render pass");
 
-		glm::vec3 cameraPosition = -glm::transpose(glm::mat3(infos.view)) * glm::vec3(infos.view[3]);
+		//glm::vec3 cameraPosition = -glm::transpose(glm::mat3(infos.view)) * glm::vec3(infos.view[3]);
 
-		_programs[PROGRAM_LIGHTNING]->use();
-		_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("projection_matrix").set(infos.data.projection);
-		_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("view_matrix").set(infos.view);
-		_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("normal_buffer").set(_normalInput);
-		_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("depth_buffer").set(_depthInput);
-		_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("specular_buffer").set(_specularInput);
-		_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("eye_pos").set(cameraPosition);
+		//_programs[PROGRAM_LIGHTNING]->use();
+		//_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("projection_matrix").set(infos.data.projection);
+		//_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("view_matrix").set(infos.view);
+		//_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("normal_buffer").set(_normalInput);
+		//_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("depth_buffer").set(_depthInput);
+		//_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("specular_buffer").set(_specularInput);
+		//_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("eye_pos").set(cameraPosition);
 
-		_programs[PROGRAM_STENCIL]->use();
-		_programs[PROGRAM_STENCIL]->get_resource<Mat4>("projection_matrix").set(infos.data.projection);
-		_programs[PROGRAM_STENCIL]->get_resource<Mat4>("view_matrix").set(infos.view);
+		//_programs[PROGRAM_STENCIL]->use();
+		//_programs[PROGRAM_STENCIL]->get_resource<Mat4>("projection_matrix").set(infos.data.projection);
+		//_programs[PROGRAM_STENCIL]->get_resource<Mat4>("view_matrix").set(infos.view);
 
-		// Disable blending to clear the color buffer
-		OpenGLState::glDisable(GL_BLEND);
-		OpenGLState::glEnable(GL_CULL_FACE);
-		// activate depth test and func to check if sphere_depth > current_depth (normal zfail)
-		OpenGLState::glEnable(GL_DEPTH_TEST);
-		OpenGLState::glDepthFunc(GL_GEQUAL);
-		// We activate the stencil test
-		OpenGLState::glEnable(GL_STENCIL_TEST);
-		// We do not write on the depth buffer
-		OpenGLState::glDepthMask(GL_FALSE);
-		// And we set the blend mode to additive
-		OpenGLState::glEnable(GL_BLEND);
-		OpenGLState::glBlendFunc(GL_ONE, GL_ONE);
-		// Set stencil clear value to 0
-		OpenGLState::glClearStencil(0);
-		// Iterate throught each light
-		for (auto &pl : lights.pointLight)
-		{
-			SCOPE_profile_gpu_i("Lightpoints");
-			SCOPE_profile_cpu_i("RenderTimer", "Lightpoints");
+		//// Disable blending to clear the color buffer
+		//OpenGLState::glDisable(GL_BLEND);
+		//OpenGLState::glEnable(GL_CULL_FACE);
+		//// activate depth test and func to check if sphere_depth > current_depth (normal zfail)
+		//OpenGLState::glEnable(GL_DEPTH_TEST);
+		//OpenGLState::glDepthFunc(GL_GEQUAL);
+		//// We activate the stencil test
+		//OpenGLState::glEnable(GL_STENCIL_TEST);
+		//// We do not write on the depth buffer
+		//OpenGLState::glDepthMask(GL_FALSE);
+		//// And we set the blend mode to additive
+		//OpenGLState::glEnable(GL_BLEND);
+		//OpenGLState::glBlendFunc(GL_ONE, GL_ONE);
+		//// Set stencil clear value to 0
+		//OpenGLState::glClearStencil(0);
+		//// Iterate throught each light
+		//for (auto &pl : lights.pointLight)
+		//{
+		//	SCOPE_profile_gpu_i("Lightpoints");
+		//	SCOPE_profile_cpu_i("RenderTimer", "Lightpoints");
 
-			_programs[PROGRAM_STENCIL]->use();
-			_programs[PROGRAM_STENCIL]->get_resource<Mat4>("model_matrix").set(pl.light.sphereTransform);
+		//	_programs[PROGRAM_STENCIL]->use();
+		//	_programs[PROGRAM_STENCIL]->get_resource<Mat4>("model_matrix").set(pl.light.sphereTransform);
 
-			_programs[PROGRAM_LIGHTNING]->use();
-			_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("model_matrix").set(pl.light.sphereTransform);
-			_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("position_light").set(glm::vec3(pl.light.sphereTransform[3]));
-			// @TRC to fix
-			//_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("attenuation_light").set(pl.light.data.range);
-			// @TRC to fix
-			//_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("color_light").set(pl.light.data.color);
-			_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("ambient_color").set(glm::vec3(0));
+		//	_programs[PROGRAM_LIGHTNING]->use();
+		//	_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("model_matrix").set(pl.light.sphereTransform);
+		//	_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("position_light").set(glm::vec3(pl.light.sphereTransform[3]));
+		//	// @TRC to fix
+		//	//_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("attenuation_light").set(pl.light.data.range);
+		//	// @TRC to fix
+		//	//_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("color_light").set(pl.light.data.color);
+		//	_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("ambient_color").set(glm::vec3(0));
 
-			// We clear the stencil buffer
-			glClear(GL_STENCIL_BUFFER_BIT);
+		//	// We clear the stencil buffer
+		//	glClear(GL_STENCIL_BUFFER_BIT);
 
-			OpenGLState::glColorMask(glm::bvec4(false));
+		//	OpenGLState::glColorMask(glm::bvec4(false));
 
-			OpenGLState::glStencilFunc(GL_ALWAYS, 0, 0xFFFFFFFF);
-			OpenGLState::glStencilOp(GL_KEEP, GL_KEEP, GL_INCR);
-			OpenGLState::glCullFace(GL_BACK);
+		//	OpenGLState::glStencilFunc(GL_ALWAYS, 0, 0xFFFFFFFF);
+		//	OpenGLState::glStencilOp(GL_KEEP, GL_KEEP, GL_INCR);
+		//	OpenGLState::glCullFace(GL_BACK);
 
-			_spherePainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_STENCIL], Properties(), _sphereVertices);
+		//	_spherePainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_STENCIL], Properties(), _sphereVertices);
 
-			OpenGLState::glColorMask(glm::bvec4(true));
+		//	OpenGLState::glColorMask(glm::bvec4(true));
 
-			OpenGLState::glStencilFunc(GL_EQUAL, 0, 0xFFFFFFFF);
-			OpenGLState::glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
-			OpenGLState::glCullFace(GL_FRONT);
+		//	OpenGLState::glStencilFunc(GL_EQUAL, 0, 0xFFFFFFFF);
+		//	OpenGLState::glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
+		//	OpenGLState::glCullFace(GL_FRONT);
 
-			_spherePainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_LIGHTNING], Properties(), _sphereVertices);
+		//	_spherePainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_LIGHTNING], Properties(), _sphereVertices);
 
-		}
+		//}
 	}
 }

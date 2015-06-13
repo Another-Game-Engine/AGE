@@ -9,18 +9,13 @@
 
 namespace AGE
 {
-	class Properties;
-	class IRenderingPipeline;
-	struct RenderLightList;
-	struct RenderPipeline;
-	struct CameraInfos;
-	struct DRBData;
+	struct DRBCameraDrawableList;
 
 	class IRender
 	{
 	public:
 		virtual ~IRender() {}
-		virtual IRender &render(std::list<std::shared_ptr<DRBData>> const &meshs, RenderLightList &lights, CameraInfos const &infos) = 0;
+		virtual IRender &render(const DRBCameraDrawableList &infos) = 0;
 	};
 
 }

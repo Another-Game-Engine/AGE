@@ -19,7 +19,7 @@ namespace AGE
 		virtual ~DeferredBasicBuffering() = default;
 
 	protected:
-		virtual void renderPass(std::list<std::shared_ptr<DRBData>> const &meshs, RenderLightList &, CameraInfos const &);
+		virtual void renderPass(const DRBCameraDrawableList &infos);
 		std::shared_ptr<Texture2D> _depth;
 		std::shared_ptr<Texture2D> _occlusionDepth;
 

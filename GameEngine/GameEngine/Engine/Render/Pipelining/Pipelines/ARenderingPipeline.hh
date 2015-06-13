@@ -18,7 +18,7 @@ namespace AGE
 		virtual bool recompileShaders();
 
 		std::shared_ptr<PaintingManager> getPainterManager() const;
-		virtual IRenderingPipeline &render(std::list<std::shared_ptr<DRBData>> const &meshs, RenderLightList &lights, CameraInfos const &camera);
+		virtual IRenderingPipeline &render(const DRBCameraDrawableList &infos);
 	protected:
 		ARenderingPipeline(std::string &&name, std::shared_ptr<PaintingManager> const &painter_manager);
 		ARenderingPipeline(ARenderingPipeline &&move);

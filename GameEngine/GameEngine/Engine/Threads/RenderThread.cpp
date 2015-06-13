@@ -326,7 +326,7 @@ namespace AGE
 		//});
 
 		registerCallback<AGE::DRBCameraDrawableListCommand>([&](AGE::DRBCameraDrawableListCommand &msg){
-			pipelines[RenderType::DEFERRED]->render(msg.list->meshs, RenderLightList(), msg.list->cameraInfos);
+			pipelines[RenderType::DEFERRED]->render(*msg.list.get());
 		});
 
 		registerSharedCallback<AGE::Tasks::Basic::BoolFunction>([&](AGE::Tasks::Basic::BoolFunction& msg)

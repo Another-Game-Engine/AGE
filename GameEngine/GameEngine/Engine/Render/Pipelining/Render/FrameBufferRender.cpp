@@ -18,7 +18,7 @@ namespace AGE
 	{
 	}
 
-	IRender & FrameBufferRender::render(std::list<std::shared_ptr<DRBData>> const &meshs, RenderLightList &lights, CameraInfos const &infos)
+	IRender & FrameBufferRender::render(const DRBCameraDrawableList &infos)
 	{
 		SCOPE_profile_cpu_i("RenderTimer", "FrameBufferRender pass");
 
@@ -42,7 +42,7 @@ namespace AGE
 			}
 			_is_update = true;
 		}
-		renderPass(meshs, lights, infos);
+		renderPass(infos);
 		_frame_buffer.unbind();
 		return (*this);
 	}

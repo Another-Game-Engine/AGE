@@ -43,13 +43,13 @@ namespace AGE
 		return true;
 	}
 
-	IRenderingPipeline & ARenderingPipeline::render(std::list<std::shared_ptr<DRBData>> const &meshs, RenderLightList &lights, CameraInfos const &camInfos)
+	IRenderingPipeline & ARenderingPipeline::render(const DRBCameraDrawableList &infos)
 	{
 		SCOPE_profile_cpu_i("RenderTimer", "RenderPipeline");
 		// We iterate over the entry points5
 		for (auto &renderPass : _rendering_list)
 		{
-			renderPass->render(meshs, lights, camInfos);
+			renderPass->render(infos);
 		}
 		return (*this);
 	}

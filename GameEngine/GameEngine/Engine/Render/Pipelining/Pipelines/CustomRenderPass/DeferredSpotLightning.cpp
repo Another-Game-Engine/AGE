@@ -17,6 +17,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <Core/Engine.hh>
 
+#include "Graphic\DRBCameraDrawableList.hpp"
+
 #define DEFERRED_SHADING_SPOT_LIGHT_VERTEX "deferred_shading/deferred_shading_spot_light.vp"
 #define DEFERRED_SHADING_SPOT_LIGHT_FRAG "deferred_shading/deferred_shading_spot_light.fp"
 
@@ -61,43 +63,44 @@ namespace AGE
 
 	}
 
-	void DeferredSpotLightning::renderPass(std::list<std::shared_ptr<DRBData>> const &, RenderLightList &lights, CameraInfos const &infos)
+	void DeferredSpotLightning::renderPass(const DRBCameraDrawableList &infos)
 	{
-		SCOPE_profile_gpu_i("DeferredSpotLightning render pass");
-		SCOPE_profile_cpu_i("RenderTimer", "DeferredSpotLightning render pass");
+		//@PROUT
+		//SCOPE_profile_gpu_i("DeferredSpotLightning render pass");
+		//SCOPE_profile_cpu_i("RenderTimer", "DeferredSpotLightning render pass");
 
-		glm::vec3 cameraPosition = -glm::transpose(glm::mat3(infos.view)) * glm::vec3(infos.view[3]);
+		//glm::vec3 cameraPosition = -glm::transpose(glm::mat3(infos.view)) * glm::vec3(infos.view[3]);
 
-		_programs[PROGRAM_LIGHTNING]->use();
-		_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("projection_matrix").set(infos.data.projection);
-		_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("view_matrix").set(infos.view);
-		_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("normal_buffer").set(_normalInput);
-		_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("specular_buffer").set(_specularInput);
-		_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("depth_buffer").set(_depthInput);
-		_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("eye_pos").set(cameraPosition);
+		//_programs[PROGRAM_LIGHTNING]->use();
+		//_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("projection_matrix").set(infos.data.projection);
+		//_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("view_matrix").set(infos.view);
+		//_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("normal_buffer").set(_normalInput);
+		//_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("specular_buffer").set(_specularInput);
+		//_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("depth_buffer").set(_depthInput);
+		//_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("eye_pos").set(cameraPosition);
 
-		OpenGLState::glDisable(GL_CULL_FACE);
-		OpenGLState::glDisable(GL_DEPTH_TEST);
-		OpenGLState::glDisable(GL_STENCIL_TEST);
-		OpenGLState::glEnable(GL_STENCIL_TEST);
-		OpenGLState::glStencilFunc(GL_LESS, 0, 0xFFFFFFFF);
-		OpenGLState::glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
-		// And we set the blend mode to additive
-		OpenGLState::glEnable(GL_BLEND);
-		OpenGLState::glBlendFunc(GL_ONE, GL_ONE);
-		for (auto &pl : lights.spotLights)
-		{
-			auto position = glm::vec3(pl.light.transformation[3]);
-			auto direction = glm::transpose(glm::inverse(glm::mat3(pl.light.transformation))) * glm::vec3(0.0f, 0.0f, -1.0f);
-			_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("shadow_map").set(std::static_pointer_cast<Texture2D>(pl.shadow_map));
-			_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("light_matrix").set(pl.shadow_matrix);
-			_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("position_light").set(position);
-			_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("attenuation_light").set(pl.light.data.range);
-			_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("direction_light").set(direction);
-			_programs[PROGRAM_LIGHTNING]->get_resource<Vec1>("spot_cut_off").set(pl.light.data.cutOff);
-			_programs[PROGRAM_LIGHTNING]->get_resource<Vec1>("exponent_light").set(pl.light.data.exponent);
-			_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("color_light").set(pl.light.data.color);
-			_painterManager->get_painter(_quadPainter)->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_LIGHTNING], Properties(), _quad);
-		}
+		//OpenGLState::glDisable(GL_CULL_FACE);
+		//OpenGLState::glDisable(GL_DEPTH_TEST);
+		//OpenGLState::glDisable(GL_STENCIL_TEST);
+		//OpenGLState::glEnable(GL_STENCIL_TEST);
+		//OpenGLState::glStencilFunc(GL_LESS, 0, 0xFFFFFFFF);
+		//OpenGLState::glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
+		//// And we set the blend mode to additive
+		//OpenGLState::glEnable(GL_BLEND);
+		//OpenGLState::glBlendFunc(GL_ONE, GL_ONE);
+		//for (auto &pl : lights.spotLights)
+		//{
+		//	auto position = glm::vec3(pl.light.transformation[3]);
+		//	auto direction = glm::transpose(glm::inverse(glm::mat3(pl.light.transformation))) * glm::vec3(0.0f, 0.0f, -1.0f);
+		//	_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("shadow_map").set(std::static_pointer_cast<Texture2D>(pl.shadow_map));
+		//	_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("light_matrix").set(pl.shadow_matrix);
+		//	_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("position_light").set(position);
+		//	_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("attenuation_light").set(pl.light.data.range);
+		//	_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("direction_light").set(direction);
+		//	_programs[PROGRAM_LIGHTNING]->get_resource<Vec1>("spot_cut_off").set(pl.light.data.cutOff);
+		//	_programs[PROGRAM_LIGHTNING]->get_resource<Vec1>("exponent_light").set(pl.light.data.exponent);
+		//	_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("color_light").set(pl.light.data.color);
+		//	_painterManager->get_painter(_quadPainter)->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_LIGHTNING], Properties(), _quad);
+		//}
 	}
 }
