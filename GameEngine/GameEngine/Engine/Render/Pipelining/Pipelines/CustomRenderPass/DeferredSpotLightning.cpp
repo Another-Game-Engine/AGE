@@ -94,10 +94,6 @@ namespace AGE
 		{
 			auto &spotlight = (std::shared_ptr<DRBSpotLightData>&)(spot->spotLight);
 
-			// todo update them in DRBSpotLight::SetTransform && SpotLightComponent methods
-			//auto position = glm::vec3(pl.light.transformation[3]);
-			//auto direction = glm::transpose(glm::inverse(glm::mat3(pl.light.transformation))) * glm::vec3(0.0f, 0.0f, -1.0f);
-
 			// todo to add in properties
 			//_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("shadow_map").set(std::static_pointer_cast<Texture2D>(pl.shadow_map));
 

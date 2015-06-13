@@ -11,6 +11,7 @@
 
 #include "Graphic/DRBLightElementManager.hpp"
 #include "Graphic/DRBData.hpp"
+#include "Graphic/DRBSpotLightData.hpp"
 
 #ifdef EDITOR_ENABLED
 #	include <imgui\imgui.h>
@@ -91,7 +92,11 @@ namespace AGE
 		properties.add_property(_propShadowMatrix);
 		properties.add_property(_propPosition);
 		properties.add_property(_propAttenuation);
-		properties.add_property(_propDirection);
+		auto &castedPropDir = std::static_pointer_cast<AutoProperty<glm::vec3, Vec3>>(_propDirection);
+		auto &castedPropPos = std::static_pointer_cast<AutoProperty<glm::vec3, Vec3>>(_propPosition);
+
+		std::static_pointer_cast<DRBSpotLightData>(_graphicHandle.getPtr()->getDatas())->registerDirectionProperty(castedPropDir);
+		std::static_pointer_cast<DRBSpotLightData>(_graphicHandle.getPtr()->getDatas())->registerPositionProperty(castedPropPos);
 		properties.add_property(_propSpotCutOff);
 		properties.add_property(_propExponentLight);
 		properties.add_property(_propColorLight);

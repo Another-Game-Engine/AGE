@@ -17,6 +17,18 @@ namespace AGE
 		{
 		}
 
+		const DataType &getValue()
+		{
+			std::lock_guard<AGE::SpinLock> lock(_mutex);
+			return _data;
+		}
+
+		void set(const DataType &value)
+		{
+			std::lock_guard<AGE::SpinLock> lock(_mutex);
+			_data = value;
+		}
+
 	private:
 		virtual void _update(std::shared_ptr<Program> const &p) override final
 		{

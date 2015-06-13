@@ -12,4 +12,11 @@ namespace AGE
 	{
 		return std::static_pointer_cast<DRBData>(_datas);
 	}
+
+	glm::vec4 DRBSpotLight::setBFCTransform(const glm::mat4 &transformation)
+	{
+		BFCCullableObject::setBFCTransform(transformation);
+		_datas->computePositionAndDirection(transformation);
+		return glm::vec4(0, 0, 0, 1);
+	};
 }
