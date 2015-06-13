@@ -40,6 +40,8 @@ namespace AGE
 		virtual void reset();
 		void init();
 
+		inline BFCCullableHandle getCullableHandle() const { return _graphicHandle; }
+
 		template <typename Archive>
 		void serialize(Archive &ar, const std::uint32_t version)
 		{

@@ -14,6 +14,7 @@ namespace AGE
 
 	private:
 		EntityFilter _cameras;
+		EntityFilter _spotLights;
 
 		virtual bool initialize();
 		virtual void updateBegin(float time);
