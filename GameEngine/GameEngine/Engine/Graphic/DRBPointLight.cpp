@@ -4,7 +4,9 @@
 namespace AGE
 {
 	DRBPointLight::DRBPointLight()
-	{}
+	{
+		_datas = std::make_shared<DRBPointLightData>();
+	}
 
 	const std::shared_ptr<DRBData> DRBPointLight::getDatas() const
 	{

@@ -17,6 +17,7 @@
 #include <BFC/BFCLinkTracker.hpp>
 #include <BFC/BFCBlockManagerFactory.hpp>
 #include "Graphic/GraphicElementManager.hpp"
+#include "Graphic/DRBLightElementManager.hpp"
 
 namespace AGE
 {
@@ -32,6 +33,7 @@ namespace AGE
 		_bfcLinkTracker = new BFCLinkTracker();
 		_bfcBlockManagerFactory = new BFCBlockManagerFactory();
 		setInstance<GraphicElementManager>(_bfcBlockManagerFactory);
+		setInstance<DRBLightElementManager>(_bfcBlockManagerFactory);
 #endif
 	}
 

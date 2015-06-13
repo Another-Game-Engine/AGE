@@ -10,7 +10,8 @@ namespace gl { class GeometryManager; class Vertices; class Indices; }
 
 namespace AGE
 {
-	class IProperty;
+	class Color;
+	class MapColor;
 
 	struct PointLightComponent : public ComponentBase
 	{
@@ -39,9 +40,9 @@ namespace AGE
 		glm::vec3 range;
 		std::shared_ptr<ITexture> map;
 
-		std::shared_ptr<IProperty>  _colorProp;
-		std::shared_ptr<IProperty>  _mapProp;
-		BFCCullableHandle           _graphicHandle;
+		std::shared_ptr<Color>     _colorProp;
+		std::shared_ptr<MapColor>  _mapProp;
+		BFCCullableHandle          _graphicHandle;
 
 
 

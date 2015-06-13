@@ -104,12 +104,12 @@ namespace AGE
 		bool modified = false;
 		if (ImGui::ColorEdit3("Color", glm::value_ptr(color)))
 		{
-			//set(_data);
+			_colorProp->set(glm::vec4(color.x, color.y, color.z, 1.0f));
 			modified = true;
 		}
 		if (ImGui::SliderFloat3("Range", glm::value_ptr(range), 0.0f, 1.0f))
 		{
-			//set(_data);
+			std::static_pointer_cast<DRBPointLightData>(_graphicHandle.getPtr()->getDatas())->setRange(range);
 			modified = true;
 		}
 		return modified;
