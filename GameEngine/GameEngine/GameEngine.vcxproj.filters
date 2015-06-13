@@ -226,6 +226,7 @@
     <ClCompile Include="Engine\Graphic\DRBLightElementManager.cpp" />
     <ClCompile Include="Engine\Graphic\DRBPointLightData.cpp" />
     <ClCompile Include="Engine\Graphic\DRBPointLight.cpp" />
+    <ClCompile Include="Engine\Graphic\DRBSpotLight.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -595,6 +596,8 @@
     <ClInclude Include="Engine\Systems\RenderSpotLightSystem.hpp" />
     <ClInclude Include="Engine\Render\Properties\Materials\SpotLightProperty.hpp" />
     <ClInclude Include="Engine\Render\Properties\AutoProperty.hpp" />
+    <ClInclude Include="Engine\Graphic\DRBSpotLight.hpp" />
+    <ClInclude Include="Engine\Graphic\DRBSpotLightData.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

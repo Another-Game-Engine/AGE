@@ -8,6 +8,7 @@ namespace AGE
 	enum BFCCullableType : uint16_t
 	{
 		CullableMesh = 0,
-		CullablePointLight
+		CullablePointLight,
+		CullableSpotLight
 	};
 }

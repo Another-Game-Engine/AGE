@@ -262,6 +262,7 @@
     <ClCompile Include="Engine\Graphic\DRBMeshData.cpp" />
     <ClCompile Include="Engine\Graphic\DRBPointLight.cpp" />
     <ClCompile Include="Engine\Graphic\DRBPointLightData.cpp" />
+    <ClCompile Include="Engine\Graphic\DRBSpotLight.cpp" />
     <ClCompile Include="Engine\Graphic\GraphicElementManager.cpp" />
     <ClCompile Include="Engine\Render\OcclusionTools\DepthMap.cpp" />
     <ClCompile Include="Engine\Render\OcclusionTools\DepthMapHandle.cpp" />
@@ -484,6 +485,8 @@
     <ClInclude Include="Engine\Graphic\DRBMeshData.hpp" />
     <ClInclude Include="Engine\Graphic\DRBPointLight.hpp" />
     <ClInclude Include="Engine\Graphic\DRBPointLightData.hpp" />
+    <ClInclude Include="Engine\Graphic\DRBSpotLight.hpp" />
+    <ClInclude Include="Engine\Graphic\DRBSpotLightData.hpp" />
     <ClInclude Include="Engine\Graphic\GraphicElementManager.hpp" />
     <ClInclude Include="Engine\Graphic\DRBLightElementManager.hpp" />
     <ClInclude Include="Engine\Physics\BoxColliderInterface.hpp" />

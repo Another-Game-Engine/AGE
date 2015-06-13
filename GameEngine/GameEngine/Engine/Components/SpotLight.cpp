@@ -9,6 +9,9 @@
 #include "Render/ProgramResources/Types/Uniform/Vec3.hh"
 #include "Render/ProgramResources/Types/Uniform/Vec1.hh"
 
+#include "Graphic/DRBLightElementManager.hpp"
+#include "Graphic/DRBData.hpp"
+
 #ifdef EDITOR_ENABLED
 #	include <imgui\imgui.h>
 #	include <glm/gtc/type_ptr.hpp>
@@ -46,6 +49,8 @@ namespace AGE
 		_propDirection = nullptr;
 		_propColorLight = nullptr;
 		_propAttenuation = nullptr;
+		auto manager = entity->getScene()->getInstance<DRBLightElementManager>();
+		manager->removeSpotLight(_graphicHandle);
 	}
 
 	void SpotLightComponent::init()
@@ -54,6 +59,11 @@ namespace AGE
 		range = glm::vec3(1.0f, 0.1f, 0.01f);
 		exponent = 5.0f;
 		cutOff = 0.5f;
+
+		AGE_ASSERT(_graphicHandle.invalid());
+
+		auto manager = entity->getScene()->getInstance<DRBLightElementManager>();
+		_graphicHandle = manager->addSpotLight();
 
 		//_propShadowMap = std::make_shared<Sampler2D>("shadow_map");
 
@@ -72,6 +82,16 @@ namespace AGE
 		_propExponentLight->autoSet(exponent);
 		_propColorLight = std::make_shared<AutoProperty<glm::vec4, Vec4>>("color_light");
 		_propColorLight->autoSet(color);
+
+		auto &properties = _graphicHandle.getPtr()->getDatas()->globalProperties;
+		
+		properties.add_property(_propShadowMatrix);
+		properties.add_property(_propPosition);
+		properties.add_property(_propAttenuation);
+		properties.add_property(_propDirection);
+		properties.add_property(_propSpotCutOff);
+		properties.add_property(_propExponentLight);
+		properties.add_property(_propColorLight);
 	}
 
 	void SpotLightComponent::postUnserialization()

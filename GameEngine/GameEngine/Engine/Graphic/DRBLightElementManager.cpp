@@ -26,11 +26,30 @@ namespace AGE
 		return result;
 	}
 	
+	BFCCullableHandle DRBLightElementManager::addSpotLight()
+	{
+		SCOPE_profile_cpu_function("DRB");
+
+		auto *drbSpotLight = _spotLightPool.create();
+
+		BFCCullableHandle result = _bfcBlockManager->createItem(drbSpotLight);
+
+		return result;
+	}
+
 	void DRBLightElementManager::removePointLight(BFCCullableHandle &handle)
 	{
 		SCOPE_profile_cpu_function("DRB");
 
 		_pointLightPool.destroy(handle.getPtr());
+		_bfcBlockManager->deleteItem(handle);
+	}
+
+	void DRBLightElementManager::removeSpotLight(BFCCullableHandle &handle)
+	{
+		SCOPE_profile_cpu_function("DRB");
+
+		_spotLightPool.destroy(handle.getPtr());
 		_bfcBlockManager->deleteItem(handle);
 	}
 }

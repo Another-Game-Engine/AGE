@@ -68,6 +68,7 @@ namespace AGE
 		std::shared_ptr<IProperty>      _propSpotCutOff;
 		std::shared_ptr<IProperty>      _propExponentLight;
 		std::shared_ptr<IProperty>      _propColorLight;
+		BFCCullableHandle               _graphicHandle;
 	};
 }
 
