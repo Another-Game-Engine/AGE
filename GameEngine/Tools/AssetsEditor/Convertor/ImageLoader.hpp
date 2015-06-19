@@ -1,5 +1,7 @@
 #pragma once
 
+#define USE_MICROSOFT_LIB
+
 #include "AssimpLoader.hpp"
 #include <AssetManagement/Data/TextureData.hh>
 #include <AssetManagement/Data/MaterialData.hh>
@@ -16,6 +18,7 @@ namespace AGE
 	class ImageLoader
 	{
 	public:
+#ifdef USE_MICROSOFT_LIB
 		static DirectX::ScratchImage *loadFromFile(std::string const &path)
 		{
 			HRESULT loadResult;
@@ -55,6 +58,7 @@ namespace AGE
 			}
 			return (retImage);
 		}
+#endif
 
 		static bool save(std::shared_ptr<CookingTask> cookingTask)
 		{
@@ -68,6 +72,7 @@ namespace AGE
 				cookingTask->textures.pop_back();
 				auto path = cookingTask->rawDirectory.path().string() + "\\" + t->rawPath;
 
+#ifdef USE_MICROSOFT_LIB
 				DirectX::ScratchImage *image;
 
 				image = loadFromFile(path);
@@ -75,7 +80,15 @@ namespace AGE
 				{
 					continue;
 				}
+#else
+				fipImage image;
 
+				if (!image.load(path.c_str()))
+				{
+					continue;
+				}
+#endif
+#ifdef USE_MICROSOFT_LIB
 				// Handle the flipping if it is set by the user from the editor
 				if (cookingTask->dataSet->flipH || cookingTask->dataSet->flipV)
 				{
@@ -99,6 +112,16 @@ namespace AGE
 					delete image;
 					image = tmp;
 				}
+#else
+				if (cookingTask->dataSet->flipH)
+				{
+					image.flipHorizontal();
+				}
+				if (cookingTask->dataSet->flipV)
+				{
+					image.flipVertical();
+				}
+#endif
 
 				if (cookingTask->dataSet->bumpToNormal)
 				{
@@ -113,10 +136,15 @@ namespace AGE
 					}
 				}
 
+#ifdef  USE_MICROSOFT_LIB
 				if (convertBump)
 				{
 					HRESULT convertBumpResult;
 					DirectX::ScratchImage *tmp = new DirectX::ScratchImage;
+
+					convertBumpResult = DirectX::ComputeNormalMap(image->GetImages(), image->GetImageCount(), image->GetMetadata(),
+						DirectX::CNMAP_CHANNEL_LUMINANCE | DirectX::CNMAP_MIRROR, cookingTask->dataSet->normalStrength,
+						DXGI_FORMAT_R8G8B8A8_UNORM, *tmp);
 
 					if (FAILED(convertBumpResult))
 					{
@@ -124,33 +152,58 @@ namespace AGE
 						assert(false);
 						continue;
 					}
+					delete image;
+					image = tmp;
 				}
+#else
+				if (convertBump)
+				{
+					if (t->colorNumber < 3)
+						t->colorNumber = 3;
+					dataSize = t->width * t->height * t->colorNumber;
+					ImageUtils::convertBumpToNormal(image, cookingTask->dataSet->normalStrength);
+				}
+#endif
 
-//				t->width = image.getWidth();
-//				t->height = image.getHeight();
-//				t->bpp = image.getBitsPerPixel();
-//				t->colorNumber = t->bpp / 8;
-//
-				//				bool toResize = false;
-				//				if (!Bits::isPowerOfTwo(t->width))
-				//				{
-				//					t->width = Bits::roundToHighestPowerOfTwo(t->width);
-				//					toResize = true;
-				//				}
-				//				if (!Bits::isPowerOfTwo(t->height))
-				//				{
-				//					t->height = Bits::roundToHighestPowerOfTwo(t->height);
-				//					toResize = true;
-				//				}
-				//				if (toResize)
-				//				{
-				//					if (!image.rescale(t->width, t->height, FILTER_BICUBIC));
-				//					{
-				//						//ERROR PAUL WILL FIXE ALL THAT PART :D
-				//					}
-				//					std::cout << "Texture : " << path << " resized !" << std::endl;
-				//				}
+#ifdef USE_MICROSOFT_LIB
+				if (cookingTask->dataSet->generateMipmap)
+				{
+					HRESULT mipmapResult;
+					DirectX::ScratchImage *tmp = new DirectX::ScratchImage;
 
+					mipmapResult = DirectX::GenerateMipMaps(image->GetImages(), image->GetImageCount(), image->GetMetadata(), DirectX::TEX_FILTER_DEFAULT, 0, *tmp);
+
+					if (FAILED(mipmapResult))
+					{
+						wprintf(L" FAILED (%x)\n", mipmapResult);
+						assert(false);
+						continue;
+					}
+					delete image;
+					image = tmp;
+				}
+#else
+#endif
+
+#ifdef USE_MICROSOFT_LIB
+				if (cookingTask->dataSet->compressTextures)
+				{
+					HRESULT compressResult;
+					DirectX::ScratchImage *tmp = new DirectX::ScratchImage;
+
+					compressResult = DirectX::Compress(image->GetImages(), image->GetImageCount(), image->GetMetadata(), DXGI_FORMAT_BC3_UNORM,
+						DirectX::TEX_COMPRESS_PARALLEL, 0.5f, *tmp);
+
+					if (FAILED(compressResult))
+					{
+						wprintf(L" FAILED (%x)\n", compressResult);
+						assert(false);
+						continue;
+					}
+					delete image;
+					image = tmp;
+				}
+#else
 				if (cookingTask->dataSet->compressTextures)
 				{
 					if (t->colorNumber == 1)
@@ -166,13 +219,7 @@ namespace AGE
 				uint8_t *imgData;
 				uint32_t dataSize = t->width * t->height * t->colorNumber;
 
-				if (convertBump)
-				{
-					if (t->colorNumber < 3)
-						t->colorNumber = 3;
-					dataSize = t->width * t->height * t->colorNumber;
-					ImageUtils::convertBumpToNormal(image, cookingTask->dataSet->normalStrength);
-				}
+
 
 				if (cookingTask->dataSet->compressTextures)
 				{
@@ -182,8 +229,9 @@ namespace AGE
 				}
 				else
 					imgData = FreeImage_GetBits(image);
-
 				t->data.assign(imgData, imgData + dataSize);
+#endif
+
 
 				auto folderPath = std::tr2::sys::path(cookingTask->serializedDirectory.path().directory_string() + "\\" + OldFile(t->rawPath).getFolder());
 
@@ -194,9 +242,20 @@ namespace AGE
 					return false;
 				}
 				auto name = cookingTask->serializedDirectory.path().directory_string() + "\\" + OldFile(t->rawPath).getFolder() + "\\" + OldFile(t->rawPath).getShortFileName() + ".tage";
+				char *ddsData;
+				size_t ddsSize;
+
+#ifdef USE_MICROSOFT_LIB
+				DirectX::Blob blob;
+
+				DirectX::SaveToDDSMemory(image->GetImages(), image->GetImageCount(), image->GetMetadata(), DirectX::DDS_FLAGS_NONE, blob);
+				ddsData = static_cast<char*>(blob.GetBufferPointer());
+				ddsSize = blob.GetBufferSize();
+#else
+#endif
 				std::ofstream ofs(name, std::ios::trunc | std::ios::binary);
-				cereal::PortableBinaryOutputArchive ar(ofs);
-				ar(*t);
+	
+				ofs.write(ddsData, ddsSize);
 			}
 			Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PopTask(tid);
 			return true;
