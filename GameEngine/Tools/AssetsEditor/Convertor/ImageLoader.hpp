@@ -3,17 +3,59 @@
 #include "AssimpLoader.hpp"
 #include <AssetManagement/Data/TextureData.hh>
 #include <AssetManagement/Data/MaterialData.hh>
-#include <ImageUtils.hh>
-#include <FreeImagePlus.h>
+//#include <ImageUtils.hh>
+//#include <FreeImagePlus.h>
+#include <algorithm>
 #include <Utils/BitOperations.hpp>
 #include "ConvertorStatusManager.hpp"
 #include "CookingTask.hpp"
+#include <DirectXTex/DirectXTex/DirectXTex.h>
 
 namespace AGE
 {
 	class ImageLoader
 	{
 	public:
+		static DirectX::ScratchImage *loadFromFile(std::string const &path)
+		{
+			HRESULT loadResult;
+			DirectX::TexMetadata info;
+			DirectX::ScratchImage *retImage = new DirectX::ScratchImage;
+			std::string extension = path.substr(path.size() - 4, 4);
+			std::wstring widePath = std::wstring(path.begin(), path.end());
+
+			std::transform(extension.begin(), extension.end(), extension.begin(), ::tolower);
+			if (extension == ".dds")
+			{
+				loadResult = LoadFromDDSFile(widePath.c_str(), DirectX::DDS_FLAGS_NONE, &info, *retImage);
+				if (FAILED(loadResult))
+				{
+					wprintf(L" FAILED (%x)\n", loadResult);
+					return (NULL);
+				}
+			}
+			else if (extension == ".tga")
+			{
+				loadResult = LoadFromTGAFile(widePath.c_str(), &info, *retImage);
+				if (FAILED(loadResult))
+				{
+					wprintf(L" FAILED (%x)\n", loadResult);
+					return (NULL);
+				}
+			}
+			else
+			{
+				loadResult = LoadFromWICFile(widePath.c_str(), DirectX::TEX_FILTER_DEFAULT, &info, *retImage);
+				if (FAILED(loadResult))
+				{
+					wprintf(L" FAILED (%x)\n", loadResult);
+					assert(false);
+					return (NULL);
+				}
+			}
+			return (retImage);
+		}
+
 		static bool save(std::shared_ptr<CookingTask> cookingTask)
 		{
 			if (!cookingTask->dataSet->loadTextures)
@@ -26,21 +68,36 @@ namespace AGE
 				cookingTask->textures.pop_back();
 				auto path = cookingTask->rawDirectory.path().string() + "\\" + t->rawPath;
 
-				fipImage image;
+				DirectX::ScratchImage *image;
 
-				if (!image.load(path.c_str()))
+				image = loadFromFile(path);
+				if (image == NULL)
 				{
 					continue;
 				}
 
 				// Handle the flipping if it is set by the user from the editor
-				if (cookingTask->dataSet->flipH)
+				if (cookingTask->dataSet->flipH || cookingTask->dataSet->flipV)
 				{
-					image.flipHorizontal();
-				}
-				if (cookingTask->dataSet->flipV)
-				{
-					image.flipVertical();
+					HRESULT flipResult;
+					DirectX::ScratchImage *tmp = new DirectX::ScratchImage;
+					DWORD dwflags = 0;
+
+					if (cookingTask->dataSet->flipH)
+						dwflags |= DirectX::TEX_FR_FLIP_HORIZONTAL;
+					if (cookingTask->dataSet->flipV)
+						dwflags |= DirectX::TEX_FR_FLIP_VERTICAL;
+
+					flipResult = DirectX::FlipRotate(image->GetImages(), image->GetImageCount(), image->GetMetadata(), dwflags, *tmp);
+
+					if (FAILED(flipResult))
+					{
+						wprintf(L" FAILED (%x)\n", flipResult);
+						assert(false);
+						continue;
+					}
+					delete image;
+					image = tmp;
 				}
 
 				if (cookingTask->dataSet->bumpToNormal)
@@ -56,11 +113,24 @@ namespace AGE
 					}
 				}
 
-				t->width = image.getWidth();
-				t->height = image.getHeight();
-				t->bpp = image.getBitsPerPixel();
-				t->colorNumber = t->bpp / 8;
+				if (convertBump)
+				{
+					HRESULT convertBumpResult;
+					DirectX::ScratchImage *tmp = new DirectX::ScratchImage;
 
+					if (FAILED(convertBumpResult))
+					{
+						wprintf(L" FAILED (%x)\n", convertBumpResult);
+						assert(false);
+						continue;
+					}
+				}
+
+//				t->width = image.getWidth();
+//				t->height = image.getHeight();
+//				t->bpp = image.getBitsPerPixel();
+//				t->colorNumber = t->bpp / 8;
+//
 				//				bool toResize = false;
 				//				if (!Bits::isPowerOfTwo(t->width))
 				//				{

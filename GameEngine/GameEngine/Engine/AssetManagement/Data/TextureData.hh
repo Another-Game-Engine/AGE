@@ -27,28 +27,28 @@ namespace AGE
 		};
 
 		std::string rawPath;
-		uint32_t width;
-		uint32_t height;
-		uint32_t bpp;
-		uint32_t colorNumber;
-		uint32_t mipmapNbr;
-		uint32_t format;
-		AGE::Vector<unsigned char> data;
+//		uint32_t width;
+//		uint32_t height;
+//		uint32_t bpp;
+//		uint32_t colorNumber;
+//		uint32_t mipmapNbr;
+//		uint32_t format;
+//		AGE::Vector<unsigned char> data;
 		RepeatType repeatX = NoRepeat;
 		RepeatType repeatY = NoRepeat;
 
-		template <class Archive>
-		void serialize(Archive &ar, const std::uint32_t version)
-		{
-			if (version < 1)
-			{
-				ar(rawPath, width, height, bpp, colorNumber, mipmapNbr, format, data);
-			}
-			else
-			{
-				ar(rawPath, width, height, bpp, colorNumber, mipmapNbr, format, data, repeatX, repeatY);
-			}
-		}
+//		template <class Archive>
+//		void serialize(Archive &ar, const std::uint32_t version)
+//		{
+//			if (version < 1)
+//			{
+//				ar(rawPath, width, height, bpp, colorNumber, mipmapNbr, format, data);
+//			}
+//			else
+//			{
+//				ar(rawPath, width, height, bpp, colorNumber, mipmapNbr, format, data, repeatX, repeatY);
+//			}
+//		}
 	};
 }
 
