@@ -142,11 +142,7 @@ namespace AGE
 			if (dataset->loadTextures)
 			{
 				ImGui::Checkbox("Compress textures", &dataset->compressTextures);
-				if (dataset->compressTextures)
-				{
-					ImGui::SliderInt("Compression quality", &dataset->textureCompressionQuality, 0, 4);
-					ImGui::Checkbox("Generate mipmaps", &dataset->generateMipmap);
-				}
+				ImGui::Checkbox("Generate mipmaps", &dataset->generateMipmap);
 			}
 		}
 	

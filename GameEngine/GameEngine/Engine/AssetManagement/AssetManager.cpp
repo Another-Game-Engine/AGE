@@ -35,6 +35,9 @@
 #include <imgui/imgui.h>
 #endif
 
+#include <DirectXTex/DirectXTex/DDS.h>
+#include <glm/gtx/extented_min_max.hpp>
+
 namespace AGE
 {
 	AssetsManager::AssetsManager()
@@ -198,81 +201,132 @@ namespace AGE
 		auto future = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]()
 		{
 			SCOPE_profile_cpu_i("AssetsLoad", "LoadTexture");
-			std::shared_ptr<TextureData> data = std::make_shared<TextureData>();
-
 			std::ifstream ifs(filePath.getFullName(), std::ios::binary);
-			cereal::PortableBinaryInputArchive ar(ifs);
-			ar(*data.get());
+			uint32_t magic;
+			DirectX::DDS_HEADER header;
 
-			GLenum ct = GL_RGB32F;
-			GLenum color = GL_RGB;
-			switch (data->colorNumber)
+			ifs.read((char*)&magic, sizeof(uint32_t));
+			assert(magic == DirectX::DDS_MAGIC && !"The texture is not a .dds file");
+			ifs.read((char*)&header, sizeof(DirectX::DDS_HEADER));
+			size_t totalSize = 0;
+			if (memcmp(&header.ddspf, &DirectX::DDSPF_DXT5, sizeof(DirectX::DDS_PIXELFORMAT)) == 0) // Compressed texture DXT3
 			{
-			case 3:
-				ct = GL_RGB32F;
-				color = GL_BGR;
-				break;
-			case 4:
-				ct =  GL_RGBA32F;
-				color = GL_BGRA;
-				break;
-			case 1:
-				ct = GL_RGB32F;
-				color = GL_LUMINANCE;
-				break;
-			default:
-				return AssetsLoadingResult(true, "Image format not found.\n");
-				break;
-			}
-			auto success = texture->init(data->width, data->height, ct, true);
-			if (success == false)
-			{
-				return AssetsLoadingResult(false, "Texture loading error");
-			}
-			texture->bind();
-			texture->set(data->data, 0, color, GL_UNSIGNED_BYTE);
-			texture->parameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-			texture->parameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+				size_t mipmapSize;
+				uint32_t width = header.dwWidth;
+				uint32_t height = header.dwHeight;
+				texture->init(width, height, GL_COMPRESSED_RGBA_S3TC_DXT5_EXT, true);
 
-			switch (data->repeatX)
-			{
-			case TextureData::NoRepeat:
-				texture->parameter(GL_TEXTURE_WRAP_T, GL_REPEAT);
-				break;
-			case TextureData::Repeat:
-				texture->parameter(GL_TEXTURE_WRAP_T, GL_REPEAT);
-				break;
-			case TextureData::MirrorRepeat:
-				texture->parameter(GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
-				break;
-			case TextureData::ClampToBorder:
-				texture->parameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-				break;
-			case TextureData::ClampToEdge:
-				texture->parameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-				break;
-			}
+				for (int i = 0; i < header.dwMipMapCount; ++i)
+				{
+					std::vector<uint8_t> data;
 
-			switch (data->repeatY)
-			{
-			case TextureData::NoRepeat:
-				texture->parameter(GL_TEXTURE_WRAP_S, GL_REPEAT);
-				break;
-			case TextureData::Repeat:
-				texture->parameter(GL_TEXTURE_WRAP_S, GL_REPEAT);
-				break;
-			case TextureData::MirrorRepeat:
-				texture->parameter(GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
-				break;
-			case TextureData::ClampToBorder:
-				texture->parameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-				break;
-			case TextureData::ClampToEdge:
-				texture->parameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-				break;
+					mipmapSize = glm::max(1U, ((width + 3) / 4)) * glm::max(1U, ((height + 3) / 4)) * 16;
+					data.resize(mipmapSize);
+					ifs.read((char*)data.data(), mipmapSize);
+					texture->setCompressed(data, i, GL_COMPRESSED_RGBA_S3TC_DXT5_EXT, data.size());
+					width >>= 1;
+					height >>= 1;
+				}
+				if (header.dwMipMapCount == 1)
+					texture->generateMipmaps();
 			}
+			else // Uncompressed
+			{
+				size_t mipmapSize;
+				uint32_t width = header.dwWidth;
+				uint32_t height = header.dwHeight;
+				texture->init(width, height, GL_RGBA8, true);
 
-			texture->generateMipmaps();
+				for (int i = 0; i < header.dwMipMapCount; ++i)
+				{
+					std::vector<uint8_t> data;
+
+					mipmapSize = glm::max(1U, ((width + 3) / 4)) * glm::max(1U, ((height + 3) / 4)) * 16;
+					data.resize(mipmapSize);
+					ifs.read((char*)data.data(), mipmapSize);
+					texture->set(data, i, GL_RGBA, GL_UNSIGNED_BYTE);
+					width >>= 1;
+					height >>= 1;
+				}
+				if (header.dwMipMapCount == 1)
+					texture->generateMipmaps();
+			}
+			ifs.close();
+			//			std::shared_ptr<TextureData> data = std::make_shared<TextureData>();
+			//
+			//			std::ifstream ifs(filePath.getFullName(), std::ios::binary);
+			//			cereal::PortableBinaryInputArchive ar(ifs);
+			//			ar(*data.get());
+			//
+			//			GLenum ct = GL_RGB32F;
+			//			GLenum color = GL_RGB;
+			//			switch (data->colorNumber)
+			//			{
+			//			case 3:
+			//				ct = GL_RGB32F;
+			//				color = GL_BGR;
+			//				break;
+			//			case 4:
+			//				ct =  GL_RGBA32F;
+			//				color = GL_BGRA;
+			//				break;
+			//			case 1:
+			//				ct = GL_RGB32F;
+			//				color = GL_LUMINANCE;
+			//				break;
+			//			default:
+			//				return AssetsLoadingResult(true, "Image format not found.\n");
+			//				break;
+			//			}
+			//			auto success = texture->init(data->width, data->height, ct, true);
+			//			if (success == false)
+			//			{
+			//				return AssetsLoadingResult(false, "Texture loading error");
+			//			}
+			//			texture->bind();
+			//			texture->set(data->data, 0, color, GL_UNSIGNED_BYTE);
+			//			texture->parameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+			//			texture->parameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			//
+			//			switch (data->repeatX)
+			//			{
+			//			case TextureData::NoRepeat:
+			//				texture->parameter(GL_TEXTURE_WRAP_T, GL_REPEAT);
+			//				break;
+			//			case TextureData::Repeat:
+			//				texture->parameter(GL_TEXTURE_WRAP_T, GL_REPEAT);
+			//				break;
+			//			case TextureData::MirrorRepeat:
+			//				texture->parameter(GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
+			//				break;
+			//			case TextureData::ClampToBorder:
+			//				texture->parameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+			//				break;
+			//			case TextureData::ClampToEdge:
+			//				texture->parameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+			//				break;
+			//			}
+			//
+			//			switch (data->repeatY)
+			//			{
+			//			case TextureData::NoRepeat:
+			//				texture->parameter(GL_TEXTURE_WRAP_S, GL_REPEAT);
+			//				break;
+			//			case TextureData::Repeat:
+			//				texture->parameter(GL_TEXTURE_WRAP_S, GL_REPEAT);
+			//				break;
+			//			case TextureData::MirrorRepeat:
+			//				texture->parameter(GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
+			//				break;
+			//			case TextureData::ClampToBorder:
+			//				texture->parameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+			//				break;
+			//			case TextureData::ClampToEdge:
+			//				texture->parameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+			//				break;
+			//			}
+			//
+			//			texture->generateMipmaps();
 			texture->unbind();
 			return AssetsLoadingResult(true);
 		});

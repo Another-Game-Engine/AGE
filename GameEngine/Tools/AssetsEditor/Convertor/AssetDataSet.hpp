@@ -66,14 +66,13 @@ namespace AGE
 		bool dynamicConcave = true;
 
 		// Textures options
-		bool compressTextures = false;
-		int textureCompressionQuality = 2;
+		bool compressTextures = true;
 		bool generateMipmap = true;
 		bool flipH = false;
 		bool flipV = false;
 
 		// Material options
-		bool bumpToNormal = true;
+		bool bumpToNormal = false;
 		float normalStrength = 10.0f;
 	};
 }

@@ -49,6 +49,12 @@ namespace AGE
 		return (*this);
 	}
 
+	Texture2D &Texture2D::setCompressed(std::vector<uint8_t> const &data, GLint level, GLenum format, GLsizei imageSize)
+	{
+		glCompressedTexSubImage2D(GL_TEXTURE_2D, level, 0, 0, _width, _height, format, imageSize, data.data());
+		return (*this);
+	}
+
 	ITexture const &Texture2D::parameter(GLenum mode, GLint param) const
 	{
 		glTexParameteri(GL_TEXTURE_2D, mode, param);
