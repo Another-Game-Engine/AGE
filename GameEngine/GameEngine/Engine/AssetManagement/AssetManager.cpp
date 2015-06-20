@@ -202,131 +202,78 @@ namespace AGE
 		{
 			SCOPE_profile_cpu_i("AssetsLoad", "LoadTexture");
 			std::ifstream ifs(filePath.getFullName(), std::ios::binary);
+			char *fileBuffer;
+			char *currentPtr;
 			uint32_t magic;
-			DirectX::DDS_HEADER header;
+			DirectX::DDS_HEADER *header;
 
-			ifs.read((char*)&magic, sizeof(uint32_t));
-			assert(magic == DirectX::DDS_MAGIC && !"The texture is not a .dds file");
-			ifs.read((char*)&header, sizeof(DirectX::DDS_HEADER));
+			ifs.seekg(0, std::ios::end);
+			std::streamsize fileSize = ifs.tellg();
+			ifs.seekg(0, std::ios::beg);
+
+			fileBuffer = new char[fileSize];
+			ifs.read(fileBuffer, fileSize);
+			currentPtr = fileBuffer;
+
+			if (!ifs)
+			{
+				return AssetsLoadingResult(true, "Image file not found.\n");
+			}
+
+			magic = *(uint32_t*)currentPtr;
+			currentPtr += sizeof(uint32_t);
+			if (magic != DirectX::DDS_MAGIC)
+			{
+				delete fileBuffer;
+				return AssetsLoadingResult(true, "The texture is not a .dds file.\n");
+			}
+			header = (DirectX::DDS_HEADER*)currentPtr;
+			currentPtr += sizeof(DirectX::DDS_HEADER);
 			size_t totalSize = 0;
-			if (memcmp(&header.ddspf, &DirectX::DDSPF_DXT5, sizeof(DirectX::DDS_PIXELFORMAT)) == 0) // Compressed texture DXT3
+			texture->bind();
+			if (memcmp(&header->ddspf, &DirectX::DDSPF_DXT5, sizeof(DirectX::DDS_PIXELFORMAT)) == 0) // Compressed texture DXT5
 			{
 				size_t mipmapSize;
-				uint32_t width = header.dwWidth;
-				uint32_t height = header.dwHeight;
+				uint32_t width = header->dwWidth;
+				uint32_t height = header->dwHeight;
 				texture->init(width, height, GL_COMPRESSED_RGBA_S3TC_DXT5_EXT, true);
 
-				for (int i = 0; i < header.dwMipMapCount; ++i)
+				for (int i = 0; i < header->dwMipMapCount; ++i)
 				{
-					std::vector<uint8_t> data;
-
 					mipmapSize = glm::max(1U, ((width + 3) / 4)) * glm::max(1U, ((height + 3) / 4)) * 16;
-					data.resize(mipmapSize);
-					ifs.read((char*)data.data(), mipmapSize);
-					texture->setCompressed(data, i, GL_COMPRESSED_RGBA_S3TC_DXT5_EXT, data.size());
+					texture->setCompressed(currentPtr, i, width, height, GL_COMPRESSED_RGBA_S3TC_DXT5_EXT, mipmapSize);
+					currentPtr += mipmapSize;
 					width >>= 1;
 					height >>= 1;
 				}
-				if (header.dwMipMapCount == 1)
+				if (header->dwMipMapCount == 1)
 					texture->generateMipmaps();
 			}
 			else // Uncompressed
 			{
 				size_t mipmapSize;
-				uint32_t width = header.dwWidth;
-				uint32_t height = header.dwHeight;
+				uint32_t width = header->dwWidth;
+				uint32_t height = header->dwHeight;
 				texture->init(width, height, GL_RGBA8, true);
 
-				for (int i = 0; i < header.dwMipMapCount; ++i)
+				for (int i = 0; i < header->dwMipMapCount; ++i)
 				{
-					std::vector<uint8_t> data;
-
-					mipmapSize = glm::max(1U, ((width + 3) / 4)) * glm::max(1U, ((height + 3) / 4)) * 16;
-					data.resize(mipmapSize);
-					ifs.read((char*)data.data(), mipmapSize);
-					texture->set(data, i, GL_RGBA, GL_UNSIGNED_BYTE);
+					mipmapSize = glm::max(1U, width) * glm::max(1U, height) * 4;
+					texture->set(currentPtr, i, width, height, GL_RGBA, GL_UNSIGNED_BYTE);
+					currentPtr += mipmapSize;
 					width >>= 1;
 					height >>= 1;
 				}
-				if (header.dwMipMapCount == 1)
+				if (header->dwMipMapCount == 1)
 					texture->generateMipmaps();
 			}
+			texture->parameter(GL_TEXTURE_WRAP_S, GL_REPEAT);
+			texture->parameter(GL_TEXTURE_WRAP_T, GL_REPEAT);
+			texture->parameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+			texture->parameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
 			ifs.close();
-			//			std::shared_ptr<TextureData> data = std::make_shared<TextureData>();
-			//
-			//			std::ifstream ifs(filePath.getFullName(), std::ios::binary);
-			//			cereal::PortableBinaryInputArchive ar(ifs);
-			//			ar(*data.get());
-			//
-			//			GLenum ct = GL_RGB32F;
-			//			GLenum color = GL_RGB;
-			//			switch (data->colorNumber)
-			//			{
-			//			case 3:
-			//				ct = GL_RGB32F;
-			//				color = GL_BGR;
-			//				break;
-			//			case 4:
-			//				ct =  GL_RGBA32F;
-			//				color = GL_BGRA;
-			//				break;
-			//			case 1:
-			//				ct = GL_RGB32F;
-			//				color = GL_LUMINANCE;
-			//				break;
-			//			default:
-			//				return AssetsLoadingResult(true, "Image format not found.\n");
-			//				break;
-			//			}
-			//			auto success = texture->init(data->width, data->height, ct, true);
-			//			if (success == false)
-			//			{
-			//				return AssetsLoadingResult(false, "Texture loading error");
-			//			}
-			//			texture->bind();
-			//			texture->set(data->data, 0, color, GL_UNSIGNED_BYTE);
-			//			texture->parameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-			//			texture->parameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-			//
-			//			switch (data->repeatX)
-			//			{
-			//			case TextureData::NoRepeat:
-			//				texture->parameter(GL_TEXTURE_WRAP_T, GL_REPEAT);
-			//				break;
-			//			case TextureData::Repeat:
-			//				texture->parameter(GL_TEXTURE_WRAP_T, GL_REPEAT);
-			//				break;
-			//			case TextureData::MirrorRepeat:
-			//				texture->parameter(GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
-			//				break;
-			//			case TextureData::ClampToBorder:
-			//				texture->parameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-			//				break;
-			//			case TextureData::ClampToEdge:
-			//				texture->parameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-			//				break;
-			//			}
-			//
-			//			switch (data->repeatY)
-			//			{
-			//			case TextureData::NoRepeat:
-			//				texture->parameter(GL_TEXTURE_WRAP_S, GL_REPEAT);
-			//				break;
-			//			case TextureData::Repeat:
-			//				texture->parameter(GL_TEXTURE_WRAP_S, GL_REPEAT);
-			//				break;
-			//			case TextureData::MirrorRepeat:
-			//				texture->parameter(GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
-			//				break;
-			//			case TextureData::ClampToBorder:
-			//				texture->parameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-			//				break;
-			//			case TextureData::ClampToEdge:
-			//				texture->parameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-			//				break;
-			//			}
-			//
-			//			texture->generateMipmaps();
+			delete fileBuffer;
 			texture->unbind();
 			return AssetsLoadingResult(true);
 		});
@@ -336,124 +283,125 @@ namespace AGE
 
 	std::shared_ptr<Texture3D> AssetsManager::loadSkybox(std::string const &name, OldFile &_filePath, std::array<std::string, 6> const &textures,  const std::string &loadingChannel)
 	{
-		{
-			std::lock_guard<std::mutex> lock(_mutex);
-			if (_skyboxes.find(name) != std::end(_skyboxes))
-			{
-				return _skyboxes[name];
-			}
-		}
-
-		auto texture = std::make_shared<Texture3D>();
-		{
-			std::lock_guard<std::mutex> lock(_mutex);
-			_skyboxes.insert(std::make_pair(name, texture));
-		}
-
-		auto future = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]()
-		{
-			static const GLenum textureFaces[6] = {
-				GL_TEXTURE_CUBE_MAP_POSITIVE_X,
-				GL_TEXTURE_CUBE_MAP_NEGATIVE_X,
-				GL_TEXTURE_CUBE_MAP_POSITIVE_Y,
-				GL_TEXTURE_CUBE_MAP_NEGATIVE_Y,
-				GL_TEXTURE_CUBE_MAP_POSITIVE_Z,
-				GL_TEXTURE_CUBE_MAP_NEGATIVE_Z
-			};
-
-			SCOPE_profile_cpu_i("AssetsLoad", "LoadSkybox");
-			
-
-			for (int index = 0; index < 6; ++index)
-			{
-				std::shared_ptr<TextureData> data = std::make_shared<TextureData>();
-				OldFile filePath(_assetsDirectory + std::string(_filePath.getFullName()) + textures[index]);
-				assert(filePath.exists());
-				std::ifstream ifs(filePath.getFullName(), std::ios::binary);
-				cereal::PortableBinaryInputArchive ar(ifs);
-				ar(*data.get());
-
-				GLenum ct = GL_RGB32F;
-				GLenum color = GL_RGB;
-				switch (data->colorNumber)
-				{
-				case 3:
-					ct = GL_RGB32F;
-					color = GL_BGR;
-					break;
-				case 4:
-					ct = GL_RGBA32F;
-					color = GL_BGRA;
-					break;
-				case 1:
-					ct = GL_RGB32F;
-					color = GL_LUMINANCE;
-					break;
-				default:
-					return AssetsLoadingResult(true, "Image format not found.\n");
-					break;
-				}
-				if (index == 0)
-				{
-					auto success = texture->init(data->width, data->height, ct, true);
-					if (success == false)
-					{
-						return AssetsLoadingResult(false, "Texture loading error");
-					}
-				}
-				texture->bind();
-				texture->set(textureFaces[index], data->data, 0, color, GL_UNSIGNED_BYTE);
-				if (index == 5)
-				{
-					texture->parameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-					texture->parameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-					switch (data->repeatX)
-					{
-					case TextureData::NoRepeat:
-						texture->parameter(GL_TEXTURE_WRAP_T, GL_REPEAT);
-						break;
-					case TextureData::Repeat:
-						texture->parameter(GL_TEXTURE_WRAP_T, GL_REPEAT);
-						break;
-					case TextureData::MirrorRepeat:
-						texture->parameter(GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
-						break;
-					case TextureData::ClampToBorder:
-						texture->parameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-						break;
-					case TextureData::ClampToEdge:
-						texture->parameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-						break;
-					}
-
-					switch (data->repeatY)
-					{
-					case TextureData::NoRepeat:
-						texture->parameter(GL_TEXTURE_WRAP_S, GL_REPEAT);
-						break;
-					case TextureData::Repeat:
-						texture->parameter(GL_TEXTURE_WRAP_S, GL_REPEAT);
-						break;
-					case TextureData::MirrorRepeat:
-						texture->parameter(GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
-						break;
-					case TextureData::ClampToBorder:
-						texture->parameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-						break;
-					case TextureData::ClampToEdge:
-						texture->parameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-						break;
-					}
-					texture->generateMipmaps();
-				}
-				texture->unbind();
-
-			}
-			return AssetsLoadingResult(true);
-		});
-		pushNewAsset(loadingChannel, _filePath.getFullName(), future);
-		return texture;
+		return (nullptr);
+//		{
+//			std::lock_guard<std::mutex> lock(_mutex);
+//			if (_skyboxes.find(name) != std::end(_skyboxes))
+//			{
+//				return _skyboxes[name];
+//			}
+//		}
+//
+//		auto texture = std::make_shared<Texture3D>();
+//		{
+//			std::lock_guard<std::mutex> lock(_mutex);
+//			_skyboxes.insert(std::make_pair(name, texture));
+//		}
+//
+//		auto future = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]()
+//		{
+//			static const GLenum textureFaces[6] = {
+//				GL_TEXTURE_CUBE_MAP_POSITIVE_X,
+//				GL_TEXTURE_CUBE_MAP_NEGATIVE_X,
+//				GL_TEXTURE_CUBE_MAP_POSITIVE_Y,
+//				GL_TEXTURE_CUBE_MAP_NEGATIVE_Y,
+//				GL_TEXTURE_CUBE_MAP_POSITIVE_Z,
+//				GL_TEXTURE_CUBE_MAP_NEGATIVE_Z
+//			};
+//
+//			SCOPE_profile_cpu_i("AssetsLoad", "LoadSkybox");
+//			
+//
+//			for (int index = 0; index < 6; ++index)
+//			{
+//				std::shared_ptr<TextureData> data = std::make_shared<TextureData>();
+//				OldFile filePath(_assetsDirectory + std::string(_filePath.getFullName()) + textures[index]);
+//				assert(filePath.exists());
+//				std::ifstream ifs(filePath.getFullName(), std::ios::binary);
+//				cereal::PortableBinaryInputArchive ar(ifs);
+//				ar(*data.get());
+//
+//				GLenum ct = GL_RGB32F;
+//				GLenum color = GL_RGB;
+//				switch (data->colorNumber)
+//				{
+//				case 3:
+//					ct = GL_RGB32F;
+//					color = GL_BGR;
+//					break;
+//				case 4:
+//					ct = GL_RGBA32F;
+//					color = GL_BGRA;
+//					break;
+//				case 1:
+//					ct = GL_RGB32F;
+//					color = GL_LUMINANCE;
+//					break;
+//				default:
+//					return AssetsLoadingResult(true, "Image format not found.\n");
+//					break;
+//				}
+//				if (index == 0)
+//				{
+//					auto success = texture->init(data->width, data->height, ct, true);
+//					if (success == false)
+//					{
+//						return AssetsLoadingResult(false, "Texture loading error");
+//					}
+//				}
+//				texture->bind();
+//				texture->set(textureFaces[index], data->data, 0, color, GL_UNSIGNED_BYTE);
+//				if (index == 5)
+//				{
+//					texture->parameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+//					texture->parameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+//
+//					switch (data->repeatX)
+//					{
+//					case TextureData::NoRepeat:
+//						texture->parameter(GL_TEXTURE_WRAP_T, GL_REPEAT);
+//						break;
+//					case TextureData::Repeat:
+//						texture->parameter(GL_TEXTURE_WRAP_T, GL_REPEAT);
+//						break;
+//					case TextureData::MirrorRepeat:
+//						texture->parameter(GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
+//						break;
+//					case TextureData::ClampToBorder:
+//						texture->parameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+//						break;
+//					case TextureData::ClampToEdge:
+//						texture->parameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+//						break;
+//					}
+//
+//					switch (data->repeatY)
+//					{
+//					case TextureData::NoRepeat:
+//						texture->parameter(GL_TEXTURE_WRAP_S, GL_REPEAT);
+//						break;
+//					case TextureData::Repeat:
+//						texture->parameter(GL_TEXTURE_WRAP_S, GL_REPEAT);
+//						break;
+//					case TextureData::MirrorRepeat:
+//						texture->parameter(GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
+//						break;
+//					case TextureData::ClampToBorder:
+//						texture->parameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+//						break;
+//					case TextureData::ClampToEdge:
+//						texture->parameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+//						break;
+//					}
+//					texture->generateMipmaps();
+//				}
+//				texture->unbind();
+//
+//			}
+//			return AssetsLoadingResult(true);
+//		});
+//		pushNewAsset(loadingChannel, _filePath.getFullName(), future);
+//		return texture;
 	}
 
 	bool AssetsManager::loadAnimation(const OldFile &_filePath, const std::string &loadingChannel)
@@ -813,14 +761,14 @@ namespace AGE
 	std::shared_ptr<ITexture> const &AssetsManager::getPointLightTexture()
 	{
 		if (!_pointLight)
-			_pointLight = loadTexture("pointlight.tage", "");
+			_pointLight = loadTexture("pointlight.dds", "");
 		return _pointLight;
 	}
 
 	std::shared_ptr<ITexture> const &AssetsManager::getSpotLightTexture()
 	{
 		if (!_spotLight)
-			_spotLight = loadTexture("spotlight.tage", "");
+			_spotLight = loadTexture("spotlight.dds", "");
 		return _spotLight;
 	}
 }

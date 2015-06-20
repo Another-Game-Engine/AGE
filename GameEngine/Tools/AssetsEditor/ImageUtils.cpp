@@ -5,6 +5,7 @@
 
 namespace AGE
 {
+	/*
 	void ImageUtils::convertBumpToNormal(fipImage &toConvert, float strength)
 	{
 		if (toConvert.getBitsPerPixel() < 24)
@@ -122,4 +123,5 @@ namespace AGE
 		compressedData += sizeof(DDS_HEADER);
 		return (compressedData);
 	}
+	*/
 }
