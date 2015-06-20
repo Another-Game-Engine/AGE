@@ -20,6 +20,10 @@
 #include <Render/Pipelining/Pipelines/PipelineTools.hh>
 #include <glm/gtc/matrix_transform.hpp>
 
+#include "Graphic/DRBCameraDrawableList.hpp"
+#include "Graphic/DRBSpotLightData.hpp"
+#include "Graphic/DRBMeshData.hpp"
+
 #define DEFERRED_SHADING_SHADOW_BUFFERING_VERTEX "deferred_shading/deferred_shading_get_shadow_buffer.vp"
 #define DEFERRED_SHADING_SHADOW_BUFFERING_FRAG "deferred_shading/deferred_shading_get_shadow_buffer.fp"
 
@@ -54,71 +58,86 @@ namespace AGE
 	void DeferredShadowBuffering::renderPass(const DRBCameraDrawableList &infos)
 	{
 		//@PROUT
-		//SCOPE_profile_gpu_i("DeferredShadowBuffering render pass");
-		//SCOPE_profile_cpu_i("RenderTimer", "DeferredShadowBuffering render pass");
+		SCOPE_profile_gpu_i("DeferredShadowBuffering render pass");
+		SCOPE_profile_cpu_i("RenderTimer", "DeferredShadowBuffering render pass");
 
-		//OpenGLState::glEnable(GL_CULL_FACE);
-		//OpenGLState::glCullFace(GL_FRONT);
-		//OpenGLState::glDepthMask(GL_TRUE);
-		//OpenGLState::glDepthFunc(GL_LEQUAL);
-		//OpenGLState::glDisable(GL_BLEND);
-		//OpenGLState::glDisable(GL_STENCIL_TEST);
-		//OpenGLState::glEnable(GL_DEPTH_TEST);
-		//OpenGLState::glDepthMask(GL_TRUE);
-		//OpenGLState::glDepthFunc(GL_LESS);
+		OpenGLState::glEnable(GL_CULL_FACE);
+		OpenGLState::glCullFace(GL_FRONT);
+		OpenGLState::glDepthMask(GL_TRUE);
+		OpenGLState::glDepthFunc(GL_LEQUAL);
+		OpenGLState::glDisable(GL_BLEND);
+		OpenGLState::glDisable(GL_STENCIL_TEST);
+		OpenGLState::glEnable(GL_DEPTH_TEST);
+		OpenGLState::glDepthMask(GL_TRUE);
+		OpenGLState::glDepthFunc(GL_LESS);
 
-		//_programs[PROGRAM_BUFFERING]->use();
+		_programs[PROGRAM_BUFFERING]->use();
 
-		//// handle the number of sample
-		//if (_depthBuffers.size() < lights.spotLights.size()) {
-		//	int count = lights.spotLights.size() - _depthBuffers.size();
-		//	for (int index = 0; index < count; ++index) {
-		//		_depthBuffers.push_back(createRenderPassOutput<Texture2D>(_frame_buffer.width(), _frame_buffer.height(), GL_DEPTH24_STENCIL8, true));
-		//		_depthBuffers.back()->bind();
-		//		_depthBuffers.back()->parameter(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		//		_depthBuffers.back()->parameter(GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		//		_depthBuffers.back()->parameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-		//		_depthBuffers.back()->parameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-		//		_depthBuffers.back()->parameter(GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
-		//	}
-		//}
-		//else if (_depthBuffers.size() > lights.spotLights.size()) {
-		//	int count = _depthBuffers.size() - lights.spotLights.size();
-		//	for (int index = 0; index < count; ++index) {
-		//		_depthBuffers.pop_back();
-		//	}
-		//}
-		//// start to render to texture for each depth map
-		//auto it = _depthBuffers.begin();
-		//for (auto &spotLight : lights.spotLights)
-		//{
-		//	SCOPE_profile_gpu_i("Spotlight pass");
-		//	SCOPE_profile_cpu_i("RenderTimer", "Spotlight pass");
+		// handle the number of sample
+		if (_depthBuffers.size() < infos.spotLights.size())
+		{
+			int count = infos.spotLights.size() - _depthBuffers.size();
+			for (int index = 0; index < count; ++index)
+			{
+				_depthBuffers.push_back(createRenderPassOutput<Texture2D>(_frame_buffer.width(), _frame_buffer.height(), GL_DEPTH24_STENCIL8, true));
+				_depthBuffers.back()->bind();
+				_depthBuffers.back()->parameter(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+				_depthBuffers.back()->parameter(GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+				_depthBuffers.back()->parameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+				_depthBuffers.back()->parameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+				_depthBuffers.back()->parameter(GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
+			}
+		}
+		else if (_depthBuffers.size() > infos.spotLights.size())
+		{
+			int count = _depthBuffers.size() - infos.spotLights.size();
+			for (int index = 0; index < count; ++index)
+			{
+				_depthBuffers.pop_back();
+			}
+		}
+		// start to render to texture for each depth map
+		auto it = _depthBuffers.begin();
+		for (auto &spotLightPtr : infos.spotLights)
+		{
+			SCOPE_profile_gpu_i("Spotlight pass");
+			SCOPE_profile_cpu_i("RenderTimer", "Spotlight pass");
 
-		//	glViewport(0, 0, _frame_buffer.width(), _frame_buffer.height());
-		//	auto projection = glm::perspective(60.f, (float)_frame_buffer.width() / (float)_frame_buffer.height(), 0.1f, 1000.0f);
-		//	spotLight.shadow_matrix = projection * glm::inverse(spotLight.light.transformation);
-		//	_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("light_matrix").set(spotLight.shadow_matrix);
-		//	_frame_buffer.attachment(*(*it), GL_DEPTH_STENCIL_ATTACHMENT);
-		//	glClear(GL_DEPTH_BUFFER_BIT);
-		//	// draw for the spot light selected
-		//	for (auto &meshPaint : spotLight.keys)
-		//	{
-		//		SCOPE_profile_gpu_i("Draw mesh");
-		//		SCOPE_profile_cpu_i("RenderTimer", "Draw mesh");
+			auto &spotlight = (std::shared_ptr<DRBSpotLightData>&)(spotLightPtr->spotLight);
 
-		//		auto painter = _painterManager->get_painter(Key<Painter>::createKey(meshPaint.first));
-		//		for (auto &mode : meshPaint.second.drawables)
-		//		{
-		//			if (renderModeCompatible(mode.renderMode))
-		//			{
-		//				painter->draw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], mode.properties, mode.vertices);
-		//			}
-		//		}
-		//	}
-		//	spotLight.shadow_map = *it;
-		//	++it;
-		//}
+			glViewport(0, 0, _frame_buffer.width(), _frame_buffer.height());
+			// it should be better to pass all that code (setting properties in the main thread)
+			{
+				auto projection = glm::perspective(60.f, (float)_frame_buffer.width() / (float)_frame_buffer.height(), 0.1f, 1000.0f);
+				spotlight->getShadowMatrixProperty()->set(projection * glm::inverse(spotlight->getTransformation()));
+			}
+			_frame_buffer.attachment(*(*it), GL_DEPTH_STENCIL_ATTACHMENT);
+			glClear(GL_DEPTH_BUFFER_BIT);
+			spotlight->globalProperties.update_properties(_programs[PROGRAM_BUFFERING]);
+			// draw for the spot light selected
+			for (auto &meshPaint : spotLightPtr->meshs)
+			{
+				SCOPE_profile_gpu_i("Draw mesh");
+				SCOPE_profile_cpu_i("RenderTimer", "Draw mesh");
+
+				auto mesh = std::static_pointer_cast<DRBMeshData>(meshPaint);
+
+				auto painter = _painterManager->get_painter(mesh->getPainterKey());
+				painter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], mesh->globalProperties, mesh->getVerticesKey());
+
+				//auto painter = _painterManager->get_painter(Key<Painter>::createKey(meshPaint.first));
+				//for (auto &mode : meshPaint.second.drawables)
+				//{
+				//	if (renderModeCompatible(mode.renderMode))
+				//	{
+				//		painter->draw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], mode.properties, mode.vertices);
+				//	}
+				//}
+			}
+			// @CESAR TODO
+			//spotlight.shadow_map = *it;
+			//++it;
+		}
 	}
 
 }
