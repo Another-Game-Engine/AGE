@@ -74,6 +74,6 @@ namespace AGE
 
 		// Material options
 		bool bumpToNormal = true;
-		float normalStrength = 2;
+		float normalStrength = 10.0f;
 	};
 }

@@ -121,7 +121,7 @@ namespace AGE
 				ImGui::Checkbox("Generate normal map from bump", &dataset->bumpToNormal);
 				if (dataset->bumpToNormal)
 				{
-					ImGui::SliderFloat("Normal strength", &dataset->normalStrength, 1.0f, 10.0f);
+					ImGui::SliderFloat("Normal strength", &dataset->normalStrength, 1.0f, 20.0f);
 				}
 			}
 			ImGui::Separator();

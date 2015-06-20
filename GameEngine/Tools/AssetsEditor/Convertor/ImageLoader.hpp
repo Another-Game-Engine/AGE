@@ -6,13 +6,15 @@
 #include <AssetManagement/Data/TextureData.hh>
 #include <AssetManagement/Data/MaterialData.hh>
 //#include <ImageUtils.hh>
-//#include <FreeImagePlus.h>
 #include <algorithm>
 #include <Utils/BitOperations.hpp>
 #include "ConvertorStatusManager.hpp"
 #include "CookingTask.hpp"
+#ifdef USE_MICROSOFT_LIB
 #include <DirectXTex/DirectXTex/DirectXTex.h>
-
+#else
+#include <FreeImagePlus.h>
+#endif
 namespace AGE
 {
 	class ImageLoader
@@ -52,7 +54,6 @@ namespace AGE
 				if (FAILED(loadResult))
 				{
 					wprintf(L" FAILED (%x)\n", loadResult);
-					assert(false);
 					return (NULL);
 				}
 			}
@@ -62,6 +63,16 @@ namespace AGE
 
 		static bool save(std::shared_ptr<CookingTask> cookingTask)
 		{
+#ifdef USE_MICROSOFT_LIB
+			// Initialize COM (needed for WIC)
+			HRESULT hr = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
+			if (FAILED(hr))
+			{
+				wprintf(L"Failed to initialize COM (%08X)\n", hr);
+				return 1;
+			}
+#endif
+
 			if (!cookingTask->dataSet->loadTextures)
 				return true;
 			auto tid = Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PushTask("ImageLoader : load and save " + cookingTask->dataSet->filePath.getShortFileName());
@@ -77,9 +88,23 @@ namespace AGE
 
 				image = loadFromFile(path);
 				if (image == NULL)
-				{
 					continue;
-				}
+//				fipImage loadImg;
+//				DirectX::Image imageData;
+//				DirectX::ScratchImage *image = NULL;
+//
+//				if (!loadImg.load(path.c_str()))
+//				{
+//					continue;
+//				}
+//				if (loadImg.getBitsPerPixel() != 32 &&
+//					!loadImg.convertTo32Bits())
+//					assert(!"Convert to 32 bits failed");
+//				imageData.format = DXGI_FORMAT_R8G8B8A8_UNORM;
+//				imageData.width = loadImg.getWidth();
+//				imageData.height = loadImg.getHeight();
+//				imageData.pixels = loadImg.accessPixels();
+//				DirectX::ComputePitch(imageData.format, imageData.width, imageData.height, imageData.rowPitch, imageData.slicePitch);
 #else
 				fipImage image;
 
@@ -100,7 +125,7 @@ namespace AGE
 						dwflags |= DirectX::TEX_FR_FLIP_HORIZONTAL;
 					if (cookingTask->dataSet->flipV)
 						dwflags |= DirectX::TEX_FR_FLIP_VERTICAL;
-
+					
 					flipResult = DirectX::FlipRotate(image->GetImages(), image->GetImageCount(), image->GetMetadata(), dwflags, *tmp);
 
 					if (FAILED(flipResult))
@@ -191,8 +216,8 @@ namespace AGE
 					HRESULT compressResult;
 					DirectX::ScratchImage *tmp = new DirectX::ScratchImage;
 
-					compressResult = DirectX::Compress(image->GetImages(), image->GetImageCount(), image->GetMetadata(), DXGI_FORMAT_BC3_UNORM,
-						DirectX::TEX_COMPRESS_PARALLEL, 0.5f, *tmp);
+					compressResult = DirectX::Compress(image->GetImages(), image->GetImageCount(), image->GetMetadata(),
+							DXGI_FORMAT_BC3_UNORM, DirectX::TEX_COMPRESS_PARALLEL, 0.5f, *tmp);
 
 					if (FAILED(compressResult))
 					{
@@ -241,7 +266,7 @@ namespace AGE
 					std::cerr << "Material convertor error : creating directory" << std::endl;
 					return false;
 				}
-				auto name = cookingTask->serializedDirectory.path().directory_string() + "\\" + OldFile(t->rawPath).getFolder() + "\\" + OldFile(t->rawPath).getShortFileName() + ".tage";
+				auto name = cookingTask->serializedDirectory.path().directory_string() + "\\" + OldFile(t->rawPath).getFolder() + "\\" + OldFile(t->rawPath).getShortFileName() + ".dds";
 				char *ddsData;
 				size_t ddsSize;
 
