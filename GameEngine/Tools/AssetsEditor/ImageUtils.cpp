@@ -5,7 +5,101 @@
 
 namespace AGE
 {
-	/*
+#if USE_MICROSOFT_LIB
+	// All this formats will be compressed in DXT5 (gradient alpha)
+	static DXGI_FORMAT dxt5Compression[] =
+	{
+		DXGI_FORMAT_R32G32B32A32_TYPELESS,
+		DXGI_FORMAT_R32G32B32A32_FLOAT,
+		DXGI_FORMAT_R32G32B32A32_UINT,
+		DXGI_FORMAT_R32G32B32A32_SINT,
+		DXGI_FORMAT_R16G16B16A16_TYPELESS,
+		DXGI_FORMAT_R16G16B16A16_FLOAT,
+		DXGI_FORMAT_R16G16B16A16_UNORM,
+		DXGI_FORMAT_R16G16B16A16_UINT,
+		DXGI_FORMAT_R16G16B16A16_SNORM,
+		DXGI_FORMAT_R16G16B16A16_SINT,
+		DXGI_FORMAT_R8G8B8A8_TYPELESS,
+		DXGI_FORMAT_R8G8B8A8_UNORM,
+		DXGI_FORMAT_R8G8B8A8_UNORM_SRGB,
+		DXGI_FORMAT_R8G8B8A8_UINT,
+		DXGI_FORMAT_R8G8B8A8_SNORM,
+		DXGI_FORMAT_R8G8B8A8_SINT,
+		DXGI_FORMAT_B8G8R8A8_TYPELESS,
+		DXGI_FORMAT_B8G8R8A8_UNORM_SRGB,
+		DXGI_FORMAT_B8G8R8X8_TYPELESS,
+		DXGI_FORMAT_B8G8R8X8_UNORM_SRGB,
+		DXGI_FORMAT_B4G4R4A4_UNORM,
+		DXGI_FORMAT_BC3_TYPELESS,
+		DXGI_FORMAT_BC3_UNORM,
+		DXGI_FORMAT_BC3_UNORM_SRGB,
+		DXGI_FORMAT_UNKNOWN
+	};
+
+	// All this formats will be compressed in DXT3 (sharp alpha)
+	static DXGI_FORMAT dxt3Compression[] =
+	{
+		DXGI_FORMAT_R10G10B10A2_TYPELESS,
+		DXGI_FORMAT_R10G10B10A2_UNORM,
+		DXGI_FORMAT_R10G10B10A2_UINT,
+		DXGI_FORMAT_UNKNOWN 
+	};
+
+	DXGI_FORMAT ImageUtils::getCompressionFormat(DXGI_FORMAT current)
+	{
+		for (int i = 0; dxt3Compression[i] != DXGI_FORMAT_UNKNOWN; ++i)
+		{
+			if (dxt3Compression[i] == current)
+				return (DXGI_FORMAT_BC2_UNORM);
+		}
+		for (int i = 0; dxt5Compression[i] != DXGI_FORMAT_UNKNOWN; ++i)
+		{
+			if (dxt5Compression[i] == current)
+				return (DXGI_FORMAT_BC3_UNORM);
+		}
+		return (DXGI_FORMAT_BC1_UNORM);
+	}
+
+	DirectX::ScratchImage *ImageUtils::loadFromFile(std::string const &path)
+	{
+		HRESULT loadResult;
+		DirectX::TexMetadata info;
+		DirectX::ScratchImage *retImage = new DirectX::ScratchImage;
+		std::string extension = path.substr(path.size() - 4, 4);
+		std::wstring widePath = std::wstring(path.begin(), path.end());
+
+		std::transform(extension.begin(), extension.end(), extension.begin(), ::tolower);
+		if (extension == ".dds")
+		{
+			loadResult = LoadFromDDSFile(widePath.c_str(), DirectX::DDS_FLAGS_NONE, &info, *retImage);
+			if (FAILED(loadResult))
+			{
+				wprintf(L" FAILED (%x)\n", loadResult);
+				return (NULL);
+			}
+		}
+		else if (extension == ".tga")
+		{
+			loadResult = LoadFromTGAFile(widePath.c_str(), &info, *retImage);
+			if (FAILED(loadResult))
+			{
+				wprintf(L" FAILED (%x)\n", loadResult);
+				return (NULL);
+			}
+		}
+		else
+		{
+			loadResult = LoadFromWICFile(widePath.c_str(), DirectX::TEX_FILTER_DEFAULT, &info, *retImage);
+			if (FAILED(loadResult))
+			{
+				wprintf(L" FAILED (%x)\n", loadResult);
+				return (NULL);
+			}
+		}
+		return (retImage);
+	}
+
+#else
 	void ImageUtils::convertBumpToNormal(fipImage &toConvert, float strength)
 	{
 		if (toConvert.getBitsPerPixel() < 24)
@@ -73,32 +167,24 @@ namespace AGE
 
 	}
 
-	uint8_t *ImageUtils::compressImage(fipImage &image, bool generateMipmaps, int compressionQuality,
-		std::shared_ptr<TextureData> const &infos, uint32_t &compressedSize)
+	char *ImageUtils::compressImage(fipImage &image, bool generateMipmaps, int compressionQuality, size_t &compressedSize)
 	{
 		if (image.getBitsPerPixel() != 32)
 			image.convertTo32Bits();
+
 		crn_comp_params params;
 		crn_mipmap_params mipmaps;
 
-		params.m_height = infos->height;
-		params.m_width = infos->width;
-
-		bool flipVertical = image.flipVertical() != 0;
-		assert(flipVertical);
+		params.m_width = image.getWidth();
+		params.m_height = image.getHeight();
 
 		auto imgData = image.accessPixels();
 
 		// set the compression params
-		if (infos->format == RGBA_DXT5_FORMAT)
-			params.m_format = crn_format::cCRNFmtDXT5;
-		else
-			params.m_format = crn_format::cCRNFmtDXT1;
+		params.m_format = crn_format::cCRNFmtDXT5;
 		params.m_file_type = cCRNFileTypeDDS;
 		params.m_alpha_component = 0;
 		params.m_dxt_quality = (crn_dxt_quality)compressionQuality;
-		if (infos->format == LUM_DXT1_FORMAT)
-			params.set_flag(cCRNCompFlagGrayscaleSampling, true);
 		params.set_flag(cCRNCompFlagPerceptual, false);
 		params.m_pImages[0][0] = (crn_uint32*)imgData;
 
@@ -109,19 +195,47 @@ namespace AGE
 		else
 			mipmaps.m_mode = cCRNMipModeNoMips;
 
-		uint8_t *compressedData = static_cast<uint8_t*>(crn_compress(params, mipmaps, compressedSize));
+		uint32_t ddsSize = 0;
+
+		char *compressedData = static_cast<char*>(crn_compress(params, mipmaps, ddsSize));
+
+		compressedSize = ddsSize;
 
 		assert(compressedData != NULL);
-
-		// --- End of compression ---
-
-		compressedSize -= sizeof(DDS_HEADER);
-
-		DDS_HEADER *textureHeader = (DDS_HEADER*)compressedData;
-
-		infos->mipmapNbr = textureHeader->dwMipMapCount;
-		compressedData += sizeof(DDS_HEADER);
 		return (compressedData);
 	}
-	*/
+
+	char *ImageUtils::getDDSUncompressed(fipImage &image, size_t &dataSize)
+	{
+		if (image.getBitsPerPixel() != 32)
+			image.convertTo32Bits();
+		
+		size_t imageSize = image.getWidth() * image.getHeight() * 4;
+		dataSize = sizeof(uint32_t) + sizeof(DirectX::DDS_HEADER) + imageSize;
+		char *ddsData = new char[dataSize];
+		char *imageData = (char*)image.accessPixels();
+		DirectX::DDS_HEADER *header;
+
+		*(uint32_t*)ddsData = DirectX::DDS_MAGIC;
+		header = (DirectX::DDS_HEADER*)(ddsData + sizeof(uint32_t));
+
+		header->dwSize = sizeof(DirectX::DDS_HEADER);
+		header->dwFlags = 0x1 | 0x2 | 0x4 | 0x8 | 0x1000;
+		header->dwHeight = image.getHeight();
+		header->dwWidth = image.getWidth();
+		header->dwPitchOrLinearSize = image.getWidth() * 4;
+		header->dwDepth = 1;
+		header->dwMipMapCount = 1;
+		for (int i = 0; i < 11; ++i)
+			header->dwReserved1[i] = 0;
+		header->ddspf = DirectX::DDSPF_A8R8G8B8;
+		header->dwCaps = 0x1000;
+		header->dwCaps2 = 0;
+		header->dwCaps3 = 0;
+		header->dwCaps4 = 0;
+		header->dwReserved2 = 0;
+		memcpy(ddsData + sizeof(uint32_t) + sizeof(DirectX::DDS_HEADER), imageData, imageSize);
+		return (ddsData);
+	}
+#endif
 }

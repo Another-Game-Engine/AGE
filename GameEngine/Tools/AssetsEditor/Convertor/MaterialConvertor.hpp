@@ -30,6 +30,7 @@ namespace AGE
 			}
 			auto fileName = cookingTask->dataSet->filePath.getShortFileName() + ".mage";
 			auto name = cookingTask->serializedDirectory.path().directory_string() + "\\" + cookingTask->dataSet->filePath.getFolder() + fileName;
+
 			MaterialDataSet materialDataSet;
 			for (auto &m : cookingTask->materials)
 			{

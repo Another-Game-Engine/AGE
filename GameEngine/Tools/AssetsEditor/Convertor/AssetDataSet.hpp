@@ -67,6 +67,7 @@ namespace AGE
 
 		// Textures options
 		bool compressTextures = true;
+		bool compressNormalMap = false;
 		bool generateMipmap = true;
 		bool flipH = false;
 		bool flipV = false;

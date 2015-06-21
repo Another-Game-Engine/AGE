@@ -207,72 +207,118 @@ namespace AGE
 			uint32_t magic;
 			DirectX::DDS_HEADER *header;
 
+			// Get the file size and read it in one syscall
 			ifs.seekg(0, std::ios::end);
 			std::streamsize fileSize = ifs.tellg();
 			ifs.seekg(0, std::ios::beg);
 
 			fileBuffer = new char[fileSize];
 			ifs.read(fileBuffer, fileSize);
+			// currentPtr is the current reading pointer
 			currentPtr = fileBuffer;
 
 			if (!ifs)
 			{
+				// The read failed
 				return AssetsLoadingResult(true, "Image file not found.\n");
 			}
-
+			// We check the magic number
 			magic = *(uint32_t*)currentPtr;
 			currentPtr += sizeof(uint32_t);
 			if (magic != DirectX::DDS_MAGIC)
 			{
+				// Wrong magic number
 				delete fileBuffer;
 				return AssetsLoadingResult(true, "The texture is not a .dds file.\n");
 			}
+			// We get the header
 			header = (DirectX::DDS_HEADER*)currentPtr;
 			currentPtr += sizeof(DirectX::DDS_HEADER);
 			size_t totalSize = 0;
 			texture->bind();
+
+			// We check the texture type
+			bool hasMipmaps = header->dwFlags & DDS_HEADER_FLAGS_MIPMAP;
+			bool compressed;
+			uint32_t blockSize;
+			GLenum format;
+			GLenum sizedFormat;
+			GLenum uncompressedType;
+
 			if (memcmp(&header->ddspf, &DirectX::DDSPF_DXT5, sizeof(DirectX::DDS_PIXELFORMAT)) == 0) // Compressed texture DXT5
 			{
-				size_t mipmapSize;
-				uint32_t width = header->dwWidth;
-				uint32_t height = header->dwHeight;
-				texture->init(width, height, GL_COMPRESSED_RGBA_S3TC_DXT5_EXT, true);
-
-				for (int i = 0; i < header->dwMipMapCount; ++i)
-				{
-					mipmapSize = glm::max(1U, ((width + 3) / 4)) * glm::max(1U, ((height + 3) / 4)) * 16;
-					texture->setCompressed(currentPtr, i, width, height, GL_COMPRESSED_RGBA_S3TC_DXT5_EXT, mipmapSize);
-					currentPtr += mipmapSize;
-					width >>= 1;
-					height >>= 1;
-				}
-				if (header->dwMipMapCount == 1)
-					texture->generateMipmaps();
+				compressed = true;
+				format = GL_COMPRESSED_RGBA_S3TC_DXT5_EXT;
+				sizedFormat = GL_COMPRESSED_RGBA_S3TC_DXT5_EXT;
+				blockSize = 16;
 			}
-			else // Uncompressed
+			else if (memcmp(&header->ddspf, &DirectX::DDSPF_DXT3, sizeof(DirectX::DDS_PIXELFORMAT)) == 0) // Compressed texture DXT3
 			{
-				size_t mipmapSize;
-				uint32_t width = header->dwWidth;
-				uint32_t height = header->dwHeight;
-				texture->init(width, height, GL_RGBA8, true);
+				compressed = true;
+				format = GL_COMPRESSED_RGBA_S3TC_DXT3_EXT;
+				sizedFormat = GL_COMPRESSED_RGBA_S3TC_DXT3_EXT;
+				blockSize = 16;
+			}
+			else if (memcmp(&header->ddspf, &DirectX::DDSPF_DXT1, sizeof(DirectX::DDS_PIXELFORMAT)) == 0) // Compressed texture DXT1
+			{
+				compressed = true;
+				format = GL_COMPRESSED_RGBA_S3TC_DXT1_EXT;
+				sizedFormat = GL_COMPRESSED_RGBA_S3TC_DXT1_EXT;
+				blockSize = 8;
+			}
+			else if (memcmp(&header->ddspf, &DirectX::DDSPF_A8R8G8B8, sizeof(DirectX::DDS_PIXELFORMAT)) == 0 ||
+					memcmp(&header->ddspf, &DirectX::DDSPF_X8R8G8B8, sizeof(DirectX::DDS_PIXELFORMAT)) == 0) // Uncompressed textures
+			{
+				compressed = false;
+				format = GL_BGRA;
+				sizedFormat = GL_RGBA8;
+				uncompressedType = GL_UNSIGNED_BYTE;
+			}
+			else if (memcmp(&header->ddspf, &DirectX::DDSPF_A8B8G8R8, sizeof(DirectX::DDS_PIXELFORMAT)) == 0 ||
+					memcmp(&header->ddspf, &DirectX::DDSPF_X8B8G8R8, sizeof(DirectX::DDS_PIXELFORMAT)) == 0)
+			{
+				compressed = false;
+				format = GL_RGBA;
+				sizedFormat = GL_RGBA8;
+				uncompressedType = GL_UNSIGNED_BYTE;
+			}
+			else
+				assert(!"Format nor supported");
 
-				for (int i = 0; i < header->dwMipMapCount; ++i)
+			// Here we read the mipmaps
+			size_t i = 0;
+			size_t mipmapSize;
+			uint32_t width = header->dwWidth;
+			uint32_t height = header->dwHeight;
+			texture->init(width, height, sizedFormat, true);
+
+			do
+			{
+				if (compressed)
+				{
+					mipmapSize = glm::max(1U, ((width + 3) / 4)) * glm::max(1U, ((height + 3) / 4)) * blockSize;
+					texture->setCompressed(currentPtr, i, width, height, format, mipmapSize);
+				}
+				else
 				{
 					mipmapSize = glm::max(1U, width) * glm::max(1U, height) * 4;
-					texture->set(currentPtr, i, width, height, GL_RGBA, GL_UNSIGNED_BYTE);
-					currentPtr += mipmapSize;
-					width >>= 1;
-					height >>= 1;
+					texture->set(currentPtr, i, width, height, format, uncompressedType);
 				}
-				if (header->dwMipMapCount == 1)
-					texture->generateMipmaps();
-			}
+				currentPtr += mipmapSize;
+				width >>= 1;
+				height >>= 1;
+				++i;
+			} while (hasMipmaps && i < header->dwMipMapCount);
+
+			// If the texture has no mipmaps, we generate them
+			if (hasMipmaps == false)
+				texture->generateMipmaps();
+			// We set the basic texture parameters
 			texture->parameter(GL_TEXTURE_WRAP_S, GL_REPEAT);
 			texture->parameter(GL_TEXTURE_WRAP_T, GL_REPEAT);
 			texture->parameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 			texture->parameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-			ifs.close();
+			// We delete the buffer and return, texture loaded successfuly
 			delete fileBuffer;
 			texture->unbind();
 			return AssetsLoadingResult(true);
