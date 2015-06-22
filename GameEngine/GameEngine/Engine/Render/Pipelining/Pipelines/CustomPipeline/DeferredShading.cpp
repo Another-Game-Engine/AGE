@@ -44,7 +44,6 @@ namespace AGE
 		// The entry point is the basic buffering pass
 		setAmbient(glm::vec3(0.2f));
 		_rendering_list.emplace_back(shadowBuffering);
-		_rendering_list.emplace_back(skybox);
 		_rendering_list.emplace_back(basicBuffering);
 		_rendering_list.emplace_back(directionalLightning);
 		_rendering_list.emplace_back(spotLightning);

@@ -7,7 +7,7 @@
 #define MAX_TONE_MAPPING 6.0f
 #define MIN_TONE_MAPPING 0.01f
 #define SPEED_TONE_MAPPING 0.1f
-#define MIDDLE_GRAY_TONE_MAPPING 0.5f
+#define MIDDLE_GRAY_TONE_MAPPING 0.8f
 
 namespace AGE
 {
