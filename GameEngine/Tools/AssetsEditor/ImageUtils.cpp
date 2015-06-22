@@ -42,7 +42,10 @@ namespace AGE
 		DXGI_FORMAT_R10G10B10A2_TYPELESS,
 		DXGI_FORMAT_R10G10B10A2_UNORM,
 		DXGI_FORMAT_R10G10B10A2_UINT,
-		DXGI_FORMAT_UNKNOWN 
+		DXGI_FORMAT_BC2_TYPELESS,
+		DXGI_FORMAT_BC2_UNORM,
+		DXGI_FORMAT_BC2_UNORM_SRGB,
+		DXGI_FORMAT_UNKNOWN
 	};
 
 	DXGI_FORMAT ImageUtils::getCompressionFormat(DXGI_FORMAT current)
@@ -74,7 +77,7 @@ namespace AGE
 			loadResult = LoadFromDDSFile(widePath.c_str(), DirectX::DDS_FLAGS_NONE, &info, *retImage);
 			if (FAILED(loadResult))
 			{
-				wprintf(L" FAILED (%x)\n", loadResult);
+				std::cerr << "Material convertor error : DDS texture loading failed (\"" << path << "\")" << std::endl;
 				return (NULL);
 			}
 		}
@@ -83,7 +86,7 @@ namespace AGE
 			loadResult = LoadFromTGAFile(widePath.c_str(), &info, *retImage);
 			if (FAILED(loadResult))
 			{
-				wprintf(L" FAILED (%x)\n", loadResult);
+				std::cerr << "Material convertor error : TGA texture loading failed (\"" << path << "\")" << std::endl;
 				return (NULL);
 			}
 		}
@@ -92,7 +95,7 @@ namespace AGE
 			loadResult = LoadFromWICFile(widePath.c_str(), DirectX::TEX_FILTER_DEFAULT, &info, *retImage);
 			if (FAILED(loadResult))
 			{
-				wprintf(L" FAILED (%x)\n", loadResult);
+				std::cerr << "Material convertor error : WIC texture loading failed (\"" << path << "\")" << std::endl;
 				return (NULL);
 			}
 		}

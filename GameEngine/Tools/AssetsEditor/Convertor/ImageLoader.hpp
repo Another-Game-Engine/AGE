@@ -26,8 +26,8 @@ namespace AGE
 			HRESULT hr = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
 			if (FAILED(hr))
 			{
-				wprintf(L"Failed to initialize COM (%08X)\n", hr);
-				return 1;
+				std::cerr << "Material convertor error : Fail to initialize the texture library" << std::endl;
+				return false;
 			}
 #endif
 
@@ -72,8 +72,7 @@ namespace AGE
 
 					if (FAILED(flipResult))
 					{
-						wprintf(L" FAILED (%x)\n", flipResult);
-						assert(false);
+						std::cerr << "Material convertor error : Texture flipping failed" << std::endl;
 						continue;
 					}
 					delete image;
@@ -93,10 +92,11 @@ namespace AGE
 				for (auto material : cookingTask->materials)
 				{
 					std::string textureName = OldFile(t->rawPath).getShortFileName();
-					if (cookingTask->dataSet->bumpToNormal &&
+					if ((cookingTask->dataSet->bumpToNormal || cookingTask->dataSet->useBumpAsNormal) &&
 						OldFile(material->bumpTexPath).getShortFileName() == textureName)
 					{
-						convertBump = true;
+						convertBump = cookingTask->dataSet->bumpToNormal;
+						isNormalMap = true;
 						material->normalTexPath = material->bumpTexPath;
 						material->bumpTexPath.clear();
 						break;
@@ -130,8 +130,7 @@ namespace AGE
 
 					if (FAILED(convertBumpResult))
 					{
-						wprintf(L" FAILED (%x)\n", convertBumpResult);
-						assert(false);
+						std::cerr << "Material convertor error : Conversion bump to normal failed" << std::endl;
 						continue;
 					}
 					delete image;
@@ -154,8 +153,7 @@ namespace AGE
 
 					if (FAILED(mipmapResult))
 					{
-						wprintf(L" FAILED (%x)\n", mipmapResult);
-						assert(false);
+						std::cerr << "Material convertor error : Texture mipmapping failed" << std::endl;
 						continue;
 					}
 					delete image;
@@ -186,8 +184,7 @@ namespace AGE
 
 					if (FAILED(compressResult))
 					{
-						wprintf(L" FAILED (%x)\n", compressResult);
-						assert(false);
+						std::cerr << "Material convertor error : Texture compression failed" << std::endl;
 						continue;
 					}
 					delete image;
@@ -218,7 +215,6 @@ namespace AGE
 				DirectX::SaveToDDSMemory(image->GetImages(), image->GetImageCount(), image->GetMetadata(), DirectX::DDS_FLAGS_NONE, blob);
 				ddsData = static_cast<char*>(blob.GetBufferPointer());
 				ddsSize = blob.GetBufferSize();
-#else
 #endif
 				std::ofstream ofs(name, std::ios::trunc | std::ios::binary);
 	

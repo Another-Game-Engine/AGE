@@ -220,6 +220,7 @@ namespace AGE
 			if (!ifs)
 			{
 				// The read failed
+				assert(!"The file has not been found");
 				return AssetsLoadingResult(true, "Image file not found.\n");
 			}
 			// We check the magic number
@@ -229,6 +230,7 @@ namespace AGE
 			{
 				// Wrong magic number
 				delete fileBuffer;
+				assert(!"Texture is not a DDS");
 				return AssetsLoadingResult(true, "The texture is not a .dds file.\n");
 			}
 			// We get the header

@@ -73,7 +73,8 @@ namespace AGE
 		bool flipV = false;
 
 		// Material options
+		bool useBumpAsNormal = false;
 		bool bumpToNormal = false;
-		float normalStrength = 10.0f;
+		float normalStrength = 70.0f;
 	};
 }
