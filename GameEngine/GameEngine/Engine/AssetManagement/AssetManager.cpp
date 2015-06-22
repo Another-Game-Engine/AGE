@@ -240,7 +240,8 @@ namespace AGE
 			texture->bind();
 
 			// We check the texture type
-			bool hasMipmaps = header->dwFlags & DDS_HEADER_FLAGS_MIPMAP;
+			bool isCubeMap = header->dwCaps2 & DDS_CUBEMAP_ALLFACES == DDS_CUBEMAP_ALLFACES;
+			bool hasMipmaps = header->dwFlags & DDS_HEADER_FLAGS_MIPMAP == DDS_HEADER_FLAGS_MIPMAP;
 			bool compressed;
 			uint32_t blockSize;
 			GLenum format;
@@ -329,25 +330,24 @@ namespace AGE
 		return texture;
 	}
 
-	std::shared_ptr<Texture3D> AssetsManager::loadSkybox(std::string const &name, OldFile &_filePath, std::array<std::string, 6> const &textures,  const std::string &loadingChannel)
+	std::shared_ptr<TextureCubeMap> AssetsManager::loadSkybox(std::string const &name, OldFile &_filePath, std::array<std::string, 6> const &textures,  const std::string &loadingChannel)
 	{
-		return (nullptr);
-//		{
-//			std::lock_guard<std::mutex> lock(_mutex);
-//			if (_skyboxes.find(name) != std::end(_skyboxes))
-//			{
-//				return _skyboxes[name];
-//			}
-//		}
-//
-//		auto texture = std::make_shared<Texture3D>();
-//		{
-//			std::lock_guard<std::mutex> lock(_mutex);
-//			_skyboxes.insert(std::make_pair(name, texture));
-//		}
-//
-//		auto future = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]()
-//		{
+		{
+			std::lock_guard<std::mutex> lock(_mutex);
+			if (_skyboxes.find(name) != std::end(_skyboxes))
+			{
+				return _skyboxes[name];
+			}
+		}
+
+		auto texture = std::make_shared<Texture3D>();
+		{
+			std::lock_guard<std::mutex> lock(_mutex);
+			_skyboxes.insert(std::make_pair(name, texture));
+		}
+
+		auto future = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]()
+		{
 //			static const GLenum textureFaces[6] = {
 //				GL_TEXTURE_CUBE_MAP_POSITIVE_X,
 //				GL_TEXTURE_CUBE_MAP_NEGATIVE_X,
@@ -446,10 +446,10 @@ namespace AGE
 //				texture->unbind();
 //
 //			}
-//			return AssetsLoadingResult(true);
-//		});
-//		pushNewAsset(loadingChannel, _filePath.getFullName(), future);
-//		return texture;
+			return AssetsLoadingResult(true);
+		});
+		pushNewAsset(loadingChannel, _filePath.getFullName(), future);
+		return texture;
 	}
 
 	bool AssetsManager::loadAnimation(const OldFile &_filePath, const std::string &loadingChannel)

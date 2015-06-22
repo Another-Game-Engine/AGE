@@ -14,7 +14,7 @@
 #include <Context/IRenderContext.hh>
 #include <CONFIGS.hh>
 #include <AssetManagement/Instance/AnimationInstance.hh>
-#include <Render/Textures/Texture3D.hh>
+#include <Render/Textures/TextureCubeMap.hh>
 
 # define VERTEX_SHADER "../../Shaders/test_pipeline_1.vp"
 # define FRAG_SHADER "../../Shaders/test_pipeline_1.fp"
