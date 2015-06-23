@@ -44,7 +44,6 @@ namespace AGE
 		std::size_t _chunkFrame = 0;
 		AGE::Entity GLOBAL_CAMERA;
 		int pipelineIndex = 1;
-		std::shared_ptr<Texture3D> _skyboxTest;
-		std::shared_ptr<Texture3D> _skyboxSpace;
+		std::shared_ptr<TextureCubeMap> _skyboxSpace;
 	};
 }

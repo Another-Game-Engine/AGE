@@ -220,7 +220,7 @@
     <ClCompile Include="Engine\BFC\BFCBlockManagerFactory.cpp" />
     <ClCompile Include="Engine\BFC\BFCLink.cpp" />
     <ClCompile Include="Engine\Render\Textures\TextureCubeMap.cpp" />
-    <ClCompile Include="OpenGLDDSLoader.cpp" />
+    <ClCompile Include="Engine\AssetManagement\OpenGLDDSLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -580,7 +580,7 @@
     <ClInclude Include="Engine\BFC\BFCLink.hpp" />
     <ClInclude Include="Engine\BFC\BFCBlockManagerFactory.hpp" />
     <ClInclude Include="Engine\Render\Textures\TextureCubeMap.hh" />
-    <ClInclude Include="OpenGLDDSLoader.hh" />
+    <ClInclude Include="Engine\AssetManagement\OpenGLDDSLoader.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Component.hh" />

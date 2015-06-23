@@ -27,6 +27,8 @@
 #include <Render/Properties/Materials/Specular.hh>
 #include <Render/Properties/Materials/ScaleUVs.hpp>
 
+#include <AssetManagement/OpenGLDDSLoader.hh>
+
 #include <Utils/Profiler.hpp>
 
 #include <Configuration.hpp>
@@ -34,9 +36,6 @@
 #ifdef AGE_ENABLE_IMGUI
 #include <imgui/imgui.h>
 #endif
-
-#include <DirectXTex/DirectXTex/DDS.h>
-#include <glm/gtx/extented_min_max.hpp>
 
 namespace AGE
 {
@@ -201,254 +200,48 @@ namespace AGE
 		auto future = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]()
 		{
 			SCOPE_profile_cpu_i("AssetsLoad", "LoadTexture");
-			std::ifstream ifs(filePath.getFullName(), std::ios::binary);
-			char *fileBuffer;
-			char *currentPtr;
-			uint32_t magic;
-			DirectX::DDS_HEADER *header;
 
-			// Get the file size and read it in one syscall
-			ifs.seekg(0, std::ios::end);
-			std::streamsize fileSize = ifs.tellg();
-			ifs.seekg(0, std::ios::beg);
-
-			fileBuffer = new char[fileSize];
-			ifs.read(fileBuffer, fileSize);
-			// currentPtr is the current reading pointer
-			currentPtr = fileBuffer;
-
-			if (!ifs)
-			{
-				// The read failed
-				assert(!"The file has not been found");
-				return AssetsLoadingResult(true, "Image file not found.\n");
-			}
-			// We check the magic number
-			magic = *(uint32_t*)currentPtr;
-			currentPtr += sizeof(uint32_t);
-			if (magic != DirectX::DDS_MAGIC)
-			{
-				// Wrong magic number
-				delete fileBuffer;
-				assert(!"Texture is not a DDS");
-				return AssetsLoadingResult(true, "The texture is not a .dds file.\n");
-			}
-			// We get the header
-			header = (DirectX::DDS_HEADER*)currentPtr;
-			currentPtr += sizeof(DirectX::DDS_HEADER);
-			size_t totalSize = 0;
-			texture->bind();
-
-			// We check the texture type
-			bool isCubeMap = header->dwCaps2 & DDS_CUBEMAP_ALLFACES == DDS_CUBEMAP_ALLFACES;
-			bool hasMipmaps = header->dwFlags & DDS_HEADER_FLAGS_MIPMAP == DDS_HEADER_FLAGS_MIPMAP;
-			bool compressed;
-			uint32_t blockSize;
-			GLenum format;
-			GLenum sizedFormat;
-			GLenum uncompressedType;
-
-			if (memcmp(&header->ddspf, &DirectX::DDSPF_DXT5, sizeof(DirectX::DDS_PIXELFORMAT)) == 0) // Compressed texture DXT5
-			{
-				compressed = true;
-				format = GL_COMPRESSED_RGBA_S3TC_DXT5_EXT;
-				sizedFormat = GL_COMPRESSED_RGBA_S3TC_DXT5_EXT;
-				blockSize = 16;
-			}
-			else if (memcmp(&header->ddspf, &DirectX::DDSPF_DXT3, sizeof(DirectX::DDS_PIXELFORMAT)) == 0) // Compressed texture DXT3
-			{
-				compressed = true;
-				format = GL_COMPRESSED_RGBA_S3TC_DXT3_EXT;
-				sizedFormat = GL_COMPRESSED_RGBA_S3TC_DXT3_EXT;
-				blockSize = 16;
-			}
-			else if (memcmp(&header->ddspf, &DirectX::DDSPF_DXT1, sizeof(DirectX::DDS_PIXELFORMAT)) == 0) // Compressed texture DXT1
-			{
-				compressed = true;
-				format = GL_COMPRESSED_RGBA_S3TC_DXT1_EXT;
-				sizedFormat = GL_COMPRESSED_RGBA_S3TC_DXT1_EXT;
-				blockSize = 8;
-			}
-			else if (memcmp(&header->ddspf, &DirectX::DDSPF_A8R8G8B8, sizeof(DirectX::DDS_PIXELFORMAT)) == 0 ||
-					memcmp(&header->ddspf, &DirectX::DDSPF_X8R8G8B8, sizeof(DirectX::DDS_PIXELFORMAT)) == 0) // Uncompressed textures
-			{
-				compressed = false;
-				format = GL_BGRA;
-				sizedFormat = GL_RGBA8;
-				uncompressedType = GL_UNSIGNED_BYTE;
-			}
-			else if (memcmp(&header->ddspf, &DirectX::DDSPF_A8B8G8R8, sizeof(DirectX::DDS_PIXELFORMAT)) == 0 ||
-					memcmp(&header->ddspf, &DirectX::DDSPF_X8B8G8R8, sizeof(DirectX::DDS_PIXELFORMAT)) == 0)
-			{
-				compressed = false;
-				format = GL_RGBA;
-				sizedFormat = GL_RGBA8;
-				uncompressedType = GL_UNSIGNED_BYTE;
-			}
-			else
-				assert(!"Format nor supported");
-
-			// Here we read the mipmaps
-			size_t i = 0;
-			size_t mipmapSize;
-			uint32_t width = header->dwWidth;
-			uint32_t height = header->dwHeight;
-			texture->init(width, height, sizedFormat, true);
-
-			do
-			{
-				if (compressed)
-				{
-					mipmapSize = glm::max(1U, ((width + 3) / 4)) * glm::max(1U, ((height + 3) / 4)) * blockSize;
-					texture->setCompressed(currentPtr, i, width, height, format, mipmapSize);
-				}
-				else
-				{
-					mipmapSize = glm::max(1U, width) * glm::max(1U, height) * 4;
-					texture->set(currentPtr, i, width, height, format, uncompressedType);
-				}
-				currentPtr += mipmapSize;
-				width >>= 1;
-				height >>= 1;
-				++i;
-			} while (hasMipmaps && i < header->dwMipMapCount);
-
-			// If the texture has no mipmaps, we generate them
-			if (hasMipmaps == false)
-				texture->generateMipmaps();
-			// We set the basic texture parameters
-			texture->parameter(GL_TEXTURE_WRAP_S, GL_REPEAT);
-			texture->parameter(GL_TEXTURE_WRAP_T, GL_REPEAT);
-			texture->parameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-			texture->parameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-			// We delete the buffer and return, texture loaded successfuly
-			delete fileBuffer;
-			texture->unbind();
+			std::shared_ptr<ATexture> loaded = OpenGLDDSLoader::loadDDSFile(filePath);
+			if (loaded == nullptr)
+				return AssetsLoadingResult(true, "Could not load the texture.\n");
+			if (loaded->type() != GL_TEXTURE_2D)
+				return AssetsLoadingResult(true, "Texture is not of the right type.\n");
+			*texture = *std::static_pointer_cast<Texture2D>(loaded);
 			return AssetsLoadingResult(true);
 		});
 		pushNewAsset(loadingChannel, _filePath.getFullName(), future);
 		return texture;
 	}
 
-	std::shared_ptr<TextureCubeMap> AssetsManager::loadSkybox(std::string const &name, OldFile &_filePath, std::array<std::string, 6> const &textures,  const std::string &loadingChannel)
+	std::shared_ptr<TextureCubeMap> AssetsManager::loadCubeMap(std::string const &name, OldFile &_filePath, const std::string &loadingChannel)
 	{
+		OldFile filePath(_assetsDirectory + _filePath.getFullName());
+
 		{
 			std::lock_guard<std::mutex> lock(_mutex);
-			if (_skyboxes.find(name) != std::end(_skyboxes))
+			if (_cubeMaps.find(name) != std::end(_cubeMaps))
 			{
-				return _skyboxes[name];
+				return _cubeMaps[name];
 			}
 		}
 
-		auto texture = std::make_shared<Texture3D>();
+		auto texture = std::make_shared<TextureCubeMap>();
 		{
 			std::lock_guard<std::mutex> lock(_mutex);
-			_skyboxes.insert(std::make_pair(name, texture));
+			_cubeMaps.insert(std::make_pair(name, texture));
 		}
 
 		auto future = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]()
 		{
-//			static const GLenum textureFaces[6] = {
-//				GL_TEXTURE_CUBE_MAP_POSITIVE_X,
-//				GL_TEXTURE_CUBE_MAP_NEGATIVE_X,
-//				GL_TEXTURE_CUBE_MAP_POSITIVE_Y,
-//				GL_TEXTURE_CUBE_MAP_NEGATIVE_Y,
-//				GL_TEXTURE_CUBE_MAP_POSITIVE_Z,
-//				GL_TEXTURE_CUBE_MAP_NEGATIVE_Z
-//			};
-//
-//			SCOPE_profile_cpu_i("AssetsLoad", "LoadSkybox");
-//			
-//
-//			for (int index = 0; index < 6; ++index)
-//			{
-//				std::shared_ptr<TextureData> data = std::make_shared<TextureData>();
-//				OldFile filePath(_assetsDirectory + std::string(_filePath.getFullName()) + textures[index]);
-//				assert(filePath.exists());
-//				std::ifstream ifs(filePath.getFullName(), std::ios::binary);
-//				cereal::PortableBinaryInputArchive ar(ifs);
-//				ar(*data.get());
-//
-//				GLenum ct = GL_RGB32F;
-//				GLenum color = GL_RGB;
-//				switch (data->colorNumber)
-//				{
-//				case 3:
-//					ct = GL_RGB32F;
-//					color = GL_BGR;
-//					break;
-//				case 4:
-//					ct = GL_RGBA32F;
-//					color = GL_BGRA;
-//					break;
-//				case 1:
-//					ct = GL_RGB32F;
-//					color = GL_LUMINANCE;
-//					break;
-//				default:
-//					return AssetsLoadingResult(true, "Image format not found.\n");
-//					break;
-//				}
-//				if (index == 0)
-//				{
-//					auto success = texture->init(data->width, data->height, ct, true);
-//					if (success == false)
-//					{
-//						return AssetsLoadingResult(false, "Texture loading error");
-//					}
-//				}
-//				texture->bind();
-//				texture->set(textureFaces[index], data->data, 0, color, GL_UNSIGNED_BYTE);
-//				if (index == 5)
-//				{
-//					texture->parameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-//					texture->parameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-//
-//					switch (data->repeatX)
-//					{
-//					case TextureData::NoRepeat:
-//						texture->parameter(GL_TEXTURE_WRAP_T, GL_REPEAT);
-//						break;
-//					case TextureData::Repeat:
-//						texture->parameter(GL_TEXTURE_WRAP_T, GL_REPEAT);
-//						break;
-//					case TextureData::MirrorRepeat:
-//						texture->parameter(GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
-//						break;
-//					case TextureData::ClampToBorder:
-//						texture->parameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-//						break;
-//					case TextureData::ClampToEdge:
-//						texture->parameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-//						break;
-//					}
-//
-//					switch (data->repeatY)
-//					{
-//					case TextureData::NoRepeat:
-//						texture->parameter(GL_TEXTURE_WRAP_S, GL_REPEAT);
-//						break;
-//					case TextureData::Repeat:
-//						texture->parameter(GL_TEXTURE_WRAP_S, GL_REPEAT);
-//						break;
-//					case TextureData::MirrorRepeat:
-//						texture->parameter(GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
-//						break;
-//					case TextureData::ClampToBorder:
-//						texture->parameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-//						break;
-//					case TextureData::ClampToEdge:
-//						texture->parameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-//						break;
-//					}
-//					texture->generateMipmaps();
-//				}
-//				texture->unbind();
-//
-//			}
+			std::shared_ptr<ATexture> loaded = OpenGLDDSLoader::loadDDSFile(filePath);
+			if (loaded == nullptr)
+				return AssetsLoadingResult(true, "Could not load the texture.\n");
+			if (loaded->type() != GL_TEXTURE_CUBE_MAP)
+				return AssetsLoadingResult(true, "Texture is not of the right type.\n");
+			*texture = *std::static_pointer_cast<TextureCubeMap>(loaded);
 			return AssetsLoadingResult(true);
 		});
-		pushNewAsset(loadingChannel, _filePath.getFullName(), future);
+		pushNewAsset(loadingChannel, filePath.getFullName(), future);
 		return texture;
 	}
 

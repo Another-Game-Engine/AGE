@@ -443,7 +443,7 @@
     <ClCompile Include="Engine\Components\FreeFlyComponent.cpp" />
     <ClCompile Include="Engine\WorldEditorGlobal.cpp" />
     <ClCompile Include="Engine\Render\OpenGLTask\OpenGLState.cpp" />
-    <ClCompile Include="OpenGLDDSLoader.cpp" />
+    <ClCompile Include="Engine\AssetManagement\OpenGLDDSLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -768,7 +768,7 @@
     <ClInclude Include="Engine\Components\FreeFlyComponent.hh" />
     <ClInclude Include="Engine\WorldEditorGlobal.hpp" />
     <ClInclude Include="Engine\Render\OpenGLTask\OpenGLState.hh" />
-    <ClInclude Include="OpenGLDDSLoader.hh" />
+    <ClInclude Include="Engine\AssetManagement\OpenGLDDSLoader.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Collider.inl" />
