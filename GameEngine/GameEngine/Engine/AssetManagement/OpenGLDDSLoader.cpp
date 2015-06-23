@@ -2,8 +2,6 @@
 #include <glm/gtx/extented_min_max.hpp>
 #include <fstream>
 
-#include <windows.h>
-
 namespace AGE
 {
 	static const GLenum textureFaces[6] =
