@@ -307,7 +307,7 @@
     <ClCompile Include="Engine\Render\ProgramResources\Types\Uniform\Mat4Array255.cpp" />
     <ClCompile Include="Engine\Render\Properties\Properties.cpp" />
     <ClCompile Include="Engine\Render\PropertyManager.cpp" />
-    <ClCompile Include="Engine\Render\Textures\Texture3D.cpp" />
+    <ClCompile Include="Engine\Render\Textures\TextureCubeMap.cpp" />
     <ClCompile Include="Engine\Systems\CollisionSystem.cpp" />
     <ClCompile Include="Engine\Systems\DebugSystem.cpp" />
     <ClCompile Include="Engine\Systems\FreeFlyCamera.cpp" />
@@ -443,6 +443,7 @@
     <ClCompile Include="Engine\Components\FreeFlyComponent.cpp" />
     <ClCompile Include="Engine\WorldEditorGlobal.cpp" />
     <ClCompile Include="Engine\Render\OpenGLTask\OpenGLState.cpp" />
+    <ClCompile Include="Engine\AssetManagement\OpenGLDDSLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -547,7 +548,7 @@
     <ClInclude Include="Engine\Render\Properties\Materials\Specular.hh" />
     <ClInclude Include="Engine\Render\ProgramResources\Types\Uniform\Mat4Array255.hh" />
     <ClInclude Include="Engine\Render\Properties\Properties.hh" />
-    <ClInclude Include="Engine\Render\Textures\Texture3D.hh" />
+    <ClInclude Include="Engine\Render\Textures\TextureCubeMap.hh" />
     <ClInclude Include="Engine\Systems\CollisionSystem.hpp" />
     <ClInclude Include="Engine\Systems\DebugSystem.hpp" />
     <ClInclude Include="Engine\Systems\FreeFlyCamera.hh" />
@@ -767,6 +768,7 @@
     <ClInclude Include="Engine\Components\FreeFlyComponent.hh" />
     <ClInclude Include="Engine\WorldEditorGlobal.hpp" />
     <ClInclude Include="Engine\Render\OpenGLTask\OpenGLState.hh" />
+    <ClInclude Include="Engine\AssetManagement\OpenGLDDSLoader.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Collider.inl" />

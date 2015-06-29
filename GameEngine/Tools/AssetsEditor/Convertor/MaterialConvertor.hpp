@@ -30,6 +30,7 @@ namespace AGE
 			}
 			auto fileName = cookingTask->dataSet->filePath.getShortFileName() + ".mage";
 			auto name = cookingTask->serializedDirectory.path().directory_string() + "\\" + cookingTask->dataSet->filePath.getFolder() + fileName;
+
 			MaterialDataSet materialDataSet;
 			for (auto &m : cookingTask->materials)
 			{
@@ -114,13 +115,13 @@ namespace AGE
 				cookingTask->texturesPath.insert(material->normalTexPath);
 				cookingTask->texturesPath.insert(material->bumpTexPath);
 
-				AssimpLoader::replaceExtension(material->diffuseTexPath, ".tage");
-				AssimpLoader::replaceExtension(material->ambientTexPath, ".tage");
-				AssimpLoader::replaceExtension(material->emissiveTexPath, ".tage");
-				AssimpLoader::replaceExtension(material->reflectiveTexPath, ".tage");
-				AssimpLoader::replaceExtension(material->specularTexPath, ".tage");
-				AssimpLoader::replaceExtension(material->normalTexPath, ".tage");
-				AssimpLoader::replaceExtension(material->bumpTexPath, ".tage");
+				AssimpLoader::replaceExtension(material->diffuseTexPath, ".dds");
+				AssimpLoader::replaceExtension(material->ambientTexPath, ".dds");
+				AssimpLoader::replaceExtension(material->emissiveTexPath, ".dds");
+				AssimpLoader::replaceExtension(material->reflectiveTexPath, ".dds");
+				AssimpLoader::replaceExtension(material->specularTexPath, ".dds");
+				AssimpLoader::replaceExtension(material->normalTexPath, ".dds");
+				AssimpLoader::replaceExtension(material->bumpTexPath, ".dds");
 
 				cookingTask->materials.push_back(material);
             }

@@ -255,7 +255,7 @@ namespace AGE
 			}
 			else if (extension == "bmp" || extension == "jpg" || extension == "jpeg" || extension == "tga" || extension == "png")
 			{
-				res.replace(res.find("." + extension), extension.size() + 1, ".tage");
+				res.replace(res.find("." + extension), extension.size() + 1, ".dds");
 			}
 			else if (extension == "mtl")
 			{

@@ -130,7 +130,7 @@ namespace AGE
 						_cookedBulletFiles.push_back(_cookedFiles.back().fileName.c_str());
 						_cookedBulletFullPath.push_back(_cookedFiles.back().fullPath.c_str());
 					}
-					else if (extension == "tage")
+					else if (extension == "dds")
 					{
 						_cookedTextureFiles.push_back(_cookedFiles.back().fileName.c_str());
 						_cookedTextureFullPath.push_back(_cookedFiles.back().fullPath.c_str());
