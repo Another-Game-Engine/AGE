@@ -1,6 +1,9 @@
 #include "RenderCameraSystem.hpp"
+
 #include <Components/CameraComponent.hpp>
 #include <Components/SpotLight.hh>
+#include <Components/DirectionalLightComponent.hh>
+#include <Components/Light.hh>
 
 #include <Core/Engine.hh>
 #include <Core/AScene.hh>
@@ -20,7 +23,9 @@ namespace AGE
 	RenderCameraSystem::RenderCameraSystem(AScene *scene) :
 		System(std::move(scene)),
 		_cameras(std::move(scene)),
-		_spotLights(std::move(scene))
+		_spotLights(std::move(scene)),
+		_directionnalLights(std::move(scene)),
+		_pointLights(std::move(scene))
 	{
 		_name = "Camera system";
 	}
@@ -29,6 +34,8 @@ namespace AGE
 	{
 		_cameras.requireComponent<CameraComponent>();
 		_spotLights.requireComponent<SpotLightComponent>();
+		_directionnalLights.requireComponent<DirectionalLightComponent>();
+		_pointLights.requireComponent<PointLightComponent>();
 		return (true);
 	}
 
@@ -42,6 +49,8 @@ namespace AGE
 		_scene->getBfcLinkTracker()->reset();
 
 		std::list<std::shared_ptr<DRBSpotLightDrawableList>> spotLightList;
+		std::list<std::shared_ptr<DRBData>> pointLightList;
+
 
 		for (auto spotEntity : _spotLights.getCollection())
 		{
@@ -54,6 +63,12 @@ namespace AGE
 
 			//_scene->getBfcBlockManagerFactory()->cullOnChannel(BFCCullableType::CullableMesh, spotDrawableList->meshs);
 			spotLightList.push_back(spotDrawableList);
+		}
+		for (auto pointLightEntity : _pointLights.getCollection())
+		{
+			auto point = pointLightEntity->getComponent<PointLightComponent>();
+			
+			pointLightList.push_back(point->getCullableHandle().getPtr()->getDatas());
 		}
 
 		for (auto cameraEntity : _cameras.getCollection())
@@ -70,6 +85,7 @@ namespace AGE
 			_scene->getBfcBlockManagerFactory()->cullOnChannel(BFCCullableType::CullableMesh, cameraList->meshs, cameraFrustum);
 			_scene->getBfcBlockManagerFactory()->cullOnChannel(BFCCullableType::CullablePointLight, cameraList->pointLights, cameraFrustum);
 			cameraList->spotLights = spotLightList;
+			cameraList->pointLights = pointLightList;
 			AGE::GetRenderThread()->getQueue()->emplaceCommand<AGE::DRBCameraDrawableListCommand>(cameraList);
 		}
 	}

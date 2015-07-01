@@ -29,6 +29,8 @@ namespace AGE
 		template <typename Archive>void serialize(Archive &ar, const std::uint32_t version);
 		virtual void postUnserialization();
 
+		inline BFCCullableHandle getCullableHandle() const { return _graphicHandle; }
+
 #ifdef EDITOR_ENABLED
 		virtual void editorCreate();
 		virtual void editorDelete();
