@@ -66,19 +66,13 @@ namespace AGE
 
 	bool Frustum::checkCollision(glm::vec4 const &sphere) const
 	{
+
+
 		for (int i = 0; i < PLANE_END; i++)
 		{
-			glm::vec3 ret = glm::vec3(sphere.x, sphere.y, sphere.z) - glm::vec3(sphere.w);
-			glm::vec3 normal = _planes[i].getNormal();
+			float dist = _planes[i].getPointDistance(glm::vec3(sphere));
 
-			if (normal.x >= 0)
-				ret.x += sphere.w * 2;
-			if (normal.y >= 0)
-				ret.y += sphere.w * 2;
-			if (normal.z >= 0)
-				ret.z += sphere.w * 2;
-
-			if (_planes[i].getPointDistance(ret) < 0)
+			if (dist + sphere.w < 0)
 				return (false);
 		}
 		return (true);

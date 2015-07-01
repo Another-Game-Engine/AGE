@@ -48,6 +48,10 @@ namespace AGE
 			auto spot = spotEntity->getComponent<SpotLightComponent>();
 			auto spotDrawableList = std::make_shared<DRBSpotLightDrawableList>();
 			spotDrawableList->spotLight = spot->getCullableHandle().getPtr()->getDatas();
+
+			Frustum spotlightFrustum;
+			//spotlightFrustum.setMatrix(spot->)
+
 			//_scene->getBfcBlockManagerFactory()->cullOnChannel(BFCCullableType::CullableMesh, spotDrawableList->meshs);
 			spotLightList.push_back(spotDrawableList);
 		}
@@ -61,7 +65,7 @@ namespace AGE
 			cameraList->cameraInfos.data = camera->getData();
 			cameraList->cameraInfos.view = glm::inverse(cameraEntity->getLink().getGlobalTransform());
 
-			cameraFrustum.setMatrix(cameraList->cameraInfos.view * camera->getProjection());
+			cameraFrustum.setMatrix(camera->getProjection() * cameraList->cameraInfos.view);
 
 			_scene->getBfcBlockManagerFactory()->cullOnChannel(BFCCullableType::CullableMesh, cameraList->meshs, cameraFrustum);
 			_scene->getBfcBlockManagerFactory()->cullOnChannel(BFCCullableType::CullablePointLight, cameraList->pointLights, cameraFrustum);
