@@ -13,7 +13,7 @@ namespace AGE
 
 	glm::vec4 DRBMesh::setBFCTransform(const glm::mat4 &transformation)
 	{
-		datas->globalProperties.get_property<Transformation>(datas->transformationPropertyKey)->set(transformation);
+		datas->setTransformation(transformation);
 		return BFCCullableObject::setBFCTransform(transformation);
 	}
 

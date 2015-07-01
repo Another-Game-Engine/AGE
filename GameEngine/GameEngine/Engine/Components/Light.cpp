@@ -16,6 +16,10 @@
 #include <glm/gtc/type_ptr.hpp>
 #endif
 
+#ifdef max
+#undef max
+#endif
+
 namespace AGE
 {
 	

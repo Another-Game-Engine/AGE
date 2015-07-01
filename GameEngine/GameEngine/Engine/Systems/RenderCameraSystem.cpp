@@ -48,19 +48,23 @@ namespace AGE
 			auto spot = spotEntity->getComponent<SpotLightComponent>();
 			auto spotDrawableList = std::make_shared<DRBSpotLightDrawableList>();
 			spotDrawableList->spotLight = spot->getCullableHandle().getPtr()->getDatas();
-			_scene->getBfcBlockManagerFactory()->cullOnChannel(BFCCullableType::CullableMesh, spotDrawableList->meshs);
+			//_scene->getBfcBlockManagerFactory()->cullOnChannel(BFCCullableType::CullableMesh, spotDrawableList->meshs);
 			spotLightList.push_back(spotDrawableList);
 		}
 
 		for (auto cameraEntity : _cameras.getCollection())
 		{
+			Frustum cameraFrustum;
 			auto camera = cameraEntity->getComponent<CameraComponent>();
 
 			auto cameraList = std::make_shared<DRBCameraDrawableList>();
 			cameraList->cameraInfos.data = camera->getData();
 			cameraList->cameraInfos.view = glm::inverse(cameraEntity->getLink().getGlobalTransform());
-			_scene->getBfcBlockManagerFactory()->cullOnChannel(BFCCullableType::CullableMesh, cameraList->meshs);
-			_scene->getBfcBlockManagerFactory()->cullOnChannel(BFCCullableType::CullablePointLight, cameraList->pointLights);
+
+			cameraFrustum.setMatrix(cameraList->cameraInfos.view * camera->getProjection());
+
+			_scene->getBfcBlockManagerFactory()->cullOnChannel(BFCCullableType::CullableMesh, cameraList->meshs, cameraFrustum);
+			_scene->getBfcBlockManagerFactory()->cullOnChannel(BFCCullableType::CullablePointLight, cameraList->pointLights, cameraFrustum);
 			cameraList->spotLights = spotLightList;
 			AGE::GetRenderThread()->getQueue()->emplaceCommand<AGE::DRBCameraDrawableListCommand>(cameraList);
 		}

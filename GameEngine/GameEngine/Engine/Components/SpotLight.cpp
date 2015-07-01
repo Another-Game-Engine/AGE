@@ -8,6 +8,7 @@
 #include "Render/ProgramResources/Types/Uniform/Vec4.hh"
 #include "Render/ProgramResources/Types/Uniform/Vec3.hh"
 #include "Render/ProgramResources/Types/Uniform/Vec1.hh"
+#include "Render/ProgramResources/Types/Uniform/Mat4.hh"
 
 #include "Graphic/DRBLightElementManager.hpp"
 #include "Graphic/DRBData.hpp"
@@ -89,14 +90,15 @@ namespace AGE
 
 		auto &properties = _graphicHandle.getPtr()->getDatas()->globalProperties;
 		
-		properties.add_property(_propShadowMatrix);
 		properties.add_property(_propPosition);
 		properties.add_property(_propAttenuation);
 		auto &castedPropDir = std::static_pointer_cast<AutoProperty<glm::vec3, Vec3>>(_propDirection);
 		auto &castedPropPos = std::static_pointer_cast<AutoProperty<glm::vec3, Vec3>>(_propPosition);
+		auto &castedPropShadowMatrix = std::static_pointer_cast<AutoProperty<glm::mat4, Mat4>>(_propShadowMatrix);
 
 		std::static_pointer_cast<DRBSpotLightData>(_graphicHandle.getPtr()->getDatas())->registerDirectionProperty(castedPropDir);
 		std::static_pointer_cast<DRBSpotLightData>(_graphicHandle.getPtr()->getDatas())->registerPositionProperty(castedPropPos);
+		std::static_pointer_cast<DRBSpotLightData>(_graphicHandle.getPtr()->getDatas())->registerShadowMatrixProperty(castedPropShadowMatrix);
 		properties.add_property(_propSpotCutOff);
 		properties.add_property(_propExponentLight);
 		properties.add_property(_propColorLight);

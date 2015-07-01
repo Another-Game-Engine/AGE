@@ -3,6 +3,7 @@
 #include <Render/ProgramResources/Types/ProgramResourcesType.hh>
 #include <Render/GeometryManagement/Data/BlockMemory.hh>
 #include <Render/Program.hh>
+#include <Utils/Profiler.hpp>
 
 namespace AGE
 {
@@ -149,6 +150,8 @@ namespace AGE
 
 	Vertices & Vertices::draw(GLenum mode)
 	{
+		SCOPE_profile_cpu_function("RenderTimer");
+
 		if (_indices_block_memory.lock())
 		{
 			auto offset = _indices_block_memory.lock()->offset();

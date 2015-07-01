@@ -64,6 +64,26 @@ namespace AGE
 		return (false);
 	}
 
+	bool Frustum::checkCollision(glm::vec4 const &sphere) const
+	{
+		for (int i = 0; i < PLANE_END; i++)
+		{
+			glm::vec3 ret = glm::vec3(sphere.x, sphere.y, sphere.z) - glm::vec3(sphere.w);
+			glm::vec3 normal = _planes[i].getNormal();
+
+			if (normal.x >= 0)
+				ret.x += sphere.w * 2;
+			if (normal.y >= 0)
+				ret.y += sphere.w * 2;
+			if (normal.z >= 0)
+				ret.z += sphere.w * 2;
+
+			if (_planes[i].getPointDistance(ret) < 0)
+				return (false);
+		}
+		return (true);
+	}
+
 	bool Frustum::checkCollision(Frustum const &frustum) const
 	{
 		assert(!"Not implemented");

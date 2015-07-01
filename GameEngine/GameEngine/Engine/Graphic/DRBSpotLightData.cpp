@@ -1,6 +1,8 @@
 #include "DRBSpotLightData.hpp"
 
 #include "Render/ProgramResources/Types/Uniform/Vec3.hh"
+#include "Render/ProgramResources/Types/Uniform/Mat4.hh"
+
 
 namespace AGE
 {
@@ -10,6 +12,7 @@ namespace AGE
 	{
 		AGE_ASSERT(_directionProperty == nullptr);
 		_directionProperty = directionProperty;
+		globalProperties.add_property(_directionProperty);
 	}
 
 	// Call that at init, it will add the property in Properties list
@@ -18,6 +21,16 @@ namespace AGE
 	{
 		AGE_ASSERT(_positionProperty == nullptr);
 		_positionProperty = positionProperty;
+		globalProperties.add_property(_directionProperty);
+	}
+
+	// Call that at init, it will add the property in Properties list
+	// and keep a pointer on it 
+	void DRBSpotLightData::registerShadowMatrixProperty(std::shared_ptr<AutoProperty<glm::mat4, Mat4>> shadowMatrixProperty)
+	{
+		AGE_ASSERT(_shadowMatrixProperty == nullptr);
+		_shadowMatrixProperty = shadowMatrixProperty;
+		globalProperties.add_property(_shadowMatrixProperty);
 	}
 
 	void DRBSpotLightData::computePositionAndDirection(const glm::mat4 &transformation)

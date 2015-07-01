@@ -1,4 +1,5 @@
 #include <Render/Properties/Properties.hh>
+#include <Utils/Profiler.hpp>
 
 namespace AGE
 {
@@ -26,6 +27,8 @@ namespace AGE
 
 	Key<Property> Properties::add_property(std::shared_ptr<IProperty> const &prop)
 	{
+		SCOPE_profile_cpu_function("RenderTimer");
+
 		RWLockGuard lock(_lock, true);
 		_properties.emplace_back(prop);
 		return (Key<Property>::createKey(int(_properties.size()) - 1));
@@ -33,6 +36,8 @@ namespace AGE
 
 	void Properties::merge_properties(const Properties &other)
 	{
+		SCOPE_profile_cpu_function("RenderTimer");
+
 		_lock.ReadLock();
 		RWLockGuard lockO(other._lock, false);
 		for (auto &p : other._properties)
@@ -48,6 +53,8 @@ namespace AGE
 	// NOT WORKING -> you invalid Key doing that !
 	void Properties::remove_property(Key<IProperty> const &prop)
 	{
+		SCOPE_profile_cpu_function("RenderTimer");
+
 		RWLockGuard lock(_lock, true);
 		if (prop.getId() != _properties.size() - 1)
 		{
@@ -58,8 +65,11 @@ namespace AGE
 
 	void Properties::update_properties(std::shared_ptr<Program> const &p) const
 	{
+		SCOPE_profile_cpu_function("RenderTimer");
+
 		RWLockGuard lock(_lock, false);
-		for (auto property : _properties) {
+		for (auto property : _properties)
+		{
 			property->update(p);
 		}
 	}

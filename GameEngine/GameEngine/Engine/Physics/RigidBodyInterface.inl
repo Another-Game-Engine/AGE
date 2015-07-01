@@ -7,6 +7,10 @@
 #include "WorldInterface.hpp"
 #include "MaterialInterface.hpp"
 
+#ifdef max
+#undef max
+#endif
+
 namespace AGE
 {
 	namespace Physics
