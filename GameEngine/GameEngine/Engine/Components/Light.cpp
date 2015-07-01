@@ -4,10 +4,16 @@
 #include <Threads/ThreadManager.hpp>
 #include <glm/glm.hpp>
 #include <AssetManagement/AssetManager.hh>
-#include "Render\Properties\Materials\Color.hh"
-#include "Render\Properties\Materials\MapColor.hh"
-#include "Graphic\DRBLightElementManager.hpp"
 
+#include "Render/Properties/AutoProperty.hpp"
+#include "Render/ProgramResources/Types/Uniform/Vec4.hh"
+#include "Render/ProgramResources/Types/Uniform/Vec3.hh"
+#include "Render/ProgramResources/Types/Uniform/Vec1.hh"
+#include "Render/ProgramResources/Types/Uniform/Mat4.hh"
+#include "Render/Properties/Materials/Color.hh"
+#include "Render/Properties/Materials/MapColor.hh"
+
+#include "Graphic/DRBLightElementManager.hpp"
 #include "Graphic/DRBData.hpp"
 #include "Graphic/DRBPointLightData.hpp"
 
@@ -44,8 +50,11 @@ namespace AGE
 		color = glm::vec3(1);
 		range = glm::vec3(1.0f, 0.01f, 0.001f);
 		map = nullptr;
-		_colorProp = nullptr;
 		_mapProp = nullptr;
+
+		_rangeProperty = nullptr;
+		_colorProperty = nullptr;
+		_ambiantColorProperty = nullptr;
 
 		if (_graphicHandle.invalid() == false)
 		{
@@ -56,15 +65,20 @@ namespace AGE
 
 	void PointLightComponent::init()
 	{
-		_colorProp = std::make_shared<Color>("color");
 		_mapProp = std::make_shared<MapColor>("sprite_light");
+		_rangeProperty = std::make_shared<AutoProperty<glm::vec4, Vec4>>("attenuation_light");
+		_colorProperty = std::make_shared<AutoProperty<glm::vec4, Vec4>>("color_light");
+		_ambiantColorProperty = std::make_shared<AutoProperty<glm::vec4, Vec4>>("ambient_color");
 
 		auto manager = entity->getScene()->getInstance<DRBLightElementManager>();
-		_graphicHandle = manager->addPointLight(_colorProp, _mapProp);
+		_graphicHandle = manager->addPointLight();
 
-		_graphicHandle.getPtr()->getDatas()->globalProperties.add_property(_colorProp);
 		_graphicHandle.getPtr()->getDatas()->globalProperties.add_property(_mapProp);
-		std::static_pointer_cast<DRBPointLightData>(_graphicHandle.getPtr()->getDatas())->setRange(range);
+		_graphicHandle.getPtr()->getDatas()->globalProperties.add_property(_rangeProperty);
+		_graphicHandle.getPtr()->getDatas()->globalProperties.add_property(_colorProperty);
+		_graphicHandle.getPtr()->getDatas()->globalProperties.add_property(_ambiantColorProperty);
+
+
 
 		map = entity->getScene()->getInstance<AssetsManager>()->getPointLightTexture();
 	}
@@ -90,10 +104,16 @@ namespace AGE
 	}
 
 
+	void PointLightComponent::_updateProperties()
+	{
+		
+	}
+
 	void PointLightComponent::postUnserialization()
 	{
 		init();
-		//set(_data);
+		_colorProperty->autoSet(color);
+		_updateProperties();
 	}
 
 #ifdef EDITOR_ENABLED
@@ -108,7 +128,7 @@ namespace AGE
 		bool modified = false;
 		if (ImGui::ColorEdit3("Color", glm::value_ptr(color)))
 		{
-			_colorProp->set(glm::vec4(color.x, color.y, color.z, 1.0f));
+			_colorProperty->autoSet(glm::vec4(color.x, color.y, color.z, 1.0f));
 			modified = true;
 		}
 		if (ImGui::SliderFloat3("Range", glm::value_ptr(range), 0.0f, 1.0f))

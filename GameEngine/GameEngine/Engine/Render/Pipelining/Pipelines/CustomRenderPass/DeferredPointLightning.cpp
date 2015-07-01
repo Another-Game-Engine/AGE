@@ -141,8 +141,6 @@ namespace AGE
 			_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("position_light").set(glm::vec3(glm::vec3(0,0,0)/*pl.light.sphereTransform[3]*/));
 
 			//_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("attenuation_light").set(pl.light.data.range);
-			//_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("color_light").set(pl.light.data.color);
-			//_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("ambient_color").set(glm::vec3(0));
 
 			// We clear the stencil buffer
 			glClear(GL_STENCIL_BUFFER_BIT);
@@ -153,7 +151,7 @@ namespace AGE
 			OpenGLState::glStencilOp(GL_KEEP, GL_KEEP, GL_INCR);
 			OpenGLState::glCullFace(GL_BACK);
 
-			_spherePainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_STENCIL], Properties(), _sphereVertices);
+			_spherePainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_STENCIL], pl->globalProperties, _sphereVertices);
 
 			OpenGLState::glColorMask(glm::bvec4(true));
 

@@ -13,13 +13,11 @@ namespace AGE
 		AGE_ASSERT(factory != nullptr);
 	}
 
-	BFCCullableHandle DRBLightElementManager::addPointLight(std::shared_ptr<IProperty> color, std::shared_ptr<IProperty> textureMap)
+	BFCCullableHandle DRBLightElementManager::addPointLight()
 	{
 		SCOPE_profile_cpu_function("DRB");
 
 		auto *drbPointLight = _pointLightPool.create();
-		drbPointLight->getDatas()->globalProperties.add_property(color);
-		drbPointLight->getDatas()->globalProperties.add_property(textureMap);
 
 		BFCCullableHandle result = _bfcBlockManager->createItem(drbPointLight);
 

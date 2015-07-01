@@ -10,8 +10,7 @@ namespace gl { class GeometryManager; class Vertices; class Indices; }
 
 namespace AGE
 {
-	class Color;
-	class MapColor;
+	class IProperty;
 
 	struct PointLightComponent : public ComponentBase
 	{
@@ -37,19 +36,20 @@ namespace AGE
 		virtual bool editorUpdate();
 #endif
 
+	protected:
+		void _updateProperties();
+
 	private:
 		glm::vec3 color;
 		glm::vec3 range;
 		std::shared_ptr<ITexture> map;
 
-		std::shared_ptr<Color>     _colorProp;
-		std::shared_ptr<MapColor>  _mapProp;
 		BFCCullableHandle          _graphicHandle;
 
-
-
-#ifdef EDITOR_ENABLED
-#endif
+		std::shared_ptr<IProperty> _mapProp = nullptr;
+		std::shared_ptr<IProperty> _rangeProperty = nullptr;
+		std::shared_ptr<IProperty> _colorProperty = nullptr;
+		std::shared_ptr<IProperty> _ambiantColorProperty = nullptr;
 
 		static float computePointLightRange(float minValue, glm::vec3 const &attenuation);
 	};

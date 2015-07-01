@@ -19,7 +19,7 @@ namespace AGE
 	{
 	public:
 		DRBLightElementManager(BFCBlockManagerFactory *factory);
-		BFCCullableHandle addPointLight(std::shared_ptr<IProperty> color, std::shared_ptr<IProperty> textureMap);
+		BFCCullableHandle addPointLight();
 		// Be carefull, there is to mush properties to pass in parametter, so you have to add Properties, manually
 		// after the handle creation
 		BFCCullableHandle addSpotLight();
