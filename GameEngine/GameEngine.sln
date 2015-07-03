@@ -48,6 +48,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "deferred shading", "deferre
 		Shaders\deferred_shading\deferred_shading_skybox.vp = Shaders\deferred_shading\deferred_shading_skybox.vp
 		Shaders\deferred_shading\deferred_shading_spot_light.fp = Shaders\deferred_shading\deferred_shading_spot_light.fp
 		Shaders\deferred_shading\deferred_shading_spot_light.vp = Shaders\deferred_shading\deferred_shading_spot_light.vp
+		Shaders\deferred_shading\deferred_shading_tone_mapping.fp = Shaders\deferred_shading\deferred_shading_tone_mapping.fp
+		Shaders\deferred_shading\deferred_shading_tone_mapping.vp = Shaders\deferred_shading\deferred_shading_tone_mapping.vp
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "basic", "basic", "{6DD3E825-06AD-46C8-B671-745D01D240D0}"
@@ -115,6 +117,8 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PxTask", "Vendors\PhysX\PhysXSDK\Source\compiler\vc12win64\PxTask.vcxproj", "{5B1132F6-84F8-142E-B951-ADB8505CC27F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PhysX", "PhysX", "{FF5DF4D7-4AAB-4EE3-9539-6A7F08CE6726}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SpacePartitioning", "SpacePartitioning\SpacePartitioning.vcxproj", "{FF05ACC8-441B-4E65-866C-FE72A1CDE27D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tool", "tool", "{F80CD93E-B35D-42B1-B65C-2322D6148808}"
 	ProjectSection(SolutionItems) = preProject

@@ -29,6 +29,8 @@ namespace AGE
 				h /= 2;
 				--i;
 			}
+			w = std::max(w, 1);
+			h = std::max(h, 1);
 			destination.resize(w * h);
 
 			glGetTexImage(GL_TEXTURE_2D, level, format, type, (GLvoid *)destination.data());

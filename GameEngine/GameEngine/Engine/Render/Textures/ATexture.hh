@@ -17,6 +17,7 @@ namespace AGE
 		virtual GLuint id() const override final;
 		virtual GLint width() const override final;
 		virtual GLint height() const override final;
+		virtual GLint nbrMipMap() const override final;
 		virtual GLenum internal_format() const override final;
 
 	protected:

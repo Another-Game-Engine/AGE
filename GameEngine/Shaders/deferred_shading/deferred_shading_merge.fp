@@ -17,4 +17,8 @@ void main()
 	vec3 specular = texture2D(shiny_buffer, interpolated_texCoord).xyz;
 	diffuse = diffuse * (light + ambient_color);
 	color = vec4(diffuse + specular, 1);
+	//float Linput = dot(vec4(0.30, 0.59, 0.11, 0.0), color);
+	//color = color * avg_log_luminance;
+	//float Louput = L / (1 + L);
+	//color *= Linput * avg_log_luminance;
 }
