@@ -81,22 +81,26 @@ namespace AGE
 
 	void DeferredPointLightning::renderPass(RenderPipeline const &, RenderLightList &lights, CameraInfos const &infos)
 	{
-		SCOPE_profile_gpu_i("DeferredPointLightning render pass");
-		SCOPE_profile_cpu_i("RenderTimer", "DeferredPointLightning render pass");
+		SCOPE_profile_gpu_i("DeferredPointLightning");
+		SCOPE_profile_cpu_i("RenderTimer", "DeferredPointLightning");
 
 		glm::vec3 cameraPosition = -glm::transpose(glm::mat3(infos.view)) * glm::vec3(infos.view[3]);
 
-		_programs[PROGRAM_LIGHTNING]->use();
-		_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("projection_matrix").set(infos.data.projection);
-		_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("view_matrix").set(infos.view);
-		_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("normal_buffer").set(_normalInput);
-		_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("depth_buffer").set(_depthInput);
-		_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("specular_buffer").set(_specularInput);
-		_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("eye_pos").set(cameraPosition);
+		{
+			SCOPE_profile_gpu_i("Overhead pipeline");
+			SCOPE_profile_cpu_i("RenderTimer", "Overhead pipeline");
+			_programs[PROGRAM_LIGHTNING]->use();
+			_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("projection_matrix").set(infos.data.projection);
+			_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("view_matrix").set(infos.view);
+			_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("normal_buffer").set(_normalInput);
+			_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("depth_buffer").set(_depthInput);
+			_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("specular_buffer").set(_specularInput);
+			_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("eye_pos").set(cameraPosition);
 
-		_programs[PROGRAM_STENCIL]->use();
-		_programs[PROGRAM_STENCIL]->get_resource<Mat4>("projection_matrix").set(infos.data.projection);
-		_programs[PROGRAM_STENCIL]->get_resource<Mat4>("view_matrix").set(infos.view);
+			_programs[PROGRAM_STENCIL]->use();
+			_programs[PROGRAM_STENCIL]->get_resource<Mat4>("projection_matrix").set(infos.data.projection);
+			_programs[PROGRAM_STENCIL]->get_resource<Mat4>("view_matrix").set(infos.view);
+		}
 
 		// Disable blending to clear the color buffer
 		OpenGLState::glDisable(GL_BLEND);
@@ -116,19 +120,22 @@ namespace AGE
 		// Iterate throught each light
 		for (auto &pl : lights.pointLight)
 		{
-			SCOPE_profile_gpu_i("Lightpoints");
-			SCOPE_profile_cpu_i("RenderTimer", "Lightpoints");
+			SCOPE_profile_gpu_i("One Lightpoints");
+			SCOPE_profile_cpu_i("RenderTimer", "One Lightpoints");
 
-			_programs[PROGRAM_STENCIL]->use();
-			_programs[PROGRAM_STENCIL]->get_resource<Mat4>("model_matrix").set(pl.light.sphereTransform);
+			{
+				SCOPE_profile_gpu_i("Overhead pipeline");
+				SCOPE_profile_cpu_i("RenderTimer", "Overhead pipeline");
+				_programs[PROGRAM_STENCIL]->use();
+				_programs[PROGRAM_STENCIL]->get_resource<Mat4>("model_matrix").set(pl.light.sphereTransform);
 
-			_programs[PROGRAM_LIGHTNING]->use();
-			_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("model_matrix").set(pl.light.sphereTransform);
-			_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("position_light").set(glm::vec3(pl.light.sphereTransform[3]));
-			_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("attenuation_light").set(pl.light.data.range);
-			_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("color_light").set(pl.light.data.color);
-			_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("ambient_color").set(glm::vec3(0));
-
+				_programs[PROGRAM_LIGHTNING]->use();
+				_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("model_matrix").set(pl.light.sphereTransform);
+				_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("position_light").set(glm::vec3(pl.light.sphereTransform[3]));
+				_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("attenuation_light").set(pl.light.data.range);
+				_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("color_light").set(pl.light.data.color);
+				_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("ambient_color").set(glm::vec3(0));
+			}
 			// We clear the stencil buffer
 			glClear(GL_STENCIL_BUFFER_BIT);
 

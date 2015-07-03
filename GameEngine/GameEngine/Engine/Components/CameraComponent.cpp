@@ -100,6 +100,11 @@ namespace AGE
 		for (int i = 0; i < countChoices; ++i)
 			delete[] choices[i];
 		delete[] choices;
+		if (ImGui::Checkbox("FXAA activated", &_data.activated))
+		{
+			AGE::GetPrepareThread()->setCameraInfos(_data, _key);
+			modified = true;
+		}
 		return modified;
 	}
 #endif
