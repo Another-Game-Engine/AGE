@@ -125,6 +125,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tool", "tool", "{F80CD93E-B
 		Shaders\tool\Fxaa3_11.h = Shaders\tool\Fxaa3_11.h
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SpacePartitioning", "SpacePartitioning\SpacePartitioning.vcxproj", "{FF05ACC8-441B-4E65-866C-FE72A1CDE27D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		checked|Mixed Platforms = checked|Mixed Platforms
