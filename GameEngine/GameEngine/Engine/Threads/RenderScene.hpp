@@ -7,9 +7,9 @@
 #include <Threads/Tasks/MainToPrepareTasks.hpp>
 #include <Core/PrepareKey.hpp>
 #include <Entities/EntityTypedef.hpp>
-#include <SpacePartitioning/LooseOctree.hh>
-#include <SpacePartitioning/Cullable/Object/Mesh.hh>
-#include <SpacePartitioning/Ouptut/RenderCamera.hh>
+#include <SpacePartitioning/Octree/LooseOctree.hh>
+#include <Culling/Cullable/Object/Mesh.hh>
+#include <Culling/Ouptut/RenderCamera.hh>
 #include <array>
 #include <Configuration.hpp>
 

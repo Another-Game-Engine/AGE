@@ -2,17 +2,18 @@
 
 #include <Utils/DependenciesInjector.hpp>
 #include <memory>
-#include <Components/ComponentRegistrationManager.hpp>
 #include <Core/EntityIdRegistrationManager.hh>
 #include <list>
 #include <array>
 #include <glm/fwd.hpp>
+
 #include <cereal/cereal.hpp>
 #include <cereal/archives/binary.hpp>
 #include <cereal/archives/json.hpp>
 #include <cereal/archives/portable_binary.hpp>
 #include <cereal/archives/xml.hpp>
 #include <cereal/types/map.hpp>
+
 #include <Utils/Containers/Queue.hpp>
 #include <Entities/EntitySerializationInfos.hpp>
 #include <Utils/ObjectPool.hpp>
@@ -30,6 +31,10 @@ namespace AGE
 	class EntityFilter;
 	class System;
 	class SceneManager;
+#ifdef AGE_BFC
+	class BFCLinkTracker;
+	class BFCBlockManagerFactory;
+#endif
 
 	class AScene : public DependenciesInjector, public EntityIdRegistrationManager, public ComponentManager
 	{
@@ -43,6 +48,10 @@ namespace AGE
 		ENTITY_ID                                                               _entityNumber;
 		AGE::RenderScene                                                        *_renderScene;
 		bool                                                                    _active;
+#ifdef AGE_BFC
+		BFCLinkTracker                                                          *_bfcLinkTracker;
+		BFCBlockManagerFactory                                                  *_bfcBlockManagerFactory;
+#endif
 		friend EntityFilter;
 		friend class AGE::RenderScene;
 		friend class AGE::SceneManager;
@@ -50,6 +59,10 @@ namespace AGE
 		AGE::Engine *                                              _engine;
 		inline void setActive(bool tof) { _active = tof; }
 	public:
+#ifdef AGE_BFC
+		BFCLinkTracker *getBfcLinkTracker() { return _bfcLinkTracker; }
+		BFCBlockManagerFactory *getBfcBlockManagerFactory() { return _bfcBlockManagerFactory; }
+#endif
 		AScene(AGE::Engine *engine);
 		virtual ~AScene();
 		inline std::size_t      getNumberOfEntities() const { return _entities.size(); }
@@ -152,34 +165,5 @@ namespace AGE
 
 		void save(const std::string &fileName);
 		void load(const std::string &fileName);
-
-		////////////////////////
-		///////
-		// Component Manager Get / Set
-
-		template <typename T>
-		void clearComponentsType()
-		{
-			SCOPE_profile_cpu_function("Scenes");
-			//TODO
-			auto id = Component<T>::getTypeId();
-			if (_componentsManagers[id] == nullptr)
-				return;
-			auto &manager = *static_cast<ComponentManager<T>*>(_componentsManagers[id]);
-			auto &col = manager.getComponents();
-			for (std::size_t i = 0; i < manager.getSize(); ++i)
-			{
-				_entityPool[col[i].entityId].barcode.unsetComponent(ComponentType(id));
-			}
-			manager.clearComponents();
-			for (auto filter : _filters[id])
-			{
-				filter->clearCollection();
-			}
-		}
-
-		void addTag(Entity &e, TAG_ID tag);
-		void removeTag(Entity &e, TAG_ID tag);
-		bool isTagged(Entity &e, TAG_ID tag);
 	};
 }

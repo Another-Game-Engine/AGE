@@ -1,12 +1,14 @@
 #pragma once
 
 #include <set>
-#include <Core/AScene.hh>
 #include <Entities/Entity.hh>
 #include <functional>
+#include <Entities/EntityTypedef.hpp>
 
 namespace AGE
 {
+	class ASCene;
+
 	class EntityFilter
 	{
 	public:
@@ -14,18 +16,19 @@ namespace AGE
 		virtual ~EntityFilter();
 
 		template <typename T>
-		void requireComponent()
+		inline void requireComponent()
 		{
-			_barcode.insert(Component<T>::getTypeId());
-			_scene->filterSubscribe(Component<T>::getTypeId(), this);
+			requireComponent(Component<T>::getTypeId());
 		}
 
 		template <typename T>
-		void unRequireComponent()
+		inline void unRequireComponent()
 		{
-			_barcode.erase(Component<T>::getTypeId());
-			_scene.lock()->filterUnsubscribe(Component<T>::getTypeId(), this);
+			unRequireComponent(Component<T>::getTypeId());
 		}
+
+		void requireComponent(ComponentType id);
+		void unRequireComponent(ComponentType id);
 
 		void requireTag(TAG_ID tag);
 		void unRequireTag(TAG_ID tag);

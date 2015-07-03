@@ -99,7 +99,7 @@ namespace AGE
 		for (Entity entity : entityFilter.getCollection())
 		{
 			link = entity.getLinkPtr();
-			rigidBody = entity.getComponent<RigidBody>();
+			rigidBody = entity->getComponent<RigidBody>();
 			rigidBody->setPosition(link->getPosition());
 			rigidBody->setRotation(link->getOrientation());
 		}
@@ -120,7 +120,7 @@ namespace AGE
 		Link *link = nullptr;
 		for (Entity entity : entityFilter.getCollection())
 		{
-			rigidBody = entity.getComponent<RigidBody>();
+			rigidBody = entity->getComponent<RigidBody>();
 			link = entity.getLinkPtr();
 			link->setPosition(rigidBody->getPosition(), false);
 			link->setOrientation(rigidBody->getRotation());

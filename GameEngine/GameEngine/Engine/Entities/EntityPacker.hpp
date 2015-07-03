@@ -9,7 +9,7 @@ namespace AGE
 
 		vector.push_back(Container());
 		vector.back().entity = e;
-		auto &children = e.getLink().getChildren();
+		auto &children = e->getLink().getChildren();
 		auto parentId = vector.size() - 1;
 		for (auto &c : children)
 		{

@@ -5,6 +5,7 @@
 #include <Threads/ThreadManager.hpp>
 #include <Threads/Tasks/ToRenderTasks.hpp>
 #include <Components/FreeFlyComponent.hh>
+#include <Core/AScene.hh>
 
 namespace AGE
 {
@@ -36,7 +37,7 @@ namespace AGE
 			_cameraAngles.resize(_cameras.getCollection().size());
 		for (auto cam : _cameras.getCollection())
 		{
-			auto &camLink = cam.getLink();
+			auto &camLink = cam->getLink();
 
 			if (camIndex == _cameraAngles.size())
 			{

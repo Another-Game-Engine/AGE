@@ -33,7 +33,7 @@ namespace AGE
 		glm::vec3 linearVelocity;
 		float mass;
 		glm::vec3 diagonalInertiaTensor;
-		double maxAngularVelocity;
+		//double maxAngularVelocity;
 		float maxDepenetrationVelocity;
 		bool isAffectedByGravity;
 		bool isKinematic;

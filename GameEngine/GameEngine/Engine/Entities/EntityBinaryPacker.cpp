@@ -33,7 +33,7 @@ namespace AGE
 		for (auto &representation : pack.entities)
 		{
 			auto &entity = representation.entity;
-			auto &components = entity.getComponentList();
+			auto &components = entity->getComponentList();
 
 			representation.entity = entity;
 
@@ -42,9 +42,9 @@ namespace AGE
 			// If entity is an Archetype
 			// We save only :
 			// - The archetype component
-			if (entity.haveComponent<ArchetypeComponent>() && continueEntityFiltering)
+			if (entity->haveComponent<ArchetypeComponent>() && continueEntityFiltering)
 			{
-				auto archetypeCpt = entity.getComponent<ArchetypeComponent>();
+				auto archetypeCpt = entity->getComponent<ArchetypeComponent>();
 				representation.componentTypes.push_back(archetypeCpt->getType());
 				representation.components.push_back(archetypeCpt);
 				representation.archetypesDependency.push_back(archetypeCpt->archetypeName);
