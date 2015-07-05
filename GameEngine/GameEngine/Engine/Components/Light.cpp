@@ -52,7 +52,6 @@ namespace AGE
 		map = nullptr;
 		_mapProp = nullptr;
 
-		_rangeProperty = nullptr;
 		_colorProperty = nullptr;
 		_ambiantColorProperty = nullptr;
 
@@ -66,7 +65,6 @@ namespace AGE
 	void PointLightComponent::init()
 	{
 		_mapProp = std::make_shared<MapColor>("sprite_light");
-		_rangeProperty = std::make_shared<AutoProperty<glm::vec4, Vec4>>("attenuation_light");
 		_colorProperty = std::make_shared<AutoProperty<glm::vec4, Vec4>>("color_light");
 		_ambiantColorProperty = std::make_shared<AutoProperty<glm::vec4, Vec4>>("ambient_color");
 
@@ -74,13 +72,12 @@ namespace AGE
 		_graphicHandle = manager->addPointLight();
 
 		_graphicHandle.getPtr()->getDatas()->globalProperties.add_property(_mapProp);
-		_graphicHandle.getPtr()->getDatas()->globalProperties.add_property(_rangeProperty);
 		_graphicHandle.getPtr()->getDatas()->globalProperties.add_property(_colorProperty);
 		_graphicHandle.getPtr()->getDatas()->globalProperties.add_property(_ambiantColorProperty);
 
-
-
 		map = entity->getScene()->getInstance<AssetsManager>()->getPointLightTexture();
+
+		std::static_pointer_cast<DRBPointLightData>(_graphicHandle.getPtr()->getDatas())->setRange(glm::vec4(range.x, range.y, range.z, 1.0f));
 	}
 
 	float		PointLightComponent::computePointLightRange(float minValue, glm::vec3 const &attenuation)
@@ -103,17 +100,11 @@ namespace AGE
 		}
 	}
 
-
-	void PointLightComponent::_updateProperties()
-	{
-		
-	}
-
 	void PointLightComponent::postUnserialization()
 	{
 		init();
 		_colorProperty->autoSet(color);
-		_updateProperties();
+		std::static_pointer_cast<DRBPointLightData>(_graphicHandle.getPtr()->getDatas())->setRange(glm::vec4(range.x, range.y, range.z, 1.0f));
 	}
 
 #ifdef EDITOR_ENABLED
@@ -133,7 +124,7 @@ namespace AGE
 		}
 		if (ImGui::SliderFloat3("Range", glm::value_ptr(range), 0.0f, 1.0f))
 		{
-			std::static_pointer_cast<DRBPointLightData>(_graphicHandle.getPtr()->getDatas())->setRange(range);
+			std::static_pointer_cast<DRBPointLightData>(_graphicHandle.getPtr()->getDatas())->setRange(glm::vec4(range.x, range.y, range.z, 1.0f));
 			modified = true;
 		}
 		return modified;

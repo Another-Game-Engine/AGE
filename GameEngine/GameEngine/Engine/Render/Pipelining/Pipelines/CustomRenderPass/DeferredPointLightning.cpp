@@ -133,11 +133,9 @@ namespace AGE
 
 			_programs[PROGRAM_STENCIL]->use();
 			pl->globalProperties.update_properties(_programs[PROGRAM_STENCIL]);
-			_programs[PROGRAM_STENCIL]->get_resource<Mat4>("model_matrix").set(glm::mat4(1)/*pl.light.sphereTransform*/);
 
 			_programs[PROGRAM_LIGHTNING]->use();
 			pl->globalProperties.update_properties(_programs[PROGRAM_LIGHTNING]);
-			_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("model_matrix").set(glm::scale(glm::mat4(1), glm::vec3(10))/*pl.light.sphereTransform*/);
 			_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("position_light").set(glm::vec3(glm::vec3(0,0,0)/*pl.light.sphereTransform[3]*/));
 
 			//_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("attenuation_light").set(pl.light.data.range);

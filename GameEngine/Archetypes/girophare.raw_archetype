@@ -125,7 +125,7 @@
                 "name": "north-Copy"
             },
             "AGE_CORE_SpotLightComponent": {
-                "cereal_class_version": 1,
+                "cereal_class_version": 0,
                 "color": {
                     "value0": 1,
                     "value1": 1,
