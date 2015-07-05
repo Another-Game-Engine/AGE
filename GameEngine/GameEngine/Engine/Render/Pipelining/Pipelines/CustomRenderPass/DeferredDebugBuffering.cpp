@@ -53,46 +53,59 @@ namespace AGE
 
 	void DeferredDebugBuffering::renderPass(const DRBCameraDrawableList &infos)
 	{
-		//@PROUT
-		//SCOPE_profile_gpu_i("DeferredDebugBuffering render pass");
-		//SCOPE_profile_cpu_i("RenderTimer", "DeferredDebugBuffering render pass");
-
-		//OpenGLState::glDisable(GL_CULL_FACE);
-		//OpenGLState::glDepthMask(GL_TRUE);
-		//OpenGLState::glDepthFunc(GL_LEQUAL);
-		//OpenGLState::glDisable(GL_BLEND);
-		//OpenGLState::glDisable(GL_STENCIL_TEST);
-		//OpenGLState::glEnable(GL_DEPTH_TEST);
-		//OpenGLState::glClearColor(glm::vec4(0.f, 0.f, 0.f, 0.f));
-		//glClear(GL_COLOR_BUFFER_BIT);
-
-		//OpenGLState::glDepthMask(GL_FALSE);
-
-		//_programs[PROGRAM_BUFFERING_LIGHT]->use();
-		//_programs[PROGRAM_BUFFERING_LIGHT]->get_resource<Mat4>("projection_matrix").set(infos.data.projection);
-		//_programs[PROGRAM_BUFFERING_LIGHT]->get_resource<Mat4>("view_matrix").set(infos.view);
-
+		//@PROUT TODO
 		//{
-		//	SCOPE_profile_gpu_i("Render point lights");
-		//	SCOPE_profile_cpu_i("RenderTimer", "Render point lights");
-		//	for (auto &pl : renderLight.pointLight)
+		//	SCOPE_profile_gpu_i("DeferredDebugBuffering render pass");
+		//	SCOPE_profile_cpu_i("RenderTimer", "DeferredDebugBuffering render pass");
+
+		//	OpenGLState::glDisable(GL_CULL_FACE);
+		//	OpenGLState::glDepthMask(GL_TRUE);
+		//	OpenGLState::glDepthFunc(GL_LEQUAL);
+		//	OpenGLState::glDisable(GL_BLEND);
+		//	OpenGLState::glDisable(GL_STENCIL_TEST);
+		//	OpenGLState::glEnable(GL_DEPTH_TEST);
+		//	OpenGLState::glClearColor(glm::vec4(0.f, 0.f, 0.f, 0.f));
+		//	SCOPE_profile_gpu_i("clear buffer for debug lights");
+		//	SCOPE_profile_cpu_i("RenderTimer", "clear buffer for debug lights");
+		//	glClear(GL_COLOR_BUFFER_BIT);
+		//	OpenGLState::glDepthMask(GL_FALSE);
+
 		//	{
-		//		// @TRC to fix
-		//		//_programs[PROGRAM_BUFFERING_LIGHT]->get_resource<Sampler2D>("sprite_light").set(std::static_pointer_cast<Texture2D>(pl.light.data.map));
-		//		_programs[PROGRAM_BUFFERING_LIGHT]->get_resource<Mat4>("model_matrix").set(pl.light.transformation);
-		//		_quadPainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING_LIGHT], Properties(), _quadVertices);
+		//		SCOPE_profile_gpu_i("Overhead Pipeline");
+		//		SCOPE_profile_cpu_i("RenderTimer", "Overhead Pipeline");
+		//		_programs[PROGRAM_BUFFERING_LIGHT]->use();
+		//		_programs[PROGRAM_BUFFERING_LIGHT]->get_resource<Mat4>("projection_matrix").set(infos.data.projection);
+		//		_programs[PROGRAM_BUFFERING_LIGHT]->get_resource<Mat4>("view_matrix").set(infos.view);
 		//	}
-		//}
-		//{
-		//	SCOPE_profile_gpu_i("Render spot lights");
-		//	SCOPE_profile_cpu_i("RenderTimer", "Render spot lights");
-		//	for (auto &pl : renderLight.spotLights)
+
 		//	{
-		//		_programs[PROGRAM_BUFFERING_LIGHT]->get_resource<Sampler2D>("sprite_light").set(std::static_pointer_cast<Texture2D>(pl.light.data.map));
-		//		_programs[PROGRAM_BUFFERING_LIGHT]->get_resource<Mat4>("model_matrix").set(pl.light.transformation);
-		//		_quadPainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING_LIGHT], Properties(), _quadVertices);
+		//		SCOPE_profile_gpu_i("Render debug sprite lights");
+		//		SCOPE_profile_cpu_i("RenderTimer", "Render debug sprite lights");
+		//		for (auto &pl : renderLight.pointLight)
+		//		{
+		//			{
+		//				SCOPE_profile_gpu_i("Overhead Pipeline");
+		//				SCOPE_profile_cpu_i("RenderTimer", "Overhead Pipeline");
+		//				_programs[PROGRAM_BUFFERING_LIGHT]->get_resource<Sampler2D>("sprite_light").set(std::static_pointer_cast<Texture2D>(pl.light.data.map));
+		//				_programs[PROGRAM_BUFFERING_LIGHT]->get_resource<Mat4>("model_matrix").set(pl.light.transformation);
+		//			}
+		//			_quadPainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING_LIGHT], Properties(), _quadVertices);
+		//		}
+		//	}
+		//	{
+		//		SCOPE_profile_gpu_i("Render debug sprite lights");
+		//		SCOPE_profile_cpu_i("RenderTimer", "Render debug sprite lights");
+		//		for (auto &pl : renderLight.spotLights)
+		//		{
+		//			{
+		//				SCOPE_profile_gpu_i("Overhead Pipeline");
+		//				SCOPE_profile_cpu_i("RenderTimer", "Overhead Pipeline");
+		//				_programs[PROGRAM_BUFFERING_LIGHT]->get_resource<Sampler2D>("sprite_light").set(std::static_pointer_cast<Texture2D>(pl.light.data.map));
+		//				_programs[PROGRAM_BUFFERING_LIGHT]->get_resource<Mat4>("model_matrix").set(pl.light.transformation);
+		//			}
+		//			_quadPainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING_LIGHT], Properties(), _quadVertices);
+		//		}
 		//	}
 		//}
 	}
-
 }

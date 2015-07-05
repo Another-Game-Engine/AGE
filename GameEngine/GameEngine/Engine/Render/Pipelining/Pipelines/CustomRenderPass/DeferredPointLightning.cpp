@@ -87,22 +87,27 @@ namespace AGE
 
 	void DeferredPointLightning::renderPass(const DRBCameraDrawableList &infos)
 	{
-		SCOPE_profile_gpu_i("DeferredPointLightning render pass");
-		SCOPE_profile_cpu_i("RenderTimer", "DeferredPointLightning render pass");
+		SCOPE_profile_gpu_i("DeferredPointLightning");
+		SCOPE_profile_cpu_i("RenderTimer", "DeferredPointLightning");
 
 		glm::vec3 cameraPosition = -glm::transpose(glm::mat3(infos.cameraInfos.view)) * glm::vec3(infos.cameraInfos.view[3]);
 
-		_programs[PROGRAM_LIGHTNING]->use();
-		_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("projection_matrix").set(infos.cameraInfos.data.projection);
-		_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("view_matrix").set(infos.cameraInfos.view);
-		_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("normal_buffer").set(_normalInput);
-		_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("depth_buffer").set(_depthInput);
-		_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("specular_buffer").set(_specularInput);
-		_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("eye_pos").set(cameraPosition);
+		{
+			SCOPE_profile_gpu_i("Overhead pipeline");
+			SCOPE_profile_cpu_i("RenderTimer", "Overhead pipeline");
+			_programs[PROGRAM_LIGHTNING]->use();
+			_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("projection_matrix").set(infos.cameraInfos.data.projection);
+			_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("view_matrix").set(infos.cameraInfos.view);
+			_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("normal_buffer").set(_normalInput);
+			_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("depth_buffer").set(_depthInput);
+			_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("specular_buffer").set(_specularInput);
+			_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("eye_pos").set(cameraPosition);
 
-		_programs[PROGRAM_STENCIL]->use();
-		_programs[PROGRAM_STENCIL]->get_resource<Mat4>("projection_matrix").set(infos.cameraInfos.data.projection);
-		_programs[PROGRAM_STENCIL]->get_resource<Mat4>("view_matrix").set(infos.cameraInfos.view);
+			_programs[PROGRAM_STENCIL]->use();
+			_programs[PROGRAM_STENCIL]->get_resource<Mat4>("projection_matrix").set(infos.cameraInfos.data.projection);
+			_programs[PROGRAM_STENCIL]->get_resource<Mat4>("view_matrix").set(infos.cameraInfos.view);
+		}
+
 
 		// Disable blending to clear the color buffer
 		OpenGLState::glDisable(GL_BLEND);

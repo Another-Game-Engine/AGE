@@ -59,30 +59,25 @@ namespace AGE
 
 	void DeferredSkyBox::renderPass(const DRBCameraDrawableList &infos)
 	{
-		//SCOPE_profile_gpu_i("DeferredSkybox render pass");
-		//SCOPE_profile_cpu_i("RenderTimer", "DeferredSkybox render pass");
-		//{
-		//	SCOPE_profile_gpu_i("Skybox buffer");
-		//	SCOPE_profile_cpu_i("RenderTimer", "Skybox buffer");
-
-		//	//OpenGLState::glEnable(GL_CULL_FACE);
-		//	//OpenGLState::glCullFace(GL_BACK);
-		//	OpenGLState::glDisable(GL_BLEND);
-		//	OpenGLState::glDisable(GL_STENCIL_TEST);
-		//	OpenGLState::glEnable(GL_DEPTH_TEST);
-		//	OpenGLState::glDepthMask(GL_TRUE);
-		//	OpenGLState::glDepthFunc(GL_LEQUAL);
-		//}
-		//{
-		//	SCOPE_profile_gpu_i("Draw all objects");
-		//	SCOPE_profile_cpu_i("RenderTimer", "Draw all objects");
-
-		//	_programs[PROGRAM_SKYBOX]->use();
-		//	_programs[PROGRAM_SKYBOX]->get_resource<Mat4>("projection").set(infos.data.projection);
-		//	_programs[PROGRAM_SKYBOX]->get_resource<Mat4>("view").set(infos.view);
-		//	_programs[PROGRAM_SKYBOX]->get_resource<Sampler3D>("skybox").set(infos.data.texture);
-		//	_painterManager->get_painter(_painterCube)->uniqueDraw(GL_QUADS, _programs[PROGRAM_SKYBOX], Properties(), _cube);
-		//}
+//@PROUT TODO
+		SCOPE_profile_gpu_i("DeferredSkybox render pass");
+		SCOPE_profile_cpu_i("RenderTimer", "DeferredSkybox render pass");
+		//OpenGLState::glEnable(GL_CULL_FACE);
+		//OpenGLState::glCullFace(GL_BACK);
+		OpenGLState::glDisable(GL_BLEND);
+		OpenGLState::glDisable(GL_STENCIL_TEST);
+		OpenGLState::glEnable(GL_DEPTH_TEST);
+		OpenGLState::glDepthMask(GL_TRUE);
+		OpenGLState::glDepthFunc(GL_LEQUAL);
+		{
+			SCOPE_profile_gpu_i("Overhead Pipeline");
+			SCOPE_profile_cpu_i("RenderTimer", "Skybox buffer");
+			_programs[PROGRAM_SKYBOX]->use();
+			//_programs[PROGRAM_SKYBOX]->get_resource<Mat4>("projection").set(infos.data.projection);
+			//_programs[PROGRAM_SKYBOX]->get_resource<Mat4>("view").set(infos.view);
+			//_programs[PROGRAM_SKYBOX]->get_resource<Sampler3D>("skybox").set(infos.data.texture);
+		}
+		_painterManager->get_painter(_painterCube)->uniqueDraw(GL_QUADS, _programs[PROGRAM_SKYBOX], Properties(), _cube);
 	}
 
 }

@@ -117,9 +117,6 @@ namespace AGE
 			// draw for the spot light selected
 			for (auto &meshPaint : spotLightPtr->meshs)
 			{
-				SCOPE_profile_gpu_i("Draw mesh");
-				SCOPE_profile_cpu_i("RenderTimer", "Draw mesh");
-
 				auto mesh = std::static_pointer_cast<DRBMeshData>(meshPaint);
 
 				auto painter = _painterManager->get_painter(mesh->getPainterKey());

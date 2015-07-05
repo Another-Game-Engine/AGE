@@ -103,9 +103,13 @@ namespace AGE
 //			SCOPE_profile_gpu_i("Occluders pass");
 //			SCOPE_profile_cpu_i("RenderTimer", "Occluders pass");
 //
-//			_programs[PROGRAM_BUFFERING]->use();
-//			_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("projection_matrix").set(infos.data.projection);
-//			_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("view_matrix").set(infos.view);
+//			{
+//				SCOPE_profile_gpu_i("Overhead Pipeline");
+//				SCOPE_profile_cpu_i("RenderTimer", "Overhead Pipeline");
+//				_programs[PROGRAM_BUFFERING]->use();
+//				_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("projection_matrix").set(infos.data.projection);
+//				_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("view_matrix").set(infos.view);
+//			}
 //
 //			for (auto &meshPaint : pipeline.keys)
 //			{

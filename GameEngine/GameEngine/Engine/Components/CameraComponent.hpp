@@ -11,9 +11,35 @@ namespace AGE
 {
 	struct CameraData
 	{
+		bool activated;
 		std::shared_ptr<Texture3D> texture;
 		glm::mat4 projection = glm::mat4(1.0f);
 		RenderType pipeline = RenderType::DEFERRED;
+		CameraData(CameraData const &cam) : 
+			activated(cam.activated),
+			texture(cam.texture),
+			projection(cam.projection),
+			pipeline(cam.pipeline)
+		{
+		}
+
+		CameraData()
+			: activated(true),
+			projection(1.0f),
+			pipeline(RenderType::DEFERRED)
+		{
+		}
+
+		CameraData &operator=(CameraData const &cam)
+		{
+			activated = (cam.activated);
+			texture = (cam.texture);
+			projection = (cam.projection);
+			pipeline = (cam.pipeline);
+			return *this;
+		}
+
+
 	};
 
 	struct CameraComponent : public ComponentBase

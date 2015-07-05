@@ -18,3 +18,5 @@ Video :
 [![Video](http://img.youtube.com/vi/ebwDNA2wz-k/0.jpg)](http://www.youtube.com/watch?v=ebwDNA2wz-k)
 
 Demo .exe : https://www.dropbox.com/s/dot6ecqo59i1prz/AGE-V0.0-demo.7z
+
+This program is released under the terms of the license contained in the file LICENSE.txt

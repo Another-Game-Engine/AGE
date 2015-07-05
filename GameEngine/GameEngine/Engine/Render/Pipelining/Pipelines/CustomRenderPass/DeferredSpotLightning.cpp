@@ -72,13 +72,17 @@ namespace AGE
 
 		glm::vec3 cameraPosition = -glm::transpose(glm::mat3(infos.cameraInfos.view)) * glm::vec3(infos.cameraInfos.view[3]);
 
-		_programs[PROGRAM_LIGHTNING]->use();
-		_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("projection_matrix").set(infos.cameraInfos.data.projection);
-		_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("view_matrix").set(infos.cameraInfos.view);
-		_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("normal_buffer").set(_normalInput);
-		_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("specular_buffer").set(_specularInput);
-		_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("depth_buffer").set(_depthInput);
-		_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("eye_pos").set(cameraPosition);
+		{
+			SCOPE_profile_gpu_i("Overhead pipeline");
+			SCOPE_profile_cpu_i("RenderTimer", "Overhead pipeline");
+			_programs[PROGRAM_LIGHTNING]->use();
+			_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("projection_matrix").set(infos.cameraInfos.data.projection);
+			_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("view_matrix").set(infos.cameraInfos.view);
+			_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("normal_buffer").set(_normalInput);
+			_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("specular_buffer").set(_specularInput);
+			_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("depth_buffer").set(_depthInput);
+			_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("eye_pos").set(cameraPosition);
+		}
 
 		OpenGLState::glDisable(GL_CULL_FACE);
 		OpenGLState::glDisable(GL_DEPTH_TEST);
@@ -94,7 +98,7 @@ namespace AGE
 		{
 			auto &spotlight = (std::shared_ptr<DRBSpotLightData>&)(spot->spotLight);
 
-			// todo to add in properties
+			// @PROUT todo to add in properties
 			//_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("shadow_map").set(std::static_pointer_cast<Texture2D>(pl.shadow_map));
 
 

@@ -1,9 +1,12 @@
 #include <Render/UnitProg.hh>
 #include <assert.h>
 #include <fstream>
-#include <vector>
+#include <sstream>
+#include <string>
 
 #include <direct.h>
+
+#define PATH_INCLUDE_SHADER_TOOL "../../Shader/tool/"
 
 UnitProg::UnitProg(std::string const &filename, GLenum type):
 _filename(filename),
@@ -26,6 +29,32 @@ UnitProg::~UnitProg()
 	destroy();
 }
 
+char const *UnitProg::handleRequireToken(std::string &sources)
+{
+	auto offset = 0;
+	do
+	{
+		auto start = sources.find("#include(", offset);
+		if (start == std::string::npos)
+		{
+			return sources.c_str();
+		}
+		auto startFile = start + 9;
+		auto end = sources.find(")", startFile);
+		assert(end != std::string::npos);
+		auto file = sources.substr(startFile, end - startFile);
+		sources.erase(start, 9 + file.size() + 1);
+		file = std::string("../../Shaders/tool/" + file);
+		std::fstream f(file.c_str());
+		assert(!f.fail()); //Fail to open the 'file' inside Shaders/tool/
+		std::ostringstream stream;
+		stream << f.rdbuf();
+		std::string includeSources = stream.str();
+		sources.insert(start, includeSources);
+	} while (true);
+	return sources.c_str();
+}
+
 bool UnitProg::compileUnitProg(char const *fileName)
 {
 	std::ifstream file(fileName, std::ios_base::binary);
@@ -34,10 +63,10 @@ bool UnitProg::compileUnitProg(char const *fileName)
 	file.seekg(0, file.end);
 	fileSize = static_cast<GLint>(file.tellg()) + 1;
 	file.seekg(0, file.beg);
-	std::vector<char> content(fileSize);
-	file.read(content.data(), fileSize - 1);
-	content[fileSize - 1] = 0;
-	GLchar const *convertionSource = content.data();
+	std::ostringstream stream;
+	stream << file.rdbuf();
+	std::string sources = stream.str();
+	GLchar const *convertionSource = handleRequireToken(sources);
 	glShaderSource(_id, 1, &convertionSource, NULL);
 	glCompileShader(_id);
 	GLint compileRet = 0;
