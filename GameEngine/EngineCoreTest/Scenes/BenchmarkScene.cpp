@@ -203,6 +203,8 @@ namespace AGE
 										 getInstance<AGE::AssetsManager>()->getMaterial(OldFile("cube/cube.mage")))->enableRenderMode(RenderModes::AGE_OPAQUE);
 			e->addComponent<RigidBody>()->addForce(10.0f * cameraForward, Physics::ForceMode::Impulse);
 			e->addComponent<Collider>(Physics::ColliderType::Box);
+			auto pl = e->addComponent<PointLightComponent>();
+			pl->setColor(glm::vec3(float(rand() % 100) / 100.0f, float(rand() % 100) / 100.0f, float(rand() % 100) / 100.0f));
 		}
 		trigger += time;
 
@@ -230,6 +232,8 @@ namespace AGE
 				{
 					mesh = e->addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("cube/cube.sage"), getInstance<AGE::AssetsManager>()->getMaterial(OldFile("cube/cube.mage")));
 					e->addComponent<Collider>(Physics::ColliderType::Box);
+					//auto pl = e->addComponent<PointLightComponent>();
+					//pl->setColor(glm::vec3(float(rand() % 100) / 100.0f, float(rand() % 100) / 100.0f, float(rand() % 100) / 100.0f));
 				}
 
 				if (i % 13 == 0)

@@ -30,6 +30,8 @@ namespace AGE
 
 		inline BFCCullableHandle getCullableHandle() const { return _graphicHandle; }
 
+		void setColor(const glm::vec3 &color);
+
 #ifdef EDITOR_ENABLED
 		virtual void editorCreate();
 		virtual void editorDelete();

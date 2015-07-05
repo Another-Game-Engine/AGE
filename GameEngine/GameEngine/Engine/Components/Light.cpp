@@ -28,7 +28,7 @@
 
 namespace AGE
 {
-	
+
 	PointLightComponent::PointLightComponent(PointLightComponent const &o)
 		: color(o.color),
 		range(o.range),
@@ -59,6 +59,7 @@ namespace AGE
 		{
 			auto manager = entity->getScene()->getInstance<DRBLightElementManager>();
 			manager->removePointLight(_graphicHandle);
+			entity->getLink().popAnObject(_graphicHandle);
 		}
 	}
 
@@ -75,9 +76,12 @@ namespace AGE
 		_graphicHandle.getPtr()->getDatas()->globalProperties.add_property(_colorProperty);
 		_graphicHandle.getPtr()->getDatas()->globalProperties.add_property(_ambiantColorProperty);
 
+		entity->getLink().pushAnObject(_graphicHandle);
+
 		map = entity->getScene()->getInstance<AssetsManager>()->getPointLightTexture();
 
 		std::static_pointer_cast<DRBPointLightData>(_graphicHandle.getPtr()->getDatas())->setRange(glm::vec4(range.x, range.y, range.z, 1.0f));
+		setColor(color);
 	}
 
 	float		PointLightComponent::computePointLightRange(float minValue, glm::vec3 const &attenuation)
@@ -103,9 +107,14 @@ namespace AGE
 	void PointLightComponent::postUnserialization()
 	{
 		init();
-		_colorProperty->autoSet(color);
-		std::static_pointer_cast<DRBPointLightData>(_graphicHandle.getPtr()->getDatas())->setRange(glm::vec4(range.x, range.y, range.z, 1.0f));
 	}
+
+	void PointLightComponent::setColor(const glm::vec3 &c)
+	{
+		color = c;
+		_colorProperty->autoSet(glm::vec4(color.x, color.y, color.z, 1.0f));
+	}
+
 
 #ifdef EDITOR_ENABLED
 	void PointLightComponent::editorCreate()
@@ -119,7 +128,7 @@ namespace AGE
 		bool modified = false;
 		if (ImGui::ColorEdit3("Color", glm::value_ptr(color)))
 		{
-			_colorProperty->autoSet(glm::vec4(color.x, color.y, color.z, 1.0f));
+			setColor(color);
 			modified = true;
 		}
 		if (ImGui::SliderFloat3("Range", glm::value_ptr(range), 0.0f, 1.0f))
