@@ -159,7 +159,7 @@ namespace AGE
 			OpenGLState::glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
 			OpenGLState::glCullFace(GL_FRONT);
 
-			_spherePainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_LIGHTNING], Properties(), _sphereVertices);
+			_spherePainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_LIGHTNING], pl->globalProperties, _sphereVertices);
 
 		}
 	}

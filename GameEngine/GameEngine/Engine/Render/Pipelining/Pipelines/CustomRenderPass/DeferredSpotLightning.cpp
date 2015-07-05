@@ -113,7 +113,7 @@ namespace AGE
 			//_programs[PROGRAM_LIGHTNING]->get_resource<Vec1>("exponent_light").set(pl.light.data.exponent);
 			//_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("color_light").set(pl.light.data.color);
 
-			_painterManager->get_painter(_quadPainter)->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_LIGHTNING], Properties(), _quad);
+			_painterManager->get_painter(_quadPainter)->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_LIGHTNING], spotlight->globalProperties, _quad);
 		}
 	}
 }

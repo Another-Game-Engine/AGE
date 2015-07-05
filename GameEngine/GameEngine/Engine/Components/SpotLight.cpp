@@ -55,6 +55,7 @@ namespace AGE
 		{
 			auto manager = entity->getScene()->getInstance<DRBLightElementManager>();
 			manager->removeSpotLight(_graphicHandle);
+			entity->getLink().popAnObject(_graphicHandle);
 		}
 	}
 
@@ -102,6 +103,8 @@ namespace AGE
 		properties.add_property(_propSpotCutOff);
 		properties.add_property(_propExponentLight);
 		properties.add_property(_propColorLight);
+
+		entity->getLink().pushAnObject(_graphicHandle);
 	}
 
 	void SpotLightComponent::postUnserialization()

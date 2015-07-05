@@ -17,6 +17,5 @@ in vec2 texCoord;
 
 void main(void)
 {
-	color = texture(screen, texCoord);
-	//color = mix(texture(screen, texCoord), FxaaPixelShader(texCoord, vec4(0.f), screen, screen, screen, 1.f / resolution, vec4(0.f), vec4(-2 / resolution.x, -2 / resolution.y, 2 / resolution.x, 2 / resolution.y), vec4(0.f), float(0.75f), float(0.125f), float(0.0833), float(4.0f), float(0.125f), float(0.05f), vec4(0.f)), activated);
+	color = mix(texture(screen, texCoord), FxaaPixelShader(texCoord, vec4(0.f), screen, screen, screen, 1.f / resolution, vec4(0.f), vec4(-2 / resolution.x, -2 / resolution.y, 2 / resolution.x, 2 / resolution.y), vec4(0.f), float(0.75f), float(0.125f), float(0.0833), float(4.0f), float(0.125f), float(0.05f), vec4(0.f)), activated);
 }
