@@ -38,14 +38,14 @@ namespace AGE
 		setAmbient(glm::vec3(0.2f));
 		_rendering_list.emplace_back(shadowBuffering);
 		//@PROUT TODO
-		//_rendering_list.emplace_back(skybox);
+		_rendering_list.emplace_back(skybox);
 		_rendering_list.emplace_back(basicBuffering);
 		_rendering_list.emplace_back(directionalLightning);
 		_rendering_list.emplace_back(spotLightning);
 		_rendering_list.emplace_back(pointLightning);
 		_rendering_list.emplace_back(_deferredMerging);
 		//@PROUT TODO
-		//_rendering_list.emplace_back(skybox);
+		_rendering_list.emplace_back(skybox);
 		_rendering_list.emplace_back(deferredOnScreen);
 	}
 
