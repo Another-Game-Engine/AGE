@@ -51,7 +51,7 @@ namespace AGE
 			SCOPE_profile_cpu_i("MainThread", "Release commands");
 			waitStart = std::chrono::high_resolution_clock::now();
 			{
-				while (!_next->getQueue()->releaseCommandReadability(TMQ::HybridQueue::WaitType::Block))
+				if (!_next->getQueue()->releaseCommandReadability(TMQ::HybridQueue::WaitType::NoWait))
 				{
 					if (getQueue()->getTaskQueue(taskQueue, TMQ::HybridQueue::NoWait))
 					{
@@ -67,6 +67,7 @@ namespace AGE
 						workEnd = std::chrono::high_resolution_clock::now();
 						workCount += std::chrono::duration_cast<std::chrono::microseconds>(workEnd - workStart).count();
 					}
+					_next->getQueue()->clear();
 				}
 			}
 		}
