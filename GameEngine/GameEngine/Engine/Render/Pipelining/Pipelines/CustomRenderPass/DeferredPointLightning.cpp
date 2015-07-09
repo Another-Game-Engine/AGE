@@ -133,9 +133,6 @@ namespace AGE
 			SCOPE_profile_gpu_i("Lightpoints");
 			SCOPE_profile_cpu_i("RenderTimer", "Lightpoints");
 
-
-			//@PROUT TODO -> add correct properties to PointLightData
-
 			_programs[PROGRAM_STENCIL]->use();
 			pl->globalProperties.update_properties(_programs[PROGRAM_STENCIL]);
 

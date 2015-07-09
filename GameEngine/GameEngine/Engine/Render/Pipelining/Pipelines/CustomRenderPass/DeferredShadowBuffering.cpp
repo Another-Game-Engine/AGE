@@ -131,9 +131,8 @@ namespace AGE
 				//	}
 				//}
 			}
-			// @CESAR TODO
-			//spotlight.shadow_map = *it;
-			//++it;
+			spotlight->shadowMap = *it;
+			++it;
 		}
 	}
 

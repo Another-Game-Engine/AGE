@@ -15,6 +15,7 @@ namespace AGE
 
 	glm::vec4 DRBSpotLight::setBFCTransform(const glm::mat4 &transformation)
 	{
+		_datas->setTransformation(transformation);
 		BFCCullableObject::setBFCTransform(transformation);
 		_datas->computePositionAndDirection(transformation);
 		return glm::vec4(0, 0, 0, 1);

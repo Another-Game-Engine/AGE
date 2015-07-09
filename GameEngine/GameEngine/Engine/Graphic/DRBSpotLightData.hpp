@@ -10,6 +10,7 @@ namespace AGE
 {
 	class Vec3;
 	class Mat4;
+	class Texture2D;
 
 	struct DRBSpotLightData : public DRBData
 	{
@@ -37,6 +38,9 @@ namespace AGE
 		void computePositionAndDirection(const glm::mat4 &transformation);
 
 		inline std::shared_ptr<AutoProperty<glm::mat4, Mat4>> getShadowMatrixProperty() { return _shadowMatrixProperty; }
+
+		// used by graphics pipeline, used don't have to set anything in it
+		std::shared_ptr<Texture2D> shadowMap = nullptr;
 	private:
 		std::shared_ptr<AutoProperty<glm::vec3, Vec3>> _directionProperty = nullptr;
 		std::shared_ptr<AutoProperty<glm::vec3, Vec3>> _positionProperty = nullptr;

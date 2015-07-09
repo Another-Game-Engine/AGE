@@ -99,8 +99,7 @@ namespace AGE
 			auto &spotlight = (std::shared_ptr<DRBSpotLightData>&)(spot->spotLight);
 
 			// @PROUT todo to add in properties
-			//_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("shadow_map").set(std::static_pointer_cast<Texture2D>(pl.shadow_map));
-
+			_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("shadow_map").set(spotlight->shadowMap);
 
 			spotlight->globalProperties.update_properties(_programs[PROGRAM_LIGHTNING]);
 

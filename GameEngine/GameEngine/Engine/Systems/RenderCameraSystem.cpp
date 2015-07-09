@@ -59,9 +59,14 @@ namespace AGE
 			spotDrawableList->spotLight = spot->getCullableHandle().getPtr()->getDatas();
 
 			Frustum spotlightFrustum;
-			//spotlightFrustum.setMatrix(spot->)
+			// BIG hack :
+			// @PROUT TODO -> compute the spotlight frustum
+			auto hackCamEnt = *(_cameras.getCollection().begin());
+			auto hackCamComp = hackCamEnt->getComponent<CameraComponent>();
+			spotlightFrustum.setMatrix(hackCamComp->getProjection() * glm::inverse(hackCamEnt->getLink().getGlobalTransform()));
+			// hack end
 
-			//_scene->getBfcBlockManagerFactory()->cullOnChannel(BFCCullableType::CullableMesh, spotDrawableList->meshs);
+			_scene->getBfcBlockManagerFactory()->cullOnChannel(BFCCullableType::CullableMesh, spotDrawableList->meshs, spotlightFrustum);
 			spotLightList.push_back(spotDrawableList);
 		}
 		for (auto pointLightEntity : _pointLights.getCollection())

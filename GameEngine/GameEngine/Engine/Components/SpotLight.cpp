@@ -73,7 +73,7 @@ namespace AGE
 
 		//_propShadowMap = std::make_shared<Sampler2D>("shadow_map");
 
-		// TODO DORIAN -> fix spotlight texture
+		// @PROUT TODO DORIAN -> fix spotlight texture
 		//auto shadowMapTexture = entity->getScene()->getInstance<AssetsManager>()->getSpotLightTexture();
 		//_propShadowMap->set(shadowMapTexture);
 
@@ -86,7 +86,7 @@ namespace AGE
 		_propSpotCutOff->autoSet(cutOff);
 		_propExponentLight = std::make_shared<AutoProperty<float, Vec1>>("exponent_light");
 		_propExponentLight->autoSet(exponent);
-		_propColorLight = std::make_shared<AutoProperty<glm::vec4, Vec4>>("color_light");
+		_propColorLight = std::make_shared<AutoProperty<glm::vec3, Vec3>>("color_light");
 		_propColorLight->autoSet(color);
 
 		auto &properties = _graphicHandle.getPtr()->getDatas()->globalProperties;
@@ -125,7 +125,7 @@ namespace AGE
 		bool modified = false;
 		if (ImGui::ColorEdit3("Color", glm::value_ptr(color)))
 		{
-			_propColorLight->autoSet(color);
+			_propColorLight->autoSet(glm::vec3(color.x, color.y, color.z));
 			modified = true;
 		}
 		if (ImGui::SliderFloat3("Range", glm::value_ptr(range), 0.0f, 1.0f))

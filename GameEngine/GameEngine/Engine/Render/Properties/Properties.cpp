@@ -68,7 +68,7 @@ namespace AGE
 		SCOPE_profile_cpu_function("RenderTimer");
 
 		RWLockGuard lock(_lock, false);
-		for (auto property : _properties)
+		for (auto &property : _properties)
 		{
 			property->update(p);
 		}

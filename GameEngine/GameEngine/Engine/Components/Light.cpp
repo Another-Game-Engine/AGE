@@ -12,6 +12,7 @@
 #include "Render/ProgramResources/Types/Uniform/Mat4.hh"
 #include "Render/Properties/Materials/Color.hh"
 #include "Render/Properties/Materials/MapColor.hh"
+#include "Render/ProgramResources/Types/Uniform/Sampler/Sampler3D.hh"
 
 #include "Graphic/DRBLightElementManager.hpp"
 #include "Graphic/DRBData.hpp"
