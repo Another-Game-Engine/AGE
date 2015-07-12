@@ -413,8 +413,6 @@ namespace AGE
 
 		TMQ::PtrQueue commands;
 		TMQ::PtrQueue tasks;
-		bool commandSuccess;
-		bool taskSuccess;
 
 		std::chrono::system_clock::time_point waitStart;
 		std::chrono::system_clock::time_point waitEnd;
@@ -426,63 +424,33 @@ namespace AGE
 			SCOPE_profile_cpu_i("RenderTimer", "Update");
 
 			waitStart = std::chrono::high_resolution_clock::now();
-			taskSuccess = commandSuccess = false;
+			SCOPE_profile_cpu_i("RenderTimer", "Wait and get commands");
+			
+			if (_context)
 			{
-				SCOPE_profile_cpu_i("RenderTimer", "Wait and get commands");
-				do {
-					if (_context)
-					{
-						_context->refreshInputs();
-					}
-					getQueue()->getTaskAndCommandQueue(tasks, taskSuccess, commands, commandSuccess, TMQ::HybridQueue::Block);
-				} while (!taskSuccess && !commandSuccess);
+				_context->refreshInputs();
 			}
-			waitEnd = std::chrono::high_resolution_clock::now();
-			workStart = std::chrono::high_resolution_clock::now();
-			if (taskSuccess)
-			{
-				SCOPE_profile_cpu_i("RenderTimer", "Execute tasks");
-				while (!tasks.empty() && _insideRun)
-				{
-					//pop all tasks
-					auto task = tasks.front();
-					auto success = execute(task); // we receive a task that we cannot treat
-					AGE_ASSERT(success);
-					tasks.pop();
-					taskCounter--;
-					workEnd = std::chrono::high_resolution_clock::now();
-					const std::size_t toWait = 33;
-					const std::size_t elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(workEnd - workStart).count();
-					if (elapsed >= toWait)
-					{
-						std::cout << elapsed << ", ";
-						while (!tasks.empty() && _insideRun)
-						{
-							auto task = tasks.front();
-							getQueue()->moveTask(task, tasks.getFrontSize());
-							tasks.pop();
-						}
-					}
-				}
-			}
-			if (commandSuccess)
-			{
-				SCOPE_profile_cpu_i("RenderTimer", "Execute commands");
-				// pop all commands
-				while (!commands.empty() && _insideRun)
-				{
-					SCOPE_profile_cpu_i("RenderTimer", "Execute one command");
-					auto command = commands.front();
-					auto success = execute(command);
-					AGE_ASSERT(success);
-					commands.pop();
-				}
 
+			TMQ::MessageBase *task = nullptr;
+			
+			waitEnd = std::chrono::high_resolution_clock::now();
+			workStart = std::chrono::high_resolution_clock::now(); \
+
+			getQueue()->getTask(task);
+			if (task)
+			{
+				SCOPE_profile_cpu_i("RenderTimer", "Execute task");
+				auto success = execute(task); // we receive a task that we cannot treat
+				AGE_ASSERT(success);
+				tasks.pop();
 				workEnd = std::chrono::high_resolution_clock::now();
-				GetThreadManager()->updateThreadStatistics(this->_id
-					, std::chrono::duration_cast<std::chrono::microseconds>(workEnd - workStart).count()
-					, std::chrono::duration_cast<std::chrono::microseconds>(waitEnd - waitStart).count());
+				const std::size_t elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(workEnd - workStart).count();
 			}
+
+			workEnd = std::chrono::high_resolution_clock::now();
+			GetThreadManager()->updateThreadStatistics(this->_id
+				, std::chrono::duration_cast<std::chrono::microseconds>(workEnd - workStart).count()
+				, std::chrono::duration_cast<std::chrono::microseconds>(waitEnd - waitStart).count());
 		}
 		return true;
 	}

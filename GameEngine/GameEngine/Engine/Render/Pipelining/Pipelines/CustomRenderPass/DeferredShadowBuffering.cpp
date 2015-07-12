@@ -76,7 +76,7 @@ namespace AGE
 		// handle the number of sample
 		if (_depthBuffers.size() < infos.spotLights.size())
 		{
-			int count = infos.spotLights.size() - _depthBuffers.size();
+			std::size_t count = infos.spotLights.size() - _depthBuffers.size();
 			for (int index = 0; index < count; ++index)
 			{
 				_depthBuffers.push_back(createRenderPassOutput<Texture2D>(_frame_buffer.width(), _frame_buffer.height(), GL_DEPTH24_STENCIL8, true));
@@ -90,7 +90,7 @@ namespace AGE
 		}
 		else if (_depthBuffers.size() > infos.spotLights.size())
 		{
-			int count = _depthBuffers.size() - infos.spotLights.size();
+			std::size_t count = _depthBuffers.size() - infos.spotLights.size();
 			for (int index = 0; index < count; ++index)
 			{
 				_depthBuffers.pop_back();

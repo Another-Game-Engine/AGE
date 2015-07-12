@@ -3,6 +3,10 @@
 
 using namespace TMQ;
 
+PtrQueue HybridQueue::_sharedQueue;
+std::mutex HybridQueue::_mutex;
+std::condition_variable HybridQueue::_condition;
+
 PtrQueue::Chunk::Chunk(std::size_t chunkSize)
 	: _data(nullptr)
 	, _cursor(0)
@@ -202,9 +206,21 @@ bool PtrQueue::empty()
 /// HYBRID
 
 HybridQueue::HybridQueue()
-	: _millisecondToWait(1)
-	, _reservedPublisher(-1)
 {
-	_releasable = true;
 }
+
+void HybridQueue::getTask(MessageBase *& task)
+{
+	std::unique_lock<std::mutex> lock(_mutex);
+	_condition.wait(lock, [this](){ return (_individualQueue.empty() == false || _sharedQueue.empty() == false); });
+
+	task = _individualQueue.front();
+	if (task)
+	{
+		return;
+	}
+
+	task = _sharedQueue.front();
+}
+
 

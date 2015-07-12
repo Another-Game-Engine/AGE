@@ -51,43 +51,19 @@ namespace AGE
 			SCOPE_profile_cpu_i("MainThread", "Release commands");
 			waitStart = std::chrono::high_resolution_clock::now();
 			{
-				if (!_next->getQueue()->releaseCommandReadability(TMQ::HybridQueue::WaitType::NoWait))
+				TMQ::MessageBase *task = nullptr;
+				getQueue()->getTask(task);
+				if (task)
 				{
-					if (getQueue()->getTaskQueue(taskQueue, TMQ::HybridQueue::Block))
-					{
-						SCOPE_profile_cpu_i("MainThread", "Execute tasks");
-						workStart = std::chrono::high_resolution_clock::now();
-						while (!taskQueue.empty())
-						{
-							auto task = taskQueue.front();
-							auto result = execute(task);
-							assert(result); // we receive a task that we cannot handle
-							taskQueue.pop();
-							taskCounter--;
-						}
-						workEnd = std::chrono::high_resolution_clock::now();
-						workCount += std::chrono::duration_cast<std::chrono::microseconds>(workEnd - workStart).count();
-					}
-					//_next->getQueue()->clear();
+					SCOPE_profile_cpu_i("MainThread", "Execute tasks");
+					workStart = std::chrono::high_resolution_clock::now();
+					auto result = execute(task);
+					assert(result); // we receive a task that we cannot handle
 				}
+				//_next->getQueue()->clear();
 			}
 		}
-		waitEnd = std::chrono::high_resolution_clock::now();
 
-		bool hasTasks = getQueue()->getTaskQueue(taskQueue, TMQ::HybridQueue::NoWait);
-		workStart = std::chrono::high_resolution_clock::now();
-		if (hasTasks)
-		{
-			SCOPE_profile_cpu_i("MainThread", "Execute tasks");
-			while (!taskQueue.empty())
-			{
-				auto task = taskQueue.front();
-				auto success = execute(task); // we receive a task that we cannot handle
-				AGE_ASSERT(success);
-				taskQueue.pop();
-				taskCounter--;
-			}
-		}
 		workEnd = std::chrono::high_resolution_clock::now();
 		workCount += std::chrono::duration_cast<std::chrono::microseconds>(workEnd - workStart).count();
 
@@ -102,7 +78,6 @@ namespace AGE
 	{
 		_run = true;
 		_insideRun = true;
-		_next->getQueue()->releaseCommandReadability(TMQ::HybridQueue::WaitType::Block);
 
 		while (_run && _insideRun)
 		{
@@ -142,7 +117,6 @@ namespace AGE
 
 	bool MainThread::launch()
 	{
-		_next->getQueue()->reserveTo(std::this_thread::get_id().hash());
 		if (!init())
 			return false;
 		return true;
