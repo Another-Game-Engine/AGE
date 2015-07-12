@@ -76,7 +76,8 @@ namespace AGE
 			{
 				//pop all tasks
 				auto task = tasks.front();
-				assert(execute(task)); // we receive a task that we cannot treat
+				auto result = execute(task);
+				assert(result); // we receive a task that we cannot treat
 				tasks.pop();
 				taskCounter--;
 			}
