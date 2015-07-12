@@ -576,8 +576,8 @@ namespace AGE
 				_loadingChannels.insert(std::make_pair(loadingChannel, std::make_shared<AssetsManager::AssetsLoadingChannel>()));
 			}
 			channel = _loadingChannels[loadingChannel];
+			channel->pushNewAsset(filename, future);
 		}
-		channel->pushNewAsset(filename, future);
 	}
 
 	void AssetsManager::pushNewCallback(const std::string &loadingChannel, AScene *currentScene, std::function<void()> &callback)
@@ -590,17 +590,18 @@ namespace AGE
 				_loadingChannels.insert(std::make_pair(loadingChannel, std::make_shared<AssetsManager::AssetsLoadingChannel>()));
 			}
 			channel = _loadingChannels[loadingChannel];
+			channel->pushNewCallback(callback, currentScene);
 		}
-		channel->pushNewCallback(callback, currentScene);
 	}
 
+	AGE_NOT_OPTIMIZED_BLOCK_BEGIN
 	bool AssetsManager::AssetsLoadingChannel::updateList(int &noLoaded, int &total)
 	{
 		std::lock_guard<std::mutex> lock(_mutex);
 		std::size_t i = 0;
 		_list.remove_if([&](AssetsManager::AssetsLoadingStatus &e){
-			if (i > 30)
-				return false;
+			//if (i > 30)
+			//	return false;
 			++i;
 			if (!e.future.valid())
 			{
@@ -623,9 +624,11 @@ namespace AGE
 		total = (int)_maxAssets;
 		return _errorMessages.empty();
 	}
-
+	AGE_NOT_OPTIMIZED_BLOCK_END
 	void AssetsManager::AssetsLoadingChannel::callCallbacks()
 	{
+		std::lock_guard<std::mutex> lock(_mutex);
+
 		for (auto &e : _callbacks)
 		{
 			if (e.callback && e.scene != nullptr)

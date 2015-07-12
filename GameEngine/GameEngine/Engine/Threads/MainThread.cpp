@@ -53,7 +53,7 @@ namespace AGE
 			{
 				if (!_next->getQueue()->releaseCommandReadability(TMQ::HybridQueue::WaitType::NoWait))
 				{
-					if (getQueue()->getTaskQueue(taskQueue, TMQ::HybridQueue::NoWait))
+					if (getQueue()->getTaskQueue(taskQueue, TMQ::HybridQueue::Block))
 					{
 						SCOPE_profile_cpu_i("MainThread", "Execute tasks");
 						workStart = std::chrono::high_resolution_clock::now();
@@ -67,7 +67,7 @@ namespace AGE
 						workEnd = std::chrono::high_resolution_clock::now();
 						workCount += std::chrono::duration_cast<std::chrono::microseconds>(workEnd - workStart).count();
 					}
-					_next->getQueue()->clear();
+					//_next->getQueue()->clear();
 				}
 			}
 		}

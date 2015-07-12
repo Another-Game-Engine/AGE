@@ -16,7 +16,7 @@ namespace AGE
 		Properties(std::vector<std::shared_ptr<IProperty>> const &properties);
 		Properties(Properties &&other);
 		Properties(Properties const &);
-		Properties &operator=(Properties const &) = default;
+		Properties &operator=(Properties const &) = delete;
 		~Properties() = default;
 
 	public:
@@ -29,6 +29,7 @@ namespace AGE
 
 		std::shared_ptr<IProperty> searchForProperty(const std::string &name) const
 		{
+			RWLockGuard lock(_lock, false);
 			for (auto &e : _properties)
 			{
 				if (e->name() == name)

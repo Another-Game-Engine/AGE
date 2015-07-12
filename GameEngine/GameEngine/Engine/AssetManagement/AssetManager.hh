@@ -98,7 +98,7 @@ static std::pair<std::pair<GLenum, std::string>, std::function<void(Vertices &ve
 			AssetsLoadingStatus(const std::string &_fileName, std::future<AssetsLoadingResult> &_future)
 				: filename(_fileName)
 			{
-				std::swap(future, _future);
+				future = std::move(_future);
 			}
 		};
 
