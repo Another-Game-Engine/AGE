@@ -236,110 +236,71 @@ namespace TMQ
 
 	class HybridQueue
 	{
-		PtrQueue _commandQueue;
-		PtrQueue _commandQueueCopy;
-		PtrQueue _taskQueue;
-		std::mutex _mutex;
-		std::condition_variable _readCondition;
-		std::condition_variable _writeCondition;
-		std::size_t _millisecondToWait;
-		std::atomic_bool _releasable;
-		std::size_t _reservedPublisher;
+		static PtrQueue                _sharedQueue;
+		PtrQueue                       _individualQueue;
+		static std::mutex              _sharedMutex;
+		std::mutex                     _individualMutex;
+		static std::condition_variable _condition;
 	public:
-		enum WaitType
-		{
-			Block = 0
-			, NoWait = 1
-		};
-
 		HybridQueue();
-		void launch();
 
 		HybridQueue(const HybridQueue&) = delete;
 		HybridQueue &operator=(const HybridQueue&) = delete;
 		HybridQueue(HybridQueue &&) = delete;
 		HybridQueue &operator=(HybridQueue &&) = delete;
 
-		bool getTaskQueue(TMQ::PtrQueue &q, WaitType waitType);
-		void getTaskAndCommandQueue(
-			TMQ::PtrQueue &taskQueue,
-			bool &taskQueueSuccess,
-			TMQ::PtrQueue &commandQueue,
-			bool &commandQueueSuccess,
-			WaitType waitType);
-		bool releaseTaskReadability();
-		bool releaseCommandReadability(WaitType waitType);
-		void setWaitingTime(std::size_t milliseconds);
-		std::size_t getWaitingTime();
-		void clear();
-		inline void reserveTo(std::size_t publisherThreadId) { _reservedPublisher = publisherThreadId; }
-
-		//////
-		////// Internal standard queue access
-
 		/////////
 		/// COMMANDS
-		void moveCommand(MessageBase *e, std::size_t size)
-		{
-			SCOPE_profile_cpu_function("TMQ");
-			assert(_reservedPublisher != -1 && std::this_thread::get_id().hash() == _reservedPublisher);
-			_commandQueue.move(e, size);
-		}
-
 		template <typename T>
 		void pushCommand(const T& e)
 		{
 			SCOPE_profile_cpu_function("TMQ");
-			assert(_reservedPublisher != -1 && std::this_thread::get_id().hash() == _reservedPublisher);
-			_commandQueue.push(e);
+			std::lock_guard<std::mutex> lock(_individualQueue);
+			_individualQueue.push(e);
+			_condition.notify_all();
 		}
 
 		template <typename T, typename ...Args>
 		void emplaceCommand(Args ...args)
 		{
 			SCOPE_profile_cpu_function("TMQ");
-			assert(_reservedPublisher != -1 && std::this_thread::get_id().hash() == _reservedPublisher);
-			_commandQueue.emplace<T>(args...);
+			std::lock_guard<std::mutex> lock(_individualQueue);
+			_individualQueue.emplace<T>(args...);
+			_condition.notify_all();
 		}
 
 		template <typename T, typename F>
 		std::future<F> pushFutureCommand(const T &e)
 		{
 			SCOPE_profile_cpu_function("TMQ");
-			assert(_reservedPublisher != -1 && std::this_thread::get_id().hash() == _reservedPublisher);
-			return _commandQueue.push(e)->getFuture();
+			std::lock_guard<std::mutex> lock(_individualQueue);
+			auto &res = _individualQueue.push(e)->getFuture();
+			_condition.notify_all();
+			return res;
 		}
 
 		template <typename T, typename F, typename ...Args>
 		std::future<F> emplaceFutureCommand(Args ...args)
 		{
 			SCOPE_profile_cpu_function("TMQ");
-			assert(_reservedPublisher != -1 && std::this_thread::get_id().hash() == _reservedPublisher);
-			return _commandQueue.emplace<T>(args...)->getFuture();
+			std::lock_guard<std::mutex> lock(_individualQueue);
+			auto &res = _individualQueue.emplace<T>(args...)->getFuture();
+			_condition.notify_all();
+			return res;
 		}
 
 		//////////////
 		//// TASKS
-
-		void moveTask(MessageBase *e, std::size_t size)
-		{
-			SCOPE_profile_cpu_function("TMQ");
-			{
-				std::lock_guard<std::mutex> lock(_mutex);
-				_taskQueue.move(e, size);
-			}
-			releaseTaskReadability();
-		}
 
 		template <typename T>
 		void pushTask(const T& e)
 		{
 			SCOPE_profile_cpu_function("TMQ");
 			{
-				std::lock_guard<std::mutex> lock(_mutex);
-				_taskQueue.push(e);
+				std::lock_guard<std::mutex> lock(_sharedMutex);
+				_sharedQueue.push(e);
 			}
-			releaseTaskReadability();
+			_condition.notify_all();
 		}
 
 		template <typename T, typename ...Args>
@@ -347,10 +308,10 @@ namespace TMQ
 		{
 			SCOPE_profile_cpu_function("TMQ");
 			{
-				std::lock_guard<std::mutex> lock(_mutex);
-				_taskQueue.emplace<T>(args...);
+				std::lock_guard<std::mutex> lock(_sharedMutex);
+				_sharedQueue.emplace<T>(args...);
 			}
-			releaseTaskReadability();
+			_condition.notify_all();
 		}
 
 		template <typename T, typename F>
@@ -359,10 +320,10 @@ namespace TMQ
 			SCOPE_profile_cpu_function("TMQ");
 			std::future < F > f;
 			{
-				std::lock_guard<std::mutex> lock(_mutex);
-				f = _taskQueue.push(e)->getFuture();
+				std::lock_guard<std::mutex> lock(_sharedMutex);
+				f = _sharedQueue.push(e)->getFuture();
 			}
-			releaseTaskReadability();
+			_condition.notify_all();
 			return f;
 		}
 
@@ -372,10 +333,10 @@ namespace TMQ
 			SCOPE_profile_cpu_function("TMQ");
 			std::future< F > f;
 			{
-				std::lock_guard<std::mutex> lock(_mutex);
-				f = _taskQueue.emplace<T>(args...)->getFuture();
+				std::lock_guard<std::mutex> lock(_sharedMutex);
+				f = _sharedQueue.emplace<T>(args...)->getFuture();
 			}
-			releaseTaskReadability();
+			_condition.notify_all();
 			return f;
 		}
 	};
