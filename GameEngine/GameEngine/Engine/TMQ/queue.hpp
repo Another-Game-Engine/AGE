@@ -11,6 +11,8 @@
 #include <list>
 #include <Utils/Profiler.hpp>
 
+#include <queue>
+
 // tmp
 #include "Utils/Debug.hpp"
 
@@ -241,8 +243,8 @@ namespace TMQ
 
 	class HybridQueue
 	{
-		static PtrQueue                _sharedQueue;
-		PtrQueue                       _individualQueue;
+		static std::queue<MessageBase*>              _sharedQueue;
+		std::queue<MessageBase*>                     _individualQueue;
 		static std::mutex              _mutex;
 		static std::condition_variable _condition;
 	public:
@@ -254,6 +256,7 @@ namespace TMQ
 		HybridQueue &operator=(HybridQueue &&) = delete;
 
 		void getTask(MessageBase *& task);
+		void tryToGetTask(MessageBase *& task, std::size_t microSeconds);
 
 		/////////
 		/// COMMANDS
@@ -262,7 +265,7 @@ namespace TMQ
 		{
 			SCOPE_profile_cpu_function("TMQ");
 			std::lock_guard<std::mutex> lock(_mutex);
-			_individualQueue.push(e);
+			_individualQueue.push(new Message<T>(e));
 			_condition.notify_all();
 		}
 
@@ -271,7 +274,7 @@ namespace TMQ
 		{
 			SCOPE_profile_cpu_function("TMQ");
 			std::lock_guard<std::mutex> lock(_mutex);
-			_individualQueue.emplace<T>(args...);
+			_individualQueue.push(new Message<T>(args...));
 			_condition.notify_all();
 		}
 
@@ -280,7 +283,9 @@ namespace TMQ
 		{
 			SCOPE_profile_cpu_function("TMQ");
 			std::lock_guard<std::mutex> lock(_mutex);
-			auto &res = _individualQueue.push(e)->getFuture();
+			auto tmp = new Message<T>(e);
+			auto &res = tmp->getData().getFuture();
+			_individualQueue.push(tmp);
 			_condition.notify_all();
 			return res;
 		}
@@ -290,7 +295,9 @@ namespace TMQ
 		{
 			SCOPE_profile_cpu_function("TMQ");
 			std::lock_guard<std::mutex> lock(_mutex);
-			auto &res = _individualQueue.emplace<T>(args...)->getFuture();
+			auto tmp = new Message<T>(args...);
+			auto res = tmp->getData().getFuture();
+			_individualQueue.push(tmp);
 			_condition.notify_all();
 			return res;
 		}
@@ -304,7 +311,7 @@ namespace TMQ
 			SCOPE_profile_cpu_function("TMQ");
 			{
 				std::lock_guard<std::mutex> lock(_mutex);
-				_individualQueue.push(e);
+				_individualQueue.push(new Message<T>(e));
 			}
 			_condition.notify_all();
 		}
@@ -315,7 +322,7 @@ namespace TMQ
 			SCOPE_profile_cpu_function("TMQ");
 			{
 				std::lock_guard<std::mutex> lock(_mutex);
-				_individualQueue.emplace<T>(args...);
+				_individualQueue.push(new Message<T>(args...));
 			}
 			_condition.notify_all();
 		}
@@ -327,7 +334,9 @@ namespace TMQ
 			std::future < F > f;
 			{
 				std::lock_guard<std::mutex> lock(_mutex);
-				f = _individualQueue.push(e)->getFuture();
+				auto tmp = new Message<T>(e);
+				f = tmp->getData().getFuture();
+				_individualQueue.push(tmp);
 			}
 			_condition.notify_all();
 			return f;
@@ -340,7 +349,9 @@ namespace TMQ
 			std::future< F > f;
 			{
 				std::lock_guard<std::mutex> lock(_mutex);
-				f = _individualQueue.emplace<T>(args...)->getFuture();
+				auto tmp = new Message<T>(args...);
+				f = tmp->getData().getFuture();
+				_individualQueue.push(tmp);
 			}
 			_condition.notify_all();
 			return f;

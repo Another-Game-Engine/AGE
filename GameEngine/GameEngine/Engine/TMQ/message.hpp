@@ -91,6 +91,8 @@ namespace TMQ
 		{
 			return new(dest)Message<T>(_data);
 		}
+
+		inline T &getData() { return _data; }
 	};
 
 	// Used for messages which return value

@@ -3,7 +3,7 @@
 
 using namespace TMQ;
 
-PtrQueue HybridQueue::_sharedQueue;
+std::queue<MessageBase*> HybridQueue::_sharedQueue;
 std::mutex HybridQueue::_mutex;
 std::condition_variable HybridQueue::_condition;
 
@@ -214,13 +214,44 @@ void HybridQueue::getTask(MessageBase *& task)
 	std::unique_lock<std::mutex> lock(_mutex);
 	_condition.wait(lock, [this](){ return (_individualQueue.empty() == false || _sharedQueue.empty() == false); });
 
-	task = _individualQueue.front();
-	if (task)
+	task = nullptr;
+	if (_individualQueue.empty() == false)
 	{
+		task = _individualQueue.front();
+		_individualQueue.pop();
 		return;
 	}
 
-	task = _sharedQueue.front();
+	if (_sharedQueue.empty() == false)
+	{
+		task = _sharedQueue.front();
+		_sharedQueue.pop();
+	}
+}
+
+void HybridQueue::tryToGetTask(MessageBase *& task, std::size_t microSeconds)
+{
+	std::unique_lock<std::mutex> lock(_mutex);
+
+	auto status = _condition.wait_for(lock, std::chrono::microseconds(microSeconds), [this](){ return (_individualQueue.empty() == false || _sharedQueue.empty() == false); });
+
+	task = nullptr;
+	if (status == false)
+	{
+		return;
+	}
+	if (_individualQueue.empty() == false)
+	{
+		task = _individualQueue.front();
+		_individualQueue.pop();
+		return;
+	}
+
+	if (_sharedQueue.empty() == false)
+	{
+		task = _sharedQueue.front();
+		_sharedQueue.pop();
+	}
 }
 
 

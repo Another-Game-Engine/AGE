@@ -411,9 +411,6 @@ namespace AGE
 		DWORD threadId = GetThreadId(static_cast<HANDLE>(_threadHandle.native_handle()));
 		SetThreadName(threadId, this->_name.c_str());
 
-		TMQ::PtrQueue commands;
-		TMQ::PtrQueue tasks;
-
 		std::chrono::system_clock::time_point waitStart;
 		std::chrono::system_clock::time_point waitEnd;
 		std::chrono::system_clock::time_point workStart;
@@ -431,21 +428,22 @@ namespace AGE
 				_context->refreshInputs();
 			}
 
-			TMQ::MessageBase *task = nullptr;
 			
 			waitEnd = std::chrono::high_resolution_clock::now();
-			workStart = std::chrono::high_resolution_clock::now(); \
+			workStart = std::chrono::high_resolution_clock::now();
 
-			getQueue()->getTask(task);
-			if (task)
-			{
-				SCOPE_profile_cpu_i("RenderTimer", "Execute task");
-				auto success = execute(task); // we receive a task that we cannot treat
-				AGE_ASSERT(success);
-				tasks.pop();
-				workEnd = std::chrono::high_resolution_clock::now();
-				const std::size_t elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(workEnd - workStart).count();
-			}
+			TMQ::MessageBase *task = nullptr;
+			do {
+				getQueue()->tryToGetTask(task, 10);
+				if (task)
+				{
+					SCOPE_profile_cpu_i("RenderTimer", "Execute task");
+					auto success = execute(task); // we receive a task that we cannot treat
+					AGE_ASSERT(success);
+					workEnd = std::chrono::high_resolution_clock::now();
+					const std::size_t elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(workEnd - workStart).count();
+				}
+			} while (task != nullptr);
 
 			workEnd = std::chrono::high_resolution_clock::now();
 			GetThreadManager()->updateThreadStatistics(this->_id
