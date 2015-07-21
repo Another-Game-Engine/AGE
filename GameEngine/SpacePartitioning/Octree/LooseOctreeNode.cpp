@@ -1,8 +1,8 @@
-#include <SpacePartitioning/LooseOctreeNode.hh>
-#include <SpacePartitioning/LooseOctree.hh>
-#include <SpacePartitioning/Cullable/CullableShape.hh>
-#include <SpacePartitioning/Cullable/Cullable.hh>
-#include <Utils/Frustum.hh>
+#include <Octree/LooseOctreeNode.hh>
+#include <Octree/LooseOctree.hh>
+#include <GameEngine/Engine/Culling/Cullable/CullableShape.hh>
+#include <GameEngine/Engine/Culling/Cullable/Cullable.hh>
+#include <GameEngine/Engine/Utils/Frustum.hh>
 
 namespace AGE
 {

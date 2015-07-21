@@ -84,9 +84,7 @@ namespace AGE
 
 		void setMesh(const std::string &mesh);
 
-		std::shared_ptr<MeshInstance> getMesh(void);
-
-		std::shared_ptr<const MeshInstance> getMesh(void) const;
+		const std::string &getMesh(void) const;
 
 		void setAsConvex(bool mustBeConvex);
 

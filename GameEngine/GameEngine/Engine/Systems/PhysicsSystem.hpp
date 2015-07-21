@@ -8,6 +8,8 @@
 #include <Physics/PhysicsInterface.hpp>
 #include <Physics/WorldInterface.hpp>
 
+#include <Engine/AssetManagement/AssetManager.hh>
+
 namespace AGE
 {
 	class PhysicsSystem final : public System, public PluginManager<Physics::PhysicsInterface>
@@ -16,7 +18,7 @@ namespace AGE
 		// Constructors
 		PhysicsSystem(void) = delete;
 
-		PhysicsSystem(AScene *scene, Physics::EngineType physicsEngineType, const std::string &assetDirectory = "");
+		PhysicsSystem(AScene *scene, Physics::EngineType physicsEngineType, AssetsManager *assetManager);
 
 		PhysicsSystem(PhysicsSystem const &) = delete;
 
@@ -33,7 +35,7 @@ namespace AGE
 
 	private:
 		// Attributes
-		const std::string assetDirectory;
+		AssetsManager *assetManager;
 
 		Physics::PhysicsInterface *physics = nullptr;
 

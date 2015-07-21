@@ -2,6 +2,7 @@
 
 # include <Utils/OpenGL.hh>
 # include <iostream>
+# include <vector>
 
 class UnitProg
 {
@@ -18,8 +19,10 @@ public:
 	GLuint getId() const;
 	bool compile();
 	void destroy();
+
 private:
 	bool compileUnitProg(char const *fileName);
+	char const *handleRequireToken(std::string &sources);
 
 private:
 	std::string _filename;

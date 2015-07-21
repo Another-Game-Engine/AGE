@@ -1,6 +1,6 @@
 #pragma once
 
-#include <SpacePartitioning/Cullable/Cullable.hh>
+#include <Culling/Cullable/Cullable.hh>
 
 namespace AGE
 {

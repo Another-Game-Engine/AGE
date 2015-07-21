@@ -55,6 +55,39 @@ namespace AGE
 		case AGE::Thread::Worker5:
 			res = "AGE_WorkerThread5";
 			break;
+		case AGE::Thread::Worker6:
+			res = "AGE_WorkerThread6";
+			break;
+		case AGE::Thread::Worker7:
+			res = "AGE_WorkerThread7";
+			break;
+		case AGE::Thread::Worker8:
+			res = "AGE_WorkerThread8";
+			break;
+		case AGE::Thread::Worker9:
+			res = "AGE_WorkerThread9";
+			break;
+		case AGE::Thread::Worker10:
+			res = "AGE_WorkerThread10";
+			break;
+		case AGE::Thread::Worker11:
+			res = "AGE_WorkerThread11";
+			break;
+		case AGE::Thread::Worker12:
+			res = "AGE_WorkerThread12";
+			break;
+		case AGE::Thread::Worker13:
+			res = "AGE_WorkerThread13";
+			break;
+		case AGE::Thread::Worker14:
+			res = "AGE_WorkerThread14";
+			break;
+		case AGE::Thread::Worker15:
+			res = "AGE_WorkerThread15";
+			break;
+		case AGE::Thread::Worker16:
+			res = "AGE_WorkerThread16";
+			break;
 		case AGE::Thread::END:
 			assert(false); // Illegal thread type
 			break;

@@ -3,10 +3,10 @@
 #include <Render/Textures/Texture2D.hh>
 #include <Render/OpenGLTask/OpenGLState.hh>
 #include <Render/GeometryManagement/Painting/Painter.hh>
-#include <SpacePartitioning/Ouptut/RenderLight.hh>
-#include <SpacePartitioning/Ouptut/RenderPipeline.hh>
-#include <SpacePartitioning/Ouptut/RenderPainter.hh>
-#include <SpacePartitioning/Ouptut/RenderCamera.hh>
+#include <Culling/Ouptut/RenderLight.hh>
+#include <Culling/Ouptut/RenderPipeline.hh>
+#include <Culling/Ouptut/RenderPainter.hh>
+#include <Culling/Ouptut/RenderCamera.hh>
 #include <Render/ProgramResources/Types/Uniform/Mat4.hh>
 #include <Render/ProgramResources/Types/Uniform/Sampler/Sampler2D.hh>
 #include <Render/ProgramResources/Types/Uniform/Vec3.hh>
@@ -68,6 +68,8 @@ namespace AGE
 
 	void DeferredMergingDebug::renderPass(RenderPipeline const &, RenderLightList &, CameraInfos const &)
 	{
+		SCOPE_profile_gpu_i("DeferredMergingDebug pass");
+		SCOPE_profile_cpu_i("RenderTimer", "DeferredMergingDebug pass");
 		_programs[PROGRAM_MERGING]->use();
 		_programs[PROGRAM_MERGING]->get_resource<Sampler2D>("debug_light_map").set(_debugLightRender);
 

@@ -17,7 +17,7 @@ namespace AGE
 			, SpotLight
 			, DirectionalLight
 		};
-		
+
 		typedef std::uint8_t OctreeObjectType;
 		typedef std::uint32_t OctreeObjectId;
 

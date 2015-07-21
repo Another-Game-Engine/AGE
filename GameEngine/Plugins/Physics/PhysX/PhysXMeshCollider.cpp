@@ -1,14 +1,16 @@
 #pragma once
 
 #include "PhysXMeshCollider.hpp"
+#include "../../../GameEngine/Engine/AssetManagement/AssetManager.hh"
 
 namespace AGE
 {
 	namespace Physics
 	{
 		// Static Methods
-		physx::PxConvexMesh *PhysXMeshCollider::CreateConvexMesh(WorldInterface *world, std::shared_ptr<MeshInstance> mesh)
+		physx::PxConvexMesh *PhysXMeshCollider::CreateConvexMesh(WorldInterface *world, const std::string &meshPath)
 		{
+			std::shared_ptr<MeshInstance> mesh = world->getAssetManager()->getMesh(meshPath + ".sage");
 			assert(mesh != nullptr && "Invalid mesh");
 			if (mesh == nullptr)
 			{
@@ -40,8 +42,9 @@ namespace AGE
 			return physics->getPhysics()->createConvexMesh(readBuffer);
 		}
 
-		physx::PxTriangleMesh *PhysXMeshCollider::CreateTriangleMesh(WorldInterface *world, std::shared_ptr<MeshInstance> mesh)
+		physx::PxTriangleMesh *PhysXMeshCollider::CreateTriangleMesh(WorldInterface *world, const std::string &meshPath)
 		{
+			std::shared_ptr<MeshInstance> mesh = world->getAssetManager()->getMesh(meshPath + ".sage");
 			assert(mesh != nullptr && "Invalid mesh");
 			if (mesh == nullptr)
 			{
@@ -81,7 +84,7 @@ namespace AGE
 		}
 
 		// Constructors
-		PhysXMeshCollider::PhysXMeshCollider(WorldInterface *world, std::shared_ptr<MeshInstance> mesh, Private::GenericData *data)
+		PhysXMeshCollider::PhysXMeshCollider(WorldInterface *world, const std::string &mesh, Private::GenericData *data)
 			: ColliderInterface(world, data), MeshColliderInterface(world, mesh, IsConvexByDefault(), data),
 			PhysXCollider(world, data,
 			IsConvexByDefault() ?
@@ -118,10 +121,10 @@ namespace AGE
 			shape->setLocalPose(localPose);
 		}
 
-		void PhysXMeshCollider::setMesh(std::shared_ptr<MeshInstance> mesh)
+		void PhysXMeshCollider::setMesh(const std::string &mesh)
 		{
 			MeshColliderInterface::setMesh(mesh);
-			assert(mesh != nullptr && "Invalid mesh");
+			assert(!mesh.empty() && "Invalid mesh");
 			physx::PxShape *shape = getShape();
 			if (isConvex())
 			{
@@ -142,11 +145,11 @@ namespace AGE
 			WorldInterface *world = getWorld();
 			if (isConvex())
 			{
-				static_cast<PhysXCollider *>(this)->updateShape(static_cast<PhysXPhysics *>(world->getPhysics())->getPhysics()->createShape(physx::PxConvexMeshGeometry(PhysXMeshCollider::CreateConvexMesh(world, mesh)), *static_cast<const PhysXMaterial *>(getMaterial())->material, true));
+				static_cast<PhysXCollider *>(this)->updateShape(static_cast<PhysXPhysics *>(world->getPhysics())->getPhysics()->createShape(physx::PxConvexMeshGeometry(PhysXMeshCollider::CreateConvexMesh(world, getMesh())), *static_cast<const PhysXMaterial *>(getMaterial())->material, true));
 			}
 			else
 			{
-				static_cast<PhysXCollider *>(this)->updateShape(static_cast<PhysXPhysics *>(world->getPhysics())->getPhysics()->createShape(physx::PxTriangleMeshGeometry(PhysXMeshCollider::CreateTriangleMesh(world, mesh)), *static_cast<const PhysXMaterial *>(getMaterial())->material, true));
+				static_cast<PhysXCollider *>(this)->updateShape(static_cast<PhysXPhysics *>(world->getPhysics())->getPhysics()->createShape(physx::PxTriangleMeshGeometry(PhysXMeshCollider::CreateTriangleMesh(world, getMesh())), *static_cast<const PhysXMaterial *>(getMaterial())->material, true));
 			}
 		}
 	}

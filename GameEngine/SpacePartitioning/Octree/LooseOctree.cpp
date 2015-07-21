@@ -1,7 +1,7 @@
-#include <SpacePartitioning/LooseOctree.hh>
-#include <SpacePartitioning/Cullable/CullableShape.hh>
-#include <SpacePartitioning/Cullable/Object/PointLight.hh>
-#include <SpacePartitioning/Cullable/Object/Mesh.hh>
+#include <Octree/LooseOctree.hh>
+#include <GameEngine/Engine/Culling/Cullable/CullableShape.hh>
+#include <GameEngine/Engine/Culling/Cullable/Object/PointLight.hh>
+#include <GameEngine/Engine/Culling/Cullable/Object/Mesh.hh>
 #include <Utils/AABoundingBox.hh>
 #include <Utils/Profiler.hpp>
 

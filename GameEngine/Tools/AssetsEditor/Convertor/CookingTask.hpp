@@ -37,9 +37,8 @@ namespace AGE
 		std::shared_ptr<MeshData> mesh = nullptr;
 		AGE::Vector<std::shared_ptr<MaterialData>> materials;
 		AGE::Vector<std::shared_ptr<TextureData>> textures;
-		std::shared_ptr<btBvhTriangleMeshShape> staticShape;
-		std::shared_ptr<btTriangleMesh> staticTriangleMesh;
-		std::shared_ptr<btConvexHullShape> dynamicShape;
+		std::shared_ptr<btConvexHullShape> convexShape;
+		std::shared_ptr<btBvhTriangleMeshShape> concaveShape;
 
 		//Assimp
 		aiScene* assimpScene = nullptr;

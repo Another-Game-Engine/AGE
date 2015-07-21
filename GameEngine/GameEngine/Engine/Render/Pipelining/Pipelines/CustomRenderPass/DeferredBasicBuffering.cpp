@@ -6,10 +6,10 @@
 #include <Render/Textures/Texture2D.hh>
 #include <Render/OpenGLTask/OpenGLState.hh>
 #include <Render/GeometryManagement/Painting/Painter.hh>
-#include <SpacePartitioning/Ouptut/RenderLight.hh>
-#include <SpacePartitioning/Ouptut/RenderPipeline.hh>
-#include <SpacePartitioning/Ouptut/RenderPainter.hh>
-#include <SpacePartitioning/Ouptut/RenderCamera.hh>
+#include <Culling/Ouptut/RenderLight.hh>
+#include <Culling/Ouptut/RenderPipeline.hh>
+#include <Culling/Ouptut/RenderPainter.hh>
+#include <Culling/Ouptut/RenderCamera.hh>
 #include <Render/ProgramResources/Types/Uniform/Mat4.hh>
 #include <Core/ConfigurationManager.hpp>
 #include <Core/Engine.hh>
@@ -96,9 +96,13 @@ namespace AGE
 			SCOPE_profile_gpu_i("Occluders pass");
 			SCOPE_profile_cpu_i("RenderTimer", "Occluders pass");
 
-			_programs[PROGRAM_BUFFERING]->use();
-			_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("projection_matrix").set(infos.data.projection);
-			_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("view_matrix").set(infos.view);
+			{
+				SCOPE_profile_gpu_i("Overhead Pipeline");
+				SCOPE_profile_cpu_i("RenderTimer", "Overhead Pipeline");
+				_programs[PROGRAM_BUFFERING]->use();
+				_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("projection_matrix").set(infos.data.projection);
+				_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("view_matrix").set(infos.view);
+			}
 
 			for (auto &meshPaint : pipeline.keys)
 			{

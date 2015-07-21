@@ -110,7 +110,8 @@ namespace AGE
 			ImGui::Checkbox("Physic", &dataset->loadPhysic);
 			if (dataset->loadPhysic)
 			{
-				ImGui::Checkbox("Static concave", &dataset->staticConcave);
+				ImGui::Checkbox("Convex", &dataset->convex);
+				ImGui::Checkbox("Concave", &dataset->concave);
 			}
 			ImGui::Separator();
 

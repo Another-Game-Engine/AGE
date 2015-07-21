@@ -1,7 +1,7 @@
 #pragma once
 
-#include <SpacePartitioning/LooseOctreeNode.hh>
-#include <Utils/MemoryPool.hpp>
+#include <SpacePartitioning/Octree/LooseOctreeNode.hh>
+#include <GameEngine/Engine/Utils/MemoryPool.hpp>
 
 #define DEBUG_OCTREE 0
 

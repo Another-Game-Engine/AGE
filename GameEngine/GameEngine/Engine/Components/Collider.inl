@@ -50,8 +50,7 @@ namespace AGE
 	template <typename Archive>
 	inline void Collider::saveMeshCollider(Archive &ar, const std::uint32_t version) const
 	{
-		std::shared_ptr<const MeshInstance> mesh = getMesh();
-		ar(cereal::make_nvp("Mesh", mesh != nullptr ? mesh->path : ""));
+		ar(cereal::make_nvp("Mesh", getMesh()));
 		ar(cereal::make_nvp("Convex", isConvex()));
 	}
 

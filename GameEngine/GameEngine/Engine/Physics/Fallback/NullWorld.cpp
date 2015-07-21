@@ -57,7 +57,7 @@ namespace AGE
 			destroy(static_cast<NullRigidBody *>(rigidBody));
 		}
 
-		ColliderInterface *NullWorld::createCollider(ColliderType colliderType, std::shared_ptr<MeshInstance> mesh, Private::GenericData *data)
+		ColliderInterface *NullWorld::createCollider(ColliderType colliderType, const std::string &mesh, Private::GenericData *data)
 		{
 			switch (colliderType)
 			{

@@ -62,7 +62,8 @@ namespace AGE
 		bool biTangents = true;
 
 		//Physic Options
-		bool staticConcave = true;
+		bool convex = true;
+		bool concave = true;
 
 		// Textures options
 		bool compressTextures = false;

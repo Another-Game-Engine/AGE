@@ -2,7 +2,7 @@
 
 #include <Utils/Sphere.hh>
 #include <Utils/Frustum.hh>
-#include <SpacePartitioning/Cullable/CullableShape.hh>
+#include <Culling/Cullable/CullableShape.hh>
 #include <Components/DirectionalLightComponent.hh>
 #include <Components/SpotLight.hh>
 #include <Components/Light.hh>
@@ -13,7 +13,6 @@
 
 namespace AGE
 {
-
 	struct PointLight : public CullableShape<Sphere>
 	{
 		// To remove when light will be in octree

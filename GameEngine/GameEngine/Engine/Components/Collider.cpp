@@ -12,9 +12,9 @@ namespace AGE
 	void Collider::init(Physics::ColliderType colliderType, const std::string &mesh)
 	{
 		assert(collider == nullptr && "Collider already initialized");
-		collider = entity.getScene()->getInstance<Physics::PhysicsInterface>()->getWorld()->createCollider(colliderType, colliderType == Physics::ColliderType::Mesh ? entity.getScene()->getInstance<AGE::AssetsManager>()->getMesh(mesh) : nullptr, entity.addComponent<Private::PhysicsData>()->getData());
+		collider = entity->getScene()->getInstance<Physics::PhysicsInterface>()->getWorld()->createCollider(colliderType, mesh, entity->addComponent<Private::PhysicsData>()->getData());
 		collider->collider = this;
-		scale(entity.getLink().getScale());
+		scale(entity->getLink().getScale());
 	}
 
 	void Collider::setMaterial(const std::string &material)
@@ -207,7 +207,7 @@ namespace AGE
 		switch (getColliderType())
 		{
 			case Physics::ColliderType::Mesh:
-				collider->as<Physics::ColliderType::Mesh>()->setMesh(entity.getScene()->getInstance<AGE::AssetsManager>()->getMesh(mesh));
+				collider->as<Physics::ColliderType::Mesh>()->setMesh(mesh);
 				break;
 			default:
 				assert(!"Invalid collider type");
@@ -215,7 +215,7 @@ namespace AGE
 		}
 	}
 
-	std::shared_ptr<MeshInstance> Collider::getMesh(void)
+	const std::string &Collider::getMesh(void) const
 	{
 		assert(collider != nullptr && "Invalid Collider");
 		switch (getColliderType())
@@ -224,20 +224,8 @@ namespace AGE
 				return collider->as<Physics::ColliderType::Mesh>()->getMesh();
 			default:
 				assert(!"Invalid collider type");
-				return nullptr;
-		}
-	}
-
-	std::shared_ptr<const MeshInstance> Collider::getMesh(void) const
-	{
-		assert(collider != nullptr && "Invalid Collider");
-		switch (getColliderType())
-		{
-			case Physics::ColliderType::Mesh:
-				return collider->as<Physics::ColliderType::Mesh>()->getMesh();
-			default:
-				assert(!"Invalid collider type");
-				return nullptr;
+				static std::string emptyString;
+				return emptyString;
 		}
 	}
 
@@ -279,12 +267,12 @@ namespace AGE
 	{
 		if (collider != nullptr)
 		{
-			entity.getScene()->getInstance<Physics::PhysicsInterface>()->getWorld()->destroyCollider(collider);
+			entity->getScene()->getInstance<Physics::PhysicsInterface>()->getWorld()->destroyCollider(collider);
 			collider = nullptr;
 		}
-		if (!entity.haveComponent<RigidBody>())
+		if (!entity->haveComponent<RigidBody>())
 		{
-			entity.removeComponent<Private::PhysicsData>();
+			entity->removeComponent<Private::PhysicsData>();
 		}
 	}
 
@@ -322,4 +310,5 @@ namespace AGE
 	}
 
 #endif
+
 }

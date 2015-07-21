@@ -2,6 +2,7 @@
 
 uniform mat4 projection;
 uniform mat4 model;
+uniform vec2 resolution;
 
 layout (location = 0) in vec2 position;
 

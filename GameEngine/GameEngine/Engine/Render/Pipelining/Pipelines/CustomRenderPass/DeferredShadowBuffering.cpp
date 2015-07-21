@@ -5,10 +5,10 @@
 #include <Render/Textures/Texture2D.hh>
 #include <Render/OpenGLTask/OpenGLState.hh>
 #include <Render/GeometryManagement/Painting/Painter.hh>
-#include <SpacePartitioning/Ouptut/RenderLight.hh>
-#include <SpacePartitioning/Ouptut/RenderPipeline.hh>
-#include <SpacePartitioning/Ouptut/RenderPainter.hh>
-#include <SpacePartitioning/Ouptut/RenderCamera.hh>
+#include <Culling/Ouptut/RenderLight.hh>
+#include <Culling/Ouptut/RenderPipeline.hh>
+#include <Culling/Ouptut/RenderPainter.hh>
+#include <Culling/Ouptut/RenderCamera.hh>
 #include <Render/ProgramResources/Types/Uniform/Mat4.hh>
 #include <Core/ConfigurationManager.hpp>
 #include <Core/Engine.hh>
@@ -67,56 +67,63 @@ namespace AGE
 		OpenGLState::glDepthFunc(GL_LESS);
 
 		_programs[PROGRAM_BUFFERING]->use();
-
-		// handle the number of sample
-		if (_depthBuffers.size() < lights.spotLights.size()) {
-			const std::size_t count = lights.spotLights.size() - _depthBuffers.size();
-			for (std::size_t index = 0; index < count; ++index) {
-				_depthBuffers.push_back(createRenderPassOutput<Texture2D>(_frame_buffer.width(), _frame_buffer.height(), GL_DEPTH24_STENCIL8, true));
-				_depthBuffers.back()->bind();
-				_depthBuffers.back()->parameter(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-				_depthBuffers.back()->parameter(GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-				_depthBuffers.back()->parameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-				_depthBuffers.back()->parameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-				_depthBuffers.back()->parameter(GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
-			}
-		}
-		else if (_depthBuffers.size() > lights.spotLights.size()) {
-			const std::size_t count = _depthBuffers.size() - lights.spotLights.size();
-			for (std::size_t index = 0; index < count; ++index) {
-				_depthBuffers.pop_back();
-			}
-		}
-		// start to render to texture for each depth map
-		auto it = _depthBuffers.begin();
-		for (auto &spotLight : lights.spotLights)
 		{
-			SCOPE_profile_gpu_i("Spotlight pass");
-			SCOPE_profile_cpu_i("RenderTimer", "Spotlight pass");
-
-			glViewport(0, 0, _frame_buffer.width(), _frame_buffer.height());
-			auto projection = glm::perspective(60.f, (float)_frame_buffer.width() / (float)_frame_buffer.height(), 0.1f, 1000.0f);
-			spotLight.shadow_matrix = projection * glm::inverse(spotLight.light.transformation);
-			_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("light_matrix").set(spotLight.shadow_matrix);
-			_frame_buffer.attachment(*(*it), GL_DEPTH_STENCIL_ATTACHMENT);
-			glClear(GL_DEPTH_BUFFER_BIT);
-			// draw for the spot light selected
-			for (auto &meshPaint : spotLight.keys)
-			{
-				SCOPE_profile_gpu_i("Draw mesh");
-				SCOPE_profile_cpu_i("RenderTimer", "Draw mesh");
-
-				auto painter = _painterManager->get_painter(Key<Painter>::createKey(meshPaint.first));
-				for (auto &mode : meshPaint.second.drawables)
-				{
-					if (renderModeCompatible(mode.renderMode))
-					{
-						painter->draw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], mode.properties, mode.vertices);
-					}
+			SCOPE_profile_gpu_i("Creation or resize Shadow map");
+			SCOPE_profile_cpu_i("RenderTimer", "Creation or resize Shadow map");
+			// handle the number of sample
+			if (_depthBuffers.size() < lights.spotLights.size()) {
+				int count = lights.spotLights.size() - _depthBuffers.size();
+				for (int index = 0; index < count; ++index) {
+					_depthBuffers.push_back(createRenderPassOutput<Texture2D>(_frame_buffer.width(), _frame_buffer.height(), GL_DEPTH24_STENCIL8, true));
+					_depthBuffers.back()->bind();
+					_depthBuffers.back()->parameter(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+					_depthBuffers.back()->parameter(GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+					_depthBuffers.back()->parameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+					_depthBuffers.back()->parameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+					_depthBuffers.back()->parameter(GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
 				}
 			}
-			spotLight.shadow_map = *it;
-			++it;
+			else if (_depthBuffers.size() > lights.spotLights.size()) {
+				int count = _depthBuffers.size() - lights.spotLights.size();
+				for (int index = 0; index < count; ++index) {
+					_depthBuffers.pop_back();
+				}
+			}
+		}
+		{
+			SCOPE_profile_gpu_i("Shadow SpotLight");
+			SCOPE_profile_cpu_i("RenderTimer", "Shadow SpotLight");
+			// start to render to texture for each depth map
+			auto it = _depthBuffers.begin();
+			for (auto &spotLight : lights.spotLights)
+			{
+				SCOPE_profile_gpu_i("One Spotlight Shadow");
+				SCOPE_profile_cpu_i("RenderTimer", "One Spotlight Shadow");
+
+				glViewport(0, 0, _frame_buffer.width(), _frame_buffer.height());
+				auto projection = glm::perspective(60.f, (float)_frame_buffer.width() / (float)_frame_buffer.height(), 0.1f, 1000.0f);
+				spotLight.shadow_matrix = projection * glm::inverse(spotLight.light.transformation);
+				_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("light_matrix").set(spotLight.shadow_matrix);
+				_frame_buffer.attachment(*(*it), GL_DEPTH_STENCIL_ATTACHMENT);
+				glClear(GL_DEPTH_BUFFER_BIT);
+				// draw for the spot light selected
+				for (auto &meshPaint : spotLight.keys)
+				{
+					SCOPE_profile_gpu_i("Draw mesh");
+					SCOPE_profile_cpu_i("RenderTimer", "Draw mesh");
+
+					auto painter = _painterManager->get_painter(Key<Painter>::createKey(meshPaint.first));
+					for (auto &mode : meshPaint.second.drawables)
+					{
+						if (renderModeCompatible(mode.renderMode))
+						{
+							painter->draw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], mode.properties, mode.vertices);
+						}
+					}
+				}
+				spotLight.shadow_map = *it;
+				++it;
+			}
 		}
 	}
 

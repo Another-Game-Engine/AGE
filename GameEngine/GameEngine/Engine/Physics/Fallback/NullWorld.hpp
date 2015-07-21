@@ -52,7 +52,7 @@ namespace AGE
 
 			void destroyRigidBody(RigidBodyInterface *rigidBody) override final;
 
-			ColliderInterface *createCollider(ColliderType colliderType, std::shared_ptr<MeshInstance> mesh, Private::GenericData *data) override final;
+			ColliderInterface *createCollider(ColliderType colliderType, const std::string &mesh, Private::GenericData *data) override final;
 
 			void destroyCollider(ColliderInterface *collider) override final;
 
