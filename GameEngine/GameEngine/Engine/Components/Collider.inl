@@ -130,7 +130,10 @@ namespace AGE
 		ar(cereal::make_nvp("Mesh", mesh));
 		setMesh(mesh);
 		ar(cereal::make_nvp("Convex", convex));
-		setAsConvex(convex);
+		if (isConvex())
+			setAsConvex();
+		else
+			setAsConcave();
 	}
 
 	template <typename Archive>

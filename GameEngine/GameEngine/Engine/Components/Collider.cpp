@@ -229,13 +229,27 @@ namespace AGE
 		}
 	}
 
-	void Collider::setAsConvex(bool mustBeConvex)
+	void Collider::setAsConvex(void)
 	{
 		assert(collider != nullptr && "Invalid Collider");
 		switch (getColliderType())
 		{
 			case Physics::ColliderType::Mesh:
-				collider->as<Physics::ColliderType::Mesh>()->setAsConvex(mustBeConvex);
+				collider->as<Physics::ColliderType::Mesh>()->setAsConvex();
+				break;
+			default:
+				assert(!"Invalid collider type");
+				break;
+		}
+	}
+
+	void Collider::setAsConcave(void)
+	{
+		assert(collider != nullptr && "Invalid Collider");
+		switch (getColliderType())
+		{
+			case Physics::ColliderType::Mesh:
+				collider->as<Physics::ColliderType::Mesh>()->setAsConcave();
 				break;
 			default:
 				assert(!"Invalid collider type");

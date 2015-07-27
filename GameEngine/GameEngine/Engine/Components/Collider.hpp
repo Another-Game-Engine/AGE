@@ -86,7 +86,9 @@ namespace AGE
 
 		const std::string &getMesh(void) const;
 
-		void setAsConvex(bool mustBeConvex);
+		void setAsConvex(void);
+
+		void setAsConcave(void);
 
 		bool isConvex(void) const;
 
