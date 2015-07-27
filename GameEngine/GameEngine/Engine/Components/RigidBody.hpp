@@ -11,7 +11,9 @@ namespace AGE
 	class RigidBody final : public ComponentBase
 	{
 		AGE_COMPONENT_UNIQUE_IDENTIFIER("AGE_CORE_RigidBody");
+
 	private:
+		// Friendships
 		friend PhysicsSystem;
 
 	public:
@@ -59,7 +61,7 @@ namespace AGE
 
 		void setMaxAngularVelocity(float maxAngularVelocity);
 
-		double getMaxAngularVelocity(void) const;
+		float getMaxAngularVelocity(void) const;
 
 		void setMaxDepenetrationVelocity(float maxDepenetrationVelocity);
 
@@ -104,28 +106,48 @@ namespace AGE
 		void load(Archive &ar, const std::uint32_t version);
 
 #ifdef EDITOR_ENABLED
-		virtual void editorCreate();
-		virtual void editorDelete();
-		virtual bool editorUpdate();
 
-		struct EditorStruct
+		virtual void editorCreate(void) override final;
+		
+		virtual void editorDelete(void) override final;
+
+		virtual bool editorUpdate(void) override final;
+
+		struct EditorStruct final
 		{
+			// Attributes
 			float angularDrag;
+
 			glm::vec3 angularVelocity;
+
 			glm::vec3 centerOfMass;
+
 			float linearDrag;
+
 			glm::vec3 linearVelocity;
+
 			float mass;
-			glm::vec3 diagonalInertia;
-			double maxAngularVelocity;
+
+			glm::vec3 diagonalInertiaTensor;
+
+			float maxAngularVelocity;
+
 			float maxDepenetrationVelocity;
+
 			bool isAffectedByGravity;
+
 			bool kinematic;
+
 			Physics::CollisionDetectionMode collisionDetectionMode;
+
+			// Methods
 			void copyDatas(RigidBody *ptr);
+
 			void editorUpdate(RigidBody *ptr);
 		};
+
 		std::unique_ptr<EditorStruct> editorStruct;
+
 #endif
 
 	private:

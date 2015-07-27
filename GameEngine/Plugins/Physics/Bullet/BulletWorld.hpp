@@ -36,6 +36,8 @@ namespace AGE
 
 			const btDiscreteDynamicsWorld *getWorld(void) const;
 
+			btCollisionShape *getCollisionShape(const std::string &mesh, bool isConvex);
+
 		private:
 			// Attributes
 			btDefaultCollisionConfiguration collisionConfiguration;
@@ -53,6 +55,8 @@ namespace AGE
 			std::unordered_map<Collider *, std::unordered_map<Collider *, std::size_t>> collisions;
 
 			std::unordered_map<Collider *, std::unordered_map<Collider *, std::size_t>> triggers;
+
+			std::unordered_map<std::string, std::shared_ptr<btCollisionShape>> collisionShapes;
 			
 			// Destructor
 			virtual ~BulletWorld(void);
@@ -85,7 +89,7 @@ namespace AGE
 
 			void destroyRigidBody(RigidBodyInterface *rigidBody) override final;
 
-			ColliderInterface *createCollider(ColliderType colliderType, std::shared_ptr<MeshInstance> mesh, Private::GenericData *data) override final;
+			ColliderInterface *createCollider(ColliderType colliderType, const std::string &mesh, Private::GenericData *data) override final;
 
 			void destroyCollider(ColliderInterface *collider) override final;
 

@@ -17,7 +17,7 @@
 #include <Convertor/MeshLoader.hpp>
 #include <Convertor/MaterialConvertor.hpp>
 #include <Convertor/ImageLoader.hpp>
-#include <Convertor/BulletLoader.hpp>
+#include <Convertor/PhysicsLoader.hpp>
 #include <Convertor/ConvertorStatusManager.hpp>
 
 #include <EditorConfiguration.hpp>
@@ -56,8 +56,8 @@ namespace AGE
 					AGE::SkeletonLoader::load(cookingTask);
 					AGE::AnimationsLoader::load(cookingTask);
 					AGE::MeshLoader::load(cookingTask);
-					AGE::BulletLoader::load(cookingTask);
-					AGE::BulletLoader::save(cookingTask);
+					AGE::PhysicsLoader::load(cookingTask);
+					AGE::PhysicsLoader::save(cookingTask);
 					AGE::MeshLoader::save(cookingTask);
 					AGE::AnimationsLoader::save(cookingTask);
 					AGE::SkeletonLoader::save(cookingTask);
@@ -72,8 +72,8 @@ namespace AGE
 					AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=](){
 						AGE::MeshLoader::load(cookingTask);
 						AGE::MeshLoader::save(cookingTask);
-						AGE::BulletLoader::load(cookingTask);
-						AGE::BulletLoader::save(cookingTask);
+						AGE::PhysicsLoader::load(cookingTask);
+						AGE::PhysicsLoader::save(cookingTask);
 					});
 					AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=](){
 						AGE::SkeletonLoader::load(cookingTask);
@@ -110,8 +110,8 @@ namespace AGE
 			ImGui::Checkbox("Physic", &dataset->loadPhysic);
 			if (dataset->loadPhysic)
 			{
-				ImGui::Checkbox("Dynamic concave", &dataset->dynamicConcave);
-				ImGui::Checkbox("Static concave", &dataset->staticConcave);
+				ImGui::Checkbox("Convex", &dataset->convex);
+				ImGui::Checkbox("Concave", &dataset->concave);
 			}
 			ImGui::Separator();
 

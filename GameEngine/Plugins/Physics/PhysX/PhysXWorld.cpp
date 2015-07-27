@@ -164,7 +164,7 @@ namespace AGE
 			destroy(static_cast<PhysXRigidBody *>(rigidBody));
 		}
 
-		ColliderInterface *PhysXWorld::createCollider(ColliderType colliderType, std::shared_ptr<MeshInstance> mesh, Private::GenericData *data)
+		ColliderInterface *PhysXWorld::createCollider(ColliderType colliderType, const std::string &mesh, Private::GenericData *data)
 		{
 			switch (colliderType)
 			{

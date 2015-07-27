@@ -17,7 +17,7 @@
 #include <Convertor/MeshLoader.hpp>
 #include <Convertor/MaterialConvertor.hpp>
 #include <Convertor/ImageLoader.hpp>
-#include <Convertor/BulletLoader.hpp>
+#include <Convertor/PhysicsLoader.hpp>
 #include <Convertor/ConvertorStatusManager.hpp>
 
 #include <EditorConfiguration.hpp>

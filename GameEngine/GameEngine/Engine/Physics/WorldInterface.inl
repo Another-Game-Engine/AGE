@@ -11,6 +11,7 @@
 #include "MaterialInterface.hpp"
 #include "ColliderInterface.hpp"
 #include "RaycasterInterface.hpp"
+#include "../AssetManagement/AssetManager.hh"
 
 namespace AGE
 {
@@ -71,18 +72,30 @@ namespace AGE
 		}
 
 		// Methods
-		inline bool WorldInterface::initialize(const std::string &assetDirectory)
+		inline bool WorldInterface::initialize(AssetsManager *assetManager)
 		{
-			loadMaterials(assetDirectory);
+			this->assetManager = assetManager;
+			loadMaterials();
 			raycaster = createRaycaster();
 			assert(raycaster != nullptr && "Impossible to create raycaster");
 			return raycaster != nullptr;
 		}
 
-		inline void WorldInterface::finalize(const std::string &assetDirectory)
+		inline void WorldInterface::finalize(AssetsManager *assetManager)
 		{
-			saveMaterials(assetDirectory);
+			this->assetManager = assetManager;
+			saveMaterials();
 			destroyRaycaster();
+		}
+
+		inline AssetsManager *WorldInterface::getAssetManager(void)
+		{
+			return assetManager;
+		}
+
+		inline const AssetsManager *WorldInterface::getAssetManager(void) const
+		{
+			return assetManager;
 		}
 
 		inline PhysicsInterface *WorldInterface::getPhysics(void)
@@ -216,9 +229,9 @@ namespace AGE
 			disableCollisionBetweenGroups(getFilterGroupForFilterName(group1), getFilterGroupForFilterName(group2));
 		}
 
-		inline void WorldInterface::saveMaterials(const std::string &assetDirectory)
+		inline void WorldInterface::saveMaterials(void)
 		{
-			const std::string path = assetDirectory + GetMaterialsFileName();
+			const std::string path = assetManager->getAssetsDirectory() + GetMaterialsFileName();
 			std::ofstream stream(path.c_str(), std::ios::binary);
 			assert(stream.is_open() && "Impossible to open stream");
 			if (!stream.is_open())
@@ -241,9 +254,9 @@ namespace AGE
 			}
 		}
 
-		inline void WorldInterface::loadMaterials(const std::string &assetDirectory)
+		inline void WorldInterface::loadMaterials(void)
 		{
-			const std::string path = assetDirectory + GetMaterialsFileName();
+			const std::string path = assetManager->getAssetsDirectory() + GetMaterialsFileName();
 			std::ifstream stream(path.c_str(), std::ios::binary);
 			if (!stream.is_open())
 			{

@@ -87,7 +87,7 @@ namespace AGE
 
 			virtual void setMaxAngularVelocity(float maxAngularVelocity) = 0;
 
-			virtual double getMaxAngularVelocity(void) const = 0;
+			virtual float getMaxAngularVelocity(void) const = 0;
 
 			virtual void setMaxDepenetrationVelocity(float maxDepenetrationVelocity) = 0;
 

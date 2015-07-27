@@ -101,6 +101,8 @@
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(SolutionDir)GameEngine/Engine;$(SolutionDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_MBCS;EDITOR_ENABLED;AGE_ENABLE_PROFILING;AGE_ENABLE_IMGUI;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -126,6 +128,7 @@
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
       <PreprocessorDefinitions>_MBCS;EDITOR_ENABLED;AGE_ENABLE_PROFILING;AGE_ENABLE_IMGUI;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -200,11 +203,6 @@
     <ClCompile Include="Systems\RotationSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GameEngine\GameEngine.vcxproj">
-      <Project>{e24d022c-e33b-47a1-bbb4-33666c76dda9}</Project>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="..\GameEngine\Engine\Physics\ContactType.hpp" />
     <ClInclude Include="Components\Lifetime.hpp" />
     <ClInclude Include="Components\lifetimeComponent.hh" />
@@ -214,6 +212,17 @@
     <ClInclude Include="Scenes\BenchmarkScene.hpp" />
     <ClInclude Include="Systems\LifetimeSystem.hpp" />
     <ClInclude Include="Systems\RotationSystem.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GameEngine\GameEngine.vcxproj">
+      <Project>{e24d022c-e33b-47a1-bbb4-33666c76dda9}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Plugins\Physics\Bullet\Bullet.vcxproj">
+      <Project>{c3490639-bced-4a06-9d1b-5c3bb25da5a7}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Plugins\Physics\PhysX\PhysX.vcxproj">
+      <Project>{fae1c65e-9000-4902-ae4f-c5786810b9fd}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

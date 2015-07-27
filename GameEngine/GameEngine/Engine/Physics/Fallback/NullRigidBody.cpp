@@ -99,7 +99,7 @@ namespace AGE
 			this->maxAngularVelocity = maxAngularVelocity;
 		}
 
-		double NullRigidBody::getMaxAngularVelocity(void) const
+		float NullRigidBody::getMaxAngularVelocity(void) const
 		{
 			return maxAngularVelocity;
 		}
