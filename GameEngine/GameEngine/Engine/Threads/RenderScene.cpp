@@ -12,10 +12,10 @@
 #include <Culling/Cullable/Object/Camera.hh>
 #include <Culling/Cullable/Object/PointLight.hh>
 #include <Culling/Cullable/Object/Mesh.hh>
-#include <Culling/Ouptut/RenderCamera.hh>
-#include <Culling/Ouptut/RenderLight.hh>
-#include <Culling/Ouptut/RenderPainter.hh>
-#include <Culling/Ouptut/RenderPipeline.hh>
+#include <Culling/Output/RenderCamera.hh>
+#include <Culling/Output/RenderLight.hh>
+#include <Culling/Output/RenderPainter.hh>
+#include <Culling/Output/RenderPipeline.hh>
 #include <Threads/RenderThread.hpp>
 #include <Utils/Debug.hpp>
 #include <Core/Link.hpp>

@@ -3,7 +3,7 @@
 #include <vector>
 #include <Render/Textures/Texture2D.hh>
 #include <Culling/Cullable/Object/PointLight.hh>
-#include <Culling/Ouptut/RenderPainter.hh>
+#include <Culling/Output/RenderPainter.hh>
 #include <glm/glm.hpp>
 
 namespace AGE
