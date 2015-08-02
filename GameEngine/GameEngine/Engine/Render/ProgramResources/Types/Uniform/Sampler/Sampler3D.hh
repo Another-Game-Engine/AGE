@@ -5,7 +5,7 @@
 
 namespace AGE
 {
-	class Texture3D;
+	class TextureCubeMap;
 
 	class Sampler3D : public AProgramResources
 	{
@@ -14,7 +14,7 @@ namespace AGE
 		Sampler3D(Sampler3D &&move);
 		Sampler3D(Sampler3D const &copy);
 		Sampler3D &operator=(Sampler3D const &copy) = delete;
-		Sampler3D &operator=(std::shared_ptr<Texture3D> const &texture);
+		Sampler3D &operator=(std::shared_ptr<TextureCubeMap> const &texture);
 
 	public:
 		virtual IProgramResources & update() override final;
@@ -23,9 +23,9 @@ namespace AGE
 		virtual size_t size() const override final;
 
 	public:
-		typedef Texture3D * type_t;
+		typedef TextureCubeMap * type_t;
 
 	private:
-		std::shared_ptr<Texture3D> _texture;
+		std::shared_ptr<TextureCubeMap> _texture;
 	};
 }

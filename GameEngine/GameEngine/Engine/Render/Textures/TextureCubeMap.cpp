@@ -1,15 +1,15 @@
-#include <Render/Textures/Texture3D.hh>
+#include <Render/Textures/TextureCubeMap.hh>
 #include <glm/glm.hpp>
 
 namespace AGE
 {
-	Texture3D::Texture3D() :
+	TextureCubeMap::TextureCubeMap() :
 		ATexture(),
 		_referenceTexture(GL_TEXTURE_CUBE_MAP_NEGATIVE_X)
 	{
 	}
 
-	bool Texture3D::init(GLint width, GLint height, GLenum internal_format, bool is_mip_mapping)
+	bool TextureCubeMap::init(GLint width, GLint height, GLenum internal_format, bool is_mip_mapping)
 	{
 		auto nbr_mip_mapping = is_mip_mapping ? (uint8_t(glm::floor(glm::log2(glm::max(float(width), float(height))) + 1))) : 1;
 		if (!ATexture::init(width, height, internal_format, nbr_mip_mapping)) {
@@ -25,55 +25,61 @@ namespace AGE
 		return true;
 	}
 
-	Texture3D::Texture3D(Texture3D &&move) :
+	TextureCubeMap::TextureCubeMap(TextureCubeMap &&move) :
 		ATexture(std::move(move))
 	{
 
 	}
 
-	GLenum Texture3D::type() const
+	GLenum TextureCubeMap::type() const
 	{
 		return (GL_TEXTURE_CUBE_MAP);
 	}
 
-	ITexture const & Texture3D::bind() const
+	ITexture const & TextureCubeMap::bind() const
 	{
 		glBindTexture(GL_TEXTURE_CUBE_MAP, _id);
 		return (*this);
 	}
 
-	ITexture const & Texture3D::unbind() const
+	ITexture const & TextureCubeMap::unbind() const
 	{
 		glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
 		return (*this);
 	}
 
-	Texture3D & Texture3D::set(GLenum index, std::vector<uint8_t> const &data, GLint level, GLenum format, GLenum type)
+	TextureCubeMap & TextureCubeMap::set(GLenum index, GLvoid const *data, GLint level, GLsizei width, GLsizei height, GLenum format, GLenum type)
 	{
-		glTexSubImage2D(index, level, 0, 0, _width, _height, format, type, (GLvoid const *)data.data());
+		glTexSubImage2D(index, level, 0, 0, width, height, format, type, data);
 		return (*this);
 	}
 
-	ITexture const &Texture3D::parameter(GLenum mode, GLint param) const
+	TextureCubeMap & TextureCubeMap::setCompressed(GLenum index, GLvoid const *data, GLint level, GLsizei width, GLsizei height, GLenum format, GLsizei imageSize)
+	{
+		glCompressedTexSubImage2D(index, level, 0, 0, width, height, format, imageSize, data);
+		return (*this);
+	}
+
+	ITexture const &TextureCubeMap::parameter(GLenum mode, GLint param) const
 	{
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, mode, param);
 		return (*this);
 	}
 
-	Texture3D &Texture3D::referencedAttachmentFace(GLenum mode)
+	TextureCubeMap &TextureCubeMap::referencedAttachmentFace(GLenum mode)
 	{
 		_referenceTexture = mode;
 		return *this;
 	}
 
-	IFramebufferStorage const & Texture3D::attachment(Framebuffer const &framebuffer, GLenum attach) const
+	IFramebufferStorage const & TextureCubeMap::attachment(Framebuffer const &framebuffer, GLenum attach) const
 	{
 		bind();
 		glFramebufferTexture2D(framebuffer.type(), attach, _referenceTexture, _id, 0);
 		return (*this);
 	}
 
-	void Texture3D::generateMipmaps() const
+	void TextureCubeMap::generateMipmaps() const
 	{
 		glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
 	}

@@ -47,9 +47,9 @@ namespace AGE
 
 				//AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=](){
 				AGE::MaterialLoader::load(cookingTask);
-				AGE::MaterialLoader::save(cookingTask);
 				AGE::ImageLoader::load(cookingTask);
 				AGE::ImageLoader::save(cookingTask);
+				AGE::MaterialLoader::save(cookingTask);
 				//});
 				if ((cookingTask->dataSet->loadMesh || cookingTask->dataSet->loadAnimations) && cookingTask->dataSet->loadSkeleton)
 				{
@@ -118,10 +118,14 @@ namespace AGE
 			ImGui::Checkbox("Material", &dataset->loadMaterials);
 			if (dataset->loadMaterials)
 			{
-				ImGui::Checkbox("Generate normal map from bump", &dataset->bumpToNormal);
-				if (dataset->bumpToNormal)
+				ImGui::Checkbox("Use bump map as normal map", &dataset->useBumpAsNormal);
+				if (dataset->useBumpAsNormal)
 				{
-					ImGui::SliderFloat("Normal strength", &dataset->normalStrength, 1.0f, 10.0f);
+					ImGui::Checkbox("Generate normal map from bump", &dataset->bumpToNormal);
+					if (dataset->bumpToNormal)
+					{
+						ImGui::SliderFloat("Normal strength", &dataset->normalStrength, 1.0f, 150.0f);
+					}
 				}
 			}
 			ImGui::Separator();
@@ -141,12 +145,9 @@ namespace AGE
 			ImGui::Checkbox("Textures", &dataset->loadTextures);
 			if (dataset->loadTextures)
 			{
+				ImGui::Checkbox("Compress normal map", &dataset->compressNormalMap);
 				ImGui::Checkbox("Compress textures", &dataset->compressTextures);
-				if (dataset->compressTextures)
-				{
-					ImGui::SliderInt("Compression quality", &dataset->textureCompressionQuality, 0, 4);
-					ImGui::Checkbox("Generate mipmaps", &dataset->generateMipmap);
-				}
+				ImGui::Checkbox("Generate mipmaps", &dataset->generateMipmap);
 			}
 		}
 	

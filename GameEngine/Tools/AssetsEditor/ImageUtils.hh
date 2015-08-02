@@ -1,51 +1,32 @@
 #pragma once
 
+#define USE_MICROSOFT_LIB 1
+
 #include <AssetManagement/Data/TextureData.hh>
 
 #include <cstdint>
 #include <FreeImagePlus.h>
+#if USE_MICROSOFT_LIB
+#include <DirectXTex/DirectXTex/DirectXTex.h>
+#else
 #include <crunch/inc/crnlib.h>
+#include <DirectXTex/DirectXTex/DDS.h>
+#endif
 
 namespace AGE
 {
 	class ImageUtils
 	{
 	public:
-		struct DDS_PIXELFORMAT
-		{
-			uint32_t dwSize;
-			uint32_t dwFlags;
-			uint32_t dwFourCC;
-			uint32_t dwRGBBitCount;
-			uint32_t dwRBitMask;
-			uint32_t dwGBitMask;
-			uint32_t dwBBitMask;
-			uint32_t dwABitMask;
-		};
-
-		struct DDS_HEADER
-		{
-			uint32_t		magicNbr;
-			uint32_t        dwSize;
-			uint32_t        dwFlags;
-			uint32_t        dwHeight;
-			uint32_t        dwWidth;
-			uint32_t        dwPitchOrLinearSize;
-			uint32_t        dwDepth;
-			uint32_t        dwMipMapCount;
-			uint32_t        dwReserved1[11];
-			DDS_PIXELFORMAT	ddspf;
-			uint32_t        dwCaps;
-			uint32_t        dwCaps2;
-			uint32_t        dwCaps3;
-			uint32_t        dwCaps4;
-			uint32_t        dwReserved2;
-		};
-
+#if USE_MICROSOFT_LIB
+		static DXGI_FORMAT getCompressionFormat(DXGI_FORMAT current);
+		static DirectX::ScratchImage *loadFromFile(std::string const &path);
+#else
 		static void convertBumpToNormal(fipImage &toConvert, float strength = 2.0f);
 		static void switchRedBlue(fipImage &image);
-		static uint8_t *compressImage(fipImage &image, bool generateMipmaps, int compressionQuality,
-			std::shared_ptr<TextureData> const &infos, uint32_t &compressedSize);
+		static char *compressImage(fipImage &image, bool generateMipmaps, int compressionQuality, size_t &compressedSize);
+		static char *getDDSUncompressed(fipImage &image, size_t &dataSize);
+#endif
 
 	private:
 		ImageUtils();
