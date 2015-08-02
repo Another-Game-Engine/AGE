@@ -37,6 +37,7 @@ namespace AGE
 		std::chrono::system_clock::time_point workStart;
 		std::chrono::system_clock::time_point workEnd;
 		std::size_t workCount = 0;
+		std::size_t waitCount = 0;
 
 		workStart = std::chrono::high_resolution_clock::now();
 
@@ -44,20 +45,20 @@ namespace AGE
 		{
 			return false;
 		}
-		workEnd = std::chrono::high_resolution_clock::now();
-		workCount += std::chrono::duration_cast<std::chrono::microseconds>(workEnd - workStart).count();
 
 		{
-			SCOPE_profile_cpu_i("MainThread", "Release commands");
-			waitStart = std::chrono::high_resolution_clock::now();
+			SCOPE_profile_cpu_i("MainThread", "Execute tasks");
 			{
 				TMQ::MessageBase *task = nullptr;
 				do {
-					getQueue()->tryToGetTask(task, 10);
+					waitStart = std::chrono::high_resolution_clock::now();
+					getQueue()->tryToGetTask(task, 0);
+					waitEnd = std::chrono::high_resolution_clock::now();
+					waitCount += std::chrono::duration_cast<std::chrono::microseconds>(waitEnd - waitStart).count();
+
 					if (task)
 					{
-						SCOPE_profile_cpu_i("MainThread", "Execute tasks");
-						workStart = std::chrono::high_resolution_clock::now();
+						SCOPE_profile_cpu_i("MainThread", "Execute task");
 						auto result = execute(task);
 						assert(result); // we receive a task that we cannot handle
 					}
@@ -66,11 +67,12 @@ namespace AGE
 		}
 
 		workEnd = std::chrono::high_resolution_clock::now();
-		workCount += std::chrono::duration_cast<std::chrono::microseconds>(workEnd - workStart).count();
+		workCount = std::chrono::duration_cast<std::chrono::microseconds>(workEnd - workStart).count();
+		workCount -= waitCount;
 
 		GetThreadManager()->updateThreadStatistics(this->_id
 			, workCount
-			, std::chrono::duration_cast<std::chrono::microseconds>(waitEnd - waitStart).count());
+			, waitCount);
 
 		return true;
 	}
