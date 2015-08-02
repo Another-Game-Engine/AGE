@@ -9,16 +9,17 @@
 namespace AGE
 {
 
-	class Texture3D : public ATexture, public AFramebufferStorage
+	class TextureCubeMap : public ATexture, public AFramebufferStorage
 	{
 	public:
-		Texture3D();
+		TextureCubeMap();
 		virtual bool init(GLint weight, GLint height, GLenum internal_format, bool is_mip_mapping);
-		Texture3D(Texture3D &&move);
+		TextureCubeMap(TextureCubeMap &&move);
 
 	public:
-		Texture3D &set(GLenum index, std::vector<uint8_t> const &data, GLint level, GLenum format, GLenum type);
-		Texture3D &referencedAttachmentFace(GLenum mode);
+		TextureCubeMap &set(GLenum index, GLvoid const *data, GLint level, GLsizei width, GLsizei height, GLenum format, GLenum type);
+		TextureCubeMap &setCompressed(GLenum index, GLvoid const *data, GLint level, GLsizei width, GLsizei height, GLenum format, GLsizei imageSize);
+		TextureCubeMap &referencedAttachmentFace(GLenum mode);
 
 	public:
 		virtual GLenum type() const override final;

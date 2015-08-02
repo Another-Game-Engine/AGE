@@ -62,18 +62,19 @@ namespace AGE
 		bool biTangents = true;
 
 		//Physic Options
-		bool staticConcave = true;
-		bool dynamicConcave = true;
+		bool convex = true;
+		bool concave = true;
 
 		// Textures options
-		bool compressTextures = false;
-		int textureCompressionQuality = 2;
+		bool compressTextures = true;
+		bool compressNormalMap = false;
 		bool generateMipmap = true;
 		bool flipH = false;
 		bool flipV = false;
 
 		// Material options
-		bool bumpToNormal = true;
-		float normalStrength = 2;
+		bool useBumpAsNormal = false;
+		bool bumpToNormal = false;
+		float normalStrength = 70.0f;
 	};
 }

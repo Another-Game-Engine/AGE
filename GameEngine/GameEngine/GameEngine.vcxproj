@@ -139,6 +139,7 @@
       <TreatWarningAsError>false</TreatWarningAsError>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -308,7 +309,7 @@
     <ClCompile Include="Engine\Render\ProgramResources\Types\Uniform\Mat4Array255.cpp" />
     <ClCompile Include="Engine\Render\Properties\Properties.cpp" />
     <ClCompile Include="Engine\Render\PropertyManager.cpp" />
-    <ClCompile Include="Engine\Render\Textures\Texture3D.cpp" />
+    <ClCompile Include="Engine\Render\Textures\TextureCubeMap.cpp" />
     <ClCompile Include="Engine\Systems\CollisionSystem.cpp" />
     <ClCompile Include="Engine\Systems\DebugSystem.cpp" />
     <ClCompile Include="Engine\Systems\FreeFlyCamera.cpp" />
@@ -444,6 +445,7 @@
     <ClCompile Include="Engine\Components\FreeFlyComponent.cpp" />
     <ClCompile Include="Engine\WorldEditorGlobal.cpp" />
     <ClCompile Include="Engine\Render\OpenGLTask\OpenGLState.cpp" />
+    <ClCompile Include="Engine\AssetManagement\OpenGLDDSLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -549,7 +551,7 @@
     <ClInclude Include="Engine\Render\Properties\Materials\Specular.hh" />
     <ClInclude Include="Engine\Render\ProgramResources\Types\Uniform\Mat4Array255.hh" />
     <ClInclude Include="Engine\Render\Properties\Properties.hh" />
-    <ClInclude Include="Engine\Render\Textures\Texture3D.hh" />
+    <ClInclude Include="Engine\Render\Textures\TextureCubeMap.hh" />
     <ClInclude Include="Engine\Systems\CollisionSystem.hpp" />
     <ClInclude Include="Engine\Systems\DebugSystem.hpp" />
     <ClInclude Include="Engine\Systems\FreeFlyCamera.hh" />
@@ -567,10 +569,10 @@
     <ClInclude Include="Engine\Culling\Cullable\Object\Camera.hh" />
     <ClInclude Include="Engine\Culling\Cullable\Object\Mesh.hh" />
     <ClInclude Include="Engine\Culling\Cullable\Object\PointLight.hh" />
-    <ClInclude Include="Engine\Culling\Ouptut\RenderCamera.hh" />
-    <ClInclude Include="Engine\Culling\Ouptut\RenderLight.hh" />
-    <ClInclude Include="Engine\Culling\Ouptut\RenderPainter.hh" />
-    <ClInclude Include="Engine\Culling\Ouptut\RenderPipeline.hh" />
+    <ClInclude Include="Engine\Culling\Output\RenderCamera.hh" />
+    <ClInclude Include="Engine\Culling\Output\RenderLight.hh" />
+    <ClInclude Include="Engine\Culling\Output\RenderPainter.hh" />
+    <ClInclude Include="Engine\Culling\Output\RenderPipeline.hh" />
     <ClInclude Include="Engine\Data\Material\MaterialData.hh" />
     <ClInclude Include="Engine\Data\TextureData.hh" />
     <ClInclude Include="Engine\Render\GeometryManagement\Buffer\Buffer.hh" />
@@ -769,6 +771,7 @@
     <ClInclude Include="Engine\Components\FreeFlyComponent.hh" />
     <ClInclude Include="Engine\WorldEditorGlobal.hpp" />
     <ClInclude Include="Engine\Render\OpenGLTask\OpenGLState.hh" />
+    <ClInclude Include="Engine\AssetManagement\OpenGLDDSLoader.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Collider.inl" />

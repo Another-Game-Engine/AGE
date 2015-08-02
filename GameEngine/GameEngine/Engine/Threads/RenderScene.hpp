@@ -9,7 +9,7 @@
 #include <Entities/EntityTypedef.hpp>
 #include <SpacePartitioning/Octree/LooseOctree.hh>
 #include <Culling/Cullable/Object/Mesh.hh>
-#include <Culling/Ouptut/RenderCamera.hh>
+#include <Culling/Output/RenderCamera.hh>
 #include <array>
 #include <Configuration.hpp>
 

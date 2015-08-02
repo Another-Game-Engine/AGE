@@ -102,6 +102,9 @@
     <ClCompile Include="Scenes\MainMenuScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Convertor\PhysicsLoader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Convertor\AssimpLoader.hpp">
@@ -126,9 +129,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Scenes\AssetsEditorScene.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Convertor\BulletLoader.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Scenes\SceneSelectorScene.hpp">
@@ -219,6 +219,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Scenes\IMenuInheritrance.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Convertor\PhysicsLoader.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

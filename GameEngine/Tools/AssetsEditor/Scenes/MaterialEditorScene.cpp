@@ -12,7 +12,7 @@
 
 namespace AGE
 {
-	static const char const *_nameTexture[ModeTexture::size] = {
+	static const char *_nameTexture[ModeTexture::size] = {
 		"ambient texture",
 		"diffuse texture",
 		"emissive texture",
@@ -75,7 +75,7 @@ namespace AGE
 		for (auto index = 0; index < materialFullPath.size(); ++index) {
 			matListBox[index] = materialGettable[index].c_str();
 		}
-		ImGui::ListBox("List of material existing", &_indexMaterial, matListBox, materialFullPath.size());
+		ImGui::ListBox("List of material existing", &_indexMaterial, matListBox, static_cast<int>(materialFullPath.size()));
 		delete[] matListBox;
 		if (_indexMaterial != -1 && ImGui::Button("open a material"))
 		{
@@ -164,7 +164,7 @@ namespace AGE
 		char const **matListBox = new char const *[_current.collection.size()];
 		for (auto index = 0; index < _current.collection.size(); ++index)
 			matListBox[index] = subMaterials[index].c_str();
-		ImGui::ListBox("List of sub material", &_indexSubMaterial, matListBox, _current.collection.size());
+		ImGui::ListBox("List of sub material", &_indexSubMaterial, matListBox, static_cast<int>(_current.collection.size()));
 		delete[] matListBox;
 		if (_indexSubMaterial != -1 && ImGui::Button("open a sub material"))
 			_mode = ModeMaterialEditor::edit;
