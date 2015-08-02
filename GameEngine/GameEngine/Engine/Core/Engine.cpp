@@ -336,6 +336,8 @@ namespace AGE
 		{
 			_renderFpsStatitstics();
 		}
+		if (GetRenderThread()->haveRenderFrameTask())
+		{
 #ifdef AGE_ENABLE_IMGUI
 		{
 			SCOPE_profile_cpu_i("ImGui", "Render");
@@ -344,6 +346,7 @@ namespace AGE
 #endif
 		GetRenderThread()->getQueue()->emplaceCommand<Commands::ToRender::Flush>();
 		++frame;
+		}
 		return true;
 	}
 

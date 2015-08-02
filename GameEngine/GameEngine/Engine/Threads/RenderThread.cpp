@@ -241,7 +241,6 @@ namespace AGE
 						std::lock_guard<AGE::SpinLock> lock(_mutex);
 
 						cameraDrawableList = _cameraDrawableList;
-						_cameraDrawableList = nullptr;
 
 						imguiRenderList = _imguiRenderlist;
 
