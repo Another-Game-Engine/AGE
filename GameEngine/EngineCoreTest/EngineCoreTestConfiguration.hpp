@@ -66,7 +66,7 @@ namespace AGE
 				}
 				else
 				{
-					std::ifstream file("EngineCoreTestConfiguration.json", std::ios::binary);
+					std::ifstream file("EngineCoreTestConfiguration.json");
 					assert(file.is_open());
 					
 					// if file is empty
@@ -192,7 +192,7 @@ namespace AGE
 				_configurations->_lastSceneOpened = _configurations->_scenesNames[_configurations->_selectedScene];
 			}
 
-			std::ofstream file("EngineCoreTestConfiguration.json", std::ios::binary);
+			std::ofstream file("EngineCoreTestConfiguration.json");
 			assert(file.is_open());
 			{
 				auto ar = cereal::JSONOutputArchive(file);

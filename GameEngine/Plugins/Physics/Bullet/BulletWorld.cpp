@@ -1,5 +1,7 @@
 #include <cassert>
 
+#include <Serialize/BulletWorldImporter/btBulletWorldImporter.h>
+
 #include "BulletWorld.hpp"
 #include "BulletRigidBody.hpp"
 #include "BulletMaterial.hpp"
@@ -33,6 +35,36 @@ namespace AGE
 		}
 
 		// Methods
+		btCollisionShape *BulletWorld::getCollisionShape(const std::string &mesh, bool isConvex)
+		{
+			const std::string path = getAssetManager()->getAssetsDirectory() + mesh + "_bullet" + (isConvex ? "_convex" : "_concave") + ".phage";
+			auto found = collisionShapes.find(path);
+			if (found != collisionShapes.end())
+			{
+				return found->second.get();
+			}
+			OldFile filePath(path);
+			if (!filePath.exists())
+			{
+				std::cerr << "Bullet file not found." << std::endl;
+				return nullptr;
+			}
+			btBulletWorldImporter importer(getWorld());
+			if (!importer.loadFile(path.c_str()))
+			{
+				std::cerr << "Bullet importer cannot open file." << std::endl;
+				return nullptr;
+			}
+			if (importer.getNumCollisionShapes() <= 0)
+			{
+				std::cerr << "Bullet file is invalid. No collision shape inside." << std::endl;
+				return nullptr;
+			}
+			std::shared_ptr<btCollisionShape> shape(importer.getCollisionShapeByIndex(0));
+			collisionShapes.emplace(std::make_pair(path, shape));
+			return shape.get();
+		}
+
 		btDiscreteDynamicsWorld *BulletWorld::getWorld(void)
 		{
 			return &world;
@@ -208,7 +240,7 @@ namespace AGE
 			destroy(static_cast<BulletRigidBody *>(rigidBody));
 		}
 
-		ColliderInterface *BulletWorld::createCollider(ColliderType colliderType, std::shared_ptr<MeshInstance> mesh, Private::GenericData *data)
+		ColliderInterface *BulletWorld::createCollider(ColliderType colliderType, const std::string &mesh, Private::GenericData *data)
 		{
 			switch (colliderType)
 			{

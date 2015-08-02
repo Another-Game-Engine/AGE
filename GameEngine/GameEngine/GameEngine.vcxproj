@@ -139,6 +139,7 @@
       <TreatWarningAsError>false</TreatWarningAsError>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

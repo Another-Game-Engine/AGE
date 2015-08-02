@@ -10,14 +10,14 @@ namespace AGE
 	namespace Physics
 	{
 		// Methods
-		inline bool PhysicsInterface::startup(const std::string &assetDirectory)
+		inline bool PhysicsInterface::startup(AssetsManager *assetManager)
 		{
 			if (initialize())
 			{
 				assert(world == nullptr && "World already created");
 				world = createWorld();
 				assert(world != nullptr && "Impossible to create world");
-				return world->initialize(assetDirectory);
+				return world->initialize(assetManager);
 			}
 			else
 			{
@@ -25,11 +25,11 @@ namespace AGE
 			}
 		}
 
-		inline void PhysicsInterface::shutdown(const std::string &assetDirectory)
+		inline void PhysicsInterface::shutdown(AssetsManager *assetManager)
 		{
 			if (world != nullptr)
 			{
-				world->finalize(assetDirectory);
+				world->finalize(assetManager);
 				destroyWorld();
 			}
 			finalize();

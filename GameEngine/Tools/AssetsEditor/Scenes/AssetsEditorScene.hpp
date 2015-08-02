@@ -30,8 +30,8 @@ namespace AGE
 
 		static std::vector<const char *> &getCookedMeshsList() { return _cookedMeshFiles; }
 		static std::vector<const char *> &getCookedMeshsListFullPath() { return _cookedMeshsFullPath; }
-		static std::vector<const char *> &getCookedBulletList() { return _cookedBulletFiles; }
-		static std::vector<const char *> &getCookedBulletListFullPath() { return _cookedBulletFullPath; }
+		static std::vector<const char *> &getCookedPhysicsList() { return _cookedPhysicsFiles; }
+		static std::vector<const char *> &getCookedPhysicsListFullPath() { return _cookedPhysicsFullPath; }
 		static std::vector<const char *> &getCookedMaterialList() { return _cookedMaterialFiles; }
 		static std::vector<const char *> &getCookedMaterialListFullPath() { return _cookedMaterialFullPath; }
 		static std::vector<const char *> &getCookedTextureList() { return _cookedTextureFiles; }
@@ -57,8 +57,8 @@ namespace AGE
 		static std::vector<const char *> _cookedMeshsFullPath;
 		static std::vector<const char *> _cookedMeshFiles;
 
-		static std::vector<const char *> _cookedBulletFullPath;
-		static std::vector<const char *> _cookedBulletFiles;
+		static std::vector<const char *> _cookedPhysicsFullPath;
+		static std::vector<const char *> _cookedPhysicsFiles;
 
 		static std::vector<const char *> _cookedMaterialFullPath;
 		static std::vector<const char *> _cookedMaterialFiles;

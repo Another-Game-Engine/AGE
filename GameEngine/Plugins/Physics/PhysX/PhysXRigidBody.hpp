@@ -59,7 +59,7 @@ namespace AGE
 
 			void setMaxAngularVelocity(float maxAngularVelocity) override final;
 
-			double getMaxAngularVelocity(void) const override final;
+			float getMaxAngularVelocity(void) const override final;
 
 			void setMaxDepenetrationVelocity(float maxDepenetrationVelocity) override final;
 

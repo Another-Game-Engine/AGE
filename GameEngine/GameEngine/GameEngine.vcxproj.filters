@@ -252,8 +252,12 @@
     <ClCompile Include="Engine\BFC\BFCBlockManager.cpp" />
     <ClCompile Include="Engine\BFC\BFCBlockManagerFactory.cpp" />
     <ClCompile Include="Engine\BFC\BFCLink.cpp" />
+<<<<<<< HEAD
     <ClCompile Include="Engine\Render\Textures\TextureCubeMap.cpp" />
     <ClCompile Include="Engine\AssetManagement\OpenGLDDSLoader.cpp" />
+=======
+    <ClCompile Include="Engine\Render\ProgramResources\Types\Uniform\Vec2.cpp" />
+>>>>>>> 5a49d7f5e605134aa2327ee2b29445169bf65ac0
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
@@ -659,8 +663,12 @@
     <ClInclude Include="Engine\BFC\BFCItemID.hpp" />
     <ClInclude Include="Engine\BFC\BFCLink.hpp" />
     <ClInclude Include="Engine\BFC\BFCBlockManagerFactory.hpp" />
+<<<<<<< HEAD
     <ClInclude Include="Engine\Render\Textures\TextureCubeMap.hh" />
     <ClInclude Include="Engine\AssetManagement\OpenGLDDSLoader.hh" />
+=======
+    <ClInclude Include="Engine\Render\ProgramResources\Types\Uniform\Vec2.hh" />
+>>>>>>> 5a49d7f5e605134aa2327ee2b29445169bf65ac0
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Components\Collider.inl" />

@@ -19,14 +19,14 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -59,6 +59,8 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;_LIB;EDITOR_ENABLED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>false</SDLCheck>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -81,6 +83,8 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;_LIB;EDITOR_ENABLED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -110,6 +114,7 @@
     <ClCompile Include="Components\EntityRepresentation.cpp" />
     <ClCompile Include="Convertor\ConvertorStatusManager.cpp" />
     <ClCompile Include="Convertor\MeshLoader.cpp" />
+    <ClCompile Include="Convertor\PhysicsLoader.cpp" />
     <ClCompile Include="EditorConfiguration.cpp" />
     <ClCompile Include="Entities\EntityReadablePacker.cpp" />
     <ClCompile Include="Entities\ReadableEntity.cpp" />
@@ -141,7 +146,7 @@
     <ClInclude Include="Convertor\AnimationsLoader.hpp" />
     <ClInclude Include="Convertor\AssetDataSet.hpp" />
     <ClInclude Include="Convertor\AssimpLoader.hpp" />
-    <ClInclude Include="Convertor\BulletLoader.hpp" />
+    <ClInclude Include="Convertor\PhysicsLoader.hpp" />
     <ClInclude Include="Convertor\CookingTask.hpp" />
     <ClInclude Include="Convertor\ImageLoader.hpp" />
     <ClInclude Include="Convertor\MaterialConvertor.hpp" />
@@ -181,6 +186,17 @@
   <ItemGroup>
     <Image Include="app-icon.ico" />
     <Image Include="icon1.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\GameEngine\GameEngine.vcxproj">
+      <Project>{e24d022c-e33b-47a1-bbb4-33666c76dda9}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Plugins\Physics\Bullet\Bullet.vcxproj">
+      <Project>{c3490639-bced-4a06-9d1b-5c3bb25da5a7}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Plugins\Physics\PhysX\PhysX.vcxproj">
+      <Project>{fae1c65e-9000-4902-ae4f-c5786810b9fd}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -28,7 +28,7 @@
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
@@ -41,7 +41,7 @@
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
@@ -71,7 +71,10 @@
     <TargetName>Physics_$(ProjectName)_x64_d</TargetName>
     <IntDir>$(ProjectDir)Dependencies\$(Platform)\$(Configuration)\</IntDir>
     <OutDir>$(ProjectDir)Binaries\$(Platform)\$(Configuration)\</OutDir>
-    <IncludePath>$(SolutionDir)Vendors/OpenGL/include;$(SolutionDir)GameEngine/Engine;$(SolutionDir)GameEngine/Engine/Physics;$(ProjectDir);$(SolutionDir)Vendors;$(SolutionDir)Vendors/PhysX/PhysXSDK/Include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>$(SolutionDir)Vendors/OpenGL/include;$(SolutionDir)GameEngine/Engine;$(SolutionDir)GameEngine/Engine/Physics;$(ProjectDir);$(SolutionDir)Vendors;$(SolutionDir)Vendors/PhysX/PhysXSDK/Include;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
+    <IgnoreImportLibrary>true</IgnoreImportLibrary>
+    <LibraryPath>$(SolutionDir)Vendors/OpenGL/lib/x64;$(SolutionDir)Vendors\fmod\lib;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
+    <SourcePath>$(SolutionDir)Vendors/TinyThread;$(SolutionDir)Vendors/TinyObjLoader;$(SourcePath);$(SolutionDir)Vendors/imgui/;$(VC_SourcePath);</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
@@ -85,6 +88,9 @@
     <IntDir>$(ProjectDir)Dependencies\$(Platform)\$(Configuration)\</IntDir>
     <OutDir>$(ProjectDir)Binaries\$(Platform)\$(Configuration)\</OutDir>
     <IncludePath>$(SolutionDir)Vendors/OpenGL/include;$(SolutionDir)GameEngine/Engine;$(SolutionDir)GameEngine/Engine/Physics;$(ProjectDir);$(SolutionDir)Vendors;$(SolutionDir)Vendors/PhysX/PhysXSDK/Include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IgnoreImportLibrary>true</IgnoreImportLibrary>
+    <LibraryPath>$(SolutionDir)Vendors/OpenGL/lib/x64;$(SolutionDir)Vendors\fmod\lib;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
+    <SourcePath>$(SolutionDir)Vendors/TinyThread;$(SolutionDir)Vendors/TinyObjLoader;$(SourcePath);$(SolutionDir)Vendors/imgui/;$(VC_SourcePath);</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -100,16 +106,21 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>Precompiled.hpp</PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)Vendors\PhysX\PhysXSDK\Lib\vc12win64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\$(Platform)\$(Configuration)\;$(SolutionDir)Vendors\zlib\lib\windows\x64;$(SolutionDir)Vendors\minizip\lib\windows\x64;$(SolutionDir)Vendors/OpenGL/lib/x64;$(SolutionDir)x64\$(Configuration)\;$(SolutionDir)Vendors\PhysX\PhysXSDK\Lib\vc12win64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>minizip.lib;zlib.lib;fmodex64_vc.lib;Ws2_32.lib;glu32.lib;glew32.lib;sdl2.lib;sdl2main.lib;opengl32.lib;GameEngine.lib;LowLevelDEBUG.lib;LowLevelClothDEBUG.lib;PhysX3DEBUG_x64.lib;PhysX3CharacterKinematicDEBUG_x64.lib;PhysX3CommonDEBUG_x64.lib;PhysX3CookingDEBUG_x64.lib;PhysX3ExtensionsDEBUG.lib;PhysX3GpuDEBUG_x64.lib;PhysX3VehicleDEBUG.lib;PvdRuntimeDEBUG.lib;PxTaskDEBUG.lib;SceneQueryDEBUG.lib;SimulationControllerDEBUG.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>
+      </IgnoreSpecificDefaultLibraries>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
     </Link>
     <ProjectReference>
       <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
     </ProjectReference>
     <PostBuildEvent>
       <Command>call "$(ProjectDir)/Scripts/PostBuildDebug.bat"</Command>
@@ -145,19 +156,26 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>Precompiled.hpp</PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(SolutionDir)Vendors\PhysX\PhysXSDK\Lib\vc12win64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>LowLevel.lib;LowLevelCloth.lib;PhysX3_x64.lib;PhysX3CharacterKinematic_x64.lib;PhysX3Common_x64.lib;PhysX3Cooking_x64.lib;PhysX3Extensions.lib;PhysX3Gpu_x64.lib;PhysX3Vehicle.lib;PvdRuntime.lib;PxTask.lib;SceneQuery.lib;SimulationController.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\$(Platform)\$(Configuration)\;$(SolutionDir)Vendors\zlib\lib\windows\x64;$(SolutionDir)Vendors\minizip\lib\windows\x64;$(SolutionDir)Vendors/OpenGL/lib/x64;$(SolutionDir)x64\$(Configuration)\;$(SolutionDir)Vendors\PhysX\PhysXSDK\Lib\vc12win64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>minizip.lib;zlib.lib;fmodex64_vc.lib;Ws2_32.lib;glu32.lib;glew32.lib;sdl2.lib;sdl2main.lib;opengl32.lib;GameEngine.lib;LowLevel.lib;LowLevelCloth.lib;PhysX3_x64.lib;PhysX3CharacterKinematic_x64.lib;PhysX3Common_x64.lib;PhysX3Cooking_x64.lib;PhysX3Extensions.lib;PhysX3Gpu_x64.lib;PhysX3Vehicle.lib;PvdRuntime.lib;PxTask.lib;SceneQuery.lib;SimulationController.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>
+      </IgnoreSpecificDefaultLibraries>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
     </Link>
     <PostBuildEvent>
       <Command>call "$(ProjectDir)/Scripts/PostBuildRelease.bat"</Command>
     </PostBuildEvent>
+    <ProjectReference>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+    </ProjectReference>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -241,6 +259,12 @@
     <None Include="..\..\..\GameEngine\Engine\Physics\WorldInterface.inl" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\GameEngine\GameEngine.vcxproj">
+      <Project>{e24d022c-e33b-47a1-bbb4-33666c76dda9}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\SpacePartitioning\SpacePartitioning.vcxproj">
+      <Project>{ff05acc8-441b-4e65-866c-fe72a1cde27d}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Vendors\PhysX\PhysXSDK\Source\compiler\vc12win64\LowLevel.vcxproj">
       <Project>{2a1f82af-85e5-26a0-bfe0-1f8d0006da7a}</Project>
     </ProjectReference>

@@ -151,6 +151,7 @@ static std::pair<std::pair<GLenum, std::string>, std::function<void(Vertices &ve
 		std::shared_ptr<TextureCubeMap> loadCubeMap(std::string const &name, OldFile &_filePath, const std::string &loadingChannel);
 		bool loadMesh(const OldFile &filePath, const std::string &loadingChannel = "");
 		void setAssetsDirectory(const std::string &path) { _assetsDirectory = path; }
+		const std::string &getAssetsDirectory(void) const { return _assetsDirectory; }
 		void update();
 		bool isLoading();
 		void pushNewCallback(const std::string &loadingChannel, AScene *currentScene, std::function<void()> &callback);

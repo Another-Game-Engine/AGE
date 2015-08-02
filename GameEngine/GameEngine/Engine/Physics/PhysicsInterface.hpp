@@ -8,6 +8,7 @@
 
 #include "EngineType.hpp"
 #include "../Utils/DependenciesInjector.hpp"
+#include "../AssetManagement/AssetManager.hh"
 
 namespace AGE
 {
@@ -30,9 +31,9 @@ namespace AGE
 			virtual ~PhysicsInterface(void) = default;
 
 			// Methods
-			bool startup(const std::string &assetDirectory);
+			bool startup(AssetsManager *assetManager);
 
-			void shutdown(const std::string &assetDirectory);
+			void shutdown(AssetsManager *assetManager);
 
 			WorldInterface *getWorld(void);
 
