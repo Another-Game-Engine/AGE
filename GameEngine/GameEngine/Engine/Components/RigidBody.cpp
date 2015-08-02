@@ -317,10 +317,10 @@ namespace AGE
 		{
 			ptr->setMass(mass);
 		}
-		if (ImGui::InputFloat3("Diagonal Inertia Tensor", glm::value_ptr(diagonalInertiaTensor)))
-		{
-			ptr->setDiagonalInertiaTensor(diagonalInertiaTensor);
-		}
+		//if (ImGui::InputFloat3("Diagonal Inertia Tensor", glm::value_ptr(diagonalInertiaTensor)))
+		//{
+		//	ptr->setDiagonalInertiaTensor(diagonalInertiaTensor);
+		//}
 		if (ImGui::InputFloat("Max Angular Velocity", &maxAngularVelocity))
 		{
 			ptr->setMaxAngularVelocity(maxAngularVelocity);

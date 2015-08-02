@@ -96,7 +96,7 @@ namespace AGE
 		getInstance<AGE::AssetsManager>()->setAssetsDirectory(EngineCoreTestConfiguration::GetCookedDirectory());
 
 		addSystem<AGE::DebugSystem>(0);
-		addSystem<AGE::PhysicsSystem>(0, Physics::EngineType::Bullet, getInstance<AGE::AssetsManager>());
+		addSystem<AGE::PhysicsSystem>(0, Physics::EngineType::PhysX, getInstance<AGE::AssetsManager>());
 
 		addSystem<AGE::LifetimeSystem>(2);
 		addSystem<AGE::FreeFlyCamera>(0);

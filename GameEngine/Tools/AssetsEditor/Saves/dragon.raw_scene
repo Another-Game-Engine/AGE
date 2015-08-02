@@ -119,6 +119,7 @@
             "components_number": [
                 0,
                 1,
+                2,
                 9
             ],
             "archetypesDependency": [],
@@ -135,6 +136,37 @@
                     "data": 16
                 }
             },
+            "AGE_CORE_RigidBody": {
+                "cereal_class_version": 1,
+                "AngularDrag": 0,
+                "AngularVelocity": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "CenterOfMass": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": -7
+                },
+                "LinearDrag": 0,
+                "LinearVelocity": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Mass": 3.4028234663852886e+038,
+                "DiagonalInertiaTensor": {
+                    "value0": 1.#INF,
+                    "value1": 1.#INF,
+                    "value2": 1.#INF
+                },
+                "MaxAngularVelocity": 1000000,
+                "MaxDepenetrationVelocity": 1000000,
+                "IsAffectedByGravity": false,
+                "IsKinematic": false,
+                "CollisionDetectionMode": 1
+            },
             "AGE_CORE_PhysicsCollider": {
                 "cereal_class_version": 1,
                 "ColliderType": 0,
@@ -147,9 +179,9 @@
                     "value2": 0
                 },
                 "Size": {
-                    "value0": 8.9600000381469727,
-                    "value1": 3.9600000381469727,
-                    "value2": 0.46000000834465027
+                    "value0": 725.5426025390625,
+                    "value1": 63.257652282714844,
+                    "value2": 0.093150004744529724
                 }
             }
         },
