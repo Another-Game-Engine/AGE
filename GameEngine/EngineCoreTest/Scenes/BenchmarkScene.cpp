@@ -92,6 +92,7 @@ namespace AGE
 		REGISTER_COMPONENT_TYPE(AGE::DirectionalLightComponent);
 		REGISTER_COMPONENT_TYPE(AGE::ArchetypeComponent);
 		REGISTER_COMPONENT_TYPE(AGE::RigidBody);
+		REGISTER_COMPONENT_TYPE(AGE::Collider);
 
 		getInstance<AGE::AssetsManager>()->setAssetsDirectory(EngineCoreTestConfiguration::GetCookedDirectory());
 

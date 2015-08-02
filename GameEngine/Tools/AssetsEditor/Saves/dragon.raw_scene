@@ -40,10 +40,14 @@
             },
             {
                 "key": 9,
-                "value": 8718854852507163888
+                "value": 16239045169874622267
             },
             {
                 "key": 10,
+                "value": 8718854852507163888
+            },
+            {
+                "key": 11,
                 "value": 13917482855567903631
             }
         ],
@@ -115,7 +119,7 @@
             "components_number": [
                 0,
                 1,
-                2
+                9
             ],
             "archetypesDependency": [],
             "AGE_CORE_EntityRepresentationComponent": {
@@ -131,36 +135,22 @@
                     "data": 16
                 }
             },
-            "AGE_CORE_RigidBody": {
+            "AGE_CORE_PhysicsCollider": {
                 "cereal_class_version": 1,
-                "AngularDrag": 0,
-                "AngularVelocity": {
+                "ColliderType": 0,
+                "Material": "DefaultMaterial",
+                "IsATrigger": false,
+                "FilterGroup": 0,
+                "Center": {
                     "value0": 0,
                     "value1": 0,
                     "value2": 0
                 },
-                "CenterOfMass": {
-                    "value0": 0,
-                    "value1": 0,
-                    "value2": -7
-                },
-                "LinearDrag": 0,
-                "LinearVelocity": {
-                    "value0": 0,
-                    "value1": 0,
-                    "value2": 0
-                },
-                "Mass": 1,
-                "DiagonalInertiaTensor": {
-                    "value0": 1.#INF,
-                    "value1": 1.#INF,
-                    "value2": 1.#INF
-                },
-                "MaxAngularVelocity": 1000000,
-                "MaxDepenetrationVelocity": 1000000,
-                "IsAffectedByGravity": false,
-                "IsKinematic": false,
-                "CollisionDetectionMode": 1
+                "Size": {
+                    "value0": 8.9600000381469727,
+                    "value1": 3.9600000381469727,
+                    "value2": 0.46000000834465027
+                }
             }
         },
         "Entity_2": {
