@@ -32,8 +32,7 @@ namespace AGE
 
 	PointLightComponent::PointLightComponent(PointLightComponent const &o)
 		: color(o.color),
-		range(o.range),
-		map(o.map)
+		range(o.range)
 	{
 		postUnserialization();
 	}
@@ -50,7 +49,6 @@ namespace AGE
 	{
 		color = glm::vec3(1);
 		range = glm::vec3(1.0f, 0.01f, 0.001f);
-		map = nullptr;
 		_mapProp = nullptr;
 
 		_colorProperty = nullptr;
@@ -66,7 +64,8 @@ namespace AGE
 
 	void PointLightComponent::init()
 	{
-		_mapProp = std::make_shared<MapColor>("sprite_light");
+		auto mapProp = std::make_shared<MapColor>("sprite_light");
+		_mapProp = mapProp;
 		_colorProperty = std::make_shared<AutoProperty<glm::vec4, Vec4>>("color_light");
 		_ambiantColorProperty = std::make_shared<AutoProperty<glm::vec4, Vec4>>("ambient_color");
 
@@ -79,7 +78,8 @@ namespace AGE
 
 		entity->getLink().pushAnObject(_graphicHandle);
 
-		map = entity->getScene()->getInstance<AssetsManager>()->getPointLightTexture();
+		auto map = entity->getScene()->getInstance<AssetsManager>()->getPointLightTexture();
+ 		mapProp->set(map);
 
 		std::static_pointer_cast<DRBPointLightData>(_graphicHandle.getPtr()->getDatas())->setRange(glm::vec4(range.x, range.y, range.z, 1.0f));
 		setColor(color);

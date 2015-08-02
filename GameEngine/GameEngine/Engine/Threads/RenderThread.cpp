@@ -248,7 +248,7 @@ namespace AGE
 					}
 					if (cameraDrawableList)
 					{
-						pipelines[RenderType::DEFERRED]->render(*cameraDrawableList.get());
+						pipelines[cameraDrawableList->cameraInfos.data.pipeline]->render(*cameraDrawableList.get());
 					}
 
 					if (imguiRenderList != nullptr)

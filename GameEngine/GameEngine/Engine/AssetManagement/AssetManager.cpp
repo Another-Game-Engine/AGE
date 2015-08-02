@@ -601,17 +601,17 @@ namespace AGE
 		}
 	}
 
-	std::shared_ptr<ITexture> const &AssetsManager::getPointLightTexture()
+	std::shared_ptr<Texture2D> const &AssetsManager::getPointLightTexture()
 	{
 		if (!_pointLight)
-			_pointLight = loadTexture("pointlight.dds", "");
+			_pointLight = std::dynamic_pointer_cast<Texture2D>(loadTexture("pointlight.dds", ""));
 		return _pointLight;
 	}
 
-	std::shared_ptr<ITexture> const &AssetsManager::getSpotLightTexture()
+	std::shared_ptr<Texture2D> const &AssetsManager::getSpotLightTexture()
 	{
 		if (!_spotLight)
-			_spotLight = loadTexture("spotlight.dds", "");
+			_spotLight = std::dynamic_pointer_cast<Texture2D>(loadTexture("spotlight.dds", ""));
 		return _spotLight;
 	}
 }

@@ -62,7 +62,7 @@ namespace AGE
 		float cutOff;
 
 		// TODO
-		//std::shared_ptr<Sampler2D> _propShadowMap;
+		std::shared_ptr<IProperty>      _mapProp = nullptr;
 		std::shared_ptr<IProperty>      _propShadowMatrix;
 		std::shared_ptr<IProperty>      _propPosition;
 		std::shared_ptr<IProperty>      _propAttenuation;
