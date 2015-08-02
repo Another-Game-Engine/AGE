@@ -51,6 +51,10 @@ namespace AGE
 			WorldInterface &operator=(const WorldInterface &) = delete;
 
 			// Methods
+			AssetsManager *getAssetManager(void);
+
+			const AssetsManager *getAssetManager(void) const;
+
 			PhysicsInterface *getPhysics(void);
 
 			const PhysicsInterface *getPhysics(void) const;
@@ -130,6 +134,8 @@ namespace AGE
 			using HashTable = std::unordered_map < std::string, FilterGroup > ;
 
 			// Attributes
+			AssetsManager *assetManager;
+
 			PhysicsInterface *physics = nullptr;
 
 			RaycasterInterface *raycaster = nullptr;
@@ -148,13 +154,13 @@ namespace AGE
 			static std::string GetMaterialsFileName(void);
 
 			// Methods
-			bool initialize(const std::string &assetDirectory);
+			bool initialize(AssetsManager *assetManager);
 
-			void finalize(const std::string &assetDirectory);
+			void finalize(AssetsManager *assetManager);
 
-			void saveMaterials(const std::string &assetDirectory);
+			void saveMaterials(void);
 
-			void loadMaterials(const std::string &assetDirectory);
+			void loadMaterials(void);
 
 			void destroyRaycaster(void);
 
@@ -165,7 +171,7 @@ namespace AGE
 
 			virtual void destroyRigidBody(RigidBodyInterface *rigidBody) = 0;
 
-			virtual ColliderInterface *createCollider(ColliderType colliderType, std::shared_ptr<MeshInstance> mesh, Private::GenericData *data) = 0;
+			virtual ColliderInterface *createCollider(ColliderType colliderType, const std::string &mesh, Private::GenericData *data) = 0;
 
 			virtual void destroyCollider(ColliderInterface *collider) = 0;
 

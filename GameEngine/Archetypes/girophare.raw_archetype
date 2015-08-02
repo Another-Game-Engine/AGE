@@ -40,10 +40,14 @@
             },
             {
                 "key": 9,
-                "value": 8718854852507163888
+                "value": 16239045169874622267
             },
             {
                 "key": 10,
+                "value": 8718854852507163888
+            },
+            {
+                "key": 11,
                 "value": 13917482855567903631
             }
         ],
@@ -78,7 +82,7 @@
             "flags": 0,
             "components_number": [
                 0,
-                10
+                11
             ],
             "archetypesDependency": [],
             "AGE_CORE_EntityRepresentationComponent": {
@@ -127,9 +131,9 @@
             "AGE_CORE_SpotLightComponent": {
                 "cereal_class_version": 0,
                 "color": {
-                    "value0": 1,
+                    "value0": 0,
                     "value1": 1,
-                    "value2": 1,
+                    "value2": 0.011764706112444401,
                     "value3": 1
                 },
                 "range": {
@@ -172,7 +176,7 @@
             },
             "AGE_CORE_SpotLightComponent": {
                 "color": {
-                    "value0": 1,
+                    "value0": 0.058823529630899429,
                     "value1": 1,
                     "value2": 1,
                     "value3": 1
@@ -219,7 +223,7 @@
                 "color": {
                     "value0": 1,
                     "value1": 1,
-                    "value2": 1,
+                    "value2": 0,
                     "value3": 1
                 },
                 "range": {
@@ -263,7 +267,7 @@
             "AGE_CORE_SpotLightComponent": {
                 "color": {
                     "value0": 1,
-                    "value1": 1,
+                    "value1": 0,
                     "value2": 1,
                     "value3": 1
                 },

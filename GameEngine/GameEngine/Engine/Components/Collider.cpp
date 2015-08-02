@@ -14,7 +14,7 @@ namespace AGE
 		SCOPE_profile_cpu_function("Physic");
 
 		assert(collider == nullptr && "Collider already initialized");
-		collider = entity->getScene()->getInstance<Physics::PhysicsInterface>()->getWorld()->createCollider(colliderType, colliderType == Physics::ColliderType::Mesh ? entity->getScene()->getInstance<AGE::AssetsManager>()->getMesh(mesh) : nullptr, entity->addComponent<Private::PhysicsData>()->getData());
+		collider = entity->getScene()->getInstance<Physics::PhysicsInterface>()->getWorld()->createCollider(colliderType, mesh, entity->addComponent<Private::PhysicsData>()->getData());
 		collider->collider = this;
 		scale(entity->getLink().getScale());
 	}
@@ -217,7 +217,7 @@ namespace AGE
 		switch (getColliderType())
 		{
 			case Physics::ColliderType::Mesh:
-				collider->as<Physics::ColliderType::Mesh>()->setMesh(entity->getScene()->getInstance<AGE::AssetsManager>()->getMesh(mesh));
+				collider->as<Physics::ColliderType::Mesh>()->setMesh(mesh);
 				break;
 			default:
 				assert(!"Invalid collider type");
@@ -225,7 +225,7 @@ namespace AGE
 		}
 	}
 
-	std::shared_ptr<MeshInstance> Collider::getMesh(void)
+	const std::string &Collider::getMesh(void) const
 	{
 		assert(collider != nullptr && "Invalid Collider");
 		switch (getColliderType())
@@ -234,30 +234,32 @@ namespace AGE
 				return collider->as<Physics::ColliderType::Mesh>()->getMesh();
 			default:
 				assert(!"Invalid collider type");
-				return nullptr;
+				static std::string emptyString;
+				return emptyString;
 		}
 	}
 
-	std::shared_ptr<const MeshInstance> Collider::getMesh(void) const
+	void Collider::setAsConvex(void)
 	{
 		assert(collider != nullptr && "Invalid Collider");
 		switch (getColliderType())
 		{
 			case Physics::ColliderType::Mesh:
-				return collider->as<Physics::ColliderType::Mesh>()->getMesh();
+				collider->as<Physics::ColliderType::Mesh>()->setAsConvex();
+				break;
 			default:
 				assert(!"Invalid collider type");
-				return nullptr;
+				break;
 		}
 	}
 
-	void Collider::setAsConvex(bool mustBeConvex)
+	void Collider::setAsConcave(void)
 	{
 		assert(collider != nullptr && "Invalid Collider");
 		switch (getColliderType())
 		{
 			case Physics::ColliderType::Mesh:
-				collider->as<Physics::ColliderType::Mesh>()->setAsConvex(mustBeConvex);
+				collider->as<Physics::ColliderType::Mesh>()->setAsConcave();
 				break;
 			default:
 				assert(!"Invalid collider type");
@@ -299,4 +301,40 @@ namespace AGE
 			entity->removeComponent<Private::PhysicsData>();
 		}
 	}
+
+#ifdef EDITOR_ENABLED
+
+	void Collider::editorCreate(void)
+	{
+		return;
+	}
+
+	void Collider::editorDelete(void)
+	{
+		return;
+	}
+
+	bool Collider::editorUpdate(void)
+	{
+		if (editorStruct == nullptr)
+		{
+			editorStruct = std::make_unique<EditorStruct>();
+		}
+		editorStruct->copyDatas(this);
+		editorStruct->editorUpdate(this);
+		return false;
+	}
+
+	void Collider::EditorStruct::copyDatas(Collider *ptr)
+	{
+		// TO_DO
+	}
+
+	void Collider::EditorStruct::editorUpdate(Collider *ptr)
+	{
+		// TO_DO
+	}
+
+#endif
+
 }

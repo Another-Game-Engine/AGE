@@ -27,8 +27,6 @@ namespace AGE
 		, _engine(engine)
 		, _rootLink(std::make_unique<Link>())
 	{
-		// Set Dependency to the fallback plugin (physics disabled) --> Needed if a RigidBody is added while no PhysicsSystem exists
-		setInstance<Physics::NullPhysics, Physics::PhysicsInterface>()->startup("");
 #ifdef AGE_BFC
 		_bfcLinkTracker = new BFCLinkTracker();
 		_bfcBlockManagerFactory = new BFCBlockManagerFactory();

@@ -33,12 +33,20 @@ namespace AGE
 
 	SpotLightComponent::SpotLightComponent(SpotLightComponent const &o)
 	{
+		color = o.color;
+		range = o.range;
+		exponent = o.exponent;
+		cutOff = o.cutOff;
 		postUnserialization();
 	}
 
 	void SpotLightComponent::_copyFrom(const ComponentBase *model)
 	{
 		auto o = static_cast<const SpotLightComponent*>(model);
+		color = o->color;
+		range = o->range;
+		exponent = o->exponent;
+		cutOff = o->cutOff;
 		postUnserialization();
 	}
 
@@ -51,6 +59,12 @@ namespace AGE
 		_propDirection = nullptr;
 		_propColorLight = nullptr;
 		_propAttenuation = nullptr;
+
+		color = glm::vec4(1.0f);
+		range = glm::vec3(1.0f, 0.1f, 0.01f);
+		exponent = 5.0f;
+		cutOff = 0.5f;
+
 		if (_graphicHandle.invalid() == false)
 		{
 			auto manager = entity->getScene()->getInstance<DRBLightElementManager>();
@@ -61,11 +75,6 @@ namespace AGE
 
 	void SpotLightComponent::init()
 	{
-		color = glm::vec4(1.0f);
-		range = glm::vec3(1.0f, 0.1f, 0.01f);
-		exponent = 5.0f;
-		cutOff = 0.5f;
-
 		AGE_ASSERT(_graphicHandle.invalid());
 
 		auto manager = entity->getScene()->getInstance<DRBLightElementManager>();

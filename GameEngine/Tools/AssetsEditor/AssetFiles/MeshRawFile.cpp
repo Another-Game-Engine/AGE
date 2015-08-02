@@ -17,7 +17,7 @@
 #include <Convertor/MeshLoader.hpp>
 #include <Convertor/MaterialConvertor.hpp>
 #include <Convertor/ImageLoader.hpp>
-#include <Convertor/BulletLoader.hpp>
+#include <Convertor/PhysicsLoader.hpp>
 #include <Convertor/ConvertorStatusManager.hpp>
 
 #include <EditorConfiguration.hpp>
@@ -47,17 +47,17 @@ namespace AGE
 
 				//AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=](){
 				AGE::MaterialLoader::load(cookingTask);
-				AGE::MaterialLoader::save(cookingTask);
 				AGE::ImageLoader::load(cookingTask);
 				AGE::ImageLoader::save(cookingTask);
+				AGE::MaterialLoader::save(cookingTask);
 				//});
 				if ((cookingTask->dataSet->loadMesh || cookingTask->dataSet->loadAnimations) && cookingTask->dataSet->loadSkeleton)
 				{
 					AGE::SkeletonLoader::load(cookingTask);
 					AGE::AnimationsLoader::load(cookingTask);
 					AGE::MeshLoader::load(cookingTask);
-					AGE::BulletLoader::load(cookingTask);
-					AGE::BulletLoader::save(cookingTask);
+					AGE::PhysicsLoader::load(cookingTask);
+					AGE::PhysicsLoader::save(cookingTask);
 					AGE::MeshLoader::save(cookingTask);
 					AGE::AnimationsLoader::save(cookingTask);
 					AGE::SkeletonLoader::save(cookingTask);
@@ -72,8 +72,8 @@ namespace AGE
 					AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=](){
 						AGE::MeshLoader::load(cookingTask);
 						AGE::MeshLoader::save(cookingTask);
-						AGE::BulletLoader::load(cookingTask);
-						AGE::BulletLoader::save(cookingTask);
+						AGE::PhysicsLoader::load(cookingTask);
+						AGE::PhysicsLoader::save(cookingTask);
 					});
 					AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=](){
 						AGE::SkeletonLoader::load(cookingTask);
@@ -110,18 +110,22 @@ namespace AGE
 			ImGui::Checkbox("Physic", &dataset->loadPhysic);
 			if (dataset->loadPhysic)
 			{
-				ImGui::Checkbox("Dynamic concave", &dataset->dynamicConcave);
-				ImGui::Checkbox("Static concave", &dataset->staticConcave);
+				ImGui::Checkbox("Convex", &dataset->convex);
+				ImGui::Checkbox("Concave", &dataset->concave);
 			}
 			ImGui::Separator();
 
 			ImGui::Checkbox("Material", &dataset->loadMaterials);
 			if (dataset->loadMaterials)
 			{
-				ImGui::Checkbox("Generate normal map from bump", &dataset->bumpToNormal);
-				if (dataset->bumpToNormal)
+				ImGui::Checkbox("Use bump map as normal map", &dataset->useBumpAsNormal);
+				if (dataset->useBumpAsNormal)
 				{
-					ImGui::SliderFloat("Normal strength", &dataset->normalStrength, 1.0f, 10.0f);
+					ImGui::Checkbox("Generate normal map from bump", &dataset->bumpToNormal);
+					if (dataset->bumpToNormal)
+					{
+						ImGui::SliderFloat("Normal strength", &dataset->normalStrength, 1.0f, 150.0f);
+					}
 				}
 			}
 			ImGui::Separator();
@@ -141,12 +145,9 @@ namespace AGE
 			ImGui::Checkbox("Textures", &dataset->loadTextures);
 			if (dataset->loadTextures)
 			{
+				ImGui::Checkbox("Compress normal map", &dataset->compressNormalMap);
 				ImGui::Checkbox("Compress textures", &dataset->compressTextures);
-				if (dataset->compressTextures)
-				{
-					ImGui::SliderInt("Compression quality", &dataset->textureCompressionQuality, 0, 4);
-					ImGui::Checkbox("Generate mipmaps", &dataset->generateMipmap);
-				}
+				ImGui::Checkbox("Generate mipmaps", &dataset->generateMipmap);
 			}
 		}
 	

@@ -16,7 +16,7 @@
 
 #include <cereal/archives/json.hpp>
 #include <cereal/types/unordered_set.hpp>
-#include <Render/Textures/Texture3D.hh>
+#include <Render/Textures/TextureCubeMap.hh>
 
 namespace AGE
 {
@@ -148,9 +148,10 @@ static std::pair<std::pair<GLenum, std::string>, std::function<void(Vertices &ve
 		std::shared_ptr<MaterialSetInstance> getMaterial(const OldFile &filePath);
 		std::shared_ptr<MeshInstance> getMesh(const OldFile &filePath);
 		std::shared_ptr<ITexture> loadTexture(const OldFile &filepath, const std::string &loadingChannel);
-		std::shared_ptr<Texture3D> loadSkybox(std::string const &name, OldFile &_filePath, std::array<std::string, 6> const &textures, const std::string &loadingChannel);
+		std::shared_ptr<TextureCubeMap> loadCubeMap(std::string const &name, OldFile &_filePath, const std::string &loadingChannel);
 		bool loadMesh(const OldFile &filePath, const std::string &loadingChannel = "");
 		void setAssetsDirectory(const std::string &path) { _assetsDirectory = path; }
+		const std::string &getAssetsDirectory(void) const { return _assetsDirectory; }
 		void update();
 		bool isLoading();
 		void pushNewCallback(const std::string &loadingChannel, AScene *currentScene, std::function<void()> &callback);
@@ -165,7 +166,7 @@ private:
 		std::map<std::string, std::shared_ptr<AnimationData>> _animations;
 		std::map<std::string, std::shared_ptr<MaterialSetInstance>> _materials;
 		std::map<std::string, std::shared_ptr<ITexture>> _textures;
-		std::map<std::string, std::shared_ptr<Texture3D>> _skyboxes;
+		std::map<std::string, std::shared_ptr<TextureCubeMap>> _cubeMaps;
 		std::map<std::string, std::shared_ptr<AssetsLoadingChannel>> _loadingChannels;
 		std::shared_ptr<ITexture> _pointLight;
 		std::shared_ptr<ITexture> _spotLight;

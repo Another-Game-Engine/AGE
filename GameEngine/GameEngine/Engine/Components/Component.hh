@@ -21,7 +21,7 @@ namespace AGE
 #define AGE_COMPONENT_UNIQUE_IDENTIFIER(Name) \
 	public: \
 	static const char *getSerializableName() { return Name; } \
-	static std::size_t getSerializableId() { static std::size_t hash = std::hash<std::string>()(std::string(Name)); return hash; } \
+	static std::size_t getSerializableId() { static const std::size_t hash = std::hash<std::string>()(std::string(Name)); return hash; } \
 	
 
 	struct ComponentBase

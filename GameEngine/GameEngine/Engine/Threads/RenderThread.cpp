@@ -14,9 +14,9 @@
 #include <Utils/OpenGL.hh>
 #include <Utils/Age_Imgui.hpp>
 #include <Render/Properties/Transformation.hh>
-#include <Culling/Ouptut/RenderCamera.hh>
-#include <Culling/Ouptut/RenderLight.hh>
-#include <Culling/Ouptut/RenderPipeline.hh>
+#include <Culling/Output/RenderCamera.hh>
+#include <Culling/Output/RenderLight.hh>
+#include <Culling/Output/RenderPipeline.hh>
 #include <Utils/Debug.hpp>
 #include <Render/GeometryManagement/SimpleGeometry.hh>
 #include <Utils/Profiler.hpp>
@@ -231,10 +231,6 @@ namespace AGE
 
 		registerCallback<Commands::ToRender::Flush>([&](Commands::ToRender::Flush& msg)
 		{
-			if (_cameraDrawableList == nullptr)
-			{
-				return;
-			}
 			{
 				SCOPE_profile_cpu_i("RenderTimer", "Render frame");
 				{
@@ -251,7 +247,10 @@ namespace AGE
 
 						_haveRenderFrameTask = false;
 					}
-					pipelines[RenderType::DEFERRED]->render(*cameraDrawableList.get());
+					if (cameraDrawableList)
+					{
+						pipelines[RenderType::DEFERRED]->render(*cameraDrawableList.get());
+					}
 
 					if (imguiRenderList != nullptr)
 					{

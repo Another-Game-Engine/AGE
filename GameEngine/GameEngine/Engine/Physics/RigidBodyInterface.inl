@@ -53,12 +53,12 @@ namespace AGE
 
 		inline float RigidBodyInterface::GetDefaultMaxAngularVelocity(void)
 		{
-			return std::numeric_limits<float>::max();
+			return 1000000.0f;
 		}
 
 		inline float RigidBodyInterface::GetDefaultMaxDepenetrationVelocity(void)
 		{
-			return std::numeric_limits<float>::max();
+			return 1000000.0f;
 		}
 
 		inline bool RigidBodyInterface::IsAffectedByGravityByDefault(void)

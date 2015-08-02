@@ -1,7 +1,7 @@
 #pragma once
 
 #include <list>
-#include "Culling\Ouptut\RenderCamera.hh"
+#include "Culling\Output\RenderCamera.hh"
 
 namespace AGE
 {

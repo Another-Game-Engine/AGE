@@ -9,7 +9,7 @@
 #include <memory>
 #include <vector>
 #include <Render/Properties/Properties.hh>
-#include <Culling/Ouptut/RenderCamera.hh>
+#include <Culling/Output/RenderCamera.hh>
 #include <Render/PipelineTypes.hpp>
 #include <Render/OcclusionTools/DepthMapManager.hpp>
 #include <Render/GeometryManagement/SimpleGeometry.hh>

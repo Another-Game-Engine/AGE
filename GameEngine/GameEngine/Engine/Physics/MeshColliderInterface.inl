@@ -13,19 +13,14 @@ namespace AGE
 		}
 
 		// Constructors
-		inline MeshColliderInterface::MeshColliderInterface(WorldInterface *world, std::shared_ptr<MeshInstance> mesh, bool mustBeConvex, Private::GenericData *data)
+		inline MeshColliderInterface::MeshColliderInterface(WorldInterface *world, const std::string &mesh, bool mustBeConvex, Private::GenericData *data)
 			: ColliderInterface(world, data), mesh(mesh), convex(mustBeConvex)
 		{
-			assert(mesh != nullptr && "Invalid mesh");
+			assert(!mesh.empty() && "Invalid mesh");
 		}
 
 		// Methods
-		inline std::shared_ptr<MeshInstance> MeshColliderInterface::getMesh(void)
-		{
-			return mesh;
-		}
-
-		inline std::shared_ptr<const MeshInstance> MeshColliderInterface::getMesh(void) const
+		inline const std::string &MeshColliderInterface::getMesh(void) const
 		{
 			return mesh;
 		}
@@ -35,17 +30,31 @@ namespace AGE
 			return convex;
 		}
 
-		inline void MeshColliderInterface::setAsConvex(bool mustBeConvex)
+		inline void MeshColliderInterface::setAsConvex(void)
 		{
-			if (mustBeConvex != convex)
+			if (!isConvex())
 			{
-				convex = mustBeConvex;
+				convex = true;
+				updateShape();
+			}
+		}
+
+		inline bool MeshColliderInterface::isConcave(void) const
+		{
+			return !isConvex();
+		}
+
+		inline void MeshColliderInterface::setAsConcave(void)
+		{
+			if (!isConcave())
+			{
+				convex = false;
 				updateShape();
 			}
 		}
 
 		// Virtual Methods
-		inline void MeshColliderInterface::setMesh(std::shared_ptr<MeshInstance> mesh)
+		inline void MeshColliderInterface::setMesh(const std::string &mesh)
 		{
 			this->mesh = mesh;
 		}

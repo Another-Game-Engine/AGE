@@ -2,9 +2,27 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="..\Vendors\imgui\imgui.cpp" />
+    <ClCompile Include="Engine\Components\ArchetypeComponent.cpp" />
+    <ClCompile Include="Engine\Components\DirectionalLightComponent.cpp" />
+    <ClCompile Include="Engine\Entities\ArchetypeManager.cpp" />
+    <ClCompile Include="Engine\Entities\BinaryEntity.cpp" />
+    <ClCompile Include="Engine\Entities\BinaryEntityPack.cpp" />
+    <ClCompile Include="Engine\Entities\EntityBinaryPacker.cpp" />
+    <ClCompile Include="Engine\Render\OcclusionTools\DepthMap.cpp" />
+    <ClCompile Include="Engine\Render\OcclusionTools\DepthMapHandle.cpp" />
+    <ClCompile Include="Engine\Render\OcclusionTools\DepthMapManager.cpp" />
+    <ClCompile Include="Engine\Components\Collider.cpp" />
+    <ClCompile Include="Engine\Core\SceneChunkSerialization.cpp" />
+    <ClCompile Include="Engine\Entities\ArchetypeLibrary.cpp" />
+    <ClCompile Include="Engine\Entities\EntitySerializationInfos.cpp" />
+    <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredDirectionalLightning.cpp" />
+    <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredOnScreen.cpp" />
+    <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredShadowBuffering.cpp" />
+    <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredSkyBox.cpp" />
+    <ClCompile Include="Engine\Render\ProgramResources\Types\Uniform\Sampler\Sampler3D.cpp" />
     <ClCompile Include="Engine\Render\Properties\AABB.cpp" />
     <ClCompile Include="Engine\Components\PhysicsData.cpp" />
-    <ClCompile Include="Engine\Components\RigidBody.cpp" />
+    <ClCompile Include="Engine\Physics\Collision.cpp" />
     <ClCompile Include="Engine\Physics\EngineTypeToPluginName.cpp" />
     <ClCompile Include="Engine\Physics\Fallback\NullBoxCollider.cpp" />
     <ClCompile Include="Engine\Physics\Fallback\NullCapsuleCollider.cpp" />
@@ -12,9 +30,13 @@
     <ClCompile Include="Engine\Physics\Fallback\NullMaterial.cpp" />
     <ClCompile Include="Engine\Physics\Fallback\NullMeshCollider.cpp" />
     <ClCompile Include="Engine\Physics\Fallback\NullPhysics.cpp" />
+    <ClCompile Include="Engine\Physics\Fallback\NullRaycaster.cpp" />
     <ClCompile Include="Engine\Physics\Fallback\NullRigidBody.cpp" />
     <ClCompile Include="Engine\Physics\Fallback\NullSphereCollider.cpp" />
     <ClCompile Include="Engine\Physics\Fallback\NullWorld.cpp" />
+    <ClCompile Include="Engine\Physics\ICollisionListener.cpp" />
+    <ClCompile Include="Engine\Physics\ITriggerListener.cpp" />
+    <ClCompile Include="Engine\Physics\Trigger.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomPipeline\DebugDeferredShading.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredDebugBuffering.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredMerging.cpp" />
@@ -24,23 +46,29 @@
     <ClCompile Include="Engine\Core\Inputs\ActionManager.cpp" />
     <ClCompile Include="Engine\AssetManagement\AssetManager.cpp" />
     <ClCompile Include="Engine\Components\Light.cpp" />
+    <ClCompile Include="Engine\Components\RigidBody.cpp" />
     <ClCompile Include="Engine\Context\IRenderContext.cpp" />
     <ClCompile Include="Engine\Context\SDL\SdlToAgeInputs.cpp" />
     <ClCompile Include="Engine\Entities\Entity.cpp" />
     <ClCompile Include="Engine\Render\GeometryManagement\SimpleGeometry.cpp" />
+    <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredSpotLightning.cpp" />
     <ClCompile Include="Engine\Render\ProgramResources\Types\Uniform\Vec3.cpp" />
+    <ClCompile Include="Engine\Render\Properties\Materials\ScaleUVs.cpp" />
     <ClCompile Include="Engine\Render\Properties\Materials\Specular.cpp" />
     <ClCompile Include="Engine\Render\ProgramResources\Types\Uniform\Mat4Array255.cpp" />
     <ClCompile Include="Engine\Render\Properties\Properties.cpp" />
     <ClCompile Include="Engine\Render\PropertyManager.cpp" />
+    <ClCompile Include="Engine\Render\Textures\Texture3D.cpp" />
     <ClCompile Include="Engine\Systems\CollisionSystem.cpp" />
     <ClCompile Include="Engine\Systems\DebugSystem.cpp" />
     <ClCompile Include="Engine\Systems\FreeFlyCamera.cpp" />
     <ClCompile Include="Engine\Systems\PhysicsSystem.cpp" />
+    <ClCompile Include="Engine\Systems\TriggerSystem.cpp" />
     <ClCompile Include="Engine\Threads\Commands\MainToPrepareCommands.cpp" />
     <ClCompile Include="Engine\Core\ConfigurationManager.cpp" />
     <ClCompile Include="Engine\Core\DefaultConfiguration.cpp" />
     <ClCompile Include="Engine\Core\Link.cpp" />
+    <ClCompile Include="Engine\Culling\PreparableObject.cpp" />
     <ClCompile Include="Engine\Threads\Tasks\ToRenderTasks.cpp" />
     <ClCompile Include="Engine\Render\Buffer\ABuffer.cpp" />
     <ClCompile Include="Engine\Render\Buffer\IndexBuffer.cpp" />
@@ -88,6 +116,9 @@
     <ClCompile Include="Engine\Skinning\Bone.cpp" />
     <ClCompile Include="Engine\Skinning\Skeleton.cpp" />
     <ClCompile Include="Engine\Components\SpotLight.cpp" />
+    <ClCompile Include="Engine\Culling\Cullable\Cullable.cpp" />
+    <ClCompile Include="Engine\Culling\Cullable\Object\Mesh.cpp" />
+    <ClCompile Include="Engine\Culling\Cullable\Object\PointLight.cpp" />
     <ClCompile Include="Engine\Threads\CallbackContainer.cpp" />
     <ClCompile Include="Engine\Threads\MainThread.cpp" />
     <ClCompile Include="Engine\Threads\QueueOwner.cpp" />
@@ -100,6 +131,7 @@
     <ClCompile Include="Engine\TMQ\message.cpp" />
     <ClCompile Include="Engine\TMQ\queue.cpp" />
     <ClCompile Include="Engine\Utils\AABoundingBox.cpp" />
+    <ClCompile Include="Engine\Utils\Age_microprofile.cpp" />
     <ClCompile Include="Engine\Utils\BitOperations.cpp" />
     <ClCompile Include="Engine\Utils\BoundingInfos.cpp" />
     <ClCompile Include="Engine\Audio\Audio.cpp" />
@@ -121,6 +153,7 @@
     <ClCompile Include="Engine\Text\Font.cpp" />
     <ClCompile Include="Engine\Text\FontGlyph.cpp" />
     <ClCompile Include="Engine\Text\FontManager.cpp" />
+    <ClCompile Include="Engine\Utils\Profiler.cpp" />
     <ClCompile Include="Engine\Utils\StreamBuffer.cpp" />
     <ClCompile Include="Engine\Utils\CRC32.cpp" />
     <ClCompile Include="Engine\Utils\Directory.cpp" />
@@ -206,7 +239,6 @@
     <ClCompile Include="Engine\Entities\BinaryEntityPack.cpp" />
     <ClCompile Include="Engine\Components\ArchetypeComponent.cpp" />
     <ClCompile Include="Engine\Entities\ArchetypeManager.cpp" />
-    <ClCompile Include="Engine\Render\Textures\Texture3D.cpp" />
     <ClCompile Include="Engine\Render\ProgramResources\Types\Uniform\Sampler\Sampler3D.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredSkyBox.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredOnScreen.cpp" />
@@ -218,6 +250,7 @@
     <ClCompile Include="Engine\BFC\BFCBlockManager.cpp" />
     <ClCompile Include="Engine\BFC\BFCBlockManagerFactory.cpp" />
     <ClCompile Include="Engine\BFC\BFCLink.cpp" />
+<<<<<<< HEAD
     <ClCompile Include="Engine\Systems\RenderCameraSystem.cpp" />
     <ClCompile Include="Engine\Graphic\DRBMesh.cpp" />
     <ClCompile Include="Engine\Graphic\DRBData.cpp" />
@@ -228,18 +261,42 @@
     <ClCompile Include="Engine\Graphic\DRBPointLight.cpp" />
     <ClCompile Include="Engine\Graphic\DRBSpotLight.cpp" />
     <ClCompile Include="Engine\Graphic\DRBSpotLightData.cpp" />
+=======
+<<<<<<< HEAD
+    <ClCompile Include="Engine\Render\Textures\TextureCubeMap.cpp" />
+    <ClCompile Include="Engine\AssetManagement\OpenGLDDSLoader.cpp" />
+=======
+    <ClCompile Include="Engine\Render\ProgramResources\Types\Uniform\Vec2.cpp" />
+>>>>>>> 5a49d7f5e605134aa2327ee2b29445169bf65ac0
+>>>>>>> b666b9794f823ed236ce3ae9ea634cfe5f343e0a
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
     <ClInclude Include="..\Vendors\imgui\imgui.h" />
     <ClInclude Include="..\Vendors\imgui\stb_textedit.h" />
+    <ClInclude Include="Engine\Components\ArchetypeComponent.hpp" />
+    <ClInclude Include="Engine\Components\DirectionalLightComponent.hh" />
+    <ClInclude Include="Engine\Components\Collider.hpp" />
+    <ClInclude Include="Engine\Core\SceneChunkSerialization.hpp" />
+    <ClInclude Include="Engine\Entities\Archetype.hpp" />
+    <ClInclude Include="Engine\Entities\ArchetypeLibrary.hpp" />
+    <ClInclude Include="Engine\Entities\ArchetypeManager.hpp" />
+    <ClInclude Include="Engine\Entities\ArchetypeScenes.hpp" />
+    <ClInclude Include="Engine\Entities\BinaryEntity.hpp" />
+    <ClInclude Include="Engine\Entities\BinaryEntityPack.hpp" />
+    <ClInclude Include="Engine\Entities\EntityBinaryPacker.hpp" />
+    <ClInclude Include="Engine\Entities\EntityPacker.hpp" />
+    <ClInclude Include="Engine\Entities\IArchetypeManager.hpp" />
     <ClInclude Include="Engine\Components\PhysicsData.hpp" />
-    <ClInclude Include="Engine\Components\RigidBody.hpp" />
     <ClInclude Include="Engine\Physics\BoxColliderInterface.hpp" />
     <ClInclude Include="Engine\Physics\CapsuleColliderInterface.hpp" />
     <ClInclude Include="Engine\Physics\ColliderInterface.hpp" />
     <ClInclude Include="Engine\Physics\ColliderType.hpp" />
+    <ClInclude Include="Engine\Physics\Collision.hpp" />
     <ClInclude Include="Engine\Physics\CollisionDetectionMode.hpp" />
+    <ClInclude Include="Engine\Physics\CollisionListener.hpp" />
+    <ClInclude Include="Engine\Physics\CollisionType.hpp" />
+    <ClInclude Include="Engine\Physics\Contact.hpp" />
     <ClInclude Include="Engine\Physics\EngineTypes.hpp" />
     <ClInclude Include="Engine\Physics\EngineTypeToPluginName.hpp" />
     <ClInclude Include="Engine\Physics\Fallback\NullBoxCollider.hpp" />
@@ -248,22 +305,35 @@
     <ClInclude Include="Engine\Physics\Fallback\NullMaterial.hpp" />
     <ClInclude Include="Engine\Physics\Fallback\NullMeshCollider.hpp" />
     <ClInclude Include="Engine\Physics\Fallback\NullPhysics.hpp" />
+    <ClInclude Include="Engine\Physics\Fallback\NullRaycaster.hpp" />
     <ClInclude Include="Engine\Physics\Fallback\NullRigidBody.hpp" />
     <ClInclude Include="Engine\Physics\Fallback\NullSphereCollider.hpp" />
     <ClInclude Include="Engine\Physics\Fallback\NullWorld.hpp" />
     <ClInclude Include="Engine\Physics\FilterGroup.hpp" />
     <ClInclude Include="Engine\Physics\ForceMode.hpp" />
+    <ClInclude Include="Engine\Physics\GenericData.hpp" />
+    <ClInclude Include="Engine\Physics\ICollisionListener.hpp" />
+    <ClInclude Include="Engine\Physics\ITriggerListener.hpp" />
     <ClInclude Include="Engine\Physics\MaterialInterface.hpp" />
     <ClInclude Include="Engine\Physics\MemoryPoolHelper.hpp" />
     <ClInclude Include="Engine\Physics\MeshColliderInterface.hpp" />
     <ClInclude Include="Engine\Physics\PhysicsInterface.hpp" />
+    <ClInclude Include="Engine\Physics\RaycasterInterface.hpp" />
     <ClInclude Include="Engine\Physics\RigidBodyInterface.hpp" />
     <ClInclude Include="Engine\Physics\SphereColliderInterface.hpp" />
+    <ClInclude Include="Engine\Physics\Trigger.hpp" />
+    <ClInclude Include="Engine\Physics\TriggerListener.hpp" />
+    <ClInclude Include="Engine\Physics\TriggerType.hpp" />
     <ClInclude Include="Engine\Physics\WorldInterface.hpp" />
+    <ClInclude Include="Engine\Render\OcclusionTools\DepthMap.hpp" />
+    <ClInclude Include="Engine\Render\OcclusionTools\DepthMapHandle.hpp" />
+    <ClInclude Include="Engine\Render\OcclusionTools\DepthMapManager.hpp" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomPipeline\DebugDeferredShading.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredDebugBuffering.hh" />
+    <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredDirectionalLightning.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredMerging.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredMergingDebug.hh" />
+    <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredOnScreen.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredPointLightning.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredBasicBuffering.hh" />
     <ClInclude Include="Engine\Core\Inputs\ActionManager.hh" />
@@ -280,17 +350,24 @@
     <ClInclude Include="Engine\Entities\EntityData.hh" />
     <ClInclude Include="Engine\Render\GeometryManagement\SimpleGeometry.hh" />
     <ClInclude Include="Engine\Render\PipelineTypes.hpp" />
+    <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredShadowBuffering.hh" />
+    <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredSkyBox.hh" />
+    <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredSpotLightning.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\PipelineTools.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Render\RenderModes.hh" />
+    <ClInclude Include="Engine\Render\ProgramResources\Types\Uniform\Sampler\Sampler3D.hh" />
     <ClInclude Include="Engine\Render\ProgramResources\Types\Uniform\Vec3.hh" />
     <ClInclude Include="Engine\Render\Properties\AABB.hpp" />
+    <ClInclude Include="Engine\Render\Properties\Materials\ScaleUVs.hpp" />
     <ClInclude Include="Engine\Render\Properties\Materials\Specular.hh" />
     <ClInclude Include="Engine\Render\ProgramResources\Types\Uniform\Mat4Array255.hh" />
     <ClInclude Include="Engine\Render\Properties\Properties.hh" />
+    <ClInclude Include="Engine\Render\Textures\Texture3D.hh" />
     <ClInclude Include="Engine\Systems\CollisionSystem.hpp" />
     <ClInclude Include="Engine\Systems\DebugSystem.hpp" />
     <ClInclude Include="Engine\Systems\FreeFlyCamera.hh" />
     <ClInclude Include="Engine\Systems\PhysicsSystem.hpp" />
+    <ClInclude Include="Engine\Systems\TriggerSystem.hpp" />
     <ClInclude Include="Engine\Threads\Commands\ToRenderCommands.hpp" />
     <ClInclude Include="Engine\Threads\Commands\MainToPrepareCommands.hpp" />
     <ClInclude Include="Engine\Core\Instance\MaterialInstance.hh" />
@@ -298,7 +375,11 @@
     <ClInclude Include="Engine\Core\Material\MaterialData.hh" />
     <ClInclude Include="Engine\Core\Material\MaterialInstance.hh" />
     <ClInclude Include="Engine\Core\Material\MaterialSetInstance.hh" />
+    <ClInclude Include="Engine\Culling\PreparableObject.hh" />
     <ClInclude Include="Engine\Skinning\AnimationManager.hpp" />
+    <ClInclude Include="Engine\Culling\Cullable\Object\Camera.hh" />
+    <ClInclude Include="Engine\Culling\Cullable\Object\Mesh.hh" />
+    <ClInclude Include="Engine\Culling\Cullable\Object\PointLight.hh" />
     <ClInclude Include="Engine\Data\Material\MaterialData.hh" />
     <ClInclude Include="Engine\Data\TextureData.hh" />
     <ClInclude Include="Engine\Render\GeometryManagement\Buffer\Buffer.hh" />
@@ -332,6 +413,8 @@
     <ClInclude Include="Engine\Render\Textures\ITexture.hh" />
     <ClInclude Include="Engine\Render\Textures\PixelTypesFormats.hh" />
     <ClInclude Include="Engine\Render\Textures\Texture2D.hh" />
+    <ClInclude Include="Engine\Culling\Cullable\Cullable.hh" />
+    <ClInclude Include="Engine\Culling\Cullable\CullableShape.hh" />
     <ClInclude Include="Engine\Threads\TaskScheduler.hpp" />
     <ClInclude Include="Engine\Threads\Tasks\BasicTasks.hpp" />
     <ClInclude Include="Engine\Threads\Tasks\MainToPrepareTasks.hpp" />
@@ -395,10 +478,14 @@
     <ClInclude Include="Engine\TMQ\queue.hpp" />
     <ClInclude Include="Engine\TMQ\templateDispatcher.hpp" />
     <ClInclude Include="Engine\Utils\AABoundingBox.hh" />
+    <ClInclude Include="Engine\Utils\Age_microprofile.hpp" />
     <ClInclude Include="Engine\Utils\Architecture.hpp" />
     <ClInclude Include="Engine\Utils\BitOperations.hpp" />
     <ClInclude Include="Engine\Utils\BoundingInfos.hpp" />
     <ClInclude Include="Engine\Utils\Debug.hpp" />
+    <ClInclude Include="Engine\Utils\Profile.hpp" />
+    <ClInclude Include="Engine\Utils\Profiler.hpp" />
+    <ClInclude Include="Engine\Utils\Serialization\btSerialization.hpp" />
     <ClInclude Include="Engine\Utils\StreamBuffer.hpp" />
     <ClInclude Include="Engine\Utils\BufferPool.hpp" />
     <ClInclude Include="Engine\Utils\Compiler.hpp" />
@@ -417,6 +504,7 @@
     <ClInclude Include="Engine\Components\CameraComponentTemplates.hpp" />
     <ClInclude Include="Engine\Components\ComponentRegistrationManager.hpp" />
     <ClInclude Include="Engine\Components\GraphNode.hpp" />
+    <ClInclude Include="Engine\Components\RigidBody.hpp" />
     <ClInclude Include="Engine\Components\RotationForce.hh" />
     <ClInclude Include="Engine\Core\EntityFilter.hpp" />
     <ClInclude Include="Engine\Core\EntityIdRegistrar.hpp" />
@@ -570,7 +658,6 @@
     <ClInclude Include="Engine\Entities\ArchetypeScenes.hpp" />
     <ClInclude Include="Engine\Entities\IArchetypeManager.hpp" />
     <ClInclude Include="Engine\Entities\ArchetypeManager.hpp" />
-    <ClInclude Include="Engine\Render\Textures\Texture3D.hh" />
     <ClInclude Include="Engine\Render\ProgramResources\Types\Uniform\Sampler\Sampler3D.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredSkyBox.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredOnScreen.hh" />
@@ -585,6 +672,7 @@
     <ClInclude Include="Engine\BFC\BFCItemID.hpp" />
     <ClInclude Include="Engine\BFC\BFCLink.hpp" />
     <ClInclude Include="Engine\BFC\BFCBlockManagerFactory.hpp" />
+<<<<<<< HEAD
     <ClInclude Include="Engine\Graphic\BFCCullableTypes.hpp" />
     <ClInclude Include="Engine\Graphic\DRBCameraDrawableList.hpp" />
     <ClInclude Include="Engine\Systems\RenderCameraSystem.hpp" />
@@ -599,9 +687,19 @@
     <ClInclude Include="Engine\Render\Properties\AutoProperty.hpp" />
     <ClInclude Include="Engine\Graphic\DRBSpotLight.hpp" />
     <ClInclude Include="Engine\Graphic\DRBSpotLightData.hpp" />
+=======
+<<<<<<< HEAD
+    <ClInclude Include="Engine\Render\Textures\TextureCubeMap.hh" />
+    <ClInclude Include="Engine\AssetManagement\OpenGLDDSLoader.hh" />
+=======
+    <ClInclude Include="Engine\Render\ProgramResources\Types\Uniform\Vec2.hh" />
+>>>>>>> 5a49d7f5e605134aa2327ee2b29445169bf65ac0
+>>>>>>> b666b9794f823ed236ce3ae9ea634cfe5f343e0a
   </ItemGroup>
   <ItemGroup>
+    <None Include="Engine\Components\Collider.inl" />
     <None Include="Engine\Components\Component.hh" />
+    <None Include="Engine\Components\RigidBody.inl" />
     <None Include="Engine\Context\IRenderContext.hh" />
     <None Include="Engine\Context\SDL\SdlContext.hh" />
     <None Include="Engine\Core\AScene.hh" />
@@ -618,6 +716,7 @@
     <None Include="Engine\Physics\MemoryPoolHelper.inl" />
     <None Include="Engine\Physics\MeshColliderInterface.inl" />
     <None Include="Engine\Physics\PhysicsInterface.inl" />
+    <None Include="Engine\Physics\RaycasterInterface.inl" />
     <None Include="Engine\Physics\RigidBodyInterface.inl" />
     <None Include="Engine\Physics\SphereColliderInterface.inl" />
     <None Include="Engine\Physics\WorldInterface.inl" />
@@ -628,18 +727,5 @@
     <None Include="Engine\ResourceManager\SharedMesh.hh" />
     <None Include="Engine\ResourceManager\Texture.hh" />
     <None Include="Engine\Components\MeshRenderer.hh" />
-    <None Include="Engine\Physics\MaterialInterface.inl" />
-    <None Include="Engine\Physics\RigidBodyInterface.inl" />
-    <None Include="Engine\Physics\WorldInterface.inl" />
-    <None Include="Engine\Physics\ColliderInterface.inl" />
-    <None Include="Engine\Physics\BoxColliderInterface.inl" />
-    <None Include="Engine\Physics\CapsuleColliderInterface.inl" />
-    <None Include="Engine\Physics\MeshColliderInterface.inl" />
-    <None Include="Engine\Physics\SphereColliderInterface.inl" />
-    <None Include="Engine\Physics\PhysicsInterface.inl" />
-    <None Include="Engine\Physics\MemoryPoolHelper.inl" />
-    <None Include="Engine\Components\Collider.inl" />
-    <None Include="Engine\Components\RigidBody.inl" />
-    <None Include="Engine\Physics\RaycasterInterface.inl" />
   </ItemGroup>
 </Project>

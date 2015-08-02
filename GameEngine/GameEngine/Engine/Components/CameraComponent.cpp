@@ -35,7 +35,7 @@ namespace AGE
 		//AGE::GetPrepareThread()->setCameraInfos(_data, _key);
 	}
 
-	void CameraComponent::setTexture(std::shared_ptr<Texture3D> const &texture)
+	void CameraComponent::setTexture(std::shared_ptr<TextureCubeMap> const &texture)
 	{
 		_data.texture = texture;
 		//AGE::GetPrepareThread()->setCameraInfos(_data, _key);
@@ -66,7 +66,7 @@ namespace AGE
 	}
 
 #ifdef EDITOR_ENABLED
-	void CameraComponent::addSkyBoxToChoice(std::string const &type, std::shared_ptr<Texture3D> const &texture)
+	void CameraComponent::addSkyBoxToChoice(std::string const &type, std::shared_ptr<TextureCubeMap> const &texture)
 	{
 		_choicesSkymap[type] = texture;
 	}
@@ -80,7 +80,7 @@ namespace AGE
 	bool CameraComponent::editorUpdate()
 	{
 		bool modified = false;
-		int countChoices = _choicesSkymap.size();
+		const int countChoices = static_cast<int>(_choicesSkymap.size());
 		char  **choices = new char *[countChoices];
 		int index = 0;
 		int current_item = 0;
