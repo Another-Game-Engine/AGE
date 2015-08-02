@@ -77,7 +77,7 @@ namespace AGE
 		//auto shadowMapTexture = entity->getScene()->getInstance<AssetsManager>()->getSpotLightTexture();
 		//_propShadowMap->set(shadowMapTexture);
 
-		_propShadowMatrix = std::make_shared<AutoProperty<glm::vec4, Vec4>>("light_matrix");
+		_propShadowMatrix = std::make_shared<AutoProperty<glm::mat4, Mat4>>("light_matrix");
 		_propPosition = std::make_shared<AutoProperty<glm::vec3, Vec3>>("position_light");
 		_propAttenuation = std::make_shared<AutoProperty<glm::vec3, Vec3>>("attenuation_light");
 		_propAttenuation->autoSet(range);

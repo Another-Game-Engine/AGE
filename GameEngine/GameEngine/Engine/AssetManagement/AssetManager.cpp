@@ -685,12 +685,12 @@ namespace AGE
 				total += channelTotal;
 				toLoad += channelToLoad;
 			}
+		}
 
-			for (auto &e : toErase)
-			{
-				_loadingChannels[e]->callCallbacks();
-				_loadingChannels.erase(e);
-			}
+		for (auto &e : toErase)
+		{
+			_loadingChannels[e]->callCallbacks();
+			_loadingChannels.erase(e);
 		}
 
 		if (toLoad != 0)

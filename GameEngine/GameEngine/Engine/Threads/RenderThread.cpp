@@ -236,7 +236,6 @@ namespace AGE
 				return;
 			}
 			{
-				_haveRenderFrameTask = false;
 				SCOPE_profile_cpu_i("RenderTimer", "SwapContext");
 				{
 					std::shared_ptr<DRBCameraDrawableList> cameraDrawableList = nullptr;
@@ -249,6 +248,8 @@ namespace AGE
 						_cameraDrawableList = nullptr;
 
 						imguiRenderList = _imguiRenderlist;
+
+						_haveRenderFrameTask = false;
 					}
 					pipelines[RenderType::DEFERRED]->render(*cameraDrawableList.get());
 

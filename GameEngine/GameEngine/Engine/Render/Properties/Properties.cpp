@@ -24,6 +24,16 @@ namespace AGE
 		_properties = other._properties;
 	}
 
+	Properties::~Properties()
+	{
+		RWLockGuard lock(_lock, true);
+		auto debug = _properties.size();
+		for (size_t i = 0; i < _properties.size(); ++i)
+		{
+			_properties[i] = nullptr;
+		}
+		_properties.clear();
+	}
 
 	Key<Property> Properties::add_property(std::shared_ptr<IProperty> const &prop)
 	{

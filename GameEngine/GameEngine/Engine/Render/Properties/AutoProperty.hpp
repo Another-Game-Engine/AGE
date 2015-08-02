@@ -24,7 +24,8 @@ namespace AGE
 		}
 
 		virtual ~AutoProperty()
-		{}
+		{
+		}
 
 		void set(const DataType &value)
 		{

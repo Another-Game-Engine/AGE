@@ -17,7 +17,7 @@ namespace AGE
 		Properties(Properties &&other);
 		Properties(Properties const &);
 		Properties &operator=(Properties const &) = delete;
-		~Properties() = default;
+		virtual ~Properties();
 
 	public:
 		Key<Property> add_property(std::shared_ptr<IProperty> const &prop);
