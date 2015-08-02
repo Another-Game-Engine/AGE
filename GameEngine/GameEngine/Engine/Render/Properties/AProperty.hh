@@ -11,6 +11,7 @@ namespace AGE
 	protected:
 		AProperty(std::string &&name);
 		AProperty(AProperty &&move);
+		virtual ~AProperty(){}
 
 	public:
 		virtual std::string const &name() const override final;

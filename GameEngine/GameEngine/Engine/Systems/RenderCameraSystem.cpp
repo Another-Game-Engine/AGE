@@ -48,6 +48,12 @@ namespace AGE
 	{
 		_scene->getBfcLinkTracker()->reset();
 
+		// check if the render thread does not already have stuff to draw
+		if (AGE::GetRenderThread()->haveRenderFrameTask())
+		{
+			return;
+		}
+
 		std::list<std::shared_ptr<DRBSpotLightDrawableList>> spotLightList;
 		std::list<std::shared_ptr<DRBData>> pointLightList;
 
@@ -91,7 +97,7 @@ namespace AGE
 			_scene->getBfcBlockManagerFactory()->cullOnChannel(BFCCullableType::CullablePointLight, cameraList->pointLights, cameraFrustum);
 			cameraList->spotLights = spotLightList;
 			cameraList->pointLights = pointLightList;
-			AGE::GetRenderThread()->getQueue()->emplaceCommand<AGE::DRBCameraDrawableListCommand>(cameraList);
+			AGE::GetRenderThread()->setCameraDrawList(cameraList);
 		}
 	}
 

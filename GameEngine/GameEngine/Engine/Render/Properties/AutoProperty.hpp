@@ -23,6 +23,9 @@ namespace AGE
 			return _data;
 		}
 
+		virtual ~AutoProperty()
+		{}
+
 		void set(const DataType &value)
 		{
 			std::lock_guard<AGE::SpinLock> lock(_mutex);

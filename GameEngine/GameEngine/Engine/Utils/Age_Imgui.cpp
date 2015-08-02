@@ -221,7 +221,7 @@ namespace AGE
 	void Imgui::renderDrawLists(ImDrawList** const cmd_lists, int cmd_lists_count)
 	{
 #ifdef AGE_ENABLE_IMGUI
-		AGE::GetRenderThread()->getQueue()->emplaceCommand<AGE::RenderImgui>(cmd_lists, cmd_lists_count);
+		AGE::GetRenderThread()->setImguiDrawList(std::make_shared<AGE::RenderImgui>(cmd_lists, cmd_lists_count));
 #else
 		UNUSED(cmd_lists);
 		UNUSED(cmd_lists_count);

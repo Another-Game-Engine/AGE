@@ -21,6 +21,7 @@ namespace AGE
 	class Engine;
 	struct DrawableCollection;
 	struct RenderCamera;
+	struct RenderImgui;
 
 	typedef Properties Material;
 
@@ -45,6 +46,13 @@ namespace AGE
 		void getCube(Key<Vertices> &vertices, Key<Painter> &painter);
 
 		inline DepthMapManager &getDepthMapManager() { return _depthMapManager; }
+
+		inline bool haveRenderFrameTask() const { return _haveRenderFrameTask; }
+		void setCameraDrawList(std::shared_ptr<DRBCameraDrawableList> &list);
+#ifdef AGE_ENABLE_IMGUI
+		void setImguiDrawList(std::shared_ptr<AGE::RenderImgui> &list);
+#endif
+
 	public:
 		std::vector<Material> _materials;
 		std::shared_ptr<PaintingManager> paintingManager;
@@ -63,11 +71,17 @@ namespace AGE
 
 		std::thread _threadHandle;
 		std::atomic_bool _insideRun;
+		std::atomic_bool _haveRenderFrameTask;
+		std::shared_ptr<DRBCameraDrawableList> _cameraDrawableList;
+#ifdef AGE_ENABLE_IMGUI
+		std::shared_ptr<AGE::RenderImgui> _imguiRenderlist;
+#endif
 		bool _run;
 
 		SdlContext *_context;
 		std::list<std::shared_ptr<RenderCameraListContainerHandle>> _drawlists;
 		DepthMapManager _depthMapManager;
+		AGE::SpinLock _mutex;
 
 		friend class ThreadManager;
 	};

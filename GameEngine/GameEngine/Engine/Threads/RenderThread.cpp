@@ -33,6 +33,9 @@ namespace AGE
 		paintingManager(std::make_shared<PaintingManager>()),
 		pipelines(RenderType::TOTAL)
 	{
+		_haveRenderFrameTask = false;
+		_cameraDrawableList = nullptr;
+		_imguiRenderlist = nullptr;
 	}
 
 	RenderThread::~RenderThread()
@@ -228,8 +231,33 @@ namespace AGE
 
 		registerCallback<Commands::ToRender::Flush>([&](Commands::ToRender::Flush& msg)
 		{
+			if (_cameraDrawableList == nullptr)
 			{
+				return;
+			}
+			{
+				_haveRenderFrameTask = false;
 				SCOPE_profile_cpu_i("RenderTimer", "SwapContext");
+				{
+					std::shared_ptr<DRBCameraDrawableList> cameraDrawableList = nullptr;
+					std::shared_ptr<AGE::RenderImgui> imguiRenderList = nullptr;
+
+					{
+						std::lock_guard<AGE::SpinLock> lock(_mutex);
+
+						cameraDrawableList = _cameraDrawableList;
+						_cameraDrawableList = nullptr;
+
+						imguiRenderList = _imguiRenderlist;
+					}
+					pipelines[RenderType::DEFERRED]->render(*cameraDrawableList.get());
+
+					if (imguiRenderList != nullptr)
+					{
+						AGE::Imgui::getInstance()->renderThreadRenderFn(imguiRenderList->cmd_lists);
+					}
+
+				}
 				_context->swapContext();
 				{
 					SCOPE_profile_gpu_i("Clear buffer");
@@ -325,10 +353,6 @@ namespace AGE
 		//	_drawlists.clear();
 		//});
 
-		registerCallback<AGE::DRBCameraDrawableListCommand>([&](AGE::DRBCameraDrawableListCommand &msg){
-			pipelines[RenderType::DEFERRED]->render(*msg.list.get());
-		});
-
 		registerSharedCallback<AGE::Tasks::Basic::BoolFunction>([&](AGE::Tasks::Basic::BoolFunction& msg)
 		{
 			SCOPE_profile_cpu_i("RenderTimer", "Bool function");
@@ -347,13 +371,6 @@ namespace AGE
 			AGE::CreateEngine()->deleteInstance<IRenderContext>();
 			this->_insideRun = false;
 		});
-
-#ifdef AGE_ENABLE_IMGUI
-		registerCallback<AGE::RenderImgui>([&](AGE::RenderImgui &msg)
-		{
-			AGE::Imgui::getInstance()->renderThreadRenderFn(msg.cmd_lists);
-		});
-#endif
 
 		registerCallback<AGE::Tasks::Render::ContextGrabMouse>([&](AGE::Tasks::Render::ContextGrabMouse &msg)
 		{
@@ -433,17 +450,15 @@ namespace AGE
 			workStart = std::chrono::high_resolution_clock::now();
 
 			TMQ::MessageBase *task = nullptr;
-			do {
-				getQueue()->tryToGetTask(task, 10);
-				if (task)
-				{
-					SCOPE_profile_cpu_i("RenderTimer", "Execute task");
-					auto success = execute(task); // we receive a task that we cannot treat
-					AGE_ASSERT(success);
-					workEnd = std::chrono::high_resolution_clock::now();
-					const std::size_t elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(workEnd - workStart).count();
-				}
-			} while (task != nullptr);
+			getQueue()->tryToGetTask(task, 10);
+			if (task)
+			{
+				SCOPE_profile_cpu_i("RenderTimer", "Execute task");
+				auto success = execute(task); // we receive a task that we cannot treat
+				AGE_ASSERT(success);
+				workEnd = std::chrono::high_resolution_clock::now();
+				const std::size_t elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(workEnd - workStart).count();
+			}
 
 			workEnd = std::chrono::high_resolution_clock::now();
 			GetThreadManager()->updateThreadStatistics(this->_id
@@ -452,4 +467,19 @@ namespace AGE
 		}
 		return true;
 	}
+
+	void RenderThread::setCameraDrawList(std::shared_ptr<DRBCameraDrawableList> &list)
+	{
+		std::lock_guard<AGE::SpinLock> lock(_mutex);
+		_cameraDrawableList = list;
+		_haveRenderFrameTask = true;
+	}
+
+#ifdef AGE_ENABLE_IMGUI
+	void RenderThread::setImguiDrawList(std::shared_ptr<AGE::RenderImgui> &list)
+	{
+		std::lock_guard<AGE::SpinLock> lock(_mutex);
+		_imguiRenderlist = list;
+	}
+#endif
 }
