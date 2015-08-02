@@ -438,33 +438,31 @@ namespace AGE
 		{
 			SCOPE_profile_cpu_i("RenderTimer", "Update");
 
-			waitStart = std::chrono::high_resolution_clock::now();
-			SCOPE_profile_cpu_i("RenderTimer", "Wait and get commands");
-			
+			workStart = std::chrono::high_resolution_clock::now();
+
 			if (_context)
 			{
 				_context->refreshInputs();
 			}
 
-			
-			waitEnd = std::chrono::high_resolution_clock::now();
-			workStart = std::chrono::high_resolution_clock::now();
 
+			SCOPE_profile_cpu_i("RenderTimer", "Get and execute tasks");
+			waitStart = std::chrono::high_resolution_clock::now();
 			TMQ::MessageBase *task = nullptr;
-			getQueue()->tryToGetTask(task, 10);
+			getQueue()->getTask(task);
+			waitEnd = std::chrono::high_resolution_clock::now();
 			if (task)
 			{
 				SCOPE_profile_cpu_i("RenderTimer", "Execute task");
 				auto success = execute(task); // we receive a task that we cannot treat
 				AGE_ASSERT(success);
-				workEnd = std::chrono::high_resolution_clock::now();
-				const std::size_t elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(workEnd - workStart).count();
 			}
 
 			workEnd = std::chrono::high_resolution_clock::now();
+			auto waitCount = std::chrono::duration_cast<std::chrono::microseconds>(waitEnd - waitStart).count();
 			GetThreadManager()->updateThreadStatistics(this->_id
-				, std::chrono::duration_cast<std::chrono::microseconds>(workEnd - workStart).count()
-				, std::chrono::duration_cast<std::chrono::microseconds>(waitEnd - waitStart).count());
+				, std::chrono::duration_cast<std::chrono::microseconds>(workEnd - workStart).count() - waitCount
+				, waitCount);
 		}
 		return true;
 	}
