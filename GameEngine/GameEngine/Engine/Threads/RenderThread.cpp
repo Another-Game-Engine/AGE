@@ -236,7 +236,7 @@ namespace AGE
 				return;
 			}
 			{
-				SCOPE_profile_cpu_i("RenderTimer", "SwapContext");
+				SCOPE_profile_cpu_i("RenderTimer", "Draw frame");
 				{
 					std::shared_ptr<DRBCameraDrawableList> cameraDrawableList = nullptr;
 					std::shared_ptr<AGE::RenderImgui> imguiRenderList = nullptr;
