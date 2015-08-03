@@ -241,7 +241,7 @@ namespace AGE
 
 		if (deep)
 		{
-			auto link = source->getLink();
+			auto &link = source->getLink();
 			for (auto &e : link.getChildren())
 			{
 				Entity tmp;

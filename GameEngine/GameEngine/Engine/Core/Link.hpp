@@ -35,6 +35,9 @@ namespace AGE
 		inline float *getScalePtr() { return &_scale.x; }
 		inline float *getOrientationPtr() { return &_orientation.x; }
 
+		virtual ~Link()
+		{
+		}
 
 		// Used by modules like physic, do not use it to set object position, use setPosition instead
 		void internalSetPosition(const glm::vec3 &v, bool recalculate);
