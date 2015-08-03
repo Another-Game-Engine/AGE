@@ -19,6 +19,8 @@
 #include <Managers/ArchetypesEditorManager.hpp>
 #include <EditorConfiguration.hpp>
 
+#include "Systems/RenderCameraSystem.hpp"
+
 namespace AGE
 {
 	const std::string WorldEditorScene::Name = "World Editor";
@@ -42,6 +44,7 @@ namespace AGE
 		addSystem<FreeFlyCamera>(2);
 		addSystem<PhysicsSystem>(3, Physics::EngineType::Bullet, getInstance<AGE::AssetsManager>());
 		getInstance<Physics::PhysicsInterface>()->getWorld()->setGravity(0, 0, 0);
+		addSystem<RenderCameraSystem>(1000);
 		return true;
 	}
 

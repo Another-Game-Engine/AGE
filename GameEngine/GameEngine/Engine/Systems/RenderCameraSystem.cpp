@@ -54,6 +54,8 @@ namespace AGE
 			return;
 		}
 
+		AGE::GetRenderThread()->setCameraDrawList(std::shared_ptr<DRBCameraDrawableList>(nullptr));
+
 		std::list<std::shared_ptr<DRBSpotLightDrawableList>> spotLightList;
 		std::list<std::shared_ptr<DRBData>> pointLightList;
 
