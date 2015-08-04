@@ -539,16 +539,10 @@ namespace AGE
 		if (toLoad != 0)
 		{
 #ifdef AGE_ENABLE_IMGUI
-			if (!ImGui::Begin("ASSETS LOADING", (bool*)1, ImVec2(0, 0), 0.3f, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings))
-			{
-				ImGui::End();
-			}
-			else
-			{
-				ImGui::SetWindowPos(ImVec2(30, 30));
-				ImGui::Text("Assets loading : %s / %s", std::to_string(toLoad).c_str(), std::to_string(total).c_str());
-				ImGui::End();
-			}
+			ImGui::Begin("ASSETS LOADING", (bool*)1, ImVec2(0, 0), 0.3f, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings);
+			ImGui::SetWindowPos(ImVec2(30, 30));
+			ImGui::Text("Assets loading : %s / %s", std::to_string(toLoad).c_str(), std::to_string(total).c_str());
+			ImGui::End();
 #endif
 			_isLoading = true;
 		}

@@ -69,6 +69,10 @@ namespace AGE
 			Frustum spotlightFrustum;
 			// BIG hack :
 			// @PROUT TODO -> compute the spotlight frustum
+			if (_cameras.getCollection().empty())
+			{
+				continue;
+			}
 			auto hackCamEnt = *(_cameras.getCollection().begin());
 			auto hackCamComp = hackCamEnt->getComponent<CameraComponent>();
 			spotlightFrustum.setMatrix(hackCamComp->getProjection() * glm::inverse(hackCamEnt->getLink().getGlobalTransform()));

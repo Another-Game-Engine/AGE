@@ -169,8 +169,15 @@ namespace AGE
 			auto &meshList = (std::list<std::shared_ptr<DRBMeshData>>&)(infos.meshs);
 			for (auto &meshPaint : meshList)
 			{
-				auto painter = _painterManager->get_painter(meshPaint->getPainterKey());
-				painter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], meshPaint->globalProperties, meshPaint->getVerticesKey());
+				//temporary
+				//todo, do not spawn entity while mesh is not loaded
+				//currently it's not safe, because the paiter key can be invalid
+				//during the first frames
+				if (meshPaint->getPainterKey().isValid())
+				{
+					auto painter = _painterManager->get_painter(meshPaint->getPainterKey());
+					painter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], meshPaint->globalProperties, meshPaint->getVerticesKey());
+				}
 			}
 		}
 //#endif
