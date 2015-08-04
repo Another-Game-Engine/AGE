@@ -15,6 +15,7 @@ namespace AGE
 	{
 	public:
 		virtual ~BFCLink();
+		BFCLink();
 		void initBFC(BFCBlockManagerFactory *blockFactory
 			, BFCLinkTracker *linkTracker);
 		void addObject(BFCCullableObject *object);

@@ -210,35 +210,35 @@ namespace AGE
 		{
 			for (auto i = 0; i < 10; ++i)
 			{
-				//auto e = createEntity();
-				//e->addComponent<Lifetime>(5.0f);
+				auto e = createEntity();
+				e->addComponent<Lifetime>(5.0f);
 
-				//auto &link = e->getLink();
-				//link.setPosition(glm::vec3((rand() % 100) - 50, (rand() % 50) - 5, (rand() % 100) - 50));
-				//link.setOrientation(glm::quat(glm::vec3(rand() % 360, rand() % 360, rand() % 360)));
-				//link.setScale(glm::vec3(1.0f));
+				auto &link = e->getLink();
+				link.setPosition(glm::vec3((rand() % 100) - 50, (rand() % 50) - 5, (rand() % 100) - 50));
+				link.setOrientation(glm::quat(glm::vec3(rand() % 360, rand() % 360, rand() % 360)));
+				link.setScale(glm::vec3(1.0f));
 
 
-				//MeshRenderer *mesh;
-				//if (i % 4 == 0)
-				//{
-				//	mesh = e->addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage"), getInstance<AGE::AssetsManager>()->getMaterial(OldFile("ball/ball.mage")));
-				//	e->addComponent<Collider>(Physics::ColliderType::Sphere);
-				//	link.setScale(glm::vec3(0.5f));
-				//}
-				//else
-				//{
-				//	mesh = e->addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("cube/cube.sage"), getInstance<AGE::AssetsManager>()->getMaterial(OldFile("cube/cube.mage")));
-				//	e->addComponent<Collider>(Physics::ColliderType::Box);
-				//	//auto pl = e->addComponent<PointLightComponent>();
-				//	//pl->setColor(glm::vec3(float(rand() % 100) / 100.0f, float(rand() % 100) / 100.0f, float(rand() % 100) / 100.0f));
-				//}
+				MeshRenderer *mesh;
+				if (i % 4 == 0)
+				{
+					mesh = e->addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage"), getInstance<AGE::AssetsManager>()->getMaterial(OldFile("ball/ball.mage")));
+					e->addComponent<Collider>(Physics::ColliderType::Sphere);
+					link.setScale(glm::vec3(0.5f));
+				}
+				else
+				{
+					mesh = e->addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("cube/cube.sage"), getInstance<AGE::AssetsManager>()->getMaterial(OldFile("cube/cube.mage")));
+					e->addComponent<Collider>(Physics::ColliderType::Box);
+					//auto pl = e->addComponent<PointLightComponent>();
+					//pl->setColor(glm::vec3(float(rand() % 100) / 100.0f, float(rand() % 100) / 100.0f, float(rand() % 100) / 100.0f));
+				}
 
-				//if (i % 13 == 0)
-				//{
-				//}
-				//e->addComponent<RigidBody>();
-				//mesh->enableRenderMode(RenderModes::AGE_OPAQUE);
+				if (i % 13 == 0)
+				{
+				}
+				e->addComponent<RigidBody>();
+				mesh->enableRenderMode(RenderModes::AGE_OPAQUE);
 			}
 			_chunkCounter = 0;
 		}

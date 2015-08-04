@@ -11,6 +11,10 @@ namespace AGE
 		unregisterFromTracker();
 	}
 
+	BFCLink::BFCLink()
+	{
+	}
+
 	void BFCLink::initBFC(BFCBlockManagerFactory *blockFactory, BFCLinkTracker *linkTracker)
 	{
 		AGE_ASSERT(blockFactory != nullptr);
@@ -60,7 +64,7 @@ namespace AGE
 	{
 		popAnObject(handle);
 		_bfcBlockFactory->deleteItem(handle);
-		registerToTracker();
+		unregisterFromTracker();
 	}
 
 	// dangerous !
@@ -86,6 +90,6 @@ namespace AGE
 
 		std::swap(_cullables[i], _cullables.back());
 		_cullables.pop_back();
-		registerToTracker();
+		unregisterFromTracker();
 	}
 }
