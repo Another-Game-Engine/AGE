@@ -14,8 +14,6 @@
 #include <Utils/OpenGL.hh>
 #include <Utils/Age_Imgui.hpp>
 #include <Render/Properties/Transformation.hh>
-#include <Culling/Output/RenderCamera.hh>
-#include <Culling/Output/RenderLight.hh>
 #include <Culling/Output/RenderPipeline.hh>
 #include <Utils/Debug.hpp>
 #include <Render/GeometryManagement/SimpleGeometry.hh>

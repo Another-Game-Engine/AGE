@@ -6,6 +6,7 @@
 #include <Core/AScene.hh>
 #include <imgui/imgui.h>
 
+
 namespace AGE
 {
 	CameraComponent::CameraComponent()

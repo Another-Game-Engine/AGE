@@ -3,7 +3,6 @@
 #include <Utils/Debug.hpp>
 #include <Utils/OpenGL.hh>
 #include <Render/Pipelining/Pipelines/ARenderingPipeline.hh>
-#include <Culling/Output/RenderLight.hh>
 #include <glm/glm.hpp>
 #include <Render/Textures/Texture2D.hh>
 

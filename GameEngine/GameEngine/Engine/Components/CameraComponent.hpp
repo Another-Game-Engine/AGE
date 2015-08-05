@@ -7,41 +7,10 @@
 #include <Render/PipelineTypes.hpp>
 #include <set>
 
+#include "Graphic/DRBCameraDrawableList.hpp"
+
 namespace AGE
 {
-	struct CameraData
-	{
-		bool activated;
-		std::shared_ptr<TextureCubeMap> texture;
-		glm::mat4 projection = glm::mat4(1.0f);
-		RenderType pipeline = RenderType::DEFERRED;
-		CameraData(CameraData const &cam) : 
-			activated(cam.activated),
-			texture(cam.texture),
-			projection(cam.projection),
-			pipeline(cam.pipeline)
-		{
-		}
-
-		CameraData()
-			: activated(true),
-			projection(1.0f),
-			pipeline(RenderType::DEFERRED)
-		{
-		}
-
-		CameraData &operator=(CameraData const &cam)
-		{
-			activated = (cam.activated);
-			texture = (cam.texture);
-			projection = (cam.projection);
-			pipeline = (cam.pipeline);
-			return *this;
-		}
-
-
-	};
-
 	struct CameraComponent : public ComponentBase
 	{
 		AGE_COMPONENT_UNIQUE_IDENTIFIER("AGE_CORE_CameraComponent");
@@ -59,7 +28,7 @@ namespace AGE
 		void setProjection(const glm::mat4 &);
 		const glm::mat4 &getProjection() const { return _data.projection; }
 		void setPipeline(RenderType pipeline);
-		RenderType getPipeline() const { return _data.pipeline; }
+		RenderType getPipeline() const { return RenderType(_data.pipeline); }
 		const CameraData &getData() const { return _data; }
 		void setTexture(std::shared_ptr<TextureCubeMap> const &texture);
 

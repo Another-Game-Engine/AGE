@@ -9,7 +9,6 @@
 #include <memory>
 #include <vector>
 #include <Render/Properties/Properties.hh>
-#include <Culling/Output/RenderCamera.hh>
 #include <Render/PipelineTypes.hpp>
 #include <Render/OcclusionTools/DepthMapManager.hpp>
 #include <Render/GeometryManagement/SimpleGeometry.hh>
@@ -82,7 +81,6 @@ namespace AGE
 		bool _run;
 
 		SdlContext *_context;
-		std::list<std::shared_ptr<RenderCameraListContainerHandle>> _drawlists;
 		DepthMapManager _depthMapManager;
 		AGE::SpinLock _mutex;
 

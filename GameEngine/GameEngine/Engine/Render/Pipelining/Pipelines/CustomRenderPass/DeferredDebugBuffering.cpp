@@ -5,10 +5,7 @@
 #include <Render/Textures/Texture2D.hh>
 #include <Render/OpenGLTask/OpenGLState.hh>
 #include <Render/GeometryManagement/Painting/Painter.hh>
-#include <Culling/Output/RenderLight.hh>
 #include <Culling/Output/RenderPipeline.hh>
-#include <Culling/Output/RenderPainter.hh>
-#include <Culling/Output/RenderCamera.hh>
 #include <Render/ProgramResources/Types/Uniform/Mat4.hh>
 #include <Render/ProgramResources/Types/Uniform/Sampler/Sampler2D.hh>
 #include <Threads/RenderThread.hpp>
@@ -88,12 +85,6 @@ namespace AGE
 				auto &pointLightList = (std::list<std::shared_ptr<DRBPointLightData>>&)(infos.pointLights);
 				for (auto &pl : pointLightList)
 				{
-					{
-						SCOPE_profile_gpu_i("Overhead Pipeline");
-						SCOPE_profile_cpu_i("RenderTimer", "Overhead Pipeline");
-						//_programs[PROGRAM_BUFFERING_LIGHT]->get_resource<Sampler2D>("sprite_light").set(std::static_pointer_cast<Texture2D>(pl.light.data.map));
-						//_programs[PROGRAM_BUFFERING_LIGHT]->get_resource<Mat4>("model_matrix").set(pl.light.transformation);
-					}
 					_quadPainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING_LIGHT], pl->globalProperties, _quadVertices);
 				}
 			}
@@ -104,12 +95,6 @@ namespace AGE
 				for (auto &pl : spotLightList)
 				{
 					auto &spotlight = (std::shared_ptr<DRBSpotLightData>&)(pl->spotLight);
-					{
-						SCOPE_profile_gpu_i("Overhead Pipeline");
-						SCOPE_profile_cpu_i("RenderTimer", "Overhead Pipeline");
-						//_programs[PROGRAM_BUFFERING_LIGHT]->get_resource<Sampler2D>("sprite_light").set(std::static_pointer_cast<Texture2D>(pl.light.data.map));
-						//_programs[PROGRAM_BUFFERING_LIGHT]->get_resource<Mat4>("model_matrix").set(pl.light.transformation);
-					}
 					_quadPainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING_LIGHT], spotlight->globalProperties, _quadVertices);
 				}
 			}

@@ -19,6 +19,8 @@
 #include <Threads/RenderThread.hpp>
 #include <Threads/MainThread.hpp>
 
+#include "Utils/Frustum.hh"
+
 namespace AGE
 {
 	RenderCameraSystem::RenderCameraSystem(AScene *scene) :

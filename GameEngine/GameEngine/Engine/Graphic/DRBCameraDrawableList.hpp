@@ -1,16 +1,36 @@
 #pragma once
 
 #include <list>
-#include "Culling\Output\RenderCamera.hh"
+#include <memory>
+#include <glm/glm.hpp>
 
 namespace AGE
 {
 	struct DRBData;
+	class TextureCubeMap;
 
 	struct DRBSpotLightDrawableList
 	{
 		std::list<std::shared_ptr<DRBData>> meshs;
 		std::shared_ptr<DRBData> spotLight;
+	};
+
+	struct CameraData
+	{
+		bool                            activated;
+		std::shared_ptr<TextureCubeMap> texture;
+		glm::mat4                       projection;
+		unsigned int                    pipeline;
+
+		CameraData(CameraData const &cam);
+		CameraData();
+		CameraData &operator=(CameraData const &cam);
+	};
+
+	struct CameraInfos
+	{
+		glm::mat4 view;
+		CameraData data;
 	};
 
 	struct DRBCameraDrawableList

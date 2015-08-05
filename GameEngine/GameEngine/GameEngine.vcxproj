@@ -257,6 +257,7 @@
     <ClCompile Include="Engine\Entities\BinaryEntity.cpp" />
     <ClCompile Include="Engine\Entities\BinaryEntityPack.cpp" />
     <ClCompile Include="Engine\Entities\EntityBinaryPacker.cpp" />
+    <ClCompile Include="Engine\Graphic\DRBCameraDrawableList.cpp" />
     <ClCompile Include="Engine\Graphic\DRBData.cpp" />
     <ClCompile Include="Engine\Graphic\DRBLightElementManager.cpp" />
     <ClCompile Include="Engine\Graphic\DRBMesh.cpp" />
