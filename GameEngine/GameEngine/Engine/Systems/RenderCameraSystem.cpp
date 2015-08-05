@@ -17,6 +17,7 @@
 
 #include <Threads/ThreadManager.hpp>
 #include <Threads/RenderThread.hpp>
+#include <Threads/MainThread.hpp>
 
 namespace AGE
 {
@@ -49,12 +50,10 @@ namespace AGE
 		_scene->getBfcLinkTracker()->reset();
 
 		// check if the render thread does not already have stuff to draw
-		if (AGE::GetRenderThread()->haveRenderFrameTask())
+		if (GetMainThread()->isRenderFrame() == false)
 		{
 			return;
 		}
-
-		AGE::GetRenderThread()->setCameraDrawList(std::shared_ptr<DRBCameraDrawableList>(nullptr));
 
 		std::list<std::shared_ptr<DRBSpotLightDrawableList>> spotLightList;
 		std::list<std::shared_ptr<DRBData>> pointLightList;
@@ -103,7 +102,7 @@ namespace AGE
 			_scene->getBfcBlockManagerFactory()->cullOnChannel(BFCCullableType::CullablePointLight, cameraList->pointLights, cameraFrustum);
 			cameraList->spotLights = spotLightList;
 			cameraList->pointLights = pointLightList;
-			AGE::GetRenderThread()->setCameraDrawList(cameraList);
+			AGE::GetRenderThread()->getQueue()->emplaceCommand<AGE::DRBCameraDrawableListCommand>(cameraList);
 		}
 	}
 

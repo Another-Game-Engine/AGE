@@ -17,6 +17,8 @@
 #include <Threads/Tasks/ToRenderTasks.hpp>
 #include <Threads/Tasks/BasicTasks.hpp>
 
+#include <Utils/Age_microprofile.hpp>
+
 #ifdef USE_DEFAULT_ENGINE_CONFIGURATION
 
 #include <AssetManagement/AssetManager.hh>
@@ -150,7 +152,7 @@ namespace AGE
 	bool Engine::launch(std::function<bool()> &fn)
 	{
 		AGE_ASSERT(!_initialized && "Engine already initialized.");
-
+		Age_microprofileInit();
 		{
 			auto futur = GetRenderThread()->getQueue()->emplaceFutureTask<Tasks::Render::CreateRenderContext, bool>(this);
 			auto success = futur.get();
@@ -336,7 +338,7 @@ namespace AGE
 		{
 			_renderFpsStatitstics();
 		}
-		if (GetRenderThread()->haveRenderFrameTask())
+		if (GetMainThread()->isRenderFrame())
 		{
 #ifdef AGE_ENABLE_IMGUI
 		{

@@ -47,8 +47,10 @@ namespace AGE
 
 		inline DepthMapManager &getDepthMapManager() { return _depthMapManager; }
 
-		inline bool haveRenderFrameTask() const { return _haveRenderFrameTask; }
-		void setCameraDrawList(std::shared_ptr<DRBCameraDrawableList> &list);
+		bool isDrawing() const;
+		// called by engine (main thread) at the beginning of a render frame
+		void setIsDrawingToTrue();
+
 #ifdef AGE_ENABLE_IMGUI
 		void setImguiDrawList(std::shared_ptr<AGE::RenderImgui> &list);
 #endif
@@ -71,8 +73,9 @@ namespace AGE
 
 		std::thread _threadHandle;
 		std::atomic_bool _insideRun;
-		std::atomic_bool _haveRenderFrameTask;
-		std::shared_ptr<DRBCameraDrawableList> _cameraDrawableList;
+
+		std::atomic_bool _isDrawing;
+
 #ifdef AGE_ENABLE_IMGUI
 		std::shared_ptr<AGE::RenderImgui> _imguiRenderlist;
 #endif

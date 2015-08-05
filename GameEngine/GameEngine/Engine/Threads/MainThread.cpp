@@ -19,7 +19,7 @@ namespace AGE
 			if (msg.function)
 				msg.function();
 		});
-
+		_isRenderFrame = false;
 		return true;
 	}
 
@@ -40,6 +40,20 @@ namespace AGE
 		std::size_t waitCount = 0;
 
 		workStart = std::chrono::high_resolution_clock::now();
+
+		if (GetRenderThread()->isDrawing())
+		{
+			_isRenderFrame = false;
+		}
+		else
+		{
+			_isRenderFrame = true;
+		}
+
+		if (_isRenderFrame)
+		{
+			GetRenderThread()->setIsDrawingToTrue();
+		}
 
 		if (!_engine->update())
 		{

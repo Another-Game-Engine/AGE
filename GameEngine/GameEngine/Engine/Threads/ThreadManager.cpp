@@ -7,7 +7,6 @@
 #include <TMQ/queue.hpp>
 #include <limits>
 #include <Utils/Debug.hpp>
-#include <Utils/Age_microprofile.hpp>
 
 namespace AGE
 {
@@ -208,7 +207,6 @@ namespace AGE
 			res = threadManager->initAndLaunch();
 			return res;
 		});
-		Age_microprofileInit();
 		return res;
 	}
 
