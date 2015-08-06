@@ -69,6 +69,9 @@ namespace AGE
 			auto spotDrawableList = std::make_shared<DRBSpotLightDrawableList>();
 			spotDrawableList->spotLight = spot->getCullableHandle().getPtr()->getDatas();
 
+			// WARNINNNNNNNNNNNG
+			// Le calcul n'est pas bon !!!!
+			// Paul, fais le STP, merci
 			Frustum spotlightFrustum;
 			spotlightFrustum.setMatrix(glm::perspective(spot->getCutOff() / 2.0f, spot->getExponent(), 0.1f, 1000.0f)* glm::inverse(spotEntity->getLink().getGlobalTransform()));
 
