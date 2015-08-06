@@ -223,15 +223,22 @@ namespace AGE
 						auto &types = ComponentRegistrationManager::getInstance().getExposedType();
 						auto &creationFn = ComponentRegistrationManager::getInstance().getCreationFunctions();
 
-						for (auto &t : types)
+						if (ImGui::Button("Add component..."))
+							ImGui::OpenPopup("add_component");
+
+						if (ImGui::BeginPopup("add_component"))
 						{
-							if (!entity->haveComponent(t.second))
+							for (auto &t : types)
 							{
-								if (ImGui::SmallButton(std::string("Add : " + ComponentRegistrationManager::getInstance().getComponentName(t.second)).c_str()))
+								if (!entity->haveComponent(t.second))
 								{
-									creationFn.at(t.first)(&entity);
+									if (ImGui::Selectable(ComponentRegistrationManager::getInstance().getComponentName(t.second).c_str()))
+									{
+										creationFn.at(t.first)(&entity);
+									}
 								}
 							}
+							ImGui::EndPopup();
 						}
 
 						ImGui::Separator();
