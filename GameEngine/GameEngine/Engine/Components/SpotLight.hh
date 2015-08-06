@@ -54,7 +54,8 @@ namespace AGE
 		virtual void editorDelete();
 		virtual bool editorUpdate();
 #endif
-
+		inline float getCutOff() const { return cutOff; }
+		inline float getExponent() const { return exponent; }
 	private:
 		glm::vec4 color;
 		glm::vec3 range;

@@ -100,7 +100,7 @@ namespace AGE
 			SCOPE_profile_gpu_i("Spotlight pass");
 			SCOPE_profile_cpu_i("RenderTimer", "Spotlight pass");
 
-			auto &spotlight = (std::shared_ptr<DRBSpotLightData>&)(spotLightPtr->spotLight);
+			DRBSpotLightData *spotlight = (DRBSpotLightData*)(spotLightPtr->spotLight.get());
 
 			glViewport(0, 0, _frame_buffer.width(), _frame_buffer.height());
 			// it should be better to pass all that code (setting properties in the main thread)
@@ -114,7 +114,7 @@ namespace AGE
 			// draw for the spot light selected
 			for (auto &meshPaint : spotLightPtr->meshs)
 			{
-				auto mesh = std::static_pointer_cast<DRBMeshData>(meshPaint);
+				auto mesh = (DRBMeshData*)(meshPaint.get());
 
 				//temporary
 				//todo, do not spawn entity while mesh is not loaded
@@ -122,17 +122,9 @@ namespace AGE
 				//during the first frames
 				if (mesh->getPainterKey().isValid())
 				{
-					auto painter = _painterManager->get_painter(mesh->getPainterKey());
+					Painter *painter = _painterManager->get_painter(mesh->getPainterKey()).get();
 					painter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], mesh->globalProperties, mesh->getVerticesKey());
 				}
-				//auto painter = _painterManager->get_painter(Key<Painter>::createKey(meshPaint.first));
-				//for (auto &mode : meshPaint.second.drawables)
-				//{
-				//	if (renderModeCompatible(mode.renderMode))
-				//	{
-				//		painter->draw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], mode.properties, mode.vertices);
-				//	}
-				//}
 			}
 			spotlight->shadowMap = *it;
 			++it;

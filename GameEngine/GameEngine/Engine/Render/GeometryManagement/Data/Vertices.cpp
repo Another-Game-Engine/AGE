@@ -91,24 +91,24 @@ namespace AGE
 		return (_types[index]);
 	}
 
-	Vertices & Vertices::set_block_memory(std::shared_ptr<BlockMemory> const &blockMemory, std::string const &attribute)
+	void Vertices::set_block_memory(std::shared_ptr<BlockMemory> const &blockMemory, std::string const &attribute)
 	{
-		for (auto &block_memory : _block_memories) {
-			if (block_memory.first == attribute) {
+		for (auto &block_memory : _block_memories)
+		{
+			if (block_memory.first == attribute)
+			{
 				block_memory.second = blockMemory;
-				return *this;
+				return;
 			}
 		}
-		return (*this);
 	}
 
-	Vertices &Vertices::set_indices_block_memory(std::shared_ptr<BlockMemory> const &blockMemory)
+	void Vertices::set_indices_block_memory(std::shared_ptr<BlockMemory> const &blockMemory)
 	{
 		_indices_block_memory = blockMemory;
-		return (*this);
 	}
 
-	Vertices & Vertices::remove()
+	void Vertices::remove()
 	{
 		auto &data = _data.begin();
 		for (auto &block : _block_memories) {
@@ -128,27 +128,25 @@ namespace AGE
 		}
 		_nbr_vertex = 0;
 		_nbr_indices = 0;
-		return (*this);
 	}
 
-	Vertices & Vertices::set_indices(std::vector<unsigned int> const &data)
+	void Vertices::set_indices(std::vector<unsigned int> const &data)
 	{
 		std::vector<uint8_t> tmp(data.size() * sizeof(unsigned int));
 		std::memcpy(tmp.data(), data.data(), tmp.size());
 		if (_indices_block_memory.lock())
 		{
 			_indices_block_memory.lock()->setDatas(tmp);
-			return (*this);
+			return;
 		}
 		if (tmp.size() != _indices_data.size())
 		{
-			return (*this);
+			return;
 		}
 		_indices_data = tmp;
-		return (*this);
 	}
 
-	Vertices & Vertices::draw(GLenum mode)
+	void Vertices::draw(GLenum mode)
 	{
 		SCOPE_profile_cpu_function("RenderTimer");
 
@@ -161,7 +159,6 @@ namespace AGE
 		{
 			glDrawArrays(mode, (GLint)_offset, (GLsizei)_nbr_vertex);
 		}
-		return (*this);
 	}
 
 	unsigned int const * Vertices::get_indices(size_t &size) const
@@ -177,10 +174,9 @@ namespace AGE
 		}
 	}
 
-	Vertices & Vertices::reset(size_t o)
+	void Vertices::reset(size_t o)
 	{
 		_offset = o;
-		return (*this);
 	}
 
 }

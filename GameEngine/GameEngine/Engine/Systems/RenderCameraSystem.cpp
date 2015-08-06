@@ -8,6 +8,8 @@
 #include <Core/Engine.hh>
 #include <Core/AScene.hh>
 
+#include <glm/gtc/matrix_transform.hpp>
+
 #include <BFC/BFCLinkTracker.hpp>
 #include <BFC/BFCBlockManagerFactory.hpp>
 #include <BFC/BFCCullableObject.hpp>
@@ -68,16 +70,7 @@ namespace AGE
 			spotDrawableList->spotLight = spot->getCullableHandle().getPtr()->getDatas();
 
 			Frustum spotlightFrustum;
-			// BIG hack :
-			// @PROUT TODO -> compute the spotlight frustum
-			if (_cameras.getCollection().empty())
-			{
-				continue;
-			}
-			auto hackCamEnt = *(_cameras.getCollection().begin());
-			auto hackCamComp = hackCamEnt->getComponent<CameraComponent>();
-			spotlightFrustum.setMatrix(hackCamComp->getProjection() * glm::inverse(hackCamEnt->getLink().getGlobalTransform()));
-			// hack end
+			spotlightFrustum.setMatrix(glm::perspective(spot->getCutOff() / 2.0f, spot->getExponent(), 0.1f, 1000.0f)* glm::inverse(spotEntity->getLink().getGlobalTransform()));
 
 			_scene->getBfcBlockManagerFactory()->cullOnChannel(BFCCullableType::CullableMesh, spotDrawableList->meshs, spotlightFrustum);
 			spotLightList.push_back(spotDrawableList);

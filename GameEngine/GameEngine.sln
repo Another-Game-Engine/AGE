@@ -386,7 +386,6 @@ Global
 		{042DAF3E-FF50-B73C-C9A4-53AC6D3CFCEC}.Release|Mixed Platforms.Build.0 = release|x64
 		{042DAF3E-FF50-B73C-C9A4-53AC6D3CFCEC}.Release|Win32.ActiveCfg = release|x64
 		{042DAF3E-FF50-B73C-C9A4-53AC6D3CFCEC}.Release|x64.ActiveCfg = release|x64
-		{042DAF3E-FF50-B73C-C9A4-53AC6D3CFCEC}.Release|x64.Build.0 = release|x64
 		{042DAF3E-FF50-B73C-C9A4-53AC6D3CFCEC}.Retail|Mixed Platforms.ActiveCfg = release|x64
 		{042DAF3E-FF50-B73C-C9A4-53AC6D3CFCEC}.Retail|Win32.ActiveCfg = release|x64
 		{042DAF3E-FF50-B73C-C9A4-53AC6D3CFCEC}.Retail|x64.ActiveCfg = release|x64

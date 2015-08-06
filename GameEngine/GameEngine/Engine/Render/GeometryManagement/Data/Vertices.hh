@@ -29,12 +29,12 @@ namespace AGE
 		template <typename type_t> type_t const *get_data(size_t index, size_t &size) const;
 		template <typename type_t> bool set_data(std::vector<type_t> const &data, std::string const &attribute);
 		unsigned int const *get_indices(size_t &size) const;
-		Vertices &set_indices(std::vector<unsigned int> const &data);
-		Vertices &set_block_memory(std::shared_ptr<BlockMemory> const &blockMemory, std::string const &attribute);
-		Vertices &set_indices_block_memory(std::shared_ptr<BlockMemory> const &blockMemory);
-		Vertices &remove();
-		Vertices &reset(size_t o);
-		Vertices &draw(GLenum mode);
+		void set_indices(std::vector<unsigned int> const &data);
+		void set_block_memory(std::shared_ptr<BlockMemory> const &blockMemory, std::string const &attribute);
+		void set_indices_block_memory(std::shared_ptr<BlockMemory> const &blockMemory);
+		void remove();
+		void reset(size_t o);
+		void draw(GLenum mode);
 
 	private:
 		size_t _offset;
