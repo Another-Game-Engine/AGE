@@ -7,6 +7,11 @@
 
 namespace AGE
 {
+	class IProperty;
+	class Sampler2D;
+	class Mat4;
+	class Vec3;
+	class Vec1;
 
 	struct SpotLightData
 	{
@@ -35,14 +40,13 @@ namespace AGE
 		virtual void reset();
 		void init();
 
-		void set(SpotLightData const &data);
+		inline BFCCullableHandle getCullableHandle() const { return _graphicHandle; }
 
 		template <typename Archive>
 		void serialize(Archive &ar, const std::uint32_t version)
 		{
-			ar(cereal::make_nvp("color", _data.color), cereal::make_nvp("range", _data.range), cereal::make_nvp("exponent", _data.exponent), cereal::make_nvp("cutOff", _data.cutOff));
+			ar(cereal::make_nvp("color", color), cereal::make_nvp("range", range), cereal::make_nvp("exponent", exponent), cereal::make_nvp("cutOff", cutOff));
 		}
-		inline const SpotLightData &get() const { return _data; }
 		virtual void postUnserialization();
 
 #ifdef EDITOR_ENABLED
@@ -50,10 +54,25 @@ namespace AGE
 		virtual void editorDelete();
 		virtual bool editorUpdate();
 #endif
-
+		inline float getCutOff() const { return cutOff; }
+		inline float getExponent() const { return exponent; }
 	private:
-		AGE::PrepareKey _key;
-		SpotLightData _data;
+		glm::vec4 color;
+		glm::vec3 range;
+		float exponent;
+		float cutOff;
 
+		// TODO
+		std::shared_ptr<IProperty>      _mapProp = nullptr;
+		std::shared_ptr<IProperty>      _propShadowMatrix;
+		std::shared_ptr<IProperty>      _propPosition;
+		std::shared_ptr<IProperty>      _propAttenuation;
+		std::shared_ptr<IProperty>      _propDirection;
+		std::shared_ptr<IProperty>      _propSpotCutOff;
+		std::shared_ptr<IProperty>      _propExponentLight;
+		std::shared_ptr<IProperty>      _propColorLight;
+		BFCCullableHandle               _graphicHandle;
 	};
 }
+
+CEREAL_CLASS_VERSION(AGE::SpotLightComponent, 0);

@@ -5,7 +5,6 @@
 #include <Skinning/AnimationManager.hpp>
 #include <Threads/ThreadManager.hpp>
 #include <Threads/RenderThread.hpp>
-#include <Threads/PrepareRenderThread.hpp>
 #include <Threads/Commands/MainToPrepareCommands.hpp>
 #include <Threads/Commands/ToRenderCommands.hpp>
 #include <Threads/Tasks/BasicTasks.hpp>
@@ -28,8 +27,8 @@
 #include <Components/ComponentRegistrationManager.hpp>
 
 #include <Systems/RotationSystem.hpp>
-
 #include <Systems/DebugSystem.hpp>
+#include <Systems/RenderCameraSystem.hpp>
 
 #include <Render/Program.hh>
 #include <Render/ProgramResources/Types/Uniform/Vec1.hh>
@@ -50,7 +49,10 @@
 
 #include <Systems/PhysicsSystem.hpp>
 
-
+#include <Graphic/DRBCameraDrawableList.hpp>
+#include <Graphic/BFCCullableTypes.hpp>
+#include <BFC/BFCBlockManagerFactory.hpp>
+#include <BFC/BFCLinkTracker.hpp>
 
 namespace AGE
 {
@@ -101,6 +103,7 @@ namespace AGE
 		addSystem<AGE::LifetimeSystem>(2);
 		addSystem<AGE::FreeFlyCamera>(0);
 		addSystem<AGE::RotationSystem>(0);
+		addSystem<AGE::RenderCameraSystem>(1000000);
 
 		getInstance<AGE::AssetsManager>()->loadMesh(OldFile("cube/cube.sage"), "DEMO_SCENE_BASIC_ASSETS");
 		getInstance<AGE::AssetsManager>()->loadMesh(OldFile("ball/ball.sage"), "DEMO_SCENE_BASIC_ASSETS");
@@ -198,7 +201,8 @@ namespace AGE
 			e->addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("cube/cube.sage"),
 										 getInstance<AGE::AssetsManager>()->getMaterial(OldFile("cube/cube.mage")))->enableRenderMode(RenderModes::AGE_OPAQUE);
 			e->addComponent<RigidBody>()->addForce(10.0f * cameraForward, Physics::ForceMode::Impulse);
-			e->addComponent<Collider>(Physics::ColliderType::Mesh, "cube/cube");
+			auto pl = e->addComponent<PointLightComponent>();
+			pl->setColor(glm::vec3(float(rand() % 100) / 100.0f, float(rand() % 100) / 100.0f, float(rand() % 100) / 100.0f));
 		}
 		trigger += time;
 
@@ -226,11 +230,12 @@ namespace AGE
 				{
 					mesh = e->addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("cube/cube.sage"), getInstance<AGE::AssetsManager>()->getMaterial(OldFile("cube/cube.mage")));
 					e->addComponent<Collider>(Physics::ColliderType::Box);
+					//auto pl = e->addComponent<PointLightComponent>();
+					//pl->setColor(glm::vec3(float(rand() % 100) / 100.0f, float(rand() % 100) / 100.0f, float(rand() % 100) / 100.0f));
 				}
 
 				if (i % 13 == 0)
 				{
-					//e->addComponent<PointLightComponent>()->set(PointLightData(glm::vec3((float)(rand() % 1000) / 1000.0f, (float)(rand() % 1000) / 1000.0f, (float)(rand() % 1000) / 1000.0f), glm::vec3(1.f, 0.1f, 0.005f)));
 				}
 				e->addComponent<RigidBody>();
 				mesh->enableRenderMode(RenderModes::AGE_OPAQUE);
@@ -264,14 +269,15 @@ namespace AGE
 		ImGui::ListBox("Pipelines", &pipelineIndex, pipelineNames, int(RenderType::TOTAL));
 		if (camComponent->getPipeline() != (RenderType)pipelineIndex)
 			camComponent->setPipeline((RenderType)pipelineIndex);
-		AGE::GetPrepareThread()->getQueue()->emplaceCommand<AGE::Commands::MainToPrepare::PrepareDrawLists>();
-		AGE::GetPrepareThread()->getQueue()->emplaceCommand<AGE::Commands::ToRender::RenderDrawLists>();
 		return true;
 	}
 
 
 	bool BenchmarkScene::_userUpdateEnd(float time)
 	{
+#ifdef AGE_BFC
+
+#endif
 		return true;
 	}
 }

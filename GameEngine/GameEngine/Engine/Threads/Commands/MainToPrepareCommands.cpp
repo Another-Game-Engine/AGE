@@ -55,11 +55,6 @@ namespace AGE
 				: key(key)
 			{}
 
-			SetPointLight::SetPointLight(PointLightData const &data, PrepareKey &key)
-				: key(key),
-				  data(data)
-			{}
-
 			SetDirectionalLight::SetDirectionalLight(DirectionalLightData const &data, PrepareKey &key)
 				: key(key),
 				  data(data)

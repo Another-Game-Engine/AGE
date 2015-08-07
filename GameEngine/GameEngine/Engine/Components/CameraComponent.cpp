@@ -2,10 +2,10 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <Threads/ThreadManager.hpp>
 #include <Threads/MainThread.hpp>
-#include <Threads/PrepareRenderThread.hpp>
 #include <Context/SDL/SdlContext.hh>
 #include <Core/AScene.hh>
 #include <imgui/imgui.h>
+
 
 namespace AGE
 {
@@ -27,26 +27,26 @@ namespace AGE
 	void CameraComponent::setProjection(const glm::mat4 &projection)
 	{
 		_data.projection = projection;
-		AGE::GetPrepareThread()->setCameraInfos(_data, _key);
+		//AGE::GetPrepareThread()->setCameraInfos(_data, _key);
 	}
 
 	void CameraComponent::setPipeline(RenderType pipeline)
 	{
 		_data.pipeline = pipeline;
-		AGE::GetPrepareThread()->setCameraInfos(_data, _key);
+		//AGE::GetPrepareThread()->setCameraInfos(_data, _key);
 	}
 
 	void CameraComponent::setTexture(std::shared_ptr<TextureCubeMap> const &texture)
 	{
 		_data.texture = texture;
-		AGE::GetPrepareThread()->setCameraInfos(_data, _key);
+		//AGE::GetPrepareThread()->setCameraInfos(_data, _key);
 	}
 
 	void CameraComponent::init()
 	{
 		auto scene = entity->getScene();
-		_key = AGE::GetPrepareThread()->addCamera();
-		entity->getLink().registerOctreeObject(_key);
+		//_key = AGE::GetPrepareThread()->addCamera();
+		//entity->getLink().registerOctreeObject(_key);
 		auto screenSize = entity->getScene()->getInstance<IRenderContext>()->getScreenSize();
 		setProjection(glm::perspective(60.0f, (float)screenSize.x / (float)screenSize.y, 0.1f, 2000.0f));
 	}
@@ -55,7 +55,7 @@ namespace AGE
 	{
 		if (!_key.invalid())
 		{
-			entity->getLink().unregisterOctreeObject(_key);
+			//entity->getLink().unregisterOctreeObject(_key);
 		}
 		_data = CameraData();
 	}
@@ -63,7 +63,7 @@ namespace AGE
 	void CameraComponent::postUnserialization()
 	{
 		init();
-		AGE::GetPrepareThread()->setCameraInfos(_data, _key);
+		//AGE::GetPrepareThread()->setCameraInfos(_data, _key);
 	}
 
 #ifdef EDITOR_ENABLED
@@ -102,7 +102,8 @@ namespace AGE
 		delete[] choices;
 		if (ImGui::Checkbox("FXAA activated", &_data.activated))
 		{
-			AGE::GetPrepareThread()->setCameraInfos(_data, _key);
+			//@PROUT TODO
+			//AGE::GetPrepareThread()->setCameraInfos(_data, _key);
 			modified = true;
 		}
 		return modified;

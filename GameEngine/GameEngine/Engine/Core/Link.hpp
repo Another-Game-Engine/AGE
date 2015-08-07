@@ -35,6 +35,9 @@ namespace AGE
 		inline float *getScalePtr() { return &_scale.x; }
 		inline float *getOrientationPtr() { return &_orientation.x; }
 
+		virtual ~Link()
+		{
+		}
 
 		// Used by modules like physic, do not use it to set object position, use setPosition instead
 		void internalSetPosition(const glm::vec3 &v, bool recalculate);
@@ -63,9 +66,6 @@ namespace AGE
 		void setScale(float v, bool recalculate = true);
 		void setOrientation(const glm::quat &v, bool recalculate = true);
 		void setTransform(const glm::mat4 &t, bool recalculate = true);
-
-		void registerOctreeObject(const PrepareKey &key);
-		void unregisterOctreeObject(const PrepareKey &key);
 
 		bool hasChildren() const;
 		bool hasParent() const;
@@ -100,10 +100,10 @@ namespace AGE
 		glm::vec3 _scale;
 		glm::quat _orientation;
 		glm::mat4 _localTransformation;
+#ifndef AGE_BFC
 		glm::mat4 _globalTransformation;
-
+#endif
 		bool _localDirty;
-		std::unordered_set<PrepareKey> _octreeObjects;
 		Link *_parent;
 		std::vector<Link*> _children;
 
@@ -114,8 +114,8 @@ namespace AGE
 		void _detachFromRoot();
 		void _attachToRoot();
 		void _updateGlobalTransform();
-	public:
-		RenderScene *_renderScene;
+
+		AScene *_scene;
 	public:
 		Link();
 		Link(EntityData *entity, AScene *_scene);

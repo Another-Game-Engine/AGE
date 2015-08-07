@@ -35,6 +35,7 @@ namespace AGE
 		// check the collision between AABB and frustum
 		bool checkCollision(AABoundingBox const &aabb) const;
 		bool checkCollision(Sphere const &sphere) const;
+		bool checkCollision(glm::vec4 const &sphere) const;
 		bool checkCollision(Frustum const &frustum) const;
 	};
 }

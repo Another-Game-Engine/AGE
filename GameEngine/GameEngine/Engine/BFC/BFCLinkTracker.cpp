@@ -1,4 +1,9 @@
 #include "BFCLinkTracker.hpp"
+#include "BFCBlockManagerFactory.hpp"
+
+#include "BFCCullableObject.hpp"
+#include "BFCItem.hpp"
+
 #include <Core/Link.hpp>
 #include <Utils/Debug.hpp>
 #include <Utils/Profiler.hpp>
@@ -17,6 +22,7 @@ namespace AGE
 		if (_free.empty() == false)
 		{
 			result = _free.front();
+			_links[result] = link;
 			_free.pop();
 		}
 		else
@@ -45,6 +51,12 @@ namespace AGE
 			if (e != nullptr)
 			{
 				e->resetBFCTrackerIndex();
+				for (auto &cullable : e->_cullables)
+				{
+					auto &item = e->_bfcBlockFactory->getItem(cullable.getItemId());
+					item.setPosition(cullable.getPtr()->setBFCTransform(e->_globalTransformation));
+				}
+				e = nullptr;
 			}
 		}
 		_links.clear();

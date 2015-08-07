@@ -5,19 +5,17 @@
 #include <Render/GeometryManagement/Data/Vertices.hh>
 #include <Render/GeometryManagement/Painting/PaintingManager.hh>
 
+#include <list>
+
 namespace AGE
 {
-	class Properties;
-	class IRenderingPipeline;
-	struct RenderLightList;
-	struct RenderPipeline;
-	struct CameraInfos;
+	struct DRBCameraDrawableList;
 
 	class IRender
 	{
 	public:
 		virtual ~IRender() {}
-		virtual IRender &render(RenderPipeline const &pipeline, RenderLightList &lights, CameraInfos const &infos) = 0;
+		virtual IRender &render(const DRBCameraDrawableList &infos) = 0;
 	};
 
 }

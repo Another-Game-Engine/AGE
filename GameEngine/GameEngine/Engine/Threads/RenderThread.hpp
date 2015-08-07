@@ -9,7 +9,6 @@
 #include <memory>
 #include <vector>
 #include <Render/Properties/Properties.hh>
-#include <Culling/Output/RenderCamera.hh>
 #include <Render/PipelineTypes.hpp>
 #include <Render/OcclusionTools/DepthMapManager.hpp>
 #include <Render/GeometryManagement/SimpleGeometry.hh>
@@ -21,6 +20,7 @@ namespace AGE
 	class Engine;
 	struct DrawableCollection;
 	struct RenderCamera;
+	struct RenderImgui;
 
 	typedef Properties Material;
 
@@ -45,6 +45,15 @@ namespace AGE
 		void getCube(Key<Vertices> &vertices, Key<Painter> &painter);
 
 		inline DepthMapManager &getDepthMapManager() { return _depthMapManager; }
+
+		bool isDrawing() const;
+		// called by engine (main thread) at the beginning of a render frame
+		void setIsDrawingToTrue();
+
+#ifdef AGE_ENABLE_IMGUI
+		void setImguiDrawList(std::shared_ptr<AGE::RenderImgui> &list);
+#endif
+
 	public:
 		std::vector<Material> _materials;
 		std::shared_ptr<PaintingManager> paintingManager;
@@ -63,11 +72,17 @@ namespace AGE
 
 		std::thread _threadHandle;
 		std::atomic_bool _insideRun;
+
+		std::atomic_bool _isDrawing;
+
+#ifdef AGE_ENABLE_IMGUI
+		std::shared_ptr<AGE::RenderImgui> _imguiRenderlist;
+#endif
 		bool _run;
 
 		SdlContext *_context;
-		std::list<std::shared_ptr<RenderCameraListContainerHandle>> _drawlists;
 		DepthMapManager _depthMapManager;
+		AGE::SpinLock _mutex;
 
 		friend class ThreadManager;
 	};

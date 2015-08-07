@@ -17,7 +17,7 @@ namespace AGE
 	{
 		Key<Painter> painter;
 		Key<Vertices> vertices;
-		Key<Properties> properties;
+		Properties properties;
 		AGE::AABoundingBox boundingBox;
 		uint16_t defaultMaterialIndex;
 	};

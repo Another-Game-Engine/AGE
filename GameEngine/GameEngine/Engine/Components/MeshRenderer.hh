@@ -21,7 +21,7 @@ namespace AGE
 	struct PrepareKey;
 	struct AnimationInstance;
 	class AScene;
-
+	class BFCCullableHandle;
 
 	struct MeshRenderer : public ComponentBase
 	{
@@ -70,12 +70,14 @@ namespace AGE
 
 	private:
 		friend class cereal::access;
-		AGE::PrepareKey _key;
 		std::shared_ptr<AGE::MeshInstance> _mesh;
 		std::shared_ptr<AGE::MaterialSetInstance> _material;
 		std::string _meshPath;
 		std::string _materialPath;
 		std::string _animationPath;
+#ifdef AGE_BFC
+		std::vector<BFCCullableHandle> _drawableHandle;
+#endif
 
 		RenderModeSet _renderMode;
 

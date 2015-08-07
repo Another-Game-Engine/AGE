@@ -26,6 +26,7 @@ namespace AGE
 	struct SubMeshInstance;
 	class ITexture;
 	class Painter;
+	class Texture2D;
 
 # define LAMBDA_FUNCTION [](Vertices &vertices, size_t index, SubMeshData const &data)
 
@@ -98,7 +99,7 @@ static std::pair<std::pair<GLenum, std::string>, std::function<void(Vertices &ve
 			AssetsLoadingStatus(const std::string &_fileName, std::future<AssetsLoadingResult> &_future)
 				: filename(_fileName)
 			{
-				std::swap(future, _future);
+				future = std::move(_future);
 			}
 		};
 
@@ -155,8 +156,8 @@ static std::pair<std::pair<GLenum, std::string>, std::function<void(Vertices &ve
 		void update();
 		bool isLoading();
 		void pushNewCallback(const std::string &loadingChannel, AScene *currentScene, std::function<void()> &callback);
-		std::shared_ptr<ITexture> const &getPointLightTexture();
-		std::shared_ptr<ITexture> const &getSpotLightTexture();
+		std::shared_ptr<Texture2D> const &getPointLightTexture();
+		std::shared_ptr<Texture2D> const &getSpotLightTexture();
 
 private:
 		std::string _assetsDirectory;
@@ -168,8 +169,8 @@ private:
 		std::map<std::string, std::shared_ptr<ITexture>> _textures;
 		std::map<std::string, std::shared_ptr<TextureCubeMap>> _cubeMaps;
 		std::map<std::string, std::shared_ptr<AssetsLoadingChannel>> _loadingChannels;
-		std::shared_ptr<ITexture> _pointLight;
-		std::shared_ptr<ITexture> _spotLight;
+		std::shared_ptr<Texture2D> _pointLight;
+		std::shared_ptr<Texture2D> _spotLight;
 		std::mutex _mutex;
 		std::atomic<bool> _isLoading;
 	private:

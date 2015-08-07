@@ -419,8 +419,8 @@ namespace AGE
 				_loadingChannels.insert(std::make_pair(loadingChannel, std::make_shared<AssetsManager::AssetsLoadingChannel>()));
 			}
 			channel = _loadingChannels[loadingChannel];
+			channel->pushNewAsset(filename, future);
 		}
-		channel->pushNewAsset(filename, future);
 	}
 
 	void AssetsManager::pushNewCallback(const std::string &loadingChannel, AScene *currentScene, std::function<void()> &callback)
@@ -433,17 +433,18 @@ namespace AGE
 				_loadingChannels.insert(std::make_pair(loadingChannel, std::make_shared<AssetsManager::AssetsLoadingChannel>()));
 			}
 			channel = _loadingChannels[loadingChannel];
+			channel->pushNewCallback(callback, currentScene);
 		}
-		channel->pushNewCallback(callback, currentScene);
 	}
 
+	AGE_NOT_OPTIMIZED_BLOCK_BEGIN
 	bool AssetsManager::AssetsLoadingChannel::updateList(int &noLoaded, int &total)
 	{
 		std::lock_guard<std::mutex> lock(_mutex);
 		std::size_t i = 0;
 		_list.remove_if([&](AssetsManager::AssetsLoadingStatus &e){
-			if (i > 30)
-				return false;
+			//if (i > 30)
+			//	return false;
 			++i;
 			if (!e.future.valid())
 			{
@@ -466,14 +467,15 @@ namespace AGE
 		total = (int)_maxAssets;
 		return _errorMessages.empty();
 	}
-
+	AGE_NOT_OPTIMIZED_BLOCK_END
 	void AssetsManager::AssetsLoadingChannel::callCallbacks()
 	{
+		std::lock_guard<std::mutex> lock(_mutex);
+
 		for (auto &e : _callbacks)
 		{
 			if (e.callback && e.scene != nullptr)
 			{
-				GetMainThread()->setSceneAsActive(e.scene);
 				e.callback();
 			}
 		}
@@ -537,16 +539,10 @@ namespace AGE
 		if (toLoad != 0)
 		{
 #ifdef AGE_ENABLE_IMGUI
-			if (!ImGui::Begin("ASSETS LOADING", (bool*)1, ImVec2(0, 0), 0.3f, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings))
-			{
-				ImGui::End();
-			}
-			else
-			{
-				ImGui::SetWindowPos(ImVec2(30, 30));
-				ImGui::Text("Assets loading : %s / %s", std::to_string(toLoad).c_str(), std::to_string(total).c_str());
-				ImGui::End();
-			}
+			ImGui::Begin("ASSETS LOADING", (bool*)1, ImVec2(0, 0), 0.3f, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings);
+			ImGui::SetWindowPos(ImVec2(30, 30));
+			ImGui::Text("Assets loading : %s / %s", std::to_string(toLoad).c_str(), std::to_string(total).c_str());
+			ImGui::End();
 #endif
 			_isLoading = true;
 		}
@@ -599,17 +595,17 @@ namespace AGE
 		}
 	}
 
-	std::shared_ptr<ITexture> const &AssetsManager::getPointLightTexture()
+	std::shared_ptr<Texture2D> const &AssetsManager::getPointLightTexture()
 	{
 		if (!_pointLight)
-			_pointLight = loadTexture("pointlight.dds", "");
+			_pointLight = std::dynamic_pointer_cast<Texture2D>(loadTexture("pointlight.dds", ""));
 		return _pointLight;
 	}
 
-	std::shared_ptr<ITexture> const &AssetsManager::getSpotLightTexture()
+	std::shared_ptr<Texture2D> const &AssetsManager::getSpotLightTexture()
 	{
 		if (!_spotLight)
-			_spotLight = loadTexture("spotlight.dds", "");
+			_spotLight = std::dynamic_pointer_cast<Texture2D>(loadTexture("spotlight.dds", ""));
 		return _spotLight;
 	}
 }

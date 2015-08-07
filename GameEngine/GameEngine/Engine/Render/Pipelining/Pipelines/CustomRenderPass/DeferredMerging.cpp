@@ -3,10 +3,7 @@
 #include <Render/Textures/Texture2D.hh>
 #include <Render/OpenGLTask/OpenGLState.hh>
 #include <Render/GeometryManagement/Painting/Painter.hh>
-#include <Culling/Output/RenderLight.hh>
 #include <Culling/Output/RenderPipeline.hh>
-#include <Culling/Output/RenderPainter.hh>
-#include <Culling/Output/RenderCamera.hh>
 #include <Render/ProgramResources/Types/Uniform/Mat4.hh>
 #include <Render/ProgramResources/Types/Uniform/Sampler/Sampler2D.hh>
 #include <Render/ProgramResources/Types/Uniform/Vec3.hh>
@@ -67,7 +64,7 @@ namespace AGE
 		_ambientColor = ambient;
 	}
 
-	void DeferredMerging::renderPass(RenderPipeline const &, RenderLightList &, CameraInfos const &)
+	void DeferredMerging::renderPass(const DRBCameraDrawableList &infos)
 	{
 		SCOPE_profile_gpu_i("DefferedMerging pass");
 		SCOPE_profile_cpu_i("RenderTimer", "DefferedMerging pass");

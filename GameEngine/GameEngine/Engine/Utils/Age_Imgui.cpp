@@ -3,9 +3,9 @@
 #include <SDL/SDL_keycode.h>
 #include <imgui/imconfig.h>
 #include <Utils/Utils.hh>
-#include <Threads/PrepareRenderThread.hpp>
 #include <Threads/ThreadManager.hpp>
 #include <Threads/MainThread.hpp>
+#include <Threads/RenderThread.hpp>
 #include <Core/Engine.hh>
 #include <Core/Inputs/Input.hh>
 #include <Core/Timer.hh>
@@ -221,7 +221,7 @@ namespace AGE
 	void Imgui::renderDrawLists(ImDrawList** const cmd_lists, int cmd_lists_count)
 	{
 #ifdef AGE_ENABLE_IMGUI
-		AGE::GetPrepareThread()->getQueue()->emplaceCommand<AGE::RenderImgui>(cmd_lists, cmd_lists_count);
+		AGE::GetRenderThread()->setImguiDrawList(std::make_shared<AGE::RenderImgui>(cmd_lists, cmd_lists_count));
 #else
 		UNUSED(cmd_lists);
 		UNUSED(cmd_lists_count);

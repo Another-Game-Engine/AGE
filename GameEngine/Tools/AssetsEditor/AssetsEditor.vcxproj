@@ -94,6 +94,8 @@
       <AdditionalDependencies>Ws2_32.lib;minizip_d.lib;zlib.lib;assimp.lib;opengl32.lib;glu32.lib;glew32.lib;sdl2.lib;FreeImage.lib;FreeImagePlus.lib;sdl2main.lib;fmodex64_vc.lib;BulletCollision.lib;BulletDynamics.lib;BulletFileLoader.lib;BulletMultiThreaded.lib;BulletSoftBody.lib;BulletWorldImporter.lib;BulletXmlWorldImporter.lib;ConvexDecomposition.lib;LinearMath.lib;crnlib_x64_VC9.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(ProjectDir)../../Vendors\zlib\lib\windows\x64;$(ProjectDir)../../Vendors\minizip\lib\windows\x64;C:\Program Files (x86)\Visual Leak Detector\lib\Win64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>/ignore:4099 %(AdditionalOptions)</AdditionalOptions>
+      <ShowProgress>LinkVerbose</ShowProgress>
+      <LinkStatus>true</LinkStatus>
     </Link>
     <PostBuildEvent>
       <Command>call "$(ProjectDir)/Scripts/PostBuildRelease.bat"</Command>

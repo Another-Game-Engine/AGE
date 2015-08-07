@@ -20,6 +20,7 @@ namespace AGE
 			return false;
 		}
 		task->_used = true;
+		task->~MessageBase();
 		return true;
 	}
 }

@@ -3,6 +3,10 @@
 
 using namespace TMQ;
 
+std::queue<MessageBase*> HybridQueue::_sharedQueue;
+std::mutex HybridQueue::_mutex;
+std::condition_variable HybridQueue::_condition;
+
 PtrQueue::Chunk::Chunk(std::size_t chunkSize)
 	: _data(nullptr)
 	, _cursor(0)
@@ -202,166 +206,52 @@ bool PtrQueue::empty()
 /// HYBRID
 
 HybridQueue::HybridQueue()
-	: _millisecondToWait(1)
-	, _reservedPublisher(-1)
 {
-	_releasable = true;
 }
 
-void HybridQueue::launch()
+void HybridQueue::getTask(MessageBase *& task)
 {
-	_writeCondition.notify_one();
-}
-
-bool HybridQueue::getTaskQueue(TMQ::PtrQueue &q, WaitType waitType)
-{
-	SCOPE_profile_cpu_function("TMQ");
-	if (waitType == WaitType::NoWait)
-	{
-		if (!_releasable)
-			return false;
-		std::unique_lock<std::mutex> lock(_mutex);
-		q = std::move(_taskQueue);
-		_taskQueue.clear();
-		_releasable = false;
-		lock.unlock();
-		return true;
-	}
-	else if (waitType == WaitType::Block)
-	{
-		std::unique_lock<std::mutex> lock(_mutex);
-
-		_readCondition.wait(lock, [this]()
-		{
-			return (_releasable || !_taskQueue.empty());
-		});
-		if (_taskQueue.empty() && !_releasable)
-			return false;
-		q = std::move(_taskQueue);
-		_taskQueue.clear();
-		_releasable = false;
-		lock.unlock();
-		return true;
-	}
-	return true;
-}
-
-void HybridQueue::getTaskAndCommandQueue(
-	TMQ::PtrQueue &taskQueue,
-	bool &taskQueueSuccess,
-	TMQ::PtrQueue &commandQueue,
-	bool &commandQueueSuccess,
-	WaitType waitType)
-{
-	SCOPE_profile_cpu_function("TMQ");
-	taskQueueSuccess = commandQueueSuccess = false;
-	if (waitType == WaitType::NoWait)
-	{
-		if (!_releasable)
-		{
-			taskQueueSuccess = commandQueueSuccess = false;
-			return;
-		}
-		std::unique_lock<std::mutex> lock(_mutex, std::try_to_lock);
-		if (!lock.owns_lock())
-			return;
-		taskQueue = std::move(_taskQueue);
-		_taskQueue.clear();
-		commandQueue = std::move(_commandQueueCopy);
-		_commandQueueCopy.clear();
-		_releasable = false;
-		lock.unlock();
-		taskQueueSuccess = !taskQueue.empty();
-		commandQueueSuccess = !commandQueue.empty();
-		if (commandQueueSuccess)
-			_writeCondition.notify_one();
-		return;
-	}
-	else if (waitType == WaitType::Block)
-	{
-		std::unique_lock<std::mutex> lock(_mutex);
-		_readCondition.wait(lock, [this]()
-		{
-			return (_releasable || !_taskQueue.empty() || !_commandQueueCopy.empty());
-		});
-		taskQueue = std::move(_taskQueue);
-		_taskQueue.clear();
-		commandQueue = std::move(_commandQueueCopy);
-		_commandQueueCopy.clear();
-		_releasable = false;
-		lock.unlock();
-		taskQueueSuccess = !taskQueue.empty();
-		commandQueueSuccess = !commandQueue.empty();
-		if (commandQueueSuccess)
-			_writeCondition.notify_one();
-		return;
-	}
-}
-
-bool HybridQueue::releaseTaskReadability()
-{
-	SCOPE_profile_cpu_function("TMQ");
-	_releasable = true;
-	_readCondition.notify_one();
-	return true;
-}
-
-bool HybridQueue::releaseCommandReadability(WaitType waitType)
-{
-	SCOPE_profile_cpu_function("TMQ");
-	if (waitType == WaitType::NoWait)
-	{
-		std::unique_lock<std::mutex> lock(_mutex, std::try_to_lock);
-		if (!lock.owns_lock())
-			return false;
-		if (!_commandQueueCopy.empty())
-			return false;
-		_commandQueueCopy = std::move(_commandQueue);
-		_commandQueue.clear();
-		_releasable = true;
-		lock.unlock();
-		_readCondition.notify_one();
-		return true;
-	}
-	else if (waitType == WaitType::Block)
-	{
-		std::unique_lock<std::mutex> lock(_mutex);
-		_writeCondition.wait(lock, [this]()
-		{
-			return (_commandQueueCopy.empty());
-		});
-		if (!_commandQueueCopy.empty())
-			return false;
-		_commandQueueCopy = std::move(_commandQueue);
-		_commandQueue.clear();
-		_releasable = true;
-		lock.unlock();
-		_readCondition.notify_one();
-		return true;
-	}
-	return true;
-}
-
-void HybridQueue::setWaitingTime(std::size_t milliseconds)
-{
-	std::lock_guard<std::mutex> lock(_mutex);
-	_millisecondToWait = milliseconds;
-}
-
-std::size_t HybridQueue::getWaitingTime()
-{
-	std::lock_guard<std::mutex> lock(_mutex);
-	return _millisecondToWait;
-}
-
-void HybridQueue::clear()
-{
-	SCOPE_profile_cpu_function("TMQ");
 	std::unique_lock<std::mutex> lock(_mutex);
-	//while (!lock.owns_lock())
-	//{
-	//	lock.lock();
-	//	std::this_thread::sleep_for(std::chrono::milliseconds(1));
-	//}
-	_commandQueue.eraseAll();
+	_condition.wait(lock, [this](){ return (_individualQueue.empty() == false || _sharedQueue.empty() == false); });
+
+	task = nullptr;
+	if (_individualQueue.empty() == false)
+	{
+		task = _individualQueue.front();
+		_individualQueue.pop();
+		return;
+	}
+
+	if (_sharedQueue.empty() == false)
+	{
+		task = _sharedQueue.front();
+		_sharedQueue.pop();
+	}
 }
+
+void HybridQueue::tryToGetTask(MessageBase *& task, std::size_t microSeconds)
+{
+	std::unique_lock<std::mutex> lock(_mutex);
+
+	auto status = _condition.wait_for(lock, std::chrono::microseconds(microSeconds), [this](){ return (_individualQueue.empty() == false || _sharedQueue.empty() == false); });
+
+	task = nullptr;
+	if (status == false)
+	{
+		return;
+	}
+	if (_individualQueue.empty() == false)
+	{
+		task = _individualQueue.front();
+		_individualQueue.pop();
+		return;
+	}
+
+	if (_sharedQueue.empty() == false)
+	{
+		task = _sharedQueue.front();
+		_sharedQueue.pop();
+	}
+}
+
+

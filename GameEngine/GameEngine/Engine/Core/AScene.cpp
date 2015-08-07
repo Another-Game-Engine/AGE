@@ -7,15 +7,17 @@
 #include <fstream>
 #include <Threads/ThreadManager.hpp>
 #include <Threads/MainThread.hpp>
-#include <Threads/PrepareRenderThread.hpp>
 #include <Components/ComponentRegistrationManager.hpp>
 #include <Physics/Fallback/NullPhysics.hpp>
 #include <Utils/Profiler.hpp>
 #include <Entities/BinaryEntityPack.hpp>
 #include <Entities/EntityBinaryPacker.hpp>
+#include <Core/Link.hpp>
 
 #include <BFC/BFCLinkTracker.hpp>
 #include <BFC/BFCBlockManagerFactory.hpp>
+#include "Graphic/GraphicElementManager.hpp"
+#include "Graphic/DRBLightElementManager.hpp"
 
 namespace AGE
 {
@@ -23,11 +25,13 @@ namespace AGE
 		DependenciesInjector(engine)
 		, _entityNumber(0)
 		, _engine(engine)
-		, _renderScene(nullptr)
+		, _rootLink(std::make_unique<Link>())
 	{
 #ifdef AGE_BFC
 		_bfcLinkTracker = new BFCLinkTracker();
 		_bfcBlockManagerFactory = new BFCBlockManagerFactory();
+		setInstance<GraphicElementManager>(_bfcBlockManagerFactory);
+		setInstance<DRBLightElementManager>(_bfcBlockManagerFactory);
 #endif
 	}
 
@@ -72,9 +76,6 @@ namespace AGE
 	{
 		SCOPE_profile_cpu_function("Scenes");
 		auto ret = _userUpdateEnd(time);
-#ifdef AGE_BFC
-		_bfcLinkTracker->reset();
-#endif
 		return ret;
 	}
 
@@ -240,7 +241,7 @@ namespace AGE
 
 		if (deep)
 		{
-			auto link = source->getLink();
+			auto &link = source->getLink();
 			for (auto &e : link.getChildren())
 			{
 				Entity tmp;
@@ -270,6 +271,11 @@ namespace AGE
 			destroy(e);
 		}
 		_entities.clear();
+	}
+
+	Link *AScene::getRootLink()
+	{
+		return _rootLink.get();
 	}
 
 	void AScene::save(const std::string &fileName)

@@ -10,15 +10,7 @@ namespace gl { class GeometryManager; class Vertices; class Indices; }
 
 namespace AGE
 {
-	struct PointLightData
-	{
-		PointLightData(glm::vec3 const &color = glm::vec3(1.0f), 
-						glm::vec3 const &range = glm::vec3(1.0f, 0.1f, 0.01f),
-						std::shared_ptr<ITexture> const &map = nullptr);
-		glm::vec3 color;
-		glm::vec3 range;
-		std::shared_ptr<ITexture> map;
-	};
+	class IProperty;
 
 	struct PointLightComponent : public ComponentBase
 	{
@@ -33,11 +25,12 @@ namespace AGE
 		virtual void reset();
 		void init();
 
-		PointLightComponent &set(PointLightData const &data);
-
 		template <typename Archive>void serialize(Archive &ar, const std::uint32_t version);
-		inline const PointLightData &get() const;
 		virtual void postUnserialization();
+
+		inline BFCCullableHandle getCullableHandle() const { return _graphicHandle; }
+
+		void setColor(const glm::vec3 &color);
 
 #ifdef EDITOR_ENABLED
 		virtual void editorCreate();
@@ -46,11 +39,14 @@ namespace AGE
 #endif
 
 	private:
-		AGE::PrepareKey _key;
-		PointLightData _data;
+		glm::vec3 color;
+		glm::vec3 range;
 
-#ifdef EDITOR_ENABLED
-#endif
+		BFCCullableHandle          _graphicHandle;
+
+		std::shared_ptr<IProperty> _mapProp = nullptr;
+		std::shared_ptr<IProperty> _colorProperty = nullptr;
+		std::shared_ptr<IProperty> _ambiantColorProperty = nullptr;
 
 		static float computePointLightRange(float minValue, glm::vec3 const &attenuation);
 	};
@@ -58,8 +54,8 @@ namespace AGE
 	template <typename Archive>
 	void PointLightComponent::serialize(Archive &ar, const std::uint32_t version)
 	{
-		ar(cereal::make_nvp("color", _data.color), cereal::make_nvp("range", _data.range));
+		ar(cereal::make_nvp("color", color), cereal::make_nvp("range", range));
 	}
 }
 
-CEREAL_CLASS_VERSION(AGE::PointLightComponent, 0)
+CEREAL_CLASS_VERSION(AGE::PointLightComponent, 1)

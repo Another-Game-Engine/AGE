@@ -11,6 +11,8 @@ namespace AGE
 	// Methods
 	void Collider::init(Physics::ColliderType colliderType, const std::string &mesh)
 	{
+		SCOPE_profile_cpu_function("Physic");
+
 		assert(collider == nullptr && "Collider already initialized");
 		collider = entity->getScene()->getInstance<Physics::PhysicsInterface>()->getWorld()->createCollider(colliderType, mesh, entity->addComponent<Private::PhysicsData>()->getData());
 		collider->collider = this;
@@ -19,6 +21,8 @@ namespace AGE
 
 	void Collider::setMaterial(const std::string &material)
 	{
+		SCOPE_profile_cpu_function("Physic");
+
 		assert(collider != nullptr && "Invalid Collider");
 		collider->setMaterial(material);
 	}
@@ -43,6 +47,8 @@ namespace AGE
 
 	void Collider::setAsTrigger(bool mustBeATrigger)
 	{
+		SCOPE_profile_cpu_function("Physic");
+
 		assert(collider != nullptr && "Invalid Collider");
 		collider->setAsTrigger(mustBeATrigger);
 	}
@@ -55,12 +61,16 @@ namespace AGE
 
 	void Collider::setFilterGroup(const std::string &filterName)
 	{
+		SCOPE_profile_cpu_function("Physic");
+
 		assert(collider != nullptr && "Invalid Collider");
 		collider->setFilterGroup(collider->getWorld()->getFilterGroupForFilterName(filterName));
 	}
 
 	void Collider::setFilterGroup(Physics::FilterGroup group)
 	{
+		SCOPE_profile_cpu_function("Physic");
+
 		assert(collider != nullptr && "Invalid Collider");
 		collider->setFilterGroup(group);
 	}
@@ -279,6 +289,8 @@ namespace AGE
 	// Inherited Methods
 	void Collider::reset(void)
 	{
+		SCOPE_profile_cpu_function("Physic");
+
 		if (collider != nullptr)
 		{
 			entity->getScene()->getInstance<Physics::PhysicsInterface>()->getWorld()->destroyCollider(collider);

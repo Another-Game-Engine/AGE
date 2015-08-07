@@ -1,30 +1,38 @@
 #include <Components/Light.hh>
 #include <Core/AScene.hh>
 #include <Utils/MathematicTools.hh>
-#include <Threads/PrepareRenderThread.hpp>
 #include <Threads/ThreadManager.hpp>
 #include <glm/glm.hpp>
 #include <AssetManagement/AssetManager.hh>
+
+#include "Render/Properties/AutoProperty.hpp"
+#include "Render/ProgramResources/Types/Uniform/Vec4.hh"
+#include "Render/ProgramResources/Types/Uniform/Vec3.hh"
+#include "Render/ProgramResources/Types/Uniform/Vec1.hh"
+#include "Render/ProgramResources/Types/Uniform/Mat4.hh"
+#include "Render/Properties/Materials/Color.hh"
+#include "Render/Properties/Materials/MapColor.hh"
+#include "Render/ProgramResources/Types/Uniform/Sampler/Sampler3D.hh"
+
+#include "Graphic/DRBLightElementManager.hpp"
+#include "Graphic/DRBData.hpp"
+#include "Graphic/DRBPointLightData.hpp"
 
 #ifdef EDITOR_ENABLED
 #include <imgui\imgui.h>
 #include <glm/gtc/type_ptr.hpp>
 #endif
 
+#ifdef max
+#undef max
+#endif
+
 namespace AGE
 {
-	
-	PointLightData::PointLightData(glm::vec3 const &color, glm::vec3 const &range, std::shared_ptr<ITexture> const &map)
-		: color(color),
-		range(range),
-		map(map)
-	{
-
-	}
 
 	PointLightComponent::PointLightComponent(PointLightComponent const &o)
-		: _key(o._key)
-		, _data(o._data)
+		: color(o.color),
+		range(o.range)
 	{
 		postUnserialization();
 	}
@@ -32,37 +40,49 @@ namespace AGE
 	void PointLightComponent::_copyFrom(const ComponentBase *model)
 	{
 		auto o = static_cast<const PointLightComponent*>(model);
-		_data.range = o->_data.range;
-		_data.color = o->_data.color;
+		range = o->range;
+		color = o->color;
 		postUnserialization();
 	}
 
 	void PointLightComponent::reset()
 	{
-		if (!_key.invalid())
+		color = glm::vec3(1);
+		range = glm::vec3(1.0f, 0.01f, 0.001f);
+		_mapProp = nullptr;
+
+		_colorProperty = nullptr;
+		_ambiantColorProperty = nullptr;
+
+		if (_graphicHandle.invalid() == false)
 		{
-			entity->getLink().unregisterOctreeObject(_key);
+			auto manager = entity->getScene()->getInstance<DRBLightElementManager>();
+			manager->removePointLight(_graphicHandle);
+			entity->getLink().popAnObject(_graphicHandle);
 		}
-		_key = AGE::PrepareKey();
-		_data.color = glm::vec3(1);
-		_data.range = glm::vec3(1.0f, 0.01f, 0.001f);
-		_data.map = nullptr;
 	}
 
 	void PointLightComponent::init()
 	{
-		_key = AGE::GetPrepareThread()->addPointLight();
-		entity->getLink().registerOctreeObject(_key);
-		_data.map = entity->getScene()->getInstance<AssetsManager>()->getPointLightTexture();
-		assert(!_key.invalid());
-		set(_data);
-	}
+		auto mapProp = std::make_shared<MapColor>("sprite_light");
+		_mapProp = mapProp;
+		_colorProperty = std::make_shared<AutoProperty<glm::vec4, Vec4>>("color_light");
+		_ambiantColorProperty = std::make_shared<AutoProperty<glm::vec4, Vec4>>("ambient_color");
 
-	PointLightComponent &PointLightComponent::set(PointLightData const &data)
-	{
-		_data = data;
-		AGE::GetPrepareThread()->setPointLight(_data, _key);
-		return (*this);
+		auto manager = entity->getScene()->getInstance<DRBLightElementManager>();
+		_graphicHandle = manager->addPointLight();
+
+		_graphicHandle.getPtr()->getDatas()->globalProperties.add_property(_mapProp);
+		_graphicHandle.getPtr()->getDatas()->globalProperties.add_property(_colorProperty);
+		_graphicHandle.getPtr()->getDatas()->globalProperties.add_property(_ambiantColorProperty);
+
+		entity->getLink().pushAnObject(_graphicHandle);
+
+		auto map = entity->getScene()->getInstance<AssetsManager>()->getPointLightTexture();
+ 		mapProp->set(map);
+
+		std::static_pointer_cast<DRBPointLightData>(_graphicHandle.getPtr()->getDatas())->setRange(glm::vec4(range.x, range.y, range.z, 1.0f));
+		setColor(color);
 	}
 
 	float		PointLightComponent::computePointLightRange(float minValue, glm::vec3 const &attenuation)
@@ -85,12 +105,17 @@ namespace AGE
 		}
 	}
 
-
 	void PointLightComponent::postUnserialization()
 	{
 		init();
-		set(_data);
 	}
+
+	void PointLightComponent::setColor(const glm::vec3 &c)
+	{
+		color = c;
+		_colorProperty->autoSet(glm::vec4(color.x, color.y, color.z, 1.0f));
+	}
+
 
 #ifdef EDITOR_ENABLED
 	void PointLightComponent::editorCreate()
@@ -102,14 +127,14 @@ namespace AGE
 	bool PointLightComponent::editorUpdate()
 	{
 		bool modified = false;
-		if (ImGui::ColorEdit3("Color", glm::value_ptr(_data.color)))
+		if (ImGui::ColorEdit3("Color", glm::value_ptr(color)))
 		{
-			set(_data);
+			setColor(color);
 			modified = true;
 		}
-		if (ImGui::SliderFloat3("Range", glm::value_ptr(_data.range), 0.0f, 1.0f))
+		if (ImGui::SliderFloat3("Range", glm::value_ptr(range), 0.0f, 1.0f))
 		{
-			set(_data);
+			std::static_pointer_cast<DRBPointLightData>(_graphicHandle.getPtr()->getDatas())->setRange(glm::vec4(range.x, range.y, range.z, 1.0f));
 			modified = true;
 		}
 		return modified;

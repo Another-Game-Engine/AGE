@@ -131,14 +131,15 @@
             "AGE_CORE_SpotLightComponent": {
                 "cereal_class_version": 0,
                 "color": {
-                    "value0": 1,
+                    "value0": 0,
                     "value1": 1,
-                    "value2": 0.098039217293262482
+                    "value2": 0.011764706112444401,
+                    "value3": 1
                 },
                 "range": {
                     "value0": 1,
                     "value1": 0.10000000149011612,
-                    "value2": 0
+                    "value2": 0.0099999997764825821
                 },
                 "exponent": 5,
                 "cutOff": 0.5
@@ -175,14 +176,15 @@
             },
             "AGE_CORE_SpotLightComponent": {
                 "color": {
-                    "value0": 1,
-                    "value1": 0,
-                    "value2": 1
+                    "value0": 0.058823529630899429,
+                    "value1": 1,
+                    "value2": 1,
+                    "value3": 1
                 },
                 "range": {
                     "value0": 1,
                     "value1": 0.10000000149011612,
-                    "value2": 0
+                    "value2": 0.0099999997764825821
                 },
                 "exponent": 5,
                 "cutOff": 0.5
@@ -219,14 +221,15 @@
             },
             "AGE_CORE_SpotLightComponent": {
                 "color": {
-                    "value0": 0,
+                    "value0": 1,
                     "value1": 1,
-                    "value2": 0.25098040699958801
+                    "value2": 0,
+                    "value3": 1
                 },
                 "range": {
                     "value0": 1,
                     "value1": 0.10000000149011612,
-                    "value2": 0
+                    "value2": 0.0099999997764825821
                 },
                 "exponent": 5,
                 "cutOff": 0.5
@@ -263,14 +266,15 @@
             },
             "AGE_CORE_SpotLightComponent": {
                 "color": {
-                    "value0": 0,
+                    "value0": 1,
                     "value1": 0,
-                    "value2": 1
+                    "value2": 1,
+                    "value3": 1
                 },
                 "range": {
                     "value0": 1,
                     "value1": 0.10000000149011612,
-                    "value2": 0
+                    "value2": 0.0099999997764825821
                 },
                 "exponent": 5,
                 "cutOff": 0.5

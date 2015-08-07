@@ -26,6 +26,8 @@ namespace AGE
 
 	void EntityData::addComponentPtr(ComponentBase *cpt)
 	{
+		SCOPE_profile_cpu_function("Entity");
+
 		auto id = cpt->getType();
 		if (haveComponent(id))
 		{
@@ -45,6 +47,8 @@ namespace AGE
 
 	void EntityData::copyComponent(ComponentBase *cpt)
 	{
+		SCOPE_profile_cpu_function("Entity");
+
 		auto id = cpt->getType();
 		auto newCpt = ComponentRegistrationManager::getInstance().copyComponent(cpt, scene);
 		newCpt->entity = getEntity();
@@ -70,6 +74,8 @@ namespace AGE
 
 	void EntityData::removeComponent(ComponentType id)
 	{
+		SCOPE_profile_cpu_function("Entity");
+
 		if (!haveComponent(id))
 			return;
 		components[id]->reset();

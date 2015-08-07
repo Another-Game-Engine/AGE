@@ -116,7 +116,7 @@
       <EntryPointSymbol>main</EntryPointSymbol>
     </Link>
     <ProjectReference>
-      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
     </ProjectReference>
     <Lib>
       <AdditionalDependencies>
@@ -154,7 +154,7 @@
       </AdditionalLibraryDirectories>
     </Lib>
     <ProjectReference>
-      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
     </ProjectReference>
     <PreBuildEvent>
       <Command>
@@ -257,6 +257,15 @@
     <ClCompile Include="Engine\Entities\BinaryEntity.cpp" />
     <ClCompile Include="Engine\Entities\BinaryEntityPack.cpp" />
     <ClCompile Include="Engine\Entities\EntityBinaryPacker.cpp" />
+    <ClCompile Include="Engine\Graphic\DRBCameraDrawableList.cpp" />
+    <ClCompile Include="Engine\Graphic\DRBData.cpp" />
+    <ClCompile Include="Engine\Graphic\DRBLightElementManager.cpp" />
+    <ClCompile Include="Engine\Graphic\DRBMesh.cpp" />
+    <ClCompile Include="Engine\Graphic\DRBMeshData.cpp" />
+    <ClCompile Include="Engine\Graphic\DRBPointLight.cpp" />
+    <ClCompile Include="Engine\Graphic\DRBPointLightData.cpp" />
+    <ClCompile Include="Engine\Graphic\DRBSpotLight.cpp" />
+    <ClCompile Include="Engine\Graphic\DRBSpotLightData.cpp" />
     <ClCompile Include="Engine\Graphic\GraphicElementManager.cpp" />
     <ClCompile Include="Engine\Render\OcclusionTools\DepthMap.cpp" />
     <ClCompile Include="Engine\Render\OcclusionTools\DepthMapHandle.cpp" />
@@ -314,6 +323,7 @@
     <ClCompile Include="Engine\Systems\DebugSystem.cpp" />
     <ClCompile Include="Engine\Systems\FreeFlyCamera.cpp" />
     <ClCompile Include="Engine\Systems\PhysicsSystem.cpp" />
+    <ClCompile Include="Engine\Systems\RenderCameraSystem.cpp" />
     <ClCompile Include="Engine\Systems\TriggerSystem.cpp" />
     <ClCompile Include="Engine\Threads\Commands\MainToPrepareCommands.cpp" />
     <ClCompile Include="Engine\Core\ConfigurationManager.cpp" />
@@ -326,7 +336,6 @@
     <ClCompile Include="Engine\Render\Buffer\UniformBuffer.cpp" />
     <ClCompile Include="Engine\Render\Buffer\VertexArray.cpp" />
     <ClCompile Include="Engine\Render\Buffer\VertexBuffer.cpp" />
-    <ClCompile Include="Engine\Threads\RenderScene.cpp" />
     <ClCompile Include="Engine\Threads\Tasks\MainToPrepareTasks.cpp" />
     <ClCompile Include="Engine\Render\GeometryManagement\Buffer\Buffer.cpp" />
     <ClCompile Include="Engine\Render\GeometryManagement\Buffer\BufferPrograms.cpp" />
@@ -373,7 +382,6 @@
     <ClCompile Include="Engine\Culling\Cullable\Object\PointLight.cpp" />
     <ClCompile Include="Engine\Threads\CallbackContainer.cpp" />
     <ClCompile Include="Engine\Threads\MainThread.cpp" />
-    <ClCompile Include="Engine\Threads\PrepareRenderThread.cpp" />
     <ClCompile Include="Engine\Threads\QueueOwner.cpp" />
     <ClCompile Include="Engine\Threads\QueuePusher.cpp" />
     <ClCompile Include="Engine\Threads\RenderThread.cpp" />
@@ -443,6 +451,7 @@
     <ClCompile Include="Engine\Utils\UniqueTypeId.cpp" />
     <ClCompile Include="Engine\Core\Inputs\Joystick.cpp" />
     <ClCompile Include="Engine\Components\FreeFlyComponent.cpp" />
+    <ClCompile Include="Engine\Utils\RWLock.cpp" />
     <ClCompile Include="Engine\WorldEditorGlobal.cpp" />
     <ClCompile Include="Engine\Render\OpenGLTask\OpenGLState.cpp" />
     <ClCompile Include="Engine\AssetManagement\OpenGLDDSLoader.cpp" />
@@ -474,8 +483,17 @@
     <ClInclude Include="Engine\Entities\EntityPacker.hpp" />
     <ClInclude Include="Engine\Entities\IArchetypeManager.hpp" />
     <ClInclude Include="Engine\Components\PhysicsData.hpp" />
+    <ClInclude Include="Engine\Graphic\BFCCullableTypes.hpp" />
+    <ClInclude Include="Engine\Graphic\DRBCameraDrawableList.hpp" />
+    <ClInclude Include="Engine\Graphic\DRBData.hpp" />
     <ClInclude Include="Engine\Graphic\DRBMesh.hpp" />
+    <ClInclude Include="Engine\Graphic\DRBMeshData.hpp" />
+    <ClInclude Include="Engine\Graphic\DRBPointLight.hpp" />
+    <ClInclude Include="Engine\Graphic\DRBPointLightData.hpp" />
+    <ClInclude Include="Engine\Graphic\DRBSpotLight.hpp" />
+    <ClInclude Include="Engine\Graphic\DRBSpotLightData.hpp" />
     <ClInclude Include="Engine\Graphic\GraphicElementManager.hpp" />
+    <ClInclude Include="Engine\Graphic\DRBLightElementManager.hpp" />
     <ClInclude Include="Engine\Physics\BoxColliderInterface.hpp" />
     <ClInclude Include="Engine\Physics\CapsuleColliderInterface.hpp" />
     <ClInclude Include="Engine\Physics\ColliderInterface.hpp" />
@@ -547,15 +565,19 @@
     <ClInclude Include="Engine\Render\ProgramResources\Types\Uniform\Vec2.hh" />
     <ClInclude Include="Engine\Render\ProgramResources\Types\Uniform\Vec3.hh" />
     <ClInclude Include="Engine\Render\Properties\AABB.hpp" />
+    <ClInclude Include="Engine\Render\Properties\AutoProperty.hpp" />
     <ClInclude Include="Engine\Render\Properties\Materials\ScaleUVs.hpp" />
     <ClInclude Include="Engine\Render\Properties\Materials\Specular.hh" />
     <ClInclude Include="Engine\Render\ProgramResources\Types\Uniform\Mat4Array255.hh" />
+    <ClInclude Include="Engine\Render\Properties\Materials\SpotLightProperty.hpp" />
     <ClInclude Include="Engine\Render\Properties\Properties.hh" />
     <ClInclude Include="Engine\Render\Textures\TextureCubeMap.hh" />
     <ClInclude Include="Engine\Systems\CollisionSystem.hpp" />
     <ClInclude Include="Engine\Systems\DebugSystem.hpp" />
     <ClInclude Include="Engine\Systems\FreeFlyCamera.hh" />
     <ClInclude Include="Engine\Systems\PhysicsSystem.hpp" />
+    <ClInclude Include="Engine\Systems\RenderCameraSystem.hpp" />
+    <ClInclude Include="Engine\Systems\RenderSpotLightSystem.hpp" />
     <ClInclude Include="Engine\Systems\TriggerSystem.hpp" />
     <ClInclude Include="Engine\Threads\Commands\ToRenderCommands.hpp" />
     <ClInclude Include="Engine\Threads\Commands\MainToPrepareCommands.hpp" />
@@ -618,7 +640,6 @@
     <ClInclude Include="Engine\Core\OctreeCommands.hpp" />
     <ClInclude Include="Engine\Core\OctreeKey.hpp" />
     <ClInclude Include="Engine\Core\PrepareKey.hpp" />
-    <ClInclude Include="Engine\Threads\RenderScene.hpp" />
     <ClInclude Include="Engine\Entities\EntitySerializationInfos.hpp" />
     <ClInclude Include="Engine\Entities\EntityTypedef.hpp" />
     <ClInclude Include="Engine\Geometry\MeshManager.hpp" />
@@ -661,7 +682,6 @@
     <ClInclude Include="Engine\Texture\Texture.hpp" />
     <ClInclude Include="Engine\Threads\CallbackContainer.hpp" />
     <ClInclude Include="Engine\Threads\MainThread.hpp" />
-    <ClInclude Include="Engine\Threads\PrepareRenderThread.hpp" />
     <ClInclude Include="Engine\Threads\QueueOwner.hpp" />
     <ClInclude Include="Engine\Threads\QueuePusher.hpp" />
     <ClInclude Include="Engine\Threads\RenderThread.hpp" />
@@ -680,6 +700,7 @@
     <ClInclude Include="Engine\Utils\Debug.hpp" />
     <ClInclude Include="Engine\Utils\Profile.hpp" />
     <ClInclude Include="Engine\Utils\Profiler.hpp" />
+    <ClInclude Include="Engine\Utils\RWLock.hpp" />
     <ClInclude Include="Engine\Utils\Serialization\btSerialization.hpp" />
     <ClInclude Include="Engine\Utils\StreamBuffer.hpp" />
     <ClInclude Include="Engine\Utils\BufferPool.hpp" />
@@ -808,6 +829,11 @@
   <ItemGroup>
     <ProjectReference Include="..\SpacePartitioning\SpacePartitioning.vcxproj">
       <Project>{ff05acc8-441b-4e65-866c-fe72a1cde27d}</Project>
+      <Private>false</Private>
+      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

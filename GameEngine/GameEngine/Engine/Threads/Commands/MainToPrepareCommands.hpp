@@ -82,13 +82,6 @@ namespace AGE
 				PrepareKey key;
 			};
 
-			struct SetPointLight
-			{
-				SetPointLight(PointLightData const &data, PrepareKey &key);
-				PrepareKey key;
-				PointLightData data;
-			};
-
 			struct SetDirectionalLight
 			{
 				SetDirectionalLight(DirectionalLightData const &data, PrepareKey &key);

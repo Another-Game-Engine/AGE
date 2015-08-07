@@ -1,10 +1,20 @@
 #include <Components/SpotLight.hh>
 #include <Core/AScene.hh>
 #include <Utils/MathematicTools.hh>
-#include <Threads/PrepareRenderThread.hpp>
-#include <Threads/ThreadManager.hpp>
 #include <glm/glm.hpp>
 #include <AssetManagement/AssetManager.hh>
+
+#include "Render/Properties/AutoProperty.hpp"
+#include "Render/ProgramResources/Types/Uniform/Vec4.hh"
+#include "Render/ProgramResources/Types/Uniform/Vec3.hh"
+#include "Render/ProgramResources/Types/Uniform/Vec1.hh"
+#include "Render/ProgramResources/Types/Uniform/Mat4.hh"
+
+#include "Graphic/DRBLightElementManager.hpp"
+#include "Graphic/DRBData.hpp"
+#include "Graphic/DRBSpotLightData.hpp"
+
+#include "Render\Properties\Materials\MapColor.hh"
 
 #ifdef EDITOR_ENABLED
 #	include <imgui\imgui.h>
@@ -24,42 +34,90 @@ namespace AGE
 	}
 
 	SpotLightComponent::SpotLightComponent(SpotLightComponent const &o)
-		: _key(o._key)
-		, _data(o._data)
 	{
+		color = o.color;
+		range = o.range;
+		exponent = o.exponent;
+		cutOff = o.cutOff;
 		postUnserialization();
 	}
 
 	void SpotLightComponent::_copyFrom(const ComponentBase *model)
 	{
 		auto o = static_cast<const SpotLightComponent*>(model);
-		_data = o->_data;
+		color = o->color;
+		range = o->range;
+		exponent = o->exponent;
+		cutOff = o->cutOff;
 		postUnserialization();
 	}
 
 	void SpotLightComponent::reset()
 	{
-		if (!_key.invalid())
+		_propShadowMatrix = nullptr;
+		_propSpotCutOff = nullptr;
+		_propPosition = nullptr;
+		_propExponentLight = nullptr;
+		_propDirection = nullptr;
+		_propColorLight = nullptr;
+		_propAttenuation = nullptr;
+		_mapProp = nullptr;
+
+		color = glm::vec4(1.0f);
+		range = glm::vec3(1.0f, 0.1f, 0.01f);
+		exponent = 5.0f;
+		cutOff = 0.5f;
+
+		if (_graphicHandle.invalid() == false)
 		{
-			entity->getLink().unregisterOctreeObject(_key);
+			auto manager = entity->getScene()->getInstance<DRBLightElementManager>();
+			manager->removeSpotLight(_graphicHandle);
+			entity->getLink().popAnObject(_graphicHandle);
 		}
-		_key = AGE::PrepareKey();
-		_data = SpotLightData();
 	}
 
 	void SpotLightComponent::init()
 	{
-		_key = AGE::GetPrepareThread()->addSpotLight();
-		entity->getLink().registerOctreeObject(_key);
-		_data.map = entity->getScene()->getInstance<AssetsManager>()->getSpotLightTexture();
-		assert(!_key.invalid());
-		set(_data);
-	}
+		AGE_ASSERT(_graphicHandle.invalid());
 
-	void SpotLightComponent::set(SpotLightData const &data)
-	{
-		_data = data;
-		AGE::GetPrepareThread()->setSpotLight(_data, _key);
+		auto manager = entity->getScene()->getInstance<DRBLightElementManager>();
+		_graphicHandle = manager->addSpotLight();
+
+		_propShadowMatrix = std::make_shared<AutoProperty<glm::mat4, Mat4>>("light_matrix");
+		_propPosition = std::make_shared<AutoProperty<glm::vec3, Vec3>>("position_light");
+		_propAttenuation = std::make_shared<AutoProperty<glm::vec3, Vec3>>("attenuation_light");
+		_propAttenuation->autoSet(range);
+		_propDirection = std::make_shared<AutoProperty<glm::vec3, Vec3>>("direction_light");
+		_propSpotCutOff = std::make_shared<AutoProperty<float, Vec1>>("spot_cuf_off");
+		_propSpotCutOff->autoSet(cutOff);
+		_propExponentLight = std::make_shared<AutoProperty<float, Vec1>>("exponent_light");
+		_propExponentLight->autoSet(exponent);
+		_propColorLight = std::make_shared<AutoProperty<glm::vec3, Vec3>>("color_light");
+		_propColorLight->autoSet(color);
+		auto mapProp = std::make_shared<MapColor>("sprite_light");
+		_mapProp = mapProp;
+
+		auto spotLightTexture = entity->getScene()->getInstance<AssetsManager>()->getSpotLightTexture();
+		mapProp->set(spotLightTexture);
+
+
+		auto &properties = _graphicHandle.getPtr()->getDatas()->globalProperties;
+		
+		properties.add_property(_propPosition);
+		properties.add_property(_propAttenuation);
+		auto &castedPropDir = std::static_pointer_cast<AutoProperty<glm::vec3, Vec3>>(_propDirection);
+		auto &castedPropPos = std::static_pointer_cast<AutoProperty<glm::vec3, Vec3>>(_propPosition);
+		auto &castedPropShadowMatrix = std::static_pointer_cast<AutoProperty<glm::mat4, Mat4>>(_propShadowMatrix);
+
+		std::static_pointer_cast<DRBSpotLightData>(_graphicHandle.getPtr()->getDatas())->registerDirectionProperty(castedPropDir);
+		std::static_pointer_cast<DRBSpotLightData>(_graphicHandle.getPtr()->getDatas())->registerPositionProperty(castedPropPos);
+		std::static_pointer_cast<DRBSpotLightData>(_graphicHandle.getPtr()->getDatas())->registerShadowMatrixProperty(castedPropShadowMatrix);
+		properties.add_property(_propSpotCutOff);
+		properties.add_property(_propExponentLight);
+		properties.add_property(_propColorLight);
+		properties.add_property(_mapProp);
+
+		entity->getLink().pushAnObject(_graphicHandle);
 	}
 
 	void SpotLightComponent::postUnserialization()
@@ -78,24 +136,24 @@ namespace AGE
 	bool SpotLightComponent::editorUpdate()
 	{
 		bool modified = false;
-		if (ImGui::ColorEdit3("Color", glm::value_ptr(_data.color)))
+		if (ImGui::ColorEdit3("Color", glm::value_ptr(color)))
 		{
-			set(_data);
+			_propColorLight->autoSet(glm::vec3(color.x, color.y, color.z));
 			modified = true;
 		}
-		if (ImGui::SliderFloat3("Range", glm::value_ptr(_data.range), 0.0f, 1.0f))
+		if (ImGui::SliderFloat3("Range", glm::value_ptr(range), 0.0f, 1.0f))
 		{
-			set(_data);
+			_propAttenuation->autoSet(range);
 			modified = true;
 		}
-		if (ImGui::InputFloat("Exponent", &_data.exponent))
+		if (ImGui::InputFloat("Exponent", &exponent))
 		{
-			set(_data);
+			_propExponentLight->autoSet(exponent);
 			modified = true;
 		}
-		if (ImGui::InputFloat("cut off", &_data.cutOff))
+		if (ImGui::InputFloat("cut off", &cutOff))
 		{
-			set(_data);
+			_propSpotCutOff->autoSet(cutOff);
 			modified = true;
 		}
 		return modified;

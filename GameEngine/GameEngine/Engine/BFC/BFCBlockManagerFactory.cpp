@@ -1,13 +1,20 @@
 #include "BFCBlockManagerFactory.hpp"
 #include "BFCCullableHandle.hpp"
 #include "BFCCullableObject.hpp"
+#include "BFCBlock.hpp"
+
+#include "Utils/Frustum.hh"
 
 #include "Utils/Debug.hpp"
+#include "Utils/Profiler.hpp"
+
 
 namespace AGE
 {
 	BFCCullableHandle BFCBlockManagerFactory::createItem(BFCCullableObject *object)
 	{
+		SCOPE_profile_cpu_function("BFC");
+
 		auto typeId = object->getBFCType();
 
 		AGE_ASSERT(typeId < MaxCullableTypeID);
@@ -32,6 +39,8 @@ namespace AGE
 
 	void BFCBlockManagerFactory::deleteItem(const BFCCullableHandle &handle)
 	{
+		SCOPE_profile_cpu_function("BFC");
+
 		AGE_ASSERT(handle.invalid() == false);
 
 		auto itemId = handle.getItemId();
@@ -41,4 +50,38 @@ namespace AGE
 
 		_managers[itemId._blockManagerID].deleteItem(itemId._blockID, itemId._itemID);
 	}
+
+	BFCItem &BFCBlockManagerFactory::getItem(const BFCItemID &id)
+	{
+		SCOPE_profile_cpu_function("BFC");
+
+		AGE_ASSERT(id._blockManagerID < _managers.size());
+		return _managers[id._blockManagerID]._blocks[id._blockID]->_items[id._itemID];
+	}
+
+	void BFCBlockManagerFactory::cullOnChannel(CullableTypeID channel, std::list<std::shared_ptr<DRBData>> &result, const Frustum &frustum)
+	{
+		SCOPE_profile_cpu_function("BFC");
+
+		AGE_ASSERT(channel < MaxCullableTypeID);
+
+		if (channel >= _managers.size())
+		{
+			return;
+		}
+
+		auto &manager = _managers[channel];
+
+		for (auto &block : manager._blocks)
+		{
+			for (auto &item : block->_items)
+			{
+				if (item.getDrawable() && frustum.checkCollision(item.getPosition()))
+				{
+					result.push_back(item.getDrawable()->getDatas());
+				}
+			}
+		}
+	}
+
 }
