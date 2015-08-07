@@ -21,7 +21,8 @@ namespace AGE
 
 	class Collider final : public ComponentBase
 	{
-		AGE_COMPONENT_UNIQUE_IDENTIFIER("AGE_CORE_PhysicCollider");
+		AGE_COMPONENT_UNIQUE_IDENTIFIER("AGE_CORE_PhysicsCollider");
+
 	private:
 		// Friendships
 		friend Private::CollisionSystem;
@@ -83,11 +84,11 @@ namespace AGE
 
 		void setMesh(const std::string &mesh);
 
-		std::shared_ptr<MeshInstance> getMesh(void);
+		const std::string &getMesh(void) const;
 
-		std::shared_ptr<const MeshInstance> getMesh(void) const;
+		void setAsConvex(void);
 
-		void setAsConvex(bool mustBeConvex);
+		void setAsConcave(void);
 
 		bool isConvex(void) const;
 
@@ -95,6 +96,42 @@ namespace AGE
 
 		template <typename Archive>
 		void save(Archive &ar, const std::uint32_t version) const;
+
+		template <typename Archive>
+		void load(Archive &ar, const std::uint32_t version);
+
+#ifdef EDITOR_ENABLED
+
+		virtual void editorCreate(void) override final;
+
+		virtual void editorDelete(void) override final;
+
+		virtual bool editorUpdate(void) override final;
+
+		struct EditorStruct final
+		{
+			// Attributes
+
+			// Methods
+			void copyDatas(Collider *ptr);
+
+			void editorUpdate(Collider *ptr);
+		};
+
+		std::unique_ptr<EditorStruct> editorStruct;
+
+#endif
+
+	private:
+		// Attributes
+		Physics::ColliderInterface *collider = nullptr;
+
+		std::vector<Physics::Collision> collisions;
+
+		std::vector<Physics::Trigger> triggers;
+
+		// Methods
+		void scale(const glm::vec3 &scaling);
 
 		template <typename Archive>
 		void saveBoxCollider(Archive &ar, const std::uint32_t version) const;
@@ -109,9 +146,6 @@ namespace AGE
 		void saveSphereCollider(Archive &ar, const std::uint32_t version) const;
 
 		template <typename Archive>
-		void load(Archive &ar, const std::uint32_t version);
-
-		template <typename Archive>
 		void loadBoxCollider(Archive &ar, const std::uint32_t version);
 
 		template <typename Archive>
@@ -122,17 +156,6 @@ namespace AGE
 
 		template <typename Archive>
 		void loadSphereCollider(Archive &ar, const std::uint32_t version);
-
-	private:
-		// Attributes
-		Physics::ColliderInterface *collider = nullptr;
-
-		std::vector<Physics::Collision> collisions;
-
-		std::vector<Physics::Trigger> triggers;
-
-		// Methods
-		void scale(const glm::vec3 &scaling);
 
 		// Inherited Methods
 		void reset(void);

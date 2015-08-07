@@ -18,11 +18,10 @@ namespace AGE
 	class BulletLoader
 	{
 	public:
-		static bool save(std::shared_ptr<CookingTask> cookingTask)
+		template <typename Member>
+		static bool save(std::shared_ptr<CookingTask> cookingTask, Member CookingTask::*shapeTypePtr)
 		{
-			if (!cookingTask->dataSet->loadPhysic)
-				return true;
-			if (cookingTask->staticShape)
+			if (cookingTask->*shapeTypePtr)
 			{
 				auto tid = Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PushTask("BulletLoader : saving static shape for " + cookingTask->dataSet->filePath.getShortFileName());
 				auto folderPath = std::tr2::sys::path(cookingTask->serializedDirectory.path().directory_string() + "\\" + cookingTask->dataSet->filePath.getFolder());
@@ -33,40 +32,23 @@ namespace AGE
 					std::cerr << "Bullet convertor error : creating directory" << std::endl;
 					return false;
 				}
-				auto fileName = cookingTask->dataSet->filePath.getShortFileName() + "_static.phage";
+				auto fileName = cookingTask->dataSet->filePath.getShortFileName() + shapeTypePtr == &CookingTask::staticShape ? "_static.phage" : "_dynamic.phage";
 				auto name = cookingTask->serializedDirectory.path().directory_string() + "\\" + cookingTask->dataSet->filePath.getFolder() + fileName;
 
 				std::ofstream ofs(name, std::ios::trunc | std::ios::binary);
 				btDefaultSerializer	serializer;
 				serializer.startSerialization();
-				cookingTask->staticShape->serializeSingleShape(&serializer);
+				cookingTask->*shapeTypePtr->serializeSingleShape(&serializer);
 				serializer.finishSerialization();
-				ofs.write((const char *)(serializer.getBufferPointer()), serializer.getCurrentBufferSize());
-				Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PopTask(tid);
-			}
-			if (cookingTask->dynamicShape)
-			{
-				auto tid = Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PushTask("BulletLoader : saving dynamic shape for " + cookingTask->dataSet->filePath.getShortFileName());
-				auto folderPath = std::tr2::sys::path(cookingTask->serializedDirectory.path().directory_string() + "\\" + cookingTask->dataSet->filePath.getFolder());
-
-				if (!std::tr2::sys::exists(folderPath) && !std::tr2::sys::create_directories(folderPath))
-				{
-					Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PopTask(tid);
-					std::cerr << "Bullet convertor error : creating directory" << std::endl;
-					return false;
-				}
-				auto fileName = cookingTask->dataSet->filePath.getShortFileName() + "_dynamic.phage";
-				auto name = cookingTask->serializedDirectory.path().directory_string() + "\\" + cookingTask->dataSet->filePath.getFolder() + fileName;
-
-				std::ofstream ofs(name, std::ios::trunc | std::ios::binary);
-				btDefaultSerializer	serializer;
-				serializer.startSerialization();
-				cookingTask->dynamicShape->serializeSingleShape(&serializer);
-				serializer.finishSerialization();
-				ofs.write((const char *)(serializer.getBufferPointer()), serializer.getCurrentBufferSize());
+				ofs.write((const char *) (serializer.getBufferPointer()), serializer.getCurrentBufferSize());
 				Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PopTask(tid);
 			}
 			return true;
+		}
+
+		static bool save(std::shared_ptr<CookingTask> cookingTask)
+		{
+			return !cookingTask->dataSet->loadPhysic || (save(cookingTask, &CookingTask::staticShape) && save(cookingTask, &CookingTask::dynamicShape));
 		}
 
 		static bool load(std::shared_ptr<CookingTask> cookingTask)

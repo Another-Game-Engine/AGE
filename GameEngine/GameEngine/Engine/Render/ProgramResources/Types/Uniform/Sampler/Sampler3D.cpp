@@ -1,6 +1,6 @@
 #include <Render/ProgramResources/Types/Uniform/Sampler/Sampler3D.hh>
 #include <iostream>
-#include <Render/Textures/Texture3D.hh>
+#include <Render/Textures/TextureCubeMap.hh>
 
 namespace AGE
 {
@@ -58,7 +58,7 @@ namespace AGE
 		return (sizeof(type_t));
 	}
 
-	Sampler3D & Sampler3D::operator=(std::shared_ptr<Texture3D> const &texture)
+	Sampler3D & Sampler3D::operator=(std::shared_ptr<TextureCubeMap> const &texture)
 	{
 		_update = false;
 		_texture = texture;

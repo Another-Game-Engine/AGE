@@ -22,8 +22,8 @@ namespace AGE
 		bool update();
 		AGE::Engine *createEngine();
 		AGE::Engine *getEngine();
-		void setSceneAsActive(AScene *scene);
 		inline AScene *getActiveScene() { return _activeScene; }
+		inline bool isRenderFrame() const { return _isRenderFrame; }
 	private:
 		MainThread();
 		virtual ~MainThread();
@@ -35,6 +35,8 @@ namespace AGE
 		bool _run;
 
 		friend class ThreadManager;
+
+		std::atomic_bool _isRenderFrame;
 
 		AGE::Engine *_engine;
 		AScene *_activeScene;

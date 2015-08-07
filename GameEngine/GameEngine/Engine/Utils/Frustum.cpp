@@ -64,6 +64,20 @@ namespace AGE
 		return (false);
 	}
 
+	bool Frustum::checkCollision(glm::vec4 const &sphere) const
+	{
+
+
+		for (int i = 0; i < PLANE_END; i++)
+		{
+			float dist = _planes[i].getPointDistance(glm::vec3(sphere));
+
+			if (dist + sphere.w < 0)
+				return (false);
+		}
+		return (true);
+	}
+
 	bool Frustum::checkCollision(Frustum const &frustum) const
 	{
 		assert(!"Not implemented");

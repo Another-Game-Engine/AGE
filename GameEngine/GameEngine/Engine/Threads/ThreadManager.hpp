@@ -16,7 +16,6 @@ namespace TMQ
 namespace AGE
 {
 	class MainThread;
-	class PrepareRenderThread;
 	class RenderThread;
 	class Engine;
 
@@ -26,7 +25,6 @@ namespace AGE
 		Thread *getCurrentThread() const;
 		MainThread *getMainThread() const;
 		RenderThread *getRenderThread() const;
-		PrepareRenderThread *getPrepareThread() const;
 		Engine *createEngine();
 		Engine *getEngine();
 		bool initAndLaunch();
@@ -92,7 +90,6 @@ namespace AGE
 	Thread *CurrentThread();
 	MainThread *GetMainThread();
 	RenderThread *GetRenderThread();
-	PrepareRenderThread *GetPrepareThread();
 	bool InitAGE();
 	void ExitAGE();
 }

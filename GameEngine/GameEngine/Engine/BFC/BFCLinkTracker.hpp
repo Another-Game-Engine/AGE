@@ -5,7 +5,7 @@
 
 namespace AGE
 {
-	struct BFCLink;
+	class BFCLink;
 
 	class BFCLinkTracker
 	{

@@ -27,6 +27,8 @@
 #include <Render/Properties/Materials/Specular.hh>
 #include <Render/Properties/Materials/ScaleUVs.hpp>
 
+#include <AssetManagement/OpenGLDDSLoader.hh>
+
 #include <Utils/Profiler.hpp>
 
 #include <Configuration.hpp>
@@ -198,207 +200,48 @@ namespace AGE
 		auto future = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]()
 		{
 			SCOPE_profile_cpu_i("AssetsLoad", "LoadTexture");
-			std::shared_ptr<TextureData> data = std::make_shared<TextureData>();
 
-			std::ifstream ifs(filePath.getFullName(), std::ios::binary);
-			cereal::PortableBinaryInputArchive ar(ifs);
-			ar(*data.get());
-
-			GLenum ct = GL_RGB32F;
-			GLenum color = GL_RGB;
-			switch (data->colorNumber)
-			{
-			case 3:
-				ct = GL_RGB32F;
-				color = GL_BGR;
-				break;
-			case 4:
-				ct =  GL_RGBA32F;
-				color = GL_BGRA;
-				break;
-			case 1:
-				ct = GL_RGB32F;
-				color = GL_LUMINANCE;
-				break;
-			default:
-				return AssetsLoadingResult(true, "Image format not found.\n");
-				break;
-			}
-			auto success = texture->init(data->width, data->height, ct, true);
-			if (success == false)
-			{
-				return AssetsLoadingResult(false, "Texture loading error");
-			}
-			texture->bind();
-			texture->set(data->data, 0, color, GL_UNSIGNED_BYTE);
-			texture->parameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-			texture->parameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-			switch (data->repeatX)
-			{
-			case TextureData::NoRepeat:
-				texture->parameter(GL_TEXTURE_WRAP_T, GL_REPEAT);
-				break;
-			case TextureData::Repeat:
-				texture->parameter(GL_TEXTURE_WRAP_T, GL_REPEAT);
-				break;
-			case TextureData::MirrorRepeat:
-				texture->parameter(GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
-				break;
-			case TextureData::ClampToBorder:
-				texture->parameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-				break;
-			case TextureData::ClampToEdge:
-				texture->parameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-				break;
-			}
-
-			switch (data->repeatY)
-			{
-			case TextureData::NoRepeat:
-				texture->parameter(GL_TEXTURE_WRAP_S, GL_REPEAT);
-				break;
-			case TextureData::Repeat:
-				texture->parameter(GL_TEXTURE_WRAP_S, GL_REPEAT);
-				break;
-			case TextureData::MirrorRepeat:
-				texture->parameter(GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
-				break;
-			case TextureData::ClampToBorder:
-				texture->parameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-				break;
-			case TextureData::ClampToEdge:
-				texture->parameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-				break;
-			}
-
-			texture->generateMipmaps();
-			texture->unbind();
+			std::shared_ptr<ATexture> loaded = OpenGLDDSLoader::loadDDSFile(filePath);
+			if (loaded == nullptr)
+				return AssetsLoadingResult(true, "Could not load the texture.\n");
+			if (loaded->type() != GL_TEXTURE_2D)
+				return AssetsLoadingResult(true, "Texture is not of the right type.\n");
+			*texture = *std::static_pointer_cast<Texture2D>(loaded);
 			return AssetsLoadingResult(true);
 		});
 		pushNewAsset(loadingChannel, _filePath.getFullName(), future);
 		return texture;
 	}
 
-	std::shared_ptr<Texture3D> AssetsManager::loadSkybox(std::string const &name, OldFile &_filePath, std::array<std::string, 6> const &textures,  const std::string &loadingChannel)
+	std::shared_ptr<TextureCubeMap> AssetsManager::loadCubeMap(std::string const &name, OldFile &_filePath, const std::string &loadingChannel)
 	{
+		OldFile filePath(_assetsDirectory + _filePath.getFullName());
+
 		{
 			std::lock_guard<std::mutex> lock(_mutex);
-			if (_skyboxes.find(name) != std::end(_skyboxes))
+			if (_cubeMaps.find(name) != std::end(_cubeMaps))
 			{
-				return _skyboxes[name];
+				return _cubeMaps[name];
 			}
 		}
 
-		auto texture = std::make_shared<Texture3D>();
+		auto texture = std::make_shared<TextureCubeMap>();
 		{
 			std::lock_guard<std::mutex> lock(_mutex);
-			_skyboxes.insert(std::make_pair(name, texture));
+			_cubeMaps.insert(std::make_pair(name, texture));
 		}
 
 		auto future = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]()
 		{
-			static const GLenum textureFaces[6] = {
-				GL_TEXTURE_CUBE_MAP_POSITIVE_X,
-				GL_TEXTURE_CUBE_MAP_NEGATIVE_X,
-				GL_TEXTURE_CUBE_MAP_POSITIVE_Y,
-				GL_TEXTURE_CUBE_MAP_NEGATIVE_Y,
-				GL_TEXTURE_CUBE_MAP_POSITIVE_Z,
-				GL_TEXTURE_CUBE_MAP_NEGATIVE_Z
-			};
-
-			SCOPE_profile_cpu_i("AssetsLoad", "LoadSkybox");
-			
-
-			for (int index = 0; index < 6; ++index)
-			{
-				std::shared_ptr<TextureData> data = std::make_shared<TextureData>();
-				OldFile filePath(_assetsDirectory + std::string(_filePath.getFullName()) + textures[index]);
-				assert(filePath.exists());
-				std::ifstream ifs(filePath.getFullName(), std::ios::binary);
-				cereal::PortableBinaryInputArchive ar(ifs);
-				ar(*data.get());
-
-				GLenum ct = GL_RGB32F;
-				GLenum color = GL_RGB;
-				switch (data->colorNumber)
-				{
-				case 3:
-					ct = GL_RGB32F;
-					color = GL_BGR;
-					break;
-				case 4:
-					ct = GL_RGBA32F;
-					color = GL_BGRA;
-					break;
-				case 1:
-					ct = GL_RGB32F;
-					color = GL_LUMINANCE;
-					break;
-				default:
-					return AssetsLoadingResult(true, "Image format not found.\n");
-					break;
-				}
-				if (index == 0)
-				{
-					auto success = texture->init(data->width, data->height, ct, true);
-					if (success == false)
-					{
-						return AssetsLoadingResult(false, "Texture loading error");
-					}
-				}
-				texture->bind();
-				texture->set(textureFaces[index], data->data, 0, color, GL_UNSIGNED_BYTE);
-				if (index == 5)
-				{
-					texture->parameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-					texture->parameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-					switch (data->repeatX)
-					{
-					case TextureData::NoRepeat:
-						texture->parameter(GL_TEXTURE_WRAP_T, GL_REPEAT);
-						break;
-					case TextureData::Repeat:
-						texture->parameter(GL_TEXTURE_WRAP_T, GL_REPEAT);
-						break;
-					case TextureData::MirrorRepeat:
-						texture->parameter(GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
-						break;
-					case TextureData::ClampToBorder:
-						texture->parameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-						break;
-					case TextureData::ClampToEdge:
-						texture->parameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-						break;
-					}
-
-					switch (data->repeatY)
-					{
-					case TextureData::NoRepeat:
-						texture->parameter(GL_TEXTURE_WRAP_S, GL_REPEAT);
-						break;
-					case TextureData::Repeat:
-						texture->parameter(GL_TEXTURE_WRAP_S, GL_REPEAT);
-						break;
-					case TextureData::MirrorRepeat:
-						texture->parameter(GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
-						break;
-					case TextureData::ClampToBorder:
-						texture->parameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-						break;
-					case TextureData::ClampToEdge:
-						texture->parameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-						break;
-					}
-					texture->generateMipmaps();
-				}
-				texture->unbind();
-
-			}
+			std::shared_ptr<ATexture> loaded = OpenGLDDSLoader::loadDDSFile(filePath);
+			if (loaded == nullptr)
+				return AssetsLoadingResult(true, "Could not load the texture.\n");
+			if (loaded->type() != GL_TEXTURE_CUBE_MAP)
+				return AssetsLoadingResult(true, "Texture is not of the right type.\n");
+			*texture = *std::static_pointer_cast<TextureCubeMap>(loaded);
 			return AssetsLoadingResult(true);
 		});
-		pushNewAsset(loadingChannel, _filePath.getFullName(), future);
+		pushNewAsset(loadingChannel, filePath.getFullName(), future);
 		return texture;
 	}
 
@@ -576,8 +419,8 @@ namespace AGE
 				_loadingChannels.insert(std::make_pair(loadingChannel, std::make_shared<AssetsManager::AssetsLoadingChannel>()));
 			}
 			channel = _loadingChannels[loadingChannel];
+			channel->pushNewAsset(filename, future);
 		}
-		channel->pushNewAsset(filename, future);
 	}
 
 	void AssetsManager::pushNewCallback(const std::string &loadingChannel, AScene *currentScene, std::function<void()> &callback)
@@ -590,17 +433,18 @@ namespace AGE
 				_loadingChannels.insert(std::make_pair(loadingChannel, std::make_shared<AssetsManager::AssetsLoadingChannel>()));
 			}
 			channel = _loadingChannels[loadingChannel];
+			channel->pushNewCallback(callback, currentScene);
 		}
-		channel->pushNewCallback(callback, currentScene);
 	}
 
+	AGE_NOT_OPTIMIZED_BLOCK_BEGIN
 	bool AssetsManager::AssetsLoadingChannel::updateList(int &noLoaded, int &total)
 	{
 		std::lock_guard<std::mutex> lock(_mutex);
 		std::size_t i = 0;
 		_list.remove_if([&](AssetsManager::AssetsLoadingStatus &e){
-			if (i > 30)
-				return false;
+			//if (i > 30)
+			//	return false;
 			++i;
 			if (!e.future.valid())
 			{
@@ -623,14 +467,15 @@ namespace AGE
 		total = (int)_maxAssets;
 		return _errorMessages.empty();
 	}
-
+	AGE_NOT_OPTIMIZED_BLOCK_END
 	void AssetsManager::AssetsLoadingChannel::callCallbacks()
 	{
+		std::lock_guard<std::mutex> lock(_mutex);
+
 		for (auto &e : _callbacks)
 		{
 			if (e.callback && e.scene != nullptr)
 			{
-				GetMainThread()->setSceneAsActive(e.scene);
 				e.callback();
 			}
 		}
@@ -694,16 +539,10 @@ namespace AGE
 		if (toLoad != 0)
 		{
 #ifdef AGE_ENABLE_IMGUI
-			if (!ImGui::Begin("ASSETS LOADING", (bool*)1, ImVec2(0, 0), 0.3f, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings))
-			{
-				ImGui::End();
-			}
-			else
-			{
-				ImGui::SetWindowPos(ImVec2(30, 30));
-				ImGui::Text("Assets loading : %s / %s", std::to_string(toLoad).c_str(), std::to_string(total).c_str());
-				ImGui::End();
-			}
+			ImGui::Begin("ASSETS LOADING", (bool*)1, ImVec2(0, 0), 0.3f, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings);
+			ImGui::SetWindowPos(ImVec2(30, 30));
+			ImGui::Text("Assets loading : %s / %s", std::to_string(toLoad).c_str(), std::to_string(total).c_str());
+			ImGui::End();
 #endif
 			_isLoading = true;
 		}
@@ -756,17 +595,17 @@ namespace AGE
 		}
 	}
 
-	std::shared_ptr<ITexture> const &AssetsManager::getPointLightTexture()
+	std::shared_ptr<Texture2D> const &AssetsManager::getPointLightTexture()
 	{
 		if (!_pointLight)
-			_pointLight = loadTexture("pointlight.tage", "");
+			_pointLight = std::dynamic_pointer_cast<Texture2D>(loadTexture("pointlight.dds", ""));
 		return _pointLight;
 	}
 
-	std::shared_ptr<ITexture> const &AssetsManager::getSpotLightTexture()
+	std::shared_ptr<Texture2D> const &AssetsManager::getSpotLightTexture()
 	{
 		if (!_spotLight)
-			_spotLight = loadTexture("spotlight.tage", "");
+			_spotLight = std::dynamic_pointer_cast<Texture2D>(loadTexture("spotlight.dds", ""));
 		return _spotLight;
 	}
 }

@@ -12,7 +12,7 @@ namespace AGE
 			// Constructors
 			MeshColliderInterface(void) = delete;
 
-			MeshColliderInterface(WorldInterface *world, std::shared_ptr<MeshInstance> mesh, bool mustBeConvex, Private::GenericData *data);
+			MeshColliderInterface(WorldInterface *world, const std::string &mesh, bool mustBeConvex, Private::GenericData *data);
 
 			MeshColliderInterface(const MeshColliderInterface &) = delete;
 
@@ -20,16 +20,18 @@ namespace AGE
 			MeshColliderInterface &operator=(const MeshColliderInterface &) = delete;
 
 			// Methods
-			std::shared_ptr<MeshInstance> getMesh(void);
-
-			std::shared_ptr<const MeshInstance> getMesh(void) const;
+			const std::string &getMesh(void) const;
 
 			bool isConvex(void) const;
 
-			void setAsConvex(bool mustBeConvex);
+			void setAsConvex(void);
+
+			bool isConcave(void) const;
+
+			void setAsConcave(void);
 
 			// Virtual Methods
-			virtual void setMesh(std::shared_ptr<MeshInstance> mesh);
+			virtual void setMesh(const std::string &mesh);
 
 			virtual void updateShape(void) = 0;
 
@@ -40,11 +42,10 @@ namespace AGE
 			// Destructor
 			virtual ~MeshColliderInterface(void) = default;
 
-			// Attributes
-			std::shared_ptr<MeshInstance> mesh;
-
 		private:
 			// Attributes
+			std::string mesh;
+
 			bool convex;
 
 			// Inherited Methods

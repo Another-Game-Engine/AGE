@@ -30,26 +30,22 @@ namespace AGE
 
 	float Diffuse::get_ratio()
 	{
-		std::lock_guard<AGE::SpinLock> lock(_mutex);
 		return (_ratio.get());
 	}
 
 	Diffuse &Diffuse::set_ratio(float ratio)
 	{
-		std::lock_guard<AGE::SpinLock> lock(_mutex);
 		_ratio.set(ratio);
 		return (*this);
 	}
 
 	glm::vec4 const &Diffuse::get_color()
 	{
-		std::lock_guard<AGE::SpinLock> lock(_mutex);
 		return (_color.get());
 	}
 
 	Diffuse &Diffuse::set_color(glm::vec4 const &color)
 	{
-		std::lock_guard<AGE::SpinLock> lock(_mutex);
 		_color.set(color);
 		return (*this);
 	}
@@ -62,6 +58,7 @@ namespace AGE
 
 	Diffuse & Diffuse::set_map(std::shared_ptr<Texture2D> const &m)
 	{
+		std::lock_guard<AGE::SpinLock> lock(_mutex);
 		_mapColor.set(m);
 		return (*this);
 	}

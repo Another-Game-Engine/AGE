@@ -33,7 +33,8 @@ namespace AGE
 
 			glGetTexImage(GL_TEXTURE_2D, level, format, type, (GLvoid *)destination.data());
 		}
-		Texture2D &set(std::vector<uint8_t> const &data, GLint level, GLenum format, GLenum type);
+		Texture2D &set(GLvoid const *data, GLint level, GLsizei width, GLsizei height, GLenum format, GLenum type);
+		Texture2D &setCompressed(GLvoid const *data, GLint level, GLsizei width, GLsizei height, GLenum format, GLsizei imageSize);
 
 	public:
 		virtual GLenum type() const override final;

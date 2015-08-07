@@ -16,15 +16,15 @@ namespace AGE
 
 	}
 
-	IRender & ScreenRender::render(RenderPipeline const &pipeline, RenderLightList &lights, CameraInfos const &infos)
+	IRender & ScreenRender::render(const DRBCameraDrawableList &infos)
 	{
 		SCOPE_profile_gpu_i("ScreenRender pass");
 		SCOPE_profile_cpu_i("RenderTimer", "ScreenRender pass");
 
 		glViewport(0, 0, viewport.x, viewport.y);
-		renderPass(pipeline, lights, infos);
+		renderPass(infos);
 		if (_nextPass != nullptr)
-			_nextPass->render(pipeline, lights, infos);
+			_nextPass->render(infos);
 		return (*this);
 	}
 

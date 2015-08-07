@@ -17,7 +17,7 @@
 #include <Convertor/MeshLoader.hpp>
 #include <Convertor/MaterialConvertor.hpp>
 #include <Convertor/ImageLoader.hpp>
-#include <Convertor/BulletLoader.hpp>
+#include <Convertor/PhysicsLoader.hpp>
 #include <Convertor/ConvertorStatusManager.hpp>
 
 #include <EditorConfiguration.hpp>
@@ -55,11 +55,7 @@ namespace AGE
 			ImGui::Text("Last modifiction : %s", _lastWriteTimeStr.c_str());
 			auto dataset = dataSet;
 			ImGui::Checkbox("Compress textures", &dataset->compressTextures);
-			if (dataset->compressTextures)
-			{
-				ImGui::SliderInt("Compression quality", &dataset->textureCompressionQuality, 0, 4);
-				ImGui::Checkbox("Generate mipmaps", &dataset->generateMipmap);
-			}
+			ImGui::Checkbox("Generate mipmaps", &dataset->generateMipmap);
 			ImGui::Checkbox("Flipping Horizontal", &dataset->flipH);
 			ImGui::Checkbox("Flipping Vertical", &dataset->flipV);
 		}

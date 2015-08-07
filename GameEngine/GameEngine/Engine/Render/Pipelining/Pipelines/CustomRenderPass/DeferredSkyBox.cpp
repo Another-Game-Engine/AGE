@@ -5,10 +5,7 @@
 #include <Render/Textures/Texture2D.hh>
 #include <Render/OpenGLTask/OpenGLState.hh>
 #include <Render/GeometryManagement/Painting/Painter.hh>
-#include <Culling/Ouptut/RenderLight.hh>
-#include <Culling/Ouptut/RenderPipeline.hh>
-#include <Culling/Ouptut/RenderPainter.hh>
-#include <Culling/Ouptut/RenderCamera.hh>
+#include <Culling/Output/RenderPipeline.hh>
 #include <Render/ProgramResources/Types/Uniform/Mat4.hh>
 #include <Render/ProgramResources/Types/Uniform/Sampler/Sampler3D.hh>
 #include <Core/ConfigurationManager.hpp>
@@ -18,6 +15,8 @@
 #include <Threads/ThreadManager.hpp>
 #include <Render/OcclusionTools/DepthMapHandle.hpp>
 #include <Render/OcclusionTools/DepthMap.hpp>
+
+#include "Engine/Graphic/DRBCameraDrawableList.hpp"
 
 #define DEFERRED_SHADING_BUFFERING_VERTEX "deferred_shading/deferred_shading_skybox.vp"
 #define DEFERRED_SHADING_BUFFERING_FRAG "deferred_shading/deferred_shading_skybox.fp"
@@ -57,8 +56,9 @@ namespace AGE
 		GetRenderThread()->getCube(_cube, _painterCube);
 	}
 
-	void DeferredSkyBox::renderPass(RenderPipeline const &pipeline, RenderLightList &, CameraInfos const &infos)
+	void DeferredSkyBox::renderPass(const DRBCameraDrawableList &infos)
 	{
+//@PROUT TODO
 		SCOPE_profile_gpu_i("DeferredSkybox render pass");
 		SCOPE_profile_cpu_i("RenderTimer", "DeferredSkybox render pass");
 		//OpenGLState::glEnable(GL_CULL_FACE);
@@ -72,9 +72,12 @@ namespace AGE
 			SCOPE_profile_gpu_i("Overhead Pipeline");
 			SCOPE_profile_cpu_i("RenderTimer", "Skybox buffer");
 			_programs[PROGRAM_SKYBOX]->use();
-			_programs[PROGRAM_SKYBOX]->get_resource<Mat4>("projection").set(infos.data.projection);
-			_programs[PROGRAM_SKYBOX]->get_resource<Mat4>("view").set(infos.view);
-			_programs[PROGRAM_SKYBOX]->get_resource<Sampler3D>("skybox").set(infos.data.texture);
+
+			// @PROUT
+			// TODO : Pass this infos as properties !
+			_programs[PROGRAM_SKYBOX]->get_resource<Mat4>("projection").set(infos.cameraInfos.data.projection);
+			_programs[PROGRAM_SKYBOX]->get_resource<Mat4>("view").set(infos.cameraInfos.view);
+			_programs[PROGRAM_SKYBOX]->get_resource<Sampler3D>("skybox").set(infos.cameraInfos.data.texture);
 		}
 		_painterManager->get_painter(_painterCube)->uniqueDraw(GL_QUADS, _programs[PROGRAM_SKYBOX], Properties(), _cube);
 	}

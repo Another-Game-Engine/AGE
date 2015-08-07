@@ -6,6 +6,7 @@
 #include <Render/ProgramResources/IProgramResources.hh>
 #include <Utils/SpinLock.hpp>
 #include <mutex>
+#include<Utils/Debug.hpp>
 
 namespace AGE
 {
@@ -24,9 +25,21 @@ namespace AGE
 		}
 		virtual std::shared_ptr<IProgramResources> get_resource(std::shared_ptr<Program> const &p) = 0;
 		virtual std::string const &name() const = 0;
+
+		template <typename T>
+		void autoSet(const T &value)
+		{
+			_autoSet((void*)(&value));
+		}
+	private:
+		virtual void _autoSet(void *dataPtr)
+		{
+			AGE_ASSERT(false);
+		}
+
 	protected:
 		virtual void _update(std::shared_ptr<Program> const &p) = 0;
-		AGE::SpinLock _mutex;
+		mutable AGE::SpinLock _mutex;
 	};
 
 	typedef IProperty Property;

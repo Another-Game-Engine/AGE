@@ -3,10 +3,7 @@
 #include <Render/Textures/Texture2D.hh>
 #include <Render/OpenGLTask/OpenGLState.hh>
 #include <Render/GeometryManagement/Painting/Painter.hh>
-#include <Culling/Ouptut/RenderLight.hh>
-#include <Culling/Ouptut/RenderPipeline.hh>
-#include <Culling/Ouptut/RenderPainter.hh>
-#include <Culling/Ouptut/RenderCamera.hh>
+#include <Culling/Output/RenderPipeline.hh>
 #include <Render/ProgramResources/Types/Uniform/Mat4.hh>
 #include <Render/ProgramResources/Types/Uniform/Sampler/Sampler2D.hh>
 #include <Render/ProgramResources/Types/Uniform/Vec3.hh>
@@ -60,7 +57,7 @@ namespace AGE
 		_quadPainter = _painterManager->get_painter(quadPainterKey);
 	}
 
-	void DeferredOnScreen::renderPass(RenderPipeline const &, RenderLightList &, CameraInfos const &infos)
+	void DeferredOnScreen::renderPass(const DRBCameraDrawableList &infos)
 	{
 		SCOPE_profile_gpu_i("DefferedOnScreen");
 		SCOPE_profile_cpu_function("RenderTime", "DefferedOnScreen");
@@ -75,8 +72,10 @@ namespace AGE
 			SCOPE_profile_gpu_i("Overhead pipeline");
 			SCOPE_profile_cpu_function("RenderTime", "Overhead pipeline");
 			_programs[PROGRAM_SCREEN]->get_resource<Vec2>("resolution").set(glm::vec2(viewport.x, viewport.y));
-			_programs[PROGRAM_SCREEN]->get_resource<Vec1>("activated").set(infos.data.activated == true ? 1.0f : 0.f);
+			//@PROUT TODO -> re enable FXAA
+			_programs[PROGRAM_SCREEN]->get_resource<Vec1>("activated").set(1.0f /*infos.data.activated == true ? 1.0f : 0.f*/);
 		}
+
 		_quadPainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_SCREEN], Properties(), _quadVertices);
 	}
 

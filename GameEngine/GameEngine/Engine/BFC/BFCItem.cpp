@@ -14,4 +14,10 @@ namespace AGE
 	{
 		_drawable = drawable;
 	}
+
+	void BFCItem::setPosition(const glm::vec4 &position)
+	{
+		_position = position;
+	}
+
 }

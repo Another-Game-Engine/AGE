@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstdint>
+
 #ifdef AGE_ENABLE_PROFILING
 #include <microprofile/microprofile.h>
 #endif
@@ -8,7 +10,7 @@ namespace AGE
 {
 	struct Profiler
 	{
-		static uint32_t GetColor(const char* str);
+		static std::uint32_t GetColor(const char* str);
 	};
 
 #ifdef AGE_ENABLE_PROFILING

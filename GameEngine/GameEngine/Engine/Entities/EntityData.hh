@@ -50,6 +50,8 @@ namespace AGE
 		template <typename T, typename... Args>
 		T *addComponent(Args &&...args)
 		{
+			SCOPE_profile_cpu_function("Entity");
+
 			auto id = Component<T>::getTypeId();
 			if (haveComponent(id))
 				return static_cast<T*>(getComponent(id));

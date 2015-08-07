@@ -17,7 +17,6 @@ namespace AGE
 	{
 		// To remove when light will be in octree
 		uint32_t activePointLightIdx;
-		PointLightData data;
 		glm::mat4 sphereTransform;
 		void computeSphereTransform();
 	};

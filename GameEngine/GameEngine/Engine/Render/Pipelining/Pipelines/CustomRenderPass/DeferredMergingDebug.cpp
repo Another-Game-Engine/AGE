@@ -3,10 +3,7 @@
 #include <Render/Textures/Texture2D.hh>
 #include <Render/OpenGLTask/OpenGLState.hh>
 #include <Render/GeometryManagement/Painting/Painter.hh>
-#include <Culling/Ouptut/RenderLight.hh>
-#include <Culling/Ouptut/RenderPipeline.hh>
-#include <Culling/Ouptut/RenderPainter.hh>
-#include <Culling/Ouptut/RenderCamera.hh>
+#include <Culling/Output/RenderPipeline.hh>
 #include <Render/ProgramResources/Types/Uniform/Mat4.hh>
 #include <Render/ProgramResources/Types/Uniform/Sampler/Sampler2D.hh>
 #include <Render/ProgramResources/Types/Uniform/Vec3.hh>
@@ -66,7 +63,7 @@ namespace AGE
 		_quadPainter = _painterManager->get_painter(quadPainterKey);
 	}
 
-	void DeferredMergingDebug::renderPass(RenderPipeline const &, RenderLightList &, CameraInfos const &)
+	void DeferredMergingDebug::renderPass(const DRBCameraDrawableList &infos)
 	{
 		SCOPE_profile_gpu_i("DeferredMergingDebug pass");
 		SCOPE_profile_cpu_i("RenderTimer", "DeferredMergingDebug pass");
@@ -78,14 +75,16 @@ namespace AGE
 		OpenGLState::glDisable(GL_CULL_FACE);
 		OpenGLState::glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		_quadPainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_MERGING], Properties(), _quadVertices);
-	
+
 		OpenGLState::glDisable(GL_DEPTH_TEST);
 		OpenGLState::glDisable(GL_STENCIL_TEST);
 		OpenGLState::glDepthMask(GL_FALSE);
 		_programs[PROGRAM_DRAW_LINE]->use();
 
-		_lines = _painterManager->get_painter(GetRenderThread()->debug2Dlines.painterKey);
-		_lines->uniqueDraw(GL_LINES, _programs[PROGRAM_DRAW_LINE], Properties(), GetRenderThread()->debug2Dlines.verticesKey);
+		if (GetRenderThread()->debug2Dlines.painterKey.isValid())
+		{
+			_lines = _painterManager->get_painter(GetRenderThread()->debug2Dlines.painterKey);
+			_lines->uniqueDraw(GL_LINES, _programs[PROGRAM_DRAW_LINE], Properties(), GetRenderThread()->debug2Dlines.verticesKey);
+		}
 	}
-
 }

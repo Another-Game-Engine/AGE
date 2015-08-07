@@ -4,6 +4,7 @@
 #include <Render/ProgramResources/Types/ProgramResourcesType.hh>
 #include <Render/GeometryManagement/Buffer/BufferPrograms.hh>
 #include <Render/ProgramResources/Types/Attribute.hh>
+#include <Utils/Profiler.hpp>
 
 namespace AGE
 {
@@ -113,8 +114,11 @@ namespace AGE
 
 	Program & Program::update()
 	{
+		SCOPE_profile_cpu_function("RenderTimer");
+
 		use();
-		for (auto &resource : _program_resources) {
+		for (auto &resource : _program_resources)
+		{
 			resource->update();
 		}
 		return (*this);
@@ -127,7 +131,11 @@ namespace AGE
 
 	Program &Program::set_attributes(BufferPrograms const &buffers)
 	{
-		for (auto &buffer : buffers.get_buffers()) {
+
+		SCOPE_profile_cpu_function("RenderTimer");
+
+		for (auto &buffer : buffers.get_buffers())
+		{
 			auto resource = Program::get_resource<Attribute>(buffer->name());
 			if (resource.isValid())
 			{

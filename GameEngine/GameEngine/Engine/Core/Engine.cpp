@@ -12,11 +12,12 @@
 
 #include <Threads/ThreadManager.hpp>
 #include <Threads/MainThread.hpp>
-#include <Threads/PrepareRenderThread.hpp>
 #include <Threads/RenderThread.hpp>
 #include <Threads/Commands/ToRenderCommands.hpp>
 #include <Threads/Tasks/ToRenderTasks.hpp>
 #include <Threads/Tasks/BasicTasks.hpp>
+
+#include <Utils/Age_microprofile.hpp>
 
 #ifdef USE_DEFAULT_ENGINE_CONFIGURATION
 
@@ -151,7 +152,7 @@ namespace AGE
 	bool Engine::launch(std::function<bool()> &fn)
 	{
 		AGE_ASSERT(!_initialized && "Engine already initialized.");
-
+		Age_microprofileInit();
 		{
 			auto futur = GetRenderThread()->getQueue()->emplaceFutureTask<Tasks::Render::CreateRenderContext, bool>(this);
 			auto success = futur.get();
@@ -337,16 +338,23 @@ namespace AGE
 		{
 			_renderFpsStatitstics();
 		}
+		if (GetMainThread()->isRenderFrame())
+		{
 #ifdef AGE_ENABLE_IMGUI
-		ImGui::Render();
+		{
+			SCOPE_profile_cpu_i("ImGui", "Render");
+			ImGui::Render();
+		}
 #endif
-		GetPrepareThread()->getQueue()->emplaceCommand<Commands::ToRender::Flush>();
+		GetRenderThread()->getQueue()->emplaceCommand<Commands::ToRender::Flush>();
 		++frame;
+		}
 		return true;
 	}
 
 	void Engine::_renderThreadsStatistics()
 	{
+		SCOPE_profile_cpu_function("Engine");
 #ifdef AGE_ENABLE_IMGUI
 		if (ImGui::Begin("Threads statistics", (bool*)0, ImVec2(0, 0), -1.0f, ImGuiWindowFlags_AlwaysAutoResize))
 		{
@@ -389,6 +397,7 @@ namespace AGE
 
 	void Engine::_renderFpsStatitstics()
 	{
+		SCOPE_profile_cpu_function("Engine");
 #ifdef AGE_ENABLE_IMGUI
 		if (!ImGui::Begin("Example: Fixed OverlayFPS OVERLAY", (bool*)1, ImVec2(0, 0), 0.3f, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings))
 		{
@@ -401,11 +410,6 @@ namespace AGE
 				auto &e = GetThreadManager()->getStatistics()[Thread::Main];
 				if (e.averageWaitTimeCopy + e.averageWorkTimeCopy > 0)
 					ImGui::Text("Main : %i fps", (int)(1000 / (e.averageWaitTimeCopy + e.averageWorkTimeCopy)));
-			}
-			{
-				auto &e = GetThreadManager()->getStatistics()[Thread::PrepareRender];
-				if (e.averageWaitTimeCopy + e.averageWorkTimeCopy > 0)
-					ImGui::Text("Prepare : %i fps", (int)(1000 / (e.averageWaitTimeCopy + e.averageWorkTimeCopy)));
 			}
 			{
 				auto &e = GetThreadManager()->getStatistics()[Thread::Render];

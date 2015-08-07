@@ -4,7 +4,6 @@
 #include "ThreadManager.hpp"
 #include "RenderThread.hpp"
 #include <Threads/Tasks/ToRenderTasks.hpp>
-#include <Threads/PrepareRenderThread.hpp>
 #include <Threads/Tasks/BasicTasks.hpp>
 #include <Utils/Debug.hpp>
 #include <Utils/Profiler.hpp>
@@ -20,7 +19,7 @@ namespace AGE
 			if (msg.function)
 				msg.function();
 		});
-
+		_isRenderFrame = false;
 		return true;
 	}
 
@@ -38,61 +37,56 @@ namespace AGE
 		std::chrono::system_clock::time_point workStart;
 		std::chrono::system_clock::time_point workEnd;
 		std::size_t workCount = 0;
+		std::size_t waitCount = 0;
 
 		workStart = std::chrono::high_resolution_clock::now();
+
+		if (GetRenderThread()->isDrawing())
+		{
+			_isRenderFrame = false;
+		}
+		else
+		{
+			_isRenderFrame = true;
+		}
+
+		if (_isRenderFrame)
+		{
+			GetRenderThread()->setIsDrawingToTrue();
+		}
 
 		if (!_engine->update())
 		{
 			return false;
 		}
-		workEnd = std::chrono::high_resolution_clock::now();
-		workCount += std::chrono::duration_cast<std::chrono::microseconds>(workEnd - workStart).count();
 
-		{
-			SCOPE_profile_cpu_i("MainThread", "Release commands");
-			waitStart = std::chrono::high_resolution_clock::now();
-			{
-				while (!_next->getQueue()->releaseCommandReadability(TMQ::HybridQueue::WaitType::Block))
-				{
-					if (getQueue()->getTaskQueue(taskQueue, TMQ::HybridQueue::NoWait))
-					{
-						SCOPE_profile_cpu_i("MainThread", "Execute tasks");
-						workStart = std::chrono::high_resolution_clock::now();
-						while (!taskQueue.empty())
-						{
-							auto task = taskQueue.front();
-							assert(execute(task)); // we receive a task that we cannot handle
-							taskQueue.pop();
-							taskCounter--;
-						}
-						workEnd = std::chrono::high_resolution_clock::now();
-						workCount += std::chrono::duration_cast<std::chrono::microseconds>(workEnd - workStart).count();
-					}
-				}
-			}
-		}
-		waitEnd = std::chrono::high_resolution_clock::now();
-
-		bool hasTasks = getQueue()->getTaskQueue(taskQueue, TMQ::HybridQueue::NoWait);
-		workStart = std::chrono::high_resolution_clock::now();
-		if (hasTasks)
 		{
 			SCOPE_profile_cpu_i("MainThread", "Execute tasks");
-			while (!taskQueue.empty())
 			{
-				auto task = taskQueue.front();
-				auto success = execute(task); // we receive a task that we cannot handle
-				AGE_ASSERT(success);
-				taskQueue.pop();
-				taskCounter--;
+				TMQ::MessageBase *task = nullptr;
+				do {
+					waitStart = std::chrono::high_resolution_clock::now();
+					getQueue()->tryToGetTask(task, 0);
+					waitEnd = std::chrono::high_resolution_clock::now();
+					waitCount += std::chrono::duration_cast<std::chrono::microseconds>(waitEnd - waitStart).count();
+
+					if (task)
+					{
+						SCOPE_profile_cpu_i("MainThread", "Execute task");
+						auto result = execute(task);
+						assert(result); // we receive a task that we cannot handle
+					}
+				} while (task != nullptr);
 			}
 		}
+
 		workEnd = std::chrono::high_resolution_clock::now();
-		workCount += std::chrono::duration_cast<std::chrono::microseconds>(workEnd - workStart).count();
+		workCount = std::chrono::duration_cast<std::chrono::microseconds>(workEnd - workStart).count();
+		workCount -= waitCount;
 
 		GetThreadManager()->updateThreadStatistics(this->_id
 			, workCount
-			, std::chrono::duration_cast<std::chrono::microseconds>(waitEnd - waitStart).count());
+			, waitCount);
 
 		return true;
 	}
@@ -101,7 +95,6 @@ namespace AGE
 	{
 		_run = true;
 		_insideRun = true;
-		_next->getQueue()->releaseCommandReadability(TMQ::HybridQueue::WaitType::Block);
 
 		while (_run && _insideRun)
 		{
@@ -141,7 +134,6 @@ namespace AGE
 
 	bool MainThread::launch()
 	{
-		_next->getQueue()->reserveTo(std::this_thread::get_id().hash());
 		if (!init())
 			return false;
 		return true;
@@ -151,14 +143,7 @@ namespace AGE
 	{
 		if (!release())
 			return false;
-		GetPrepareThread()->stop();
+		GetRenderThread()->stop();
 		return true;
 	}
-
-	void MainThread::setSceneAsActive(AScene *scene)
-	{
-		_activeScene = scene;
-		GetPrepareThread()->getQueue()->emplaceCommand<Commands::MainToPrepare::SetCurrentScene>(scene);
-	}
-
 }

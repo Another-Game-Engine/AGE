@@ -6,7 +6,6 @@
 #include <AssetManagement/AssetManager.hh>
 #include <assert.h>
 #include <Threads/ThreadManager.hpp>
-#include <Threads/PrepareRenderThread.hpp>
 #include <Threads/RenderThread.hpp>
 #include <Threads/Tasks/ToRenderTasks.hpp>
 #ifdef EDITOR_ENABLED
@@ -17,6 +16,9 @@
 
 //tmp
 #include "Configuration.hpp"
+
+//BFC
+#include "Graphic/GraphicElementManager.hpp"
 
 namespace AGE
 {
@@ -45,12 +47,16 @@ namespace AGE
 		_material = nullptr;
 		_renderMode.reset();
 
-		if (!_key.invalid())
+		if (_drawableHandle.size() != 0)
 		{
-			entity->getLink().unregisterOctreeObject(_key);
+			for (auto &drawable : _drawableHandle)
+			{
+				auto manager = entity->getScene()->getInstance<GraphicElementManager>();
+				manager->removeMesh(drawable);
+				entity->getLink().popAnObject(drawable);
+			}
+			_drawableHandle.clear();
 		}
-		//scene->getInstance<AGE::Threads::Prepare>()->removeElement(_key);
-		_key = AGE::PrepareKey();
 	}
 
 	bool MeshRenderer::setMeshAndMaterial(
@@ -65,17 +71,6 @@ namespace AGE
 		_materialPath = material->path;
 		_mesh = mesh;
 		_material = material;
-#ifndef AGE_BFC
-		if (!_key.invalid())
-		{
-			entity->getLink().unregisterOctreeObject(_key);
-		}
-
-		//create key
-		_key = AGE::GetPrepareThread()->addMesh();
-		entity->getLink().registerOctreeObject(_key);
-#else
-#endif
 		_updateGeometry();
 		return true;
 	}
@@ -83,13 +78,11 @@ namespace AGE
 	void MeshRenderer::enableRenderMode(RenderModes mode)
 	{
 		_renderMode[mode] = true;
-		_updateGeometry();
 	}
 
 	void MeshRenderer::disableRenderMode(RenderModes mode)
 	{
 		_renderMode[mode] = false;
-		_updateGeometry();
 	}
 
 	void MeshRenderer::_copyFrom(const ComponentBase *model)
@@ -129,12 +122,22 @@ namespace AGE
 		{
 			return;
 		}
-#ifndef AGE_BFC
-		AGE::GetPrepareThread()->updateGeometry(_key, _mesh->subMeshs, _material->datas);
-		AGE::GetPrepareThread()->updateRenderMode(_key, _renderMode);
-#else
-		//entity->getLink().addObject(mesh);
-#endif
+		auto manager = entity->getScene()->getInstance<GraphicElementManager>();
+		if (_drawableHandle.size() != 0)
+		{
+			for (auto &drawable : _drawableHandle)
+			{
+				manager->removeMesh(drawable);
+				entity->getLink().popAnObject(drawable);
+			}
+			_drawableHandle.clear();
+		}
+		for (auto &submesh : _mesh->subMeshs)
+		{
+			auto handle = manager->addMesh(submesh, _material);
+			entity->getLink().pushAnObject(handle);
+			_drawableHandle.push_back(handle);
+		}
 	}
 
 	void MeshRenderer::postUnserialization()

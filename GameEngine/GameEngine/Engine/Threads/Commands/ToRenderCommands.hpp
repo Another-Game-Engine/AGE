@@ -17,21 +17,6 @@ namespace AGE
 				std::size_t aligned;
 			};
 
-			struct CopyDrawLists
-			{
-				std::shared_ptr<RenderCameraListContainerHandle> listContainer;
-				
-				CopyDrawLists(std::shared_ptr<RenderCameraListContainerHandle> handle)
-					: listContainer(handle)
-				{}
-			};
-
-			struct RenderDrawLists
-			{
-				int lol;
-				RenderDrawLists() { }
-			};
-
 			struct DrawTestTriangle
 			{
 				std::shared_ptr<Painter> painter;

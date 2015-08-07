@@ -2,24 +2,28 @@
 
 #include <memory>
 
-#include <Utils/ObjectPool.hpp>
+#include "Utils/ObjectPool.hpp"
 #include "DRBMesh.hpp"
+#include "Utils/Dependency.hpp"
 
 namespace AGE
 {
-	class BFCCullableHandle;
 	struct MeshInstance;
+	struct SubMeshInstance;
+	struct MaterialSetInstance;
 
-	class BFCBlockManager;
+	class BFCCullableHandle;
+	class BFCBlockManagerFactory;
 
-	class GraphicElementManager
+	// That's a SCENE dependency, and not a global one, set on per scene
+	class GraphicElementManager : public Dependency<GraphicElementManager>
 	{
 	public:
-		BFCCullableHandle addMesh(std::shared_ptr<MeshInstance> meshInstance);
+		GraphicElementManager(BFCBlockManagerFactory *factory);
+		BFCCullableHandle addMesh(const SubMeshInstance &meshInstance, std::shared_ptr<MaterialSetInstance> materialInstance);
+		void removeMesh(BFCCullableHandle &handle);
 	private:
-		
-		BFCBlockManager *_bfcBlockManager = nullptr;
-
+		BFCBlockManagerFactory *_bfcBlockManager = nullptr;
 		ObjectPool<DRBMesh> _meshPool;
 	};
 }

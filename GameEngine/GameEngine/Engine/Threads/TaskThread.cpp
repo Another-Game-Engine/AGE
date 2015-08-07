@@ -64,20 +64,18 @@ namespace AGE
 		std::chrono::system_clock::time_point workStart;
 		std::chrono::system_clock::time_point workEnd;
 
-		getQueue()->setWaitingTime(100);
-		TMQ::PtrQueue tasks;
+		TMQ::MessageBase *task = nullptr;
 		while (_run && _insideRun)
 		{
 			waitStart = std::chrono::high_resolution_clock::now();
-			getQueue()->getTaskQueue(tasks, TMQ::HybridQueue::Block);
+			getQueue()->getTask(task);
 			waitEnd = std::chrono::high_resolution_clock::now();
 			workStart = std::chrono::high_resolution_clock::now();
-			while (!tasks.empty())
+			if (task != nullptr)
 			{
 				//pop all tasks
-				auto task = tasks.front();
-				assert(execute(task)); // we receive a task that we cannot treat
-				tasks.pop();
+				auto result = execute(task);
+				assert(result); // we receive a task that we cannot treat
 				taskCounter--;
 			}
 			workEnd = std::chrono::high_resolution_clock::now();

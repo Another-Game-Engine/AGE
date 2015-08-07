@@ -41,12 +41,11 @@ namespace AGE
 
 	void ReadableEntity::load(cereal::JSONInputArchive &ar, const std::uint32_t version)
 	{
-		Link link;
 		ENTITY_FLAGS flags;
 
 		AGE_ASSERT(typesMap != nullptr);
 
-		ar(link
+		ar(entity->getLink()
 			, children
 			, flags
 			, componentTypes
@@ -63,9 +62,9 @@ namespace AGE
 			}
 		}
 
-		entity->getLink().setPosition(link.getPosition());
-		entity->getLink().setOrientation(link.getOrientation());
-		entity->getLink().setScale(link.getScale());
+		entity->getLink().setPosition(entity->getLink().getPosition());
+		entity->getLink().setOrientation(entity->getLink().getOrientation());
+		entity->getLink().setScale(entity->getLink().getScale());
 		//entity.setFlags(f);
 		for (auto &e : componentTypes)
 		{

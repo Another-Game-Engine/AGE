@@ -95,10 +95,8 @@ namespace AGE
 			//for that we set the ArchetypeScene as the current scene
 			//so that messages will be not passed to the renderScene of the WE's scene
 			//but to the ArchetypeScene.
-			GetMainThread()->setSceneAsActive(getScene().get());
 			bool success = getScene()->copyEntity(entity, representation->root, true, false);
 
-			GetMainThread()->setSceneAsActive(scene);
 			AGE_ASSERT(success);
 
 			representation->root->getComponent<EntityRepresentation>()->editorOnly = true;
@@ -160,9 +158,6 @@ namespace AGE
 
 			if (ptr->loaded == false)
 			{
-				auto currentScene = GetMainThread()->getActiveScene();
-				GetMainThread()->setSceneAsActive(getScene().get());
-
 				auto path = _libraryFolder + "/" + ptr->name + ".raw_archetype";
 				ReadableEntityPack pack;
 				pack.scene = getScene().get();
@@ -171,10 +166,6 @@ namespace AGE
 				ptr->root = pack.entities.front().entity;
 				ptr->loaded = true;
 
-				if (currentScene)
-				{
-					GetMainThread()->setSceneAsActive(currentScene);
-				}
 			}
 		}
 
@@ -272,7 +263,6 @@ namespace AGE
 				auto entity = _selectedArchetype->root;
 				auto modified = false;
 
-				GetMainThread()->setSceneAsActive(getScene().get());
 				if (_graphNodeDisplay)
 				{
 					modified |= recursiveDisplayList(entity, _selectedEntity, _selectParent, false);
@@ -336,8 +326,6 @@ namespace AGE
 					}
 				}
 				ImGui::Separator();
-
-				GetMainThread()->setSceneAsActive(scene);
 
 				if (modified)
 				{

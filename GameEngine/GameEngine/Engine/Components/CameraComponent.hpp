@@ -1,47 +1,16 @@
 #pragma once
 
 #include <Components/Component.hh>
-#include <Render/Textures/Texture3D.hh>
+#include <Render/Textures/TextureCubeMap.hh>
 #include <Utils/Serialization/MatrixSerialization.hpp>
 #include <Core/PrepareKey.hpp>
 #include <Render/PipelineTypes.hpp>
 #include <set>
 
+#include "Graphic/DRBCameraDrawableList.hpp"
+
 namespace AGE
 {
-	struct CameraData
-	{
-		bool activated;
-		std::shared_ptr<Texture3D> texture;
-		glm::mat4 projection = glm::mat4(1.0f);
-		RenderType pipeline = RenderType::DEFERRED;
-		CameraData(CameraData const &cam) : 
-			activated(cam.activated),
-			texture(cam.texture),
-			projection(cam.projection),
-			pipeline(cam.pipeline)
-		{
-		}
-
-		CameraData()
-			: activated(true),
-			projection(1.0f),
-			pipeline(RenderType::DEFERRED)
-		{
-		}
-
-		CameraData &operator=(CameraData const &cam)
-		{
-			activated = (cam.activated);
-			texture = (cam.texture);
-			projection = (cam.projection);
-			pipeline = (cam.pipeline);
-			return *this;
-		}
-
-
-	};
-
 	struct CameraComponent : public ComponentBase
 	{
 		AGE_COMPONENT_UNIQUE_IDENTIFIER("AGE_CORE_CameraComponent");
@@ -59,19 +28,20 @@ namespace AGE
 		void setProjection(const glm::mat4 &);
 		const glm::mat4 &getProjection() const { return _data.projection; }
 		void setPipeline(RenderType pipeline);
-		RenderType getPipeline() const { return _data.pipeline; }
-		void setTexture(std::shared_ptr<Texture3D> const &texture);
+		RenderType getPipeline() const { return RenderType(_data.pipeline); }
+		const CameraData &getData() const { return _data; }
+		void setTexture(std::shared_ptr<TextureCubeMap> const &texture);
 
 		template <typename Archive> void save(Archive &ar, const std::uint32_t version) const;
 		template <typename Archive> void load(Archive &ar, const std::uint32_t version);
 		virtual void postUnserialization();
 
 #ifdef EDITOR_ENABLED
-		void addSkyBoxToChoice(std::string const &type, std::shared_ptr<Texture3D> const &texture);
+		void addSkyBoxToChoice(std::string const &type, std::shared_ptr<TextureCubeMap> const &texture);
 		virtual void editorCreate();
 		virtual void editorDelete();
 		virtual bool editorUpdate();
-		std::unordered_map<std::string, std::shared_ptr<Texture3D>> _choicesSkymap;
+		std::unordered_map<std::string, std::shared_ptr<TextureCubeMap>> _choicesSkymap;
 #endif
 	private:
 		CameraData _data;

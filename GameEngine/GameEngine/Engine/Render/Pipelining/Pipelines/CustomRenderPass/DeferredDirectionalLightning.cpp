@@ -3,10 +3,7 @@
 #include <Render/Textures/Texture2D.hh>
 #include <Render/OpenGLTask/OpenGLState.hh>
 #include <Render/GeometryManagement/Painting/Painter.hh>
-#include <Culling/Ouptut/RenderLight.hh>
-#include <Culling/Ouptut/RenderPipeline.hh>
-#include <Culling/Ouptut/RenderPainter.hh>
-#include <Culling/Ouptut/RenderCamera.hh>
+#include <Culling/Output/RenderPipeline.hh>
 #include <Render/ProgramResources/Types/Uniform/Mat4.hh>
 #include <Render/ProgramResources/Types/Uniform/Sampler/Sampler2D.hh>
 #include <Render/ProgramResources/Types/Uniform/Vec3.hh>
@@ -15,6 +12,8 @@
 #include <Threads/ThreadManager.hpp>
 #include <Core/ConfigurationManager.hpp>
 #include <Core/Engine.hh>
+
+#include "Graphic/DRBCameraDrawableList.hpp"
 
 #define DEFERRED_SHADING_DIRECTIONAL_LIGHT_VERTEX "deferred_shading/deferred_shading_directional_light.vp"
 #define DEFERRED_SHADING_DIRECTIONAL_LIGHT_FRAG "deferred_shading/deferred_shading_directional_light.fp"
@@ -64,16 +63,18 @@ namespace AGE
 
 	}
 
-	void DeferredDirectionalLightning::renderPass(RenderPipeline const &, RenderLightList &lights, CameraInfos const &infos)
+	void DeferredDirectionalLightning::renderPass(const DRBCameraDrawableList &infos)
 	{
 		SCOPE_profile_gpu_i("DeferredDirectionalLightning render pass");
 		SCOPE_profile_cpu_i("RenderTimer", "DeferredDirectionalLightning render pass");
 
-		glm::vec3 cameraPosition = -glm::transpose(glm::mat3(infos.view)) * glm::vec3(infos.view[3]);
+		//auto &meshList = (std::list<std::shared_ptr<DRBMeshData>>&)(infos.meshs);
+
+		glm::vec3 cameraPosition = -glm::transpose(glm::mat3(infos.cameraInfos.view)) * glm::vec3(infos.cameraInfos.view[3]);
 
 		_programs[PROGRAM_LIGHTNING]->use();
-		_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("projection_matrix").set(infos.data.projection);
-		_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("view_matrix").set(infos.view);
+		_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("projection_matrix").set(infos.cameraInfos.data.projection);
+		_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("view_matrix").set(infos.cameraInfos.view);
 		_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("normal_buffer").set(_normalInput);
 		_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("depth_buffer").set(_depthInput);
 		_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("specular_buffer").set(_specularInput);
@@ -99,18 +100,20 @@ namespace AGE
 		{
 			SCOPE_profile_gpu_i("Directional light");
 			SCOPE_profile_cpu_i("RenderTimer", "Directional light");
-			for (auto &pl : lights.directionalLights)
-			{
-				SCOPE_profile_gpu_i("One Directional light");
-				SCOPE_profile_cpu_i("RenderTimer", "One Directional light");
-				{
-					SCOPE_profile_gpu_i("Overhead pipeline");
-					SCOPE_profile_cpu_i("RenderTimer", "One Directional light");
-					_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("direction_light").set(glm::normalize(glm::transpose(glm::inverse(glm::mat3(pl.light.transformation))) * glm::vec3(0.f, 1.0f, 0.f)));
-					_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("color_light").set(pl.light.data.color);
-				}
-				_painterManager->get_painter(_quadPainter)->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_LIGHTNING], Properties(), _quad);
-			}
+
+			//@PROUT TODO -> PASS DIRECTIONNAL LIGHT INFOS
+			//for (auto &pl : lights.directionalLights)
+			//{
+			//	SCOPE_profile_gpu_i("One Directional light");
+			//	SCOPE_profile_cpu_i("RenderTimer", "One Directional light");
+			//	{
+			//		SCOPE_profile_gpu_i("Overhead pipeline");
+			//		SCOPE_profile_cpu_i("RenderTimer", "One Directional light");
+			//		_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("direction_light").set(glm::normalize(glm::transpose(glm::inverse(glm::mat3(pl.light.transformation))) * glm::vec3(0.f, 1.0f, 0.f)));
+			//		_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("color_light").set(pl.light.data.color);
+			//	}
+			//	_painterManager->get_painter(_quadPainter)->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_LIGHTNING], Properties(), _quad);
+			//}
 		}
 	}
 }

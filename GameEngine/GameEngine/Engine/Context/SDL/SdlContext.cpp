@@ -19,7 +19,7 @@ namespace AGE
 			//SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1) != 0 ||
 			//SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8) != 0 ||
 			(_window = SDL_CreateWindow(_windowName.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-			_screenSize.x, _screenSize.y, SDL_WINDOW_OPENGL | SDL_WINDOW_BORDERLESS)) == NULL ||
+			_screenSize.x, _screenSize.y, SDL_WINDOW_OPENGL)) == NULL ||
 			(_glContext = SDL_GL_CreateContext(_window)) == NULL)
 		{
 			std::cerr << "SDL_GL_CreateContext Failed : " << SDL_GetError() << std::endl;
@@ -41,6 +41,7 @@ namespace AGE
 
 	void SdlContext::swapContext()
 	{
+		SCOPE_profile_cpu_function("RenderTimer");
 		SCOPE_profile_gpu_i("SwapContext");
 		SDL_GL_SwapWindow(_window);
 	}

@@ -6,10 +6,7 @@
 #include <Render/Textures/Texture2D.hh>
 #include <Render/OpenGLTask/OpenGLState.hh>
 #include <Render/GeometryManagement/Painting/Painter.hh>
-#include <Culling/Ouptut/RenderLight.hh>
-#include <Culling/Ouptut/RenderPipeline.hh>
-#include <Culling/Ouptut/RenderPainter.hh>
-#include <Culling/Ouptut/RenderCamera.hh>
+#include <Culling/Output/RenderPipeline.hh>
 #include <Render/ProgramResources/Types/Uniform/Mat4.hh>
 #include <Core/ConfigurationManager.hpp>
 #include <Core/Engine.hh>
@@ -18,6 +15,13 @@
 #include <Threads/ThreadManager.hpp>
 #include <Render/OcclusionTools/DepthMapHandle.hpp>
 #include <Render/OcclusionTools/DepthMap.hpp>
+
+#include "Graphic/DRBMesh.hpp"
+#include "Graphic/DRBMeshData.hpp"
+
+#include "AssetManagement\Instance\MeshInstance.hh"
+
+#include <Graphic/DRBCameraDrawableList.hpp>
 
 #define DEFERRED_SHADING_BUFFERING_VERTEX "deferred_shading/deferred_shading_get_buffer.vp"
 #define DEFERRED_SHADING_BUFFERING_FRAG "deferred_shading/deferred_shading_get_buffer.fp"
@@ -69,7 +73,7 @@ namespace AGE
 		}));
 	}
 
-	void DeferredBasicBuffering::renderPass(RenderPipeline const &pipeline, RenderLightList &, CameraInfos const &infos)
+	void DeferredBasicBuffering::renderPass(const DRBCameraDrawableList &infos)
 	{
 		SCOPE_profile_gpu_i("DeferredBasicBuffering render pass");
 		SCOPE_profile_cpu_i("RenderTimer", "DeferredBasicBuffering render pass");
@@ -90,88 +94,90 @@ namespace AGE
 			OpenGLState::glStencilOp(GL_KEEP, GL_KEEP, GL_INCR);
 			glClear(GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 		}
-#ifdef OCCLUSION_CULLING
-
-		{
-			SCOPE_profile_gpu_i("Occluders pass");
-			SCOPE_profile_cpu_i("RenderTimer", "Occluders pass");
-
-			{
-				SCOPE_profile_gpu_i("Overhead Pipeline");
-				SCOPE_profile_cpu_i("RenderTimer", "Overhead Pipeline");
-				_programs[PROGRAM_BUFFERING]->use();
-				_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("projection_matrix").set(infos.data.projection);
-				_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("view_matrix").set(infos.view);
-			}
-
-			for (auto &meshPaint : pipeline.keys)
-			{
-				auto painter = _painterManager->get_painter(Key<Painter>::createKey(meshPaint.first));
-				for (auto &mode : meshPaint.second.drawables)
-				{
-					if (mode.renderMode.at(AGE_OCCLUDER) == true)
-					{
-						painter->draw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], mode.properties, mode.vertices);
-					}
-				}
-			}
-		}
-		{
-			SCOPE_profile_gpu_i("Copy occlusion depth to CPU");
-			SCOPE_profile_cpu_i("RenderTimer", "Copy occlusion depth to CPU");
-
-			auto writableBuffer = GetRenderThread()->getDepthMapManager().getWritableMap();
-			auto mipmapLevel = GetRenderThread()->getDepthMapManager().getMipmapLevel();
-
-			if (writableBuffer.isValid())
-			{
-				writableBuffer.setMV(infos.data.projection * infos.view);
-				glActiveTextureARB(GL_TEXTURE0_ARB);
-				_depth->bind();
-				glGenerateMipmap(GL_TEXTURE_2D);
-				_depth->get(static_cast<GLint>(mipmapLevel), GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, writableBuffer.getWritableBuffer());
-				_depth->unbind();
-			}
-		}
-
-		{
-			SCOPE_profile_gpu_i("Draw occluded objects");
-			SCOPE_profile_cpu_i("RenderTimer", "Draw occluded objects");
-
-			for (auto &meshPaint : pipeline.keys)
-			{
-				auto painter = _painterManager->get_painter(Key<Painter>::createKey(meshPaint.first));
-				for (auto &mode : meshPaint.second.drawables)
-				{
-					if (mode.renderMode.at(AGE_OCCLUDER) == false)
-					{
-						painter->draw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], mode.properties, mode.vertices);
-					}
-				}
-			}
-		}
-#else
+//#ifdef OCCLUSION_CULLING
+//
+//		{
+//			SCOPE_profile_gpu_i("Occluders pass");
+//			SCOPE_profile_cpu_i("RenderTimer", "Occluders pass");
+//
+//			{
+//				SCOPE_profile_gpu_i("Overhead Pipeline");
+//				SCOPE_profile_cpu_i("RenderTimer", "Overhead Pipeline");
+//				_programs[PROGRAM_BUFFERING]->use();
+//				_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("projection_matrix").set(infos.data.projection);
+//				_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("view_matrix").set(infos.view);
+//			}
+//
+//			for (auto &meshPaint : pipeline.keys)
+//			{
+//				auto painter = _painterManager->get_painter(Key<Painter>::createKey(meshPaint.first));
+//				for (auto &mode : meshPaint.second.drawables)
+//				{
+//					if (mode.renderMode.at(AGE_OCCLUDER) == true)
+//					{
+//						painter->draw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], mode.properties, mode.vertices);
+//					}
+//				}
+//			}
+//		}
+//		{
+//			SCOPE_profile_gpu_i("Copy occlusion depth to CPU");
+//			SCOPE_profile_cpu_i("RenderTimer", "Copy occlusion depth to CPU");
+//
+//			auto writableBuffer = GetRenderThread()->getDepthMapManager().getWritableMap();
+//			auto mipmapLevel = GetRenderThread()->getDepthMapManager().getMipmapLevel();
+//
+//			if (writableBuffer.isValid())
+//			{
+//				writableBuffer.setMV(infos.data.projection * infos.view);
+//				glActiveTextureARB(GL_TEXTURE0_ARB);
+//				_depth->bind();
+//				glGenerateMipmap(GL_TEXTURE_2D);
+//				_depth->get(static_cast<GLint>(mipmapLevel), GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, writableBuffer.getWritableBuffer());
+//				_depth->unbind();
+//			}
+//		}
+//
+//		{
+//			SCOPE_profile_gpu_i("Draw occluded objects");
+//			SCOPE_profile_cpu_i("RenderTimer", "Draw occluded objects");
+//
+//			for (auto &meshPaint : pipeline.keys)
+//			{
+//				auto painter = _painterManager->get_painter(Key<Painter>::createKey(meshPaint.first));
+//				for (auto &mode : meshPaint.second.drawables)
+//				{
+//					if (mode.renderMode.at(AGE_OCCLUDER) == false)
+//					{
+//						painter->draw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], mode.properties, mode.vertices);
+//					}
+//				}
+//			}
+//		}
+//#else
 		{
 			SCOPE_profile_gpu_i("Draw all objects");
 			SCOPE_profile_cpu_i("RenderTimer", "Draw all objects");
 
 			_programs[PROGRAM_BUFFERING]->use();
-			_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("projection_matrix").set(infos.projection);
-			_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("view_matrix").set(infos.view);
+			_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("projection_matrix").set(infos.cameraInfos. data.projection);
+			_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("view_matrix").set(infos.cameraInfos.view);
 
-			for (auto &meshPaint : pipeline.keys)
+			auto &meshList = (std::list<std::shared_ptr<DRBMeshData>>&)(infos.meshs);
+			for (auto &meshPaint : meshList)
 			{
-				auto painter = _painterManager->get_painter(Key<Painter>::createKey(meshPaint.first));
-				for (auto &mode : meshPaint.second.drawables)
+				//temporary
+				//todo, do not spawn entity while mesh is not loaded
+				//currently it's not safe, because the paiter key can be invalid
+				//during the first frames
+				if (meshPaint->getPainterKey().isValid())
 				{
-					if (renderModeCompatible(mode.renderMode))
-					{
-						painter->draw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], mode.properties, mode.vertices);
-					}
+					auto painter = _painterManager->get_painter(meshPaint->getPainterKey());
+					painter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], meshPaint->globalProperties, meshPaint->getVerticesKey());
 				}
 			}
 		}
-#endif
+//#endif
 	}
 
 }

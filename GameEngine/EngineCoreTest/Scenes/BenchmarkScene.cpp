@@ -5,7 +5,6 @@
 #include <Skinning/AnimationManager.hpp>
 #include <Threads/ThreadManager.hpp>
 #include <Threads/RenderThread.hpp>
-#include <Threads/PrepareRenderThread.hpp>
 #include <Threads/Commands/MainToPrepareCommands.hpp>
 #include <Threads/Commands/ToRenderCommands.hpp>
 #include <Threads/Tasks/BasicTasks.hpp>
@@ -28,8 +27,8 @@
 #include <Components/ComponentRegistrationManager.hpp>
 
 #include <Systems/RotationSystem.hpp>
-
 #include <Systems/DebugSystem.hpp>
+#include <Systems/RenderCameraSystem.hpp>
 
 #include <Render/Program.hh>
 #include <Render/ProgramResources/Types/Uniform/Vec1.hh>
@@ -50,7 +49,10 @@
 
 #include <Systems/PhysicsSystem.hpp>
 
-
+#include <Graphic/DRBCameraDrawableList.hpp>
+#include <Graphic/BFCCullableTypes.hpp>
+#include <BFC/BFCBlockManagerFactory.hpp>
+#include <BFC/BFCLinkTracker.hpp>
 
 namespace AGE
 {
@@ -93,22 +95,22 @@ namespace AGE
 		REGISTER_COMPONENT_TYPE(AGE::ArchetypeComponent);
 		REGISTER_COMPONENT_TYPE(AGE::RigidBody);
 
+		getInstance<AGE::AssetsManager>()->setAssetsDirectory(EngineCoreTestConfiguration::GetCookedDirectory());
 
 		addSystem<AGE::DebugSystem>(0);
-		addSystem<AGE::PhysicsSystem>(0, Physics::EngineType::PhysX, EngineCoreTestConfiguration::GetCookedDirectory());
+		addSystem<AGE::PhysicsSystem>(0, Physics::EngineType::PhysX, getInstance<AGE::AssetsManager>());
 
 		addSystem<AGE::LifetimeSystem>(2);
 		addSystem<AGE::FreeFlyCamera>(0);
 		addSystem<AGE::RotationSystem>(0);
-
-		getInstance<AGE::AssetsManager>()->setAssetsDirectory(EngineCoreTestConfiguration::GetCookedDirectory());
+		addSystem<AGE::RenderCameraSystem>(1000000);
 
 		getInstance<AGE::AssetsManager>()->loadMesh(OldFile("cube/cube.sage"), "DEMO_SCENE_BASIC_ASSETS");
 		getInstance<AGE::AssetsManager>()->loadMesh(OldFile("ball/ball.sage"), "DEMO_SCENE_BASIC_ASSETS");
 		getInstance<AGE::AssetsManager>()->loadMaterial(OldFile("cube/cube.mage"), "DEMO_SCENE_BASIC_ASSETS");
 		getInstance<AGE::AssetsManager>()->loadMaterial(OldFile("ball/ball.mage"), "DEMO_SCENE_BASIC_ASSETS");
-		_skyboxTest = getInstance<AGE::AssetsManager>()->loadSkybox("test", OldFile("skyboxes/test/"), { { "test_pos_x.tage", "test_neg_x.tage", "test_pos_y.tage", "test_neg_y.tage", "test_pos_z.tage", "test_neg_z.tage" } }, "DEMO_SCENE_BASIC_ASSETS");
-		_skyboxSpace = getInstance<AGE::AssetsManager>()->loadSkybox("space", OldFile("skyboxes/space/"), { { "pink_planet_pos_x.tage", "pink_planet_neg_x.tage", "pink_planet_pos_y.tage", "pink_planet_neg_y.tage", "pink_planet_pos_z.tage", "pink_planet_neg_z.tage" } }, "DEMO_SCENE_BASIC_ASSETS");
+//		_skyboxTest = getInstance<AGE::AssetsManager>()->loadSkybox("test", OldFile("skyboxes/test.dds"), "DEMO_SCENE_BASIC_ASSETS");
+		_skyboxSpace = getInstance<AGE::AssetsManager>()->loadCubeMap("space", OldFile("skyboxes/space.dds"), "DEMO_SCENE_BASIC_ASSETS");
 		//getInstance<AGE::AssetsManager>()->loadAnimation(OldFile("hexapod/animation/hexapod@attack(1).aage"), "DEMO_SCENE_BASIC_ASSETS");
 		//getInstance<AGE::AssetsManager>()->loadSkeleton(OldFile("hexapod/animation/hexapod@attack(1).skage"), "DEMO_SCENE_BASIC_ASSETS");
 
@@ -146,7 +148,7 @@ namespace AGE
 			cam->setPipeline(RenderType::DEFERRED);
 			cam->setTexture(_skyboxSpace);
 			cam->addSkyBoxToChoice("space", _skyboxSpace);
-			cam->addSkyBoxToChoice("test", _skyboxTest);
+//			cam->addSkyBoxToChoice("test", _skyboxTest);
 			camera->getLink().setPosition(glm::vec3(0, 2.5f, 4.5f));
 
 			auto sceneFileName = EngineCoreTestConfiguration::getSelectedScenePath();
@@ -195,11 +197,12 @@ namespace AGE
 			const glm::vec3 cameraForward = glm::vec3(glm::mat4(glm::toMat4(cameraOrientation) * glm::translate(glm::mat4(1), glm::vec3(0.0f, 0.0f, -1.0f)))[3]);
 			link.setPosition(cameraLink.getPosition());
 			link.setOrientation(cameraOrientation);
-			link.setScale(glm::vec3(0.2f));
+			link.setScale(glm::vec3(1.0f));
 			e->addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("cube/cube.sage"),
 										 getInstance<AGE::AssetsManager>()->getMaterial(OldFile("cube/cube.mage")))->enableRenderMode(RenderModes::AGE_OPAQUE);
 			e->addComponent<RigidBody>()->addForce(10.0f * cameraForward, Physics::ForceMode::Impulse);
-			e->addComponent<Collider>(Physics::ColliderType::Box);
+			auto pl = e->addComponent<PointLightComponent>();
+			pl->setColor(glm::vec3(float(rand() % 100) / 100.0f, float(rand() % 100) / 100.0f, float(rand() % 100) / 100.0f));
 		}
 		trigger += time;
 
@@ -227,11 +230,12 @@ namespace AGE
 				{
 					mesh = e->addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("cube/cube.sage"), getInstance<AGE::AssetsManager>()->getMaterial(OldFile("cube/cube.mage")));
 					e->addComponent<Collider>(Physics::ColliderType::Box);
+					//auto pl = e->addComponent<PointLightComponent>();
+					//pl->setColor(glm::vec3(float(rand() % 100) / 100.0f, float(rand() % 100) / 100.0f, float(rand() % 100) / 100.0f));
 				}
 
 				if (i % 13 == 0)
 				{
-					//e->addComponent<PointLightComponent>()->set(PointLightData(glm::vec3((float)(rand() % 1000) / 1000.0f, (float)(rand() % 1000) / 1000.0f, (float)(rand() % 1000) / 1000.0f), glm::vec3(1.f, 0.1f, 0.005f)));
 				}
 				e->addComponent<RigidBody>();
 				mesh->enableRenderMode(RenderModes::AGE_OPAQUE);
@@ -265,14 +269,15 @@ namespace AGE
 		ImGui::ListBox("Pipelines", &pipelineIndex, pipelineNames, int(RenderType::TOTAL));
 		if (camComponent->getPipeline() != (RenderType)pipelineIndex)
 			camComponent->setPipeline((RenderType)pipelineIndex);
-		AGE::GetPrepareThread()->getQueue()->emplaceCommand<AGE::Commands::MainToPrepare::PrepareDrawLists>();
-		AGE::GetPrepareThread()->getQueue()->emplaceCommand<AGE::Commands::ToRender::RenderDrawLists>();
 		return true;
 	}
 
 
 	bool BenchmarkScene::_userUpdateEnd(float time)
 	{
+#ifdef AGE_BFC
+
+#endif
 		return true;
 	}
 }

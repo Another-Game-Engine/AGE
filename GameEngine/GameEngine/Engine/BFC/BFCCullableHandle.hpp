@@ -24,6 +24,7 @@ namespace AGE
 		}
 
 		const BFCCullableObject *getPtr() const { return _elementPtr; }
+		BFCCullableObject *getPtr() { return _elementPtr; }
 		const BFCItemID getItemId() const { return _itemID; }
 	private:
 		BFCItemID              _itemID;

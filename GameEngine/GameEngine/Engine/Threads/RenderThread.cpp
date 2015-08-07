@@ -14,13 +14,14 @@
 #include <Utils/OpenGL.hh>
 #include <Utils/Age_Imgui.hpp>
 #include <Render/Properties/Transformation.hh>
-#include <Culling/Ouptut/RenderCamera.hh>
-#include <Culling/Ouptut/RenderLight.hh>
-#include <Culling/Ouptut/RenderPipeline.hh>
+#include <Culling/Output/RenderPipeline.hh>
 #include <Utils/Debug.hpp>
 #include <Render/GeometryManagement/SimpleGeometry.hh>
 #include <Utils/Profiler.hpp>
 #include <utility>
+
+//BFC
+#include "Graphic/DRBCameraDrawableList.hpp"
 
 namespace AGE
 {
@@ -30,6 +31,8 @@ namespace AGE
 		paintingManager(std::make_shared<PaintingManager>()),
 		pipelines(RenderType::TOTAL)
 	{
+		_imguiRenderlist = nullptr;
+		_isDrawing = false;
 	}
 
 	RenderThread::~RenderThread()
@@ -226,14 +229,35 @@ namespace AGE
 		registerCallback<Commands::ToRender::Flush>([&](Commands::ToRender::Flush& msg)
 		{
 			{
-				SCOPE_profile_cpu_i("RenderTimer", "SwapContext");
+				SCOPE_profile_cpu_i("RenderTimer", "Render frame");
+				{
+					std::shared_ptr<AGE::RenderImgui> imguiRenderList = nullptr;
+					{
+						std::lock_guard<AGE::SpinLock> lock(_mutex);
+
+						imguiRenderList = _imguiRenderlist;
+					}
+					if (imguiRenderList != nullptr)
+					{
+						AGE::Imgui::getInstance()->renderThreadRenderFn(imguiRenderList->cmd_lists);
+					}
+
+				}
 				_context->swapContext();
 				{
 					SCOPE_profile_gpu_i("Clear buffer");
+					SCOPE_profile_cpu_i("RenderTimer", "Clear buffer");
 					glClear(GL_COLOR_BUFFER_BIT);
 				}
 			}
+
+			if (_context)
+			{
+				_context->refreshInputs();
+			}
+
 			MicroProfileFlip();
+			_isDrawing = false;
 		});
 
 		registerCallback<Tasks::Render::ReloadShaders>([&](Tasks::Render::ReloadShaders& msg)
@@ -255,78 +279,72 @@ namespace AGE
 			_context->setScreenSize(msg.size);
 		});
 
-		registerCallback<Commands::ToRender::CopyDrawLists>([&](Commands::ToRender::CopyDrawLists& msg)
-		{
-			SCOPE_profile_cpu_i("RenderTimer", "CopyDrawLists");
-			_drawlists.push_back(msg.listContainer);
-		});
+		//registerCallback<Commands::ToRender::RenderDrawLists>([&](Commands::ToRender::RenderDrawLists& msg)
+		//{
+		//	if (_drawlists.empty()) // nothing to draw
+		//		return;
 
-		registerCallback<Commands::ToRender::RenderDrawLists>([&](Commands::ToRender::RenderDrawLists& msg)
-		{
-			if (_drawlists.empty()) // nothing to draw
-				return;
+		//	SCOPE_profile_cpu_i("RenderTimer", "RenderDrawLists");
 
-			SCOPE_profile_cpu_i("RenderTimer", "RenderDrawLists");
+		//	for (auto &_drawlistPtr : _drawlists)
+		//	{
+		//		SCOPE_profile_cpu_i("RenderTimer", "Render one DrawList");
 
-			for (auto &_drawlistPtr : _drawlists)
-			{
-				SCOPE_profile_cpu_i("RenderTimer", "Render one DrawList");
+		//		// DEBUG DRAW DEGUEULASSE
+		//		std::shared_ptr<Painter> painterPtr = nullptr;
+		//		{
 
-				// DEBUG DRAW DEGUEULASSE
-				std::shared_ptr<Painter> painterPtr = nullptr;
-				{
+		//			SCOPE_profile_cpu_i("RenderTimer", "RenderDebugLines");
+		//			std::vector<unsigned int> indices;
+		//			auto type = std::make_pair<GLenum, std::string>(GL_FLOAT_VEC2, "position");
+		//			std::vector<std::pair < GLenum, std::string > > types;
+		//			types.push_back(type);
 
-					SCOPE_profile_cpu_i("RenderTimer", "RenderDebugLines");
-					std::vector<unsigned int> indices;
-					auto type = std::make_pair<GLenum, std::string>(GL_FLOAT_VEC2, "position");
-					std::vector<std::pair < GLenum, std::string > > types;
-					types.push_back(type);
+		//			indices.resize(debug2DlinesPoints.size());
+		//			for (int i = 0; i < debug2DlinesPoints.size(); ++i)
+		//			{
+		//				indices[i] = i;
+		//			}
+		//			if (!paintingManager->has_painter(types))
+		//			{
+		//				debug2Dlines.painterKey = paintingManager->add_painter(std::move(types));
+		//			}
+		//			else
+		//			{
+		//				debug2Dlines.painterKey = paintingManager->get_painter(types);
+		//			}
+		//			Key<Painter> kk = debug2Dlines.painterKey;
 
-					indices.resize(debug2DlinesPoints.size());
-					for (int i = 0; i < debug2DlinesPoints.size(); ++i)
-					{
-						indices[i] = i;
-					}
-					if (!paintingManager->has_painter(types))
-					{
-						debug2Dlines.painterKey = paintingManager->add_painter(std::move(types));
-					}
-					else
-					{
-						debug2Dlines.painterKey = paintingManager->get_painter(types);
-					}
-					Key<Painter> kk = debug2Dlines.painterKey;
+		//			painterPtr = paintingManager->get_painter(debug2Dlines.painterKey);
 
-					painterPtr = paintingManager->get_painter(debug2Dlines.painterKey);
+		//			debug2Dlines.verticesKey = painterPtr->add_vertices(debug2DlinesPoints.size(), indices.size());
+		//			auto vertices = painterPtr->get_vertices(debug2Dlines.verticesKey);
 
-					debug2Dlines.verticesKey = painterPtr->add_vertices(debug2DlinesPoints.size(), indices.size());
-					auto vertices = painterPtr->get_vertices(debug2Dlines.verticesKey);
+		//			vertices->set_data<glm::vec2>(debug2DlinesPoints, std::string("position"));
+		//			vertices->set_indices(indices);
 
-					vertices->set_data<glm::vec2>(debug2DlinesPoints, std::string("position"));
-					vertices->set_indices(indices);
+		//			debug2DlinesPoints.clear();
+		//		}
 
-					debug2DlinesPoints.clear();
-				}
+		//		// CEST VRAIMENT DEGUEULASSE...
 
-				// CEST VRAIMENT DEGUEULASSE...
+		//		{
+		//			SCOPE_profile_cpu_i("RenderTimer", "Render cameras");
 
-				{
-					SCOPE_profile_cpu_i("RenderTimer", "Render cameras");
+		//			auto &drawlist = _drawlistPtr->container.cameras;
+		//			for (auto &curCamera : drawlist)
+		//			{
+		//				SCOPE_profile_gpu_i("RenderCameraDrawList");
+		//				SCOPE_profile_cpu_i("RenderTimer", "RenderCamera");
+		//				AGE_ASSERT(!(pipelines[curCamera.camInfos.data.pipeline] == nullptr));
+		//				//pipelines[curCamera.camInfos.data.pipeline]->render(curCamera.pipeline, curCamera.lights, curCamera.camInfos);
+		//			}
+		//		}
 
-					auto &drawlist = _drawlistPtr->container.cameras;
-					for (auto &curCamera : drawlist)
-					{
-						SCOPE_profile_gpu_i("RenderCameraDrawList");
-						SCOPE_profile_cpu_i("RenderTimer", "RenderCamera");
-						AGE_ASSERT(!(pipelines[curCamera.camInfos.data.pipeline] == nullptr));
-						pipelines[curCamera.camInfos.data.pipeline]->render(curCamera.pipeline, curCamera.lights, curCamera.camInfos);
-					}
-				}
-
-				painterPtr->remove_vertices(debug2Dlines.verticesKey);
-			}
-			_drawlists.clear();
-		});
+		//		painterPtr->remove_vertices(debug2Dlines.verticesKey);
+		//	}
+		//	_drawlists.clear();
+		//});
 
 		registerSharedCallback<AGE::Tasks::Basic::BoolFunction>([&](AGE::Tasks::Basic::BoolFunction& msg)
 		{
@@ -347,13 +365,6 @@ namespace AGE
 			this->_insideRun = false;
 		});
 
-#ifdef AGE_ENABLE_IMGUI
-		registerCallback<AGE::RenderImgui>([&](AGE::RenderImgui &msg)
-		{
-			AGE::Imgui::getInstance()->renderThreadRenderFn(msg.cmd_lists);
-		});
-#endif
-
 		registerCallback<AGE::Tasks::Render::ContextGrabMouse>([&](AGE::Tasks::Render::ContextGrabMouse &msg)
 		{
 			_context->grabMouse(msg.grabMouse == 1 ? true : false);
@@ -363,6 +374,11 @@ namespace AGE
 		{
 			debug2DlinesPoints.push_back(msg.start);
 			debug2DlinesPoints.push_back(msg.end);
+		});
+
+		registerCallback<AGE::DRBCameraDrawableListCommand>([&](AGE::DRBCameraDrawableListCommand &msg)
+		{
+			pipelines[msg.list->cameraInfos.data.pipeline]->render(*msg.list.get());
 		});
 
 		return true;
@@ -410,11 +426,6 @@ namespace AGE
 		DWORD threadId = GetThreadId(static_cast<HANDLE>(_threadHandle.native_handle()));
 		SetThreadName(threadId, this->_name.c_str());
 
-		TMQ::PtrQueue commands;
-		TMQ::PtrQueue tasks;
-		bool commandSuccess;
-		bool taskSuccess;
-
 		std::chrono::system_clock::time_point waitStart;
 		std::chrono::system_clock::time_point waitEnd;
 		std::chrono::system_clock::time_point workStart;
@@ -424,65 +435,45 @@ namespace AGE
 		{
 			SCOPE_profile_cpu_i("RenderTimer", "Update");
 
-			waitStart = std::chrono::high_resolution_clock::now();
-			taskSuccess = commandSuccess = false;
-			{
-				SCOPE_profile_cpu_i("RenderTimer", "Wait and get commands");
-				do {
-					if (_context)
-					{
-						_context->refreshInputs();
-					}
-					getQueue()->getTaskAndCommandQueue(tasks, taskSuccess, commands, commandSuccess, TMQ::HybridQueue::Block);
-				} while (!taskSuccess && !commandSuccess);
-			}
-			waitEnd = std::chrono::high_resolution_clock::now();
 			workStart = std::chrono::high_resolution_clock::now();
-			if (taskSuccess)
-			{
-				SCOPE_profile_cpu_i("RenderTimer", "Execute tasks");
-				while (!tasks.empty() && _insideRun)
-				{
-					//pop all tasks
-					auto task = tasks.front();
-					auto success = execute(task); // we receive a task that we cannot treat
-					AGE_ASSERT(success);
-					tasks.pop();
-					taskCounter--;
-					workEnd = std::chrono::high_resolution_clock::now();
-					const std::size_t toWait = 33;
-					const std::size_t elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(workEnd - workStart).count();
-					if (elapsed >= toWait)
-					{
-						std::cout << elapsed << ", ";
-						while (!tasks.empty() && _insideRun)
-						{
-							auto task = tasks.front();
-							getQueue()->moveTask(task, tasks.getFrontSize());
-							tasks.pop();
-						}
-					}
-				}
-			}
-			if (commandSuccess)
-			{
-				SCOPE_profile_cpu_i("RenderTimer", "Execute commands");
-				// pop all commands
-				while (!commands.empty() && _insideRun)
-				{
-					SCOPE_profile_cpu_i("RenderTimer", "Execute one command");
-					auto command = commands.front();
-					auto success = execute(command);
-					AGE_ASSERT(success);
-					commands.pop();
-				}
 
-				workEnd = std::chrono::high_resolution_clock::now();
-				GetThreadManager()->updateThreadStatistics(this->_id
-					, std::chrono::duration_cast<std::chrono::microseconds>(workEnd - workStart).count()
-					, std::chrono::duration_cast<std::chrono::microseconds>(waitEnd - waitStart).count());
+			SCOPE_profile_cpu_i("RenderTimer", "Get and execute tasks");
+			waitStart = std::chrono::high_resolution_clock::now();
+			TMQ::MessageBase *task = nullptr;
+			getQueue()->getTask(task);
+			waitEnd = std::chrono::high_resolution_clock::now();
+			if (task)
+			{
+				SCOPE_profile_cpu_i("RenderTimer", "Execute task");
+				auto success = execute(task); // we receive a task that we cannot treat
+				AGE_ASSERT(success);
 			}
+
+			workEnd = std::chrono::high_resolution_clock::now();
+			auto waitCount = std::chrono::duration_cast<std::chrono::microseconds>(waitEnd - waitStart).count();
+			GetThreadManager()->updateThreadStatistics(this->_id
+				, std::chrono::duration_cast<std::chrono::microseconds>(workEnd - workStart).count() - waitCount
+				, waitCount);
 		}
 		return true;
+	}
+
+#ifdef AGE_ENABLE_IMGUI
+	void RenderThread::setImguiDrawList(std::shared_ptr<AGE::RenderImgui> &list)
+	{
+		std::lock_guard<AGE::SpinLock> lock(_mutex);
+		_imguiRenderlist = list;
+	}
+#endif
+
+	bool RenderThread::isDrawing() const
+	{
+		return _isDrawing;
+	}
+
+	void RenderThread::setIsDrawingToTrue()
+	{
+		AGE_ASSERT(CurrentThread() == (AGE::Thread*)GetMainThread());
+		_isDrawing = true;
 	}
 }

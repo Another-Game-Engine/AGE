@@ -20,7 +20,7 @@ namespace AGE
 		virtual ~DeferredPointLightning() = default;
 
 	protected:
-		virtual void renderPass(RenderPipeline const &, RenderLightList &, CameraInfos const &);
+		virtual void renderPass(const DRBCameraDrawableList &infos);
 
 	private:
 		std::shared_ptr<Texture2D> _normalInput;
