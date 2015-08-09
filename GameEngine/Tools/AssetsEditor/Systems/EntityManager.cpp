@@ -240,25 +240,64 @@ namespace AGE
 							}
 							ImGui::EndPopup();
 						}
-
-						ImGui::Separator();
 					}
 
 					auto isAnArchetype = archetypeCpt != nullptr;
 					auto isAnArchetypeChild = isAnArchetype && archetypeCpt->parentIsAnArchetype;
 
-					if (!isAnArchetypeChild && ImGui::SmallButton("Delete entity"))
+					ImGui::SameLine();
+					if (!isAnArchetypeChild && ImGui::Button("Delete entity"))
 					{
-						auto destroyAllHierarchy = archetypeCpt != nullptr;
-						_scene->destroy(entity, destroyAllHierarchy);
-						_selectedEntity = nullptr;
-						_selectedEntityIndex = 0;
+						ImGui::OpenPopup("Delete entity ?");
+					}
+					if (ImGui::BeginPopupModal("Delete entity ?", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+					{
+						ImGui::Text("Are you sure to delete entity ?\nThis operation cannot be undone!\n\n");
+						ImGui::Separator();
+
+						static bool dont_ask_me_next_time = false;
+						ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
+						ImGui::Checkbox("Don't ask me next time", &dont_ask_me_next_time);
+						ImGui::PopStyleVar();
+
+						if (ImGui::Button("Delete", ImVec2(120, 0)))
+						{
+							ImGui::CloseCurrentPopup();
+							auto destroyAllHierarchy = archetypeCpt != nullptr;
+							_scene->destroy(entity, destroyAllHierarchy);
+							_selectedEntity = nullptr;
+							_selectedEntityIndex = 0;
+						}
+						ImGui::SameLine();
+						if (ImGui::Button("Cancel", ImVec2(120, 0))) { ImGui::CloseCurrentPopup(); }
+						ImGui::EndPopup();
 					}
 
-					if (isAnArchetypeChild == false && ImGui::SmallButton("Duplicate"))
+					if (isAnArchetypeChild == false && ImGui::Button("Duplicate"))
+					{
+						ImGui::OpenPopup("Duplicate entity ?");
+					}
+					if (ImGui::BeginPopupModal("Duplicate entity ?", NULL, ImGuiWindowFlags_AlwaysAutoResize))
 					{
 						Entity duplicate;
 						_scene->copyEntity(entity, duplicate, true, false);
+						auto copyRepresentationCpt = duplicate->getComponent<AGE::WE::EntityRepresentation>();
+
+						ImGui::Text("Duplicate entity");
+						ImGui::Separator();
+						ImGui::InputText("Entity name", copyRepresentationCpt->name, ENTITY_NAME_LENGTH);
+
+						if (ImGui::Button("Okay", ImVec2(120, 0)))
+						{
+							ImGui::CloseCurrentPopup();
+						}
+						ImGui::SameLine();
+						if (ImGui::Button("Cancel", ImVec2(120, 0)))
+						{
+							_scene->destroy(duplicate, true);
+							ImGui::CloseCurrentPopup();
+						}
+						ImGui::EndPopup();
 					}
 
 					if (isAnArchetypeChild == false)
