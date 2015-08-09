@@ -27,6 +27,7 @@ namespace AGE
 
 		drbMesh->datas->setVerticesKey(meshInstance.vertices);
 		drbMesh->datas->setPainterKey(meshInstance.painter);
+		drbMesh->datas->setAABB(meshInstance.boundingBox);
 		
 		drbMesh->datas->globalProperties.merge_properties(meshInstance.properties);
 		

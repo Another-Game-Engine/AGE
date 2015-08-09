@@ -16,12 +16,18 @@
 
 #include <Graphic/DRBCameraDrawableList.hpp>
 #include <Graphic/BFCCullableTypes.hpp>
+#include <Graphic/DRBMeshData.hpp>
 
 #include <Threads/ThreadManager.hpp>
 #include <Threads/RenderThread.hpp>
 #include <Threads/MainThread.hpp>
 
 #include "Utils/Frustum.hh"
+#include "Utils/AABoundingBox.hh"
+
+#include <Render/OcclusionTools/DepthMap.hpp>
+#include <Render/OcclusionTools/DepthMapManager.hpp>
+#include <Render/OcclusionTools/DepthMapHandle.hpp>
 
 namespace AGE
 {
@@ -49,8 +55,85 @@ namespace AGE
 
 	}
 
+	void occlusionCulling(std::list<std::shared_ptr<DRBData>> &list)
+	{
+		SCOPE_profile_cpu_function("Camera system");
+
+		auto depthMap = GetRenderThread()->getDepthMapManager().getReadableMap();
+		//for (auto &e : cameraList->meshs)
+		//{
+		//	readableDepthMap->testBox()
+		//}
+
+		if (depthMap.isValid() == false)
+		{
+			return;
+		}
+
+		auto i = list.begin();
+		while (i != std::end(list))
+		{
+			auto &d = *i;
+			auto BB = std::static_pointer_cast<DRBMeshData>(d)->getAABB();
+
+			glm::vec2 minPoint = glm::vec2(1);
+			glm::vec2 maxPoint = glm::vec2(-1);
+
+			float minZ = std::numeric_limits<float>::max();
+
+			for (std::size_t i = 0; i < 8; ++i)
+			{
+				auto point = depthMap->getMV() * d->getTransformation() * glm::vec4(BB.getCornerPoint(i), 1.0f);
+				point /= point.w;
+
+				if (point.x < -1)
+				{
+					point.x = -1;
+				}
+				if (point.y < -1)
+				{
+					point.y = -1;
+				}
+				if (point.x > 1)
+				{
+					point.x = 1;
+				}
+				if (point.y > 1)
+				{
+					point.y = 1;
+				}
+
+				minPoint.x = std::min(minPoint.x, point.x);
+				minPoint.y = std::min(minPoint.y, point.y);
+				maxPoint.x = std::max(maxPoint.x, point.x);
+				maxPoint.y = std::max(maxPoint.y, point.y);
+
+				point.z = (point.z + 1.0f) * 0.5f;
+				minZ = std::min(minZ, point.z);
+			}
+
+			glm::uvec2 screenMin(((minPoint + glm::vec2(1)) / glm::vec2(2)) * glm::vec2(depthMap->getMipmapWidth(), depthMap->getMipmapHeight()));
+			glm::uvec2 screenMax(((maxPoint + glm::vec2(1)) / glm::vec2(2)) * glm::vec2(depthMap->getMipmapWidth(), depthMap->getMipmapHeight()));
+
+			if (minZ < 0)
+			{
+				minZ = 0;
+			}
+
+			if (depthMap->testBox((uint32_t)(minZ * (1 << 24)), screenMin, screenMax) == false)
+			{
+				list.erase(i++);
+			}
+			else
+			{
+				++i;
+			}
+		}
+	}
+
 	void RenderCameraSystem::mainUpdate(float time)
 	{
+		SCOPE_profile_cpu_function("Camera system");
 		_scene->getBfcLinkTracker()->reset();
 
 		// check if the render thread does not already have stuff to draw
@@ -98,6 +181,8 @@ namespace AGE
 
 			_scene->getBfcBlockManagerFactory()->cullOnChannel(BFCCullableType::CullableMesh, cameraList->meshs, cameraFrustum);
 			_scene->getBfcBlockManagerFactory()->cullOnChannel(BFCCullableType::CullablePointLight, cameraList->pointLights, cameraFrustum);
+			occlusionCulling(cameraList->meshs);
+
 			cameraList->spotLights = spotLightList;
 			cameraList->pointLights = pointLightList;
 			AGE::GetRenderThread()->getQueue()->emplaceCommand<AGE::DRBCameraDrawableListCommand>(cameraList);
