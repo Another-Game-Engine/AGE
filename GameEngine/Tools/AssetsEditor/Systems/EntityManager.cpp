@@ -273,15 +273,24 @@ namespace AGE
 						ImGui::EndPopup();
 					}
 
+					ImGui::SameLine();
+					static bool duplicateModalIsOpen = false;
 					if (isAnArchetypeChild == false && ImGui::Button("Duplicate"))
 					{
 						ImGui::OpenPopup("Duplicate entity ?");
 					}
 					if (ImGui::BeginPopupModal("Duplicate entity ?", NULL, ImGuiWindowFlags_AlwaysAutoResize))
 					{
-						Entity duplicate;
-						_scene->copyEntity(entity, duplicate, true, false);
-						auto copyRepresentationCpt = duplicate->getComponent<AGE::WE::EntityRepresentation>();
+						static Entity duplicate;
+						AGE::WE::EntityRepresentation *copyRepresentationCpt = nullptr;
+						if (duplicateModalIsOpen == false)
+						{
+							duplicate = Entity();
+							_scene->copyEntity(entity, duplicate, true, false);
+							duplicateModalIsOpen = true;
+						}
+
+						copyRepresentationCpt = duplicate->getComponent<AGE::WE::EntityRepresentation>();
 
 						ImGui::Text("Duplicate entity");
 						ImGui::Separator();
@@ -290,12 +299,14 @@ namespace AGE
 						if (ImGui::Button("Okay", ImVec2(120, 0)))
 						{
 							ImGui::CloseCurrentPopup();
+							duplicateModalIsOpen = false;
 						}
 						ImGui::SameLine();
 						if (ImGui::Button("Cancel", ImVec2(120, 0)))
 						{
-							_scene->destroy(duplicate, true);
 							ImGui::CloseCurrentPopup();
+							_scene->destroy(duplicate, true);
+							duplicateModalIsOpen = false;
 						}
 						ImGui::EndPopup();
 					}
