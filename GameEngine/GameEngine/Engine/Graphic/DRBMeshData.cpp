@@ -17,6 +17,18 @@ namespace AGE
 		_vertices = key;
 	}
 
+	void DRBMeshData::setRenderMode(RenderModes mode, bool activate)
+	{
+		RWLockGuard(_lock, true);
+		_renderMode[mode] = activate;
+	}
+
+	void DRBMeshData::setRenderModes(const RenderModeSet &modes)
+	{
+		RWLockGuard(_lock, true);
+		_renderMode = modes;
+	}
+
 	const Key<Painter> DRBMeshData::getPainterKey() const
 	{
 		RWLockGuard(_lock, false);
@@ -27,5 +39,11 @@ namespace AGE
 	{
 		RWLockGuard(_lock, false);
 		return _vertices;
+	}
+
+	bool DRBMeshData::hadRenderMode(RenderModes mode) const
+	{
+		RWLockGuard(_lock, false);
+		return _renderMode.test(mode);
 	}
 }

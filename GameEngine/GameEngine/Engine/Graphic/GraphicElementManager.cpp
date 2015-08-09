@@ -49,5 +49,4 @@ namespace AGE
 		_meshPool.destroy(handle.getPtr());
 		_bfcBlockManager->deleteItem(handle);
 	}
-
 }

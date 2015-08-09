@@ -114,6 +114,7 @@ namespace AGE
 					pack.scene = _scene;
 					pack.loadFromFile(sceneFileName);
 					_reloadScene = false;
+					_selectedEntity = nullptr;
 				}
 
 				if (_saveScene)
