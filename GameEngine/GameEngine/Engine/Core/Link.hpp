@@ -69,6 +69,7 @@ namespace AGE
 
 		bool hasChildren() const;
 		bool hasParent() const;
+		Link *getParent();
 		bool hasParent(const Link *parent) const;
 		bool isAttachedToRoot() const;
 		const std::vector<Link*> &getChildren() const;

@@ -29,6 +29,7 @@ namespace AGE
 				, _selectedEntityIndex(0)
 				, _graphNodeDisplay(false)
 				, _selectParent(false)
+				, _lastFrameSelectedEntity(nullptr)
 			{
 				//
 				auto name = "\0";
@@ -36,6 +37,18 @@ namespace AGE
 				_meshRenderers.requireComponent<MeshRenderer>();
 				_displayWindow = true;
 				generateBasicEntities();
+
+				scene->getInstance<AGE::AssetsManager>()->pushNewCallback("Gizmo/gizmo.sage", scene,
+					std::function<void()>([=](){
+					_gizmoMesh = scene->getInstance<AGE::AssetsManager>()->getMesh("Gizmo/gizmo.sage");
+				}));
+				scene->getInstance<AGE::AssetsManager>()->pushNewCallback("Gizmo/gizmo.mage", scene,
+					std::function<void()>([=](){
+					_gizmoMaterial = scene->getInstance<AGE::AssetsManager>()->getMaterial("Gizmo/gizmo.mage");
+				}));
+
+				_scene->getInstance<AGE::AssetsManager>()->loadMesh(OldFile("Gizmo/gizmo.sage"), "Gizmo/gizmo.sage");
+				_scene->getInstance<AGE::AssetsManager>()->loadMaterial(OldFile("Gizmo/gizmo.mage"), "Gizmo/gizmo.mage");
 			}
 			EntityManager::~EntityManager(){}
 
@@ -107,6 +120,9 @@ namespace AGE
 				{
 					WESerialization::SetSerializeForEditor(true);
 
+					auto parent = _gizmoEntity.getLinkPtr()->getParent();
+					_gizmoEntity.getLinkPtr()->detachParent();
+
 					ReadableEntityPack pack;
 					{
 						CreateReadableEntityPack(pack, _entities);
@@ -115,6 +131,11 @@ namespace AGE
 					{
 						BinaryEntityPack binaryPack = pack.toBinary();
 						binaryPack.saveToFile(WE::EditorConfiguration::GetExportedSceneDirectory() + std::string(_sceneName) + ".scene");
+					}
+
+					if (parent)
+					{
+						_gizmoEntity.getLinkPtr()->attachParent(parent);
 					}
 
 					WESerialization::SetSerializeForEditor(false);
@@ -398,6 +419,23 @@ namespace AGE
 					_saveScene = true;
 				}
 
+				if (_lastFrameSelectedEntity != _selectedEntity)
+				{
+					if (_lastFrameSelectedEntity != nullptr)
+					{
+						_gizmoEntity->removeComponent<MeshRenderer>();
+						_gizmoEntity.getLinkPtr()->detachParent();
+					}
+					if (_selectedEntity != nullptr)
+					{
+						_gizmoEntity.getLinkPtr()->attachParent(_selectedEntity->getLinkPtr());
+						_gizmoEntity->addComponent<MeshRenderer>(_gizmoMesh, _gizmoMaterial);
+					}
+
+
+					_lastFrameSelectedEntity = _selectedEntity;
+				}
+
 			}
 
 			bool EntityManager::initialize()
@@ -413,6 +451,9 @@ namespace AGE
 				camera->getLink().setForward(glm::vec3(0, 0, 0));
 				camera->addComponent<FreeFlyComponent>();
 				camera->addComponent<AGE::WE::EntityRepresentation>()->editorOnly = true;
+
+				_gizmoEntity = _scene->createEntity();
+				_gizmoEntity->addComponent<AGE::WE::EntityRepresentation>()->editorOnly = true;
 			}
 	}
 }

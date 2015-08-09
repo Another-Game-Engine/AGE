@@ -7,6 +7,9 @@
 
 namespace AGE
 {
+	struct MaterialSetInstance;
+	struct MeshInstance;
+
 	namespace WE
 	{
 		class EntityManager : public System
@@ -26,12 +29,16 @@ namespace AGE
 			std::vector<const char*> _entityNames;
 			std::vector<Entity> _entities;
 			Entity *_selectedEntity;
+			Entity *_lastFrameSelectedEntity;
+			Entity _gizmoEntity;
 			int _selectedEntityIndex;
 			char _sceneName[MAX_SCENE_NAME_LENGTH];
 			char _archetypeName[MAX_SCENE_NAME_LENGTH];
 			bool _displayWindow;
 			bool _reloadScene = false;
 			bool _saveScene = false;
+			std::shared_ptr<MaterialSetInstance> _gizmoMaterial = nullptr;
+			std::shared_ptr<MeshInstance> _gizmoMesh = nullptr;
 
 			virtual void updateBegin(float time);
 			virtual void updateEnd(float time);
