@@ -322,10 +322,44 @@ namespace AGE
 					}
 				}
 
-				
+				ImGui::SameLine();
+				static bool createEntityModalIsOpen = false;
 				if (ImGui::Button("Create entity"))
 				{
-					_scene->createEntity();
+					ImGui::OpenPopup("Create entity ?");
+				}
+				if (ImGui::BeginPopupModal("Create entity ?", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+				{
+					static Entity created;
+					AGE::WE::EntityRepresentation *newRepresentation = nullptr;
+					if (createEntityModalIsOpen == false)
+					{
+						created = _scene->createEntity();
+						createEntityModalIsOpen = true;
+					}
+
+					newRepresentation = created->getComponent<AGE::WE::EntityRepresentation>();
+
+					ImGui::Text("Create entity");
+					ImGui::Separator();
+					if (newRepresentation)
+					{
+						ImGui::InputText("Entity name", newRepresentation->name, ENTITY_NAME_LENGTH);
+					}
+
+					if (ImGui::Button("Okay", ImVec2(120, 0)))
+					{
+						ImGui::CloseCurrentPopup();
+						createEntityModalIsOpen = false;
+					}
+					ImGui::SameLine();
+					if (ImGui::Button("Cancel", ImVec2(120, 0)))
+					{
+						ImGui::CloseCurrentPopup();
+						_scene->destroy(created, true);
+						createEntityModalIsOpen = false;
+					}
+					ImGui::EndPopup();
 				}
 
 				_entities.clear();
