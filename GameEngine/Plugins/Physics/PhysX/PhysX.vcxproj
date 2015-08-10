@@ -107,10 +107,7 @@
       <PrecompiledHeaderFile>Precompiled.hpp</PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-<<<<<<< HEAD
-=======
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
->>>>>>> 1781dabeb87db4d4214670865992c67749b1c1b5
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
