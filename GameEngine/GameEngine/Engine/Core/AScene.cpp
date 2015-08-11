@@ -190,7 +190,8 @@ namespace AGE
 		SCOPE_profile_cpu_function("Scenes");
 		auto &data = e.ptr;
 		auto find = _entities.find(e);
-		assert(data->entity == e && find != std::end(_entities));
+		AGE_ASSERT(data->entity == e);
+		AGE_ASSERT(find != std::end(_entities));
 		_entities.erase(find);
 		++data->entity.version;
 		data->entity.flags = 0;

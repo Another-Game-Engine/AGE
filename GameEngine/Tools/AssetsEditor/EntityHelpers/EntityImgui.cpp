@@ -110,9 +110,9 @@ namespace AGE
 							}
 							ImGui::PopID();
 						}
-						if (opened && !deleted)
+						if (opened)
 						{
-							if (ptr->editorUpdate())
+							if (!deleted && ptr->editorUpdate())
 							{
 								modified = true;
 							}

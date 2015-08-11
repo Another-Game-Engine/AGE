@@ -133,6 +133,10 @@ namespace AGE
 				auto diffuseTex = std::make_shared<MapColor>("diffuse");
 				materialSubset._properties.push_back(diffuseTex);
 				auto diffuseTexPtr = std::static_pointer_cast<Texture2D>(loadTexture(material_data.diffuseTexPath, loadingChannel));
+				if (diffuseTexPtr == nullptr)
+				{
+					diffuseTexPtr = std::static_pointer_cast<Texture2D>(loadTexture("ambiant_default.dds", loadingChannel));
+				}
 				diffuseTex->set(diffuseTexPtr);
 
 				auto ambientTex = std::make_shared<MapColor>("ambient");

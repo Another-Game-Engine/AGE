@@ -29,6 +29,7 @@ namespace AGE
 				, _selectedEntityIndex(0)
 				, _graphNodeDisplay(false)
 				, _selectParent(false)
+				, _lastFrameSelectedEntity(nullptr)
 			{
 				//
 				auto name = "\0";
@@ -36,6 +37,18 @@ namespace AGE
 				_meshRenderers.requireComponent<MeshRenderer>();
 				_displayWindow = true;
 				generateBasicEntities();
+
+				scene->getInstance<AGE::AssetsManager>()->pushNewCallback("Gizmo/gizmo.sage", scene,
+					std::function<void()>([=](){
+					_gizmoMesh = scene->getInstance<AGE::AssetsManager>()->getMesh("Gizmo/gizmo.sage");
+				}));
+				scene->getInstance<AGE::AssetsManager>()->pushNewCallback("Gizmo/gizmo.mage", scene,
+					std::function<void()>([=](){
+					_gizmoMaterial = scene->getInstance<AGE::AssetsManager>()->getMaterial("Gizmo/gizmo.mage");
+				}));
+
+				_scene->getInstance<AGE::AssetsManager>()->loadMesh(OldFile("Gizmo/gizmo.sage"), "Gizmo/gizmo.sage");
+				_scene->getInstance<AGE::AssetsManager>()->loadMaterial(OldFile("Gizmo/gizmo.mage"), "Gizmo/gizmo.mage");
 			}
 			EntityManager::~EntityManager(){}
 
@@ -107,6 +120,9 @@ namespace AGE
 				{
 					WESerialization::SetSerializeForEditor(true);
 
+					auto parent = _gizmoEntity.getLinkPtr()->getParent();
+					_gizmoEntity.getLinkPtr()->detachParent();
+
 					ReadableEntityPack pack;
 					{
 						CreateReadableEntityPack(pack, _entities);
@@ -115,6 +131,11 @@ namespace AGE
 					{
 						BinaryEntityPack binaryPack = pack.toBinary();
 						binaryPack.saveToFile(WE::EditorConfiguration::GetExportedSceneDirectory() + std::string(_sceneName) + ".scene");
+					}
+
+					if (parent)
+					{
+						_gizmoEntity.getLinkPtr()->attachParent(parent);
 					}
 
 					WESerialization::SetSerializeForEditor(false);
@@ -223,35 +244,92 @@ namespace AGE
 						auto &types = ComponentRegistrationManager::getInstance().getExposedType();
 						auto &creationFn = ComponentRegistrationManager::getInstance().getCreationFunctions();
 
-						for (auto &t : types)
+						if (ImGui::Button("Add component..."))
+							ImGui::OpenPopup("add_component");
+
+						if (ImGui::BeginPopup("add_component"))
 						{
-							if (!entity->haveComponent(t.second))
+							for (auto &t : types)
 							{
-								if (ImGui::SmallButton(std::string("Add : " + ComponentRegistrationManager::getInstance().getComponentName(t.second)).c_str()))
+								if (!entity->haveComponent(t.second))
 								{
-									creationFn.at(t.first)(&entity);
+									if (ImGui::Selectable(ComponentRegistrationManager::getInstance().getComponentName(t.second).c_str()))
+									{
+										creationFn.at(t.first)(&entity);
+									}
 								}
 							}
+							ImGui::EndPopup();
 						}
-
-						ImGui::Separator();
 					}
 
 					auto isAnArchetype = archetypeCpt != nullptr;
 					auto isAnArchetypeChild = isAnArchetype && archetypeCpt->parentIsAnArchetype;
 
-					if (!isAnArchetypeChild && ImGui::SmallButton("Delete entity"))
+					ImGui::SameLine();
+					if (!isAnArchetypeChild && ImGui::Button("Delete entity"))
 					{
-						auto destroyAllHierarchy = archetypeCpt != nullptr;
-						_scene->destroy(entity, destroyAllHierarchy);
-						_selectedEntity = nullptr;
-						_selectedEntityIndex = 0;
+						ImGui::OpenPopup("Delete entity ?");
+					}
+					if (ImGui::BeginPopupModal("Delete entity ?", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+					{
+						ImGui::Text("Are you sure to delete entity ?\nThis operation cannot be undone!\n\n");
+						ImGui::Separator();
+
+						static bool dont_ask_me_next_time = false;
+						ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
+						ImGui::Checkbox("Don't ask me next time", &dont_ask_me_next_time);
+						ImGui::PopStyleVar();
+
+						if (ImGui::Button("Delete", ImVec2(120, 0)))
+						{
+							ImGui::CloseCurrentPopup();
+							auto destroyAllHierarchy = archetypeCpt != nullptr;
+							_scene->destroy(entity, destroyAllHierarchy);
+							_selectedEntity = nullptr;
+							_selectedEntityIndex = 0;
+						}
+						ImGui::SameLine();
+						if (ImGui::Button("Cancel", ImVec2(120, 0))) { ImGui::CloseCurrentPopup(); }
+						ImGui::EndPopup();
 					}
 
-					if (isAnArchetypeChild == false && ImGui::SmallButton("Duplicate"))
+					ImGui::SameLine();
+					static bool duplicateModalIsOpen = false;
+					if (isAnArchetypeChild == false && ImGui::Button("Duplicate"))
 					{
-						Entity duplicate;
-						_scene->copyEntity(entity, duplicate, true, false);
+						ImGui::OpenPopup("Duplicate entity ?");
+					}
+					if (ImGui::BeginPopupModal("Duplicate entity ?", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+					{
+						static Entity duplicate;
+						AGE::WE::EntityRepresentation *copyRepresentationCpt = nullptr;
+						if (duplicateModalIsOpen == false)
+						{
+							duplicate = Entity();
+							_scene->copyEntity(entity, duplicate, true, false);
+							duplicateModalIsOpen = true;
+						}
+
+						copyRepresentationCpt = duplicate->getComponent<AGE::WE::EntityRepresentation>();
+
+						ImGui::Text("Duplicate entity");
+						ImGui::Separator();
+						ImGui::InputText("Entity name", copyRepresentationCpt->name, ENTITY_NAME_LENGTH);
+
+						if (ImGui::Button("Okay", ImVec2(120, 0)))
+						{
+							ImGui::CloseCurrentPopup();
+							duplicateModalIsOpen = false;
+						}
+						ImGui::SameLine();
+						if (ImGui::Button("Cancel", ImVec2(120, 0)))
+						{
+							ImGui::CloseCurrentPopup();
+							_scene->destroy(duplicate, true);
+							duplicateModalIsOpen = false;
+						}
+						ImGui::EndPopup();
 					}
 
 					if (isAnArchetypeChild == false)
@@ -265,10 +343,44 @@ namespace AGE
 					}
 				}
 
-				
+				ImGui::SameLine();
+				static bool createEntityModalIsOpen = false;
 				if (ImGui::Button("Create entity"))
 				{
-					_scene->createEntity();
+					ImGui::OpenPopup("Create entity ?");
+				}
+				if (ImGui::BeginPopupModal("Create entity ?", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+				{
+					static Entity created;
+					AGE::WE::EntityRepresentation *newRepresentation = nullptr;
+					if (createEntityModalIsOpen == false)
+					{
+						created = _scene->createEntity();
+						createEntityModalIsOpen = true;
+					}
+
+					newRepresentation = created->getComponent<AGE::WE::EntityRepresentation>();
+
+					ImGui::Text("Create entity");
+					ImGui::Separator();
+					if (newRepresentation)
+					{
+						ImGui::InputText("Entity name", newRepresentation->name, ENTITY_NAME_LENGTH);
+					}
+
+					if (ImGui::Button("Okay", ImVec2(120, 0)))
+					{
+						ImGui::CloseCurrentPopup();
+						createEntityModalIsOpen = false;
+					}
+					ImGui::SameLine();
+					if (ImGui::Button("Cancel", ImVec2(120, 0)))
+					{
+						ImGui::CloseCurrentPopup();
+						_scene->destroy(created, true);
+						createEntityModalIsOpen = false;
+					}
+					ImGui::EndPopup();
 				}
 
 				_entities.clear();
@@ -307,6 +419,23 @@ namespace AGE
 					_saveScene = true;
 				}
 
+				if (_lastFrameSelectedEntity != _selectedEntity)
+				{
+					if (_lastFrameSelectedEntity != nullptr)
+					{
+						_gizmoEntity->removeComponent<MeshRenderer>();
+						_gizmoEntity.getLinkPtr()->detachParent();
+					}
+					if (_selectedEntity != nullptr)
+					{
+						_gizmoEntity.getLinkPtr()->attachParent(_selectedEntity->getLinkPtr());
+						_gizmoEntity->addComponent<MeshRenderer>(_gizmoMesh, _gizmoMaterial);
+					}
+
+
+					_lastFrameSelectedEntity = _selectedEntity;
+				}
+
 			}
 
 			bool EntityManager::initialize()
@@ -322,6 +451,9 @@ namespace AGE
 				camera->getLink().setForward(glm::vec3(0, 0, 0));
 				camera->addComponent<FreeFlyComponent>();
 				camera->addComponent<AGE::WE::EntityRepresentation>()->editorOnly = true;
+
+				_gizmoEntity = _scene->createEntity();
+				_gizmoEntity->addComponent<AGE::WE::EntityRepresentation>()->editorOnly = true;
 			}
 	}
 }

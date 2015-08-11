@@ -51,34 +51,45 @@ namespace AGE
 	{
 		std::vector<ImDrawCmd>     commands;
 		std::vector<ImDrawVert>    vtx_buffer;
+		std::vector<ImDrawIdx>     idx_buffer;
 		Age_ImDrawList() = default;
 		Age_ImDrawList(const Age_ImDrawList& o)
 		{
 			commands = o.commands;
 			vtx_buffer = o.vtx_buffer;
+			idx_buffer = o.idx_buffer;
 		}
 		Age_ImDrawList& operator=(const Age_ImDrawList& o)
 		{
 			commands = o.commands;
 			vtx_buffer = o.vtx_buffer;
+			idx_buffer = o.idx_buffer;
 			return *this;
 		}
 		Age_ImDrawList(const ImDrawList& o)
 		{
-			const ImDrawCmd* pcmd_end = o.commands.end();
-			commands.resize(o.commands.size());
+			const ImDrawCmd* pcmd_end = o.CmdBuffer.end();
+			commands.resize(o.CmdBuffer.size());
 			int i = 0;
-			for (const ImDrawCmd* pcmd = o.commands.begin(); pcmd != pcmd_end; pcmd++)
+			for (const ImDrawCmd* pcmd = o.CmdBuffer.begin(); pcmd != pcmd_end; pcmd++)
 			{
 				commands[i] = (*pcmd);
 				++i;
 			}
-			auto ve = o.vtx_buffer.end();
-			vtx_buffer.resize(o.vtx_buffer.size());
+			auto ve = o.VtxBuffer.end();
+			vtx_buffer.resize(o.VtxBuffer.size());
 			i = 0;
-			for (auto v = o.vtx_buffer.begin(); v != ve; v++)
+			for (auto v = o.VtxBuffer.begin(); v != ve; v++)
 			{
 				vtx_buffer[i] = *v;
+				++i;
+			}
+			auto vi = o.IdxBuffer.end();
+			idx_buffer.resize(o.IdxBuffer.size());
+			i = 0;
+			for (auto v = o.IdxBuffer.begin(); v != vi; v++)
+			{
+				idx_buffer[i] = *v;
 				++i;
 			}
 		}
@@ -104,16 +115,6 @@ namespace AGE
 			cmd_lists = o.cmd_lists;
 			return *this;
 		}
-
-		//RenderImgui(RenderImgui &&o)
-		//{
-		//	cmd_lists = std::move(o.cmd_lists);
-		//}
-
-		//	RenderImgui &operator=(RenderImgui &&o)
-		//{
-		//	cmd_lists = std::move(o.cmd_lists);
-		//}
 	};
 
 
@@ -122,7 +123,7 @@ namespace AGE
 		static int shader_handle, vert_handle, frag_handle;
 		static int texture_location, ortho_location;
 		static int position_location, uv_location, colour_location;
-		static size_t vbo_max_size;
+		static size_t vbo_max_size, vbo_size;
 		static unsigned int vbo_handle, vao_handle;
 		static GLuint fontTex;
 
@@ -135,7 +136,7 @@ namespace AGE
 		bool init(Engine *en);
 		void startUpdate();
 		static Imgui* getInstance();
-		static void renderDrawLists(ImDrawList** const cmd_lists, int cmd_lists_count);
+		static void renderDrawLists(ImDrawData* draw_data);
 		static void initShader(int *pid, int *vert, int *frag, const char *vs, const char *fs);
 		void renderThreadRenderFn(const std::vector<Age_ImDrawList> &cmd_lists);
 

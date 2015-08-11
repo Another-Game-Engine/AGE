@@ -244,6 +244,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\Vendors\imgui\imgui.cpp" />
+    <ClCompile Include="..\Vendors\imgui\imgui_draw.cpp" />
     <ClCompile Include="Engine\BFC\BFCBlock.cpp" />
     <ClCompile Include="Engine\BFC\BFCBlockManager.cpp" />
     <ClCompile Include="Engine\BFC\BFCBlockManagerFactory.cpp" />

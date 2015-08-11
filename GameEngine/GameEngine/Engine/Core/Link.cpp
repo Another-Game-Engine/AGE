@@ -27,6 +27,7 @@ void Link::BFC_REMOVE()
 bool Link::hasChildren() const { return _children.size() > 0; };
 bool Link::hasParent() const { return _parent != nullptr && _parent != _scene->getRootLink(); }
 bool Link::hasParent(const Link *parent) const { return _parent == parent; }
+Link *Link::getParent() { return _parent; }
 const std::vector<Link*> &Link::getChildren() const { return _children; }
 
 void Link::setPosition(const glm::vec3 &v, bool recalculate)

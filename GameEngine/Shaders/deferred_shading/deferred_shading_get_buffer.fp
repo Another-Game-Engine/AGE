@@ -29,7 +29,7 @@ vec3 perturb_normal()
 
 void main(void)
 {
-	diffuse_frag = texture(diffuse_map, VertexIn.inter_texCoord); // diffuse_color * diffuse_ratio
+	diffuse_frag = texture(diffuse_map, VertexIn.inter_texCoord) * diffuse_color; // diffuse_color * diffuse_ratio
 	vec3 normal = perturb_normal() * 0.5f + 0.5f;
 	normal_frag = vec4(normal, 1.0f);
 	specular_frag = vec4(vec3(specular_color), shininess_ratio);

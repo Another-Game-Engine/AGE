@@ -22,6 +22,7 @@
 namespace AGE
 {
 	size_t Imgui::vbo_max_size = 20000;
+	size_t Imgui::vbo_size = 0;
 	int Imgui::shader_handle, Imgui::vert_handle, Imgui::frag_handle;
 	int Imgui::texture_location, Imgui::ortho_location;
 	int Imgui::position_location, Imgui::uv_location, Imgui::colour_location;
@@ -87,28 +88,28 @@ namespace AGE
 
 		const GLchar *vertex_shader =
 			"#version 330\n"
-			"uniform mat4 ortho;\n"
+			"uniform mat4 ProjMtx;\n"
 			"in vec2 Position;\n"
 			"in vec2 UV;\n"
-			"in vec4 Colour;\n"
+			"in vec4 Color;\n"
 			"out vec2 Frag_UV;\n"
-			"out vec4 Frag_Colour;\n"
+			"out vec4 Frag_Color;\n"
 			"void main()\n"
 			"{\n"
 			"	Frag_UV = UV;\n"
-			"	Frag_Colour = Colour;\n"
-			"	gl_Position = ortho*vec4(Position.xy,0,1);\n"
+			"	Frag_Color = Color;\n"
+			"	gl_Position = ProjMtx * vec4(Position.xy,0,1);\n"
 			"}\n";
 
 		const GLchar* fragment_shader =
 			"#version 330\n"
 			"uniform sampler2D Texture;\n"
 			"in vec2 Frag_UV;\n"
-			"in vec4 Frag_Colour;\n"
-			"out vec4 FragColor;\n"
+			"in vec4 Frag_Color;\n"
+			"out vec4 Out_Color;\n"
 			"void main()\n"
 			"{\n"
-			"	FragColor = Frag_Colour * texture( Texture, Frag_UV.st);\n"
+			"	Out_Color = Frag_Color * texture( Texture, Frag_UV.st);\n"
 			"}\n";
 
 		shader_handle = glCreateProgram();
@@ -123,10 +124,10 @@ namespace AGE
 		glLinkProgram(shader_handle);
 
 		texture_location = glGetUniformLocation(shader_handle, "Texture");
-		ortho_location = glGetUniformLocation(shader_handle, "ortho");
+		ortho_location = glGetUniformLocation(shader_handle, "ProjMtx");
 		position_location = glGetAttribLocation(shader_handle, "Position");
 		uv_location = glGetAttribLocation(shader_handle, "UV");
-		colour_location = glGetAttribLocation(shader_handle, "Colour");
+		colour_location = glGetAttribLocation(shader_handle, "Color");
 
 		glGenBuffers(1, &vbo_handle);
 		glBindBuffer(GL_ARRAY_BUFFER, vbo_handle);
@@ -148,8 +149,8 @@ namespace AGE
 		// Load font texture
 		glGenTextures(1, &fontTex);
 		glBindTexture(GL_TEXTURE_2D, fontTex);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 		unsigned char* pixels;
 		int width, height;
@@ -157,6 +158,10 @@ namespace AGE
 		io.Fonts->TexID = &fontTex;
 
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+
+		// Cleanup (don't clear the input data if you want to append new fonts later)
+		io.Fonts->ClearInputData();
+		io.Fonts->ClearTexData();
 #else
 		UNUSED(di);
 #endif //AGE_ENABLE_IMGUI
@@ -218,10 +223,10 @@ namespace AGE
 #endif
 	}
 
-	void Imgui::renderDrawLists(ImDrawList** const cmd_lists, int cmd_lists_count)
+	void Imgui::renderDrawLists(ImDrawData* draw_data/*ImDrawList** const cmd_lists, int cmd_lists_count*/)
 	{
 #ifdef AGE_ENABLE_IMGUI
-		AGE::GetRenderThread()->setImguiDrawList(std::make_shared<AGE::RenderImgui>(cmd_lists, cmd_lists_count));
+		AGE::GetRenderThread()->setImguiDrawList(std::make_shared<AGE::RenderImgui>(draw_data->CmdLists, draw_data->CmdListsCount));
 #else
 		UNUSED(cmd_lists);
 		UNUSED(cmd_lists_count);
@@ -240,10 +245,7 @@ namespace AGE
 		OpenGLState::glDisable(GL_CULL_FACE);
 		OpenGLState::glDisable(GL_DEPTH_TEST);
 		OpenGLState::glEnable(GL_SCISSOR_TEST);
-
-		// Setup texture
 		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, fontTex);
 
 		// Setup orthographic projection matrix
 		const float width = ImGui::GetIO().DisplaySize.x;
@@ -255,54 +257,86 @@ namespace AGE
 			{ 0.0f, 0.0f, -1.0f, 0.0f },
 			{ -1.0f, 1.0f, 0.0f, 1.0f },
 		};
+
 		glUseProgram(shader_handle);
 		glUniform1i(texture_location, 0);
 		glUniformMatrix4fv(ortho_location, 1, GL_FALSE, &ortho_projection[0][0]);
-
-		// Grow our buffer according to what we need
-		size_t total_vtx_count = 0;
-		for (int n = 0; n < cmd_lists.size(); n++)
-			total_vtx_count += cmd_lists[n].vtx_buffer.size();
-		glBindBuffer(GL_ARRAY_BUFFER, vbo_handle);
-		size_t neededBufferSize = total_vtx_count * sizeof(ImDrawVert);
-		if (neededBufferSize > vbo_max_size)
-		{
-			vbo_max_size = neededBufferSize + 5000;  // Grow buffer
-			glBufferData(GL_ARRAY_BUFFER, vbo_max_size, NULL, GL_STREAM_DRAW);
-		}
-
-		// Copy and convert all vertices into a single contiguous buffer
-		unsigned char* buffer_data = (unsigned char*)glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
-		if (!buffer_data)
-			return;
-		for (int n = 0; n < cmd_lists.size(); n++)
-		{
-			auto &cmd_list = cmd_lists[n];
-			memcpy(buffer_data, &cmd_list.vtx_buffer[0], cmd_list.vtx_buffer.size() * sizeof(ImDrawVert));
-			buffer_data += cmd_list.vtx_buffer.size() * sizeof(ImDrawVert);
-		}
-		glUnmapBuffer(GL_ARRAY_BUFFER);
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glBindVertexArray(vao_handle);
 
-		int cmd_offset = 0;
 		for (int n = 0; n < cmd_lists.size(); n++)
 		{
-			SCOPE_profile_cpu_i("RenderTimer", "Render ImGui command list");
-			auto &cmd_list = cmd_lists[n];
-			int vtx_offset = cmd_offset;
-			auto &pcmd_end = std::end(cmd_list.commands);
-			for (auto &pcmd = std::begin(cmd_list.commands); pcmd != pcmd_end; pcmd++)
+			const Age_ImDrawList& cmd_list = cmd_lists[n];
+			const ImDrawIdx* idx_buffer = cmd_list.idx_buffer.data();
+
+			glBindBuffer(GL_ARRAY_BUFFER, vbo_handle);
+			size_t needed_vtx_size = cmd_list.vtx_buffer.size() * sizeof(ImDrawVert);
+			if (vbo_size < needed_vtx_size)
 			{
-				glScissor((int)pcmd->clip_rect.x, (int)(height - pcmd->clip_rect.w), (int)(pcmd->clip_rect.z - pcmd->clip_rect.x), (int)(pcmd->clip_rect.w - pcmd->clip_rect.y));
-				glDrawArrays(GL_TRIANGLES, vtx_offset, pcmd->vtx_count);
-				vtx_offset += pcmd->vtx_count;
+				// Grow our buffer if needed
+				vbo_size = needed_vtx_size + 2000 * sizeof(ImDrawVert);
+				glBufferData(GL_ARRAY_BUFFER, (GLsizeiptr)vbo_size, NULL, GL_STREAM_DRAW);
 			}
-			cmd_offset = vtx_offset;
+
+			unsigned char* vtx_data = (unsigned char*)glMapBufferRange(GL_ARRAY_BUFFER, 0, needed_vtx_size, GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT);
+			if (!vtx_data)
+				continue;
+			memcpy(vtx_data, &cmd_list.vtx_buffer[0], cmd_list.vtx_buffer.size() * sizeof(ImDrawVert));
+			glUnmapBuffer(GL_ARRAY_BUFFER);
+
+			for (auto pcmd = cmd_list.commands.begin(); pcmd != cmd_list.commands.end(); pcmd++)
+			{
+				glBindTexture(GL_TEXTURE_2D, fontTex);
+				glScissor((int)pcmd->ClipRect.x, (int)(height - pcmd->ClipRect.w), (int)(pcmd->ClipRect.z - pcmd->ClipRect.x), (int)(pcmd->ClipRect.w - pcmd->ClipRect.y));
+				glDrawElements(GL_TRIANGLES, (GLsizei)pcmd->ElemCount, GL_UNSIGNED_SHORT, idx_buffer);
+				idx_buffer += pcmd->ElemCount;
+			}
 		}
+
+		////// Grow our buffer according to what we need
+		////size_t total_vtx_count = 0;
+		////for (int n = 0; n < cmd_lists.size(); n++)
+		////	total_vtx_count += cmd_lists[n].vtx_buffer.size();
+		////glBindBuffer(GL_ARRAY_BUFFER, vbo_handle);
+		////size_t neededBufferSize = total_vtx_count * sizeof(ImDrawVert);
+		////if (neededBufferSize > vbo_max_size)
+		////{
+		////	vbo_max_size = neededBufferSize + 5000;  // Grow buffer
+		////	glBufferData(GL_ARRAY_BUFFER, vbo_max_size, NULL, GL_STREAM_DRAW);
+		////}
+
+		////// Copy and convert all vertices into a single contiguous buffer
+		////unsigned char* buffer_data = (unsigned char*)glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
+		////if (!buffer_data)
+		////	return;
+		////for (int n = 0; n < cmd_lists.size(); n++)
+		////{
+		////	auto &cmd_list = cmd_lists[n];
+		////	memcpy(buffer_data, &cmd_list.vtx_buffer[0], cmd_list.vtx_buffer.size() * sizeof(ImDrawVert));
+		////	buffer_data += cmd_list.vtx_buffer.size() * sizeof(ImDrawVert);
+		////}
+		////glUnmapBuffer(GL_ARRAY_BUFFER);
+		////glBindBuffer(GL_ARRAY_BUFFER, 0);
+		////glBindVertexArray(vao_handle);
+
+		////int cmd_offset = 0;
+		////for (int n = 0; n < cmd_lists.size(); n++)
+		////{
+		////	SCOPE_profile_cpu_i("RenderTimer", "Render ImGui command list");
+		////	auto &cmd_list = cmd_lists[n];
+		////	int vtx_offset = cmd_offset;
+		////	auto &pcmd_end = std::end(cmd_list.commands);
+		////	for (auto &pcmd = std::begin(cmd_list.commands); pcmd != pcmd_end; pcmd++)
+		////	{
+		////		glScissor((int)pcmd->ClipRect.x, (int)(height - pcmd->ClipRect.w), (int)(pcmd->ClipRect.z - pcmd->ClipRect.x), (int)(pcmd->ClipRect.w - pcmd->ClipRect.y));
+		////		//glDrawElements(GL_TRIANGLES, pcmd->ElemCount, GL_UNSIGNED_SHORT, );
+		////		vtx_offset += pcmd->vtx_count;
+		////	}
+		////	cmd_offset = vtx_offset;
+		////}
 
 		// Restore modified state
 		glBindVertexArray(0);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glUseProgram(0);
 		OpenGLState::glDisable(GL_SCISSOR_TEST);
 		glBindTexture(GL_TEXTURE_2D, 0);

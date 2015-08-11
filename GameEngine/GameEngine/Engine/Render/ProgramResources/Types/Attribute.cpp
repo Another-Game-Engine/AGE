@@ -28,9 +28,12 @@ namespace AGE
 
 	IProgramResources & Attribute::update()
 	{
-		_buffer->bind();
-		glEnableVertexAttribArray(_location);
-		glVertexAttribPointer(_location, _available_type.nbr_component, _available_type.type_component, GL_FALSE, 0, 0);
+		if (_buffer)
+		{
+			_buffer->bind();
+			glEnableVertexAttribArray(_location);
+			glVertexAttribPointer(_location, _available_type.nbr_component, _available_type.type_component, GL_FALSE, 0, 0);
+		}
 		return (*this);
 	}
 
