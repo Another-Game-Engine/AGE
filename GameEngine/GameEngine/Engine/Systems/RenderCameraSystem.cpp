@@ -70,10 +70,10 @@ namespace AGE
 			return;
 		}
 
-		auto i = list.begin();
-		while (i != std::end(list))
+		auto j = list.begin();
+		while (j != std::end(list))
 		{
-			auto &d = *i;
+			auto &d = *j;
 			auto BB = std::static_pointer_cast<DRBMeshData>(d)->getAABB();
 
 			glm::vec2 minPoint = glm::vec2(1);
@@ -122,11 +122,11 @@ namespace AGE
 
 			if (depthMap->testBox((uint32_t)(minZ * (1 << 24)), screenMin, screenMax) == false)
 			{
-				list.erase(i++);
+				list.erase(j++);
 			}
 			else
 			{
-				++i;
+				++j;
 			}
 		}
 	}
@@ -158,7 +158,12 @@ namespace AGE
 			Frustum spotlightFrustum;
 			spotlightFrustum.setMatrix(glm::perspective(spot->getCutOff() / 2.0f, spot->getExponent(), 0.1f, 1000.0f)* glm::inverse(spotEntity->getLink().getGlobalTransform()));
 
-			_scene->getBfcBlockManagerFactory()->cullOnChannel(BFCCullableType::CullableMesh, spotDrawableList->meshs, spotlightFrustum);
+			LFList<BFCItem> list;
+			_scene->getBfcBlockManagerFactory()->cullOnChannel(BFCCullableType::CullableMesh, list/*spotDrawableList->meshs*/, spotlightFrustum);
+			while (list.getSize() > 0)
+			{
+				spotDrawableList->meshs.push_back(list.pop()->getDrawable()->getDatas());
+			}
 			spotLightList.push_back(spotDrawableList);
 		}
 		for (auto pointLightEntity : _pointLights.getCollection())
@@ -179,8 +184,17 @@ namespace AGE
 
 			cameraFrustum.setMatrix(camera->getProjection() * cameraList->cameraInfos.view);
 
-			_scene->getBfcBlockManagerFactory()->cullOnChannel(BFCCullableType::CullableMesh, cameraList->meshs, cameraFrustum);
-			_scene->getBfcBlockManagerFactory()->cullOnChannel(BFCCullableType::CullablePointLight, cameraList->pointLights, cameraFrustum);
+			LFList<BFCItem> list;
+			_scene->getBfcBlockManagerFactory()->cullOnChannel(BFCCullableType::CullableMesh, list/*cameraList->meshs*/, cameraFrustum);
+			while (list.getSize() > 0)
+			{
+				cameraList->meshs.push_back(list.pop()->getDrawable()->getDatas());
+			}
+			_scene->getBfcBlockManagerFactory()->cullOnChannel(BFCCullableType::CullablePointLight, list/*cameraList->pointLights*/, cameraFrustum);
+			while (list.getSize() > 0)
+			{
+				cameraList->pointLights.push_back(list.pop()->getDrawable()->getDatas());
+			}
 			occlusionCulling(cameraList->meshs);
 
 			cameraList->spotLights = spotLightList;
