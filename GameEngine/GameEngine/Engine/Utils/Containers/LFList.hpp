@@ -1,11 +1,10 @@
 #pragma once
 
-#include <atomic>
+#include <cstddef>
 
 namespace AGE
 {
 	// Lock Free List
-
 	class LFListBase
 	{
 	private:
@@ -29,72 +28,10 @@ namespace AGE
 		};
 
 	public:
-		LFListBase(std::size_t nextPtrPadding)
-			: _nextPtrPadding(nextPtrPadding)
-		{
-			AGE_ASSERT(nextPtrPadding != 0);
-			AGE_ASSERT(nextPtrPadding % 8 == 0);
-			_datas.rawData.down = _datas.rawData.up = 0;
-		}
-
-		void push(void *element)
-		{
-			void *elementNext = (void*)((std::size_t)element + _nextPtrPadding);
-
-			while (true)
-			{
-				Int128 oldDatas = _datas.rawData;
-				Data datas = _datas;
-
-				*(std::size_t*)(elementNext) = (std::size_t)datas.head;
-
-				datas.head = element;
-				datas.size += 1;
-
-				if (_InterlockedCompareExchange128(
-					&_datas.rawData.up,
-					datas.rawData.down,
-					datas.rawData.up,
-					&oldDatas.up
-					) == 1)
-				{
-					return;
-				}
-			}
-		}
-
-		void *pop()
-		{
-			while (true)
-			{
-				Int128 oldDatas = _datas.rawData;
-				Data datas = _datas;
-
-				if (datas.head != nullptr)
-				{
-					void *res = (void*)(datas.head);
-
-					datas.size -= 1;
-					datas.rawData.down = *(__int64*)((void*)((size_t)(res)+_nextPtrPadding));
-
-					if (_InterlockedCompareExchange128(
-						&_datas.rawData.up,
-						datas.rawData.down,
-						datas.rawData.up,
-						&oldDatas.up
-						) == 1)
-					{
-						return res;
-					}
-				}
-				else
-				{
-					return nullptr;
-				}
-			}
-		}
-
-		std::size_t  getSize() const { return _datas.size; }
+		LFListBase(std::size_t nextPtrPadding);
+		void push(void *element);
+		void *pop();
+		inline std::size_t  getSize() const { return _datas.size; }
 	private:
 		std::size_t _nextPtrPadding;
 		Data        _datas;
@@ -108,12 +45,12 @@ namespace AGE
 			: LFListBase(offsetof(T, next))
 		{}
 
-		void push(T* element)
+		inline void push(T* element)
 		{
 			LFListBase::push((void*)(element));
 		}
 
-		T* pop()
+		inline T* pop()
 		{
 			return (T*)(LFListBase::pop());
 		}
