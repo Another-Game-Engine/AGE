@@ -8,23 +8,18 @@ namespace AGE
 	class LFListBase
 	{
 	private:
-		__declspec(align(8))
+		__declspec(align(16))
 		struct Int128
 		{
 			__int64 up;
 			__int64 down;
 		};
 
-		__declspec(align(8))
-		union Data
+		__declspec(align(16))
+		struct Data
 		{
-			__declspec(align(8))
-			struct
-			{
-				volatile __int64     size;
-				volatile void        *head;
-			};
-			Int128           rawData;
+			volatile __int64     size;
+			volatile void        *head;
 		};
 
 	public:

@@ -12,7 +12,8 @@ namespace AGE
 	{
 		AGE_ASSERT(nextPtrPadding != 0);
 		AGE_ASSERT(nextPtrPadding % 8 == 0);
-		_datas.rawData.down = _datas.rawData.up = 0;
+		_datas.head = nullptr;
+		_datas.size = 0;
 	}
 
 	void LFListBase::push(void *element)
@@ -21,21 +22,24 @@ namespace AGE
 
 		while (true)
 		{
-			Int128 oldDatas = _datas.rawData;
 			Data datas = _datas;
+			Data oldDatas = _datas;
 
 			*(std::size_t*)(elementNext) = (std::size_t)datas.head;
 			AGE_ASSERT((std::size_t)(elementNext) % 8 == 0);
-			AGE_ASSERT(datas->head != );
+			AGE_ASSERT(datas.head != elementNext);
 
 			datas.head = element;
 			datas.size += 1;
 
+			__int64 comparandResult[2];
+			comparandResult[0] = (__int64)oldDatas.size; /* low */
+			comparandResult[1] = (__int64)oldDatas.head; /* high */
 			if (_InterlockedCompareExchange128(
-				&_datas.rawData.up,
-				datas.rawData.up,
-				datas.rawData.down,
-				&oldDatas.up
+				&_datas.size,
+				(__int64)datas.head,
+				datas.size,
+				&comparandResult[0]
 				) == 1)
 			{
 				return;
@@ -47,7 +51,7 @@ namespace AGE
 	{
 		while (true)
 		{
-			Int128 oldDatas = _datas.rawData;
+			Data oldDatas = _datas;
 			Data datas = _datas;
 
 			if (datas.head != nullptr)
@@ -55,13 +59,16 @@ namespace AGE
 				void *res = (void*)(datas.head);
 
 				datas.size -= 1;
-				datas.rawData.down = *(__int64*)((void*)((size_t)(res)+_nextPtrPadding));
+				datas.head = (void*)(*(__int64*)((void*)((size_t)(res)+_nextPtrPadding)));
 
+				__int64 comparandResult[2];
+				comparandResult[0] = (__int64)oldDatas.size; /* low */
+				comparandResult[1] = (__int64)oldDatas.head; /* high */
 				if (_InterlockedCompareExchange128(
-					&_datas.rawData.up,
-					datas.rawData.down,
-					datas.rawData.up,
-					&oldDatas.up
+					&_datas.size,
+					(__int64)datas.head,
+					datas.size,
+					&comparandResult[0]
 					) == 1)
 				{
 					return res;
