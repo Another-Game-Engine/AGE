@@ -62,6 +62,39 @@ namespace AGE
 				}
 			}
 		}
+
+		void *pop()
+		{
+			while (true)
+			{
+				Int128 oldDatas = _datas.rawData;
+				Data datas = _datas;
+
+				if (datas.head != nullptr)
+				{
+					void *res = (void*)(datas.head);
+
+					datas.size -= 1;
+					datas.rawData.down = *(__int64*)((void*)((size_t)(res)+_nextPtrPadding));
+
+					if (_InterlockedCompareExchange128(
+						&_datas.rawData.up,
+						datas.rawData.down,
+						datas.rawData.up,
+						&oldDatas.up
+						) == 1)
+					{
+						return res;
+					}
+				}
+				else
+				{
+					return nullptr;
+				}
+			}
+		}
+
+		std::size_t  getSize() const { return _datas.size; }
 	private:
 		std::size_t _nextPtrPadding;
 		Data        _datas;
