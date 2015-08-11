@@ -99,4 +99,23 @@ namespace AGE
 		std::size_t _nextPtrPadding;
 		Data        _datas;
 	};
+
+	template <typename T>
+	class LFList : public LFListBase
+	{
+	public:
+		LFList()
+			: LFListBase(offsetof(T, next))
+		{}
+
+		void push(T* element)
+		{
+			LFListBase::push((void*)(element));
+		}
+
+		T* pop()
+		{
+			return (T*)(LFListBase::pop());
+		}
+	};
 }
