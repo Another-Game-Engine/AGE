@@ -390,7 +390,9 @@ namespace AGE
 			const auto &archetypesChild = archetype->getLink().getChildren();
 			const auto &entityChild = entity->getLink().getChildren();
 
-			AGE_ASSERT(archetypesChild.size() == entityChild.size());
+			// archetype can have less child because instance in the editor,
+			// if selected can have the gizmo
+			//AGE_ASSERT(archetypesChild.size() == entityChild.size());
 
 			for (std::size_t i = 0; i < archetypesChild.size(); ++i)
 			{
