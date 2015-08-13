@@ -71,7 +71,8 @@ namespace AGE
 			spotDrawableList->spotLight = spot->getCullableHandle().getPtr()->getDatas();
 
 			float spotFov = glm::max(0.001f, (1.0f - spot->getCutOff()) * 180.0f);
-			glm::mat4 spotViewProj = glm::perspective(spotFov, 1.0f, 0.1f, 1000.0f) * glm::inverse(spotEntity->getLink().getGlobalTransform());
+			// We add 30 degres to have the spot entierly in the frustum (otherwise it is circumscribed)
+			glm::mat4 spotViewProj = glm::perspective(glm::min(spotFov + 30.0f, 179.9f), 1.0f, 0.1f, 1000.0f) * glm::inverse(spotEntity->getLink().getGlobalTransform());
 
 			Frustum spotlightFrustum;
 			spotlightFrustum.setMatrix(spotViewProj);

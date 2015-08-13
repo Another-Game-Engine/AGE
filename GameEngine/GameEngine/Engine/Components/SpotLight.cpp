@@ -88,7 +88,7 @@ namespace AGE
 		_propAttenuation = std::make_shared<AutoProperty<glm::vec3, Vec3>>("attenuation_light");
 		_propAttenuation->autoSet(range);
 		_propDirection = std::make_shared<AutoProperty<glm::vec3, Vec3>>("direction_light");
-		_propSpotCutOff = std::make_shared<AutoProperty<float, Vec1>>("spot_cuf_off");
+		_propSpotCutOff = std::make_shared<AutoProperty<float, Vec1>>("spot_cut_off");
 		_propSpotCutOff->autoSet(cutOff);
 		_propExponentLight = std::make_shared<AutoProperty<float, Vec1>>("exponent_light");
 		_propExponentLight->autoSet(exponent);
