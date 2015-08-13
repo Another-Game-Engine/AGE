@@ -34,13 +34,14 @@ namespace AGE
 
 	DeferredMergingDebug::DeferredMergingDebug(glm::uvec2 const &screenSize, std::shared_ptr<PaintingManager> painterManager,
 		std::shared_ptr<Texture2D> debugLightRender,
-		std::shared_ptr<Texture2D> diffuse) :
+		std::shared_ptr<Texture2D> diffuse, std::shared_ptr<Texture2D> depthStencil) :
 		FrameBufferRender(screenSize.x, screenSize.y, painterManager)
 	{
 		_debugLightRender = debugLightRender;
 		_programs.resize(PROGRAM_NBR);
 
 		push_storage_output(GL_COLOR_ATTACHMENT0, diffuse);
+		push_storage_output(GL_DEPTH_STENCIL_ATTACHMENT, depthStencil);
 
 		auto confManager = GetEngine()->getInstance<ConfigurationManager>();
 
@@ -86,12 +87,11 @@ namespace AGE
 		OpenGLState::glEnable(GL_BLEND);
 		OpenGLState::glDisable(GL_DEPTH_TEST);
 		OpenGLState::glDisable(GL_CULL_FACE);
-		OpenGLState::glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		_quadPainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_MERGING], Properties(), _quadVertices);
-
-		OpenGLState::glDisable(GL_DEPTH_TEST);
-		OpenGLState::glDisable(GL_STENCIL_TEST);
 		OpenGLState::glDepthMask(GL_FALSE);
+		OpenGLState::glDisable(GL_STENCIL_TEST);
+		OpenGLState::glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		_quadPainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_MERGING], Properties(), _quadVertices);
 
 		_programs[PROGRAM_DRAW_2D_LINE]->use();
 
@@ -108,6 +108,14 @@ namespace AGE
 		{
 			_lines = _painterManager->get_painter(GetRenderThread()->debug3Dlines.painterKey);
 			_lines->uniqueDraw(GL_LINES, _programs[PROGRAM_DRAW_3D_LINE], Properties(), GetRenderThread()->debug3Dlines.verticesKey);
+		}
+
+		OpenGLState::glEnable(GL_DEPTH_TEST);
+
+		if (GetRenderThread()->debug3DlinesDepth.painterKey.isValid())
+		{
+			_lines = _painterManager->get_painter(GetRenderThread()->debug3DlinesDepth.painterKey);
+			_lines->uniqueDraw(GL_LINES, _programs[PROGRAM_DRAW_3D_LINE], Properties(), GetRenderThread()->debug3DlinesDepth.verticesKey);
 		}
 	}
 }

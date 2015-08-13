@@ -14,7 +14,7 @@ namespace AGE
 	public:
 		DeferredMergingDebug(glm::uvec2 const &screenSize, std::shared_ptr<PaintingManager> painterManager,
 			std::shared_ptr<Texture2D> debugLightRender,
-			std::shared_ptr<Texture2D> diffuse);
+			std::shared_ptr<Texture2D> diffuse, std::shared_ptr<Texture2D> depthStencil);
 		virtual ~DeferredMergingDebug() = default;
 
 	protected:

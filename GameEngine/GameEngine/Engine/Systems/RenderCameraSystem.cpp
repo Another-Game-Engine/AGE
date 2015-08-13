@@ -96,7 +96,7 @@ namespace AGE
 			glm::vec3 dFar = glm::vec3(worldPos / worldPos.w);
 
 			glm::vec3 color = glm::vec3(1, 0, 0);
-			bool activateDepth = false;
+			bool activateDepth = true;
 
 			AGE::GetRenderThread()->getQueue()->emplaceCommand<Commands::ToRender::Draw3DQuad>(aNear, bNear, cNear, dNear, color, activateDepth);
 			AGE::GetRenderThread()->getQueue()->emplaceCommand<Commands::ToRender::Draw3DQuad>(aFar, bFar, cFar, dFar, color, activateDepth);
