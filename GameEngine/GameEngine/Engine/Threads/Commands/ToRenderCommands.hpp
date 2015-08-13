@@ -36,10 +36,12 @@ namespace AGE
 			{
 				glm::vec2 start;
 				glm::vec2 end;
+				glm::vec3 color;
 
-				Draw2DLine(glm::vec2 _start, glm::vec2 _end) :
+				Draw2DLine(glm::vec2 _start, glm::vec2 _end, glm::vec3 _color) :
 					start(_start),
-					end(_end)
+					end(_end),
+					color(_color)
 				{
 				}
 			};
@@ -47,12 +49,14 @@ namespace AGE
 			struct Draw2DQuad
 			{
 				glm::vec2 a, b, c, d;
+				glm::vec3 color;
 
-				Draw2DQuad(glm::vec2 _a, glm::vec2 _b, glm::vec2 _c, glm::vec2 _d) :
+				Draw2DQuad(glm::vec2 _a, glm::vec2 _b, glm::vec2 _c, glm::vec2 _d, glm::vec3 _color) :
 					a(_a),
 					b(_b),
 					c(_c),
-					d(_d)
+					d(_d),
+					color(_color)
 				{
 				}
 			};
@@ -61,10 +65,14 @@ namespace AGE
 			{
 				glm::vec3 start;
 				glm::vec3 end;
+				glm::vec3 color;
+				bool depthTest;
 
-				Draw3DLine(glm::vec3 _start, glm::vec3 _end) :
+				Draw3DLine(glm::vec3 _start, glm::vec3 _end, glm::vec3 _color, bool _depthTest) :
 					start(_start),
-					end(_end)
+					end(_end),
+					color(_color),
+					depthTest(_depthTest)
 				{
 				}
 			};
@@ -72,15 +80,20 @@ namespace AGE
 			struct Draw3DQuad
 			{
 				glm::vec3 a, b, c, d;
+				glm::vec3 color;
+				bool depthTest;
 
-				Draw3DQuad(glm::vec3 _a, glm::vec3 _b, glm::vec3 _c, glm::vec3 _d) :
+				Draw3DQuad(glm::vec3 _a, glm::vec3 _b, glm::vec3 _c, glm::vec3 _d, glm::vec3 _color, bool _depthTest) :
 					a(_a),
 					b(_b),
 					c(_c),
-					d(_d)
+					d(_d),
+					color(_color),
+					depthTest(_depthTest)
 				{
 				}
 			};
+
 		};
 	}
 }
