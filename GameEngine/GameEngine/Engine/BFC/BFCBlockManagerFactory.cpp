@@ -89,6 +89,10 @@ namespace AGE
 		SCOPE_profile_cpu_function("BFC");
 
 		AGE_ASSERT(channel < MaxCullableTypeID);
+		if (channel >= _managers.size())
+		{
+			return;
+		}
 		auto &manager = _managers[channel];
 		AGE_ASSERT(blockId < manager._blocks.size());
 		auto &block = manager._blocks[blockId];
@@ -104,6 +108,10 @@ namespace AGE
 	std::size_t BFCBlockManagerFactory::getBlockNumberToCull(CullableTypeID channel) const
 	{
 		AGE_ASSERT(channel < MaxCullableTypeID);
+		if (channel >= _managers.size())
+		{
+			return 0;
+		}
 		return _managers[channel]._blocks.size();
 	}
 
