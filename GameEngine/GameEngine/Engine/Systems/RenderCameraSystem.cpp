@@ -70,16 +70,36 @@ namespace AGE
 			auto spotDrawableList = std::make_shared<DRBSpotLightDrawableList>();
 			spotDrawableList->spotLight = spot->getCullableHandle().getPtr()->getDatas();
 
-			// WARNINNNNNNNNNNNG
-			// Le calcul n'est pas bon !!!!
-			// Paul, fais le STP, merci
+			float spotFov = glm::max(0.001f, (1.0f - spot->getCutOff()) * 180.0f);
+			glm::mat4 spotViewProj = glm::perspective(spotFov, 1.0f, 0.1f, 1000.0f) * glm::inverse(spotEntity->getLink().getGlobalTransform());
+
 			Frustum spotlightFrustum;
-			spotlightFrustum.setMatrix(glm::perspective(spot->getCutOff() / 2.0f, spot->getExponent(), 0.1f, 1000.0f)* glm::inverse(spotEntity->getLink().getGlobalTransform()));
-			glm::vec4 a = spotEntity->getLink().getGlobalTransform() * glm::vec4(-1, -1, 0, 1);
-			glm::vec4 b = spotEntity->getLink().getGlobalTransform() * glm::vec4(-1, 1, 0, 1);
-			glm::vec4 c = spotEntity->getLink().getGlobalTransform() * glm::vec4(1, 1, 0, 1);
-			glm::vec4 d = spotEntity->getLink().getGlobalTransform() * glm::vec4(1, -1, 0, 1);
-			AGE::GetRenderThread()->getQueue()->emplaceCommand<Commands::ToRender::Draw3DQuad>(glm::vec3(a), glm::vec3(b), glm::vec3(c), glm::vec3(d));
+			spotlightFrustum.setMatrix(spotViewProj);
+
+			// Draw spotlight frustum debug:
+			glm::vec4 worldPos = glm::inverse(spotViewProj) * glm::vec4(-1, -1, -1, 1.0f);
+			glm::vec3 aNear = glm::vec3(worldPos / worldPos.w);
+			worldPos = glm::inverse(spotViewProj) * glm::vec4(-1, 1, -1, 1.0f);
+			glm::vec3 bNear = glm::vec3(worldPos / worldPos.w);
+			worldPos = glm::inverse(spotViewProj) * glm::vec4(1, 1, -1, 1.0f);
+			glm::vec3 cNear = glm::vec3(worldPos / worldPos.w);
+			worldPos = glm::inverse(spotViewProj) * glm::vec4(1, -1, -1, 1.0f);
+			glm::vec3 dNear = glm::vec3(worldPos / worldPos.w);
+			worldPos = glm::inverse(spotViewProj) * glm::vec4(-1, -1, 1, 1.0f);
+			glm::vec3 aFar = glm::vec3(worldPos / worldPos.w);
+			worldPos = glm::inverse(spotViewProj) * glm::vec4(-1, 1, 1, 1.0f);
+			glm::vec3 bFar = glm::vec3(worldPos / worldPos.w);
+			worldPos = glm::inverse(spotViewProj) * glm::vec4(1, 1, 1, 1.0f);
+			glm::vec3 cFar = glm::vec3(worldPos / worldPos.w);
+			worldPos = glm::inverse(spotViewProj) * glm::vec4(1, -1, 1, 1.0f);
+			glm::vec3 dFar = glm::vec3(worldPos / worldPos.w);
+
+			AGE::GetRenderThread()->getQueue()->emplaceCommand<Commands::ToRender::Draw3DQuad>(aNear, bNear, cNear, dNear);
+			AGE::GetRenderThread()->getQueue()->emplaceCommand<Commands::ToRender::Draw3DQuad>(aFar, bFar, cFar, dFar);
+			AGE::GetRenderThread()->getQueue()->emplaceCommand<Commands::ToRender::Draw3DLine>(aNear, aFar);
+			AGE::GetRenderThread()->getQueue()->emplaceCommand<Commands::ToRender::Draw3DLine>(bNear, bFar);
+			AGE::GetRenderThread()->getQueue()->emplaceCommand<Commands::ToRender::Draw3DLine>(cNear, cFar);
+			AGE::GetRenderThread()->getQueue()->emplaceCommand<Commands::ToRender::Draw3DLine>(dNear, dFar);
 
 			_scene->getBfcBlockManagerFactory()->cullOnChannel(BFCCullableType::CullableMesh, spotDrawableList->meshs, spotlightFrustum);
 			spotLightList.push_back(spotDrawableList);
