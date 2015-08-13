@@ -20,6 +20,7 @@
 #include <Threads/ThreadManager.hpp>
 #include <Threads/RenderThread.hpp>
 #include <Threads/MainThread.hpp>
+#include <Threads/Commands/ToRenderCommands.hpp>
 
 #include "Utils/Frustum.hh"
 
@@ -74,6 +75,11 @@ namespace AGE
 			// Paul, fais le STP, merci
 			Frustum spotlightFrustum;
 			spotlightFrustum.setMatrix(glm::perspective(spot->getCutOff() / 2.0f, spot->getExponent(), 0.1f, 1000.0f)* glm::inverse(spotEntity->getLink().getGlobalTransform()));
+			glm::vec4 a = spotEntity->getLink().getGlobalTransform() * glm::vec4(-1, -1, 0, 1);
+			glm::vec4 b = spotEntity->getLink().getGlobalTransform() * glm::vec4(-1, 1, 0, 1);
+			glm::vec4 c = spotEntity->getLink().getGlobalTransform() * glm::vec4(1, 1, 0, 1);
+			glm::vec4 d = spotEntity->getLink().getGlobalTransform() * glm::vec4(1, -1, 0, 1);
+			AGE::GetRenderThread()->getQueue()->emplaceCommand<Commands::ToRender::Draw3DQuad>(glm::vec3(a), glm::vec3(b), glm::vec3(c), glm::vec3(d));
 
 			_scene->getBfcBlockManagerFactory()->cullOnChannel(BFCCullableType::CullableMesh, spotDrawableList->meshs, spotlightFrustum);
 			spotLightList.push_back(spotDrawableList);

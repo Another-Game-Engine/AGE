@@ -106,6 +106,76 @@ namespace AGE
 		p = SimpleGeometry::cubeMesh.painterKey;
 	}
 
+	void RenderThread::fillDebugPainter(std::shared_ptr<Painter> &line2DPainter,
+										std::shared_ptr<Painter> &line3DPainter)
+	{
+		SCOPE_profile_cpu_i("RenderTimer", "RenderDebugLines");
+		// 2D lines
+		{
+			std::vector<unsigned int> indices;
+			auto type = std::make_pair<GLenum, std::string>(GL_FLOAT_VEC2, "position");
+			std::vector<std::pair < GLenum, std::string > > types;
+			types.push_back(type);
+
+			indices.resize(debug2DlinesPoints.size());
+			for (int i = 0; i < debug2DlinesPoints.size(); ++i)
+			{
+				indices[i] = i;
+			}
+			if (!paintingManager->has_painter(types))
+			{
+				debug2Dlines.painterKey = paintingManager->add_painter(std::move(types));
+			}
+			else
+			{
+				debug2Dlines.painterKey = paintingManager->get_painter(types);
+			}
+			Key<Painter> kk = debug2Dlines.painterKey;
+
+			line2DPainter = paintingManager->get_painter(debug2Dlines.painterKey);
+
+			debug2Dlines.verticesKey = line2DPainter->add_vertices(debug2DlinesPoints.size(), indices.size());
+			auto vertices = line2DPainter->get_vertices(debug2Dlines.verticesKey);
+
+			vertices->set_data<glm::vec2>(debug2DlinesPoints, std::string("position"));
+			vertices->set_indices(indices);
+
+			debug2DlinesPoints.clear();
+		}
+		// 3D lines
+		{
+			std::vector<unsigned int> indices;
+			auto type = std::make_pair<GLenum, std::string>(GL_FLOAT_VEC3, "position");
+			std::vector<std::pair < GLenum, std::string > > types;
+			types.push_back(type);
+
+			indices.resize(debug3DlinesPoints.size());
+			for (int i = 0; i < debug3DlinesPoints.size(); ++i)
+			{
+				indices[i] = i;
+			}
+			if (!paintingManager->has_painter(types))
+			{
+				debug3Dlines.painterKey = paintingManager->add_painter(std::move(types));
+			}
+			else
+			{
+				debug3Dlines.painterKey = paintingManager->get_painter(types);
+			}
+			Key<Painter> kk = debug3Dlines.painterKey;
+
+			line3DPainter = paintingManager->get_painter(debug3Dlines.painterKey);
+
+			debug3Dlines.verticesKey = line3DPainter->add_vertices(debug3DlinesPoints.size(), indices.size());
+			auto vertices = line3DPainter->get_vertices(debug3Dlines.verticesKey);
+
+			vertices->set_data<glm::vec3>(debug3DlinesPoints, std::string("position"));
+			vertices->set_indices(indices);
+
+			debug3DlinesPoints.clear();
+		}
+	}
+
 	void RenderThread::getQuadGeometry(Key<Vertices> &v, Key<Painter> &p)
 	{
 		static const std::vector<glm::vec2> positions =
@@ -376,9 +446,54 @@ namespace AGE
 			debug2DlinesPoints.push_back(msg.end);
 		});
 
+		registerCallback<Commands::ToRender::Draw2DQuad>([&](Commands::ToRender::Draw2DQuad& msg)
+		{
+			debug2DlinesPoints.push_back(msg.a);
+			debug2DlinesPoints.push_back(msg.b);
+			debug2DlinesPoints.push_back(msg.b);
+			debug2DlinesPoints.push_back(msg.c);
+			debug2DlinesPoints.push_back(msg.c);
+			debug2DlinesPoints.push_back(msg.d);
+			debug2DlinesPoints.push_back(msg.d);
+			debug2DlinesPoints.push_back(msg.a);
+		});
+
+		registerCallback<Commands::ToRender::Draw3DLine>([&](Commands::ToRender::Draw3DLine& msg)
+		{
+			debug3DlinesPoints.push_back(msg.start);
+			debug3DlinesPoints.push_back(msg.end);
+		});
+
+		registerCallback<Commands::ToRender::Draw3DQuad>([&](Commands::ToRender::Draw3DQuad& msg)
+		{
+			debug3DlinesPoints.push_back(msg.a);
+			debug3DlinesPoints.push_back(msg.b);
+			debug3DlinesPoints.push_back(msg.b);
+			debug3DlinesPoints.push_back(msg.c);
+			debug3DlinesPoints.push_back(msg.c);
+			debug3DlinesPoints.push_back(msg.d);
+			debug3DlinesPoints.push_back(msg.d);
+			debug3DlinesPoints.push_back(msg.a);
+		});
+
 		registerCallback<AGE::DRBCameraDrawableListCommand>([&](AGE::DRBCameraDrawableListCommand &msg)
 		{
+			std::shared_ptr<Painter> line2DPainter = nullptr;
+			std::shared_ptr<Painter> line3DPainter = nullptr;
+
+			if (pipelines[msg.list->cameraInfos.data.pipeline]->isDebug())
+			{
+				fillDebugPainter(line2DPainter, line3DPainter);
+			}
 			pipelines[msg.list->cameraInfos.data.pipeline]->render(*msg.list.get());
+			if (line2DPainter != nullptr)
+			{
+				line2DPainter->remove_vertices(debug2Dlines.verticesKey);
+			}
+			if (line3DPainter != nullptr)
+			{
+				line3DPainter->remove_vertices(debug3Dlines.verticesKey);
+			}
 		});
 
 		return true;

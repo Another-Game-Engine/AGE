@@ -34,9 +34,16 @@ namespace AGE
 		virtual bool launch();
 		virtual bool stop();
 
-		// temporary
+		// Debug Drawings
+		// 2D lines
 		SimpleGeometry::SimpleGeometryKeys debug2Dlines;
 		std::vector<glm::vec2> debug2DlinesPoints;
+		// 3D lines
+		SimpleGeometry::SimpleGeometryKeys debug3Dlines;
+		std::vector<glm::vec3> debug3DlinesPoints;
+		// Fill debug painters
+		void fillDebugPainter(std::shared_ptr<Painter> &line2DPainter, std::shared_ptr<Painter> &line3DPainter);
+		// End Debug drawing
 
 		// used by render scene, maybe should be protected
 		void createMeshProperty(const Key<Painter> &painter, Key<Properties> &properties, Key<Property> &transformation);

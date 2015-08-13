@@ -43,6 +43,44 @@ namespace AGE
 				{
 				}
 			};
+
+			struct Draw2DQuad
+			{
+				glm::vec2 a, b, c, d;
+
+				Draw2DQuad(glm::vec2 _a, glm::vec2 _b, glm::vec2 _c, glm::vec2 _d) :
+					a(_a),
+					b(_b),
+					c(_c),
+					d(_d)
+				{
+				}
+			};
+
+			struct Draw3DLine
+			{
+				glm::vec3 start;
+				glm::vec3 end;
+
+				Draw3DLine(glm::vec3 _start, glm::vec3 _end) :
+					start(_start),
+					end(_end)
+				{
+				}
+			};
+
+			struct Draw3DQuad
+			{
+				glm::vec3 a, b, c, d;
+
+				Draw3DQuad(glm::vec3 _a, glm::vec3 _b, glm::vec3 _c, glm::vec3 _d) :
+					a(_a),
+					b(_b),
+					c(_c),
+					d(_d)
+				{
+				}
+			};
 		};
 	}
 }
