@@ -159,6 +159,11 @@ namespace AGE
 			spotlightFrustum.setMatrix(glm::perspective(spot->getCutOff() / 2.0f, spot->getExponent(), 0.1f, 1000.0f)* glm::inverse(spotEntity->getLink().getGlobalTransform()));
 
 			LFList<BFCItem> list;
+			std::size_t meshBlocksToCullNumber = _scene->getBfcBlockManagerFactory()->getBlockNumberToCull(BFCCullableType::CullableMesh);
+			//for (std::size_t i = 0; i < meshBlocksToCullNumber; ++i)
+			//{
+			//	GetThreadManager()->
+			//}
 			_scene->getBfcBlockManagerFactory()->cullOnChannel(BFCCullableType::CullableMesh, list/*spotDrawableList->meshs*/, spotlightFrustum);
 			while (list.getSize() > 0)
 			{
@@ -199,7 +204,7 @@ namespace AGE
 
 			cameraList->spotLights = spotLightList;
 			cameraList->pointLights = pointLightList;
-			AGE::GetRenderThread()->getQueue()->emplaceCommand<AGE::DRBCameraDrawableListCommand>(cameraList);
+			AGE::GetRenderThread()->getQueue()->emplaceTask<AGE::DRBCameraDrawableListCommand>(cameraList);
 		}
 	}
 

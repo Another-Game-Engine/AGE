@@ -258,50 +258,6 @@ namespace TMQ
 		void getTask(MessageBase *& task);
 		void tryToGetTask(MessageBase *& task, std::size_t microSeconds);
 
-		/////////
-		/// COMMANDS
-		template <typename T>
-		void pushCommand(const T& e)
-		{
-			SCOPE_profile_cpu_function("TMQ");
-			std::lock_guard<std::mutex> lock(_mutex);
-			_individualQueue.push(new Message<T>(e));
-			_condition.notify_all();
-		}
-
-		template <typename T, typename ...Args>
-		void emplaceCommand(Args ...args)
-		{
-			SCOPE_profile_cpu_function("TMQ");
-			std::lock_guard<std::mutex> lock(_mutex);
-			_individualQueue.push(new Message<T>(args...));
-			_condition.notify_all();
-		}
-
-		template <typename T, typename F>
-		std::future<F> pushFutureCommand(const T &e)
-		{
-			SCOPE_profile_cpu_function("TMQ");
-			std::lock_guard<std::mutex> lock(_mutex);
-			auto tmp = new Message<T>(e);
-			auto &res = tmp->getData().getFuture();
-			_individualQueue.push(tmp);
-			_condition.notify_all();
-			return res;
-		}
-
-		template <typename T, typename F, typename ...Args>
-		std::future<F> emplaceFutureCommand(Args ...args)
-		{
-			SCOPE_profile_cpu_function("TMQ");
-			std::lock_guard<std::mutex> lock(_mutex);
-			auto tmp = new Message<T>(args...);
-			auto res = tmp->getData().getFuture();
-			_individualQueue.push(tmp);
-			_condition.notify_all();
-			return res;
-		}
-
 		//////////////
 		//// TASKS
 
@@ -331,11 +287,11 @@ namespace TMQ
 		std::future<F> pushFutureTask(const T &e)
 		{
 			SCOPE_profile_cpu_function("TMQ");
+			auto tmp = new Message<T>(e);
+			f = tmp->getData().getFuture();
 			std::future < F > f;
 			{
 				std::lock_guard<std::mutex> lock(_mutex);
-				auto tmp = new Message<T>(e);
-				f = tmp->getData().getFuture();
 				_individualQueue.push(tmp);
 			}
 			_condition.notify_all();
@@ -347,11 +303,67 @@ namespace TMQ
 		{
 			SCOPE_profile_cpu_function("TMQ");
 			std::future< F > f;
+			auto tmp = new Message<T>(args...);
+			f = tmp->getData().getFuture();
 			{
 				std::lock_guard<std::mutex> lock(_mutex);
-				auto tmp = new Message<T>(args...);
-				f = tmp->getData().getFuture();
 				_individualQueue.push(tmp);
+			}
+			_condition.notify_all();
+			return f;
+		}
+
+
+		///////
+		// SHARED
+
+		template <typename T>
+		static void pushSharedTask(const T& e)
+		{
+			SCOPE_profile_cpu_function("TMQ");
+			{
+				std::lock_guard<std::mutex> lock(_mutex);
+				_sharedQueue.push(new Message<T>(e));
+			}
+			_condition.notify_all();
+		}
+
+		template <typename T, typename ...Args>
+		static void emplaceSharedTask(Args ...args)
+		{
+			SCOPE_profile_cpu_function("TMQ");
+			{
+				std::lock_guard<std::mutex> lock(_mutex);
+				_sharedQueue.push(new Message<T>(args...));
+			}
+			_condition.notify_all();
+		}
+
+		template <typename T, typename F>
+		static std::future<F> pushSharedFutureTask(const T &e)
+		{
+			SCOPE_profile_cpu_function("TMQ");
+			std::future < F > f;
+			auto tmp = new Message<T>(e);
+			f = tmp->getData().getFuture();
+			{
+				std::lock_guard<std::mutex> lock(_mutex);
+				_sharedQueue.push(tmp);
+			}
+			_condition.notify_all();
+			return f;
+		}
+
+		template <typename T, typename F, typename ...Args>
+		static std::future<F> emplaceSharedFutureTask(Args ...args)
+		{
+			SCOPE_profile_cpu_function("TMQ");
+			std::future< F > f;
+			auto tmp = new Message<T>(args...);
+			f = tmp->getData().getFuture();
+			{
+				std::lock_guard<std::mutex> lock(_mutex);
+				_sharedQueue.push(tmp);
 			}
 			_condition.notify_all();
 			return f;
