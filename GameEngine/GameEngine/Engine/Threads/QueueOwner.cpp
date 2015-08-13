@@ -23,4 +23,27 @@ namespace AGE
 		task->~MessageBase();
 		return true;
 	}
+
+	void QueueOwner::computeTasksWhile(std::function<bool()> &condition)
+	{
+		TMQ::MessageBase *task = nullptr;
+
+		while (true)
+		{
+			if (condition())
+			{
+				return;
+			}
+			getQueue()->tryToGetTask(task, 1);
+			if (task != nullptr)
+			{
+				auto result = execute(task);
+				assert(result); // we receive a task that we cannot treat
+			}
+			if (condition())
+			{
+				return;
+			}
+		}
+	}
 }
