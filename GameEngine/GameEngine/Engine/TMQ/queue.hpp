@@ -16,8 +16,6 @@
 // tmp
 #include "Utils/Debug.hpp"
 
-AGE_NOT_OPTIMIZED_BLOCK_BEGIN
-
 namespace TMQ
 {
 	class ReleasableQueue;
@@ -372,4 +370,3 @@ namespace TMQ
 	};
 
 }
-AGE_NOT_OPTIMIZED_BLOCK_END
