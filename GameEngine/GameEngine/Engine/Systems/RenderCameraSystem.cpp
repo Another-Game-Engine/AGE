@@ -15,6 +15,7 @@
 #include <BFC/BFCCullableObject.hpp>
 
 #include <Graphic/DRBCameraDrawableList.hpp>
+#include <Graphic/DRBSpotLightData.hpp>
 #include <Graphic/BFCCullableTypes.hpp>
 
 #include <Threads/ThreadManager.hpp>
@@ -70,11 +71,9 @@ namespace AGE
 			auto spotDrawableList = std::make_shared<DRBSpotLightDrawableList>();
 			spotDrawableList->spotLight = spot->getCullableHandle().getPtr()->getDatas();
 
-			float spotFov = glm::max(0.001f, (1.0f - spot->getCutOff()) * glm::radians(180.0f));
-//			// We add 30 degres to have the spot entierly in the frustum (otherwise it is circumscribed)
-			float adaptedFov = glm::min(spotFov + glm::radians(30.0f), glm::radians(179.9f));
-			glm::mat4 invTransform = glm::inverse(spotEntity->getLink().getGlobalTransform());
-			glm::mat4 spotViewProj = glm::perspective(adaptedFov, 1.0f, 0.1f, 1000.0f) * invTransform;
+			auto spotData = std::static_pointer_cast<DRBSpotLightData>(spotDrawableList->spotLight);
+
+			glm::mat4 spotViewProj = spot->updateShadowMatrix();
 
 			Frustum spotlightFrustum;
 			spotlightFrustum.setMatrix(spotViewProj);
