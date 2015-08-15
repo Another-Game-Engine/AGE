@@ -3,9 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GameEngine", "GameEngine\GameEngine.vcxproj", "{E24D022C-E33B-47A1-BBB4-33666C76DDA9}"
-	ProjectSection(ProjectDependencies) = postProject
-		{FF05ACC8-441B-4E65-866C-FE72A1CDE27D} = {FF05ACC8-441B-4E65-866C-FE72A1CDE27D}
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shader", "Shader", "{6823E483-DFC6-4750-920C-35DA2E87B060}"
 EndProject
@@ -71,13 +68,11 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PhysX", "Plugins\Physics\PhysX\PhysX.vcxproj", "{FAE1C65E-9000-4902-AE4F-C5786810B9FD}"
 	ProjectSection(ProjectDependencies) = postProject
 		{E24D022C-E33B-47A1-BBB4-33666C76DDA9} = {E24D022C-E33B-47A1-BBB4-33666C76DDA9}
-		{FF05ACC8-441B-4E65-866C-FE72A1CDE27D} = {FF05ACC8-441B-4E65-866C-FE72A1CDE27D}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Bullet", "Plugins\Physics\Bullet\Bullet.vcxproj", "{C3490639-BCED-4A06-9D1B-5C3BB25DA5A7}"
 	ProjectSection(ProjectDependencies) = postProject
 		{E24D022C-E33B-47A1-BBB4-33666C76DDA9} = {E24D022C-E33B-47A1-BBB4-33666C76DDA9}
-		{FF05ACC8-441B-4E65-866C-FE72A1CDE27D} = {FF05ACC8-441B-4E65-866C-FE72A1CDE27D}
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Vendors", "Vendors", "{8FD58CA8-8812-4B8D-85DC-B42B9D75D0CB}"
@@ -135,8 +130,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tool", "tool", "{F80CD93E-B
 	ProjectSection(SolutionItems) = preProject
 		Shaders\tool\Fxaa3_11.h = Shaders\tool\Fxaa3_11.h
 	EndProjectSection
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SpacePartitioning", "SpacePartitioning\SpacePartitioning.vcxproj", "{FF05ACC8-441B-4E65-866C-FE72A1CDE27D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{56123164-A219-4B81-977C-9EA97AEF3ADA}"
 	ProjectSection(SolutionItems) = preProject
@@ -574,33 +567,6 @@ Global
 		{5B1132F6-84F8-142E-B951-ADB8505CC27F}.Retail|Mixed Platforms.ActiveCfg = release|x64
 		{5B1132F6-84F8-142E-B951-ADB8505CC27F}.Retail|Win32.ActiveCfg = release|x64
 		{5B1132F6-84F8-142E-B951-ADB8505CC27F}.Retail|x64.ActiveCfg = release|x64
-		{FF05ACC8-441B-4E65-866C-FE72A1CDE27D}.checked|Mixed Platforms.ActiveCfg = Release|Win32
-		{FF05ACC8-441B-4E65-866C-FE72A1CDE27D}.checked|Mixed Platforms.Build.0 = Release|Win32
-		{FF05ACC8-441B-4E65-866C-FE72A1CDE27D}.checked|Win32.ActiveCfg = Release|Win32
-		{FF05ACC8-441B-4E65-866C-FE72A1CDE27D}.checked|Win32.Build.0 = Release|Win32
-		{FF05ACC8-441B-4E65-866C-FE72A1CDE27D}.checked|x64.ActiveCfg = Release|x64
-		{FF05ACC8-441B-4E65-866C-FE72A1CDE27D}.checked|x64.Build.0 = Release|x64
-		{FF05ACC8-441B-4E65-866C-FE72A1CDE27D}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
-		{FF05ACC8-441B-4E65-866C-FE72A1CDE27D}.Debug|Mixed Platforms.Build.0 = Debug|Win32
-		{FF05ACC8-441B-4E65-866C-FE72A1CDE27D}.Debug|Win32.ActiveCfg = Debug|Win32
-		{FF05ACC8-441B-4E65-866C-FE72A1CDE27D}.Debug|Win32.Build.0 = Debug|Win32
-		{FF05ACC8-441B-4E65-866C-FE72A1CDE27D}.Debug|x64.ActiveCfg = Debug|x64
-		{FF05ACC8-441B-4E65-866C-FE72A1CDE27D}.Profile|Mixed Platforms.ActiveCfg = Release|Win32
-		{FF05ACC8-441B-4E65-866C-FE72A1CDE27D}.Profile|Mixed Platforms.Build.0 = Release|Win32
-		{FF05ACC8-441B-4E65-866C-FE72A1CDE27D}.Profile|Win32.ActiveCfg = Release|Win32
-		{FF05ACC8-441B-4E65-866C-FE72A1CDE27D}.Profile|Win32.Build.0 = Release|Win32
-		{FF05ACC8-441B-4E65-866C-FE72A1CDE27D}.Profile|x64.ActiveCfg = Release|x64
-		{FF05ACC8-441B-4E65-866C-FE72A1CDE27D}.Profile|x64.Build.0 = Release|x64
-		{FF05ACC8-441B-4E65-866C-FE72A1CDE27D}.Release|Mixed Platforms.ActiveCfg = Release|Win32
-		{FF05ACC8-441B-4E65-866C-FE72A1CDE27D}.Release|Mixed Platforms.Build.0 = Release|Win32
-		{FF05ACC8-441B-4E65-866C-FE72A1CDE27D}.Release|Win32.ActiveCfg = Release|Win32
-		{FF05ACC8-441B-4E65-866C-FE72A1CDE27D}.Release|Win32.Build.0 = Release|Win32
-		{FF05ACC8-441B-4E65-866C-FE72A1CDE27D}.Release|x64.ActiveCfg = Release|x64
-		{FF05ACC8-441B-4E65-866C-FE72A1CDE27D}.Retail|Mixed Platforms.ActiveCfg = Release|Win32
-		{FF05ACC8-441B-4E65-866C-FE72A1CDE27D}.Retail|Mixed Platforms.Build.0 = Release|Win32
-		{FF05ACC8-441B-4E65-866C-FE72A1CDE27D}.Retail|Win32.ActiveCfg = Release|Win32
-		{FF05ACC8-441B-4E65-866C-FE72A1CDE27D}.Retail|Win32.Build.0 = Release|Win32
-		{FF05ACC8-441B-4E65-866C-FE72A1CDE27D}.Retail|x64.ActiveCfg = Release|x64
 		{371B9FA9-4C90-4AC6-A123-ACED756D6C77}.checked|Mixed Platforms.ActiveCfg = Release|Win32
 		{371B9FA9-4C90-4AC6-A123-ACED756D6C77}.checked|Mixed Platforms.Build.0 = Release|Win32
 		{371B9FA9-4C90-4AC6-A123-ACED756D6C77}.checked|Win32.ActiveCfg = Release|Win32
