@@ -71,7 +71,7 @@ namespace AGE
 
 		float BulletRigidBody::getAngularDrag(void) const
 		{
-			return getDataAs<btRigidBody>()->getAngularDamping();
+			return 1.0f - getDataAs<btRigidBody>()->getAngularDamping();
 		}
 
 		void BulletRigidBody::setAngularVelocity(const glm::vec3 &angularVelocity)
@@ -107,7 +107,7 @@ namespace AGE
 
 		float BulletRigidBody::getLinearDrag(void) const
 		{
-			return getDataAs<btRigidBody>()->getLinearDamping();
+			return 1.0f - getDataAs<btRigidBody>()->getLinearDamping();
 		}
 
 		void BulletRigidBody::setLinearVelocity(const glm::vec3 &linearVelocity)
@@ -200,7 +200,8 @@ namespace AGE
 
 		bool BulletRigidBody::isAffectedByGravity(void) const
 		{
-			return !getDataAs<btRigidBody>()->getGravity().isZero();
+			btRigidBody const *body = getDataAs<btRigidBody>();
+			return !(body->getFlags() & BT_DISABLE_WORLD_GRAVITY);
 		}
 
 		void BulletRigidBody::setAsKinematic(bool mustBeKinematic)

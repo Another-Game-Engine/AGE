@@ -32,7 +32,7 @@ namespace AGE
 
 			glm::vec3 rotation = e->getComponent<RotationComponent>()->_angles;
 			glm::quat quaternion = e->getLink().getOrientation();
-			auto res = glm::rotate(quaternion, time * e->getComponent<RotationComponent>()->_speed, rotation);
+			auto res = glm::rotate(quaternion, glm::radians(time * e->getComponent<RotationComponent>()->_speed), rotation);
 			e->getLink().setOrientation(res);
 		}
 	}

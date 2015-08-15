@@ -1,8 +1,12 @@
 #version 330
 
 layout (location = 0) in vec2 position;
+layout (location = 0) in vec3 color;
+
+out vec3 fColor;
 
 void main()
 {
+	fColor = color;
 	gl_Position = vec4(position.xy, 0, 1);
 }

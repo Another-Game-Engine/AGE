@@ -51,6 +51,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "deferred shading", "deferre
 		Shaders\deferred_shading\deferred_shading_skybox.vp = Shaders\deferred_shading\deferred_shading_skybox.vp
 		Shaders\deferred_shading\deferred_shading_spot_light.fp = Shaders\deferred_shading\deferred_shading_spot_light.fp
 		Shaders\deferred_shading\deferred_shading_spot_light.vp = Shaders\deferred_shading\deferred_shading_spot_light.vp
+		Shaders\deferred_shading\draw2DLine.fp = Shaders\deferred_shading\draw2DLine.fp
+		Shaders\deferred_shading\draw2DLine.vp = Shaders\deferred_shading\draw2DLine.vp
+		Shaders\deferred_shading\draw3DLine.fp = Shaders\deferred_shading\draw3DLine.fp
+		Shaders\deferred_shading\draw3DLine.vp = Shaders\deferred_shading\draw3DLine.vp
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "basic", "basic", "{6DD3E825-06AD-46C8-B671-745D01D240D0}"
@@ -246,7 +250,6 @@ Global
 		{FAE1C65E-9000-4902-AE4F-C5786810B9FD}.Debug|Win32.ActiveCfg = Debug|Win32
 		{FAE1C65E-9000-4902-AE4F-C5786810B9FD}.Debug|Win32.Build.0 = Debug|Win32
 		{FAE1C65E-9000-4902-AE4F-C5786810B9FD}.Debug|x64.ActiveCfg = Debug|x64
-		{FAE1C65E-9000-4902-AE4F-C5786810B9FD}.Debug|x64.Build.0 = Debug|x64
 		{FAE1C65E-9000-4902-AE4F-C5786810B9FD}.Profile|Mixed Platforms.ActiveCfg = Release|Win32
 		{FAE1C65E-9000-4902-AE4F-C5786810B9FD}.Profile|Mixed Platforms.Build.0 = Release|Win32
 		{FAE1C65E-9000-4902-AE4F-C5786810B9FD}.Profile|Win32.ActiveCfg = Release|Win32
@@ -274,7 +277,6 @@ Global
 		{C3490639-BCED-4A06-9D1B-5C3BB25DA5A7}.Debug|Win32.ActiveCfg = Debug|Win32
 		{C3490639-BCED-4A06-9D1B-5C3BB25DA5A7}.Debug|Win32.Build.0 = Debug|Win32
 		{C3490639-BCED-4A06-9D1B-5C3BB25DA5A7}.Debug|x64.ActiveCfg = Debug|x64
-		{C3490639-BCED-4A06-9D1B-5C3BB25DA5A7}.Debug|x64.Build.0 = Debug|x64
 		{C3490639-BCED-4A06-9D1B-5C3BB25DA5A7}.Profile|Mixed Platforms.ActiveCfg = Release|Win32
 		{C3490639-BCED-4A06-9D1B-5C3BB25DA5A7}.Profile|Mixed Platforms.Build.0 = Release|Win32
 		{C3490639-BCED-4A06-9D1B-5C3BB25DA5A7}.Profile|Win32.ActiveCfg = Release|Win32

@@ -347,7 +347,7 @@ namespace AGE
 		if (GetMainThread()->isRenderFrame())
 		{
 
-			GetRenderThread()->getQueue()->emplaceCommand<Commands::ToRender::Flush>();
+			GetRenderThread()->getQueue()->emplaceTask<Commands::ToRender::Flush>();
 			++frame;
 		}
 		return true;

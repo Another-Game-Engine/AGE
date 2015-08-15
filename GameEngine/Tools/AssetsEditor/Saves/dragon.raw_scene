@@ -139,7 +139,7 @@
             "link": {
                 "Position": {
                     "value0": 0,
-                    "value1": 4,
+                    "value1": 1,
                     "value2": 5
                 },
                 "Scale": {
@@ -300,8 +300,8 @@
                     "value1": 0,
                     "value2": 0
                 },
-                "exponent": 5,
-                "cutOff": 1
+                "exponent": 30,
+                "cutOff": 0.89999997615814209
             }
         },
         "Entity_6": {

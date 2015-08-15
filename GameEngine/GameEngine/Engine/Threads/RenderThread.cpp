@@ -106,6 +106,121 @@ namespace AGE
 		p = SimpleGeometry::cubeMesh.painterKey;
 	}
 
+	void RenderThread::fillDebugPainter(std::shared_ptr<Painter> &line2DPainter,
+										std::shared_ptr<Painter> &line3DPainter,
+										std::shared_ptr<Painter> &line3DPainterDepth)
+	{
+		SCOPE_profile_cpu_i("RenderTimer", "RenderDebugLines");
+		// 2D lines
+		if (debug2DlinesPoints.size() != 0)
+		{
+			std::vector<unsigned int> indices;
+			auto type = std::make_pair<GLenum, std::string>(GL_FLOAT_VEC2, "position");
+			std::vector<std::pair < GLenum, std::string > > types;
+			types.push_back(type);
+			type = std::make_pair<GLenum, std::string>(GL_FLOAT_VEC3, "color");
+			types.push_back(type);
+
+			indices.resize(debug2DlinesPoints.size());
+			for (int i = 0; i < debug2DlinesPoints.size(); ++i)
+			{
+				indices[i] = i;
+			}
+			if (!paintingManager->has_painter(types))
+			{
+				debug2Dlines.painterKey = paintingManager->add_painter(std::move(types));
+			}
+			else
+			{
+				debug2Dlines.painterKey = paintingManager->get_painter(types);
+			}
+			Key<Painter> kk = debug2Dlines.painterKey;
+
+			line2DPainter = paintingManager->get_painter(debug2Dlines.painterKey);
+
+			debug2Dlines.verticesKey = line2DPainter->add_vertices(debug2DlinesPoints.size(), indices.size());
+			auto vertices = line2DPainter->get_vertices(debug2Dlines.verticesKey);
+
+			vertices->set_data<glm::vec2>(debug2DlinesPoints, std::string("position"));
+			vertices->set_data<glm::vec3>(debug2DlinesColor, std::string("color"));
+			vertices->set_indices(indices);
+
+			debug2DlinesPoints.clear();
+		}
+		// 3D lines
+		if (debug3DlinesPoints.size() != 0)
+		{
+			std::vector<unsigned int> indices;
+			auto type = std::make_pair<GLenum, std::string>(GL_FLOAT_VEC3, "position");
+			std::vector<std::pair < GLenum, std::string > > types;
+			types.push_back(type);
+			type = std::make_pair<GLenum, std::string>(GL_FLOAT_VEC3, "color");
+			types.push_back(type);
+
+			indices.resize(debug3DlinesPoints.size());
+			for (int i = 0; i < debug3DlinesPoints.size(); ++i)
+			{
+				indices[i] = i;
+			}
+			if (!paintingManager->has_painter(types))
+			{
+				debug3Dlines.painterKey = paintingManager->add_painter(std::move(types));
+			}
+			else
+			{
+				debug3Dlines.painterKey = paintingManager->get_painter(types);
+			}
+			Key<Painter> kk = debug3Dlines.painterKey;
+
+			line3DPainter = paintingManager->get_painter(debug3Dlines.painterKey);
+
+			debug3Dlines.verticesKey = line3DPainter->add_vertices(debug3DlinesPoints.size(), indices.size());
+			auto vertices = line3DPainter->get_vertices(debug3Dlines.verticesKey);
+
+			vertices->set_data<glm::vec3>(debug3DlinesPoints, std::string("position"));
+			vertices->set_data<glm::vec3>(debug3DlinesColor, std::string("color"));
+			vertices->set_indices(indices);
+
+			debug3DlinesPoints.clear();
+		}
+		// 3D lines with depth
+		if (debug3DlinesPointsDepth.size() != 0)
+		{
+			std::vector<unsigned int> indices;
+			auto type = std::make_pair<GLenum, std::string>(GL_FLOAT_VEC3, "position");
+			std::vector<std::pair < GLenum, std::string > > types;
+			types.push_back(type);
+			type = std::make_pair<GLenum, std::string>(GL_FLOAT_VEC3, "color");
+			types.push_back(type);
+
+			indices.resize(debug3DlinesPointsDepth.size());
+			for (int i = 0; i < debug3DlinesPointsDepth.size(); ++i)
+			{
+				indices[i] = i;
+			}
+			if (!paintingManager->has_painter(types))
+			{
+				debug3DlinesDepth.painterKey = paintingManager->add_painter(std::move(types));
+			}
+			else
+			{
+				debug3DlinesDepth.painterKey = paintingManager->get_painter(types);
+			}
+			Key<Painter> kk = debug3DlinesDepth.painterKey;
+
+			line3DPainterDepth = paintingManager->get_painter(debug3DlinesDepth.painterKey);
+
+			debug3DlinesDepth.verticesKey = line3DPainterDepth->add_vertices(debug3DlinesPointsDepth.size(), indices.size());
+			auto vertices = line3DPainterDepth->get_vertices(debug3DlinesDepth.verticesKey);
+
+			vertices->set_data<glm::vec3>(debug3DlinesPointsDepth, std::string("position"));
+			vertices->set_data<glm::vec3>(debug3DlinesColorDepth, std::string("color"));
+			vertices->set_indices(indices);
+
+			debug3DlinesPointsDepth.clear();
+		}
+	}
+
 	void RenderThread::getQuadGeometry(Key<Vertices> &v, Key<Painter> &p)
 	{
 		static const std::vector<glm::vec2> positions =
@@ -374,11 +489,125 @@ namespace AGE
 		{
 			debug2DlinesPoints.push_back(msg.start);
 			debug2DlinesPoints.push_back(msg.end);
+
+			debug2DlinesColor.push_back(msg.color);
+			debug2DlinesColor.push_back(msg.color);
+		});
+
+		registerCallback<Commands::ToRender::Draw2DQuad>([&](Commands::ToRender::Draw2DQuad& msg)
+		{
+			debug2DlinesPoints.push_back(msg.a);
+			debug2DlinesPoints.push_back(msg.b);
+			debug2DlinesPoints.push_back(msg.b);
+			debug2DlinesPoints.push_back(msg.c);
+			debug2DlinesPoints.push_back(msg.c);
+			debug2DlinesPoints.push_back(msg.d);
+			debug2DlinesPoints.push_back(msg.d);
+			debug2DlinesPoints.push_back(msg.a);
+
+			debug2DlinesColor.push_back(msg.color);
+			debug2DlinesColor.push_back(msg.color);
+			debug2DlinesColor.push_back(msg.color);
+			debug2DlinesColor.push_back(msg.color);
+			debug2DlinesColor.push_back(msg.color);
+			debug2DlinesColor.push_back(msg.color);
+			debug2DlinesColor.push_back(msg.color);
+			debug2DlinesColor.push_back(msg.color);
+		});
+
+		registerCallback<Commands::ToRender::Draw3DLine>([&](Commands::ToRender::Draw3DLine& msg)
+		{
+			if (msg.depthTest)
+			{
+				debug3DlinesPointsDepth.push_back(msg.start);
+				debug3DlinesPointsDepth.push_back(msg.end);
+
+				debug3DlinesColorDepth.push_back(msg.color);
+				debug3DlinesColorDepth.push_back(msg.color);
+			}
+			else
+			{
+				debug3DlinesPoints.push_back(msg.start);
+				debug3DlinesPoints.push_back(msg.end);
+
+				debug3DlinesColor.push_back(msg.color);
+				debug3DlinesColor.push_back(msg.color);
+			}
+		});
+
+		registerCallback<Commands::ToRender::Draw3DQuad>([&](Commands::ToRender::Draw3DQuad& msg)
+		{
+			if (msg.depthTest)
+			{
+				debug3DlinesPointsDepth.push_back(msg.a);
+				debug3DlinesPointsDepth.push_back(msg.b);
+				debug3DlinesPointsDepth.push_back(msg.b);
+				debug3DlinesPointsDepth.push_back(msg.c);
+				debug3DlinesPointsDepth.push_back(msg.c);
+				debug3DlinesPointsDepth.push_back(msg.d);
+				debug3DlinesPointsDepth.push_back(msg.d);
+				debug3DlinesPointsDepth.push_back(msg.a);
+
+				debug3DlinesColorDepth.push_back(msg.color);
+				debug3DlinesColorDepth.push_back(msg.color);
+				debug3DlinesColorDepth.push_back(msg.color);
+				debug3DlinesColorDepth.push_back(msg.color);
+				debug3DlinesColorDepth.push_back(msg.color);
+				debug3DlinesColorDepth.push_back(msg.color);
+				debug3DlinesColorDepth.push_back(msg.color);
+				debug3DlinesColorDepth.push_back(msg.color);
+			}
+			else
+			{
+				debug3DlinesPoints.push_back(msg.a);
+				debug3DlinesPoints.push_back(msg.b);
+				debug3DlinesPoints.push_back(msg.b);
+				debug3DlinesPoints.push_back(msg.c);
+				debug3DlinesPoints.push_back(msg.c);
+				debug3DlinesPoints.push_back(msg.d);
+				debug3DlinesPoints.push_back(msg.d);
+				debug3DlinesPoints.push_back(msg.a);
+
+				debug3DlinesColor.push_back(msg.color);
+				debug3DlinesColor.push_back(msg.color);
+				debug3DlinesColor.push_back(msg.color);
+				debug3DlinesColor.push_back(msg.color);
+				debug3DlinesColor.push_back(msg.color);
+				debug3DlinesColor.push_back(msg.color);
+				debug3DlinesColor.push_back(msg.color);
+				debug3DlinesColor.push_back(msg.color);
+			}
 		});
 
 		registerCallback<AGE::DRBCameraDrawableListCommand>([&](AGE::DRBCameraDrawableListCommand &msg)
 		{
+			std::shared_ptr<Painter> line2DPainter = nullptr;
+			std::shared_ptr<Painter> line3DPainter = nullptr;
+			std::shared_ptr<Painter> line3DPainterDepth = nullptr;
+
+			if (pipelines[msg.list->cameraInfos.data.pipeline]->isDebug())
+			{
+				fillDebugPainter(line2DPainter, line3DPainter, line3DPainterDepth);
+			}
 			pipelines[msg.list->cameraInfos.data.pipeline]->render(*msg.list.get());
+			if (line2DPainter != nullptr)
+			{
+				line2DPainter->remove_vertices(debug2Dlines.verticesKey);
+				debug2DlinesColor.clear();
+				debug2DlinesPoints.clear();
+			}
+			if (line3DPainter != nullptr)
+			{
+				line3DPainter->remove_vertices(debug3Dlines.verticesKey);
+				debug3DlinesColor.clear();
+				debug3DlinesPoints.clear();
+			}
+			if (line3DPainterDepth != nullptr)
+			{
+				line3DPainterDepth->remove_vertices(debug3DlinesDepth.verticesKey);
+				debug3DlinesColorDepth.clear();
+				debug3DlinesPointsDepth.clear();
+			}
 		});
 
 		return true;
