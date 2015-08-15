@@ -26,7 +26,7 @@ namespace AGE
 		auto scene = _scene;
 		EntityFilter::Lock lock(_filter);
 		auto &collection = _filter.getCollection();
-		for (auto e : collection)
+		for (auto &e : collection)
 		{
 			e->getComponent<Lifetime>()->_t -= time;
 			if (e->getComponent<Lifetime>()->_t <= 0.0f)

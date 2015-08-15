@@ -39,7 +39,7 @@ namespace AGE
 
 		void CollisionSystem::mainUpdate(float elapsedTime)
 		{
-			for (Entity entity : entityFilter.getCollection())
+			for (const Entity &entity : entityFilter.getCollection())
 			{
 				entity->getComponent<Collider>()->collisions.clear();
 			}

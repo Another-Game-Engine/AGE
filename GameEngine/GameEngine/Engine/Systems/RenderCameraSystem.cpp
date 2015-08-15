@@ -160,7 +160,7 @@ namespace AGE
 		std::list<std::shared_ptr<DRBData>> pointLightList;
 
 
-		for (auto spotEntity : _spotLights.getCollection())
+		for (auto &spotEntity : _spotLights.getCollection())
 		{
 			auto spot = spotEntity->getComponent<SpotLightComponent>();
 			auto spotDrawableList = std::make_shared<DRBSpotLightDrawableList>();
@@ -226,14 +226,14 @@ namespace AGE
 
 			spotLightList.push_back(spotDrawableList);
 		}
-		for (auto pointLightEntity : _pointLights.getCollection())
+		for (auto &pointLightEntity : _pointLights.getCollection())
 		{
 			auto point = pointLightEntity->getComponent<PointLightComponent>();
 			
 			pointLightList.push_back(point->getCullableHandle().getPtr()->getDatas());
 		}
 
-		for (auto cameraEntity : _cameras.getCollection())
+		for (auto &cameraEntity : _cameras.getCollection())
 		{
 			Frustum cameraFrustum;
 			auto camera = cameraEntity->getComponent<CameraComponent>();
@@ -274,14 +274,17 @@ namespace AGE
 				return counter >= totalToCullNumber;
 			}));
 
-			while (meshList.getSize() > 0)
 			{
-				cameraList->meshs.push_back(meshList.pop()->getDrawable()->getDatas());
-			}
+				SCOPE_profile_cpu_i("Camera system", "Copy LFList to std");
+				while (meshList.getSize() > 0)
+				{
+					cameraList->meshs.push_back(meshList.pop()->getDrawable()->getDatas());
+				}
 
-			while (pointLightListToCull.getSize() > 0)
-			{
-				cameraList->pointLights.push_back(pointLightListToCull.pop()->getDrawable()->getDatas());
+				while (pointLightListToCull.getSize() > 0)
+				{
+					cameraList->pointLights.push_back(pointLightListToCull.pop()->getDrawable()->getDatas());
+				}
 			}
 			occlusionCulling(cameraList->meshs);
 

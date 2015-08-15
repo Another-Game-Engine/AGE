@@ -174,7 +174,7 @@ namespace AGE
 				_entities.clear();
 				{
 					EntityFilter::Lock lock(_filter);
-					for (auto e : _filter.getCollection())
+					for (auto &e : _filter.getCollection())
 					{
 						auto representation = e->getComponent<AGE::WE::EntityRepresentation>();
 						if (representation->editorOnly)
@@ -387,7 +387,7 @@ namespace AGE
 				_entities.clear();
 				{
 					EntityFilter::Lock lock(_filter);
-					for (auto e : _filter.getCollection())
+					for (auto &e : _filter.getCollection())
 					{
 						// if it's not attached to root
 						if (e->getLink().hasParent())
