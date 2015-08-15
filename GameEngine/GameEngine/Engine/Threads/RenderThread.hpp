@@ -59,11 +59,9 @@ namespace AGE
 		void getIcoSphereGeometry(Key<Vertices> &vertices, Key<Painter> &painter, uint32_t recursion);
 		void getCube(Key<Vertices> &vertices, Key<Painter> &painter);
 
-		inline DepthMapManager &getDepthMapManager() { return _depthMapManager; }
+		inline std::size_t getCurrentFrameCount() const { return _frameCounter; }
 
-		bool isDrawing() const;
-		// called by engine (main thread) at the beginning of a render frame
-		void setIsDrawingToTrue();
+		inline DepthMapManager &getDepthMapManager() { return _depthMapManager; }
 
 #ifdef AGE_ENABLE_IMGUI
 		void setImguiDrawList(std::shared_ptr<AGE::RenderImgui> &list);
@@ -88,7 +86,7 @@ namespace AGE
 		std::thread _threadHandle;
 		std::atomic_bool _insideRun;
 
-		std::atomic_bool _isDrawing;
+		std::size_t _frameCounter;
 
 #ifdef AGE_ENABLE_IMGUI
 		std::shared_ptr<AGE::RenderImgui> _imguiRenderlist;

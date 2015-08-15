@@ -36,7 +36,8 @@ namespace AGE
 
 		friend class ThreadManager;
 
-		std::atomic_bool _isRenderFrame;
+		bool _isRenderFrame;
+		std::size_t _frameCounter;
 
 		AGE::Engine *_engine;
 		AScene *_activeScene;
