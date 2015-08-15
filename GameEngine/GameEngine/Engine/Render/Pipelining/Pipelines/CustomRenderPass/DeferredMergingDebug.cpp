@@ -95,27 +95,30 @@ namespace AGE
 
 		_programs[PROGRAM_DRAW_2D_LINE]->use();
 
-		if (GetRenderThread()->debug2Dlines.painterKey.isValid())
+		auto &_2dLines = GetRenderThread()->debug2Dlines;
+		if (_2dLines.verticesKey.isValid() && _2dLines.painterKey.isValid())
 		{
-			_lines = _painterManager->get_painter(GetRenderThread()->debug2Dlines.painterKey);
-			_lines->uniqueDraw(GL_LINES, _programs[PROGRAM_DRAW_2D_LINE], Properties(), GetRenderThread()->debug2Dlines.verticesKey);
+			_lines = _painterManager->get_painter(_2dLines.painterKey);
+			_lines->uniqueDraw(GL_LINES, _programs[PROGRAM_DRAW_2D_LINE], Properties(), _2dLines.verticesKey);
 		}
 
 		_programs[PROGRAM_DRAW_3D_LINE]->use();
 		_programs[PROGRAM_DRAW_3D_LINE]->get_resource<Mat4>("viewProj").set(infos.cameraInfos.data.projection * infos.cameraInfos.view);
 
-		if (GetRenderThread()->debug3Dlines.painterKey.isValid())
+		auto _3dLines = GetRenderThread()->debug3Dlines;
+		if (_3dLines.verticesKey.isValid() && _3dLines.painterKey.isValid())
 		{
-			_lines = _painterManager->get_painter(GetRenderThread()->debug3Dlines.painterKey);
-			_lines->uniqueDraw(GL_LINES, _programs[PROGRAM_DRAW_3D_LINE], Properties(), GetRenderThread()->debug3Dlines.verticesKey);
+			_lines = _painterManager->get_painter(_3dLines.painterKey);
+			_lines->uniqueDraw(GL_LINES, _programs[PROGRAM_DRAW_3D_LINE], Properties(), _3dLines.verticesKey);
 		}
 
 		OpenGLState::glEnable(GL_DEPTH_TEST);
 
-		if (GetRenderThread()->debug3DlinesDepth.painterKey.isValid())
+		auto &_3dlinesDepth = GetRenderThread()->debug3DlinesDepth;
+		if (_3dlinesDepth.painterKey.isValid() && _3dlinesDepth.painterKey.isValid())
 		{
-			_lines = _painterManager->get_painter(GetRenderThread()->debug3DlinesDepth.painterKey);
-			_lines->uniqueDraw(GL_LINES, _programs[PROGRAM_DRAW_3D_LINE], Properties(), GetRenderThread()->debug3DlinesDepth.verticesKey);
+			_lines = _painterManager->get_painter(_3dlinesDepth.painterKey);
+			_lines->uniqueDraw(GL_LINES, _programs[PROGRAM_DRAW_3D_LINE], Properties(), _3dlinesDepth.verticesKey);
 		}
 	}
 }
