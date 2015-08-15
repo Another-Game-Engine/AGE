@@ -188,12 +188,12 @@ namespace AGE
 			glm::vec3 color = glm::vec3(1, 0, 0);
 			bool activateDepth = true;
 
-			AGE::GetRenderThread()->getQueue()->emplaceCommand<Commands::ToRender::Draw3DQuad>(aNear, bNear, cNear, dNear, color, activateDepth);
-			AGE::GetRenderThread()->getQueue()->emplaceCommand<Commands::ToRender::Draw3DQuad>(aFar, bFar, cFar, dFar, color, activateDepth);
-			AGE::GetRenderThread()->getQueue()->emplaceCommand<Commands::ToRender::Draw3DLine>(aNear, aFar, color, activateDepth);
-			AGE::GetRenderThread()->getQueue()->emplaceCommand<Commands::ToRender::Draw3DLine>(bNear, bFar, color, activateDepth);
-			AGE::GetRenderThread()->getQueue()->emplaceCommand<Commands::ToRender::Draw3DLine>(cNear, cFar, color, activateDepth);
-			AGE::GetRenderThread()->getQueue()->emplaceCommand<Commands::ToRender::Draw3DLine>(dNear, dFar, color, activateDepth);
+			AGE::GetRenderThread()->getQueue()->emplaceTask<Commands::ToRender::Draw3DQuad>(aNear, bNear, cNear, dNear, color, activateDepth);
+			AGE::GetRenderThread()->getQueue()->emplaceTask<Commands::ToRender::Draw3DQuad>(aFar, bFar, cFar, dFar, color, activateDepth);
+			AGE::GetRenderThread()->getQueue()->emplaceTask<Commands::ToRender::Draw3DLine>(aNear, aFar, color, activateDepth);
+			AGE::GetRenderThread()->getQueue()->emplaceTask<Commands::ToRender::Draw3DLine>(bNear, bFar, color, activateDepth);
+			AGE::GetRenderThread()->getQueue()->emplaceTask<Commands::ToRender::Draw3DLine>(cNear, cFar, color, activateDepth);
+			AGE::GetRenderThread()->getQueue()->emplaceTask<Commands::ToRender::Draw3DLine>(dNear, dFar, color, activateDepth);
 
 			std::atomic_size_t counter = 0;
 
