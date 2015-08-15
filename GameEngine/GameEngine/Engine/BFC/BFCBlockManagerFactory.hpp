@@ -5,11 +5,13 @@
 #include "BFCBlockManager.hpp"
 #include "BFCItemID.hpp"
 
+#include "Utils/Containers/LFList.hpp"
+#include "BFC/BFCItem.hpp"
+
 namespace AGE
 {
 	struct BFCCullableObject;
 	class  BFCCullableHandle;
-	class  BFCItem;
 	struct DRBData;
 	class Frustum;
 
@@ -21,7 +23,7 @@ namespace AGE
 		BFCCullableHandle createItem(BFCCullableObject *object);
 		void deleteItem(const BFCCullableHandle &handle);
 		BFCItem &getItem(const BFCItemID &id);
-		void cullOnChannel(CullableTypeID channel, std::list<std::shared_ptr<DRBData>> &result, const Frustum &frustum);
+		void cullOnChannel(CullableTypeID channel, LFList<BFCItem> &result, const Frustum &frustum);
 	private:
 		std::vector<BFCBlockManager> _managers;
 	};

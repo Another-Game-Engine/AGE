@@ -417,6 +417,7 @@
     <ClCompile Include="Engine\Text\Font.cpp" />
     <ClCompile Include="Engine\Text\FontGlyph.cpp" />
     <ClCompile Include="Engine\Text\FontManager.cpp" />
+    <ClCompile Include="Engine\Utils\Containers\LFList.cpp" />
     <ClCompile Include="Engine\Utils\Profiler.cpp" />
     <ClCompile Include="Engine\Utils\StreamBuffer.cpp" />
     <ClCompile Include="Engine\Utils\CRC32.cpp" />
@@ -702,6 +703,7 @@
     <ClInclude Include="Engine\Utils\Architecture.hpp" />
     <ClInclude Include="Engine\Utils\BitOperations.hpp" />
     <ClInclude Include="Engine\Utils\BoundingInfos.hpp" />
+    <ClInclude Include="Engine\Utils\Containers\LFList.hpp" />
     <ClInclude Include="Engine\Utils\Debug.hpp" />
     <ClInclude Include="Engine\Utils\Profile.hpp" />
     <ClInclude Include="Engine\Utils\Profiler.hpp" />

@@ -13,6 +13,7 @@
 #include <AssetManagement/AssetManager.hh>
 #include <Utils/Debug.hpp>
 #endif
+#include "Engine\Graphic\DRBMeshData.hpp"
 
 //tmp
 #include "Configuration.hpp"
@@ -135,6 +136,7 @@ namespace AGE
 		for (auto &submesh : _mesh->subMeshs)
 		{
 			auto handle = manager->addMesh(submesh, _material);
+			std::static_pointer_cast<DRBMeshData>(handle.getPtr()->getDatas())->setRenderModes(_renderMode);
 			entity->getLink().pushAnObject(handle);
 			_drawableHandle.push_back(handle);
 		}
