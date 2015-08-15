@@ -8,7 +8,7 @@ namespace AGE
 
 	bool CharacterControllerSystem::initialize()
 	{
-
+		return (true);
 	}
 
 	void CharacterControllerSystem::updateBegin(float time)
