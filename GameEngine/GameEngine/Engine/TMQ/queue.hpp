@@ -271,7 +271,7 @@ namespace TMQ
 		}
 
 		template <typename T, typename ...Args>
-		void emplaceTask(Args ...args)
+		void emplaceTask(Args... args)
 		{
 			SCOPE_profile_cpu_function("TMQ");
 			{
@@ -297,7 +297,7 @@ namespace TMQ
 		}
 
 		template <typename T, typename F, typename ...Args>
-		std::future<F> emplaceFutureTask(Args ...args)
+		std::future<F> emplaceFutureTask(Args... args)
 		{
 			SCOPE_profile_cpu_function("TMQ");
 			std::future< F > f;
@@ -327,7 +327,7 @@ namespace TMQ
 		}
 
 		template <typename T, typename ...Args>
-		static void emplaceSharedTask(Args ...args)
+		static void emplaceSharedTask(Args... args)
 		{
 			SCOPE_profile_cpu_function("TMQ");
 			{
@@ -353,7 +353,7 @@ namespace TMQ
 		}
 
 		template <typename T, typename F, typename ...Args>
-		static std::future<F> emplaceSharedFutureTask(Args ...args)
+		static std::future<F> emplaceSharedFutureTask(Args... args)
 		{
 			SCOPE_profile_cpu_function("TMQ");
 			std::future< F > f;
