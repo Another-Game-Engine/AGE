@@ -5,6 +5,9 @@
 #include <Physics/PhysicsInterface.hpp>
 #include <Physics/WorldInterface.hpp>
 #include <AssetManagement/AssetManager.hh>
+#ifdef EDITOR_ENABLED
+#include <imgui/imgui.h>
+#endif
 
 namespace AGE
 {
@@ -327,12 +330,40 @@ namespace AGE
 
 	void Collider::EditorStruct::copyDatas(Collider *ptr)
 	{
-		// TO_DO
+		currentType = ptr->getColliderType();
 	}
 
 	void Collider::EditorStruct::editorUpdate(Collider *ptr)
 	{
-		// TO_DO
+		bool hasChanged = false;
+
+		std::string colliderType[] = 
+		{
+			"Box",
+			"Sphere",
+			"Capsule",
+			"Mesh"
+		};
+		for (int i = 0; i < sizeof(colliderType) / sizeof(colliderType[0]); ++i)
+		{
+			if (ImGui::RadioButton(colliderType[i].c_str(), i == (int)currentType))
+			{
+				currentType = (Physics::ColliderType)i;
+				hasChanged = true;
+			}
+		}
+		if (hasChanged)
+		{
+			ptr->reset();
+			if (currentType == Physics::ColliderType::Mesh)
+			{
+				ptr->init(Physics::ColliderType::Box);
+			}
+			else
+			{
+				ptr->init(currentType);
+			}
+		}
 	}
 
 #endif
