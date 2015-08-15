@@ -21,6 +21,8 @@
 #	include <glm/gtc/type_ptr.hpp>
 #endif
 
+#include <glm/gtc/matrix_transform.hpp>
+
 namespace AGE
 {
 	SpotLightData::SpotLightData(glm::vec3 const &color, glm::vec3 const &range, float exponent, float cutOff, std::shared_ptr<ITexture> const &map)
@@ -88,7 +90,7 @@ namespace AGE
 		_propAttenuation = std::make_shared<AutoProperty<glm::vec3, Vec3>>("attenuation_light");
 		_propAttenuation->autoSet(range);
 		_propDirection = std::make_shared<AutoProperty<glm::vec3, Vec3>>("direction_light");
-		_propSpotCutOff = std::make_shared<AutoProperty<float, Vec1>>("spot_cuf_off");
+		_propSpotCutOff = std::make_shared<AutoProperty<float, Vec1>>("spot_cut_off");
 		_propSpotCutOff->autoSet(cutOff);
 		_propExponentLight = std::make_shared<AutoProperty<float, Vec1>>("exponent_light");
 		_propExponentLight->autoSet(exponent);
@@ -159,4 +161,16 @@ namespace AGE
 		return modified;
 	}
 #endif
+
+	glm::mat4 SpotLightComponent::updateShadowMatrix()
+	{
+		float spotFov = glm::max(0.001f, (1.0f - cutOff) * glm::radians(180.0f));
+		// We add 30 degres to have the spot entierly in the frustum (otherwise it is circumscribed)
+		float adaptedFov = glm::min(spotFov + glm::radians(30.0f), glm::radians(179.9f));
+		glm::mat4 invTransform = glm::inverse(entity->getLink().getGlobalTransform());
+		glm::mat4 spotViewProj = glm::perspective(adaptedFov, 1.0f, 0.1f, 1000.0f) * invTransform;
+		_propShadowMatrix->autoSet(spotViewProj);
+		return (spotViewProj);
+	}
+
 }

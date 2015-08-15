@@ -24,6 +24,7 @@ namespace AGE
 
 	public:
 		void setAmbient(glm::vec3 const &ambient);
+		virtual bool isDebug() const { return true; }
 
 	private:
 		std::shared_ptr<Texture2D> _depthStencil;

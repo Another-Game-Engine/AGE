@@ -51,6 +51,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "deferred shading", "deferre
 		Shaders\deferred_shading\deferred_shading_skybox.vp = Shaders\deferred_shading\deferred_shading_skybox.vp
 		Shaders\deferred_shading\deferred_shading_spot_light.fp = Shaders\deferred_shading\deferred_shading_spot_light.fp
 		Shaders\deferred_shading\deferred_shading_spot_light.vp = Shaders\deferred_shading\deferred_shading_spot_light.vp
+		Shaders\deferred_shading\draw2DLine.fp = Shaders\deferred_shading\draw2DLine.fp
+		Shaders\deferred_shading\draw2DLine.vp = Shaders\deferred_shading\draw2DLine.vp
+		Shaders\deferred_shading\draw3DLine.fp = Shaders\deferred_shading\draw3DLine.fp
+		Shaders\deferred_shading\draw3DLine.vp = Shaders\deferred_shading\draw3DLine.vp
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "basic", "basic", "{6DD3E825-06AD-46C8-B671-745D01D240D0}"
@@ -651,8 +655,5 @@ Global
 		{FF5DF4D7-4AAB-4EE3-9539-6A7F08CE6726} = {8FD58CA8-8812-4B8D-85DC-B42B9D75D0CB}
 		{F80CD93E-B35D-42B1-B65C-2322D6148808} = {6823E483-DFC6-4750-920C-35DA2E87B060}
 		{371B9FA9-4C90-4AC6-A123-ACED756D6C77} = {8FD58CA8-8812-4B8D-85DC-B42B9D75D0CB}
-	EndGlobalSection
-	GlobalSection(Performance) = preSolution
-		HasPerformanceSessions = true
 	EndGlobalSection
 EndGlobal

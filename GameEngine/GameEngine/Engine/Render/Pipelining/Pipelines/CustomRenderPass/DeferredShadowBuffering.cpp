@@ -105,8 +105,8 @@ namespace AGE
 			glViewport(0, 0, _frame_buffer.width(), _frame_buffer.height());
 			// it should be better to pass all that code (setting properties in the main thread)
 			{
-				auto projection = glm::perspective(60.f, (float)_frame_buffer.width() / (float)_frame_buffer.height(), 0.1f, 1000.0f);
-				spotlight->getShadowMatrixProperty()->set(projection * glm::inverse(spotlight->getTransformation()));
+//				auto projection = glm::perspective(60.f, (float)_frame_buffer.width() / (float)_frame_buffer.height(), 0.1f, 1000.0f);
+//				spotlight->getShadowMatrixProperty()->set(projection * glm::inverse(spotlight->getTransformation()));
 			}
 			_frame_buffer.attachment(*(*it), GL_DEPTH_STENCIL_ATTACHMENT);
 			glClear(GL_DEPTH_BUFFER_BIT);

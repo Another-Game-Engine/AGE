@@ -11,6 +11,7 @@
 #include <Threads/ThreadManager.hpp>
 #include <Core/ConfigurationManager.hpp>
 #include <Core/Engine.hh>
+#include <Graphic/DRBCameraDrawableList.hpp>
 
 #define DEFERRED_SHADING_MERGING_VERTEX "../../Shaders/deferred_shading/deferred_shading_merge_debug.vp"
 #define DEFERRED_SHADING_MERGING_FRAG "../../Shaders/deferred_shading/deferred_shading_merge_debug.fp"
@@ -18,25 +19,29 @@
 #define DRAW_2D_LINE_VERTEX "deferred_shading/draw2DLine.vp"
 #define DRAW_2D_LINE_FRAG "deferred_shading/draw2DLine.fp"
 
+#define DRAW_3D_LINE_VERTEX "deferred_shading/draw3DLine.vp"
+#define DRAW_3D_LINE_FRAG "deferred_shading/draw3DLine.fp"
 
 namespace AGE
 {
 	enum Programs
 	{
 		PROGRAM_MERGING = 0,
-		PROGRAM_DRAW_LINE,
+		PROGRAM_DRAW_2D_LINE,
+		PROGRAM_DRAW_3D_LINE,
 		PROGRAM_NBR
 	};
 
 	DeferredMergingDebug::DeferredMergingDebug(glm::uvec2 const &screenSize, std::shared_ptr<PaintingManager> painterManager,
 		std::shared_ptr<Texture2D> debugLightRender,
-		std::shared_ptr<Texture2D> diffuse) :
+		std::shared_ptr<Texture2D> diffuse, std::shared_ptr<Texture2D> depthStencil) :
 		FrameBufferRender(screenSize.x, screenSize.y, painterManager)
 	{
 		_debugLightRender = debugLightRender;
 		_programs.resize(PROGRAM_NBR);
 
 		push_storage_output(GL_COLOR_ATTACHMENT0, diffuse);
+		push_storage_output(GL_DEPTH_STENCIL_ATTACHMENT, depthStencil);
 
 		auto confManager = GetEngine()->getInstance<ConfigurationManager>();
 
@@ -51,7 +56,16 @@ namespace AGE
 		auto vertexDrawLine = shaderPath->getValue() + DRAW_2D_LINE_VERTEX;
 		auto fragDrawLine = shaderPath->getValue() + DRAW_2D_LINE_FRAG;
 
-		_programs[PROGRAM_DRAW_LINE] = std::make_shared<Program>(Program(std::string("draw2DLine"),
+		_programs[PROGRAM_DRAW_2D_LINE] = std::make_shared<Program>(Program(std::string("draw2DLine"),
+		{
+			std::make_shared<UnitProg>(vertexDrawLine, GL_VERTEX_SHADER),
+			std::make_shared<UnitProg>(fragDrawLine, GL_FRAGMENT_SHADER)
+		}));
+
+		vertexDrawLine = shaderPath->getValue() + DRAW_3D_LINE_VERTEX;
+		fragDrawLine = shaderPath->getValue() + DRAW_3D_LINE_FRAG;
+
+		_programs[PROGRAM_DRAW_3D_LINE] = std::make_shared<Program>(Program(std::string("draw3DLine"),
 		{
 			std::make_shared<UnitProg>(vertexDrawLine, GL_VERTEX_SHADER),
 			std::make_shared<UnitProg>(fragDrawLine, GL_FRAGMENT_SHADER)
@@ -73,18 +87,35 @@ namespace AGE
 		OpenGLState::glEnable(GL_BLEND);
 		OpenGLState::glDisable(GL_DEPTH_TEST);
 		OpenGLState::glDisable(GL_CULL_FACE);
+		OpenGLState::glDepthMask(GL_FALSE);
+		OpenGLState::glDisable(GL_STENCIL_TEST);
 		OpenGLState::glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 		_quadPainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_MERGING], Properties(), _quadVertices);
 
-		OpenGLState::glDisable(GL_DEPTH_TEST);
-		OpenGLState::glDisable(GL_STENCIL_TEST);
-		OpenGLState::glDepthMask(GL_FALSE);
-		_programs[PROGRAM_DRAW_LINE]->use();
+		_programs[PROGRAM_DRAW_2D_LINE]->use();
 
 		if (GetRenderThread()->debug2Dlines.painterKey.isValid())
 		{
 			_lines = _painterManager->get_painter(GetRenderThread()->debug2Dlines.painterKey);
-			_lines->uniqueDraw(GL_LINES, _programs[PROGRAM_DRAW_LINE], Properties(), GetRenderThread()->debug2Dlines.verticesKey);
+			_lines->uniqueDraw(GL_LINES, _programs[PROGRAM_DRAW_2D_LINE], Properties(), GetRenderThread()->debug2Dlines.verticesKey);
+		}
+
+		_programs[PROGRAM_DRAW_3D_LINE]->use();
+		_programs[PROGRAM_DRAW_3D_LINE]->get_resource<Mat4>("viewProj").set(infos.cameraInfos.data.projection * infos.cameraInfos.view);
+
+		if (GetRenderThread()->debug3Dlines.painterKey.isValid())
+		{
+			_lines = _painterManager->get_painter(GetRenderThread()->debug3Dlines.painterKey);
+			_lines->uniqueDraw(GL_LINES, _programs[PROGRAM_DRAW_3D_LINE], Properties(), GetRenderThread()->debug3Dlines.verticesKey);
+		}
+
+		OpenGLState::glEnable(GL_DEPTH_TEST);
+
+		if (GetRenderThread()->debug3DlinesDepth.painterKey.isValid())
+		{
+			_lines = _painterManager->get_painter(GetRenderThread()->debug3DlinesDepth.painterKey);
+			_lines->uniqueDraw(GL_LINES, _programs[PROGRAM_DRAW_3D_LINE], Properties(), GetRenderThread()->debug3DlinesDepth.verticesKey);
 		}
 	}
 }

@@ -15,12 +15,14 @@
 #include <BFC/BFCCullableObject.hpp>
 
 #include <Graphic/DRBCameraDrawableList.hpp>
+#include <Graphic/DRBSpotLightData.hpp>
 #include <Graphic/BFCCullableTypes.hpp>
 #include <Graphic/DRBMeshData.hpp>
 
 #include <Threads/ThreadManager.hpp>
 #include <Threads/RenderThread.hpp>
 #include <Threads/MainThread.hpp>
+#include <Threads/Commands/ToRenderCommands.hpp>
 
 #include "Utils/Frustum.hh"
 #include "Utils/AABoundingBox.hh"
@@ -158,11 +160,40 @@ namespace AGE
 			auto spotDrawableList = std::make_shared<DRBSpotLightDrawableList>();
 			spotDrawableList->spotLight = spot->getCullableHandle().getPtr()->getDatas();
 
-			// WARNINNNNNNNNNNNG
-			// Le calcul n'est pas bon !!!!
-			// Paul, fais le STP, merci
+			auto spotData = std::static_pointer_cast<DRBSpotLightData>(spotDrawableList->spotLight);
+
+			glm::mat4 spotViewProj = spot->updateShadowMatrix();
+
 			Frustum spotlightFrustum;
-			spotlightFrustum.setMatrix(glm::perspective(spot->getCutOff() / 2.0f, spot->getExponent(), 0.1f, 1000.0f)* glm::inverse(spotEntity->getLink().getGlobalTransform()));
+			spotlightFrustum.setMatrix(spotViewProj);
+
+			// Draw spotlight frustum debug:
+			glm::vec4 worldPos = glm::inverse(spotViewProj) * glm::vec4(-1, -1, -1, 1.0f);
+			glm::vec3 aNear = glm::vec3(worldPos / worldPos.w);
+			worldPos = glm::inverse(spotViewProj) * glm::vec4(-1, 1, -1, 1.0f);
+			glm::vec3 bNear = glm::vec3(worldPos / worldPos.w);
+			worldPos = glm::inverse(spotViewProj) * glm::vec4(1, 1, -1, 1.0f);
+			glm::vec3 cNear = glm::vec3(worldPos / worldPos.w);
+			worldPos = glm::inverse(spotViewProj) * glm::vec4(1, -1, -1, 1.0f);
+			glm::vec3 dNear = glm::vec3(worldPos / worldPos.w);
+			worldPos = glm::inverse(spotViewProj) * glm::vec4(-1, -1, 1, 1.0f);
+			glm::vec3 aFar = glm::vec3(worldPos / worldPos.w);
+			worldPos = glm::inverse(spotViewProj) * glm::vec4(-1, 1, 1, 1.0f);
+			glm::vec3 bFar = glm::vec3(worldPos / worldPos.w);
+			worldPos = glm::inverse(spotViewProj) * glm::vec4(1, 1, 1, 1.0f);
+			glm::vec3 cFar = glm::vec3(worldPos / worldPos.w);
+			worldPos = glm::inverse(spotViewProj) * glm::vec4(1, -1, 1, 1.0f);
+			glm::vec3 dFar = glm::vec3(worldPos / worldPos.w);
+
+			glm::vec3 color = glm::vec3(1, 0, 0);
+			bool activateDepth = true;
+
+			AGE::GetRenderThread()->getQueue()->emplaceCommand<Commands::ToRender::Draw3DQuad>(aNear, bNear, cNear, dNear, color, activateDepth);
+			AGE::GetRenderThread()->getQueue()->emplaceCommand<Commands::ToRender::Draw3DQuad>(aFar, bFar, cFar, dFar, color, activateDepth);
+			AGE::GetRenderThread()->getQueue()->emplaceCommand<Commands::ToRender::Draw3DLine>(aNear, aFar, color, activateDepth);
+			AGE::GetRenderThread()->getQueue()->emplaceCommand<Commands::ToRender::Draw3DLine>(bNear, bFar, color, activateDepth);
+			AGE::GetRenderThread()->getQueue()->emplaceCommand<Commands::ToRender::Draw3DLine>(cNear, cFar, color, activateDepth);
+			AGE::GetRenderThread()->getQueue()->emplaceCommand<Commands::ToRender::Draw3DLine>(dNear, dFar, color, activateDepth);
 
 			std::atomic_size_t counter = 0;
 
