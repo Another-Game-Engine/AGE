@@ -161,8 +161,8 @@ static std::pair<std::pair<GLenum, std::string>, std::function<void(Vertices &ve
 		std::shared_ptr<Texture2D> const &getSpotLightTexture();
 		bool meshRequiresDataReload(const OldFile &filePath);
 		bool materialRequiresDataReload(const OldFile &filePath);
-		void requireMeshReload();
-		void requireMaterialReload();
+		void requireMeshReload(const OldFile &filePath);
+		void requireMaterialReload(const OldFile &filePath);
 
 private:
 		std::string _assetsDirectory;
