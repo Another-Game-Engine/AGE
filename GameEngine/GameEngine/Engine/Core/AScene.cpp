@@ -37,6 +37,7 @@ namespace AGE
 
 	AScene::~AScene()
 	{
+		clearAllEntities();
 #ifdef AGE_BFC
 		delete _bfcLinkTracker;
 		delete _bfcBlockManagerFactory;
