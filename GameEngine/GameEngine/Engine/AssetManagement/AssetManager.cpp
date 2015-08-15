@@ -54,8 +54,46 @@ namespace AGE
 		std::lock_guard<std::mutex> lock(_mutex);
 
 		if (_meshs.find(filePath.getFullName()) != std::end(_meshs))
-			return _meshs[filePath.getFullName()];
+			return _meshs[filePath.getFullName()].second;
 		return nullptr;
+	}
+
+	bool AssetsManager::meshRequiresDataReload(const OldFile &_filePath)
+	{
+		OldFile filePath(_assetsDirectory + _filePath.getFullName());
+		std::lock_guard<std::mutex> lock(_mutex);
+
+		if (_meshs.find(filePath.getFullName()) != std::end(_meshs))
+			return _meshs[filePath.getFullName()].first;
+		return false;
+	}
+
+	bool AssetsManager::materialRequiresDataReload(const OldFile &_filePath)
+	{
+		OldFile filePath(_assetsDirectory + _filePath.getFullName());
+		std::lock_guard<std::mutex> lock(_mutex);
+
+		if (_materials.find(filePath.getFullName()) != std::end(_materials))
+			return _materials[filePath.getFullName()].first;
+		return false;
+	}
+
+	void AssetsManager::requireMaterialReload(const OldFile &_filePath)
+	{
+		OldFile filePath(_assetsDirectory + _filePath.getFullName());
+		std::lock_guard<std::mutex> lock(_mutex);
+
+		if (_materials.find(filePath.getFullName()) != std::end(_materials))
+			_materials[filePath.getFullName()].first = true;
+	}
+
+	void AssetsManager::requireMeshReload(const OldFile &_filePath)
+	{
+		OldFile filePath(_assetsDirectory + _filePath.getFullName());
+		std::lock_guard<std::mutex> lock(_mutex);
+
+		if (_meshs.find(filePath.getFullName()) != std::end(_meshs))
+			_meshs[filePath.getFullName()].first = true;
 	}
 
 	std::shared_ptr<MaterialSetInstance> AssetsManager::getMaterial(const OldFile &_filePath)
@@ -65,7 +103,7 @@ namespace AGE
 
 		if (_materials.find(filePath.getFullName()) != std::end(_materials)) 
 		{
-			return _materials[filePath.getFullName()];
+			return _materials[filePath.getFullName()].second;
 		}
 		return nullptr;
 	}
@@ -80,7 +118,7 @@ namespace AGE
 			{
 				return (true);
 			}
-			_materials.insert(std::make_pair(filePath.getFullName(), material));
+			_materials.insert(std::make_pair(filePath.getFullName(), std::make_pair(false, material)));
 		}
 		auto future = AGE::EmplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]()
 		{
@@ -332,7 +370,7 @@ namespace AGE
 			{
 				return (true);
 			}
-			_meshs.insert(std::make_pair(filePath.getFullName(), meshInstance));
+			_meshs.insert(std::make_pair(filePath.getFullName(), std::make_pair(false, meshInstance)));
 		}
 		auto future = AGE::EmplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]()
 		{

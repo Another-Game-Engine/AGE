@@ -13,6 +13,7 @@
 #include <TMQ/message.hpp>
 #include <functional>
 #include <string>
+#include <utility>
 
 #include <cereal/archives/json.hpp>
 #include <cereal/types/unordered_set.hpp>
@@ -158,14 +159,18 @@ static std::pair<std::pair<GLenum, std::string>, std::function<void(Vertices &ve
 		void pushNewCallback(const std::string &loadingChannel, AScene *currentScene, std::function<void()> &callback);
 		std::shared_ptr<Texture2D> const &getPointLightTexture();
 		std::shared_ptr<Texture2D> const &getSpotLightTexture();
+		bool meshRequiresDataReload(const OldFile &filePath);
+		bool materialRequiresDataReload(const OldFile &filePath);
+		void requireMeshReload();
+		void requireMaterialReload();
 
 private:
 		std::string _assetsDirectory;
 		std::map<std::bitset<MeshInfos::END>, Key<Painter>, BitsetComparer> _painters;
-		std::map<std::string, std::shared_ptr<MeshInstance>> _meshs;
+		std::map<std::string, std::pair<bool, std::shared_ptr<MeshInstance>>> _meshs;
 		std::map<std::string, std::shared_ptr<Skeleton>> _skeletons;
 		std::map<std::string, std::shared_ptr<AnimationData>> _animations;
-		std::map<std::string, std::shared_ptr<MaterialSetInstance>> _materials;
+		std::map<std::string, std::pair<bool, std::shared_ptr<MaterialSetInstance>>> _materials;
 		std::map<std::string, std::shared_ptr<ITexture>> _textures;
 		std::map<std::string, std::shared_ptr<TextureCubeMap>> _cubeMaps;
 		std::map<std::string, std::shared_ptr<AssetsLoadingChannel>> _loadingChannels;
