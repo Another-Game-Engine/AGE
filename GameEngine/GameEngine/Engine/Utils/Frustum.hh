@@ -4,6 +4,7 @@
 #include <Utils/AABoundingBox.hh>
 #include <Utils/Sphere.hh>
 #include <Culling/Cullable/Cullable.hh>
+#include <glm/fwd.hpp>
 
 namespace AGE
 {
