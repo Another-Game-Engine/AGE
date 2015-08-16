@@ -39,6 +39,8 @@ namespace AGE
 
 			float maxDepenetrationVelocity = 0.0f;
 
+			CollisionDetectionMode collisionDetectionMode = CollisionDetectionMode::Continuous;
+
 			// Destructor
 			~BulletRigidBody(void);
 
@@ -95,7 +97,7 @@ namespace AGE
 
 			bool isKinematic(void) const override final;
 
-			void setCollisionDetectionMode(CollisionDetectionMode collisionDetectionMode) override final;
+			void setCollisionDetectionMode(CollisionDetectionMode newCollisionDetectionMode) override final;
 
 			CollisionDetectionMode getCollisionDetectionMode(void) const override final;
 

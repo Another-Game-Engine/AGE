@@ -34,6 +34,7 @@ namespace AGE
 			setDiagonalInertiaTensor(GetDefaultDiagonalInertiaTensor());
 			setMaxAngularVelocity(GetDefaultMaxAngularVelocity());
 			setMaxDepenetrationVelocity(GetDefaultMaxDepenetrationVelocity());
+			unlockRotation();
 		}
 
 		// Destructor
@@ -329,6 +330,31 @@ namespace AGE
 		{
 			const physx::PxVec3 velocity = physx::PxRigidBodyExt::getVelocityAtOffset(*getDataAs<physx::PxRigidDynamic>(), physx::PxVec3(position.x, position.y, position.z));
 			return glm::vec3(velocity.x, velocity.y, velocity.z);
+		}
+
+		void PhysXRigidBody::unlockRotation(void)
+		{
+			physx::PxRigidActor *actor = getDataAs<physx::PxRigidDynamic>();
+			physx::PxPhysics *physics = static_cast<PhysXPhysics *>(getWorld()->getPhysics())->getPhysics();
+
+			//physx::PxScene *scene = static_cast<PhysXWorld *>(getWorld())->getScene();
+			//physx::PxDefaultFileOutputStream stream("test");
+			//physx::PxSerializationRegistry *registry = physx::PxSerialization::createSerializationRegistry(*physics);
+			//physx::PxCollection *collection = PxCreateCollection();
+			////collection->add(actor);
+			//physx::PxSerialization::complete(*collection, *registry);
+			//physx::PxSerialization::serializeCollectionToBinary(stream, *collection, *registry);
+			//collection->release();
+			//registry->release();
+
+			joint = physx::PxD6JointCreate(*physics, actor, physx::PxTransform::createIdentity(), nullptr, actor->getGlobalPose());
+			physx::PxD6Joint *joint = static_cast<physx::PxD6Joint *>(this->joint);
+			joint->setMotion(physx::PxD6Axis::eX, physx::PxD6Motion::eFREE);
+			joint->setMotion(physx::PxD6Axis::eY, physx::PxD6Motion::eFREE);
+			joint->setMotion(physx::PxD6Axis::eZ, physx::PxD6Motion::eFREE);
+			joint->setMotion(physx::PxD6Axis::eSWING1, physx::PxD6Motion::eFREE);
+			joint->setMotion(physx::PxD6Axis::eSWING2, physx::PxD6Motion::eFREE);
+			joint->setMotion(physx::PxD6Axis::eTWIST, physx::PxD6Motion::eFREE);
 		}
 	}
 }
