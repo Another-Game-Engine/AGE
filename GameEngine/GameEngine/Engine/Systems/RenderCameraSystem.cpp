@@ -215,9 +215,12 @@ namespace AGE
 				});
 			}
 
-			GetMainThread()->computeTasksWhile(std::function<bool()>([&counter, meshBlocksToCullNumber]() {
-				return counter >= meshBlocksToCullNumber;
-			}));
+			{
+				SCOPE_profile_cpu_i("Camera system", "Cull for spots");
+				GetMainThread()->computeTasksWhile(std::function<bool()>([&counter, meshBlocksToCullNumber]() {
+					return counter >= meshBlocksToCullNumber;
+				}));
+			}
 
 			while (meshInLightList.getSize() > 0)
 			{
@@ -270,9 +273,12 @@ namespace AGE
 				});
 			}
 
-			GetMainThread()->computeTasksWhile(std::function<bool()>([&counter, totalToCullNumber]() {
-				return counter >= totalToCullNumber;
-			}));
+			{
+				SCOPE_profile_cpu_i("Camera system", "Cull for cam");
+				GetMainThread()->computeTasksWhile(std::function<bool()>([&counter, totalToCullNumber]() {
+					return counter >= totalToCullNumber;
+				}));
+			}
 
 			{
 				SCOPE_profile_cpu_i("Camera system", "Copy LFList to std");
