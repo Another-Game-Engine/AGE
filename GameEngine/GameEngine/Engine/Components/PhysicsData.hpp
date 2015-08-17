@@ -26,7 +26,7 @@ namespace AGE
 			void reset(void) override final;
 
 			// Methods
-			void init(void);
+			void init(Entity entity);
 
 			Physics::Private::GenericData *getData(void);
 

@@ -8,7 +8,9 @@ namespace AGE
 	{
 		struct Contact final
 		{
+			// Attribute
 			glm::vec3 position;
+
 			glm::vec3 normal;
 		};
 	}

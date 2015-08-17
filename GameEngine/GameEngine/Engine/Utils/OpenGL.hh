@@ -4,7 +4,9 @@
 # include	<GL\glew.h>
 
 #ifdef	WIN32
-#define NOMINMAX 
+# ifndef NOMINMAX
+#  define NOMINMAX 
+# endif
 # include	<Windows.h>
 # include	<GL\GL.h>
 # include	<GL\GLU.h>

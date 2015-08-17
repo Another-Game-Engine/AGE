@@ -48,7 +48,7 @@ namespace AGE
 
 		inline glm::vec3 RigidBodyInterface::GetDefaultDiagonalInertiaTensor(void)
 		{
-			return glm::vec3();
+			return glm::vec3(1.0f, 1.0f, 1.0f);
 		}
 
 		inline float RigidBodyInterface::GetDefaultMaxAngularVelocity(void)

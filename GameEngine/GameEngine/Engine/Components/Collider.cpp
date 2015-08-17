@@ -17,7 +17,7 @@ namespace AGE
 		SCOPE_profile_cpu_function("Physic");
 
 		assert(collider == nullptr && "Collider already initialized");
-		collider = entity->getScene()->getInstance<Physics::PhysicsInterface>()->getWorld()->createCollider(colliderType, mesh, entity->addComponent<Private::PhysicsData>()->getData());
+		collider = entity->getScene()->getInstance<Physics::PhysicsInterface>()->getWorld()->createCollider(colliderType, mesh, entity->addComponent<Private::PhysicsData>(entity)->getData());
 		collider->collider = this;
 		scale(entity->getLink().getScale());
 	}

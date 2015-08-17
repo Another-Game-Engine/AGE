@@ -15,7 +15,7 @@ namespace AGE
 	void RigidBody::init(void)
 	{
 		assert(rigidBody == nullptr && "RigidBody already initialized");
-		rigidBody = entity->getScene()->getInstance<Physics::PhysicsInterface>()->getWorld()->createRigidBody(entity->addComponent<Private::PhysicsData>()->getData());
+		rigidBody = entity->getScene()->getInstance<Physics::PhysicsInterface>()->getWorld()->createRigidBody(entity->addComponent<Private::PhysicsData>(entity)->getData());
 		rigidBody->rigidBody = this;
 		Link *link = entity.getLinkPtr();
 		setPosition(link->getPosition());
@@ -317,10 +317,10 @@ namespace AGE
 		{
 			ptr->setMass(mass);
 		}
-		//if (ImGui::InputFloat3("Diagonal Inertia Tensor", glm::value_ptr(diagonalInertiaTensor)))
-		//{
-		//	ptr->setDiagonalInertiaTensor(diagonalInertiaTensor);
-		//}
+		if (ImGui::InputFloat3("Diagonal Inertia Tensor", glm::value_ptr(diagonalInertiaTensor)))
+		{
+			ptr->setDiagonalInertiaTensor(diagonalInertiaTensor);
+		}
 		if (ImGui::InputFloat("Max Angular Velocity", &maxAngularVelocity))
 		{
 			ptr->setMaxAngularVelocity(maxAngularVelocity);

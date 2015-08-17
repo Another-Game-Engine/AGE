@@ -96,7 +96,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_SCL_SECURE_NO_WARNINGS;EDITOR_ENABLED;_CRT_SECURE_NO_WARNINGS;AGE_ENABLE_IMGUI;AGE_ENABLE_PROFILING;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NOMINMAX;_SCL_SECURE_NO_WARNINGS;EDITOR_ENABLED;_CRT_SECURE_NO_WARNINGS;AGE_ENABLE_IMGUI;AGE_ENABLE_PROFILING;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MultiProcessorCompilation>false</MultiProcessorCompilation>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <OpenMPSupport>
@@ -132,7 +132,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;EDITOR_ENABLED;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;AGE_ENABLE_IMGUI;AGE_ENABLE_PROFILING;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NOMINMAX;EDITOR_ENABLED;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;AGE_ENABLE_IMGUI;AGE_ENABLE_PROFILING;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4503;4099</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -171,7 +171,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;EDITOR_ENABLED;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NOMINMAX;EDITOR_ENABLED;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4503;4099</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -210,7 +210,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;EDITOR_ENABLED;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;AGE_ENABLE_PROFILING = 1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NOMINMAX;EDITOR_ENABLED;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;AGE_ENABLE_PROFILING = 1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4503;4099</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -531,6 +531,7 @@
     <ClInclude Include="Engine\Physics\MeshColliderInterface.hpp" />
     <ClInclude Include="Engine\Physics\PhysicsInterface.hpp" />
     <ClInclude Include="Engine\Physics\RaycasterInterface.hpp" />
+    <ClInclude Include="Engine\Physics\RaycastHit.hpp" />
     <ClInclude Include="Engine\Physics\RigidBodyInterface.hpp" />
     <ClInclude Include="Engine\Physics\SphereColliderInterface.hpp" />
     <ClInclude Include="Engine\Physics\Trigger.hpp" />
@@ -817,6 +818,7 @@
     <None Include="Engine\Physics\BoxColliderInterface.inl" />
     <None Include="Engine\Physics\CapsuleColliderInterface.inl" />
     <None Include="Engine\Physics\ColliderInterface.inl" />
+    <None Include="Engine\Physics\FilterGroup.inl" />
     <None Include="Engine\Physics\MaterialInterface.inl" />
     <None Include="Engine\Physics\MemoryPoolHelper.inl" />
     <None Include="Engine\Physics\MeshColliderInterface.inl" />

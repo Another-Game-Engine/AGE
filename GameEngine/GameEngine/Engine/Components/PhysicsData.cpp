@@ -7,11 +7,12 @@ namespace AGE
 		void PhysicsData::reset(void)
 		{
 			data.data = nullptr;
+			data.entity = Entity();
 		}
 
-		void PhysicsData::init(void)
+		void PhysicsData::init(Entity entity)
 		{
-			return;
+			data.entity = entity;
 		}
 
 		Physics::Private::GenericData *PhysicsData::getData(void)

@@ -42,6 +42,10 @@ namespace AGE
 		{
 			physx::PxRigidDynamic *body = getDataAs<physx::PxRigidDynamic>();
 			PhysXCollider *collider = static_cast<PhysXCollider *>(body->userData);
+			if (joint != nullptr)
+			{
+				static_cast<physx::PxJoint *>(joint)->release();
+			}
 			if (collider == nullptr || static_cast<void *>(collider) == this)
 			{
 				static_cast<PhysXWorld *>(getWorld())->getScene()->removeActor(*body);

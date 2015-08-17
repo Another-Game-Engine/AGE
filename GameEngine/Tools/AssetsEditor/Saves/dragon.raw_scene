@@ -118,7 +118,9 @@
             "flags": 0,
             "components_number": [
                 0,
-                1
+                1,
+                2,
+                9
             ],
             "archetypesDependency": [],
             "AGE_CORE_EntityRepresentationComponent": {
@@ -132,6 +134,54 @@
                 "value3": {
                     "type": 0,
                     "data": 16
+                }
+            },
+            "AGE_CORE_RigidBody": {
+                "cereal_class_version": 1,
+                "AngularDrag": 1,
+                "AngularVelocity": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "CenterOfMass": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "LinearDrag": 1,
+                "LinearVelocity": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Mass": 1,
+                "DiagonalInertiaTensor": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "MaxAngularVelocity": 1000000,
+                "MaxDepenetrationVelocity": 1000000,
+                "IsAffectedByGravity": false,
+                "IsKinematic": true,
+                "CollisionDetectionMode": 1
+            },
+            "AGE_CORE_PhysicsCollider": {
+                "cereal_class_version": 1,
+                "ColliderType": 0,
+                "Material": "DefaultMaterial",
+                "IsATrigger": false,
+                "FilterGroup": 0,
+                "Center": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Size": {
+                    "value0": 80.616996765136719,
+                    "value1": 55.927001953125,
+                    "value2": 0.2070000022649765
                 }
             }
         },

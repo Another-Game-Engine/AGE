@@ -95,8 +95,9 @@ namespace AGE
 
 		glm::vec3 BulletRigidBody::getCenterOfMass(void) const
 		{
+			const btVector3 &position = getDataAs<btRigidBody>()->getWorldTransform().getOrigin();
 			const btVector3 &centerOfMass = getDataAs<btRigidBody>()->getCenterOfMassPosition();
-			return glm::vec3(centerOfMass.x(), centerOfMass.y(), centerOfMass.z());
+			return glm::vec3(centerOfMass.x() - position.x(), centerOfMass.y() - position.y(), centerOfMass.z() - position.z());
 		}
 
 		void BulletRigidBody::setLinearDrag(float linearDrag)
@@ -225,14 +226,14 @@ namespace AGE
 			return (body->getCollisionFlags() & btCollisionObject::CF_KINEMATIC_OBJECT) && body->getActivationState() == DISABLE_DEACTIVATION;
 		}
 
-		void BulletRigidBody::setCollisionDetectionMode(CollisionDetectionMode collisionDetectionMode)
+		void BulletRigidBody::setCollisionDetectionMode(CollisionDetectionMode newCollisionDetectionMode)
 		{
-			return;
+			collisionDetectionMode = newCollisionDetectionMode;
 		}
 
 		CollisionDetectionMode BulletRigidBody::getCollisionDetectionMode(void) const
 		{
-			return CollisionDetectionMode::Continuous;
+			return collisionDetectionMode;
 		}
 
 		void BulletRigidBody::addForce(const glm::vec3 &force, ForceMode forceMode)
