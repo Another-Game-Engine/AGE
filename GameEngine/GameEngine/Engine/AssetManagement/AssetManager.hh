@@ -146,6 +146,7 @@ static std::pair<std::pair<GLenum, std::string>, std::function<void(Vertices &ve
 		std::shared_ptr<AnimationData> getAnimation(const OldFile &filePath);
 		bool loadSkeleton(const OldFile &filePath, const std::string &loadingChannel = "");
 		std::shared_ptr<Skeleton> getSkeleton(const OldFile &filePath);
+		bool reloadMaterial(const OldFile &filePath, const std::string &loadingChannel = "");
 		bool loadMaterial(const OldFile &filePath, const std::string &loadingChannel = "");
 		std::shared_ptr<MaterialSetInstance> getMaterial(const OldFile &filePath);
 		std::shared_ptr<MeshInstance> getMesh(const OldFile &filePath);
@@ -159,18 +160,14 @@ static std::pair<std::pair<GLenum, std::string>, std::function<void(Vertices &ve
 		void pushNewCallback(const std::string &loadingChannel, AScene *currentScene, std::function<void()> &callback);
 		std::shared_ptr<Texture2D> const &getPointLightTexture();
 		std::shared_ptr<Texture2D> const &getSpotLightTexture();
-		bool meshRequiresDataReload(const OldFile &filePath);
-		bool materialRequiresDataReload(const OldFile &filePath);
-		void requireMeshReload(const OldFile &filePath);
-		void requireMaterialReload(const OldFile &filePath);
 
 private:
 		std::string _assetsDirectory;
 		std::map<std::bitset<MeshInfos::END>, Key<Painter>, BitsetComparer> _painters;
-		std::map<std::string, std::pair<bool, std::shared_ptr<MeshInstance>>> _meshs;
+		std::map<std::string, std::shared_ptr<MeshInstance>> _meshs;
 		std::map<std::string, std::shared_ptr<Skeleton>> _skeletons;
 		std::map<std::string, std::shared_ptr<AnimationData>> _animations;
-		std::map<std::string, std::pair<bool, std::shared_ptr<MaterialSetInstance>>> _materials;
+		std::map<std::string, std::shared_ptr<MaterialSetInstance>> _materials;
 		std::map<std::string, std::shared_ptr<ITexture>> _textures;
 		std::map<std::string, std::shared_ptr<TextureCubeMap>> _cubeMaps;
 		std::map<std::string, std::shared_ptr<AssetsLoadingChannel>> _loadingChannels;

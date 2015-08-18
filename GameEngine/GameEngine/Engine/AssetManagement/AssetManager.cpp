@@ -54,46 +54,8 @@ namespace AGE
 		std::lock_guard<std::mutex> lock(_mutex);
 
 		if (_meshs.find(filePath.getFullName()) != std::end(_meshs))
-			return _meshs[filePath.getFullName()].second;
+			return _meshs[filePath.getFullName()];
 		return nullptr;
-	}
-
-	bool AssetsManager::meshRequiresDataReload(const OldFile &_filePath)
-	{
-		OldFile filePath(_assetsDirectory + _filePath.getFullName());
-		std::lock_guard<std::mutex> lock(_mutex);
-
-		if (_meshs.find(filePath.getFullName()) != std::end(_meshs))
-			return _meshs[filePath.getFullName()].first;
-		return false;
-	}
-
-	bool AssetsManager::materialRequiresDataReload(const OldFile &_filePath)
-	{
-		OldFile filePath(_assetsDirectory + _filePath.getFullName());
-		std::lock_guard<std::mutex> lock(_mutex);
-
-		if (_materials.find(filePath.getFullName()) != std::end(_materials))
-			return _materials[filePath.getFullName()].first;
-		return false;
-	}
-
-	void AssetsManager::requireMaterialReload(const OldFile &_filePath)
-	{
-		OldFile filePath(_assetsDirectory + _filePath.getFullName());
-		std::lock_guard<std::mutex> lock(_mutex);
-
-		if (_materials.find(filePath.getFullName()) != std::end(_materials))
-			_materials[filePath.getFullName()].first = true;
-	}
-
-	void AssetsManager::requireMeshReload(const OldFile &_filePath)
-	{
-		OldFile filePath(_assetsDirectory + _filePath.getFullName());
-		std::lock_guard<std::mutex> lock(_mutex);
-
-		if (_meshs.find(filePath.getFullName()) != std::end(_meshs))
-			_meshs[filePath.getFullName()].first = true;
 	}
 
 	std::shared_ptr<MaterialSetInstance> AssetsManager::getMaterial(const OldFile &_filePath)
@@ -103,9 +65,109 @@ namespace AGE
 
 		if (_materials.find(filePath.getFullName()) != std::end(_materials)) 
 		{
-			return _materials[filePath.getFullName()].second;
+			return _materials[filePath.getFullName()];
 		}
 		return nullptr;
+	}
+
+	bool AssetsManager::reloadMaterial(const OldFile &_filePath, const std::string &loadingChannel)
+	{
+		OldFile filePath(_assetsDirectory + _filePath.getFullName());
+		//get the material adaptered if not return false
+		auto it_material = _materials.find(filePath.getFullName());
+		if (it_material == _materials.end()) {
+			return false;
+		}
+		auto &material = it_material->second;
+		//erase its data
+		material->datas.clear();
+		//reload it
+		auto future = AGE::EmplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]()
+		{
+			SCOPE_profile_cpu_i("AssetsLoad", "LoadMaterial");
+			if (!filePath.exists())
+			{
+				return AssetsLoadingResult(true, std::string("AssetsManager : Mesh File [" + filePath.getFullName() + "] does not exists.\n"));
+			}
+			std::shared_ptr<MaterialDataSet> material_data_set = std::make_shared<MaterialDataSet>();
+			std::ifstream ifs(filePath.getFullName(), std::ios::binary);
+			cereal::PortableBinaryInputArchive ar(ifs);
+			ar(*material_data_set.get());
+			material->name = material_data_set->name;
+			material->path = _filePath.getFullName();
+			for (auto &material_data : material_data_set->collection)
+			{
+
+				material->datas.push_back(MaterialInstance());
+				auto &materialSubset = material->datas.back();
+
+				auto &shininess = std::make_shared<Ratio>("shininess");
+				materialSubset._properties.push_back(shininess);
+				shininess->set(material_data.shininess);
+
+				auto diffuse = std::make_shared<Color>("diffuse");
+				materialSubset._properties.push_back(diffuse);
+				diffuse->set(material_data.diffuse);
+
+				auto ambient = std::make_shared<Color>("ambient");
+				materialSubset._properties.push_back(ambient);
+				ambient->set(material_data.ambient);
+
+				auto emissive = std::make_shared<Color>("emissive");
+				materialSubset._properties.push_back(emissive);
+				emissive->set(material_data.emissive);
+
+				auto reflective = std::make_shared<Color>("reflective");
+				materialSubset._properties.push_back(reflective);
+				reflective->set(material_data.reflective);
+
+				auto specular = std::make_shared<Color>("specular");
+				materialSubset._properties.push_back(specular);
+				specular->set(material_data.specular);
+
+				auto normalTex = std::make_shared<MapColor>("normal");
+				materialSubset._properties.push_back(normalTex);
+				auto normalTexPtr = std::static_pointer_cast<Texture2D>(loadTexture(material_data.normalTexPath, loadingChannel));
+				normalTex->set(normalTexPtr);
+
+				auto diffuseTex = std::make_shared<MapColor>("diffuse");
+				materialSubset._properties.push_back(diffuseTex);
+				auto diffuseTexPtr = std::static_pointer_cast<Texture2D>(loadTexture(material_data.diffuseTexPath, loadingChannel));
+				if (diffuseTexPtr == nullptr)
+				{
+					diffuseTexPtr = std::static_pointer_cast<Texture2D>(loadTexture("ambiant_default.dds", loadingChannel));
+				}
+				diffuseTex->set(diffuseTexPtr);
+
+				auto ambientTex = std::make_shared<MapColor>("ambient");
+				materialSubset._properties.push_back(ambientTex);
+				auto ambientTexPtr = std::static_pointer_cast<Texture2D>(loadTexture(material_data.ambientTexPath, loadingChannel));
+				ambientTex->set(ambientTexPtr);
+
+				auto emissiveTex = std::make_shared<MapColor>("emissive");
+				materialSubset._properties.push_back(emissiveTex);
+				auto emissiveTexPtr = std::static_pointer_cast<Texture2D>(loadTexture(material_data.emissiveTexPath, loadingChannel));
+				emissiveTex->set(emissiveTexPtr);
+
+				auto reflectiveTex = std::make_shared<MapColor>("reflective");
+				materialSubset._properties.push_back(reflectiveTex);
+				auto reflectiveTexPtr = std::static_pointer_cast<Texture2D>(loadTexture(material_data.reflectiveTexPath, loadingChannel));
+				reflectiveTex->set(reflectiveTexPtr);
+
+				auto specularTex = std::make_shared<MapColor>("specular");
+				materialSubset._properties.push_back(specularTex);
+				auto specularTexPtr = std::static_pointer_cast<Texture2D>(loadTexture(material_data.specularTexPath, loadingChannel));
+				specularTex->set(specularTexPtr);
+
+				auto scaleUVs = std::make_shared<ScaleUVs>();
+				materialSubset._properties.push_back(scaleUVs);
+				scaleUVs->set(material_data.scaleUVs);
+			}
+			material->_valid = true;
+			return AssetsLoadingResult(false);
+		});
+		pushNewAsset(loadingChannel, _filePath.getFullName(), future);
+		return true;
 	}
 
 	bool AssetsManager::loadMaterial(const OldFile &_filePath, const std::string &loadingChannel)
@@ -118,7 +180,7 @@ namespace AGE
 			{
 				return (true);
 			}
-			_materials.insert(std::make_pair(filePath.getFullName(), std::make_pair(false, material)));
+			_materials.insert(std::make_pair(filePath.getFullName(), material));
 		}
 		auto future = AGE::EmplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]()
 		{
@@ -370,7 +432,7 @@ namespace AGE
 			{
 				return (true);
 			}
-			_meshs.insert(std::make_pair(filePath.getFullName(), std::make_pair(false, meshInstance)));
+			_meshs.insert(std::make_pair(filePath.getFullName(), meshInstance));
 		}
 		auto future = AGE::EmplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]()
 		{

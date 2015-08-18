@@ -193,8 +193,8 @@ namespace AGE
 			std::ofstream file(absPath + _current.name + ".mage", std::ios::trunc | std::ios::binary);
 			cereal::PortableBinaryOutputArchive ar(file);
 			ar(_current);
-			_world_editor->getInstance<AssetsManager>()->requireMaterialReload(_current.name + ".mage");
-			std::cout << "Material update :" << _current.name + ".mage" << std::endl;
+			//_world_editor->getInstance<AssetsManager>()->requireMaterialReload(_current.name + ".mage");
+			_world_editor->getInstance<AssetsManager>()->reloadMaterial(_current.name + ".mage");
 		}
 	}
 

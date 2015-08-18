@@ -146,7 +146,6 @@ namespace AGE
 	{
 		auto scene = entity->getScene();
 
-		std::cout << "post uncereal -> " << _meshPath << std::endl;
 		auto meshptr = scene->getInstance<AGE::AssetsManager>()->getMesh(_meshPath);
 		if (!_meshPath.empty() && (!meshptr || !meshptr->isValid()))
 		{
