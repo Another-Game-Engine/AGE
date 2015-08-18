@@ -65,9 +65,24 @@ namespace AGE
 
 		if (_materials.find(filePath.getFullName()) != std::end(_materials)) 
 		{
-			return _materials[filePath.getFullName()];
+			return _materials[filePath.getFullName()].second;
 		}
 		return nullptr;
+	}
+	
+	bool AssetsManager::material_was_reloaded(const OldFile &_filePath) const
+	{
+		OldFile filePath(_assetsDirectory + _filePath.getFullName());
+		//get the material adaptered if not return false
+		auto &it_material = _materials.find(filePath.getFullName());
+		if (it_material == _materials.end()) {
+			return false;
+		}
+		if (*it_material->second.first == true) {
+			*it_material->second.first = false;
+			return true;
+		}
+		return false;
 	}
 
 	bool AssetsManager::reloadMaterial(const OldFile &_filePath, const std::string &loadingChannel)
@@ -79,9 +94,7 @@ namespace AGE
 			return false;
 		}
 		auto &material = it_material->second;
-		//erase its data
-		material->datas.clear();
-		//reload it
+		material.second->datas.clear();
 		auto future = AGE::EmplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]()
 		{
 			SCOPE_profile_cpu_i("AssetsLoad", "LoadMaterial");
@@ -93,13 +106,13 @@ namespace AGE
 			std::ifstream ifs(filePath.getFullName(), std::ios::binary);
 			cereal::PortableBinaryInputArchive ar(ifs);
 			ar(*material_data_set.get());
-			material->name = material_data_set->name;
-			material->path = _filePath.getFullName();
+			material.second->name = material_data_set->name;
+			material.second->path = _filePath.getFullName();
 			for (auto &material_data : material_data_set->collection)
 			{
 
-				material->datas.push_back(MaterialInstance());
-				auto &materialSubset = material->datas.back();
+				material.second->datas.push_back(MaterialInstance());
+				auto &materialSubset = material.second->datas.back();
 
 				auto &shininess = std::make_shared<Ratio>("shininess");
 				materialSubset._properties.push_back(shininess);
@@ -163,7 +176,8 @@ namespace AGE
 				materialSubset._properties.push_back(scaleUVs);
 				scaleUVs->set(material_data.scaleUVs);
 			}
-			material->_valid = true;
+			material.second->_valid = true;
+			*material.first = true;
 			return AssetsLoadingResult(false);
 		});
 		pushNewAsset(loadingChannel, _filePath.getFullName(), future);
@@ -180,7 +194,7 @@ namespace AGE
 			{
 				return (true);
 			}
-			_materials.insert(std::make_pair(filePath.getFullName(), material));
+			_materials.insert(std::make_pair(filePath.getFullName(), std::make_pair(std::make_shared<bool>(true), material)));
 		}
 		auto future = AGE::EmplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]()
 		{
