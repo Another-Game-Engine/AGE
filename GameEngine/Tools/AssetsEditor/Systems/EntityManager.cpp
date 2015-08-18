@@ -117,10 +117,9 @@ namespace AGE
 				}
 
 				{
-					EntityFilter mesh_renderer(_scene);
-					EntityFilter::Lock lock(mesh_renderer);
-					mesh_renderer.requireComponent<MeshRenderer>();
-					for (auto mesh : mesh_renderer.getCollection()) {
+					EntityFilter::Lock lock(_meshRenderers);
+					_meshRenderers.requireComponent<MeshRenderer>();
+					for (auto mesh : _meshRenderers.getCollection()) {
 						auto r = mesh->getComponent<MeshRenderer>();
 						r->reload_material();
 					}
