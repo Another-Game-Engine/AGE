@@ -116,12 +116,15 @@ namespace AGE
 					_selectedEntity = nullptr;
 				}
 
-				//EntityFilter mesh_renderer(_scene);
-				//mesh_renderer.requireComponent<MeshRenderer>();
-				//for (auto mesh : mesh_renderer.getCollection()) {
-				//	auto r = mesh->getComponent<MeshRenderer>();
-				//	r->reload_material();
-				//}
+				{
+					EntityFilter mesh_renderer(_scene);
+					EntityFilter::Lock lock(mesh_renderer);
+					mesh_renderer.requireComponent<MeshRenderer>();
+					for (auto mesh : mesh_renderer.getCollection()) {
+						auto r = mesh->getComponent<MeshRenderer>();
+						r->reload_material();
+					}
+				}
 
 				if (_saveScene)
 				{
