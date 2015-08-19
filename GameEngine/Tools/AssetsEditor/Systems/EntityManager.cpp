@@ -115,7 +115,6 @@ namespace AGE
 					_reloadScene = false;
 					_selectedEntity = nullptr;
 				}
-
 				{
 					EntityFilter::Lock lock(_meshRenderers);
 					_meshRenderers.requireComponent<MeshRenderer>();

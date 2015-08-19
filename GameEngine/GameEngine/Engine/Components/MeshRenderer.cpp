@@ -142,15 +142,18 @@ namespace AGE
 		}
 	}
 
-	void MeshRenderer::reload_material() {
+	bool MeshRenderer::reload_material() {
 		if (_material) {
+			auto scene = entity->getScene();
 			if (entity->getScene()->getInstance<AGE::AssetsManager>()->material_was_reloaded(_materialPath)) {
 				if (_mesh && _material)
 				{
 					setMeshAndMaterial(_mesh, _material);
+					return true;
 				}
 			}
 		}
+		return false;
 	}
 
 	void MeshRenderer::postUnserialization()
