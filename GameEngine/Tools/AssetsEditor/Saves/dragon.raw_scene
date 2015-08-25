@@ -139,7 +139,7 @@
             "link": {
                 "Position": {
                     "value0": 0,
-                    "value1": 4,
+                    "value1": 1,
                     "value2": 5
                 },
                 "Scale": {
@@ -255,7 +255,7 @@
                 "value2": "",
                 "value3": {
                     "type": 0,
-                    "data": 0
+                    "data": 16
                 }
             }
         },

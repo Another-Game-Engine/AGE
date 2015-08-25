@@ -27,7 +27,7 @@ namespace AGE
 	void RotationSystem::mainUpdate(float time)
 	{
 		auto &collection = _filter.getCollection();
-		for (auto e : collection)
+		for (auto &e : collection)
 		{
 
 			glm::vec3 rotation = e->getComponent<RotationComponent>()->_angles;

@@ -3,6 +3,7 @@
 #include <imgui/imgui.h>
 #include <glm/gtc/type_ptr.hpp>
 #endif
+#include <glm/glm.hpp>
 
 namespace AGE
 {

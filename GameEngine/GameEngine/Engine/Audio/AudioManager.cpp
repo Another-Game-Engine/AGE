@@ -1,3 +1,4 @@
+/*
 #include <Audio/AudioManager.hh>
 #include <cassert>
 #include <iostream>
@@ -143,3 +144,4 @@ FMOD::ChannelGroup *AudioManager::getChannelGroup(ChannelGroupType type)
 	assert(_channelGroups.find(type) != std::end(_channelGroups) && "Channel goup not found.");
 	return _channelGroups[type];
 }
+*/

@@ -35,7 +35,7 @@ namespace AGE
 
 		if (_cameras.getCollection().size() < _cameraAngles.size())
 			_cameraAngles.resize(_cameras.getCollection().size());
-		for (auto cam : _cameras.getCollection())
+		for (auto &cam : _cameras.getCollection())
 		{
 			auto &camLink = cam->getLink();
 

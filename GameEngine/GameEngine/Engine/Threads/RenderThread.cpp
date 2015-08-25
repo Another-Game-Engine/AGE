@@ -32,7 +32,7 @@ namespace AGE
 		pipelines(RenderType::TOTAL)
 	{
 		_imguiRenderlist = nullptr;
-		_isDrawing = false;
+		_frameCounter = 0;
 	}
 
 	RenderThread::~RenderThread()
@@ -372,7 +372,7 @@ namespace AGE
 			}
 
 			MicroProfileFlip();
-			_isDrawing = false;
+			++_frameCounter;
 		});
 
 		registerCallback<Tasks::Render::ReloadShaders>([&](Tasks::Render::ReloadShaders& msg)
@@ -694,15 +694,4 @@ namespace AGE
 		_imguiRenderlist = list;
 	}
 #endif
-
-	bool RenderThread::isDrawing() const
-	{
-		return _isDrawing;
-	}
-
-	void RenderThread::setIsDrawingToTrue()
-	{
-		AGE_ASSERT(CurrentThread() == (AGE::Thread*)GetMainThread());
-		_isDrawing = true;
-	}
 }
