@@ -20,6 +20,11 @@ namespace AGE
 		return _collection;
 	}
 
+	const std::set<Entity> &EntityFilter::getCollection() const
+	{
+		return _collection;
+	}
+
 	void EntityFilter::requireComponent(ComponentType typeId)
 	{
 		_barcode.insert(typeId);

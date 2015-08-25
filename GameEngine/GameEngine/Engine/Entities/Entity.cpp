@@ -163,7 +163,7 @@ namespace AGE
 		return &ptr->getEntity();
 	}
 
-	const Entity *Entity::getPtr() const
+	Entity *Entity::getPtr() const
 	{
 		return &ptr->getEntity();
 	}
@@ -173,7 +173,7 @@ namespace AGE
 		return &ptr->getLink();
 	}
 
-	const AGE::Link *Entity::getLinkPtr() const
+	AGE::Link *Entity::getLinkPtr() const
 	{
 		return &ptr->getLink();
 	}

@@ -38,12 +38,12 @@ namespace AGE
 		bool operator<=(const Entity &o) const;
 		bool operator>(const Entity &o) const;
 		bool operator>=(const Entity &o) const;
-		const EntityData *operator->() const { return ptr; }
+		EntityData *operator->() const { return ptr; }
 		EntityData *operator->() { return ptr; }
 
-		const AGE::Link *getLinkPtr() const;
+		AGE::Link *getLinkPtr() const;
 		AGE::Link *getLinkPtr();
-		const AGE::Entity *getPtr() const;
+		AGE::Entity *getPtr() const;
 		AGE::Entity *getPtr();
 		EntityData *getDataPtr() { return ptr; }
 
@@ -72,7 +72,7 @@ namespace AGE
 			return id != MAX_ENTITY_NUMBER && ptr != nullptr;
 		}
 	private:
-		EntityData *ptr;
+		mutable EntityData *ptr;
 		ENTITY_ID id;
 		ENTITY_VERSION version;
 		ENTITY_FLAGS flags;

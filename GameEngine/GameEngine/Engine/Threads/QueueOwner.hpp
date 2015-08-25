@@ -32,6 +32,7 @@ namespace AGE
 		}
 
 		bool execute(TMQ::MessageBase *task);
+		void computeTasksWhile(std::function<bool()> &condition);
 	protected:
 		TMQ::HybridQueue _queue;
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Frustum.hh"
+#include <glm/glm.hpp>
 
 namespace AGE
 {

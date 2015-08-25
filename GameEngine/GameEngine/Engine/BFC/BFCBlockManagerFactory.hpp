@@ -24,6 +24,9 @@ namespace AGE
 		void deleteItem(const BFCCullableHandle &handle);
 		BFCItem &getItem(const BFCItemID &id);
 		void cullOnChannel(CullableTypeID channel, LFList<BFCItem> &result, const Frustum &frustum);
+		void cullOnBlock(CullableTypeID channel, LFList<BFCItem> &result, const Frustum &frustum, std::size_t blockId);
+		// return the number of block to treat (each in on job)
+		std::size_t getBlockNumberToCull(CullableTypeID channel) const;
 	private:
 		std::vector<BFCBlockManager> _managers;
 	};

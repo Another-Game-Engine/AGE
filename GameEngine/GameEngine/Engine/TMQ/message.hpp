@@ -49,7 +49,8 @@ namespace TMQ
 		T _data;
 
 		virtual ~Message()
-		{}
+		{
+		}
 
 		static std::size_t getId()
 		{

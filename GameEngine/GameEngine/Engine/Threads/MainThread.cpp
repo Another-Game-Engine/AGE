@@ -19,7 +19,8 @@ namespace AGE
 			if (msg.function)
 				msg.function();
 		});
-		_isRenderFrame = false;
+		_isRenderFrame = true;
+		_frameCounter = 0;
 		return true;
 	}
 
@@ -41,18 +42,13 @@ namespace AGE
 
 		workStart = std::chrono::high_resolution_clock::now();
 
-		if (GetRenderThread()->isDrawing())
+		if (_frameCounter - GetRenderThread()->getCurrentFrameCount() > 2)
 		{
 			_isRenderFrame = false;
 		}
 		else
 		{
 			_isRenderFrame = true;
-		}
-
-		if (_isRenderFrame)
-		{
-			GetRenderThread()->setIsDrawingToTrue();
 		}
 
 		if (!_engine->update())
@@ -87,6 +83,11 @@ namespace AGE
 		GetThreadManager()->updateThreadStatistics(this->_id
 			, workCount
 			, waitCount);
+		
+		if (_isRenderFrame)
+		{
+			++_frameCounter;
+		}
 
 		return true;
 	}

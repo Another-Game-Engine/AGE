@@ -56,6 +56,9 @@ namespace AGE
 #endif
 		inline float getCutOff() const { return cutOff; }
 		inline float getExponent() const { return exponent; }
+
+		glm::mat4 updateShadowMatrix();
+
 	private:
 		glm::vec4 color;
 		glm::vec3 range;

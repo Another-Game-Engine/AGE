@@ -111,6 +111,7 @@ namespace AGE
 		struct EditorStruct final
 		{
 			// Attributes
+			Physics::ColliderType currentType = Physics::ColliderType::Box;
 
 			// Methods
 			void copyDatas(Collider *ptr);
