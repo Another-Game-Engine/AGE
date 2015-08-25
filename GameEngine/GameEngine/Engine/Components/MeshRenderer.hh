@@ -43,6 +43,7 @@ namespace AGE
 			const std::shared_ptr<AGE::MaterialSetInstance> &_material);
 		std::shared_ptr<AGE::MeshInstance> getMesh();
 		std::shared_ptr<AGE::MaterialSetInstance> getMaterial();
+		bool reload_material();
 
 		void enableRenderMode(RenderModes mode);
 		void disableRenderMode(RenderModes mode);

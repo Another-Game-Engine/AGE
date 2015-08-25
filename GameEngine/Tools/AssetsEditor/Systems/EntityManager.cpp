@@ -97,7 +97,6 @@ namespace AGE
 
 			void EntityManager::mainUpdate(float time)
 			{
-
 				if (_reloadScene)
 				{
 					_scene->clearAllEntities();
@@ -115,6 +114,14 @@ namespace AGE
 					pack.loadFromFile(sceneFileName);
 					_reloadScene = false;
 					_selectedEntity = nullptr;
+				}
+				{
+					EntityFilter::Lock lock(_meshRenderers);
+					_meshRenderers.requireComponent<MeshRenderer>();
+					for (auto mesh : _meshRenderers.getCollection()) {
+						auto r = mesh->getComponent<MeshRenderer>();
+						r->reload_material();
+					}
 				}
 
 				if (_saveScene)
@@ -432,8 +439,6 @@ namespace AGE
 						_gizmoEntity.getLinkPtr()->attachParent(_selectedEntity->getLinkPtr());
 						_gizmoEntity->addComponent<MeshRenderer>(_gizmoMesh, _gizmoMaterial);
 					}
-
-
 					_lastFrameSelectedEntity = _selectedEntity;
 				}
 

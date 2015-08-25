@@ -100,7 +100,7 @@ int			main(int ac, char **av)
 		engine->addScene(std::make_shared<AGE::MainMenuScene>(engine), AGE::MainMenuScene::Name);
 		engine->addScene(std::make_shared<AGE::AssetsEditorScene>(engine), AGE::AssetsEditorScene::Name);
 		engine->addScene(std::make_shared<AGE::WorldEditorScene>(engine), AGE::WorldEditorScene::Name);
-		engine->addScene(std::make_shared<AGE::MaterialEditorScene>(engine), AGE::MaterialEditorScene::Name);
+		engine->addScene(std::make_shared<AGE::MaterialEditorScene>(engine, std::static_pointer_cast<AGE::WorldEditorScene>(engine->getScene(AGE::WorldEditorScene::Name))), AGE::MaterialEditorScene::Name);
 		if (!engine->initScene(AGE::MainMenuScene::Name))
 			return false;
 		if (!engine->initScene(AGE::AssetsEditorScene::Name))
