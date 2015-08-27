@@ -58,7 +58,7 @@ PROJECT_LOGO           =
 # entered, it will be relative to the location where doxygen was started. If
 # left blank the current directory will be used.
 
-OUTPUT_DIRECTORY       = C:/Users/AGE/Documents/GitHub/AGE/GameEngine/Documentation/configuration
+OUTPUT_DIRECTORY       = ../html
 
 # If the CREATE_SUBDIRS tag is set to YES, then doxygen will create 4096 sub-
 # directories (in 2 levels) under the output directory of each output format and
@@ -1052,7 +1052,7 @@ GENERATE_HTML          = YES
 # The default directory is: html.
 # This tag requires that the tag GENERATE_HTML is set to YES.
 
-HTML_OUTPUT            = C:/Users/AGE/Documents/GitHub/AGE/GameEngine/Documentation/html
+HTML_OUTPUT            = ../html
 
 # The HTML_FILE_EXTENSION tag can be used to specify the file extension for each
 # generated HTML page (for example: .htm, .php, .asp).
@@ -1595,7 +1595,7 @@ GENERATE_LATEX         = NO
 # The default directory is: latex.
 # This tag requires that the tag GENERATE_LATEX is set to YES.
 
-LATEX_OUTPUT           = C:/Users/AGE/Documents/GitHub/AGE/GameEngine/Documentation/LaTeX
+LATEX_OUTPUT           = ../latex
 
 # The LATEX_CMD_NAME tag can be used to specify the LaTeX command name to be
 # invoked.
@@ -1870,7 +1870,7 @@ GENERATE_DOCBOOK       = NO
 # The default directory is: docbook.
 # This tag requires that the tag GENERATE_DOCBOOK is set to YES.
 
-DOCBOOK_OUTPUT         = C:/Users/AGE/Documents/GitHub/AGE/GameEngine/Documentation/Docbook
+DOCBOOK_OUTPUT         = ../docbook
 
 # If the DOCBOOK_PROGRAMLISTING tag is set to YES doxygen will include the
 # program listings (including syntax highlighting and cross-referencing
