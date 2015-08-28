@@ -77,7 +77,6 @@ namespace AGE
 		OpenGLState::glStencilFunc(GL_LEQUAL, 1, 0xFF);
 		OpenGLState::glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
 		OpenGLState::glDepthMask(GL_FALSE);
-		glFinish();
 		{
 			SCOPE_profile_gpu_i("Overhead Pipeline");
 			SCOPE_profile_cpu_i("RenderTimer", "Skybox buffer");
@@ -91,7 +90,6 @@ namespace AGE
 			_programs[PROGRAM_SKYBOX]->get_resource<Vec3>("lighting").set(_lighting);
 		}
 		_painterManager->get_painter(_painterCube)->uniqueDraw(GL_QUADS, _programs[PROGRAM_SKYBOX], Properties(), _cube);
-		glFinish();
 	}
 
 }

@@ -110,6 +110,5 @@ namespace AGE
 
 			_painterManager->get_painter(_quadPainter)->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_LIGHTNING], spotlight->globalProperties, _quad);
 		}
-		glFinish();
 	}
 }

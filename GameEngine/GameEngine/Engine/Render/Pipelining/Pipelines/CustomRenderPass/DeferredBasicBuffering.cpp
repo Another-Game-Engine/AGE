@@ -175,7 +175,6 @@ namespace AGE
 			}
 		}
 #endif
-		glFinish();
 	}
 
 }

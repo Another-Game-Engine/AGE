@@ -37,7 +37,7 @@ namespace AGE
 		std::shared_ptr<DeferredDirectionalLightning> directionalLightning = std::make_shared<DeferredDirectionalLightning>(screen_size, _painter_manager, _normal, _depthStencil, _specular, _lightAccumulation, _shinyAccumulation);
 		_deferredMerging = std::make_shared<DeferredMerging>(screen_size, _painter_manager, _diffuse, _lightAccumulation, _shinyAccumulation);
 		std::shared_ptr<DeferredOnScreen> deferredOnScreen = std::make_shared<DeferredOnScreen>(screen_size, _painter_manager, _diffuse);
-	
+
 		// Debug render passes
 		std::shared_ptr<DebugDrawLines> debugDrawLines = std::make_shared<DebugDrawLines>(screen_size, _painter_manager, _diffuse, _depthStencil);
 		std::shared_ptr<DebugLightBillboards> debugLightBillboards = std::make_shared<DebugLightBillboards>(screen_size, _painter_manager, _diffuse, _depthStencil);
@@ -52,8 +52,8 @@ namespace AGE
 		_rendering_list.emplace_back(spotLightning);
 		_rendering_list.emplace_back(pointLightning);
 		_rendering_list.emplace_back(_deferredMerging);
-		_rendering_list.emplace_back(debugDrawLines);
 		_rendering_list.emplace_back(debugLightBillboards);
+		_rendering_list.emplace_back(debugDrawLines);
 		_rendering_list.emplace_back(deferredOnScreen);
 	}
 
