@@ -7,6 +7,7 @@
 #include <Render/GeometryManagement/Painting/Painter.hh>
 #include <Culling/Output/RenderPipeline.hh>
 #include <Render/ProgramResources/Types/Uniform/Mat4.hh>
+#include <Render/ProgramResources/Types/Uniform/Vec3.hh>
 #include <Render/ProgramResources/Types/Uniform/Sampler/Sampler3D.hh>
 #include <Core/ConfigurationManager.hpp>
 #include <Core/Engine.hh>
@@ -59,6 +60,11 @@ namespace AGE
 		GetRenderThread()->getCube(_cube, _painterCube);
 	}
 
+	void DeferredSkyBox::setSkyboxLighting(glm::vec3 lighting)
+	{
+		_lighting = lighting;
+	}
+
 	void DeferredSkyBox::renderPass(const DRBCameraDrawableList &infos)
 	{
 //@PROUT TODO
@@ -82,6 +88,7 @@ namespace AGE
 			_programs[PROGRAM_SKYBOX]->get_resource<Mat4>("projection").set(infos.cameraInfos.data.projection);
 			_programs[PROGRAM_SKYBOX]->get_resource<Mat4>("view").set(infos.cameraInfos.view);
 			_programs[PROGRAM_SKYBOX]->get_resource<Sampler3D>("skybox").set(infos.cameraInfos.data.texture);
+			_programs[PROGRAM_SKYBOX]->get_resource<Vec3>("lighting").set(_lighting);
 		}
 		_painterManager->get_painter(_painterCube)->uniqueDraw(GL_QUADS, _programs[PROGRAM_SKYBOX], Properties(), _cube);
 		glFinish();
