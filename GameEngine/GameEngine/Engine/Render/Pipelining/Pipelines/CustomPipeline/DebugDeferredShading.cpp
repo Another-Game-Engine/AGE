@@ -1,14 +1,16 @@
 #include <Render/Pipelining/Pipelines/CustomPipeline/DebugDeferredShading.hh>
 #include <Render/Pipelining/Pipelines/CustomRenderPass/DeferredBasicBuffering.hh>
-#include <Render/Pipelining/Pipelines/CustomRenderPass/DeferredDebugBuffering.hh>
 #include <Render/Pipelining/Pipelines/CustomRenderPass/DeferredPointLightning.hh>
 #include <Render/Pipelining/Pipelines/CustomRenderPass/DeferredSpotLightning.hh>
 #include <Render/Pipelining/Pipelines/CustomRenderPass/DeferredDirectionalLightning.hh>
-#include <Render/Pipelining/Pipelines/CustomRenderPass/DebugDrawLines.hh>
 #include <Render/Pipelining/Pipelines/CustomRenderPass/DeferredMerging.hh>
 #include <Render/Pipelining/Pipelines/CustomRenderPass/DeferredShadowBuffering.hh>
 #include <Render/Pipelining/Pipelines/CustomRenderPass/DeferredSkyBox.hh>
 #include <Render/Pipelining/Pipelines/CustomRenderPass/DeferredOnScreen.hh>
+
+#include <Render/Pipelining/Pipelines/CustomRenderPass/DebugDrawLines.hh>
+#include <Render/Pipelining/Pipelines/CustomRenderPass/DebugLightBillboards.hh>
+
 #include <Render/Pipelining/Pipelines/PipelineTools.hh>
 #include <Configuration.hpp>
 
@@ -38,6 +40,7 @@ namespace AGE
 	
 		// Debug render passes
 		std::shared_ptr<DebugDrawLines> debugDrawLines = std::make_shared<DebugDrawLines>(screen_size, _painter_manager, _diffuse, _depthStencil);
+		std::shared_ptr<DebugLightBillboards> debugLightBillboards = std::make_shared<DebugLightBillboards>(screen_size, _painter_manager, _diffuse, _depthStencil);
 
 		// The entry point is the basic buffering pass
 		setAmbient(glm::vec3(0.2f));
@@ -49,6 +52,7 @@ namespace AGE
 		_rendering_list.emplace_back(pointLightning);
 		_rendering_list.emplace_back(_deferredMerging);
 		_rendering_list.emplace_back(debugDrawLines);
+		_rendering_list.emplace_back(debugLightBillboards);
 		_rendering_list.emplace_back(deferredOnScreen);
 	}
 
