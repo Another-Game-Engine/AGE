@@ -84,15 +84,15 @@ namespace AGE
 			OpenGLState::glEnable(GL_CULL_FACE);
 			OpenGLState::glCullFace(GL_BACK);
 			OpenGLState::glDepthMask(GL_TRUE);
-			OpenGLState::glDepthFunc(GL_LEQUAL);
+			OpenGLState::glDepthFunc(GL_LESS);
 			OpenGLState::glDisable(GL_BLEND);
 			OpenGLState::glEnable(GL_DEPTH_TEST);
 			OpenGLState::glClearColor(glm::vec4(0.f, 0.0f, 0.0f, 0.0f));
+			OpenGLState::glClearStencil(1);
 			OpenGLState::glEnable(GL_STENCIL_TEST);
-			OpenGLState::glClearStencil(0);
-			OpenGLState::glStencilFunc(GL_ALWAYS, 0, 0xFFFFFFFF);
-			OpenGLState::glStencilOp(GL_KEEP, GL_KEEP, GL_INCR);
-			glClear(GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+			OpenGLState::glStencilFunc(GL_ALWAYS, 0, 0xFF);
+			OpenGLState::glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 		}
 
 		auto &meshList = (std::list<std::shared_ptr<DRBMeshData>>&)(infos.meshs);
@@ -130,7 +130,7 @@ namespace AGE
 			if (writableBuffer.isValid())
 			{
 				writableBuffer.setMV(infos.cameraInfos.data.projection * infos.cameraInfos.view);
-				glActiveTextureARB(GL_TEXTURE0_ARB);
+				glActiveTexture(GL_TEXTURE0);
 				_depth->bind();
 				glGenerateMipmap(GL_TEXTURE_2D);
 				_depth->get(static_cast<GLint>(mipmapLevel), GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, writableBuffer.getWritableBuffer());

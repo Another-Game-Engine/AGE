@@ -7,5 +7,9 @@ out vec4 color;
 
 void main()
 {
-	color = texture(sprite_light_map, interpolated_texCoord);
+	vec4 billboardColor = texture(sprite_light_map, interpolated_texCoord);
+
+	if (billboardColor.a < 0.5)
+		discard;
+	color = billboardColor;
 }

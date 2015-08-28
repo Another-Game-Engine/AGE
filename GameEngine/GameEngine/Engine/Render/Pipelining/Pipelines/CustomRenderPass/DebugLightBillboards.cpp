@@ -1,4 +1,4 @@
-#include <Render/Pipelining/Pipelines/CustomRenderPass/DeferredDebugBuffering.hh>
+#include <Render/Pipelining/Pipelines/CustomRenderPass/DebugLightBillboards.hh>
 
 #include <memory>
 
@@ -27,8 +27,8 @@ namespace AGE
 		PROGRAM_NBR
 	};
 
-	DeferredDebugBuffering::DeferredDebugBuffering(glm::uvec2 const &screenSize, std::shared_ptr<PaintingManager> painterManager,
-		std::shared_ptr<Texture2D> debugLights,
+	DebugLightBillboards::DebugLightBillboards(glm::uvec2 const &screenSize, std::shared_ptr<PaintingManager> painterManager,
+		std::shared_ptr<Texture2D> diffuse,
 		std::shared_ptr<Texture2D> depth) :
 		FrameBufferRender(screenSize.x, screenSize.y, painterManager)
 	{
@@ -40,7 +40,7 @@ namespace AGE
 		_forbidden[AGE_SKINNED] = true;
 		_forbidden[AGE_SEMI_TRANSPARENT] = true;
 
-		push_storage_output(GL_COLOR_ATTACHMENT0, debugLights);
+		push_storage_output(GL_COLOR_ATTACHMENT0, diffuse);
 		push_storage_output(GL_DEPTH_STENCIL_ATTACHMENT, depth);
 
 		_programs.resize(PROGRAM_NBR);
@@ -52,7 +52,7 @@ namespace AGE
 		}));
 	}
 
-	void DeferredDebugBuffering::renderPass(const DRBCameraDrawableList &infos)
+	void DebugLightBillboards::renderPass(const DRBCameraDrawableList &infos)
 	{
 		//@PROUT TODO
 		{
@@ -61,16 +61,11 @@ namespace AGE
 
 			OpenGLState::glDisable(GL_CULL_FACE);
 			OpenGLState::glDepthMask(GL_TRUE);
-			OpenGLState::glDepthFunc(GL_LEQUAL);
+			OpenGLState::glDepthFunc(GL_LESS);
 			OpenGLState::glDisable(GL_BLEND);
 			OpenGLState::glDisable(GL_STENCIL_TEST);
 			OpenGLState::glEnable(GL_DEPTH_TEST);
-			OpenGLState::glClearColor(glm::vec4(0.f, 0.f, 0.f, 0.f));
-			SCOPE_profile_gpu_i("clear buffer for debug lights");
-			SCOPE_profile_cpu_i("RenderTimer", "clear buffer for debug lights");
-			glClear(GL_COLOR_BUFFER_BIT);
-			OpenGLState::glDepthMask(GL_FALSE);
-
+			OpenGLState::glDepthMask(GL_TRUE);
 			{
 				SCOPE_profile_gpu_i("Overhead Pipeline");
 				SCOPE_profile_cpu_i("RenderTimer", "Overhead Pipeline");

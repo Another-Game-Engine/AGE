@@ -12,6 +12,7 @@ namespace AGE
 {
 
 	class DeferredMerging;
+	class DeferredSkyBox;
 
 	class DebugDeferredShading : public ARenderingPipeline
 	{
@@ -24,17 +25,18 @@ namespace AGE
 
 	public:
 		void setAmbient(glm::vec3 const &ambient);
+		void setSkyboxLighting(glm::vec3 const &lighting);
 		virtual bool isDebug() const { return true; }
 
 	private:
 		std::shared_ptr<Texture2D> _depthStencil;
 		std::shared_ptr<Texture2D> _diffuse;
-		std::shared_ptr<Texture2D> _debugLights;
 		std::shared_ptr<Texture2D> _normal;
 		std::shared_ptr<Texture2D> _specular;
 		std::shared_ptr<Texture2D> _lightAccumulation;
 		std::shared_ptr<Texture2D> _shinyAccumulation;
 		std::shared_ptr<DeferredMerging> _deferredMerging;
+		std::shared_ptr<DeferredSkyBox> _deferredSkybox;
 	};
 
 }
