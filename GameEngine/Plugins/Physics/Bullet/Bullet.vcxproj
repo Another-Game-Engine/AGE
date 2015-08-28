@@ -237,9 +237,6 @@
     <ProjectReference Include="..\..\..\GameEngine\GameEngine.vcxproj">
       <Project>{e24d022c-e33b-47a1-bbb4-33666c76dda9}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\SpacePartitioning\SpacePartitioning.vcxproj">
-      <Project>{ff05acc8-441b-4e65-866c-fe72a1cde27d}</Project>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

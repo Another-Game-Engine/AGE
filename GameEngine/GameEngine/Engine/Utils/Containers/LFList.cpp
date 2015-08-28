@@ -22,8 +22,19 @@ namespace AGE
 
 		while (true)
 		{
-			Data datas = _datas;
-			Data oldDatas = _datas;
+			Data datas;
+			while (true)
+			{
+				datas = _datas;
+				__int64 cr[2];
+				cr[0] = (__int64)datas.size; /* low */
+				cr[1] = (__int64)datas.head; /* high */
+				if (_InterlockedCompareExchange128(&_datas.size, (__int64)datas.head, datas.size, &cr[0]) == 1)
+				{
+					break;
+				}
+			}
+			Data oldDatas = datas;
 
 			*(std::size_t*)(elementNext) = (std::size_t)datas.head;
 			AGE_ASSERT((std::size_t)(elementNext) % 8 == 0);

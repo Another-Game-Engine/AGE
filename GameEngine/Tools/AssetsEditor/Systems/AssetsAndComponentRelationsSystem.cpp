@@ -28,14 +28,14 @@ namespace AGE
 
 		void AssetsAndComponentRelationsSystem::mainUpdate(float time)
 		{
-			for (auto e : _meshRenderer.getCollection())
+			for (auto &e : _meshRenderer.getCollection())
 			{
 				e->getComponent<MeshRenderer>()->meshFileList = &AssetsEditorScene::getCookedMeshsList();
 				e->getComponent<MeshRenderer>()->meshPathList = &AssetsEditorScene::getCookedMeshsListFullPath();
 				e->getComponent<MeshRenderer>()->materialFileList = &AssetsEditorScene::getCookedMaterialList();
 				e->getComponent<MeshRenderer>()->materialPathList = &AssetsEditorScene::getCookedMaterialListFullPath();
 			}
-			for (auto e : _rigidBodies.getCollection())
+			for (auto &e : _rigidBodies.getCollection())
 			{
 				/*e->getComponent<RigidBody>()->shapeFileList = &AssetsEditorScene::getCookedBulletList();
 				e->getComponent<RigidBody>()->shapePathList = &AssetsEditorScene::getCookedBulletListFullPath();*/

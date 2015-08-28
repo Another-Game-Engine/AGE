@@ -31,6 +31,12 @@
 #include <Render/OcclusionTools/DepthMapManager.hpp>
 #include <Render/OcclusionTools/DepthMapHandle.hpp>
 
+#include <Threads/TaskScheduler.hpp>
+#include <Threads/Tasks/BasicTasks.hpp>
+
+//temp
+#include <chrono>
+
 namespace AGE
 {
 	RenderCameraSystem::RenderCameraSystem(AScene *scene) :
@@ -128,6 +134,7 @@ namespace AGE
 			}
 			else
 			{
+				GetRenderThread()->getQueue()->emplaceTask<AGE::Commands::ToRender::Draw2DQuad>(glm::vec2(minPoint.x, minPoint.y), glm::vec2(minPoint.x, maxPoint.y), glm::vec2(maxPoint.x, maxPoint.y), glm::vec2(maxPoint.x, minPoint.y), glm::vec3(0, 1, 0));
 				++j;
 			}
 		}
@@ -148,7 +155,7 @@ namespace AGE
 		std::list<std::shared_ptr<DRBData>> pointLightList;
 
 
-		for (auto spotEntity : _spotLights.getCollection())
+		for (auto &spotEntity : _spotLights.getCollection())
 		{
 			auto spot = spotEntity->getComponent<SpotLightComponent>();
 			auto spotDrawableList = std::make_shared<DRBSpotLightDrawableList>();
@@ -182,32 +189,54 @@ namespace AGE
 			glm::vec3 color = glm::vec3(1, 0, 0);
 			bool activateDepth = true;
 
-			AGE::GetRenderThread()->getQueue()->emplaceCommand<Commands::ToRender::Draw3DQuad>(aNear, bNear, cNear, dNear, color, activateDepth);
-			AGE::GetRenderThread()->getQueue()->emplaceCommand<Commands::ToRender::Draw3DQuad>(aFar, bFar, cFar, dFar, color, activateDepth);
-			AGE::GetRenderThread()->getQueue()->emplaceCommand<Commands::ToRender::Draw3DLine>(aNear, aFar, color, activateDepth);
-			AGE::GetRenderThread()->getQueue()->emplaceCommand<Commands::ToRender::Draw3DLine>(bNear, bFar, color, activateDepth);
-			AGE::GetRenderThread()->getQueue()->emplaceCommand<Commands::ToRender::Draw3DLine>(cNear, cFar, color, activateDepth);
-			AGE::GetRenderThread()->getQueue()->emplaceCommand<Commands::ToRender::Draw3DLine>(dNear, dFar, color, activateDepth);
+			AGE::GetRenderThread()->getQueue()->emplaceTask<Commands::ToRender::Draw3DQuad>(aNear, bNear, cNear, dNear, color, activateDepth);
+			AGE::GetRenderThread()->getQueue()->emplaceTask<Commands::ToRender::Draw3DQuad>(aFar, bFar, cFar, dFar, color, activateDepth);
+			AGE::GetRenderThread()->getQueue()->emplaceTask<Commands::ToRender::Draw3DLine>(aNear, aFar, color, activateDepth);
+			AGE::GetRenderThread()->getQueue()->emplaceTask<Commands::ToRender::Draw3DLine>(bNear, bFar, color, activateDepth);
+			AGE::GetRenderThread()->getQueue()->emplaceTask<Commands::ToRender::Draw3DLine>(cNear, cFar, color, activateDepth);
+			AGE::GetRenderThread()->getQueue()->emplaceTask<Commands::ToRender::Draw3DLine>(dNear, dFar, color, activateDepth);
 
-			LFList<BFCItem> list;
-			_scene->getBfcBlockManagerFactory()->cullOnChannel(BFCCullableType::CullableMesh, list/*spotDrawableList->meshs*/, spotlightFrustum);
-			while (list.getSize() > 0)
+			std::atomic_size_t counter = 0;
+
+			LFList<BFCItem> meshInLightList;
+			std::size_t meshBlocksToCullNumber = _scene->getBfcBlockManagerFactory()->getBlockNumberToCull(BFCCullableType::CullableMesh);
+
+			for (std::size_t i = 0; i < meshBlocksToCullNumber; ++i)
 			{
-				spotDrawableList->meshs.push_back(list.pop()->getDrawable()->getDatas());
+				BFCBlockManagerFactory *bf = _scene->getBfcBlockManagerFactory();
+				EmplaceTask<Tasks::Basic::VoidFunction>([bf, i, &spotlightFrustum, &counter, &meshInLightList](){
+					bf->cullOnBlock(BFCCullableType::CullableMesh, meshInLightList, spotlightFrustum, i);
+					counter.fetch_add(1);
+				});
 			}
+
+			{
+				SCOPE_profile_cpu_i("Camera system", "Cull for spots");
+				GetMainThread()->computeTasksWhile(std::function<bool()>([&counter, meshBlocksToCullNumber]() {
+					return counter >= meshBlocksToCullNumber;
+				}));
+			}
+
+			while (meshInLightList.getSize() > 0)
+			{
+				spotDrawableList->meshs.push_back(meshInLightList.pop()->getDrawable()->getDatas());
+			}
+
 			spotLightList.push_back(spotDrawableList);
 		}
-		for (auto pointLightEntity : _pointLights.getCollection())
+		for (auto &pointLightEntity : _pointLights.getCollection())
 		{
 			auto point = pointLightEntity->getComponent<PointLightComponent>();
 			
 			pointLightList.push_back(point->getCullableHandle().getPtr()->getDatas());
 		}
 
-		for (auto cameraEntity : _cameras.getCollection())
+		for (auto &cameraEntity : _cameras.getCollection())
 		{
 			Frustum cameraFrustum;
 			auto camera = cameraEntity->getComponent<CameraComponent>();
+
+			std::atomic_size_t counter = 0;
 
 			auto cameraList = std::make_shared<DRBCameraDrawableList>();
 			cameraList->cameraInfos.data = camera->getData();
@@ -215,22 +244,54 @@ namespace AGE
 
 			cameraFrustum.setMatrix(camera->getProjection() * cameraList->cameraInfos.view);
 
-			LFList<BFCItem> list;
-			_scene->getBfcBlockManagerFactory()->cullOnChannel(BFCCullableType::CullableMesh, list/*cameraList->meshs*/, cameraFrustum);
-			while (list.getSize() > 0)
+			LFList<BFCItem> meshList;
+			LFList<BFCItem> pointLightListToCull;
+			std::size_t meshBlocksToCullNumber = _scene->getBfcBlockManagerFactory()->getBlockNumberToCull(BFCCullableType::CullableMesh);
+			std::size_t pointLightBlocksToCullNumber = _scene->getBfcBlockManagerFactory()->getBlockNumberToCull(BFCCullableType::CullablePointLight);
+			std::size_t totalToCullNumber = meshBlocksToCullNumber + pointLightBlocksToCullNumber;
+			
+			for (std::size_t i = 0; i < meshBlocksToCullNumber; ++i)
 			{
-				cameraList->meshs.push_back(list.pop()->getDrawable()->getDatas());
+				BFCBlockManagerFactory *bf = _scene->getBfcBlockManagerFactory();
+				EmplaceTask<Tasks::Basic::VoidFunction>([bf, i, &cameraFrustum, &counter, &meshList](){
+					bf->cullOnBlock(BFCCullableType::CullableMesh, meshList, cameraFrustum, i);
+					counter.fetch_add(1);
+				});
 			}
-			_scene->getBfcBlockManagerFactory()->cullOnChannel(BFCCullableType::CullablePointLight, list/*cameraList->pointLights*/, cameraFrustum);
-			while (list.getSize() > 0)
+
+			for (std::size_t i = 0; i < pointLightBlocksToCullNumber; ++i)
 			{
-				cameraList->pointLights.push_back(list.pop()->getDrawable()->getDatas());
+				BFCBlockManagerFactory *bf = _scene->getBfcBlockManagerFactory();
+				EmplaceTask<Tasks::Basic::VoidFunction>([bf, i, &cameraFrustum, &counter, &pointLightListToCull](){
+					bf->cullOnBlock(BFCCullableType::CullablePointLight, pointLightListToCull, cameraFrustum, i);
+					counter.fetch_add(1);
+				});
+			}
+
+			{
+				SCOPE_profile_cpu_i("Camera system", "Cull for cam");
+				GetMainThread()->computeTasksWhile(std::function<bool()>([&counter, totalToCullNumber]() {
+					return counter >= totalToCullNumber;
+				}));
+			}
+
+			{
+				SCOPE_profile_cpu_i("Camera system", "Copy LFList to std");
+				while (meshList.getSize() > 0)
+				{
+					cameraList->meshs.push_back(meshList.pop()->getDrawable()->getDatas());
+				}
+
+				while (pointLightListToCull.getSize() > 0)
+				{
+					cameraList->pointLights.push_back(pointLightListToCull.pop()->getDrawable()->getDatas());
+				}
 			}
 			occlusionCulling(cameraList->meshs);
 
 			cameraList->spotLights = spotLightList;
 			cameraList->pointLights = pointLightList;
-			AGE::GetRenderThread()->getQueue()->emplaceCommand<AGE::DRBCameraDrawableListCommand>(cameraList);
+			AGE::GetRenderThread()->getQueue()->emplaceTask<AGE::DRBCameraDrawableListCommand>(cameraList);
 		}
 	}
 

@@ -68,10 +68,15 @@
       <AdditionalDependencies>Ws2_32.lib;minizip_d.lib;zlib.lib;assimpd.lib;opengl32.lib;glu32.lib;glew32.lib;sdl2.lib;sdl2main.lib;fmodex64_vc.lib;BulletCollision_Debug.lib;BulletDynamics_Debug.lib;BulletFileLoader_Debug.lib;BulletMultiThreaded_Debug.lib;BulletSoftBody_Debug.lib;BulletWorldImporter_Debug.lib;BulletXmlWorldImporter_Debug.lib;ConvexDecomposition_Debug.lib;LinearMath_Debug.lib;%(AdditionalDependencies);FreeImagePlusd.lib;FreeImaged.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(ProjectDir)../../Vendors\zlib\lib\windows\x64;$(ProjectDir)../../Vendors\minizip\lib\windows\x64;C:\Program Files (x86)\Visual Leak Detector\lib\Win64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>/ignore:4099 %(AdditionalOptions)</AdditionalOptions>
+      <OptimizeReferences>false</OptimizeReferences>
+      <EnableCOMDATFolding>false</EnableCOMDATFolding>
     </Link>
     <PostBuildEvent>
       <Command>call "$(ProjectDir)/Scripts/PostBuildDebug.bat"</Command>
     </PostBuildEvent>
+    <ProjectReference>
+      <UseLibraryDependencyInputs>true</UseLibraryDependencyInputs>
+    </ProjectReference>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>

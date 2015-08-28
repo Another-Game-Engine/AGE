@@ -262,9 +262,6 @@
     <ProjectReference Include="..\..\..\GameEngine\GameEngine.vcxproj">
       <Project>{e24d022c-e33b-47a1-bbb4-33666c76dda9}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\SpacePartitioning\SpacePartitioning.vcxproj">
-      <Project>{ff05acc8-441b-4e65-866c-fe72a1cde27d}</Project>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\Vendors\PhysX\PhysXSDK\Source\compiler\vc12win64\LowLevel.vcxproj">
       <Project>{2a1f82af-85e5-26a0-bfe0-1f8d0006da7a}</Project>
     </ProjectReference>

@@ -3,6 +3,7 @@
 #include <GameEngine/Engine/Culling/Cullable/CullableShape.hh>
 #include <GameEngine/Engine/Culling/Cullable/Cullable.hh>
 #include <GameEngine/Engine/Utils/Frustum.hh>
+#include <glm/glm.hpp>
 
 namespace AGE
 {

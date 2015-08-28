@@ -9,6 +9,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include "AssetsEditorScene.hpp"
+#include "WorldEditorScene.hpp"
+#include <AssetManagement/AssetManager.hh>
 
 namespace AGE
 {
@@ -24,8 +26,9 @@ namespace AGE
 
 	const std::string MaterialEditorScene::Name = "Material Editor";
 
-	MaterialEditorScene::MaterialEditorScene(AGE::Engine *engine)
+	MaterialEditorScene::MaterialEditorScene(AGE::Engine *engine, std::shared_ptr<WorldEditorScene> const &world_editor)
 		: AScene(engine),
+		_world_editor(world_editor),
 		_mode(ModeMaterialEditor::selectMaterial),
 		_indexMaterial(-1)
 	{
@@ -190,6 +193,8 @@ namespace AGE
 			std::ofstream file(absPath + _current.name + ".mage", std::ios::trunc | std::ios::binary);
 			cereal::PortableBinaryOutputArchive ar(file);
 			ar(_current);
+			//_world_editor->getInstance<AssetsManager>()->requireMaterialReload(_current.name + ".mage");
+			_world_editor->getInstance<AssetsManager>()->reloadMaterial(_current.name + ".mage");
 		}
 	}
 

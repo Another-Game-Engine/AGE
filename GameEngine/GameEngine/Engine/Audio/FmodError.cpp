@@ -1,3 +1,4 @@
+/*
 #include <Audio/FmodError.hpp>
 
 bool fmodError(FMOD_RESULT result)
@@ -9,3 +10,4 @@ bool fmodError(FMOD_RESULT result)
 	}
 	return true;
 }
+*/

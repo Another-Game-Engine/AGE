@@ -99,7 +99,7 @@ namespace AGE
 
 		RigidBody *rigidBody = nullptr;
 		Link *link = nullptr;
-		for (Entity entity : entityFilter.getCollection())
+		for (const Entity &entity : entityFilter.getCollection())
 		{
 			link = entity.getLinkPtr();
 			rigidBody = entity->getComponent<RigidBody>();
@@ -121,7 +121,7 @@ namespace AGE
 
 		RigidBody *rigidBody = nullptr;
 		Link *link = nullptr;
-		for (Entity entity : entityFilter.getCollection())
+		for (const Entity &entity : entityFilter.getCollection())
 		{
 			rigidBody = entity->getComponent<RigidBody>();
 			link = entity.getLinkPtr();

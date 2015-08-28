@@ -45,24 +45,34 @@ namespace AGE
 	void BFCLinkTracker::reset()
 	{
 		SCOPE_profile_cpu_function("BFC");
-		for (auto &e : _links)
 		{
-			// beurk
-			if (e != nullptr)
+			SCOPE_profile_cpu_i("BFC", "ResetLinks");
+			for (auto &e : _links)
 			{
-				e->resetBFCTrackerIndex();
-				for (auto &cullable : e->_cullables)
+				// beurk
+				if (e != nullptr)
 				{
-					auto &item = e->_bfcBlockFactory->getItem(cullable.getItemId());
-					item.setPosition(cullable.getPtr()->setBFCTransform(e->_globalTransformation));
+					e->resetBFCTrackerIndex();
+					for (auto &cullable : e->_cullables)
+					{
+						auto &item = e->_bfcBlockFactory->getItem(cullable.getItemId());
+						item.setPosition(cullable.getPtr()->setBFCTransform(e->_globalTransformation));
+					}
+					e = nullptr;
 				}
-				e = nullptr;
 			}
+			_links.clear();
 		}
-		_links.clear();
+		{
+			SCOPE_profile_cpu_i("BFC", "ResetFree");
+			//beurk
+			while (!_free.empty())
+				_free.pop();
+		}
+	}
 
-		//beurk
-		while (!_free.empty())
-			_free.pop();
+	std::size_t BFCLinkTracker::getLinkCount() const
+	{
+		return _links.size();
 	}
 }

@@ -34,6 +34,7 @@ namespace AGE
 		void unRequireTag(TAG_ID tag);
 
 		std::set<Entity> &getCollection();
+		const std::set<Entity> &getCollection() const;
 
 		inline void clearCollection() { _collection.clear(); }
 

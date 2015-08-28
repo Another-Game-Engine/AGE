@@ -12,6 +12,8 @@
 #define InputTextCustom(name, diff1, diff2) memcpy(diff1, mat.diff2.c_str(), mat.diff2.size()); \
 	ImGui::InputText(name, diff1, mat.diff2.size());
 
+namespace AGE { class WorldEditorScene; }
+
 namespace AGE
 {
 	enum class ModeMaterialEditor {
@@ -37,7 +39,7 @@ namespace AGE
 	public:
 		static const std::string Name;
 
-		MaterialEditorScene(Engine *engine);
+		MaterialEditorScene(Engine *engine, std::shared_ptr<WorldEditorScene> const &world_editor);
 
 		virtual void updateMenu();
 
@@ -54,6 +56,7 @@ namespace AGE
 		void _resetEdition();
 	
 	private:
+		std::shared_ptr<WorldEditorScene> _world_editor;
 		ModeMaterialEditor _mode;
 		int _indexMaterial;
 		int _indexSubMaterial;
