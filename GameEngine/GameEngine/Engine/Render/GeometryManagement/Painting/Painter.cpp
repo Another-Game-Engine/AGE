@@ -114,7 +114,9 @@ namespace AGE
 		_buffer.update();
 		properties.update_properties(program);
 		program->update();
-		_vertices[vertice.getId()].draw(mode);
+		// TODO: Fix that properly! @Dorian
+		if (vertice.getId() >= 0 && vertice.getId() < _vertices.size())
+			_vertices[vertice.getId()].draw(mode);
 		_buffer.unbind();
 	}
 
