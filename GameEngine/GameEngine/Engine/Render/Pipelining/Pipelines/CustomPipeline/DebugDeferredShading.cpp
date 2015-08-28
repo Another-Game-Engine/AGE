@@ -48,9 +48,8 @@ namespace AGE
 		_rendering_list.emplace_back(spotLightning);
 		_rendering_list.emplace_back(pointLightning);
 		_rendering_list.emplace_back(_deferredMerging);
-		_rendering_list.emplace_back(deferredOnScreen);
-
 		_rendering_list.emplace_back(debugDrawLines);
+		_rendering_list.emplace_back(deferredOnScreen);
 	}
 
 	DebugDeferredShading::DebugDeferredShading(DebugDeferredShading &&move) :
