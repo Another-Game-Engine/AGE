@@ -25,7 +25,7 @@ namespace AGE
 		_shinyAccumulation = createRenderPassOutput<Texture2D>(screen_size.x, screen_size.y, GL_RGBA8, true);
 
 		// We create the render pass
-		std::shared_ptr<DeferredSkyBox> skybox = std::make_shared<DeferredSkyBox>(screen_size, _painter_manager, _diffuse, _depthStencil);
+		std::shared_ptr<DeferredSkyBox> skybox = std::make_shared<DeferredSkyBox>(screen_size, _painter_manager, _diffuse, _depthStencil, _lightAccumulation);
 		std::shared_ptr<DeferredBasicBuffering> basicBuffering = std::make_shared<DeferredBasicBuffering>(screen_size, _painter_manager, _diffuse, _normal, _specular, _depthStencil);
 		std::shared_ptr<DeferredSpotLightning> spotLightning = std::make_shared<DeferredSpotLightning>(screen_size, _painter_manager, _normal, _depthStencil, _specular, _lightAccumulation, _shinyAccumulation);
 		std::shared_ptr<DeferredShadowBuffering> shadowBuffering = std::make_shared<DeferredShadowBuffering>(glm::uvec2(RESOLUTION_SHADOW_X, RESOLUTION_SHADOW_Y), _painter_manager);
@@ -37,13 +37,12 @@ namespace AGE
 		// The entry point is the basic buffering pass
 		setAmbient(glm::vec3(0.2f));
 		_rendering_list.emplace_back(shadowBuffering);
-		_rendering_list.emplace_back(skybox);
 		_rendering_list.emplace_back(basicBuffering);
+		_rendering_list.emplace_back(skybox);
 		_rendering_list.emplace_back(directionalLightning);
 		_rendering_list.emplace_back(spotLightning);
 		_rendering_list.emplace_back(pointLightning);
 		_rendering_list.emplace_back(_deferredMerging);
-		_rendering_list.emplace_back(skybox);
 		_rendering_list.emplace_back(deferredOnScreen);
 	}
 

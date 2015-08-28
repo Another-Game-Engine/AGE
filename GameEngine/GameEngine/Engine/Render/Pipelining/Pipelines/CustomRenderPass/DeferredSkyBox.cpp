@@ -29,16 +29,19 @@ namespace AGE
 		PROGRAM_NBR
 	};
 
-	DeferredSkyBox::DeferredSkyBox(glm::uvec2 const &screenSize, std::shared_ptr<PaintingManager> painterManager, std::shared_ptr<Texture2D> diffuse,
-		std::shared_ptr<Texture2D> depth) :
+	DeferredSkyBox::DeferredSkyBox(glm::uvec2 const &screenSize, std::shared_ptr<PaintingManager> painterManager,
+		std::shared_ptr<Texture2D> diffuse,
+		std::shared_ptr<Texture2D> depth,
+		std::shared_ptr<Texture2D> lightAccumulation) :
 		FrameBufferRender(screenSize.x, screenSize.y, painterManager)
 	{
 		// We dont want to take the skinned or transparent meshes
 		_forbidden[AGE_SKINNED] = true;
 		_forbidden[AGE_SEMI_TRANSPARENT] = true;
 
-		push_storage_output(GL_COLOR_ATTACHMENT0, diffuse);
 		push_storage_output(GL_DEPTH_STENCIL_ATTACHMENT, depth);
+		push_storage_output(GL_COLOR_ATTACHMENT0, diffuse);
+		push_storage_output(GL_COLOR_ATTACHMENT1, lightAccumulation);
 
 		_programs.resize(PROGRAM_NBR);
 
@@ -61,13 +64,14 @@ namespace AGE
 //@PROUT TODO
 		SCOPE_profile_gpu_i("DeferredSkybox render pass");
 		SCOPE_profile_cpu_i("RenderTimer", "DeferredSkybox render pass");
-		//OpenGLState::glEnable(GL_CULL_FACE);
-		//OpenGLState::glCullFace(GL_BACK);
 		OpenGLState::glDisable(GL_BLEND);
-		OpenGLState::glDisable(GL_STENCIL_TEST);
-		OpenGLState::glEnable(GL_DEPTH_TEST);
-		OpenGLState::glDepthMask(GL_TRUE);
-		OpenGLState::glDepthFunc(GL_LEQUAL);
+		OpenGLState::glDisable(GL_DEPTH_TEST);
+		OpenGLState::glDisable(GL_CULL_FACE);
+		OpenGLState::glEnable(GL_STENCIL_TEST);
+		OpenGLState::glStencilFunc(GL_LEQUAL, 0, 0xFFFFFFFF);
+		OpenGLState::glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
+		OpenGLState::glDepthMask(GL_FALSE);
+		glFinish();
 		{
 			SCOPE_profile_gpu_i("Overhead Pipeline");
 			SCOPE_profile_cpu_i("RenderTimer", "Skybox buffer");
@@ -80,6 +84,7 @@ namespace AGE
 			_programs[PROGRAM_SKYBOX]->get_resource<Sampler3D>("skybox").set(infos.cameraInfos.data.texture);
 		}
 		_painterManager->get_painter(_painterCube)->uniqueDraw(GL_QUADS, _programs[PROGRAM_SKYBOX], Properties(), _cube);
+		glFinish();
 	}
 
 }

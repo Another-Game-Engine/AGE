@@ -84,15 +84,15 @@ namespace AGE
 			OpenGLState::glEnable(GL_CULL_FACE);
 			OpenGLState::glCullFace(GL_BACK);
 			OpenGLState::glDepthMask(GL_TRUE);
-			OpenGLState::glDepthFunc(GL_LEQUAL);
+			OpenGLState::glDepthFunc(GL_LESS);
 			OpenGLState::glDisable(GL_BLEND);
 			OpenGLState::glEnable(GL_DEPTH_TEST);
 			OpenGLState::glClearColor(glm::vec4(0.f, 0.0f, 0.0f, 0.0f));
-			OpenGLState::glEnable(GL_STENCIL_TEST);
 			OpenGLState::glClearStencil(0);
-			OpenGLState::glStencilFunc(GL_ALWAYS, 0, 0xFFFFFFFF);
-			OpenGLState::glStencilOp(GL_KEEP, GL_KEEP, GL_INCR);
-			glClear(GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+			OpenGLState::glEnable(GL_STENCIL_TEST);
+			OpenGLState::glStencilFunc(GL_ALWAYS, 1, 0xFFFFFFFF);
+			OpenGLState::glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 		}
 
 		auto &meshList = (std::list<std::shared_ptr<DRBMeshData>>&)(infos.meshs);
@@ -175,6 +175,7 @@ namespace AGE
 			}
 		}
 #endif
+		glFinish();
 	}
 
 }
