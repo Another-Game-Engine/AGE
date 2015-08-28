@@ -68,7 +68,7 @@ namespace AGE
 		OpenGLState::glDisable(GL_DEPTH_TEST);
 		OpenGLState::glDisable(GL_CULL_FACE);
 		OpenGLState::glEnable(GL_STENCIL_TEST);
-		OpenGLState::glStencilFunc(GL_LEQUAL, 0, 0xFFFFFFFF);
+		OpenGLState::glStencilFunc(GL_LEQUAL, 1, 0xFF);
 		OpenGLState::glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
 		OpenGLState::glDepthMask(GL_FALSE);
 		glFinish();
