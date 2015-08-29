@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Utils/FileSystemHelpers.hpp>
+#include <FileUtils/FileUtils/FileSystemHelpers.hpp>
 #include <Utils/Serialization/SerializationArchives.hpp>
 #include <fstream>
 #include <cereal/types/string.hpp>
@@ -59,7 +59,7 @@ namespace AGE
 		{
 			if (_configurations == nullptr)
 			{
-				if (!AGE::FileSystemHelpers::AgeExists("EngineCoreTestConfiguration.json"))
+				if (!FileUtils::AgeExists("EngineCoreTestConfiguration.json"))
 				{
 					_configurations = std::make_shared<ECTConfigurations>();
 					saveConfigurations();
