@@ -112,6 +112,7 @@ namespace AGE
 		{
 			// Attributes
 			Physics::ColliderType currentType = Physics::ColliderType::Box;
+			bool isChoosingMesh = false;
 			std::string _meshPath;
 
 			// Methods

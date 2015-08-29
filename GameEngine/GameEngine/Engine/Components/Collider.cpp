@@ -336,7 +336,10 @@ namespace AGE
 
 	void Collider::EditorStruct::copyDatas(Collider *ptr)
 	{
-//		currentType = ptr->getColliderType();
+		if (isChoosingMesh == false)
+		{
+			currentType = ptr->getColliderType();
+		}
 	}
 
 	void Collider::EditorStruct::editorUpdate(Collider *ptr)
@@ -372,6 +375,7 @@ namespace AGE
 		}
 		if (currentType == Physics::ColliderType::Mesh)
 		{
+			isChoosingMesh = true;
 			std::list<std::string> phageInFolder;
 
 			colliderFolder.update(
@@ -438,6 +442,7 @@ namespace AGE
 			{
 				if (_meshPath.empty() == false)
 				{
+					isChoosingMesh = false;
 					ptr->reset();
 					ptr->init(currentType, _meshPath);
 				}
