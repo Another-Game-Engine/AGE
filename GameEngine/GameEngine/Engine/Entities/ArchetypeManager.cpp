@@ -1,6 +1,6 @@
 #include "ArchetypeManager.hpp"
 #include <Utils/Directory.hpp>
-#include <Utils/FileSystemHelpers.hpp>
+#include <FileUtils/FileUtils/FileSystemHelpers.hpp>
 #include <Utils/Debug.hpp>
 #include <Entities/BinaryEntityPack.hpp>
 #include <Entities\ArchetypeScenes.hpp>
@@ -29,13 +29,13 @@ namespace AGE
 		{
 			if (Directory::IsFile(*it))
 			{
-				auto extension = AGE::FileSystemHelpers::GetExtension(*it);
+				auto extension = FileUtils::GetExtension(*it);
 
 				if (extension != "archetype")
 				{
 					continue;
 				}
-				loadOne(AGE::FileSystemHelpers::RemoveExtension(AGE::FileSystemHelpers::GetName(*it)));
+				loadOne(FileUtils::RemoveExtension(FileUtils::GetName(*it)));
 			}
 		}
 		dir.close();

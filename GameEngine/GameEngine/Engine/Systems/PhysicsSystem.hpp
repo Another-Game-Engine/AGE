@@ -8,7 +8,7 @@
 #include <Physics/PhysicsInterface.hpp>
 #include <Physics/WorldInterface.hpp>
 
-#include <Engine/AssetManagement/AssetManager.hh>
+#include <AssetManagement/AssetManager.hh>
 
 namespace AGE
 {

@@ -2,7 +2,7 @@
 
 namespace AGE
 {
-	namespace AE
+	namespace FileUtils
 	{
 		RawFile::~RawFile()
 		{

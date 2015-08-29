@@ -1,14 +1,19 @@
 #pragma once
 
-#include "AssetFiles/File.hpp"
+#include <FileUtils/AssetFiles/AssetsTypes.hpp>
 #include <set>
+#include <filesystem>
 
 namespace AGE
 {
+	namespace FileUtils
+	{
+		class AssetFile;
+		class RawFile;
+		class Folder;
+	}
 	namespace AE
 	{
-		class RawFile;
-
 		class AssetFileManager
 		{
 		public:
@@ -19,13 +24,10 @@ namespace AGE
 				, Type = 1 << 2
 				, Date = 1 << 3
 			};
-			static bool IsValidFile(const std::tr2::sys::path &path);
-			static std::shared_ptr<AssetFile> AgeCreateFile(const std::tr2::sys::path &path, Folder *parent = nullptr);
-			static std::shared_ptr<AssetFile> AgeCreateFile(const std::string &path, Folder *parent = nullptr);
-			static void PrintSelectableRawAssetsFile(RawFile *ptr, int printSections, std::set<std::shared_ptr<RawFile>> *list);
-			static void PrintClickableRawAssetsFile(RawFile *ptr, int printSections, std::shared_ptr<RawFile> &clicked);
-			static void CheckIfRawModified(Folder *folder, std::set <std::shared_ptr<RawFile>> &list);
-			static void LinkRawToCooked(Folder *raw, Folder *cooked);
+			static void PrintSelectableRawAssetsFile(FileUtils::RawFile *ptr, int printSections, std::set<std::shared_ptr<FileUtils::RawFile>> *list);
+			static void PrintClickableRawAssetsFile(FileUtils::RawFile *ptr, int printSections, std::shared_ptr<FileUtils::RawFile> &clicked);
+			static void CheckIfRawModified(FileUtils::Folder *folder, std::set <std::shared_ptr<FileUtils::RawFile>> &list);
+			static void LinkRawToCooked(FileUtils::Folder *raw, FileUtils::Folder *cooked);
 			static std::string RawPathToCooked(const std::string &path);
 		private:
 			AssetFileManager() = delete;

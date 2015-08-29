@@ -4,7 +4,7 @@
 #include <Convertor/MaterialConvertor.hpp>
 #include <Utils/Directory.hpp>
 #include <Utils/Path.hpp>
-#include <Utils/FileSystemHelpers.hpp>
+#include <FileUtils/FileUtils/FileSystemHelpers.hpp>
 #include <EditorConfiguration.hpp>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -67,7 +67,7 @@ namespace AGE
 		AGE_ASSERT(succeed && "Impossible to open directory");
 		for (auto it = dir.recursive_begin(); it != dir.recursive_end(); ++it)
 		{
-			if (Directory::IsFile(*it) && AGE::FileSystemHelpers::GetExtension(*it) == "mage")
+			if (Directory::IsFile(*it) && FileUtils::GetExtension(*it) == "mage")
 			{
 				materialGettable.push_back(std::string(Path::RelativeName(absPath.c_str(), *it)));
 				materialFullPath.push_back(*it);

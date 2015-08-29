@@ -6,7 +6,7 @@
 
 namespace AGE
 {
-	namespace FileSystemHelpers
+	namespace FileUtils
 	{
 		bool AgeCreateFolder(const std::string &path)
 		{

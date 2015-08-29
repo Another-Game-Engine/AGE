@@ -2,8 +2,8 @@
 
 #include <Components/ComponentRegistrationManager.hpp>
 
-#include <RotationComponent.hpp>
-#include <Lifetime.hpp>
+#include <EngineCoreTest/Components/RotationComponent.hpp>
+#include <EngineCoreTest/Components/Lifetime.hpp>
 
 void RegisterComponents()
 {

@@ -5,7 +5,7 @@
 #include <AssetManagement/Data/MaterialData.hh>
 #include <ImageUtils.hh>
 #include <algorithm>
-#include <Utils/BitOperations.hpp>
+#include <LowLevelUtils/BitOperations.hpp>
 #include "ConvertorStatusManager.hpp"
 #include "CookingTask.hpp"
 #if USE_MICROSOFT_LIB

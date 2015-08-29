@@ -1,15 +1,15 @@
 #include "Folder.hpp"
 
-#include <imgui\imgui.h>
+#include <imgui/imgui.h>
 #include <regex>
 
-#include "AssetFileManager.hpp"
-#include <Utils/FileSystemHelpers.hpp>
+#include "FileUtils/FileSystemHelpers.hpp"
+#include <LowLevelUtils/BitOperations.hpp>
 #include <iostream>
 
 namespace AGE
 {
-	namespace AE
+	namespace FileUtils
 	{
 		Folder::Folder()
 			: _active(true)
@@ -38,7 +38,7 @@ namespace AGE
 			}
 		}
 
-		void Folder::list(const std::string &path)
+		void Folder::list(AFileFilter *filter, const std::string &path)
 		{
 			if (path.size() != 0)
 			{
@@ -56,12 +56,12 @@ namespace AGE
 			{
 				const auto& file = it->path();
 
-				if (!std::tr2::sys::is_directory(file) && AssetFileManager::IsValidFile(file))
+				if (!std::tr2::sys::is_directory(file) && filter->isValidFile(file))
 				{
 					fileCount++;
 					if (_files.find(file.relative_path().string()) == std::end(_files))
 					{
-						auto n = AssetFileManager::AgeCreateFile(file.relative_path(), this);
+						auto n = filter->ageCreateFile(file.relative_path(), this);
 						if (n)
 						{
 							_files.insert(std::make_pair(file.relative_path().string(), n));
@@ -73,15 +73,15 @@ namespace AGE
 					dirCount++;
 					if (_folders.find(file.filename()) == std::end(_folders))
 					{
-						auto n = std::make_shared<AE::Folder>(std::tr2::sys::basic_directory_entry<std::tr2::sys::path>(_path.path().string() + "/" + file.filename() + "/"), this);
+						auto n = std::make_shared<Folder>(std::tr2::sys::basic_directory_entry<std::tr2::sys::path>(_path.path().string() + "/" + file.filename() + "/"), this);
 						_folders.insert(std::make_pair(file.filename(), n));
-						n->list();
+						n->list(filter);
 					}
 				}
 			}
 			if (dirCount != _folders.size())
 			{
-				for (auto it = std::begin(_folders); it != std::end(_folders); )
+				for (auto it = std::begin(_folders); it != std::end(_folders);)
 				{
 					if (!std::tr2::sys::exists(it->second->_path.path()))
 					{
@@ -163,7 +163,7 @@ namespace AGE
 
 		void Folder::find(const std::string &path, std::shared_ptr<AssetFile> &result)
 		{
-			_internalFind(FileSystemHelpers::CleanPath(path), result);
+			_internalFind(FileUtils::CleanPath(path), result);
 		}
 	}
 }

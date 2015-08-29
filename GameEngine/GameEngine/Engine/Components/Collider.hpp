@@ -112,6 +112,7 @@ namespace AGE
 		{
 			// Attributes
 			Physics::ColliderType currentType = Physics::ColliderType::Box;
+			std::string _meshPath;
 
 			// Methods
 			void copyDatas(Collider *ptr);

@@ -11,11 +11,13 @@ namespace AGE
 		physx::PxConvexMesh *PhysXMeshCollider::CreateConvexMesh(WorldInterface *world, const std::string &meshPath)
 		{
 			std::shared_ptr<MeshInstance> mesh = world->getAssetManager()->getMesh(meshPath + ".sage");
-			assert(mesh != nullptr && "Invalid mesh");
-			if (mesh == nullptr)
+
+			if (mesh == nullptr &&
+				world->getAssetManager()->loadMesh(meshPath + ".sage", meshPath) == false)
 			{
 				return nullptr;
 			}
+			mesh = world->getAssetManager()->getMesh(meshPath + ".sage");
 			std::vector<physx::PxVec3> points;
 			for (SubMeshData &subMesh : mesh->meshData->subMeshs)
 			{

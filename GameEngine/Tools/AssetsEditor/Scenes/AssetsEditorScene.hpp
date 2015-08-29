@@ -3,15 +3,18 @@
 #include <Core/AScene.hh>
 #include <Core/Engine.hh>
 #include <memory>
-#include <AssetFiles/Folder.hpp>
+#include <FileUtils/AssetFiles/Folder.hpp>
 #include <set>
 #include "IMenuInheritrance.hpp"
 
 namespace AGE
 {
-	namespace AE
+	namespace FileUtils
 	{
 		class RawFile;
+	}
+	namespace AE
+	{
 		struct CookConfig;
 	}
 	class AssetsEditorScene : public AScene, public IMenuInheritance
@@ -25,8 +28,8 @@ namespace AGE
 		virtual bool _userUpdateBegin(float time);
 		virtual bool _userUpdateEnd(float time);
 
-		static AE::Folder &getRawList() { return _raw; }
-		static AE::Folder &getCookedList() { return _cook; }
+		static FileUtils::Folder &getRawList() { return _raw; }
+		static FileUtils::Folder &getCookedList() { return _cook; }
 
 		static std::vector<const char *> &getCookedMeshsList() { return _cookedMeshFiles; }
 		static std::vector<const char *> &getCookedMeshsListFullPath() { return _cookedMeshsFullPath; }
@@ -40,8 +43,8 @@ namespace AGE
 		virtual void updateMenu();
 
 	private:
-		static AE::Folder _raw;
-	 	static AE::Folder _cook;
+		static FileUtils::Folder _raw;
+	 	static FileUtils::Folder _cook;
 
 		struct AssetsEditorFileDescriptor
 		{
@@ -66,7 +69,7 @@ namespace AGE
 		static std::vector<const char *> _cookedTextureFullPath;
 		static std::vector<const char *> _cookedTextureFiles;
 
-		std::shared_ptr<AE::RawFile> _selectedRaw;
+		std::shared_ptr<FileUtils::RawFile> _selectedRaw;
 		std::set<std::shared_ptr<AE::CookConfig>> _configs;
 	};
 }

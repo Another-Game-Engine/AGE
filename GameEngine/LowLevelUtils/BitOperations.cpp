@@ -1,4 +1,4 @@
-#include <Utils/BitOperations.hpp>
+#include "BitOperations.hpp"
 #include <math.h>
 
 namespace AGE

@@ -5,6 +5,12 @@
 #include <Physics/PhysicsInterface.hpp>
 #include <Physics/WorldInterface.hpp>
 #include <AssetManagement/AssetManager.hh>
+
+#include <FileUtils/AssetFiles/CookedFileFilter.hpp>
+#include <FileUtils/AssetFiles/Folder.hpp>
+#include <FileUtils/AssetFiles/CookedFile.hpp>
+#include <FileUtils/FileUtils/FileSystemHelpers.hpp>
+
 #ifdef EDITOR_ENABLED
 #include <imgui/imgui.h>
 #endif
@@ -330,12 +336,24 @@ namespace AGE
 
 	void Collider::EditorStruct::copyDatas(Collider *ptr)
 	{
-		currentType = ptr->getColliderType();
+//		currentType = ptr->getColliderType();
 	}
 
 	void Collider::EditorStruct::editorUpdate(Collider *ptr)
 	{
+		// Used to display the collider editor
+		static bool folderInitialized = false;
+		static FileUtils::Folder colliderFolder = FileUtils::Folder();
+		// ---
 		bool hasChanged = false;
+
+		if (folderInitialized == false)
+		{
+			FileUtils::CookedFileFilter filter;
+			std::string assetsDirectory = ptr->entity->getScene()->getInstance<AGE::AssetsManager>()->getAssetsDirectory();
+			colliderFolder.list(&filter, assetsDirectory);
+			folderInitialized = true;
+		}
 
 		std::string colliderType[] = 
 		{
@@ -352,15 +370,81 @@ namespace AGE
 				hasChanged = true;
 			}
 		}
+		if (currentType == Physics::ColliderType::Mesh)
+		{
+			std::list<std::string> phageInFolder;
+
+			colliderFolder.update(
+				std::function<bool(FileUtils::Folder*)>([&](FileUtils::Folder* folder) {
+				phageInFolder.clear();
+				return true;
+			}),
+				std::function<bool(FileUtils::Folder*)>([](FileUtils::Folder* folder) {
+				return true;
+			}),
+				std::function<void(FileUtils::CookedFile*)>([&](FileUtils::CookedFile* file) {
+				
+				auto extension = FileUtils::GetExtension(file->getFileName());
+				// Name of the file without extension and without _static or _dynamic
+				std::string phageName;
+
+				// If its a .sage file, we just need to remove the extension to set the collider
+				if (extension == "sage")
+				{
+					phageName = FileUtils::RemoveExtension(file->getFileName());
+
+					if (std::find(phageInFolder.begin(), phageInFolder.end(), phageName) == phageInFolder.end())
+					{
+						phageInFolder.push_back(phageName);
+						if (ImGui::Button(phageName.c_str()))
+						{
+							std::string phagePath = FileUtils::RemoveExtension(file->getPath());
+							std::string assetsDirectory = ptr->entity->getScene()->getInstance<AGE::AssetsManager>()->getAssetsDirectory();
+							_meshPath = phagePath.substr(assetsDirectory.size(), std::string::npos);
+							hasChanged = true;
+						}
+					}
+				}
+				// If its a .phage file, we need to remove the extension and the _static or _dynamic
+				else if (extension == "phage")
+				{
+					size_t pos = file->getFileName().find_last_of("_");
+					if (pos != std::string::npos)
+						phageName = file->getFileName().substr(0, pos);
+					else
+						return;
+					if (std::find(phageInFolder.begin(), phageInFolder.end(), phageName) == phageInFolder.end())
+					{
+						phageInFolder.push_back(phageName);
+						if (ImGui::Button((phageName).c_str()))
+						{
+							std::string phagePath;
+							pos = file->getPath().find_last_of("_");
+							if (pos != std::string::npos)
+								phagePath = file->getPath().substr(0, pos);
+							else
+								return;
+							std::string assetsDirectory = ptr->entity->getScene()->getInstance<AGE::AssetsManager>()->getAssetsDirectory();
+							_meshPath = phagePath.substr(assetsDirectory.size(), std::string::npos);
+							hasChanged = true;
+						}
+					}
+				}
+			}));
+		}
 		if (hasChanged)
 		{
-			ptr->reset();
 			if (currentType == Physics::ColliderType::Mesh)
 			{
-				ptr->init(Physics::ColliderType::Box);
+				if (_meshPath.empty() == false)
+				{
+					ptr->reset();
+					ptr->init(currentType, _meshPath);
+				}
 			}
 			else
 			{
+				ptr->reset();
 				ptr->init(currentType);
 			}
 		}

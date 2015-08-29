@@ -10,7 +10,7 @@ namespace AGE
 		{
 			if (_configurations == nullptr)
 			{
-				if (!AGE::FileSystemHelpers::AgeExists("../../EditorConfiguration.json"))
+				if (!FileUtils::AgeExists("../../EditorConfiguration.json"))
 				{
 					_configurations = std::make_shared<Configurations>();
 					_saveConfigurations();

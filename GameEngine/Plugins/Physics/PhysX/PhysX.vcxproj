@@ -259,8 +259,14 @@
     <None Include="..\..\..\GameEngine\Engine\Physics\WorldInterface.inl" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\FileUtils\FileUtils.vcxproj">
+      <Project>{038c3874-8114-4bc8-9814-b0225fb033fb}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\GameEngine\GameEngine.vcxproj">
       <Project>{e24d022c-e33b-47a1-bbb4-33666c76dda9}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\LowLevelUtils\LowLevelUtils.vcxproj">
+      <Project>{cd9a602f-e073-4044-a371-cd845147482c}</Project>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Vendors\PhysX\PhysXSDK\Source\compiler\vc12win64\LowLevel.vcxproj">
       <Project>{2a1f82af-85e5-26a0-bfe0-1f8d0006da7a}</Project>
