@@ -363,10 +363,12 @@ namespace AGE
 				for (SubMeshData &subMesh : mesh->subMeshs)
 				{
 					const std::size_t startIndex = points.size();
+					for (const glm::vec3 &position : subMesh.positions)
+					{
+						points.push_back(physx::PxVec3(position.x, position.y, position.z));
+					}
 					for (unsigned int index : subMesh.indices)
 					{
-						const glm::vec3 &point = subMesh.positions[index];
-						points.push_back(physx::PxVec3(point.x, point.y, point.z));
 						indices.push_back(startIndex + index);
 					}
 				}
