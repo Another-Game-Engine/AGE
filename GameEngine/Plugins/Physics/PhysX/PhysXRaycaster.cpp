@@ -17,9 +17,9 @@ namespace AGE
 		{
 			const physx::PxVec3 rayOrigin(origin.x, origin.y, origin.z);
 			const glm::vec3 normalizedDirection = glm::normalize(direction);
-			const physx::PxVec3 rayDirection = physx::PxVec3(normalizedDirection.x, normalizedDirection.y, normalizedDirection.z);
+			const physx::PxVec3 rayDirection(normalizedDirection.x, normalizedDirection.y, normalizedDirection.z);
 			physx::PxRaycastBuffer hit;
-			const physx::PxHitFlags outputFlags = physx::PxHitFlag::eNORMAL;
+			const physx::PxHitFlags outputFlags(physx::PxHitFlag::eNORMAL);
 			physx::PxQueryFilterData filterData;
 			filterData.data.word0 = static_cast<std::uint32_t>(layers);
 			return static_cast<PhysXWorld *>(getWorld())->getScene()->raycast(rayOrigin, rayDirection, distance, hit, outputFlags, filterData);

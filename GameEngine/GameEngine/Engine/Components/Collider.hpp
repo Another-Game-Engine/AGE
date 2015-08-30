@@ -92,6 +92,8 @@ namespace AGE
 
 		bool isConvex(void) const;
 
+		bool isConcave(void) const;
+
 		const std::vector<Physics::Collision> &getCollisions(void) const;
 
 		template <typename Archive>
@@ -114,6 +116,7 @@ namespace AGE
 			Physics::ColliderType currentType = Physics::ColliderType::Box;
 			bool isChoosingMesh = false;
 			std::string _meshPath;
+			bool isConcave = false;
 
 			// Methods
 			void copyDatas(Collider *ptr);

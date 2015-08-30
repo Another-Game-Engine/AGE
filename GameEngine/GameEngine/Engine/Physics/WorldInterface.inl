@@ -84,8 +84,8 @@ namespace AGE
 		inline void WorldInterface::finalize(AssetsManager *assetManager)
 		{
 			this->assetManager = assetManager;
-			saveMaterials();
 			destroyRaycaster();
+			saveMaterials();
 		}
 
 		inline AssetsManager *WorldInterface::getAssetManager(void)

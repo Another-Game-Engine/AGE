@@ -66,6 +66,12 @@ namespace AGE
 		// Destructor
 		PhysXWorld::~PhysXWorld(void)
 		{
+			for (auto &shapePair : collisionShapes)
+			{
+				shapePair.second.second->release();
+				std::free(shapePair.second.first);
+			}
+			collisionShapes.clear();
 			if (scene != nullptr)
 			{
 				scene->setBroadPhaseCallback(nullptr);
@@ -94,6 +100,58 @@ namespace AGE
 		const physx::PxScene *PhysXWorld::getScene(void) const
 		{
 			return scene;
+		}
+
+		physx::PxShape *PhysXWorld::getCollisionShape(const std::string &mesh, bool isConvex)
+		{
+			const std::string path = getAssetManager()->getAssetsDirectory() + mesh + "_physx" + (isConvex ? "_convex" : "_concave") + ".phage";
+			auto found = collisionShapes.find(path);
+			if (found != collisionShapes.end())
+			{
+				physx::PxPhysics *physics = static_cast<PhysXPhysics *>(getPhysics())->getPhysics();
+				physx::PxMaterial *material = static_cast<PhysXMaterial *>(getMaterial(GetDefaultMaterialName()))->getMaterial();
+				return found->second.second->getConcreteType() == physx::PxConcreteType::eTRIANGLE_MESH ?
+					physics->createShape(physx::PxTriangleMeshGeometry(static_cast<physx::PxTriangleMesh *>(found->second.second)), *material, true) :
+					physics->createShape(physx::PxConvexMeshGeometry(static_cast<physx::PxConvexMesh *>(found->second.second)), *material, true);
+			}
+			OldFile filePath(path);
+			if (!filePath.exists())
+			{
+				std::cerr << "Physics file not found." << std::endl;
+				return nullptr;
+			}
+			FILE *stream = nullptr;
+			fopen_s(&stream, path.c_str(), "rb");
+			if (stream == nullptr)
+			{
+				std::cerr << "Impossible to open PhysX file." << std::endl;
+				return nullptr;
+			}
+			std::fseek(stream, 0, SEEK_END);
+			const std::size_t fileSize = std::ftell(stream);
+			if (fileSize == 0U)
+			{
+				std::cerr << "PhysX file is invalid. File is empty." << std::endl;
+				std::fclose(stream);
+				return nullptr;
+			}
+			std::fseek(stream, 0, SEEK_SET);
+			void *collectionBuffer = std::malloc(fileSize + PX_SERIAL_FILE_ALIGN);
+			void *bytes = reinterpret_cast<void *>((reinterpret_cast<std::size_t>(collectionBuffer) + PX_SERIAL_FILE_ALIGN) & ~(PX_SERIAL_FILE_ALIGN - 1));
+			std::fread(bytes, 1, fileSize, stream);
+			std::fclose(stream);
+			physx::PxSerializationRegistry *registry = physx::PxSerialization::createSerializationRegistry(*static_cast<PhysXPhysics *>(getPhysics())->getPhysics());
+			physx::PxCollection *collection = physx::PxSerialization::createCollectionFromBinary(bytes, *registry);
+			if (collection->getNbObjects() != 1 || (collection->getObject(0).getConcreteType() != physx::PxConcreteType::eTRIANGLE_MESH &&
+													collection->getObject(0).getConcreteType() != physx::PxConcreteType::eCONVEX_MESH))
+			{
+				std::cerr << "PhysX file is invalid. No collision shape inside." << std::endl;
+				return nullptr;
+			}
+			collisionShapes.emplace(std::make_pair(path, std::make_pair(collectionBuffer, &collection->getObject(0))));
+			collection->release();
+			registry->release();
+			return getCollisionShape(mesh, isConvex);
 		}
 
 		void PhysXWorld::notifyTriggers(void)

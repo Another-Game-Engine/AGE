@@ -31,6 +31,7 @@ namespace AGE
 		// Destructor
 		BulletWorld::~BulletWorld(void)
 		{
+			collisionShapes.clear();
 			world.getPairCache()->setOverlapFilterCallback(nullptr);
 		}
 

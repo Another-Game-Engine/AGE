@@ -30,10 +30,6 @@ namespace AGE
 			}
 			physx::PxRigidDynamic *body = getDataAs<physx::PxRigidDynamic>();
 			body->userData = this;
-			if (shape->getGeometryType() == physx::PxGeometryType::eTRIANGLEMESH)
-			{
-				body->setRigidBodyFlag(physx::PxRigidBodyFlag::eKINEMATIC, true);
-			}
 			body->attachShape(*shape);
 			setAsTrigger(IsTriggerByDefault());
 			setFilterGroup(GetDefaultFilterGroup());
@@ -54,7 +50,6 @@ namespace AGE
 				body->userData = nullptr;
 				body->detachShape(*shape);
 			}
-			shape->release();
 			shape = nullptr;
 		}
 
@@ -74,13 +69,8 @@ namespace AGE
 			assert(newShape != nullptr && "Invalid shape");
 			physx::PxRigidDynamic *body = getDataAs<physx::PxRigidDynamic>();
 			body->detachShape(*shape);
-			shape->release();
-			shape = newShape;
-			if (newShape->getGeometryType() == physx::PxGeometryType::eTRIANGLEMESH)
-			{
-				body->setRigidBodyFlag(physx::PxRigidBodyFlag::eKINEMATIC, true);
-			}
 			body->attachShape(*shape);
+			shape = newShape;
 		}
 
 		// Inherited Methods

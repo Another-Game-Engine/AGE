@@ -34,6 +34,8 @@ namespace AGE
 
 			const physx::PxScene *getScene(void) const;
 
+			physx::PxShape *getCollisionShape(const std::string &mesh, bool isConvex);
+
 		private:
 			// Attributes
 			physx::PxScene *scene = nullptr;
@@ -47,6 +49,8 @@ namespace AGE
 			physx::PxCudaContextManager *cudaContextManager = nullptr;
 
 			std::unordered_map<Collider *, std::unordered_map<Collider *, std::size_t>> triggers;
+
+			std::unordered_map<std::string, std::pair<void *, physx::PxBase *>> collisionShapes;
 
 			// Static Methods
 			static physx::PxFilterFlags FilterShader(physx::PxFilterObjectAttributes attributes1, physx::PxFilterData filterData1, physx::PxFilterObjectAttributes attributes2,

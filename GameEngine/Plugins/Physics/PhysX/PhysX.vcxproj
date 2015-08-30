@@ -112,7 +112,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)\$(Platform)\$(Configuration)\;$(SolutionDir)Vendors\zlib\lib\windows\x64;$(SolutionDir)Vendors\minizip\lib\windows\x64;$(SolutionDir)Vendors/OpenGL/lib/x64;$(SolutionDir)x64\$(Configuration)\;$(SolutionDir)Vendors\PhysX\PhysXSDK\Lib\vc12win64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)$(Platform)\$(Configuration)\;$(SolutionDir)Vendors\zlib\lib\windows\x64;$(SolutionDir)Vendors\minizip\lib\windows\x64;$(SolutionDir)Vendors/OpenGL/lib/x64;$(SolutionDir)Vendors\PhysX\PhysXSDK\Lib\vc12win64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>minizip.lib;zlib.lib;fmodex64_vc.lib;Ws2_32.lib;glu32.lib;glew32.lib;sdl2.lib;sdl2main.lib;opengl32.lib;GameEngine.lib;LowLevelDEBUG.lib;LowLevelClothDEBUG.lib;PhysX3DEBUG_x64.lib;PhysX3CharacterKinematicDEBUG_x64.lib;PhysX3CommonDEBUG_x64.lib;PhysX3CookingDEBUG_x64.lib;PhysX3ExtensionsDEBUG.lib;PhysX3GpuDEBUG_x64.lib;PhysX3VehicleDEBUG.lib;PvdRuntimeDEBUG.lib;PxTaskDEBUG.lib;SceneQueryDEBUG.lib;SimulationControllerDEBUG.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
@@ -164,7 +164,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(SolutionDir)\$(Platform)\$(Configuration)\;$(SolutionDir)Vendors\zlib\lib\windows\x64;$(SolutionDir)Vendors\minizip\lib\windows\x64;$(SolutionDir)Vendors/OpenGL/lib/x64;$(SolutionDir)x64\$(Configuration)\;$(SolutionDir)Vendors\PhysX\PhysXSDK\Lib\vc12win64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)$(Platform)\$(Configuration)\;$(SolutionDir)Vendors\zlib\lib\windows\x64;$(SolutionDir)Vendors\minizip\lib\windows\x64;$(SolutionDir)Vendors/OpenGL/lib/x64;$(SolutionDir)Vendors\PhysX\PhysXSDK\Lib\vc12win64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>minizip.lib;zlib.lib;fmodex64_vc.lib;Ws2_32.lib;glu32.lib;glew32.lib;sdl2.lib;sdl2main.lib;opengl32.lib;GameEngine.lib;LowLevel.lib;LowLevelCloth.lib;PhysX3_x64.lib;PhysX3CharacterKinematic_x64.lib;PhysX3Common_x64.lib;PhysX3Cooking_x64.lib;PhysX3Extensions.lib;PhysX3Gpu_x64.lib;PhysX3Vehicle.lib;PvdRuntime.lib;PxTask.lib;SceneQuery.lib;SimulationController.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>

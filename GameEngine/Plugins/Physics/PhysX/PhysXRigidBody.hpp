@@ -25,9 +25,6 @@ namespace AGE
 			PhysXRigidBody &operator=(const PhysXRigidBody &) = delete;
 
 		private:
-			// Attributes
-			void *joint = nullptr;
-
 			// Destructor
 			~PhysXRigidBody(void);
 
@@ -101,8 +98,6 @@ namespace AGE
 			glm::vec3 getVelocityAtWorldPosition(const glm::vec3 &position) const override final;
 
 			glm::vec3 getVelocityAtLocalPosition(const glm::vec3 &position) const override final;
-
-			void unlockRotation(void);
 		};
 	}
 }

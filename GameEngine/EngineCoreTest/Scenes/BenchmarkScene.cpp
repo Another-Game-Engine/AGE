@@ -98,7 +98,7 @@ namespace AGE
 		getInstance<AGE::AssetsManager>()->setAssetsDirectory(EngineCoreTestConfiguration::GetCookedDirectory());
 
 		addSystem<AGE::DebugSystem>(0);
-		addSystem<AGE::PhysicsSystem>(0, Physics::EngineType::PhysX, getInstance<AGE::AssetsManager>());
+		addSystem<AGE::PhysicsSystem>(0, Physics::EngineType::Bullet, getInstance<AGE::AssetsManager>());
 
 		addSystem<AGE::LifetimeSystem>(2);
 		addSystem<AGE::FreeFlyCamera>(0);
@@ -201,7 +201,7 @@ namespace AGE
 			e->addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("cube/cube.sage"),
 										 getInstance<AGE::AssetsManager>()->getMaterial(OldFile("cube/cube.mage")))->enableRenderMode(RenderModes::AGE_OPAQUE);
 			e->addComponent<RigidBody>()->addForce(10.0f * cameraForward, Physics::ForceMode::Impulse);
-			e->addComponent<Collider>(Physics::ColliderType::Box);
+			e->addComponent<Collider>(Physics::ColliderType::Mesh, "cube/cube")->setAsConvex();
 			auto pl = e->addComponent<PointLightComponent>();
 			pl->setColor(glm::vec3(float(rand() % 100) / 100.0f, float(rand() % 100) / 100.0f, float(rand() % 100) / 100.0f));
 		}
@@ -224,13 +224,13 @@ namespace AGE
 				if (i % 4 == 0)
 				{
 					mesh = e->addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage"), getInstance<AGE::AssetsManager>()->getMaterial(OldFile("ball/ball.mage")));
-					e->addComponent<Collider>(Physics::ColliderType::Sphere, "ball/ball");
+					e->addComponent<Collider>(Physics::ColliderType::Sphere);
 					link.setScale(glm::vec3(0.5f));
 				}
 				else
 				{
 					mesh = e->addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("cube/cube.sage"), getInstance<AGE::AssetsManager>()->getMaterial(OldFile("cube/cube.mage")));
-					e->addComponent<Collider>(Physics::ColliderType::Box, "cube/cube");
+					e->addComponent<Collider>(Physics::ColliderType::Box);
 					//auto pl = e->addComponent<PointLightComponent>();
 					//pl->setColor(glm::vec3(float(rand() % 100) / 100.0f, float(rand() % 100) / 100.0f, float(rand() % 100) / 100.0f));
 				}

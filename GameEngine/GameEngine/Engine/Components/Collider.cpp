@@ -289,6 +289,19 @@ namespace AGE
 		}
 	}
 
+	bool Collider::isConcave(void) const
+	{
+		assert(collider != nullptr && "Invalid Collider");
+		switch (getColliderType())
+		{
+			case Physics::ColliderType::Mesh:
+				return collider->as<Physics::ColliderType::Mesh>()->isConcave();
+			default:
+				assert(!"Invalid collider type");
+				return false;
+		}
+	}
+
 	void Collider::scale(const glm::vec3 &scaling)
 	{
 		assert(collider != nullptr && "Invalid Collider");
@@ -375,6 +388,11 @@ namespace AGE
 		}
 		if (currentType == Physics::ColliderType::Mesh)
 		{
+			if (ImGui::RadioButton("Convex", !isConcave))
+				isConcave = false;
+			if (ImGui::RadioButton("Concave", isConcave))
+				isConcave = true;
+
 			isChoosingMesh = true;
 			std::list<std::string> phageInFolder;
 

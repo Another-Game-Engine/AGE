@@ -21,6 +21,8 @@
 
 #include "Systems/RenderCameraSystem.hpp"
 
+#include "../Plugins/Physics/PhysX/PhysXPhysics.hpp"
+
 namespace AGE
 {
 	const std::string WorldEditorScene::Name = "World Editor";
