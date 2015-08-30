@@ -389,19 +389,24 @@ namespace AGE
 		}
 		if (currentType == Physics::ColliderType::Mesh)
 		{
-			if (ImGui::RadioButton("Convex", !isConcave))
+			if (ptr->getColliderType() != Physics::ColliderType::Mesh)
 			{
-				ptr->setAsConvex();
-				isConcave = false;
+				isChoosingMesh = true;
 			}
-			if (ImGui::RadioButton("Concave", isConcave))
+			if (isChoosingMesh == false)
 			{
-				ptr->setAsConcave();
-				isConcave = true;
+				if (ImGui::RadioButton("Convex", !isConcave))
+				{
+					ptr->setAsConvex();
+					isConcave = false;
+				}
+				if (ImGui::RadioButton("Concave", isConcave))
+				{
+					ptr->setAsConcave();
+					isConcave = true;
+				}
 			}
 
-
-			isChoosingMesh = true;
 			std::list<std::string> phageInFolder;
 
 			colliderFolder.update(

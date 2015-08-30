@@ -69,7 +69,7 @@ namespace AGE
 			assert(newShape != nullptr && "Invalid shape");
 			physx::PxRigidDynamic *body = getDataAs<physx::PxRigidDynamic>();
 			body->detachShape(*shape);
-			body->attachShape(*shape);
+			body->attachShape(*newShape);
 			shape = newShape;
 		}
 
