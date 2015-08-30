@@ -83,9 +83,8 @@ namespace AGE
 
 		OpenGLState::glDisable(GL_CULL_FACE);
 		OpenGLState::glDisable(GL_DEPTH_TEST);
-		OpenGLState::glDisable(GL_STENCIL_TEST);
 		OpenGLState::glEnable(GL_STENCIL_TEST);
-		OpenGLState::glStencilFunc(GL_LESS, 0, 0xFFFFFFFF);
+		OpenGLState::glStencilFunc(GL_EQUAL, 0, 0xFF);
 		OpenGLState::glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
 		// And we set the blend mode to additive
 		OpenGLState::glEnable(GL_BLEND);
