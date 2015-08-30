@@ -69,7 +69,7 @@ namespace AGE
 			for (auto &shapePair : collisionShapes)
 			{
 				shapePair.second.second->release();
-				std::free(shapePair.second.first);
+				//delete[] shapePair.second.first;
 			}
 			collisionShapes.clear();
 			if (scene != nullptr)

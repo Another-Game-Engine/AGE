@@ -427,31 +427,6 @@ namespace AGE
 						}
 					}
 				}
-				// If its a .phage file, we need to remove the extension and the _static or _dynamic
-				else if (extension == "phage")
-				{
-					size_t pos = file->getFileName().find_last_of("_");
-					if (pos != std::string::npos)
-						phageName = file->getFileName().substr(0, pos);
-					else
-						return;
-					if (std::find(phageInFolder.begin(), phageInFolder.end(), phageName) == phageInFolder.end())
-					{
-						phageInFolder.push_back(phageName);
-						if (ImGui::Button((phageName).c_str()))
-						{
-							std::string phagePath;
-							pos = file->getPath().find_last_of("_");
-							if (pos != std::string::npos)
-								phagePath = file->getPath().substr(0, pos);
-							else
-								return;
-							std::string assetsDirectory = ptr->entity->getScene()->getInstance<AGE::AssetsManager>()->getAssetsDirectory();
-							_meshPath = phagePath.substr(assetsDirectory.size(), std::string::npos);
-							hasChanged = true;
-						}
-					}
-				}
 			}));
 		}
 		if (hasChanged)
