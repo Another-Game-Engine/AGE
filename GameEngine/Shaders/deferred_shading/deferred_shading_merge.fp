@@ -1,6 +1,6 @@
 #version 330
 
- out vec4 color;
+out vec4 color;
 
 uniform sampler2D light_buffer;
 uniform sampler2D shiny_buffer;
@@ -13,8 +13,8 @@ in vec2 interpolated_texCoord;
 void main()
 {
 	vec3 diffuse = texture2D(diffuse_map, interpolated_texCoord).xyz;
-	vec3 albido = texture2D(light_buffer, interpolated_texCoord).xyz;
+	vec3 albedo = texture2D(light_buffer, interpolated_texCoord).xyz;
 	vec3 specular = texture2D(shiny_buffer, interpolated_texCoord).xyz;
-	diffuse = diffuse * (albido + ambient_color);
-	color = vec4(diffuse + specular, 1);
+	diffuse = diffuse * (albedo + ambient_color);
+	color = vec4(diffuse + specular, 1.0);
 }
