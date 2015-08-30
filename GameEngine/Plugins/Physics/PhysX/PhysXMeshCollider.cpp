@@ -46,11 +46,13 @@ namespace AGE
 		{
 			MeshColliderInterface::setMesh(mesh);
 			static_cast<PhysXCollider *>(this)->updateShape(static_cast<PhysXWorld *>(getWorld())->getCollisionShape(mesh, isConvex()));
+			getShape()->setMaterials(&static_cast<PhysXMaterial *>(getMaterial())->material, 1);
 		}
 
 		void PhysXMeshCollider::updateShape(void)
 		{
 			static_cast<PhysXCollider *>(this)->updateShape(static_cast<PhysXWorld *>(getWorld())->getCollisionShape(getMesh(), isConvex()));
+			getShape()->setMaterials(&static_cast<PhysXMaterial *>(getMaterial())->material, 1);
 		}
 	}
 }

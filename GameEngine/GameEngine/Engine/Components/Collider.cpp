@@ -352,6 +352,7 @@ namespace AGE
 		if (isChoosingMesh == false)
 		{
 			currentType = ptr->getColliderType();
+			isConcave = ptr->isConcave();
 		}
 	}
 
@@ -389,9 +390,16 @@ namespace AGE
 		if (currentType == Physics::ColliderType::Mesh)
 		{
 			if (ImGui::RadioButton("Convex", !isConcave))
+			{
+				ptr->setAsConvex();
 				isConcave = false;
+			}
 			if (ImGui::RadioButton("Concave", isConcave))
+			{
+				ptr->setAsConcave();
 				isConcave = true;
+			}
+
 
 			isChoosingMesh = true;
 			std::list<std::string> phageInFolder;
@@ -421,31 +429,6 @@ namespace AGE
 						if (ImGui::Button(phageName.c_str()))
 						{
 							std::string phagePath = FileUtils::RemoveExtension(file->getPath());
-							std::string assetsDirectory = ptr->entity->getScene()->getInstance<AGE::AssetsManager>()->getAssetsDirectory();
-							_meshPath = phagePath.substr(assetsDirectory.size(), std::string::npos);
-							hasChanged = true;
-						}
-					}
-				}
-				// If its a .phage file, we need to remove the extension and the _static or _dynamic
-				else if (extension == "phage")
-				{
-					size_t pos = file->getFileName().find_last_of("_");
-					if (pos != std::string::npos)
-						phageName = file->getFileName().substr(0, pos);
-					else
-						return;
-					if (std::find(phageInFolder.begin(), phageInFolder.end(), phageName) == phageInFolder.end())
-					{
-						phageInFolder.push_back(phageName);
-						if (ImGui::Button((phageName).c_str()))
-						{
-							std::string phagePath;
-							pos = file->getPath().find_last_of("_");
-							if (pos != std::string::npos)
-								phagePath = file->getPath().substr(0, pos);
-							else
-								return;
 							std::string assetsDirectory = ptr->entity->getScene()->getInstance<AGE::AssetsManager>()->getAssetsDirectory();
 							_meshPath = phagePath.substr(assetsDirectory.size(), std::string::npos);
 							hasChanged = true;

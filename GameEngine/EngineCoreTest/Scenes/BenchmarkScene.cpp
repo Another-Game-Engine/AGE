@@ -98,7 +98,7 @@ namespace AGE
 		getInstance<AGE::AssetsManager>()->setAssetsDirectory(EngineCoreTestConfiguration::GetCookedDirectory());
 
 		addSystem<AGE::DebugSystem>(0);
-		addSystem<AGE::PhysicsSystem>(0, Physics::EngineType::Bullet, getInstance<AGE::AssetsManager>());
+		addSystem<AGE::PhysicsSystem>(0, Physics::EngineType::PhysX, getInstance<AGE::AssetsManager>());
 
 		addSystem<AGE::LifetimeSystem>(2);
 		addSystem<AGE::FreeFlyCamera>(0);
@@ -115,7 +115,7 @@ namespace AGE
 		//getInstance<AGE::AssetsManager>()->loadSkeleton(OldFile("hexapod/animation/hexapod@attack(1).skage"), "DEMO_SCENE_BASIC_ASSETS");
 
 		setInstance<AGE::AnimationManager>();
-
+ 
 		srand(42);
 
 		return true;
@@ -201,7 +201,7 @@ namespace AGE
 			e->addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("cube/cube.sage"),
 										 getInstance<AGE::AssetsManager>()->getMaterial(OldFile("cube/cube.mage")))->enableRenderMode(RenderModes::AGE_OPAQUE);
 			e->addComponent<RigidBody>()->addForce(10.0f * cameraForward, Physics::ForceMode::Impulse);
-			e->addComponent<Collider>(Physics::ColliderType::Mesh, "cube/cube")->setAsConvex();
+			e->addComponent<Collider>(Physics::ColliderType::Box);
 			auto pl = e->addComponent<PointLightComponent>();
 			pl->setColor(glm::vec3(float(rand() % 100) / 100.0f, float(rand() % 100) / 100.0f, float(rand() % 100) / 100.0f));
 		}
