@@ -134,8 +134,7 @@ namespace AGE
 		ar(cereal::make_nvp("Convex", convex));
 		reset();
 		init(Physics::ColliderType::Mesh, mesh);
-//		setMesh(mesh);
-		if (isConvex())
+		if (convex)
 			setAsConvex();
 		else
 			setAsConcave();

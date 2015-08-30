@@ -352,6 +352,7 @@ namespace AGE
 		if (isChoosingMesh == false)
 		{
 			currentType = ptr->getColliderType();
+			isConcave = ptr->isConcave();
 		}
 	}
 
@@ -389,9 +390,16 @@ namespace AGE
 		if (currentType == Physics::ColliderType::Mesh)
 		{
 			if (ImGui::RadioButton("Convex", !isConcave))
+			{
+				ptr->setAsConvex();
 				isConcave = false;
+			}
 			if (ImGui::RadioButton("Concave", isConcave))
+			{
+				ptr->setAsConcave();
 				isConcave = true;
+			}
+
 
 			isChoosingMesh = true;
 			std::list<std::string> phageInFolder;
