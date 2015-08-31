@@ -102,7 +102,7 @@ namespace AGE
 		getInstance<AGE::AssetsManager>()->setAssetsDirectory(EngineCoreTestConfiguration::GetCookedDirectory());
 
 		addSystem<AGE::DebugSystem>(0);
-		addSystem<AGE::PhysicsSystem>(0, Physics::EngineType::PhysX, getInstance<AGE::AssetsManager>());
+		addSystem<AGE::PhysicsSystem>(0, Physics::EngineType::Bullet, getInstance<AGE::AssetsManager>());
 
 		addSystem<AGE::LifetimeSystem>(2);
 		addSystem<AGE::FreeFlyCamera>(0);
@@ -157,6 +157,7 @@ namespace AGE
 			auto cam = camera->addComponent<CameraComponent>();
 			camera->addComponent<FreeFlyComponent>();
 			cam->setPipeline(RenderType::DEFERRED);
+			getSystem<RenderCameraSystem>()->drawDebugLines(false);
 			cam->setTexture(_skyboxSpace);
 			cam->addSkyBoxToChoice("space", _skyboxSpace);
 //			cam->addSkyBoxToChoice("test", _skyboxTest);
@@ -278,9 +279,14 @@ namespace AGE
 
 		auto camComponent = GLOBAL_CAMERA->getComponent<CameraComponent>();
 		static char const *pipelineNames[RenderType::TOTAL] = {"Debug deferred rendering", "Deferred rendering" };
-		ImGui::ListBox("Pipelines", &pipelineIndex, pipelineNames, int(RenderType::TOTAL));
-		if (camComponent->getPipeline() != (RenderType)pipelineIndex)
-			camComponent->setPipeline((RenderType)pipelineIndex);
+		if (ImGui::ListBox("Pipelines", &pipelineIndex, pipelineNames, int(RenderType::TOTAL)))
+		{
+			if (camComponent->getPipeline() != (RenderType)pipelineIndex)
+			{
+				camComponent->setPipeline((RenderType)pipelineIndex);
+				getSystem<RenderCameraSystem>()->drawDebugLines(pipelineIndex == (int)RenderType::DEBUG_DEFERRED ? true : false);
+			}
+		}
 		return true;
 	}
 
