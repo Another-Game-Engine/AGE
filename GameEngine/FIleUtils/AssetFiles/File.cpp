@@ -1,3 +1,7 @@
+#ifdef VISUAL_LEAK_DETECTOR
+#include <vld.h>
+#endif
+
 #include "File.hpp"
 #include "Folder.hpp"
 #include <iomanip>

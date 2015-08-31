@@ -1,3 +1,7 @@
+#ifdef VISUAL_LEAK_DETECTOR
+#include <vld.h>
+#endif
+
 #include <Scenes/BenchmarkScene.hpp>
 #include <Configuration.hpp>
 #include <Utils/Age_Imgui.hpp>
@@ -123,6 +127,11 @@ namespace AGE
 
 	bool BenchmarkScene::_userUpdateBegin(float time)
 	{
+		char *titi = new char[256];
+
+		for (int i = 0; i <= 257; ++i)
+			titi[i] = 5;
+
 		++_chunkFrame;
 		_chunkCounter += time;
 

@@ -1,3 +1,7 @@
+#ifdef VISUAL_LEAK_DETECTOR
+#include <vld.h>
+#endif
+
 #include "WorldEditorScene.hpp"
 #include <imgui\imgui.h>
 #include <Systems/EntityManager.hpp>

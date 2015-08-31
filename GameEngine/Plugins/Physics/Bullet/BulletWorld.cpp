@@ -1,3 +1,7 @@
+#ifdef VISUAL_LEAK_DETECTOR
+#include <vld.h>
+#endif
+
 #include <cassert>
 
 #include <Serialize/BulletWorldImporter/btBulletWorldImporter.h>
