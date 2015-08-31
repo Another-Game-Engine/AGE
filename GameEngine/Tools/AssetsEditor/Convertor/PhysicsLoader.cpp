@@ -328,7 +328,7 @@ namespace AGE
 				meshDesciption.points.count = static_cast<physx::PxU32>(points.size());
 				meshDesciption.points.stride = static_cast<physx::PxU32>(sizeof(physx::PxVec3));
 				meshDesciption.points.data = static_cast<const void *>(&points[0]);
-				meshDesciption.flags = physx::PxConvexFlag::eCOMPUTE_CONVEX | physx::PxConvexFlag::eINFLATE_CONVEX;
+				//meshDesciption.flags = physx::PxConvexFlag::eCOMPUTE_CONVEX | physx::PxConvexFlag::eINFLATE_CONVEX;
 				meshDesciption.vertexLimit = physx::PxU16(256);
 				physx::PxDefaultMemoryOutputStream writeBuffer;
 				physx::PxCooking *cooking = PxCreateCooking(PX_PHYSICS_VERSION, PxGetFoundation(), physx::PxCookingParams(physx::PxTolerancesScale()));
