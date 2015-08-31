@@ -255,6 +255,7 @@ namespace AGE
 		{
 			case Physics::ColliderType::Mesh:
 				collider->as<Physics::ColliderType::Mesh>()->setAsConvex();
+				scale(entity->getLink().getScale());
 				break;
 			default:
 				assert(!"Invalid collider type");
@@ -269,6 +270,7 @@ namespace AGE
 		{
 			case Physics::ColliderType::Mesh:
 				collider->as<Physics::ColliderType::Mesh>()->setAsConcave();
+				scale(entity->getLink().getScale());
 				break;
 			default:
 				assert(!"Invalid collider type");
