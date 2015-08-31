@@ -354,7 +354,10 @@ namespace AGE
 		if (isChoosingMesh == false)
 		{
 			currentType = ptr->getColliderType();
-			isConcave = ptr->isConcave();
+			if (currentType == Physics::ColliderType::Mesh)
+			{
+				isConcave = ptr->isConcave();
+			}
 		}
 	}
 

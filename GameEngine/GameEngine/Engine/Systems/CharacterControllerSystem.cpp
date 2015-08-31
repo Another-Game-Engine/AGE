@@ -2,6 +2,7 @@
 
 #include <Components/RigidBody.hpp>
 #include <Components/Collider.hpp>
+#include <Components/CameraComponent.hpp>
 
 namespace AGE
 {
@@ -11,9 +12,9 @@ namespace AGE
 
 	bool CharacterControllerSystem::initialize()
 	{
-		_cameras.requireComponent<CameraComponent>();
-		_cameras.requireComponent<RigidBody>();
-		_cameras.requireComponent<Collider>();
+//		_cameras.requireComponent<CameraComponent>();
+//		_cameras.requireComponent<RigidBody>();
+//		_cameras.requireComponent<Collider>();
 		return (true);
 	}
 
