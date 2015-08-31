@@ -277,6 +277,7 @@
     <ClCompile Include="Engine\Core\SceneChunkSerialization.cpp" />
     <ClCompile Include="Engine\Entities\ArchetypeLibrary.cpp" />
     <ClCompile Include="Engine\Entities\EntitySerializationInfos.cpp" />
+    <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredBlur.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredDirectionalLightning.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredOnScreen.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredShadowBuffering.cpp" />
@@ -541,6 +542,7 @@
     <ClInclude Include="Engine\Render\OcclusionTools\DepthMapHandle.hpp" />
     <ClInclude Include="Engine\Render\OcclusionTools\DepthMapManager.hpp" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomPipeline\DebugDeferredShading.hh" />
+    <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredBlur.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredDebugBuffering.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredDirectionalLightning.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredMerging.hh" />

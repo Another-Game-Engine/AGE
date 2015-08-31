@@ -1,5 +1,7 @@
 #version 330
 
+out vec4 color;
+
 uniform float diameter;
 uniform sampler2D diffuse_map;
 
@@ -18,21 +20,21 @@ void main(void)
   float y_pos = interpolated_texCoord.y - (4 * stp);
   float x_pos = interpolated_texCoord.x;
 
-  gl_FragColor = C4 * texture2D(diffuse_map, vec2(x_pos, y_pos));
+  color = C4 * texture2D(diffuse_map, vec2(x_pos, y_pos));
   y_pos += stp;
-  gl_FragColor += C3 * texture2D(diffuse_map, vec2(x_pos, y_pos));
+  color += C3 * texture2D(diffuse_map, vec2(x_pos, y_pos));
   y_pos += stp;
-  gl_FragColor += C2 * texture2D(diffuse_map, vec2(x_pos, y_pos));
+  color += C2 * texture2D(diffuse_map, vec2(x_pos, y_pos));
   y_pos += stp;
-  gl_FragColor += C1 * texture2D(diffuse_map, vec2(x_pos, y_pos));
+  color += C1 * texture2D(diffuse_map, vec2(x_pos, y_pos));
   y_pos += stp;
-  gl_FragColor += C0 * texture2D(diffuse_map, vec2(x_pos, y_pos));
+  color += C0 * texture2D(diffuse_map, vec2(x_pos, y_pos));
   y_pos += stp;
-  gl_FragColor += C1 * texture2D(diffuse_map, vec2(x_pos, y_pos));
+  color += C1 * texture2D(diffuse_map, vec2(x_pos, y_pos));
   y_pos += stp;
-  gl_FragColor += C2 * texture2D(diffuse_map, vec2(x_pos, y_pos));
+  color += C2 * texture2D(diffuse_map, vec2(x_pos, y_pos));
   y_pos += stp;
-  gl_FragColor += C3 * texture2D(diffuse_map, vec2(x_pos, y_pos));
+  color += C3 * texture2D(diffuse_map, vec2(x_pos, y_pos));
   y_pos += stp;
-  gl_FragColor += C4 * texture2D(diffuse_map, vec2(x_pos, y_pos));
+  color += C4 * texture2D(diffuse_map, vec2(x_pos, y_pos));
 }
