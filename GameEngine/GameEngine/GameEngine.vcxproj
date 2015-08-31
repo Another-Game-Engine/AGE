@@ -303,7 +303,7 @@
   <ItemGroup>
     <ClCompile Include="..\Vendors\imgui\imgui.cpp" />
     <ClCompile Include="..\Vendors\imgui\imgui_draw.cpp" />
-    <ClCompile Include="CharacterControllerSystem.cpp" />
+    <ClCompile Include="Engine\Systems\CharacterControllerSystem.cpp" />
     <ClCompile Include="Engine\BFC\BFCBlock.cpp" />
     <ClCompile Include="Engine\BFC\BFCBlockManager.cpp" />
     <ClCompile Include="Engine\BFC\BFCBlockManagerFactory.cpp" />
@@ -520,7 +520,7 @@
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
     <ClInclude Include="..\Vendors\imgui\imgui.h" />
     <ClInclude Include="..\Vendors\imgui\stb_textedit.h" />
-    <ClInclude Include="CharacterControllerSystem.hh" />
+    <ClInclude Include="Engine\Systems\CharacterControllerSystem.hh" />
     <ClInclude Include="Engine\BFC\BFCBlock.hpp" />
     <ClInclude Include="Engine\BFC\BFCBlockManager.hpp" />
     <ClInclude Include="Engine\BFC\BFCBlockManagerFactory.hpp" />
