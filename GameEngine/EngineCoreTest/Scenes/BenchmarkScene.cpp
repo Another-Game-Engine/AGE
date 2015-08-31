@@ -127,11 +127,6 @@ namespace AGE
 
 	bool BenchmarkScene::_userUpdateBegin(float time)
 	{
-		char *titi = new char[256];
-
-		for (int i = 0; i <= 257; ++i)
-			titi[i] = 5;
-
 		++_chunkFrame;
 		_chunkCounter += time;
 
