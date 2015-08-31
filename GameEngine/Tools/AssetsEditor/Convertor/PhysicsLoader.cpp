@@ -276,23 +276,29 @@ namespace AGE
 			assert(mesh != nullptr && "Invalid mesh");
 			if (mesh != nullptr)
 			{
-				btTriangleMesh *triangleMesh = new btTriangleMesh(true, true);
+				btTriangleMesh *triangleMesh = new btTriangleMesh();
+				std::size_t indiceNb = 0;
+				std::size_t verticeNb = 0;
 				for (SubMeshData &subMesh : mesh->subMeshs)
 				{
-					std::vector<unsigned int>::const_iterator it = subMesh.indices.begin();
-					std::vector<unsigned int>::const_iterator end = subMesh.indices.end();
-					while (it != end)
+					indiceNb += subMesh.indices.size();
+					verticeNb += subMesh.positions.size();
+				}
+				triangleMesh->preallocateIndices(static_cast<int>(indiceNb));
+				triangleMesh->preallocateVertices(static_cast<int>(verticeNb));
+				for (std::size_t j = 0; j < mesh->subMeshs.size(); ++j)
+				{
+					auto &geo = mesh->subMeshs[j];
+					for (std::size_t i = 0; i < geo.indices.size(); i += 3)
 					{
-						const btVector3 firstVertex(subMesh.positions[*it].x, subMesh.positions[*it].y, subMesh.positions[*it].z);
-						++it;
-						const btVector3 secondVertex(subMesh.positions[*it].x, subMesh.positions[*it].y, subMesh.positions[*it].z);
-						++it;
-						const btVector3 thirdVertex(subMesh.positions[*it].x, subMesh.positions[*it].y, subMesh.positions[*it].z);
-						++it;
-						triangleMesh->addTriangle(firstVertex, secondVertex, thirdVertex, true);
+						auto a = geo.positions[geo.indices[i]];
+						auto b = geo.positions[geo.indices[i + 1]];
+						auto c = geo.positions[geo.indices[i + 2]];
+						triangleMesh->addTriangle(btVector3(a.x, a.y, a.z), btVector3(b.x, b.y, b.z), btVector3(c.x, c.y, c.z), false);
 					}
 				}
 				cookingTask->concaveShape = std::make_shared<btBvhTriangleMeshShape>(triangleMesh, true);
+				cookingTask->concaveShape->buildOptimizedBvh();
 			}
 			else
 			{
@@ -361,9 +367,9 @@ namespace AGE
 					{
 						points.push_back(physx::PxVec3(position.x, position.y, position.z));
 					}
-					for (unsigned int indice : subMesh.indices)
+					for (unsigned int index : subMesh.indices)
 					{
-						indices.push_back(static_cast<physx::PxU32>(indice + startIndex));
+						indices.push_back(startIndex + index);
 					}
 				}
 				physx::PxTriangleMeshDesc meshDesciption;
