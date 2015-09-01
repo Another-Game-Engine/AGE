@@ -43,7 +43,7 @@ namespace AGE
 		for (Entity const &entity : _filter.getCollection())
 		{
 			glm::mat4 transform = entity->getLink().getGlobalTransform();
-			bool result = rc->raycast(glm::vec3(transform[3]) + glm::vec3(0, -0.5, 0), glm::vec3(0, -1, 0), 0.3f, Physics::All);
+			bool result = rc->raycast(glm::vec3(transform[3]), glm::vec3(0, -1, 0), 0.3f, Physics::FilterGroup::GroupI);
 			if (result)
 			{
 				if (entity->getComponent<RigidBody>()->isAffectedByGravity() == true)
