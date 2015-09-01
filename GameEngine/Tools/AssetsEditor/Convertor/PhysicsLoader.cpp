@@ -330,18 +330,16 @@ namespace AGE
 						indices.push_back(startIndex + index);
 					}
 				}
-				physx::PxConvexMeshDesc meshDesciption;
+				physx::PxTriangleMeshDesc meshDesciption;
 				meshDesciption.points.count = static_cast<physx::PxU32>(points.size());
 				meshDesciption.points.stride = static_cast<physx::PxU32>(sizeof(physx::PxVec3));
 				meshDesciption.points.data = static_cast<const void *>(&points[0]);
 				meshDesciption.triangles.count = static_cast<physx::PxU32>(indices.size() / 3);
 				meshDesciption.triangles.stride = static_cast<physx::PxU32>(3 * sizeof(physx::PxU32));
 				meshDesciption.triangles.data = static_cast<const void *>(&indices[0]);
-				meshDesciption.flags = physx::PxConvexFlag::eCOMPUTE_CONVEX | physx::PxConvexFlag::eINFLATE_CONVEX;
-				meshDesciption.vertexLimit = physx::PxU16(256);
 				physx::PxDefaultMemoryOutputStream writeBuffer;
 				physx::PxCooking *cooking = PxCreateCooking(PX_PHYSICS_VERSION, PxGetFoundation(), physx::PxCookingParams(physx::PxTolerancesScale()));
-				const bool status = cooking->cookConvexMesh(meshDesciption, writeBuffer);
+				const bool status = cooking->cookTriangleMesh(meshDesciption, writeBuffer);
 				assert(status && "Impossible to create mesh collider");
 				if (!status)
 				{

@@ -18,7 +18,7 @@ namespace AGE
 		// Constructors
 		PhysicsSystem(void) = delete;
 
-		PhysicsSystem(AScene *scene, Physics::EngineType physicsEngineType, AssetsManager *assetManager);
+		PhysicsSystem(AScene *scene, Physics::EngineType physicsEngineType, AssetsManager *assetManager, bool activateSimulation = true);
 
 		PhysicsSystem(PhysicsSystem const &) = delete;
 
@@ -40,6 +40,8 @@ namespace AGE
 		Physics::PhysicsInterface *physics = nullptr;
 
 		EntityFilter entityFilter;
+
+		const bool _activateSimulation;
 
 		// Inherited Methods
 		bool initialize(void) override final;

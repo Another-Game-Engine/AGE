@@ -48,7 +48,7 @@ namespace AGE
 		addSystem<WE::AssetsAndComponentRelationsSystem>(0);
 		addSystem<WE::EntityManager>(1);
 		addSystem<FreeFlyCamera>(2);
-		addSystem<PhysicsSystem>(3, Physics::EngineType::PhysX, getInstance<AGE::AssetsManager>());
+		addSystem<PhysicsSystem>(3, Physics::EngineType::PhysX, getInstance<AGE::AssetsManager>(), false);
 		getInstance<Physics::PhysicsInterface>()->getWorld()->setGravity(0, 0, 0);
 		addSystem<RenderCameraSystem>(1000);
 		return true;
