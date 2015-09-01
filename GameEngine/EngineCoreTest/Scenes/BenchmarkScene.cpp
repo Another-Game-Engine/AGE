@@ -223,43 +223,47 @@ namespace AGE
 		}
 		trigger += time;
 
-		//if (_chunkCounter >= _maxChunk)
-		//{
-		//	for (auto i = 0; i < 10; ++i)
-		//	{
-		//		auto e = createEntity();
-		//		e->addComponent<Lifetime>(5.0f);
-		//
-		//		auto &link = e->getLink();
-		//		link.setPosition(glm::vec3((rand() % 100) - 50, (rand() % 50) - 5, (rand() % 100) - 50));
-		//		link.setOrientation(glm::quat(glm::vec3(rand() % 360, rand() % 360, rand() % 360)));
-		//		link.setScale(glm::vec3(1.0f));
-		//
-		//
-		//		MeshRenderer *mesh;
-		//		if (i % 4 == 0)
-		//		{
-		//			mesh = e->addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage"), getInstance<AGE::AssetsManager>()->getMaterial(OldFile("ball/ball.mage")));
-		//			e->addComponent<Collider>(Physics::ColliderType::Mesh, "ball/ball");
-		//			link.setScale(glm::vec3(2.0f));
-		//		}
-		//		else
-		//		{
-		//			mesh = e->addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("cube/cube.sage"), getInstance<AGE::AssetsManager>()->getMaterial(OldFile("cube/cube.mage")));
-		//			e->addComponent<Collider>(Physics::ColliderType::Mesh, "cube/cube");
-		//			link.setScale(glm::vec3(3.0f));
-		//		}
-		//
-		//		if (i % 20 == 0)
-		//		{
-		//			auto pl = e->addComponent<PointLightComponent>();
-		//			pl->setColor(glm::vec3(float(rand() % 100) / 100.0f, float(rand() % 100) / 100.0f, float(rand() % 100) / 100.0f));
-		//		}
-		//		e->addComponent<RigidBody>();
-		//		mesh->enableRenderMode(RenderModes::AGE_OPAQUE);
-		//	}
-		//	_chunkCounter = 0;
-		//}
+		static bool rain = false;
+
+		ImGui::Checkbox("Cube rain", &rain);
+
+		if (rain && _chunkCounter >= _maxChunk)
+		{
+			for (auto i = 0; i < 10; ++i)
+			{
+				auto e = createEntity();
+				e->addComponent<Lifetime>(5.0f);
+
+				auto &link = e->getLink();
+				link.setPosition(glm::vec3((rand() % 100) - 50, (rand() % 50) - 5, (rand() % 100) - 50));
+				link.setOrientation(glm::quat(glm::vec3(rand() % 360, rand() % 360, rand() % 360)));
+				link.setScale(glm::vec3(1.0f));
+
+
+				MeshRenderer *mesh;
+				if (i % 4 == 0)
+				{
+					mesh = e->addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage"), getInstance<AGE::AssetsManager>()->getMaterial(OldFile("ball/ball.mage")));
+					e->addComponent<Collider>(Physics::ColliderType::Mesh, "ball/ball");
+					link.setScale(glm::vec3(2.0f));
+				}
+				else
+				{
+					mesh = e->addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("cube/cube.sage"), getInstance<AGE::AssetsManager>()->getMaterial(OldFile("cube/cube.mage")));
+					e->addComponent<Collider>(Physics::ColliderType::Mesh, "cube/cube");
+					link.setScale(glm::vec3(3.0f));
+				}
+
+				if (i % 20 == 0)
+				{
+					auto pl = e->addComponent<PointLightComponent>();
+					pl->setColor(glm::vec3(float(rand() % 100) / 100.0f, float(rand() % 100) / 100.0f, float(rand() % 100) / 100.0f));
+				}
+				e->addComponent<RigidBody>();
+				mesh->enableRenderMode(RenderModes::AGE_OPAQUE);
+			}
+			_chunkCounter = 0;
+		}
 
 		if (ImGui::Button("Reload shaders or type R") || getInstance<Input>()->getPhysicalKeyPressed(AGE_r))
 		{
