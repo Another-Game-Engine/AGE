@@ -235,9 +235,9 @@ namespace AGE
 				e->addComponent<Lifetime>(5.0f);
 
 				auto &link = e->getLink();
-				link.setPosition(glm::vec3((rand() % 100) - 50, (rand() % 50) - 5, (rand() % 100) - 50));
+				link.setPosition(glm::vec3((rand() % 100) - 50, (rand() % 50) - 50, (rand() % 100) - 50));
 				link.setOrientation(glm::quat(glm::vec3(rand() % 360, rand() % 360, rand() % 360)));
-				link.setScale(glm::vec3(1.0f));
+				link.setScale(glm::vec3((float)(rand() % 30) / 10.0f));
 
 
 				MeshRenderer *mesh;
@@ -245,13 +245,11 @@ namespace AGE
 				{
 					mesh = e->addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage"), getInstance<AGE::AssetsManager>()->getMaterial(OldFile("ball/ball.mage")));
 					e->addComponent<Collider>(Physics::ColliderType::Mesh, "ball/ball");
-					link.setScale(glm::vec3(2.0f));
 				}
 				else
 				{
 					mesh = e->addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("cube/cube.sage"), getInstance<AGE::AssetsManager>()->getMaterial(OldFile("cube/cube.mage")));
 					e->addComponent<Collider>(Physics::ColliderType::Mesh, "cube/cube");
-					link.setScale(glm::vec3(3.0f));
 				}
 
 				if (i % 20 == 0)
