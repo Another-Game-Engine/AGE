@@ -20,6 +20,11 @@ namespace AGE
 		virtual void editorDelete(void) override final;
 		virtual bool editorUpdate(void) override final;
 
+		template <typename Archive>
+		void serialize(Archive &ar, const std::uint32_t version)
+		{
+		}
+
 	};
 }
 

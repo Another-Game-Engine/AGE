@@ -48,9 +48,13 @@ namespace AGE
 
 		LayerMask operator|(LayerMask lhs, LayerMask rhs);
 
+		LayerMask operator^(LayerMask lhs, LayerMask rhs);
+
 		LayerMask &operator&=(LayerMask &lhs, LayerMask rhs);
 
 		LayerMask &operator|=(LayerMask &lhs, LayerMask rhs);
+
+		LayerMask operator^=(LayerMask lhs, LayerMask rhs);
 
 		LayerMask operator~(LayerMask lhs);
 
