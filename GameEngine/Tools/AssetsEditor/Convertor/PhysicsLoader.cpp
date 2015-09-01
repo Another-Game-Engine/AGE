@@ -317,18 +317,27 @@ namespace AGE
 			if (mesh != nullptr)
 			{
 				std::vector<physx::PxVec3> points;
+				std::vector<physx::PxU32> indices;
 				for (SubMeshData &subMesh : mesh->subMeshs)
 				{
+					const std::size_t startIndex = points.size();
 					for (const glm::vec3 &position : subMesh.positions)
 					{
 						points.push_back(physx::PxVec3(position.x, position.y, position.z));
+					}
+					for (unsigned int index : subMesh.indices)
+					{
+						indices.push_back(startIndex + index);
 					}
 				}
 				physx::PxConvexMeshDesc meshDesciption;
 				meshDesciption.points.count = static_cast<physx::PxU32>(points.size());
 				meshDesciption.points.stride = static_cast<physx::PxU32>(sizeof(physx::PxVec3));
 				meshDesciption.points.data = static_cast<const void *>(&points[0]);
-				//meshDesciption.flags = physx::PxConvexFlag::eCOMPUTE_CONVEX | physx::PxConvexFlag::eINFLATE_CONVEX;
+				meshDesciption.triangles.count = static_cast<physx::PxU32>(indices.size() / 3);
+				meshDesciption.triangles.stride = static_cast<physx::PxU32>(3 * sizeof(physx::PxU32));
+				meshDesciption.triangles.data = static_cast<const void *>(&indices[0]);
+				meshDesciption.flags = physx::PxConvexFlag::eCOMPUTE_CONVEX | physx::PxConvexFlag::eINFLATE_CONVEX;
 				meshDesciption.vertexLimit = physx::PxU16(256);
 				physx::PxDefaultMemoryOutputStream writeBuffer;
 				physx::PxCooking *cooking = PxCreateCooking(PX_PHYSICS_VERSION, PxGetFoundation(), physx::PxCookingParams(physx::PxTolerancesScale()));
@@ -376,7 +385,7 @@ namespace AGE
 				meshDesciption.points.count = static_cast<physx::PxU32>(points.size());
 				meshDesciption.points.stride = static_cast<physx::PxU32>(sizeof(physx::PxVec3));
 				meshDesciption.points.data = static_cast<const void *>(&points[0]);
-				meshDesciption.triangles.count = static_cast<physx::PxU32>(indices.size());
+				meshDesciption.triangles.count = static_cast<physx::PxU32>(indices.size() / 3);
 				meshDesciption.triangles.stride = static_cast<physx::PxU32>(3 * sizeof(physx::PxU32));
 				meshDesciption.triangles.data = static_cast<const void *>(&indices[0]);
 				physx::PxDefaultMemoryOutputStream writeBuffer;
