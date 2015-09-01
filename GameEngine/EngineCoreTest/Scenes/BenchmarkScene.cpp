@@ -240,18 +240,19 @@ namespace AGE
 				{
 					mesh = e->addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage"), getInstance<AGE::AssetsManager>()->getMaterial(OldFile("ball/ball.mage")));
 					e->addComponent<Collider>(Physics::ColliderType::Mesh, "ball/ball");
-					link.setScale(glm::vec3(0.5f));
+					link.setScale(glm::vec3(2.0f));
 				}
 				else
 				{
 					mesh = e->addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("cube/cube.sage"), getInstance<AGE::AssetsManager>()->getMaterial(OldFile("cube/cube.mage")));
 					e->addComponent<Collider>(Physics::ColliderType::Mesh, "cube/cube");
-					//auto pl = e->addComponent<PointLightComponent>();
-					//pl->setColor(glm::vec3(float(rand() % 100) / 100.0f, float(rand() % 100) / 100.0f, float(rand() % 100) / 100.0f));
+					link.setScale(glm::vec3(3.0f));
 				}
 
-				if (i % 13 == 0)
+				if (i % 20 == 0)
 				{
+					auto pl = e->addComponent<PointLightComponent>();
+					pl->setColor(glm::vec3(float(rand() % 100) / 100.0f, float(rand() % 100) / 100.0f, float(rand() % 100) / 100.0f));
 				}
 				e->addComponent<RigidBody>();
 				mesh->enableRenderMode(RenderModes::AGE_OPAQUE);
