@@ -27,7 +27,7 @@ namespace AGE
 	{
 		PROGRAM_BLUR_HORIZONTAL = 0,
         PROGRAM_BLUR_VERTICAL,
-        PROGRAM_BLUR_MERGE;
+        PROGRAM_BLUR_MERGE,
 		PROGRAM_NBR
 	};
 
@@ -50,35 +50,30 @@ namespace AGE
 		auto fragmentShaderPathVertical = shaderPath->getValue() + BLUR_VERTICAL_FRAG;
 		_programs[PROGRAM_BLUR_VERTICAL] = std::make_shared<Program>(Program(std::string("basic_3d_render"),
 		{
-			std::make_shared<UnitProg>(fragmentShaderPathVertical, GL_FRAGMENT_SHADER)
-			std::make_shared<UnitProg>(vertexShaderPathVertical, GL_VERTEX_SHADER),
+			std::make_shared<UnitProg>(fragmentShaderPathVertical, GL_FRAGMENT_SHADER),
+			std::make_shared<UnitProg>(vertexShaderPathVertical, GL_VERTEX_SHADER)
 		}));
 
         auto vertexShaderPathHorizontal = shaderPath->getValue() + BLUR_HORIZONTAL_VERTEX;
 		auto fragmentShaderPathHorizontal = shaderPath->getValue() + BLUR_HORIZONTAL_FRAG;
 		_programs[PROGRAM_BLUR_HORIZONTAL] = std::make_shared<Program>(Program(std::string("blur_horizontal"),
 		{
-			std::make_shared<UnitProg>(fragmentShaderPathHorizontal, GL_FRAGMENT_SHADER)
-			std::make_shared<UnitProg>(vertexShaderPathHorizontal, GL_VERTEX_SHADER),
+			std::make_shared<UnitProg>(fragmentShaderPathHorizontal, GL_FRAGMENT_SHADER),
+			std::make_shared<UnitProg>(vertexShaderPathHorizontal, GL_VERTEX_SHADER)
 		}));
 
         auto vertexShaderPathMerge = shaderPath->getValue() + BLUR_EXTRACT_VERTEX;
 		auto fragmentShaderPathMerge = shaderPath->getValue() + BLUR_EXTRACT_FRAG;
 		_programs[PROGRAM_BLUR_MERGE] = std::make_shared<Program>(Program(std::string("merge"),
 		{
-			std::make_shared<UnitProg>(fragmentShaderPathMerge, GL_FRAGMENT_SHADER)
-			std::make_shared<UnitProg>(vertexShaderPathMerge, GL_VERTEX_SHADER),
+			std::make_shared<UnitProg>(fragmentShaderPathMerge, GL_FRAGMENT_SHADER),
+			std::make_shared<UnitProg>(vertexShaderPathMerge, GL_VERTEX_SHADER)
 		}));
 
 		Key<Painter> quadPainterKey;
 
 		GetRenderThread()->getQuadGeometry(_quadVertices, quadPainterKey);
 		_quadPainter = _painterManager->get_painter(quadPainterKey);
-	}
-
-	void DeferredBlur::setAmbient(glm::vec3 const &ambient)
-	{
-		_ambientColor = ambient;
 	}
 
 	void DeferredBlur::renderPass(const DRBCameraDrawableList &infos)
@@ -97,7 +92,7 @@ namespace AGE
 			//_programs[PROGRAM_MERGING]->get_resource<Sampler2D>("light_buffer").set(_lightAccuInput);
 			//_programs[PROGRAM_MERGING]->get_resource<Sampler2D>("shiny_buffer").set(_shinyAccuInput);
 			//_programs[PROGRAM_MERGING]->get_resource<Vec3>("ambient_color").set(_ambientColor);
-            _quadPainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_MERGING], Properties(), _quadVertices);
+			_quadPainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BLUR_HORIZONTAL], Properties(), _quadVertices);
 		}
         SCOPE_profile_gpu_i("DeferredBlur() first pass of blur horizontal");
         SCOPE_profile_cpu_i("RenderTimer", "DeferredBlur() pass");
@@ -109,7 +104,7 @@ namespace AGE
             //_programs[PROGRAM_MERGING]->get_resource<Sampler2D>("light_buffer").set(_lightAccuInput);
             //_programs[PROGRAM_MERGING]->get_resource<Sampler2D>("shiny_buffer").set(_shinyAccuInput);
             //_programs[PROGRAM_MERGING]->get_resource<Vec3>("ambient_color").set(_ambientColor);
-            _quadPainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_MERGING], Properties(), _quadVertices);
+			_quadPainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BLUR_VERTICAL], Properties(), _quadVertices);
         }
         SCOPE_profile_gpu_i("DeferredBlur() merge blur");
         SCOPE_profile_cpu_i("RenderTimer", "DeferredBlur() pass");
@@ -121,7 +116,7 @@ namespace AGE
             //_programs[PROGRAM_MERGING]->get_resource<Sampler2D>("light_buffer").set(_lightAccuInput);
             //_programs[PROGRAM_MERGING]->get_resource<Sampler2D>("shiny_buffer").set(_shinyAccuInput);
             //_programs[PROGRAM_MERGING]->get_resource<Vec3>("ambient_color").set(_ambientColor);
-            _quadPainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_MERGING], Properties(), _quadVertices);
+			_quadPainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BLUR_MERGE], Properties(), _quadVertices);
         }
 	}
 

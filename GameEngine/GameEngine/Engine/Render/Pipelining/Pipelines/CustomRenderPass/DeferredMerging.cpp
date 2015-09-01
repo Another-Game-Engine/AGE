@@ -28,14 +28,15 @@ namespace AGE
 	DeferredMerging::DeferredMerging(glm::uvec2 const &screenSize, std::shared_ptr<PaintingManager> painterManager,
 		std::shared_ptr<Texture2D> diffuse,
 		std::shared_ptr<Texture2D> lightAccumulation,
-		std::shared_ptr<Texture2D> shinyAccumulation) :
+		std::shared_ptr<Texture2D> shinyAccumulation,
+		std::shared_ptr<Texture2D> albedo) :
 					FrameBufferRender(screenSize.x, screenSize.y, painterManager)
 	{
  		_diffuseInput = diffuse;
 		_lightAccuInput = lightAccumulation;
 		_shinyAccuInput = shinyAccumulation;
 
-		push_storage_output(GL_COLOR_ATTACHMENT0, diffuse);
+		push_storage_output(GL_COLOR_ATTACHMENT0, albedo);
 
 		_programs.resize(PROGRAM_NBR);
 

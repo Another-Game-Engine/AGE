@@ -15,7 +15,8 @@ namespace AGE
 		DeferredMerging(glm::uvec2 const &screenSize, std::shared_ptr<PaintingManager> painterManager,
 							std::shared_ptr<Texture2D> diffuse,
 							std::shared_ptr<Texture2D> lightAccumulation,
-							std::shared_ptr<Texture2D> shinyAccumulation);
+							std::shared_ptr<Texture2D> shinyAccumulation,
+							std::shared_ptr<Texture2D> albedo);
 		virtual ~DeferredMerging() = default;
 
 		void setAmbient(glm::vec3 const &ambient);

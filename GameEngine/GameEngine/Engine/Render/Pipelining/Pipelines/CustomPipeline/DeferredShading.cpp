@@ -16,6 +16,7 @@ namespace AGE
 	DeferredShading::DeferredShading(glm::uvec2 const &screen_size, std::shared_ptr<PaintingManager> const &painter_manager) :
 		ARenderingPipeline(std::string("deferred shading"), painter_manager)
 	{
+		_albedo = createRenderPassOutput<Texture2D>(screen_size.x, screen_size.y, GL_RGBA32F, true);
 		_diffuse = createRenderPassOutput<Texture2D>(screen_size.x, screen_size.y, GL_RGBA32F, true);
 		_normal = createRenderPassOutput<Texture2D>(screen_size.x, screen_size.y, GL_RGBA8, true);
 		_specular = createRenderPassOutput<Texture2D>(screen_size.x, screen_size.y, GL_RGBA8, true);
@@ -25,26 +26,25 @@ namespace AGE
 		_shinyAccumulation = createRenderPassOutput<Texture2D>(screen_size.x, screen_size.y, GL_RGBA32F, true);
 
 		// We create the render pass
-		std::shared_ptr<DeferredSkyBox> skybox = std::make_shared<DeferredSkyBox>(screen_size, _painter_manager, _diffuse, _depthStencil);
-		std::shared_ptr<DeferredBasicBuffering> basicBuffering = std::make_shared<DeferredBasicBuffering>(screen_size, _painter_manager, _diffuse, _normal, _specular, _depthStencil);
-		std::shared_ptr<DeferredSpotLightning> spotLightning = std::make_shared<DeferredSpotLightning>(screen_size, _painter_manager, _normal, _depthStencil, _specular, _lightAccumulation, _shinyAccumulation);
-		std::shared_ptr<DeferredShadowBuffering> shadowBuffering = std::make_shared<DeferredShadowBuffering>(glm::uvec2(RESOLUTION_SHADOW_X, RESOLUTION_SHADOW_Y), _painter_manager);
-		std::shared_ptr<DeferredPointLightning> pointLightning = std::make_shared<DeferredPointLightning>(screen_size, _painter_manager, _normal, _depthStencil, _specular, _lightAccumulation, _shinyAccumulation);
-		std::shared_ptr<DeferredDirectionalLightning> directionalLightning = std::make_shared<DeferredDirectionalLightning>(screen_size, _painter_manager, _normal, _depthStencil, _specular, _lightAccumulation, _shinyAccumulation);
-		_deferredMerging = std::make_shared<DeferredMerging>(screen_size, _painter_manager, _diffuse, _lightAccumulation, _shinyAccumulation);
-		std::shared_ptr<DeferredOnScreen> deferredOnScreen = std::make_shared<DeferredOnScreen>(screen_size, _painter_manager, _diffuse);
+		auto shadowBuffering = std::make_shared<DeferredShadowBuffering>(glm::uvec2(RESOLUTION_SHADOW_X, RESOLUTION_SHADOW_Y), _painter_manager);
+		auto skybox = std::make_shared<DeferredSkyBox>(screen_size, _painter_manager, _diffuse, _depthStencil);
+		auto basicBuffering = std::make_shared<DeferredBasicBuffering>(screen_size, _painter_manager, _diffuse, _normal, _specular, _depthStencil);
+		auto directionalLightning = std::make_shared<DeferredDirectionalLightning>(screen_size, _painter_manager, _normal, _depthStencil, _specular, _lightAccumulation, _shinyAccumulation);
+		auto spotLightning = std::make_shared<DeferredSpotLightning>(screen_size, _painter_manager, _normal, _depthStencil, _specular, _lightAccumulation, _shinyAccumulation);
+		auto pointLightning = std::make_shared<DeferredPointLightning>(screen_size, _painter_manager, _normal, _depthStencil, _specular, _lightAccumulation, _shinyAccumulation);
+		_deferredMerging = std::make_shared<DeferredMerging>(screen_size, _painter_manager, _diffuse, _lightAccumulation, _shinyAccumulation, _albedo);
+		auto deferredOnScreen = std::make_shared<DeferredOnScreen>(screen_size, _painter_manager, _diffuse);
 
 		// The entry point is the basic buffering pass
 		setAmbient(glm::vec3(0.2f));
-		_rendering_list.emplace_back(shadowBuffering);
-		_rendering_list.emplace_back(skybox);
-		_rendering_list.emplace_back(basicBuffering);
-		_rendering_list.emplace_back(directionalLightning);
-		_rendering_list.emplace_back(spotLightning);
-		_rendering_list.emplace_back(pointLightning);
-		_rendering_list.emplace_back(_deferredMerging);
-		_rendering_list.emplace_back(skybox);
-		_rendering_list.emplace_back(deferredOnScreen);
+		_rendering_list.emplace_back(shadowBuffering); // here compute the shadow map
+		_rendering_list.emplace_back(basicBuffering); // fill the diffuse, normal, depth with the geometry drawing.
+		_rendering_list.emplace_back(directionalLightning); // accumulate in accumulation buffer light and shiny, the directional light 
+		_rendering_list.emplace_back(spotLightning);  // accumulate  spot light
+		_rendering_list.emplace_back(pointLightning); // accumulate point light
+		_rendering_list.emplace_back(_deferredMerging); // regoup all in the albedo 
+		_rendering_list.emplace_back(skybox); // next fill the diffuse buffer with the skybox, clean the old data.
+		_rendering_list.emplace_back(deferredOnScreen); // 
 	}
 
 	DeferredShading::DeferredShading(DeferredShading &&move) :

@@ -28,6 +28,7 @@ namespace AGE
 
 	private:
 		std::shared_ptr<Texture2D> _depthStencil;
+		std::shared_ptr<Texture2D> _albedo;
 		std::shared_ptr<Texture2D> _diffuse;
 		std::shared_ptr<Texture2D> _normal;
 		std::shared_ptr<Texture2D> _specular;
