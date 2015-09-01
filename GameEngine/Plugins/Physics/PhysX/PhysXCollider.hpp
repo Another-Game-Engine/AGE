@@ -19,12 +19,12 @@ namespace AGE
 			// Constructors
 			PhysXCollider(void) = delete;
 
-			PhysXCollider(WorldInterface *world, Private::GenericData *data, physx::PxShape *shape);
+			PhysXCollider(WorldInterface *world, Private::GenericData *data, std::vector<physx::PxShape *> shapes);
 
 			PhysXCollider(const PhysXCollider &) = delete;
 
 			// Methods
-			void updateShape(physx::PxShape *newShape);
+			void updateShape(std::vector<physx::PxShape *> newShapes);
 
 			// Assignment Operators
 			PhysXCollider &operator=(const PhysXCollider &) = delete;
@@ -34,13 +34,13 @@ namespace AGE
 			virtual ~PhysXCollider(void);
 
 			// Methods
-			physx::PxShape *getShape(void);
+			std::vector<physx::PxShape *> &getShapes(void);
 
-			const physx::PxShape *getShape(void) const;
+			const std::vector<physx::PxShape *> &getShapes(void) const;
 
 		private:
 			// Attributes
-			physx::PxShape *shape = nullptr;
+			std::vector<physx::PxShape *> shapes;
 
 			PhysXRigidBody *rigidBody = nullptr;
 

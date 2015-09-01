@@ -72,8 +72,8 @@ namespace AGE
 		{
 			for (auto &shapePair : collisionShapes)
 			{
-				shapePair.second.second->release();
-				//delete[] shapePair.second.first;
+				//shapePair.second.second->release();
+				delete[] shapePair.second.first;
 			}
 			collisionShapes.clear();
 			if (scene != nullptr)
@@ -106,30 +106,35 @@ namespace AGE
 			return scene;
 		}
 
-		physx::PxShape *PhysXWorld::getCollisionShape(const std::string &mesh, bool isConvex)
+		std::vector<physx::PxShape *> PhysXWorld::getCollisionShapes(const std::string &mesh, bool isConvex)
 		{
+			std::vector<physx::PxShape *> shapes;
 			const std::string path = getAssetManager()->getAssetsDirectory() + mesh + "_physx" + (isConvex ? "_convex" : "_concave") + ".phage";
 			auto found = collisionShapes.find(path);
 			if (found != collisionShapes.end())
 			{
 				physx::PxPhysics *physics = static_cast<PhysXPhysics *>(getPhysics())->getPhysics();
 				physx::PxMaterial *material = static_cast<PhysXMaterial *>(getMaterial(GetDefaultMaterialName()))->getMaterial();
-				return found->second.second->getConcreteType() == physx::PxConcreteType::eTRIANGLE_MESH ?
-					physics->createShape(physx::PxTriangleMeshGeometry(static_cast<physx::PxTriangleMesh *>(found->second.second)), *material, true) :
-					physics->createShape(physx::PxConvexMeshGeometry(static_cast<physx::PxConvexMesh *>(found->second.second)), *material, true);
+				for (physx::PxBase *base : found->second.second)
+				{
+					shapes.push_back(base->getConcreteType() == physx::PxConcreteType::eTRIANGLE_MESH ?
+									 physics->createShape(physx::PxTriangleMeshGeometry(static_cast<physx::PxTriangleMesh *>(base)), *material, true) :
+									 physics->createShape(physx::PxConvexMeshGeometry(static_cast<physx::PxConvexMesh *>(base)), *material, true));
+				}
+				return std::move(shapes);
 			}
 			OldFile filePath(path);
 			if (!filePath.exists())
 			{
 				std::cerr << "Physics file not found." << std::endl;
-				return nullptr;
+				return std::move(shapes);
 			}
 			FILE *stream = nullptr;
 			fopen_s(&stream, path.c_str(), "rb");
 			if (stream == nullptr)
 			{
 				std::cerr << "Impossible to open PhysX file." << std::endl;
-				return nullptr;
+				return std::move(shapes);
 			}
 			std::fseek(stream, 0, SEEK_END);
 			const std::size_t fileSize = std::ftell(stream);
@@ -137,7 +142,7 @@ namespace AGE
 			{
 				std::cerr << "PhysX file is invalid. File is empty." << std::endl;
 				std::fclose(stream);
-				return nullptr;
+				return std::move(shapes);
 			}
 			std::fseek(stream, 0, SEEK_SET);
 			void *collectionBuffer = std::malloc(fileSize + PX_SERIAL_FILE_ALIGN);
@@ -146,16 +151,20 @@ namespace AGE
 			std::fclose(stream);
 			physx::PxSerializationRegistry *registry = physx::PxSerialization::createSerializationRegistry(*static_cast<PhysXPhysics *>(getPhysics())->getPhysics());
 			physx::PxCollection *collection = physx::PxSerialization::createCollectionFromBinary(bytes, *registry);
-			if (collection->getNbObjects() != 1 || (collection->getObject(0).getConcreteType() != physx::PxConcreteType::eTRIANGLE_MESH &&
-													collection->getObject(0).getConcreteType() != physx::PxConcreteType::eCONVEX_MESH))
+			std::vector<physx::PxBase *> baseShapes;
+			for (physx::PxU32 objectIndex = 0; objectIndex < collection->getNbObjects(); ++objectIndex)
 			{
-				std::cerr << "PhysX file is invalid. No collision shape inside." << std::endl;
-				return nullptr;
+				if (collection->getObject(objectIndex).getConcreteType() != physx::PxConcreteType::eTRIANGLE_MESH && collection->getObject(objectIndex).getConcreteType() != physx::PxConcreteType::eCONVEX_MESH)
+				{
+					std::cerr << "PhysX file is invalid. No collision shape inside." << std::endl;
+					return std::move(shapes);
+				}
+				baseShapes.push_back(&collection->getObject(objectIndex));
 			}
-			collisionShapes.emplace(std::make_pair(path, std::make_pair(collectionBuffer, &collection->getObject(0))));
+			collisionShapes.emplace(std::make_pair(path, std::make_pair(collectionBuffer, std::move(baseShapes))));
 			collection->release();
 			registry->release();
-			return getCollisionShape(mesh, isConvex);
+			return getCollisionShapes(mesh, isConvex);
 		}
 
 		void PhysXWorld::notifyTriggers(void)

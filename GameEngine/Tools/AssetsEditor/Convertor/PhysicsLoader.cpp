@@ -70,7 +70,7 @@ namespace AGE
 
 	static bool SavePhysXConvex(std::shared_ptr<CookingTask> cookingTask)
 	{
-		if (cookingTask->physxConvexShape)
+		if (!cookingTask->physxConvexShapes.empty())
 		{
 			auto tid = Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PushTask("PhysicsLoader : saving physx convex shape for " + cookingTask->dataSet->filePath.getShortFileName());
 			auto folderPath = std::tr2::sys::path(cookingTask->serializedDirectory.path().directory_string() + "\\" + cookingTask->dataSet->filePath.getFolder());
@@ -85,7 +85,17 @@ namespace AGE
 			physx::PxDefaultFileOutputStream stream(name.c_str());
 			physx::PxSerializationRegistry *registry = physx::PxSerialization::createSerializationRegistry(PxGetPhysics());
 			physx::PxCollection *collection = PxCreateCollection();
-			collection->add(*cookingTask->physxConvexShape);
+			for (physx::PxConvexMesh *convexShape : cookingTask->physxConvexShapes)
+			{
+				collection->add(*convexShape);
+			}
+			if (collection->getNbObjects() == 0)
+			{
+				for (physx::PxTriangleMesh *concaveShape : cookingTask->physxConcaveShapes)
+				{
+					collection->add(*concaveShape);
+				}
+			}
 			physx::PxSerialization::complete(*collection, *registry);
 			physx::PxSerialization::serializeCollectionToBinary(stream, *collection, *registry);
 			collection->release();
@@ -97,7 +107,7 @@ namespace AGE
 
 	static bool SavePhysXConcave(std::shared_ptr<CookingTask> cookingTask)
 	{
-		if (cookingTask->physxConcaveShape)
+		if (!cookingTask->physxConcaveShapes.empty())
 		{
 			auto tid = Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PushTask("PhysicsLoader : saving physx concave shape for " + cookingTask->dataSet->filePath.getShortFileName());
 			auto folderPath = std::tr2::sys::path(cookingTask->serializedDirectory.path().directory_string() + "\\" + cookingTask->dataSet->filePath.getFolder());
@@ -112,7 +122,17 @@ namespace AGE
 			physx::PxDefaultFileOutputStream stream(name.c_str());
 			physx::PxSerializationRegistry *registry = physx::PxSerialization::createSerializationRegistry(PxGetPhysics());
 			physx::PxCollection *collection = PxCreateCollection();
-			collection->add(*cookingTask->physxConcaveShape);
+			for (physx::PxTriangleMesh *concaveShape : cookingTask->physxConcaveShapes)
+			{
+				collection->add(*concaveShape);
+			}
+			if (collection->getNbObjects() == 0)
+			{
+				for (physx::PxConvexMesh *convexShape : cookingTask->physxConvexShapes)
+				{
+					collection->add(*convexShape);
+				}
+			}
 			physx::PxSerialization::complete(*collection, *registry);
 			physx::PxSerialization::serializeCollectionToBinary(stream, *collection, *registry);
 			collection->release();
@@ -126,7 +146,11 @@ namespace AGE
 	{
 		if (!cookingTask->dataSet->loadPhysic)
 			return true;
-		return SaveBulletConvex(cookingTask) && SaveBulletConcave(cookingTask) && SavePhysXConvex(cookingTask) && SavePhysXConcave(cookingTask);
+		bool returnValue = SaveBulletConvex(cookingTask);
+		returnValue &= SaveBulletConcave(cookingTask);
+		returnValue &= SavePhysXConvex(cookingTask);
+		returnValue &= SavePhysXConcave(cookingTask);
+		return returnValue;
 	}
 
 	namespace Private
@@ -316,37 +340,30 @@ namespace AGE
 			assert(mesh != nullptr && "Invalid mesh");
 			if (mesh != nullptr)
 			{
-				std::vector<physx::PxVec3> points;
-				std::vector<physx::PxU32> indices;
+				physx::PxCooking *cooking = PxCreateCooking(PX_PHYSICS_VERSION, PxGetFoundation(), physx::PxCookingParams(physx::PxTolerancesScale()));
 				for (SubMeshData &subMesh : mesh->subMeshs)
 				{
-					const std::size_t startIndex = points.size();
+					std::vector<physx::PxVec3> points;
 					for (const glm::vec3 &position : subMesh.positions)
 					{
 						points.push_back(physx::PxVec3(position.x, position.y, position.z));
 					}
-					for (unsigned int index : subMesh.indices)
+					physx::PxConvexMeshDesc meshDesciption;
+					meshDesciption.points.count = static_cast<physx::PxU32>(points.size());
+					meshDesciption.points.stride = static_cast<physx::PxU32>(sizeof(physx::PxVec3));
+					meshDesciption.points.data = static_cast<const void *>(&points[0]);
+					meshDesciption.flags = physx::PxConvexFlag::eCOMPUTE_CONVEX | physx::PxConvexFlag::eINFLATE_CONVEX;
+					meshDesciption.vertexLimit = physx::PxU16(256);
+					physx::PxDefaultMemoryOutputStream writeBuffer;
+					const bool status = cooking->cookConvexMesh(meshDesciption, writeBuffer);
+					assert(status && "Impossible to create convex shape");
+					if (!status)
 					{
-						indices.push_back(startIndex + index);
+						return false;
 					}
+					physx::PxDefaultMemoryInputData readBuffer(writeBuffer.getData(), writeBuffer.getSize());
+					cookingTask->physxConvexShapes.push_back(PxGetPhysics().createConvexMesh(readBuffer));
 				}
-				physx::PxTriangleMeshDesc meshDesciption;
-				meshDesciption.points.count = static_cast<physx::PxU32>(points.size());
-				meshDesciption.points.stride = static_cast<physx::PxU32>(sizeof(physx::PxVec3));
-				meshDesciption.points.data = static_cast<const void *>(&points[0]);
-				meshDesciption.triangles.count = static_cast<physx::PxU32>(indices.size() / 3);
-				meshDesciption.triangles.stride = static_cast<physx::PxU32>(3 * sizeof(physx::PxU32));
-				meshDesciption.triangles.data = static_cast<const void *>(&indices[0]);
-				physx::PxDefaultMemoryOutputStream writeBuffer;
-				physx::PxCooking *cooking = PxCreateCooking(PX_PHYSICS_VERSION, PxGetFoundation(), physx::PxCookingParams(physx::PxTolerancesScale()));
-				const bool status = cooking->cookTriangleMesh(meshDesciption, writeBuffer);
-				assert(status && "Impossible to create mesh collider");
-				if (!status)
-				{
-					return false;
-				}
-				physx::PxDefaultMemoryInputData readBuffer(writeBuffer.getData(), writeBuffer.getSize());
-				cookingTask->physxConvexShape = PxGetPhysics().createConvexMesh(readBuffer);
 				cooking->release();
 			}
 			else
@@ -365,37 +382,36 @@ namespace AGE
 			assert(mesh != nullptr && "Invalid mesh");
 			if (mesh != nullptr)
 			{
-				std::vector<physx::PxVec3> points;
-				std::vector<physx::PxU32> indices;
+				physx::PxCooking *cooking = PxCreateCooking(PX_PHYSICS_VERSION, PxGetFoundation(), physx::PxCookingParams(physx::PxTolerancesScale()));
 				for (SubMeshData &subMesh : mesh->subMeshs)
 				{
-					const std::size_t startIndex = points.size();
+					std::vector<physx::PxVec3> points;
+					std::vector<physx::PxU32> indices;
 					for (const glm::vec3 &position : subMesh.positions)
 					{
 						points.push_back(physx::PxVec3(position.x, position.y, position.z));
 					}
 					for (unsigned int index : subMesh.indices)
 					{
-						indices.push_back(startIndex + index);
+						indices.push_back(index);
 					}
+					physx::PxTriangleMeshDesc meshDesciption;
+					meshDesciption.points.count = static_cast<physx::PxU32>(points.size());
+					meshDesciption.points.stride = static_cast<physx::PxU32>(sizeof(physx::PxVec3));
+					meshDesciption.points.data = static_cast<const void *>(&points[0]);
+					meshDesciption.triangles.count = static_cast<physx::PxU32>(indices.size() / 3);
+					meshDesciption.triangles.stride = static_cast<physx::PxU32>(3 * sizeof(physx::PxU32));
+					meshDesciption.triangles.data = static_cast<const void *>(&indices[0]);
+					physx::PxDefaultMemoryOutputStream writeBuffer;
+					const bool status = cooking->cookTriangleMesh(meshDesciption, writeBuffer);
+					assert(status && "Impossible to create concave shape");
+					if (!status)
+					{
+						return false;
+					}
+					physx::PxDefaultMemoryInputData readBuffer(writeBuffer.getData(), writeBuffer.getSize());
+					cookingTask->physxConcaveShapes.push_back(PxGetPhysics().createTriangleMesh(readBuffer));
 				}
-				physx::PxTriangleMeshDesc meshDesciption;
-				meshDesciption.points.count = static_cast<physx::PxU32>(points.size());
-				meshDesciption.points.stride = static_cast<physx::PxU32>(sizeof(physx::PxVec3));
-				meshDesciption.points.data = static_cast<const void *>(&points[0]);
-				meshDesciption.triangles.count = static_cast<physx::PxU32>(indices.size() / 3);
-				meshDesciption.triangles.stride = static_cast<physx::PxU32>(3 * sizeof(physx::PxU32));
-				meshDesciption.triangles.data = static_cast<const void *>(&indices[0]);
-				physx::PxDefaultMemoryOutputStream writeBuffer;
-				physx::PxCooking *cooking = PxCreateCooking(PX_PHYSICS_VERSION, PxGetFoundation(), physx::PxCookingParams(physx::PxTolerancesScale()));
-				const bool status = cooking->cookTriangleMesh(meshDesciption, writeBuffer);
-				assert(status && "Impossible to create mesh collider");
-				if (!status)
-				{
-					return false;
-				}
-				physx::PxDefaultMemoryInputData readBuffer(writeBuffer.getData(), writeBuffer.getSize());
-				cookingTask->physxConcaveShape = PxGetPhysics().createTriangleMesh(readBuffer);
 				cooking->release();
 			}
 			else
@@ -411,7 +427,10 @@ namespace AGE
 		if (!cookingTask->dataSet->loadPhysic)
 			return true;
 		auto tid = Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PushTask("PhysicsLoader : loading " + cookingTask->dataSet->filePath.getShortFileName());
-		const bool returnValue = LoadBulletConvex(cookingTask) && LoadBulletConcave(cookingTask) && LoadPhysXConvex(cookingTask) && LoadPhysXConcave(cookingTask);
+		bool returnValue = LoadBulletConvex(cookingTask);
+		returnValue &= LoadBulletConcave(cookingTask);
+		returnValue &= LoadPhysXConvex(cookingTask);
+		returnValue &= LoadPhysXConcave(cookingTask);
 		Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PopTask(tid);
 		return returnValue;
 	}
