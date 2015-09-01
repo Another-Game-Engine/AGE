@@ -12,8 +12,8 @@
 namespace AGE
 {
 	// Constructors
-	PhysicsSystem::PhysicsSystem(AScene *scene, Physics::EngineType physicsEngineType, AssetsManager *assetManager)
-		: System(scene), PluginManager("CreateInterface", "DestroyInterface"), assetManager(assetManager), entityFilter(scene)
+	PhysicsSystem::PhysicsSystem(AScene *scene, Physics::EngineType physicsEngineType, AssetsManager *assetManager, bool activateSimulation /* true */)
+		: System(scene), PluginManager("CreateInterface", "DestroyInterface"), assetManager(assetManager), entityFilter(scene), _activateSimulation(activateSimulation)
 	{
 		_name = "PhysicsSystem";
 		entityFilter.requireComponent<RigidBody>();
@@ -112,7 +112,10 @@ namespace AGE
 	{
 		SCOPE_profile_cpu_function("Physic");
 
-		physics->getWorld()->update(elapsedTime);
+		if (_activateSimulation)
+		{
+			physics->getWorld()->update(elapsedTime);
+		}
 	}
 
 	void PhysicsSystem::updateEnd(float elapsedTime)

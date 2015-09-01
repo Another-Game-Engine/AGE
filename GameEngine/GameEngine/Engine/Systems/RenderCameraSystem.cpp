@@ -44,7 +44,8 @@ namespace AGE
 		_cameras(std::move(scene)),
 		_spotLights(std::move(scene)),
 		_directionnalLights(std::move(scene)),
-		_pointLights(std::move(scene))
+		_pointLights(std::move(scene)),
+		_drawDebugLines(false)
 	{
 		_name = "Camera system";
 	}
@@ -63,7 +64,12 @@ namespace AGE
 
 	}
 
-	void occlusionCulling(std::list<std::shared_ptr<DRBData>> &list)
+	void RenderCameraSystem::drawDebugLines(bool activated)
+	{
+		_drawDebugLines = activated;
+	}
+
+	void occlusionCulling(std::list<std::shared_ptr<DRBData>> &list, bool drawDebugLines)
 	{
 		SCOPE_profile_cpu_function("Camera system");
 
@@ -82,7 +88,14 @@ namespace AGE
 		while (j != std::end(list))
 		{
 			auto &d = *j;
-			auto BB = std::static_pointer_cast<DRBMeshData>(d)->getAABB();
+			auto mesh = std::static_pointer_cast<DRBMeshData>(d);
+			if (mesh->hadRenderMode(AGE_OCCLUDER))
+			{
+				++j;
+				continue;
+			}
+			auto BB = mesh->getAABB();
+
 
 			glm::vec2 minPoint = glm::vec2(1);
 			glm::vec2 maxPoint = glm::vec2(-1);
@@ -131,12 +144,13 @@ namespace AGE
 			if (depthMap->testBox((uint32_t)(minZ * (1 << 24)), screenMin, screenMax) == false)
 			{
 				list.erase(j++);
+				continue;
 			}
-			else
+			if (drawDebugLines)
 			{
 				GetRenderThread()->getQueue()->emplaceTask<AGE::Commands::ToRender::Draw2DQuad>(glm::vec2(minPoint.x, minPoint.y), glm::vec2(minPoint.x, maxPoint.y), glm::vec2(maxPoint.x, maxPoint.y), glm::vec2(maxPoint.x, minPoint.y), glm::vec3(0, 1, 0));
-				++j;
 			}
+			++j;
 		}
 	}
 
@@ -189,12 +203,15 @@ namespace AGE
 			glm::vec3 color = glm::vec3(1, 0, 0);
 			bool activateDepth = true;
 
-			AGE::GetRenderThread()->getQueue()->emplaceTask<Commands::ToRender::Draw3DQuad>(aNear, bNear, cNear, dNear, color, activateDepth);
-			AGE::GetRenderThread()->getQueue()->emplaceTask<Commands::ToRender::Draw3DQuad>(aFar, bFar, cFar, dFar, color, activateDepth);
-			AGE::GetRenderThread()->getQueue()->emplaceTask<Commands::ToRender::Draw3DLine>(aNear, aFar, color, activateDepth);
-			AGE::GetRenderThread()->getQueue()->emplaceTask<Commands::ToRender::Draw3DLine>(bNear, bFar, color, activateDepth);
-			AGE::GetRenderThread()->getQueue()->emplaceTask<Commands::ToRender::Draw3DLine>(cNear, cFar, color, activateDepth);
-			AGE::GetRenderThread()->getQueue()->emplaceTask<Commands::ToRender::Draw3DLine>(dNear, dFar, color, activateDepth);
+			if (_drawDebugLines)
+			{
+				AGE::GetRenderThread()->getQueue()->emplaceTask<Commands::ToRender::Draw3DQuad>(aNear, bNear, cNear, dNear, color, activateDepth);
+				AGE::GetRenderThread()->getQueue()->emplaceTask<Commands::ToRender::Draw3DQuad>(aFar, bFar, cFar, dFar, color, activateDepth);
+				AGE::GetRenderThread()->getQueue()->emplaceTask<Commands::ToRender::Draw3DLine>(aNear, aFar, color, activateDepth);
+				AGE::GetRenderThread()->getQueue()->emplaceTask<Commands::ToRender::Draw3DLine>(bNear, bFar, color, activateDepth);
+				AGE::GetRenderThread()->getQueue()->emplaceTask<Commands::ToRender::Draw3DLine>(cNear, cFar, color, activateDepth);
+				AGE::GetRenderThread()->getQueue()->emplaceTask<Commands::ToRender::Draw3DLine>(dNear, dFar, color, activateDepth);
+			}
 
 			std::atomic_size_t counter = 0;
 
@@ -287,7 +304,7 @@ namespace AGE
 					cameraList->pointLights.push_back(pointLightListToCull.pop()->getDrawable()->getDatas());
 				}
 			}
-			occlusionCulling(cameraList->meshs);
+			occlusionCulling(cameraList->meshs, _drawDebugLines);
 
 			cameraList->spotLights = spotLightList;
 			cameraList->pointLights = pointLightList;

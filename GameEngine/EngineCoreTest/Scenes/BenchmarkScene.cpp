@@ -161,6 +161,7 @@ namespace AGE
 			auto cam = camera->addComponent<CameraComponent>();
 			camera->addComponent<FreeFlyComponent>();
 			cam->setPipeline(RenderType::DEFERRED);
+			getSystem<RenderCameraSystem>()->drawDebugLines(false);
 			cam->setTexture(_skyboxSpace);
 			cam->addSkyBoxToChoice("space", _skyboxSpace);
 //			cam->addSkyBoxToChoice("test", _skyboxTest);
@@ -283,9 +284,14 @@ namespace AGE
 
 		auto camComponent = GLOBAL_CAMERA->getComponent<CameraComponent>();
 		static char const *pipelineNames[RenderType::TOTAL] = {"Debug deferred rendering", "Deferred rendering" };
-		ImGui::ListBox("Pipelines", &pipelineIndex, pipelineNames, int(RenderType::TOTAL));
-		if (camComponent->getPipeline() != (RenderType)pipelineIndex)
-			camComponent->setPipeline((RenderType)pipelineIndex);
+		if (ImGui::ListBox("Pipelines", &pipelineIndex, pipelineNames, int(RenderType::TOTAL)))
+		{
+			if (camComponent->getPipeline() != (RenderType)pipelineIndex)
+			{
+				camComponent->setPipeline((RenderType)pipelineIndex);
+				getSystem<RenderCameraSystem>()->drawDebugLines(pipelineIndex == (int)RenderType::DEBUG_DEFERRED ? true : false);
+			}
+		}
 		return true;
 	}
 
