@@ -235,7 +235,7 @@ namespace AGE
 				e->addComponent<Lifetime>(5.0f);
 
 				auto &link = e->getLink();
-				link.setPosition(glm::vec3((rand() % 100) - 50, (rand() % 50) - 50, (rand() % 100) - 50));
+				link.setPosition(glm::vec3((rand() % 100) - 50, (rand() % 50) + 50, (rand() % 100) - 50));
 				link.setOrientation(glm::quat(glm::vec3(rand() % 360, rand() % 360, rand() % 360)));
 				link.setScale(glm::vec3((float)(rand() % 30) / 10.0f));
 
