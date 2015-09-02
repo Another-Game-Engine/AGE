@@ -246,7 +246,7 @@
             "link": {
                 "Position": {
                     "value0": 0,
-                    "value1": -9,
+                    "value1": -7,
                     "value2": 0
                 },
                 "Scale": {
@@ -318,7 +318,7 @@
                 "IsATrigger": false,
                 "FilterGroup": 0,
                 "Mesh": "sponza/sponza",
-                "Convex": true
+                "Convex": false
             }
         }
     }
