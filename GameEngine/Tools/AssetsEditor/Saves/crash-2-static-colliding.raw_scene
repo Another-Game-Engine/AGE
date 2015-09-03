@@ -209,7 +209,7 @@
                 "MaxAngularVelocity": 1000000,
                 "MaxDepenetrationVelocity": 1000000,
                 "IsAffectedByGravity": false,
-                "IsKinematic": false,
+                "IsKinematic": true,
                 "CollisionDetectionMode": 1
             },
             "AGE_CORE_PointLightComponent": {

@@ -14,6 +14,7 @@
 #include "PhysXMeshCollider.hpp"
 #include "PhysXSphereCollider.hpp"
 #include "PhysXRaycaster.hpp"
+#include "PxFiltering.h"
 
 namespace AGE
 {
@@ -24,6 +25,15 @@ namespace AGE
 													  physx::PxFilterData filterData2, physx::PxPairFlags &pairFlags, const void *constantBlock, physx::PxU32 constantBlockSize)
 		{
 			pairFlags = physx::PxPairFlag::eNOTIFY_TOUCH_FOUND | physx::PxPairFlag::eNOTIFY_TOUCH_PERSISTS | physx::PxPairFlag::eNOTIFY_TOUCH_LOST;
+
+			bool kinematic0 = physx::PxFilterObjectIsKinematic(attributes1);
+			bool kinematic1 = physx::PxFilterObjectIsKinematic(attributes2);
+			if (kinematic0 && kinematic1)
+			{
+				pairFlags = physx::PxPairFlag::eTRIGGER_DEFAULT;
+				return physx::PxFilterFlag::eSUPPRESS;
+			}
+
 			if (physx::PxFilterObjectIsTrigger(attributes1) || physx::PxFilterObjectIsTrigger(attributes2))
 			{
 				pairFlags |= physx::PxPairFlag::eTRIGGER_DEFAULT;
