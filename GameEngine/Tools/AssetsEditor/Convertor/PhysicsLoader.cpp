@@ -348,20 +348,39 @@ namespace AGE
 					{
 						points.push_back(physx::PxVec3(position.x, position.y, position.z));
 					}
+					std::vector<physx::PxU32> indices;
+					for (const auto &indice : subMesh.indices)
+					{
+						indices.push_back(indice);
+					}
 					physx::PxConvexMeshDesc meshDesciption;
 					meshDesciption.points.count = static_cast<physx::PxU32>(points.size());
 					meshDesciption.points.stride = static_cast<physx::PxU32>(sizeof(physx::PxVec3));
 					meshDesciption.points.data = static_cast<const void *>(&points[0]);
-					meshDesciption.flags = physx::PxConvexFlag::eCOMPUTE_CONVEX | physx::PxConvexFlag::eINFLATE_CONVEX;
+					meshDesciption.indices.count = static_cast<physx::PxU32>(indices.size());
+					meshDesciption.indices.stride = static_cast<physx::PxU32>(sizeof(physx::PxU32));
+					meshDesciption.indices.data = static_cast<const void *>(&indices[0]);
+					meshDesciption.flags = physx::PxConvexFlag::eCOMPUTE_CONVEX;
 					meshDesciption.vertexLimit = physx::PxU16(256);
-					physx::PxDefaultMemoryOutputStream writeBuffer;
-					const bool status = cooking->cookConvexMesh(meshDesciption, writeBuffer);
+					physx::PxDefaultMemoryOutputStream *writeBuffer;
+					physx::PxDefaultMemoryOutputStream buffer1;
+					physx::PxDefaultMemoryOutputStream buffer2;
+					writeBuffer = &buffer1;
+					bool status = cooking->cookConvexMesh(meshDesciption, *writeBuffer);
+					if (!status)
+					{
+						writeBuffer = &buffer2;
+						meshDesciption.flags = physx::PxConvexFlag::eCOMPUTE_CONVEX | physx::PxConvexFlag::eINFLATE_CONVEX;
+						status = cooking->cookConvexMesh(meshDesciption, *writeBuffer);
+					}
+					AGE_ERROR(status && "Impossible to create convex shape");
 					assert(status && "Impossible to create convex shape");
 					if (!status)
 					{
+						std::cerr << "Impossible to create convex shape\n";
 						return false;
 					}
-					physx::PxDefaultMemoryInputData readBuffer(writeBuffer.getData(), writeBuffer.getSize());
+					physx::PxDefaultMemoryInputData readBuffer(writeBuffer->getData(), writeBuffer->getSize());
 					cookingTask->physxConvexShapes.push_back(PxGetPhysics().createConvexMesh(readBuffer));
 				}
 				cooking->release();
