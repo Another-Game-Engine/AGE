@@ -7,13 +7,13 @@ namespace AGE
 {
 	class Texture2D;
 
-	class DeferredDebugBuffering : public FrameBufferRender
+	class DebugLightBillboards : public FrameBufferRender
 	{
 	public:
-		DeferredDebugBuffering(glm::uvec2 const &screenSize, std::shared_ptr<PaintingManager> painterManager,
-			std::shared_ptr<Texture2D> debugLights,
+		DebugLightBillboards(glm::uvec2 const &screenSize, std::shared_ptr<PaintingManager> painterManager,
+			std::shared_ptr<Texture2D> diffuse,
 			std::shared_ptr<Texture2D> depth);
-		virtual ~DeferredDebugBuffering() = default;
+		virtual ~DebugLightBillboards() = default;
 
 	protected:
 		virtual void renderPass(const DRBCameraDrawableList &infos);

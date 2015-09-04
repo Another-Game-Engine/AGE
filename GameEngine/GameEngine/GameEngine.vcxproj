@@ -302,9 +302,9 @@
     <ClCompile Include="Engine\Physics\ITriggerListener.cpp" />
     <ClCompile Include="Engine\Physics\Trigger.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomPipeline\DebugDeferredShading.cpp" />
-    <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredDebugBuffering.cpp" />
+    <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DebugLightBillboards.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredMerging.cpp" />
-    <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredMergingDebug.cpp" />
+    <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DebugDrawLines.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredPointLightning.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredBasicBuffering.cpp" />
     <ClCompile Include="Engine\Core\Inputs\ActionManager.cpp" />
@@ -544,9 +544,10 @@
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomPipeline\DebugDeferredShading.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredBlur.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredDebugBuffering.hh" />
+    <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DebugLightBillboards.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredDirectionalLightning.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredMerging.hh" />
-    <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredMergingDebug.hh" />
+    <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DebugDrawLines.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredOnScreen.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredPointLightning.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredBasicBuffering.hh" />

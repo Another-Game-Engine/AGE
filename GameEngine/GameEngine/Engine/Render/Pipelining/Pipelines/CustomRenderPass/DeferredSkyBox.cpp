@@ -7,6 +7,7 @@
 #include <Render/GeometryManagement/Painting/Painter.hh>
 #include <Culling/Output/RenderPipeline.hh>
 #include <Render/ProgramResources/Types/Uniform/Mat4.hh>
+#include <Render/ProgramResources/Types/Uniform/Vec3.hh>
 #include <Render/ProgramResources/Types/Uniform/Sampler/Sampler3D.hh>
 #include <Core/ConfigurationManager.hpp>
 #include <Core/Engine.hh>
@@ -29,16 +30,19 @@ namespace AGE
 		PROGRAM_NBR
 	};
 
-	DeferredSkyBox::DeferredSkyBox(glm::uvec2 const &screenSize, std::shared_ptr<PaintingManager> painterManager, std::shared_ptr<Texture2D> diffuse,
-		std::shared_ptr<Texture2D> depth) :
+	DeferredSkyBox::DeferredSkyBox(glm::uvec2 const &screenSize, std::shared_ptr<PaintingManager> painterManager,
+		std::shared_ptr<Texture2D> diffuse,
+		std::shared_ptr<Texture2D> depth,
+		std::shared_ptr<Texture2D> lightAccumulation) :
 		FrameBufferRender(screenSize.x, screenSize.y, painterManager)
 	{
 		// We dont want to take the skinned or transparent meshes
 		_forbidden[AGE_SKINNED] = true;
 		_forbidden[AGE_SEMI_TRANSPARENT] = true;
 
-		push_storage_output(GL_COLOR_ATTACHMENT0, diffuse);
 		push_storage_output(GL_DEPTH_STENCIL_ATTACHMENT, depth);
+		push_storage_output(GL_COLOR_ATTACHMENT0, diffuse);
+		push_storage_output(GL_COLOR_ATTACHMENT1, lightAccumulation);
 
 		_programs.resize(PROGRAM_NBR);
 
@@ -56,18 +60,23 @@ namespace AGE
 		GetRenderThread()->getCube(_cube, _painterCube);
 	}
 
+	void DeferredSkyBox::setSkyboxLighting(glm::vec3 lighting)
+	{
+		_lighting = lighting;
+	}
+
 	void DeferredSkyBox::renderPass(const DRBCameraDrawableList &infos)
 	{
 //@PROUT TODO
 		SCOPE_profile_gpu_i("DeferredSkybox render pass");
 		SCOPE_profile_cpu_i("RenderTimer", "DeferredSkybox render pass");
-		//OpenGLState::glEnable(GL_CULL_FACE);
-		//OpenGLState::glCullFace(GL_BACK);
 		OpenGLState::glDisable(GL_BLEND);
-		OpenGLState::glDisable(GL_STENCIL_TEST);
-		OpenGLState::glEnable(GL_DEPTH_TEST);
-		OpenGLState::glDepthMask(GL_TRUE);
-		OpenGLState::glDepthFunc(GL_LEQUAL);
+		OpenGLState::glDisable(GL_DEPTH_TEST);
+		OpenGLState::glDisable(GL_CULL_FACE);
+		OpenGLState::glEnable(GL_STENCIL_TEST);
+		OpenGLState::glStencilFunc(GL_LEQUAL, 1, 0xFF);
+		OpenGLState::glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
+		OpenGLState::glDepthMask(GL_FALSE);
 		{
 			SCOPE_profile_gpu_i("Overhead Pipeline");
 			SCOPE_profile_cpu_i("RenderTimer", "Skybox buffer");
@@ -78,6 +87,7 @@ namespace AGE
 			_programs[PROGRAM_SKYBOX]->get_resource<Mat4>("projection").set(infos.cameraInfos.data.projection);
 			_programs[PROGRAM_SKYBOX]->get_resource<Mat4>("view").set(infos.cameraInfos.view);
 			_programs[PROGRAM_SKYBOX]->get_resource<Sampler3D>("skybox").set(infos.cameraInfos.data.texture);
+			_programs[PROGRAM_SKYBOX]->get_resource<Vec3>("lighting").set(_lighting);
 		}
 		_painterManager->get_painter(_painterCube)->uniqueDraw(GL_QUADS, _programs[PROGRAM_SKYBOX], Properties(), _cube);
 	}

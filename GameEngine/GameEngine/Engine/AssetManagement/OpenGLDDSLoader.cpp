@@ -106,9 +106,9 @@ namespace AGE
 			for (size_t curMipmap = 0; curMipmap < textureMipmaps; ++curMipmap)
 			{
 				if (compressed)
-					mipmapSize = glm::max(1ULL, ((width + 3) / 4)) * glm::max(1ULL, ((height + 3) / 4)) * blockOrPixelSize;
+					mipmapSize = ((width + 3) / 4) * ((height + 3) / 4) * blockOrPixelSize;
 				else
-					mipmapSize = glm::max(1ULL, width) * glm::max(1ULL, height) * blockOrPixelSize;
+					mipmapSize = width * height * blockOrPixelSize;
 
 				if (isCubeMap)
 				{
@@ -129,8 +129,8 @@ namespace AGE
 						tmp->set(currentPtr, curMipmap, width, height, format, uncompressedType);
 				}
 				currentPtr += mipmapSize;
-				width >>= 1;
-				height >>= 1;
+				width = glm::max(1ULL, width >> 1);
+				height = glm::max(1ULL, height >> 1);
 			}
 		}
 

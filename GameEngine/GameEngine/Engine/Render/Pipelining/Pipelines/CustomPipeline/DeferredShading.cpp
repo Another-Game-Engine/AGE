@@ -58,4 +58,8 @@ namespace AGE
 		_deferredMerging->setAmbient(ambient);
 	}
 
+	void DeferredShading::setSkyboxLighting(glm::vec3 const &lighting)
+	{
+		_deferredSkybox->setSkyboxLighting(lighting);
+	}
 }
