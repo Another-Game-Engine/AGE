@@ -35,6 +35,10 @@ namespace AGE
 		std::shared_ptr<Texture2D> _specular;
 		std::shared_ptr<Texture2D> _lightAccumulation;
 		std::shared_ptr<Texture2D> _shinyAccumulation;
+		std::shared_ptr<Texture2D> _downSampled1;
+		std::shared_ptr<Texture2D> _downSampled2;
+		std::shared_ptr<Texture2D> _downSampled3;
+		std::shared_ptr<Texture2D> _blurTmp;
 		std::shared_ptr<DeferredMerging> _deferredMerging;
 		std::shared_ptr<DeferredSkyBox> _deferredSkybox;
 	};
