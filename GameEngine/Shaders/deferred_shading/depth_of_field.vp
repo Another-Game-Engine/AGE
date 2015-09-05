@@ -1,11 +1,26 @@
 #version 330
 
+#define NEAR 0.1
+#define FAR 2000
+
+#define USED_DEPTH_MIPMAP 3
+
+uniform sampler2D depthMap;
+
 layout (location = 0) in vec2 position;
 
 out vec2 interpolated_texCoord;
+flat out float centerDepth;
+
+float linearizeDepth(float depth, float near, float far)
+{
+    float clipDepth = depth * 2.0 - 1.0;
+    return (2.0 * near * far / (far + near - clipDepth * (far - near)));
+}
 
 void main()
 {
-	interpolated_texCoord = position * 0.5f + 0.5f; 
+	centerDepth = linearizeDepth(textureLod(depthMap, vec2(0.5), USED_DEPTH_MIPMAP).r, NEAR, FAR);
+	interpolated_texCoord = position * 0.5f + 0.5f;
 	gl_Position = vec4(position, 0.f, 1.0f);
 }

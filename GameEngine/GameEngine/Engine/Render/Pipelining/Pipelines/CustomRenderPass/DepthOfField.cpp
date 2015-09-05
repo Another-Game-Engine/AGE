@@ -20,6 +20,8 @@
 #define PROGRAM_DOF_VERTEX "deferred_shading/depth_of_field.vp"
 #define PROGRAM_DOF_FRAG "deferred_shading/depth_of_field.fp"
 
+#define USED_DEPTH_MIPMAP 3
+
 namespace AGE
 {
 	enum Programs
@@ -30,7 +32,8 @@ namespace AGE
 
 	DepthOfField::DepthOfField(glm::uvec2 const &screenSize, std::shared_ptr<PaintingManager> painterManager,
 		std::shared_ptr<Texture2D> depth,
-		std::shared_ptr<Texture2D> blurred,
+		std::shared_ptr<Texture2D> blurred1,
+		std::shared_ptr<Texture2D> blurred2,
 		std::shared_ptr<Texture2D> clean,
 		std::shared_ptr<Texture2D> dst) :
 		FrameBufferRender(screenSize.x, screenSize.y, painterManager)
@@ -39,7 +42,8 @@ namespace AGE
 
 		_depth = depth;
 		_clean = clean;
-		_blurred = blurred;
+		_blurred1 = blurred1;
+		_blurred2 = blurred2;
 
 		_programs.resize(PROGRAM_NBR);
 
@@ -69,6 +73,9 @@ namespace AGE
 		SCOPE_profile_gpu_i("Depth of field");
 		SCOPE_profile_cpu_i("RenderTimer", "Depth of field");
 
+		_depth->bind();
+		_depth->generateMipmaps();
+
 		OpenGLState::glDepthMask(GL_FALSE);
 		OpenGLState::glDisable(GL_DEPTH_TEST);
 		OpenGLState::glDisable(GL_STENCIL_TEST);
@@ -77,7 +84,8 @@ namespace AGE
 		_programs[PROGRAM_DEPTH_OF_FIELD]->use();
 		_programs[PROGRAM_DEPTH_OF_FIELD]->get_resource<Sampler2D>("cleanMap").set(_clean);
 		_programs[PROGRAM_DEPTH_OF_FIELD]->get_resource<Sampler2D>("depthMap").set(_depth);
-		_programs[PROGRAM_DEPTH_OF_FIELD]->get_resource<Sampler2D>("blurredMap").set(_blurred);
+		_programs[PROGRAM_DEPTH_OF_FIELD]->get_resource<Sampler2D>("blurredMap1").set(_blurred1);
+		_programs[PROGRAM_DEPTH_OF_FIELD]->get_resource<Sampler2D>("blurredMap2").set(_blurred2);
 
 		_quadPainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_DEPTH_OF_FIELD], Properties(), _quadVertices);
 	}

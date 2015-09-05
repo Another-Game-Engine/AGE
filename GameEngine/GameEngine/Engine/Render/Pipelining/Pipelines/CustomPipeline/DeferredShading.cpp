@@ -29,9 +29,10 @@ namespace AGE
 
 		_downSampled1 = createRenderPassOutput<Texture2D>(screen_size.x / 2, screen_size.y / 2, GL_RGBA8, false);
 		_downSampled2 = createRenderPassOutput<Texture2D>(screen_size.x / 4, screen_size.y / 4, GL_RGBA8, false);
-		_downSampled3 = createRenderPassOutput<Texture2D>(screen_size.x / 8, screen_size.y / 8, GL_RGBA8, false);
+//		_downSampled3 = createRenderPassOutput<Texture2D>(screen_size.x / 8, screen_size.y / 8, GL_RGBA8, false);
 
-		_blurTmp = createRenderPassOutput<Texture2D>(screen_size.x / 8, screen_size.y / 8, GL_RGBA8, false);
+		_blurTmp1 = createRenderPassOutput<Texture2D>(screen_size.x / 2, screen_size.y / 2, GL_RGBA8, false);
+		_blurTmp2 = createRenderPassOutput<Texture2D>(screen_size.x / 4, screen_size.y / 4, GL_RGBA8, false);
 
 		// We create the render pass
 		_deferredSkybox = std::make_shared<DeferredSkyBox>(screen_size, _painter_manager, _diffuse, _depthStencil, _lightAccumulation);
@@ -44,10 +45,15 @@ namespace AGE
 
 		std::shared_ptr<DownSample> downSample1 = std::make_shared<DownSample>(screen_size / glm::uvec2(2), _painter_manager, _diffuse, _downSampled1);
 		std::shared_ptr<DownSample> downSample2 = std::make_shared<DownSample>(screen_size / glm::uvec2(4), _painter_manager, _downSampled1, _downSampled2);
-		std::shared_ptr<DownSample> downSample3 = std::make_shared<DownSample>(screen_size / glm::uvec2(8), _painter_manager, _downSampled2, _downSampled3);
-		std::shared_ptr<GaussianBlur> horizontalPass = std::make_shared<GaussianBlur>(screen_size / glm::uvec2(8), _painter_manager, _downSampled3, _blurTmp, true);
-		std::shared_ptr<GaussianBlur> verticalPass = std::make_shared<GaussianBlur>(screen_size / glm::uvec2(8), _painter_manager, _blurTmp, _downSampled3, false);
-		std::shared_ptr<DepthOfField> depthOfField = std::make_shared<DepthOfField>(screen_size, _painter_manager, _depthStencil, _downSampled3, _diffuse, _diffuse);
+//		std::shared_ptr<DownSample> downSample3 = std::make_shared<DownSample>(screen_size / glm::uvec2(8), _painter_manager, _downSampled2, _downSampled3);
+
+		std::shared_ptr<GaussianBlur> horizontalPass1 = std::make_shared<GaussianBlur>(screen_size / glm::uvec2(2), _painter_manager, _downSampled1, _blurTmp1, true);
+		std::shared_ptr<GaussianBlur> verticalPass1 = std::make_shared<GaussianBlur>(screen_size / glm::uvec2(2), _painter_manager, _blurTmp1, _downSampled1, false);
+
+		std::shared_ptr<GaussianBlur> horizontalPass2 = std::make_shared<GaussianBlur>(screen_size / glm::uvec2(4), _painter_manager, _downSampled2, _blurTmp2, true);
+		std::shared_ptr<GaussianBlur> verticalPass2 = std::make_shared<GaussianBlur>(screen_size / glm::uvec2(4), _painter_manager, _blurTmp2, _downSampled2, false);
+
+		std::shared_ptr<DepthOfField> depthOfField = std::make_shared<DepthOfField>(screen_size, _painter_manager, _depthStencil, _downSampled1, _downSampled2, _diffuse, _diffuse);
 		std::shared_ptr<DeferredOnScreen> deferredOnScreen = std::make_shared<DeferredOnScreen>(screen_size, _painter_manager, _diffuse);
 
 		// The entry point is the basic buffering pass
@@ -62,9 +68,13 @@ namespace AGE
 		_rendering_list.emplace_back(_deferredMerging);
 		_rendering_list.emplace_back(downSample1);
 		_rendering_list.emplace_back(downSample2);
-		_rendering_list.emplace_back(downSample3);
-		_rendering_list.emplace_back(horizontalPass);
-		_rendering_list.emplace_back(verticalPass);
+//		_rendering_list.emplace_back(downSample3);
+		// Double blur
+		_rendering_list.emplace_back(horizontalPass1);
+		_rendering_list.emplace_back(verticalPass1);
+		_rendering_list.emplace_back(horizontalPass2);
+		_rendering_list.emplace_back(verticalPass2);
+
 		_rendering_list.emplace_back(depthOfField);
 		_rendering_list.emplace_back(deferredOnScreen);
 	}
