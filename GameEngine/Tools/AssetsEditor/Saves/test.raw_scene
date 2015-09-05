@@ -44,10 +44,14 @@
             },
             {
                 "key": 10,
-                "value": 8718854852507163888
+                "value": 6441919271708046876
             },
             {
                 "key": 11,
+                "value": 8718854852507163888
+            },
+            {
+                "key": 12,
                 "value": 13917482855567903631
             }
         ],
@@ -78,7 +82,7 @@
             "components_number": [
                 0,
                 1,
-                11
+                12
             ],
             "archetypesDependency": [],
             "AGE_CORE_EntityRepresentationComponent": {
@@ -118,10 +122,10 @@
                     "value2": 1
                 },
                 "Orientation": {
-                    "value0": 0.70710551738739014,
+                    "value0": 0.70710557699203491,
                     "value1": 0,
                     "value2": 0,
-                    "value3": 0.7071080207824707
+                    "value3": 0.70710808038711548
                 }
             },
             "children": [],
@@ -149,16 +153,16 @@
                 "ColliderType": 0,
                 "Material": "DefaultMaterial",
                 "IsATrigger": false,
-                "FilterGroup": 0,
+                "FilterGroup": 1,
                 "Center": {
                     "value0": 0,
                     "value1": 0,
                     "value2": 0
                 },
                 "Size": {
-                    "value0": 123.87464141845703,
-                    "value1": 123.87464141845703,
-                    "value2": 0.093150004744529724
+                    "value0": 10,
+                    "value1": 10,
+                    "value2": 1
                 }
             }
         }

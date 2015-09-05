@@ -6,6 +6,8 @@
 # include <vector>
 # include <Render/Pipelining/Buffer/AFramebufferStorage.hh>
 
+#include <glm/glm.hpp>
+
 namespace AGE
 {
 	class Texture2D : public ATexture, public AFramebufferStorage
@@ -16,23 +18,17 @@ namespace AGE
 		Texture2D(Texture2D &&move);
 
 	public:
-
 		template <typename T>
 		void get(GLint level, GLenum format, GLenum type, std::vector<T> &destination) const
 		{
-			auto w = _width;
-			auto h = _height;
-			auto i = level;
-			while (i > 0)
-			{
-				w /= 2;
-				h /= 2;
-				--i;
-			}
-			destination.resize(w * h);
+			glm::uvec2 mipmapSize = getMipmapSize(level);
 
+			destination.resize(mipmapSize.x * mipmapSize.y);
 			glGetTexImage(GL_TEXTURE_2D, level, format, type, (GLvoid *)destination.data());
 		}
+
+		glm::uvec2 getMipmapSize(GLint level) const;
+
 		Texture2D &set(GLvoid const *data, GLint level, GLsizei width, GLsizei height, GLenum format, GLenum type);
 		Texture2D &setCompressed(GLvoid const *data, GLint level, GLsizei width, GLsizei height, GLenum format, GLsizei imageSize);
 

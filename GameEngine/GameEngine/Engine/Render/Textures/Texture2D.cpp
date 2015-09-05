@@ -43,6 +43,19 @@ namespace AGE
 		return (*this);
 	}
 
+	glm::uvec2 Texture2D::getMipmapSize(GLint level) const
+	{
+		glm::uvec2 mipMapSize(_width, _height);
+		auto i = level;
+		while (i > 0)
+		{
+			mipMapSize.x = (mipMapSize.x >> 1 != 0) ? (mipMapSize.x >> 1) : (1);
+			mipMapSize.y = (mipMapSize.y >> 1 != 0) ? (mipMapSize.y >> 1) : (1);
+			--i;
+		}
+		return (mipMapSize);
+	}
+
 	Texture2D & Texture2D::set(GLvoid const *data, GLint level, GLsizei width, GLsizei height, GLenum format, GLenum type)
 	{
 		glTexSubImage2D(GL_TEXTURE_2D, level, 0, 0, width, height, format, type, data);

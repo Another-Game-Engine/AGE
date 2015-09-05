@@ -1,0 +1,18 @@
+#version 330
+
+uniform vec2 inverseSourceSize;
+
+layout (location = 0) in vec2 position;
+
+out vec2 blurOffsets[5];
+
+void main()
+{
+	vec2 texCoord = position * 0.5f + 0.5f; 
+	blurOffsets[0] = texCoord - vec2(0, inverseSourceSize.x * 3.2307692308);
+	blurOffsets[1] = texCoord - vec2(0, inverseSourceSize.x * 1.3846153846);
+	blurOffsets[2] = texCoord;
+	blurOffsets[3] = texCoord + vec2(0, inverseSourceSize.x * 1.3846153846);
+	blurOffsets[4] = texCoord + vec2(0, inverseSourceSize.x * 3.2307692308);
+	gl_Position = vec4(position, 0.f, 1.0f);
+}

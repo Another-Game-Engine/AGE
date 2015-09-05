@@ -1,8 +1,5 @@
 {
-    "AssetsPath": {
-        "string": "../../Assets/Serialized/"
-    },
     "ShadersPath": {
-        "string": "../../Shaders/"
+        "string": "G:/AGE/GameEngine/x64/Debug//../../Shaders/"
     }
 }

@@ -7,6 +7,9 @@
 #include <Render/Pipelining/Pipelines/CustomRenderPass/DeferredShadowBuffering.hh>
 #include <Render/Pipelining/Pipelines/CustomRenderPass/DeferredSkyBox.hh>
 #include <Render/Pipelining/Pipelines/CustomRenderPass/DeferredOnScreen.hh>
+#include <Render/Pipelining/Pipelines/CustomRenderPass/DownSample.hh>
+#include <Render/Pipelining/Pipelines/CustomRenderPass/GaussianBlur.hh>
+#include <Render/Pipelining/Pipelines/CustomRenderPass/DepthOfField.hh>
 #include <Render/Pipelining/Pipelines/PipelineTools.hh>
 #include <Configuration.hpp>
 
@@ -16,13 +19,20 @@ namespace AGE
 	DeferredShading::DeferredShading(glm::uvec2 const &screen_size, std::shared_ptr<PaintingManager> const &painter_manager) :
 		ARenderingPipeline(std::string("deferred shading"), painter_manager)
 	{
-		_diffuse = createRenderPassOutput<Texture2D>(screen_size.x, screen_size.y, GL_RGBA8, true);
+		_diffuse = createRenderPassOutput<Texture2D>(screen_size.x, screen_size.y, GL_RGBA8, false);
 		_normal = createRenderPassOutput<Texture2D>(screen_size.x, screen_size.y, GL_RGBA8, true);
 		_specular = createRenderPassOutput<Texture2D>(screen_size.x, screen_size.y, GL_RGBA8, true);
 		_depthStencil = createRenderPassOutput<Texture2D>(screen_size.x, screen_size.y, GL_DEPTH24_STENCIL8, true);
 		// RGB = light color, A = specular power
 		_lightAccumulation = createRenderPassOutput<Texture2D>(screen_size.x, screen_size.y, GL_RGBA8, true);
 		_shinyAccumulation = createRenderPassOutput<Texture2D>(screen_size.x, screen_size.y, GL_RGBA8, true);
+
+		_downSampled1 = createRenderPassOutput<Texture2D>(screen_size.x / 2, screen_size.y / 2, GL_RGBA8, false);
+		_downSampled2 = createRenderPassOutput<Texture2D>(screen_size.x / 4, screen_size.y / 4, GL_RGBA8, false);
+//		_downSampled3 = createRenderPassOutput<Texture2D>(screen_size.x / 8, screen_size.y / 8, GL_RGBA8, false);
+
+		_blurTmp1 = createRenderPassOutput<Texture2D>(screen_size.x / 2, screen_size.y / 2, GL_RGBA8, false);
+		_blurTmp2 = createRenderPassOutput<Texture2D>(screen_size.x / 4, screen_size.y / 4, GL_RGBA8, false);
 
 		// We create the render pass
 		_deferredSkybox = std::make_shared<DeferredSkyBox>(screen_size, _painter_manager, _diffuse, _depthStencil, _lightAccumulation);
@@ -32,6 +42,18 @@ namespace AGE
 		std::shared_ptr<DeferredPointLightning> pointLightning = std::make_shared<DeferredPointLightning>(screen_size, _painter_manager, _normal, _depthStencil, _specular, _lightAccumulation, _shinyAccumulation);
 		std::shared_ptr<DeferredDirectionalLightning> directionalLightning = std::make_shared<DeferredDirectionalLightning>(screen_size, _painter_manager, _normal, _depthStencil, _specular, _lightAccumulation, _shinyAccumulation);
 		_deferredMerging = std::make_shared<DeferredMerging>(screen_size, _painter_manager, _diffuse, _lightAccumulation, _shinyAccumulation);
+
+		std::shared_ptr<DownSample> downSample1 = std::make_shared<DownSample>(screen_size / glm::uvec2(2), _painter_manager, _diffuse, _downSampled1);
+		std::shared_ptr<DownSample> downSample2 = std::make_shared<DownSample>(screen_size / glm::uvec2(4), _painter_manager, _downSampled1, _downSampled2);
+//		std::shared_ptr<DownSample> downSample3 = std::make_shared<DownSample>(screen_size / glm::uvec2(8), _painter_manager, _downSampled2, _downSampled3);
+
+		std::shared_ptr<GaussianBlur> horizontalPass1 = std::make_shared<GaussianBlur>(screen_size / glm::uvec2(2), _painter_manager, _downSampled1, _blurTmp1, true);
+		std::shared_ptr<GaussianBlur> verticalPass1 = std::make_shared<GaussianBlur>(screen_size / glm::uvec2(2), _painter_manager, _blurTmp1, _downSampled1, false);
+
+		std::shared_ptr<GaussianBlur> horizontalPass2 = std::make_shared<GaussianBlur>(screen_size / glm::uvec2(4), _painter_manager, _downSampled2, _blurTmp2, true);
+		std::shared_ptr<GaussianBlur> verticalPass2 = std::make_shared<GaussianBlur>(screen_size / glm::uvec2(4), _painter_manager, _blurTmp2, _downSampled2, false);
+
+		std::shared_ptr<DepthOfField> depthOfField = std::make_shared<DepthOfField>(screen_size, _painter_manager, _depthStencil, _downSampled1, _downSampled2, _diffuse, _diffuse);
 		std::shared_ptr<DeferredOnScreen> deferredOnScreen = std::make_shared<DeferredOnScreen>(screen_size, _painter_manager, _diffuse);
 
 		// The entry point is the basic buffering pass
@@ -44,6 +66,16 @@ namespace AGE
 		_rendering_list.emplace_back(spotLightning);
 		_rendering_list.emplace_back(pointLightning);
 		_rendering_list.emplace_back(_deferredMerging);
+		_rendering_list.emplace_back(downSample1);
+		_rendering_list.emplace_back(downSample2);
+//		_rendering_list.emplace_back(downSample3);
+		// Double blur
+		_rendering_list.emplace_back(horizontalPass1);
+		_rendering_list.emplace_back(verticalPass1);
+		_rendering_list.emplace_back(horizontalPass2);
+		_rendering_list.emplace_back(verticalPass2);
+
+		_rendering_list.emplace_back(depthOfField);
 		_rendering_list.emplace_back(deferredOnScreen);
 	}
 
