@@ -316,6 +316,18 @@ namespace AGE
 		collider->scale(scaling);
 	}
 
+	void Collider::setPosition(const glm::vec3 &position)
+	{
+		assert(collider != nullptr && "Invalid Collider");
+		collider->setPosition(position);
+	}
+
+	void Collider::setRotation(const glm::quat &rotation)
+	{
+		assert(collider != nullptr && "Invalid Collider");
+		collider->setRotation(rotation);
+	}
+
 	// Inherited Methods
 	void Collider::reset(void)
 	{

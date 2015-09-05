@@ -37,5 +37,15 @@ namespace AGE
 		{
 			static_cast<ColliderInterface *>(this)->setMaterial(getWorld()->createMaterial(name));
 		}
+
+		void NullCollider::setPosition(const glm::vec3 &position)
+		{
+			return;
+		}
+
+		void NullCollider::setRotation(const glm::quat &rotation)
+		{
+			return;
+		}
 	}
 }

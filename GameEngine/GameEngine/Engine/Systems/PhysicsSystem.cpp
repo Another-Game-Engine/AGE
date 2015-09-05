@@ -5,6 +5,8 @@
 #include <Physics/WorldInterface.hpp>
 #include <Physics/Fallback/NullPhysics.hpp>
 #include <Components/RigidBody.hpp>
+#include <Components/Collider.hpp>
+#include <Components/PhysicsData.hpp>
 #include <Systems/CollisionSystem.hpp>
 #include <Systems/TriggerSystem.hpp>
 #include <Utils/Profiler.hpp>
@@ -16,7 +18,7 @@ namespace AGE
 		: System(scene), PluginManager("CreateInterface", "DestroyInterface"), assetManager(assetManager), entityFilter(scene), _activateSimulation(activateSimulation)
 	{
 		_name = "PhysicsSystem";
-		entityFilter.requireComponent<RigidBody>();
+		entityFilter.requireComponent<Private::PhysicsData>();
 		if (physicsEngineType == Physics::EngineType::Null)
 		{
 			physics = new Physics::NullPhysics;
@@ -98,13 +100,23 @@ namespace AGE
 		SCOPE_profile_cpu_function("Physic");
 
 		RigidBody *rigidBody = nullptr;
+		Collider *collider = nullptr;
 		Link *link = nullptr;
 		for (const Entity &entity : entityFilter.getCollection())
 		{
 			link = entity.getLinkPtr();
 			rigidBody = entity->getComponent<RigidBody>();
-			rigidBody->setPosition(link->getPosition());
-			rigidBody->setRotation(link->getOrientation());
+			if (rigidBody != nullptr)
+			{
+				rigidBody->setPosition(link->getPosition());
+				rigidBody->setRotation(link->getOrientation());
+			}
+			else
+			{
+				collider = entity->getComponent<Collider>();
+				collider->setPosition(link->getPosition());
+				collider->setRotation(link->getOrientation());
+			}
 		}
 	}
 
@@ -126,10 +138,13 @@ namespace AGE
 		Link *link = nullptr;
 		for (const Entity &entity : entityFilter.getCollection())
 		{
-			rigidBody = entity->getComponent<RigidBody>();
 			link = entity.getLinkPtr();
-			link->setPosition(rigidBody->getPosition());
-			link->setOrientation(rigidBody->getRotation());
+			rigidBody = entity->getComponent<RigidBody>();
+			if (rigidBody != nullptr)
+			{
+				link->setPosition(rigidBody->getPosition());
+				link->setOrientation(rigidBody->getRotation());
+			}
 		}
 	}
 }

@@ -54,6 +54,10 @@ namespace AGE
 			FilterGroup getFilterGroup(void) const override final;
 
 			void setMaterial(const std::string &name) override final;
+
+			void setPosition(const glm::vec3 &position) override final;
+
+			void setRotation(const glm::quat &rotation) override final;
 		};
 	}
 }

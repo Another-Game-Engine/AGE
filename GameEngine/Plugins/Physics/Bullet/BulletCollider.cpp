@@ -110,5 +110,17 @@ namespace AGE
 			MaterialInterface *newMaterial = getWorld()->createMaterial(name);
 			static_cast<ColliderInterface *>(this)->setMaterial(newMaterial);
 		}
+
+		void BulletCollider::setPosition(const glm::vec3 &position)
+		{
+			btTransform &transform = getDataAs<btRigidBody>()->getWorldTransform();
+			transform.setOrigin(btVector3(position.x, position.y, position.z));
+		}
+
+		void BulletCollider::setRotation(const glm::quat &rotation)
+		{
+			btTransform &transform = getDataAs<btRigidBody>()->getWorldTransform();
+			transform.setRotation(btQuaternion(rotation.x, rotation.y, rotation.z, rotation.w));
+		}
 	}
 }

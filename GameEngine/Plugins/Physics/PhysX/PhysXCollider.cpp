@@ -126,5 +126,34 @@ namespace AGE
 				shape->setMaterials(&concreteMaterial, 1);
 			}
 		}
+
+		void PhysXCollider::setPosition(const glm::vec3 &position)
+		{
+			physx::PxRigidDynamic *actor = getDataAs<physx::PxRigidDynamic>();
+			physx::PxTransform transform = actor->getGlobalPose();
+			transform.p.x = position.x;
+			transform.p.y = position.y;
+			transform.p.z = position.z;
+			actor->setGlobalPose(transform);
+			if (actor->getRigidBodyFlags().isSet(physx::PxRigidBodyFlag::eKINEMATIC))
+			{
+				actor->setKinematicTarget(transform);
+			}
+		}
+		
+		void PhysXCollider::setRotation(const glm::quat &rotation)
+		{
+			physx::PxRigidDynamic *actor = getDataAs<physx::PxRigidDynamic>();
+			physx::PxTransform transform = actor->getGlobalPose();
+			transform.q.x = rotation.x;
+			transform.q.y = rotation.y;
+			transform.q.z = rotation.z;
+			transform.q.w = rotation.w;
+			actor->setGlobalPose(transform);
+			if (actor->getRigidBodyFlags().isSet(physx::PxRigidBodyFlag::eKINEMATIC))
+			{
+				actor->setKinematicTarget(transform);
+			}
+		}
 	}
 }

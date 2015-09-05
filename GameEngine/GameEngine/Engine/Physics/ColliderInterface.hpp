@@ -125,6 +125,10 @@ namespace AGE
 			// Virtual Methods
 			virtual void scale(const glm::vec3 &scaling) = 0;
 
+			virtual void setPosition(const glm::vec3 &position) = 0;
+
+			virtual void setRotation(const glm::quat &rotation) = 0;
+
 			virtual void setMaterial(const std::string &name) = 0;
 
 		private:
