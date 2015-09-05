@@ -43,15 +43,12 @@ namespace AGE
 				{
 					const physx::PxRaycastHit &raycastHit = hit.getTouch(index);
 					PhysXCollider *collider = static_cast<PhysXCollider *>(raycastHit.actor->userData);
-					if ((layers & static_cast<LayerMask>(1 << static_cast<std::uint32_t>(collider->getFilterGroup()))) != LayerMask::None)
-					{
-						RaycastHit result;
-						result.hitEntity = collider->getData()->entity;
-						result.distanceFromRayOrigin = raycastHit.distance;
-						result.impactNormal = glm::vec3(raycastHit.normal.x, raycastHit.normal.y, raycastHit.normal.z);
-						result.impactPoint = glm::vec3(raycastHit.position.x, raycastHit.position.y, raycastHit.position.z);
-						results.emplace_back(std::move(result));
-					}
+					RaycastHit result;
+					result.hitEntity = collider->getData()->entity;
+					result.distanceFromRayOrigin = raycastHit.distance;
+					result.impactNormal = glm::vec3(raycastHit.normal.x, raycastHit.normal.y, raycastHit.normal.z);
+					result.impactPoint = glm::vec3(raycastHit.position.x, raycastHit.position.y, raycastHit.position.z);
+					results.emplace_back(std::move(result));
 				}
 			}
 			return std::move(results);
