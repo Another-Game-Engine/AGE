@@ -42,9 +42,7 @@ namespace AGE
 		Physics::RaycasterInterface *rc = _scene->getSystem<PhysicsSystem>()->getPhysics()->getWorld()->getRaycaster();
 		for (Entity const &entity : _filter.getCollection())
 		{
-			glm::mat4 transform = entity->getLink().getGlobalTransform();
-			bool result = rc->raycast(glm::vec3(transform[3]), glm::vec3(0, -1, 0), 0.3f, Physics::FilterGroup::GroupI);
-			if (result)
+			if (rc->raycast(glm::vec3(entity->getLink().getPosition()), glm::vec3(0, -1, 0), 0.3f, Physics::LayerMask::GroupI))
 			{
 				if (entity->getComponent<RigidBody>()->isAffectedByGravity() == true)
 					entity->getComponent<RigidBody>()->affectByGravity(false);

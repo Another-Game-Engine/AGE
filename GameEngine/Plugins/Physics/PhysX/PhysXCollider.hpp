@@ -15,6 +15,8 @@ namespace AGE
 			// Friendships
 			friend PhysXRigidBody;
 
+			friend class PhysXRaycaster;
+
 		public:
 			// Constructors
 			PhysXCollider(void) = delete;

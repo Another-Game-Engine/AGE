@@ -40,6 +40,8 @@ namespace AGE
 			// Attributes
 			physx::PxScene *scene = nullptr;
 
+			physx::PxU64 worldAddress[1];
+
 			physx::PxU32 groupCollisionFlags[32];
 
 			__declspec(align(16)) std::uint8_t scratchMemoryBlock[65536];
@@ -55,6 +57,8 @@ namespace AGE
 			// Static Methods
 			static physx::PxFilterFlags FilterShader(physx::PxFilterObjectAttributes attributes1, physx::PxFilterData filterData1, physx::PxFilterObjectAttributes attributes2,
 													 physx::PxFilterData filterData2, physx::PxPairFlags& pairFlags, const void *constantBlock, physx::PxU32 constantBlockSize);
+
+			static physx::PxU32 GetIndexForFilterGroup(FilterGroup group);
 
 			// Destructor
 			~PhysXWorld(void);

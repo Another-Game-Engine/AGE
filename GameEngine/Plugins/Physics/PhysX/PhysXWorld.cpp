@@ -38,10 +38,19 @@ namespace AGE
 				return physx::PxFilterFlag::eDEFAULT;
 			}
 			pairFlags |= physx::PxPairFlag::eRESOLVE_CONTACTS | physx::PxPairFlag::eCCD_LINEAR | physx::PxPairFlag::eNOTIFY_CONTACT_POINTS;
-			const physx::PxU32 shapeGroup1 = filterData1.word0 & 31;
-			const physx::PxU32 shapeGroup2 = filterData2.word0 & 31;
-			const physx::PxU32 *groupCollisionFlags = static_cast<const physx::PxU32 *>(constantBlock);
-			return (groupCollisionFlags[shapeGroup1] & (1 << shapeGroup2)) == 0 ? physx::PxFilterFlag::eSUPPRESS : physx::PxFilterFlag::eDEFAULT;
+			const PhysXWorld *world = reinterpret_cast<const PhysXWorld *>(static_cast<const physx::PxU64 *>(constantBlock)[0]);
+			return world->groupCollisionFlags[PhysXWorld::GetIndexForFilterGroup(static_cast<FilterGroup>(filterData1.word0))] & filterData2.word0 ? physx::PxFilterFlag::eDEFAULT : physx::PxFilterFlag::eSUPPRESS;
+		}
+
+		physx::PxU32 PhysXWorld::GetIndexForFilterGroup(FilterGroup group)
+		{
+			physx::PxU32 groupValue = static_cast<physx::PxU32>(group);
+			physx::PxU32 index = physx::PxU32(0);
+			while (groupValue >>= 1)
+			{
+				++index;
+			}
+			return index;
 		}
 
 		// Constructors
@@ -66,11 +75,12 @@ namespace AGE
 			{
 				groupCollisionFlags[index] = 0xFFFFFFFF;
 			}
+			worldAddress[0] = reinterpret_cast<physx::PxU64>(this);
 			sceneDescription.simulationEventCallback = this;
 			sceneDescription.broadPhaseCallback = this;
 			sceneDescription.filterShader = &PhysXWorld::FilterShader;
-			sceneDescription.filterShaderData = static_cast<const void *>(groupCollisionFlags);
-			sceneDescription.filterShaderDataSize = sizeof(groupCollisionFlags);
+			sceneDescription.filterShaderData = static_cast<const void *>(worldAddress);
+			sceneDescription.filterShaderDataSize = sizeof(worldAddress);
 			scene = physics->getPhysics()->createScene(sceneDescription);
 			assert(scene != nullptr && "Impossible to create scene");
 		}
@@ -78,11 +88,6 @@ namespace AGE
 		// Destructor
 		PhysXWorld::~PhysXWorld(void)
 		{
-			for (auto &shapePair : collisionShapes)
-			{
-				//shapePair.second.second->release();
-				delete[] shapePair.second.first;
-			}
 			collisionShapes.clear();
 			if (scene != nullptr)
 			{
@@ -210,14 +215,14 @@ namespace AGE
 
 		void PhysXWorld::enableCollisionBetweenGroups(FilterGroup group1, FilterGroup group2)
 		{
-			groupCollisionFlags[static_cast<std::uint8_t>(group1)] |= (1 << static_cast<std::uint8_t>(group2));
-			groupCollisionFlags[static_cast<std::uint8_t>(group2)] |= (1 << static_cast<std::uint8_t>(group1));
+			groupCollisionFlags[PhysXWorld::GetIndexForFilterGroup(group1)] |= static_cast<physx::PxU32>(group2);
+			groupCollisionFlags[PhysXWorld::GetIndexForFilterGroup(group2)] |= static_cast<physx::PxU32>(group1);
 		}
 
 		void PhysXWorld::disableCollisionBetweenGroups(FilterGroup group1, FilterGroup group2)
 		{
-			groupCollisionFlags[static_cast<std::uint8_t>(group1)] &= ~(1 << static_cast<std::uint8_t>(group2));
-			groupCollisionFlags[static_cast<std::uint8_t>(group2)] &= ~(1 << static_cast<std::uint8_t>(group1));
+			groupCollisionFlags[PhysXWorld::GetIndexForFilterGroup(group1)] &= static_cast<physx::PxU32>(~group2);
+			groupCollisionFlags[PhysXWorld::GetIndexForFilterGroup(group2)] &= static_cast<physx::PxU32>(~group1);
 		}
 
 		void PhysXWorld::simulate(float stepSize)

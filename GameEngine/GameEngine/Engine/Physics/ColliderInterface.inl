@@ -19,7 +19,7 @@ namespace AGE
 
 		inline FilterGroup ColliderInterface::GetDefaultFilterGroup(void)
 		{
-			return FilterGroup::GroupI;
+			return FilterGroup::Default;
 		}
 
 		// Constructors

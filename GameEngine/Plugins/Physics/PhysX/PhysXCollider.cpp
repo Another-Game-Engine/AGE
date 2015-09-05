@@ -91,6 +91,7 @@ namespace AGE
 			for (physx::PxShape *shape : shapes)
 			{
 				shape->setFlag(physx::PxShapeFlag::eSIMULATION_SHAPE, !mustBeATrigger);
+				shape->setFlag(physx::PxShapeFlag::eSCENE_QUERY_SHAPE, !mustBeATrigger);
 				shape->setFlag(physx::PxShapeFlag::eTRIGGER_SHAPE, mustBeATrigger);
 			}
 		}

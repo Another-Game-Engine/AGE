@@ -1,3 +1,4 @@
+#include "FilterGroup.hpp"
 #pragma once
 
 #include "FilterGroup.hpp"
@@ -38,7 +39,7 @@ namespace AGE
 
 		inline LayerMask operator~(LayerMask lhs)
 		{
-			return static_cast<LayerMask>(static_cast<std::uint32_t>(lhs));
+			return static_cast<LayerMask>(~static_cast<std::uint32_t>(lhs));
 		}
 	}
 }

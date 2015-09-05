@@ -35,9 +35,9 @@ namespace AGE
 
 			const WorldInterface *getWorld(void) const;
 
-			virtual bool raycast(const glm::vec3 &origin, const glm::vec3 &direction, float distance = std::numeric_limits<float>::max(), LayerMask layers = DefaultLayerMask) = 0;
+			virtual bool raycast(const glm::vec3 &origin, const glm::vec3 &direction, float distance = std::numeric_limits<float>::max(), LayerMask layers = LayerMask::Default) = 0;
 
-			virtual std::vector<RaycastHit> raycastAll(const glm::vec3 &origin, const glm::vec3 &direction, float distance = std::numeric_limits<float>::max(), LayerMask layers = DefaultLayerMask) = 0;
+			virtual std::vector<RaycastHit> raycastAll(const glm::vec3 &origin, const glm::vec3 &direction, float distance = std::numeric_limits<float>::max(), LayerMask layers = LayerMask::Default) = 0;
 
 		protected:
 			// Attributes
