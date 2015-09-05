@@ -128,7 +128,7 @@ namespace AGE
 		{
 			rigidBody = entity->getComponent<RigidBody>();
 			link = entity.getLinkPtr();
-			link->setPosition(rigidBody->getPosition(), false);
+			link->setPosition(rigidBody->getPosition());
 			link->setOrientation(rigidBody->getRotation());
 		}
 	}
