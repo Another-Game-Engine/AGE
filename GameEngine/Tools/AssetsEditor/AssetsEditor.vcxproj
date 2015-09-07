@@ -168,6 +168,7 @@
     <ClCompile Include="AssetsDatabase.cpp" />
     <ClCompile Include="Components\EntityRepresentation.cpp" />
     <ClCompile Include="Convertor\ConvertorStatusManager.cpp" />
+    <ClCompile Include="Convertor\ImageLoader.cpp" />
     <ClCompile Include="Convertor\MeshLoader.cpp" />
     <ClCompile Include="Convertor\PhysicsLoader.cpp" />
     <ClCompile Include="EditorConfiguration.cpp" />
