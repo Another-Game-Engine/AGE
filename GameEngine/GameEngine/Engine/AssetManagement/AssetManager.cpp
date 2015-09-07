@@ -555,7 +555,6 @@ namespace AGE
 		}
 	}
 
-	AGE_NOT_OPTIMIZED_BLOCK_BEGIN
 	bool AssetsManager::AssetsLoadingChannel::updateList(int &noLoaded, int &total)
 	{
 		std::lock_guard<std::mutex> lock(_mutex);
@@ -585,7 +584,7 @@ namespace AGE
 		total = (int)_maxAssets;
 		return _errorMessages.empty();
 	}
-	AGE_NOT_OPTIMIZED_BLOCK_END
+	
 	void AssetsManager::AssetsLoadingChannel::callCallbacks()
 	{
 		std::lock_guard<std::mutex> lock(_mutex);
