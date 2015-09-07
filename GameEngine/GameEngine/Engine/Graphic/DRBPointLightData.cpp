@@ -35,7 +35,7 @@ namespace AGE
 		if (equation.x == 0) // first degree
 		{
 			// infinite range if there is no distance attenuation
-			AGE_ASSERT(equation.y != 0);
+			//AGE_ASSERT(equation.y != 0);
 			lightRange = glm::vec3(-equation.z / equation.y);
 		}
 		else // second degree

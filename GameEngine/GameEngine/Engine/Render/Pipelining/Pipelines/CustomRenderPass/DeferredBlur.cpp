@@ -45,7 +45,7 @@ namespace AGE
 
 		auto vertexShaderPathVertical = shaderPath->getValue() + BLUR_VERTICAL_VERTEX;
 		auto fragmentShaderPathVertical = shaderPath->getValue() + BLUR_VERTICAL_FRAG;
-		_programs[PROGRAM_BLUR_VERTICAL] = std::make_shared<Program>(Program(std::string("basic_3d_render"),
+		_programs[PROGRAM_BLUR_VERTICAL] = std::make_shared<Program>(Program(std::string("blur_vertical"),
 		{
 			std::make_shared<UnitProg>(fragmentShaderPathVertical, GL_FRAGMENT_SHADER),
 			std::make_shared<UnitProg>(vertexShaderPathVertical, GL_VERTEX_SHADER)
@@ -87,12 +87,10 @@ namespace AGE
         {
             SCOPE_profile_gpu_i("Overhead Pipeline");
             SCOPE_profile_cpu_i("RenderTimer", "Overhead Pipeline");
-           // _programs[PROGRAM_BLUR_VERTICAL]->use();
-            //_programs[PROGRAM_MERGING]->get_resource<Sampler2D>("diffuse_map").set(_diffuseInput);
-            //_programs[PROGRAM_MERGING]->get_resource<Sampler2D>("light_buffer").set(_lightAccuInput);
-            //_programs[PROGRAM_MERGING]->get_resource<Sampler2D>("shiny_buffer").set(_shinyAccuInput);
-            //_programs[PROGRAM_MERGING]->get_resource<Vec3>("ambient_color").set(_ambientColor);
-			//_quadPainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BLUR_VERTICAL], Properties(), _quadVertices);
+			_programs[PROGRAM_BLUR_VERTICAL]->use();
+			_programs[PROGRAM_BLUR_VERTICAL]->get_resource<Vec1>("diameter").set(0.05f);
+			_programs[PROGRAM_BLUR_VERTICAL]->get_resource<Sampler2D>("diffuse_map").set(_blurInput);
+			_quadPainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BLUR_VERTICAL], Properties(), _quadVertices);
         }
 	}
 
