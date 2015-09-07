@@ -17,7 +17,6 @@ namespace AGE
 
 	protected:
 		virtual void renderPass(const DRBCameraDrawableList &infos);
-        std::shared_ptr<Texture2D> _diffuseInput;
         std::shared_ptr<Texture2D> _blurInput;
         Key<Vertices> _quadVertices;
 		std::shared_ptr<Painter> _quadPainter;

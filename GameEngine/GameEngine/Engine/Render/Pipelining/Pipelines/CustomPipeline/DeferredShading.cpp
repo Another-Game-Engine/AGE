@@ -7,6 +7,7 @@
 #include <Render/Pipelining/Pipelines/CustomRenderPass/DeferredShadowBuffering.hh>
 #include <Render/Pipelining/Pipelines/CustomRenderPass/DeferredSkyBox.hh>
 #include <Render/Pipelining/Pipelines/CustomRenderPass/DeferredOnScreen.hh>
+#include <Render/Pipelining/Pipelines/CustomRenderPass/DeferredBlur.hh>
 #include <Render/Pipelining/Pipelines/PipelineTools.hh>
 #include <Configuration.hpp>
 
@@ -32,7 +33,8 @@ namespace AGE
 		auto directionalLightning = std::make_shared<DeferredDirectionalLightning>(screen_size, _painter_manager, _normal, _depthStencil, _specular, _lightAccumulation, _shinyAccumulation);
 		auto spotLightning = std::make_shared<DeferredSpotLightning>(screen_size, _painter_manager, _normal, _depthStencil, _specular, _lightAccumulation, _shinyAccumulation);
 		auto pointLightning = std::make_shared<DeferredPointLightning>(screen_size, _painter_manager, _normal, _depthStencil, _specular, _lightAccumulation, _shinyAccumulation);
-		_deferredMerging = std::make_shared<DeferredMerging>(screen_size, _painter_manager, _diffuse, _lightAccumulation, _shinyAccumulation, _diffuse);
+		_deferredMerging = std::make_shared<DeferredMerging>(screen_size, _painter_manager, _diffuse, _lightAccumulation, _shinyAccumulation, _albedo);
+		auto deferredBlur = std::make_shared<DeferredBlur>(screen_size, _painter_manager, _diffuse, _albedo);
 		auto deferredOnScreen = std::make_shared<DeferredOnScreen>(screen_size, _painter_manager, _diffuse);
 
 		// The entry point is the basic buffering pass
@@ -45,6 +47,7 @@ namespace AGE
 		_rendering_list.emplace_back(pointLightning); // accumulate point light
 		_rendering_list.emplace_back(_deferredMerging); // regoup all in the albedo 
 		_rendering_list.emplace_back(_deferredSkybox); // next fill the diffuse buffer with the skybox, clean the old data.
+		_rendering_list.emplace_back(deferredBlur); // blur pass to see bloom effect
 		_rendering_list.emplace_back(deferredOnScreen); // 
 
 	}

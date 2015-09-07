@@ -19,21 +19,21 @@ void main(void)
   float y_pos = interpolated_texCoord.y;
   float x_pos = interpolated_texCoord.x - (4 * stp);
 
-  color = C4 * texture2D(diffuse_map, vec2(x_pos, y_pos));
+  color = C4 * (texture2D(diffuse_map, vec2(x_pos, y_pos)) - 1.0f);
   x_pos += stp;
-  color += C3 * texture2D(diffuse_map, vec2(x_pos, y_pos));
+  color += C3 * (texture2D(diffuse_map, vec2(x_pos, y_pos)) - 1.0f);
   x_pos += stp;
-  color += C2 * texture2D(diffuse_map, vec2(x_pos, y_pos));
+  color += C2 * (texture2D(diffuse_map, vec2(x_pos, y_pos)) - 1.0f);
   x_pos += stp;
-  color += C1 * texture2D(diffuse_map, vec2(x_pos, y_pos));
+  color += C1 * (texture2D(diffuse_map, vec2(x_pos, y_pos)) - 1.0f);
   x_pos += stp;
-  color += C0 * texture2D(diffuse_map, vec2(x_pos, y_pos));
+  color += C0 * (texture2D(diffuse_map, vec2(x_pos, y_pos)) - 1.0f);
   x_pos += stp;
-  color += C1 * texture2D(diffuse_map, vec2(x_pos, y_pos));
+  color += C1 * (texture2D(diffuse_map, vec2(x_pos, y_pos)) - 1.0f);
   x_pos += stp;
-  color += C2 * texture2D(diffuse_map, vec2(x_pos, y_pos));
+  color += C2 * (texture2D(diffuse_map, vec2(x_pos, y_pos)) - 1.0f);
   x_pos += stp;
-  color += C3 * texture2D(diffuse_map, vec2(x_pos, y_pos));
+  color += C3 * (texture2D(diffuse_map, vec2(x_pos, y_pos)) - 1.0f);
   x_pos += stp;
-  color += C4 * texture2D(diffuse_map, vec2(x_pos, y_pos));
+  color += C4 * (texture2D(diffuse_map, vec2(x_pos, y_pos)) - 1.0f);
 }
