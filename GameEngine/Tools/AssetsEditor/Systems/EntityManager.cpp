@@ -345,8 +345,16 @@ namespace AGE
 						ImGui::InputText("Archetype name", _archetypeName, MAX_SCENE_NAME_LENGTH);
 						if (ImGui::SmallButton("Convert to Archetype"))
 						{
+							auto parent = _gizmoEntity.getLinkPtr()->getParent();
+							_gizmoEntity.getLinkPtr()->detachParent();
+
 							auto manager = _scene->getInstance<AGE::WE::ArchetypeEditorManager>();
 							manager->addOne(_archetypeName, *_selectedEntity);
+
+							if (parent)
+							{
+								_gizmoEntity.getLinkPtr()->attachParent(parent);
+							}
 						}
 					}
 				}
