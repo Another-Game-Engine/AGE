@@ -177,7 +177,7 @@ namespace AGE
 				max = glm::max(e.boundingBox.maxPoint, max);
 			}
 			auto dif = max - min;
-			glm::vec3 decalage = (max - (dif / 2.0f)) * -1.0f;
+			glm::vec3 decalage = min * -1.0f;
 
 			float t = dif.x > dif.y ? dif.x : dif.y;
 			t = t > dif.z ? t : dif.z;
