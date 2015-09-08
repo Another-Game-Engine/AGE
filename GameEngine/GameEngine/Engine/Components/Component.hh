@@ -31,11 +31,7 @@ namespace AGE
 		virtual void reset(){};
 		virtual void postUnserialization(){}
 
-		void copyFrom(const ComponentBase *model)
-		{
-			_typeId = model->_typeId;
-			_copyFrom(model);
-		}
+		void copyFrom(const ComponentBase *model);
 
 		Entity entity;
 
@@ -45,17 +41,17 @@ namespace AGE
 			return _typeId;
 		}
 
-		virtual bool doSerialize() { return true; }
+		virtual bool doSerialize();
 
 #ifdef EDITOR_ENABLED
 		virtual void editorCreate(){}
 		virtual void editorDelete(){}
 		// return true if modified
-		virtual bool editorUpdate(){ return false; }
-		virtual bool isExposedInEditor(){ return true; }
+		virtual bool editorUpdate();
+		virtual bool isExposedInEditor();
 		bool deletableInEditor = true;
 		// if serialized in final export
-		virtual bool serializeInExport() { return true; }
+		virtual bool serializeInExport();
 #endif
 	protected:
 		static ComponentType _typeCounter;
