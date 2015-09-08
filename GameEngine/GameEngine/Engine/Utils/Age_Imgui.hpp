@@ -16,10 +16,7 @@ namespace AGE
 	{
 		AgeKeys key;
 		bool down;
-		ImGuiKeyEvent(AgeKeys _key, bool _down)
-			: key(_key)
-			, down(_down)
-		{}
+		ImGuiKeyEvent(AgeKeys _key, bool _down);
 	};
 	
 	struct ImGuiMouseStateEvent
@@ -28,23 +25,8 @@ namespace AGE
 		bool mouseState[3];
 		float mouseWheel;
 
-		ImGuiMouseStateEvent() :
-			mousePosition(0)
-			, mouseWheel(0.0f)
-		{
-			mouseState[0] = false;
-			mouseState[1] = false;
-			mouseState[2] = false;
-		}
-
-		ImGuiMouseStateEvent(glm::ivec2 const &_mousePosition, bool leftClic, bool wheelClic, bool rightClic, float _mouseWheel)
-			: mousePosition(_mousePosition)
-			, mouseWheel(_mouseWheel)
-		{
-			mouseState[0] = leftClic;
-			mouseState[1] = wheelClic;
-			mouseState[2] = rightClic;
-		}
+		ImGuiMouseStateEvent();
+		ImGuiMouseStateEvent(glm::ivec2 const &_mousePosition, bool leftClic, bool wheelClic, bool rightClic, float _mouseWheel);
 	};
 
 	struct Age_ImDrawList
@@ -53,68 +35,17 @@ namespace AGE
 		std::vector<ImDrawVert>    vtx_buffer;
 		std::vector<ImDrawIdx>     idx_buffer;
 		Age_ImDrawList() = default;
-		Age_ImDrawList(const Age_ImDrawList& o)
-		{
-			commands = o.commands;
-			vtx_buffer = o.vtx_buffer;
-			idx_buffer = o.idx_buffer;
-		}
-		Age_ImDrawList& operator=(const Age_ImDrawList& o)
-		{
-			commands = o.commands;
-			vtx_buffer = o.vtx_buffer;
-			idx_buffer = o.idx_buffer;
-			return *this;
-		}
-		Age_ImDrawList(const ImDrawList& o)
-		{
-			const ImDrawCmd* pcmd_end = o.CmdBuffer.end();
-			commands.resize(o.CmdBuffer.size());
-			int i = 0;
-			for (const ImDrawCmd* pcmd = o.CmdBuffer.begin(); pcmd != pcmd_end; pcmd++)
-			{
-				commands[i] = (*pcmd);
-				++i;
-			}
-			auto ve = o.VtxBuffer.end();
-			vtx_buffer.resize(o.VtxBuffer.size());
-			i = 0;
-			for (auto v = o.VtxBuffer.begin(); v != ve; v++)
-			{
-				vtx_buffer[i] = *v;
-				++i;
-			}
-			auto vi = o.IdxBuffer.end();
-			idx_buffer.resize(o.IdxBuffer.size());
-			i = 0;
-			for (auto v = o.IdxBuffer.begin(); v != vi; v++)
-			{
-				idx_buffer[i] = *v;
-				++i;
-			}
-		}
+		Age_ImDrawList(const Age_ImDrawList& o);
+		Age_ImDrawList& operator=(const Age_ImDrawList& o);
+		Age_ImDrawList(const ImDrawList& o);
 	};
 
 	struct RenderImgui
 	{
 		std::vector<Age_ImDrawList> cmd_lists;
-		RenderImgui(ImDrawList** const _cmd_lists, int _cmd_lists_count)
-		{
-			cmd_lists.resize(_cmd_lists_count);
-			for (auto i = 0; i < _cmd_lists_count; ++i)
-				cmd_lists[i] = Age_ImDrawList(*_cmd_lists[i]);
-		}
-
-		RenderImgui(const RenderImgui &o)
-		{
-			cmd_lists = o.cmd_lists;
-		}
-
-		RenderImgui &operator=(const RenderImgui &o)
-		{
-			cmd_lists = o.cmd_lists;
-			return *this;
-		}
+		RenderImgui(ImDrawList** const _cmd_lists, int _cmd_lists_count);
+		RenderImgui(const RenderImgui &o);
+		RenderImgui &operator=(const RenderImgui &o);
 	};
 
 
