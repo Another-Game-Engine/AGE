@@ -189,14 +189,21 @@ namespace AGE
 				//e.boundingBox.maxPoint += center;
 				e.boundingBox.maxPoint /= t;
 				e.boundingBox.maxPoint *= cookingTask->dataSet->maxSideLength;
+				e.boundingBox.center = e.boundingBox.minPoint + (dist / 2.0f);
+
+				e.boundingBox.center = glm::vec3(0, 0, 0);
+				glm::vec3 dist = e.boundingBox.maxPoint - e.boundingBox.minPoint;
+				glm::vec3 decalage = (e.boundingBox.maxPoint - (dist / 2.0f)) * -1.0f;
+				e.boundingBox.maxPoint = dist / 2.0f;
+				e.boundingBox.minPoint = -(dist / 2.0f);
 				for (auto &f : e.positions)
 				{
 					//f += center4;
 					f /= t;
 					f *= cookingTask->dataSet->maxSideLength;
+					f += decalage;
+					//f -= dist / 2.0f;
 				}
-				glm::vec3 dist = e.boundingBox.maxPoint - e.boundingBox.minPoint;
-				e.boundingBox.center = e.boundingBox.minPoint + (dist / 2.0f);
 			}
 		}
 		Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PopTask(tid);
