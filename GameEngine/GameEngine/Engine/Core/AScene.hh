@@ -61,8 +61,8 @@ namespace AGE
 		inline void setActive(bool tof) { _active = tof; }
 	public:
 #ifdef AGE_BFC
-		BFCLinkTracker *getBfcLinkTracker() { return _bfcLinkTracker; }
-		BFCBlockManagerFactory *getBfcBlockManagerFactory() { return _bfcBlockManagerFactory; }
+		BFCLinkTracker *getBfcLinkTracker();
+		BFCBlockManagerFactory *getBfcBlockManagerFactory();
 #endif
 		AScene(AGE::Engine *engine);
 		virtual ~AScene();

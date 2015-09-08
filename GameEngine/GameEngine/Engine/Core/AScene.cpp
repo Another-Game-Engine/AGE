@@ -300,4 +300,17 @@ namespace AGE
 		pack.scene = this;
 		pack.loadFromFile(fileName);
 	}
+
+#ifdef AGE_BFC
+	BFCLinkTracker *AScene::getBfcLinkTracker()
+	{
+		return _bfcLinkTracker;
+	}
+
+	BFCBlockManagerFactory *AScene::getBfcBlockManagerFactory()
+	{
+		return _bfcBlockManagerFactory;
+	}
+#endif
+
 }
