@@ -20,26 +20,28 @@
 #include <Convertor/ImageLoader.hpp>
 #include <Convertor/PhysicsLoader.hpp>
 #include <Convertor/ConvertorStatusManager.hpp>
+#include <Convertor/AssetDataSet.hpp>
 
-#include <AssetFiles/Folder.hpp>
-#include <AssetFiles/RawFile.hpp>
+#include <FileUtils/AssetFiles/Folder.hpp>
+#include <FileUtils/AssetFiles/RawFile.hpp>
+#include <FileUtils/AssetFiles/CookedFile.hpp>
+#include <FileUtils/AssetFiles/AssetsTypes.hpp>
 #include <AssetFiles/AssetFileManager.hpp>
-#include <AssetFiles/CookedFile.hpp>
-#include <AssetFiles/AssetsTypes.hpp>
 
 #include <Utils/FileSystem.hpp>
 #include <Utils/Directory.hpp>
 #include <Utils/Path.hpp>
 #include <Utils/Debug.hpp>
-#include <Utils/FileSystemHelpers.hpp>
+#include <FileUtils/FileUtils/FileSystemHelpers.hpp>
 
 #include <EditorConfiguration.hpp>
+#include <AssetFiles/RawFileFilter.hpp>
 
 namespace AGE
 {
 	const std::string AssetsEditorScene::Name = "Assets Editor";
-	AE::Folder AssetsEditorScene::_raw = AE::Folder();
-	AE::Folder AssetsEditorScene::_cook = AE::Folder();
+	FileUtils::Folder AssetsEditorScene::_raw = FileUtils::Folder();
+	FileUtils::Folder AssetsEditorScene::_cook = FileUtils::Folder();
 
 	std::vector<AssetsEditorScene::AssetsEditorFileDescriptor> AssetsEditorScene::_cookedFiles
 		= std::vector<AssetsEditorScene::AssetsEditorFileDescriptor>();
@@ -59,7 +61,8 @@ namespace AGE
 	AssetsEditorScene::AssetsEditorScene(AGE::Engine *engine)
 		: AScene(engine)
 	{
-		_raw.list(WE::EditorConfiguration::GetRawDirectory());
+		RawFileFilter filter;
+		_raw.list(&filter, WE::EditorConfiguration::GetRawDirectory());
 		AE::AssetFileManager::LinkRawToCooked(&_raw, &_cook);
 	}
 
@@ -114,7 +117,7 @@ namespace AGE
 				{
 					_cookedFiles.push_back(AssetsEditorFileDescriptor(Path::RelativeName(absPath.c_str(), *it), Path::BaseName(*it)));
 
-					auto extension = AGE::FileSystemHelpers::GetExtension(*it);
+					auto extension = FileUtils::GetExtension(*it);
 					if (extension == "sage")
 					{
 						_cookedMeshFiles.push_back(_cookedFiles.back().fileName.c_str());
@@ -152,7 +155,7 @@ namespace AGE
 			{
 				ImGui::BeginChild("Raw", ImVec2(0, 0), false);
 				_raw.update(
-				std::function<bool(AE::Folder*)>([](AE::Folder* folder) {
+					std::function<bool(FileUtils::Folder*)>([](FileUtils::Folder* folder) {
 					bool opened = ImGui::TreeNode((void*)(folder), folder->_path.path().filename().c_str());
 					if (opened)
 					{
@@ -160,12 +163,12 @@ namespace AGE
 					}
 					return opened;
 				}),
-					std::function<bool(AE::Folder*)>([](AE::Folder* folder) {
+					std::function<bool(FileUtils::Folder*)>([](FileUtils::Folder* folder) {
 					ImGui::Separator();
 					ImGui::TreePop();
 					return true;
 				}),
-					std::function<void(AE::RawFile*)>([&](AE::RawFile* file) {
+					std::function<void(FileUtils::RawFile*)>([&](FileUtils::RawFile* file) {
 					AE::AssetFileManager::PrintClickableRawAssetsFile(file, AE::AssetFileManager::PrintSection::Date | AE::AssetFileManager::PrintSection::Name | AE::AssetFileManager::PrintSection::Type, _selectedRaw);
 				}));
 				ImGui::EndChild();

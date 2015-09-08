@@ -59,6 +59,10 @@ namespace AGE
 			virtual void scale(const glm::vec3 &scaling) override;
 
 			void setMaterial(const std::string &name) override final;
+
+			void setPosition(const glm::vec3 &position) override final;
+
+			void setRotation(const glm::quat &rotation) override final;
 		};
 	}
 }

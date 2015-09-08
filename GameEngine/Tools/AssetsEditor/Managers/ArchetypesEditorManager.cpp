@@ -7,7 +7,7 @@
 #include <Utils/Age_Imgui.hpp>
 #include <Entities\ArchetypeScenes.hpp>
 #include <Utils/Directory.hpp>
-#include <Utils/FileSystemHelpers.hpp>
+#include <FileUtils/FileUtils/FileSystemHelpers.hpp>
 #include <Entities/ReadableEntityPack.hpp>
 #include <Entities/EntityReadablePacker.hpp>
 #include <Systems\AssetsAndComponentRelationsSystem.hpp>
@@ -36,13 +36,13 @@ namespace AGE
 			{
 				if (Directory::IsFile(*it))
 				{
-					auto extension = AGE::FileSystemHelpers::GetExtension(*it);
+					auto extension = FileUtils::GetExtension(*it);
 
 					if (extension != "raw_archetype")
 					{
 						continue;
 					}
-					loadOne(AGE::FileSystemHelpers::RemoveExtension(AGE::FileSystemHelpers::GetName(*it)));
+					loadOne(FileUtils::RemoveExtension(FileUtils::GetName(*it)));
 				}
 			}
 			dir.close();

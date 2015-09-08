@@ -5,7 +5,7 @@
 
 namespace AGE
 {
-	class CharacterControllerSystem
+	class CharacterControllerSystem : public System
 	{
 	public:
 		CharacterControllerSystem() = delete;
@@ -17,6 +17,8 @@ namespace AGE
 		virtual void updateBegin(float time);
 		virtual void mainUpdate(float time);
 		virtual void updateEnd(float time);
+
+		EntityFilter _filter;
 	};
 }
 

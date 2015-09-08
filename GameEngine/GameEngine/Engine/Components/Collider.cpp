@@ -5,6 +5,12 @@
 #include <Physics/PhysicsInterface.hpp>
 #include <Physics/WorldInterface.hpp>
 #include <AssetManagement/AssetManager.hh>
+
+#include <FileUtils/AssetFiles/CookedFileFilter.hpp>
+#include <FileUtils/AssetFiles/Folder.hpp>
+#include <FileUtils/AssetFiles/CookedFile.hpp>
+#include <FileUtils/FileUtils/FileSystemHelpers.hpp>
+
 #ifdef EDITOR_ENABLED
 #include <imgui/imgui.h>
 #endif
@@ -17,7 +23,7 @@ namespace AGE
 		SCOPE_profile_cpu_function("Physic");
 
 		assert(collider == nullptr && "Collider already initialized");
-		collider = entity->getScene()->getInstance<Physics::PhysicsInterface>()->getWorld()->createCollider(colliderType, mesh, entity->addComponent<Private::PhysicsData>()->getData());
+		collider = entity->getScene()->getInstance<Physics::PhysicsInterface>()->getWorld()->createCollider(colliderType, mesh, entity->addComponent<Private::PhysicsData>(entity)->getData());
 		collider->collider = this;
 		scale(entity->getLink().getScale());
 	}
@@ -248,7 +254,11 @@ namespace AGE
 		switch (getColliderType())
 		{
 			case Physics::ColliderType::Mesh:
-				collider->as<Physics::ColliderType::Mesh>()->setAsConvex();
+				if (isConcave())
+				{
+					collider->as<Physics::ColliderType::Mesh>()->setAsConvex();
+					scale(entity->getLink().getScale());
+				}
 				break;
 			default:
 				assert(!"Invalid collider type");
@@ -262,7 +272,11 @@ namespace AGE
 		switch (getColliderType())
 		{
 			case Physics::ColliderType::Mesh:
-				collider->as<Physics::ColliderType::Mesh>()->setAsConcave();
+				if (isConvex())
+				{
+					collider->as<Physics::ColliderType::Mesh>()->setAsConcave();
+					scale(entity->getLink().getScale());
+				}
 				break;
 			default:
 				assert(!"Invalid collider type");
@@ -283,10 +297,35 @@ namespace AGE
 		}
 	}
 
+	bool Collider::isConcave(void) const
+	{
+		assert(collider != nullptr && "Invalid Collider");
+		switch (getColliderType())
+		{
+			case Physics::ColliderType::Mesh:
+				return collider->as<Physics::ColliderType::Mesh>()->isConcave();
+			default:
+				assert(!"Invalid collider type");
+				return false;
+		}
+	}
+
 	void Collider::scale(const glm::vec3 &scaling)
 	{
 		assert(collider != nullptr && "Invalid Collider");
 		collider->scale(scaling);
+	}
+
+	void Collider::setPosition(const glm::vec3 &position)
+	{
+		assert(collider != nullptr && "Invalid Collider");
+		collider->setPosition(position);
+	}
+
+	void Collider::setRotation(const glm::quat &rotation)
+	{
+		assert(collider != nullptr && "Invalid Collider");
+		collider->setRotation(rotation);
 	}
 
 	// Inherited Methods
@@ -330,12 +369,31 @@ namespace AGE
 
 	void Collider::EditorStruct::copyDatas(Collider *ptr)
 	{
-		currentType = ptr->getColliderType();
+		if (isChoosingMesh == false)
+		{
+			currentType = ptr->getColliderType();
+			if (currentType == Physics::ColliderType::Mesh)
+			{
+				isConcave = ptr->isConcave();
+			}
+		}
 	}
 
 	void Collider::EditorStruct::editorUpdate(Collider *ptr)
 	{
+		// Used to display the collider editor
+		static bool folderInitialized = false;
+		static FileUtils::Folder colliderFolder = FileUtils::Folder();
+		// ---
 		bool hasChanged = false;
+
+		if (folderInitialized == false)
+		{
+			FileUtils::CookedFileFilter filter;
+			std::string assetsDirectory = ptr->entity->getScene()->getInstance<AGE::AssetsManager>()->getAssetsDirectory();
+			colliderFolder.list(&filter, assetsDirectory);
+			folderInitialized = true;
+		}
 
 		std::string colliderType[] = 
 		{
@@ -352,15 +410,75 @@ namespace AGE
 				hasChanged = true;
 			}
 		}
+		if (currentType == Physics::ColliderType::Mesh)
+		{
+			if (ptr->getColliderType() != Physics::ColliderType::Mesh)
+			{
+				isChoosingMesh = true;
+			}
+			if (isChoosingMesh == false)
+			{
+				if (ImGui::RadioButton("Convex", !isConcave))
+				{
+					ptr->setAsConvex();
+					isConcave = false;
+				}
+				if (ImGui::RadioButton("Concave", isConcave))
+				{
+					ptr->setAsConcave();
+					isConcave = true;
+				}
+			}
+
+			std::list<std::string> phageInFolder;
+
+			colliderFolder.update(
+				std::function<bool(FileUtils::Folder*)>([&](FileUtils::Folder* folder) {
+				phageInFolder.clear();
+				return true;
+			}),
+				std::function<bool(FileUtils::Folder*)>([](FileUtils::Folder* folder) {
+				return true;
+			}),
+				std::function<void(FileUtils::CookedFile*)>([&](FileUtils::CookedFile* file) {
+				
+				auto extension = FileUtils::GetExtension(file->getFileName());
+				// Name of the file without extension and without _static or _dynamic
+				std::string phageName;
+
+				// If its a .sage file, we just need to remove the extension to set the collider
+				if (extension == "sage")
+				{
+					phageName = FileUtils::RemoveExtension(file->getFileName());
+
+					if (std::find(phageInFolder.begin(), phageInFolder.end(), phageName) == phageInFolder.end())
+					{
+						phageInFolder.push_back(phageName);
+						if (ImGui::Button(phageName.c_str()))
+						{
+							std::string phagePath = FileUtils::RemoveExtension(file->getPath());
+							std::string assetsDirectory = ptr->entity->getScene()->getInstance<AGE::AssetsManager>()->getAssetsDirectory();
+							_meshPath = phagePath.substr(assetsDirectory.size(), std::string::npos);
+							hasChanged = true;
+						}
+					}
+				}
+			}));
+		}
 		if (hasChanged)
 		{
-			ptr->reset();
 			if (currentType == Physics::ColliderType::Mesh)
 			{
-				ptr->init(Physics::ColliderType::Box);
+				if (_meshPath.empty() == false)
+				{
+					isChoosingMesh = false;
+					ptr->reset();
+					ptr->init(currentType, _meshPath);
+				}
 			}
 			else
 			{
+				ptr->reset();
 				ptr->init(currentType);
 			}
 		}

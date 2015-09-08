@@ -1,6 +1,6 @@
 #pragma once
 
-#include "RawFile.hpp"
+#include <FileUtils/AssetFiles/RawFile.hpp>
 
 namespace AGE
 {
@@ -10,11 +10,11 @@ namespace AGE
 		class CookedFile;
 		struct CookConfig;
 
-		class MeshRawFile : public RawFile
+		class MeshRawFile : public FileUtils::RawFile
 		{
 		public:
 			virtual ~MeshRawFile();
-			MeshRawFile(const AE::Path &path, Folder *parent = nullptr);
+			MeshRawFile(const FileUtils::Path &path, FileUtils::Folder *parent = nullptr);
 			virtual void cook();
 			virtual void selection();
 		};

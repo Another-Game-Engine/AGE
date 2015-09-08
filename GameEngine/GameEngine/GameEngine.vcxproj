@@ -5,6 +5,10 @@
       <Configuration>Debug</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="LeakDetector|x64">
+      <Configuration>LeakDetector</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="Profile|x64">
       <Configuration>Profile</Configuration>
       <Platform>x64</Platform>
@@ -24,6 +28,12 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='LeakDetector|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>MultiByte</CharacterSet>
@@ -57,6 +67,11 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\AgeLibProperties.props" />
   </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='LeakDetector|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\AgeLibProperties.props" />
+    <Import Project="..\VisualLeakDetector.props" />
+  </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\AgeLibProperties.props" />
@@ -73,37 +88,80 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <SourcePath>$(SolutionDir)Vendors/TinyThread;$(SolutionDir)Vendors/TinyObjLoader;$(SourcePath);$(SolutionDir)Vendors/imgui/</SourcePath>
     <LibraryPath>$(LibraryPath)</LibraryPath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='LeakDetector|x64'">
+    <SourcePath>$(SolutionDir)Vendors/TinyThread;$(SolutionDir)Vendors/TinyObjLoader;$(SourcePath);$(SolutionDir)Vendors/imgui/</SourcePath>
+    <LibraryPath>$(LibraryPath)</LibraryPath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LibraryPath>$(LibraryPath)</LibraryPath>
     <TargetExt>.lib</TargetExt>
     <SourcePath>$(SolutionDir)Vendors/TinyThread;$(SolutionDir)Vendors/TinyObjLoader;$(SourcePath);$(SolutionDir)Vendors/imgui/</SourcePath>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Retail|x64'">
     <LibraryPath>$(LibraryPath)</LibraryPath>
     <TargetExt>.lib</TargetExt>
     <SourcePath>$(SolutionDir)Vendors/TinyThread;$(SolutionDir)Vendors/TinyObjLoader;$(SourcePath);$(SolutionDir)Vendors/imgui/</SourcePath>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">
     <LibraryPath>$(LibraryPath)</LibraryPath>
     <TargetExt>.lib</TargetExt>
     <SourcePath>$(SolutionDir)Vendors/TinyThread;$(SolutionDir)Vendors/TinyObjLoader;$(SourcePath);$(SolutionDir)Vendors/imgui/</SourcePath>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_SCL_SECURE_NO_WARNINGS;EDITOR_ENABLED;_CRT_SECURE_NO_WARNINGS;AGE_ENABLE_IMGUI;AGE_ENABLE_PROFILING;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NOMINMAX;_SCL_SECURE_NO_WARNINGS;EDITOR_ENABLED;_CRT_SECURE_NO_WARNINGS;AGE_ENABLE_IMGUI;AGE_ENABLE_PROFILING;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MultiProcessorCompilation>false</MultiProcessorCompilation>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <OpenMPSupport>
       </OpenMPSupport>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Vendors/PhysX/PhysXSDK/Include;$(SolutionDir)GameEngine/Engine/Physics;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeTypeInfo>
+      </RuntimeTypeInfo>
+      <DisableSpecificWarnings>4503;4099</DisableSpecificWarnings>
+      <TreatWarningAsError>false</TreatWarningAsError>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;glew32.lib;glext.lib;sdl2.lib;sdl2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <EntryPointSymbol>main</EntryPointSymbol>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+    <Lib>
+      <AdditionalDependencies>
+      </AdditionalDependencies>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
+      <AdditionalOptions>/ignore:4006,4221,4099,4098,4075 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='LeakDetector|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;NOMINMAX;_SCL_SECURE_NO_WARNINGS;EDITOR_ENABLED;_CRT_SECURE_NO_WARNINGS;AGE_ENABLE_IMGUI;AGE_ENABLE_PROFILING;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MultiProcessorCompilation>false</MultiProcessorCompilation>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <OpenMPSupport>
+      </OpenMPSupport>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <AdditionalIncludeDirectories>$(SolutionDir)Vendors/PhysX/PhysXSDK/Include;$(SolutionDir)GameEngine/Engine/Physics;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeTypeInfo>
       </RuntimeTypeInfo>
       <DisableSpecificWarnings>4503;4099</DisableSpecificWarnings>
@@ -132,8 +190,8 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;EDITOR_ENABLED;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;AGE_ENABLE_IMGUI;AGE_ENABLE_PROFILING;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NOMINMAX;EDITOR_ENABLED;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;AGE_ENABLE_IMGUI;AGE_ENABLE_PROFILING;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)Vendors/PhysX/PhysXSDK/Include;$(SolutionDir)GameEngine/Engine/Physics;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4503;4099</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <TreatWarningAsError>false</TreatWarningAsError>
@@ -171,8 +229,8 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;EDITOR_ENABLED;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NOMINMAX;EDITOR_ENABLED;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)Vendors/PhysX/PhysXSDK/Include;$(SolutionDir)GameEngine/Engine/Physics;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4503;4099</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <TreatWarningAsError>false</TreatWarningAsError>
@@ -210,8 +268,8 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;EDITOR_ENABLED;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;AGE_ENABLE_PROFILING = 1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NOMINMAX;EDITOR_ENABLED;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;AGE_ENABLE_PROFILING = 1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)Vendors/PhysX/PhysXSDK/Include;$(SolutionDir)GameEngine/Engine/Physics;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4503;4099</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <TreatWarningAsError>false</TreatWarningAsError>
@@ -245,7 +303,10 @@
   <ItemGroup>
     <ClCompile Include="..\Vendors\imgui\imgui.cpp" />
     <ClCompile Include="..\Vendors\imgui\imgui_draw.cpp" />
-    <ClCompile Include="CharacterControllerSystem.cpp" />
+    <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DepthOfField.cpp" />
+    <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DownSample.cpp" />
+    <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\GaussianBlur.cpp" />
+    <ClCompile Include="Engine\Systems\CharacterControllerSystem.cpp" />
     <ClCompile Include="Engine\BFC\BFCBlock.cpp" />
     <ClCompile Include="Engine\BFC\BFCBlockManager.cpp" />
     <ClCompile Include="Engine\BFC\BFCBlockManagerFactory.cpp" />
@@ -396,7 +457,6 @@
     <ClCompile Include="Engine\TMQ\queue.cpp" />
     <ClCompile Include="Engine\Utils\AABoundingBox.cpp" />
     <ClCompile Include="Engine\Utils\Age_microprofile.cpp" />
-    <ClCompile Include="Engine\Utils\BitOperations.cpp" />
     <ClCompile Include="Engine\Utils\BoundingInfos.cpp" />
     <ClCompile Include="Engine\Audio\Audio.cpp" />
     <ClCompile Include="Engine\Audio\AudioManager.cpp" />
@@ -429,7 +489,6 @@
     <ClCompile Include="Engine\Utils\FileMemory.cpp" />
     <ClCompile Include="Engine\Utils\FileStdio.cpp" />
     <ClCompile Include="Engine\Utils\FileSystem.cpp" />
-    <ClCompile Include="Engine\Utils\FileSystemHelpers.cpp" />
     <ClCompile Include="Engine\Utils\FileSystemThread.cpp" />
     <ClCompile Include="Engine\Utils\Frustum.cpp" />
     <ClCompile Include="Engine\Utils\Age_Imgui.cpp" />
@@ -464,7 +523,10 @@
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
     <ClInclude Include="..\Vendors\imgui\imgui.h" />
     <ClInclude Include="..\Vendors\imgui\stb_textedit.h" />
-    <ClInclude Include="CharacterControllerSystem.hh" />
+    <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DepthOfField.hh" />
+    <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DownSample.hh" />
+    <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\GaussianBlur.hh" />
+    <ClInclude Include="Engine\Systems\CharacterControllerSystem.hh" />
     <ClInclude Include="Engine\BFC\BFCBlock.hpp" />
     <ClInclude Include="Engine\BFC\BFCBlockManager.hpp" />
     <ClInclude Include="Engine\BFC\BFCBlockManagerFactory.hpp" />
@@ -531,6 +593,7 @@
     <ClInclude Include="Engine\Physics\MeshColliderInterface.hpp" />
     <ClInclude Include="Engine\Physics\PhysicsInterface.hpp" />
     <ClInclude Include="Engine\Physics\RaycasterInterface.hpp" />
+    <ClInclude Include="Engine\Physics\RaycastHit.hpp" />
     <ClInclude Include="Engine\Physics\RigidBodyInterface.hpp" />
     <ClInclude Include="Engine\Physics\SphereColliderInterface.hpp" />
     <ClInclude Include="Engine\Physics\Trigger.hpp" />
@@ -701,7 +764,6 @@
     <ClInclude Include="Engine\Utils\AABoundingBox.hh" />
     <ClInclude Include="Engine\Utils\Age_microprofile.hpp" />
     <ClInclude Include="Engine\Utils\Architecture.hpp" />
-    <ClInclude Include="Engine\Utils\BitOperations.hpp" />
     <ClInclude Include="Engine\Utils\BoundingInfos.hpp" />
     <ClInclude Include="Engine\Utils\Containers\LFList.hpp" />
     <ClInclude Include="Engine\Utils\Debug.hpp" />
@@ -757,7 +819,6 @@
     <ClInclude Include="Engine\Utils\FileMemory.hpp" />
     <ClInclude Include="Engine\Utils\FileStdio.hpp" />
     <ClInclude Include="Engine\Utils\FileSystem.hpp" />
-    <ClInclude Include="Engine\Utils\FileSystemHelpers.hpp" />
     <ClInclude Include="Engine\Utils\FileSystemThread.hpp" />
     <ClInclude Include="Engine\Utils\Frustum.hh" />
     <ClInclude Include="Engine\Utils\FSThreadBase.hpp" />
@@ -817,6 +878,7 @@
     <None Include="Engine\Physics\BoxColliderInterface.inl" />
     <None Include="Engine\Physics\CapsuleColliderInterface.inl" />
     <None Include="Engine\Physics\ColliderInterface.inl" />
+    <None Include="Engine\Physics\FilterGroup.inl" />
     <None Include="Engine\Physics\MaterialInterface.inl" />
     <None Include="Engine\Physics\MemoryPoolHelper.inl" />
     <None Include="Engine\Physics\MeshColliderInterface.inl" />
@@ -832,6 +894,14 @@
     <None Include="Engine\ResourceManager\SharedMesh.hh" />
     <None Include="Engine\ResourceManager\Texture.hh" />
     <None Include="Engine\Components\MeshRenderer.hh" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FileUtils\FileUtils.vcxproj">
+      <Project>{038c3874-8114-4bc8-9814-b0225fb033fb}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\LowLevelUtils\LowLevelUtils.vcxproj">
+      <Project>{cd9a602f-e073-4044-a371-cd845147482c}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

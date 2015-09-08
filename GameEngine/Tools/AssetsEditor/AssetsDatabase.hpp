@@ -18,8 +18,8 @@ namespace AGE
 		private:
 			void reset();
 		private:
-			std::unique_ptr<Folder> _raws;
-			std::unique_ptr<Folder> _cooked;
+			std::unique_ptr<FileUtils::Folder> _raws;
+			std::unique_ptr<FileUtils::Folder> _cooked;
 			std::string _saveFile;
 		};
 	}

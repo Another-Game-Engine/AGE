@@ -19,7 +19,7 @@ namespace AGE
 
 		inline FilterGroup ColliderInterface::GetDefaultFilterGroup(void)
 		{
-			return FilterGroup::GroupI;
+			return FilterGroup::Default;
 		}
 
 		// Constructors
@@ -35,7 +35,6 @@ namespace AGE
 		inline ColliderInterface::~ColliderInterface(void)
 		{
 			collider = nullptr;
-			world->destroyMaterial(material);
 			material = nullptr;
 			world = nullptr;
 		}
@@ -88,7 +87,6 @@ namespace AGE
 		inline void ColliderInterface::setMaterial(MaterialInterface *newMaterial)
 		{
 			assert(newMaterial != nullptr && "Invalid material");
-			world->destroyMaterial(material);
 			material = newMaterial;
 		}
 

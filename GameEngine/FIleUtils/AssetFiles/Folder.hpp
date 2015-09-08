@@ -7,10 +7,11 @@
 #include <functional>
 #include <memory>
 #include "File.hpp"
+#include "AFileFilter.hpp"
 
 namespace AGE
 {
-	namespace AE
+	namespace FileUtils
 	{
 		class Folder
 		{
@@ -18,7 +19,7 @@ namespace AGE
 			Folder();
 			Folder(const std::string &path, Folder* parent = nullptr);
 			Folder(const std::tr2::sys::basic_directory_entry<std::tr2::sys::path> &path, Folder *parent = nullptr);
-			void list(const std::string &path = "");
+			void list(AFileFilter *filter, const std::string &path = "");
 			void filesFilter(std::function<bool(const std::tr2::sys::path& file)> &filter);
 			void foldersFilter(std::function<bool(const std::tr2::sys::path& file)> &filter);
 			void clearFileFilter();
@@ -75,8 +76,8 @@ namespace AGE
 			}
 
 			std::tr2::sys::basic_directory_entry<std::tr2::sys::path> _path;
-			std::map<std::string, std::shared_ptr<AE::Folder> > _folders;
-			std::map<std::string, std::shared_ptr<AE::AssetFile> > _files;
+			std::map<std::string, std::shared_ptr<Folder> > _folders;
+			std::map<std::string, std::shared_ptr<AssetFile> > _files;
 			Folder *_parent;
 			bool _active;
 		};

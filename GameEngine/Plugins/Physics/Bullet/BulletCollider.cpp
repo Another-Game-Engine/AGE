@@ -30,11 +30,6 @@ namespace AGE
 			}
 			btRigidBody *body = getDataAs<btRigidBody>();
 			body->setUserPointer(this);
-			if (collisionShape->isConcave())
-			{
-				body->setCollisionFlags(body->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
-				body->setActivationState(DISABLE_DEACTIVATION);
-			}
 			body->setCollisionShape(collisionShape);
 			setAsTrigger(IsTriggerByDefault());
 			setFilterGroup(GetDefaultFilterGroup());
@@ -57,7 +52,6 @@ namespace AGE
 				body->setCollisionShape(&BulletRigidBody::EmptyShape);
 				bulletWorld->addRigidBody(body);
 			}
-			delete collisionShape;
 			collisionShape = nullptr;
 		}
 
@@ -76,13 +70,7 @@ namespace AGE
 		{
 			assert(shape != nullptr && "Invalid shape");
 			btRigidBody *body = getDataAs<btRigidBody>();
-			if (shape->isConcave())
-			{
-				body->setCollisionFlags(body->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
-				body->setActivationState(DISABLE_DEACTIVATION);
-			}
 			body->setCollisionShape(shape);
-			delete collisionShape;
 			collisionShape = shape;
 		}
 
@@ -121,6 +109,18 @@ namespace AGE
 		{
 			MaterialInterface *newMaterial = getWorld()->createMaterial(name);
 			static_cast<ColliderInterface *>(this)->setMaterial(newMaterial);
+		}
+
+		void BulletCollider::setPosition(const glm::vec3 &position)
+		{
+			btTransform &transform = getDataAs<btRigidBody>()->getWorldTransform();
+			transform.setOrigin(btVector3(position.x, position.y, position.z));
+		}
+
+		void BulletCollider::setRotation(const glm::quat &rotation)
+		{
+			btTransform &transform = getDataAs<btRigidBody>()->getWorldTransform();
+			transform.setRotation(btQuaternion(rotation.x, rotation.y, rotation.z, rotation.w));
 		}
 	}
 }

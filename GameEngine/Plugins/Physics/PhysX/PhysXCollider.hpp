@@ -15,16 +15,18 @@ namespace AGE
 			// Friendships
 			friend PhysXRigidBody;
 
+			friend class PhysXRaycaster;
+
 		public:
 			// Constructors
 			PhysXCollider(void) = delete;
 
-			PhysXCollider(WorldInterface *world, Private::GenericData *data, physx::PxShape *shape);
+			PhysXCollider(WorldInterface *world, Private::GenericData *data, std::vector<physx::PxShape *> shapes);
 
 			PhysXCollider(const PhysXCollider &) = delete;
 
 			// Methods
-			void updateShape(physx::PxShape *newShape);
+			void updateShape(std::vector<physx::PxShape *> newShapes);
 
 			// Assignment Operators
 			PhysXCollider &operator=(const PhysXCollider &) = delete;
@@ -34,13 +36,13 @@ namespace AGE
 			virtual ~PhysXCollider(void);
 
 			// Methods
-			physx::PxShape *getShape(void);
+			std::vector<physx::PxShape *> &getShapes(void);
 
-			const physx::PxShape *getShape(void) const;
+			const std::vector<physx::PxShape *> &getShapes(void) const;
 
 		private:
 			// Attributes
-			physx::PxShape *shape = nullptr;
+			std::vector<physx::PxShape *> shapes;
 
 			PhysXRigidBody *rigidBody = nullptr;
 
@@ -54,6 +56,10 @@ namespace AGE
 			FilterGroup getFilterGroup(void) const override final;
 
 			void setMaterial(const std::string &name) override final;
+
+			void setPosition(const glm::vec3 &position) override final;
+
+			void setRotation(const glm::quat &rotation) override final;
 		};
 	}
 }

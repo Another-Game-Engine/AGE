@@ -4,7 +4,7 @@
 
 namespace AGE
 {
-	namespace FileSystemHelpers
+	namespace FileUtils
 	{
 		bool AgeCreateFolder(const std::string &path);
 		bool AgeExists(const std::string &path);

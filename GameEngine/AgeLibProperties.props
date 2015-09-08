@@ -5,7 +5,7 @@
   <PropertyGroup />
   <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(SolutionDir)GameEngine/Engine;$(SolutionDir)SpacePartitioning;$(ProjectDir);$(SolutionDir);$(SolutionDir)Vendors/;$(SolutionDir)Vendors/TinyObjLoader;$(SolutionDir)Vendors/TinyThread;$(SolutionDir)Vendors/OpenGL/include;$(IncludePath);$(SolutionDir)Vendors/boost_1_55_0;$(SolutionDir)Vendors/bullet/src;$(SolutionDir)Vendors/fmod/inc;$(SolutionDir)Vendors/minizip/include/;$(SolutionDir)Vendors/zlib/include/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)GameEngine/Engine;$(SolutionDir)LowLevelUtils;$(ProjectDir);$(SolutionDir);$(SolutionDir)Vendors/;$(SolutionDir)Vendors/TinyObjLoader;$(SolutionDir)Vendors/TinyThread;$(SolutionDir)Vendors/OpenGL/include;$(IncludePath);$(SolutionDir)Vendors/boost_1_55_0;$(SolutionDir)Vendors/bullet/src;$(SolutionDir)Vendors/fmod/inc;$(SolutionDir)Vendors/minizip/include/;$(SolutionDir)Vendors/zlib/include/;$(SolutionDir)FileUtils;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup />

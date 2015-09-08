@@ -58,6 +58,7 @@ char const *UnitProg::handleRequireToken(std::string &sources)
 bool UnitProg::compileUnitProg(char const *fileName)
 {
 	std::ifstream file(fileName, std::ios_base::binary);
+	std::cerr << fileName << std::endl;
 	assert(!file.fail());
 	size_t fileSize;
 	file.seekg(0, file.end);

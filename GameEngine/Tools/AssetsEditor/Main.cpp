@@ -49,6 +49,7 @@
 #include <Components/FreeFlyComponent.hh>
 #include <Components/ArchetypeComponent.hpp>
 #include <Components/Collider.hpp>
+#include <Components/CharacterController.hh>
 
 //COMPONENTS
 #include <Components/EntityRepresentation.hpp>
@@ -90,6 +91,7 @@ int			main(int ac, char **av)
 		REGISTER_COMPONENT_TYPE(AGE::ArchetypeComponent);
 		REGISTER_COMPONENT_TYPE(AGE::RigidBody);
 		REGISTER_COMPONENT_TYPE(AGE::Collider);
+		REGISTER_COMPONENT_TYPE(AGE::CharacterController);
 
 		RegisterComponents();
 

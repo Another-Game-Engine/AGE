@@ -253,7 +253,9 @@
 #endif
 
 #if defined(AGE_PLATFORM_WINDOWS)
-# define NOMINMAX
+# ifndef NOMINMAX
+#  define NOMINMAX
+# endif
 # include <Windows.h>
 #endif
 

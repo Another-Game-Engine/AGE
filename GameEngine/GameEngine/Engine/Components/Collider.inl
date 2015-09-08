@@ -69,14 +69,14 @@ namespace AGE
 		bool isATrigger;
 		std::uint8_t filterGroup;
 		ar(cereal::make_nvp("ColliderType", colliderType));
-		reset();
-		init(static_cast<Physics::ColliderType>(colliderType));
+		if (static_cast<Physics::ColliderType>(colliderType) != Physics::ColliderType::Mesh)
+		{
+			reset();
+			init(static_cast<Physics::ColliderType>(colliderType));
+		}
 		ar(cereal::make_nvp("Material", material));
 		ar(cereal::make_nvp("IsATrigger", isATrigger));
 		ar(cereal::make_nvp("FilterGroup", filterGroup));
-		setMaterial(material);
-		setAsTrigger(isATrigger);
-		setFilterGroup(static_cast<Physics::FilterGroup>(filterGroup));
 		switch (static_cast<Physics::ColliderType>(colliderType))
 		{
 			case Physics::ColliderType::Box:
@@ -95,6 +95,9 @@ namespace AGE
 				assert(!"Never reached");
 				break;
 		}
+		setMaterial(material);
+		setAsTrigger(isATrigger);
+		setFilterGroup(static_cast<Physics::FilterGroup>(filterGroup));
 	}
 
 	template <typename Archive>
@@ -128,9 +131,10 @@ namespace AGE
 		std::string mesh;
 		bool convex;
 		ar(cereal::make_nvp("Mesh", mesh));
-		setMesh(mesh);
 		ar(cereal::make_nvp("Convex", convex));
-		if (isConvex())
+		reset();
+		init(Physics::ColliderType::Mesh, mesh);
+		if (convex)
 			setAsConvex();
 		else
 			setAsConcave();

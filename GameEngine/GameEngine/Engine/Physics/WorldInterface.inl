@@ -53,22 +53,6 @@ namespace AGE
 			filterNameToFilterGroup.emplace("GroupXIV", FilterGroup::GroupXIV);
 			filterNameToFilterGroup.emplace("GroupXV", FilterGroup::GroupXV);
 			filterNameToFilterGroup.emplace("GroupXVI", FilterGroup::GroupXVI);
-			filterNameToFilterGroup.emplace("GroupXVII", FilterGroup::GroupXVII);
-			filterNameToFilterGroup.emplace("GroupXVIII", FilterGroup::GroupXVIII);
-			filterNameToFilterGroup.emplace("GroupXIX", FilterGroup::GroupXIX);
-			filterNameToFilterGroup.emplace("GroupXX", FilterGroup::GroupXX);
-			filterNameToFilterGroup.emplace("GroupXXI", FilterGroup::GroupXXI);
-			filterNameToFilterGroup.emplace("GroupXXII", FilterGroup::GroupXXII);
-			filterNameToFilterGroup.emplace("GroupXXIII", FilterGroup::GroupXXIII);
-			filterNameToFilterGroup.emplace("GroupXXIV", FilterGroup::GroupXXIV);
-			filterNameToFilterGroup.emplace("GroupXXV", FilterGroup::GroupXXV);
-			filterNameToFilterGroup.emplace("GroupXXVI", FilterGroup::GroupXXVI);
-			filterNameToFilterGroup.emplace("GroupXXVII", FilterGroup::GroupXXVII);
-			filterNameToFilterGroup.emplace("GroupXXVIII", FilterGroup::GroupXXVIII);
-			filterNameToFilterGroup.emplace("GroupXXIX", FilterGroup::GroupXXIX);
-			filterNameToFilterGroup.emplace("GroupXXX", FilterGroup::GroupXXX);
-			filterNameToFilterGroup.emplace("GroupXXXI", FilterGroup::GroupXXXI);
-			filterNameToFilterGroup.emplace("GroupXXXII", FilterGroup::GroupXXXII);
 		}
 
 		// Methods
@@ -84,8 +68,8 @@ namespace AGE
 		inline void WorldInterface::finalize(AssetsManager *assetManager)
 		{
 			this->assetManager = assetManager;
-			saveMaterials();
 			destroyRaycaster();
+			saveMaterials();
 		}
 
 		inline AssetsManager *WorldInterface::getAssetManager(void)

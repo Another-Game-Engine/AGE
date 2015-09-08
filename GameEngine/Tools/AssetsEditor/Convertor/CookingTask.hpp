@@ -1,5 +1,7 @@
 #pragma once
 
+#include <PxPhysicsAPI.h>
+
 #include "AssetDataSet.hpp"
 
 namespace AGE
@@ -39,6 +41,8 @@ namespace AGE
 		AGE::Vector<std::shared_ptr<TextureData>> textures;
 		std::shared_ptr<btConvexHullShape> convexShape;
 		std::shared_ptr<btBvhTriangleMeshShape> concaveShape;
+		std::vector<physx::PxConvexMesh *> physxConvexShapes;
+		std::vector<physx::PxTriangleMesh *> physxConcaveShapes;
 
 		//Assimp
 		aiScene* assimpScene = nullptr;

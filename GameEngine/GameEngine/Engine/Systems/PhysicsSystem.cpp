@@ -5,6 +5,8 @@
 #include <Physics/WorldInterface.hpp>
 #include <Physics/Fallback/NullPhysics.hpp>
 #include <Components/RigidBody.hpp>
+#include <Components/Collider.hpp>
+#include <Components/PhysicsData.hpp>
 #include <Systems/CollisionSystem.hpp>
 #include <Systems/TriggerSystem.hpp>
 #include <Utils/Profiler.hpp>
@@ -12,11 +14,11 @@
 namespace AGE
 {
 	// Constructors
-	PhysicsSystem::PhysicsSystem(AScene *scene, Physics::EngineType physicsEngineType, AssetsManager *assetManager)
-		: System(scene), PluginManager("CreateInterface", "DestroyInterface"), assetManager(assetManager), entityFilter(scene)
+	PhysicsSystem::PhysicsSystem(AScene *scene, Physics::EngineType physicsEngineType, AssetsManager *assetManager, bool activateSimulation /* true */)
+		: System(scene), PluginManager("CreateInterface", "DestroyInterface"), assetManager(assetManager), entityFilter(scene), _activateSimulation(activateSimulation)
 	{
 		_name = "PhysicsSystem";
-		entityFilter.requireComponent<RigidBody>();
+		entityFilter.requireComponent<Private::PhysicsData>();
 		if (physicsEngineType == Physics::EngineType::Null)
 		{
 			physics = new Physics::NullPhysics;
@@ -76,14 +78,14 @@ namespace AGE
 		assert(physics != nullptr && "System already finalized");
 		Singleton<Logger>::getInstance()->log(Logger::Level::Normal, "Finalizing PhysicsSystem with plugin '", Physics::GetPluginNameForEngine(physics->getPluginType()), "'.");
 		const Physics::EngineType engineType = physics->getPluginType();
+		// Set Dependency to the fallback plugin (physics disabled) --> Needed if a RigidBody is added while no PhysicsSystem exists
+		_scene->removeInstance<Physics::PhysicsInterface>();
 		physics->shutdown(assetManager);
 		if (engineType == Physics::EngineType::Null)
 		{
 			delete physics;
 		}
 		physics = nullptr;
-		// Set Dependency to the fallback plugin (physics disabled) --> Needed if a RigidBody is added while no PhysicsSystem exists
-		_scene->removeInstance<Physics::PhysicsInterface>();
 		_scene->setInstance<Physics::NullPhysics, Physics::PhysicsInterface>()->startup(assetManager);
 	}
 
@@ -98,13 +100,23 @@ namespace AGE
 		SCOPE_profile_cpu_function("Physic");
 
 		RigidBody *rigidBody = nullptr;
+		Collider *collider = nullptr;
 		Link *link = nullptr;
 		for (const Entity &entity : entityFilter.getCollection())
 		{
 			link = entity.getLinkPtr();
 			rigidBody = entity->getComponent<RigidBody>();
-			rigidBody->setPosition(link->getPosition());
-			rigidBody->setRotation(link->getOrientation());
+			if (rigidBody != nullptr)
+			{
+				rigidBody->setPosition(link->getPosition());
+				rigidBody->setRotation(link->getOrientation());
+			}
+			else
+			{
+				collider = entity->getComponent<Collider>();
+				collider->setPosition(link->getPosition());
+				collider->setRotation(link->getOrientation());
+			}
 		}
 	}
 
@@ -112,7 +124,10 @@ namespace AGE
 	{
 		SCOPE_profile_cpu_function("Physic");
 
-		physics->getWorld()->update(elapsedTime);
+		if (_activateSimulation)
+		{
+			physics->getWorld()->update(elapsedTime);
+		}
 	}
 
 	void PhysicsSystem::updateEnd(float elapsedTime)
@@ -123,10 +138,13 @@ namespace AGE
 		Link *link = nullptr;
 		for (const Entity &entity : entityFilter.getCollection())
 		{
-			rigidBody = entity->getComponent<RigidBody>();
 			link = entity.getLinkPtr();
-			link->setPosition(rigidBody->getPosition(), false);
-			link->setOrientation(rigidBody->getRotation());
+			rigidBody = entity->getComponent<RigidBody>();
+			if (rigidBody != nullptr)
+			{
+				link->setPosition(rigidBody->getPosition());
+				link->setOrientation(rigidBody->getRotation());
+			}
 		}
 	}
 }

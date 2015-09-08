@@ -30,8 +30,8 @@ namespace AGE
 		{
 		}
 
-		MaterialRawFile::MaterialRawFile(const std::tr2::sys::path &path, Folder *parent)
-			: RawFile(path, parent)
+		MaterialRawFile::MaterialRawFile(const std::tr2::sys::path &path, FileUtils::Folder *parent)
+			: FileUtils::RawFile(path, parent)
 		{
 		}
 

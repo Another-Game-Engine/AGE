@@ -1,6 +1,6 @@
 #include "ArchetypeLibrary.hpp"
 
-#include <Utils/FileSystemHelpers.hpp>
+#include <FileUtils/FileUtils/FileSystemHelpers.hpp>
 #include <Entities/Entity.hh>
 #include <cereal/types/set.hpp>
 #include <Utils/Path.hpp>
@@ -33,7 +33,7 @@ namespace AGE
 		{
 			if (Directory::IsFile(*it))
 			{
-				auto extension = AGE::FileSystemHelpers::GetExtension(*it);
+				auto extension = FileUtils::GetExtension(*it);
 
 				if (extension != "archetype")
 				{

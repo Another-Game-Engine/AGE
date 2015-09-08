@@ -6,13 +6,13 @@
 
 namespace AGE
 {
-	namespace AE
+	namespace FileUtils
 	{
 		class Folder;
 
 		typedef std::tr2::sys::path Path;
 
-		class AssetFile : std::enable_shared_from_this<AssetFile>
+		class AssetFile : std::enable_shared_from_this < AssetFile >
 		{
 		public:
 			AssetFile() = delete;
@@ -21,7 +21,7 @@ namespace AGE
 			template <typename T>
 			void update(std::function<void(T*)> &function)
 			{
-				
+
 				static_assert(std::is_convertible<T*, AssetFile*>::value, "T have to inherit from AssetFile.");
 				function(static_cast<T*>(this));
 			}

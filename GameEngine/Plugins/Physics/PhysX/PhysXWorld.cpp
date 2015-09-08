@@ -1,3 +1,7 @@
+#ifdef VISUAL_LEAK_DETECTOR
+#include <vld.h>
+#endif
+
 #include <cassert>
 #include <vector>
 #include <thread>
@@ -10,6 +14,7 @@
 #include "PhysXMeshCollider.hpp"
 #include "PhysXSphereCollider.hpp"
 #include "PhysXRaycaster.hpp"
+#include "PxFiltering.h"
 
 namespace AGE
 {
@@ -20,16 +25,32 @@ namespace AGE
 													  physx::PxFilterData filterData2, physx::PxPairFlags &pairFlags, const void *constantBlock, physx::PxU32 constantBlockSize)
 		{
 			pairFlags = physx::PxPairFlag::eNOTIFY_TOUCH_FOUND | physx::PxPairFlag::eNOTIFY_TOUCH_PERSISTS | physx::PxPairFlag::eNOTIFY_TOUCH_LOST;
-			if (physx::PxFilterObjectIsTrigger(attributes1) || physx::PxFilterObjectIsTrigger(attributes2))
+			const bool kinematic0 = physx::PxFilterObjectIsKinematic(attributes1);
+			const bool kinematic1 = physx::PxFilterObjectIsKinematic(attributes2);
+			if (kinematic0 && kinematic1)
+			{
+				pairFlags = physx::PxPairFlag::eTRIGGER_DEFAULT;
+				return physx::PxFilterFlag::eSUPPRESS;
+			}
+			else if (physx::PxFilterObjectIsTrigger(attributes1) || physx::PxFilterObjectIsTrigger(attributes2))
 			{
 				pairFlags |= physx::PxPairFlag::eTRIGGER_DEFAULT;
 				return physx::PxFilterFlag::eDEFAULT;
 			}
 			pairFlags |= physx::PxPairFlag::eRESOLVE_CONTACTS | physx::PxPairFlag::eCCD_LINEAR | physx::PxPairFlag::eNOTIFY_CONTACT_POINTS;
-			const physx::PxU32 shapeGroup1 = filterData1.word0 & 31;
-			const physx::PxU32 shapeGroup2 = filterData2.word0 & 31;
-			const physx::PxU32 *groupCollisionFlags = static_cast<const physx::PxU32 *>(constantBlock);
-			return (groupCollisionFlags[shapeGroup1] & (1 << shapeGroup2)) == 0 ? physx::PxFilterFlag::eSUPPRESS : physx::PxFilterFlag::eDEFAULT;
+			const PhysXWorld *world = reinterpret_cast<const PhysXWorld *>(static_cast<const physx::PxU64 *>(constantBlock)[0]);
+			return world->groupCollisionFlags[PhysXWorld::GetIndexForFilterGroup(static_cast<FilterGroup>(filterData1.word0))] & filterData2.word0 ? physx::PxFilterFlag::eDEFAULT : physx::PxFilterFlag::eSUPPRESS;
+		}
+
+		physx::PxU32 PhysXWorld::GetIndexForFilterGroup(FilterGroup group)
+		{
+			physx::PxU32 groupValue = static_cast<physx::PxU32>(group);
+			physx::PxU32 index = physx::PxU32(0);
+			while (groupValue >>= 1)
+			{
+				++index;
+			}
+			return index;
 		}
 
 		// Constructors
@@ -54,11 +75,12 @@ namespace AGE
 			{
 				groupCollisionFlags[index] = 0xFFFFFFFF;
 			}
+			worldAddress[0] = reinterpret_cast<physx::PxU64>(this);
 			sceneDescription.simulationEventCallback = this;
 			sceneDescription.broadPhaseCallback = this;
 			sceneDescription.filterShader = &PhysXWorld::FilterShader;
-			sceneDescription.filterShaderData = static_cast<const void *>(groupCollisionFlags);
-			sceneDescription.filterShaderDataSize = sizeof(groupCollisionFlags);
+			sceneDescription.filterShaderData = static_cast<const void *>(worldAddress);
+			sceneDescription.filterShaderDataSize = sizeof(worldAddress);
 			scene = physics->getPhysics()->createScene(sceneDescription);
 			assert(scene != nullptr && "Impossible to create scene");
 		}
@@ -66,6 +88,7 @@ namespace AGE
 		// Destructor
 		PhysXWorld::~PhysXWorld(void)
 		{
+			collisionShapes.clear();
 			if (scene != nullptr)
 			{
 				scene->setBroadPhaseCallback(nullptr);
@@ -94,6 +117,67 @@ namespace AGE
 		const physx::PxScene *PhysXWorld::getScene(void) const
 		{
 			return scene;
+		}
+
+		std::vector<physx::PxShape *> PhysXWorld::getCollisionShapes(const std::string &mesh, bool isConvex)
+		{
+			std::vector<physx::PxShape *> shapes;
+			const std::string path = getAssetManager()->getAssetsDirectory() + mesh + "_physx" + (isConvex ? "_convex" : "_concave") + ".phage";
+			auto found = collisionShapes.find(path);
+			if (found != collisionShapes.end())
+			{
+				physx::PxPhysics *physics = static_cast<PhysXPhysics *>(getPhysics())->getPhysics();
+				physx::PxMaterial *material = static_cast<PhysXMaterial *>(getMaterial(GetDefaultMaterialName()))->getMaterial();
+				for (physx::PxBase *base : found->second.second)
+				{
+					shapes.push_back(base->getConcreteType() == physx::PxConcreteType::eTRIANGLE_MESH ?
+									 physics->createShape(physx::PxTriangleMeshGeometry(static_cast<physx::PxTriangleMesh *>(base)), *material, true) :
+									 physics->createShape(physx::PxConvexMeshGeometry(static_cast<physx::PxConvexMesh *>(base)), *material, true));
+				}
+				return std::move(shapes);
+			}
+			OldFile filePath(path);
+			if (!filePath.exists())
+			{
+				std::cerr << "Physics file not found." << std::endl;
+				return std::move(shapes);
+			}
+			FILE *stream = nullptr;
+			fopen_s(&stream, path.c_str(), "rb");
+			if (stream == nullptr)
+			{
+				std::cerr << "Impossible to open PhysX file." << std::endl;
+				return std::move(shapes);
+			}
+			std::fseek(stream, 0, SEEK_END);
+			const std::size_t fileSize = std::ftell(stream);
+			if (fileSize == 0U)
+			{
+				std::cerr << "PhysX file is invalid. File is empty." << std::endl;
+				std::fclose(stream);
+				return std::move(shapes);
+			}
+			std::fseek(stream, 0, SEEK_SET);
+			void *collectionBuffer = std::malloc(fileSize + PX_SERIAL_FILE_ALIGN);
+			void *bytes = reinterpret_cast<void *>((reinterpret_cast<std::size_t>(collectionBuffer) + PX_SERIAL_FILE_ALIGN) & ~(PX_SERIAL_FILE_ALIGN - 1));
+			std::fread(bytes, 1, fileSize, stream);
+			std::fclose(stream);
+			physx::PxSerializationRegistry *registry = physx::PxSerialization::createSerializationRegistry(*static_cast<PhysXPhysics *>(getPhysics())->getPhysics());
+			physx::PxCollection *collection = physx::PxSerialization::createCollectionFromBinary(bytes, *registry);
+			std::vector<physx::PxBase *> baseShapes;
+			for (physx::PxU32 objectIndex = 0; objectIndex < collection->getNbObjects(); ++objectIndex)
+			{
+				if (collection->getObject(objectIndex).getConcreteType() != physx::PxConcreteType::eTRIANGLE_MESH && collection->getObject(objectIndex).getConcreteType() != physx::PxConcreteType::eCONVEX_MESH)
+				{
+					std::cerr << "PhysX file is invalid. No collision shape inside." << std::endl;
+					return std::move(shapes);
+				}
+				baseShapes.push_back(&collection->getObject(objectIndex));
+			}
+			collisionShapes.emplace(std::make_pair(path, std::make_pair(collectionBuffer, std::move(baseShapes))));
+			collection->release();
+			registry->release();
+			return getCollisionShapes(mesh, isConvex);
 		}
 
 		void PhysXWorld::notifyTriggers(void)
@@ -131,14 +215,14 @@ namespace AGE
 
 		void PhysXWorld::enableCollisionBetweenGroups(FilterGroup group1, FilterGroup group2)
 		{
-			groupCollisionFlags[static_cast<std::uint8_t>(group1)] |= (1 << static_cast<std::uint8_t>(group2));
-			groupCollisionFlags[static_cast<std::uint8_t>(group2)] |= (1 << static_cast<std::uint8_t>(group1));
+			groupCollisionFlags[PhysXWorld::GetIndexForFilterGroup(group1)] |= static_cast<physx::PxU32>(group2);
+			groupCollisionFlags[PhysXWorld::GetIndexForFilterGroup(group2)] |= static_cast<physx::PxU32>(group1);
 		}
 
 		void PhysXWorld::disableCollisionBetweenGroups(FilterGroup group1, FilterGroup group2)
 		{
-			groupCollisionFlags[static_cast<std::uint8_t>(group1)] &= ~(1 << static_cast<std::uint8_t>(group2));
-			groupCollisionFlags[static_cast<std::uint8_t>(group2)] &= ~(1 << static_cast<std::uint8_t>(group1));
+			groupCollisionFlags[PhysXWorld::GetIndexForFilterGroup(group1)] &= static_cast<physx::PxU32>(~group2);
+			groupCollisionFlags[PhysXWorld::GetIndexForFilterGroup(group2)] &= static_cast<physx::PxU32>(~group1);
 		}
 
 		void PhysXWorld::simulate(float stepSize)

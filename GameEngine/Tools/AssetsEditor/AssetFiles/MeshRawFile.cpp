@@ -30,7 +30,7 @@ namespace AGE
 		{
 		}
 
-		MeshRawFile::MeshRawFile(const std::tr2::sys::path &path, Folder *parent)
+		MeshRawFile::MeshRawFile(const std::tr2::sys::path &path, FileUtils::Folder *parent)
 			: RawFile(path, parent)
 		{
 		}

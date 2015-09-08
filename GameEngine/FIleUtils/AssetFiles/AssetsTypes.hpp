@@ -1,6 +1,8 @@
+#pragma once
+
 namespace AGE
 {
-	namespace AE
+	namespace FileUtils
 	{
 		enum AssetType
 		{

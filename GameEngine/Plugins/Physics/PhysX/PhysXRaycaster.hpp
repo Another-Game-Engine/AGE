@@ -22,6 +22,11 @@ namespace AGE
 		private:
 			// Destructor
 			~PhysXRaycaster(void) = default;
+
+			// Inherited Methods
+			bool raycast(const glm::vec3 &origin, const glm::vec3 &direction, float distance, LayerMask layers) override final;
+
+			std::vector<RaycastHit> raycastAll(const glm::vec3 &origin, const glm::vec3 &direction, float distance, LayerMask layers) override final;
 		};
 	}
 }

@@ -34,9 +34,13 @@ namespace AGE
 
 			const physx::PxScene *getScene(void) const;
 
+			std::vector<physx::PxShape *> getCollisionShapes(const std::string &mesh, bool isConvex);
+
 		private:
 			// Attributes
 			physx::PxScene *scene = nullptr;
+
+			physx::PxU64 worldAddress[1];
 
 			physx::PxU32 groupCollisionFlags[32];
 
@@ -48,9 +52,13 @@ namespace AGE
 
 			std::unordered_map<Collider *, std::unordered_map<Collider *, std::size_t>> triggers;
 
+			std::unordered_map<std::string, std::pair<void *, std::vector<physx::PxBase *>>> collisionShapes;
+
 			// Static Methods
 			static physx::PxFilterFlags FilterShader(physx::PxFilterObjectAttributes attributes1, physx::PxFilterData filterData1, physx::PxFilterObjectAttributes attributes2,
 													 physx::PxFilterData filterData2, physx::PxPairFlags& pairFlags, const void *constantBlock, physx::PxU32 constantBlockSize);
+
+			static physx::PxU32 GetIndexForFilterGroup(FilterGroup group);
 
 			// Destructor
 			~PhysXWorld(void);

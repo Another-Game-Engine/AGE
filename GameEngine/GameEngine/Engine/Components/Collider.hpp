@@ -7,6 +7,7 @@
 #include <Physics/Collision.hpp>
 #include <Physics/MaterialInterface.hpp>
 #include <Physics/Trigger.hpp>
+#include <Systems/PhysicsSystem.hpp>
 #include <Utils/Serialization/VectorSerialization.hpp>
 
 namespace AGE
@@ -28,6 +29,8 @@ namespace AGE
 		friend Private::CollisionSystem;
 
 		friend Private::TriggerSystem;
+
+		friend PhysicsSystem;
 
 		friend Link;
 
@@ -92,6 +95,8 @@ namespace AGE
 
 		bool isConvex(void) const;
 
+		bool isConcave(void) const;
+
 		const std::vector<Physics::Collision> &getCollisions(void) const;
 
 		template <typename Archive>
@@ -112,6 +117,9 @@ namespace AGE
 		{
 			// Attributes
 			Physics::ColliderType currentType = Physics::ColliderType::Box;
+			bool isChoosingMesh = false;
+			std::string _meshPath;
+			bool isConcave = false;
 
 			// Methods
 			void copyDatas(Collider *ptr);
@@ -133,6 +141,10 @@ namespace AGE
 
 		// Methods
 		void scale(const glm::vec3 &scaling);
+
+		void setPosition(const glm::vec3 &position);
+
+		void setRotation(const glm::quat &rotation);
 
 		template <typename Archive>
 		void saveBoxCollider(Archive &ar, const std::uint32_t version) const;

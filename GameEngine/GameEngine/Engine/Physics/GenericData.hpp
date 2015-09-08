@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Entities/Entity.hh"
+
 namespace AGE
 {
 	namespace Physics
@@ -8,7 +10,10 @@ namespace AGE
 		{
 			struct GenericData
 			{
+				// Attributes
 				void *data = nullptr;
+
+				Entity entity;
 			};
 		}
 	}

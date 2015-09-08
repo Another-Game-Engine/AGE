@@ -1,11 +1,11 @@
 #include <AssetFiles/AssetFileManager.hpp>
-#include <Utils/FileSystemHelpers.hpp>
+#include <FileUtils/FileUtils/FileSystemHelpers.hpp>
 #include <AssetFiles/MeshRawFile.hpp>
 #include <AssetFiles/TextureRawFile.hpp>
 #include <AssetFiles/MaterialRawFile.hpp>
 #include <AssetFiles/CookedFile.hpp>
 #include <AssetFiles/AssetsTypes.hpp>
-#include <Utils/BitOperations.hpp>
+#include <LowLevelUtils/BitOperations.hpp>
 #include <AssetFiles/Folder.hpp>
 #include <imgui/imgui.h>
 #include <vector>
@@ -37,68 +37,23 @@ namespace AGE
 			return enumStrings;
 		}
 
-		bool AssetFileManager::IsValidFile(const std::tr2::sys::path &path)
+		void AssetFileManager::CheckIfRawModified(FileUtils::Folder *folder, std::set<std::shared_ptr<FileUtils::RawFile>> &list)
 		{
-			auto extension = AGE::FileSystemHelpers::GetExtension(path);
-			if (extension == "obj" || extension == "fbx" || extension == "dae")
-				return true;
-			if (extension == "bmp" || extension == "jpg" || extension == "jpeg" || extension == "tga" || extension == "png" || extension == "tif")
-				return true;
-			if (extension == "mtl")
-				return true;
-			return false;
-		}
-
-		std::shared_ptr<AssetFile> AssetFileManager::AgeCreateFile(const std::tr2::sys::path &path, Folder *parent)
-		{
-			auto extension = AGE::FileSystemHelpers::GetExtension(path);
-			std::shared_ptr<AssetFile> t = nullptr;
-			if (extension == "obj" || extension == "fbx" || extension == "dae")
-			{
-				t = std::make_shared<MeshRawFile>(path, parent);
-				t->_type = AssetType::Raw | AssetType::Mesh;
-			}
-			else if (extension == "bmp" || extension == "jpg" || extension == "jpeg" || extension == "tga" || extension == "png" || extension == "tif")
-			{
-				t = std::make_shared<TextureRawFile>(path, parent);
-				t->_type = AssetType::Raw | AssetType::Texture;
-			}
-			else if (extension == "mtl")
-			{
-				t =  std::make_shared<MaterialRawFile>(path, parent);
-				t->_type = AssetType::Raw | AssetType::Material;
-			}
-
-			if (t)
-			{
-				t->_lastWriteTime = AGE::FileSystemHelpers::GetLastWriteTime(t->getPath());
-				t->_lastWriteTimeStr = AGE::FileSystemHelpers::GetDateStr(t->getPath());
-			}
-			return t;
-		}
-
-		std::shared_ptr<AssetFile> AssetFileManager::AgeCreateFile(const std::string &path, Folder *parent)
-		{
-			return AgeCreateFile(std::tr2::sys::path(path), parent);
-		}
-
-		void AssetFileManager::CheckIfRawModified(Folder *folder, std::set<std::shared_ptr<RawFile>> &list)
-		{
-			folder->update(std::function<void(Folder*)>([](Folder*){}), std::function<void(RawFile*)>([&](RawFile* ptr) {
+			folder->update(std::function<void(FileUtils::Folder*)>([](FileUtils::Folder*){}), std::function<void(FileUtils::RawFile*)>([&](FileUtils::RawFile* ptr) {
 				if (ptr->dataSet && ptr->dataSet->isConverting)
 					return;
-				auto lastWrite = FileSystemHelpers::GetLastWriteTime(ptr->getPath());
-				if (FileSystemHelpers::GetDiffTime(lastWrite, ptr->_lastWriteTime) > 0)
+				auto lastWrite = FileUtils::GetLastWriteTime(ptr->getPath());
+				if (FileUtils::GetDiffTime(lastWrite, ptr->_lastWriteTime) > 0)
 				{
 					ptr->_dirty = true;
-					list.insert(std::static_pointer_cast<RawFile>(ptr->getSharedPtrOnThis()));
+					list.insert(std::static_pointer_cast<FileUtils::RawFile>(ptr->getSharedPtrOnThis()));
 				}
 				else
 					ptr->_dirty = false;
 			}));
 		}
 
-		void AssetFileManager::PrintSelectableRawAssetsFile(RawFile *ptr, int printSections, std::set<std::shared_ptr<RawFile>> *list)
+		void AssetFileManager::PrintSelectableRawAssetsFile(FileUtils::RawFile *ptr, int printSections, std::set<std::shared_ptr<FileUtils::RawFile>> *list)
 		{
 			if (!ptr->_active)
 				return;
@@ -108,7 +63,7 @@ namespace AGE
 			{
 				if (ImGui::Checkbox(ptr->getFileName().c_str(), &ptr->_selected))
 				{
-					auto castedPtr = std::static_pointer_cast<RawFile>(ptr->getSharedPtrOnThis());
+					auto castedPtr = std::static_pointer_cast<FileUtils::RawFile>(ptr->getSharedPtrOnThis());
 					if (ptr->_selected)
 					{
 						list->insert(castedPtr);
@@ -158,7 +113,7 @@ namespace AGE
 			ImGui::Columns(1);
 		}
 
-		void AssetFileManager::PrintClickableRawAssetsFile(RawFile *ptr, int printSections, std::shared_ptr<RawFile> &selected)
+		void AssetFileManager::PrintClickableRawAssetsFile(FileUtils::RawFile *ptr, int printSections, std::shared_ptr<FileUtils::RawFile> &selected)
 		{
 			if (!ptr->_active)
 				return;
@@ -168,7 +123,7 @@ namespace AGE
 			ImGui::PushID((void*)ptr);
 			if (ImGui::Button("Select"))
 			{
-				selected = std::static_pointer_cast<RawFile>(ptr->getSharedPtrOnThis());
+				selected = std::static_pointer_cast<FileUtils::RawFile>(ptr->getSharedPtrOnThis());
 			}
 			ImGui::PopID();
 
@@ -210,21 +165,21 @@ namespace AGE
 			ImGui::Columns(1);
 		}
 
-		void AssetFileManager::LinkRawToCooked(Folder *raw, Folder *cooked)
+		void AssetFileManager::LinkRawToCooked(FileUtils::Folder *raw, FileUtils::Folder *cooked)
 		{
-			raw->update(std::function<void(RawFile *)>([&](RawFile *ptr){
+			raw->update(std::function<void(FileUtils::RawFile *)>([&](FileUtils::RawFile *ptr){
 				//if (!ptr->_cookedFile)
 				{
-					std::shared_ptr<AGE::AE::AssetFile> result = nullptr;
-					auto cookedPath = RawPathToCooked(FileSystemHelpers::CleanPath(ptr->getPath()));
+					std::shared_ptr<FileUtils::AssetFile> result = nullptr;
+					auto cookedPath = RawPathToCooked(FileUtils::CleanPath(ptr->getPath()));
 					cooked->find(cookedPath, result);
 					if (result)
 					{
-						ptr->_cookedFile = std::static_pointer_cast<CookedFile>(result->getSharedPtrOnThis());
-						std::static_pointer_cast<CookedFile>(result)->_rawFile = std::static_pointer_cast<RawFile>(ptr->getSharedPtrOnThis());
-						if (FileSystemHelpers::GetDiffTime(ptr->_lastWriteTime, result->_lastWriteTime) > 0)
+						ptr->_cookedFile = std::static_pointer_cast<FileUtils::CookedFile>(result->getSharedPtrOnThis());
+						std::static_pointer_cast<FileUtils::CookedFile>(result)->_rawFile = std::static_pointer_cast<FileUtils::RawFile>(ptr->getSharedPtrOnThis());
+						if (FileUtils::GetDiffTime(ptr->_lastWriteTime, result->_lastWriteTime) > 0)
 						{
-							std::cout << FileSystemHelpers::GetDateStr(ptr->getPath()) << " | " << FileSystemHelpers::GetDateStr(result->getPath()) << std::endl;
+							std::cout << FileUtils::GetDateStr(ptr->getPath()) << " | " << FileUtils::GetDateStr(result->getPath()) << std::endl;
 							//TODO push in dirty list
 							ptr->_dirty = true;
 						}
@@ -248,7 +203,7 @@ namespace AGE
 				return path;
 			auto res = path;
 			res.replace(index, 5, "/Serialized/");
-			auto extension = FileSystemHelpers::GetExtension(res);
+			auto extension = FileUtils::GetExtension(res);
 			if (extension == "obj" || extension == "fbx" || extension == "collada")
 			{
 				res.replace(res.find("." + extension), extension.size() + 1, ".sage");

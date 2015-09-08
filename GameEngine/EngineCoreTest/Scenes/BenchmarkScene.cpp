@@ -1,3 +1,7 @@
+#ifdef VISUAL_LEAK_DETECTOR
+#include <vld.h>
+#endif
+
 #include <Scenes/BenchmarkScene.hpp>
 #include <Configuration.hpp>
 #include <Utils/Age_Imgui.hpp>
@@ -23,12 +27,14 @@
 #include <Components/RotationComponent.hpp>
 #include <Components/Collider.hpp>
 #include <Components/ArchetypeComponent.hpp>
+#include <Components/CharacterController.hh>
 
 #include <Components/ComponentRegistrationManager.hpp>
 
 #include <Systems/RotationSystem.hpp>
 #include <Systems/DebugSystem.hpp>
 #include <Systems/RenderCameraSystem.hpp>
+#include <Systems/CharacterControllerSystem.hh>
 
 #include <Render/Program.hh>
 #include <Render/ProgramResources/Types/Uniform/Vec1.hh>
@@ -94,11 +100,13 @@ namespace AGE
 		REGISTER_COMPONENT_TYPE(AGE::DirectionalLightComponent);
 		REGISTER_COMPONENT_TYPE(AGE::ArchetypeComponent);
 		REGISTER_COMPONENT_TYPE(AGE::RigidBody);
+		REGISTER_COMPONENT_TYPE(AGE::CharacterController);
 
 		getInstance<AGE::AssetsManager>()->setAssetsDirectory(EngineCoreTestConfiguration::GetCookedDirectory());
 
 		addSystem<AGE::DebugSystem>(0);
-		addSystem<AGE::PhysicsSystem>(0, Physics::EngineType::PhysX, getInstance<AGE::AssetsManager>());
+		addSystem<AGE::PhysicsSystem>(1, Physics::EngineType::PhysX, getInstance<AGE::AssetsManager>());
+		addSystem<AGE::CharacterControllerSystem>(0);
 
 		addSystem<AGE::LifetimeSystem>(2);
 		addSystem<AGE::FreeFlyCamera>(0);
@@ -115,7 +123,7 @@ namespace AGE
 		//getInstance<AGE::AssetsManager>()->loadSkeleton(OldFile("hexapod/animation/hexapod@attack(1).skage"), "DEMO_SCENE_BASIC_ASSETS");
 
 		setInstance<AGE::AnimationManager>();
-
+ 
 		srand(42);
 
 		return true;
@@ -123,6 +131,13 @@ namespace AGE
 
 	bool BenchmarkScene::_userUpdateBegin(float time)
 	{
+#ifdef VISUAL_LEAK_DETECTOR
+//		int tmpFlag = _CrtSetDbgFlag(_CRTDBG_REPORT_FLAG);
+//		tmpFlag |= _CRTDBG_CHECK_ALWAYS_DF;
+//		_CrtSetDbgFlag(tmpFlag);
+		assert(_CrtCheckMemory());
+#endif
+
 		++_chunkFrame;
 		_chunkCounter += time;
 
@@ -146,6 +161,7 @@ namespace AGE
 			auto cam = camera->addComponent<CameraComponent>();
 			camera->addComponent<FreeFlyComponent>();
 			cam->setPipeline(RenderType::DEFERRED);
+			getSystem<RenderCameraSystem>()->drawDebugLines(false);
 			cam->setTexture(_skyboxSpace);
 			cam->addSkyBoxToChoice("space", _skyboxSpace);
 //			cam->addSkyBoxToChoice("test", _skyboxTest);
@@ -207,7 +223,11 @@ namespace AGE
 		}
 		trigger += time;
 
-		if (_chunkCounter >= _maxChunk)
+		static bool rain = false;
+
+		ImGui::Checkbox("Cube rain", &rain);
+
+		if (rain && _chunkCounter >= _maxChunk)
 		{
 			for (auto i = 0; i < 10; ++i)
 			{
@@ -215,30 +235,29 @@ namespace AGE
 				e->addComponent<Lifetime>(5.0f);
 
 				auto &link = e->getLink();
-				link.setPosition(glm::vec3((rand() % 100) - 50, (rand() % 50) - 5, (rand() % 100) - 50));
+				link.setPosition(glm::vec3((rand() % 100) - 50, (rand() % 50) + 50, (rand() % 100) - 50));
 				link.setOrientation(glm::quat(glm::vec3(rand() % 360, rand() % 360, rand() % 360)));
-				link.setScale(glm::vec3(1.0f));
+				link.setScale(glm::vec3((float)(rand() % 30) / 10.0f));
 
 
 				MeshRenderer *mesh;
 				if (i % 4 == 0)
 				{
 					mesh = e->addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage"), getInstance<AGE::AssetsManager>()->getMaterial(OldFile("ball/ball.mage")));
-//					e->addComponent<Collider>(Physics::ColliderType::Sphere);
-					link.setScale(glm::vec3(0.5f));
+					e->addComponent<Collider>(Physics::ColliderType::Mesh, "ball/ball");
 				}
 				else
 				{
 					mesh = e->addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("cube/cube.sage"), getInstance<AGE::AssetsManager>()->getMaterial(OldFile("cube/cube.mage")));
-//					e->addComponent<Collider>(Physics::ColliderType::Box);
-					//auto pl = e->addComponent<PointLightComponent>();
-					//pl->setColor(glm::vec3(float(rand() % 100) / 100.0f, float(rand() % 100) / 100.0f, float(rand() % 100) / 100.0f));
+					e->addComponent<Collider>(Physics::ColliderType::Mesh, "cube/cube");
 				}
 
-				if (i % 13 == 0)
+				if (i % 20 == 0)
 				{
+					auto pl = e->addComponent<PointLightComponent>();
+					pl->setColor(glm::vec3(float(rand() % 100) / 100.0f, float(rand() % 100) / 100.0f, float(rand() % 100) / 100.0f));
 				}
-//				e->addComponent<RigidBody>();
+				e->addComponent<RigidBody>();
 				mesh->enableRenderMode(RenderModes::AGE_OPAQUE);
 			}
 			_chunkCounter = 0;
@@ -267,9 +286,14 @@ namespace AGE
 
 		auto camComponent = GLOBAL_CAMERA->getComponent<CameraComponent>();
 		static char const *pipelineNames[RenderType::TOTAL] = {"Debug deferred rendering", "Deferred rendering" };
-		ImGui::ListBox("Pipelines", &pipelineIndex, pipelineNames, int(RenderType::TOTAL));
-		if (camComponent->getPipeline() != (RenderType)pipelineIndex)
-			camComponent->setPipeline((RenderType)pipelineIndex);
+		if (ImGui::ListBox("Pipelines", &pipelineIndex, pipelineNames, int(RenderType::TOTAL)))
+		{
+			if (camComponent->getPipeline() != (RenderType)pipelineIndex)
+			{
+				camComponent->setPipeline((RenderType)pipelineIndex);
+				getSystem<RenderCameraSystem>()->drawDebugLines(pipelineIndex == (int)RenderType::DEBUG_DEFERRED ? true : false);
+			}
+		}
 		return true;
 	}
 

@@ -1,3 +1,7 @@
+#ifdef VISUAL_LEAK_DETECTOR
+#include <vld.h>
+#endif
+
 #include "WorldEditorScene.hpp"
 #include <imgui\imgui.h>
 #include <Systems/EntityManager.hpp>
@@ -21,6 +25,8 @@
 
 #include "Systems/RenderCameraSystem.hpp"
 
+#include "../Plugins/Physics/PhysX/PhysXPhysics.hpp"
+
 namespace AGE
 {
 	const std::string WorldEditorScene::Name = "World Editor";
@@ -42,7 +48,7 @@ namespace AGE
 		addSystem<WE::AssetsAndComponentRelationsSystem>(0);
 		addSystem<WE::EntityManager>(1);
 		addSystem<FreeFlyCamera>(2);
-		addSystem<PhysicsSystem>(3, Physics::EngineType::Bullet, getInstance<AGE::AssetsManager>());
+		addSystem<PhysicsSystem>(3, Physics::EngineType::PhysX, getInstance<AGE::AssetsManager>(), false);
 		getInstance<Physics::PhysicsInterface>()->getWorld()->setGravity(0, 0, 0);
 		addSystem<RenderCameraSystem>(1000);
 		return true;

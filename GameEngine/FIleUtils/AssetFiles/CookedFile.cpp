@@ -1,9 +1,8 @@
 #include "CookedFile.hpp"
-#include "RawFile.hpp"
 
 namespace AGE
 {
-	namespace AE
+	namespace FileUtils
 	{
 		CookedFile::~CookedFile()
 		{

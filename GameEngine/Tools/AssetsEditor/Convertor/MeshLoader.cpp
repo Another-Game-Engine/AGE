@@ -169,34 +169,36 @@ namespace AGE
 
 		if (cookingTask->dataSet->normalize)
 		{
-			glm::vec3 min(std::numeric_limits<float>::max());
-			glm::vec3 max(std::numeric_limits<float>::min());
+			glm::vec3 min = cookingTask->mesh->subMeshs[0].boundingBox.minPoint;
+			glm::vec3 max = cookingTask->mesh->subMeshs[0].boundingBox.maxPoint;
 			for (auto &e : cookingTask->mesh->subMeshs)
 			{
 				min = glm::min(e.boundingBox.minPoint, min);
 				max = glm::max(e.boundingBox.maxPoint, max);
 			}
 			auto dif = max - min;
+			glm::vec3 decalage = (max - (dif / 2.0f)) * -1.0f;
+
 			float t = dif.x > dif.y ? dif.x : dif.y;
 			t = t > dif.z ? t : dif.z;
-			auto center = ((max - min) / 2.0f);
-			auto center4 = glm::vec4(center.x, center.y, center.z, 0.0f);
+
+			decalage /= t;
+
 			for (auto &e : cookingTask->mesh->subMeshs)
 			{
-				//e.boundingBox.minPoint += center;
 				e.boundingBox.minPoint /= t;
 				e.boundingBox.minPoint *= cookingTask->dataSet->maxSideLength;
-				//e.boundingBox.maxPoint += center;
 				e.boundingBox.maxPoint /= t;
 				e.boundingBox.maxPoint *= cookingTask->dataSet->maxSideLength;
-				for (auto &f : e.positions)
-				{
-					//f += center4;
-					f /= t;
-					f *= cookingTask->dataSet->maxSideLength;
-				}
 				glm::vec3 dist = e.boundingBox.maxPoint - e.boundingBox.minPoint;
 				e.boundingBox.center = e.boundingBox.minPoint + (dist / 2.0f);
+
+				for (auto &f : e.positions)
+				{
+					f /= t;
+					f *= cookingTask->dataSet->maxSideLength;
+					f += decalage;
+				}
 			}
 		}
 		Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PopTask(tid);

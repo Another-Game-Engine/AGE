@@ -1,3 +1,7 @@
+#ifdef VISUAL_LEAK_DETECTOR
+#include <vld.h>
+#endif
+
 #include "Engine.hh"
 
 #include <Core/Timer.hh>
@@ -177,10 +181,6 @@ namespace AGE
 		if (assetsFilePath != nullptr)
 		{
 			getInstance<AGE::AssetsManager>()->setAssetsDirectory(assetsFilePath->getValue());
-		}
-		else
-		{
-			AGE_BREAK(); // "Assets file path is missing. Add it in configuration.json"
 		}
 #endif //USE_DEFAULT_ENGINE_CONFIGURATION
 

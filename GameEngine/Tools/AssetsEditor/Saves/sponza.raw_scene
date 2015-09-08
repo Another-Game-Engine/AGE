@@ -44,10 +44,14 @@
             },
             {
                 "key": 10,
-                "value": 8718854852507163888
+                "value": 6441919271708046876
             },
             {
                 "key": 11,
+                "value": 8718854852507163888
+            },
+            {
+                "key": 12,
                 "value": 13917482855567903631
             }
         ],
@@ -77,9 +81,7 @@
             "flags": 0,
             "components_number": [
                 0,
-                1,
-                2,
-                9
+                1
             ],
             "archetypesDependency": [],
             "AGE_CORE_EntityRepresentationComponent": {
@@ -93,55 +95,7 @@
                 "value2": "",
                 "value3": {
                     "type": 0,
-                    "data": 0
-                }
-            },
-            "AGE_CORE_RigidBody": {
-                "cereal_class_version": 1,
-                "AngularDrag": 0.05000000074505806,
-                "AngularVelocity": {
-                    "value0": 0,
-                    "value1": 0,
-                    "value2": 0
-                },
-                "CenterOfMass": {
-                    "value0": 0,
-                    "value1": 0,
-                    "value2": 0
-                },
-                "LinearDrag": 0,
-                "LinearVelocity": {
-                    "value0": 0,
-                    "value1": 0,
-                    "value2": 0
-                },
-                "Mass": 0,
-                "DiagonalInertiaTensor": {
-                    "value0": 0,
-                    "value1": 0,
-                    "value2": 0
-                },
-                "MaxAngularVelocity": 1000000,
-                "MaxDepenetrationVelocity": 1000000,
-                "IsAffectedByGravity": false,
-                "IsKinematic": false,
-                "CollisionDetectionMode": 1
-            },
-            "AGE_CORE_PhysicsCollider": {
-                "cereal_class_version": 1,
-                "ColliderType": 0,
-                "Material": "DefaultMaterial",
-                "IsATrigger": false,
-                "FilterGroup": 0,
-                "Center": {
-                    "value0": 0,
-                    "value1": 0,
-                    "value2": 0
-                },
-                "Size": {
-                    "value0": 20,
-                    "value1": 20,
-                    "value2": 20
+                    "data": 16
                 }
             }
         }

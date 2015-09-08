@@ -1,21 +1,21 @@
 #pragma once
 
-#include "File.hpp"
+#include <FileUtils/AssetFiles/File.hpp>
 #include <set>
 
 namespace AGE
 {
 	struct AssetDataSet;
-	namespace AE
+
+	namespace FileUtils
 	{
 		class CookedFile;
-		struct CookConfig;
 
-		class RawFile : public AssetFile
+		class RawFile : public FileUtils::AssetFile
 		{
 		public:
 			virtual ~RawFile();
-			RawFile(const AE::Path &path, Folder *parent = nullptr);
+			RawFile(const FileUtils::Path &path, FileUtils::Folder *parent = nullptr);
 
 			virtual void cook() = 0;
 			virtual void selection() = 0;

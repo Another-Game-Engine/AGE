@@ -3,8 +3,6 @@
 #include <atomic>
 #include "Utils/Debug.hpp"
 
-AGE_NOT_OPTIMIZED_BLOCK_BEGIN
-
 namespace AGE
 {
 	LFListBase::LFListBase(std::size_t nextPtrPadding)
@@ -92,5 +90,3 @@ namespace AGE
 		}
 	}
 }
-
-AGE_NOT_OPTIMIZED_BLOCK_END
