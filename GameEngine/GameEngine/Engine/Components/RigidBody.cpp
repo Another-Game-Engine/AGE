@@ -354,4 +354,14 @@ namespace AGE
 	}
 
 #endif
+
+	void RigidBody::_copyFrom(const ComponentBase *model)
+	{
+#ifdef EDITOR_ENABLED
+		auto m = (RigidBody*)model;
+		if (editorStruct)
+		{
+			editorStruct->copyDatas(m);
+		}
+#endif
 }

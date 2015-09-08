@@ -30,6 +30,7 @@
 #include <Components/Collider.hpp>
 #include <Components/ArchetypeComponent.hpp>
 #include <Components/CharacterController.hh>
+#include <Components/PhysicsData.hpp>
 
 #include <Components/ComponentRegistrationManager.hpp>
 
@@ -104,6 +105,7 @@ namespace AGE
 		REGISTER_COMPONENT_TYPE(AGE::ArchetypeComponent);
 		REGISTER_COMPONENT_TYPE(AGE::RigidBody);
 		REGISTER_COMPONENT_TYPE(AGE::CharacterController);
+		REGISTER_COMPONENT_TYPE(AGE::Private::PhysicsData);
 
 		getInstance<AGE::AssetsManager>()->setAssetsDirectory(EngineCoreTestConfiguration::GetCookedDirectory());
 

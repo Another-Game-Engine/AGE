@@ -61,10 +61,7 @@ namespace AGE
 		static ComponentType _typeCounter;
 
 		// override this method to enable copy of the component
-		virtual void _copyFrom(const ComponentBase *model)
-		{
-			(void)(model);
-		}
+		virtual void _copyFrom(const ComponentBase *model) = 0;
 	private:
 		ComponentType _typeId;
 

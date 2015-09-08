@@ -10,6 +10,10 @@ namespace AGE
 			data.entity = Entity();
 		}
 
+		void PhysicsData::init()
+		{
+		}
+
 		void PhysicsData::init(Entity entity)
 		{
 			data.entity = entity;

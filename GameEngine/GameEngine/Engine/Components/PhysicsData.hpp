@@ -26,6 +26,7 @@ namespace AGE
 			void reset(void) override final;
 
 			// Methods
+			void init();
 			void init(Entity entity);
 
 			Physics::Private::GenericData *getData(void);
@@ -33,6 +34,17 @@ namespace AGE
 			const Physics::Private::GenericData *getData(void) const;
 
 			virtual bool doSerialize() { return false; }
+
+			virtual void _copyFrom(const ComponentBase *model)
+			{
+				data = ((PhysicsData*)(model))->data;
+			}
+
+			template <typename Archive>
+			void save(Archive &, const std::uint32_t) const{}
+
+			template <typename Archive>
+			void load(Archive &, const std::uint32_t){}
 
 #ifdef EDITOR_ENABLED
 			virtual bool isExposedInEditor(){ return false; }

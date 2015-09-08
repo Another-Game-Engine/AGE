@@ -149,7 +149,7 @@ namespace AGE
 		std::unique_ptr<EditorStruct> editorStruct;
 
 #endif
-
+		virtual void _copyFrom(const ComponentBase *model);
 	private:
 		// Attributes
 		Physics::RigidBodyInterface *rigidBody = nullptr;

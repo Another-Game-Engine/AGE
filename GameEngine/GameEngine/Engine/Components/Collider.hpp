@@ -131,6 +131,8 @@ namespace AGE
 
 #endif
 
+		virtual void _copyFrom(const ComponentBase *model);
+
 	private:
 		// Attributes
 		Physics::ColliderInterface *collider = nullptr;

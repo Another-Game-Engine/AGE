@@ -20,6 +20,13 @@ namespace AGE
 		virtual void editorDelete(void) override final;
 		virtual bool editorUpdate(void) override final;
 
+		// never copied
+		virtual void _copyFrom(const ComponentBase *model)
+		{
+			(void)(model);
+			assert(false && "Paul, je te laisse le remplir");
+		}
+
 		template <typename Archive>
 		void serialize(Archive &ar, const std::uint32_t version)
 		{
