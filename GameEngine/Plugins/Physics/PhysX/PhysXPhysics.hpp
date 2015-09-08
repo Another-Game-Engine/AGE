@@ -45,6 +45,8 @@ namespace AGE
 
 			static bool extensions;
 
+			static std::size_t counter;
+
 			// Inherited Methods
 			EngineType getPluginType(void) const override final;
 

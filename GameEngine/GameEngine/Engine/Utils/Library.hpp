@@ -81,11 +81,11 @@ namespace AGE
 		};
 
 		using PluginPtr = std::shared_ptr < PluginData > ;
-		using PluginContainer = std::unordered_map < std::string, PluginPtr >;
+		using PluginContainer = std::unordered_map < std::string, std::pair<std::size_t, PluginPtr> >;
 
 		const char *createFunction;
 		const char *releaseFunction;
-		PluginContainer plugins;
+		static PluginContainer plugins;
 
 	public:
 		PluginManager(const char *createFunction = "CreatePlugin", const char *releaseFunction = "ReleasePlugin")
@@ -99,10 +99,18 @@ namespace AGE
 
 		virtual ~PluginManager(void)
 		{
-			for (auto &p : plugins)
+			PluginContainer::iterator it = plugins.begin();
+			while (it != plugins.end())
 			{
-				p.second->release(p.second->plugin);
-				p.second->manager->close();
+				if (!--it->second.first)
+				{
+					it->second.second->release(it->second.second->plugin);
+					it->second.second->manager->close();
+				}
+				else
+				{
+					++it;
+				}
 			}
 		}
 
@@ -110,11 +118,10 @@ namespace AGE
 		bool addPlugin(const std::string &name, Args &&...args)
 		{
 			AGE_ASSERT(!name.empty() && "Invalid name");
-			PluginContainer::const_iterator found = plugins.find(name);
+			PluginContainer::iterator found = plugins.find(name);
 			if (found != plugins.end())
 			{
-				AGE_ERROR("\"", name, "\" plugin is already loaded");
-				return false;
+				++found->second.first;
 			}
 			PluginPtr p = std::make_shared<PluginData>();
 			if (!p->manager->load(name))
@@ -147,26 +154,9 @@ namespace AGE
 				const bool returnValue = onPluginLoaded(p);
 				if (returnValue)
 				{
-					plugins.insert(std::make_pair(name, p));
+					plugins.insert(std::make_pair(name, std::make_pair(1, p)));
 				}
 				return returnValue;
-			}
-		}
-
-		bool releasePlugin(const std::string &name)
-		{
-			AGE_ASSERT(!name.empty() && "Invalid name");
-			PluginContainer::const_iterator found = plugins.find(name);
-			if (found != plugins.end())
-			{
-				found->second->release(found->second->plugin);
-				found->second->manager->close();
-				plugins.erase(found);
-				return true;
-			}
-			else
-			{
-				return false;
 			}
 		}
 
@@ -176,7 +166,7 @@ namespace AGE
 			PluginContainer::const_iterator found = plugins.find(name);
 			if (found != plugins.end())
 			{
-				found->second->manager;
+				found->second.second->manager;
 			}
 			else
 			{
@@ -190,7 +180,7 @@ namespace AGE
 			PluginContainer::iterator found = plugins.find(name);
 			if (found != plugins.end())
 			{
-				return found->second->plugin;
+				return found->second.second->plugin;
 			}
 			else
 			{
@@ -204,7 +194,7 @@ namespace AGE
 			PluginContainer::const_iterator found = plugins.find(name);
 			if (found != plugins.end())
 			{
-				found->second->plugin;
+				found->second.second->plugin;
 			}
 			else
 			{
@@ -217,4 +207,7 @@ namespace AGE
 			return true;
 		}
 	};
+
+	template <class T>
+	typename PluginManager<T>::PluginContainer PluginManager<T>::plugins;
 }
