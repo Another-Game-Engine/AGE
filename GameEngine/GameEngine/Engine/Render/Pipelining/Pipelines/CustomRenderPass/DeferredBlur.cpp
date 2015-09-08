@@ -82,6 +82,7 @@ namespace AGE
 			_programs[PROGRAM_BLUR_HORIZONTAL]->get_resource<Sampler2D>("diffuse_map").set(_blurInput);
 			_quadPainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BLUR_HORIZONTAL], Properties(), _quadVertices);
 		}
+		OpenGLState::glBlendFunc(GL_ONE, GL_ONE);
         SCOPE_profile_gpu_i("DeferredBlur() first pass of blur horizontal");
         SCOPE_profile_cpu_i("RenderTimer", "DeferredBlur() pass");
         {
