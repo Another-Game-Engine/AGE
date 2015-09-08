@@ -96,4 +96,12 @@ namespace AGE
 		return f->second;
 	}
 
+	void ComponentRegistrationManager::createComponentPool(AScene *scene)
+	{
+		for (auto &e : _createComponentPoolMap)
+		{
+			e.second(scene);
+		}
+	}
+
 }

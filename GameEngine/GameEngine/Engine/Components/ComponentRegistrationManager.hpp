@@ -36,13 +36,7 @@ namespace AGE
 
 		// This function is called at scene creation, so that pool are already created
 		// and we can deserialize components without knowing their types
-		void createComponentPool(AScene *scene)
-		{
-			for (auto &e : _createComponentPoolMap)
-			{
-				e.second(scene);
-			}
-		}
+		void createComponentPool(AScene *scene);
 
 		template <class T>
 		void registerComponentType(const char *name)
