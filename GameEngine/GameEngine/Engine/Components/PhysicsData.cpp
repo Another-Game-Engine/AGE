@@ -34,5 +34,21 @@ namespace AGE
 		{
 			return &data;
 		}
+
+		bool PhysicsData::doSerialize()
+		{
+			return false;
+		}
+
+		bool PhysicsData::serializeInExport()
+		{
+			return false;
+		}
+		
+		bool PhysicsData::isExposedInEditor()
+		{
+			return false;
+		}
+
 	}
 }

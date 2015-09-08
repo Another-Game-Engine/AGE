@@ -13,11 +13,7 @@ namespace AGE
 		size_t notEmpty;
 
 		// never copied
-		virtual void _copyFrom(const ComponentBase *model)
-		{
-			(void)(model);
-			assert(false && "Paul, je te laisse le remplir");
-		}
+		virtual void _copyFrom(const ComponentBase *model);
 
 		void init();
 

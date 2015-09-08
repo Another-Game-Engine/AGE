@@ -33,7 +33,7 @@ namespace AGE
 
 			const Physics::Private::GenericData *getData(void) const;
 
-			virtual bool doSerialize() { return false; }
+			virtual bool doSerialize();
 
 			virtual void _copyFrom(const ComponentBase *model);
 
@@ -44,9 +44,9 @@ namespace AGE
 			void load(Archive &, const std::uint32_t){}
 
 #ifdef EDITOR_ENABLED
-			virtual bool isExposedInEditor(){ return false; }
+			virtual bool isExposedInEditor();
 			bool deletableInEditor = false;
-			virtual bool serializeInExport() { return false; }
+			virtual bool serializeInExport();
 #endif
 
 		private:
