@@ -364,4 +364,5 @@ namespace AGE
 			editorStruct->copyDatas(m);
 		}
 #endif
+	}
 }
