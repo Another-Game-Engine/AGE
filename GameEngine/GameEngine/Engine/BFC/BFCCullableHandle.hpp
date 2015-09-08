@@ -13,19 +13,11 @@ namespace AGE
 	class BFCCullableHandle
 	{
 	public:
-		bool invalid() const
-		{
-			return (_itemID.isValid() == false || _elementPtr == nullptr);
-		}
-
-		bool operator==(const BFCCullableHandle &o) const
-		{
-			return o._itemID == _itemID && o._elementPtr == _elementPtr;
-		}
-
-		const BFCCullableObject *getPtr() const { return _elementPtr; }
-		BFCCullableObject *getPtr() { return _elementPtr; }
-		const BFCItemID getItemId() const { return _itemID; }
+		bool invalid() const;
+		bool operator==(const BFCCullableHandle &o) const;
+		const BFCCullableObject *getPtr() const;
+		BFCCullableObject *getPtr();
+		const BFCItemID getItemId() const;
 	private:
 		BFCItemID              _itemID;
 		BFCCullableObject*     _elementPtr = nullptr;
