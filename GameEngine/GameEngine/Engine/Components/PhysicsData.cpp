@@ -27,7 +27,7 @@ namespace AGE
 
 		void PhysicsData::_copyFrom(const ComponentBase *model)
 		{
-			data = ((PhysicsData*)(model))->data;
+			assert(false); // not copyable
 		}
 
 		const Physics::Private::GenericData *PhysicsData::getData(void) const
