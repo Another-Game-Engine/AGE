@@ -92,4 +92,10 @@ namespace AGE
 		_cullables.pop_back();
 		unregisterFromTracker();
 	}
+
+	void BFCLink::resetBFCTrackerIndex()
+	{
+		_bfcTrackerIndex = -1;
+	}
+
 }

@@ -35,7 +35,7 @@ namespace AGE
 		void unregisterFromTracker();
 
 		// called by LinkTracker
-		void resetBFCTrackerIndex() { _bfcTrackerIndex = -1; }
+		void resetBFCTrackerIndex();
 
 		glm::mat4 _globalTransformation;
 	private:
