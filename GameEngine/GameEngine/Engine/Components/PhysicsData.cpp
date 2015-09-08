@@ -24,6 +24,12 @@ namespace AGE
 			return &data;
 		}
 
+
+		void PhysicsData::_copyFrom(const ComponentBase *model)
+		{
+			data = ((PhysicsData*)(model))->data;
+		}
+
 		const Physics::Private::GenericData *PhysicsData::getData(void) const
 		{
 			return &data;

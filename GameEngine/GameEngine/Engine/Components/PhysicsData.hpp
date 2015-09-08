@@ -35,10 +35,7 @@ namespace AGE
 
 			virtual bool doSerialize() { return false; }
 
-			virtual void _copyFrom(const ComponentBase *model)
-			{
-				data = ((PhysicsData*)(model))->data;
-			}
+			virtual void _copyFrom(const ComponentBase *model);
 
 			template <typename Archive>
 			void save(Archive &, const std::uint32_t) const{}

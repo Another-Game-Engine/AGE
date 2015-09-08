@@ -37,13 +37,13 @@ namespace AGE
 
 			physx::PxTolerancesScale toleranceScale;
 			
-			physx::PxFoundation *foundation = nullptr;
+			static physx::PxFoundation *foundation;
 			
 			physx::PxCooking *cooking = nullptr;
 			
-			physx::PxPhysics *physics = nullptr;
+			static physx::PxPhysics *physics;
 
-			bool extensions = false;
+			static bool extensions;
 
 			// Inherited Methods
 			EngineType getPluginType(void) const override final;

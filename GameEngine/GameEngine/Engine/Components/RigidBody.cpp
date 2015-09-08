@@ -357,8 +357,10 @@ namespace AGE
 
 	void RigidBody::_copyFrom(const ComponentBase *model)
 	{
-#ifdef EDITOR_ENABLED
+		init();
 		auto m = (RigidBody*)model;
+#ifdef EDITOR_ENABLED
+		editorUpdate();
 		if (editorStruct)
 		{
 			editorStruct->copyDatas(m);
