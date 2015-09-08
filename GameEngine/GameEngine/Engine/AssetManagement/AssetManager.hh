@@ -64,10 +64,7 @@ static std::pair<std::pair<GLenum, std::string>, std::function<void(Vertices &ve
 		};
 	private:
 		struct BitsetComparer {
-			bool operator() (const std::bitset<MeshInfos::END> &b1, const std::bitset<MeshInfos::END> &b2) const
-			{
-				return b1.to_ulong() < b2.to_ulong();
-			}
+			bool operator() (const std::bitset<MeshInfos::END> &b1, const std::bitset<MeshInfos::END> &b2) const;
 		};
 
 	public:
@@ -77,10 +74,7 @@ static std::pair<std::pair<GLenum, std::string>, std::function<void(Vertices &ve
 			bool error = false;
 			std::string errorMessage = "";
 			AssetsLoadingResult() = default;
-			AssetsLoadingResult(bool _error, const std::string &_errorMessage = "")
-				: error(_error)
-				, errorMessage(_errorMessage)
-			{}
+			AssetsLoadingResult(bool _error, const std::string &_errorMessage = "");
 		};
 
 	public:
@@ -90,18 +84,8 @@ static std::pair<std::pair<GLenum, std::string>, std::function<void(Vertices &ve
 			std::future < AssetsLoadingResult > future;
 			AssetsLoadingResult result;
 			AssetsLoadingStatus(const AssetsLoadingStatus&) = delete;
-			AssetsLoadingStatus(AssetsLoadingStatus &&o)
-				: filename(std::move(o.filename))
-				, future(std::move(o.future))
-				, result(std::move(o.result))
-			{
-
-			}
-			AssetsLoadingStatus(const std::string &_fileName, std::future<AssetsLoadingResult> &_future)
-				: filename(_fileName)
-			{
-				future = std::move(_future);
-			}
+			AssetsLoadingStatus(AssetsLoadingStatus &&o);
+			AssetsLoadingStatus(const std::string &_fileName, std::future<AssetsLoadingResult> &_future);
 		};
 
 	public:
@@ -133,9 +117,7 @@ static std::pair<std::pair<GLenum, std::string>, std::function<void(Vertices &ve
 		struct LoadAssetMessage : public TMQ::FutureData < AssetsLoadingResult >
 		{
 			std::function<AssetsLoadingResult()> function;
-			LoadAssetMessage(const std::function<AssetsLoadingResult()> &_function)
-				: function(_function)
-			{}
+			LoadAssetMessage(const std::function<AssetsLoadingResult()> &_function);
 		};
 
 	public:

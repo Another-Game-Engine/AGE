@@ -725,4 +725,32 @@ namespace AGE
 			_spotLight = std::dynamic_pointer_cast<Texture2D>(loadTexture("spotlight.dds", ""));
 		return _spotLight;
 	}
+
+	bool AssetsManager::BitsetComparer::operator() (const std::bitset<MeshInfos::END> &b1, const std::bitset<MeshInfos::END> &b2) const
+	{
+		return b1.to_ulong() < b2.to_ulong();
+	}
+
+	AssetsManager::AssetsLoadingResult::AssetsLoadingResult(bool _error, const std::string &_errorMessage)
+		: error(_error)
+		, errorMessage(_errorMessage)
+	{}
+
+	AssetsManager::AssetsLoadingStatus::AssetsLoadingStatus(AssetsLoadingStatus &&o)
+		: filename(std::move(o.filename))
+		, future(std::move(o.future))
+		, result(std::move(o.result))
+	{
+	}
+
+	AssetsManager::AssetsLoadingStatus::AssetsLoadingStatus(const std::string &_fileName, std::future<AssetsLoadingResult> &_future)
+		: filename(_fileName)
+	{
+		future = std::move(_future);
+	}
+
+	AssetsManager::LoadAssetMessage::LoadAssetMessage(const std::function<AssetsLoadingResult()> &_function)
+		: function(_function)
+	{}
+
 }
