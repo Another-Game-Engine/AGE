@@ -305,6 +305,7 @@
     <ClCompile Include="..\Vendors\imgui\imgui_draw.cpp" />
     <ClCompile Include="Engine\BFC\BFCCullableHandle.cpp" />
     <ClCompile Include="Engine\BFC\BFCCullableObject.cpp" />
+    <ClCompile Include="Engine\BFC\BFCItemID.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DepthOfField.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DownSample.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\GaussianBlur.cpp" />

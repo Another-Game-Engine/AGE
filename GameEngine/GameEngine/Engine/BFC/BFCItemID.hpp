@@ -24,10 +24,7 @@ namespace AGE
 	{
 	public:
 		inline bool isValid() const { return _blockManagerID != MaxBlockManagerID; }
-		bool operator==(const BFCItemID &o) const
-		{
-			return (_blockManagerID == o._blockManagerID && _blockID == o._blockID && _itemID == o._itemID);
-		}
+		bool operator==(const BFCItemID &o) const;
 	private:
 		BlockManagerID _blockManagerID = MaxBlockManagerID;
 		BlockID        _blockID = 0;
