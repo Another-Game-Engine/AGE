@@ -82,7 +82,14 @@ namespace AGE
 
 		auto id = src->getType();
 		auto find = _copyMap.find(id);
-		assert(find != std::end(_copyMap));
+		if (find == std::end(_copyMap))
+		{
+#ifdef _DEBUG
+			// can be normal for component who generates other components
+			std::cerr << "Component not copyable\n";
+#endif // _DEBUG
+			return nullptr;
+		}
 		auto voidCpt = scene->allocateComponent(id);
 		find->second(voidCpt, src);
 		return static_cast<ComponentBase*>(voidCpt);

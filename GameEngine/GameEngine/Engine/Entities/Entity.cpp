@@ -51,6 +51,10 @@ namespace AGE
 
 		auto id = cpt->getType();
 		auto newCpt = ComponentRegistrationManager::getInstance().copyComponent(cpt, scene);
+		if (!newCpt)
+		{
+			return;
+		}
 		newCpt->entity = getEntity();
 		newCpt->reset();
 		newCpt->copyFrom(cpt);
@@ -58,7 +62,7 @@ namespace AGE
 		if (haveComponent(id))
 		{
 			// if already have component of this type, we remove the old one
-			removeComponent(id);
+			//removeComponent(id);
 		}
 
 		if (components.size() <= id)
