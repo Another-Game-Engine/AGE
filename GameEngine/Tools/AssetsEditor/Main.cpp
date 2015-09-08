@@ -92,6 +92,7 @@ int			main(int ac, char **av)
 		REGISTER_COMPONENT_TYPE(AGE::RigidBody);
 		REGISTER_COMPONENT_TYPE(AGE::Collider);
 		REGISTER_COMPONENT_TYPE(AGE::CharacterController);
+		REGISTER_COMPONENT_TYPE(AGE::Private::PhysicsData);
 
 		RegisterComponents();
 

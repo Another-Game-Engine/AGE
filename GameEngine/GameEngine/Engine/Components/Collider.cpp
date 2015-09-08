@@ -486,4 +486,11 @@ namespace AGE
 
 #endif
 
+	void Collider::_copyFrom(const ComponentBase *model)
+	{
+		auto m = (Collider*)model;
+		collider = m->collider;
+		collisions = m->collisions;
+		triggers = m->triggers;
+	}
 }

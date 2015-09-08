@@ -5,6 +5,10 @@ namespace AGE
 {
 	namespace Physics
 	{
+		physx::PxFoundation *PhysXPhysics::foundation = nullptr;
+		physx::PxPhysics *PhysXPhysics::physics = nullptr;
+		bool PhysXPhysics::extensions = false;
+
 		// Methods
 		physx::PxFoundation *PhysXPhysics::getFoundation(void)
 		{
@@ -29,14 +33,17 @@ namespace AGE
 
 		bool PhysXPhysics::initialize(void)
 		{
-			foundation = PxCreateFoundation(PX_PHYSICS_VERSION, defaultAllocatorCallback, defaultErrorCallback);
 			if (foundation == nullptr)
 			{
-				foundation = &PxGetFoundation();
+				foundation = PxCreateFoundation(PX_PHYSICS_VERSION, defaultAllocatorCallback, defaultErrorCallback);
 				if (foundation == nullptr)
 				{
-					assert(!"Impossible to create foundation");
-					return false;
+					foundation = &PxGetFoundation();
+					if (foundation == nullptr)
+					{
+						assert(!"Impossible to create foundation");
+						return false;
+					}
 				}
 			}
 			cooking = PxCreateCooking(PX_PHYSICS_VERSION, *foundation, physx::PxCookingParams(toleranceScale));
@@ -49,17 +56,23 @@ namespace AGE
 			cookingParameters.meshPreprocessParams.set(physx::PxMeshPreprocessingFlag::eREMOVE_DUPLICATED_TRIANGLES);
 			cookingParameters.meshPreprocessParams.set(physx::PxMeshPreprocessingFlag::eREMOVE_UNREFERENCED_VERTICES);
 			cooking->setParams(cookingParameters);
-			physics = PxCreatePhysics(PX_PHYSICS_VERSION, *foundation, toleranceScale);
 			if (physics == nullptr)
 			{
-				assert(!"Impossible to create physics");
-				return false;
+				physics = PxCreatePhysics(PX_PHYSICS_VERSION, *foundation, toleranceScale);
+				if (physics == nullptr)
+				{
+					assert(!"Impossible to create physics");
+					return false;
+				}
 			}
-			extensions = PxInitExtensions(*physics);
 			if (!extensions)
 			{
-				assert(!"Impossible to initialize extensions");
-				return false;
+				extensions = PxInitExtensions(*physics);
+				if (!extensions)
+				{
+					assert(!"Impossible to initialize extensions");
+					return false;
+				}
 			}
 			return true;
 		}

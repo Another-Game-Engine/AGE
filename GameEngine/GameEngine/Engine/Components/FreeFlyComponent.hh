@@ -12,6 +12,13 @@ namespace AGE
 		AGE_COMPONENT_UNIQUE_IDENTIFIER("AGE_CORE_FreeFlyComponent");
 		size_t notEmpty;
 
+		// never copied
+		virtual void _copyFrom(const ComponentBase *model)
+		{
+			(void)(model);
+			assert(false && "Paul, je te laisse le remplir");
+		}
+
 		void init();
 
 		//////

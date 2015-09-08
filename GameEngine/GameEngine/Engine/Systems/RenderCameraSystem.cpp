@@ -34,6 +34,8 @@
 #include <Threads/TaskScheduler.hpp>
 #include <Threads/Tasks/BasicTasks.hpp>
 
+#include <render/OcclusionTools/OcclusionOptions.hpp>
+
 //temp
 #include <chrono>
 
@@ -304,7 +306,10 @@ namespace AGE
 					cameraList->pointLights.push_back(pointLightListToCull.pop()->getDrawable()->getDatas());
 				}
 			}
-			occlusionCulling(cameraList->meshs, _drawDebugLines);
+			if (OcclusionConfig::g_Occlusion_is_enabled)
+			{
+				occlusionCulling(cameraList->meshs, _drawDebugLines);
+			}
 
 			cameraList->spotLights = spotLightList;
 			cameraList->pointLights = pointLightList;

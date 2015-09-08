@@ -133,6 +133,7 @@ namespace AGE
 
 	void	Input::frameUpdate()
 	{
+		SCOPE_profile_cpu_function("Inputs");
 		std::lock_guard<AGE::SpinLock> lock(_mutex);
 
 		_mouseDelY = _mouseDelX = 0;
@@ -162,6 +163,7 @@ namespace AGE
 
 	void	Input::resetInputs()
 	{
+		SCOPE_profile_cpu_function("Inputs");
 		std::lock_guard<AGE::SpinLock> lock(_mutex);
 
 		for (int i = 0; i < AGE_WINDOW_INPUT_NUMBER; ++i)
@@ -174,6 +176,7 @@ namespace AGE
 
 	void 	Input::mouseButtonPressed(AgeMouseButtons input)
 	{
+		SCOPE_profile_cpu_function("Inputs");
 		std::lock_guard<AGE::SpinLock> lock(_mutex);
 
 		_mouseInputs[input] = 0;
@@ -183,6 +186,7 @@ namespace AGE
 
 	void 	Input::mouseButtonReleased(AgeMouseButtons input)
 	{
+		SCOPE_profile_cpu_function("Inputs");
 		std::lock_guard<AGE::SpinLock> lock(_mutex);
 
 		_mouseInputs[input] = 0;
@@ -191,6 +195,7 @@ namespace AGE
 
 	void	Input::addWindowInput(AgeWindowInputs input)
 	{
+		SCOPE_profile_cpu_function("Inputs");
 		std::lock_guard<AGE::SpinLock> lock(_mutex);
 
 		_windowInputs[input] = true;
@@ -198,6 +203,7 @@ namespace AGE
 
 	void	Input::keyInputPressed(AgeKeys mappedInput, AgeKeys physicalInput)
 	{
+		SCOPE_profile_cpu_function("Inputs");
 		std::lock_guard<AGE::SpinLock> lock(_mutex);
 		_keyInputs[mappedInput] = AGE_RESET_MAPPED_KEY_STATE(_keyInputs[mappedInput]);
 		_keyInputs[mappedInput] = AGE_SET_KEY_JUST_PRESSED(_keyInputs[mappedInput]);
@@ -212,6 +218,7 @@ namespace AGE
 
 	void 	Input::keyInputReleased(AgeKeys mappedInput, AgeKeys physicalInput)
 	{
+		SCOPE_profile_cpu_function("Inputs");
 		std::lock_guard<AGE::SpinLock> lock(_mutex);
 		_keyInputs[mappedInput] = AGE_RESET_MAPPED_KEY_STATE(_keyInputs[mappedInput]);
 		_keyInputs[mappedInput] = AGE_SET_KEY_JUST_RELEASED(_keyInputs[mappedInput]);
@@ -296,6 +303,7 @@ namespace AGE
 
 	void Input::sendMouseStateToIMGUI()
 	{
+		SCOPE_profile_cpu_function("Inputs");
 #ifdef AGE_ENABLE_IMGUI
 		glm::ivec2 mousePosition;
 		{
