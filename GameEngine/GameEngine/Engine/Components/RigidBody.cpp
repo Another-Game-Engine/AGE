@@ -291,6 +291,23 @@ namespace AGE
 		collisionDetectionMode = ptr->getCollisionDetectionMode();
 	}
 
+	void RigidBody::EditorStruct::refreshDatas(RigidBody *ptr)
+	{
+		ptr->setAngularDrag(angularDrag);
+		ptr->setAngularVelocity(angularVelocity);
+		ptr->setCenterOfMass(centerOfMass);
+		ptr->setLinearDrag(linearDrag);
+		ptr->setLinearVelocity(linearVelocity);
+		ptr->setMass(mass);
+		ptr->setDiagonalInertiaTensor(diagonalInertiaTensor);
+		ptr->setMaxAngularVelocity(maxAngularVelocity);
+		ptr->setMaxDepenetrationVelocity(maxDepenetrationVelocity);
+		ptr->affectByGravity(isAffectedByGravity);
+		ptr->setAsKinematic(kinematic);
+		ptr->setCollisionDetectionMode(collisionDetectionMode);
+	}
+
+
 	void RigidBody::EditorStruct::editorUpdate(RigidBody *ptr)
 	{
 		if (ImGui::InputFloat("Angular Drag", &angularDrag))
@@ -364,6 +381,7 @@ namespace AGE
 		if (editorStruct)
 		{
 			editorStruct->copyDatas(m);
+			editorStruct->refreshDatas(this);
 		}
 #endif
 	}

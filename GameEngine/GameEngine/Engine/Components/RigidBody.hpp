@@ -142,6 +142,7 @@ namespace AGE
 
 			// Methods
 			void copyDatas(RigidBody *ptr);
+			void refreshDatas(RigidBody *ptr);
 
 			void editorUpdate(RigidBody *ptr);
 		};
