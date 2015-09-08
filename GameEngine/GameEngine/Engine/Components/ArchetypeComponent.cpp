@@ -35,4 +35,9 @@ namespace AGE
 		init(archetypeName);
 	}
 
+	void ArchetypeComponent::_copyFrom(const ComponentBase *model)
+	{
+		(void)(model);
+	}
+
 }

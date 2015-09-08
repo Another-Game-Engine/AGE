@@ -22,10 +22,7 @@ namespace AGE
 		bool synchronizeScale;
 #endif
 		// never copied
-		virtual void _copyFrom(const ComponentBase *model)
-		{
-			(void)(model);
-		}
+		virtual void _copyFrom(const ComponentBase *model);
 		void init(const std::string &_archetypeName = "AGE_INVALID_ARCHETYPE");
 
 		//////

@@ -66,6 +66,21 @@ namespace AGE
 		//AGE::GetPrepareThread()->setCameraInfos(_data, _key);
 	}
 
+	const glm::mat4 &CameraComponent::getProjection() const
+	{
+		return _data.projection;
+	}
+
+	RenderType CameraComponent::getPipeline() const
+	{
+		return RenderType(_data.pipeline);
+	}
+
+	const CameraData &CameraComponent::getData() const
+	{
+		return _data;
+	}
+
 #ifdef EDITOR_ENABLED
 	void CameraComponent::addSkyBoxToChoice(std::string const &type, std::shared_ptr<TextureCubeMap> const &texture)
 	{
