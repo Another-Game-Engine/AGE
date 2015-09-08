@@ -17,5 +17,4 @@ namespace AGE
 #define RESOLUTION_SHADOW_Y 720
 
 #define AGE_BFC
-
 }

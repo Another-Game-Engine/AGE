@@ -17,6 +17,8 @@
 #include <Threads/TaskScheduler.hpp>
 #include <Core/Inputs/Input.hh>
 
+#include <Configuration.hpp>
+
 #include <Components/FreeFlyComponent.hh>
 #include <Components/CameraComponent.hpp>
 #include <Components/Light.hh>
@@ -39,11 +41,12 @@
 #include <Render/Program.hh>
 #include <Render/ProgramResources/Types/Uniform/Vec1.hh>
 #include <Render/ProgramResources/Types/Uniform/Vec4.hh>
-# include <Render/ProgramResources/Types/UniformBlock.hh>
-# include <Render/ProgramResources/Types/Attribute.hh>
-# include <Render/GeometryManagement/Painting/Painter.hh>
-# include <Render/Pipelining/Pipelines/IRenderingPipeline.hh>
-# include <Render/GeometryManagement/Painting/PaintingManager.hh>
+#include <Render/ProgramResources/Types/UniformBlock.hh>
+#include <Render/ProgramResources/Types/Attribute.hh>
+#include <Render/GeometryManagement/Painting/Painter.hh>
+#include <Render/Pipelining/Pipelines/IRenderingPipeline.hh>
+#include <Render/GeometryManagement/Painting/PaintingManager.hh>
+#include <render/OcclusionTools/OcclusionOptions.hpp>
 
 #include <EngineCoreTestConfiguration.hpp>
 
@@ -226,6 +229,7 @@ namespace AGE
 		static bool rain = false;
 
 		ImGui::Checkbox("Cube rain", &rain);
+		ImGui::Checkbox("Occlusion culling", &AGE::OcclusionConfig::g_Occlusion_is_enabled);
 
 		if (rain && _chunkCounter >= _maxChunk)
 		{

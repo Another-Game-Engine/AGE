@@ -303,6 +303,7 @@
   <ItemGroup>
     <ClCompile Include="..\Vendors\imgui\imgui.cpp" />
     <ClCompile Include="..\Vendors\imgui\imgui_draw.cpp" />
+    <ClCompile Include="Engine\Render\OcclusionTools\OcclusionOptions.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DepthOfField.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DownSample.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\GaussianBlur.cpp" />
@@ -523,6 +524,7 @@
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
     <ClInclude Include="..\Vendors\imgui\imgui.h" />
     <ClInclude Include="..\Vendors\imgui\stb_textedit.h" />
+    <ClInclude Include="Engine\Render\OcclusionTools\OcclusionOptions.hpp" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DepthOfField.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DownSample.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\GaussianBlur.hh" />

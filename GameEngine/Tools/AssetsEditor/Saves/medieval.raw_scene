@@ -55,14 +55,14 @@
                 "value": 13917482855567903631
             }
         ],
-        "entityNumber": 7,
+        "entityNumber": 8,
         "Entity_0": {
             "cereal_class_version": 0,
             "link": {
                 "cereal_class_version": 0,
                 "Position": {
                     "value0": 0,
-                    "value1": 0,
+                    "value1": -0.33000001311302185,
                     "value2": 0
                 },
                 "Scale": {
@@ -145,8 +145,8 @@
             "link": {
                 "Position": {
                     "value0": 0,
-                    "value1": -0.15000000596046448,
-                    "value2": 0
+                    "value1": -0.55000001192092896,
+                    "value2": -3
                 },
                 "Scale": {
                     "value0": 1,
@@ -224,7 +224,7 @@
             "link": {
                 "Position": {
                     "value0": 0,
-                    "value1": -2,
+                    "value1": -1.2000000476837158,
                     "value2": 0
                 },
                 "Scale": {
@@ -252,8 +252,8 @@
                 "name": "sol"
             },
             "AGE_CORE_MeshRenderer": {
-                "value0": "medievalpack/meshs/wall_a.mage",
-                "value1": "medievalpack/meshs/wall_a.sage",
+                "value0": "medievalpack/meshs/floor_b.mage",
+                "value1": "cube/cube.sage",
                 "value2": "",
                 "value3": {
                     "type": 0,
@@ -291,12 +291,20 @@
                 "CollisionDetectionMode": 1
             },
             "AGE_CORE_PhysicsCollider": {
-                "ColliderType": 3,
+                "ColliderType": 0,
                 "Material": "DefaultMaterial",
                 "IsATrigger": false,
                 "FilterGroup": 1,
-                "Mesh": "medievalpack/meshs/wall_a",
-                "Convex": true
+                "Center": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Size": {
+                    "value0": 1,
+                    "value1": 10,
+                    "value2": 10
+                }
             }
         },
         "Entity_3": {
@@ -382,7 +390,7 @@
             "link": {
                 "Position": {
                     "value0": 0,
-                    "value1": 0,
+                    "value1": -0.2199999988079071,
                     "value2": 3
                 },
                 "Scale": {
@@ -544,6 +552,85 @@
                 },
                 "exponent": 1,
                 "cutOff": 0.5
+            }
+        },
+        "Entity_7": {
+            "link": {
+                "Position": {
+                    "value0": -2,
+                    "value1": -0.4699999988079071,
+                    "value2": -2
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                2,
+                9
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "block"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "medievalpack/meshs/block_d.mage",
+                "value1": "medievalpack/meshs/block_d.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 16
+                }
+            },
+            "AGE_CORE_RigidBody": {
+                "AngularDrag": 0.05000000074505806,
+                "AngularVelocity": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "CenterOfMass": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "LinearDrag": 0,
+                "LinearVelocity": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Mass": 1,
+                "DiagonalInertiaTensor": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "MaxAngularVelocity": 1000000,
+                "MaxDepenetrationVelocity": 1000000,
+                "IsAffectedByGravity": false,
+                "IsKinematic": true,
+                "CollisionDetectionMode": 1
+            },
+            "AGE_CORE_PhysicsCollider": {
+                "ColliderType": 3,
+                "Material": "DefaultMaterial",
+                "IsATrigger": false,
+                "FilterGroup": 1,
+                "Mesh": "medievalpack/meshs/block_d",
+                "Convex": true
             }
         }
     }

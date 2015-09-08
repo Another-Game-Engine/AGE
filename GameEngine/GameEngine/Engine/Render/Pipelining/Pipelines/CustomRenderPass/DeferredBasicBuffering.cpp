@@ -15,6 +15,7 @@
 #include <Threads/ThreadManager.hpp>
 #include <Render/OcclusionTools/DepthMapHandle.hpp>
 #include <Render/OcclusionTools/DepthMap.hpp>
+#include <render/OcclusionTools/OcclusionOptions.hpp>
 
 #include "Graphic/DRBMesh.hpp"
 #include "Graphic/DRBMeshData.hpp"
@@ -35,10 +36,10 @@ namespace AGE
 	};
 
 	DeferredBasicBuffering::DeferredBasicBuffering(glm::uvec2 const &screenSize, std::shared_ptr<PaintingManager> painterManager,
-												std::shared_ptr<Texture2D> diffuse,
-												std::shared_ptr<Texture2D> normal,
-												std::shared_ptr<Texture2D> specular,
-												std::shared_ptr<Texture2D> depth) :
+		std::shared_ptr<Texture2D> diffuse,
+		std::shared_ptr<Texture2D> normal,
+		std::shared_ptr<Texture2D> specular,
+		std::shared_ptr<Texture2D> depth) :
 		FrameBufferRender(screenSize.x, screenSize.y, painterManager)
 		, _depth(depth)
 	{
@@ -67,7 +68,7 @@ namespace AGE
 		auto fragmentShaderPath = shaderPath->getValue() + DEFERRED_SHADING_BUFFERING_FRAG;
 
 		_programs[PROGRAM_BUFFERING] = std::make_shared<Program>(Program(std::string("program_buffering"),
-		{ 
+		{
 			std::make_shared<UnitProg>(vertexShaderPath, GL_VERTEX_SHADER),
 			std::make_shared<UnitProg>(fragmentShaderPath, GL_FRAGMENT_SHADER)
 		}));
@@ -97,29 +98,29 @@ namespace AGE
 
 		auto &meshList = (std::list<std::shared_ptr<DRBMeshData>>&)(infos.meshs);
 
-#ifdef OCCLUSION_CULLING
-
+		if (OcclusionConfig::g_Occlusion_is_enabled)
 		{
-			SCOPE_profile_gpu_i("Occluders pass");
-			SCOPE_profile_cpu_i("RenderTimer", "Occluders pass");
-
-			_programs[PROGRAM_BUFFERING]->use();
-			_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("projection_matrix").set(infos.cameraInfos.data.projection);
-			_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("view_matrix").set(infos.cameraInfos.view);
-
-			for (auto &meshPaint : meshList)
 			{
-				//temporary
-				//todo, do not spawn entity while mesh is not loaded
-				//currently it's not safe, because the paiter key can be invalid
-				//during the first frames
-				if (meshPaint->getPainterKey().isValid() && meshPaint->hadRenderMode(AGE_OCCLUDER))
+				SCOPE_profile_gpu_i("Occluders pass");
+				SCOPE_profile_cpu_i("RenderTimer", "Occluders pass");
+
+				_programs[PROGRAM_BUFFERING]->use();
+				_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("projection_matrix").set(infos.cameraInfos.data.projection);
+				_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("view_matrix").set(infos.cameraInfos.view);
+
+				for (auto &meshPaint : meshList)
 				{
-					auto painter = _painterManager->get_painter(meshPaint->getPainterKey());
-					painter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], meshPaint->globalProperties, meshPaint->getVerticesKey());
+					//temporary
+					//todo, do not spawn entity while mesh is not loaded
+					//currently it's not safe, because the painter key can be invalid
+					//during the first frames
+					if (meshPaint->getPainterKey().isValid() && meshPaint->hadRenderMode(AGE_OCCLUDER))
+					{
+						auto painter = _painterManager->get_painter(meshPaint->getPainterKey());
+						painter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], meshPaint->globalProperties, meshPaint->getVerticesKey());
+					}
 				}
 			}
-		}
 		{
 			SCOPE_profile_gpu_i("Copy occlusion depth to CPU");
 			SCOPE_profile_cpu_i("RenderTimer", "Copy occlusion depth to CPU");
@@ -156,25 +157,30 @@ namespace AGE
 				}
 			}
 		}
-#else
+		}
+		else // !occlusion enabled
 		{
-			SCOPE_profile_gpu_i("Draw all objects");
-			SCOPE_profile_cpu_i("RenderTimer", "Draw occluded objects");
-
-			for (auto &meshPaint : meshList)
 			{
-				//temporary
-				//todo, do not spawn entity while mesh is not loaded
-				//currently it's not safe, because the paiter key can be invalid
-				//during the first frames
-				if (meshPaint->getPainterKey().isValid())
+				SCOPE_profile_gpu_i("Draw all objects");
+				SCOPE_profile_cpu_i("RenderTimer", "Draw occluded objects");
+
+				_programs[PROGRAM_BUFFERING]->use();
+				_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("projection_matrix").set(infos.cameraInfos.data.projection);
+				_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("view_matrix").set(infos.cameraInfos.view);
+
+				for (auto &meshPaint : meshList)
 				{
-					auto painter = _painterManager->get_painter(meshPaint->getPainterKey());
-					painter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], meshPaint->globalProperties, meshPaint->getVerticesKey());
+					//temporary
+					//todo, do not spawn entity while mesh is not loaded
+					//currently it's not safe, because the paiter key can be invalid
+					//during the first frames
+					if (meshPaint->getPainterKey().isValid())
+					{
+						auto painter = _painterManager->get_painter(meshPaint->getPainterKey());
+						painter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], meshPaint->globalProperties, meshPaint->getVerticesKey());
+					}
 				}
 			}
 		}
-#endif
 	}
-
 }
