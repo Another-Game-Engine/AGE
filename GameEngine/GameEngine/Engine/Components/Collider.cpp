@@ -488,9 +488,14 @@ namespace AGE
 
 	void Collider::_copyFrom(const ComponentBase *model)
 	{
+		init();
 		auto m = (Collider*)model;
-		collider = m->collider;
-		collisions = m->collisions;
-		triggers = m->triggers;
+#ifdef EDITOR_ENABLED
+		editorUpdate();
+		if (editorStruct)
+		{
+			editorStruct->copyDatas(m);
+		}
+#endif
 	}
 }
