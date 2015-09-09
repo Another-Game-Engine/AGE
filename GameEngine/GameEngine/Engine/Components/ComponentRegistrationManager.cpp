@@ -85,7 +85,7 @@ namespace AGE
 		{
 #ifdef _DEBUG
 			// can be normal for component who generates other components
-			std::cerr << "Component not copyable\n";
+			//std::cerr << "Component not copyable\n";
 #endif // _DEBUG
 			return nullptr;
 		}

@@ -180,11 +180,11 @@ namespace AGE
 
 			representation->editorOnly = false;
 			representation->_archetypeLinked = it->second;
-
+			
 			std::vector<Entity*> tmpEntitiesList;
 			std::vector<const char*> tmpEntitiesNameList;
 			listEntityTree(entity, tmpEntitiesNameList, tmpEntitiesList);
-
+			
 			it->second->entities.insert(entity);
 
 			for (auto &en: tmpEntitiesList)
