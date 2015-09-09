@@ -1,7 +1,6 @@
 #pragma once
 
 #include <Entities/IArchetypeManager.hpp>
-#include <Utils/Dependency.hpp>
 #include <map>
 
 namespace AGE
@@ -9,7 +8,7 @@ namespace AGE
 	class AScene;
 	class Entity;
 
-	class ArchetypeManager : public Dependency < ArchetypeManager >, public IArchetypeManager
+	class ArchetypeManager : public IArchetypeManager
 	{
 	public:
 		ArchetypeManager();

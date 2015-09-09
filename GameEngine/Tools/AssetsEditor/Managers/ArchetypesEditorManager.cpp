@@ -198,6 +198,24 @@ namespace AGE
 			it->second->entities.insert(entity);
 		}
 
+		void ArchetypeEditorManager::updateArchetype(const std::string &name)
+		{
+			auto it = _archetypesCollection.find(name);
+			if (it == std::end(_archetypesCollection))
+			{
+				return;
+			}
+			if (it->second->loaded == false)
+			{
+				return;
+			}
+			for (auto e : it->second->entities)
+			{
+				_copyArchetypeToInstanciedEntity(it->second->root, e);
+			}
+		}
+
+
 		void ArchetypeEditorManager::updateMenu()
 		{
 			if (ImGui::MenuItem("Show", nullptr, &_displayWindow)) {}

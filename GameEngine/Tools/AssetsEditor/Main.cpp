@@ -95,7 +95,8 @@ int			main(int ac, char **av)
 
 		RegisterComponents();
 
-		engine->setInstance<AGE::WE::ArchetypeEditorManager>();
+		engine->removeInstance<AGE::IArchetypeManager>();
+		engine->setInstance<AGE::WE::ArchetypeEditorManager, AGE::IArchetypeManager>();
 		engine->setInstance<AGE::WE::ArchetypeEditorManager>()->setLibraryFolder("../../Archetypes/");
 		engine->getInstance<AGE::WE::ArchetypeEditorManager>()->load();
 

@@ -174,7 +174,7 @@ namespace AGE
 		setInstance<AGE::AssetsManager>();
 		setInstance<AGE::AnimationManager>();
 		setInstance<ConfigurationManager>("../../Configuration.json");
-		setInstance<ArchetypeManager>()->setLibraryFolder("../../Archetypes/");
+		setInstance<ArchetypeManager, IArchetypeManager>()->setLibraryFolder("../../Archetypes/");
 
 		getInstance<ConfigurationManager>()->loadFile();
 		auto assetsFilePath = getInstance<ConfigurationManager>()->getConfiguration<std::string>("AssetsPath");

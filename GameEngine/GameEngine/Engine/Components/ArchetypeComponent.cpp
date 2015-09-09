@@ -1,5 +1,8 @@
 #include "ArchetypeComponent.hpp"
 #include <imgui/imgui.h>
+#include "Entities\IArchetypeManager.hpp"
+#include "Entities\Entity.hh"
+#include "Core/AScene.hh"
 
 namespace AGE
 {
@@ -15,6 +18,10 @@ namespace AGE
 		modified |= ImGui::Checkbox("Sync Position", &synchronizePosition);
 		modified |= ImGui::Checkbox("Sync Rotation", &synchronizeRotation);
 		modified |= ImGui::Checkbox("Sync Scale", &synchronizeScale);
+		if (modified)
+		{
+			entity->getScene()->getInstance<AGE::IArchetypeManager>()->updateArchetype(archetypeName);
+		}
 		return modified;
 	}
 #endif

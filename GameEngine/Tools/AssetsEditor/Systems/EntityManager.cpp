@@ -128,8 +128,8 @@ namespace AGE
 				{
 					WESerialization::SetSerializeForEditor(true);
 
-					auto parent = _gizmoEntity.getLinkPtr()->getParent();
-					_gizmoEntity.getLinkPtr()->detachParent();
+					//auto parent = _gizmoEntity.getLinkPtr()->getParent();
+					//_gizmoEntity.getLinkPtr()->detachParent();
 
 					ReadableEntityPack pack;
 					{
@@ -141,10 +141,10 @@ namespace AGE
 						binaryPack.saveToFile(WE::EditorConfiguration::GetExportedSceneDirectory() + std::string(_sceneName) + ".scene");
 					}
 
-					if (parent)
-					{
-						_gizmoEntity.getLinkPtr()->attachParent(parent);
-					}
+					//if (parent)
+					//{
+					//	_gizmoEntity.getLinkPtr()->attachParent(parent);
+					//}
 
 					WESerialization::SetSerializeForEditor(false);
 					_saveScene = false;
@@ -345,16 +345,16 @@ namespace AGE
 						ImGui::InputText("Archetype name", _archetypeName, MAX_SCENE_NAME_LENGTH);
 						if (ImGui::SmallButton("Convert to Archetype"))
 						{
-							auto parent = _gizmoEntity.getLinkPtr()->getParent();
-							_gizmoEntity.getLinkPtr()->detachParent();
+							//auto parent = _gizmoEntity.getLinkPtr()->getParent();
+							//_gizmoEntity.getLinkPtr()->detachParent();
 
 							auto manager = _scene->getInstance<AGE::WE::ArchetypeEditorManager>();
 							manager->addOne(_archetypeName, *_selectedEntity);
 
-							if (parent)
-							{
-								_gizmoEntity.getLinkPtr()->attachParent(parent);
-							}
+							//if (parent)
+							//{
+							//	_gizmoEntity.getLinkPtr()->attachParent(parent);
+							//}
 						}
 					}
 				}
@@ -437,16 +437,16 @@ namespace AGE
 
 				if (_lastFrameSelectedEntity != _selectedEntity)
 				{
-					if (_lastFrameSelectedEntity != nullptr)
-					{
-						_gizmoEntity->removeComponent<MeshRenderer>();
-						_gizmoEntity.getLinkPtr()->detachParent();
-					}
-					if (_selectedEntity != nullptr)
-					{
-						_gizmoEntity.getLinkPtr()->attachParent(_selectedEntity->getLinkPtr());
-						_gizmoEntity->addComponent<MeshRenderer>(_gizmoMesh, _gizmoMaterial);
-					}
+					//if (_lastFrameSelectedEntity != nullptr)
+					//{
+					//	_gizmoEntity->removeComponent<MeshRenderer>();
+					//	_gizmoEntity.getLinkPtr()->detachParent();
+					//}
+					//if (_selectedEntity != nullptr)
+					//{
+					//	_gizmoEntity.getLinkPtr()->attachParent(_selectedEntity->getLinkPtr());
+					//	_gizmoEntity->addComponent<MeshRenderer>(_gizmoMesh, _gizmoMaterial);
+					//}
 					_lastFrameSelectedEntity = _selectedEntity;
 				}
 
@@ -466,8 +466,8 @@ namespace AGE
 				camera->addComponent<FreeFlyComponent>();
 				camera->addComponent<AGE::WE::EntityRepresentation>()->editorOnly = true;
 
-				_gizmoEntity = _scene->createEntity();
-				_gizmoEntity->addComponent<AGE::WE::EntityRepresentation>()->editorOnly = true;
+				//_gizmoEntity = _scene->createEntity();
+				//_gizmoEntity->addComponent<AGE::WE::EntityRepresentation>()->editorOnly = true;
 			}
 	}
 }

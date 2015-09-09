@@ -1,6 +1,5 @@
 #pragma once
 
-#include <Utils/Dependency.hpp>
 #include <set>
 #include <map>
 #include <Entities/Archetype.hpp>
@@ -19,7 +18,7 @@ namespace AGE
 			bool loaded = false;
 		};
 
-		class ArchetypeEditorManager : public Dependency < ArchetypeEditorManager >, public IArchetypeManager
+		class ArchetypeEditorManager : public IArchetypeManager
 		{
 		public:
 			ArchetypeEditorManager();
@@ -30,7 +29,8 @@ namespace AGE
 			virtual void loadOne(const std::string &name);
 			virtual void addOne(const std::string &name, Entity &entity);
 			virtual void spawn(Entity &entity, const std::string &name);
-
+			// will update all the instanced
+			virtual void updateArchetype(const std::string &name);
 			void loadFromFile(std::shared_ptr<ArchetypeEditorRepresentation> ptr);
 
 			std::shared_ptr<AScene> getScene();

@@ -49,7 +49,7 @@ namespace AGE
 			, componentTypes
 			, archetypesDependency);
 
-		auto archetypeManager = entity->getScene()->getInstance<AGE::ArchetypeManager>();
+		auto archetypeManager = entity->getScene()->getInstance<AGE::IArchetypeManager>();
 
 		// we load archetypes dependency
 		if (!archetypesDependency.empty())
