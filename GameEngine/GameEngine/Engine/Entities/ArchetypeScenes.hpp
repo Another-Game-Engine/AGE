@@ -20,29 +20,14 @@ namespace AGE
 	public:
 		static const std::string Name;
 
-		ArchetypeScene(AGE::Engine *engine)
-			:AScene(engine)
-		{}
+		ArchetypeScene(AGE::Engine *engine);
 
-		virtual ~ArchetypeScene(void)
-		{}
+		virtual ~ArchetypeScene(void);
 
-		virtual bool _userStart()
-		{
-			addSystem<PhysicsSystem>(3, Physics::EngineType::PhysX, getInstance<AGE::AssetsManager>());
-			getInstance<Physics::PhysicsInterface>()->getWorld()->setGravity(0, 0, 0);
-			return true;
-		}
+		virtual bool _userStart();
 
-		virtual bool _userUpdateBegin(float time)
-		{
+		virtual bool _userUpdateBegin(float time);
 
-			return true;
-		}
-
-		virtual bool _userUpdateEnd(float time)
-		{
-			return true;
-		}
+		virtual bool _userUpdateEnd(float time);
 	};
 }
