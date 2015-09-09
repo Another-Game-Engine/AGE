@@ -61,20 +61,20 @@
             "link": {
                 "cereal_class_version": 0,
                 "Position": {
-                    "value0": -0.14499448239803314,
-                    "value1": -1.7366441488265991,
-                    "value2": -0.13111302256584167
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
                 },
                 "Scale": {
-                    "value0": 1,
-                    "value1": 1,
-                    "value2": 1
+                    "value0": 5,
+                    "value1": 0.0099999997764825821,
+                    "value2": 5
                 },
                 "Orientation": {
-                    "value0": 0.042832247912883759,
-                    "value1": -0.00095883844187483191,
-                    "value2": -0.042004525661468506,
-                    "value3": 0.99819850921630859
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
                 }
             },
             "children": [],
@@ -83,31 +83,30 @@
                 0,
                 1,
                 2,
-                3,
                 9
             ],
             "archetypesDependency": [],
             "AGE_CORE_EntityRepresentationComponent": {
                 "cereal_class_version": 0,
-                "name": "cube-Copy"
+                "name": "floor-a-Copy"
             },
             "AGE_CORE_MeshRenderer": {
                 "cereal_class_version": 3,
-                "value0": "cube/cube.mage",
-                "value1": "cube/cube.sage",
+                "value0": "medievalpack/meshs/floor_a.mage",
+                "value1": "medievalpack/meshs/floor_a.sage",
                 "value2": "",
                 "value3": {
                     "type": 0,
-                    "data": 0
+                    "data": 16
                 }
             },
             "AGE_CORE_RigidBody": {
                 "cereal_class_version": 1,
                 "AngularDrag": 0.05000000074505806,
                 "AngularVelocity": {
-                    "value0": 0.00015115513815544546,
-                    "value1": -3.3850562886073021e-006,
-                    "value2": -0.00014814473979640752
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
                 },
                 "CenterOfMass": {
                     "value0": 0,
@@ -116,9 +115,9 @@
                 },
                 "LinearDrag": 0,
                 "LinearVelocity": {
-                    "value0": -0.0021452524233609438,
-                    "value1": -0.010903298854827881,
-                    "value2": -0.0019402361940592527
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
                 },
                 "Mass": 1,
                 "DiagonalInertiaTensor": {
@@ -128,39 +127,18 @@
                 },
                 "MaxAngularVelocity": 1000000,
                 "MaxDepenetrationVelocity": 1000000,
-                "IsAffectedByGravity": true,
-                "IsKinematic": false,
+                "IsAffectedByGravity": false,
+                "IsKinematic": true,
                 "CollisionDetectionMode": 1
-            },
-            "AGE_CORE_PointLightComponent": {
-                "cereal_class_version": 1,
-                "color": {
-                    "value0": 0.11372549086809158,
-                    "value1": 0.27450981736183167,
-                    "value2": 1
-                },
-                "range": {
-                    "value0": 1,
-                    "value1": 0.0099999997764825821,
-                    "value2": 0.0010000000474974513
-                }
             },
             "AGE_CORE_PhysicsCollider": {
                 "cereal_class_version": 1,
-                "ColliderType": 0,
+                "ColliderType": 3,
                 "Material": "DefaultMaterial",
                 "IsATrigger": false,
                 "FilterGroup": 1,
-                "Center": {
-                    "value0": 0,
-                    "value1": 0,
-                    "value2": 0
-                },
-                "Size": {
-                    "value0": 1,
-                    "value1": 1,
-                    "value2": 1
-                }
+                "Mesh": "medievalpack/meshs/floor_a",
+                "Convex": true
             }
         }
     }

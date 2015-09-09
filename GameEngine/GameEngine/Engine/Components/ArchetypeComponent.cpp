@@ -31,8 +31,8 @@ namespace AGE
 		archetypeName = _archetypeName;
 #ifdef EDITOR_ENABLED
 		synchronizePosition = false;
-		synchronizeRotation = false;
-		synchronizeScale = false;
+		synchronizeRotation = true;
+		synchronizeScale = true;
 		deletableInEditor = false;
 #endif
 	}

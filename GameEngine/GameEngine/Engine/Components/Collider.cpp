@@ -11,6 +11,8 @@
 #include <FileUtils/AssetFiles/CookedFile.hpp>
 #include <FileUtils/FileUtils/FileSystemHelpers.hpp>
 
+#include <Utils/MatrixConversion.hpp>
+
 #ifdef EDITOR_ENABLED
 #include <imgui/imgui.h>
 #endif
@@ -501,6 +503,9 @@ namespace AGE
 		{
 			editorStruct->copyDatas(m);
 		}
+		Link *link = entity.getLinkPtr();
+		auto p = scaleFromMat4(link->getGlobalTransform());
+		scale(p);
 #endif
 	}
 }
