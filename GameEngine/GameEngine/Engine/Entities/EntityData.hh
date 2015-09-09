@@ -68,10 +68,8 @@ namespace AGE
 			return ptr;
 		}
 
-		const std::vector<ComponentBase*> &getComponentList() const
-		{
-			return components;
-		}
+		const std::vector<ComponentBase*> &getComponentList() const;
+
 	private:
 		Entity entity;
 		AGE::Link link;

@@ -308,6 +308,7 @@
     <ClCompile Include="Engine\BFC\BFCItemID.cpp" />
     <ClCompile Include="Engine\Components\ComponentManager.cpp" />
     <ClCompile Include="Engine\Entities\ArchetypeScenes.cpp" />
+    <ClCompile Include="Engine\Entities\EntityData.cpp" />
     <ClCompile Include="Engine\Render\OcclusionTools\OcclusionOptions.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DepthOfField.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DownSample.cpp" />
