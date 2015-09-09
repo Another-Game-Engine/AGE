@@ -55,7 +55,7 @@
                 "value": 13917482855567903631
             }
         ],
-        "entityNumber": 8,
+        "entityNumber": 9,
         "Entity_0": {
             "cereal_class_version": 0,
             "link": {
@@ -242,69 +242,22 @@
             "children": [],
             "flags": 0,
             "components_number": [
-                0,
-                1,
-                2,
-                9
+                8,
+                0
             ],
-            "archetypesDependency": [],
+            "archetypesDependency": [
+                "sol1"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "cereal_class_version": 2,
+                "archetypeName": "sol1",
+                "value0": false,
+                "value1": false,
+                "value2": false,
+                "value3": false
+            },
             "AGE_CORE_EntityRepresentationComponent": {
-                "name": "sol"
-            },
-            "AGE_CORE_MeshRenderer": {
-                "value0": "medievalpack/meshs/floor_b.mage",
-                "value1": "cube/cube.sage",
-                "value2": "",
-                "value3": {
-                    "type": 0,
-                    "data": 16
-                }
-            },
-            "AGE_CORE_RigidBody": {
-                "AngularDrag": 0.05000000074505806,
-                "AngularVelocity": {
-                    "value0": 0,
-                    "value1": 0,
-                    "value2": 0
-                },
-                "CenterOfMass": {
-                    "value0": 0,
-                    "value1": 0,
-                    "value2": 0
-                },
-                "LinearDrag": 0,
-                "LinearVelocity": {
-                    "value0": 0,
-                    "value1": 0,
-                    "value2": 0
-                },
-                "Mass": 1,
-                "DiagonalInertiaTensor": {
-                    "value0": 1,
-                    "value1": 1,
-                    "value2": 1
-                },
-                "MaxAngularVelocity": 1000000,
-                "MaxDepenetrationVelocity": 1000000,
-                "IsAffectedByGravity": false,
-                "IsKinematic": true,
-                "CollisionDetectionMode": 1
-            },
-            "AGE_CORE_PhysicsCollider": {
-                "ColliderType": 0,
-                "Material": "DefaultMaterial",
-                "IsATrigger": false,
-                "FilterGroup": 1,
-                "Center": {
-                    "value0": 0,
-                    "value1": 0,
-                    "value2": 0
-                },
-                "Size": {
-                    "value0": 5,
-                    "value1": 1,
-                    "value2": 5
-                }
+                "name": "sol-Copy-Copy"
             }
         },
         "Entity_3": {
@@ -631,6 +584,45 @@
                 "FilterGroup": 1,
                 "Mesh": "medievalpack/meshs/block_d",
                 "Convex": true
+            }
+        },
+        "Entity_8": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": -1,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 5,
+                    "value1": 1,
+                    "value2": 5
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "sol1"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "sol1",
+                "value0": false,
+                "value1": false,
+                "value2": false,
+                "value3": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "sol-Copy-Copy"
             }
         }
     }

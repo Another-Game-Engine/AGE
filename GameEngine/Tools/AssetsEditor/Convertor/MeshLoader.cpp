@@ -177,7 +177,7 @@ namespace AGE
 				max = glm::max(e.boundingBox.maxPoint, max);
 			}
 			auto dif = max - min;
-			glm::vec3 decalage = min * -1.0f;
+			glm::vec3 decalage = (max - (dif / 2.0f)) * -1.0f;
 
 			float t = dif.x > dif.y ? dif.x : dif.y;
 			t = t > dif.z ? t : dif.z;
@@ -188,8 +188,10 @@ namespace AGE
 			{
 				e.boundingBox.minPoint /= t;
 				e.boundingBox.minPoint *= cookingTask->dataSet->maxSideLength;
+				e.boundingBox.minPoint += decalage;
 				e.boundingBox.maxPoint /= t;
 				e.boundingBox.maxPoint *= cookingTask->dataSet->maxSideLength;
+				e.boundingBox.maxPoint += decalage;
 				glm::vec3 dist = e.boundingBox.maxPoint - e.boundingBox.minPoint;
 				e.boundingBox.center = e.boundingBox.minPoint + (dist / 2.0f);
 
