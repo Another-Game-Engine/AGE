@@ -5,6 +5,15 @@
 
 namespace AGE
 {
+
+	EntitySerializationInfos::EntitySerializationInfos(EntityData *e, std::map<ComponentType, std::size_t> *_typesMap)
+		: entity(e->entity)
+		, typesMap(_typesMap)
+	{}
+
+	EntitySerializationInfos::EntitySerializationInfos()
+	{}
+
 	void EntitySerializationInfos::_postLoad(Link &link, ENTITY_FLAGS flags, cereal::JSONInputArchive &ar)
 	{
 		// we load archetypes dependency

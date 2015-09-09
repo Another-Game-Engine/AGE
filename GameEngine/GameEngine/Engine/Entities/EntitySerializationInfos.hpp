@@ -19,13 +19,9 @@ namespace AGE
 		Entity entity;
 		std::map<ComponentType, std::size_t> *typesMap; // used to unserialize
 
-		EntitySerializationInfos(EntityData *e, std::map<ComponentType, std::size_t> *_typesMap)
-			: entity(e->entity)
-			, typesMap(_typesMap)
-		{}
+		EntitySerializationInfos(EntityData *e, std::map<ComponentType, std::size_t> *_typesMap);
 
-		EntitySerializationInfos()
-		{}
+		EntitySerializationInfos();
 
 		template < typename Archive >
 		void save(Archive &ar, const std::uint32_t version) const
