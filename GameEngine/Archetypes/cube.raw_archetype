@@ -1,0 +1,167 @@
+{
+    "value0": {
+        "cereal_class_version": 0,
+        "componentsIdReferenceTable": [
+            {
+                "key": 0,
+                "value": 2633202538906912002
+            },
+            {
+                "key": 1,
+                "value": 4279995424560007376
+            },
+            {
+                "key": 2,
+                "value": 9228130898566333550
+            },
+            {
+                "key": 3,
+                "value": 2719950380395641793
+            },
+            {
+                "key": 4,
+                "value": 12568265209258137674
+            },
+            {
+                "key": 5,
+                "value": 7226899121077071394
+            },
+            {
+                "key": 6,
+                "value": 8685391846632613471
+            },
+            {
+                "key": 7,
+                "value": 11957752261005749183
+            },
+            {
+                "key": 8,
+                "value": 17192082489458106606
+            },
+            {
+                "key": 9,
+                "value": 16239045169874622267
+            },
+            {
+                "key": 10,
+                "value": 6441919271708046876
+            },
+            {
+                "key": 11,
+                "value": 8718854852507163888
+            },
+            {
+                "key": 12,
+                "value": 13917482855567903631
+            }
+        ],
+        "entityNumber": 1,
+        "Entity_0": {
+            "cereal_class_version": 0,
+            "link": {
+                "cereal_class_version": 0,
+                "Position": {
+                    "value0": -0.027900094166398048,
+                    "value1": -1.1416586637496948,
+                    "value2": -0.025213845074176788
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0.021201184019446373,
+                    "value1": -0.00047496866318397224,
+                    "value2": -0.020804198458790779,
+                    "value3": 0.99955862760543823
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                2,
+                3,
+                9
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "cereal_class_version": 0,
+                "name": "cube-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "cereal_class_version": 3,
+                "value0": "cube/cube.mage",
+                "value1": "cube/cube.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_CORE_RigidBody": {
+                "cereal_class_version": 1,
+                "AngularDrag": 0.05000000074505806,
+                "AngularVelocity": {
+                    "value0": 0.0023183403536677361,
+                    "value1": -5.1918363169534132e-005,
+                    "value2": -0.0022721688728779554
+                },
+                "CenterOfMass": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "LinearDrag": 0,
+                "LinearVelocity": {
+                    "value0": -0.0021452524233609438,
+                    "value1": -0.010903298854827881,
+                    "value2": -0.0019402361940592527
+                },
+                "Mass": 1,
+                "DiagonalInertiaTensor": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "MaxAngularVelocity": 1000000,
+                "MaxDepenetrationVelocity": 1000000,
+                "IsAffectedByGravity": true,
+                "IsKinematic": false,
+                "CollisionDetectionMode": 1
+            },
+            "AGE_CORE_PointLightComponent": {
+                "cereal_class_version": 1,
+                "color": {
+                    "value0": 0.11372549086809158,
+                    "value1": 0.27450981736183167,
+                    "value2": 1
+                },
+                "range": {
+                    "value0": 1,
+                    "value1": 0.0099999997764825821,
+                    "value2": 0.0010000000474974513
+                }
+            },
+            "AGE_CORE_PhysicsCollider": {
+                "cereal_class_version": 1,
+                "ColliderType": 0,
+                "Material": "DefaultMaterial",
+                "IsATrigger": false,
+                "FilterGroup": 1,
+                "Center": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Size": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                }
+            }
+        }
+    }
+}
