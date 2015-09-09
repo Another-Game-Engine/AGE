@@ -254,7 +254,7 @@ namespace AGE
 				ImGui::EndMenuBar();
 			}
 
-			if (ImGui::Combo("", &_selectedArchetypeIndex, &_archetypesImGuiNamesList[0], static_cast<int>(_archetypesImGuiNamesList.size())))
+			if (_archetypesImGuiNamesList.size() > 0 && ImGui::Combo("", &_selectedArchetypeIndex, &_archetypesImGuiNamesList[0], static_cast<int>(_archetypesImGuiNamesList.size())))
 			{
 				if (_selectedArchetypeIndex < _archetypesImGuiNamesList.size())
 				{
