@@ -8,6 +8,7 @@ namespace AGE
 		physx::PxFoundation *PhysXPhysics::foundation = nullptr;
 		physx::PxPhysics *PhysXPhysics::physics = nullptr;
 		bool PhysXPhysics::extensions = false;
+		std::size_t PhysXPhysics::counter = 0;
 
 		// Methods
 		physx::PxFoundation *PhysXPhysics::getFoundation(void)
@@ -74,30 +75,34 @@ namespace AGE
 					return false;
 				}
 			}
+			++counter;
 			return true;
 		}
 
 		void PhysXPhysics::finalize(void)
 		{
-			if (extensions)
+			if (!--counter)
 			{
-				PxCloseExtensions();
-				extensions = false;
-			}
-			if (physics != nullptr)
-			{
-				physics->release();
-				physics = nullptr;
-			}
-			if (cooking != nullptr)
-			{
-				cooking->release();
-				cooking = nullptr;
-			}
-			if (foundation != nullptr)
-			{
-				foundation->release();
-				foundation = nullptr;
+				if (extensions)
+				{
+					PxCloseExtensions();
+					extensions = false;
+				}
+				if (physics != nullptr)
+				{
+					physics->release();
+					physics = nullptr;
+				}
+				if (cooking != nullptr)
+				{
+					cooking->release();
+					cooking = nullptr;
+				}
+				if (foundation != nullptr)
+				{
+					foundation->release();
+					foundation = nullptr;
+				}
 			}
 		}
 
