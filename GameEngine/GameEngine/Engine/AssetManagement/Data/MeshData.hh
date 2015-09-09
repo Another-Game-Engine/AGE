@@ -53,6 +53,7 @@ namespace AGE
 	public:
 		std::string name;
 		std::vector<SubMeshData> subMeshs;
+		AGE::AABoundingBox boundingBox;
 
 	public:
 		template <class Archive> void serialize(Archive &ar, const std::uint32_t version);
@@ -68,8 +69,12 @@ namespace AGE
 	void MeshData::serialize(Archive &ar, const std::uint32_t version)
 	{
 		ar(name, subMeshs);
+		if (version > 0)
+		{
+			ar(boundingBox);
+		}
 	}
 }
 
-CEREAL_CLASS_VERSION(AGE::MeshData, 0)
+CEREAL_CLASS_VERSION(AGE::MeshData, 1)
 CEREAL_CLASS_VERSION(AGE::SubMeshData, 0)

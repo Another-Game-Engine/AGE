@@ -121,6 +121,10 @@ namespace AGE
 				}
 			}
 
+			cookingTask->mesh->boundingBox.maxPoint = glm::max(meshs[meshIndex].boundingBox.maxPoint, cookingTask->mesh->boundingBox.maxPoint);
+			cookingTask->mesh->boundingBox.minPoint = glm::min(meshs[meshIndex].boundingBox.minPoint, cookingTask->mesh->boundingBox.minPoint);
+			cookingTask->mesh->boundingBox.recomputeCenter();
+
 			std::map<std::string, unsigned int> bonesIndices;
 			unsigned int numBone = 0;
 			if (cookingTask->dataSet->bonesInfos)
@@ -183,6 +187,10 @@ namespace AGE
 			t = t > dif.z ? t : dif.z;
 
 			decalage /= t;
+
+			cookingTask->mesh->boundingBox.maxPoint = max + decalage;
+			cookingTask->mesh->boundingBox.minPoint = min + decalage;
+			cookingTask->mesh->boundingBox.recomputeCenter();
 
 			for (auto &e : cookingTask->mesh->subMeshs)
 			{
