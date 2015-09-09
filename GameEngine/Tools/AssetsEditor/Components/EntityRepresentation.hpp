@@ -27,6 +27,8 @@ namespace AGE
 
 			virtual void _copyFrom(const ComponentBase *model);
 
+			void setName(const char *_name);
+
 			template <typename Archive>
 			void serialize(Archive &ar, const std::uint32_t version)
 			{

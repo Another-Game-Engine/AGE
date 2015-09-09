@@ -44,7 +44,19 @@ namespace AGE
 
 	void ArchetypeComponent::_copyFrom(const ComponentBase *model)
 	{
-		(void)(model);
+		// on ne devrait pas passer par la mais par le manager
+		assert(false);
+		ArchetypeComponent *m = (ArchetypeComponent *)model;
+		archetypeName = m->archetypeName;
+#ifdef EDITOR_ENABLED
+		synchronizePosition = m->synchronizePosition;
+		synchronizeRotation = m->synchronizeRotation;
+		synchronizeScale = m->synchronizeScale;
+		deletableInEditor = m->deletableInEditor;
+#endif
+		//entity->getLink()->setPosition(m->entity->getLink().getPosition());
+		//entity->getLink()->setScale(m->entity->getLink().getScale());
+		//entity->getLink()->setOrientation(m->entity->getLink().getOrientation());
 	}
 
 }

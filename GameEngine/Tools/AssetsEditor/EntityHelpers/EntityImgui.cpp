@@ -53,19 +53,19 @@ namespace AGE
 			// if entity have a mesh renderer component
 			// we pad the position so the origin is not in the center of the geometry
 			// but in 0,0,0
-			if (meshRenderer && meshRenderer->getMesh())
-			{
-				auto mesh = meshRenderer->getMesh();
-				cpt->position += mesh->meshData->boundingBox.getSize() / 2.0f;
-			}
+			//if (meshRenderer && meshRenderer->getMesh())
+			//{
+			//	auto mesh = meshRenderer->getMesh();
+			//	cpt->position += mesh->meshData->boundingBox.getSize() / 2.0f;
+			//}
 			if (ImGui::InputFloat3("Position", glm::value_ptr(cpt->position)))
 			{
 				modified = true;
-				if (meshRenderer && meshRenderer->getMesh())
-				{
-					auto mesh = meshRenderer->getMesh();
-					cpt->position -= mesh->meshData->boundingBox.getSize() / 2.0f;
-				}
+				//if (meshRenderer && meshRenderer->getMesh())
+				//{
+				//	auto mesh = meshRenderer->getMesh();
+				//	cpt->position -= mesh->meshData->boundingBox.getSize() / 2.0f;
+				//}
 				entity->getLink().setPosition(cpt->position);
 			}
 

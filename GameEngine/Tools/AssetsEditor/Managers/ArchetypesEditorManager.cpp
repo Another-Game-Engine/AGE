@@ -174,7 +174,7 @@ namespace AGE
 			auto it = _archetypesCollection.find(name);
 			AGE_ASSERT(it != std::end(_archetypesCollection));
 			loadFromFile(it->second);
-			entity->getScene()->copyEntity(it->second->root, entity, true, false);
+			entity->getScene()->internalCopyEntity(it->second->root, entity, true, false);
 
 			auto representation = entity->getComponent<EntityRepresentation>();
 
@@ -188,6 +188,10 @@ namespace AGE
 			for (auto &en: tmpEntitiesList)
 			{
 				auto &e = *en;
+				if (e->haveComponent<AGE::ArchetypeComponent>())
+				{
+					e->removeComponent<AGE::ArchetypeComponent>();
+				}
 				e->addComponent<ArchetypeComponent>(name);
 				if (e != entity)
 				{

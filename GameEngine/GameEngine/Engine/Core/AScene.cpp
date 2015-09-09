@@ -13,6 +13,7 @@
 #include <Entities/BinaryEntityPack.hpp>
 #include <Entities/EntityBinaryPacker.hpp>
 #include <Core/Link.hpp>
+#include <Entities/IArchetypeManager.hpp>
 
 #include <BFC/BFCLinkTracker.hpp>
 #include <BFC/BFCBlockManagerFactory.hpp>
@@ -227,6 +228,55 @@ namespace AGE
 	}
 
 	bool AScene::copyEntity(const Entity &source, Entity &destination, bool deep /*= true*/, bool outContext /*= false*/)
+	{
+		SCOPE_profile_cpu_function("Scenes");
+		if (!source.isValid())
+		{
+			return false;
+		}
+
+		if (!destination.isValid())
+		{
+			destination = createEntity(outContext);
+			destination->getLink().setPosition(source->getLink().getPosition());
+			destination->getLink().setOrientation(source->getLink().getOrientation());
+			destination->getLink().setScale(source->getLink().getScale());
+		}
+
+		if (deep)
+		{
+			auto &link = source->getLink();
+			for (auto &e : link.getChildren())
+			{
+				Entity tmp;
+				if (!copyEntity(e->getEntity()->getEntity(), tmp, deep, outContext))
+				{
+					return false;
+				}
+				destination->getLink().attachChild(tmp.getLinkPtr());
+			}
+
+			auto archetype = source->getComponent<ArchetypeComponent>();
+
+			if (archetype == nullptr)
+			{
+				for (auto e : source->getComponentList())
+				{
+					if (e != nullptr)
+					{
+						destination->copyComponent(e);
+					}
+				}
+			}
+			else
+			{
+				destination->scene->getInstance<IArchetypeManager>()->spawn(destination, archetype->archetypeName);
+			}
+		}
+		return true;
+	}
+
+	bool AScene::internalCopyEntity(const Entity &source, Entity &destination, bool deep /*= true*/, bool outContext /*= false*/)
 	{
 		SCOPE_profile_cpu_function("Scenes");
 		if (!source.isValid())

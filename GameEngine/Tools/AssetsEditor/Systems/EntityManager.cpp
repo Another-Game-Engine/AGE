@@ -304,7 +304,7 @@ namespace AGE
 
 					ImGui::SameLine();
 					static bool duplicateModalIsOpen = false;
-					if (isAnArchetypeChild == false && ImGui::Button("Duplicate"))
+					if (isAnArchetype == false && isAnArchetypeChild == false && ImGui::Button("Duplicate"))
 					{
 						ImGui::OpenPopup("Duplicate entity ?");
 					}
@@ -314,8 +314,17 @@ namespace AGE
 						AGE::WE::EntityRepresentation *copyRepresentationCpt = nullptr;
 						if (duplicateModalIsOpen == false)
 						{
+							auto archetypeCpt = entity->getComponent<ArchetypeComponent>();
 							duplicate = Entity();
-							_scene->copyEntity(entity, duplicate, true, false);
+							if (archetypeCpt == nullptr)
+							{
+								_scene->copyEntity(entity, duplicate, true, false);
+							}
+							else
+							{
+								duplicate = _scene->createEntity();
+								_scene->getInstance<IArchetypeManager>()->spawn(duplicate, archetypeCpt->archetypeName);
+							}
 							duplicateModalIsOpen = true;
 						}
 
@@ -343,7 +352,7 @@ namespace AGE
 					if (isAnArchetypeChild == false)
 					{
 						ImGui::InputText("Archetype name", _archetypeName, MAX_SCENE_NAME_LENGTH);
-						if (ImGui::SmallButton("Convert to Archetype"))
+						if (ImGui::Button("Convert to Archetype"))
 						{
 							//auto parent = _gizmoEntity.getLinkPtr()->getParent();
 							//_gizmoEntity.getLinkPtr()->detachParent();

@@ -6,6 +6,7 @@
 namespace AGE
 {
 	class Entity;
+	struct ArchetypeComponent;
 
 	class IArchetypeManager : public Dependency < IArchetypeManager >
 	{

@@ -35,10 +35,7 @@ namespace AGE
 		void EntityRepresentation::init(const char *_name, const std::string &layerName /*= ""*/)
 		{
 			editorOnly = false;
-			auto len = strlen(_name);
-			if (len >= ENTITY_NAME_LENGTH)
-				len = ENTITY_NAME_LENGTH;
-			memcpy(name, _name, len);
+			setName(_name);
 			auto &link = entity->getLink();
 			position = link.getPosition();
 			rotation = glm::eulerAngles(link.getOrientation());
@@ -63,6 +60,14 @@ namespace AGE
 			{
 				memcpy(name, "NoName", strlen("NoName"));
 			}
+		}
+
+		void EntityRepresentation::setName(const char *_name)
+		{
+			auto len = strlen(_name);
+			if (len >= ENTITY_NAME_LENGTH)
+				len = ENTITY_NAME_LENGTH;
+			memcpy(name, _name, len);
 		}
 	}
 }
