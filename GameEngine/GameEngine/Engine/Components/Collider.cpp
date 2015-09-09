@@ -505,7 +505,7 @@ namespace AGE
 		}
 		Link *link = entity.getLinkPtr();
 		auto p = scaleFromMat4(link->getGlobalTransform());
-		scale(p);
+		//scale(p / getSize());
 #endif
 	}
 }

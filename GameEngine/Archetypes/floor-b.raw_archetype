@@ -66,9 +66,9 @@
                     "value2": 0
                 },
                 "Scale": {
-                    "value0": 10,
+                    "value0": 5,
                     "value1": 0.0099999997764825821,
-                    "value2": 1
+                    "value2": 5
                 },
                 "Orientation": {
                     "value0": 0,
@@ -88,12 +88,12 @@
             "archetypesDependency": [],
             "AGE_CORE_EntityRepresentationComponent": {
                 "cereal_class_version": 0,
-                "name": "floor-a-Copy"
+                "name": "floor-b-Copy"
             },
             "AGE_CORE_MeshRenderer": {
                 "cereal_class_version": 3,
-                "value0": "medievalpack/meshs/floor_a.mage",
-                "value1": "medievalpack/meshs/floor_a.sage",
+                "value0": "medievalpack/meshs/floor_b.mage",
+                "value1": "medievalpack/meshs/floor_b.sage",
                 "value2": "",
                 "value3": {
                     "type": 0,
@@ -133,20 +133,12 @@
             },
             "AGE_CORE_PhysicsCollider": {
                 "cereal_class_version": 1,
-                "ColliderType": 0,
+                "ColliderType": 3,
                 "Material": "DefaultMaterial",
                 "IsATrigger": false,
                 "FilterGroup": 1,
-                "Center": {
-                    "value0": 0,
-                    "value1": 0,
-                    "value2": 0
-                },
-                "Size": {
-                    "value0": 10,
-                    "value1": 0.0099999997764825821,
-                    "value2": 1
-                }
+                "Mesh": "medievalpack/meshs/floor_b",
+                "Convex": true
             }
         }
     }
