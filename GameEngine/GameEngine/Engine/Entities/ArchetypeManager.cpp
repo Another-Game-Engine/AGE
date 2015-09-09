@@ -71,11 +71,11 @@ namespace AGE
 		AGE_ASSERT(it != std::end(_archetypesCollection));
 
 		entity->getScene()->internalCopyEntity(it->second, entity, true, false);
-		if (entity->haveComponent<AGE::ArchetypeComponent>())
-		{
-			entity->removeComponent<AGE::ArchetypeComponent>();
-		}
-		entity->addComponent<AGE::ArchetypeComponent>(name);
+		//if (entity->haveComponent<AGE::ArchetypeComponent>())
+		//{
+		//	entity->removeComponent<AGE::ArchetypeComponent>();
+		//}
+		//entity->addComponent<AGE::ArchetypeComponent>(name);
 	}
 
 

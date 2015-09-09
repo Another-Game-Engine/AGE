@@ -48,6 +48,18 @@ namespace AGE
 		}
 		for (auto &e : entities)
 		{
+			if (e.entity->getLink().hasChildren())
+			{
+				e.entity->getLink().isUserModified();
+				e.entity->getLink().setTransform(e.entity->getLink().getLocalTransform(), true);
+			}
+		}
+		for (auto &e : entities)
+		{
+			if (e.entity->getComponent<ArchetypeComponent>())
+			{
+				continue;
+			}
 			for (auto &c : e.entity->getComponentList())
 			{
 				if (c)

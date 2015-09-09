@@ -30,7 +30,7 @@ namespace AGE
 
 	void Collider::postUnserialization()
 	{
-		scale(entity->getLink().getScale());
+		//scale(entity->getLink().getScale());
 	}
 
 	void Collider::setMaterial(const std::string &material)

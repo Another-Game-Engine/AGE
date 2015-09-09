@@ -4,6 +4,7 @@
 #include <Core/AScene.hh>
 #include <Physics/PhysicsInterface.hpp>
 #include <Physics/WorldInterface.hpp>
+#include <Utils/MatrixConversion.hpp>
 #ifdef EDITOR_ENABLED
 #include <imgui/imgui.h>
 #include <glm/gtc/type_ptr.hpp>
@@ -25,8 +26,12 @@ namespace AGE
 	void RigidBody::postUnserialization()
 	{
 		Link *link = entity.getLinkPtr();
-		setPosition(link->getPosition());
-		setRotation(link->getOrientation());
+		if (isKinematic())
+		{
+			auto p = posFromMat4(link->getGlobalTransform());
+			setPosition(posFromMat4(link->getGlobalTransform()));
+			setRotation(link->getOrientation());
+		}
 	}
 
 	void RigidBody::setAngularDrag(float angularDrag)
@@ -389,6 +394,13 @@ namespace AGE
 		{
 			editorStruct->copyDatas(m);
 			editorStruct->refreshDatas(this);
+			Link *link = entity.getLinkPtr();
+			if (isKinematic())
+			{
+				auto p = posFromMat4(link->getGlobalTransform());
+				setPosition(posFromMat4(link->getGlobalTransform()));
+				// global orientation not supported
+			}
 		}
 #endif
 	}

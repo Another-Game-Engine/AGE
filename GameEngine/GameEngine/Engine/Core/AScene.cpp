@@ -283,32 +283,39 @@ namespace AGE
 		{
 			return false;
 		}
-		if (!destination.isValid())
-		{
-			destination = createEntity(outContext);
-			destination->getLink().setPosition(source->getLink().getPosition());
-			destination->getLink().setOrientation(source->getLink().getOrientation());
-			destination->getLink().setScale(source->getLink().getScale());
-		}
+		assert(destination.isValid());
 
+		auto debug = destination->getLink().getPosition();
 		if (deep)
 		{
 			auto &link = source->getLink();
-			for (auto &e : link.getChildren())
+			auto archetype = source->getComponent<ArchetypeComponent>();
+			if (archetype == nullptr)
 			{
-				Entity tmp;
-				if (!copyEntity(e->getEntity()->getEntity(), tmp, deep, outContext))
+				for (auto e : source->getComponentList())
 				{
-					return false;
+					if (e != nullptr)
+					{
+						destination->copyComponent(e);
+					}
 				}
-				destination->getLink().attachChild(tmp.getLinkPtr());
+				for (auto &e : link.getChildren())
+				{
+					Entity tmp;
+					tmp = createEntity(outContext);
+					tmp->getLink().setPosition(e->getPosition());
+					tmp->getLink().setOrientation(e->getOrientation());
+					tmp->getLink().setScale(e->getScale());
+					destination->getLink().attachChild(tmp.getLinkPtr());
+					if (!internalCopyEntity(e->getEntity()->getEntity(), tmp, deep, outContext))
+					{
+						return false;
+					}
+				}
 			}
-			for (auto e : source->getComponentList())
+			else
 			{
-				if (e != nullptr)
-				{
-					destination->copyComponent(e);
-				}
+				destination->scene->getInstance<IArchetypeManager>()->spawn(destination, archetype->archetypeName);
 			}
 		}
 		return true;

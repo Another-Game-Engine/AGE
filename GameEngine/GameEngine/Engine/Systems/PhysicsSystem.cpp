@@ -10,6 +10,7 @@
 #include <Systems/CollisionSystem.hpp>
 #include <Systems/TriggerSystem.hpp>
 #include <Utils/Profiler.hpp>
+#include <Utils/MatrixConversion.hpp>
 
 namespace AGE
 {
@@ -106,15 +107,21 @@ namespace AGE
 		{
 			link = entity.getLinkPtr();
 			rigidBody = entity->getComponent<RigidBody>();
-			if (rigidBody != nullptr)
+			if (rigidBody != nullptr && rigidBody->isKinematic() == false)
 			{
+				//rigidBody->setPosition(posFromMat4(link->getGlobalTransform()));
+				// physx n'a pas l'air d'aimer ca
+				//rigidBody->setRotation(glm::quat_cast(link->getGlobalTransform()));
 				rigidBody->setPosition(link->getPosition());
 				rigidBody->setRotation(link->getOrientation());
 			}
-			else
+			else if (rigidBody == nullptr)
 			{
 				collider = entity->getComponent<Collider>();
+				//collider->setPosition(posFromMat4(link->getGlobalTransform()));
 				collider->setPosition(link->getPosition());
+				// physx n'a pas l'air d'aimer ca
+				//collider->setRotation(glm::quat_cast(link->getGlobalTransform()));
 				collider->setRotation(link->getOrientation());
 			}
 		}
@@ -140,7 +147,7 @@ namespace AGE
 		{
 			link = entity.getLinkPtr();
 			rigidBody = entity->getComponent<RigidBody>();
-			if (rigidBody != nullptr)
+			if (rigidBody != nullptr && rigidBody->isKinematic() == false)
 			{
 				link->setPosition(rigidBody->getPosition());
 				link->setOrientation(rigidBody->getRotation());

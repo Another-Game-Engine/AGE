@@ -401,9 +401,10 @@ namespace AGE
 
 			// and replace them by fresh copy
 			representation = archetype->getComponent<EntityRepresentation>();
+			auto archeArche = archetype->getComponent<ArchetypeComponent>();
 			for (auto c : componentList)
 			{
-				if (c != nullptr && c != representation && c != archetypeCpt)
+				if (c != nullptr && c != representation && c != archetypeCpt && c != archeArche)
 				{
 					entity->copyComponent(c);
 				}
