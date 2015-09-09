@@ -15,13 +15,12 @@
 #include <cereal/types/map.hpp>
 
 #include <Utils/Containers/Queue.hpp>
-#include <Entities/EntitySerializationInfos.hpp>
 #include <Utils/ObjectPool.hpp>
 #include <unordered_set>
 #include <Components/ComponentManager.hpp>
 #include <Utils/Debug.hpp>
 #include <fstream>
-#include "SceneChunkSerialization.hpp"
+#include "Entities/EntityData.hh"
 
 
 namespace AGE

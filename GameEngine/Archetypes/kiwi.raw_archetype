@@ -61,20 +61,20 @@
             "link": {
                 "cereal_class_version": 0,
                 "Position": {
-                    "value0": 0,
-                    "value1": 0,
-                    "value2": 0
+                    "value0": -0.0060224244371056557,
+                    "value1": 2.6145782470703125,
+                    "value2": 0.0074681397527456284
                 },
                 "Scale": {
-                    "value0": 5,
-                    "value1": 0.0099999997764825821,
-                    "value2": 5
+                    "value0": 0.20000000298023224,
+                    "value1": 0.20000000298023224,
+                    "value2": 0.20000000298023224
                 },
                 "Orientation": {
-                    "value0": 0,
-                    "value1": 0,
-                    "value2": 0,
-                    "value3": 1
+                    "value0": 0.027836937457323074,
+                    "value1": -0.02797868475317955,
+                    "value2": 0.72769606113433838,
+                    "value3": 0.68476331233978271
                 }
             },
             "children": [],
@@ -88,25 +88,25 @@
             "archetypesDependency": [],
             "AGE_CORE_EntityRepresentationComponent": {
                 "cereal_class_version": 0,
-                "name": "floor-a-Copy"
+                "name": "kiwi-Copy"
             },
             "AGE_CORE_MeshRenderer": {
                 "cereal_class_version": 3,
-                "value0": "medievalpack/meshs/floor_a.mage",
-                "value1": "medievalpack/meshs/floor_a.sage",
+                "value0": "medievalpack/meshs/kivi.mage",
+                "value1": "medievalpack/meshs/kivi.sage",
                 "value2": "",
                 "value3": {
                     "type": 0,
-                    "data": 16
+                    "data": 0
                 }
             },
             "AGE_CORE_RigidBody": {
                 "cereal_class_version": 1,
                 "AngularDrag": 0.05000000074505806,
                 "AngularVelocity": {
-                    "value0": 0,
-                    "value1": 0,
-                    "value2": 0
+                    "value0": -1.7071997717721388e-005,
+                    "value1": -1.460924613638781e-005,
+                    "value2": -3.5705023037735373e-005
                 },
                 "CenterOfMass": {
                     "value0": 0,
@@ -115,9 +115,9 @@
                 },
                 "LinearDrag": 0,
                 "LinearVelocity": {
-                    "value0": 0,
-                    "value1": 0,
-                    "value2": 0
+                    "value0": 6.1597693274961784e-006,
+                    "value1": 0.0004444122314453125,
+                    "value2": -0.00018472597002983093
                 },
                 "Mass": 1,
                 "DiagonalInertiaTensor": {
@@ -127,8 +127,8 @@
                 },
                 "MaxAngularVelocity": 1000000,
                 "MaxDepenetrationVelocity": 1000000,
-                "IsAffectedByGravity": false,
-                "IsKinematic": true,
+                "IsAffectedByGravity": true,
+                "IsKinematic": false,
                 "CollisionDetectionMode": 1
             },
             "AGE_CORE_PhysicsCollider": {
@@ -143,9 +143,9 @@
                     "value2": 0
                 },
                 "Size": {
-                    "value0": 5,
-                    "value1": 0.0099999997764825821,
-                    "value2": 5
+                    "value0": 0.20000000298023224,
+                    "value1": 0.20000000298023224,
+                    "value2": 0.20000000298023224
                 }
             }
         }

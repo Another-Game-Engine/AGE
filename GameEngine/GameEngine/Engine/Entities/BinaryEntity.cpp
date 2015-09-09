@@ -10,8 +10,10 @@
 #include <cereal/types/string.hpp>
 
 #include <Components\ComponentRegistrationManager.hpp>
+#include "Components/ArchetypeComponent.hpp"
 
 #include <Utils/Debug.hpp>
+
 
 namespace AGE
 {

@@ -3,6 +3,7 @@
 #include "Entities\IArchetypeManager.hpp"
 #include "Entities\Entity.hh"
 #include "Core/AScene.hh"
+#include "Entities/EntityData.hh"
 
 namespace AGE
 {
@@ -35,6 +36,7 @@ namespace AGE
 		synchronizeScale = true;
 		deletableInEditor = false;
 #endif
+		entity->getScene()->getInstance<AGE::IArchetypeManager>()->updateArchetype(archetypeName);
 	}
 
 	void ArchetypeComponent::postUnserialization()

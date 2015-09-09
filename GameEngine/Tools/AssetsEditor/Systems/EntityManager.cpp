@@ -16,6 +16,7 @@
 #include <Entities/EntityBinaryPacker.hpp>
 #include <Entities/BinaryEntityPack.hpp>
 #include <Core/Inputs/Input.hh>
+#include <Components/ArchetypeComponent.hpp>
 
 namespace AGE
 {
@@ -126,6 +127,7 @@ namespace AGE
 
 				if (_saveScene)
 				{
+					((WE::ArchetypeEditorManager*)(_scene->getInstance<IArchetypeManager>()))->save();
 					WESerialization::SetSerializeForEditor(true);
 
 					//auto parent = _gizmoEntity.getLinkPtr()->getParent();

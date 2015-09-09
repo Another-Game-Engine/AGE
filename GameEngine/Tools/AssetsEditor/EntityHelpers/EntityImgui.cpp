@@ -5,6 +5,8 @@
 #include <Components/ComponentRegistrationManager.hpp>
 #include <Components/MeshRenderer.hh>
 
+#include <Components/ArchetypeComponent.hpp>
+
 #include <imgui/imgui.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>

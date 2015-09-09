@@ -5,6 +5,7 @@
 #include <fstream>
 #include <Utils/Debug.hpp>
 #include <Core/AScene.hh>
+#include "Components/ArchetypeComponent.hpp"
 
 namespace AGE
 {

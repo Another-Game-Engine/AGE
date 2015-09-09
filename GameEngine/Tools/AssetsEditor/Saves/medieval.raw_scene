@@ -1,0 +1,688 @@
+{
+    "value0": {
+        "cereal_class_version": 0,
+        "componentsIdReferenceTable": [
+            {
+                "key": 0,
+                "value": 2633202538906912002
+            },
+            {
+                "key": 1,
+                "value": 4279995424560007376
+            },
+            {
+                "key": 2,
+                "value": 9228130898566333550
+            },
+            {
+                "key": 3,
+                "value": 2719950380395641793
+            },
+            {
+                "key": 4,
+                "value": 12568265209258137674
+            },
+            {
+                "key": 5,
+                "value": 7226899121077071394
+            },
+            {
+                "key": 6,
+                "value": 8685391846632613471
+            },
+            {
+                "key": 7,
+                "value": 11957752261005749183
+            },
+            {
+                "key": 8,
+                "value": 17192082489458106606
+            },
+            {
+                "key": 9,
+                "value": 16239045169874622267
+            },
+            {
+                "key": 10,
+                "value": 6441919271708046876
+            },
+            {
+                "key": 11,
+                "value": 8718854852507163888
+            },
+            {
+                "key": 12,
+                "value": 13917482855567903631
+            }
+        ],
+        "entityNumber": 16,
+        "Entity_0": {
+            "cereal_class_version": 0,
+            "link": {
+                "cereal_class_version": 0,
+                "Position": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9
+            ],
+            "flags": 0,
+            "components_number": [
+                0
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "cereal_class_version": 0,
+                "name": "main-sol"
+            }
+        },
+        "Entity_1": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "vsol-3x3"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "cereal_class_version": 2,
+                "archetypeName": "vsol-3x3",
+                "value0": false,
+                "value1": true,
+                "value2": true,
+                "value3": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "sol-3x3-Copy-Copy"
+            }
+        },
+        "Entity_2": {
+            "link": {
+                "Position": {
+                    "value0": -15,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "vsol-3x3"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "vsol-3x3",
+                "value0": false,
+                "value1": true,
+                "value2": true,
+                "value3": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "sol-3x3-Copy-Copy"
+            }
+        },
+        "Entity_3": {
+            "link": {
+                "Position": {
+                    "value0": 15,
+                    "value1": 0,
+                    "value2": 15
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "vsol-3x3"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "vsol-3x3",
+                "value0": false,
+                "value1": true,
+                "value2": true,
+                "value3": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "sol-3x3-Copy-Copy"
+            }
+        },
+        "Entity_4": {
+            "link": {
+                "Position": {
+                    "value0": -15,
+                    "value1": 0,
+                    "value2": 15
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "vsol-3x3"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "vsol-3x3",
+                "value0": false,
+                "value1": true,
+                "value2": true,
+                "value3": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "sol-3x3-Copy-Copy"
+            }
+        },
+        "Entity_5": {
+            "link": {
+                "Position": {
+                    "value0": 15,
+                    "value1": 0,
+                    "value2": -15
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "vsol-3x3"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "vsol-3x3",
+                "value0": false,
+                "value1": true,
+                "value2": true,
+                "value3": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "sol-3x3-Copy-Copy"
+            }
+        },
+        "Entity_6": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": -15
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "vsol-3x3"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "vsol-3x3",
+                "value0": false,
+                "value1": true,
+                "value2": true,
+                "value3": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "sol-3x3-Copy-Copy"
+            }
+        },
+        "Entity_7": {
+            "link": {
+                "Position": {
+                    "value0": -15,
+                    "value1": 0,
+                    "value2": -15
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "vsol-3x3"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "vsol-3x3",
+                "value0": false,
+                "value1": true,
+                "value2": true,
+                "value3": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "sol-3x3-Copy-Copy"
+            }
+        },
+        "Entity_8": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 15
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "vsol-3x3"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "vsol-3x3",
+                "value0": false,
+                "value1": true,
+                "value2": true,
+                "value3": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "sol-3x3-Copy-Copy"
+            }
+        },
+        "Entity_9": {
+            "link": {
+                "Position": {
+                    "value0": 15,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "vsol-3x3"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "vsol-3x3",
+                "value0": false,
+                "value1": true,
+                "value2": true,
+                "value3": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "sol-3x3-Copy-Copy"
+            }
+        },
+        "Entity_10": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 1,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "tonneau"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "tonneau",
+                "value0": false,
+                "value1": true,
+                "value2": true,
+                "value3": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "tonneau"
+            }
+        },
+        "Entity_11": {
+            "link": {
+                "Position": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "tonneau"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "tonneau",
+                "value0": false,
+                "value1": true,
+                "value2": true,
+                "value3": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "tonneau-Copy-Copy"
+            }
+        },
+        "Entity_12": {
+            "link": {
+                "Position": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "tonneau"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "tonneau",
+                "value0": false,
+                "value1": true,
+                "value2": true,
+                "value3": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "tonneau-Copy-Copy"
+            }
+        },
+        "Entity_13": {
+            "link": {
+                "Position": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": -1
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "tonneau"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "tonneau",
+                "value0": false,
+                "value1": true,
+                "value2": true,
+                "value3": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "tonneau-Copy-Copy"
+            }
+        },
+        "Entity_14": {
+            "link": {
+                "Position": {
+                    "value0": 12,
+                    "value1": 1,
+                    "value2": 12
+                },
+                "Scale": {
+                    "value0": 3,
+                    "value1": 3,
+                    "value2": 3
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "rock-a"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "rock-a",
+                "value0": false,
+                "value1": true,
+                "value2": true,
+                "value3": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "rock"
+            }
+        },
+        "Entity_15": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 1.5,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 0.20000000298023224,
+                    "value1": 0.20000000298023224,
+                    "value2": 0.20000000298023224
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0.70710635185241699,
+                    "value3": 0.70710724592208862
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "kiwi"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "kiwi",
+                "value0": false,
+                "value1": true,
+                "value2": true,
+                "value3": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "kiwi"
+            }
+        }
+    }
+}

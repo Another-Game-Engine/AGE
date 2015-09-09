@@ -14,6 +14,8 @@
 #include <Entities/EntityBinaryPacker.hpp>
 #include <Core/Link.hpp>
 #include <Entities/IArchetypeManager.hpp>
+#include "Entities/EntityData.hh"
+#include "Components/ArchetypeComponent.hpp"
 
 #include <BFC/BFCLinkTracker.hpp>
 #include <BFC/BFCBlockManagerFactory.hpp>

@@ -14,6 +14,8 @@
 
 #include <Entities/BinaryEntity.hpp>
 
+#include <Components/ArchetypeComponent.hpp>
+
 namespace AGE
 {
 	ReadableEntity::ReadableEntity()

@@ -62,13 +62,13 @@
                 "cereal_class_version": 0,
                 "Position": {
                     "value0": 0,
-                    "value1": 0,
+                    "value1": 1,
                     "value2": 0
                 },
                 "Scale": {
-                    "value0": 5,
-                    "value1": 0.0099999997764825821,
-                    "value2": 5
+                    "value0": 3,
+                    "value1": 3,
+                    "value2": 3
                 },
                 "Orientation": {
                     "value0": 0,
@@ -88,16 +88,16 @@
             "archetypesDependency": [],
             "AGE_CORE_EntityRepresentationComponent": {
                 "cereal_class_version": 0,
-                "name": "floor-a-Copy"
+                "name": "rock-Copy"
             },
             "AGE_CORE_MeshRenderer": {
                 "cereal_class_version": 3,
-                "value0": "medievalpack/meshs/floor_a.mage",
-                "value1": "medievalpack/meshs/floor_a.sage",
+                "value0": "medievalpack/meshs/rock_a.mage",
+                "value1": "medievalpack/meshs/rock_a.sage",
                 "value2": "",
                 "value3": {
                     "type": 0,
-                    "data": 16
+                    "data": 0
                 }
             },
             "AGE_CORE_RigidBody": {
@@ -143,9 +143,9 @@
                     "value2": 0
                 },
                 "Size": {
-                    "value0": 5,
-                    "value1": 0.0099999997764825821,
-                    "value2": 5
+                    "value0": 3,
+                    "value1": 3,
+                    "value2": 3
                 }
             }
         }

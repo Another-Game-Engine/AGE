@@ -1,7 +1,6 @@
 #include "ArchetypesEditorManager.hpp"
 #include <Threads/MainThread.hpp>
 #include <Threads/ThreadManager.hpp>
-#include <Entities/EntitySerializationInfos.hpp>
 #include <Components/EntityRepresentation.hpp>
 #include <EntityHelpers/EntityImgui.hpp>
 #include <Utils/Age_Imgui.hpp>
@@ -13,6 +12,7 @@
 #include <Systems\AssetsAndComponentRelationsSystem.hpp>
 #include <Entities\BinaryEntityPack.hpp>
 #include <Components/ComponentRegistrationManager.hpp>
+#include <Components/ArchetypeComponent.hpp>
 
 namespace AGE
 {
@@ -185,6 +185,8 @@ namespace AGE
 			std::vector<const char*> tmpEntitiesNameList;
 			listEntityTree(entity, tmpEntitiesNameList, tmpEntitiesList);
 
+			it->second->entities.insert(entity);
+
 			for (auto &en: tmpEntitiesList)
 			{
 				auto &e = *en;
@@ -199,7 +201,6 @@ namespace AGE
 				}
 			}
 
-			it->second->entities.insert(entity);
 		}
 
 		void ArchetypeEditorManager::updateArchetype(const std::string &name)
