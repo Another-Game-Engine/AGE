@@ -69,7 +69,6 @@ namespace AGE
 
 		cpt->_typeId = id;
 		cpt->entity = e;
-		cpt->postUnserialization();
 
 		e->addComponentPtr(cpt);
 		return cpt;

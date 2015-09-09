@@ -48,7 +48,7 @@ namespace AGE
 
 		// Methods
 		void init(Physics::ColliderType colliderType = Physics::ColliderType::Box, const std::string &mesh = "");
-
+		virtual void postUnserialization();
 		Physics::ColliderType getColliderType(void) const;
 
 		void setMaterial(const std::string &material);

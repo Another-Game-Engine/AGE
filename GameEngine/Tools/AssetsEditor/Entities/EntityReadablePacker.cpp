@@ -79,18 +79,18 @@ namespace AGE
 				}
 			}
 
-			if (saveArchetypes)
-			{
-				auto archetypeManager = entity->getScene()->getInstance<AGE::WE::ArchetypeEditorManager>();
-				archetypeManager->save();
-			}
+			//if (saveArchetypes)
+			//{
+			//	auto archetypeManager = entity->getScene()->getInstance<AGE::WE::ArchetypeEditorManager>();
+			//	archetypeManager->save();
+			//}
 		}
 	}
 
 	void EntityToFlatReadableVector(std::vector<ReadableEntity> &vector, const Entity &e)
 	{
 		SCOPE_profile_cpu_function("Entity packer");
-
+		
 		vector.push_back(ReadableEntity());
 		vector.back().entity = e;
 		auto &children = e->getLink().getChildren();

@@ -55,7 +55,7 @@
                 "value": 13917482855567903631
             }
         ],
-        "entityNumber": 13,
+        "entityNumber": 11,
         "Entity_0": {
             "cereal_class_version": 0,
             "link": {
@@ -565,18 +565,23 @@
                     "value3": 1
                 }
             },
-            "children": [
-                8,
-                9,
-                10,
-                11,
-                12
-            ],
+            "children": [],
             "flags": 0,
             "components_number": [
+                8,
                 0
             ],
-            "archetypesDependency": [],
+            "archetypesDependency": [
+                "a"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "cereal_class_version": 2,
+                "archetypeName": "a",
+                "value0": false,
+                "value1": false,
+                "value2": false,
+                "value3": false
+            },
             "AGE_CORE_EntityRepresentationComponent": {
                 "name": "sol-tranche"
             }
@@ -584,14 +589,14 @@
         "Entity_8": {
             "link": {
                 "Position": {
-                    "value0": 20,
-                    "value1": -1,
-                    "value2": 0
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 5
                 },
                 "Scale": {
-                    "value0": 5,
+                    "value0": 1,
                     "value1": 1,
-                    "value2": 5
+                    "value2": 1
                 },
                 "Orientation": {
                     "value0": 0,
@@ -607,31 +612,30 @@
                 0
             ],
             "archetypesDependency": [
-                "sol1"
+                "a"
             ],
             "AGE_CORE_ArchetypeComponent": {
-                "cereal_class_version": 2,
-                "archetypeName": "sol1",
+                "archetypeName": "a",
                 "value0": false,
                 "value1": false,
                 "value2": false,
                 "value3": false
             },
             "AGE_CORE_EntityRepresentationComponent": {
-                "name": "sol-Copy-Copy"
+                "name": "sol-tranche-Copy-Copy"
             }
         },
         "Entity_9": {
             "link": {
                 "Position": {
-                    "value0": 15,
-                    "value1": -1,
-                    "value2": 0
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 3
                 },
                 "Scale": {
-                    "value0": 5,
+                    "value0": 1,
                     "value1": 1,
-                    "value2": 5
+                    "value2": 1
                 },
                 "Orientation": {
                     "value0": 0,
@@ -640,37 +644,29 @@
                     "value3": 1
                 }
             },
-            "children": [],
+            "children": [
+                10
+            ],
             "flags": 0,
             "components_number": [
-                8,
                 0
             ],
-            "archetypesDependency": [
-                "sol1"
-            ],
-            "AGE_CORE_ArchetypeComponent": {
-                "archetypeName": "sol1",
-                "value0": false,
-                "value1": false,
-                "value2": false,
-                "value3": false
-            },
+            "archetypesDependency": [],
             "AGE_CORE_EntityRepresentationComponent": {
-                "name": "sol-Copy-Copy"
+                "name": "Entity 21"
             }
         },
         "Entity_10": {
             "link": {
                 "Position": {
-                    "value0": 10,
-                    "value1": -1,
+                    "value0": 0,
+                    "value1": 4,
                     "value2": 0
                 },
                 "Scale": {
-                    "value0": 5,
-                    "value1": 1,
-                    "value2": 5
+                    "value0": 4,
+                    "value1": 4,
+                    "value2": 4
                 },
                 "Orientation": {
                     "value0": 0,
@@ -682,99 +678,61 @@
             "children": [],
             "flags": 0,
             "components_number": [
-                8,
-                0
+                0,
+                1,
+                2,
+                9
             ],
-            "archetypesDependency": [
-                "sol1"
-            ],
-            "AGE_CORE_ArchetypeComponent": {
-                "archetypeName": "sol1",
-                "value0": false,
-                "value1": false,
-                "value2": false,
-                "value3": false
-            },
+            "archetypesDependency": [],
             "AGE_CORE_EntityRepresentationComponent": {
-                "name": "sol-Copy-Copy"
-            }
-        },
-        "Entity_11": {
-            "link": {
-                "Position": {
-                    "value0": 0,
-                    "value1": -1,
-                    "value2": 0
-                },
-                "Scale": {
-                    "value0": 5,
-                    "value1": 1,
-                    "value2": 5
-                },
-                "Orientation": {
-                    "value0": 0,
-                    "value1": 0,
-                    "value2": 0,
-                    "value3": 1
+                "name": "EntityToFlatReadableVector"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "medievalpack/meshs/grid_a.mage",
+                "value1": "medievalpack/meshs/grid_a.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
                 }
             },
-            "children": [],
-            "flags": 0,
-            "components_number": [
-                8,
-                0
-            ],
-            "archetypesDependency": [
-                "sol1"
-            ],
-            "AGE_CORE_ArchetypeComponent": {
-                "archetypeName": "sol1",
-                "value0": false,
-                "value1": false,
-                "value2": false,
-                "value3": false
-            },
-            "AGE_CORE_EntityRepresentationComponent": {
-                "name": "sol-Copy-Copy"
-            }
-        },
-        "Entity_12": {
-            "link": {
-                "Position": {
-                    "value0": 5,
-                    "value1": -1,
-                    "value2": 0
-                },
-                "Scale": {
-                    "value0": 5,
-                    "value1": 1,
-                    "value2": 5
-                },
-                "Orientation": {
+            "AGE_CORE_RigidBody": {
+                "AngularDrag": 0.05000000074505806,
+                "AngularVelocity": {
                     "value0": 0,
                     "value1": 0,
-                    "value2": 0,
-                    "value3": 1
-                }
+                    "value2": 0
+                },
+                "CenterOfMass": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "LinearDrag": 0,
+                "LinearVelocity": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Mass": 1,
+                "DiagonalInertiaTensor": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "MaxAngularVelocity": 1000000,
+                "MaxDepenetrationVelocity": 1000000,
+                "IsAffectedByGravity": false,
+                "IsKinematic": true,
+                "CollisionDetectionMode": 1
             },
-            "children": [],
-            "flags": 0,
-            "components_number": [
-                8,
-                0
-            ],
-            "archetypesDependency": [
-                "sol1"
-            ],
-            "AGE_CORE_ArchetypeComponent": {
-                "archetypeName": "sol1",
-                "value0": false,
-                "value1": false,
-                "value2": false,
-                "value3": false
-            },
-            "AGE_CORE_EntityRepresentationComponent": {
-                "name": "sol-Copy-Copy"
+            "AGE_CORE_PhysicsCollider": {
+                "ColliderType": 3,
+                "Material": "DefaultMaterial",
+                "IsATrigger": false,
+                "FilterGroup": 1,
+                "Mesh": "medievalpack/meshs/grid_a",
+                "Convex": true
             }
         }
     }

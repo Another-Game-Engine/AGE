@@ -31,6 +31,8 @@ namespace AGE
 		// Methods
 		void init(void);
 
+		virtual void postUnserialization();
+
 		void setAngularDrag(float angularDrag);
 
 		float getAngularDrag(void) const;

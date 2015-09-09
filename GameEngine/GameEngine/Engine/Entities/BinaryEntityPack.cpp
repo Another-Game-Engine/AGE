@@ -46,6 +46,16 @@ namespace AGE
 				e.entity->getLink().attachChild(entities[c].entity.getLinkPtr());
 			}
 		}
+		for (auto &e : entities)
+		{
+			for (auto &c : e.entity->getComponentList())
+			{
+				if (c)
+				{
+					c->postUnserialization();
+				}
+			}
+		}
 	}
 
 	void BinaryEntityPack::loadFromFile(const std::string &filePath)

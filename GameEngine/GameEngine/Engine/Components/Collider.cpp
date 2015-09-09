@@ -28,6 +28,11 @@ namespace AGE
 		scale(entity->getLink().getScale());
 	}
 
+	void Collider::postUnserialization()
+	{
+		scale(entity->getLink().getScale());
+	}
+
 	void Collider::setMaterial(const std::string &material)
 	{
 		SCOPE_profile_cpu_function("Physic");

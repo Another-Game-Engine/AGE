@@ -22,6 +22,13 @@ namespace AGE
 		setRotation(link->getOrientation());
 	}
 
+	void RigidBody::postUnserialization()
+	{
+		Link *link = entity.getLinkPtr();
+		setPosition(link->getPosition());
+		setRotation(link->getOrientation());
+	}
+
 	void RigidBody::setAngularDrag(float angularDrag)
 	{
 		assert(rigidBody != nullptr && "Invalid RigidBody");
