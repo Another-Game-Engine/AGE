@@ -26,7 +26,7 @@ namespace AGE
 		BufferPrograms &unbind();
 		BufferPrograms &update();
 		std::vector<std::pair<GLenum, std::string>> const &get_types() const;
-		std::vector<std::shared_ptr<Buffer>> const &get_buffers() const { return _buffers; }
+		std::vector<std::shared_ptr<Buffer>> const &get_buffers() const;
 
 	private:
 		std::vector<std::pair<GLenum, std::string>> _types;

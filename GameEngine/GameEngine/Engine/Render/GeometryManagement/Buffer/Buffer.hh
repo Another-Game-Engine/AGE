@@ -25,7 +25,7 @@ namespace AGE
 		Buffer &require_resize();
 		Buffer &require_transfer();
 		std::shared_ptr<BlockMemory> const &operator[](size_t index);
-		std::string const &name() const { return _name; }
+		std::string const &name() const;
 
 	private:
 		bool _request_resize;

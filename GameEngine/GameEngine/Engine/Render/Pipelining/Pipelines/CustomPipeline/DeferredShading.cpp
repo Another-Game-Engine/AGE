@@ -94,4 +94,14 @@ namespace AGE
 	{
 		_deferredSkybox->setSkyboxLighting(lighting);
 	}
+	
+	DeferredShading::~DeferredShading()
+	{
+	}
+
+	bool DeferredShading::isDebug() const
+	{
+		return false;
+	}
+
 }

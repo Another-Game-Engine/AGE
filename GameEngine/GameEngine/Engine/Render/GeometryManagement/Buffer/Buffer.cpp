@@ -115,4 +115,10 @@ namespace AGE
 		}
 		return (*this);
 	}
+
+	std::string const &Buffer::name() const
+	{
+		return _name;
+	}
+
 }

@@ -19,14 +19,14 @@ namespace AGE
 	public:
 		DeferredShading(glm::uvec2 const &screen_size, std::shared_ptr<PaintingManager> const &painter_manager);
 		DeferredShading(DeferredShading &&move);
-		virtual ~DeferredShading() {};
+		virtual ~DeferredShading();
 		DeferredShading(DeferredShading const &) = delete;
 		DeferredShading &operator=(DeferredShading const &) = delete;
 
 	public:
 		void setAmbient(glm::vec3 const &ambient);
 		void setSkyboxLighting(glm::vec3 const &lighting);
-		virtual bool isDebug() const { return false; }
+		virtual bool isDebug() const;
 
 	private:
 		std::shared_ptr<Texture2D> _depthStencil;

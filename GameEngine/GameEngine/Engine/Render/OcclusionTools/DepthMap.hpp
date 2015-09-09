@@ -14,8 +14,8 @@ namespace AGE
 		bool testPixel(uint32_t pixelDepth, std::size_t x, std::size_t y) const;
 		bool testBox(uint32_t pixelDepth, glm::uvec2 min, glm::uvec2 max) const;
 		glm::mat4 getMV() const;
-		std::size_t getMipmapWidth() const { return _mipmapWidth; }
-		std::size_t getMipmapHeight() const { return _mipmapHeight; }
+		std::size_t getMipmapWidth() const;
+		std::size_t getMipmapHeight() const;
 	private:
 		std::vector<uint32_t> _buffer;
 		std::size_t _width;

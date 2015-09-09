@@ -95,4 +95,10 @@ namespace AGE
 	{
 		return (_types);
 	}
+
+	std::vector<std::shared_ptr<Buffer>> const &BufferPrograms::get_buffers() const
+	{
+		return _buffers;
+	}
+
 }

@@ -67,4 +67,6 @@ namespace AGE
 	}
 
 	glm::mat4 DepthMap::getMV() const { return _mv; }
+	std::size_t DepthMap::getMipmapWidth() const { return _mipmapWidth; }
+	std::size_t DepthMap::getMipmapHeight() const { return _mipmapHeight; }
 }
