@@ -121,6 +121,10 @@ static std::pair<std::pair<GLenum, std::string>, std::function<void(Vertices &ve
 		};
 
 	public:
+		~AssetsManager()
+		{
+
+		}
 		void loadPackage(const OldFile &packagePath, const std::string &loadingChannel = "");
 		void loadPackage(const AssetsPackage &package, const std::string &loadingChannel = "");
 		void savePackage(const AssetsPackage &package, const std::string filePath);
