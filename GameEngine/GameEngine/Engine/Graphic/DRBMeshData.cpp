@@ -5,6 +5,16 @@
 
 namespace AGE
 {
+
+	DRBMeshData::DRBMeshData()
+		: DRBData()
+	{
+	}
+
+	DRBMeshData::~DRBMeshData()
+	{
+	}
+
 	void DRBMeshData::setPainterKey(const Key<Painter> &key)
 	{
 		RWLockGuard(_lock, true);

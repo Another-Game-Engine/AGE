@@ -16,6 +16,10 @@ namespace AGE
 		globalProperties.add_property(_positionLightProperty);
 	}
 
+	DRBPointLightData::~DRBPointLightData()
+	{
+	}
+
 	void DRBPointLightData::setRange(const glm::vec4 &range)
 	{
 		RWLockGuard(_lock, true);

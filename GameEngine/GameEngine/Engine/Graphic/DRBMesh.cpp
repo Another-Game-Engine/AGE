@@ -21,4 +21,9 @@ namespace AGE
 	{
 		return std::static_pointer_cast<DRBData>(datas);
 	}
+
+	CullableTypeID DRBMesh::getBFCType() const
+	{
+		return BFCCullableType::CullableMesh;
+	}
 }

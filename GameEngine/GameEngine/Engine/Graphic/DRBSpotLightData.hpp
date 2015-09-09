@@ -14,14 +14,8 @@ namespace AGE
 
 	struct DRBSpotLightData : public DRBData
 	{
-		DRBSpotLightData()
-			: DRBData()
-		{
-		}
-
-		virtual ~DRBSpotLightData()
-		{
-		}
+		DRBSpotLightData();
+		virtual ~DRBSpotLightData();
 
 		// Call that at init, it will add the property in Properties list
 		// and keep a pointer on it to update it when spotlight transformation is modified

@@ -16,9 +16,7 @@ namespace AGE
 	struct DRBPointLightData : public DRBData
 	{
 		DRBPointLightData();
-		virtual ~DRBPointLightData()
-		{
-		}
+		virtual ~DRBPointLightData();
 		void setRange(const glm::vec4 &range);
 		void updateRange(const glm::mat4 &transformation);
 	private:

@@ -11,14 +11,8 @@ namespace AGE
 
 	struct DRBMeshData : public DRBData
 	{
-		DRBMeshData()
-			: DRBData()
-		{
-		}
-
-		virtual ~DRBMeshData()
-		{
-		}
+		DRBMeshData();
+		virtual ~DRBMeshData();
 
 		void setPainterKey(const Key<Painter> &key);
 		void setVerticesKey(const Key<Vertices> &key);

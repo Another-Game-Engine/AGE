@@ -21,4 +21,9 @@ namespace AGE
 		_datas->updateRange(glm::translate(glm::mat4(1), glm::vec3(res)));
 		return res;
 	}
+
+	CullableTypeID DRBPointLight::getBFCType() const
+	{
+		return BFCCullableType::CullablePointLight;
+	}
 }

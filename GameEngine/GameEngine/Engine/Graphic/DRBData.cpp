@@ -11,6 +11,8 @@ namespace AGE
 		_transformationPropertyKey = globalProperties.add_property(transformationProperty);
 	}
 
+	DRBData::~DRBData(){}
+
 	void DRBData::setTransformation(const glm::mat4 &transformation)
 	{
 		globalProperties.get_property<Transformation>(_transformationPropertyKey)->set(transformation);

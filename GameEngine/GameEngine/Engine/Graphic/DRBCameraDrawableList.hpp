@@ -43,13 +43,8 @@ namespace AGE
 
 	struct DRBCameraDrawableListCommand
 	{
-		DRBCameraDrawableListCommand(std::shared_ptr<DRBCameraDrawableList> _list)
-			: list(_list)
-		{}
-		DRBCameraDrawableListCommand(DRBCameraDrawableListCommand &&o)
-		{
-			list = std::move(o.list);
-		}
+		DRBCameraDrawableListCommand(std::shared_ptr<DRBCameraDrawableList> _list);
+		DRBCameraDrawableListCommand(DRBCameraDrawableListCommand &&o);
 		std::shared_ptr<DRBCameraDrawableList> list;
 	};
 }

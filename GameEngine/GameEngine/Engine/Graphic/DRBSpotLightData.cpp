@@ -6,6 +6,16 @@
 
 namespace AGE
 {
+
+	DRBSpotLightData::DRBSpotLightData()
+		: DRBData()
+	{
+	}
+
+	DRBSpotLightData::~DRBSpotLightData()
+	{
+	}
+
 	// Call that at init, it will add the property in Properties list
 	// and keep a pointer on it to update it when spotlight transformation is modified
 	void DRBSpotLightData::registerDirectionProperty(std::shared_ptr<AutoProperty<glm::vec3, Vec3>> directionProperty)

@@ -1,8 +1,10 @@
 #include "DRBSpotLight.hpp"
 #include "DRBSpotLightData.hpp"
 
+
 namespace AGE
 {
+
 	DRBSpotLight::DRBSpotLight()
 	{
 		_datas = std::make_shared<DRBSpotLightData>();

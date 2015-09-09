@@ -26,4 +26,14 @@ namespace AGE
 		pipeline = (cam.pipeline);
 		return *this;
 	}
+
+	DRBCameraDrawableListCommand::DRBCameraDrawableListCommand(std::shared_ptr<DRBCameraDrawableList> _list)
+		: list(_list)
+	{}
+
+
+	DRBCameraDrawableListCommand::DRBCameraDrawableListCommand(DRBCameraDrawableListCommand &&o)
+	{
+		list = std::move(o.list);
+	}
 }

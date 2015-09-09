@@ -11,7 +11,7 @@ namespace AGE
 		Properties globalProperties;
 
 		DRBData();
-		virtual ~DRBData(){}
+		virtual ~DRBData();
 		void setTransformation(const glm::mat4 &transformation);
 		glm::mat4 getTransformation() const;
 	protected:
