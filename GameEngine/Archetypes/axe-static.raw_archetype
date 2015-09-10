@@ -66,9 +66,9 @@
                     "value2": 0
                 },
                 "Scale": {
-                    "value0": 5,
-                    "value1": 5,
-                    "value2": 5
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
                 },
                 "Orientation": {
                     "value0": 0,
@@ -88,16 +88,16 @@
             "archetypesDependency": [],
             "AGE_CORE_EntityRepresentationComponent": {
                 "cereal_class_version": 0,
-                "name": "block-window-a-Copy"
+                "name": "axe-static-Copy"
             },
             "AGE_CORE_MeshRenderer": {
                 "cereal_class_version": 3,
-                "value0": "medievalpack/meshs/wall_d_door.mage",
-                "value1": "medievalpack/meshs/block_window_a.sage",
+                "value0": "medievalpack/meshs/axe.mage",
+                "value1": "medievalpack/meshs/axe.sage",
                 "value2": "",
                 "value3": {
                     "type": 0,
-                    "data": 16
+                    "data": 0
                 }
             },
             "AGE_CORE_RigidBody": {
@@ -127,8 +127,8 @@
                 },
                 "MaxAngularVelocity": 1000000,
                 "MaxDepenetrationVelocity": 1000000,
-                "IsAffectedByGravity": false,
-                "IsKinematic": true,
+                "IsAffectedByGravity": true,
+                "IsKinematic": false,
                 "CollisionDetectionMode": 1
             },
             "AGE_CORE_PhysicsCollider": {
@@ -137,7 +137,7 @@
                 "Material": "DefaultMaterial",
                 "IsATrigger": false,
                 "FilterGroup": 1,
-                "Mesh": "medievalpack/meshs/block_window_a",
+                "Mesh": "medievalpack/meshs/axe",
                 "Convex": true
             }
         }
