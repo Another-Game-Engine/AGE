@@ -29,9 +29,9 @@ namespace AGE
 			void init();
 			void init(Entity entity);
 
-			Physics::Private::GenericData *getData(void);
+			inline Physics::Private::GenericData *getData(void) { return &data; }
 
-			const Physics::Private::GenericData *getData(void) const;
+			inline const Physics::Private::GenericData *getData(void) const { return &data; }
 
 			virtual bool doSerialize();
 

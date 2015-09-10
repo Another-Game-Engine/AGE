@@ -14,7 +14,7 @@ namespace AGE
 		std::size_t addLink(BFCLink *link);
 		void removeLink(std::size_t link);
 		void reset();
-		std::size_t getLinkCount() const;
+		inline std::size_t getLinkCount() const { return _links.size(); }
 	private:
 		std::vector<BFCLink*> _links;
 		std::queue<std::size_t> _free;

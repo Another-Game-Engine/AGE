@@ -15,7 +15,7 @@ namespace AGE
 		virtual ~IRenderContext();
 
 		bool init(unsigned int swidth, unsigned int sheight, std::string && name);
-		glm::uvec2 getScreenSize() const;
+		inline glm::uvec2 getScreenSize() const { return _screenSize; }
 
 		virtual void swapContext() = 0;
 		virtual void refreshInputs() = 0;

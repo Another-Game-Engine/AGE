@@ -26,10 +26,10 @@ namespace AGE
 		virtual void reset();
 
 		void setProjection(const glm::mat4 &);
-		const glm::mat4 &getProjection() const;
+		inline const glm::mat4 &getProjection() const { return _data.projection; }
 		void setPipeline(RenderType pipeline);
 		RenderType getPipeline() const;
-		const CameraData &getData() const;
+		inline const CameraData &getData() const { return _data; }
 		void setTexture(std::shared_ptr<TextureCubeMap> const &texture);
 
 		template <typename Archive> void save(Archive &ar, const std::uint32_t version) const;

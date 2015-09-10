@@ -15,9 +15,10 @@ namespace AGE
 	public:
 		bool invalid() const;
 		bool operator==(const BFCCullableHandle &o) const;
-		const BFCCullableObject *getPtr() const;
-		BFCCullableObject *getPtr();
-		const BFCItemID getItemId() const;
+		inline const BFCCullableObject *getPtr() const { return _elementPtr; }
+		inline BFCCullableObject *getPtr() { return _elementPtr; }
+		inline const BFCItemID getItemId() const { return _itemID; }
+
 	private:
 		BFCItemID              _itemID;
 		BFCCullableObject*     _elementPtr = nullptr;

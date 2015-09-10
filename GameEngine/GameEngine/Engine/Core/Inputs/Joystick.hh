@@ -17,14 +17,14 @@ namespace AGE
 		~Joystick() = default;
 
 	public:
-		bool isConnected() const;
-		std::string getName() const;
-		glm::ivec2 getTrackBall(uint32_t trackBallIdx) const;
-		AgeJoystickHatDirections getHat(uint32_t hatIdx) const;
-		float getAxis(AgeJoystickAxis axis) const;
-		bool getButtonPressed(AgeJoystickButtons button) const;
-		bool getButtonJustPressed(AgeJoystickButtons button) const;
-		bool getButtonJustReleased(AgeJoystickButtons button) const;
+		inline bool isConnected() const { return (_connected); }
+		inline std::string getName() const { return (_name); }
+		inline glm::ivec2 getTrackBall(uint32_t trackBallIdx) const { return (_trackBalls[trackBallIdx]); }
+		inline AgeJoystickHatDirections getHat(uint32_t hatIdx) const { return (_hats[hatIdx]); }
+		inline float getAxis(AgeJoystickAxis axis) const { return (_axis[axis]); }
+		inline bool getButtonPressed(AgeJoystickButtons button) const { return (AGE_KEY_PRESSED(_buttons[button])); }
+		inline bool getButtonJustPressed(AgeJoystickButtons button) const { return (AGE_KEY_JUST_PRESSED(_buttons[button])); }
+		inline bool getButtonJustReleased(AgeJoystickButtons button) const { return (AGE_KEY_JUST_RELEASED(_buttons[button])); }
 
 	private:
 		void _frameUpdate();

@@ -12,19 +12,4 @@ namespace AGE
 		return o._itemID == _itemID && o._elementPtr == _elementPtr;
 	}
 
-	const BFCCullableObject *BFCCullableHandle::getPtr() const
-	{
-		return _elementPtr;
-	}
-
-	BFCCullableObject *BFCCullableHandle::getPtr()
-	{
-		return _elementPtr;
-	}
-
-	const BFCItemID BFCCullableHandle::getItemId() const
-	{
-		return _itemID;
-	}
-
 }

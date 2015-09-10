@@ -71,8 +71,4 @@ namespace AGE
 		}
 	}
 
-	std::size_t BFCLinkTracker::getLinkCount() const
-	{
-		return _links.size();
-	}
 }

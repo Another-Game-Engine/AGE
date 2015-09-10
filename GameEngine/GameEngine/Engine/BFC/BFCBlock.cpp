@@ -11,11 +11,6 @@ namespace AGE
 		}
 	}
 
-	bool BFCBlock::isFull() const
-	{
-		return _free.empty();
-	}
-
 	ItemID BFCBlock::createItem(BFCCullableObject *object)
 	{
 		ItemID index;

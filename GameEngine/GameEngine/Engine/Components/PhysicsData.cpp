@@ -19,20 +19,9 @@ namespace AGE
 			data.entity = entity;
 		}
 
-		Physics::Private::GenericData *PhysicsData::getData(void)
-		{
-			return &data;
-		}
-
-
 		void PhysicsData::_copyFrom(const ComponentBase *model)
 		{
 			assert(false); // not copyable
-		}
-
-		const Physics::Private::GenericData *PhysicsData::getData(void) const
-		{
-			return &data;
 		}
 
 		bool PhysicsData::doSerialize()

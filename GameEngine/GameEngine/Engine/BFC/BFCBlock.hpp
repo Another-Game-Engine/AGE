@@ -14,9 +14,10 @@ namespace AGE
 	{
 	public:
 		BFCBlock();
-		bool isFull() const;
 		ItemID createItem(BFCCullableObject *object);
 		void deleteItem(ItemID itemId);
+
+		inline bool isFull() const { return _free.empty(); }
 	private:
 		BFCItem _items[MaxItemID];
 		std::queue<ItemID> _free;

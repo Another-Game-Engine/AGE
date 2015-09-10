@@ -25,11 +25,6 @@ namespace AGE
 		return _init();
 	}
 
-	glm::uvec2 IRenderContext::getScreenSize() const
-	{
-		return _screenSize;
-	}
-
 	AgeKeys IRenderContext::findAgeMappedKey(int contextKey) const
 	{
 		auto it = _toAgeMappedKey.find(contextKey);

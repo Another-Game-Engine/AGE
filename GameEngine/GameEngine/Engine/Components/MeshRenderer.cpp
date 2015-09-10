@@ -106,16 +106,6 @@ namespace AGE
 		postUnserialization();
 	}
 
-	std::shared_ptr<AGE::MeshInstance> MeshRenderer::getMesh()
-	{
-		return _mesh;
-	}
-
-	std::shared_ptr<AGE::MaterialSetInstance> MeshRenderer::getMaterial()
-	{
-		return _material;
-	}
-
 	void MeshRenderer::_updateGeometry()
 	{
 		if (_mesh == nullptr
