@@ -12,6 +12,7 @@
 namespace AGE
 {
 	ArchetypeManager::ArchetypeManager()
+		: _archetypesScene(nullptr)
 	{
 	}
 
@@ -52,7 +53,7 @@ namespace AGE
 
 		auto path = _libraryFolder + "/" + name + ".archetype";
 		BinaryEntityPack pack;
-		pack.scene = getScene().get();
+		pack.scene = getScene();
 
 		pack.loadFromFile(path);
 
@@ -79,12 +80,13 @@ namespace AGE
 	}
 
 
-	std::shared_ptr<AScene> ArchetypeManager::getScene()
+	AScene *ArchetypeManager::getScene()
 	{
 		if (_archetypesScene == nullptr)
 		{
-			_archetypesScene = std::make_shared<ArchetypeScene>(GetEngine());
-			GetEngine()->addScene(_archetypesScene, "ARCHETYPES_SCENE");
+			auto scene = std::make_shared<ArchetypeScene>(GetEngine());
+			_archetypesScene = scene.get();
+			GetEngine()->addScene(scene, "ARCHETYPES_SCENE");
 			GetEngine()->initScene("ARCHETYPES_SCENE");
 			GetEngine()->enableScene("ARCHETYPES_SCENE", 0);
 		}

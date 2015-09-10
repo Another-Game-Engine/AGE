@@ -17,11 +17,11 @@ namespace AGE
 		virtual void loadOne(const std::string &name);
 		virtual void spawn(Entity &entity, const std::string &name);
 
-		std::shared_ptr<AScene> getScene();
+		AScene *getScene();
 		void enableScene();
 		void disableScene();
 	private:
 		std::map<std::string, Entity> _archetypesCollection;
-		std::shared_ptr<AScene> _archetypesScene;
+		AScene *_archetypesScene;
 	};
 }

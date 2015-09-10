@@ -19,6 +19,7 @@ namespace AGE
 	namespace WE
 	{
 		ArchetypeEditorManager::ArchetypeEditorManager()
+			: _archetypesScene(nullptr)
 		{
 		}
 
@@ -160,7 +161,7 @@ namespace AGE
 			{
 				auto path = _libraryFolder + "/" + ptr->name + ".raw_archetype";
 				ReadableEntityPack pack;
-				pack.scene = getScene().get();
+				pack.scene = getScene();
 				pack.loadFromFile(path);
 
 				ptr->root = pack.entities.front().entity;
@@ -433,12 +434,13 @@ namespace AGE
 			}
 		}
 
-		std::shared_ptr<AScene> ArchetypeEditorManager::getScene()
+		AScene *ArchetypeEditorManager::getScene()
 		{
 			if (_archetypesScene == nullptr)
 			{
-				_archetypesScene = std::make_shared<ArchetypeScene>(GetEngine());
-				GetEngine()->addScene(_archetypesScene, "EDITOR_ARCHETYPES_SCENE");
+				auto scene = std::make_shared<ArchetypeScene>(GetEngine());
+				_archetypesScene = scene.get();
+				GetEngine()->addScene(scene, "EDITOR_ARCHETYPES_SCENE");
 				_archetypesScene->addSystem<WE::AssetsAndComponentRelationsSystem>(0);
 				GetEngine()->initScene("EDITOR_ARCHETYPES_SCENE");
 				GetEngine()->enableScene("EDITOR_ARCHETYPES_SCENE", 0);

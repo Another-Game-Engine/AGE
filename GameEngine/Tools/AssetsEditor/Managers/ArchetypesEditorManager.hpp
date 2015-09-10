@@ -33,7 +33,7 @@ namespace AGE
 			virtual void updateArchetype(const std::string &name);
 			void loadFromFile(std::shared_ptr<ArchetypeEditorRepresentation> ptr);
 
-			std::shared_ptr<AScene> getScene();
+			AScene *getScene();
 			void enableScene();
 			void disableScene();
 			void updateMenu();
@@ -48,7 +48,7 @@ namespace AGE
 			bool _graphNodeDisplay = false;
 			bool _selectParent = false;
 			bool _displayWindow = true;
-			std::shared_ptr<AScene> _archetypesScene;
+			AScene *_archetypesScene;
 			bool _save = false;
 
 			void _copyArchetypeToInstanciedEntity(Entity &archetype, Entity &entity);
