@@ -47,6 +47,7 @@ namespace AGE
 		ENTITY_ID                                                               _entityNumber;
 		bool                                                                    _active;
 		std::unique_ptr<Link>                                                   _rootLink;
+		std::string                                                             _name;
 #ifdef AGE_BFC
 	protected:
 		BFCLinkTracker                                                          *_bfcLinkTracker;
@@ -87,6 +88,8 @@ namespace AGE
 		void                    informFiltersComponentDeletion(ComponentType id, const EntityData &entity);
 		void                    informFiltersEntityCreation(const EntityData &entity);
 		void                    informFiltersEntityDeletion(const EntityData &entity);
+
+		inline void             setName(const std::string &name) { _name = name; }
 
 		// If `outContext` is true, entity will not be in the world and updated
 		// It's used for Archetypes, a priori, you don't need it anywhere else.

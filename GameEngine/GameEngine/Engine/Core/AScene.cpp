@@ -51,10 +51,13 @@ namespace AGE
 	void 							AScene::update(float time)
 	{
 		SCOPE_profile_cpu_function("Scenes");
-		for (auto &e : _systems)
 		{
-			if (e.second->isActivated())
-				e.second->update(time);
+			SCOPE_profile_cpu_i("Scenes", _name.c_str());
+			for (auto &e : _systems)
+			{
+				if (e.second->isActivated())
+					e.second->update(time);
+			}
 		}
 	}
 

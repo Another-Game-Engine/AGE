@@ -18,6 +18,7 @@ namespace AGE
 	void		SceneManager::addScene(std::shared_ptr<AScene> scene, std::string const &name)
 	{
 		_scenes[name] = scene;
+		scene->setName(name);
 	}
 
 	void		SceneManager::removeScene(std::string const &name)
