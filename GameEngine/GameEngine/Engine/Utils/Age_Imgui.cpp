@@ -135,6 +135,12 @@ namespace AGE
 			}
 		});
 
+		GetMainThread()->registerCallback<ImGuiEndOfFrame>([this](ImGuiEndOfFrame &msg)
+		{
+			SCOPE_profile_cpu_i("ImGui", "Render");
+			ImGui::Render();
+		});
+
 		GetMainThread()->registerCallback<ImGuiMouseStateEvent>([this](ImGuiMouseStateEvent &msg)
 		{
 			_lastMouseState = msg;

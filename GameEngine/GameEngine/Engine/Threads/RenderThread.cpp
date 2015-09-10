@@ -5,6 +5,7 @@
 #include <Threads/Tasks/ToRenderTasks.hpp>
 #include <Threads/Commands/ToRenderCommands.hpp>
 #include <Threads/Tasks/BasicTasks.hpp>
+#include <Threads/MainThread.hpp>
 #include <Utils/Containers/Vector.hpp>
 #include <Threads/ThreadManager.hpp>
 #include <Core/Engine.hh>
@@ -346,6 +347,7 @@ namespace AGE
 			{
 				SCOPE_profile_cpu_i("RenderTimer", "Render frame");
 				{
+#ifdef AGE_ENABLE_IMGUI
 					std::shared_ptr<AGE::RenderImgui> imguiRenderList = nullptr;
 					{
 						std::lock_guard<AGE::SpinLock> lock(_mutex);
@@ -356,7 +358,13 @@ namespace AGE
 					{
 						AGE::Imgui::getInstance()->renderThreadRenderFn(imguiRenderList->cmd_lists);
 					}
-
+					static bool first = true;
+					if (first || imguiRenderList)
+					{
+						GetMainThread()->getQueue()->emplaceTask<ImGuiEndOfFrame>();
+						first = false;
+					}
+#endif
 				}
 				_context->swapContext();
 				{
