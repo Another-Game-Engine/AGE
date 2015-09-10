@@ -21899,9 +21899,9 @@
                 },
                 "Orientation": {
                     "value0": 0,
-                    "value1": 0.7071068286895752,
+                    "value1": 0,
                     "value2": 0,
-                    "value3": 0.7071068286895752
+                    "value3": 1
                 }
             },
             "children": [],
@@ -21916,7 +21916,7 @@
             "AGE_CORE_ArchetypeComponent": {
                 "archetypeName": "tonneau",
                 "synchronizePosition": false,
-                "synchronizeRotation": false,
+                "synchronizeRotation": true,
                 "synchronizeScale": true,
                 "parentIsAnArchetype": false
             },
@@ -22591,9 +22591,9 @@
                     "value2": 1
                 },
                 "Orientation": {
-                    "value0": -0,
+                    "value0": 0,
                     "value1": 1,
-                    "value2": -0,
+                    "value2": 0,
                     "value3": -4.3711388286737929e-008
                 }
             },

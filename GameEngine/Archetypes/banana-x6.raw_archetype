@@ -1,0 +1,334 @@
+{
+    "value0": {
+        "cereal_class_version": 0,
+        "componentsIdReferenceTable": [
+            {
+                "key": 0,
+                "value": 2633202538906912002
+            },
+            {
+                "key": 1,
+                "value": 4279995424560007376
+            },
+            {
+                "key": 2,
+                "value": 9228130898566333550
+            },
+            {
+                "key": 3,
+                "value": 2719950380395641793
+            },
+            {
+                "key": 4,
+                "value": 12568265209258137674
+            },
+            {
+                "key": 5,
+                "value": 7226899121077071394
+            },
+            {
+                "key": 6,
+                "value": 8685391846632613471
+            },
+            {
+                "key": 7,
+                "value": 11957752261005749183
+            },
+            {
+                "key": 8,
+                "value": 17192082489458106606
+            },
+            {
+                "key": 9,
+                "value": 16239045169874622267
+            },
+            {
+                "key": 10,
+                "value": 6441919271708046876
+            },
+            {
+                "key": 11,
+                "value": 8718854852507163888
+            },
+            {
+                "key": 12,
+                "value": 13917482855567903631
+            }
+        ],
+        "entityNumber": 7,
+        "Entity_0": {
+            "cereal_class_version": 0,
+            "link": {
+                "cereal_class_version": 0,
+                "Position": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6
+            ],
+            "flags": 0,
+            "components_number": [
+                0
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "cereal_class_version": 0,
+                "name": "bananas-x6-Copy"
+            }
+        },
+        "Entity_1": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": -0.22200000286102295
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "banana"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "cereal_class_version": 3,
+                "archetypeName": "banana",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "banana-Copy-Copy"
+            }
+        },
+        "Entity_2": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0.22200000286102295
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "banana"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "banana",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "banana-Copy-Copy"
+            }
+        },
+        "Entity_3": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 0.11100000143051147,
+                    "value2": 0.11100000143051147
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "banana"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "banana",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "banana-Copy-Copy"
+            }
+        },
+        "Entity_4": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 0.11110000312328339,
+                    "value2": -0.11111000180244446
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "banana"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "banana",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "banana-Copy-Copy"
+            }
+        },
+        "Entity_5": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 0.22222200036048889,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "banana"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "banana",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "banana-Copy-Copy"
+            }
+        },
+        "Entity_6": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "banana"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "banana",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "banana-Copy-Copy"
+            }
+        }
+    }
+}
