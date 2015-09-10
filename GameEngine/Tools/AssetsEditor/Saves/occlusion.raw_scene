@@ -398,12 +398,12 @@
                 "Center": {
                     "value0": 0,
                     "value1": 0,
-                    "value2": -1.#IND
+                    "value2": 0
                 },
                 "Size": {
-                    "value0": -1.#IND,
-                    "value1": -1.#IND,
-                    "value2": -1.#IND
+                    "value0": 3,
+                    "value1": 3,
+                    "value2": 0.20000000298023224
                 }
             }
         },
@@ -485,12 +485,12 @@
                 "Center": {
                     "value0": 0,
                     "value1": 0,
-                    "value2": -1.#IND
+                    "value2": 0
                 },
                 "Size": {
-                    "value0": -1.#IND,
-                    "value1": -1.#IND,
-                    "value2": -1.#IND
+                    "value0": 3,
+                    "value1": 3,
+                    "value2": 0.20000000298023224
                 }
             }
         },
@@ -684,12 +684,12 @@
                 "Center": {
                     "value0": 0,
                     "value1": 0,
-                    "value2": -1.#IND
+                    "value2": 0
                 },
                 "Size": {
-                    "value0": -1.#IND,
-                    "value1": -1.#IND,
-                    "value2": -1.#IND
+                    "value0": 3,
+                    "value1": 3,
+                    "value2": 0.20000000298023224
                 }
             }
         },
@@ -771,12 +771,12 @@
                 "Center": {
                     "value0": 0,
                     "value1": 0,
-                    "value2": -1.#IND
+                    "value2": 0
                 },
                 "Size": {
-                    "value0": -1.#IND,
-                    "value1": -1.#IND,
-                    "value2": -1.#IND
+                    "value0": 3,
+                    "value1": 3,
+                    "value2": 0.20000000298023224
                 }
             }
         },
@@ -872,9 +872,9 @@
                     "value2": 1
                 },
                 "Orientation": {
-                    "value0": -0,
+                    "value0": 0,
                     "value1": 0.70710676908493042,
-                    "value2": -0,
+                    "value2": 0,
                     "value3": -0.70710676908493042
                 }
             },
@@ -1158,9 +1158,9 @@
                     "value2": 1
                 },
                 "Orientation": {
-                    "value0": -0,
+                    "value0": 0,
                     "value1": 1,
-                    "value2": -0,
+                    "value2": 0,
                     "value3": -4.3711388286737929e-008
                 }
             },
