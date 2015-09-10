@@ -218,4 +218,16 @@ namespace AGE
 			threadManager->exit();
 		});
 	}
+
+	ThreadManager::ThreadStatistics::ThreadStatistics()
+		: name("")
+		, averageWorkTime(0)
+		, averageWaitTime(0)
+		, frameCounter(0)
+		, secondCounter(0)
+	{
+		work.fill(0);
+		wait.fill(0);
+	}
+
 }

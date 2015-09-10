@@ -62,6 +62,7 @@ namespace TMQ
 			void eraseAll();
 			void release();
 			bool empty();
+			bool move(MessageBase *e, std::size_t size);
 
 			template <typename T>
 			T* push(const T& e)
@@ -105,26 +106,6 @@ namespace TMQ
 				return &res->_data;
 			}
 
-			bool move(MessageBase *e, std::size_t size)
-			{
-				std::size_t s = size;
-				std::size_t sizeOfInt = sizeof(std::size_t);
-
-				if (_size - _to < s + sizeOfInt)
-				{
-					return false;
-				}
-
-				char *tmp = _data;
-				tmp += _to;
-				memcpy(tmp, &s, sizeOfInt);
-				tmp += sizeOfInt;
-				e->clone(tmp);
-				auto test = (MessageBase*)(tmp);
-				_to += sizeOfInt + s;
-				return true;
-			}
-
 			template <typename T, typename ...Args>
 			T* emplace(Args ...args)
 			{
@@ -149,6 +130,8 @@ namespace TMQ
 		std::list<Chunk*> _list;
 		std::list<Chunk*>::iterator _listReader;
 		std::list<Chunk*>::iterator _listWriter;
+
+		bool move(MessageBase *e, std::size_t size);
 
 		template <typename T>
 		T* push(const T& e)
@@ -192,24 +175,6 @@ namespace TMQ
 					++_listWriter;
 				return push(e);
 			}
-		}
-		
-		bool move(MessageBase *e, std::size_t size)
-		{
-			std::size_t s = size;
-			std::size_t sizeOfInt = sizeof(std::size_t);
-			assert(s + sizeOfInt < _chunkSize);
-
-			if ((*_listWriter)->move(std::move(e), size))
-				return true;
-			if (_listWriter == --std::end(_list))
-			{
-				_list.push_back(new Chunk(_chunkSize));
-				_listWriter = --std::end(_list);
-			}
-			else
-				++_listWriter;
-			return (*_listWriter)->move(std::move(e), size);
 		}
 
 		template <typename T, typename ...Args>

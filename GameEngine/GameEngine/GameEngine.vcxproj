@@ -465,6 +465,7 @@
     <ClCompile Include="Engine\TMQ\queue.cpp" />
     <ClCompile Include="Engine\Utils\AABoundingBox.cpp" />
     <ClCompile Include="Engine\Utils\Age_microprofile.cpp" />
+    <ClCompile Include="Engine\Utils\Any.cpp" />
     <ClCompile Include="Engine\Utils\BoundingInfos.cpp" />
     <ClCompile Include="Engine\Audio\Audio.cpp" />
     <ClCompile Include="Engine\Audio\AudioManager.cpp" />
@@ -485,7 +486,9 @@
     <ClCompile Include="Engine\Text\Font.cpp" />
     <ClCompile Include="Engine\Text\FontGlyph.cpp" />
     <ClCompile Include="Engine\Text\FontManager.cpp" />
+    <ClCompile Include="Engine\Utils\BufferPool.cpp" />
     <ClCompile Include="Engine\Utils\Containers\LFList.cpp" />
+    <ClCompile Include="Engine\Utils\DependenciesInjector.cpp" />
     <ClCompile Include="Engine\Utils\Profiler.cpp" />
     <ClCompile Include="Engine\Utils\StreamBuffer.cpp" />
     <ClCompile Include="Engine\Utils\CRC32.cpp" />
