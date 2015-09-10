@@ -486,7 +486,7 @@
                 "value3": false
             },
             "AGE_CORE_EntityRepresentationComponent": {
-                "name": "tonneau"
+                "name": "tonneau-Copy-Copy"
             }
         },
         "Entity_11": {
@@ -642,7 +642,7 @@
                 "value3": false
             },
             "AGE_CORE_EntityRepresentationComponent": {
-                "name": "rock"
+                "name": "rock-Copy-Copy"
             }
         },
         "Entity_15": {
@@ -681,7 +681,7 @@
                 "value3": false
             },
             "AGE_CORE_EntityRepresentationComponent": {
-                "name": "kiwi"
+                "name": "kiwi-Copy-Copy"
             }
         }
     }
