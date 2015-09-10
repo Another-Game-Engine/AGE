@@ -495,8 +495,15 @@ namespace AGE
 
 	void Collider::_copyFrom(const ComponentBase *model)
 	{
-		init();
 		auto m = (Collider*)model;
+		if (m->getColliderType() == Physics::ColliderType::Mesh)
+		{
+			init(m->getColliderType(), m->getMesh());
+		}
+		else
+		{
+			init(m->getColliderType(), "");
+		}
 #ifdef EDITOR_ENABLED
 		editorUpdate();
 		if (editorStruct)

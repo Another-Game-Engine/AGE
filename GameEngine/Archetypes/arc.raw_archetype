@@ -61,14 +61,14 @@
             "link": {
                 "cereal_class_version": 0,
                 "Position": {
-                    "value0": -9.5446281433105469,
-                    "value1": 0.58910411596298218,
-                    "value2": -2.0437002182006836
+                    "value0": 0,
+                    "value1": 2.5,
+                    "value2": 0
                 },
                 "Scale": {
-                    "value0": 1,
-                    "value1": 1,
-                    "value2": 1
+                    "value0": 5,
+                    "value1": 5,
+                    "value2": 5
                 },
                 "Orientation": {
                     "value0": 0,
@@ -88,25 +88,25 @@
             "archetypesDependency": [],
             "AGE_CORE_EntityRepresentationComponent": {
                 "cereal_class_version": 0,
-                "name": "tonneau-Copy"
+                "name": "arc-Copy"
             },
             "AGE_CORE_MeshRenderer": {
                 "cereal_class_version": 3,
-                "value0": "medievalpack/meshs/barrel.mage",
-                "value1": "medievalpack/meshs/barrel.sage",
+                "value0": "medievalpack/meshs/arc.mage",
+                "value1": "medievalpack/meshs/arc.sage",
                 "value2": "",
                 "value3": {
                     "type": 0,
-                    "data": 0
+                    "data": 16
                 }
             },
             "AGE_CORE_RigidBody": {
                 "cereal_class_version": 1,
                 "AngularDrag": 0.05000000074505806,
                 "AngularVelocity": {
-                    "value0": -1.8682921876234104e-010,
-                    "value1": -8.9010114383281103e-013,
-                    "value2": -2.0084800489428289e-010
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
                 },
                 "CenterOfMass": {
                     "value0": 0,
@@ -115,9 +115,9 @@
                 },
                 "LinearDrag": 0,
                 "LinearVelocity": {
-                    "value0": -0.018998529762029648,
-                    "value1": 3.8107515138108283e-005,
-                    "value2": -0.0055930023081600666
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
                 },
                 "Mass": 1,
                 "DiagonalInertiaTensor": {
@@ -127,18 +127,18 @@
                 },
                 "MaxAngularVelocity": 1000000,
                 "MaxDepenetrationVelocity": 1000000,
-                "IsAffectedByGravity": true,
-                "IsKinematic": false,
-                "CollisionDetectionMode": 0
+                "IsAffectedByGravity": false,
+                "IsKinematic": true,
+                "CollisionDetectionMode": 1
             },
             "AGE_CORE_PhysicsCollider": {
                 "cereal_class_version": 1,
                 "ColliderType": 3,
                 "Material": "DefaultMaterial",
                 "IsATrigger": false,
-                "FilterGroup": 1,
-                "Mesh": "medievalpack/meshs/barrel",
-                "Convex": true
+                "FilterGroup": 0,
+                "Mesh": "medievalpack/meshs/arc",
+                "Convex": false
             }
         }
     }

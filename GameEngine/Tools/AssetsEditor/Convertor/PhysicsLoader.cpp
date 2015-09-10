@@ -416,6 +416,7 @@ namespace AGE
 					physx::PxDefaultMemoryOutputStream writeBuffer;
 					if (!cooking->cookTriangleMesh(meshDescription, writeBuffer))
 					{
+						std::cerr << "Impossible to create concave shape\n";
 						assert(!"Impossible to create concave shape");
 						return false;
 					}

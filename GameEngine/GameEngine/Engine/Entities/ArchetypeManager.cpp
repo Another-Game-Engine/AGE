@@ -76,7 +76,6 @@ namespace AGE
 		//{
 		//	entity->removeComponent<AGE::ArchetypeComponent>();
 		//}
-		//entity->addComponent<AGE::ArchetypeComponent>(name);
 	}
 
 
