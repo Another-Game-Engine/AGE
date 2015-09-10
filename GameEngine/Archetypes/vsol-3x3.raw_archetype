@@ -127,12 +127,12 @@
                 "floor-a"
             ],
             "AGE_CORE_ArchetypeComponent": {
-                "cereal_class_version": 2,
+                "cereal_class_version": 3,
                 "archetypeName": "floor-a",
-                "value0": false,
-                "value1": true,
-                "value2": true,
-                "value3": false
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
             },
             "AGE_CORE_EntityRepresentationComponent": {
                 "name": "floor-a-Copy-Copy"
@@ -168,10 +168,10 @@
             ],
             "AGE_CORE_ArchetypeComponent": {
                 "archetypeName": "floor-a",
-                "value0": false,
-                "value1": true,
-                "value2": true,
-                "value3": false
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
             },
             "AGE_CORE_EntityRepresentationComponent": {
                 "name": "floor-a-Copy-Copy"
@@ -207,10 +207,10 @@
             ],
             "AGE_CORE_ArchetypeComponent": {
                 "archetypeName": "floor-a",
-                "value0": false,
-                "value1": true,
-                "value2": true,
-                "value3": false
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
             },
             "AGE_CORE_EntityRepresentationComponent": {
                 "name": "floor-a-Copy-Copy"
@@ -246,10 +246,10 @@
             ],
             "AGE_CORE_ArchetypeComponent": {
                 "archetypeName": "floor-a",
-                "value0": false,
-                "value1": true,
-                "value2": true,
-                "value3": false
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
             },
             "AGE_CORE_EntityRepresentationComponent": {
                 "name": "floor-a-Copy-Copy"
@@ -285,10 +285,10 @@
             ],
             "AGE_CORE_ArchetypeComponent": {
                 "archetypeName": "floor-a",
-                "value0": false,
-                "value1": true,
-                "value2": true,
-                "value3": false
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
             },
             "AGE_CORE_EntityRepresentationComponent": {
                 "name": "floor-a-Copy-Copy"
@@ -324,10 +324,10 @@
             ],
             "AGE_CORE_ArchetypeComponent": {
                 "archetypeName": "floor-a",
-                "value0": false,
-                "value1": true,
-                "value2": true,
-                "value3": false
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
             },
             "AGE_CORE_EntityRepresentationComponent": {
                 "name": "floor-a-Copy-Copy"
@@ -363,10 +363,10 @@
             ],
             "AGE_CORE_ArchetypeComponent": {
                 "archetypeName": "floor-a",
-                "value0": false,
-                "value1": true,
-                "value2": true,
-                "value3": false
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
             },
             "AGE_CORE_EntityRepresentationComponent": {
                 "name": "floor-a-Copy-Copy"
@@ -402,10 +402,10 @@
             ],
             "AGE_CORE_ArchetypeComponent": {
                 "archetypeName": "floor-b",
-                "value0": false,
-                "value1": true,
-                "value2": true,
-                "value3": false
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
             },
             "AGE_CORE_EntityRepresentationComponent": {
                 "name": "floor-b-Copy-Copy"
@@ -441,10 +441,10 @@
             ],
             "AGE_CORE_ArchetypeComponent": {
                 "archetypeName": "floor-a",
-                "value0": false,
-                "value1": true,
-                "value2": true,
-                "value3": false
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
             },
             "AGE_CORE_EntityRepresentationComponent": {
                 "name": "floor-a-Copy-Copy"

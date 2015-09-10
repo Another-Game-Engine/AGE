@@ -62,6 +62,47 @@
                 "cereal_class_version": 0,
                 "Position": {
                     "value0": 0,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0.38268345594406128,
+                    "value3": 0.92387950420379639
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "cereal_class_version": 3,
+                "archetypeName": "cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": false,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "cereal_class_version": 0,
+                "name": "cube-Copy-Copy"
+            }
+        },
+        "Entity_1": {
+            "link": {
+                "Position": {
+                    "value0": 0,
                     "value1": 0,
                     "value2": 0
                 },
@@ -87,55 +128,14 @@
                 "sol"
             ],
             "AGE_CORE_ArchetypeComponent": {
-                "cereal_class_version": 2,
                 "archetypeName": "sol",
-                "value0": false,
-                "value1": false,
-                "value2": false,
-                "value3": false
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
             },
             "AGE_CORE_EntityRepresentationComponent": {
-                "cereal_class_version": 0,
-                "name": "sol"
-            }
-        },
-        "Entity_1": {
-            "link": {
-                "Position": {
-                    "value0": 0,
-                    "value1": 4,
-                    "value2": 0
-                },
-                "Scale": {
-                    "value0": 1,
-                    "value1": 1,
-                    "value2": 1
-                },
-                "Orientation": {
-                    "value0": 0,
-                    "value1": 0,
-                    "value2": 0,
-                    "value3": 1
-                }
-            },
-            "children": [],
-            "flags": 0,
-            "components_number": [
-                8,
-                0
-            ],
-            "archetypesDependency": [
-                "cube"
-            ],
-            "AGE_CORE_ArchetypeComponent": {
-                "archetypeName": "cube",
-                "value0": false,
-                "value1": false,
-                "value2": false,
-                "value3": false
-            },
-            "AGE_CORE_EntityRepresentationComponent": {
-                "name": "cube"
+                "name": "sol-Copy-Copy"
             }
         }
     }

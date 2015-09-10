@@ -85,7 +85,6 @@ namespace AGE
 			if (updatePos && cpt->position != entity->getLink().getPosition())
 			{
 				entity->getLink().setPosition(cpt->position);
-				modified = true;
 			}
 
 			if (updateRot && ImGui::InputFloat3("Rotation", glm::value_ptr(cpt->rotation)))
@@ -97,7 +96,6 @@ namespace AGE
 			if (updateRot &&  glm::quat(cpt->rotation * glm::pi<float>() / 180.f) != entity->getLink().getOrientation())
 			{
 				entity->getLink().setOrientation(glm::quat(cpt->rotation * glm::pi<float>() / 180.f));
-				modified = true;
 			}
 
 			if (updateSca && ImGui::InputFloat3("Scale", glm::value_ptr(cpt->scale)))
@@ -109,7 +107,6 @@ namespace AGE
 			if (updateSca && cpt->scale != entity->getLink().getScale())
 			{
 				entity->getLink().setScale(cpt->scale);
-				modified = true;
 			}
 
 			ImGui::Separator();
