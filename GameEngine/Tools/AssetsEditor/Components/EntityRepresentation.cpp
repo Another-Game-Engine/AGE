@@ -28,7 +28,7 @@ namespace AGE
 			memcpy(name, copyName.c_str(), len);
 			auto &link = entity->getLink();
 			position = link.getPosition();
-			rotation = glm::eulerAngles(link.getOrientation());
+			rotation = glm::degrees(glm::eulerAngles(link.getOrientation()));
 			scale = link.getScale();
 		}
 
@@ -38,7 +38,7 @@ namespace AGE
 			setName(_name);
 			auto &link = entity->getLink();
 			position = link.getPosition();
-			rotation = glm::eulerAngles(link.getOrientation());
+			rotation = glm::degrees(glm::eulerAngles(link.getOrientation()));
 			scale = link.getScale();
 		}
 
@@ -54,7 +54,7 @@ namespace AGE
 		void EntityRepresentation::postUnserialization()
 		{
 			position = entity->getLink().getPosition();
-			rotation = glm::eulerAngles(entity->getLink().getOrientation());
+			rotation = glm::degrees(glm::eulerAngles(entity->getLink().getOrientation()));
 			scale = entity->getLink().getScale();
 			if (strlen(name) == 0)
 			{

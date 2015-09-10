@@ -399,6 +399,7 @@ namespace AGE
 			{
 				auto p = posFromMat4(link->getGlobalTransform());
 				setPosition(posFromMat4(link->getGlobalTransform()));
+				setRotation(link->getOrientation());
 				// global orientation not supported
 			}
 		}

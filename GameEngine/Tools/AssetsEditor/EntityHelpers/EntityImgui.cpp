@@ -52,6 +52,17 @@ namespace AGE
 			auto meshRenderer = entity->getComponent<MeshRenderer>();
 			cpt->position = entity->getLink().getPosition();
 
+			bool updatePos = true;
+			bool updateRot = true;
+			bool updateSca = true;
+
+			if (archetypeCpt)
+			{
+				updatePos = !archetypeCpt->synchronizePosition;
+				updateRot = !archetypeCpt->synchronizeRotation;
+				updateSca = !archetypeCpt->synchronizeScale;
+			}
+
 			// if entity have a mesh renderer component
 			// we pad the position so the origin is not in the center of the geometry
 			// but in 0,0,0
@@ -60,7 +71,7 @@ namespace AGE
 			//	auto mesh = meshRenderer->getMesh();
 			//	cpt->position += mesh->meshData->boundingBox.getSize() / 2.0f;
 			//}
-			if (ImGui::InputFloat3("Position", glm::value_ptr(cpt->position)))
+			if (updatePos && ImGui::InputFloat3("Position", glm::value_ptr(cpt->position)))
 			{
 				modified = true;
 				//if (meshRenderer && meshRenderer->getMesh())
@@ -71,17 +82,34 @@ namespace AGE
 				entity->getLink().setPosition(cpt->position);
 			}
 
-			if (ImGui::InputFloat3("Rotation", glm::value_ptr(cpt->rotation)))
+			if (updatePos && cpt->position != entity->getLink().getPosition())
 			{
+				entity->getLink().setPosition(cpt->position);
 				modified = true;
-				entity->getLink().setOrientation(glm::quat(cpt->rotation * 3.14159f / 180.f));
 			}
 
-			cpt->scale = entity->getLink().getScale();
-			if (ImGui::InputFloat3("Scale", glm::value_ptr(cpt->scale)))
+			if (updateRot && ImGui::InputFloat3("Rotation", glm::value_ptr(cpt->rotation)))
+			{
+				modified = true;
+				entity->getLink().setOrientation(glm::quat(cpt->rotation * glm::pi<float>() / 180.f));
+			}
+
+			if (updateRot &&  glm::quat(cpt->rotation * glm::pi<float>() / 180.f) != entity->getLink().getOrientation())
+			{
+				entity->getLink().setOrientation(glm::quat(cpt->rotation * glm::pi<float>() / 180.f));
+				modified = true;
+			}
+
+			if (updateSca && ImGui::InputFloat3("Scale", glm::value_ptr(cpt->scale)))
 			{
 				modified = true;
 				entity->getLink().setScale(cpt->scale);
+			}
+
+			if (updateSca && cpt->scale != entity->getLink().getScale())
+			{
+				entity->getLink().setScale(cpt->scale);
+				modified = true;
 			}
 
 			ImGui::Separator();

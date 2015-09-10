@@ -61,6 +61,125 @@
             "link": {
                 "cereal_class_version": 0,
                 "Position": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": -1
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "tonneau"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "cereal_class_version": 2,
+                "archetypeName": "tonneau",
+                "value0": false,
+                "value1": true,
+                "value2": true,
+                "value3": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "cereal_class_version": 0,
+                "name": "tonneau-Copy-Copy"
+            }
+        },
+        "Entity_1": {
+            "link": {
+                "Position": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0.7071068286895752,
+                    "value2": 0,
+                    "value3": 0.7071068286895752
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "tonneau"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "tonneau",
+                "value0": false,
+                "value1": false,
+                "value2": true,
+                "value3": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "tonneau-Copy-Copy"
+            }
+        },
+        "Entity_2": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 1.5,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 0.20000000298023224,
+                    "value1": 0.20000000298023224,
+                    "value2": 0.20000000298023224
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0.7071068286895752,
+                    "value3": 0.7071068286895752
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "kiwi"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "kiwi",
+                "value0": false,
+                "value1": true,
+                "value2": true,
+                "value3": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "kiwi-Copy-Copy"
+            }
+        },
+        "Entity_3": {
+            "link": {
+                "Position": {
                     "value0": 0,
                     "value1": 0,
                     "value2": 0
@@ -78,15 +197,15 @@
                 }
             },
             "children": [
-                1,
-                2,
-                3,
                 4,
                 5,
                 6,
                 7,
                 8,
-                9
+                9,
+                10,
+                11,
+                12
             ],
             "flags": 0,
             "components_number": [
@@ -94,134 +213,15 @@
             ],
             "archetypesDependency": [],
             "AGE_CORE_EntityRepresentationComponent": {
-                "cereal_class_version": 0,
                 "name": "main-sol"
-            }
-        },
-        "Entity_1": {
-            "link": {
-                "Position": {
-                    "value0": 0,
-                    "value1": 0,
-                    "value2": 0
-                },
-                "Scale": {
-                    "value0": 1,
-                    "value1": 1,
-                    "value2": 1
-                },
-                "Orientation": {
-                    "value0": 0,
-                    "value1": 0,
-                    "value2": 0,
-                    "value3": 1
-                }
-            },
-            "children": [],
-            "flags": 0,
-            "components_number": [
-                8,
-                0
-            ],
-            "archetypesDependency": [
-                "vsol-3x3"
-            ],
-            "AGE_CORE_ArchetypeComponent": {
-                "cereal_class_version": 2,
-                "archetypeName": "vsol-3x3",
-                "value0": false,
-                "value1": true,
-                "value2": true,
-                "value3": false
-            },
-            "AGE_CORE_EntityRepresentationComponent": {
-                "name": "sol-3x3-Copy-Copy"
-            }
-        },
-        "Entity_2": {
-            "link": {
-                "Position": {
-                    "value0": -15,
-                    "value1": 0,
-                    "value2": 0
-                },
-                "Scale": {
-                    "value0": 1,
-                    "value1": 1,
-                    "value2": 1
-                },
-                "Orientation": {
-                    "value0": 0,
-                    "value1": 0,
-                    "value2": 0,
-                    "value3": 1
-                }
-            },
-            "children": [],
-            "flags": 0,
-            "components_number": [
-                8,
-                0
-            ],
-            "archetypesDependency": [
-                "vsol-3x3"
-            ],
-            "AGE_CORE_ArchetypeComponent": {
-                "archetypeName": "vsol-3x3",
-                "value0": false,
-                "value1": true,
-                "value2": true,
-                "value3": false
-            },
-            "AGE_CORE_EntityRepresentationComponent": {
-                "name": "sol-3x3-Copy-Copy"
-            }
-        },
-        "Entity_3": {
-            "link": {
-                "Position": {
-                    "value0": 15,
-                    "value1": 0,
-                    "value2": 15
-                },
-                "Scale": {
-                    "value0": 1,
-                    "value1": 1,
-                    "value2": 1
-                },
-                "Orientation": {
-                    "value0": 0,
-                    "value1": 0,
-                    "value2": 0,
-                    "value3": 1
-                }
-            },
-            "children": [],
-            "flags": 0,
-            "components_number": [
-                8,
-                0
-            ],
-            "archetypesDependency": [
-                "vsol-3x3"
-            ],
-            "AGE_CORE_ArchetypeComponent": {
-                "archetypeName": "vsol-3x3",
-                "value0": false,
-                "value1": true,
-                "value2": true,
-                "value3": false
-            },
-            "AGE_CORE_EntityRepresentationComponent": {
-                "name": "sol-3x3-Copy-Copy"
             }
         },
         "Entity_4": {
             "link": {
                 "Position": {
-                    "value0": -15,
+                    "value0": 0,
                     "value1": 0,
-                    "value2": 15
+                    "value2": 0
                 },
                 "Scale": {
                     "value0": 1,
@@ -258,9 +258,9 @@
         "Entity_5": {
             "link": {
                 "Position": {
-                    "value0": 15,
+                    "value0": -15,
                     "value1": 0,
-                    "value2": -15
+                    "value2": 0
                 },
                 "Scale": {
                     "value0": 1,
@@ -297,9 +297,9 @@
         "Entity_6": {
             "link": {
                 "Position": {
-                    "value0": 0,
+                    "value0": 15,
                     "value1": 0,
-                    "value2": -15
+                    "value2": 15
                 },
                 "Scale": {
                     "value0": 1,
@@ -338,7 +338,7 @@
                 "Position": {
                     "value0": -15,
                     "value1": 0,
-                    "value2": -15
+                    "value2": 15
                 },
                 "Scale": {
                     "value0": 1,
@@ -373,6 +373,123 @@
             }
         },
         "Entity_8": {
+            "link": {
+                "Position": {
+                    "value0": 15,
+                    "value1": 0,
+                    "value2": -15
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "vsol-3x3"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "vsol-3x3",
+                "value0": false,
+                "value1": true,
+                "value2": true,
+                "value3": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "sol-3x3-Copy-Copy"
+            }
+        },
+        "Entity_9": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": -15
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "vsol-3x3"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "vsol-3x3",
+                "value0": false,
+                "value1": true,
+                "value2": true,
+                "value3": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "sol-3x3-Copy-Copy"
+            }
+        },
+        "Entity_10": {
+            "link": {
+                "Position": {
+                    "value0": -15,
+                    "value1": 0,
+                    "value2": -15
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "vsol-3x3"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "vsol-3x3",
+                "value0": false,
+                "value1": true,
+                "value2": true,
+                "value3": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "sol-3x3-Copy-Copy"
+            }
+        },
+        "Entity_11": {
             "link": {
                 "Position": {
                     "value0": 0,
@@ -411,7 +528,7 @@
                 "name": "sol-3x3-Copy-Copy"
             }
         },
-        "Entity_9": {
+        "Entity_12": {
             "link": {
                 "Position": {
                     "value0": 15,
@@ -450,163 +567,7 @@
                 "name": "sol-3x3-Copy-Copy"
             }
         },
-        "Entity_10": {
-            "link": {
-                "Position": {
-                    "value0": 0,
-                    "value1": 1,
-                    "value2": 0
-                },
-                "Scale": {
-                    "value0": 1,
-                    "value1": 1,
-                    "value2": 1
-                },
-                "Orientation": {
-                    "value0": 0,
-                    "value1": 0,
-                    "value2": 0,
-                    "value3": 1
-                }
-            },
-            "children": [],
-            "flags": 0,
-            "components_number": [
-                8,
-                0
-            ],
-            "archetypesDependency": [
-                "tonneau"
-            ],
-            "AGE_CORE_ArchetypeComponent": {
-                "archetypeName": "tonneau",
-                "value0": false,
-                "value1": true,
-                "value2": true,
-                "value3": false
-            },
-            "AGE_CORE_EntityRepresentationComponent": {
-                "name": "tonneau-Copy-Copy"
-            }
-        },
-        "Entity_11": {
-            "link": {
-                "Position": {
-                    "value0": 1,
-                    "value1": 1,
-                    "value2": 0
-                },
-                "Scale": {
-                    "value0": 1,
-                    "value1": 1,
-                    "value2": 1
-                },
-                "Orientation": {
-                    "value0": 0,
-                    "value1": 0,
-                    "value2": 0,
-                    "value3": 1
-                }
-            },
-            "children": [],
-            "flags": 0,
-            "components_number": [
-                8,
-                0
-            ],
-            "archetypesDependency": [
-                "tonneau"
-            ],
-            "AGE_CORE_ArchetypeComponent": {
-                "archetypeName": "tonneau",
-                "value0": false,
-                "value1": true,
-                "value2": true,
-                "value3": false
-            },
-            "AGE_CORE_EntityRepresentationComponent": {
-                "name": "tonneau-Copy-Copy"
-            }
-        },
-        "Entity_12": {
-            "link": {
-                "Position": {
-                    "value0": 1,
-                    "value1": 1,
-                    "value2": 1
-                },
-                "Scale": {
-                    "value0": 1,
-                    "value1": 1,
-                    "value2": 1
-                },
-                "Orientation": {
-                    "value0": 0,
-                    "value1": 0,
-                    "value2": 0,
-                    "value3": 1
-                }
-            },
-            "children": [],
-            "flags": 0,
-            "components_number": [
-                8,
-                0
-            ],
-            "archetypesDependency": [
-                "tonneau"
-            ],
-            "AGE_CORE_ArchetypeComponent": {
-                "archetypeName": "tonneau",
-                "value0": false,
-                "value1": true,
-                "value2": true,
-                "value3": false
-            },
-            "AGE_CORE_EntityRepresentationComponent": {
-                "name": "tonneau-Copy-Copy"
-            }
-        },
         "Entity_13": {
-            "link": {
-                "Position": {
-                    "value0": 1,
-                    "value1": 1,
-                    "value2": -1
-                },
-                "Scale": {
-                    "value0": 1,
-                    "value1": 1,
-                    "value2": 1
-                },
-                "Orientation": {
-                    "value0": 0,
-                    "value1": 0,
-                    "value2": 0,
-                    "value3": 1
-                }
-            },
-            "children": [],
-            "flags": 0,
-            "components_number": [
-                8,
-                0
-            ],
-            "archetypesDependency": [
-                "tonneau"
-            ],
-            "AGE_CORE_ArchetypeComponent": {
-                "archetypeName": "tonneau",
-                "value0": false,
-                "value1": true,
-                "value2": true,
-                "value3": false
-            },
-            "AGE_CORE_EntityRepresentationComponent": {
-                "name": "tonneau-Copy-Copy"
-            }
-        },
-        "Entity_14": {
             "link": {
                 "Position": {
                     "value0": 12,
@@ -645,23 +606,23 @@
                 "name": "rock-Copy-Copy"
             }
         },
-        "Entity_15": {
+        "Entity_14": {
             "link": {
                 "Position": {
                     "value0": 0,
-                    "value1": 1.5,
+                    "value1": 1,
                     "value2": 0
                 },
                 "Scale": {
-                    "value0": 0.20000000298023224,
-                    "value1": 0.20000000298023224,
-                    "value2": 0.20000000298023224
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
                 },
                 "Orientation": {
                     "value0": 0,
                     "value1": 0,
-                    "value2": 0.70710635185241699,
-                    "value3": 0.70710724592208862
+                    "value2": 0,
+                    "value3": 1
                 }
             },
             "children": [],
@@ -671,17 +632,56 @@
                 0
             ],
             "archetypesDependency": [
-                "kiwi"
+                "tonneau"
             ],
             "AGE_CORE_ArchetypeComponent": {
-                "archetypeName": "kiwi",
+                "archetypeName": "tonneau",
                 "value0": false,
                 "value1": true,
                 "value2": true,
                 "value3": false
             },
             "AGE_CORE_EntityRepresentationComponent": {
-                "name": "kiwi-Copy-Copy"
+                "name": "tonneau-Copy-Copy"
+            }
+        },
+        "Entity_15": {
+            "link": {
+                "Position": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "tonneau"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "tonneau",
+                "value0": false,
+                "value1": true,
+                "value2": true,
+                "value3": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "tonneau-Copy-Copy"
             }
         }
     }
