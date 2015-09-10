@@ -7,11 +7,11 @@ namespace AGE
 	private:
 		static bool _forEditor;
 	public:
-		static bool SerializeForEditor()
+		static inline bool SerializeForEditor()
 		{
 			return _forEditor;
 		}
-		static void SetSerializeForEditor(bool tof)
+		static inline void SetSerializeForEditor(bool tof)
 		{
 			_forEditor = tof;
 		}

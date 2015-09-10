@@ -490,6 +490,7 @@
     <ClCompile Include="Engine\Utils\Containers\LFList.cpp" />
     <ClCompile Include="Engine\Utils\DependenciesInjector.cpp" />
     <ClCompile Include="Engine\Utils\Profiler.cpp" />
+    <ClCompile Include="Engine\Utils\PubSub.cpp" />
     <ClCompile Include="Engine\Utils\StreamBuffer.cpp" />
     <ClCompile Include="Engine\Utils\CRC32.cpp" />
     <ClCompile Include="Engine\Utils\Directory.cpp" />

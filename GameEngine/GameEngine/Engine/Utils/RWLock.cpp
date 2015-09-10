@@ -42,4 +42,35 @@ namespace AGE
 	{
 		_uniqueLock.store(false, std::memory_order_relaxed);
 	}
+
+	// RWLockGuard
+
+	RWLockGuard::RWLockGuard(RWLock &lock, bool exclusive)
+		: _lock(lock)
+		, _exclusive(exclusive)
+	{
+		if (_exclusive)
+		{
+			_lock.WriteLock();
+		}
+		else
+		{
+			_lock.ReadLock();
+		}
+	}
+
+	RWLockGuard::~RWLockGuard()
+	{
+		if (_exclusive)
+		{
+			_lock.WriteUnlock();
+		}
+		else
+		{
+			_lock.ReadUnlock();
+		}
+	}
+
+
+	// End RWLockGuard
 }
