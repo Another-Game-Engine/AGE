@@ -55,7 +55,7 @@
                 "value": 13917482855567903631
             }
         ],
-        "entityNumber": 268,
+        "entityNumber": 277,
         "Entity_0": {
             "cereal_class_version": 0,
             "link": {
@@ -22249,9 +22249,9 @@
                     "value2": 1
                 },
                 "Orientation": {
-                    "value0": -0,
+                    "value0": 0,
                     "value1": 0.70710676908493042,
-                    "value2": -0,
+                    "value2": 0,
                     "value3": -0.70710676908493042
                 }
             },
@@ -22430,10 +22430,10 @@
                     "value2": 1
                 },
                 "Orientation": {
-                    "value0": 0.49999997019767761,
-                    "value1": 0.49999997019767761,
-                    "value2": -0.49999997019767761,
-                    "value3": 0.49999997019767761
+                    "value0": 0,
+                    "value1": 0.70693415403366089,
+                    "value2": 0,
+                    "value3": 0.70727938413619995
                 }
             },
             "children": [],
@@ -22460,6 +22460,379 @@
                 },
                 "exponent": 5,
                 "cutOff": 0.5
+            }
+        },
+        "Entity_268": {
+            "link": {
+                "Position": {
+                    "value0": 4,
+                    "value1": 3,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0.70710676908493042,
+                    "value2": 0,
+                    "value3": -0.70710676908493042
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                4
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "gears-light"
+            },
+            "AGE_CORE_SpotLightComponent": {
+                "color": {
+                    "value0": 0.97254902124404907,
+                    "value1": 1,
+                    "value2": 0,
+                    "value3": 1
+                },
+                "range": {
+                    "value0": 1,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "exponent": 5,
+                "cutOff": 0.5
+            }
+        },
+        "Entity_269": {
+            "link": {
+                "Position": {
+                    "value0": 11,
+                    "value1": 5,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 10,
+                    "value2": 20
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "gear-wall"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "pixar128 library/wood/american_cherry.mage",
+                "value1": "cube/cube.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 16
+                }
+            }
+        },
+        "Entity_270": {
+            "link": {
+                "Position": {
+                    "value0": 10,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0.70710676908493042,
+                    "value2": 0,
+                    "value3": 0.70710676908493042
+                }
+            },
+            "children": [
+                271,
+                274
+            ],
+            "flags": 0,
+            "components_number": [
+                0
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "gearzzz"
+            }
+        },
+        "Entity_271": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": -0,
+                    "value1": 1,
+                    "value2": -0,
+                    "value3": -4.3711388286737929e-008
+                }
+            },
+            "children": [
+                272,
+                273
+            ],
+            "flags": 0,
+            "components_number": [
+                0
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "gears-group-Copy"
+            }
+        },
+        "Entity_272": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 4.0999999046325684,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 3.5,
+                    "value1": 3.5,
+                    "value2": 3.5
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0.19936792552471161,
+                    "value3": 0.97992467880249023
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                12
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "gear-2-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "medievalpack/meshs/wall_f_door.mage",
+                "value1": "medievalpack/meshs/geara.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_CORE_RotationComponent": {
+                "cereal_class_version": 1,
+                "Angles": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 1
+                },
+                "Speed": -40
+            }
+        },
+        "Entity_273": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 1.6000000238418579,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 2,
+                    "value1": 2,
+                    "value2": 2
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0.19936792552471161,
+                    "value3": 0.97992467880249023
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                12
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "mini-gear"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "medievalpack/meshs/wooden_fence_plank.mage",
+                "value1": "medievalpack/meshs/geara.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_CORE_RotationComponent": {
+                "Angles": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 1
+                },
+                "Speed": 40
+            }
+        },
+        "Entity_274": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [
+                275,
+                276
+            ],
+            "flags": 0,
+            "components_number": [
+                0
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "gears-group"
+            }
+        },
+        "Entity_275": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 4.0999999046325684,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 3.5,
+                    "value1": 3.5,
+                    "value2": 3.5
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                12
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "gear-2"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "medievalpack/meshs/wall_f_door.mage",
+                "value1": "medievalpack/meshs/geara.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_CORE_RotationComponent": {
+                "Angles": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 1
+                },
+                "Speed": 40
+            }
+        },
+        "Entity_276": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 1.6000000238418579,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 2,
+                    "value1": 2,
+                    "value2": 2
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                12
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "mini-gear-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "medievalpack/meshs/wooden_fence_plank.mage",
+                "value1": "medievalpack/meshs/geara.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_CORE_RotationComponent": {
+                "Angles": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 1
+                },
+                "Speed": -40
             }
         }
     }
