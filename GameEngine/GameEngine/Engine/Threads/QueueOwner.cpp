@@ -34,7 +34,7 @@ namespace AGE
 			{
 				return;
 			}
-			getQueue()->tryToGetTask(task, 1);
+			getQueue()->tryToGetSharedTask(task, 1);
 			if (task != nullptr)
 			{
 				auto result = execute(task);

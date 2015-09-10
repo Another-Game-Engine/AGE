@@ -254,4 +254,22 @@ void HybridQueue::tryToGetTask(MessageBase *& task, std::size_t microSeconds)
 	}
 }
 
+void HybridQueue::tryToGetSharedTask(MessageBase *& task, std::size_t microSeconds)
+{
+	std::unique_lock<std::mutex> lock(_mutex);
+
+	auto status = _condition.wait_for(lock, std::chrono::microseconds(microSeconds), [this](){ return (_sharedQueue.empty() == false); });
+
+	task = nullptr;
+	if (status == false)
+	{
+		return;
+	}
+
+	if (_sharedQueue.empty() == false)
+	{
+		task = _sharedQueue.front();
+		_sharedQueue.pop();
+	}
+}
 

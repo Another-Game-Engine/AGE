@@ -73,8 +73,8 @@
                 "Orientation": {
                     "value0": 0,
                     "value1": 0,
-                    "value2": 0,
-                    "value3": 1
+                    "value2": 0.7071068286895752,
+                    "value3": 0.7071068286895752
                 }
             },
             "children": [],
@@ -102,11 +102,11 @@
             },
             "AGE_CORE_RigidBody": {
                 "cereal_class_version": 1,
-                "AngularDrag": 0.05000000074505806,
+                "AngularDrag": 0,
                 "AngularVelocity": {
-                    "value0": -1.7071997717721388e-005,
-                    "value1": -1.460924613638781e-005,
-                    "value2": -3.5705023037735373e-005
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
                 },
                 "CenterOfMass": {
                     "value0": 0,
@@ -115,9 +115,9 @@
                 },
                 "LinearDrag": 0,
                 "LinearVelocity": {
-                    "value0": 6.1597693274961784e-006,
-                    "value1": 0.0004444122314453125,
-                    "value2": -0.00018472597002983093
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
                 },
                 "Mass": 1,
                 "DiagonalInertiaTensor": {
@@ -133,20 +133,12 @@
             },
             "AGE_CORE_PhysicsCollider": {
                 "cereal_class_version": 1,
-                "ColliderType": 0,
+                "ColliderType": 3,
                 "Material": "DefaultMaterial",
                 "IsATrigger": false,
                 "FilterGroup": 1,
-                "Center": {
-                    "value0": 0,
-                    "value1": 0,
-                    "value2": 0
-                },
-                "Size": {
-                    "value0": 0.20000000298023224,
-                    "value1": 0.20000000298023224,
-                    "value2": 0.20000000298023224
-                }
+                "Mesh": "medievalpack/meshs/kivi",
+                "Convex": true
             }
         }
     }

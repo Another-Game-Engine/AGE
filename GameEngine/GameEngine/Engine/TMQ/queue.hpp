@@ -255,6 +255,7 @@ namespace TMQ
 
 		void getTask(MessageBase *& task);
 		void tryToGetTask(MessageBase *& task, std::size_t microSeconds);
+		void tryToGetSharedTask(MessageBase *& task, std::size_t microSeconds);
 
 		//////////////
 		//// TASKS

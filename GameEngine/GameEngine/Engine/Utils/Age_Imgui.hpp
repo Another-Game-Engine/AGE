@@ -18,6 +18,10 @@ namespace AGE
 		bool down;
 		ImGuiKeyEvent(AgeKeys _key, bool _down);
 	};
+
+	struct ImGuiEndOfFrame
+	{
+	};
 	
 	struct ImGuiMouseStateEvent
 	{
