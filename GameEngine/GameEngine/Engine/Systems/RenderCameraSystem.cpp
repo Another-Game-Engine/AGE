@@ -231,9 +231,12 @@ namespace AGE
 
 			{
 				SCOPE_profile_cpu_i("Camera system", "Cull for spots");
-				GetMainThread()->computeTasksWhile(std::function<bool()>([&counter, meshBlocksToCullNumber]() {
-					return counter >= meshBlocksToCullNumber;
-				}));
+				while (counter < meshBlocksToCullNumber )
+				{
+				}
+				//GetMainThread()->computeTasksWhile(std::function<bool()>([&counter, meshBlocksToCullNumber]() {
+				//	return counter >= meshBlocksToCullNumber;
+				//}));
 			}
 
 			while (meshInLightList.getSize() > 0)
@@ -289,9 +292,11 @@ namespace AGE
 
 			{
 				SCOPE_profile_cpu_i("Camera system", "Cull for cam");
-				GetMainThread()->computeTasksWhile(std::function<bool()>([&counter, totalToCullNumber]() {
-					return counter >= totalToCullNumber;
-				}));
+				while (counter < totalToCullNumber)
+				{ }
+				//GetMainThread()->computeTasksWhile(std::function<bool()>([&counter, totalToCullNumber]() {
+				//	return counter >= totalToCullNumber;
+				//}));
 			}
 
 			{

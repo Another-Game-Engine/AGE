@@ -26,23 +26,34 @@ namespace AGE
 
 	void QueueOwner::computeTasksWhile(std::function<bool()> &condition)
 	{
+		SCOPE_profile_cpu_function("QueueOwner");
 		TMQ::MessageBase *task = nullptr;
 
 		while (true)
 		{
-			if (condition())
 			{
-				return;
+				SCOPE_profile_cpu_i("QueueOwner", "condition begin");
+				if (condition())
+				{
+					return;
+				}
 			}
-			getQueue()->tryToGetSharedTask(task, 1);
+			{
+				SCOPE_profile_cpu_i("QueueOwner", "try to get task");
+				getQueue()->tryToGetSharedTask(task, 1);
+			}
 			if (task != nullptr)
 			{
+				SCOPE_profile_cpu_i("QueueOwner", "execute");
 				auto result = execute(task);
 				assert(result); // we receive a task that we cannot treat
 			}
-			if (condition())
 			{
-				return;
+				SCOPE_profile_cpu_i("QueueOwner", "condition end");
+				if (condition())
+				{
+					return;
+				}
 			}
 		}
 	}
