@@ -55,7 +55,7 @@
                 "value": 13917482855567903631
             }
         ],
-        "entityNumber": 281,
+        "entityNumber": 287,
         "Entity_0": {
             "cereal_class_version": 0,
             "link": {
@@ -22100,10 +22100,10 @@
                     "value2": 1
                 },
                 "Orientation": {
-                    "value0": 0.50012201070785522,
-                    "value1": 0.4998779296875,
-                    "value2": -0.4998779296875,
-                    "value3": 0.50012201070785522
+                    "value0": 0.5001494288444519,
+                    "value1": 0.49985048174858093,
+                    "value2": -0.49985048174858093,
+                    "value3": 0.5001494288444519
                 }
             },
             "children": [],
@@ -22145,10 +22145,10 @@
                     "value2": 1
                 },
                 "Orientation": {
-                    "value0": 0.5001494288444519,
-                    "value1": 0.49985048174858093,
-                    "value2": -0.49985048174858093,
-                    "value3": 0.5001494288444519
+                    "value0": 0.50017261505126953,
+                    "value1": 0.49982735514640808,
+                    "value2": -0.49982735514640808,
+                    "value3": 0.50017261505126953
                 }
             },
             "children": [],
@@ -22178,96 +22178,6 @@
             }
         },
         "Entity_261": {
-            "link": {
-                "Position": {
-                    "value0": -8.5,
-                    "value1": 0,
-                    "value2": 16
-                },
-                "Scale": {
-                    "value0": 1,
-                    "value1": 1,
-                    "value2": 1
-                },
-                "Orientation": {
-                    "value0": 0.50012201070785522,
-                    "value1": 0.4998779296875,
-                    "value2": -0.4998779296875,
-                    "value3": 0.50012201070785522
-                }
-            },
-            "children": [],
-            "flags": 0,
-            "components_number": [
-                0,
-                4
-            ],
-            "archetypesDependency": [],
-            "AGE_CORE_EntityRepresentationComponent": {
-                "name": "wall-spot-3"
-            },
-            "AGE_CORE_SpotLightComponent": {
-                "color": {
-                    "value0": 1,
-                    "value1": 0.74901962280273438,
-                    "value2": 0.44705882668495178,
-                    "value3": 1
-                },
-                "range": {
-                    "value0": 0.84000003337860107,
-                    "value1": 0,
-                    "value2": 0.060000002384185791
-                },
-                "exponent": 5,
-                "cutOff": 0.5
-            }
-        },
-        "Entity_262": {
-            "link": {
-                "Position": {
-                    "value0": -8.5,
-                    "value1": 0,
-                    "value2": -16
-                },
-                "Scale": {
-                    "value0": 1,
-                    "value1": 1,
-                    "value2": 1
-                },
-                "Orientation": {
-                    "value0": 0.50012201070785522,
-                    "value1": 0.4998779296875,
-                    "value2": -0.4998779296875,
-                    "value3": 0.50012201070785522
-                }
-            },
-            "children": [],
-            "flags": 0,
-            "components_number": [
-                0,
-                4
-            ],
-            "archetypesDependency": [],
-            "AGE_CORE_EntityRepresentationComponent": {
-                "name": "wall-spot-4"
-            },
-            "AGE_CORE_SpotLightComponent": {
-                "color": {
-                    "value0": 1,
-                    "value1": 0.74901962280273438,
-                    "value2": 0.44705882668495178,
-                    "value3": 1
-                },
-                "range": {
-                    "value0": 0.84000003337860107,
-                    "value1": 0,
-                    "value2": 0.060000002384185791
-                },
-                "exponent": 5,
-                "cutOff": 0.5
-            }
-        },
-        "Entity_263": {
             "link": {
                 "Position": {
                     "value0": 4,
@@ -22312,7 +22222,7 @@
                 "cutOff": 0.5
             }
         },
-        "Entity_264": {
+        "Entity_262": {
             "link": {
                 "Position": {
                     "value0": 11,
@@ -22322,7 +22232,7 @@
                 "Scale": {
                     "value0": 1,
                     "value1": 10,
-                    "value2": 20
+                    "value2": 30
                 },
                 "Orientation": {
                     "value0": 0,
@@ -22351,7 +22261,7 @@
                 }
             }
         },
-        "Entity_265": {
+        "Entity_263": {
             "link": {
                 "Position": {
                     "value0": 10,
@@ -22371,8 +22281,8 @@
                 }
             },
             "children": [
-                266,
-                269
+                264,
+                267
             ],
             "flags": 0,
             "components_number": [
@@ -22383,7 +22293,7 @@
                 "name": "gearzzz"
             }
         },
-        "Entity_266": {
+        "Entity_264": {
             "link": {
                 "Position": {
                     "value0": 0,
@@ -22403,8 +22313,8 @@
                 }
             },
             "children": [
-                267,
-                268
+                265,
+                266
             ],
             "flags": 0,
             "components_number": [
@@ -22415,7 +22325,7 @@
                 "name": "gears-group-Copy"
             }
         },
-        "Entity_267": {
+        "Entity_265": {
             "link": {
                 "Position": {
                     "value0": 0,
@@ -22464,7 +22374,7 @@
                 "Speed": -40
             }
         },
-        "Entity_268": {
+        "Entity_266": {
             "link": {
                 "Position": {
                     "value0": 0,
@@ -22512,7 +22422,7 @@
                 "Speed": 40
             }
         },
-        "Entity_269": {
+        "Entity_267": {
             "link": {
                 "Position": {
                     "value0": 0,
@@ -22532,8 +22442,8 @@
                 }
             },
             "children": [
-                270,
-                271
+                268,
+                269
             ],
             "flags": 0,
             "components_number": [
@@ -22544,7 +22454,7 @@
                 "name": "gears-group"
             }
         },
-        "Entity_270": {
+        "Entity_268": {
             "link": {
                 "Position": {
                     "value0": 0,
@@ -22592,7 +22502,7 @@
                 "Speed": 40
             }
         },
-        "Entity_271": {
+        "Entity_269": {
             "link": {
                 "Position": {
                     "value0": 0,
@@ -22640,7 +22550,7 @@
                 "Speed": -40
             }
         },
-        "Entity_272": {
+        "Entity_270": {
             "link": {
                 "Position": {
                     "value0": 0,
@@ -22660,10 +22570,10 @@
                 }
             },
             "children": [
+                271,
+                272,
                 273,
-                274,
-                275,
-                276
+                274
             ],
             "flags": 0,
             "components_number": [
@@ -22674,7 +22584,7 @@
                 "name": "tonneau-group"
             }
         },
-        "Entity_273": {
+        "Entity_271": {
             "link": {
                 "Position": {
                     "value0": 1.5,
@@ -22713,7 +22623,7 @@
                 "name": "tonneau-Copy-Copy"
             }
         },
-        "Entity_274": {
+        "Entity_272": {
             "link": {
                 "Position": {
                     "value0": 1,
@@ -22752,7 +22662,7 @@
                 "name": "tonneau-Copy-Copy"
             }
         },
-        "Entity_275": {
+        "Entity_273": {
             "link": {
                 "Position": {
                     "value0": 1,
@@ -22791,7 +22701,7 @@
                 "name": "tonneau-Copy-Copy"
             }
         },
-        "Entity_276": {
+        "Entity_274": {
             "link": {
                 "Position": {
                     "value0": 0,
@@ -22830,7 +22740,7 @@
                 "name": "crate-Copy-Copy"
             }
         },
-        "Entity_277": {
+        "Entity_275": {
             "link": {
                 "Position": {
                     "value0": 0,
@@ -22869,7 +22779,7 @@
                 "name": "kiwi-Copy-Copy"
             }
         },
-        "Entity_278": {
+        "Entity_276": {
             "link": {
                 "Position": {
                     "value0": 0,
@@ -22908,7 +22818,7 @@
                 "name": "pinapple-Copy-Copy"
             }
         },
-        "Entity_279": {
+        "Entity_277": {
             "link": {
                 "Position": {
                     "value0": 0,
@@ -22947,7 +22857,7 @@
                 "name": "pinapple-Copy-Copy"
             }
         },
-        "Entity_280": {
+        "Entity_278": {
             "link": {
                 "Position": {
                     "value0": -0.40000000596046448,
@@ -22984,6 +22894,319 @@
             },
             "AGE_CORE_EntityRepresentationComponent": {
                 "name": "banana-Copy-Copy"
+            }
+        },
+        "Entity_279": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 1.5,
+                    "value2": -10
+                },
+                "Scale": {
+                    "value0": 5,
+                    "value1": 5,
+                    "value2": 5
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0.70710676908493042,
+                    "value2": 0,
+                    "value3": 0.70710676908493042
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "stair-b"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "stair-b",
+                "synchronizePosition": false,
+                "synchronizeRotation": false,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "stair-b-Copy-Copy"
+            }
+        },
+        "Entity_280": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 0.69999998807907104,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [
+                281,
+                282,
+                283,
+                284,
+                285,
+                286
+            ],
+            "flags": 0,
+            "components_number": [
+                0
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "back-walls"
+            }
+        },
+        "Entity_281": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": -13
+                },
+                "Scale": {
+                    "value0": 5,
+                    "value1": 5,
+                    "value2": 5
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0.70710676908493042,
+                    "value2": 0,
+                    "value3": 0.70710676908493042
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "wall-a"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "wall-a",
+                "synchronizePosition": false,
+                "synchronizeRotation": false,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "wall-a-Copy-Copy"
+            }
+        },
+        "Entity_282": {
+            "link": {
+                "Position": {
+                    "value0": 5,
+                    "value1": 0,
+                    "value2": -13
+                },
+                "Scale": {
+                    "value0": 5,
+                    "value1": 5,
+                    "value2": 5
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0.70710676908493042,
+                    "value2": 0,
+                    "value3": 0.70710676908493042
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "wall-a"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "wall-a",
+                "synchronizePosition": false,
+                "synchronizeRotation": false,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "wall-a-Copy-Copy"
+            }
+        },
+        "Entity_283": {
+            "link": {
+                "Position": {
+                    "value0": 10,
+                    "value1": 0,
+                    "value2": -13
+                },
+                "Scale": {
+                    "value0": 5,
+                    "value1": 5,
+                    "value2": 5
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0.70710676908493042,
+                    "value2": 0,
+                    "value3": 0.70710676908493042
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "wall-a"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "wall-a",
+                "synchronizePosition": false,
+                "synchronizeRotation": false,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "wall-a-Copy-Copy"
+            }
+        },
+        "Entity_284": {
+            "link": {
+                "Position": {
+                    "value0": -6,
+                    "value1": 2.5555000305175781,
+                    "value2": -13
+                },
+                "Scale": {
+                    "value0": 7,
+                    "value1": 7,
+                    "value2": 7
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0.70710676908493042,
+                    "value2": 0,
+                    "value3": -0.70710676908493042
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "block-window-a"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "block-window-a",
+                "synchronizePosition": false,
+                "synchronizeRotation": false,
+                "synchronizeScale": false,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "block-window-a-Copy-Copy"
+            }
+        },
+        "Entity_285": {
+            "link": {
+                "Position": {
+                    "value0": -6,
+                    "value1": 2,
+                    "value2": -20
+                },
+                "Scale": {
+                    "value0": 20,
+                    "value1": 20,
+                    "value2": 20
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0.70710676908493042,
+                    "value2": 0,
+                    "value3": -0.70710676908493042
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "dragon"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "alduin/alduin.mage",
+                "value1": "alduin/alduin.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            }
+        },
+        "Entity_286": {
+            "link": {
+                "Position": {
+                    "value0": -6,
+                    "value1": 3,
+                    "value2": -12.5
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                3
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "dragon-light"
+            },
+            "AGE_CORE_PointLightComponent": {
+                "cereal_class_version": 1,
+                "color": {
+                    "value0": 1,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "range": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0.85500001907348633
+                }
             }
         }
     }
