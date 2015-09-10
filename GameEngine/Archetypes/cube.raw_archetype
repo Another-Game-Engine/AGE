@@ -61,9 +61,9 @@
             "link": {
                 "cereal_class_version": 0,
                 "Position": {
-                    "value0": -33.072921752929687,
-                    "value1": -13.849857330322266,
-                    "value2": 0.37862730026245117
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
                 },
                 "Scale": {
                     "value0": 1,
