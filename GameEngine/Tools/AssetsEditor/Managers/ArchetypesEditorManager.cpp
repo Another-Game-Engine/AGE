@@ -191,7 +191,11 @@ namespace AGE
 			for (auto &en: tmpEntitiesList)
 			{
 				auto &e = *en;
-				if (e != entity && e->getComponent<ArchetypeComponent>())
+				if (e->haveComponent<ArchetypeComponent>() == false)
+				{
+					e->addComponent<ArchetypeComponent>(name);
+				}
+				if (e != entity)
 				{
 					e->getComponent<ArchetypeComponent>()->parentIsAnArchetype = true;
 				}
