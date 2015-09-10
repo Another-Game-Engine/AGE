@@ -2,6 +2,7 @@
 
 #include <Components/Component.hh>
 #include <Utils/Serialization/SerializationArchives.hpp>
+#include <Utils/Debug.hpp>
 
 namespace AGE
 {
@@ -9,6 +10,8 @@ namespace AGE
 	// An Archetype's entity will just have this component when serialized
 	// At load, this component will be detected and the archetype's infos
 	// will fill this entity
+	START_NOT_OPTIMIZED;
+
 	struct ArchetypeComponent : public ComponentBase
 	{
 		AGE_COMPONENT_UNIQUE_IDENTIFIER("AGE_CORE_ArchetypeComponent");
@@ -28,15 +31,20 @@ namespace AGE
 		//////
 		////
 		// Serialization
-
 		template <typename Archive>
 		void serialize(Archive &ar, const std::uint32_t version)
 		{
 			ar(CEREAL_NVP(archetypeName));
-			if (version > 1)
+			if (version == 2)
 			{
 #ifdef EDITOR_ENABLED
 				ar(synchronizePosition, synchronizeRotation, synchronizeScale, parentIsAnArchetype);
+#endif
+			}
+			if (version == 3)
+			{
+#ifdef EDITOR_ENABLED
+				ar(CEREAL_NVP(synchronizePosition), CEREAL_NVP(synchronizeRotation), CEREAL_NVP(synchronizeScale), CEREAL_NVP(parentIsAnArchetype));
 #endif
 			}
 		}
@@ -49,6 +57,7 @@ namespace AGE
 		////
 		//////
 	};
+	STOP_NOT_OPTIMIZED;
 }
 
-CEREAL_CLASS_VERSION(AGE::ArchetypeComponent, 2)
+CEREAL_CLASS_VERSION(AGE::ArchetypeComponent, 3)
