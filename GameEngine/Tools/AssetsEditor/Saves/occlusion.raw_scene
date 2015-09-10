@@ -55,66 +55,15 @@
                 "value": 13917482855567903631
             }
         ],
-        "entityNumber": 25,
+        "entityNumber": 26,
         "Entity_0": {
             "cereal_class_version": 0,
             "link": {
                 "cereal_class_version": 0,
                 "Position": {
                     "value0": 0,
-                    "value1": 1,
-                    "value2": 0
-                },
-                "Scale": {
-                    "value0": 5,
-                    "value1": 5,
-                    "value2": 5
-                },
-                "Orientation": {
-                    "value0": 0.2164396196603775,
-                    "value1": 0,
-                    "value2": 0,
-                    "value3": 0.97629600763320923
-                }
-            },
-            "children": [],
-            "flags": 0,
-            "components_number": [
-                0,
-                1,
-                12
-            ],
-            "archetypesDependency": [],
-            "AGE_CORE_EntityRepresentationComponent": {
-                "cereal_class_version": 0,
-                "name": "spaceship"
-            },
-            "AGE_CORE_MeshRenderer": {
-                "cereal_class_version": 3,
-                "value0": "spaceship/spaceship.mage",
-                "value1": "spaceship/spaceship.sage",
-                "value2": "",
-                "value3": {
-                    "type": 0,
-                    "data": 0
-                }
-            },
-            "AGE_CORE_RotationComponent": {
-                "cereal_class_version": 1,
-                "Angles": {
-                    "value0": 0,
-                    "value1": 1,
-                    "value2": 0
-                },
-                "Speed": 40
-            }
-        },
-        "Entity_1": {
-            "link": {
-                "Position": {
-                    "value0": 0,
                     "value1": -1,
-                    "value2": 0
+                    "value2": 7.5
                 },
                 "Scale": {
                     "value0": 30,
@@ -138,9 +87,11 @@
             ],
             "archetypesDependency": [],
             "AGE_CORE_EntityRepresentationComponent": {
+                "cereal_class_version": 0,
                 "name": "sol"
             },
             "AGE_CORE_MeshRenderer": {
+                "cereal_class_version": 3,
                 "value0": "pixar128 library/brick/red_dutch.mage",
                 "value1": "cube/cube.sage",
                 "value2": "",
@@ -198,7 +149,7 @@
                 }
             }
         },
-        "Entity_2": {
+        "Entity_1": {
             "link": {
                 "Position": {
                     "value0": 0,
@@ -241,7 +192,7 @@
                 }
             }
         },
-        "Entity_3": {
+        "Entity_2": {
             "link": {
                 "Position": {
                     "value0": 0,
@@ -287,7 +238,7 @@
                 "cutOff": 0.5
             }
         },
-        "Entity_4": {
+        "Entity_3": {
             "link": {
                 "Position": {
                     "value0": 0,
@@ -307,9 +258,9 @@
                 }
             },
             "children": [
+                4,
                 5,
-                6,
-                7
+                6
             ],
             "flags": 0,
             "components_number": [
@@ -320,7 +271,7 @@
                 "name": "wall-and-window"
             }
         },
-        "Entity_5": {
+        "Entity_4": {
             "link": {
                 "Position": {
                     "value0": -2,
@@ -407,7 +358,7 @@
                 }
             }
         },
-        "Entity_6": {
+        "Entity_5": {
             "link": {
                 "Position": {
                     "value0": 2,
@@ -494,7 +445,7 @@
                 }
             }
         },
-        "Entity_7": {
+        "Entity_6": {
             "link": {
                 "Position": {
                     "value0": 0,
@@ -571,6 +522,55 @@
                 "FilterGroup": 1,
                 "Mesh": "medievalpack/meshs/block_window_b",
                 "Convex": true
+            }
+        },
+        "Entity_7": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 1,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 5,
+                    "value1": 5,
+                    "value2": 5
+                },
+                "Orientation": {
+                    "value0": 0.2164396196603775,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 0.97629600763320923
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                12
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "spaceship"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "spaceship/spaceship.mage",
+                "value1": "spaceship/spaceship.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_CORE_RotationComponent": {
+                "cereal_class_version": 1,
+                "Angles": {
+                    "value0": 0,
+                    "value1": 1,
+                    "value2": 0
+                },
+                "Speed": 40
             }
         },
         "Entity_8": {
@@ -1583,13 +1583,13 @@
             "link": {
                 "Position": {
                     "value0": 0,
-                    "value1": 0,
-                    "value2": 0
+                    "value1": 1,
+                    "value2": 14
                 },
                 "Scale": {
-                    "value0": 1,
-                    "value1": 1,
-                    "value2": 1
+                    "value0": 3,
+                    "value1": 3,
+                    "value2": 3
                 },
                 "Orientation": {
                     "value0": 0,
@@ -1601,11 +1601,30 @@
             "children": [],
             "flags": 0,
             "components_number": [
-                0
+                0,
+                1,
+                12
             ],
             "archetypesDependency": [],
             "AGE_CORE_EntityRepresentationComponent": {
                 "name": "flash"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "flash/flash.mage",
+                "value1": "flash/flash.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_CORE_RotationComponent": {
+                "Angles": {
+                    "value0": 0,
+                    "value1": 1,
+                    "value2": 0
+                },
+                "Speed": 40
             }
         },
         "Entity_23": {
@@ -1696,6 +1715,64 @@
                     "value0": 1,
                     "value1": 0.024000000208616257,
                     "value2": 0.0099999997764825821
+                },
+                "exponent": 5,
+                "cutOff": 0.5
+            }
+        },
+        "Entity_25": {
+            "link": {
+                "Position": {
+                    "value0": 1,
+                    "value1": 0.5,
+                    "value2": 12
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": -0,
+                    "value1": 1,
+                    "value2": -0,
+                    "value3": -4.3711388286737929e-008
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                3,
+                4
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "spot-flash"
+            },
+            "AGE_CORE_PointLightComponent": {
+                "color": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "range": {
+                    "value0": 1,
+                    "value1": 0.13400000333786011,
+                    "value2": 0.26500001549720764
+                }
+            },
+            "AGE_CORE_SpotLightComponent": {
+                "color": {
+                    "value0": 1,
+                    "value1": 0.44387543201446533,
+                    "value2": 0.035294115543365479,
+                    "value3": 1
+                },
+                "range": {
+                    "value0": 1,
+                    "value1": 0,
+                    "value2": 0
                 },
                 "exponent": 5,
                 "cutOff": 0.5
