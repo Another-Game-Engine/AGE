@@ -55,7 +55,7 @@
                 "value": 13917482855567903631
             }
         ],
-        "entityNumber": 287,
+        "entityNumber": 290,
         "Entity_0": {
             "cereal_class_version": 0,
             "link": {
@@ -22960,7 +22960,10 @@
                 283,
                 284,
                 285,
-                286
+                286,
+                287,
+                288,
+                289
             ],
             "flags": 0,
             "components_number": [
@@ -22985,9 +22988,9 @@
                 },
                 "Orientation": {
                     "value0": 0,
-                    "value1": 0.70710676908493042,
+                    "value1": 0.70698469877243042,
                     "value2": 0,
-                    "value3": 0.70710676908493042
+                    "value3": 0.70722883939743042
                 }
             },
             "children": [],
@@ -23097,14 +23100,14 @@
                 },
                 "Scale": {
                     "value0": 7,
-                    "value1": 7,
+                    "value1": 9,
                     "value2": 7
                 },
                 "Orientation": {
                     "value0": 0,
-                    "value1": 0.70710676908493042,
+                    "value1": -0.70698469877243042,
                     "value2": 0,
-                    "value3": -0.70710676908493042
+                    "value3": 0.70722883939743042
                 }
             },
             "children": [],
@@ -23206,6 +23209,123 @@
                     "value0": 0,
                     "value1": 0,
                     "value2": 0.85500001907348633
+                }
+            }
+        },
+        "Entity_287": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 5,
+                    "value2": -13
+                },
+                "Scale": {
+                    "value0": 5,
+                    "value1": 5,
+                    "value2": 5
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0.70710676908493042,
+                    "value2": 0,
+                    "value3": 0.70710676908493042
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "arc"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "arc",
+                "synchronizePosition": false,
+                "synchronizeRotation": false,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "arc-Copy-Copy"
+            }
+        },
+        "Entity_288": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 5,
+                    "value2": -13
+                },
+                "Scale": {
+                    "value0": 5,
+                    "value1": 5,
+                    "value2": 5.3000001907348633
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0.70710676908493042,
+                    "value2": 0,
+                    "value3": 0.70710676908493042
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "grid-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "medievalpack/meshs/grid_a.mage",
+                "value1": "medievalpack/meshs/grid_a.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            }
+        },
+        "Entity_289": {
+            "link": {
+                "Position": {
+                    "value0": -6,
+                    "value1": 3,
+                    "value2": -12.399999618530273
+                },
+                "Scale": {
+                    "value0": 5,
+                    "value1": 5,
+                    "value2": 5.3000001907348633
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0.70698469877243042,
+                    "value2": 0,
+                    "value3": 0.70722883939743042
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "grid-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "medievalpack/meshs/grid_a.mage",
+                "value1": "medievalpack/meshs/grid_a.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
                 }
             }
         }
