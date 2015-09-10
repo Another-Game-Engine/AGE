@@ -10,34 +10,12 @@ namespace TMQ
 		MessageBase(std::size_t _uid, std::size_t _tid);
 		std::size_t uid;
 		std::size_t tid; // thread id
-		MessageBase(const MessageBase&o)
-		{
-			uid = o.uid;
-			tid = o.tid;
-			_used = o._used;
-		}
-		MessageBase &operator=(const MessageBase&o)
-		{
-			uid = o.uid;
-			tid = o.tid;
-			_used = o._used;
-			return *this;
-		}
-		MessageBase(MessageBase&&o)
-		{
-			uid = o.uid;
-			tid = o.tid;
-			_used = o._used;
-		}
-		MessageBase &operator=(MessageBase&&o)
-		{
-			uid = o.uid;
-			tid = o.tid;
-			_used = o._used;
-			return *this;
-		}
+		MessageBase(const MessageBase&o);
+		MessageBase &operator=(const MessageBase&o);
+		MessageBase(MessageBase&&o);
+		MessageBase &operator=(MessageBase&&o);
 		bool _used = false;
-		MessageBase *clone(char* dest) { return _clone(dest); }
+		MessageBase *clone(char* dest);
 	protected:
 		static std::size_t __sharedIdCounter;
 		virtual MessageBase *_clone(char *dest) = 0;

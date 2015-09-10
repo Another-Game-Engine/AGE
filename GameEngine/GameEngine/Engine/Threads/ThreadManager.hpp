@@ -44,16 +44,7 @@ namespace AGE
 			std::array < float, 128 > workCopy;
 			std::array < float, 128 > waitCopy;
 			std::array < float, 128 > totalCopy;
-			ThreadStatistics()
-				: name("")
-				, frameCounter(0)
-				, secondCounter(0)
-			{
-				work.fill(0);
-				wait.fill(0);
-				averageWorkTime = 0;
-				averageWaitTime = 0;
-			}
+			ThreadStatistics();
 		};
 		inline std::array<ThreadStatistics, Thread::END> &getStatistics()
 		{

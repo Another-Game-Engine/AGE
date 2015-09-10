@@ -177,4 +177,21 @@ void FontManager::draw2DString(const std::string &text,
 {
 	_toDraw.emplace_back(text, fontName, size, position, color, shader);
 }
+
+FontManager::DrawStringSave::DrawStringSave(
+	const std::string &_str
+	, const std::string &_fontName
+	, std::size_t _size
+	, const glm::ivec2 &_position
+	, const glm::vec4 &_color
+	, const std::string &_shader
+	) : str(_str)
+	, fontName(_fontName)
+	, size(_size)
+	, position(_position)
+	, color(_color)
+	, shader(_shader))
+{
+}
+
 #endif

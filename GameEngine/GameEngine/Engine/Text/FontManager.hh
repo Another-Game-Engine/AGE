@@ -61,8 +61,7 @@ private:
 			, size(_size)
 			, position(_position)
 			, color(_color)
-			, shader(_shader)
-		{}
+			, shader(_shader));
 
 		std::string str;
 		std::string fontName;

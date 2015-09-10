@@ -18,21 +18,11 @@ private:
 	AGE::Vector<IDependency*>             _instances;
 	DependenciesInjector                   *_parent;
 public:
-	DependenciesInjector(DependenciesInjector *parent = nullptr)
-		: _parent(std::move(parent))
-	{}
+	DependenciesInjector(DependenciesInjector *parent = nullptr);
 
-	virtual ~DependenciesInjector()
-	{
-		for (auto &e : _instances)
-		{
-			if (e != nullptr)
-				delete e;
-		}
-		_instances.clear();
-	}
+	virtual ~DependenciesInjector();
 
-	DependenciesInjector *getDependenciesInjectorParent()
+	inline DependenciesInjector *getDependenciesInjectorParent()
 	{
 		return _parent;
 	}

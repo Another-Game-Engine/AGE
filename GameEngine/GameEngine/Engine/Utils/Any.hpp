@@ -60,12 +60,9 @@ public:
 	{
 	}
 
-	~Any(){}
+	~Any();
 
-	Any(const Any &o)
-	{
-		_data = o._data;
-	}
+	Any(const Any &o);
 
 	template<typename T>
 	T get()

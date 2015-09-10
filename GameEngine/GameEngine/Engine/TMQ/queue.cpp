@@ -109,6 +109,25 @@ bool PtrQueue::Chunk::empty()
 	return false;
 }
 
+bool PtrQueue::Chunk::move(MessageBase *e, std::size_t size)
+{
+	std::size_t s = size;
+	std::size_t sizeOfInt = sizeof(std::size_t);
+
+	if (_size - _to < s + sizeOfInt)
+	{
+		return false;
+	}
+
+	char *tmp = _data;
+	tmp += _to;
+	memcpy(tmp, &s, sizeOfInt);
+	tmp += sizeOfInt;
+	e->clone(tmp);
+	auto test = (MessageBase*)(tmp);
+	_to += sizeOfInt + s;
+	return true;
+}
 
 PtrQueue::PtrQueue(std::size_t chunkSize)
 	: _chunkSize(chunkSize)
@@ -201,6 +220,23 @@ bool PtrQueue::empty()
 	return true;
 }
 
+bool PtrQueue::move(MessageBase *e, std::size_t size)
+{
+	std::size_t s = size;
+	std::size_t sizeOfInt = sizeof(std::size_t);
+	assert(s + sizeOfInt < _chunkSize);
+
+	if ((*_listWriter)->move(std::move(e), size))
+		return true;
+	if (_listWriter == --std::end(_list))
+	{
+		_list.push_back(new Chunk(_chunkSize));
+		_listWriter = --std::end(_list);
+	}
+	else
+		++_listWriter;
+	return (*_listWriter)->move(std::move(e), size);
+}
 
 ////////////////////
 /// HYBRID
