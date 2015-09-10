@@ -317,8 +317,6 @@ namespace AGE
 
 	void Imgui::renderDrawLists(ImDrawData* draw_data/*ImDrawList** const cmd_lists, int cmd_lists_count*/)
 	{
-		if (GetMainThread()->isRenderFrame() == false)
-			return;
 #ifdef AGE_ENABLE_IMGUI
 		AGE::GetRenderThread()->setImguiDrawList(std::make_shared<AGE::RenderImgui>(draw_data->CmdLists, draw_data->CmdListsCount));
 #else
