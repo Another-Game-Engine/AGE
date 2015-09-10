@@ -55,7 +55,7 @@
                 "value": 13917482855567903631
             }
         ],
-        "entityNumber": 261,
+        "entityNumber": 268,
         "Entity_0": {
             "cereal_class_version": 0,
             "link": {
@@ -22083,8 +22083,86 @@
         "Entity_259": {
             "link": {
                 "Position": {
-                    "value0": -22,
+                    "value0": -10,
                     "value1": 0,
+                    "value2": 5
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "wall-a-x4"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "wall-a-x4",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "wall-a-x4-Copy-Copy"
+            }
+        },
+        "Entity_260": {
+            "link": {
+                "Position": {
+                    "value0": -10,
+                    "value1": 0,
+                    "value2": -20
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "wall-a-x4"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "wall-a-x4",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "wall-a-x4-Copy-Copy"
+            }
+        },
+        "Entity_261": {
+            "link": {
+                "Position": {
+                    "value0": -10,
+                    "value1": 2.5,
                     "value2": 0
                 },
                 "Scale": {
@@ -22106,25 +22184,25 @@
                 0
             ],
             "archetypesDependency": [
-                "wall-a"
+                "arc"
             ],
             "AGE_CORE_ArchetypeComponent": {
-                "archetypeName": "wall-a",
+                "archetypeName": "arc",
                 "synchronizePosition": false,
                 "synchronizeRotation": true,
                 "synchronizeScale": true,
                 "parentIsAnArchetype": false
             },
             "AGE_CORE_EntityRepresentationComponent": {
-                "name": "wall-a-Copy-Copy"
+                "name": "arc-Copy-Copy"
             }
         },
-        "Entity_260": {
+        "Entity_262": {
             "link": {
                 "Position": {
-                    "value0": -22,
+                    "value0": -10,
                     "value1": 2.5,
-                    "value2": 5
+                    "value2": 0
                 },
                 "Scale": {
                     "value0": 5,
@@ -22141,21 +22219,247 @@
             "children": [],
             "flags": 0,
             "components_number": [
-                8,
-                0
+                0,
+                1
             ],
-            "archetypesDependency": [
-                "wall-a"
-            ],
-            "AGE_CORE_ArchetypeComponent": {
-                "archetypeName": "wall-a",
-                "synchronizePosition": false,
-                "synchronizeRotation": true,
-                "synchronizeScale": true,
-                "parentIsAnArchetype": false
-            },
+            "archetypesDependency": [],
             "AGE_CORE_EntityRepresentationComponent": {
-                "name": "wall-a-Copy-Copy"
+                "name": "grid"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "medievalpack/meshs/grid_a.mage",
+                "value1": "medievalpack/meshs/grid_a.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            }
+        },
+        "Entity_263": {
+            "link": {
+                "Position": {
+                    "value0": -13,
+                    "value1": 1,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": -0,
+                    "value1": 0.70710676908493042,
+                    "value2": -0,
+                    "value3": -0.70710676908493042
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                4
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "spot-behind-grid"
+            },
+            "AGE_CORE_SpotLightComponent": {
+                "cereal_class_version": 0,
+                "color": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1,
+                    "value3": 1
+                },
+                "range": {
+                    "value0": 0.33300000429153442,
+                    "value1": 0.14800000190734863,
+                    "value2": 0
+                },
+                "exponent": 5,
+                "cutOff": 0.5
+            }
+        },
+        "Entity_264": {
+            "link": {
+                "Position": {
+                    "value0": -8.5,
+                    "value1": 0,
+                    "value2": -7
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0.49999997019767761,
+                    "value1": 0.49999997019767761,
+                    "value2": -0.49999997019767761,
+                    "value3": 0.49999997019767761
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                4
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "wall-spot"
+            },
+            "AGE_CORE_SpotLightComponent": {
+                "color": {
+                    "value0": 1,
+                    "value1": 0.74901962280273438,
+                    "value2": 0.44705882668495178,
+                    "value3": 1
+                },
+                "range": {
+                    "value0": 0.84000003337860107,
+                    "value1": 0,
+                    "value2": 0.060000002384185791
+                },
+                "exponent": 5,
+                "cutOff": 0.5
+            }
+        },
+        "Entity_265": {
+            "link": {
+                "Position": {
+                    "value0": -8.5,
+                    "value1": 0,
+                    "value2": 7
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0.50012201070785522,
+                    "value1": 0.4998779296875,
+                    "value2": -0.4998779296875,
+                    "value3": 0.50012201070785522
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                4
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "wall-spot-2"
+            },
+            "AGE_CORE_SpotLightComponent": {
+                "color": {
+                    "value0": 1,
+                    "value1": 0.74901962280273438,
+                    "value2": 0.44705882668495178,
+                    "value3": 1
+                },
+                "range": {
+                    "value0": 0.84000003337860107,
+                    "value1": 0,
+                    "value2": 0.060000002384185791
+                },
+                "exponent": 5,
+                "cutOff": 0.5
+            }
+        },
+        "Entity_266": {
+            "link": {
+                "Position": {
+                    "value0": -8.5,
+                    "value1": 0,
+                    "value2": 16
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0.49999997019767761,
+                    "value1": 0.49999997019767761,
+                    "value2": -0.49999997019767761,
+                    "value3": 0.49999997019767761
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                4
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "wall-spot-3"
+            },
+            "AGE_CORE_SpotLightComponent": {
+                "color": {
+                    "value0": 1,
+                    "value1": 0.74901962280273438,
+                    "value2": 0.44705882668495178,
+                    "value3": 1
+                },
+                "range": {
+                    "value0": 0.84000003337860107,
+                    "value1": 0,
+                    "value2": 0.060000002384185791
+                },
+                "exponent": 5,
+                "cutOff": 0.5
+            }
+        },
+        "Entity_267": {
+            "link": {
+                "Position": {
+                    "value0": -8.5,
+                    "value1": 0,
+                    "value2": -16
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0.49999997019767761,
+                    "value1": 0.49999997019767761,
+                    "value2": -0.49999997019767761,
+                    "value3": 0.49999997019767761
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                4
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "wall-spot-4"
+            },
+            "AGE_CORE_SpotLightComponent": {
+                "color": {
+                    "value0": 1,
+                    "value1": 0.74901962280273438,
+                    "value2": 0.44705882668495178,
+                    "value3": 1
+                },
+                "range": {
+                    "value0": 0.84000003337860107,
+                    "value1": 0,
+                    "value2": 0.060000002384185791
+                },
+                "exponent": 5,
+                "cutOff": 0.5
             }
         }
     }
