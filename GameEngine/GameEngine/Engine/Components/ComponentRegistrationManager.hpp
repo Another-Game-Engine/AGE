@@ -65,7 +65,6 @@ namespace AGE
 
 			_jsonLoadMap.insert(std::make_pair(ageId, LoadJsonFn([=](void *ptr, cereal::JSONInputArchive &ar, Entity &entity)
 			{
-				std::cout << "Loading component of type : " << name << std::endl;
 				T *c = new(ptr)T();
 				c->entity = entity;
 				ar(*c);
@@ -78,7 +77,6 @@ namespace AGE
 
 			_binaryLoadMap.insert(std::make_pair(ageId, LoadBinaryFn([=](void *ptr, cereal::PortableBinaryInputArchive &ar, Entity &entity)
 			{
-				std::cout << "Loading component of type : " << name << std::endl;
 				T *c = new(ptr)T();
 				c->entity = entity;
 				ar(*c);
