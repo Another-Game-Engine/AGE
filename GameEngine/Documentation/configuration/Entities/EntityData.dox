@@ -1,0 +1,41 @@
+/*!
+\class		EntityData
+\brief
+
+\fn			EntityData (AScene *scene)
+\brief		Constructor.
+\param		AScene *scene
+
+\fn			const Entity & 	getEntity () const 
+\brief		Return the Entity (const version)
+\return		const Entity &
+
+\fn			Entity & 	getEntity ()
+\brief		Return the Entity
+\return		Entity &
+\see			const Entity & 	getEntity () const 
+
+\fn			const AGE::Link & 	getLink () const
+\return		const AGE::Link & 
+ 
+\fn			AGE::Link & 	getLink ()
+ 
+\fn			AScene * 	getScene ()
+\return		AScene *
+ 
+\fn			ComponentBase * 	getComponent (ComponentType id)
+\param		ComponentType id
+\return		ComponentBase *
+ 
+\fn			void 	addComponentPtr (ComponentBase *cpt)
+ 
+\fn			void 	copyComponent (ComponentBase *cpt)
+ 
+\fn			void 	removeComponent (ComponentType id)
+ 
+\fn			bool 	haveComponent (ComponentType id) const
+  
+\fn			const std::vector< ComponentBase * > & 				getComponentList () const 
+
+
+*/

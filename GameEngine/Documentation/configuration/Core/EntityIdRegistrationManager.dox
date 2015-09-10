@@ -1,0 +1,31 @@
+/*!
+\class		EntityIdRegistrationManager
+\brief
+
+\fn			EntityIdRegistrationManager ()
+\brief		Constructor.
+
+
+\fn     void registrarUnserializedEntity (Entity e, std::size_t id)
+\brief  register an unserialized Entity
+
+\fn     std::size_t 	registrarSerializedEntity (std::size_t id)
+\brief  register a serialized Entity
+\param void 	std::size_t id
+\return std::size_t
+
+
+\fn     void 	entityHandle (std::size_t id, Entity *e)
+\brief
+\param  std::size_t id
+\param  Entity *e
+
+\fn     void 	updateEntityHandles ()
+\brief
+
+\fn     void 	registrarGraphNode (std::size_t e, GraphNodeUnserialize g)
+\brief
+\param  std::size_t e
+\param  GraphNodeUnserialize g
+
+*/

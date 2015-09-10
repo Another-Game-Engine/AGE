@@ -1,0 +1,93 @@
+/*!
+\class		EntityFilter
+\brief
+
+\fn			EntityFilter (AScene *scene)
+\brief		Constructor.
+\param		AScene *scene
+
+
+\fn     void 	requireComponent (ComponentType id))
+\brief  set a component as required
+\param  ComponentType id
+
+\fn     void 	unRequireComponent (ComponentType id)
+\brief  delete a required component
+\param void 	ComponentType id
+
+\fn     void 	requireTag (TAG_ID tag)
+\brief  Flag a tag as required one
+\param  TAG_ID tag
+
+\fn     void 	unRequireTag (TAG_ID tag)
+\breif  delete a required tag
+\param  TAG_ID tag
+
+\fn     std::set< Entity > & 	getCollection ()
+\brief  return Entities collection
+\return std::set< Entity > &
+
+\fn     const std::set< Entity > & 	getCollection () const
+\brief  return Entities collection
+\return const std::set< Entity > &
+
+\fn     void 	clearCollection ()
+\brief  clear the collection
+
+
+\fn     virtual void 	componentAdded (const EntityData &e, ComponentType typeId)
+\brief  Manage Component's Adding
+\param  const EntityData &e
+\param  ComponentType typeId
+
+\fn     virtual void 	componentRemoved (const EntityData &e, ComponentType typeId)
+\brief  Manage component's removing
+\param  const EntityData &e
+\param  ComponentType typeId
+
+\fn     virtual void 	tagAdded (const EntityData &e, TAG_ID typeId)
+\brief  Manage tag's adding
+\param  const EntityData &e
+\param  TAG_ID typeId
+
+\fn     virtual void 	tagRemoved (const EntityData &e, TAG_ID typeId)
+\brief  Manage tag's removing
+\param  const EntityData &e
+\param  TAG_ID typeId
+
+\fn     virtual void 	entityAdded (const EntityData &e)
+\brief  Manage Entity add
+\param  const EntityData &e
+
+\fn     virtual void 	entityRemoved (const EntityData &e)
+\brief  Manage Entity remove
+\param  const EntityData &e
+
+\fn     void 	manuallyRemoveEntity (const Entity &e)
+\brief  Manage an Entity removing
+\param  const Entity &e
+
+\fn     void 	setOnAdd (std::function< void(Entity e)> &onAdd)
+\brief  Bind an Event on adding
+\param  std::function< void(Entity e)> &onAdd
+
+\fn     void 	setOnRemove (std::function< void(Entity e)> &onRm)
+\brief  Bind an Event on removing
+\param  std::function< void(Entity e)> &onRm
+
+\fn     bool 	isLocked () const
+\brief  check if ressource is locked
+\return bool
+
+\fn     void 	lock ()
+\brief  locks a ressource
+
+\fn     void unlock()
+\brief  unlocks ressources
+
+\fn     bool 	match (const EntityData &e)
+\brief
+\param  const EntityData &e
+\return bool
+
+*/
