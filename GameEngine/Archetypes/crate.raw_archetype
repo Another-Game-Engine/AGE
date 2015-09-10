@@ -66,9 +66,9 @@
                     "value2": 0
                 },
                 "Scale": {
-                    "value0": 0.5,
-                    "value1": 2,
-                    "value2": 2
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
                 },
                 "Orientation": {
                     "value0": 0,
