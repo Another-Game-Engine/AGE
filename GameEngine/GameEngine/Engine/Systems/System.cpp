@@ -51,4 +51,36 @@ namespace AGE
 	{
 		return _activated;
 	}
+	
+	void System::finalize(void)
+	{
+	}
+	
+	void System::updateBegin(float time) 
+	{
+	}
+
+	void System::updateEnd(float time)
+	{
+	}
+
+	void System::mainUpdate(float time)
+	{
+	}
+
+	bool System::initialize()
+	{
+		return true;
+	}
+	
+	bool System::activate()
+	{
+		return true;
+	}
+
+	bool System::deactivate()
+	{
+		return true;
+	}
+
 }
