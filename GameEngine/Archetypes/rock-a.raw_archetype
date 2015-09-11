@@ -133,20 +133,12 @@
             },
             "AGE_CORE_PhysicsCollider": {
                 "cereal_class_version": 1,
-                "ColliderType": 0,
+                "ColliderType": 3,
                 "Material": "DefaultMaterial",
                 "IsATrigger": false,
                 "FilterGroup": 1,
-                "Center": {
-                    "value0": 0,
-                    "value1": 0,
-                    "value2": 0
-                },
-                "Size": {
-                    "value0": 3,
-                    "value1": 3,
-                    "value2": 3
-                }
+                "Mesh": "medievalpack/meshs/rock_a",
+                "Convex": true
             }
         }
     }

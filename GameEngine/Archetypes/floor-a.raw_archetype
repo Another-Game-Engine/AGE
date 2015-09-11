@@ -119,34 +119,26 @@
                     "value1": 0,
                     "value2": 0
                 },
-                "Mass": 1,
+                "Mass": 0,
                 "DiagonalInertiaTensor": {
                     "value0": 1,
                     "value1": 1,
                     "value2": 1
                 },
-                "MaxAngularVelocity": 1000000,
-                "MaxDepenetrationVelocity": 1000000,
+                "MaxAngularVelocity": 7,
+                "MaxDepenetrationVelocity": 1.0000000331813535e+032,
                 "IsAffectedByGravity": false,
                 "IsKinematic": true,
-                "CollisionDetectionMode": 1
+                "CollisionDetectionMode": 0
             },
             "AGE_CORE_PhysicsCollider": {
                 "cereal_class_version": 1,
-                "ColliderType": 0,
+                "ColliderType": 3,
                 "Material": "DefaultMaterial",
                 "IsATrigger": false,
                 "FilterGroup": 1,
-                "Center": {
-                    "value0": 0,
-                    "value1": 0,
-                    "value2": 0
-                },
-                "Size": {
-                    "value0": 5,
-                    "value1": 0.0099999997764825821,
-                    "value2": 5
-                }
+                "Mesh": "medievalpack/meshs/floor_a",
+                "Convex": true
             }
         }
     }

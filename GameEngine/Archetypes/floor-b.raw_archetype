@@ -119,17 +119,17 @@
                     "value1": 0,
                     "value2": 0
                 },
-                "Mass": 1,
+                "Mass": 0,
                 "DiagonalInertiaTensor": {
                     "value0": 1,
                     "value1": 1,
                     "value2": 1
                 },
-                "MaxAngularVelocity": 1000000,
-                "MaxDepenetrationVelocity": 1000000,
+                "MaxAngularVelocity": 7,
+                "MaxDepenetrationVelocity": 1.0000000331813535e+032,
                 "IsAffectedByGravity": false,
                 "IsKinematic": true,
-                "CollisionDetectionMode": 1
+                "CollisionDetectionMode": 0
             },
             "AGE_CORE_PhysicsCollider": {
                 "cereal_class_version": 1,
