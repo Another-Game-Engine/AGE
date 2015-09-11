@@ -23584,9 +23584,9 @@
         "Entity_295": {
             "link": {
                 "Position": {
-                    "value0": -5.8613409996032715,
-                    "value1": 6.9978737831115723,
-                    "value2": -7.121422290802002
+                    "value0": 3.853724479675293,
+                    "value1": 2.3998093605041504,
+                    "value2": -3.9142298698425293
                 },
                 "Scale": {
                     "value0": 1,
@@ -23594,10 +23594,10 @@
                     "value2": 1
                 },
                 "Orientation": {
-                    "value0": 0.89966237545013428,
-                    "value1": -0.068052366375923157,
-                    "value2": 0.40370413661003113,
-                    "value3": 0.15165598690509796
+                    "value0": 0.042056843638420105,
+                    "value1": 0.68703848123550415,
+                    "value2": -0.039892956614494324,
+                    "value3": 0.72430509328842163
                 }
             },
             "children": [],
@@ -23605,7 +23605,7 @@
             "components_number": [
                 0,
                 5,
-                6
+                10
             ],
             "archetypesDependency": [],
             "AGE_CORE_EntityRepresentationComponent": {
@@ -23634,8 +23634,10 @@
                     }
                 }
             },
-            "AGE_CORE_FreeFlyComponent": {
-                "cereal_class_version": 0
+            "AGE_CORE_CharacterController": {
+                "cereal_class_version": 0,
+                "value0": 0.5,
+                "value1": 2
             }
         }
     }
