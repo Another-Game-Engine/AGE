@@ -357,8 +357,9 @@ namespace AGE
 			{
 				return;
 			}
-			assert(pairHeader.actors[0]->userData != nullptr && "Invalid actor");
-			assert(pairHeader.actors[1]->userData != nullptr && "Invalid actor");
+			if (pairHeader.actors[0]->userData == nullptr ||
+				pairHeader.actors[1]->userData == nullptr)
+				return;
 			CollisionListener *collisionListener = getCollisionListener();
 			std::vector<Contact> firstColliderContacts;
 			std::vector<Contact> secondColliderContacts;
