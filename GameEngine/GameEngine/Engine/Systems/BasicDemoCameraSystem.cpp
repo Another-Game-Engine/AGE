@@ -49,8 +49,6 @@ namespace AGE
 	{
 		for (Entity const &entity : _filter.getCollection())
 		{
-			if (entity->getComponent<CameraComponent>()->getPipeline() == 0)
-				entity->getComponent<CameraComponent>()->setPipeline(static_cast<RenderType>(1));
 			static float trigger = 1.0f;
 			if (_scene->getInstance<Input>()->getPhysicalKeyPressed(AGE_SPACE) && trigger >= 0.15f)
 			{
@@ -76,16 +74,16 @@ namespace AGE
 			entity->getComponent<CameraComponent>()->editorUpdate();
 			////////////////////////////////////
 
-//			auto camComponent = entity->getComponent<CameraComponent>();
-//			static char const *pipelineNames[RenderType::TOTAL] = { "Debug deferred rendering", "Deferred rendering" };
-//			if (ImGui::ListBox("Pipelines", &_pipelineIndex, pipelineNames, int(RenderType::TOTAL)))
-//			{
-//				if (camComponent->getPipeline() != (RenderType)_pipelineIndex)
-//				{
-//					camComponent->setPipeline((RenderType)_pipelineIndex);
-//					_scene->getSystem<RenderCameraSystem>()->drawDebugLines(_pipelineIndex == (int)RenderType::DEBUG_DEFERRED ? true : false);
-//				}
-//			}
+			auto camComponent = entity->getComponent<CameraComponent>();
+			static char const *pipelineNames[RenderType::TOTAL] = { "Debug deferred rendering", "Deferred rendering" };
+			if (ImGui::ListBox("Pipelines", &_pipelineIndex, pipelineNames, int(RenderType::TOTAL)))
+			{
+				if (camComponent->getPipeline() != (RenderType)_pipelineIndex)
+				{
+					camComponent->setPipeline((RenderType)_pipelineIndex);
+					_scene->getSystem<RenderCameraSystem>()->drawDebugLines(_pipelineIndex == (int)RenderType::DEBUG_DEFERRED ? true : false);
+				}
+			}
 		}
 	}
 

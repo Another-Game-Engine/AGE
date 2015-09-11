@@ -13,6 +13,7 @@
 #include <Threads/ThreadManager.hpp>
 #include <Core/ConfigurationManager.hpp>
 #include <Core/Engine.hh>
+#include <Graphic/DRBCameraDrawableList.hpp>
 
 #include "Render/GeometryManagement/SimpleGeometry.hh"
 
@@ -72,8 +73,7 @@ namespace AGE
 			SCOPE_profile_gpu_i("Overhead pipeline");
 			SCOPE_profile_cpu_function("RenderTime", "Overhead pipeline");
 			_programs[PROGRAM_SCREEN]->get_resource<Vec2>("resolution").set(glm::vec2(viewport.x, viewport.y));
-			//@PROUT TODO -> re enable FXAA
-			_programs[PROGRAM_SCREEN]->get_resource<Vec1>("activated").set(1.0f /*infos.data.activated == true ? 1.0f : 0.f*/);
+			_programs[PROGRAM_SCREEN]->get_resource<Vec1>("activated").set(infos.cameraInfos.data.fxaa == true ? 1.0f : 0.f);
 		}
 
 		_quadPainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_SCREEN], Properties(), _quadVertices);

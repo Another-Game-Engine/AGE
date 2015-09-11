@@ -66,19 +66,22 @@ namespace AGE
 
 	void DeferredBloomMerge::renderPass(const DRBCameraDrawableList &infos)
 	{
-		SCOPE_profile_gpu_i("Depth of field");
-		SCOPE_profile_cpu_i("RenderTimer", "Depth of field");
+		if (infos.cameraInfos.data.bloom)
+		{
+			SCOPE_profile_gpu_i("Depth of field");
+			SCOPE_profile_cpu_i("RenderTimer", "Depth of field");
 
-		OpenGLState::glDepthMask(GL_FALSE);
-		OpenGLState::glDisable(GL_DEPTH_TEST);
-		OpenGLState::glDisable(GL_STENCIL_TEST);
-		OpenGLState::glDisable(GL_CULL_FACE);
+			OpenGLState::glDepthMask(GL_FALSE);
+			OpenGLState::glDisable(GL_DEPTH_TEST);
+			OpenGLState::glDisable(GL_STENCIL_TEST);
+			OpenGLState::glDisable(GL_CULL_FACE);
 
-		_programs[PROGRAM_BLOOM_MERGE]->use();
-		_programs[PROGRAM_BLOOM_MERGE]->get_resource<Sampler2D>("cleanMap").set(_clean);
-		_programs[PROGRAM_BLOOM_MERGE]->get_resource<Sampler2D>("blurredMap1").set(_blurred1);
-		_programs[PROGRAM_BLOOM_MERGE]->get_resource<Sampler2D>("blurredMap2").set(_blurred2);
+			_programs[PROGRAM_BLOOM_MERGE]->use();
+			_programs[PROGRAM_BLOOM_MERGE]->get_resource<Sampler2D>("cleanMap").set(_clean);
+			_programs[PROGRAM_BLOOM_MERGE]->get_resource<Sampler2D>("blurredMap1").set(_blurred1);
+			_programs[PROGRAM_BLOOM_MERGE]->get_resource<Sampler2D>("blurredMap2").set(_blurred2);
 
-		_quadPainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BLOOM_MERGE], Properties(), _quadVertices);
+			_quadPainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BLOOM_MERGE], Properties(), _quadVertices);
+		}
 	}
 }

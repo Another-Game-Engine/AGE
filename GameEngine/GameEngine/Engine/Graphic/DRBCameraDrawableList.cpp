@@ -3,7 +3,9 @@
 namespace AGE
 {
 	CameraData::CameraData(CameraData const &cam) :
-		activated(cam.activated),
+		fxaa(cam.fxaa),
+		bloom(cam.bloom),
+		dof(cam.dof),
 		texture(cam.texture),
 		projection(cam.projection),
 		pipeline(cam.pipeline)
@@ -11,7 +13,9 @@ namespace AGE
 	}
 
 	CameraData::CameraData()
-		: activated(true),
+		: fxaa(true),
+		bloom(true),
+		dof(true),
 		texture(nullptr),
 		projection(1.0f),
 		pipeline(0)
@@ -20,7 +24,9 @@ namespace AGE
 
 	CameraData &CameraData::operator = (CameraData const &cam)
 	{
-		activated = (cam.activated);
+		fxaa = (cam.fxaa);
+		bloom = (cam.bloom);
+		dof = (cam.dof);
 		texture = (cam.texture);
 		projection = (cam.projection);
 		pipeline = (cam.pipeline);

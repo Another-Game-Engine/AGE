@@ -19,7 +19,7 @@ namespace AGE
 		virtual void updateEnd(float time);
 
 		EntityFilter _filter;
-		int _pipelineIndex = 1;
+		int _pipelineIndex = 0;
 	};
 }
 
