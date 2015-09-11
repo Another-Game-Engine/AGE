@@ -1733,9 +1733,9 @@
                     "value2": 1
                 },
                 "Orientation": {
-                    "value0": -0,
+                    "value0": 0,
                     "value1": 1,
-                    "value2": -0,
+                    "value2": 0,
                     "value3": -4.3711388286737929e-008
                 }
             },
