@@ -97,7 +97,7 @@
                 "value2": "",
                 "value3": {
                     "type": 0,
-                    "data": 16
+                    "data": 0
                 }
             },
             "AGE_CORE_RigidBody": {
