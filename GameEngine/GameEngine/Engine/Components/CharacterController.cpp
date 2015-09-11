@@ -1,10 +1,14 @@
 #include "CharacterController.hh"
 
+#include <Entities/EntityData.hh>
+#include <Core/AScene.hh>
+#include <Physics/PhysicsInterface.hpp>
+
 namespace AGE
 {
 	void CharacterController::init(void)
 	{
-
+		controller = entity->getScene()->getInstance<Physics::PhysicsInterface>()->getWorld()->createCharacterController();
 	}
 
 	void CharacterController::editorCreate(void)

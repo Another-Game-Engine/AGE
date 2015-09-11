@@ -24,6 +24,7 @@
 #include <EditorConfiguration.hpp>
 
 #include "Systems/RenderCameraSystem.hpp"
+#include "Systems/CharacterControllerSystem.hh"
 
 #include "../Plugins/Physics/PhysX/PhysXPhysics.hpp"
 
@@ -48,6 +49,7 @@ namespace AGE
 		addSystem<WE::AssetsAndComponentRelationsSystem>(0);
 		addSystem<WE::EntityManager>(1);
 		addSystem<FreeFlyCamera>(2);
+		addSystem<CharacterControllerSystem>(2, true);
 		addSystem<PhysicsSystem>(3, Physics::EngineType::PhysX, getInstance<AGE::AssetsManager>(), false);
 		getInstance<Physics::PhysicsInterface>()->getWorld()->setGravity(0, 0, 0);
 		addSystem<RenderCameraSystem>(1000);

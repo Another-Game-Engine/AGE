@@ -307,6 +307,7 @@
     <ClCompile Include="Engine\BFC\BFCCullableObject.cpp" />
     <ClCompile Include="Engine\BFC\BFCItemID.cpp" />
     <ClCompile Include="Engine\Components\ComponentManager.cpp" />
+    <ClCompile Include="Engine\Components\FPSCharacter.cpp" />
     <ClCompile Include="Engine\Entities\ArchetypeScenes.cpp" />
     <ClCompile Include="Engine\Entities\EntityData.cpp" />
     <ClCompile Include="Engine\Render\OcclusionTools\OcclusionOptions.cpp" />
@@ -314,6 +315,7 @@
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DownSample.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\GaussianBlur.cpp" />
     <ClCompile Include="Engine\Skinning\AnimationManager.cpp" />
+    <ClCompile Include="Engine\Systems\BasicDemoCameraSystem.cpp" />
     <ClCompile Include="Engine\Systems\CharacterControllerSystem.cpp" />
     <ClCompile Include="Engine\BFC\BFCBlock.cpp" />
     <ClCompile Include="Engine\BFC\BFCBlockManager.cpp" />
@@ -393,6 +395,7 @@
     <ClCompile Include="Engine\Render\Textures\TextureCubeMap.cpp" />
     <ClCompile Include="Engine\Systems\CollisionSystem.cpp" />
     <ClCompile Include="Engine\Systems\DebugSystem.cpp" />
+    <ClCompile Include="Engine\Systems\FPSCharacterSystem.cpp" />
     <ClCompile Include="Engine\Systems\FreeFlyCamera.cpp" />
     <ClCompile Include="Engine\Systems\PhysicsSystem.cpp" />
     <ClCompile Include="Engine\Systems\RenderCameraSystem.cpp" />
@@ -535,10 +538,13 @@
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
     <ClInclude Include="..\Vendors\imgui\imgui.h" />
     <ClInclude Include="..\Vendors\imgui\stb_textedit.h" />
+    <ClInclude Include="Engine\Components\FPSCharacter.hh" />
+    <ClInclude Include="Engine\Physics\CharacterControllerInterface.hh" />
     <ClInclude Include="Engine\Render\OcclusionTools\OcclusionOptions.hpp" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DepthOfField.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DownSample.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\GaussianBlur.hh" />
+    <ClInclude Include="Engine\Systems\BasicDemoCameraSystem.hh" />
     <ClInclude Include="Engine\Systems\CharacterControllerSystem.hh" />
     <ClInclude Include="Engine\BFC\BFCBlock.hpp" />
     <ClInclude Include="Engine\BFC\BFCBlockManager.hpp" />
@@ -656,6 +662,7 @@
     <ClInclude Include="Engine\Render\Textures\TextureCubeMap.hh" />
     <ClInclude Include="Engine\Systems\CollisionSystem.hpp" />
     <ClInclude Include="Engine\Systems\DebugSystem.hpp" />
+    <ClInclude Include="Engine\Systems\FPSCharacterSystem.hh" />
     <ClInclude Include="Engine\Systems\FreeFlyCamera.hh" />
     <ClInclude Include="Engine\Systems\PhysicsSystem.hpp" />
     <ClInclude Include="Engine\Systems\RenderCameraSystem.hpp" />
@@ -890,6 +897,7 @@
     <None Include="Engine\Parsers\Parsers.hh" />
     <None Include="Engine\Physics\BoxColliderInterface.inl" />
     <None Include="Engine\Physics\CapsuleColliderInterface.inl" />
+    <None Include="Engine\Physics\CharacterControllerInterface.inl" />
     <None Include="Engine\Physics\ColliderInterface.inl" />
     <None Include="Engine\Physics\FilterGroup.inl" />
     <None Include="Engine\Physics\MaterialInterface.inl" />

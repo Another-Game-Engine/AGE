@@ -70,6 +70,16 @@ namespace AGE
 			return shape.get();
 		}
 
+		CharacterControllerInterface *BulletWorld::createCharacterController()
+		{
+			return (nullptr);
+		}
+
+		void BulletWorld::destroyCharacterController(CharacterControllerInterface *cc)
+		{
+			(void)cc;
+		}
+
 		btDiscreteDynamicsWorld *BulletWorld::getWorld(void)
 		{
 			return &world;

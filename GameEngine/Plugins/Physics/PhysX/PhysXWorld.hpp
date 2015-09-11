@@ -36,6 +36,10 @@ namespace AGE
 
 			std::vector<physx::PxShape *> getCollisionShapes(const std::string &mesh, bool isConvex);
 
+			CharacterControllerInterface *createCharacterController() override final;
+
+			void destroyCharacterController(CharacterControllerInterface *cc) override final;
+
 		private:
 			// Attributes
 			physx::PxScene *scene = nullptr;

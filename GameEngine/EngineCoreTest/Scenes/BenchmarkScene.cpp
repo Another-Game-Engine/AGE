@@ -38,6 +38,8 @@
 #include <Systems/DebugSystem.hpp>
 #include <Systems/RenderCameraSystem.hpp>
 #include <Systems/CharacterControllerSystem.hh>
+#include <Systems/FPSCharacterSystem.hh>
+#include <Systems/BasicDemoCameraSystem.hh>
 
 #include <Render/Program.hh>
 #include <Render/ProgramResources/Types/Uniform/Vec1.hh>
@@ -108,9 +110,12 @@ namespace AGE
 
 		getInstance<AGE::AssetsManager>()->setAssetsDirectory(EngineCoreTestConfiguration::GetCookedDirectory());
 
+		addSystem<AGE::BasicDemoCameraSystem>(0);
+
 		addSystem<AGE::DebugSystem>(0);
 		addSystem<AGE::PhysicsSystem>(1, Physics::EngineType::PhysX, getInstance<AGE::AssetsManager>());
-		addSystem<AGE::CharacterControllerSystem>(0);
+		addSystem<AGE::CharacterControllerSystem>(0, false);
+		addSystem<AGE::FPSCharacterSystem>(0);
 
 		addSystem<AGE::LifetimeSystem>(2);
 		addSystem<AGE::FreeFlyCamera>(0);
@@ -160,16 +165,16 @@ namespace AGE
 			EngineCoreTestConfiguration::saveConfigurations();
 			clearAllEntities();
 
-			auto camera = createEntity();
-			GLOBAL_CAMERA = camera;
-			auto cam = camera->addComponent<CameraComponent>();
-			camera->addComponent<FreeFlyComponent>();
-			cam->setPipeline(RenderType::DEFERRED);
-			getSystem<RenderCameraSystem>()->drawDebugLines(false);
-			cam->setTexture(_skyboxSpace);
-			cam->addSkyBoxToChoice("space", _skyboxSpace);
-//			cam->addSkyBoxToChoice("test", _skyboxTest);
-			camera->getLink().setPosition(glm::vec3(0, 2.5f, 4.5f));
+//			auto camera = createEntity();
+//			GLOBAL_CAMERA = camera;
+//			auto cam = camera->addComponent<CameraComponent>();
+//			camera->addComponent<FreeFlyComponent>();
+//			cam->setPipeline(RenderType::DEFERRED);
+//			getSystem<RenderCameraSystem>()->drawDebugLines(false);
+//			cam->setTexture(_skyboxSpace);
+//			cam->addSkyBoxToChoice("space", _skyboxSpace);
+////			cam->addSkyBoxToChoice("test", _skyboxTest);
+//			camera->getLink().setPosition(glm::vec3(0, 2.5f, 4.5f));
 
 			auto sceneFileName = EngineCoreTestConfiguration::getSelectedScenePath();
 
@@ -204,28 +209,6 @@ namespace AGE
 		{
 			return true;
 		}
-
-		static float trigger = 1.0f;
-		if (getInstance<Input>()->getPhysicalKeyPressed(AGE_SPACE) && trigger >= 0.15f)
-		{
-			trigger = 0.0f;
-			auto e = createEntity();
-			e->addComponent<Lifetime>(15.0f);
-			auto &link = e->getLink();
-			auto &cameraLink = GLOBAL_CAMERA->getLink();
-			const glm::quat &cameraOrientation = cameraLink.getOrientation();
-			const glm::vec3 cameraForward = glm::vec3(glm::mat4(glm::toMat4(cameraOrientation) * glm::translate(glm::mat4(1), glm::vec3(0.0f, 0.0f, -1.0f)))[3]);
-			link.setPosition(cameraLink.getPosition());
-			link.setOrientation(cameraOrientation);
-			link.setScale(glm::vec3(1.0f));
-			e->addComponent<MeshRenderer>(getInstance<AGE::AssetsManager>()->getMesh("cube/cube.sage"),
-										 getInstance<AGE::AssetsManager>()->getMaterial(OldFile("cube/cube.mage")))->enableRenderMode(RenderModes::AGE_OPAQUE);
-			e->addComponent<RigidBody>()->addForce(10.0f * cameraForward, Physics::ForceMode::Impulse);
-			e->addComponent<Collider>(Physics::ColliderType::Box);
-			auto pl = e->addComponent<PointLightComponent>();
-			pl->setColor(glm::vec3(float(rand() % 100) / 100.0f, float(rand() % 100) / 100.0f, float(rand() % 100) / 100.0f));
-		}
-		trigger += time;
 
 		static bool rain = false;
 
@@ -275,30 +258,6 @@ namespace AGE
 
 		ImGui::Text("%i entities", getNumberOfEntities());
 
-		GLOBAL_CAMERA->getComponent<CameraComponent>()->editorUpdate();
-		////////////////////////////////////
-
-		//static float ttime = 0;
-		//getInstance<AGE::AnimationManager>()->update(ttime);
-		//ttime += time;
-		//auto &bones = getInstance<AGE::AnimationManager>()->getBones(animationTestInstance);
-		//for (std::size_t i = 0; i < bones.size(); ++i)
-		//{
-		//	bonesEntities[i]->getLink().setTransform(bones[i]);
-		//}
-
-		////////////////////////////////////
-
-		auto camComponent = GLOBAL_CAMERA->getComponent<CameraComponent>();
-		static char const *pipelineNames[RenderType::TOTAL] = {"Debug deferred rendering", "Deferred rendering" };
-		if (ImGui::ListBox("Pipelines", &pipelineIndex, pipelineNames, int(RenderType::TOTAL)))
-		{
-			if (camComponent->getPipeline() != (RenderType)pipelineIndex)
-			{
-				camComponent->setPipeline((RenderType)pipelineIndex);
-				getSystem<RenderCameraSystem>()->drawDebugLines(pipelineIndex == (int)RenderType::DEBUG_DEFERRED ? true : false);
-			}
-		}
 		return true;
 	}
 

@@ -15,6 +15,9 @@
 #include "PhysXSphereCollider.hpp"
 #include "PhysXRaycaster.hpp"
 #include "PxFiltering.h"
+#include "characterkinematic/PxCapsuleController.h"
+
+#include "PhysXCharacterController.hpp"
 
 namespace AGE
 {
@@ -264,6 +267,16 @@ namespace AGE
 					assert(!"Never reached");
 					return nullptr;
 			}
+		}
+
+		CharacterControllerInterface *PhysXWorld::createCharacterController()
+		{
+			return (new PhysXCharacterController(this));
+		}
+
+		void PhysXWorld::destroyCharacterController(CharacterControllerInterface *cc)
+		{
+			delete cc;
 		}
 
 		void PhysXWorld::destroyCollider(ColliderInterface *collider)

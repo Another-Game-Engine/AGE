@@ -12,6 +12,7 @@
 #include "GenericData.hpp"
 #include "CollisionListener.hpp"
 #include "TriggerListener.hpp"
+#include "CharacterControllerInterface.hh"
 #include "../AssetManagement/Instance/MeshInstance.hh"
 
 namespace AGE
@@ -109,6 +110,10 @@ namespace AGE
 			virtual MaterialInterface *createMaterial(const std::string &name = GetDefaultMaterialName()) = 0;
 
 			virtual void destroyMaterial(MaterialInterface *material) = 0;
+
+			virtual CharacterControllerInterface *createCharacterController() = 0;
+
+			virtual void destroyCharacterController(CharacterControllerInterface *cc) = 0;
 
 		protected:
 			// Type Aliases
