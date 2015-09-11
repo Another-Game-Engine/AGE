@@ -311,6 +311,7 @@
     <ClCompile Include="Engine\Entities\ArchetypeScenes.cpp" />
     <ClCompile Include="Engine\Entities\EntityData.cpp" />
     <ClCompile Include="Engine\Render\OcclusionTools\OcclusionOptions.cpp" />
+    <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredBloomMerge.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DepthOfField.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DownSample.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\GaussianBlur.cpp" />
@@ -541,6 +542,7 @@
     <ClInclude Include="Engine\Components\FPSCharacter.hh" />
     <ClInclude Include="Engine\Physics\CharacterControllerInterface.hh" />
     <ClInclude Include="Engine\Render\OcclusionTools\OcclusionOptions.hpp" />
+    <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredBloomMerge.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DepthOfField.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DownSample.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\GaussianBlur.hh" />
