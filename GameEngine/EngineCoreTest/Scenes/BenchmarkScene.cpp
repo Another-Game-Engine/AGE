@@ -215,7 +215,9 @@ namespace AGE
 		ImGui::Checkbox("Cube rain", &rain);
 		
 		static bool physicsDebug = false;
-		if (physicsDebug != ImGui::Checkbox("Physics Debug", &physicsDebug))
+		bool lastValue = physicsDebug;
+		ImGui::Checkbox("Physics Debug", &physicsDebug);
+		if (physicsDebug != lastValue)
 		{
 			if (physicsDebug)
 			{

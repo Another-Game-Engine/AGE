@@ -185,9 +185,10 @@ namespace AGE
 
 		inline void WorldInterface::update(float elapsedTime)
 		{
-			debugInformation.points.clear();
-			debugInformation.lines.clear();
-			debugInformation.triangles.clear();
+			if (isDebugEnabled())
+			{
+				debugInformation = DebugInformation();
+			}
 			simulate(elapsedTime);
 			/*const float stepSize = 1.0f / static_cast<float>(targetFPS);
 			accumulator += elapsedTime;

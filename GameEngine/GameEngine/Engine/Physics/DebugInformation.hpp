@@ -15,7 +15,7 @@ namespace AGE
 			{
 				glm::vec3 position[VerticesNumber];
 
-				float color[VerticesNumber];
+				glm::vec3 color[VerticesNumber];
 			};
 
 			using Point = GenericInformation<1>;
