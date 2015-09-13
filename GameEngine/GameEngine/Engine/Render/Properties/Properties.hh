@@ -20,28 +20,38 @@ namespace AGE
 		virtual ~Properties();
 
 	public:
-		Key<Property> add_property(std::shared_ptr<IProperty> const &prop);
+		Key<Property> add_property(std::shared_ptr<IProperty> const &prop, bool computeHash = true);
 		void remove_property(Key<Property> const &prop);
-		void update_properties(std::shared_ptr<Program> const &p) const;
+		void update_property(IProgramResources *p, std::size_t index) const;
 		void merge_properties(const Properties &other);
+		std::size_t getProgramId(std::size_t programId);
+		inline std::size_t getHash() const { return _shaderHash; }
+		void setProgramId(std::size_t programUniqueId, std::size_t givenId);
+		bool empty() const { return _properties.empty(); }
 	public:
 		template <typename type_t> std::shared_ptr<type_t> get_property(Key<Property> const &key) const;
 
-		std::shared_ptr<IProperty> searchForProperty(const std::string &name) const
+		std::size_t getPropertyIndex(const std::string &name) const
 		{
 			RWLockGuard lock(_lock, false);
+			std::size_t res = 0;
 			for (auto &e : _properties)
 			{
 				if (e->name() == name)
 				{
-					return e;
+					return res;
 				}
+				++res;
 			}
-			return nullptr;
+			return -1;
 		}
 
 	private:
+		void _computeHash();
+
 		std::vector<std::shared_ptr<IProperty>> _properties;
+		std::vector<std::size_t> _shadersGivenId;
+		std::size_t _shaderHash;
 		mutable RWLock _lock;
 	};
 

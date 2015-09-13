@@ -1,5 +1,7 @@
 #include <Render/Properties/Properties.hh>
 #include <Utils/Profiler.hpp>
+#include <string>
+#include <functional>
 
 namespace AGE
 {
@@ -8,6 +10,7 @@ namespace AGE
 	{
 		RWLockGuard lock(_lock, true);
 		_properties = properties;
+		_shaderHash = 0;
 	}
 
 	Properties::Properties(Properties &&other)
@@ -15,6 +18,7 @@ namespace AGE
 		RWLockGuard lock(_lock, true);
 		RWLockGuard lockO(other._lock, false);
 		_properties = std::move(other._properties);
+		_shaderHash = 0;
 	}
 
 	Properties::Properties(Properties const &other)
@@ -22,6 +26,7 @@ namespace AGE
 		RWLockGuard lock(_lock, true);
 		RWLockGuard lockO(other._lock, false);
 		_properties = other._properties;
+		_shaderHash = 0;
 	}
 
 	Properties::~Properties()
@@ -35,12 +40,16 @@ namespace AGE
 		_properties.clear();
 	}
 
-	Key<Property> Properties::add_property(std::shared_ptr<IProperty> const &prop)
+	Key<Property> Properties::add_property(std::shared_ptr<IProperty> const &prop, bool computeHash)
 	{
 		SCOPE_profile_cpu_function("RenderTimer");
 
 		RWLockGuard lock(_lock, true);
 		_properties.emplace_back(prop);
+		if (computeHash)
+		{
+			_computeHash();
+		}
 		return (Key<Property>::createKey(int(_properties.size()) - 1));
 	}
 
@@ -53,10 +62,41 @@ namespace AGE
 		for (auto &p : other._properties)
 		{
 			_lock.ReadUnlock();
-			add_property(p);
+			add_property(p, false);
 			_lock.ReadLock();
 		}
+		_computeHash();
 		_lock.ReadUnlock();
+	}
+
+	std::size_t Properties::getProgramId(std::size_t programId)
+	{
+		if (_shadersGivenId.size() <= programId)
+		{
+			return -1;
+		}
+		return _shadersGivenId[programId];
+	}
+
+	void Properties::setProgramId(std::size_t programUniqueId, std::size_t givenId)
+	{
+		if (_shadersGivenId.size() <= programUniqueId)
+		{
+			_shadersGivenId.resize(programUniqueId + 1, -1);
+		}
+		AGE_ASSERT(_shadersGivenId[programUniqueId] == -1);
+		_shadersGivenId[programUniqueId] = givenId;
+	}
+
+	void Properties::_computeHash()
+	{
+		std::string str;
+		for (auto &p : _properties)
+		{
+			str += p->name();
+		}
+		std::hash<std::string> hashFn;
+		_shaderHash = hashFn(str);
 	}
 
 	// @Dorian !
@@ -73,14 +113,11 @@ namespace AGE
 		_properties.resize(_properties.size() - 1);
 	}
 
-	void Properties::update_properties(std::shared_ptr<Program> const &p) const
+	void Properties::update_property(IProgramResources *p, std::size_t index) const
 	{
 		SCOPE_profile_cpu_function("RenderTimer");
 
 		RWLockGuard lock(_lock, false);
-		for (auto &property : _properties)
-		{
-			property->update(p);
-		}
+		_properties[index]->update(p);
 	}
 }

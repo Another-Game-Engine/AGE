@@ -21,7 +21,7 @@ namespace AGE
 
 	}
 
-	void Specular::_update(std::shared_ptr<Program> const &p)
+	void Specular::_update(IProgramResources *p)
 	{
 		_ratio.update(p);
 		_color.update(p);

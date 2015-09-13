@@ -14,7 +14,7 @@ namespace AGE
 	public:
 		SpotLightProperty();
 	private:
-		virtual void _update(std::shared_ptr<Program> const &p) override final;
+		virtual void _update(IProgramResources *p) override final;
 
 	public:
 		std::shared_ptr<Texture2D> getTexMap() const;

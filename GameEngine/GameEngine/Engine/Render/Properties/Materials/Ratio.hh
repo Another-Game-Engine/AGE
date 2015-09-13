@@ -12,7 +12,7 @@ namespace AGE
 		Ratio(Ratio &&move);
 
 	private:
-		virtual void _update(std::shared_ptr<Program> const &p) override final;
+		virtual void _update(IProgramResources *p) override final;
 
 	public:
 		float get();

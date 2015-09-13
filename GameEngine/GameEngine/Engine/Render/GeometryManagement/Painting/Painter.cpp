@@ -76,7 +76,7 @@ namespace AGE
 		return (&_vertices[key.getId()]);
 	}
 
-	Painter & Painter::draw(GLenum mode, std::shared_ptr<Program> const &program, std::vector<Properties> const &propertiesList, std::vector<Key<Vertices>> const &drawList)
+	Painter & Painter::draw(GLenum mode, std::shared_ptr<Program> const &program, std::vector<Properties> &propertiesList, std::vector<Key<Vertices>> const &drawList)
 	{
 		SCOPE_profile_gpu_i("Draw");
 		SCOPE_profile_cpu_function("PainterTimer");
@@ -91,7 +91,8 @@ namespace AGE
 			if (draw_element.isValid())
 			{
 				auto &property = propertiesList[index];
-				property.update_properties(program);
+				program->registerProperties(property);
+				program->updateProperties(property);
 				program->update();
 				_vertices[draw_element.getId()].draw(mode);
 			}
@@ -102,7 +103,7 @@ namespace AGE
 		return (*this);
 	}
 
-	void Painter::uniqueDraw(GLenum mode, std::shared_ptr<Program> const &program, Properties const &properties, const Key<Vertices> &vertice)
+	void Painter::uniqueDraw(GLenum mode, std::shared_ptr<Program> const &program, Properties &properties, const Key<Vertices> &vertice)
 	{
 		SCOPE_profile_gpu_i("Unique Draw");
 		SCOPE_profile_cpu_function("PainterTimer");
@@ -112,7 +113,8 @@ namespace AGE
 		program->set_attributes(_buffer);
 		_buffer.bind();
 		_buffer.update();
-		properties.update_properties(program);
+		program->registerProperties(properties);
+		program->updateProperties(properties);
 		program->update();
 		// TODO: Fix that properly! @Dorian
 		if (vertice.getId() >= 0 && vertice.getId() < _vertices.size())

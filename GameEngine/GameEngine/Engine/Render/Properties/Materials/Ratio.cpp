@@ -17,12 +17,10 @@ namespace AGE
 
 	}
 
-	void Ratio::_update(std::shared_ptr<Program> const &p)
+	void Ratio::_update(IProgramResources *p)
 	{
-		auto resource = std::static_pointer_cast<Vec1>(get_resource(p));
-		if (resource) {
-			*resource = _ratio;
-		}
+		auto resource = (Vec1*)(p);
+		*resource = _ratio;
 	}
 
 	float Ratio::get()

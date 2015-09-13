@@ -11,6 +11,7 @@ namespace AGE
 {
 	class Attribute;
 	class BufferPrograms;
+	class Properties;
 
 	class Program
 	{
@@ -66,17 +67,30 @@ namespace AGE
 		bool compile();
 		void destroy();
 		inline bool isCompiled() { return _compiled; }
+
+		void registerProperties(Properties &properties);
+		void updateProperties(Properties &properties);
 	private:
 		void _get_resources();
 		void _get_resource(size_t index, GLenum resource, std::string const & buffer);
 
 	private:
+
+		struct PropertiesRegister
+		{
+			std::vector<std::pair<std::size_t, std::shared_ptr<IProgramResources>>> propertyIndex;
+			std::size_t              propertiesHash = 0;
+		};
+
 		std::vector<std::shared_ptr<IProgramResources>> _program_resources;
 		std::vector<std::shared_ptr<UnitProg>> _unitsProg;
 		ProgramResourcesFactory _resources_factory;
 		GLuint _id;
 		std::string const _name;
 		bool _compiled;
+		static std::size_t _ageIdCounter;
+		std::size_t _ageId;
+		std::vector<PropertiesRegister> _propertiesRegister;
 
 #ifdef AGE_DEBUG
 		std::size_t _version; //used for shader recompilation

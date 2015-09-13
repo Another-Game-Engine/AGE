@@ -34,13 +34,10 @@ namespace AGE
 		}
 
 	private:
-		virtual void _update(std::shared_ptr<Program> const &p) override final
+		virtual void _update(IProgramResources *p) override final
 		{
-			auto resource = std::static_pointer_cast<UpdateType>(get_resource(p));
-			if (resource)
-			{
-				*resource = _data;
-			}
+			auto resource = (UpdateType*)(p);
+			*resource = _data;
 		}
 
 		virtual void _autoSet(void *dataPtr)
