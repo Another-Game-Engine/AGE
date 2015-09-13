@@ -1,5 +1,6 @@
 #include <Render/Properties/AProperty.hh>
 #include <Render/Program.hh>
+#include <Utils/Profiler.hpp>
 
 namespace AGE
 {
@@ -25,6 +26,7 @@ namespace AGE
 
 	std::shared_ptr<IProgramResources> AProperty::get_resource(std::shared_ptr<Program> const &program)
 	{
+		SCOPE_profile_cpu_function("RenderTimer");
 #ifdef AGE_DEBUG
 		auto version = program->getVersion();
 		if (version != _shaderVersion)
