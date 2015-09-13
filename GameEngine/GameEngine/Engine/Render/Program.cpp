@@ -256,14 +256,12 @@ namespace AGE
 			return;
 
 		std::size_t id = properties.getProgramId(_ageId);
+		std::size_t hash = properties.getHash();
 
-		if (id != -1)
+		if (id != -1 && _propertiesRegister.size() != 0 && _propertiesRegister[id].propertiesHash == hash)
 			return;
 
-		std::size_t hash = -1;
 		PropertiesRegister *propRegister = nullptr;
-
-		hash = properties.getHash();
 
 		id = 0;
 		for (auto &reg : _propertiesRegister)
