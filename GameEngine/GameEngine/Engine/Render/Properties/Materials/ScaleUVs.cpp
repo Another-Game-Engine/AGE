@@ -17,13 +17,10 @@ namespace AGE
 
 	}
 
-	void ScaleUVs::_update(std::shared_ptr<Program> const &program)
+	void ScaleUVs::_update(IProgramResources *program)
 	{
-		auto resource = std::static_pointer_cast<Vec1>(get_resource(program));
-		if (resource)
-		{
-			*resource = _tof ? 1.0f : 0.0f;
-		}
+		auto resource = (Vec1*)(program);
+		*resource = _tof ? 1.0f : 0.0f;
 	}
 
 	bool const & ScaleUVs::get()

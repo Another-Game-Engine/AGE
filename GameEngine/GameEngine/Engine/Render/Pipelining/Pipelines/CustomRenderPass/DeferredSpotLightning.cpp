@@ -97,7 +97,8 @@ namespace AGE
 			// @PROUT todo to add in properties
 			_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("shadow_map").set(spotlight->shadowMap);
 
-			spotlight->globalProperties.update_properties(_programs[PROGRAM_LIGHTNING]);
+			_programs[PROGRAM_LIGHTNING]->registerProperties(spotlight->globalProperties);
+			_programs[PROGRAM_LIGHTNING]->updateProperties(spotlight->globalProperties);
 
 			// Allready added in properties
 			//_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("light_matrix").set(pl.shadow_matrix);

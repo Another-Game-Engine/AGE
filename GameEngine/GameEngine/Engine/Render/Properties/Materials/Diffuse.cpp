@@ -21,7 +21,7 @@ namespace AGE
 
 	}
 
-	void Diffuse::_update(std::shared_ptr<Program> const &p)
+	void Diffuse::_update(IProgramResources *p)
 	{
 		_ratio.update(p);
 		_color.update(p);

@@ -17,12 +17,10 @@ namespace AGE
 
 	}
 
-	void Color::_update(std::shared_ptr<Program> const &program)
+	void Color::_update(IProgramResources *res)
 	{
-		auto resource = std::static_pointer_cast<Vec4>(get_resource(program));
-		if (resource) {
-			*resource = _color;
-		}
+		auto resource = (Vec4*)(res);
+		*resource = _color;
 	}
 
 	glm::vec4 const & Color::get()

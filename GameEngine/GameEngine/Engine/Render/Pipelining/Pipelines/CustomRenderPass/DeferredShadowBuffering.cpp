@@ -110,7 +110,9 @@ namespace AGE
 			}
 			_frame_buffer.attachment(*(*it), GL_DEPTH_STENCIL_ATTACHMENT);
 			glClear(GL_DEPTH_BUFFER_BIT);
-			spotlight->globalProperties.update_properties(_programs[PROGRAM_BUFFERING]);
+			_programs[PROGRAM_BUFFERING]->registerProperties(spotlight->globalProperties);
+			_programs[PROGRAM_BUFFERING]->updateProperties(spotlight->globalProperties);
+
 			// draw for the spot light selected
 			for (auto &meshPaint : spotLightPtr->meshs)
 			{

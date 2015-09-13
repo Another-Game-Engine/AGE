@@ -11,7 +11,7 @@ namespace AGE
 		ScaleUVs(ScaleUVs &&move);
 
 	private:
-		virtual void _update(std::shared_ptr<Program> const &program) override final;
+		virtual void _update(IProgramResources *program) override final;
 
 	public:
 		bool const &get();

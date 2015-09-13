@@ -11,7 +11,7 @@ namespace AGE
 		Color(Color &&move);
 
 	private:
-		virtual void _update(std::shared_ptr<Program> const &program) override final;
+		virtual void _update(IProgramResources *resource) override final;
 
 	public:
 		glm::vec4 const &get();

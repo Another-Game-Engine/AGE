@@ -10,13 +10,13 @@
 
 namespace AGE
 {
-	class Program;
+	class IProgramResources;
 
 	class IProperty
 	{
 	public:
 		virtual ~IProperty() {};
-		IProperty &update(std::shared_ptr<Program> const &p)
+		IProperty &update(IProgramResources* const p)
 		{
 			_mutex.lock();
 			_update(p);
@@ -38,7 +38,7 @@ namespace AGE
 		}
 
 	protected:
-		virtual void _update(std::shared_ptr<Program> const &p) = 0;
+		virtual void _update(IProgramResources *p) = 0;
 		mutable AGE::SpinLock _mutex;
 	};
 

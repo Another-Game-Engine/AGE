@@ -27,13 +27,10 @@ namespace AGE
 		return (*this);
 	}
 
-	void Transformation::_update(std::shared_ptr<Program> const &program)
+	void Transformation::_update(IProgramResources *program)
 	{
-		auto resource = std::static_pointer_cast<Mat4>(get_resource(program));
-		if (resource)
-		{
-			*resource = _model_matrix;
-		}
+		auto resource = (Mat4*)(program);
+		*resource = _model_matrix;
 	}
 
 	glm::mat4 const & Transformation::get()

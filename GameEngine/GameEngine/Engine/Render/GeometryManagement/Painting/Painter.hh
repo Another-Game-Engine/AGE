@@ -29,8 +29,8 @@ namespace AGE
 
 		Painter &remove_vertices(Key<Vertices> &key);
 		Vertices *get_vertices(Key<Vertices> const &key);
-		Painter &draw(GLenum mode, std::shared_ptr<Program> const &p, std::vector<Properties> const &propertiesList, std::vector<Key<Vertices>> const &drawList);
-		void uniqueDraw(GLenum mode, std::shared_ptr<Program> const &program, Properties const &properties, const Key<Vertices> &vertice);
+		Painter &draw(GLenum mode, std::shared_ptr<Program> const &p, std::vector<Properties> &propertiesList, std::vector<Key<Vertices>> const &drawList);
+		void uniqueDraw(GLenum mode, std::shared_ptr<Program> const &program, Properties &properties, const Key<Vertices> &vertice);
 		void uniqueDraw(GLenum mode, const Key<Vertices> &vertice);
 	private:
 		BufferPrograms _buffer;
