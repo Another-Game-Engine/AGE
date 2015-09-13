@@ -14,6 +14,7 @@ namespace AGE
 	{
 	public:
 		Texture2D();
+		~Texture2D();
 		virtual bool init(GLint weight, GLint height, GLenum internal_format, bool is_mip_mapping);
 		Texture2D(Texture2D &&move);
 

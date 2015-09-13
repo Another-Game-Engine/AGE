@@ -84,7 +84,7 @@ namespace AGE
 		{
 			_shadersGivenId.resize(programUniqueId + 1, -1);
 		}
-		AGE_ASSERT(_shadersGivenId[programUniqueId] == -1);
+		//AGE_ASSERT(_shadersGivenId[programUniqueId] == -1);
 		_shadersGivenId[programUniqueId] = givenId;
 	}
 
