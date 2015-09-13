@@ -70,6 +70,8 @@ namespace AGE
 			// Methods
 			void notifyTriggers(void);
 
+			void fillDebugInformation(void);
+
 			// Inherited Methods
 			void setGravity(const glm::vec3 &gravity) override final;
 
@@ -94,6 +96,10 @@ namespace AGE
 			MaterialInterface *createMaterial(const std::string &name) override final;
 
 			void destroyMaterial(MaterialInterface *material) override final;
+
+			void enableDebug(void) override final;
+
+			void disableDebug(void) override final;
 
 			void onConstraintBreak(physx::PxConstraintInfo *constraints, physx::PxU32 numberOfConstraints) override final;
 

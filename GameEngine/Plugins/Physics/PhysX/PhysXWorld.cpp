@@ -234,6 +234,45 @@ namespace AGE
 			scene->simulate(stepSize, nullptr, scratchMemoryBlock, sizeof(scratchMemoryBlock));
 			scene->fetchResults(true);
 			notifyTriggers();
+			fillDebugInformation();
+		}
+
+		void PhysXWorld::fillDebugInformation(void)
+		{
+			if (isDebugEnabled())
+			{
+				const physx::PxRenderBuffer &renderBuffer = scene->getRenderBuffer();
+				for (physx::PxU32 index = 0; index < renderBuffer.getNbPoints(); ++index)
+				{
+					const physx::PxDebugPoint &point = renderBuffer.getPoints()[index];
+					DebugInformation::Point debugPoint;
+					debugPoint.color[0] = static_cast<float>(point.color) / 255.0f;
+					debugPoint.position[0] = glm::vec3(static_cast<float>(point.pos.x), static_cast<float>(point.pos.y), static_cast<float>(point.pos.z));
+					debugInformation.points.push_back(std::move(debugPoint));
+				}
+				for (physx::PxU32 index = 0; index < renderBuffer.getNbLines(); ++index)
+				{
+					const physx::PxDebugLine &line = renderBuffer.getLines()[index];
+					DebugInformation::Line debugLine;
+					debugLine.color[0] = static_cast<float>(line.color0) / 255.0f;
+					debugLine.position[0] = glm::vec3(static_cast<float>(line.pos0.x), static_cast<float>(line.pos0.y), static_cast<float>(line.pos0.z));
+					debugLine.color[1] = static_cast<float>(line.color1) / 255.0f;
+					debugLine.position[1] = glm::vec3(static_cast<float>(line.pos1.x), static_cast<float>(line.pos1.y), static_cast<float>(line.pos1.z));
+					debugInformation.lines.push_back(std::move(debugLine));
+				}
+				for (physx::PxU32 index = 0; index < renderBuffer.getNbTriangles(); ++index)
+				{
+					const physx::PxDebugTriangle &triangle = renderBuffer.getTriangles()[index];
+					DebugInformation::Triangle debugTriangle;
+					debugTriangle.color[0] = static_cast<float>(triangle.color0) / 255.0f;
+					debugTriangle.position[0] = glm::vec3(static_cast<float>(triangle.pos0.x), static_cast<float>(triangle.pos0.y), static_cast<float>(triangle.pos0.z));
+					debugTriangle.color[1] = static_cast<float>(triangle.color1) / 255.0f;
+					debugTriangle.position[1] = glm::vec3(static_cast<float>(triangle.pos1.x), static_cast<float>(triangle.pos1.y), static_cast<float>(triangle.pos1.z));
+					debugTriangle.color[2] = static_cast<float>(triangle.color2) / 255.0f;
+					debugTriangle.position[2] = glm::vec3(static_cast<float>(triangle.pos2.x), static_cast<float>(triangle.pos2.y), static_cast<float>(triangle.pos2.z));
+					debugInformation.triangles.push_back(std::move(debugTriangle));
+				}
+			}
 		}
 
 		RaycasterInterface *PhysXWorld::createRaycaster(void)
@@ -334,6 +373,53 @@ namespace AGE
 					materials.erase(found);
 				}
 			}
+		}
+
+		void PhysXWorld::enableDebug(void)
+		{
+			WorldInterface::enableDebug();
+			assert(scene != nullptr && "Invalid scene");
+			scene->setVisualizationParameter(physx::PxVisualizationParameter::eSCALE, 1.0f);
+			scene->setVisualizationParameter(physx::PxVisualizationParameter::eWORLD_AXES, 15.0f);
+			/*scene->setVisualizationParameter(physx::PxVisualizationParameter::eBODY_AXES, 1.0f);
+			scene->setVisualizationParameter(physx::PxVisualizationParameter::eBODY_MASS_AXES, 1.0f);
+			scene->setVisualizationParameter(physx::PxVisualizationParameter::eBODY_LIN_VELOCITY, 1.0f);
+			scene->setVisualizationParameter(physx::PxVisualizationParameter::eBODY_ANG_VELOCITY, 1.0f);
+			scene->setVisualizationParameter(physx::PxVisualizationParameter::eCONTACT_POINT, 1.0f);*/
+			scene->setVisualizationParameter(physx::PxVisualizationParameter::eCONTACT_NORMAL, 5.0f);
+			scene->setVisualizationParameter(physx::PxVisualizationParameter::eCONTACT_FORCE, 5.0f);
+			scene->setVisualizationParameter(physx::PxVisualizationParameter::eACTOR_AXES, 2.5f);
+			//scene->setVisualizationParameter(physx::PxVisualizationParameter::eCOLLISION_AABBS, 1.0f);
+			scene->setVisualizationParameter(physx::PxVisualizationParameter::eCOLLISION_SHAPES, 1.0f);
+			//scene->setVisualizationParameter(physx::PxVisualizationParameter::eCOLLISION_AXES, 1.0f);
+			scene->setVisualizationParameter(physx::PxVisualizationParameter::eCOLLISION_EDGES, 1.0f);
+			scene->setVisualizationParameter(physx::PxVisualizationParameter::eCOLLISION_STATIC, 1.0f);
+			scene->setVisualizationParameter(physx::PxVisualizationParameter::eCOLLISION_DYNAMIC, 1.0f);
+			scene->setVisualizationParameter(physx::PxVisualizationParameter::eCOLLISION_PAIRS, 1.0f);
+
+		}
+
+		void PhysXWorld::disableDebug(void)
+		{
+			WorldInterface::disableDebug();
+			assert(scene != nullptr && "Invalid scene");
+			scene->setVisualizationParameter(physx::PxVisualizationParameter::eSCALE, 0.0f);
+			scene->setVisualizationParameter(physx::PxVisualizationParameter::eWORLD_AXES, 0.0f);
+			/*scene->setVisualizationParameter(physx::PxVisualizationParameter::eBODY_AXES, 0.0f);
+			scene->setVisualizationParameter(physx::PxVisualizationParameter::eBODY_MASS_AXES, 0.0f);
+			scene->setVisualizationParameter(physx::PxVisualizationParameter::eBODY_LIN_VELOCITY, 0.0f);
+			scene->setVisualizationParameter(physx::PxVisualizationParameter::eBODY_ANG_VELOCITY, 0.0f);
+			scene->setVisualizationParameter(physx::PxVisualizationParameter::eCONTACT_POINT, 0.0f);*/
+			scene->setVisualizationParameter(physx::PxVisualizationParameter::eCONTACT_NORMAL, 0.0f);
+			scene->setVisualizationParameter(physx::PxVisualizationParameter::eCONTACT_FORCE, 0.0f);
+			scene->setVisualizationParameter(physx::PxVisualizationParameter::eACTOR_AXES, 0.0f);
+			//scene->setVisualizationParameter(physx::PxVisualizationParameter::eCOLLISION_AABBS, 0.0f);
+			scene->setVisualizationParameter(physx::PxVisualizationParameter::eCOLLISION_SHAPES, 0.0f);
+			//scene->setVisualizationParameter(physx::PxVisualizationParameter::eCOLLISION_AXES, 0.0f);
+			scene->setVisualizationParameter(physx::PxVisualizationParameter::eCOLLISION_EDGES, 0.0f);
+			scene->setVisualizationParameter(physx::PxVisualizationParameter::eCOLLISION_STATIC, 0.0f);
+			scene->setVisualizationParameter(physx::PxVisualizationParameter::eCOLLISION_DYNAMIC, 0.0f);
+			scene->setVisualizationParameter(physx::PxVisualizationParameter::eCOLLISION_PAIRS, 0.0f);
 		}
 
 		void PhysXWorld::onConstraintBreak(physx::PxConstraintInfo *constraints, physx::PxU32 numberOfConstraints)

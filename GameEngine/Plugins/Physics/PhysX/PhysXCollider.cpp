@@ -20,6 +20,7 @@ namespace AGE
 				assert(getData()->data != nullptr && "Impossible to create actor");
 				physx::PxRigidDynamic *body = getDataAs<physx::PxRigidDynamic>();
 				static_cast<PhysXWorld *>(world)->getScene()->addActor(*body);
+				body->setActorFlag(physx::PxActorFlag::eVISUALIZATION, true);
 				body->setActorFlag(physx::PxActorFlag::eDISABLE_GRAVITY, true);
 				body->setRigidBodyFlag(physx::PxRigidBodyFlag::eKINEMATIC, true);
 				body->setMass(0.0f);
@@ -33,6 +34,7 @@ namespace AGE
 			for (physx::PxShape *shape : this->shapes)
 			{
 				body->attachShape(*shape);
+				shape->setFlag(physx::PxShapeFlag::eVISUALIZATION, true);
 			}
 			setAsTrigger(IsTriggerByDefault());
 			setFilterGroup(GetDefaultFilterGroup());
@@ -82,6 +84,7 @@ namespace AGE
 			for (physx::PxShape *shape : shapes)
 			{
 				body->attachShape(*shape);
+				shape->setFlag(physx::PxShapeFlag::eVISUALIZATION, true);
 			}
 		}
 

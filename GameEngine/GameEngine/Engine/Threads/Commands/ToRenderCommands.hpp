@@ -66,12 +66,23 @@ namespace AGE
 				glm::vec3 start;
 				glm::vec3 end;
 				glm::vec3 color;
+				glm::vec3 endColor;
 				bool depthTest;
 
 				Draw3DLine(glm::vec3 _start, glm::vec3 _end, glm::vec3 _color, bool _depthTest) :
 					start(_start),
 					end(_end),
 					color(_color),
+					endColor(_color),
+					depthTest(_depthTest)
+				{
+				}
+
+				Draw3DLine(glm::vec3 _start, float _startColor, glm::vec3 _end, float _endColor, bool _depthTest) :
+					start(_start),
+					end(_end),
+					color(_startColor, _startColor, _startColor),
+					endColor(_endColor, _endColor, _endColor),
 					depthTest(_depthTest)
 				{
 				}
