@@ -76,7 +76,9 @@ namespace AGE
 			_programs[PROGRAM_SCREEN]->get_resource<Vec1>("activated").set(infos.cameraInfos.data.fxaa == true ? 1.0f : 0.f);
 		}
 
+		_quadPainter->uniqueDrawBegin(_programs[PROGRAM_SCREEN]);
 		_quadPainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_SCREEN], Properties(), _quadVertices);
+		_quadPainter->uniqueDrawEnd();
 	}
 
 }

@@ -108,6 +108,8 @@ namespace AGE
 				_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("projection_matrix").set(infos.cameraInfos.data.projection);
 				_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("view_matrix").set(infos.cameraInfos.view);
 
+				std::shared_ptr<Painter> painter = nullptr;
+				std::shared_ptr<Painter> oldPainter = nullptr;
 				for (auto &meshPaint : meshList)
 				{
 					//temporary
@@ -116,9 +118,22 @@ namespace AGE
 					//during the first frames
 					if (meshPaint->getPainterKey().isValid() && meshPaint->hadRenderMode(AGE_OCCLUDER))
 					{
-						auto painter = _painterManager->get_painter(meshPaint->getPainterKey());
+						painter = _painterManager->get_painter(meshPaint->getPainterKey());
+						if (painter != oldPainter)
+						{
+							if (oldPainter)
+							{
+								oldPainter->uniqueDrawEnd();
+							}
+							painter->uniqueDrawBegin(_programs[PROGRAM_BUFFERING]);
+						}
+						oldPainter = painter;
 						painter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], meshPaint->globalProperties, meshPaint->getVerticesKey());
 					}
+				}
+				if (oldPainter)
+				{
+					oldPainter->uniqueDrawEnd();
 				}
 			}
 		{
@@ -144,17 +159,33 @@ namespace AGE
 			SCOPE_profile_gpu_i("Draw occluded objects");
 			SCOPE_profile_cpu_i("RenderTimer", "Draw occluded objects");
 
+			std::shared_ptr<Painter> painter = nullptr;
+			std::shared_ptr<Painter> oldPainter = nullptr;
+
 			for (auto &meshPaint : meshList)
 			{
 				//temporary
 				//todo, do not spawn entity while mesh is not loaded
-				//currently it's not safe, because the paiter key can be invalid
+				//currently it's not safe, because the painter key can be invalid
 				//during the first frames
 				if (meshPaint->getPainterKey().isValid() && meshPaint->hadRenderMode(AGE_OCCLUDER) == false)
 				{
-					auto painter = _painterManager->get_painter(meshPaint->getPainterKey());
+					painter = _painterManager->get_painter(meshPaint->getPainterKey());
+					if (painter != oldPainter)
+					{
+						if (oldPainter)
+						{
+							oldPainter->uniqueDrawEnd();
+						}
+						painter->uniqueDrawBegin(_programs[PROGRAM_BUFFERING]);
+					}
+					oldPainter = painter;
 					painter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], meshPaint->globalProperties, meshPaint->getVerticesKey());
 				}
+			}
+			if (oldPainter)
+			{
+				oldPainter->uniqueDrawEnd();
 			}
 		}
 		}
@@ -168,6 +199,9 @@ namespace AGE
 				_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("projection_matrix").set(infos.cameraInfos.data.projection);
 				_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("view_matrix").set(infos.cameraInfos.view);
 
+				std::shared_ptr<Painter> painter = nullptr;
+				std::shared_ptr<Painter> oldPainter = nullptr;
+
 				for (auto &meshPaint : meshList)
 				{
 					//temporary
@@ -176,9 +210,22 @@ namespace AGE
 					//during the first frames
 					if (meshPaint->getPainterKey().isValid())
 					{
-						auto painter = _painterManager->get_painter(meshPaint->getPainterKey());
+						painter = _painterManager->get_painter(meshPaint->getPainterKey());
+						if (painter != oldPainter)
+						{
+							if (oldPainter)
+							{
+								oldPainter->uniqueDrawEnd();
+							}
+							painter->uniqueDrawBegin(_programs[PROGRAM_BUFFERING]);
+						}
+						oldPainter = painter;
 						painter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], meshPaint->globalProperties, meshPaint->getVerticesKey());
 					}
+				}
+				if (oldPainter)
+				{
+					oldPainter->uniqueDrawEnd();
 				}
 			}
 		}

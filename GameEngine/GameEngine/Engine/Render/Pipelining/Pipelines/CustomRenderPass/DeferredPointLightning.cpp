@@ -147,7 +147,11 @@ namespace AGE
 			OpenGLState::glStencilOp(GL_KEEP, GL_KEEP, GL_INCR);
 			OpenGLState::glCullFace(GL_BACK);
 
+			// Question for Paul :
+			// This cannot be optimized, doing 2 for loop instead of one ?
+			_spherePainter->uniqueDrawBegin(_programs[PROGRAM_STENCIL]);
 			_spherePainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_STENCIL], pl->globalProperties, _sphereVertices);
+			_spherePainter->uniqueDrawEnd();
 
 			OpenGLState::glColorMask(glm::bvec4(true));
 
@@ -155,7 +159,9 @@ namespace AGE
 			OpenGLState::glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
 			OpenGLState::glCullFace(GL_FRONT);
 
+			_spherePainter->uniqueDrawBegin(_programs[PROGRAM_LIGHTNING]);
 			_spherePainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_LIGHTNING], pl->globalProperties, _sphereVertices);
+			_spherePainter->uniqueDrawEnd();
 
 		}
 	}

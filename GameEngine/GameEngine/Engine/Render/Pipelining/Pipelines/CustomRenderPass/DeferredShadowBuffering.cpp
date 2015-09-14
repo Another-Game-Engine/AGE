@@ -95,6 +95,11 @@ namespace AGE
 		}
 		// start to render to texture for each depth map
 		auto it = _depthBuffers.begin();
+
+
+		std::shared_ptr<Painter> painter = nullptr;
+		std::shared_ptr<Painter> oldPainter = nullptr;
+
 		for (auto &spotLightPtr : infos.spotLights)
 		{
 			SCOPE_profile_gpu_i("Spotlight pass");
@@ -119,12 +124,25 @@ namespace AGE
 				//during the first frames
 				if (mesh->getPainterKey().isValid())
 				{
-					Painter *painter = _painterManager->get_painter(mesh->getPainterKey()).get();
+					painter = _painterManager->get_painter(mesh->getPainterKey());
+					if (painter != oldPainter)
+					{
+						if (oldPainter)
+						{
+							oldPainter->uniqueDrawEnd();
+						}
+						painter->uniqueDrawBegin(_programs[PROGRAM_BUFFERING]);
+					}
+					oldPainter = painter;
 					painter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], mesh->globalProperties, mesh->getVerticesKey());
 				}
 			}
 			spotlight->shadowMap = *it;
 			++it;
+		}
+		if (oldPainter)
+		{
+			oldPainter->uniqueDrawEnd();
 		}
 	}
 

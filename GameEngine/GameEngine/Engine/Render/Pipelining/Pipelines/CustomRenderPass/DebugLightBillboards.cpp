@@ -78,20 +78,24 @@ namespace AGE
 				SCOPE_profile_gpu_i("Render debug sprite lights");
 				SCOPE_profile_cpu_i("RenderTimer", "Render debug sprite lights");
 				auto &pointLightList = (std::list<std::shared_ptr<DRBPointLightData>>&)(infos.pointLights);
+				_quadPainter->uniqueDrawBegin(_programs[PROGRAM_BUFFERING_LIGHT]);
 				for (auto &pl : pointLightList)
 				{
 					_quadPainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING_LIGHT], pl->globalProperties, _quadVertices);
 				}
+				_quadPainter->uniqueDrawEnd();
 			}
 			{
 				SCOPE_profile_gpu_i("Render debug sprite lights");
 				SCOPE_profile_cpu_i("RenderTimer", "Render debug sprite lights");
 				auto &spotLightList = infos.spotLights;
+				_quadPainter->uniqueDrawBegin(_programs[PROGRAM_BUFFERING_LIGHT]);
 				for (auto &pl : spotLightList)
 				{
 					auto &spotlight = (std::shared_ptr<DRBSpotLightData>&)(pl->spotLight);
 					_quadPainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING_LIGHT], spotlight->globalProperties, _quadVertices);
 				}
+				_quadPainter->uniqueDrawEnd();
 			}
 		}
 	}

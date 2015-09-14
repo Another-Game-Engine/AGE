@@ -89,7 +89,11 @@ namespace AGE
 			_programs[PROGRAM_SKYBOX]->get_resource<Sampler3D>("skybox").set(infos.cameraInfos.data.texture);
 			_programs[PROGRAM_SKYBOX]->get_resource<Vec3>("lighting").set(_lighting);
 		}
-		_painterManager->get_painter(_painterCube)->uniqueDraw(GL_QUADS, _programs[PROGRAM_SKYBOX], Properties(), _cube);
+		
+		auto painter = _painterManager->get_painter(_painterCube);
+		painter->uniqueDrawBegin(_programs[PROGRAM_SKYBOX]);
+		painter->uniqueDraw(GL_QUADS, _programs[PROGRAM_SKYBOX], Properties(), _cube);
+		painter->uniqueDrawEnd();
 	}
 
 }
