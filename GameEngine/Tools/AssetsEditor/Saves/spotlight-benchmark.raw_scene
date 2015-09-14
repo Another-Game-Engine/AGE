@@ -55,7 +55,7 @@
                 "value": 13917482855567903631
             }
         ],
-        "entityNumber": 124,
+        "entityNumber": 125,
         "Entity_0": {
             "cereal_class_version": 0,
             "link": {
@@ -4970,6 +4970,45 @@
             },
             "AGE_CORE_EntityRepresentationComponent": {
                 "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_124": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "freefly-camera"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "freefly-camera",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "freefly-camera-Copy-Copy"
             }
         }
     }
