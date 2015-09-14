@@ -252,18 +252,23 @@ namespace AGE
 	{
 		SCOPE_profile_cpu_function("RenderTimer");
 
+		// if properties is empty we return
 		if (properties.empty())
 			return;
 
 		std::size_t id = properties.getProgramId(_ageId);
 		std::size_t hash = properties.getHash();
 
+		// if the properties is already registered
+		// and his hash didn't change
+		// we return
 		if (id != -1 && _propertiesRegister.size() != 0 && _propertiesRegister[id].propertiesHash == hash)
 			return;
 
 		PropertiesRegister *propRegister = nullptr;
 
 		id = 0;
+		// we search for the hash
 		for (auto &reg : _propertiesRegister)
 		{
 			if (reg.propertiesHash == hash)
@@ -274,14 +279,15 @@ namespace AGE
 			++id;
 		}
 
-		// si le hash n'a jamais ete enregistré
+		// if the hash never have been registered
 		if (propRegister == nullptr)
 		{
-			// on enregistre le hash
+			// we register the hash
 			_propertiesRegister.resize(_propertiesRegister.size() + 1);
 			id = _propertiesRegister.size() - 1;
 			propRegister = &_propertiesRegister[id];
 			propRegister->propertiesHash = hash;
+			// we register properties index
 			for (auto &r : _program_resources)
 			{
 				auto index = properties.getPropertyIndex(r->name());
@@ -291,6 +297,7 @@ namespace AGE
 				}
 			}
 		}
+		// we give the id the the properties
 		properties.setProgramId(_ageId, id);
 	}
 
