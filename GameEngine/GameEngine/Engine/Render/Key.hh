@@ -27,37 +27,37 @@ namespace AGE
 	};
 
 	template <typename type_t>
-	size_t Key<type_t>::getId() const
+	inline size_t Key<type_t>::getId() const
 	{
 		return (_id);
 	}
 
 	template <typename type_t>
-	bool Key<type_t>::isValid() const
+	inline bool Key<type_t>::isValid() const
 	{
 		return (_id != -1);
 	}
 
 	template <typename type_t>
-	void Key<type_t>::destroy()
+	inline void Key<type_t>::destroy()
 	{
 		_id = -1;
 	}
 
 	template <typename type_t>
-	Key<type_t>::Key(size_t id)
+	inline Key<type_t>::Key(size_t id)
 	{
 		_id = id;
 	}
 
 	template <typename type_t>
-	Key<type_t> Key<type_t>::createKey(size_t index)
+	inline Key<type_t> Key<type_t>::createKey(size_t index)
 	{
 		return (Key<type_t>(index));
 	}
 
 	template <typename type_t>
-	Key<type_t>::Key() :
+	inline Key<type_t>::Key() :
 		_id(-1)
 	{
 
