@@ -5,6 +5,15 @@
 #define MICROPROFILE_IMPL
 #define MICROPROFILE_GPU_TIMERS_GL 1
 
+#define MICROPROFILE_MAX_FRAME_HISTORY (2<<10)
+#define MICROPROFILE_PER_THREAD_BUFFER_SIZE (8192<<10)
+
+
+#define MICROPROFILE_MINIZ 1
+#if MICROPROFILE_MINIZ
+#include "microprofile/miniz.c"
+#endif
+
 #include <microprofile/microprofile.h>
 
 MICROPROFILE_DEFINE(MAIN, "MAIN", "Main", 0xff0000);

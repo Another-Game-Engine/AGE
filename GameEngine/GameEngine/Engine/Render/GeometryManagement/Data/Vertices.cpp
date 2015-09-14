@@ -148,8 +148,6 @@ namespace AGE
 
 	void Vertices::draw(GLenum mode)
 	{
-		SCOPE_profile_cpu_function("RenderTimer");
-
 		if (_indices_block_memory.lock())
 		{
 			auto offset = _indices_block_memory.lock()->offset();
