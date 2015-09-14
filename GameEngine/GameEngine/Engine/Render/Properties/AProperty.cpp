@@ -5,7 +5,7 @@
 namespace AGE
 {
 	AProperty::AProperty(std::string &&name) :
-		_name(std::move(name))
+		IProperty(std::move(name))
 	{
 #ifdef AGE_DEBUG
 		_shaderVersion = 0;
@@ -13,15 +13,10 @@ namespace AGE
 	}
 
 	AProperty::AProperty(AProperty &&move) :
-		_name(std::move(move._name)),
+		IProperty(std::move(std::string(move._name))),
 		_registered_resources(std::move(move._registered_resources))
 	{
 
-	}
-
-	std::string const & AProperty::name() const
-	{
-		return (_name);
 	}
 
 	std::shared_ptr<IProgramResources> AProperty::get_resource(std::shared_ptr<Program> const &program)

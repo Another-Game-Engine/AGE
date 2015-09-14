@@ -25,7 +25,7 @@ namespace AGE
 		void update_property(IProgramResources *p, std::size_t index) const;
 		void merge_properties(const Properties &other);
 		std::size_t getProgramId(std::size_t programId);
-		inline std::size_t getHash() const { return _shaderHash; }
+		inline std::size_t getHash() { if (_hashToRefresh){ _computeHash(); }; return _shaderHash; }
 		void setProgramId(std::size_t programUniqueId, std::size_t givenId);
 		bool empty() const { return _properties.empty(); }
 	public:
@@ -52,6 +52,7 @@ namespace AGE
 		std::vector<std::shared_ptr<IProperty>> _properties;
 		std::vector<std::size_t> _shadersGivenId;
 		std::size_t _shaderHash;
+		bool        _hashToRefresh;
 		mutable RWLock _lock;
 	};
 

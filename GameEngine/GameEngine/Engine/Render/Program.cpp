@@ -274,7 +274,7 @@ namespace AGE
 			if (reg.propertiesHash == hash)
 			{
 				propRegister = &reg;
-				continue;
+				break;
 			}
 			++id;
 		}
