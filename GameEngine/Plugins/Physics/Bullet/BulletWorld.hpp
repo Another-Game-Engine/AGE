@@ -38,6 +38,10 @@ namespace AGE
 
 			btCollisionShape *getCollisionShape(const std::string &mesh, bool isConvex);
 
+			CharacterControllerInterface *createCharacterController() override final;
+
+			void destroyCharacterController(CharacterControllerInterface *cc) override final;
+
 		private:
 			// Attributes
 			btDefaultCollisionConfiguration collisionConfiguration;

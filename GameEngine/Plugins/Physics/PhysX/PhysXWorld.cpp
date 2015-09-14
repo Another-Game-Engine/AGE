@@ -15,6 +15,9 @@
 #include "PhysXSphereCollider.hpp"
 #include "PhysXRaycaster.hpp"
 #include "PxFiltering.h"
+#include "characterkinematic/PxCapsuleController.h"
+
+#include "PhysXCharacterController.hpp"
 
 namespace AGE
 {
@@ -266,6 +269,16 @@ namespace AGE
 			}
 		}
 
+		CharacterControllerInterface *PhysXWorld::createCharacterController()
+		{
+			return (new PhysXCharacterController(this));
+		}
+
+		void PhysXWorld::destroyCharacterController(CharacterControllerInterface *cc)
+		{
+			delete cc;
+		}
+
 		void PhysXWorld::destroyCollider(ColliderInterface *collider)
 		{
 			Collider *colliderComponent = collider->getCollider();
@@ -344,8 +357,9 @@ namespace AGE
 			{
 				return;
 			}
-			assert(pairHeader.actors[0]->userData != nullptr && "Invalid actor");
-			assert(pairHeader.actors[1]->userData != nullptr && "Invalid actor");
+			if (pairHeader.actors[0]->userData == nullptr ||
+				pairHeader.actors[1]->userData == nullptr)
+				return;
 			CollisionListener *collisionListener = getCollisionListener();
 			std::vector<Contact> firstColliderContacts;
 			std::vector<Contact> secondColliderContacts;

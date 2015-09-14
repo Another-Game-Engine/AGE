@@ -1,4 +1,4 @@
-#include <Render/Pipelining/Pipelines/CustomRenderPass/DepthOfField.hh>
+#include <Render/Pipelining/Pipelines/CustomRenderPass/DeferredBloomMerge.hh>
 
 #include <Render/Textures/Texture2D.hh>
 #include <Render/OpenGLTask/OpenGLState.hh>
@@ -17,21 +17,18 @@
 #include "Graphic/DRBCameraDrawableList.hpp"
 #include "Graphic/DRBPointLightData.hpp"
 
-#define PROGRAM_DOF_VERTEX "deferred_shading/depth_of_field.vp"
-#define PROGRAM_DOF_FRAG "deferred_shading/depth_of_field.fp"
-
-#define USED_DEPTH_MIPMAP 3
+#define PROGRAM_BLOOM_MERGE_VERTEX "deferred_shading/bloom_merge.vp"
+#define PROGRAM_BLOOM_MERGE_FRAG "deferred_shading/bloom_merge.fp"
 
 namespace AGE
 {
 	enum Programs
 	{
-		PROGRAM_DEPTH_OF_FIELD = 0,
+		PROGRAM_BLOOM_MERGE = 0,
 		PROGRAM_NBR
 	};
 
-	DepthOfField::DepthOfField(glm::uvec2 const &screenSize, std::shared_ptr<PaintingManager> painterManager,
-		std::shared_ptr<Texture2D> depth,
+	DeferredBloomMerge::DeferredBloomMerge(glm::uvec2 const &screenSize, std::shared_ptr<PaintingManager> painterManager,
 		std::shared_ptr<Texture2D> blurred1,
 		std::shared_ptr<Texture2D> blurred2,
 		std::shared_ptr<Texture2D> clean,
@@ -40,7 +37,6 @@ namespace AGE
 	{
 		push_storage_output(GL_COLOR_ATTACHMENT0, dst);
 
-		_depth = depth;
 		_clean = clean;
 		_blurred1 = blurred1;
 		_blurred2 = blurred2;
@@ -54,10 +50,10 @@ namespace AGE
 		// you have to set shader directory in configuration path
 		AGE_ASSERT(shaderPath != nullptr);
 
-		auto vertexShaderPath = shaderPath->getValue() + PROGRAM_DOF_VERTEX;
-		auto fragmentShaderPath = shaderPath->getValue() + PROGRAM_DOF_FRAG;
+		auto vertexShaderPath = shaderPath->getValue() + PROGRAM_BLOOM_MERGE_VERTEX;
+		auto fragmentShaderPath = shaderPath->getValue() + PROGRAM_BLOOM_MERGE_FRAG;
 
-		_programs[PROGRAM_DEPTH_OF_FIELD] = std::make_shared<Program>(Program(std::string("depth_of_field"),
+		_programs[PROGRAM_BLOOM_MERGE] = std::make_shared<Program>(Program(std::string("bloom_merge"),
 		{
 			std::make_shared<UnitProg>(vertexShaderPath, GL_VERTEX_SHADER),
 			std::make_shared<UnitProg>(fragmentShaderPath, GL_FRAGMENT_SHADER)
@@ -68,30 +64,24 @@ namespace AGE
 		_quadPainter = _painterManager->get_painter(quadPainterKey);
 	}
 
-	void DepthOfField::renderPass(const DRBCameraDrawableList &infos)
+	void DeferredBloomMerge::renderPass(const DRBCameraDrawableList &infos)
 	{
-		if (infos.cameraInfos.data.dof)
+		if (infos.cameraInfos.data.bloom)
 		{
 			SCOPE_profile_gpu_i("Depth of field");
 			SCOPE_profile_cpu_i("RenderTimer", "Depth of field");
-
-			_depth->bind();
-			_depth->generateMipmaps();
 
 			OpenGLState::glDepthMask(GL_FALSE);
 			OpenGLState::glDisable(GL_DEPTH_TEST);
 			OpenGLState::glDisable(GL_STENCIL_TEST);
 			OpenGLState::glDisable(GL_CULL_FACE);
 
-			_programs[PROGRAM_DEPTH_OF_FIELD]->use();
-			_programs[PROGRAM_DEPTH_OF_FIELD]->get_resource<Sampler2D>("cleanMap").set(_clean);
-			_programs[PROGRAM_DEPTH_OF_FIELD]->get_resource<Sampler2D>("depthMap").set(_depth);
-			_programs[PROGRAM_DEPTH_OF_FIELD]->get_resource<Sampler2D>("blurredMap1").set(_blurred1);
-			_programs[PROGRAM_DEPTH_OF_FIELD]->get_resource<Sampler2D>("blurredMap2").set(_blurred2);
+			_programs[PROGRAM_BLOOM_MERGE]->use();
+			_programs[PROGRAM_BLOOM_MERGE]->get_resource<Sampler2D>("cleanMap").set(_clean);
+			_programs[PROGRAM_BLOOM_MERGE]->get_resource<Sampler2D>("blurredMap1").set(_blurred1);
+			_programs[PROGRAM_BLOOM_MERGE]->get_resource<Sampler2D>("blurredMap2").set(_blurred2);
 
-			_quadPainter->uniqueDrawBegin(_programs[PROGRAM_DEPTH_OF_FIELD]);
-			_quadPainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_DEPTH_OF_FIELD], Properties(), _quadVertices);
-			_quadPainter->uniqueDrawEnd();
+			_quadPainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BLOOM_MERGE], Properties(), _quadVertices);
 		}
 	}
 }

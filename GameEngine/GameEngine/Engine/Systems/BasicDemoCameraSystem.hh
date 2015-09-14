@@ -5,12 +5,12 @@
 
 namespace AGE
 {
-	class CharacterControllerSystem : public System
+	class BasicDemoCameraSystem : public System
 	{
 	public:
-		CharacterControllerSystem() = delete;
-		CharacterControllerSystem(AScene *scene, bool isEditor);
-		~CharacterControllerSystem() = default;
+		BasicDemoCameraSystem() = delete;
+		BasicDemoCameraSystem(AScene *scene);
+		~BasicDemoCameraSystem() = default;
 
 	private:
 		virtual bool initialize();
@@ -19,7 +19,7 @@ namespace AGE
 		virtual void updateEnd(float time);
 
 		EntityFilter _filter;
-		bool _isEditor;
+		int _pipelineIndex = 0;
 	};
 }
 

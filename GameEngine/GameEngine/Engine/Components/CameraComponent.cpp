@@ -105,10 +105,18 @@ namespace AGE
 		for (int i = 0; i < countChoices; ++i)
 			delete[] choices[i];
 		delete[] choices;
-		if (ImGui::Checkbox("FXAA activated", &_data.activated))
+		if (ImGui::Checkbox("FXAA activated", &_data.fxaa))
 		{
 			//@PROUT TODO
 			//AGE::GetPrepareThread()->setCameraInfos(_data, _key);
+			modified = true;
+		}
+		if (ImGui::Checkbox("DOF activated", &_data.dof))
+		{
+			modified = true;
+		}
+		if (ImGui::Checkbox("Bloom activated", &_data.bloom))
+		{
 			modified = true;
 		}
 		return modified;

@@ -28,6 +28,10 @@ namespace AGE
 			// Assignment Operators
 			NullWorld &operator=(const NullWorld &) = delete;
 
+			CharacterControllerInterface *createCharacterController() override final;
+
+			void destroyCharacterController(CharacterControllerInterface *cc) override final;
+
 		private:
 			// Destructor
 			~NullWorld(void) = default;

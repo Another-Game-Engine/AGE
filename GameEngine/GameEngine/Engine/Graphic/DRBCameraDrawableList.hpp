@@ -17,7 +17,9 @@ namespace AGE
 
 	struct CameraData
 	{
-		bool                            activated;
+		bool                            fxaa;
+		bool                            bloom;
+		bool                            dof;
 		std::shared_ptr<TextureCubeMap> texture;
 		glm::mat4                       projection;
 		unsigned int                    pipeline;

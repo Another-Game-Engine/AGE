@@ -195,6 +195,7 @@
     <ClInclude Include="..\..\..\GameEngine\Engine\Physics\WorldInterface.hpp" />
     <ClInclude Include="PhysXBoxCollider.hpp" />
     <ClInclude Include="PhysXCapsuleCollider.hpp" />
+    <ClInclude Include="PhysXCharacterController.hpp" />
     <ClInclude Include="PhysXCollider.hpp" />
     <ClInclude Include="PhysXMaterial.hpp" />
     <ClInclude Include="PhysXMeshCollider.hpp" />
@@ -207,6 +208,7 @@
   <ItemGroup>
     <ClCompile Include="PhysXBoxCollider.cpp" />
     <ClCompile Include="PhysXCapsuleCollider.cpp" />
+    <ClCompile Include="PhysXCharacterController.cpp" />
     <ClCompile Include="PhysXCollider.cpp" />
     <ClCompile Include="PhysXExports.cpp" />
     <ClCompile Include="PhysXMaterial.cpp" />

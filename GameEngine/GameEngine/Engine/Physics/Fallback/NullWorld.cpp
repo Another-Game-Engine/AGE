@@ -75,6 +75,11 @@ namespace AGE
 			}
 		}
 
+		CharacterControllerInterface *NullWorld::createCharacterController()
+		{
+			return (nullptr);
+		}
+
 		void NullWorld::destroyCollider(ColliderInterface *collider)
 		{
 			switch (collider->getColliderType())
@@ -95,6 +100,10 @@ namespace AGE
 					assert(!"Never reached");
 					break;
 			}
+		}
+
+		void NullWorld::destroyCharacterController(CharacterControllerInterface *cc)
+		{
 		}
 
 		MaterialInterface *NullWorld::createMaterial(const std::string &name)
