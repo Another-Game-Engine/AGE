@@ -100,6 +100,7 @@ namespace AGE
 
 		if (OcclusionConfig::g_Occlusion_is_enabled)
 		{
+			int occluderCounter = 0;
 			{
 				SCOPE_profile_gpu_i("Occluders pass");
 				SCOPE_profile_cpu_i("RenderTimer", "Occluders pass");
@@ -129,6 +130,7 @@ namespace AGE
 						}
 						oldPainter = painter;
 						painter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], meshPaint->globalProperties, meshPaint->getVerticesKey());
+						++occluderCounter;
 					}
 				}
 				if (oldPainter)
@@ -136,23 +138,24 @@ namespace AGE
 					oldPainter->uniqueDrawEnd();
 				}
 			}
-		{
-			SCOPE_profile_gpu_i("Copy occlusion depth to CPU");
-			SCOPE_profile_cpu_i("RenderTimer", "Copy occlusion depth to CPU");
-
-			auto writableBuffer = GetRenderThread()->getDepthMapManager().getWritableMap();
-			auto mipmapLevel = GetRenderThread()->getDepthMapManager().getMipmapLevel();
-
-			if (writableBuffer.isValid())
+			if (occluderCounter > 0)
 			{
-				writableBuffer.setMV(infos.cameraInfos.data.projection * infos.cameraInfos.view);
-				glActiveTexture(GL_TEXTURE0);
-				_depth->bind();
-				glGenerateMipmap(GL_TEXTURE_2D);
-				_depth->get(static_cast<GLint>(mipmapLevel), GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, writableBuffer.getWritableBuffer());
-				_depth->unbind();
+				SCOPE_profile_gpu_i("Copy occlusion depth to CPU");
+				SCOPE_profile_cpu_i("RenderTimer", "Copy occlusion depth to CPU");
+
+				auto writableBuffer = GetRenderThread()->getDepthMapManager().getWritableMap();
+				auto mipmapLevel = GetRenderThread()->getDepthMapManager().getMipmapLevel();
+
+				if (writableBuffer.isValid())
+				{
+					writableBuffer.setMV(infos.cameraInfos.data.projection * infos.cameraInfos.view);
+					glActiveTexture(GL_TEXTURE0);
+					_depth->bind();
+					glGenerateMipmap(GL_TEXTURE_2D);
+					_depth->get(static_cast<GLint>(mipmapLevel), GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, writableBuffer.getWritableBuffer());
+					_depth->unbind();
+				}
 			}
-		}
 
 
 		{
