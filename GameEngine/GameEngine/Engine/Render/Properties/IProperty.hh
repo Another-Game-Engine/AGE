@@ -15,6 +15,13 @@ namespace AGE
 	class IProperty
 	{
 	public:
+		IProperty(std::string &&name)
+		: _name(std::move(name))
+		{
+			std::hash<std::string> hashFn;
+			_hash = hashFn(_name);
+		}
+
 		virtual ~IProperty() {};
 		IProperty &update(IProgramResources* const p)
 		{
@@ -24,7 +31,8 @@ namespace AGE
 			return (*this);
 		}
 		virtual std::shared_ptr<IProgramResources> get_resource(std::shared_ptr<Program> const &p) = 0;
-		virtual std::string const &name() const = 0;
+		inline std::string const &name() const { return _name; }
+		inline std::size_t const &hash() const { return _hash; }
 
 		template <typename T>
 		void autoSet(const T &value)
@@ -39,6 +47,8 @@ namespace AGE
 
 	protected:
 		virtual void _update(IProgramResources *p) = 0;
+		const std::string _name;
+		std::size_t _hash;
 		mutable AGE::SpinLock _mutex;
 	};
 

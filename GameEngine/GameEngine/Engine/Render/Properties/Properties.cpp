@@ -11,6 +11,7 @@ namespace AGE
 		RWLockGuard lock(_lock, true);
 		_properties = properties;
 		_shaderHash = 0;
+		_hashToRefresh = false;
 	}
 
 	Properties::Properties(Properties &&other)
@@ -18,7 +19,8 @@ namespace AGE
 		RWLockGuard lock(_lock, true);
 		RWLockGuard lockO(other._lock, false);
 		_properties = std::move(other._properties);
-		_shaderHash = 0;
+		_shaderHash = other._shaderHash;
+		_hashToRefresh = other._hashToRefresh;
 	}
 
 	Properties::Properties(Properties const &other)
@@ -26,7 +28,8 @@ namespace AGE
 		RWLockGuard lock(_lock, true);
 		RWLockGuard lockO(other._lock, false);
 		_properties = other._properties;
-		_shaderHash = 0;
+		_shaderHash = other._shaderHash;
+		_hashToRefresh = other._hashToRefresh;
 	}
 
 	Properties::~Properties()
@@ -46,10 +49,7 @@ namespace AGE
 
 		RWLockGuard lock(_lock, true);
 		_properties.emplace_back(prop);
-		if (computeHash)
-		{
-			_computeHash();
-		}
+		_hashToRefresh = true;
 		return (Key<Property>::createKey(int(_properties.size()) - 1));
 	}
 
@@ -65,7 +65,7 @@ namespace AGE
 			add_property(p, false);
 			_lock.ReadLock();
 		}
-		_computeHash();
+		_hashToRefresh = true;
 		_lock.ReadUnlock();
 	}
 
@@ -90,13 +90,14 @@ namespace AGE
 
 	void Properties::_computeHash()
 	{
-		std::string str;
+		RWLockGuard lock(_lock, true);
+
+		_shaderHash = 0;
 		for (auto &p : _properties)
 		{
-			str += p->name();
+			_shaderHash ^= p->hash();
 		}
-		std::hash<std::string> hashFn;
-		_shaderHash = hashFn(str);
+		_hashToRefresh = false;
 	}
 
 	// @Dorian !
