@@ -104,8 +104,6 @@ namespace AGE
 	// NOT WORKING -> you invalid Key doing that !
 	void Properties::remove_property(Key<IProperty> const &prop)
 	{
-		SCOPE_profile_cpu_function("RenderTimer");
-
 		RWLockGuard lock(_lock, true);
 		if (prop.getId() != _properties.size() - 1)
 		{
@@ -116,8 +114,6 @@ namespace AGE
 
 	void Properties::update_property(IProgramResources *p, std::size_t index) const
 	{
-		SCOPE_profile_cpu_function("RenderTimer");
-
 		RWLockGuard lock(_lock, false);
 		_properties[index]->update(p);
 	}
