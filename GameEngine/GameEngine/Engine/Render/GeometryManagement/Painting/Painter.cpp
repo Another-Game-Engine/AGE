@@ -10,6 +10,7 @@ namespace AGE
 
 	Painter::Painter(std::vector<std::pair<GLenum, std::string>>  const &types) :
 		_buffer(types)
+		, _isInUniqueDraw(false)
 	{
 		// to be sure that this function is only called in render thread
 		AGE_ASSERT(GetThreadManager()->getCurrentThread() == (AGE::Thread*)GetRenderThread());
@@ -18,6 +19,7 @@ namespace AGE
 	Painter::Painter(Painter &&move) :
 		_buffer(std::move(move._buffer)),
 		_vertices(std::move(move._vertices))
+		, _isInUniqueDraw(std::move(move._isInUniqueDraw))
 	{
 		// to be sure that this function is only called in render thread
 		AGE_ASSERT(GetThreadManager()->getCurrentThread() == (AGE::Thread*)GetRenderThread());
@@ -108,18 +110,18 @@ namespace AGE
 		SCOPE_profile_gpu_i("Unique Draw");
 		SCOPE_profile_cpu_function("PainterTimer");
 
+		// be sure to call uniqueDrawBegin() before and uniqueDrawEnd() after
+		AGE_ASSERT(_isInUniqueDraw);
+
 		// to be sure that this function is only called in render thread
 		AGE_ASSERT(GetThreadManager()->getCurrentThread() == (AGE::Thread*)GetRenderThread());
-		program->set_attributes(_buffer);
-		_buffer.bind();
-		_buffer.update();
+
 		program->registerProperties(properties);
 		program->updateProperties(properties);
 		program->update();
 		// TODO: Fix that properly! @Dorian
 		if (vertice.getId() >= 0 && vertice.getId() < _vertices.size())
 			_vertices[vertice.getId()].draw(mode);
-		_buffer.unbind();
 	}
 
 	void Painter::uniqueDraw(GLenum mode, const Key<Vertices> &vertice)
@@ -127,12 +129,36 @@ namespace AGE
 		SCOPE_profile_gpu_i("Unique Draw");
 		SCOPE_profile_cpu_function("PainterTimer");
 
+		// be sure to call uniqueDrawBegin() before and uniqueDrawEnd() after
+		AGE_ASSERT(_isInUniqueDraw);
+
 		// to be sure that this function is only called in render thread
 		AGE_ASSERT(GetThreadManager()->getCurrentThread() == (AGE::Thread*)GetRenderThread());
+		_vertices[vertice.getId()].draw(mode);
+	}
+
+	void Painter::uniqueDrawBegin(std::shared_ptr<Program> const &program)
+	{
+		AGE_ASSERT(_isInUniqueDraw == false);
+
+		if (program)
+		{
+			program->set_attributes(_buffer);
+		}
+
 		_buffer.bind();
 		_buffer.update();
-		_vertices[vertice.getId()].draw(mode);
+
+		_isInUniqueDraw = true;
+	}
+
+	void Painter::uniqueDrawEnd()
+	{
+		AGE_ASSERT(_isInUniqueDraw == true);
+
 		_buffer.unbind();
+
+		_isInUniqueDraw = false;
 	}
 
 	bool Painter::coherent(std::vector<std::pair<GLenum, std::string>> const &types) const

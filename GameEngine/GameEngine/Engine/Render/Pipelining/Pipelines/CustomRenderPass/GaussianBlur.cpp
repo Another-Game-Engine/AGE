@@ -80,6 +80,8 @@ namespace AGE
 		_programs[PROGRAM_BLUR]->get_resource<Sampler2D>("sourceTexture").set(_source);
 		_programs[PROGRAM_BLUR]->get_resource<Vec2>("inverseSourceSize").set(_inverseSourceSize);
 
+		_quadPainter->uniqueDrawBegin(_programs[PROGRAM_BLUR]);
 		_quadPainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BLUR], Properties(), _quadVertices);
+		_quadPainter->uniqueDrawEnd();
 	}
 }
