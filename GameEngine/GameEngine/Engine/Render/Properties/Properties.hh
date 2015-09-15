@@ -45,20 +45,23 @@ namespace AGE
 			return -1;
 		}
 
-		std::shared_ptr<IProperty> getProperty(const std::string &name) const
+		std::shared_ptr<IProperty> &getProperty(const std::string &name)
 		{
 			RWLockGuard lock(_lock, false);
+			int res = 0;
 			for (auto &e : _properties)
 			{
 				if (e->name() == name)
 				{
-					return e;
+					return _properties[res];
 				}
+				++res;
 			}
-			return nullptr;
+			static std::shared_ptr<IProperty> nullValue(nullptr);
+			return nullValue;
 		}
 
-		inline std::shared_ptr<IProperty> getProperty(const std::size_t &index) const
+		inline std::shared_ptr<IProperty> &getProperty(const std::size_t &index) 
 		{
 			RWLockGuard lock(_lock, false);
 			return _properties[index];
