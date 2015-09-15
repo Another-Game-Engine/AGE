@@ -12,6 +12,7 @@ namespace AGE
 	class Attribute;
 	class BufferPrograms;
 	class Properties;
+	class IProperty;
 
 	class Program
 	{
@@ -84,11 +85,11 @@ namespace AGE
 		{
 			std::size_t index;
 			std::shared_ptr<IProgramResources> resource;
-			bool instancied = false;
-			PropertyRegister(std::size_t _index, std::shared_ptr<IProgramResources> _resource, bool _instancied)
+			void(*updateFunction)(IProgramResources *, IProperty*) = nullptr;
+			PropertyRegister(std::size_t _index, std::shared_ptr<IProgramResources> _resource, void(*_updateFunction)(IProgramResources *, IProperty*))
 				: index(_index)
 				, resource(_resource)
-				, instancied(_instancied)
+				, updateFunction(_updateFunction)
 			{}
 		};
 		struct PropertiesRegister

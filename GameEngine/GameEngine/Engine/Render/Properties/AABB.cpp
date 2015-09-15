@@ -27,10 +27,14 @@ namespace AGE
 		return (*this);
 	}
 
-	void AABB::_update(IProgramResources *program)
+	void AABB::update(Vec3 *res, AABB *aabb)
 	{
-		auto resource = (Vec3*)(program);
-		*resource = _aabb;
+		*res = aabb->_aabb;
+	}
+
+	void AABB::instanciedUpdate(Vec3 *, AABB *)
+	{
+		assert(false && "implement me");
 	}
 
 	glm::vec3 const & AABB::get()

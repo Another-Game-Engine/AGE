@@ -22,8 +22,6 @@ namespace AGE
 	public:
 		Key<Property> add_property(std::shared_ptr<IProperty> const &prop);
 		void remove_property(Key<Property> const &prop);
-		void update_property(IProgramResources *p, std::size_t index) const;
-		void update_instancied_property(IProgramResources *p, std::size_t index) const;
 		void merge_properties(const Properties &other);
 		std::size_t getProgramId(std::size_t programId);
 		inline std::size_t getHash() { if (_hashToRefresh){ _computeHash(); }; return _shaderHash; }
@@ -45,6 +43,25 @@ namespace AGE
 				++res;
 			}
 			return -1;
+		}
+
+		std::shared_ptr<IProperty> getProperty(const std::string &name) const
+		{
+			RWLockGuard lock(_lock, false);
+			for (auto &e : _properties)
+			{
+				if (e->name() == name)
+				{
+					return e;
+				}
+			}
+			return nullptr;
+		}
+
+		inline std::shared_ptr<IProperty> getProperty(const std::size_t &index) const
+		{
+			RWLockGuard lock(_lock, false);
+			return _properties[index];
 		}
 
 	private:

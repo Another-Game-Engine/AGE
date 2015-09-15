@@ -17,10 +17,14 @@ namespace AGE
 
 	}
 
-	void Color::_update(IProgramResources *res)
+	void Color::update(Vec4 *res, Color *color)
 	{
-		auto resource = (Vec4*)(res);
-		*resource = _color;
+		*res = color->_color;
+	}
+
+	void Color::instanciedUpdate(Vec4 *, Color *)
+	{
+		assert(false && "implement me");
 	}
 
 	glm::vec4 const & Color::get()

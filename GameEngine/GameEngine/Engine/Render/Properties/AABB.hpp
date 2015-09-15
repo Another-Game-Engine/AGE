@@ -8,6 +8,8 @@
 
 namespace AGE
 {
+	class Vec3;
+
 	class AABB : public AProperty
 	{
 	public:
@@ -16,9 +18,8 @@ namespace AGE
 		AABB(AABB const &copy) = delete;
 		AABB &operator=(AABB const &other) = delete;
 		AABB &operator=(glm::vec3 const &value);
-
-	private:
-		virtual void _update(IProgramResources *p) override final;
+		PROPERTY_UPDATE_FUNCTION(AABB, Vec3);
+		PROPERTY_INSTANCIED_UPDATE_FUNCTION(AABB, Vec3);
 
 	public:
 		glm::vec3 const &get();

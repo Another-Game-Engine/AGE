@@ -30,17 +30,14 @@ namespace AGE
 		return (*this);
 	}
 
-	void Transformation::_update(IProgramResources *program)
+	void Transformation::update(Mat4 *res, Transformation *trans)
 	{
-		auto resource = (Mat4*)(program);
-		*resource = _model_matrix;
+		*res = trans->_model_matrix;
 	}
 
-	void Transformation::_update_instancied(IProgramResources *program)
+	void Transformation::instanciedUpdate(SamplerBuffer *res, Transformation *trans)
 	{
-		auto resource = (SamplerBuffer*)(program);
-		auto texture = resource->getTexture();
-		texture->push(glm::value_ptr(this->_model_matrix));
+		res->getTexture()->push(glm::value_ptr(trans->_model_matrix));
 	}
 
 	glm::mat4 const & Transformation::get()

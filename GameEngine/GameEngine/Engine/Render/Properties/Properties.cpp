@@ -110,16 +110,4 @@ namespace AGE
 		}
 		_properties.resize(_properties.size() - 1);
 	}
-
-	void Properties::update_property(IProgramResources *p, std::size_t index) const
-	{
-		RWLockGuard lock(_lock, false);
-		_properties[index]->update(p);
-	}
-
-	void Properties::update_instancied_property(IProgramResources *p, std::size_t index) const
-	{
-		RWLockGuard lock(_lock, false);
-		_properties[index]->update_instancied(p);
-	}
 }
