@@ -20,7 +20,7 @@ namespace AGE
 		virtual ~Properties();
 
 	public:
-		Key<Property> add_property(std::shared_ptr<IProperty> const &prop, bool computeHash = true);
+		Key<Property> add_property(std::shared_ptr<IProperty> const &prop);
 		void remove_property(Key<Property> const &prop);
 		void update_property(IProgramResources *p, std::size_t index) const;
 		void merge_properties(const Properties &other);
