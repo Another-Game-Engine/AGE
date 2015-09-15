@@ -21,6 +21,7 @@ namespace AGE
 		_buffer(std::move(move._buffer)),
 		_vertices(std::move(move._vertices))
 		, _isInUniqueDraw(std::move(move._isInUniqueDraw))
+		, _isInstanciedDraw(std::move(move._isInstanciedDraw))
 	{
 		// to be sure that this function is only called in render thread
 		AGE_ASSERT(GetThreadManager()->getCurrentThread() == (AGE::Thread*)GetRenderThread());
