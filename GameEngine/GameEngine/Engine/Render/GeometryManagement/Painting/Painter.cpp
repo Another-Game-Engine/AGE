@@ -124,6 +124,30 @@ namespace AGE
 			_vertices[vertice.getId()].draw(mode);
 	}
 
+	void Painter::instanciedDraw(GLenum mode, std::shared_ptr<Program> const &program, const Key<Vertices> &vertice, std::size_t count)
+	{
+		SCOPE_profile_gpu_i("Unique Draw");
+		SCOPE_profile_cpu_function("PainterTimer");
+
+		if (program)
+		{
+			program->set_attributes(_buffer);
+		}
+
+		_buffer.bind();
+		_buffer.update();
+
+		// to be sure that this function is only called in render thread
+		AGE_ASSERT(GetThreadManager()->getCurrentThread() == (AGE::Thread*)GetRenderThread());
+
+		program->update();
+		// TODO: Fix that properly! @Dorian
+		if (vertice.getId() >= 0 && vertice.getId() < _vertices.size())
+		{
+			_vertices[vertice.getId()].instanciedDraw(mode, count);
+		}
+	}
+
 	void Painter::uniqueDraw(GLenum mode, const Key<Vertices> &vertice)
 	{
 		SCOPE_profile_gpu_i("Unique Draw");

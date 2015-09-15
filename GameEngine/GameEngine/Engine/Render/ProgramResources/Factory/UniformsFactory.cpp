@@ -6,6 +6,7 @@
 #include <Render/ProgramResources/Types/Uniform/Vec2.hh>
 #include <Render/ProgramResources/Types/Uniform/Sampler/Sampler2D.hh>
 #include <Render/ProgramResources/Types/Uniform/Sampler/Sampler3D.hh>
+#include <Render/ProgramResources/Types/Uniform/Sampler/SamplerBuffer.hh>
 
 #define LAMBDA_PROTO [this](GLint id, std::string &&name)
 
@@ -41,7 +42,12 @@ return (std::make_shared<Sampler2D>(id, std::move(name))); \
 std::make_pair(GL_SAMPLER_CUBE, LAMBDA_PROTO\
 {\
 return (std::make_shared<Sampler3D>(id, std::move(name))); \
+}), \
+std::make_pair(GL_SAMPLER_BUFFER, LAMBDA_PROTO\
+{\
+return (std::make_shared<SamplerBuffer>(id, std::move(name))); \
 })
+
 
 namespace AGE
 {

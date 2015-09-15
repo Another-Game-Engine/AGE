@@ -23,6 +23,7 @@ namespace AGE
 		Key<Property> add_property(std::shared_ptr<IProperty> const &prop);
 		void remove_property(Key<Property> const &prop);
 		void update_property(IProgramResources *p, std::size_t index) const;
+		void update_instancied_property(IProgramResources *p, std::size_t index) const;
 		void merge_properties(const Properties &other);
 		std::size_t getProgramId(std::size_t programId);
 		inline std::size_t getHash() { if (_hashToRefresh){ _computeHash(); }; return _shaderHash; }

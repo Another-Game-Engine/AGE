@@ -32,6 +32,7 @@ namespace AGE
 		Painter &draw(GLenum mode, std::shared_ptr<Program> const &p, std::vector<Properties> &propertiesList, std::vector<Key<Vertices>> const &drawList);
 		void uniqueDraw(GLenum mode, std::shared_ptr<Program> const &program, Properties &properties, const Key<Vertices> &vertice);
 		void uniqueDraw(GLenum mode, const Key<Vertices> &vertice);
+		void instanciedDraw(GLenum mode, std::shared_ptr<Program> const &program, const Key<Vertices> &vertice, std::size_t count);
 		void uniqueDrawBegin(std::shared_ptr<Program> const &program = nullptr);
 		void uniqueDrawEnd();
 	private:

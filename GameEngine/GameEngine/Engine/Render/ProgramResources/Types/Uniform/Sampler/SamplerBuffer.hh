@@ -16,7 +16,7 @@ namespace AGE
 		~SamplerBuffer();
 		SamplerBuffer &operator=(SamplerBuffer const &copy) = delete;
 		SamplerBuffer &operator=(std::shared_ptr<TextureBuffer> const &texture);
-
+		inline std::shared_ptr<TextureBuffer> getTexture() { return _texture; }
 	public:
 		virtual IProgramResources & update() override final;
 		virtual void print() const override final;

@@ -30,6 +30,13 @@ namespace AGE
 			_mutex.unlock();
 			return (*this);
 		}
+		IProperty &update_instancied(IProgramResources* const p)
+		{
+			_mutex.lock();
+			_update_instancied(p);
+			_mutex.unlock();
+			return (*this);
+		}
 		virtual std::shared_ptr<IProgramResources> get_resource(std::shared_ptr<Program> const &p) = 0;
 		inline std::string const &name() const { return _name; }
 		inline std::size_t const &hash() const { return _hash; }
@@ -47,6 +54,7 @@ namespace AGE
 
 	protected:
 		virtual void _update(IProgramResources *p) = 0;
+		virtual void _update_instancied(IProgramResources*) { assert(false && "Not implemented in derived class"); };
 		const std::string _name;
 		std::size_t _hash;
 		mutable AGE::SpinLock _mutex;

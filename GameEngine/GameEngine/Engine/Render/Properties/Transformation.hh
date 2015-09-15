@@ -19,6 +19,7 @@ namespace AGE
 
 	private:
 		virtual void _update(IProgramResources *p) override final;
+		virtual void _update_instancied(IProgramResources *p) override final;
 
 	public:
 		glm::mat4 const &get();
