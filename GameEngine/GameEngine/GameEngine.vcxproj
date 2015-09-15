@@ -315,6 +315,7 @@
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DepthOfField.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DownSample.cpp" />
     <ClCompile Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\GaussianBlur.cpp" />
+    <ClCompile Include="Engine\Render\ProgramResources\Types\Uniform\Sampler\SamplerBuffer.cpp" />
     <ClCompile Include="Engine\Skinning\AnimationManager.cpp" />
     <ClCompile Include="Engine\Systems\BasicDemoCameraSystem.cpp" />
     <ClCompile Include="Engine\Systems\CharacterControllerSystem.cpp" />
@@ -546,6 +547,8 @@
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DepthOfField.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DownSample.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\GaussianBlur.hh" />
+    <ClInclude Include="Engine\Render\ProgramResources\Types\Uniform\Sampler\SamplerBuffer.hh" />
+    <ClInclude Include="Engine\Render\Textures\TextureBuffer.hh" />
     <ClInclude Include="Engine\Systems\BasicDemoCameraSystem.hh" />
     <ClInclude Include="Engine\Systems\CharacterControllerSystem.hh" />
     <ClInclude Include="Engine\BFC\BFCBlock.hpp" />
