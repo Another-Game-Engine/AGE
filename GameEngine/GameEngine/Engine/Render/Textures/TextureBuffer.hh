@@ -41,6 +41,7 @@ namespace AGE
 			bind();
 			glTexBuffer(GL_TEXTURE_BUFFER, internal_format, _bufferHandle);
 			_buffer = (char*)malloc(size * count);
+			return true;
 		}
 
 		void resetOffset()

@@ -16,6 +16,9 @@
 #include "Graphic\DRBCameraDrawableList.hpp"
 #include "Graphic\DRBSpotLightData.hpp"
 
+#include <Core/Engine.hh>
+#include <AssetManagement/AssetManager.hh>
+
 #define DEFERRED_SHADING_DEBUG_LIGHT_VERTEX "../../Shaders/deferred_shading/deferred_shading_debug_light.vp"
 #define DEFERRED_SHADING_DEBUG_LIGHT_FRAG "../../Shaders/deferred_shading/deferred_shading_debug_light.fp"
 
@@ -94,7 +97,12 @@ namespace AGE
 			{
 				SCOPE_profile_gpu_i("Render debug sprite lights");
 				SCOPE_profile_cpu_i("RenderTimer", "Render debug sprite pointlights");
+
+				auto map = GetEngine()->getInstance<AssetsManager>()->getPointLightTexture();
+
 				_programs[PROGRAM_BUFFERING_LIGHT]->get_resource<SamplerBuffer>("model_matrix_tbo").set(g_position_buffer);
+				_programs[PROGRAM_BUFFERING_LIGHT]->get_resource<Sampler2D>("sprite_light_map").set(map);
+
 				g_position_buffer->resetOffset();
 				_quadPainter->instanciedDrawBegin(_programs[PROGRAM_BUFFERING_LIGHT]);
 				for (auto &pl : pointLightList)
@@ -121,7 +129,12 @@ namespace AGE
 			{
 				SCOPE_profile_gpu_i("Render debug sprite lights");
 				SCOPE_profile_cpu_i("RenderTimer", "Render debug sprite spotlights");
+
+				auto map = GetEngine()->getInstance<AssetsManager>()->getSpotLightTexture();
+
 				_programs[PROGRAM_BUFFERING_LIGHT]->get_resource<SamplerBuffer>("model_matrix_tbo").set(g_position_buffer);
+				_programs[PROGRAM_BUFFERING_LIGHT]->get_resource<Sampler2D>("sprite_light_map").set(map);
+
 				g_position_buffer->resetOffset();
 				_quadPainter->instanciedDrawBegin(_programs[PROGRAM_BUFFERING_LIGHT]);
 				for (auto &pl : spotLightList)
