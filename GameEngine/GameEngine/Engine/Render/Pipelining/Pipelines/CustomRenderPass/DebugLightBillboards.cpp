@@ -71,7 +71,6 @@ namespace AGE
 
 	void DebugLightBillboards::renderPass(const DRBCameraDrawableList &infos)
 	{
-		//@PROUT TODO
 		{
 			SCOPE_profile_gpu_i("DeferredDebugBuffering render pass");
 			SCOPE_profile_cpu_i("RenderTimer", "DeferredDebugBuffering render pass");
@@ -97,6 +96,7 @@ namespace AGE
 				SCOPE_profile_cpu_i("RenderTimer", "Render debug sprite pointlights");
 				_programs[PROGRAM_BUFFERING_LIGHT]->get_resource<SamplerBuffer>("model_matrix_tbo").set(g_position_buffer);
 				g_position_buffer->resetOffset();
+				_quadPainter->instanciedDrawBegin(_programs[PROGRAM_BUFFERING_LIGHT]);
 				for (auto &pl : pointLightList)
 				{
 					_programs[PROGRAM_BUFFERING_LIGHT]->registerProperties(pl->globalProperties);
@@ -114,7 +114,7 @@ namespace AGE
 					_quadPainter->instanciedDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING_LIGHT], _quadVertices, g_position_buffer->getOffset());
 					g_position_buffer->resetOffset();
 				}
-				
+				_quadPainter->instanciedDrawEnd();
 			}
 			auto &spotLightList = infos.spotLights;
 			if (spotLightList.size() > 0)
@@ -123,6 +123,7 @@ namespace AGE
 				SCOPE_profile_cpu_i("RenderTimer", "Render debug sprite spotlights");
 				_programs[PROGRAM_BUFFERING_LIGHT]->get_resource<SamplerBuffer>("model_matrix_tbo").set(g_position_buffer);
 				g_position_buffer->resetOffset();
+				_quadPainter->instanciedDrawBegin(_programs[PROGRAM_BUFFERING_LIGHT]);
 				for (auto &pl : spotLightList)
 				{
 					auto &spotlight = (std::shared_ptr<DRBSpotLightData>&)(pl->spotLight);
@@ -141,6 +142,7 @@ namespace AGE
 					_quadPainter->instanciedDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING_LIGHT], _quadVertices, g_position_buffer->getOffset());
 					g_position_buffer->resetOffset();
 				}
+				_quadPainter->instanciedDrawEnd();
 			}
 		}
 	}
