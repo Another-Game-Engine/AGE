@@ -125,43 +125,36 @@ namespace AGE
 
 		auto &pointList = (std::list<std::shared_ptr<DRBPointLightData>>&)(infos.pointLights);
 
-		// We clear the stencil buffer
-		glClear(GL_STENCIL_BUFFER_BIT);
-
-		OpenGLState::glColorMask(glm::bvec4(false));
-
-		OpenGLState::glStencilFunc(GL_ALWAYS, 0, 0xFFFFFFFF);
-		OpenGLState::glStencilOp(GL_KEEP, GL_KEEP, GL_INCR);
-		OpenGLState::glCullFace(GL_BACK);
-
-		_spherePainter->uniqueDrawBegin(_programs[PROGRAM_STENCIL]);
-
 		for (auto &pl : pointList)
 		{
-			SCOPE_profile_gpu_i("Lightpoints pass1");
-			SCOPE_profile_cpu_i("RenderTimer", "Lightpoints pass1");
+			SCOPE_profile_gpu_i("Lightpoints");
+			SCOPE_profile_cpu_i("RenderTimer", "Lightpoints");
 
+			// We clear the stencil buffer
+			glClear(GL_STENCIL_BUFFER_BIT);
+
+			OpenGLState::glColorMask(glm::bvec4(false));
+
+			OpenGLState::glStencilFunc(GL_ALWAYS, 0, 0xFFFFFFFF);
+			OpenGLState::glStencilOp(GL_KEEP, GL_KEEP, GL_INCR);
+			OpenGLState::glCullFace(GL_BACK);
+
+			// Question for Paul :
+			// This cannot be optimized, doing 2 for loop instead of one ?
+			_spherePainter->uniqueDrawBegin(_programs[PROGRAM_STENCIL]);
 			_spherePainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_STENCIL], pl->globalProperties, _sphereVertices);
-		}
-		_spherePainter->uniqueDrawEnd();
+			_spherePainter->uniqueDrawEnd();
 
+			OpenGLState::glColorMask(glm::bvec4(true));
 
-		OpenGLState::glColorMask(glm::bvec4(true));
+			OpenGLState::glStencilFunc(GL_EQUAL, 0, 0xFFFFFFFF);
+			OpenGLState::glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
+			OpenGLState::glCullFace(GL_FRONT);
 
-		OpenGLState::glStencilFunc(GL_EQUAL, 0, 0xFFFFFFFF);
-		OpenGLState::glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
-		OpenGLState::glCullFace(GL_FRONT);
-
-		_spherePainter->uniqueDrawBegin(_programs[PROGRAM_LIGHTNING]);
-
-		for (auto &pl : pointList)
-		{
-			SCOPE_profile_gpu_i("Lightpoints pass2");
-			SCOPE_profile_cpu_i("RenderTimer", "Lightpoints pass2");
-
+			_spherePainter->uniqueDrawBegin(_programs[PROGRAM_LIGHTNING]);
 			_spherePainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_LIGHTNING], pl->globalProperties, _sphereVertices);
-		}
-		_spherePainter->uniqueDrawEnd();
+			_spherePainter->uniqueDrawEnd();
 
+		}
 	}
 }
