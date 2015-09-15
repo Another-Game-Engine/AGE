@@ -25,6 +25,11 @@ namespace AGE
 
 	}
 
+	Sampler2D::~Sampler2D()
+	{
+
+	}
+
 	IProgramResources & Sampler2D::update()
 	{
 		if (!_update) {

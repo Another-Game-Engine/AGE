@@ -131,10 +131,12 @@ namespace AGE
 			SCOPE_profile_cpu_i("RenderTimer", "Lightpoints");
 
 			_programs[PROGRAM_STENCIL]->use();
-			pl->globalProperties.update_properties(_programs[PROGRAM_STENCIL]);
+			_programs[PROGRAM_STENCIL]->registerProperties(pl->globalProperties);
+			_programs[PROGRAM_STENCIL]->updateProperties(pl->globalProperties);
 
 			_programs[PROGRAM_LIGHTNING]->use();
-			pl->globalProperties.update_properties(_programs[PROGRAM_LIGHTNING]);
+			_programs[PROGRAM_LIGHTNING]->registerProperties(pl->globalProperties);
+			_programs[PROGRAM_LIGHTNING]->updateProperties(pl->globalProperties);
 
 			// We clear the stencil buffer
 			glClear(GL_STENCIL_BUFFER_BIT);
@@ -145,7 +147,11 @@ namespace AGE
 			OpenGLState::glStencilOp(GL_KEEP, GL_KEEP, GL_INCR);
 			OpenGLState::glCullFace(GL_BACK);
 
+			// Question for Paul :
+			// This cannot be optimized, doing 2 for loop instead of one ?
+			_spherePainter->uniqueDrawBegin(_programs[PROGRAM_STENCIL]);
 			_spherePainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_STENCIL], pl->globalProperties, _sphereVertices);
+			_spherePainter->uniqueDrawEnd();
 
 			OpenGLState::glColorMask(glm::bvec4(true));
 
@@ -153,7 +159,9 @@ namespace AGE
 			OpenGLState::glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
 			OpenGLState::glCullFace(GL_FRONT);
 
+			_spherePainter->uniqueDrawBegin(_programs[PROGRAM_LIGHTNING]);
 			_spherePainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_LIGHTNING], pl->globalProperties, _sphereVertices);
+			_spherePainter->uniqueDrawEnd();
 
 		}
 	}

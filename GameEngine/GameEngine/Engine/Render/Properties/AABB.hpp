@@ -18,7 +18,7 @@ namespace AGE
 		AABB &operator=(glm::vec3 const &value);
 
 	private:
-		virtual void _update(std::shared_ptr<Program> const &p) override final;
+		virtual void _update(IProgramResources *p) override final;
 
 	public:
 		glm::vec3 const &get();

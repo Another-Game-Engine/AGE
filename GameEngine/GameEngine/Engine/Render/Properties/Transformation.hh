@@ -18,7 +18,7 @@ namespace AGE
 		Transformation &operator=(glm::mat4 const &value);
 
 	private:
-		virtual void _update(std::shared_ptr<Program> const &p) override final;
+		virtual void _update(IProgramResources *p) override final;
 
 	public:
 		glm::mat4 const &get();

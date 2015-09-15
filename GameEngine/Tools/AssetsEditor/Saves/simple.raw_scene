@@ -55,7 +55,7 @@
                 "value": 13917482855567903631
             }
         ],
-        "entityNumber": 2,
+        "entityNumber": 3,
         "Entity_0": {
             "cereal_class_version": 0,
             "link": {
@@ -136,6 +136,45 @@
             },
             "AGE_CORE_EntityRepresentationComponent": {
                 "name": "sol-Copy-Copy"
+            }
+        },
+        "Entity_2": {
+            "link": {
+                "Position": {
+                    "value0": -3.9397313594818115,
+                    "value1": 7.4445147514343262,
+                    "value2": 9.9642791748046875
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": -0.31333082914352417,
+                    "value1": -0.16784898936748505,
+                    "value2": -0.056369505822658539,
+                    "value3": 0.9329913854598999
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "freefly-camera"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "freefly-camera",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "freefly-camera-Copy-Copy"
             }
         }
     }

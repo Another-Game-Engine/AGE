@@ -80,7 +80,9 @@ namespace AGE
 		if (_2dLines.verticesKey.isValid() && _2dLines.painterKey.isValid())
 		{
 			lines = _painterManager->get_painter(_2dLines.painterKey);
+			lines->uniqueDrawBegin(_programs[PROGRAM_DRAW_2D_LINE]);
 			lines->uniqueDraw(GL_LINES, _programs[PROGRAM_DRAW_2D_LINE], Properties(), _2dLines.verticesKey);
+			lines->uniqueDrawEnd();
 		}
 
 		_programs[PROGRAM_DRAW_3D_LINE]->use();
@@ -90,7 +92,9 @@ namespace AGE
 		if (_3dLines.verticesKey.isValid() && _3dLines.painterKey.isValid())
 		{
 			lines = _painterManager->get_painter(_3dLines.painterKey);
+			lines->uniqueDrawBegin(_programs[PROGRAM_DRAW_3D_LINE]);
 			lines->uniqueDraw(GL_LINES, _programs[PROGRAM_DRAW_3D_LINE], Properties(), _3dLines.verticesKey);
+			lines->uniqueDrawEnd();
 		}
 
 		OpenGLState::glEnable(GL_DEPTH_TEST);
@@ -100,7 +104,9 @@ namespace AGE
 		if (_3dlinesDepth.painterKey.isValid() && _3dlinesDepth.painterKey.isValid())
 		{
 			lines = _painterManager->get_painter(_3dlinesDepth.painterKey);
+			lines->uniqueDrawBegin(_programs[PROGRAM_DRAW_3D_LINE]);
 			lines->uniqueDraw(GL_LINES, _programs[PROGRAM_DRAW_3D_LINE], Properties(), _3dlinesDepth.verticesKey);
+			lines->uniqueDrawEnd();
 		}
 	}
 }

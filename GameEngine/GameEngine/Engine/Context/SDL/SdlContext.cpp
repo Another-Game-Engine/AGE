@@ -41,9 +41,12 @@ namespace AGE
 
 	void SdlContext::swapContext()
 	{
-		SCOPE_profile_cpu_function("RenderTimer");
-		SCOPE_profile_gpu_i("SwapContext");
-		SDL_GL_SwapWindow(_window);
+		MicroProfileFlip();
+		{
+			SCOPE_profile_cpu_i("RenderTimer", "swapContext");
+			SCOPE_profile_gpu_i("SwapContext");
+			SDL_GL_SwapWindow(_window);
+		}
 	}
 
 	void SdlContext::refreshInputs()

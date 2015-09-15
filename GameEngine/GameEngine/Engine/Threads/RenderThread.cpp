@@ -379,7 +379,6 @@ namespace AGE
 				_context->refreshInputs();
 			}
 
-			MicroProfileFlip();
 			++_frameCounter;
 		});
 

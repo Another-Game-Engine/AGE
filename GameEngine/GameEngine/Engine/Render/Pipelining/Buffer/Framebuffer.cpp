@@ -76,6 +76,8 @@ namespace AGE
 
 	Framebuffer const &Framebuffer::attachment(IFramebufferStorage const &storage, GLenum attach) const
 	{
+		SCOPE_profile_cpu_function("RenderTimer");
+
 		storage.attachment(*this, attach);
 		if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 		{

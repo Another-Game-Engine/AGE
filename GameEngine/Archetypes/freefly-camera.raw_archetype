@@ -66,9 +66,9 @@
                     "value2": 0
                 },
                 "Scale": {
-                    "value0": 5,
-                    "value1": 0.0099999997764825821,
-                    "value2": 5
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
                 },
                 "Orientation": {
                     "value0": 0,
@@ -81,64 +81,39 @@
             "flags": 0,
             "components_number": [
                 0,
-                1,
-                2,
-                9
+                5,
+                6
             ],
             "archetypesDependency": [],
             "AGE_CORE_EntityRepresentationComponent": {
                 "cereal_class_version": 0,
-                "name": "floor-b-Copy"
+                "name": "freefly-camera-Copy"
             },
-            "AGE_CORE_MeshRenderer": {
-                "cereal_class_version": 3,
-                "value0": "medievalpack/meshs/floor_b.mage",
-                "value1": "medievalpack/meshs/floor_b.sage",
-                "value2": "",
-                "value3": {
-                    "type": 0,
-                    "data": 0
+            "AGE_CORE_CameraComponent": {
+                "cereal_class_version": 0,
+                "projection": {
+                    "value0": {
+                        "value0": 0.97427862882614136,
+                        "value1": 0,
+                        "value2": 0,
+                        "value3": 0,
+                        "value4": 0,
+                        "value5": 1.732050895690918,
+                        "value6": 0,
+                        "value7": 0,
+                        "value8": 0,
+                        "value9": 0,
+                        "value10": -1.0001000165939331,
+                        "value11": -1,
+                        "value12": 0,
+                        "value13": 0,
+                        "value14": -0.20001000165939331,
+                        "value15": 0
+                    }
                 }
             },
-            "AGE_CORE_RigidBody": {
-                "cereal_class_version": 1,
-                "AngularDrag": 0.05000000074505806,
-                "AngularVelocity": {
-                    "value0": 0,
-                    "value1": 0,
-                    "value2": 0
-                },
-                "CenterOfMass": {
-                    "value0": 0,
-                    "value1": 0,
-                    "value2": 0
-                },
-                "LinearDrag": 0,
-                "LinearVelocity": {
-                    "value0": 0,
-                    "value1": 0,
-                    "value2": 0
-                },
-                "Mass": 1,
-                "DiagonalInertiaTensor": {
-                    "value0": 1,
-                    "value1": 1,
-                    "value2": 1
-                },
-                "MaxAngularVelocity": 1000000,
-                "MaxDepenetrationVelocity": 1000000,
-                "IsAffectedByGravity": false,
-                "IsKinematic": true,
-                "CollisionDetectionMode": 1
-            },
-            "AGE_CORE_PhysicsCollider": {
-                "cereal_class_version": 1,
-                "ColliderType": 3,
-                "Material": "DefaultMaterial",
-                "IsATrigger": false,
-                "FilterGroup": 1,
-                "Mesh": "medievalpack/meshs/floor_b",
-                "Convex": true
+            "AGE_CORE_FreeFlyComponent": {
+                "cereal_class_version": 0
             }
         }
     }
