@@ -20,7 +20,8 @@ namespace AGE
 		size_t getId() const;
 		bool isValid() const;
 		void destroy();
-
+		bool operator==(const Key &o);
+		bool operator!=(const Key &o);
 	private:
 		size_t _id;
 		explicit Key(size_t id);
@@ -61,5 +62,17 @@ namespace AGE
 		_id(-1)
 	{
 
+	}
+
+	template <typename type_t>
+	inline bool Key<type_t>::operator==(const Key<type_t> &o)
+	{
+		return (_id == o._id);
+	}
+
+	template <typename type_t>
+	inline bool Key<type_t>::operator!=(const Key<type_t> &o)
+	{
+		return (_id != o._id);
 	}
 }
