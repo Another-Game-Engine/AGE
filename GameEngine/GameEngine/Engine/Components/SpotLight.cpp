@@ -14,8 +14,6 @@
 #include "Graphic/DRBData.hpp"
 #include "Graphic/DRBSpotLightData.hpp"
 
-#include "Render\Properties\Materials\MapColor.hh"
-
 #ifdef EDITOR_ENABLED
 #	include <imgui\imgui.h>
 #	include <glm/gtc/type_ptr.hpp>
@@ -63,7 +61,6 @@ namespace AGE
 		_propDirection = nullptr;
 		_propColorLight = nullptr;
 		_propAttenuation = nullptr;
-		_mapProp = nullptr;
 
 		color = glm::vec4(1.0f);
 		range = glm::vec3(1.0f, 0.1f, 0.01f);
@@ -96,12 +93,8 @@ namespace AGE
 		_propExponentLight->autoSet(exponent);
 		_propColorLight = std::make_shared<AutoProperty<glm::vec3, Vec3>>("color_light");
 		_propColorLight->autoSet(color);
-		auto mapProp = std::make_shared<MapColor>("sprite_light");
-		_mapProp = mapProp;
 
 		auto spotLightTexture = entity->getScene()->getInstance<AssetsManager>()->getSpotLightTexture();
-		mapProp->set(spotLightTexture);
-
 
 		auto &properties = _graphicHandle.getPtr()->getDatas()->globalProperties;
 		
@@ -117,7 +110,6 @@ namespace AGE
 		properties.add_property(_propSpotCutOff);
 		properties.add_property(_propExponentLight);
 		properties.add_property(_propColorLight);
-		properties.add_property(_mapProp);
 
 		entity->getLink().pushAnObject(_graphicHandle);
 	}

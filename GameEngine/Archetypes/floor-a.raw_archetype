@@ -97,7 +97,7 @@
                 "value2": "",
                 "value3": {
                     "type": 0,
-                    "data": 16
+                    "data": 0
                 }
             },
             "AGE_CORE_RigidBody": {
@@ -133,20 +133,12 @@
             },
             "AGE_CORE_PhysicsCollider": {
                 "cereal_class_version": 1,
-                "ColliderType": 0,
+                "ColliderType": 3,
                 "Material": "DefaultMaterial",
                 "IsATrigger": false,
                 "FilterGroup": 1,
-                "Center": {
-                    "value0": 0,
-                    "value1": 0,
-                    "value2": 0
-                },
-                "Size": {
-                    "value0": 5,
-                    "value1": 0.0099999997764825821,
-                    "value2": 5
-                }
+                "Mesh": "medievalpack/meshs/floor_a",
+                "Convex": true
             }
         }
     }

@@ -74,6 +74,8 @@ namespace AGE
 		_programs[PROGRAM_DOWN_SAMPLE]->get_resource<Sampler2D>("sourceTexture").set(_source);
 		_programs[PROGRAM_DOWN_SAMPLE]->get_resource<Vec2>("inverseSourceSize").set(_inverseSourceSize);
 
+		_quadPainter->uniqueDrawBegin(_programs[PROGRAM_DOWN_SAMPLE]);
 		_quadPainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_DOWN_SAMPLE], Properties(), _quadVertices);
+		_quadPainter->uniqueDrawEnd();
 	}
 }

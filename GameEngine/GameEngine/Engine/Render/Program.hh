@@ -11,6 +11,8 @@ namespace AGE
 {
 	class Attribute;
 	class BufferPrograms;
+	class Properties;
+	class IProperty;
 
 	class Program
 	{
@@ -45,6 +47,11 @@ namespace AGE
 				}
 			}
 
+			std::shared_ptr<T> operator->()
+			{
+				return _ptr;
+			}
+
 		private:
 			std::shared_ptr<T> _ptr = nullptr;
 		};
@@ -66,17 +73,40 @@ namespace AGE
 		bool compile();
 		void destroy();
 		inline bool isCompiled() { return _compiled; }
+
+		void registerProperties(Properties &properties);
+		void updateProperties(Properties &properties);
 	private:
 		void _get_resources();
 		void _get_resource(size_t index, GLenum resource, std::string const & buffer);
 
 	private:
+		struct PropertyRegister
+		{
+			std::size_t index;
+			std::shared_ptr<IProgramResources> resource;
+			void(*updateFunction)(IProgramResources *, IProperty*) = nullptr;
+			PropertyRegister(std::size_t _index, std::shared_ptr<IProgramResources> _resource, void(*_updateFunction)(IProgramResources *, IProperty*))
+				: index(_index)
+				, resource(_resource)
+				, updateFunction(_updateFunction)
+			{}
+		};
+		struct PropertiesRegister
+		{
+			std::vector<PropertyRegister> propertyIndex;
+			std::size_t              propertiesHash = 0;
+		};
+
 		std::vector<std::shared_ptr<IProgramResources>> _program_resources;
 		std::vector<std::shared_ptr<UnitProg>> _unitsProg;
 		ProgramResourcesFactory _resources_factory;
 		GLuint _id;
 		std::string const _name;
 		bool _compiled;
+		static std::size_t _ageIdCounter;
+		std::size_t _ageId;
+		std::vector<PropertiesRegister> _propertiesRegister;
 
 #ifdef AGE_DEBUG
 		std::size_t _version; //used for shader recompilation

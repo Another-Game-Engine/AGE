@@ -22,26 +22,58 @@ namespace AGE
 	public:
 		Key<Property> add_property(std::shared_ptr<IProperty> const &prop);
 		void remove_property(Key<Property> const &prop);
-		void update_properties(std::shared_ptr<Program> const &p) const;
 		void merge_properties(const Properties &other);
+		std::size_t getProgramId(std::size_t programId);
+		inline std::size_t getHash() { if (_hashToRefresh){ _computeHash(); }; return _shaderHash; }
+		void setProgramId(std::size_t programUniqueId, std::size_t givenId);
+		bool empty() const { return _properties.empty(); }
 	public:
 		template <typename type_t> std::shared_ptr<type_t> get_property(Key<Property> const &key) const;
 
-		std::shared_ptr<IProperty> searchForProperty(const std::string &name) const
+		std::size_t getPropertyIndex(const std::string &name) const
 		{
 			RWLockGuard lock(_lock, false);
+			std::size_t res = 0;
 			for (auto &e : _properties)
 			{
 				if (e->name() == name)
 				{
-					return e;
+					return res;
 				}
+				++res;
 			}
-			return nullptr;
+			return -1;
+		}
+
+		std::shared_ptr<IProperty> &getProperty(const std::string &name)
+		{
+			RWLockGuard lock(_lock, false);
+			int res = 0;
+			for (auto &e : _properties)
+			{
+				if (e->name() == name)
+				{
+					return _properties[res];
+				}
+				++res;
+			}
+			static std::shared_ptr<IProperty> nullValue(nullptr);
+			return nullValue;
+		}
+
+		inline std::shared_ptr<IProperty> &getProperty(const std::size_t &index) 
+		{
+			RWLockGuard lock(_lock, false);
+			return _properties[index];
 		}
 
 	private:
+		void _computeHash();
+
 		std::vector<std::shared_ptr<IProperty>> _properties;
+		std::vector<std::size_t> _shadersGivenId;
+		std::size_t _shaderHash;
+		bool        _hashToRefresh;
 		mutable RWLock _lock;
 	};
 

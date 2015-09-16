@@ -1,0 +1,6486 @@
+{
+    "value0": {
+        "cereal_class_version": 0,
+        "componentsIdReferenceTable": [
+            {
+                "key": 0,
+                "value": 2633202538906912002
+            },
+            {
+                "key": 1,
+                "value": 4279995424560007376
+            },
+            {
+                "key": 2,
+                "value": 9228130898566333550
+            },
+            {
+                "key": 3,
+                "value": 2719950380395641793
+            },
+            {
+                "key": 4,
+                "value": 12568265209258137674
+            },
+            {
+                "key": 5,
+                "value": 7226899121077071394
+            },
+            {
+                "key": 6,
+                "value": 8685391846632613471
+            },
+            {
+                "key": 7,
+                "value": 11957752261005749183
+            },
+            {
+                "key": 8,
+                "value": 17192082489458106606
+            },
+            {
+                "key": 9,
+                "value": 16239045169874622267
+            },
+            {
+                "key": 10,
+                "value": 6441919271708046876
+            },
+            {
+                "key": 11,
+                "value": 8718854852507163888
+            },
+            {
+                "key": 12,
+                "value": 13917482855567903631
+            }
+        ],
+        "entityNumber": 161,
+        "Entity_0": {
+            "cereal_class_version": 0,
+            "link": {
+                "cereal_class_version": 0,
+                "Position": {
+                    "value0": 40,
+                    "value1": 0,
+                    "value2": 50
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-camera"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "cereal_class_version": 3,
+                "archetypeName": "static-camera",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "cereal_class_version": 0,
+                "name": "static-camera-Copy-Copy"
+            }
+        },
+        "Entity_1": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [
+                2,
+                12
+            ],
+            "flags": 0,
+            "components_number": [
+                0
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "cube-group-group"
+            }
+        },
+        "Entity_2": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": -10
+                },
+                "Scale": {
+                    "value0": 5,
+                    "value1": 5,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11
+            ],
+            "flags": 0,
+            "components_number": [
+                0
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "cube-group-Copy"
+            }
+        },
+        "Entity_3": {
+            "link": {
+                "Position": {
+                    "value0": 16,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_4": {
+            "link": {
+                "Position": {
+                    "value0": 14,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_5": {
+            "link": {
+                "Position": {
+                    "value0": 12,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_6": {
+            "link": {
+                "Position": {
+                    "value0": 10,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_7": {
+            "link": {
+                "Position": {
+                    "value0": 8,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_8": {
+            "link": {
+                "Position": {
+                    "value0": 6,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_9": {
+            "link": {
+                "Position": {
+                    "value0": 4,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_10": {
+            "link": {
+                "Position": {
+                    "value0": 2,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_11": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_12": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": -5
+                },
+                "Scale": {
+                    "value0": 5,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [
+                13,
+                14,
+                15,
+                16,
+                17,
+                18,
+                19,
+                20,
+                21
+            ],
+            "flags": 0,
+            "components_number": [
+                0
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "cube-group"
+            }
+        },
+        "Entity_13": {
+            "link": {
+                "Position": {
+                    "value0": 16,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_14": {
+            "link": {
+                "Position": {
+                    "value0": 14,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_15": {
+            "link": {
+                "Position": {
+                    "value0": 12,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_16": {
+            "link": {
+                "Position": {
+                    "value0": 10,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_17": {
+            "link": {
+                "Position": {
+                    "value0": 8,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_18": {
+            "link": {
+                "Position": {
+                    "value0": 6,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_19": {
+            "link": {
+                "Position": {
+                    "value0": 4,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_20": {
+            "link": {
+                "Position": {
+                    "value0": 2,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_21": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_22": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 7,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [
+                23,
+                33
+            ],
+            "flags": 0,
+            "components_number": [
+                0
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "cube-group-group-Copy"
+            }
+        },
+        "Entity_23": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": -10
+                },
+                "Scale": {
+                    "value0": 5,
+                    "value1": 5,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [
+                24,
+                25,
+                26,
+                27,
+                28,
+                29,
+                30,
+                31,
+                32
+            ],
+            "flags": 0,
+            "components_number": [
+                0
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "cube-group-Copy-Copy"
+            }
+        },
+        "Entity_24": {
+            "link": {
+                "Position": {
+                    "value0": 16,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_25": {
+            "link": {
+                "Position": {
+                    "value0": 14,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_26": {
+            "link": {
+                "Position": {
+                    "value0": 12,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_27": {
+            "link": {
+                "Position": {
+                    "value0": 10,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_28": {
+            "link": {
+                "Position": {
+                    "value0": 8,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_29": {
+            "link": {
+                "Position": {
+                    "value0": 6,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_30": {
+            "link": {
+                "Position": {
+                    "value0": 4,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_31": {
+            "link": {
+                "Position": {
+                    "value0": 2,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_32": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_33": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": -5
+                },
+                "Scale": {
+                    "value0": 5,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [
+                34,
+                35,
+                36,
+                37,
+                38,
+                39,
+                40,
+                41,
+                42
+            ],
+            "flags": 0,
+            "components_number": [
+                0
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "cube-group-Copy"
+            }
+        },
+        "Entity_34": {
+            "link": {
+                "Position": {
+                    "value0": 16,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_35": {
+            "link": {
+                "Position": {
+                    "value0": 14,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_36": {
+            "link": {
+                "Position": {
+                    "value0": 12,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_37": {
+            "link": {
+                "Position": {
+                    "value0": 10,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_38": {
+            "link": {
+                "Position": {
+                    "value0": 8,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_39": {
+            "link": {
+                "Position": {
+                    "value0": 6,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_40": {
+            "link": {
+                "Position": {
+                    "value0": 4,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_41": {
+            "link": {
+                "Position": {
+                    "value0": 2,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_42": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_43": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": -7,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [
+                44,
+                54
+            ],
+            "flags": 0,
+            "components_number": [
+                0
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "cube-group-group-Copy-Copy"
+            }
+        },
+        "Entity_44": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": -10
+                },
+                "Scale": {
+                    "value0": 5,
+                    "value1": 5,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [
+                45,
+                46,
+                47,
+                48,
+                49,
+                50,
+                51,
+                52,
+                53
+            ],
+            "flags": 0,
+            "components_number": [
+                0
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "cube-group-Copy-Copy-Copy"
+            }
+        },
+        "Entity_45": {
+            "link": {
+                "Position": {
+                    "value0": 16,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_46": {
+            "link": {
+                "Position": {
+                    "value0": 14,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_47": {
+            "link": {
+                "Position": {
+                    "value0": 12,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_48": {
+            "link": {
+                "Position": {
+                    "value0": 10,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_49": {
+            "link": {
+                "Position": {
+                    "value0": 8,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_50": {
+            "link": {
+                "Position": {
+                    "value0": 6,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_51": {
+            "link": {
+                "Position": {
+                    "value0": 4,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_52": {
+            "link": {
+                "Position": {
+                    "value0": 2,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_53": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_54": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": -5
+                },
+                "Scale": {
+                    "value0": 5,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [
+                55,
+                56,
+                57,
+                58,
+                59,
+                60,
+                61,
+                62,
+                63
+            ],
+            "flags": 0,
+            "components_number": [
+                0
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "cube-group-Copy-Copy"
+            }
+        },
+        "Entity_55": {
+            "link": {
+                "Position": {
+                    "value0": 16,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_56": {
+            "link": {
+                "Position": {
+                    "value0": 14,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_57": {
+            "link": {
+                "Position": {
+                    "value0": 12,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_58": {
+            "link": {
+                "Position": {
+                    "value0": 10,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_59": {
+            "link": {
+                "Position": {
+                    "value0": 8,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_60": {
+            "link": {
+                "Position": {
+                    "value0": 6,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_61": {
+            "link": {
+                "Position": {
+                    "value0": 4,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_62": {
+            "link": {
+                "Position": {
+                    "value0": 2,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_63": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_64": {
+            "link": {
+                "Position": {
+                    "value0": 40,
+                    "value1": 0,
+                    "value2": -30
+                },
+                "Scale": {
+                    "value0": 120,
+                    "value1": 50,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": false,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_65": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 5,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [
+                66,
+                67,
+                68,
+                69,
+                70,
+                71,
+                72,
+                73,
+                74,
+                75,
+                76,
+                77,
+                78,
+                79,
+                80,
+                81,
+                82
+            ],
+            "flags": 0,
+            "components_number": [
+                0
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "spot-group"
+            }
+        },
+        "Entity_66": {
+            "link": {
+                "Position": {
+                    "value0": 5,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                3
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "spot-Copy-Copy"
+            },
+            "AGE_CORE_PointLightComponent": {
+                "cereal_class_version": 1,
+                "color": {
+                    "value0": 0.27843138575553894,
+                    "value1": 0.15613995492458344,
+                    "value2": 0.15613995492458344
+                },
+                "range": {
+                    "value0": 1,
+                    "value1": 0.0099999997764825821,
+                    "value2": 0.0010000000474974513
+                }
+            }
+        },
+        "Entity_67": {
+            "link": {
+                "Position": {
+                    "value0": 16,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                3
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "spot-Copy"
+            },
+            "AGE_CORE_PointLightComponent": {
+                "color": {
+                    "value0": 0.15389062464237213,
+                    "value1": 0.12181468307971954,
+                    "value2": 0.3490196168422699
+                },
+                "range": {
+                    "value0": 1,
+                    "value1": 0.0099999997764825821,
+                    "value2": 0.0010000000474974513
+                }
+            }
+        },
+        "Entity_68": {
+            "link": {
+                "Position": {
+                    "value0": 15,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                3
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "spot-Copy"
+            },
+            "AGE_CORE_PointLightComponent": {
+                "color": {
+                    "value0": 0.58823531866073608,
+                    "value1": 0.40138408541679382,
+                    "value2": 0.40138408541679382
+                },
+                "range": {
+                    "value0": 1,
+                    "value1": 0.0099999997764825821,
+                    "value2": 0.0010000000474974513
+                }
+            }
+        },
+        "Entity_69": {
+            "link": {
+                "Position": {
+                    "value0": 14,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                3
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "spot-Copy"
+            },
+            "AGE_CORE_PointLightComponent": {
+                "color": {
+                    "value0": 0.52627456188201904,
+                    "value1": 0.63345789909362793,
+                    "value2": 0.73333334922790527
+                },
+                "range": {
+                    "value0": 1,
+                    "value1": 0.0099999997764825821,
+                    "value2": 0.0010000000474974513
+                }
+            }
+        },
+        "Entity_70": {
+            "link": {
+                "Position": {
+                    "value0": 13,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                3
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "spot-Copy"
+            },
+            "AGE_CORE_PointLightComponent": {
+                "color": {
+                    "value0": 0.82745099067687988,
+                    "value1": 0.58039218187332153,
+                    "value2": 0.67843139171600342
+                },
+                "range": {
+                    "value0": 1,
+                    "value1": 0.0099999997764825821,
+                    "value2": 0.0010000000474974513
+                }
+            }
+        },
+        "Entity_71": {
+            "link": {
+                "Position": {
+                    "value0": 12,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                3
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "spot-Copy"
+            },
+            "AGE_CORE_PointLightComponent": {
+                "color": {
+                    "value0": 0.29803922772407532,
+                    "value1": 0.94901961088180542,
+                    "value2": 1
+                },
+                "range": {
+                    "value0": 1,
+                    "value1": 0.0099999997764825821,
+                    "value2": 0.0010000000474974513
+                }
+            }
+        },
+        "Entity_72": {
+            "link": {
+                "Position": {
+                    "value0": 11,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                3
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "spot-Copy"
+            },
+            "AGE_CORE_PointLightComponent": {
+                "color": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 0
+                },
+                "range": {
+                    "value0": 1,
+                    "value1": 0.0099999997764825821,
+                    "value2": 0.0010000000474974513
+                }
+            }
+        },
+        "Entity_73": {
+            "link": {
+                "Position": {
+                    "value0": 10,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                3
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "spot-Copy"
+            },
+            "AGE_CORE_PointLightComponent": {
+                "color": {
+                    "value0": 0.49803921580314636,
+                    "value1": 1,
+                    "value2": 0.45882353186607361
+                },
+                "range": {
+                    "value0": 1,
+                    "value1": 0.0099999997764825821,
+                    "value2": 0.0010000000474974513
+                }
+            }
+        },
+        "Entity_74": {
+            "link": {
+                "Position": {
+                    "value0": 9,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                3
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "spot-Copy"
+            },
+            "AGE_CORE_PointLightComponent": {
+                "color": {
+                    "value0": 1,
+                    "value1": 0.21176470816135406,
+                    "value2": 1
+                },
+                "range": {
+                    "value0": 1,
+                    "value1": 0.0099999997764825821,
+                    "value2": 0.0010000000474974513
+                }
+            }
+        },
+        "Entity_75": {
+            "link": {
+                "Position": {
+                    "value0": 8,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                3
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "spot-Copy"
+            },
+            "AGE_CORE_PointLightComponent": {
+                "color": {
+                    "value0": 1,
+                    "value1": 0.18823529779911041,
+                    "value2": 0
+                },
+                "range": {
+                    "value0": 1,
+                    "value1": 0.0099999997764825821,
+                    "value2": 0.0010000000474974513
+                }
+            }
+        },
+        "Entity_76": {
+            "link": {
+                "Position": {
+                    "value0": 7,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                3
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "spot-Copy"
+            },
+            "AGE_CORE_PointLightComponent": {
+                "color": {
+                    "value0": 0.64313727617263794,
+                    "value1": 0.27843138575553894,
+                    "value2": 1
+                },
+                "range": {
+                    "value0": 1,
+                    "value1": 0.0099999997764825821,
+                    "value2": 0.0010000000474974513
+                }
+            }
+        },
+        "Entity_77": {
+            "link": {
+                "Position": {
+                    "value0": 6,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                3
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "spot-Copy"
+            },
+            "AGE_CORE_PointLightComponent": {
+                "color": {
+                    "value0": 0.7607843279838562,
+                    "value1": 0.68627452850341797,
+                    "value2": 0.27843138575553894
+                },
+                "range": {
+                    "value0": 1,
+                    "value1": 0.0099999997764825821,
+                    "value2": 0.0010000000474974513
+                }
+            }
+        },
+        "Entity_78": {
+            "link": {
+                "Position": {
+                    "value0": 4,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                3
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "spot-Copy"
+            },
+            "AGE_CORE_PointLightComponent": {
+                "color": {
+                    "value0": 0.89019608497619629,
+                    "value1": 0.54509806632995605,
+                    "value2": 1
+                },
+                "range": {
+                    "value0": 1,
+                    "value1": 0.0099999997764825821,
+                    "value2": 0.0010000000474974513
+                }
+            }
+        },
+        "Entity_79": {
+            "link": {
+                "Position": {
+                    "value0": 3,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                3
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "spot-Copy"
+            },
+            "AGE_CORE_PointLightComponent": {
+                "color": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "range": {
+                    "value0": 1,
+                    "value1": 0.0099999997764825821,
+                    "value2": 0.0010000000474974513
+                }
+            }
+        },
+        "Entity_80": {
+            "link": {
+                "Position": {
+                    "value0": 2,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                3
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "spot-Copy"
+            },
+            "AGE_CORE_PointLightComponent": {
+                "color": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "range": {
+                    "value0": 1,
+                    "value1": 0.0099999997764825821,
+                    "value2": 0.0010000000474974513
+                }
+            }
+        },
+        "Entity_81": {
+            "link": {
+                "Position": {
+                    "value0": 1,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                3
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "spot-Copy"
+            },
+            "AGE_CORE_PointLightComponent": {
+                "color": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "range": {
+                    "value0": 1,
+                    "value1": 0.0099999997764825821,
+                    "value2": 0.0010000000474974513
+                }
+            }
+        },
+        "Entity_82": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                3
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "spot"
+            },
+            "AGE_CORE_PointLightComponent": {
+                "color": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "range": {
+                    "value0": 1,
+                    "value1": 0.0099999997764825821,
+                    "value2": 0.0010000000474974513
+                }
+            }
+        },
+        "Entity_83": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": -14,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [
+                84,
+                94
+            ],
+            "flags": 0,
+            "components_number": [
+                0
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "cube-group-group-Copy-Copy-Copy"
+            }
+        },
+        "Entity_84": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": -10
+                },
+                "Scale": {
+                    "value0": 5,
+                    "value1": 5,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [
+                85,
+                86,
+                87,
+                88,
+                89,
+                90,
+                91,
+                92,
+                93
+            ],
+            "flags": 0,
+            "components_number": [
+                0
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "cube-group-Copy-Copy-Copy-Copy"
+            }
+        },
+        "Entity_85": {
+            "link": {
+                "Position": {
+                    "value0": 16,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_86": {
+            "link": {
+                "Position": {
+                    "value0": 14,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_87": {
+            "link": {
+                "Position": {
+                    "value0": 12,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_88": {
+            "link": {
+                "Position": {
+                    "value0": 10,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_89": {
+            "link": {
+                "Position": {
+                    "value0": 8,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_90": {
+            "link": {
+                "Position": {
+                    "value0": 6,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_91": {
+            "link": {
+                "Position": {
+                    "value0": 4,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_92": {
+            "link": {
+                "Position": {
+                    "value0": 2,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_93": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_94": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": -5
+                },
+                "Scale": {
+                    "value0": 5,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [
+                95,
+                96,
+                97,
+                98,
+                99,
+                100,
+                101,
+                102,
+                103
+            ],
+            "flags": 0,
+            "components_number": [
+                0
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "cube-group-Copy-Copy-Copy"
+            }
+        },
+        "Entity_95": {
+            "link": {
+                "Position": {
+                    "value0": 16,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_96": {
+            "link": {
+                "Position": {
+                    "value0": 14,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_97": {
+            "link": {
+                "Position": {
+                    "value0": 12,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_98": {
+            "link": {
+                "Position": {
+                    "value0": 10,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_99": {
+            "link": {
+                "Position": {
+                    "value0": 8,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_100": {
+            "link": {
+                "Position": {
+                    "value0": 6,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_101": {
+            "link": {
+                "Position": {
+                    "value0": 4,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_102": {
+            "link": {
+                "Position": {
+                    "value0": 2,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_103": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_104": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 14,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [
+                105,
+                115
+            ],
+            "flags": 0,
+            "components_number": [
+                0
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "cube-group-group-Copy-Copy-Copy-Copy"
+            }
+        },
+        "Entity_105": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": -10
+                },
+                "Scale": {
+                    "value0": 5,
+                    "value1": 5,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [
+                106,
+                107,
+                108,
+                109,
+                110,
+                111,
+                112,
+                113,
+                114
+            ],
+            "flags": 0,
+            "components_number": [
+                0
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "cube-group-Copy-Copy-Copy-Copy-Copy"
+            }
+        },
+        "Entity_106": {
+            "link": {
+                "Position": {
+                    "value0": 16,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_107": {
+            "link": {
+                "Position": {
+                    "value0": 14,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_108": {
+            "link": {
+                "Position": {
+                    "value0": 12,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_109": {
+            "link": {
+                "Position": {
+                    "value0": 10,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_110": {
+            "link": {
+                "Position": {
+                    "value0": 8,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_111": {
+            "link": {
+                "Position": {
+                    "value0": 6,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_112": {
+            "link": {
+                "Position": {
+                    "value0": 4,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_113": {
+            "link": {
+                "Position": {
+                    "value0": 2,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_114": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_115": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": -5
+                },
+                "Scale": {
+                    "value0": 5,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [
+                116,
+                117,
+                118,
+                119,
+                120,
+                121,
+                122,
+                123,
+                124
+            ],
+            "flags": 0,
+            "components_number": [
+                0
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "cube-group-Copy-Copy-Copy-Copy"
+            }
+        },
+        "Entity_116": {
+            "link": {
+                "Position": {
+                    "value0": 16,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_117": {
+            "link": {
+                "Position": {
+                    "value0": 14,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_118": {
+            "link": {
+                "Position": {
+                    "value0": 12,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_119": {
+            "link": {
+                "Position": {
+                    "value0": 10,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_120": {
+            "link": {
+                "Position": {
+                    "value0": 8,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_121": {
+            "link": {
+                "Position": {
+                    "value0": 6,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_122": {
+            "link": {
+                "Position": {
+                    "value0": 4,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_123": {
+            "link": {
+                "Position": {
+                    "value0": 2,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_124": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_125": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 5,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [
+                126,
+                127,
+                128,
+                129,
+                130,
+                131,
+                132,
+                133,
+                134,
+                135,
+                136,
+                137,
+                138,
+                139,
+                140,
+                141,
+                142
+            ],
+            "flags": 0,
+            "components_number": [
+                0
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "spot-group-Copy"
+            }
+        },
+        "Entity_126": {
+            "link": {
+                "Position": {
+                    "value0": 5,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                3
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "spot-Copy-Copy-Copy"
+            },
+            "AGE_CORE_PointLightComponent": {
+                "color": {
+                    "value0": 0.27843138575553894,
+                    "value1": 0.15613995492458344,
+                    "value2": 0.15613995492458344
+                },
+                "range": {
+                    "value0": 1,
+                    "value1": 0.0099999997764825821,
+                    "value2": 0.0010000000474974513
+                }
+            }
+        },
+        "Entity_127": {
+            "link": {
+                "Position": {
+                    "value0": 16,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                3
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "spot-Copy-Copy"
+            },
+            "AGE_CORE_PointLightComponent": {
+                "color": {
+                    "value0": 0.15389062464237213,
+                    "value1": 0.12181468307971954,
+                    "value2": 0.3490196168422699
+                },
+                "range": {
+                    "value0": 1,
+                    "value1": 0.0099999997764825821,
+                    "value2": 0.0010000000474974513
+                }
+            }
+        },
+        "Entity_128": {
+            "link": {
+                "Position": {
+                    "value0": 15,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                3
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "spot-Copy-Copy"
+            },
+            "AGE_CORE_PointLightComponent": {
+                "color": {
+                    "value0": 0.58823531866073608,
+                    "value1": 0.40138408541679382,
+                    "value2": 0.40138408541679382
+                },
+                "range": {
+                    "value0": 1,
+                    "value1": 0.0099999997764825821,
+                    "value2": 0.0010000000474974513
+                }
+            }
+        },
+        "Entity_129": {
+            "link": {
+                "Position": {
+                    "value0": 14,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                3
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "spot-Copy-Copy"
+            },
+            "AGE_CORE_PointLightComponent": {
+                "color": {
+                    "value0": 0.52627456188201904,
+                    "value1": 0.63345789909362793,
+                    "value2": 0.73333334922790527
+                },
+                "range": {
+                    "value0": 1,
+                    "value1": 0.0099999997764825821,
+                    "value2": 0.0010000000474974513
+                }
+            }
+        },
+        "Entity_130": {
+            "link": {
+                "Position": {
+                    "value0": 13,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                3
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "spot-Copy-Copy"
+            },
+            "AGE_CORE_PointLightComponent": {
+                "color": {
+                    "value0": 0.82745099067687988,
+                    "value1": 0.58039218187332153,
+                    "value2": 0.67843139171600342
+                },
+                "range": {
+                    "value0": 1,
+                    "value1": 0.0099999997764825821,
+                    "value2": 0.0010000000474974513
+                }
+            }
+        },
+        "Entity_131": {
+            "link": {
+                "Position": {
+                    "value0": 12,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                3
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "spot-Copy-Copy"
+            },
+            "AGE_CORE_PointLightComponent": {
+                "color": {
+                    "value0": 0.29803922772407532,
+                    "value1": 0.94901961088180542,
+                    "value2": 1
+                },
+                "range": {
+                    "value0": 1,
+                    "value1": 0.0099999997764825821,
+                    "value2": 0.0010000000474974513
+                }
+            }
+        },
+        "Entity_132": {
+            "link": {
+                "Position": {
+                    "value0": 11,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                3
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "spot-Copy-Copy"
+            },
+            "AGE_CORE_PointLightComponent": {
+                "color": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 0
+                },
+                "range": {
+                    "value0": 1,
+                    "value1": 0.0099999997764825821,
+                    "value2": 0.0010000000474974513
+                }
+            }
+        },
+        "Entity_133": {
+            "link": {
+                "Position": {
+                    "value0": 10,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                3
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "spot-Copy-Copy"
+            },
+            "AGE_CORE_PointLightComponent": {
+                "color": {
+                    "value0": 0.49803921580314636,
+                    "value1": 1,
+                    "value2": 0.45882353186607361
+                },
+                "range": {
+                    "value0": 1,
+                    "value1": 0.0099999997764825821,
+                    "value2": 0.0010000000474974513
+                }
+            }
+        },
+        "Entity_134": {
+            "link": {
+                "Position": {
+                    "value0": 9,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                3
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "spot-Copy-Copy"
+            },
+            "AGE_CORE_PointLightComponent": {
+                "color": {
+                    "value0": 1,
+                    "value1": 0.21176470816135406,
+                    "value2": 1
+                },
+                "range": {
+                    "value0": 1,
+                    "value1": 0.0099999997764825821,
+                    "value2": 0.0010000000474974513
+                }
+            }
+        },
+        "Entity_135": {
+            "link": {
+                "Position": {
+                    "value0": 8,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                3
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "spot-Copy-Copy"
+            },
+            "AGE_CORE_PointLightComponent": {
+                "color": {
+                    "value0": 1,
+                    "value1": 0.18823529779911041,
+                    "value2": 0
+                },
+                "range": {
+                    "value0": 1,
+                    "value1": 0.0099999997764825821,
+                    "value2": 0.0010000000474974513
+                }
+            }
+        },
+        "Entity_136": {
+            "link": {
+                "Position": {
+                    "value0": 7,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                3
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "spot-Copy-Copy"
+            },
+            "AGE_CORE_PointLightComponent": {
+                "color": {
+                    "value0": 0.64313727617263794,
+                    "value1": 0.27843138575553894,
+                    "value2": 1
+                },
+                "range": {
+                    "value0": 1,
+                    "value1": 0.0099999997764825821,
+                    "value2": 0.0010000000474974513
+                }
+            }
+        },
+        "Entity_137": {
+            "link": {
+                "Position": {
+                    "value0": 6,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                3
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "spot-Copy-Copy"
+            },
+            "AGE_CORE_PointLightComponent": {
+                "color": {
+                    "value0": 0.7607843279838562,
+                    "value1": 0.68627452850341797,
+                    "value2": 0.27843138575553894
+                },
+                "range": {
+                    "value0": 1,
+                    "value1": 0.0099999997764825821,
+                    "value2": 0.0010000000474974513
+                }
+            }
+        },
+        "Entity_138": {
+            "link": {
+                "Position": {
+                    "value0": 4,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                3
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "spot-Copy-Copy"
+            },
+            "AGE_CORE_PointLightComponent": {
+                "color": {
+                    "value0": 0.89019608497619629,
+                    "value1": 0.54509806632995605,
+                    "value2": 1
+                },
+                "range": {
+                    "value0": 1,
+                    "value1": 0.0099999997764825821,
+                    "value2": 0.0010000000474974513
+                }
+            }
+        },
+        "Entity_139": {
+            "link": {
+                "Position": {
+                    "value0": 3,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                3
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "spot-Copy-Copy"
+            },
+            "AGE_CORE_PointLightComponent": {
+                "color": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "range": {
+                    "value0": 1,
+                    "value1": 0.0099999997764825821,
+                    "value2": 0.0010000000474974513
+                }
+            }
+        },
+        "Entity_140": {
+            "link": {
+                "Position": {
+                    "value0": 2,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                3
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "spot-Copy-Copy"
+            },
+            "AGE_CORE_PointLightComponent": {
+                "color": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "range": {
+                    "value0": 1,
+                    "value1": 0.0099999997764825821,
+                    "value2": 0.0010000000474974513
+                }
+            }
+        },
+        "Entity_141": {
+            "link": {
+                "Position": {
+                    "value0": 1,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                3
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "spot-Copy-Copy"
+            },
+            "AGE_CORE_PointLightComponent": {
+                "color": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "range": {
+                    "value0": 1,
+                    "value1": 0.0099999997764825821,
+                    "value2": 0.0010000000474974513
+                }
+            }
+        },
+        "Entity_142": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                3
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "spot-Copy"
+            },
+            "AGE_CORE_PointLightComponent": {
+                "color": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "range": {
+                    "value0": 1,
+                    "value1": 0.0099999997764825821,
+                    "value2": 0.0010000000474974513
+                }
+            }
+        },
+        "Entity_143": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": -4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 5,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [
+                144,
+                145,
+                146,
+                147,
+                148,
+                149,
+                150,
+                151,
+                152,
+                153,
+                154,
+                155,
+                156,
+                157,
+                158,
+                159,
+                160
+            ],
+            "flags": 0,
+            "components_number": [
+                0
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "spot-group-Copy"
+            }
+        },
+        "Entity_144": {
+            "link": {
+                "Position": {
+                    "value0": 5,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                3
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "spot-Copy-Copy-Copy"
+            },
+            "AGE_CORE_PointLightComponent": {
+                "color": {
+                    "value0": 0.27843138575553894,
+                    "value1": 0.15613995492458344,
+                    "value2": 0.15613995492458344
+                },
+                "range": {
+                    "value0": 1,
+                    "value1": 0.0099999997764825821,
+                    "value2": 0.0010000000474974513
+                }
+            }
+        },
+        "Entity_145": {
+            "link": {
+                "Position": {
+                    "value0": 16,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                3
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "spot-Copy-Copy"
+            },
+            "AGE_CORE_PointLightComponent": {
+                "color": {
+                    "value0": 0.15389062464237213,
+                    "value1": 0.12181468307971954,
+                    "value2": 0.3490196168422699
+                },
+                "range": {
+                    "value0": 1,
+                    "value1": 0.0099999997764825821,
+                    "value2": 0.0010000000474974513
+                }
+            }
+        },
+        "Entity_146": {
+            "link": {
+                "Position": {
+                    "value0": 15,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                3
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "spot-Copy-Copy"
+            },
+            "AGE_CORE_PointLightComponent": {
+                "color": {
+                    "value0": 0.58823531866073608,
+                    "value1": 0.40138408541679382,
+                    "value2": 0.40138408541679382
+                },
+                "range": {
+                    "value0": 1,
+                    "value1": 0.0099999997764825821,
+                    "value2": 0.0010000000474974513
+                }
+            }
+        },
+        "Entity_147": {
+            "link": {
+                "Position": {
+                    "value0": 14,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                3
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "spot-Copy-Copy"
+            },
+            "AGE_CORE_PointLightComponent": {
+                "color": {
+                    "value0": 0.52627456188201904,
+                    "value1": 0.63345789909362793,
+                    "value2": 0.73333334922790527
+                },
+                "range": {
+                    "value0": 1,
+                    "value1": 0.0099999997764825821,
+                    "value2": 0.0010000000474974513
+                }
+            }
+        },
+        "Entity_148": {
+            "link": {
+                "Position": {
+                    "value0": 13,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                3
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "spot-Copy-Copy"
+            },
+            "AGE_CORE_PointLightComponent": {
+                "color": {
+                    "value0": 0.82745099067687988,
+                    "value1": 0.58039218187332153,
+                    "value2": 0.67843139171600342
+                },
+                "range": {
+                    "value0": 1,
+                    "value1": 0.0099999997764825821,
+                    "value2": 0.0010000000474974513
+                }
+            }
+        },
+        "Entity_149": {
+            "link": {
+                "Position": {
+                    "value0": 12,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                3
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "spot-Copy-Copy"
+            },
+            "AGE_CORE_PointLightComponent": {
+                "color": {
+                    "value0": 0.29803922772407532,
+                    "value1": 0.94901961088180542,
+                    "value2": 1
+                },
+                "range": {
+                    "value0": 1,
+                    "value1": 0.0099999997764825821,
+                    "value2": 0.0010000000474974513
+                }
+            }
+        },
+        "Entity_150": {
+            "link": {
+                "Position": {
+                    "value0": 11,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                3
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "spot-Copy-Copy"
+            },
+            "AGE_CORE_PointLightComponent": {
+                "color": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 0
+                },
+                "range": {
+                    "value0": 1,
+                    "value1": 0.0099999997764825821,
+                    "value2": 0.0010000000474974513
+                }
+            }
+        },
+        "Entity_151": {
+            "link": {
+                "Position": {
+                    "value0": 10,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                3
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "spot-Copy-Copy"
+            },
+            "AGE_CORE_PointLightComponent": {
+                "color": {
+                    "value0": 0.49803921580314636,
+                    "value1": 1,
+                    "value2": 0.45882353186607361
+                },
+                "range": {
+                    "value0": 1,
+                    "value1": 0.0099999997764825821,
+                    "value2": 0.0010000000474974513
+                }
+            }
+        },
+        "Entity_152": {
+            "link": {
+                "Position": {
+                    "value0": 9,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                3
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "spot-Copy-Copy"
+            },
+            "AGE_CORE_PointLightComponent": {
+                "color": {
+                    "value0": 1,
+                    "value1": 0.21176470816135406,
+                    "value2": 1
+                },
+                "range": {
+                    "value0": 1,
+                    "value1": 0.0099999997764825821,
+                    "value2": 0.0010000000474974513
+                }
+            }
+        },
+        "Entity_153": {
+            "link": {
+                "Position": {
+                    "value0": 8,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                3
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "spot-Copy-Copy"
+            },
+            "AGE_CORE_PointLightComponent": {
+                "color": {
+                    "value0": 1,
+                    "value1": 0.18823529779911041,
+                    "value2": 0
+                },
+                "range": {
+                    "value0": 1,
+                    "value1": 0.0099999997764825821,
+                    "value2": 0.0010000000474974513
+                }
+            }
+        },
+        "Entity_154": {
+            "link": {
+                "Position": {
+                    "value0": 7,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                3
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "spot-Copy-Copy"
+            },
+            "AGE_CORE_PointLightComponent": {
+                "color": {
+                    "value0": 0.64313727617263794,
+                    "value1": 0.27843138575553894,
+                    "value2": 1
+                },
+                "range": {
+                    "value0": 1,
+                    "value1": 0.0099999997764825821,
+                    "value2": 0.0010000000474974513
+                }
+            }
+        },
+        "Entity_155": {
+            "link": {
+                "Position": {
+                    "value0": 6,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                3
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "spot-Copy-Copy"
+            },
+            "AGE_CORE_PointLightComponent": {
+                "color": {
+                    "value0": 0.7607843279838562,
+                    "value1": 0.68627452850341797,
+                    "value2": 0.27843138575553894
+                },
+                "range": {
+                    "value0": 1,
+                    "value1": 0.0099999997764825821,
+                    "value2": 0.0010000000474974513
+                }
+            }
+        },
+        "Entity_156": {
+            "link": {
+                "Position": {
+                    "value0": 4,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                3
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "spot-Copy-Copy"
+            },
+            "AGE_CORE_PointLightComponent": {
+                "color": {
+                    "value0": 0.89019608497619629,
+                    "value1": 0.54509806632995605,
+                    "value2": 1
+                },
+                "range": {
+                    "value0": 1,
+                    "value1": 0.0099999997764825821,
+                    "value2": 0.0010000000474974513
+                }
+            }
+        },
+        "Entity_157": {
+            "link": {
+                "Position": {
+                    "value0": 3,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                3
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "spot-Copy-Copy"
+            },
+            "AGE_CORE_PointLightComponent": {
+                "color": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "range": {
+                    "value0": 1,
+                    "value1": 0.0099999997764825821,
+                    "value2": 0.0010000000474974513
+                }
+            }
+        },
+        "Entity_158": {
+            "link": {
+                "Position": {
+                    "value0": 2,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                3
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "spot-Copy-Copy"
+            },
+            "AGE_CORE_PointLightComponent": {
+                "color": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "range": {
+                    "value0": 1,
+                    "value1": 0.0099999997764825821,
+                    "value2": 0.0010000000474974513
+                }
+            }
+        },
+        "Entity_159": {
+            "link": {
+                "Position": {
+                    "value0": 1,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                3
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "spot-Copy-Copy"
+            },
+            "AGE_CORE_PointLightComponent": {
+                "color": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "range": {
+                    "value0": 1,
+                    "value1": 0.0099999997764825821,
+                    "value2": 0.0010000000474974513
+                }
+            }
+        },
+        "Entity_160": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                3
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "spot-Copy"
+            },
+            "AGE_CORE_PointLightComponent": {
+                "color": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "range": {
+                    "value0": 1,
+                    "value1": 0.0099999997764825821,
+                    "value2": 0.0010000000474974513
+                }
+            }
+        }
+    }
+}

@@ -13,9 +13,10 @@ namespace AGE
 	{
 		_maps[0].init(width, height, mipmalLevel);
 		_maps[1].init(width, height, mipmalLevel);
-		_status[0] = Readable;
-		_status[1] = Readable;
+		_status[0] = Writing;
+		_status[1] = Writing;
 		_mipmapLevel = mipmalLevel;
+		_lastReadable = -1;
 	}
 
 	DepthMapHandle DepthMapManager::getReadableMap()

@@ -9,6 +9,11 @@ namespace AGE
 	{
 	}
 
+	Texture2D::~Texture2D()
+	{
+	}
+
+
 	bool Texture2D::init(GLint width, GLint height, GLenum internal_format, bool is_mip_mapping)
 	{
 		auto nbr_mip_mapping = is_mip_mapping ? (uint8_t(glm::floor(glm::log2(glm::max(float(width), float(height))) + 1))) : 1;
@@ -33,7 +38,7 @@ namespace AGE
 
 	ITexture const & Texture2D::bind() const
 	{
-		glBindTexture(GL_TEXTURE_2D, _id);
+ 		glBindTexture(GL_TEXTURE_2D, _id);
 		return (*this);
 	}
 

@@ -5,15 +5,15 @@
 
 namespace AGE
 {
+	class Vec1;
+
 	class Ratio : public AProperty
 	{
 	public:
 		Ratio(std::string const &add_name);
 		Ratio(Ratio &&move);
-
-	private:
-		virtual void _update(std::shared_ptr<Program> const &p) override final;
-
+		PROPERTY_UPDATE_FUNCTION(Ratio, Vec1);
+		PROPERTY_INSTANCIED_UPDATE_FUNCTION(Ratio, Vec1);
 	public:
 		float get();
 		Ratio &set(float ratio);

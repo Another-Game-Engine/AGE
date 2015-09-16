@@ -17,12 +17,14 @@ namespace AGE
 
 	}
 
-	void Ratio::_update(std::shared_ptr<Program> const &p)
+	void Ratio::update(Vec1 *res, Ratio *ratio)
 	{
-		auto resource = std::static_pointer_cast<Vec1>(get_resource(p));
-		if (resource) {
-			*resource = _ratio;
-		}
+		*res = ratio->_ratio;
+	}
+
+	void Ratio::instanciedUpdate(Vec1 *, Ratio *)
+	{
+		assert(false && "implement me");
 	}
 
 	float Ratio::get()

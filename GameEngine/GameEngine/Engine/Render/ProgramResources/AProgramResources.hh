@@ -18,7 +18,6 @@ namespace AGE
 		virtual std::string const &name() const override final;
 		virtual GLuint id() const override final;
 		virtual GLenum type() const override final;
-
 	protected:
 		std::string _name;
 		GLuint _id;

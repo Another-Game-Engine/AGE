@@ -97,9 +97,17 @@ namespace AGE
 		_run = true;
 		_insideRun = true;
 
+		std::chrono::system_clock::time_point start;
 		while (_run && _insideRun)
 		{
+			start = std::chrono::high_resolution_clock::now();
 			_run = update();
+			auto stop = std::chrono::high_resolution_clock::now();
+			while (std::chrono::duration_cast<std::chrono::microseconds>(stop - start).count() < 16000)
+			{
+				std::this_thread::yield();
+				stop = std::chrono::high_resolution_clock::now();
+			}
 		}
 		ExitAGE();
 		return true;

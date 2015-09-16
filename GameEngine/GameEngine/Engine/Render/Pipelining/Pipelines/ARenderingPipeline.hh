@@ -16,6 +16,7 @@ namespace AGE
 	public:
 		virtual ~ARenderingPipeline() {}
 		virtual bool recompileShaders();
+		virtual bool init();
 
 		std::shared_ptr<PaintingManager> getPainterManager() const;
 		virtual IRenderingPipeline &render(const DRBCameraDrawableList &infos);

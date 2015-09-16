@@ -90,6 +90,8 @@ namespace AGE
 		OpenGLState::glEnable(GL_BLEND);
 		OpenGLState::glBlendFunc(GL_ONE, GL_ONE);
 
+		auto painter = _painterManager->get_painter(_quadPainter);
+		//@CESAR_OPTIMIZE
 		for (auto &spot : infos.spotLights)
 		{
 			auto &spotlight = (std::shared_ptr<DRBSpotLightData>&)(spot->spotLight);
@@ -97,18 +99,9 @@ namespace AGE
 			// @PROUT todo to add in properties
 			_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("shadow_map").set(spotlight->shadowMap);
 
-			spotlight->globalProperties.update_properties(_programs[PROGRAM_LIGHTNING]);
-
-			// Allready added in properties
-			//_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("light_matrix").set(pl.shadow_matrix);
-			//_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("position_light").set(position);
-			//_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("attenuation_light").set(pl.light.data.range);
-			//_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("direction_light").set(direction);
-			//_programs[PROGRAM_LIGHTNING]->get_resource<Vec1>("spot_cut_off").set(pl.light.data.cutOff);
-			//_programs[PROGRAM_LIGHTNING]->get_resource<Vec1>("exponent_light").set(pl.light.data.exponent);
-			//_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("color_light").set(pl.light.data.color);
-
-			_painterManager->get_painter(_quadPainter)->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_LIGHTNING], spotlight->globalProperties, _quad);
+			painter->uniqueDrawBegin(_programs[PROGRAM_LIGHTNING]);
+			painter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_LIGHTNING], spotlight->globalProperties, _quad);
+			painter->uniqueDrawEnd();
 		}
 	}
 }

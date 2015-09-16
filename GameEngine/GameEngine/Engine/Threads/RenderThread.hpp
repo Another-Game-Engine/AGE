@@ -75,7 +75,7 @@ namespace AGE
 	private:
 
 		void _recompileShaders();
-
+		void _initPipelines();
 		RenderThread();
 		virtual ~RenderThread();
 		RenderThread(const RenderThread &) = delete;

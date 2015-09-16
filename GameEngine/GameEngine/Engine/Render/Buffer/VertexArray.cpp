@@ -24,14 +24,12 @@ _id(move._id)
 
 void VertexArray::bind() const
 {
-	SCOPE_profile_cpu_function("RenderTimer");
 	glBindVertexArray(_id);
 
 }
 
 void VertexArray::unbind() const
 {
-	SCOPE_profile_cpu_function("RenderTimer");
 	_current_id = 0;
 	glBindVertexArray(0);
 }

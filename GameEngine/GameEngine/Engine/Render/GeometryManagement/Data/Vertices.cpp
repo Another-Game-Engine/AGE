@@ -148,8 +148,6 @@ namespace AGE
 
 	void Vertices::draw(GLenum mode)
 	{
-		SCOPE_profile_cpu_function("RenderTimer");
-
 		if (_indices_block_memory.lock())
 		{
 			auto offset = _indices_block_memory.lock()->offset();
@@ -160,6 +158,20 @@ namespace AGE
 			glDrawArrays(mode, (GLint)_offset, (GLsizei)_nbr_vertex);
 		}
 	}
+
+	void Vertices::instanciedDraw(GLenum mode, std::size_t count)
+	{
+		if (_indices_block_memory.lock())
+		{
+			auto offset = _indices_block_memory.lock()->offset();
+			glDrawElementsInstancedBaseVertex(mode, GLsizei(_nbr_indices), GL_UNSIGNED_INT, (GLvoid *)offset, count, GLint(_offset));
+		}
+		else
+		{
+			glDrawArraysInstanced(mode, (GLint)_offset, (GLsizei)_nbr_vertex, count);
+		}
+	}
+
 
 	unsigned int const * Vertices::get_indices(size_t &size) const
 	{

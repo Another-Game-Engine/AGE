@@ -17,13 +17,14 @@ namespace AGE
 
 	}
 
-	void ScaleUVs::_update(std::shared_ptr<Program> const &program)
+	void ScaleUVs::update(Vec1 *res, ScaleUVs *scale)
 	{
-		auto resource = std::static_pointer_cast<Vec1>(get_resource(program));
-		if (resource)
-		{
-			*resource = _tof ? 1.0f : 0.0f;
-		}
+		*res = scale->_tof ? 1.0f : 0.0f;
+	}
+
+	void ScaleUVs::instanciedUpdate(Vec1 *, ScaleUVs *)
+	{
+		assert(false && "implement me");
 	}
 
 	bool const & ScaleUVs::get()

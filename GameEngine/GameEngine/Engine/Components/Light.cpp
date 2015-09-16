@@ -5,14 +5,13 @@
 #include <glm/glm.hpp>
 #include <AssetManagement/AssetManager.hh>
 
-#include "Render/Properties/AutoProperty.hpp"
 #include "Render/ProgramResources/Types/Uniform/Vec4.hh"
 #include "Render/ProgramResources/Types/Uniform/Vec3.hh"
 #include "Render/ProgramResources/Types/Uniform/Vec1.hh"
 #include "Render/ProgramResources/Types/Uniform/Mat4.hh"
 #include "Render/Properties/Materials/Color.hh"
-#include "Render/Properties/Materials/MapColor.hh"
 #include "Render/ProgramResources/Types/Uniform/Sampler/Sampler3D.hh"
+#include "Render/Properties/AutoProperty.hpp"
 
 #include "Graphic/DRBLightElementManager.hpp"
 #include "Graphic/DRBData.hpp"
@@ -49,7 +48,6 @@ namespace AGE
 	{
 		color = glm::vec3(1);
 		range = glm::vec3(1.0f, 0.01f, 0.001f);
-		_mapProp = nullptr;
 
 		_colorProperty = nullptr;
 		_ambiantColorProperty = nullptr;
@@ -64,22 +62,16 @@ namespace AGE
 
 	void PointLightComponent::init()
 	{
-		auto mapProp = std::make_shared<MapColor>("sprite_light");
-		_mapProp = mapProp;
 		_colorProperty = std::make_shared<AutoProperty<glm::vec4, Vec4>>("color_light");
 		_ambiantColorProperty = std::make_shared<AutoProperty<glm::vec4, Vec4>>("ambient_color");
 
 		auto manager = entity->getScene()->getInstance<DRBLightElementManager>();
 		_graphicHandle = manager->addPointLight();
 
-		_graphicHandle.getPtr()->getDatas()->globalProperties.add_property(_mapProp);
 		_graphicHandle.getPtr()->getDatas()->globalProperties.add_property(_colorProperty);
 		_graphicHandle.getPtr()->getDatas()->globalProperties.add_property(_ambiantColorProperty);
 
 		entity->getLink().pushAnObject(_graphicHandle);
-
-		auto map = entity->getScene()->getInstance<AssetsManager>()->getPointLightTexture();
- 		mapProp->set(map);
 
 		std::static_pointer_cast<DRBPointLightData>(_graphicHandle.getPtr()->getDatas())->setRange(glm::vec4(range.x, range.y, range.z, 1.0f));
 		setColor(color);

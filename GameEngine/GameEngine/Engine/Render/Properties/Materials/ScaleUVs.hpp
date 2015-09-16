@@ -4,14 +4,15 @@
 
 namespace AGE
 {
+	class Vec1;
+
 	class ScaleUVs : public AProperty
 	{
 	public:
 		ScaleUVs();
 		ScaleUVs(ScaleUVs &&move);
-
-	private:
-		virtual void _update(std::shared_ptr<Program> const &program) override final;
+		PROPERTY_UPDATE_FUNCTION(ScaleUVs, Vec1);
+		PROPERTY_INSTANCIED_UPDATE_FUNCTION(ScaleUVs, Vec1);
 
 	public:
 		bool const &get();

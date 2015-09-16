@@ -54,6 +54,21 @@ namespace AGE
 		}
 	}
 
+	void RenderThread::_initPipelines()
+	{
+		// to be sure that this function is only called in render thread
+		AGE_ASSERT(GetThreadManager()->getCurrentThread() == (AGE::Thread*)GetRenderThread());
+
+		for (auto &e : pipelines)
+		{
+			if (!e)
+			{
+				continue;
+			}
+			e->init();
+		}
+	}
+
 	void RenderThread::getCube(Key<Vertices> &v, Key<Painter> &p)
 	{
 		static const std::vector<glm::vec3> positions =
@@ -339,6 +354,7 @@ namespace AGE
 			pipelines[DEFERRED] = std::make_unique<DeferredShading>(_context->getScreenSize(), paintingManager);
 			pipelines[DEBUG_DEFERRED] = std::make_unique<DebugDeferredShading>(_context->getScreenSize(), paintingManager);
 			_recompileShaders();
+			_initPipelines();
 			msg.setValue(true);
 		});
 
@@ -379,7 +395,6 @@ namespace AGE
 				_context->refreshInputs();
 			}
 
-			MicroProfileFlip();
 			++_frameCounter;
 		});
 

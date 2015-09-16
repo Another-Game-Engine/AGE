@@ -16,12 +16,14 @@ namespace AGE
 
 	}
 
-	void MapColor::_update(std::shared_ptr<Program> const &p)
+	void MapColor::update(Sampler2D *res, MapColor *color)
 	{
-		auto resource = std::static_pointer_cast<Sampler2D>(get_resource(p));
-		if (resource) {
-			*resource = _texture;
-		}
+		*res = color->_texture;
+	}
+
+	void MapColor::instanciedUpdate(Sampler2D *, MapColor *)
+	{
+		assert(false && "implement me");
 	}
 
 	std::shared_ptr<Texture2D> const & MapColor::get()

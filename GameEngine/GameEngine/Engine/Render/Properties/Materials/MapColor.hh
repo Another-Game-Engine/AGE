@@ -5,16 +5,15 @@
 namespace AGE
 {
 	class Texture2D;
+	class Sampler2D;
 
 	class MapColor : public AProperty
 	{
 	public:
 		MapColor(std::string const &add_name);
 		MapColor(MapColor &&move);
-
-	private:
-		virtual void _update(std::shared_ptr<Program> const &p) override;
-
+		PROPERTY_UPDATE_FUNCTION(MapColor, Sampler2D);
+		PROPERTY_INSTANCIED_UPDATE_FUNCTION(MapColor, Sampler2D);
 	public:
 		std::shared_ptr<Texture2D> const &get();
 		MapColor &set(std::shared_ptr<Texture2D> const &map);

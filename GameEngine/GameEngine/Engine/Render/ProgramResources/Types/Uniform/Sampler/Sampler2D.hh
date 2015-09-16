@@ -13,6 +13,7 @@ namespace AGE
 		Sampler2D(GLint id, std::string &&name);
 		Sampler2D(Sampler2D &&move);
 		Sampler2D(Sampler2D const &copy);
+		~Sampler2D();
 		Sampler2D &operator=(Sampler2D const &copy) = delete;
 		Sampler2D &operator=(std::shared_ptr<Texture2D> const &texture);
 

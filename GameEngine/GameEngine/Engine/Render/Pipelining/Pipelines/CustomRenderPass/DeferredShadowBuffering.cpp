@@ -95,6 +95,11 @@ namespace AGE
 		}
 		// start to render to texture for each depth map
 		auto it = _depthBuffers.begin();
+
+
+		std::shared_ptr<Painter> painter = nullptr;
+		std::shared_ptr<Painter> oldPainter = nullptr;
+
 		for (auto &spotLightPtr : infos.spotLights)
 		{
 			SCOPE_profile_gpu_i("Spotlight pass");
@@ -103,14 +108,11 @@ namespace AGE
 			DRBSpotLightData *spotlight = (DRBSpotLightData*)(spotLightPtr->spotLight.get());
 
 			glViewport(0, 0, _frame_buffer.width(), _frame_buffer.height());
-			// it should be better to pass all that code (setting properties in the main thread)
-			{
-//				auto projection = glm::perspective(60.f, (float)_frame_buffer.width() / (float)_frame_buffer.height(), 0.1f, 1000.0f);
-//				spotlight->getShadowMatrixProperty()->set(projection * glm::inverse(spotlight->getTransformation()));
-			}
 			_frame_buffer.attachment(*(*it), GL_DEPTH_STENCIL_ATTACHMENT);
 			glClear(GL_DEPTH_BUFFER_BIT);
-			spotlight->globalProperties.update_properties(_programs[PROGRAM_BUFFERING]);
+			_programs[PROGRAM_BUFFERING]->registerProperties(spotlight->globalProperties);
+			_programs[PROGRAM_BUFFERING]->updateProperties(spotlight->globalProperties);
+
 			// draw for the spot light selected
 			for (auto &meshPaint : spotLightPtr->meshs)
 			{
@@ -122,12 +124,25 @@ namespace AGE
 				//during the first frames
 				if (mesh->getPainterKey().isValid())
 				{
-					Painter *painter = _painterManager->get_painter(mesh->getPainterKey()).get();
+					painter = _painterManager->get_painter(mesh->getPainterKey());
+					if (painter != oldPainter)
+					{
+						if (oldPainter)
+						{
+							oldPainter->uniqueDrawEnd();
+						}
+						painter->uniqueDrawBegin(_programs[PROGRAM_BUFFERING]);
+					}
+					oldPainter = painter;
 					painter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], mesh->globalProperties, mesh->getVerticesKey());
 				}
 			}
 			spotlight->shadowMap = *it;
 			++it;
+		}
+		if (oldPainter)
+		{
+			oldPainter->uniqueDrawEnd();
 		}
 	}
 

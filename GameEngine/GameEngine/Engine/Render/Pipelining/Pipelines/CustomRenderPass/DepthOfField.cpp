@@ -89,7 +89,9 @@ namespace AGE
 			_programs[PROGRAM_DEPTH_OF_FIELD]->get_resource<Sampler2D>("blurredMap1").set(_blurred1);
 			_programs[PROGRAM_DEPTH_OF_FIELD]->get_resource<Sampler2D>("blurredMap2").set(_blurred2);
 
+			_quadPainter->uniqueDrawBegin(_programs[PROGRAM_DEPTH_OF_FIELD]);
 			_quadPainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_DEPTH_OF_FIELD], Properties(), _quadVertices);
+			_quadPainter->uniqueDrawEnd();
 		}
 	}
 }

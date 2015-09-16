@@ -27,13 +27,14 @@ namespace AGE
 		return (*this);
 	}
 
-	void AABB::_update(std::shared_ptr<Program> const &program)
+	void AABB::update(Vec3 *res, AABB *aabb)
 	{
-		auto resource = std::static_pointer_cast<Vec3>(get_resource(program));
-		if (resource)
-		{
-			*resource = _aabb;
-		}
+		*res = aabb->_aabb;
+	}
+
+	void AABB::instanciedUpdate(Vec3 *, AABB *)
+	{
+		assert(false && "implement me");
 	}
 
 	glm::vec3 const & AABB::get()
