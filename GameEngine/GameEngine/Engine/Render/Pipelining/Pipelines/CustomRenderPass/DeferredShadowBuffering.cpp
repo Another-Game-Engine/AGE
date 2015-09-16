@@ -21,6 +21,9 @@
 #include "Graphic/DRBSpotLightData.hpp"
 #include "Graphic/DRBMeshData.hpp"
 
+#include "Render/Textures/TextureBuffer.hh"
+#include "Render/ProgramResources/Types/Uniform/Sampler/SamplerBuffer.hh"
+
 #define DEFERRED_SHADING_SHADOW_BUFFERING_VERTEX "deferred_shading/deferred_shading_get_shadow_buffer.vp"
 #define DEFERRED_SHADING_SHADOW_BUFFERING_FRAG "deferred_shading/deferred_shading_get_shadow_buffer.fp"
 
@@ -35,22 +38,31 @@ namespace AGE
 	DeferredShadowBuffering::DeferredShadowBuffering(glm::uvec2 const &screenSize, std::shared_ptr<PaintingManager> painterManager) :
 		FrameBufferRender(screenSize.x, screenSize.y, painterManager)
 	{
-		// We dont want to take the skinned or transparent meshes
-		_forbidden[AGE_SKINNED] = true;
-		_forbidden[AGE_SEMI_TRANSPARENT] = true;
-		_programs.resize(PROGRAM_NBR);
 		auto confManager = GetEngine()->getInstance<ConfigurationManager>();
 		auto shaderPath = confManager->getConfiguration<std::string>("ShadersPath");
 		// you have to set shader directory in configuration path
 		AGE_ASSERT(shaderPath != nullptr);
 		auto vertexShaderPath = shaderPath->getValue() + DEFERRED_SHADING_SHADOW_BUFFERING_VERTEX;
 		auto fragmentShaderPath = shaderPath->getValue() + DEFERRED_SHADING_SHADOW_BUFFERING_FRAG;
+		_programs.resize(PROGRAM_NBR);
 		_programs[PROGRAM_BUFFERING] = std::make_shared<Program>(Program(std::string("program_shadow_buffering"),
 		{
 			std::make_shared<UnitProg>(vertexShaderPath, GL_VERTEX_SHADER),
 			std::make_shared<UnitProg>(fragmentShaderPath, GL_FRAGMENT_SHADER)
 		}));
 	}
+
+	void DeferredShadowBuffering::init()
+	{
+		// We dont want to take the skinned or transparent meshes
+		_forbidden[AGE_SKINNED] = true;
+		_forbidden[AGE_SEMI_TRANSPARENT] = true;
+
+		_positionBuffer = createRenderPassOutput<TextureBuffer>(_maxInstanciedShadowCaster, GL_RGBA32F, _sizeofMatrix, GL_DYNAMIC_DRAW);
+
+		_programs[PROGRAM_BUFFERING]->get_resource<SamplerBuffer>("model_matrix_tbo")->addInstanciedAlias("model_matrix");
+	}
+
 
 	void DeferredShadowBuffering::renderPass(const DRBCameraDrawableList &infos)
 	{
@@ -99,6 +111,8 @@ namespace AGE
 
 		std::shared_ptr<Painter> painter = nullptr;
 		std::shared_ptr<Painter> oldPainter = nullptr;
+		Key<Vertices> verticesKey;
+		Key<Vertices> oldVerticesKey;
 
 		for (auto &spotLightPtr : infos.spotLights)
 		{
@@ -111,7 +125,10 @@ namespace AGE
 			_frame_buffer.attachment(*(*it), GL_DEPTH_STENCIL_ATTACHMENT);
 			glClear(GL_DEPTH_BUFFER_BIT);
 			_programs[PROGRAM_BUFFERING]->registerProperties(spotlight->globalProperties);
-			_programs[PROGRAM_BUFFERING]->updateProperties(spotlight->globalProperties);
+			_programs[PROGRAM_BUFFERING]->updateNonInstanciedProperties(spotlight->globalProperties);
+			_programs[PROGRAM_BUFFERING]->get_resource<SamplerBuffer>("model_matrix_tbo").set(_positionBuffer);
+
+			_positionBuffer->resetOffset();
 
 			// draw for the spot light selected
 			for (auto &meshPaint : spotLightPtr->meshs)
@@ -125,24 +142,45 @@ namespace AGE
 				if (mesh->getPainterKey().isValid())
 				{
 					painter = _painterManager->get_painter(mesh->getPainterKey());
-					if (painter != oldPainter)
+					verticesKey = mesh->getVerticesKey();
+					if (painter != oldPainter || verticesKey != oldVerticesKey)
 					{
 						if (oldPainter)
 						{
-							oldPainter->uniqueDrawEnd();
+							if (_positionBuffer->isEmpty() == false)
+							{
+								oldPainter->instanciedDrawBegin(_programs[PROGRAM_BUFFERING]);
+								_positionBuffer->sendBuffer();
+								oldPainter->instanciedDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], oldVerticesKey, _positionBuffer->getOffset());
+								_positionBuffer->resetOffset();
+								oldPainter->instanciedDrawEnd();
+							}
 						}
-						painter->uniqueDrawBegin(_programs[PROGRAM_BUFFERING]);
 					}
-					oldPainter = painter;
-					painter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], mesh->globalProperties, mesh->getVerticesKey());
 				}
+				_programs[PROGRAM_BUFFERING]->registerProperties(mesh->globalProperties);
+				_programs[PROGRAM_BUFFERING]->updateProperties(mesh->globalProperties);
+				if (_positionBuffer->isFull())
+				{
+					painter->instanciedDrawBegin(_programs[PROGRAM_BUFFERING]);
+					_positionBuffer->sendBuffer();
+					painter->instanciedDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], verticesKey, _positionBuffer->getOffset());
+					_positionBuffer->resetOffset();
+					painter->instanciedDrawEnd();
+				}
+				oldVerticesKey = verticesKey;
+				oldPainter = painter;
+			}
+			if (oldPainter && _positionBuffer->isEmpty() == false)
+			{
+				oldPainter->instanciedDrawBegin(_programs[PROGRAM_BUFFERING]);
+				_positionBuffer->sendBuffer();
+				oldPainter->instanciedDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], oldVerticesKey, _positionBuffer->getOffset());
+				_positionBuffer->resetOffset();
+				oldPainter->instanciedDrawEnd();
 			}
 			spotlight->shadowMap = *it;
 			++it;
-		}
-		if (oldPainter)
-		{
-			oldPainter->uniqueDrawEnd();
 		}
 	}
 
