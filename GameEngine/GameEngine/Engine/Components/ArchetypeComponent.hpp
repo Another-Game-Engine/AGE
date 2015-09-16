@@ -10,7 +10,6 @@ namespace AGE
 	// An Archetype's entity will just have this component when serialized
 	// At load, this component will be detected and the archetype's infos
 	// will fill this entity
-	START_NOT_OPTIMIZED;
 
 	struct ArchetypeComponent : public ComponentBase
 	{
@@ -57,7 +56,6 @@ namespace AGE
 		////
 		//////
 	};
-	STOP_NOT_OPTIMIZED;
 }
 
 CEREAL_CLASS_VERSION(AGE::ArchetypeComponent, 3)

@@ -108,12 +108,6 @@ namespace AGE
 		// start to render to texture for each depth map
 		auto it = _depthBuffers.begin();
 
-
-		std::shared_ptr<Painter> painter = nullptr;
-		std::shared_ptr<Painter> oldPainter = nullptr;
-		Key<Vertices> verticesKey;
-		Key<Vertices> oldVerticesKey;
-
 		glViewport(0, 0, _frame_buffer.width(), _frame_buffer.height());
 		for (auto &spotLightPtr : infos.spotLights)
 		{
@@ -130,54 +124,40 @@ namespace AGE
 
 			_positionBuffer->resetOffset();
 
-			// draw for the spot light selected
-			for (auto &meshPaint : spotLightPtr->meshs)
-			{
-				auto mesh = (DRBMeshData*)(meshPaint.get());
+			std::shared_ptr<Painter> painter = nullptr;
+			//std::shared_ptr<Painter> oldPainter = nullptr;
+			Key<Vertices> verticesKey;
+			//Key<Vertices> oldVerticesKey;
 
-				//temporary
-				//todo, do not spawn entity while mesh is not loaded
-				//currently it's not safe, because the paiter key can be invalid
-				//during the first frames
-				if (mesh->getPainterKey().isValid())
+			// draw for the spot light selected
+			auto &occluders = spotLightPtr->occluders;
+			std::size_t occluderSize = occluders.size();
+			std::size_t occluderCounter = 0;
+
+			while (occluderCounter < occluderSize)
+			{
+				auto &current = occluders[occluderCounter];
+				AGE_ASSERT(current.isKeyHolder() == true);
+				// too much occluder for 1 spotlight ( > 1024)
+				AGE_ASSERT(current.keyHolder.size <= _maxMatrixInstancied);
+				
+				Key<Painter> painterKey;
+				UnConcatenateKey(current.keyHolder.key, painterKey, verticesKey);
+
+				++occluderCounter;
+				if (painterKey.isValid())
 				{
-					painter = _painterManager->get_painter(mesh->getPainterKey());
-					verticesKey = mesh->getVerticesKey();
-					if (painter != oldPainter || verticesKey != oldVerticesKey)
-					{
-						if (oldPainter)
-						{
-							if (_positionBuffer->isEmpty() == false)
-							{
-								oldPainter->instanciedDrawBegin(_programs[PROGRAM_BUFFERING]);
-								_positionBuffer->sendBuffer();
-								oldPainter->instanciedDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], oldVerticesKey, _positionBuffer->getOffset());
-								_positionBuffer->resetOffset();
-								oldPainter->instanciedDrawEnd();
-							}
-						}
-					}
-				}
-				_programs[PROGRAM_BUFFERING]->registerProperties(mesh->globalProperties);
-				_programs[PROGRAM_BUFFERING]->updateProperties(mesh->globalProperties);
-				if (_positionBuffer->isFull())
-				{
+					painter = _painterManager->get_painter(painterKey);
 					painter->instanciedDrawBegin(_programs[PROGRAM_BUFFERING]);
-					_positionBuffer->sendBuffer();
-					painter->instanciedDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], verticesKey, _positionBuffer->getOffset());
-					_positionBuffer->resetOffset();
+					_positionBuffer->set((void*)(&occluders[occluderCounter]), current.keyHolder.size);
+					painter->instanciedDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], verticesKey, current.keyHolder.size);
 					painter->instanciedDrawEnd();
 				}
-				oldVerticesKey = verticesKey;
-				oldPainter = painter;
-			}
-			if (oldPainter && _positionBuffer->isEmpty() == false)
-			{
-				oldPainter->instanciedDrawBegin(_programs[PROGRAM_BUFFERING]);
-				_positionBuffer->sendBuffer();
-				oldPainter->instanciedDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], oldVerticesKey, _positionBuffer->getOffset());
-				_positionBuffer->resetOffset();
-				oldPainter->instanciedDrawEnd();
+				else
+				{
+					int debug = 666;
+				}
+				occluderCounter += current.keyHolder.size;
 			}
 			spotlight->shadowMap = *it;
 			++it;

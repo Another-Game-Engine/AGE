@@ -540,6 +540,7 @@
     <ClInclude Include="..\Vendors\imgui\imconfig.h" />
     <ClInclude Include="..\Vendors\imgui\imgui.h" />
     <ClInclude Include="..\Vendors\imgui\stb_textedit.h" />
+    <ClInclude Include="Engine\BFC\IBFCCullCallback.hpp" />
     <ClInclude Include="Engine\Components\FPSCharacter.hh" />
     <ClInclude Include="Engine\Physics\CharacterControllerInterface.hh" />
     <ClInclude Include="Engine\Render\OcclusionTools\OcclusionOptions.hpp" />

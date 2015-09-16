@@ -23,7 +23,7 @@ namespace AGE
 		std::list<std::shared_ptr<Texture2D>> _depthBuffers;
 
 		std::shared_ptr<AGE::TextureBuffer> _positionBuffer = nullptr;
-		static const std::size_t _maxMatrixInstancied = 512;
+		static const std::size_t _maxMatrixInstancied = 1024;
 		static const std::size_t _sizeofMatrix = sizeof(glm::mat4);
 		static const std::size_t _maxInstanciedShadowCaster = _maxMatrixInstancied;
 	};

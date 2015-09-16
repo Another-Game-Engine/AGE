@@ -5,8 +5,8 @@
 #include "BFCBlockManager.hpp"
 #include "BFCItemID.hpp"
 
-#include "Utils/Containers/LFList.hpp"
-#include "BFC/BFCItem.hpp"
+#include "IBFCCullCallback.hpp"
+
 
 namespace AGE
 {
@@ -24,7 +24,7 @@ namespace AGE
 		void deleteItem(const BFCCullableHandle &handle);
 		BFCItem &getItem(const BFCItemID &id);
 		void cullOnChannel(CullableTypeID channel, LFList<BFCItem> &result, const Frustum &frustum);
-		void cullOnBlock(CullableTypeID channel, LFList<BFCItem> &result, const Frustum &frustum, std::size_t blockId);
+		void cullOnBlock(CullableTypeID channel, LFList<BFCItem> &result, const Frustum &frustum, std::size_t blockId, IBFCCullCallback *callback = nullptr);
 		// return the number of block to treat (each in on job)
 		std::size_t getBlockNumberToCull(CullableTypeID channel) const;
 	private:

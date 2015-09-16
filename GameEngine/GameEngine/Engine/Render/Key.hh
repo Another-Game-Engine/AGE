@@ -77,7 +77,7 @@ namespace AGE
 	template <typename T1, typename T2>
 	static inline ConcatenatedKey ConcatenateKey(const Key<T1> &top, const Key<T2> &bottom)
 	{
-		return (uint64_t)(top << 32) | (uint64_t)(bottom);
+		return ((uint64_t)(top.getId()) << 32) | (uint64_t)(bottom.getId());
 	}
 
 	template <typename T1, typename T2>
