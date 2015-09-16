@@ -114,6 +114,7 @@ namespace AGE
 		Key<Vertices> verticesKey;
 		Key<Vertices> oldVerticesKey;
 
+		glViewport(0, 0, _frame_buffer.width(), _frame_buffer.height());
 		for (auto &spotLightPtr : infos.spotLights)
 		{
 			SCOPE_profile_gpu_i("Spotlight pass");
@@ -121,7 +122,6 @@ namespace AGE
 
 			DRBSpotLightData *spotlight = (DRBSpotLightData*)(spotLightPtr->spotLight.get());
 
-			glViewport(0, 0, _frame_buffer.width(), _frame_buffer.height());
 			_frame_buffer.attachment(*(*it), GL_DEPTH_STENCIL_ATTACHMENT);
 			glClear(GL_DEPTH_BUFFER_BIT);
 			_programs[PROGRAM_BUFFERING]->registerProperties(spotlight->globalProperties);
