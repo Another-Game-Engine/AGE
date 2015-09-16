@@ -294,26 +294,28 @@ namespace AGE
 			// we register properties index
 			for (auto &r : _program_resources)
 			{
-				std::shared_ptr<IProperty> p = properties.getProperty(r->name());
-				if (p)
-				{
-					auto index = properties.getPropertyIndex(r->name());
-					propRegister->propertyIndex.push_back(PropertyRegister(index, r, p->getUpdateFunction()));
-				}
 				if (r->isInstancied())
 				{
 					auto &alias = r->getInstanciedAlias();
 					for (auto &a : alias)
 					{
-						p = properties.getProperty(a);
+						std::shared_ptr<IProperty> p = properties.getProperty(a);
 						if (p != nullptr)
 						{
 							auto index = properties.getPropertyIndex(a);
-							propRegister->propertyIndex.push_back(PropertyRegister(index, r, p->getInstanciedUpdateFunction()));
+							propRegister->propertyIndex.push_back(PropertyRegister(index, r, p->getInstanciedUpdateFunction(), true));
 						}
 					}
 				}
-
+				else
+				{
+					std::shared_ptr<IProperty> p = properties.getProperty(r->name());
+					if (p)
+					{
+						auto index = properties.getPropertyIndex(r->name());
+						propRegister->propertyIndex.push_back(PropertyRegister(index, r, p->getUpdateFunction(), false));
+					}
+				}
 			}
 		}
 		// we give the id the the properties
@@ -324,17 +326,56 @@ namespace AGE
 	{
 		SCOPE_profile_cpu_function("RenderTimer");
 
-		if (properties.empty())
+		std::size_t id = properties.getProgramId(_ageId);
+		if (id == -1)
 		{
 			return;
 		}
-
-		std::size_t id = properties.getProgramId(_ageId);
 		PropertiesRegister *propRegister = &_propertiesRegister[id];
 
 		for (auto &i : propRegister->propertyIndex)
 		{
 			i.updateFunction(i.resource.get(), properties.getProperty(i.index).get());
+		}
+	}
+
+	void Program::updateInstanciedProperties(Properties &properties)
+	{
+		SCOPE_profile_cpu_function("RenderTimer");
+
+		std::size_t id = properties.getProgramId(_ageId);
+		if (id == -1)
+		{
+			return;
+		}
+		PropertiesRegister *propRegister = &_propertiesRegister[id];
+
+		for (auto &i : propRegister->propertyIndex)
+		{
+			if (i.instancied)
+			{
+				i.updateFunction(i.resource.get(), properties.getProperty(i.index).get());
+			}
+		}
+	}
+
+	void Program::updateNonInstanciedProperties(Properties &properties)
+	{
+		SCOPE_profile_cpu_function("RenderTimer");
+
+		std::size_t id = properties.getProgramId(_ageId);
+		if (id == -1)
+		{
+			return;
+		}
+		PropertiesRegister *propRegister = &_propertiesRegister[id];
+
+		for (auto &i : propRegister->propertyIndex)
+		{
+			if (i.instancied == false)
+			{
+				i.updateFunction(i.resource.get(), properties.getProperty(i.index).get());
+			}
 		}
 	}
 }

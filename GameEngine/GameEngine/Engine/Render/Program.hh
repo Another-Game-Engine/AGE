@@ -76,6 +76,8 @@ namespace AGE
 
 		void registerProperties(Properties &properties);
 		void updateProperties(Properties &properties);
+		void updateInstanciedProperties(Properties &properties);
+		void updateNonInstanciedProperties(Properties &properties);
 	private:
 		void _get_resources();
 		void _get_resource(size_t index, GLenum resource, std::string const & buffer);
@@ -86,10 +88,13 @@ namespace AGE
 			std::size_t index;
 			std::shared_ptr<IProgramResources> resource;
 			void(*updateFunction)(IProgramResources *, IProperty*) = nullptr;
-			PropertyRegister(std::size_t _index, std::shared_ptr<IProgramResources> _resource, void(*_updateFunction)(IProgramResources *, IProperty*))
+			bool instancied;
+
+			PropertyRegister(std::size_t _index, std::shared_ptr<IProgramResources> _resource, void(*_updateFunction)(IProgramResources *, IProperty*), bool _instancied)
 				: index(_index)
 				, resource(_resource)
 				, updateFunction(_updateFunction)
+				, instancied(_instancied)
 			{}
 		};
 		struct PropertiesRegister
