@@ -6,6 +6,7 @@
 namespace AGE
 {
 	class Texture2D;
+	class TextureBuffer;
 
 	class DebugLightBillboards : public FrameBufferRender
 	{
@@ -22,5 +23,11 @@ namespace AGE
 	private:
 		Key<Vertices> _quadVertices;
 		std::shared_ptr<Painter> _quadPainter;
+
+		std::shared_ptr<AGE::TextureBuffer> _positionBuffer = nullptr;
+		static const std::size_t _maxMatrixInstancied = 256;
+		static const std::size_t _sizeofMatrix = sizeof(glm::mat4);
+		static const std::size_t _maxInstanciedBillboard = _maxMatrixInstancied;
+
 	};
 }
