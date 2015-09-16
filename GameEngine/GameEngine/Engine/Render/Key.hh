@@ -1,12 +1,10 @@
 #pragma once
-
-#include <iostream>
-#include <queue>
 #include <cstdint>
-#include <vector>
 
 namespace AGE
 {
+	typedef uint64_t ConcatenatedKey;
+
 	template <typename TYPE>
 	class Key
 	{
@@ -14,21 +12,21 @@ namespace AGE
 		Key();
 
 	public:
-		static Key<TYPE> createKey(size_t index);
+		static Key<TYPE> createKey(uint32_t index);
 
 	public:
-		size_t getId() const;
+		uint32_t getId() const;
 		bool isValid() const;
 		void destroy();
 		bool operator==(const Key &o);
 		bool operator!=(const Key &o);
 	private:
-		size_t _id;
-		explicit Key(size_t id);
+		uint32_t _id;
+		explicit Key(uint32_t id);
 	};
 
 	template <typename type_t>
-	inline size_t Key<type_t>::getId() const
+	inline uint32_t Key<type_t>::getId() const
 	{
 		return (_id);
 	}
@@ -46,13 +44,13 @@ namespace AGE
 	}
 
 	template <typename type_t>
-	inline Key<type_t>::Key(size_t id)
+	inline Key<type_t>::Key(uint32_t id)
 	{
 		_id = id;
 	}
 
 	template <typename type_t>
-	inline Key<type_t> Key<type_t>::createKey(size_t index)
+	inline Key<type_t> Key<type_t>::createKey(uint32_t index)
 	{
 		return (Key<type_t>(index));
 	}
@@ -74,5 +72,18 @@ namespace AGE
 	inline bool Key<type_t>::operator!=(const Key<type_t> &o)
 	{
 		return (_id != o._id);
+	}
+
+	template <typename T1, typename T2>
+	static inline ConcatenatedKey ConcatenateKey(const Key<T1> &top, const Key<T2> &bottom)
+	{
+		return (uint64_t)(top << 32) | (uint64_t)(bottom);
+	}
+
+	template <typename T1, typename T2>
+	static inline void UnConcatenateKey(ConcatenatedKey concatenatedKey, Key<T1> &topResult, Key<T2> &bottomResult)
+	{
+		topResult = Key<T1>::createKey((uint32_t)(concatenatedKey >> 32));
+		bottomResult = Key<T2>::createKey((uint32_t)(concatenatedKey));
 	}
 }

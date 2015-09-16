@@ -164,11 +164,11 @@ namespace AGE
 		if (_indices_block_memory.lock())
 		{
 			auto offset = _indices_block_memory.lock()->offset();
-			glDrawElementsInstancedBaseVertex(mode, GLsizei(_nbr_indices), GL_UNSIGNED_INT, (GLvoid *)offset, count, GLint(_offset));
+			glDrawElementsInstancedBaseVertex(mode, GLsizei(_nbr_indices), GL_UNSIGNED_INT, (GLvoid *)offset, GLsizei(count), GLint(_offset));
 		}
 		else
 		{
-			glDrawArraysInstanced(mode, (GLint)_offset, (GLsizei)_nbr_vertex, count);
+			glDrawArraysInstanced(mode, (GLint)_offset, (GLsizei)_nbr_vertex, GLsizei(count));
 		}
 	}
 
