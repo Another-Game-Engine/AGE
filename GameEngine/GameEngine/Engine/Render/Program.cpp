@@ -86,6 +86,10 @@ namespace AGE
 		if (element) {
 			_program_resources.emplace_back(std::move(element));
 		}
+		else
+		{
+			int i = 0;
+		}
 	}
 
 	void Program::_get_resources()
@@ -290,11 +294,26 @@ namespace AGE
 			// we register properties index
 			for (auto &r : _program_resources)
 			{
-				auto index = properties.getPropertyIndex(r->name());
-				if (index != -1)
+				std::shared_ptr<IProperty> p = properties.getProperty(r->name());
+				if (p)
 				{
-					propRegister->propertyIndex.push_back(std::make_pair(index, r));
+					auto index = properties.getPropertyIndex(r->name());
+					propRegister->propertyIndex.push_back(PropertyRegister(index, r, p->getUpdateFunction()));
 				}
+				if (r->isInstancied())
+				{
+					auto &alias = r->getInstanciedAlias();
+					for (auto &a : alias)
+					{
+						p = properties.getProperty(a);
+						if (p != nullptr)
+						{
+							auto index = properties.getPropertyIndex(a);
+							propRegister->propertyIndex.push_back(PropertyRegister(index, r, p->getInstanciedUpdateFunction()));
+						}
+					}
+				}
+
 			}
 		}
 		// we give the id the the properties
@@ -315,7 +334,7 @@ namespace AGE
 
 		for (auto &i : propRegister->propertyIndex)
 		{
-			properties.update_property(i.second.get(), i.first);
+			i.updateFunction(i.resource.get(), properties.getProperty(i.index).get());
 		}
 	}
 }

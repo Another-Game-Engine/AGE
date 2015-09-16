@@ -23,7 +23,7 @@ namespace AGE
 	public:
 		bool recompilePrograms();
 		void setNextPass(std::shared_ptr<ARender> nextPass);
-
+		virtual void init(){}
 		bool renderModeCompatible(RenderModeSet const &renderMode);
 
 	protected:

@@ -43,6 +43,15 @@ namespace AGE
 		return true;
 	}
 
+	bool ARenderingPipeline::init()
+	{
+		for (auto &e : _rendering_list)
+		{
+			e->init();
+		}
+		return true;
+	}
+
 	IRenderingPipeline & ARenderingPipeline::render(const DRBCameraDrawableList &infos)
 	{
 		SCOPE_profile_cpu_i("RenderTimer", "RenderPipeline");

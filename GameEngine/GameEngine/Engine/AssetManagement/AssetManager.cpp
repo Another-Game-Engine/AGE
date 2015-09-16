@@ -16,16 +16,14 @@
 #include <Threads/QueueOwner.hpp>
 #include <Threads/Thread.hpp>
 #include <Threads/Tasks/ToRenderTasks.hpp>
-#include <Render/Properties/Materials/Diffuse.hh>
 #include <Render/Textures/Texture2D.hh>
 #include <Render/GeometryManagement/Painting/Painter.hh>
 
 #include <Render/Properties/Transformation.hh>
 #include <Render/Properties/Materials/Color.hh>
-#include <Render/Properties/Materials/Diffuse.hh>
 #include <Render/Properties/Materials/MapColor.hh>
-#include <Render/Properties/Materials/Specular.hh>
 #include <Render/Properties/Materials/ScaleUVs.hpp>
+#include <Render/Properties/Materials/Ratio.hh>
 
 #include <AssetManagement/OpenGLDDSLoader.hh>
 

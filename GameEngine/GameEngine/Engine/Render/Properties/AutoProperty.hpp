@@ -33,13 +33,35 @@ namespace AGE
 			_data = value;
 		}
 
-	private:
-		virtual void _update(IProgramResources *p) override final
+		static void update(UpdateType* res, AutoProperty*p)
 		{
-			auto resource = (UpdateType*)(p);
-			*resource = _data;
+			*res = p->_data;
 		}
 
+		static inline void _updateFunctionLock(IProgramResources *r, IProperty*p)
+		{
+			p->_mutex.lock(); AutoProperty::update((UpdateType*)(r), (AutoProperty*)(p)); p->_mutex.unlock();
+		}
+		inline virtual void(*getUpdateFunction())(IProgramResources *, IProperty*)
+		{
+			return AutoProperty::_updateFunctionLock;
+		}
+
+		static void instanciedUpdate(UpdateType*, AutoProperty*)
+		{
+			assert(false);
+		}
+
+		static inline void _instanciedUpdateFunctionLock(IProgramResources *r, IProperty*p)
+		{
+			p->_mutex.lock(); AutoProperty::instanciedUpdate((UpdateType*)(r), (AutoProperty*)(p)); p->_mutex.unlock();
+		}
+		inline virtual void(*getInstanciedUpdateFunction())(IProgramResources *, IProperty*)
+		{	
+			return AutoProperty::_instanciedUpdateFunctionLock;
+		}
+
+	private:
 		virtual void _autoSet(void *dataPtr)
 		{
 			// totally unsafe, you have to be sure of what you're doing

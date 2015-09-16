@@ -1,5 +1,8 @@
 #include <Render/Properties/Transformation.hh>
 #include <Render/ProgramResources/Types/Uniform/Mat4.hh>
+#include <Render/ProgramResources/Types/Uniform/Sampler/SamplerBuffer.hh>
+#include <Render/Textures/TextureBuffer.hh>
+#include <glm/gtc/type_ptr.hpp>
 #include <mutex>
 
 namespace AGE
@@ -27,10 +30,14 @@ namespace AGE
 		return (*this);
 	}
 
-	void Transformation::_update(IProgramResources *program)
+	void Transformation::update(Mat4 *res, Transformation *trans)
 	{
-		auto resource = (Mat4*)(program);
-		*resource = _model_matrix;
+		*res = trans->_model_matrix;
+	}
+
+	void Transformation::instanciedUpdate(SamplerBuffer *res, Transformation *trans)
+	{
+		res->getTexture()->push(glm::value_ptr(trans->_model_matrix));
 	}
 
 	glm::mat4 const & Transformation::get()

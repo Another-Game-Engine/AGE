@@ -44,7 +44,6 @@ namespace AGE
 
 		BFCCullableHandle          _graphicHandle;
 
-		std::shared_ptr<IProperty> _mapProp = nullptr;
 		std::shared_ptr<IProperty> _colorProperty = nullptr;
 		std::shared_ptr<IProperty> _ambiantColorProperty = nullptr;
 

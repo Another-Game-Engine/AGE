@@ -11,6 +11,7 @@ namespace AGE
 	Painter::Painter(std::vector<std::pair<GLenum, std::string>>  const &types) :
 		_buffer(types)
 		, _isInUniqueDraw(false)
+		, _isInstanciedDraw(false)
 	{
 		// to be sure that this function is only called in render thread
 		AGE_ASSERT(GetThreadManager()->getCurrentThread() == (AGE::Thread*)GetRenderThread());
@@ -20,6 +21,7 @@ namespace AGE
 		_buffer(std::move(move._buffer)),
 		_vertices(std::move(move._vertices))
 		, _isInUniqueDraw(std::move(move._isInUniqueDraw))
+		, _isInstanciedDraw(std::move(move._isInstanciedDraw))
 	{
 		// to be sure that this function is only called in render thread
 		AGE_ASSERT(GetThreadManager()->getCurrentThread() == (AGE::Thread*)GetRenderThread());
@@ -124,17 +126,23 @@ namespace AGE
 			_vertices[vertice.getId()].draw(mode);
 	}
 
-	void Painter::uniqueDraw(GLenum mode, const Key<Vertices> &vertice)
+	void Painter::instanciedDraw(GLenum mode, std::shared_ptr<Program> const &program, const Key<Vertices> &vertice, std::size_t count)
 	{
 		SCOPE_profile_gpu_i("Unique Draw");
 		SCOPE_profile_cpu_function("PainterTimer");
 
 		// be sure to call uniqueDrawBegin() before and uniqueDrawEnd() after
-		AGE_ASSERT(_isInUniqueDraw);
+		AGE_ASSERT(_isInstanciedDraw);
 
 		// to be sure that this function is only called in render thread
 		AGE_ASSERT(GetThreadManager()->getCurrentThread() == (AGE::Thread*)GetRenderThread());
-		_vertices[vertice.getId()].draw(mode);
+
+		program->update();
+		// TODO: Fix that properly! @Dorian
+		if (vertice.getId() >= 0 && vertice.getId() < _vertices.size())
+		{
+			_vertices[vertice.getId()].instanciedDraw(mode, count);
+		}
 	}
 
 	void Painter::uniqueDrawBegin(std::shared_ptr<Program> const &program)
@@ -159,6 +167,30 @@ namespace AGE
 		_buffer.unbind();
 
 		_isInUniqueDraw = false;
+	}
+
+	void Painter::instanciedDrawBegin(std::shared_ptr<Program> const &program)
+	{
+		AGE_ASSERT(_isInstanciedDraw == false);
+
+		if (program)
+		{
+			program->set_attributes(_buffer);
+		}
+
+		_buffer.bind();
+		_buffer.update();
+
+		_isInstanciedDraw = true;
+	}
+
+	void Painter::instanciedDrawEnd()
+	{
+		AGE_ASSERT(_isInstanciedDraw == true);
+
+		_buffer.unbind();
+
+		_isInstanciedDraw = false;
 	}
 
 	bool Painter::coherent(std::vector<std::pair<GLenum, std::string>> const &types) const

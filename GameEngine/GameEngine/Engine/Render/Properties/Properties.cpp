@@ -43,7 +43,7 @@ namespace AGE
 		_properties.clear();
 	}
 
-	Key<Property> Properties::add_property(std::shared_ptr<IProperty> const &prop, bool computeHash)
+	Key<Property> Properties::add_property(std::shared_ptr<IProperty> const &prop)
 	{
 		SCOPE_profile_cpu_function("RenderTimer");
 
@@ -62,10 +62,9 @@ namespace AGE
 		for (auto &p : other._properties)
 		{
 			_lock.ReadUnlock();
-			add_property(p, false);
+			add_property(p);
 			_lock.ReadLock();
 		}
-		_hashToRefresh = true;
 		_lock.ReadUnlock();
 	}
 
@@ -110,11 +109,5 @@ namespace AGE
 			std::swap(_properties[prop.getId()], _properties[_properties.size() - 1]);
 		}
 		_properties.resize(_properties.size() - 1);
-	}
-
-	void Properties::update_property(IProgramResources *p, std::size_t index) const
-	{
-		RWLockGuard lock(_lock, false);
-		_properties[index]->update(p);
 	}
 }

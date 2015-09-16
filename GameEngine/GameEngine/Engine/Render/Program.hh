@@ -12,6 +12,7 @@ namespace AGE
 	class Attribute;
 	class BufferPrograms;
 	class Properties;
+	class IProperty;
 
 	class Program
 	{
@@ -46,6 +47,11 @@ namespace AGE
 				}
 			}
 
+			std::shared_ptr<T> operator->()
+			{
+				return _ptr;
+			}
+
 		private:
 			std::shared_ptr<T> _ptr = nullptr;
 		};
@@ -75,10 +81,20 @@ namespace AGE
 		void _get_resource(size_t index, GLenum resource, std::string const & buffer);
 
 	private:
-
+		struct PropertyRegister
+		{
+			std::size_t index;
+			std::shared_ptr<IProgramResources> resource;
+			void(*updateFunction)(IProgramResources *, IProperty*) = nullptr;
+			PropertyRegister(std::size_t _index, std::shared_ptr<IProgramResources> _resource, void(*_updateFunction)(IProgramResources *, IProperty*))
+				: index(_index)
+				, resource(_resource)
+				, updateFunction(_updateFunction)
+			{}
+		};
 		struct PropertiesRegister
 		{
-			std::vector<std::pair<std::size_t, std::shared_ptr<IProgramResources>>> propertyIndex;
+			std::vector<PropertyRegister> propertyIndex;
 			std::size_t              propertiesHash = 0;
 		};
 

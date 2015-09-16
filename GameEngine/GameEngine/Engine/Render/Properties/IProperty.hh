@@ -12,6 +12,25 @@ namespace AGE
 {
 	class IProgramResources;
 
+#define PROPERTY_UPDATE_FUNCTION(PROPERTY_TYPE, RESOURCE_TYPE)\
+	static void update(RESOURCE_TYPE*, PROPERTY_TYPE*);\
+	static inline void _updateFunctionLock(IProgramResources *r, IProperty*p){\
+	    p->_mutex.lock(); PROPERTY_TYPE::update((RESOURCE_TYPE*)(r), (PROPERTY_TYPE*)(p)); p->_mutex.unlock();\
+	}\
+    inline virtual void(*getUpdateFunction())(IProgramResources *, IProperty*) {\
+	    return PROPERTY_TYPE::_updateFunctionLock;\
+	}\
+
+#define PROPERTY_INSTANCIED_UPDATE_FUNCTION(PROPERTY_TYPE, RESOURCE_TYPE)\
+	static void instanciedUpdate(RESOURCE_TYPE*, PROPERTY_TYPE*);\
+	static inline void _instanciedUpdateFunctionLock(IProgramResources *r, IProperty*p){\
+	   p->_mutex.lock(); PROPERTY_TYPE::instanciedUpdate((RESOURCE_TYPE*)(r), (PROPERTY_TYPE*)(p)); p->_mutex.unlock();\
+			}\
+	inline virtual void(*getInstanciedUpdateFunction())(IProgramResources *, IProperty*) {\
+	    return PROPERTY_TYPE::_instanciedUpdateFunctionLock;\
+			}\
+
+
 	class IProperty
 	{
 	public:
@@ -23,16 +42,11 @@ namespace AGE
 		}
 
 		virtual ~IProperty() {};
-		IProperty &update(IProgramResources* const p)
-		{
-			_mutex.lock();
-			_update(p);
-			_mutex.unlock();
-			return (*this);
-		}
 		virtual std::shared_ptr<IProgramResources> get_resource(std::shared_ptr<Program> const &p) = 0;
 		inline std::string const &name() const { return _name; }
 		inline std::size_t const &hash() const { return _hash; }
+		virtual void(*getUpdateFunction())(IProgramResources *, IProperty*) = 0;
+		virtual void(*getInstanciedUpdateFunction())(IProgramResources *, IProperty*) = 0;
 
 		template <typename T>
 		void autoSet(const T &value)
@@ -46,9 +60,10 @@ namespace AGE
 		}
 
 	protected:
-		virtual void _update(IProgramResources *p) = 0;
 		const std::string _name;
 		std::size_t _hash;
+		//dirty:
+	public:
 		mutable AGE::SpinLock _mutex;
 	};
 

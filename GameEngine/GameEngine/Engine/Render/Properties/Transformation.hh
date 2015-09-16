@@ -8,6 +8,9 @@
 
 namespace AGE
 {
+	class Mat4;
+	class SamplerBuffer;
+
 	class Transformation : public AProperty
 	{
 	public:
@@ -16,10 +19,8 @@ namespace AGE
 		Transformation(Transformation const &copy) = delete;
 		Transformation &operator=(Transformation const &other) = delete;
 		Transformation &operator=(glm::mat4 const &value);
-
-	private:
-		virtual void _update(IProgramResources *p) override final;
-
+		PROPERTY_UPDATE_FUNCTION(Transformation, Mat4);
+		PROPERTY_INSTANCIED_UPDATE_FUNCTION(Transformation, SamplerBuffer);
 	public:
 		glm::mat4 const &get();
 		Transformation &set(glm::mat4 const &mat);

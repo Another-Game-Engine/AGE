@@ -14,6 +14,7 @@ namespace AGE
 			std::shared_ptr<Texture2D> diffuse,
 			std::shared_ptr<Texture2D> depth);
 		virtual ~DebugLightBillboards() = default;
+		virtual void init();
 
 	protected:
 		virtual void renderPass(const DRBCameraDrawableList &infos);

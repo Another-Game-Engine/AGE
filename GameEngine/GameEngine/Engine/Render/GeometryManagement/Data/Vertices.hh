@@ -35,7 +35,7 @@ namespace AGE
 		void remove();
 		void reset(size_t o);
 		void draw(GLenum mode);
-
+		void instanciedDraw(GLenum mode, std::size_t count);
 	private:
 		size_t _offset;
 		size_t _nbr_indices;

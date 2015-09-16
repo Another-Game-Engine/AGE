@@ -17,10 +17,14 @@ namespace AGE
 
 	}
 
-	void ScaleUVs::_update(IProgramResources *program)
+	void ScaleUVs::update(Vec1 *res, ScaleUVs *scale)
 	{
-		auto resource = (Vec1*)(program);
-		*resource = _tof ? 1.0f : 0.0f;
+		*res = scale->_tof ? 1.0f : 0.0f;
+	}
+
+	void ScaleUVs::instanciedUpdate(Vec1 *, ScaleUVs *)
+	{
+		assert(false && "implement me");
 	}
 
 	bool const & ScaleUVs::get()

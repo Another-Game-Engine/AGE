@@ -17,10 +17,14 @@ namespace AGE
 
 	}
 
-	void Ratio::_update(IProgramResources *p)
+	void Ratio::update(Vec1 *res, Ratio *ratio)
 	{
-		auto resource = (Vec1*)(p);
-		*resource = _ratio;
+		*res = ratio->_ratio;
+	}
+
+	void Ratio::instanciedUpdate(Vec1 *, Ratio *)
+	{
+		assert(false && "implement me");
 	}
 
 	float Ratio::get()

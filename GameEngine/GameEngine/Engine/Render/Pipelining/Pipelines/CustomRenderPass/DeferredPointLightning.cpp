@@ -130,14 +130,6 @@ namespace AGE
 			SCOPE_profile_gpu_i("Lightpoints");
 			SCOPE_profile_cpu_i("RenderTimer", "Lightpoints");
 
-			_programs[PROGRAM_STENCIL]->use();
-			_programs[PROGRAM_STENCIL]->registerProperties(pl->globalProperties);
-			_programs[PROGRAM_STENCIL]->updateProperties(pl->globalProperties);
-
-			_programs[PROGRAM_LIGHTNING]->use();
-			_programs[PROGRAM_LIGHTNING]->registerProperties(pl->globalProperties);
-			_programs[PROGRAM_LIGHTNING]->updateProperties(pl->globalProperties);
-
 			// We clear the stencil buffer
 			glClear(GL_STENCIL_BUFFER_BIT);
 
