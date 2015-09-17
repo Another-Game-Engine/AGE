@@ -368,7 +368,6 @@ namespace AGE
 				vbo_size = needed_vtx_size + 2000 * sizeof(ImDrawVert);
 				glBufferData(GL_ARRAY_BUFFER, (GLsizeiptr)vbo_size, NULL, GL_STREAM_DRAW);
 			}
-
 			unsigned char* vtx_data = (unsigned char*)glMapBufferRange(GL_ARRAY_BUFFER, 0, needed_vtx_size, GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT);
 			if (!vtx_data)
 				continue;
@@ -383,48 +382,6 @@ namespace AGE
 				idx_buffer += pcmd->ElemCount;
 			}
 		}
-
-		////// Grow our buffer according to what we need
-		////size_t total_vtx_count = 0;
-		////for (int n = 0; n < cmd_lists.size(); n++)
-		////	total_vtx_count += cmd_lists[n].vtx_buffer.size();
-		////glBindBuffer(GL_ARRAY_BUFFER, vbo_handle);
-		////size_t neededBufferSize = total_vtx_count * sizeof(ImDrawVert);
-		////if (neededBufferSize > vbo_max_size)
-		////{
-		////	vbo_max_size = neededBufferSize + 5000;  // Grow buffer
-		////	glBufferData(GL_ARRAY_BUFFER, vbo_max_size, NULL, GL_STREAM_DRAW);
-		////}
-
-		////// Copy and convert all vertices into a single contiguous buffer
-		////unsigned char* buffer_data = (unsigned char*)glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
-		////if (!buffer_data)
-		////	return;
-		////for (int n = 0; n < cmd_lists.size(); n++)
-		////{
-		////	auto &cmd_list = cmd_lists[n];
-		////	memcpy(buffer_data, &cmd_list.vtx_buffer[0], cmd_list.vtx_buffer.size() * sizeof(ImDrawVert));
-		////	buffer_data += cmd_list.vtx_buffer.size() * sizeof(ImDrawVert);
-		////}
-		////glUnmapBuffer(GL_ARRAY_BUFFER);
-		////glBindBuffer(GL_ARRAY_BUFFER, 0);
-		////glBindVertexArray(vao_handle);
-
-		////int cmd_offset = 0;
-		////for (int n = 0; n < cmd_lists.size(); n++)
-		////{
-		////	SCOPE_profile_cpu_i("RenderTimer", "Render ImGui command list");
-		////	auto &cmd_list = cmd_lists[n];
-		////	int vtx_offset = cmd_offset;
-		////	auto &pcmd_end = std::end(cmd_list.commands);
-		////	for (auto &pcmd = std::begin(cmd_list.commands); pcmd != pcmd_end; pcmd++)
-		////	{
-		////		glScissor((int)pcmd->ClipRect.x, (int)(height - pcmd->ClipRect.w), (int)(pcmd->ClipRect.z - pcmd->ClipRect.x), (int)(pcmd->ClipRect.w - pcmd->ClipRect.y));
-		////		//glDrawElements(GL_TRIANGLES, pcmd->ElemCount, GL_UNSIGNED_SHORT, );
-		////		vtx_offset += pcmd->vtx_count;
-		////	}
-		////	cmd_offset = vtx_offset;
-		////}
 
 		// Restore modified state
 		glBindVertexArray(0);

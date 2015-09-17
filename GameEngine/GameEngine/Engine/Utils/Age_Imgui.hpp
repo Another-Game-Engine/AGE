@@ -74,30 +74,5 @@ namespace AGE
 		static void renderDrawLists(ImDrawData* draw_data);
 		static void initShader(int *pid, int *vert, int *frag, const char *vs, const char *fs);
 		void renderThreadRenderFn(const std::vector<Age_ImDrawList> &cmd_lists);
-
-		template<typename T>
-		static unsigned int stream(GLenum target, unsigned int vbo, unsigned int *vbo_cursor, unsigned int *vbo_size, T *start, int elementCount)
-		{
-			unsigned int bytes = sizeof(T) *elementCount;
-			unsigned int aligned = bytes + bytes % 64; //align memory
-
-			glBindBuffer(target, vbo);
-			//If there's not enough space left, orphan the buffer object, create a new one and start writing
-			if (vbo_cursor[0] + aligned > vbo_size[0])
-			{
-				assert(aligned < vbo_size[0]);
-				glBufferData(target, vbo_size[0], NULL, GL_DYNAMIC_DRAW);
-				vbo_cursor[0] = 0;
-			}
-
-			void* mapped = glMapBufferRange(target, vbo_cursor[0], aligned, GL_MAP_WRITE_BIT | GL_MAP_UNSYNCHRONIZED_BIT);
-
-			memcpy(mapped, start, bytes);
-			vbo_cursor[0] += aligned;
-
-			glUnmapBuffer(target);
-			return vbo_cursor[0] - aligned; //return the offset we use for glVertexAttribPointer call
-		}
-
 	};
 }
