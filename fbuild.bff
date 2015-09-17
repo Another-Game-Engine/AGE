@@ -76,8 +76,8 @@ Compiler( 'Compiler-x64' )
               + ' /D"_WINSOCK_DEPRECATED_NO_WARNINGS"' // don't warn about deprecated winsock functions - TODO:C Update API use
 
   .CompilerOptions    + ' /Fo"%2"'
-  .LibrarianOptions   = '/NODEFAULTLIB /NOLOGO /OUT:"%2" "%1"'
-  .LinkerOptions      = '/NODEFAULTLIB /NOLOGO /INCREMENTAL:NO /OUT:"%2" "%1" /DEBUG'
+  .LibrarianOptions   = '/NOLOGO /OUT:"%2" "%1"' //@FBUILD : Il faudrait peut etre faire une configuration dll et une .lib et ajouter NODEFAULTLIB pour les dll
+  .LinkerOptions      = '/NOLOGO /INCREMENTAL:NO /OUT:"%2" "%1" /DEBUG'
               + ' /IGNORE:4001' ; don't complain about linking libs only
 
   // Optimizations
@@ -211,10 +211,11 @@ Compiler( 'Compiler-x64' )
 .Configs_Windows_MSVC = { .X64DebugConfig, .X64ProfileConfig, .X64ReleaseConfig, .X64RetailConfig }
 
 // Core
+#include "GameEngine\AGE_Utils.bff"
+#include "GameEngine\AGE_BFC.bff"
 #include "GameEngine\AGE_Engine.bff"
 #include "GameEngine\AGE_Reader.bff"
-#include "GameEngine\AGE_BFC.bff"
-#include "GameEngine\AGE_Utils.bff"
+
 
 // Aliases : All-$Platform$
 //------------------------------------------------------------------------------
@@ -234,21 +235,21 @@ ForEach( .Platform in .Platforms )
 //------------------------------------------------------------------------------
 Alias( 'All' )
 {
-  .Targets    = { 'AGEngine-proj'
-                , 'AGEReader-proj'
+  .Targets    = { 'AGE_Utils-proj'
                 , 'AGE_BFC-proj'
-                , 'AGE_Utils-proj' }
+                , 'AGEngine-proj'
+                , 'AGEReader-proj' }
 }
 
 // Aliases : proj (all projects)
 //------------------------------------------------------------------------------
 Alias( 'proj' )
 {
-  .Targets    = { 'All-proj',
-             'AGEngine-proj',
-             'AGEReader-proj',
-             'AGE_BFC-proj',
-             'AGE_Utils-proj'
+  .Targets    = { 'All-proj'
+                  , 'AGE_Utils-proj'
+                  , 'AGE_BFC-proj'
+                  , 'AGEngine-proj'
+                  , 'AGEReader-proj'
             }
 }
 

@@ -8,6 +8,7 @@
 	.VendorsPath        = 'GameEngine/Vendors'
 
 	.CompilerIncludesPaths = ' /I"$ProjectPath$"'
+						   + ' /I./'
 						   + ' /I"$VendorsPath$"'
 						   + ' /I"$VendorsPath$"\OpenGL\include\'
 						   + ' /I"$VendorsPath$"\bullet\src\'

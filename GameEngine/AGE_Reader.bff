@@ -3,7 +3,7 @@
 {
 	.ProjectName		= 'AGEReader'
 	.ProjectDestPath	= './TMP_SOLUTIONS/AGE_Reader/'
-	.ProjectPath		= 'GameEngine/EngineCoreTest'
+	.ProjectPath		= 'Reader'
 	.EnginePath         = 'GameEngine/GameEngine/Engine'
 
 	.VendorsPath        = 'GameEngine/Vendors'
@@ -98,7 +98,10 @@
 
 		Executable( '$ProjectName$-Exe-$Platform$-$Config$' )
 		{
-			.Libraries					= { 'AGEngine-Lib-$Platform$-$Config$' ,'AGEReader-Lib-$Platform$-$Config$' }
+			.Libraries					= { 'AGE_Utils-Lib-$Platform$-$Config$'
+			                              , 'AGE_BFC-Lib-$Platform$-$Config$'
+			                              , 'AGEReader-Lib-$Platform$-$Config$'
+			                              , 'AGEngine-Lib-$Platform$-$Config$' }
 			.LinkerOutput				= '$OutputBase$/Reader.exe'
 			.LinkerOptions				+ ' /SUBSYSTEM:CONSOLE'
 										+ ' kernel32.lib'

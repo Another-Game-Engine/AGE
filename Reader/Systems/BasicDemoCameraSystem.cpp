@@ -5,7 +5,7 @@
 #include <Components/CameraComponent.hpp>
 #include <Components/Light.hh>
 #include <Components/MeshRenderer.hh>
-#include <EngineCoreTest/Components/Lifetime.hpp>
+#include <Components/Lifetime.hpp>
 
 #include <Entities/Entity.hh>
 #include <Entities/EntityData.hh>
