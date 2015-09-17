@@ -14,6 +14,7 @@
 						   + ' /I"$VendorsPath$"\fmod\inc\'
 						   + ' /I"$VendorsPath$"\minizip\include\'
 						   + ' /I"$VendorsPath$"\zlib\include\'
+						   + ' /I"$VendorsPath$"\PhysX\PhysXSDK\Include\'
 						   + ' /IFileUtils\'
 
 

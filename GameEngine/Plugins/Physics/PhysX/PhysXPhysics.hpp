@@ -2,7 +2,7 @@
 
 #include <PxPhysicsAPI.h>
 
-#include "PhysicsInterface.hpp"
+#include <Physics/PhysicsInterface.hpp>
 
 namespace AGE
 {

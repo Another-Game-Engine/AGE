@@ -1,7 +1,6 @@
 #pragma once
 
 #include <glm/glm.hpp>
-#include <Culling/Cullable/Cullable.hh>
 
 namespace AGE
 {
@@ -15,8 +14,6 @@ namespace AGE
 
 	struct AABoundingBox
 	{
-		enum { shape_type = CULLABLE_BOUNDING_BOX };
-
 		glm::vec3		minPoint;
 		glm::vec3		maxPoint;
 		glm::vec3		center;

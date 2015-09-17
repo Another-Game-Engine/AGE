@@ -3,7 +3,6 @@
 #include <Utils/Plane.hh>
 #include <Utils/AABoundingBox.hh>
 #include <Utils/Sphere.hh>
-#include <Culling/Cullable/Cullable.hh>
 #include <glm/fwd.hpp>
 
 namespace AGE
@@ -12,7 +11,6 @@ namespace AGE
 	class Frustum
 	{
 	public:
-		enum { shape_type = CULLABLE_FRUSTUM };
 
 	private:
 		enum PlaneName

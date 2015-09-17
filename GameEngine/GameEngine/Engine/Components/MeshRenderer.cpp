@@ -13,7 +13,7 @@
 #include <AssetManagement/AssetManager.hh>
 #include <Utils/Debug.hpp>
 #endif
-#include "Engine\Graphic\DRBMeshData.hpp"
+#include "Graphic\DRBMeshData.hpp"
 
 //tmp
 #include "Configuration.hpp"
