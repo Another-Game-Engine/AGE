@@ -214,6 +214,8 @@ Compiler( 'Compiler-x64' )
 #include "GameEngine\AGE_ImGui.bff"
 
 #include "GameEngine\AGE_Utils.bff"
+#include "GameEngine\AGE_LowLevelUtils.bff"
+#include "GameEngine\AGE_FileUtils.bff"
 #include "GameEngine\AGE_BFC.bff"
 #include "GameEngine\AGE_Engine.bff"
 #include "GameEngine\AGE_Reader.bff"
@@ -239,10 +241,13 @@ ForEach( .Platform in .Platforms )
 Alias( 'All' )
 {
   .Targets    = { 'AGE_ImGui-proj'
-  				, 'AGE_Utils-proj'
-                , 'AGE_BFC-proj'
-                , 'AGEngine-proj'
-                , 'AGEReader-proj' }
+                  , 'AGE_FileUtils-proj'
+                  , 'AGE_Utils-proj'
+                  , 'AGE_LowLevelUtils-proj'
+                  , 'AGE_FileUtils-proj'
+                  , 'AGE_BFC-proj'
+                  , 'AGEngine-proj'
+                  , 'AGEReader-proj' }
 }
 
 // Aliases : proj (all projects)
@@ -252,6 +257,8 @@ Alias( 'proj' )
   .Targets    = { 'All-proj'
                   , 'AGE_ImGui-proj'
                   , 'AGE_Utils-proj'
+                  , 'AGE_LowLevelUtils-proj'
+                  , 'AGE_FileUtils-proj'
                   , 'AGE_BFC-proj'
                   , 'AGEngine-proj'
                   , 'AGEReader-proj'

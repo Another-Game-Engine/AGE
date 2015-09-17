@@ -1,3 +1,5 @@
+#pragma once
+
 #include <Systems/System.h>
 
 namespace AGE

@@ -81,27 +81,26 @@
 		.OutputBase + '\$Platform$-$Config$'
 
 		// Static Library
-		Library( '$ProjectName$-Lib-$Platform$-$Config$' )
+		ObjectList( '$ProjectName$-Lib-$Platform$-$Config$' )
 		{
 			// Input (Unity)
 			.CompilerInputUnity			= '$ProjectName$-Unity-Windows'
 
-			.CompilerInputPath          = '$ProjectPath$'
-
-			.CompilerOptions            + ' $CompilerIncludesPaths$'
-
 			// Output
 			.CompilerOutputPath			= '$OutputBase$\$ProjectName$\'
  			.LibrarianOutput 			= '$OutputBase$\$ProjectName$\$ProjectName$.lib'
+
+ 			.CompilerOptions            + ' $CompilerIncludesPaths$'
 		}
 
 		Executable( '$ProjectName$-Exe-$Platform$-$Config$' )
 		{
-			.Libraries					= { 'AGE_ImGui-Lib-$Platform$-$Config$'
-			                              , 'AGE_Utils-Lib-$Platform$-$Config$'
+			.Libraries					= { 'AGE_Utils-Lib-$Platform$-$Config$'
+			                              , 'AGE_FileUtils-Lib-$Platform$-$Config$'
 			                              , 'AGE_BFC-Lib-$Platform$-$Config$'
-			                              , 'AGEReader-Lib-$Platform$-$Config$'
-			                              , 'AGEngine-Lib-$Platform$-$Config$' }
+			                              , 'AGE_ImGui-Lib-$Platform$-$Config$'
+			                              , 'AGEngine-Lib-$Platform$-$Config$'
+			                              , 'AGEReader-Lib-$Platform$-$Config$' }
 			.LinkerOutput				= '$OutputBase$/$ProjectName$.exe'
 			.LinkerOptions				+ ' /SUBSYSTEM:CONSOLE'
 										+ ' kernel32.lib'
