@@ -17,7 +17,7 @@
 #include <Render/OcclusionTools/DepthMapHandle.hpp>
 #include <Render/OcclusionTools/DepthMap.hpp>
 
-#include "Engine/Graphic/DRBCameraDrawableList.hpp"
+#include "Graphic/DRBCameraDrawableList.hpp"
 
 #define DEFERRED_SHADING_BUFFERING_VERTEX "deferred_shading/deferred_shading_skybox.vp"
 #define DEFERRED_SHADING_BUFFERING_FRAG "deferred_shading/deferred_shading_skybox.fp"

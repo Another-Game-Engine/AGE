@@ -122,7 +122,7 @@ namespace AGE
 		program->updateProperties(properties);
 		program->update();
 		// TODO: Fix that properly! @Dorian
-		if (vertice.getId() >= 0 && vertice.getId() < _vertices.size())
+		if (vertice.getId() != std::uint32_t(-1) && vertice.getId() < _vertices.size())
 			_vertices[vertice.getId()].draw(mode);
 	}
 
@@ -139,7 +139,7 @@ namespace AGE
 
 		program->update();
 		// TODO: Fix that properly! @Dorian
-		if (vertice.getId() >= 0 && vertice.getId() < _vertices.size())
+		if (vertice.getId() != std::uint32_t(-1) && vertice.getId() < _vertices.size())
 		{
 			_vertices[vertice.getId()].instanciedDraw(mode, count);
 		}
