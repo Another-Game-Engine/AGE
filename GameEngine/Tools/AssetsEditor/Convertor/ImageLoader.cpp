@@ -21,7 +21,6 @@
 
 namespace AGE
 {
-	START_NOT_OPTIMIZED;
 	bool ImageLoader::save(std::shared_ptr<CookingTask> cookingTask)
 	{
 #if USE_MICROSOFT_LIB
@@ -243,7 +242,6 @@ namespace AGE
 		Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PopTask(tid);
 		return true;
 	}
-	STOP_NOT_OPTIMIZED;
 
 	bool ImageLoader::load(std::shared_ptr<CookingTask> cookingTask)
 	{

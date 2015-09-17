@@ -19,8 +19,8 @@ namespace AGE
 		void setRenderMode(RenderModes mode, bool activate);
 		void setRenderModes(const RenderModeSet &modes);
 		void setAABB(const AABoundingBox &box);
-		const Key<Painter> getPainterKey() const;
-		const Key<Vertices> getVerticesKey() const;
+		const Key<Painter> &getPainterKey() const;
+		const Key<Vertices> &getVerticesKey() const;
 		bool hadRenderMode(RenderModes mode) const;
 		AABoundingBox getAABB() const;
 

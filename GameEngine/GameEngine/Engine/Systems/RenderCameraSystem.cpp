@@ -36,11 +36,120 @@
 
 #include <render/OcclusionTools/OcclusionOptions.hpp>
 
-//temp
-#include <chrono>
+#include <algorithm>
 
 namespace AGE
 {
+	class ShadowCasterBFCCallback : public IBFCCullCallback
+	{
+	public:
+		struct MatrixHandler
+		{
+			ConcatenatedKey key;
+			glm::mat4 matrix;
+			MatrixHandler() : key(-1), matrix(glm::mat4(1)) {}
+			MatrixHandler(MatrixHandler &&o) : key(std::move(o.key)), matrix(std::move(o.matrix)) {}
+		};
+		ShadowCasterBFCCallback(std::size_t _blockNumber)
+			: blockNumber(_blockNumber)
+		{
+			SCOPE_profile_cpu_function("Camera system");
+
+			AGE_ASSERT(blockNumber > 0);
+			matrixKeyArray = new MatrixHandler[blockNumber * MaxItemID]();
+			list           = new LFList<BFCItem>[blockNumber]();
+			total          = 0;
+		}
+
+		~ShadowCasterBFCCallback()
+		{
+			SCOPE_profile_cpu_function("Camera system");
+
+			if (matrixKeyArray)
+				delete[] matrixKeyArray;
+			if (list)
+				delete[] list;
+		}
+
+		MatrixHandler   *matrixKeyArray = nullptr;
+		LFList<BFCItem> *list = nullptr;
+		std::atomic_size_t total;
+		const std::size_t blockNumber;
+
+		virtual void operator()(LFList<BFCItem> &, std::size_t blockId);
+		void sortAll();
+		void fill(std::vector<DRBSpotLightOccluder> &res);
+	};
+
+	inline bool compare(const ShadowCasterBFCCallback::MatrixHandler &a, const ShadowCasterBFCCallback::MatrixHandler &b)
+	{
+		return (a.key < b.key);
+	}
+
+	void ShadowCasterBFCCallback::operator()(LFList<BFCItem> &, std::size_t blockId)
+	{
+		SCOPE_profile_cpu_function("Camera system");
+
+		auto &listBlock = list[blockId];
+		total.fetch_add(listBlock.getSize());
+		std::size_t index = blockId * MaxItemID;
+		while (listBlock.getSize() > 0)
+		{
+			DRBMeshData * mesh = (DRBMeshData*)(listBlock.pop()->getDrawable()->getDatas().get());
+			matrixKeyArray[index].key = ConcatenateKey(mesh->getPainterKey(), mesh->getVerticesKey());
+			matrixKeyArray[index].matrix = mesh->getTransformation();
+			++index;
+		}
+
+		std::sort((matrixKeyArray + blockId * MaxItemID), (matrixKeyArray + (blockId + 1) * MaxItemID), compare);
+	}
+
+	void ShadowCasterBFCCallback::sortAll()
+	{
+		SCOPE_profile_cpu_function("Camera system");
+
+		std::sort(matrixKeyArray, (matrixKeyArray + blockNumber * MaxItemID), compare);
+	}
+
+	void ShadowCasterBFCCallback::fill(std::vector<DRBSpotLightOccluder> &res)
+	{
+		SCOPE_profile_cpu_function("Camera system");
+
+		if (total == 0)
+		{
+			return;
+		}
+
+		std::size_t max = total;
+		res.resize(max * 2);
+		std::size_t i = 0;
+		DRBSpotLightOccluder *key = nullptr;
+		ConcatenatedKey lastKey = -1;
+		std::size_t keyCounter = 0;
+		std::size_t j = 0;
+		while (i < max)
+		{
+			auto &c = matrixKeyArray[i];
+			if (c.key != lastKey)
+			{
+				if (key)
+				{
+					key->keyHolder.size = keyCounter;
+				}
+				keyCounter = 0;
+				lastKey = c.key;
+				res[j] = DRBSpotLightOccluder(std::move(c.key));
+				key = &(res[j++]);
+			}
+			res[j++] = DRBSpotLightOccluder(std::move(matrixKeyArray[i].matrix));
+			++keyCounter;
+			++i;
+		}
+		key->keyHolder.size = keyCounter;
+		res.resize(j);
+	}
+
+
 	RenderCameraSystem::RenderCameraSystem(AScene *scene) :
 		System(std::move(scene)),
 		_cameras(std::move(scene)),
@@ -217,14 +326,16 @@ namespace AGE
 
 			std::atomic_size_t counter = 0;
 
-			LFList<BFCItem> meshInLightList;
 			std::size_t meshBlocksToCullNumber = _scene->getBfcBlockManagerFactory()->getBlockNumberToCull(BFCCullableType::CullableMesh);
+			ShadowCasterBFCCallback shadowCaster(meshBlocksToCullNumber);
 
 			for (std::size_t i = 0; i < meshBlocksToCullNumber; ++i)
 			{
 				BFCBlockManagerFactory *bf = _scene->getBfcBlockManagerFactory();
-				EmplaceTask<Tasks::Basic::VoidFunction>([bf, i, &spotlightFrustum, &counter, &meshInLightList](){
-					bf->cullOnBlock(BFCCullableType::CullableMesh, meshInLightList, spotlightFrustum, i);
+				EmplaceTask<Tasks::Basic::VoidFunction>([bf, i, &spotlightFrustum, &counter, &shadowCaster]()
+				{
+					auto &list = shadowCaster.list[i];
+					bf->cullOnBlock(BFCCullableType::CullableMesh, list, spotlightFrustum, i, &shadowCaster);
 					counter.fetch_add(1);
 				});
 			}
@@ -234,16 +345,10 @@ namespace AGE
 				while (counter < meshBlocksToCullNumber )
 				{
 				}
-				//GetMainThread()->computeTasksWhile(std::function<bool()>([&counter, meshBlocksToCullNumber]() {
-				//	return counter >= meshBlocksToCullNumber;
-				//}));
 			}
 
-			while (meshInLightList.getSize() > 0)
-			{
-				spotDrawableList->meshs.push_back(meshInLightList.pop()->getDrawable()->getDatas());
-			}
-
+			shadowCaster.sortAll();
+			shadowCaster.fill(spotDrawableList->occluders);
 			spotLightList.push_back(spotDrawableList);
 		}
 		for (auto &pointLightEntity : _pointLights.getCollection())

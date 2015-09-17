@@ -21,6 +21,9 @@
 #include "Graphic/DRBSpotLightData.hpp"
 #include "Graphic/DRBMeshData.hpp"
 
+#include "Render/Textures/TextureBuffer.hh"
+#include "Render/ProgramResources/Types/Uniform/Sampler/SamplerBuffer.hh"
+
 #define DEFERRED_SHADING_SHADOW_BUFFERING_VERTEX "deferred_shading/deferred_shading_get_shadow_buffer.vp"
 #define DEFERRED_SHADING_SHADOW_BUFFERING_FRAG "deferred_shading/deferred_shading_get_shadow_buffer.fp"
 
@@ -35,22 +38,31 @@ namespace AGE
 	DeferredShadowBuffering::DeferredShadowBuffering(glm::uvec2 const &screenSize, std::shared_ptr<PaintingManager> painterManager) :
 		FrameBufferRender(screenSize.x, screenSize.y, painterManager)
 	{
-		// We dont want to take the skinned or transparent meshes
-		_forbidden[AGE_SKINNED] = true;
-		_forbidden[AGE_SEMI_TRANSPARENT] = true;
-		_programs.resize(PROGRAM_NBR);
 		auto confManager = GetEngine()->getInstance<ConfigurationManager>();
 		auto shaderPath = confManager->getConfiguration<std::string>("ShadersPath");
 		// you have to set shader directory in configuration path
 		AGE_ASSERT(shaderPath != nullptr);
 		auto vertexShaderPath = shaderPath->getValue() + DEFERRED_SHADING_SHADOW_BUFFERING_VERTEX;
 		auto fragmentShaderPath = shaderPath->getValue() + DEFERRED_SHADING_SHADOW_BUFFERING_FRAG;
+		_programs.resize(PROGRAM_NBR);
 		_programs[PROGRAM_BUFFERING] = std::make_shared<Program>(Program(std::string("program_shadow_buffering"),
 		{
 			std::make_shared<UnitProg>(vertexShaderPath, GL_VERTEX_SHADER),
 			std::make_shared<UnitProg>(fragmentShaderPath, GL_FRAGMENT_SHADER)
 		}));
 	}
+
+	void DeferredShadowBuffering::init()
+	{
+		// We dont want to take the skinned or transparent meshes
+		_forbidden[AGE_SKINNED] = true;
+		_forbidden[AGE_SEMI_TRANSPARENT] = true;
+
+		_positionBuffer = createRenderPassOutput<TextureBuffer>(_maxInstanciedShadowCaster, GL_RGBA32F, _sizeofMatrix, GL_DYNAMIC_DRAW);
+
+		_programs[PROGRAM_BUFFERING]->get_resource<SamplerBuffer>("model_matrix_tbo")->addInstanciedAlias("model_matrix");
+	}
+
 
 	void DeferredShadowBuffering::renderPass(const DRBCameraDrawableList &infos)
 	{
@@ -96,10 +108,7 @@ namespace AGE
 		// start to render to texture for each depth map
 		auto it = _depthBuffers.begin();
 
-
-		std::shared_ptr<Painter> painter = nullptr;
-		std::shared_ptr<Painter> oldPainter = nullptr;
-
+		glViewport(0, 0, _frame_buffer.width(), _frame_buffer.height());
 		for (auto &spotLightPtr : infos.spotLights)
 		{
 			SCOPE_profile_gpu_i("Spotlight pass");
@@ -107,42 +116,51 @@ namespace AGE
 
 			DRBSpotLightData *spotlight = (DRBSpotLightData*)(spotLightPtr->spotLight.get());
 
-			glViewport(0, 0, _frame_buffer.width(), _frame_buffer.height());
 			_frame_buffer.attachment(*(*it), GL_DEPTH_STENCIL_ATTACHMENT);
 			glClear(GL_DEPTH_BUFFER_BIT);
 			_programs[PROGRAM_BUFFERING]->registerProperties(spotlight->globalProperties);
-			_programs[PROGRAM_BUFFERING]->updateProperties(spotlight->globalProperties);
+			_programs[PROGRAM_BUFFERING]->updateNonInstanciedProperties(spotlight->globalProperties);
+			_programs[PROGRAM_BUFFERING]->get_resource<SamplerBuffer>("model_matrix_tbo").set(_positionBuffer);
+
+			_positionBuffer->resetOffset();
+
+			std::shared_ptr<Painter> painter = nullptr;
+			//std::shared_ptr<Painter> oldPainter = nullptr;
+			Key<Vertices> verticesKey;
+			//Key<Vertices> oldVerticesKey;
 
 			// draw for the spot light selected
-			for (auto &meshPaint : spotLightPtr->meshs)
-			{
-				auto mesh = (DRBMeshData*)(meshPaint.get());
+			auto &occluders = spotLightPtr->occluders;
+			std::size_t occluderSize = occluders.size();
+			std::size_t occluderCounter = 0;
 
-				//temporary
-				//todo, do not spawn entity while mesh is not loaded
-				//currently it's not safe, because the paiter key can be invalid
-				//during the first frames
-				if (mesh->getPainterKey().isValid())
+			while (occluderCounter < occluderSize)
+			{
+				auto &current = occluders[occluderCounter];
+				AGE_ASSERT(current.isKeyHolder() == true);
+				// too much occluder for 1 spotlight ( > 1024)
+				AGE_ASSERT(current.keyHolder.size <= _maxMatrixInstancied);
+				
+				Key<Painter> painterKey;
+				UnConcatenateKey(current.keyHolder.key, painterKey, verticesKey);
+
+				++occluderCounter;
+				if (painterKey.isValid())
 				{
-					painter = _painterManager->get_painter(mesh->getPainterKey());
-					if (painter != oldPainter)
-					{
-						if (oldPainter)
-						{
-							oldPainter->uniqueDrawEnd();
-						}
-						painter->uniqueDrawBegin(_programs[PROGRAM_BUFFERING]);
-					}
-					oldPainter = painter;
-					painter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], mesh->globalProperties, mesh->getVerticesKey());
+					painter = _painterManager->get_painter(painterKey);
+					painter->instanciedDrawBegin(_programs[PROGRAM_BUFFERING]);
+					_positionBuffer->set((void*)(&occluders[occluderCounter]), current.keyHolder.size);
+					painter->instanciedDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], verticesKey, current.keyHolder.size);
+					painter->instanciedDrawEnd();
 				}
+				else
+				{
+					int debug = 666;
+				}
+				occluderCounter += current.keyHolder.size;
 			}
 			spotlight->shadowMap = *it;
 			++it;
-		}
-		if (oldPainter)
-		{
-			oldPainter->uniqueDrawEnd();
 		}
 	}
 

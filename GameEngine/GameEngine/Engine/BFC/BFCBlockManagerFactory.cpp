@@ -84,7 +84,7 @@ namespace AGE
 		}
 	}
 
-	void BFCBlockManagerFactory::cullOnBlock(CullableTypeID channel, LFList<BFCItem> &result, const Frustum &frustum, std::size_t blockId)
+	void BFCBlockManagerFactory::cullOnBlock(CullableTypeID channel, LFList<BFCItem> &result, const Frustum &frustum, std::size_t blockId, IBFCCullCallback *callback)
 	{
 		SCOPE_profile_cpu_function("BFC");
 
@@ -102,6 +102,10 @@ namespace AGE
 			{
 				result.push(&item);
 			}
+		}
+		if (callback)
+		{
+			(*callback)(result, blockId);
 		}
 	}
 

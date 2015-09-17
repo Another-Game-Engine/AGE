@@ -2,6 +2,8 @@
 
 #include <Utils/Debug.hpp>
 
+//@ANTHO pass in .cpp and remove max include
+
 namespace AGE
 {
 	class TextureBuffer
@@ -83,6 +85,7 @@ namespace AGE
 			bindBuffer();
 			glBufferSubData(GL_TEXTURE_BUFFER, 0, _size * count, data);
 		}
+
 		inline void bindBuffer()
 		{
 			AGE_ASSERT(_bufferHandle != -1);

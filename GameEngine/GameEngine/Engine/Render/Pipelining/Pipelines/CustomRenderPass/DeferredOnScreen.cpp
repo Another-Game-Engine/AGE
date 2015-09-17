@@ -61,7 +61,7 @@ namespace AGE
 	void DeferredOnScreen::renderPass(const DRBCameraDrawableList &infos)
 	{
 		SCOPE_profile_gpu_i("DefferedOnScreen");
-		SCOPE_profile_cpu_function("RenderTime", "DefferedOnScreen");
+		SCOPE_profile_cpu_function("RenderTime");
 		_programs[PROGRAM_SCREEN]->use();
 		_programs[PROGRAM_SCREEN]->get_resource<Sampler2D>("screen").set(_diffuseInput);
 
@@ -71,7 +71,7 @@ namespace AGE
 		OpenGLState::glDisable(GL_STENCIL_TEST);
 		{
 			SCOPE_profile_gpu_i("Overhead pipeline");
-			SCOPE_profile_cpu_function("RenderTime", "Overhead pipeline");
+			SCOPE_profile_cpu_i("RenderTime", "Overhead pipeline");
 			_programs[PROGRAM_SCREEN]->get_resource<Vec2>("resolution").set(glm::vec2(viewport.x, viewport.y));
 			_programs[PROGRAM_SCREEN]->get_resource<Vec1>("activated").set(infos.cameraInfos.data.fxaa == true ? 1.0f : 0.f);
 		}

@@ -2,6 +2,8 @@
 
 namespace AGE
 {
+	const float DRBSpotLightOccluder::invalidVector[4] = { std::numeric_limits<float>::lowest(), std::numeric_limits<float>::lowest(), std::numeric_limits<float>::lowest(), std::numeric_limits<float>::lowest() };
+
 	CameraData::CameraData(CameraData const &cam) :
 		fxaa(cam.fxaa),
 		bloom(cam.bloom),

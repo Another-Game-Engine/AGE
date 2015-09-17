@@ -14,7 +14,7 @@ namespace AGE
 
 		auto instance = std::make_shared<AnimationInstance>(skeleton, animation);
 		_list.push_back(instance);
-		instance->key = Key<AnimationInstance>::createKey(_list.size() - 1);
+		instance->key = Key<AnimationInstance>::createKey((uint32_t)(_list.size() - 1));
 		return instance->key;
 	}
 

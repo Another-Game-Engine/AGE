@@ -17,4 +17,8 @@ namespace AGE
 #define RESOLUTION_SHADOW_Y 720
 
 #define AGE_BFC
+
+// Enable if you want to activate OpenGL checks
+// like glCheckFramebufferStatus for example
+// #define AGE_CHECK_OPENGL_STATUS
 }

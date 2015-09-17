@@ -45,13 +45,13 @@ namespace AGE
 		_boundingBox = box;
 	}
 
-	const Key<Painter> DRBMeshData::getPainterKey() const
+	const Key<Painter> &DRBMeshData::getPainterKey() const
 	{
 		RWLockGuard(_lock, false);
 		return _painter;
 	}
 
-	const Key<Vertices> DRBMeshData::getVerticesKey() const
+	const Key<Vertices> &DRBMeshData::getVerticesKey() const
 	{
 		RWLockGuard(_lock, false);
 		return _vertices;

@@ -25,12 +25,6 @@
 #include "Render/Textures/TextureBuffer.hh"
 #include "Render/ProgramResources/Types/Uniform/Sampler/SamplerBuffer.hh"
 #include "Render/Pipelining/Pipelines/PipelineTools.hh"
-#include "glm/gtc/matrix_transform.hpp"
-
-static std::shared_ptr<AGE::TextureBuffer> g_position_buffer = nullptr;
-static const std::size_t max_matrix_instancied = 256;
-static const std::size_t sizeofMatrix = sizeof(glm::mat4);
-static const std::size_t max_instancied_billboard = max_matrix_instancied;
 
 namespace AGE
 {
@@ -67,7 +61,7 @@ namespace AGE
 		_forbidden[AGE_SKINNED] = true;
 		_forbidden[AGE_SEMI_TRANSPARENT] = true;
 
-		g_position_buffer = createRenderPassOutput<TextureBuffer>(max_instancied_billboard, GL_RGBA32F, sizeof(glm::mat4), GL_DYNAMIC_DRAW);
+		_positionBuffer = createRenderPassOutput<TextureBuffer>(_maxInstanciedBillboard, GL_RGBA32F, sizeof(glm::mat4), GL_DYNAMIC_DRAW);
 
 		_programs[PROGRAM_BUFFERING_LIGHT]->get_resource<SamplerBuffer>("model_matrix_tbo")->addInstanciedAlias("model_matrix");
 	}
@@ -100,27 +94,27 @@ namespace AGE
 
 				auto map = GetEngine()->getInstance<AssetsManager>()->getPointLightTexture();
 
-				_programs[PROGRAM_BUFFERING_LIGHT]->get_resource<SamplerBuffer>("model_matrix_tbo").set(g_position_buffer);
+				_programs[PROGRAM_BUFFERING_LIGHT]->get_resource<SamplerBuffer>("model_matrix_tbo").set(_positionBuffer);
 				_programs[PROGRAM_BUFFERING_LIGHT]->get_resource<Sampler2D>("sprite_light_map").set(map);
 
-				g_position_buffer->resetOffset();
+				_positionBuffer->resetOffset();
 				_quadPainter->instanciedDrawBegin(_programs[PROGRAM_BUFFERING_LIGHT]);
 				for (auto &pl : pointLightList)
 				{
 					_programs[PROGRAM_BUFFERING_LIGHT]->registerProperties(pl->globalProperties);
 					_programs[PROGRAM_BUFFERING_LIGHT]->updateProperties(pl->globalProperties);
-					if (g_position_buffer->isFull())
+					if (_positionBuffer->isFull())
 					{
-						g_position_buffer->sendBuffer();
-						_quadPainter->instanciedDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING_LIGHT], _quadVertices, g_position_buffer->getOffset());
-						g_position_buffer->resetOffset();
+						_positionBuffer->sendBuffer();
+						_quadPainter->instanciedDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING_LIGHT], _quadVertices, _positionBuffer->getOffset());
+						_positionBuffer->resetOffset();
 					}
 				}
-				if (g_position_buffer->isEmpty() == false)
+				if (_positionBuffer->isEmpty() == false)
 				{
-					g_position_buffer->sendBuffer();
-					_quadPainter->instanciedDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING_LIGHT], _quadVertices, g_position_buffer->getOffset());
-					g_position_buffer->resetOffset();
+					_positionBuffer->sendBuffer();
+					_quadPainter->instanciedDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING_LIGHT], _quadVertices, _positionBuffer->getOffset());
+					_positionBuffer->resetOffset();
 				}
 				_quadPainter->instanciedDrawEnd();
 			}
@@ -132,28 +126,28 @@ namespace AGE
 
 				auto map = GetEngine()->getInstance<AssetsManager>()->getSpotLightTexture();
 
-				_programs[PROGRAM_BUFFERING_LIGHT]->get_resource<SamplerBuffer>("model_matrix_tbo").set(g_position_buffer);
+				_programs[PROGRAM_BUFFERING_LIGHT]->get_resource<SamplerBuffer>("model_matrix_tbo").set(_positionBuffer);
 				_programs[PROGRAM_BUFFERING_LIGHT]->get_resource<Sampler2D>("sprite_light_map").set(map);
 
-				g_position_buffer->resetOffset();
+				_positionBuffer->resetOffset();
 				_quadPainter->instanciedDrawBegin(_programs[PROGRAM_BUFFERING_LIGHT]);
 				for (auto &pl : spotLightList)
 				{
 					auto &spotlight = (std::shared_ptr<DRBSpotLightData>&)(pl->spotLight);
 					_programs[PROGRAM_BUFFERING_LIGHT]->registerProperties(spotlight->globalProperties);
 					_programs[PROGRAM_BUFFERING_LIGHT]->updateProperties(spotlight->globalProperties);
-					if (g_position_buffer->isFull())
+					if (_positionBuffer->isFull())
 					{
-						g_position_buffer->sendBuffer();
-						_quadPainter->instanciedDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING_LIGHT], _quadVertices, g_position_buffer->getOffset());
-						g_position_buffer->resetOffset();
+						_positionBuffer->sendBuffer();
+						_quadPainter->instanciedDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING_LIGHT], _quadVertices, _positionBuffer->getOffset());
+						_positionBuffer->resetOffset();
 					}
 				}
-				if (g_position_buffer->isEmpty() == false)
+				if (_positionBuffer->isEmpty() == false)
 				{
-					g_position_buffer->sendBuffer();
-					_quadPainter->instanciedDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING_LIGHT], _quadVertices, g_position_buffer->getOffset());
-					g_position_buffer->resetOffset();
+					_positionBuffer->sendBuffer();
+					_quadPainter->instanciedDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING_LIGHT], _quadVertices, _positionBuffer->getOffset());
+					_positionBuffer->resetOffset();
 				}
 				_quadPainter->instanciedDrawEnd();
 			}

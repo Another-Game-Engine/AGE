@@ -79,10 +79,15 @@ namespace AGE
 		SCOPE_profile_cpu_function("RenderTimer");
 
 		storage.attachment(*this, attach);
-		if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+#ifdef AGE_CHECK_OPENGL_STATUS
 		{
-			AGE_ASSERT(false);
+			SCOPE_profile_cpu_i("RenderTimer", "GL debug check framebuffer status");
+			if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+			{
+				AGE_ASSERT(false);
+			}
 		}
+#endif
 		return (*this);
 	}
 
