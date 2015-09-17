@@ -4,9 +4,8 @@
 	.ProjectName		= 'AGEReader'
 	.ProjectDestPath	= './TMP_SOLUTIONS/AGE_Reader/'
 	.ProjectPath		= 'Reader'
-	.EnginePath         = 'GameEngine/GameEngine/Engine'
 
-	.VendorsPath        = 'GameEngine/Vendors'
+	#include "FBuildPath.bff"
 
 	.CompilerIncludesPaths = ' /I"$ProjectPath$"'
 						   + ' /I"$VendorsPath$"'
@@ -23,7 +22,7 @@
 	VCXProject( '$ProjectName$-proj' )
 	{
 		.ProjectOutput				= '$ProjectDestPath$\$ProjectName$.vcxproj'
-		.ProjectInputPaths			= { '$ProjectPath$\' }
+		.ProjectInputPaths			= { '$ProjectPath$\', '$VendorsPath$\imgui\' }
         .ProjectBasePath            = { '$ProjectPath$\'
                                         , '$VendorsPath$\' }
 
@@ -98,15 +97,16 @@
 
 		Executable( '$ProjectName$-Exe-$Platform$-$Config$' )
 		{
-			.Libraries					= { 'AGE_Utils-Lib-$Platform$-$Config$'
+			.Libraries					= { 'AGE_ImGui-Lib-$Platform$-$Config$'
+			                              , 'AGE_Utils-Lib-$Platform$-$Config$'
 			                              , 'AGE_BFC-Lib-$Platform$-$Config$'
 			                              , 'AGEReader-Lib-$Platform$-$Config$'
 			                              , 'AGEngine-Lib-$Platform$-$Config$' }
-			.LinkerOutput				= '$OutputBase$/Reader.exe'
+			.LinkerOutput				= '$OutputBase$/$ProjectName$.exe'
 			.LinkerOptions				+ ' /SUBSYSTEM:CONSOLE'
 										+ ' kernel32.lib'
 										+ ' Ws2_32.lib'
-										+ ' LIBCMT.LIB'
+										+ ' LIBCMTD.LIB'
 										+ ' User32.lib'
 		}
 		Alias( '$ProjectName$-$Platform$-$Config$' ) { .Targets = '$ProjectName$-Exe-$Platform$-$Config$' }

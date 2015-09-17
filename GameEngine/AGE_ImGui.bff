@@ -1,19 +1,13 @@
 // Core
 //------------------------------------------------------------------------------
 {
-	.ProjectName		= 'AGE_Utils'
-	.ProjectDestPath	= './TMP_SOLUTIONS/AGE_Utils/'
-	.ProjectPath		= 'Utils'
-
 	#include "FBuildPath.bff"
 
-	.CompilerIncludesPaths = ' /I"$ProjectPath$"'
-	                       + ' /I"$VendorsPath$"'
-	                       + ' /I"$VendorsPath$"\zlib\include\'
-	                       + ' /I"$VendorsPath$"\minizip\include\'
-	                       + ' /I"$VendorsPath$"\OpenGL\include\'
-	                       + ' /I"$EnginePath$"' // @FBUILD - Faudrait virer ca
+	.ProjectName		= 'AGE_ImGui'
+	.ProjectDestPath	= './TMP_SOLUTIONS/AGE_ImGui/'
+	.ProjectPath		= '$VendorsPath$/ImGui'
 
+	.CompilerIncludesPaths = ' /I"$ProjectPath$"'
 
 	// Visual Studio Project Generation
 	//--------------------------------------------------------------------------

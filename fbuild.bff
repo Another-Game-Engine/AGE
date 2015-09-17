@@ -211,10 +211,13 @@ Compiler( 'Compiler-x64' )
 .Configs_Windows_MSVC = { .X64DebugConfig, .X64ProfileConfig, .X64ReleaseConfig, .X64RetailConfig }
 
 // Core
+#include "GameEngine\AGE_ImGui.bff"
+
 #include "GameEngine\AGE_Utils.bff"
 #include "GameEngine\AGE_BFC.bff"
 #include "GameEngine\AGE_Engine.bff"
 #include "GameEngine\AGE_Reader.bff"
+
 
 
 // Aliases : All-$Platform$
@@ -235,7 +238,8 @@ ForEach( .Platform in .Platforms )
 //------------------------------------------------------------------------------
 Alias( 'All' )
 {
-  .Targets    = { 'AGE_Utils-proj'
+  .Targets    = { 'AGE_ImGui-proj'
+  				, 'AGE_Utils-proj'
                 , 'AGE_BFC-proj'
                 , 'AGEngine-proj'
                 , 'AGEReader-proj' }
@@ -246,6 +250,7 @@ Alias( 'All' )
 Alias( 'proj' )
 {
   .Targets    = { 'All-proj'
+                  , 'AGE_ImGui-proj'
                   , 'AGE_Utils-proj'
                   , 'AGE_BFC-proj'
                   , 'AGEngine-proj'

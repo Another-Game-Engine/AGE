@@ -5,7 +5,7 @@
 	.ProjectDestPath	= './TMP_SOLUTIONS/AGE_BFC/'
 	.ProjectPath		= 'BFC'
 
-	.VendorsPath        = 'GameEngine/Vendors'
+	#include "FBuildPath.bff"
 
 	.CompilerIncludesPaths = ' /I"$ProjectPath$"'
 	                       + ' /I"$VendorsPath$"'
