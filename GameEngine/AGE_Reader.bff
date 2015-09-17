@@ -2,7 +2,7 @@
 //------------------------------------------------------------------------------
 {
 	.ProjectName		= 'AGEReader'
-	.ProjectDestPath	= './TMP_SOLUTIONS/GameEngine/EngineCoreTest/'
+	.ProjectDestPath	= './TMP_SOLUTIONS/AGE_Reader/'
 	.ProjectPath		= 'GameEngine/EngineCoreTest'
 	.EnginePath         = 'GameEngine/GameEngine/Engine'
 

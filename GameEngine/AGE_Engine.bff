@@ -2,7 +2,7 @@
 //------------------------------------------------------------------------------
 {
 	.ProjectName		= 'AGEngine'
-	.ProjectDestPath	= './TMP_SOLUTIONS/GameEngine/Engine/'
+	.ProjectDestPath	= './TMP_SOLUTIONS/AGE_Engine/'
 	.ProjectPath		= 'GameEngine/GameEngine/Engine'
 
 	.VendorsPath        = 'GameEngine/Vendors'
