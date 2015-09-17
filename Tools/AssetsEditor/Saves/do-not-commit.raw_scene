@@ -1,0 +1,539 @@
+{
+    "value0": {
+        "cereal_class_version": 0,
+        "componentsIdReferenceTable": [
+            {
+                "key": 0,
+                "value": 2633202538906912002
+            },
+            {
+                "key": 1,
+                "value": 4279995424560007376
+            },
+            {
+                "key": 2,
+                "value": 9228130898566333550
+            },
+            {
+                "key": 3,
+                "value": 2719950380395641793
+            },
+            {
+                "key": 4,
+                "value": 12568265209258137674
+            },
+            {
+                "key": 5,
+                "value": 7226899121077071394
+            },
+            {
+                "key": 6,
+                "value": 8685391846632613471
+            },
+            {
+                "key": 7,
+                "value": 11957752261005749183
+            },
+            {
+                "key": 8,
+                "value": 17192082489458106606
+            },
+            {
+                "key": 9,
+                "value": 16239045169874622267
+            },
+            {
+                "key": 10,
+                "value": 6441919271708046876
+            },
+            {
+                "key": 11,
+                "value": 8718854852507163888
+            },
+            {
+                "key": 12,
+                "value": 13917482855567903631
+            }
+        ],
+        "entityNumber": 10,
+        "Entity_0": {
+            "cereal_class_version": 0,
+            "link": {
+                "cereal_class_version": 0,
+                "Position": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [
+                1,
+                2
+            ],
+            "flags": 0,
+            "components_number": [
+                0
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "cereal_class_version": 0,
+                "name": "group"
+            }
+        },
+        "Entity_1": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": -10
+                },
+                "Scale": {
+                    "value0": 10,
+                    "value1": 10,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "wall"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "cereal_class_version": 3,
+                "value0": "cube/cube.mage",
+                "value1": "cube/cube.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            }
+        },
+        "Entity_2": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": -7
+                },
+                "Scale": {
+                    "value0": 3,
+                    "value1": 3,
+                    "value2": 3
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0.70710676908493042,
+                    "value2": 0,
+                    "value3": 0.70710676908493042
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                2,
+                9
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "sponza"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "ball/ball.mage",
+                "value1": "ball/ball.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 16
+                }
+            },
+            "AGE_CORE_RigidBody": {
+                "cereal_class_version": 1,
+                "AngularDrag": 0.05000000074505806,
+                "AngularVelocity": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "CenterOfMass": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "LinearDrag": 0,
+                "LinearVelocity": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Mass": 1,
+                "DiagonalInertiaTensor": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "MaxAngularVelocity": 1000000,
+                "MaxDepenetrationVelocity": 1000000,
+                "IsAffectedByGravity": false,
+                "IsKinematic": true,
+                "CollisionDetectionMode": 1
+            },
+            "AGE_CORE_PhysicsCollider": {
+                "cereal_class_version": 1,
+                "ColliderType": 3,
+                "Material": "DefaultMaterial",
+                "IsATrigger": false,
+                "FilterGroup": 0,
+                "Mesh": "sponza/sponza",
+                "Convex": false
+            }
+        },
+        "Entity_3": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 10
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 1,
+                    "value2": 0,
+                    "value3": -4.3711388286737929e-008
+                }
+            },
+            "children": [
+                4,
+                5
+            ],
+            "flags": 0,
+            "components_number": [
+                0
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "group-Copy"
+            }
+        },
+        "Entity_4": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": -10
+                },
+                "Scale": {
+                    "value0": 10,
+                    "value1": 10,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "wall-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "cube/cube.mage",
+                "value1": "cube/cube.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            }
+        },
+        "Entity_5": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": -7
+                },
+                "Scale": {
+                    "value0": 3,
+                    "value1": 3,
+                    "value2": 3
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                2,
+                9
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "sponza-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "ball/ball.mage",
+                "value1": "ball/ball.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 16
+                }
+            },
+            "AGE_CORE_RigidBody": {
+                "AngularDrag": 0.05000000074505806,
+                "AngularVelocity": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "CenterOfMass": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "LinearDrag": 0,
+                "LinearVelocity": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Mass": 1,
+                "DiagonalInertiaTensor": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "MaxAngularVelocity": 1000000,
+                "MaxDepenetrationVelocity": 1000000,
+                "IsAffectedByGravity": false,
+                "IsKinematic": true,
+                "CollisionDetectionMode": 1
+            },
+            "AGE_CORE_PhysicsCollider": {
+                "ColliderType": 3,
+                "Material": "DefaultMaterial",
+                "IsATrigger": false,
+                "FilterGroup": 1,
+                "Mesh": "sponza/sponza",
+                "Convex": true
+            }
+        },
+        "Entity_6": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [
+                7,
+                8
+            ],
+            "flags": 0,
+            "components_number": [
+                0,
+                12
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "spot-group"
+            },
+            "AGE_CORE_RotationComponent": {
+                "cereal_class_version": 1,
+                "Angles": {
+                    "value0": 0,
+                    "value1": 1,
+                    "value2": 0
+                },
+                "Speed": 100
+            }
+        },
+        "Entity_7": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                4
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "spot-red"
+            },
+            "AGE_CORE_SpotLightComponent": {
+                "cereal_class_version": 0,
+                "color": {
+                    "value0": 1,
+                    "value1": 0.39215686917304993,
+                    "value2": 0.39215686917304993,
+                    "value3": 1
+                },
+                "range": {
+                    "value0": 1,
+                    "value1": 0.10000000149011612,
+                    "value2": 0.0099999997764825821
+                },
+                "exponent": 5,
+                "cutOff": 0.5
+            }
+        },
+        "Entity_8": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 1,
+                    "value2": 0,
+                    "value3": -4.3711388286737929e-008
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                4
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "spot-green"
+            },
+            "AGE_CORE_SpotLightComponent": {
+                "color": {
+                    "value0": 0,
+                    "value1": 1,
+                    "value2": 0,
+                    "value3": 1
+                },
+                "range": {
+                    "value0": 1,
+                    "value1": 0.10000000149011612,
+                    "value2": 0.0099999997764825821
+                },
+                "exponent": 5,
+                "cutOff": 0.5
+            }
+        },
+        "Entity_9": {
+            "link": {
+                "Position": {
+                    "value0": 13.469174385070801,
+                    "value1": -1.3441005945205688,
+                    "value2": -0.64630341529846191
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0.039529420435428619,
+                    "value1": 0.53987687826156616,
+                    "value2": -0.025392921641469002,
+                    "value3": 0.840431809425354
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "freefly-camera"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "cereal_class_version": 3,
+                "archetypeName": "freefly-camera",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "freefly-camera-Copy-Copy"
+            }
+        }
+    }
+}
