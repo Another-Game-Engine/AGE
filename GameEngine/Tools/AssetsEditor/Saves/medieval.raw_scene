@@ -55,7 +55,7 @@
                 "value": 13917482855567903631
             }
         ],
-        "entityNumber": 296,
+        "entityNumber": 297,
         "Entity_0": {
             "cereal_class_version": 0,
             "link": {
@@ -23344,9 +23344,9 @@
         "Entity_289": {
             "link": {
                 "Position": {
-                    "value0": 12,
-                    "value1": 1,
-                    "value2": 12
+                    "value0": -7.5,
+                    "value1": 0.5,
+                    "value2": 5
                 },
                 "Scale": {
                     "value0": 3,
@@ -23584,9 +23584,9 @@
         "Entity_295": {
             "link": {
                 "Position": {
-                    "value0": -4.9594106674194336,
-                    "value1": 2.225297212600708,
-                    "value2": 3.7658936977386475
+                    "value0": -6.4516124725341797,
+                    "value1": 2.3995227813720703,
+                    "value2": -2.6443696022033691
                 },
                 "Scale": {
                     "value0": 1,
@@ -23594,10 +23594,10 @@
                     "value2": 1
                 },
                 "Orientation": {
-                    "value0": 0.025445818901062012,
-                    "value1": -0.52925223112106323,
-                    "value2": 0.015882430598139763,
-                    "value3": 0.84793418645858765
+                    "value0": 0.093618594110012054,
+                    "value1": 0.071619980037212372,
+                    "value2": -0.0067521878518164158,
+                    "value3": 0.99300587177276611
                 }
             },
             "children": [],
@@ -23618,6 +23618,83 @@
             },
             "AGE_CORE_EntityRepresentationComponent": {
                 "name": "freefly-camera-Copy-Copy"
+            }
+        },
+        "Entity_296": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 6.1999998092651367
+                },
+                "Scale": {
+                    "value0": 20,
+                    "value1": 14,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                2,
+                9
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "fake wall"
+            },
+            "AGE_CORE_RigidBody": {
+                "AngularDrag": 0.05000000074505806,
+                "AngularVelocity": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "CenterOfMass": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "LinearDrag": 0,
+                "LinearVelocity": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Mass": 1,
+                "DiagonalInertiaTensor": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "MaxAngularVelocity": 1000000,
+                "MaxDepenetrationVelocity": 1000000,
+                "IsAffectedByGravity": false,
+                "IsKinematic": true,
+                "CollisionDetectionMode": 1
+            },
+            "AGE_CORE_PhysicsCollider": {
+                "ColliderType": 0,
+                "Material": "DefaultMaterial",
+                "IsATrigger": false,
+                "FilterGroup": 1,
+                "Center": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Size": {
+                    "value0": 20,
+                    "value1": 14,
+                    "value2": 1
+                }
             }
         }
     }
