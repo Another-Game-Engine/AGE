@@ -163,15 +163,40 @@ namespace AGE
 			return targetFPS;
 		}
 
+		inline void WorldInterface::enableDebug(void)
+		{
+			debugEnabled = true;
+		}
+
+		inline void WorldInterface::disableDebug(void)
+		{
+			debugEnabled = false;
+		}
+
+		inline bool WorldInterface::isDebugEnabled(void) const
+		{
+			return debugEnabled;
+		}
+
+		inline const DebugInformation &WorldInterface::getDebugInformation(void) const
+		{
+			return debugInformation;
+		}
+
 		inline void WorldInterface::update(float elapsedTime)
 		{
-			const float stepSize = 1.0f / static_cast<float>(targetFPS);
+			if (isDebugEnabled())
+			{
+				debugInformation = DebugInformation();
+			}
+			simulate(elapsedTime);
+			/*const float stepSize = 1.0f / static_cast<float>(targetFPS);
 			accumulator += elapsedTime;
 			while (accumulator >= stepSize)
 			{
 				simulate(stepSize);
 				accumulator -= stepSize;
-			}
+			}*/
 		}
 
 		inline void WorldInterface::setFilterNameForFilterGroup(FilterGroup group, const std::string &name)

@@ -479,7 +479,7 @@ namespace AGE
 				debug3DlinesPointsDepth.push_back(msg.end);
 
 				debug3DlinesColorDepth.push_back(msg.color);
-				debug3DlinesColorDepth.push_back(msg.color);
+				debug3DlinesColorDepth.push_back(msg.endColor);
 			}
 			else
 			{
@@ -487,7 +487,7 @@ namespace AGE
 				debug3DlinesPoints.push_back(msg.end);
 
 				debug3DlinesColor.push_back(msg.color);
-				debug3DlinesColor.push_back(msg.color);
+				debug3DlinesColor.push_back(msg.endColor);
 			}
 		});
 

@@ -17,6 +17,7 @@ namespace AGE
 				physx::PxRigidDynamic *body = getDataAs<physx::PxRigidDynamic>();
 				world->getScene()->addActor(*body);
 				body->userData = this;
+				body->setActorFlag(physx::PxActorFlag::eVISUALIZATION, true);
 			}
 			else
 			{

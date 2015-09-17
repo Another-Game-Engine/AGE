@@ -399,6 +399,7 @@
     <ClCompile Include="Engine\Systems\DebugSystem.cpp" />
     <ClCompile Include="Engine\Systems\FPSCharacterSystem.cpp" />
     <ClCompile Include="Engine\Systems\FreeFlyCamera.cpp" />
+    <ClCompile Include="Engine\Systems\PhysicsDebugSystem.cpp" />
     <ClCompile Include="Engine\Systems\PhysicsSystem.cpp" />
     <ClCompile Include="Engine\Systems\RenderCameraSystem.cpp" />
     <ClCompile Include="Engine\Systems\TriggerSystem.cpp" />
@@ -542,6 +543,7 @@
     <ClInclude Include="..\Vendors\imgui\stb_textedit.h" />
     <ClInclude Include="Engine\Components\FPSCharacter.hh" />
     <ClInclude Include="Engine\Physics\CharacterControllerInterface.hh" />
+    <ClInclude Include="Engine\Physics\DebugInformation.hpp" />
     <ClInclude Include="Engine\Render\OcclusionTools\OcclusionOptions.hpp" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DeferredBloomMerge.hh" />
     <ClInclude Include="Engine\Render\Pipelining\Pipelines\CustomRenderPass\DepthOfField.hh" />
@@ -669,6 +671,7 @@
     <ClInclude Include="Engine\Systems\DebugSystem.hpp" />
     <ClInclude Include="Engine\Systems\FPSCharacterSystem.hh" />
     <ClInclude Include="Engine\Systems\FreeFlyCamera.hh" />
+    <ClInclude Include="Engine\Systems\PhysicsDebugSystem.hpp" />
     <ClInclude Include="Engine\Systems\PhysicsSystem.hpp" />
     <ClInclude Include="Engine\Systems\RenderCameraSystem.hpp" />
     <ClInclude Include="Engine\Systems\RenderSpotLightSystem.hpp" />
