@@ -2,6 +2,10 @@
 #define GLM_FORCE_SSE2 
 #define GLM_FORCE_AVX
 
+#pragma comment(lib, "Ws2_32.lib")
+
+#include "microprofile/microprofile.h"
+
 #include <stdlib.h>
 #include <crtdbg.h>
 #include <stdint.h>

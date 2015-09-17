@@ -2,7 +2,6 @@
 #include <Utils/ThreadName.hpp>
 #include <Threads/Tasks/BasicTasks.hpp>
 #include <Threads/ThreadManager.hpp>
-#include <microprofile/microprofile.h>
 
 namespace AGE
 {

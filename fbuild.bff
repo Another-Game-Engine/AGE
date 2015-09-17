@@ -76,7 +76,7 @@ Compiler( 'Compiler-x64' )
               + ' /D"_WINSOCK_DEPRECATED_NO_WARNINGS"' // don't warn about deprecated winsock functions - TODO:C Update API use
 
   .CompilerOptions    + ' /Fo"%2"'
-  .LibrarianOptions   = '/NOLOGO /OUT:"%2" "%1"' //@FBUILD : Il faudrait peut etre faire une configuration dll et une .lib et ajouter NODEFAULTLIB pour les dll
+  .LibrarianOptions   = '/NODEFAULTLIB /NOLOGO /OUT:"%2" "%1"' //@FBUILD : Il faudrait peut etre faire une configuration dll et une .lib et ajouter NODEFAULTLIB pour les dll
   .LinkerOptions      = '/NOLOGO /INCREMENTAL:NO /OUT:"%2" "%1" /DEBUG'
               + ' /IGNORE:4001' ; don't complain about linking libs only
 
@@ -114,8 +114,8 @@ Compiler( 'Compiler-x64' )
   .Librarian        = '$ToolsBasePath$\lib.exe'
   .Linker         = '$ToolsBasePath$\link.exe'
   .CompilerOptions    + ' /DWIN64'
-                      + ' /DMSVC'
                       + ' /DWIN32'
+
   .LinkerOptions      + ' /MACHINE:X64'
   .Platform       = 'x64'
   .LinkerOptions      + ' /LIBPATH:"$WindowsLibPaths$/x64" /LIBPATH:"$VSBasePath$/VC/lib/amd64"'
@@ -124,7 +124,7 @@ Compiler( 'Compiler-x64' )
 [
   Using( .X64BaseConfig )
   .Config         = 'Debug'
-  .CompilerOptions    + ' /DDEBUG /DEDITOR_ENABLED /DAGE_ENABLE_PROFILING /DAGE_ENABLE_IMGUI '
+  .CompilerOptions    + ' /DDEBUG /DEDITOR_ENABLED /DAGE_ENABLE_PROFILING /DAGE_ENABLE_IMGUI /D_CRT_SECURE_NO_WARNINGS'
               + .CompilerDebugOptimizations             
   .LibrarianOptions   + .LibrarianDebugOptimizations
   .LinkerOptions      + .LinkerDebugOptimizations
@@ -133,7 +133,7 @@ Compiler( 'Compiler-x64' )
 [
   Using( .X64BaseConfig )
   .Config         = 'Release'
-  .CompilerOptions    + ' /DRELEASE /DEDITOR_ENABLED /DAGE_ENABLE_PROFILING /DAGE_ENABLE_IMGUI'
+  .CompilerOptions    + ' /DRELEASE /DEDITOR_ENABLED /DAGE_ENABLE_PROFILING /DAGE_ENABLE_IMGUI /D_CRT_SECURE_NO_WARNINGS'
 
     // Setup de-optimization options (FASTBUILD_DEOPTIMIZE_OBJECT)
     .DeoptimizeWritableFilesWithToken   = true
@@ -241,10 +241,9 @@ ForEach( .Platform in .Platforms )
 Alias( 'All' )
 {
   .Targets    = { 'AGE_ImGui-proj'
-                  , 'AGE_FileUtils-proj'
                   , 'AGE_Utils-proj'
-                  , 'AGE_LowLevelUtils-proj'
                   , 'AGE_FileUtils-proj'
+                  , 'AGE_LowLevelUtils-proj'
                   , 'AGE_BFC-proj'
                   , 'AGEngine-proj'
                   , 'AGEReader-proj' }
@@ -257,8 +256,8 @@ Alias( 'proj' )
   .Targets    = { 'All-proj'
                   , 'AGE_ImGui-proj'
                   , 'AGE_Utils-proj'
-                  , 'AGE_LowLevelUtils-proj'
                   , 'AGE_FileUtils-proj'
+                  , 'AGE_LowLevelUtils-proj'
                   , 'AGE_BFC-proj'
                   , 'AGEngine-proj'
                   , 'AGEReader-proj'

@@ -1,7 +1,5 @@
 #pragma once
 
-#include <Utils/OpenGL.hh>
-
 //// VERY IMPORTANT
 
 // Include that in preprocessor options

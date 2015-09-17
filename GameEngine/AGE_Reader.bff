@@ -36,8 +36,6 @@
 		                                 + ';$VendorsPath$\fmod\inc\'
 		                                 + ';$VendorsPath$\minizip\include\'
 		                                 + ';$VendorsPath$\zlib\include\'
-
-		// Exclude Tests
 	}
 
 	// Unity
@@ -95,10 +93,12 @@
 
 		Executable( '$ProjectName$-Exe-$Platform$-$Config$' )
 		{
-			.Libraries					= { 'AGE_Utils-Lib-$Platform$-$Config$'
+
+			.Libraries					= { 'AGE_ImGui-Lib-$Platform$-$Config$'
+			                              , 'AGE_Utils-Lib-$Platform$-$Config$'
 			                              , 'AGE_FileUtils-Lib-$Platform$-$Config$'
+			                              , 'AGE_LowLevelUtils-Lib-$Platform$-$Config$'
 			                              , 'AGE_BFC-Lib-$Platform$-$Config$'
-			                              , 'AGE_ImGui-Lib-$Platform$-$Config$'
 			                              , 'AGEngine-Lib-$Platform$-$Config$'
 			                              , 'AGEReader-Lib-$Platform$-$Config$' }
 			.LinkerOutput				= '$OutputBase$/$ProjectName$.exe'
@@ -107,6 +107,15 @@
 										+ ' Ws2_32.lib'
 										+ ' LIBCMTD.LIB'
 										+ ' User32.lib'
+										+ ' opengl32.lib'
+										+ ' glu32.lib'
+										+ ' $VendorsPath$/OpenGL/lib/x64/glew32.lib'
+										+ ' $VendorsPath$/OpenGL/lib/x64/sdl2.lib'
+										+ ' $VendorsPath$/OpenGL/lib/x64/sdl2main.lib'
+										+ ' $VendorsPath$/OpenGL/lib/x64/sdl2main.lib'
+										+ ' $VendorsPath$/minizip\lib\windows\x64/minizip.lib'
+										+ ' $VendorsPath$/zlib\lib\windows\x64/zlib.lib'
+
 		}
 		Alias( '$ProjectName$-$Platform$-$Config$' ) { .Targets = '$ProjectName$-Exe-$Platform$-$Config$' }
 
