@@ -3,8 +3,8 @@
 
 #include "BFCCullableObject.hpp"
 #include "BFCItem.hpp"
+#include "BFCLink.hpp"
 
-#include <Core/Link.hpp>
 #include <Utils/Debug.hpp>
 #include <Utils/Profiler.hpp>
 
