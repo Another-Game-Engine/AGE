@@ -217,7 +217,12 @@ Compiler( 'Compiler-x64' )
 #include "GameEngine\AGE_LowLevelUtils.bff"
 #include "GameEngine\AGE_FileUtils.bff"
 #include "GameEngine\AGE_BFC.bff"
+#include "GameEngine\AGE_Core.bff"
+#include "GameEngine\AGE_Entity.bff"
+
 #include "GameEngine\AGE_Engine.bff"
+
+
 #include "GameEngine\AGE_Reader.bff"
 
 
@@ -245,6 +250,8 @@ Alias( 'All' )
                   , 'AGE_FileUtils-proj'
                   , 'AGE_LowLevelUtils-proj'
                   , 'AGE_BFC-proj'
+                  , 'AGE_Core-proj'
+                  , 'AGE_Entity-proj'
                   , 'AGEngine-proj'
                   , 'AGEReader-proj' }
 }
@@ -259,6 +266,8 @@ Alias( 'proj' )
                   , 'AGE_FileUtils-proj'
                   , 'AGE_LowLevelUtils-proj'
                   , 'AGE_BFC-proj'
+                  , 'AGE_Core-proj'
+                  , 'AGE_Entity-proj'
                   , 'AGEngine-proj'
                   , 'AGEReader-proj'
             }
