@@ -64,32 +64,27 @@ namespace AGE
 	}
 
 	Engine::Engine(void)
-		: Engine(0, nullptr)
+		: EngineBase(void)
 		//, _timer(nullptr)
 	{
 
 	}
 
 	Engine::Engine(int argc, char *argv[])
-		: Engine(argc, argv, "AgeGameEngine", "")
+		: EngineBase(argc, argv)
 	{
 		return;
 	}
 
 	Engine::Engine(const std::string &projectName, const std::string &password)
-		: Engine(0, nullptr, projectName, password)
+		: EngineBase(projectName, password)
 	{
 		return;
 	}
 
 	Engine::Engine(int argc, char *argv[], const std::string &projectName, const std::string &password)
-		: numberOfArguments(argc), projectName(projectName), password(password)
+		: EngineBase(argc, argv, projectName, password)
 	{
-		arguments.reserve(argc);
-		for (int index = 0; index < argc; ++index)
-		{
-			arguments.push_back(argv[index]);
-		}
 		// Catch signals.
 		SetConsoleCtrlHandler(reinterpret_cast<PHANDLER_ROUTINE>(CtrlHandler), TRUE);
 	}
@@ -100,57 +95,6 @@ namespace AGE
 		{
 			finalize();
 		}
-	}
-
-	std::size_t Engine::getNumberOfArguments(void) const
-	{
-		return numberOfArguments;
-	}
-
-	const std::string &Engine::getArgument(std::size_t num) const
-	{
-		assert(num < arguments.size() && "Invalid argument");
-		return arguments[num];
-	}
-
-	const std::string &Engine::getProjectName(void) const
-	{
-		return projectName;
-	}
-
-	const std::string &Engine::getPassword(void) const
-	{
-		return password;
-	}
-
-	const std::string &Engine::getApplicationPath(void) const
-	{
-		return applicationPath;
-	}
-
-	const std::string &Engine::getDataPath(void) const
-	{
-		return dataPath;
-	}
-
-	const std::string &Engine::getHomePath(void) const
-	{
-		return homePath;
-	}
-
-	const std::string &Engine::getSavePath(void) const
-	{
-		return savePath;
-	}
-
-	const std::string &Engine::getCachePath(void) const
-	{
-		return cachePath;
-	}
-
-	std::size_t Engine::getFrameNumber(void) const
-	{
-		return frame;
 	}
 
 	bool Engine::launch(std::function<bool()> &fn)
@@ -419,12 +363,15 @@ namespace AGE
 
 	Engine *GetEngine()
 	{
-		return GetThreadManager()->getEngine();
+		AGE_ASSERT(AGE::g_engineInstance != nullptr);
+		return (Engine*)AGE::g_engineInstance;
 	}
 
 	Engine *CreateEngine()
 	{
-		return GetThreadManager()->createEngine();
+		AGE_ASSERT(AGE::g_engineInstance == nullptr);
+		AGE::g_engineInstance = GetThreadManager()->createEngine();
+		return (Engine*)AGE::g_engineInstance;
 	}
 
 }

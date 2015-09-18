@@ -10,6 +10,7 @@
 	.CompilerIncludesPaths = ' /I"$ProjectPath$"'
 						   + ' /I"$VendorsPath$"'
 						   + ' /I"$EnginePath$"'
+						   + ' /I"$NewEnginePath$"'
 						   + ' /I"$VendorsPath$"\OpenGL\include\'
 						   + ' /I"$VendorsPath$"\bullet\src\'
 						   + ' /I"$VendorsPath$"\fmod\inc\'
@@ -99,6 +100,7 @@
 			                              , 'AGE_FileUtils-Lib-$Platform$-$Config$'
 			                              , 'AGE_LowLevelUtils-Lib-$Platform$-$Config$'
 			                              , 'AGE_BFC-Lib-$Platform$-$Config$'
+			                              , 'AGE_Core-Lib-$Platform$-$Config$'
 			                              , 'AGEngine-Lib-$Platform$-$Config$'
 			                              , 'AGEReader-Lib-$Platform$-$Config$'
 			                              , 'AGE_Utils-Lib-$Platform$-$Config$' }

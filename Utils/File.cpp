@@ -1,6 +1,6 @@
 #include <cassert>
 
-#include <Core/Engine.hh>
+#include <Utils/EngineBase.hpp>
 #include "File.hpp"
 #include "FileInterface.hpp"
 #include "FileSystem.hpp"
@@ -58,7 +58,7 @@ namespace AGE
 	bool File::open(const char *name, const char *mode)
 	{
 		assert(!data->file && "File is already opened");
-		FileSystem *fileSystem = GetEngine()->getInstance<FileSystem>();
+		FileSystem *fileSystem = g_engineInstance->getInstance<FileSystem>();
 		assert(fileSystem != nullptr && "FileSystem is not initialized");
 		data->file = fileSystem->getFile(name, mode);
 		return data->file != nullptr;
@@ -67,7 +67,7 @@ namespace AGE
 	bool File::execute(const char *command, const char *mode)
 	{
 		assert(!data->file && "File is already opened");
-		FileSystem *fileSystem = GetEngine()->getInstance<FileSystem>();
+		FileSystem *fileSystem = g_engineInstance->getInstance<FileSystem>();
 		assert(fileSystem != nullptr && "FileSystem is not initialized");
 		data->file = fileSystem->getFile((std::string("command://") + command).c_str(), mode);
 		return data->file != nullptr;

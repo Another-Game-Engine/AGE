@@ -1,2 +1,3 @@
 	.VendorsPath        = 'GameEngine/Vendors/'
 	.EnginePath         = 'GameEngine/GameEngine/Engine/'
+	.NewEnginePath      = 'Engine/'
