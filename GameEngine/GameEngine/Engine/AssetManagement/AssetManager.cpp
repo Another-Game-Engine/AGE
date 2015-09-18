@@ -39,11 +39,7 @@ namespace AGE
 {
 	AssetsManager::AssetsManager()
 	{
-		GetThreadManager()->forEachThreads([](AGE::Thread *t) {
-			dynamic_cast <QueueOwner*>(t)->registerCallback<LoadAssetMessage>([t](LoadAssetMessage &msg){
-				msg.setValue(msg.function());
-			});
-		});
+		QueueOwner::registerSharedCallback<LoadAssetMessage>([](LoadAssetMessage &msg){msg.setValue(msg.function()); });
 	}
 
 	std::shared_ptr<MeshInstance> AssetsManager::getMesh(const OldFile &_filePath)
