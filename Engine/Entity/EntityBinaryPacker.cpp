@@ -9,7 +9,7 @@
 #include <Components/ComponentRegistrationManager.hpp>
 #include <Components/ArchetypeComponent.hpp>
 
-#include <WorldEditorGlobal.hpp>
+//#include <WorldEditorGlobal.hpp>
 
 namespace AGE
 {

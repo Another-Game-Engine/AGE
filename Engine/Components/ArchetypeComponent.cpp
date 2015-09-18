@@ -1,7 +1,7 @@
 #include "ArchetypeComponent.hpp"
 #include <imgui/imgui.h>
-#include "Entities\IArchetypeManager.hpp"
-#include "Entities\Entity.hh"
+#include "Entity\IArchetypeManager.hpp"
+#include "Entity\Entity.hh"
 #include "Core/AScene.hh"
 #include "Entity/EntityData.hh"
 

@@ -9,6 +9,8 @@
 
 	.CompilerIncludesPaths = ' /I"$ProjectPath$"'
 	                       + ' /I"$VendorsPath$"'
+	                       + ' /I"$VendorsPath$"\OpenGL\include\'
+	                       + ' /I"$EnginePath$"'
 
 
 	// Visual Studio Project Generation
@@ -25,6 +27,7 @@
 		.IncludeSearchPath               = '$ProjectPath$\'
 		                                 + '$ProjectPath$\Core'
 		                                 + '$ProjectPath$\Entity'
+		                                 + '$VendorsPath$\Entity'
 
 		// Exclude Tests
 	}

@@ -1,27 +1,33 @@
 #include "RenderThread.hpp"
+
 #include <Core/Engine.hh>
-#include <Context/SDL/SdlContext.hh>
+#include <Core/Engine.hh>
+
 #include <Utils/ThreadName.hpp>
+#include <Utils/OpenGL.hh>
+#include <Utils/Age_Imgui.hpp>
+
+#include <Utils/Debug.hpp>
+#include <Utils/Profiler.hpp>
+#include <Context/SDL/SdlContext.hh>
+
 #include <Threads/Tasks/ToRenderTasks.hpp>
 #include <Threads/Commands/ToRenderCommands.hpp>
 #include <Threads/Tasks/BasicTasks.hpp>
 #include <Threads/MainThread.hpp>
-#include <Utils/Containers/Vector.hpp>
 #include <Threads/ThreadManager.hpp>
-#include <Core/Engine.hh>
+
 #include <Render/GeometryManagement/Painting/Painter.hh>
 #include <Render/Pipelining/Pipelines/CustomPipeline/DebugDeferredShading.hh>
+#include <Render/GeometryManagement/SimpleGeometryManager.hpp>
+#include <Render/PipelineTypes.hpp>
+#include <Render/GeometryManagement/Painting/PaintingManager.hh>
+#include <Render/OcclusionTools/DepthMapManager.hpp>
 #include <Render/Pipelining/Pipelines/CustomPipeline/DeferredShading.hh>
-#include <Utils/OpenGL.hh>
-#include <Utils/Age_Imgui.hpp>
 #include <Render/Properties/Transformation.hh>
-#include <Culling/Output/RenderPipeline.hh>
-#include <Utils/Debug.hpp>
-#include <Render/GeometryManagement/SimpleGeometry.hh>
-#include <Utils/Profiler.hpp>
+
 #include <utility>
 
-//BFC
 #include "Graphic/DRBCameraDrawableList.hpp"
 
 namespace AGE
@@ -37,7 +43,8 @@ namespace AGE
 	}
 
 	RenderThread::~RenderThread()
-	{}
+	{
+	}
 
 	void RenderThread::_recompileShaders()
 	{
@@ -144,18 +151,18 @@ namespace AGE
 			}
 			if (!paintingManager->has_painter(types))
 			{
-				debug2Dlines.painterKey = paintingManager->add_painter(std::move(types));
+				Singleton<SimpleGeometryManager>::getInstance()->debug2Dlines.painterKey = paintingManager->add_painter(std::move(types));
 			}
 			else
 			{
-				debug2Dlines.painterKey = paintingManager->get_painter(types);
+				Singleton<SimpleGeometryManager>::getInstance()->debug2Dlines.painterKey = paintingManager->get_painter(types);
 			}
-			Key<Painter> kk = debug2Dlines.painterKey;
+			Key<Painter> kk = Singleton<SimpleGeometryManager>::getInstance()->debug2Dlines.painterKey;
 
-			line2DPainter = paintingManager->get_painter(debug2Dlines.painterKey);
+			line2DPainter = paintingManager->get_painter(Singleton<SimpleGeometryManager>::getInstance()->debug2Dlines.painterKey);
 
-			debug2Dlines.verticesKey = line2DPainter->add_vertices(debug2DlinesPoints.size(), indices.size());
-			auto vertices = line2DPainter->get_vertices(debug2Dlines.verticesKey);
+			Singleton<SimpleGeometryManager>::getInstance()->debug2Dlines.verticesKey = line2DPainter->add_vertices(debug2DlinesPoints.size(), indices.size());
+			auto vertices = line2DPainter->get_vertices(Singleton<SimpleGeometryManager>::getInstance()->debug2Dlines.verticesKey);
 
 			vertices->set_data<glm::vec2>(debug2DlinesPoints, std::string("position"));
 			vertices->set_data<glm::vec3>(debug2DlinesColor, std::string("color"));
@@ -180,18 +187,18 @@ namespace AGE
 			}
 			if (!paintingManager->has_painter(types))
 			{
-				debug3Dlines.painterKey = paintingManager->add_painter(std::move(types));
+				Singleton<SimpleGeometryManager>::getInstance()->debug3Dlines.painterKey = paintingManager->add_painter(std::move(types));
 			}
 			else
 			{
-				debug3Dlines.painterKey = paintingManager->get_painter(types);
+				Singleton<SimpleGeometryManager>::getInstance()->debug3Dlines.painterKey = paintingManager->get_painter(types);
 			}
-			Key<Painter> kk = debug3Dlines.painterKey;
+			Key<Painter> kk = Singleton<SimpleGeometryManager>::getInstance()->debug3Dlines.painterKey;
 
-			line3DPainter = paintingManager->get_painter(debug3Dlines.painterKey);
+			line3DPainter = paintingManager->get_painter(Singleton<SimpleGeometryManager>::getInstance()->debug3Dlines.painterKey);
 
-			debug3Dlines.verticesKey = line3DPainter->add_vertices(debug3DlinesPoints.size(), indices.size());
-			auto vertices = line3DPainter->get_vertices(debug3Dlines.verticesKey);
+			Singleton<SimpleGeometryManager>::getInstance()->debug3Dlines.verticesKey = line3DPainter->add_vertices(debug3DlinesPoints.size(), indices.size());
+			auto vertices = line3DPainter->get_vertices(Singleton<SimpleGeometryManager>::getInstance()->debug3Dlines.verticesKey);
 
 			vertices->set_data<glm::vec3>(debug3DlinesPoints, std::string("position"));
 			vertices->set_data<glm::vec3>(debug3DlinesColor, std::string("color"));
@@ -216,18 +223,18 @@ namespace AGE
 			}
 			if (!paintingManager->has_painter(types))
 			{
-				debug3DlinesDepth.painterKey = paintingManager->add_painter(std::move(types));
+				Singleton<SimpleGeometryManager>::getInstance()->debug3DlinesDepth.painterKey = paintingManager->add_painter(std::move(types));
 			}
 			else
 			{
-				debug3DlinesDepth.painterKey = paintingManager->get_painter(types);
+				Singleton<SimpleGeometryManager>::getInstance()->debug3DlinesDepth.painterKey = paintingManager->get_painter(types);
 			}
-			Key<Painter> kk = debug3DlinesDepth.painterKey;
+			Key<Painter> kk = Singleton<SimpleGeometryManager>::getInstance()->debug3DlinesDepth.painterKey;
 
-			line3DPainterDepth = paintingManager->get_painter(debug3DlinesDepth.painterKey);
+			line3DPainterDepth = paintingManager->get_painter(Singleton<SimpleGeometryManager>::getInstance()->debug3DlinesDepth.painterKey);
 
-			debug3DlinesDepth.verticesKey = line3DPainterDepth->add_vertices(debug3DlinesPointsDepth.size(), indices.size());
-			auto vertices = line3DPainterDepth->get_vertices(debug3DlinesDepth.verticesKey);
+			Singleton<SimpleGeometryManager>::getInstance()->debug3DlinesDepth.verticesKey = line3DPainterDepth->add_vertices(debug3DlinesPointsDepth.size(), indices.size());
+			auto vertices = line3DPainterDepth->get_vertices(Singleton<SimpleGeometryManager>::getInstance()->debug3DlinesDepth.verticesKey);
 
 			vertices->set_data<glm::vec3>(debug3DlinesPointsDepth, std::string("position"));
 			vertices->set_data<glm::vec3>(debug3DlinesColorDepth, std::string("color"));
@@ -339,10 +346,15 @@ namespace AGE
 				return;
 			}
 
+			if (_depthMapManager == nullptr)
+			{
+				_depthMapManager = new DepthMapManager;
+			}
+
 #ifdef DEBUG
-			_depthMapManager.init(1280, 720, 4);
+			_depthMapManager->init(1280, 720, 4);
 #else
-			_depthMapManager.init(1280, 720, 2);
+			_depthMapManager->init(1280, 720, 2);
 #endif
 
 			msg.setValue(true);
@@ -407,17 +419,7 @@ namespace AGE
 #endif
 		});
 
-		registerCallback<Tasks::Render::GetWindowSize>([&](Tasks::Render::GetWindowSize &msg)
-		{
-			msg.setValue(_context->getScreenSize());
-		});
-
-		registerCallback<Tasks::Render::SetWindowSize>([&](Tasks::Render::SetWindowSize& msg)
-		{
-			_context->setScreenSize(msg.size);
-		});
-
-		registerSharedCallback<AGE::Tasks::Basic::BoolFunction>([&](AGE::Tasks::Basic::BoolFunction& msg)
+ 		registerSharedCallback<AGE::Tasks::Basic::BoolFunction>([&](AGE::Tasks::Basic::BoolFunction& msg)
 		{
 			SCOPE_profile_cpu_i("RenderTimer", "Bool function");
 			msg.setValue(msg.function());
@@ -548,19 +550,19 @@ namespace AGE
 			pipelines[msg.list->cameraInfos.data.pipeline]->render(*msg.list.get());
 			if (line2DPainter != nullptr)
 			{
-				line2DPainter->remove_vertices(debug2Dlines.verticesKey);
+				line2DPainter->remove_vertices(Singleton<SimpleGeometryManager>::getInstance()->debug2Dlines.verticesKey);
 				debug2DlinesColor.clear();
 				debug2DlinesPoints.clear();
 			}
 			if (line3DPainter != nullptr)
 			{
-				line3DPainter->remove_vertices(debug3Dlines.verticesKey);
+				line3DPainter->remove_vertices(Singleton<SimpleGeometryManager>::getInstance()->debug3Dlines.verticesKey);
 				debug3DlinesColor.clear();
 				debug3DlinesPoints.clear();
 			}
 			if (line3DPainterDepth != nullptr)
 			{
-				line3DPainterDepth->remove_vertices(debug3DlinesDepth.verticesKey);
+				line3DPainterDepth->remove_vertices(Singleton<SimpleGeometryManager>::getInstance()->debug3DlinesDepth.verticesKey);
 				debug3DlinesColorDepth.clear();
 				debug3DlinesPointsDepth.clear();
 			}
@@ -571,6 +573,8 @@ namespace AGE
 
 	bool RenderThread::release()
 	{
+		if (_depthMapManager != nullptr)
+			delete _depthMapManager;
 		return true;
 	}
 

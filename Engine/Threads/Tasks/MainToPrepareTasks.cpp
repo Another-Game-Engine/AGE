@@ -7,9 +7,6 @@ namespace AGE
 	{
 		namespace MainToPrepare
 		{
-			CreateScene::CreateScene(AScene *_scene)
-				: scene(_scene)
-			{}
 		}
 	}
 }

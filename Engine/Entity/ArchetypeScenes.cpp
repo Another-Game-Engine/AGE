@@ -11,8 +11,9 @@ namespace AGE
 
 	bool ArchetypeScene::_userStart()
 	{
-		addSystem<PhysicsSystem>(3, Physics::EngineType::PhysX, getInstance<AGE::AssetsManager>(), false);
-		getInstance<Physics::PhysicsInterface>()->getWorld()->setGravity(0, 0, 0);
+		//@URGENT
+		//addSystem<PhysicsSystem>(3, Physics::EngineType::PhysX, getInstance<AGE::AssetsManager>(), false);
+		//getInstance<Physics::PhysicsInterface>()->getWorld()->setGravity(0, 0, 0);
 		return true;
 	}
 

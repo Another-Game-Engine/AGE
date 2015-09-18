@@ -3,13 +3,15 @@
 #include "Thread.hpp"
 #include "QueuePusher.hpp"
 #include "QueueOwner.hpp"
+#include "Core/Key.hh"
+
+#include "glm/fwd.hpp"
+
 #include <Utils/Containers/Vector.hpp>
+#include <Utils/SpinLock.hpp>
+
 #include <memory>
 #include <vector>
-#include <Render/Properties/Properties.hh>
-#include <Render/PipelineTypes.hpp>
-#include <Render/OcclusionTools/DepthMapManager.hpp>
-#include <Render/GeometryManagement/SimpleGeometry.hh>
 
 namespace AGE
 {
@@ -21,8 +23,11 @@ namespace AGE
 	struct RenderImgui;
 	class PaintingManager;
 	class IRenderingPipeline;
-
-	typedef Properties Material;
+	class Properties;
+	class DepthMapManager;
+	class Painter;
+	class IProperty;
+	class Vertices;
 
 	class RenderThread : public Thread, public QueueOwner
 	{
@@ -36,15 +41,12 @@ namespace AGE
 
 		// Debug Drawings
 		// 2D lines
-		SimpleGeometry::SimpleGeometryKeys debug2Dlines;
 		std::vector<glm::vec2> debug2DlinesPoints;
 		std::vector<glm::vec3> debug2DlinesColor;
-		// 3D lines without depth test
-		SimpleGeometry::SimpleGeometryKeys debug3Dlines;
+
 		std::vector<glm::vec3> debug3DlinesPoints;
 		std::vector<glm::vec3> debug3DlinesColor;
 		// 3D lines with depth test
-		SimpleGeometry::SimpleGeometryKeys debug3DlinesDepth;
 		std::vector<glm::vec3> debug3DlinesPointsDepth;
 		std::vector<glm::vec3> debug3DlinesColorDepth;
 		// Fill debug painters
@@ -54,21 +56,20 @@ namespace AGE
 		// End Debug drawing
 
 		// used by render scene, maybe should be protected
-		void createMeshProperty(const Key<Painter> &painter, Key<Properties> &properties, Key<Property> &transformation);
+		void createMeshProperty(const Key<Painter> &painter, Key<Properties> &properties, Key<IProperty> &transformation);
 		void getQuadGeometry(Key<Vertices> &vertices, Key<Painter> &painter);
 		void getIcoSphereGeometry(Key<Vertices> &vertices, Key<Painter> &painter, uint32_t recursion);
 		void getCube(Key<Vertices> &vertices, Key<Painter> &painter);
 
 		inline std::size_t getCurrentFrameCount() const { return _frameCounter; }
 
-		inline DepthMapManager &getDepthMapManager() { return _depthMapManager; }
+		inline DepthMapManager &getDepthMapManager() { return *_depthMapManager; }
 
 #ifdef AGE_ENABLE_IMGUI
 		void setImguiDrawList(std::shared_ptr<AGE::RenderImgui> &list);
 #endif
 
 	public:
-		std::vector<Material> _materials;
 		std::shared_ptr<PaintingManager> paintingManager;
 		std::vector<std::unique_ptr<IRenderingPipeline>> pipelines;
 
@@ -94,7 +95,7 @@ namespace AGE
 		bool _run;
 
 		SdlContext *_context;
-		DepthMapManager _depthMapManager;
+		DepthMapManager *_depthMapManager;
 		AGE::SpinLock _mutex;
 
 		friend class ThreadManager;
