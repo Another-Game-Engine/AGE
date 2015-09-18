@@ -1,11 +1,11 @@
 // Core
 //------------------------------------------------------------------------------
 {
-	.ProjectName		= 'AGE_LowLevelUtils'
-	.ProjectDestPath	= './TMP_SOLUTIONS/AGE_LowLevelUtils/'
-	.ProjectPath		= 'LowLevelUtils'
-
 	#include "FBuildPath.bff"
+
+	.ProjectName		= 'AGE_LowLevelUtils'
+	.ProjectDestPath	= './$ProjectsFolder$/AGE_LowLevelUtils/'
+	.ProjectPath		= 'LowLevelUtils'
 
 	.CompilerIncludesPaths = ' /I"$ProjectPath$"'
 	                       + ' /I"$VendorsPath$"'

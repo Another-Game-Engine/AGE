@@ -1,8 +1,10 @@
 // Core
 //------------------------------------------------------------------------------
 {
+	#include "FBuildPath.bff"
+
 	.ProjectName		= 'AGEngine'
-	.ProjectDestPath	= './TMP_SOLUTIONS/AGE_Engine/'
+	.ProjectDestPath	= './$ProjectsFolder$/AGE_Engine/'
 	.ProjectPath		= 'GameEngine/GameEngine/Engine'
 
 	.VendorsPath        = 'GameEngine/Vendors'

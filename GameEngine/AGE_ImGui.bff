@@ -4,7 +4,7 @@
 	#include "FBuildPath.bff"
 
 	.ProjectName		= 'AGE_ImGui'
-	.ProjectDestPath	= './TMP_SOLUTIONS/AGE_ImGui/'
+	.ProjectDestPath	= './$ProjectsFolder$/AGE_ImGui/'
 	.ProjectPath		= '$VendorsPath$/ImGui'
 
 	.CompilerIncludesPaths = ' /I"$ProjectPath$"'

@@ -1,11 +1,11 @@
 // Core
 //------------------------------------------------------------------------------
 {
-	.ProjectName		= 'AGEReader'
-	.ProjectDestPath	= './TMP_SOLUTIONS/AGE_Reader/'
-	.ProjectPath		= 'Reader'
-
 	#include "FBuildPath.bff"
+
+	.ProjectName		= 'AGEReader'
+	.ProjectDestPath	= './$ProjectsFolder$/AGE_Reader/'
+	.ProjectPath		= 'Reader'
 
 	.CompilerIncludesPaths = ' /I"$ProjectPath$"'
 						   + ' /I"$VendorsPath$"'

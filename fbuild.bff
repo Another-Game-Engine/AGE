@@ -210,6 +210,8 @@ Compiler( 'Compiler-x64' )
 //------------------------------------------------------------------------------
 .Configs_Windows_MSVC = { .X64DebugConfig, .X64ProfileConfig, .X64ReleaseConfig, .X64RetailConfig }
 
+#include "GameEngine\FBuildPath.bff"
+
 // Core
 #include "GameEngine\AGE_ImGui.bff"
 
@@ -271,3 +273,24 @@ Alias( 'proj' )
 }
 
 //------------------------------------------------------------------------------
+
+VSSolution( 'solution' )
+{
+  // Basic options
+  .SolutionOutput                     = './$ProjectsFolder$/AGE_Reader.sln' // Path to Solution file to be generated
+  .SolutionProjects                   = { 'AGE_ImGui-proj'
+                                        , 'AGE_Utils-proj'
+                                        , 'AGE_FileUtils-proj'
+                                        , 'AGE_LowLevelUtils-proj'
+                                        , 'AGE_BFC-proj'
+                                        , 'AGE_Core-proj'
+                                        , 'AGEngine-proj'
+                                        , 'AGEReader-proj'
+                                        }  // Project(s) to include in Solution
+
+  .SolutionBuildProject                = 'AGEReader-proj'
+
+  .SolutionConfigs                     = .ProjectConfigs
+  
+  .SolutionVisualStudioVersion         = "12.0.31101.00" 
+}
