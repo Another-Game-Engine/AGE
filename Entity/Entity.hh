@@ -13,8 +13,6 @@
 #include <cereal/types/bitset.hpp>
 #include <cereal/types/vector.hpp>
 
-#include <Core/Link.hpp>
-
 #include <Utils/Profiler.hpp>
 
 namespace AGE
@@ -23,6 +21,9 @@ namespace AGE
 	struct ComponentBase;
 	class ComponentManager;
 	struct EntitySerializationInfos;
+	struct Link;
+	class EntityData;
+	class AScene;
 
 	class Entity
 	{
