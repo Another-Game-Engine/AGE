@@ -31,7 +31,9 @@ namespace AGE
 			std::cerr << "glewInit Failed" << std::endl;
 			return (false);
 		}
+#ifdef AGE_ENABLE_PROFILING
 		MicroProfileGpuInitGL();
+#endif
 		return (true);
 	}
 
@@ -41,7 +43,9 @@ namespace AGE
 
 	void SdlContext::swapContext()
 	{
+#ifdef AGE_ENABLE_PROFILING
 		MicroProfileFlip();
+#endif
 		{
 			SCOPE_profile_cpu_i("RenderTimer", "swapContext");
 			SCOPE_profile_gpu_i("SwapContext");

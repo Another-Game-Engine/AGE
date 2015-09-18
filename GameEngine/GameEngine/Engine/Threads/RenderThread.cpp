@@ -579,7 +579,9 @@ namespace AGE
 		if (!init())
 			return false;
 		_threadHandle = std::thread(&RenderThread::update, std::ref(*this));
+#ifdef AGE_ENABLE_PROFILING
 		MicroProfileOnThreadExit();
+#endif
 		return true;
 	}
 

@@ -15,6 +15,7 @@
 						   + ' /I"$VendorsPath$"\fmod\inc\'
 						   + ' /I"$VendorsPath$"\minizip\include\'
 						   + ' /I"$VendorsPath$"\zlib\include\'
+						   + ' /IUtils'
 
 
 	// Visual Studio Project Generation
@@ -41,7 +42,7 @@
 	// Unity
 	//--------------------------------------------------------------------------
 
-        .UnityNumFiles   = 3
+        .UnityNumFiles   = 10
         .UnityInputPath  = { '$ProjectDestPath$\' }
 
 	{
@@ -95,17 +96,16 @@
 		{
 
 			.Libraries					= { 'AGE_ImGui-Lib-$Platform$-$Config$'
-			                              , 'AGE_Utils-Lib-$Platform$-$Config$'
 			                              , 'AGE_FileUtils-Lib-$Platform$-$Config$'
 			                              , 'AGE_LowLevelUtils-Lib-$Platform$-$Config$'
 			                              , 'AGE_BFC-Lib-$Platform$-$Config$'
 			                              , 'AGEngine-Lib-$Platform$-$Config$'
-			                              , 'AGEReader-Lib-$Platform$-$Config$' }
+			                              , 'AGEReader-Lib-$Platform$-$Config$'
+			                              , 'AGE_Utils-Lib-$Platform$-$Config$' }
 			.LinkerOutput				= '$OutputBase$/$ProjectName$.exe'
 			.LinkerOptions				+ ' /SUBSYSTEM:CONSOLE'
 										+ ' kernel32.lib'
 										+ ' Ws2_32.lib'
-										+ ' LIBCMTD.LIB'
 										+ ' User32.lib'
 										+ ' opengl32.lib'
 										+ ' glu32.lib'

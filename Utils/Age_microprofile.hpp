@@ -1,5 +1,7 @@
 #pragma once
 
+#pragma comment(lib, "ws2_32.lib")
+
 //// VERY IMPORTANT
 
 // Include that in preprocessor options
@@ -23,8 +25,6 @@
 #define MICROPROFILE_GPU_TIMERS 1
 #define MICROPROFILE_WEBSERVER 1
 
-#else
-#define MICROPROFILE_ENABLED 0
 #endif
 
 #endif

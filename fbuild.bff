@@ -76,13 +76,13 @@ Compiler( 'Compiler-x64' )
               + ' /D"_WINSOCK_DEPRECATED_NO_WARNINGS"' // don't warn about deprecated winsock functions - TODO:C Update API use
 
   .CompilerOptions    + ' /Fo"%2"'
-  .LibrarianOptions   = '/NODEFAULTLIB /NOLOGO /OUT:"%2" "%1"' //@FBUILD : Il faudrait peut etre faire une configuration dll et une .lib et ajouter NODEFAULTLIB pour les dll
+  .LibrarianOptions   = '/NOLOGO /OUT:"%2" "%1"' //@FBUILD : Il faudrait peut etre faire une configuration dll et une .lib et ajouter NODEFAULTLIB pour les dll
   .LinkerOptions      = '/NOLOGO /INCREMENTAL:NO /OUT:"%2" "%1" /DEBUG'
               + ' /IGNORE:4001' ; don't complain about linking libs only
 
   // Optimizations
-  .CompilerDebugOptimizations   = ' /MTd /Od /RTC1 /GS /Oy- /GR-' //analyze
-  .CompilerReleaseOptimizations = ' /MT /Ox /Oy /Oi /GS- /GF /GL /Gy /Gw /GR- ' //analyze
+  .CompilerDebugOptimizations   = ' /MDd /Od /RTC1 /GS /Oy- /GR-' //analyze
+  .CompilerReleaseOptimizations = ' /MD /Ox /Oy /Oi /GS- /GF /GL /Gy /Gw /GR- ' //analyze
   .LibrarianDebugOptimizations  = ''
   .LibrarianReleaseOptimizations  = ' /LTCG'
   .LinkerDebugOptimizations   = ''
@@ -118,13 +118,13 @@ Compiler( 'Compiler-x64' )
 
   .LinkerOptions      + ' /MACHINE:X64'
   .Platform       = 'x64'
-  .LinkerOptions      + ' /LIBPATH:"$WindowsLibPaths$/x64" /LIBPATH:"$VSBasePath$/VC/lib/amd64"'
+  .LinkerOptions      + ' /LIBPATH:"$WindowsLibPaths$/x64" /LIBPATH:"$VSBasePath$/VC/lib/amd64" /LIBPATH:"$VSBasePath$/VC/atlmfc/lib/amd64" /LIBRARYPATH:"$WindowsSDKBasePath$/lib/winv6.3/um/x64"'
 ]
 .X64DebugConfig =
 [
   Using( .X64BaseConfig )
   .Config         = 'Debug'
-  .CompilerOptions    + ' /DDEBUG /DEDITOR_ENABLED /DAGE_ENABLE_PROFILING /DAGE_ENABLE_IMGUI /D_CRT_SECURE_NO_WARNINGS'
+  .CompilerOptions    + ' /DDEBUG /DEDITOR_ENABLED /DAGE_ENABLE_IMGUI /D_CRT_SECURE_NO_WARNINGS'
               + .CompilerDebugOptimizations             
   .LibrarianOptions   + .LibrarianDebugOptimizations
   .LinkerOptions      + .LinkerDebugOptimizations
@@ -133,7 +133,7 @@ Compiler( 'Compiler-x64' )
 [
   Using( .X64BaseConfig )
   .Config         = 'Release'
-  .CompilerOptions    + ' /DRELEASE /DEDITOR_ENABLED /DAGE_ENABLE_PROFILING /DAGE_ENABLE_IMGUI /D_CRT_SECURE_NO_WARNINGS'
+  .CompilerOptions    + ' /DRELEASE /DEDITOR_ENABLED /DAGE_ENABLE_IMGUI /D_CRT_SECURE_NO_WARNINGS'
 
     // Setup de-optimization options (FASTBUILD_DEOPTIMIZE_OBJECT)
     .DeoptimizeWritableFilesWithToken   = true
@@ -193,9 +193,9 @@ Compiler( 'Compiler-x64' )
   .IncludeSearchPath      = '^$(SolutionDir);^$(ProjectDir);.\'
   .X86Defines         = 'WIN32_LEAN_AND_MEAN;_WIN32;__WINDOWS__;WIN32;'
   .X64Defines         = 'WIN32_LEAN_AND_MEAN;_WIN32;__WINDOWS__;WIN64;'
-  .DebugDefines       = 'DEBUG;AGE_ENABLE_PROFILING;AGE_ENABLE_IMGUI;EDITOR_ENABLED;'
-  .ProfileDefines       = 'RELEASE;AGE_ENABLE_PROFILING;EDITOR_ENABLED;'
-  .ReleaseDefines       = 'RELEASE;AGE_ENABLE_PROFILING;AGE_ENABLE_IMGUI;EDITOR_ENABLED;'
+  .DebugDefines       = 'DEBUG;AGE_ENABLE_IMGUI;EDITOR_ENABLED;'
+  .ProfileDefines       = 'RELEASE;EDITOR_ENABLED;'
+  .ReleaseDefines       = 'RELEASE;AGE_ENABLE_IMGUI;EDITOR_ENABLED;'
   .RetailDefines        = 'RETAIL;EDITOR_ENABLED;'
 ]
 

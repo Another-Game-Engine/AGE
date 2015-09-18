@@ -2,6 +2,8 @@
 
 #include <cstdint>
 
+#pragma comment(lib, "ws2_32.lib")
+
 #ifdef AGE_ENABLE_PROFILING
 #include <microprofile/microprofile.h>
 #endif

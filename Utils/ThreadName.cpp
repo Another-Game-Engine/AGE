@@ -9,9 +9,9 @@ void SetThreadName( DWORD dwThreadID, const char* threadName)
    info.szName = threadName;
    info.dwThreadID = dwThreadID;
    info.dwFlags = 0;
-
+#ifdef AGE_ENABLE_PROFILING
    MicroProfileOnThreadCreate(threadName);
-
+#endif
    __try
    {
       RaiseException( MS_VC_EXCEPTION, 0, sizeof(info)/sizeof(ULONG_PTR), (ULONG_PTR*)&info );
