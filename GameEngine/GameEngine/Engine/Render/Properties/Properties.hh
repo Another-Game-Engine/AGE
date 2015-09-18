@@ -3,7 +3,7 @@
 #include <vector>
 #include <memory>
 #include <Render/Properties/IProperty.hh>
-#include <Render/Key.hh>
+#include <Core/Key.hh>
 #include <Utils/RWLock.hpp>
 
 namespace AGE

@@ -20,23 +20,6 @@ namespace AGE
 	{
 		namespace MainToPrepare
 		{
-			struct SetTransform
-			{
-				SetTransform(const PrepareKey &_key, const glm::mat4 &_transform);
-				PrepareKey key;
-				glm::mat4 transform;
-			};
-
-			struct SetGeometry
-			{
-				SetGeometry(const PrepareKey &_key
-					, const std::vector<SubMeshInstance> &_submeshInstances
-					, const std::vector<MaterialInstance> &_submaterialInstances);
-				PrepareKey key;
-				std::vector<SubMeshInstance> submeshInstances;
-				std::vector<MaterialInstance> submaterialInstances;
-			};
-
 			struct SetRenderMode
 			{
 				SetRenderMode(const PrepareKey &_key

@@ -4,7 +4,7 @@
 #include <cereal/types/string.hpp>
 #include <Entity/Entity.hh>
 #include <cereal/types/memory.hpp>
-#include <Render/Key.hh>
+#include <Core/Key.hh>
 #include <AssetManagement/Instance/MaterialInstance.hh>
 #include <AssetManagement/Instance/MeshInstance.hh>
 #include <Render/Pipelining/Render/RenderModes.hh>

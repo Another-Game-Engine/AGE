@@ -8,7 +8,6 @@
 # include <Render/ProgramResources/AInterfaceBlock.hh>
 # include <Render/ProgramResources/Types/BlockResources.hh>
 # include <Render/Buffer/UniformBuffer.hh>
-# include <Render/Key.hh>
 
 namespace AGE
 {

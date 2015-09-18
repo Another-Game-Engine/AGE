@@ -3,8 +3,6 @@
 #include <string>
 #include <vector>
 #include <memory>
-//#include <map>
-#include <Render/Key.hh>
 #include <Threads/RenderThread.hpp>
 #include <Render/Properties/Properties.hh>
 

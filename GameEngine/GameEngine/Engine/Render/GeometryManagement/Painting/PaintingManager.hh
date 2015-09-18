@@ -3,7 +3,7 @@
 # include <Utils/OpenGL.hh>
 # include <vector>
 # include <memory>
-# include <Render/Key.hh>
+# include <Core/Key.hh>
 # include <Utils/SpinLock.hpp>
 
 namespace AGE

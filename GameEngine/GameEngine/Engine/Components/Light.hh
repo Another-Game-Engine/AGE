@@ -1,7 +1,6 @@
 #pragma once
 
 #include <Components/Component.hh>
-#include <Render/Key.hh>
 #include <Utils/Serialization/VectorSerialization.hpp>
 #include <Render/Textures/ITexture.hh>
 #include <memory>

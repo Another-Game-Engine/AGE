@@ -5,7 +5,6 @@
 # include <Render/GeometryManagement/Data/Vertices.hh>
 # include <Render/ProgramResources/AProgramResources.hh>
 # include <Render/Buffer/VertexArray.hh>
-# include <Render/Key.hh>
 # include <vector>
 
 namespace AGE

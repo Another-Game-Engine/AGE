@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Render/Key.hh>
+#include <Core/Key.hh>
 #include <Render/ProgramResources/IProgramResources.hh>
 
 namespace AGE
