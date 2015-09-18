@@ -13,6 +13,7 @@
 #include <Utils/FileSystem.hpp>
 #include <Utils/Path.hpp>
 #include <Utils/Profiler.hpp>
+#include <Utils/EngineBase.hpp>
 
 #include <Threads/ThreadManager.hpp>
 #include <Threads/MainThread.hpp>
@@ -37,7 +38,7 @@
 
 #ifdef AGE_ENABLE_IMGUI
 
-#include <Utils/Age_Imgui.hpp>
+#include <Core/Age_Imgui.hpp>
 
 #endif
 
@@ -64,7 +65,7 @@ namespace AGE
 	}
 
 	Engine::Engine(void)
-		: EngineBase(void)
+		: EngineBase()
 		//, _timer(nullptr)
 	{
 

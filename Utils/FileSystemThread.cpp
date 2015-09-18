@@ -1,7 +1,7 @@
 #include "FileSystemThread.hpp"
 #include "FileSystem.hpp"
 
-#include <Core/Engine.hh>
+#include <Utils/EngineBase.hpp>
 
 namespace AGE
 {
@@ -9,7 +9,7 @@ namespace AGE
 	{
 		while (isRunning())
 		{
-			GetEngine()->getInstance<FileSystem>()->update();
+			g_engineInstance->getInstance<FileSystem>()->update();
 		}
 	}
 }

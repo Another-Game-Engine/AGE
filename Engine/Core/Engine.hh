@@ -26,7 +26,6 @@ namespace AGE
 
 		inline void displayFps(bool tof) { _displayFps = tof; }
 		inline void displayThreadsStatistics(bool tof) { _displayThreadsStatistics = tof; }
-	private:
 
 		Engine(void);
 		Engine(int argc, char *argv[]);

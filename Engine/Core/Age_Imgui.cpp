@@ -1,16 +1,22 @@
 #include "Age_Imgui.hpp"
 #include <Context/IRenderContext.hh>
+
 #include <SDL/SDL_keycode.h>
+
 #include <imgui/imconfig.h>
+
 #include <Utils/Utils.hh>
-#include <Threads/ThreadManager.hpp>
+#include <Utils/Profiler.hpp>
+
 #include <Threads/MainThread.hpp>
+#include <Threads/ThreadManager.hpp>
 #include <Threads/RenderThread.hpp>
+
 #include <Core/Engine.hh>
 #include <Core/Inputs/Input.hh>
 #include <Core/Timer.hh>
+
 #include <Render/OpenGLTask/OpenGLState.hh>
-#include <Utils/Profiler.hpp>
 
 #define STB_TRUETYPE_IMPLEMENTATION
 #include <imgui/stb_truetype.h>
@@ -122,10 +128,10 @@ namespace AGE
 		GetMainThread()->registerCallback<ImGuiKeyEvent>([this](ImGuiKeyEvent &msg)
 		{
 			ImGuiIO& io = ImGui::GetIO();
-			io.KeysDown[msg.key] = msg.down;
-			if (msg.key == AGE_LCTRL || msg.key == AGE_RCTRL)
+			io.KeysDown[int(msg.key)] = msg.down;
+			if (msg.key == AgeKeys::AGE_LCTRL || msg.key == AgeKeys::AGE_RCTRL)
 				io.KeyCtrl = msg.down;
-			else if (msg.key == AGE_LSHIFT || msg.key == AGE_RSHIFT)
+			else if (msg.key == AgeKeys::AGE_LSHIFT || msg.key == AgeKeys::AGE_RSHIFT)
 				io.KeyShift = msg.down;
 			else if (msg.down)
 			{
@@ -155,23 +161,23 @@ namespace AGE
 		auto screenSize = en->getInstance<IRenderContext>()->getScreenSize();
 		io.DisplaySize = ImVec2((float)screenSize.x, (float)screenSize.y);        // Display size, in pixels. For clamping windows positions.
 		io.DeltaTime = 1.0f / 60.0f;                          // Time elapsed since last frame, in seconds (in this sample app we'll override this every frame because our timestep is variable)
-		io.KeyMap[ImGuiKey_Tab] = AGE_TAB;             // Keyboard mapping. ImGui will use those indices to peek into the io.KeyDown[] array.
-		io.KeyMap[ImGuiKey_LeftArrow] = AGE_LEFT;
-		io.KeyMap[ImGuiKey_RightArrow] = AGE_RIGHT;
-		io.KeyMap[ImGuiKey_UpArrow] = AGE_UP;
-		io.KeyMap[ImGuiKey_DownArrow] = AGE_DOWN;
-		io.KeyMap[ImGuiKey_Home] = AGE_HOME;
-		io.KeyMap[ImGuiKey_End] = AGE_END;
-		io.KeyMap[ImGuiKey_Delete] = AGE_DELETE;
-		io.KeyMap[ImGuiKey_Backspace] = AGE_BACKSPACE;
-		io.KeyMap[ImGuiKey_Enter] = AGE_RETURN;
-		io.KeyMap[ImGuiKey_Escape] = AGE_ESCAPE;
-		io.KeyMap[ImGuiKey_A] = AGE_a;
-		io.KeyMap[ImGuiKey_C] = AGE_c;
-		io.KeyMap[ImGuiKey_V] = AGE_v;
-		io.KeyMap[ImGuiKey_X] = AGE_x;
-		io.KeyMap[ImGuiKey_Y] = AGE_y;
-		io.KeyMap[ImGuiKey_Z] = AGE_z;
+		io.KeyMap[ImGuiKey_Tab] = int(AgeKeys::AGE_TAB);             // Keyboard mapping. ImGui will use those indices to peek into the io.KeyDown[] array.
+		io.KeyMap[ImGuiKey_LeftArrow] =  int(AgeKeys::AGE_LEFT);
+		io.KeyMap[ImGuiKey_RightArrow] = int(AgeKeys::AGE_RIGHT);
+		io.KeyMap[ImGuiKey_UpArrow] =    int(AgeKeys::AGE_UP);
+		io.KeyMap[ImGuiKey_DownArrow] =  int(AgeKeys::AGE_DOWN);
+		io.KeyMap[ImGuiKey_Home] =       int(AgeKeys::AGE_HOME);
+		io.KeyMap[ImGuiKey_End] =        int(AgeKeys::AGE_END);
+		io.KeyMap[ImGuiKey_Delete] =     int(AgeKeys::AGE_DELETE);
+		io.KeyMap[ImGuiKey_Backspace] =  int(AgeKeys::AGE_BACKSPACE);
+		io.KeyMap[ImGuiKey_Enter] =      int(AgeKeys::AGE_RETURN);
+		io.KeyMap[ImGuiKey_Escape] =     int(AgeKeys::AGE_ESCAPE);
+		io.KeyMap[ImGuiKey_A] =          int(AgeKeys::AGE_a);
+		io.KeyMap[ImGuiKey_C] =          int(AgeKeys::AGE_c);
+		io.KeyMap[ImGuiKey_V] =          int(AgeKeys::AGE_v);
+		io.KeyMap[ImGuiKey_X] =          int(AgeKeys::AGE_x);
+		io.KeyMap[ImGuiKey_Y] =          int(AgeKeys::AGE_y);
+		io.KeyMap[ImGuiKey_Z] =          int(AgeKeys::AGE_z);
 
 		io.RenderDrawListsFn = renderDrawLists;
 

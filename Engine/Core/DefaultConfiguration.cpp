@@ -1,11 +1,11 @@
 #include "DefaultConfiguration.hpp"
-#include <Core/Engine.hh>
 #include <Configuration.hpp>
 #include <Threads/ThreadManager.hpp>
 #include <Threads/RenderThread.hpp>
-#include <Utils/Age_Imgui.hpp>
-#include <Core/Timer.hh>
 #include <Threads/Tasks/BasicTasks.hpp>
+#include <Core/Engine.hh>
+#include <Core/Age_Imgui.hpp>
+#include <Core/Timer.hh>
 
 namespace AGE
 {

@@ -61,9 +61,9 @@ namespace AGE
 
 	private:
 		Joystick _joysticks[AGE_JOYSTICK_MAX_NUMBER];
-		bool _windowInputs[AGE_WINDOW_INPUT_NUMBER];
-		uint8_t _mouseInputs[AGE_MOUSE_BUTTONS_NUMBER];
-		uint8_t _keyInputs[AGE_KEY_NUMBER];
+		bool _windowInputs[AgeWindowInputs::AGE_WINDOW_INPUT_NUMBER];
+		uint8_t _mouseInputs[AgeMouseButtons::AGE_MOUSE_BUTTONS_NUMBER];
+		uint8_t _keyInputs[AgeKeys::AGE_KEY_NUMBER];
 
 		std::atomic_int32_t _mousePosX;
 		std::atomic_int32_t _mousePosY;

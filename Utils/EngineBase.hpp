@@ -1,5 +1,7 @@
 #pragma once
 
+#include "DependenciesInjector.hpp"
+
 namespace AGE
 {
 	class EngineBase : public DependenciesInjector
@@ -21,12 +23,12 @@ namespace AGE
 		inline float getTimeMultiplier() const { return _timeMultiplier; }
 		inline void setTimeMultiplier(float multiplier) { if (multiplier < 0.0f) return; _timeMultiplier = multiplier; }
 
-		virtual ~EngineBase;
+		virtual ~EngineBase();
 		EngineBase(void);
 		EngineBase(int argc, char *argv[]);
 		EngineBase(const std::string &projectName, const std::string &password);
 		EngineBase(int argc, char *argv[], const std::string &projectName, const std::string &password);
-		EngineBase(const Engine &other) = delete;
+		EngineBase(const EngineBase &other) = delete;
 		EngineBase(EngineBase &&other) = delete;
 		EngineBase &operator=(const EngineBase &other) = delete;
 		EngineBase &operator=(EngineBase &&other) = delete;

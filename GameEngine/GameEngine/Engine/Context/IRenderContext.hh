@@ -2,12 +2,18 @@
 
 #include <glm/glm.hpp>
 #include <Utils/Dependency.hpp>
-#include <Core/Inputs/AgeInputs.hh>
 #include <string>
 #include <map>
 
 namespace AGE
 {
+	enum class AgeKeys;
+	enum class AgeWindowInputs;
+	enum class AgeMouseButtons;
+	enum class AgeJoystickAxis;
+	enum class AgeJoystickButtons;
+	enum class AgeJoystickHatDirections;
+
 	class IRenderContext : public Dependency < IRenderContext >
 	{
 	public:
