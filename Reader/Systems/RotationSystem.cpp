@@ -1,7 +1,7 @@
 #include "RotationSystem.hpp"
 #include <Components/RotationComponent.hpp>
-#include <Entities/Entity.hh>
-#include <Entities/EntityData.hh>
+#include <Entity/Entity.hh>
+#include <Entity/EntityData.hh>
 #include <Core/Link.hpp>
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>

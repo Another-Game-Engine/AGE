@@ -3,18 +3,18 @@
 #include <Core/AScene.hh>
 #include <Systems/System.h>
 #include <Core/EntityFilter.hpp>
-#include <Entities/EntityFlags.hh>
+#include <Entity/EntityFlags.hh>
 #include <fstream>
 #include <Threads/ThreadManager.hpp>
 #include <Threads/MainThread.hpp>
 #include <Components/ComponentRegistrationManager.hpp>
 #include <Physics/Fallback/NullPhysics.hpp>
 #include <Utils/Profiler.hpp>
-#include <Entities/BinaryEntityPack.hpp>
-#include <Entities/EntityBinaryPacker.hpp>
+#include <Entity/BinaryEntityPack.hpp>
+#include <Entity/EntityBinaryPacker.hpp>
 #include <Core/Link.hpp>
-#include <Entities/IArchetypeManager.hpp>
-#include "Entities/EntityData.hh"
+#include <Entity/IArchetypeManager.hpp>
+#include "Entity/EntityData.hh"
 #include "Components/ArchetypeComponent.hpp"
 
 #include <BFC/BFCLinkTracker.hpp>

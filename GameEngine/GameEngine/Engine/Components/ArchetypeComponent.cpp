@@ -3,7 +3,7 @@
 #include "Entities\IArchetypeManager.hpp"
 #include "Entities\Entity.hh"
 #include "Core/AScene.hh"
-#include "Entities/EntityData.hh"
+#include "Entity/EntityData.hh"
 
 namespace AGE
 {

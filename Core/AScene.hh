@@ -17,10 +17,11 @@
 #include <Utils/Containers/Queue.hpp>
 #include <Utils/ObjectPool.hpp>
 #include <unordered_set>
-#include <Components/ComponentManager.hpp>
 #include <Utils/Debug.hpp>
 #include <fstream>
-#include "Entities/EntityData.hh"
+#include "Entity/EntityData.hh"
+
+#include "Core/ComponentManager.hpp"
 
 
 namespace AGE
@@ -30,6 +31,7 @@ namespace AGE
 	class System;
 	class SceneManager;
 	struct Link;
+
 #ifdef AGE_BFC
 	class BFCLinkTracker;
 	class BFCBlockManagerFactory;

@@ -7,8 +7,8 @@
 #include <Components/MeshRenderer.hh>
 #include <Components/Lifetime.hpp>
 
-#include <Entities/Entity.hh>
-#include <Entities/EntityData.hh>
+#include <Entity/Entity.hh>
+#include <Entity/EntityData.hh>
 
 #include <Core/AScene.hh>
 #include <Systems/PhysicsSystem.hpp>

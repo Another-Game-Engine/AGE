@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-#include <Entities/Entity.hh>
+#include <Entity/Entity.hh>
 
 #include <cereal/archives/binary.hpp>
 #include <cereal/archives/json.hpp>

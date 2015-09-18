@@ -5,8 +5,8 @@
 #include <Components/CameraComponent.hpp>
 #include <Components/CharacterController.hh>
 
-#include <Entities/Entity.hh>
-#include <Entities/EntityData.hh>
+#include <Entity/Entity.hh>
+#include <Entity/EntityData.hh>
 
 #include <Core/AScene.hh>
 #include <Systems/PhysicsSystem.hpp>

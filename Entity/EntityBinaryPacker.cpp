@@ -1,10 +1,10 @@
 #include "EntityBinaryPacker.hpp"
 #include <Utils/Profiler.hpp>
-#include <Entities/EntityData.hh>
-#include <Entities/Entity.hh>
-#include <Entities/EntityPacker.hpp>
-#include <Entities/BinaryEntityPack.hpp>
-#include <Entities/BinaryEntity.hpp>
+#include <Entity/EntityData.hh>
+#include <Entity/Entity.hh>
+#include <Entity/EntityPacker.hpp>
+#include <Entity/BinaryEntityPack.hpp>
+#include <Entity/BinaryEntity.hpp>
 
 #include <Components/ComponentRegistrationManager.hpp>
 #include <Components/ArchetypeComponent.hpp>

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Entities/BinaryEntity.hpp>
+#include <Entity/BinaryEntity.hpp>
 
 namespace AGE
 {

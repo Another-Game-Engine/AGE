@@ -2,8 +2,8 @@
 #include <Utils/Directory.hpp>
 #include <FileUtils/FileUtils/FileSystemHelpers.hpp>
 #include <Utils/Debug.hpp>
-#include <Entities/BinaryEntityPack.hpp>
-#include <Entities\ArchetypeScenes.hpp>
+#include <Entity/BinaryEntityPack.hpp>
+#include <Entity/ArchetypeScenes.hpp>
 #include <Core/Engine.hh>
 #include <Threads/MainThread.hpp>
 #include <Threads/ThreadManager.hpp>

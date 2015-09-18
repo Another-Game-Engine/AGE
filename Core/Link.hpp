@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Entities/EntityTypedef.hpp>
+#include <Entity/EntityTypedef.hpp>
 #include <Core/PrepareKey.hpp>
 #include <vector>
 #include <unordered_set>

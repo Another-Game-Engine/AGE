@@ -4,8 +4,8 @@
 #include <string>
 #include <map>
 
-#include <Entities/EntityTypedef.hpp>
-#include <Entities/Entity.hh>
+#include <Entity/EntityTypedef.hpp>
+#include <Entity/Entity.hh>
 
 #include <cereal/cereal.hpp>
 #include <cereal/archives/portable_binary.hpp>

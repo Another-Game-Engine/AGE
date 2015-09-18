@@ -1,6 +1,6 @@
 #include "LifetimeSystem.hpp"
 #include <Components/Lifetime.hpp>
-#include <Entities/Entity.hh>
+#include <Entity/Entity.hh>
 #include <Core/AScene.hh>
 
 namespace AGE

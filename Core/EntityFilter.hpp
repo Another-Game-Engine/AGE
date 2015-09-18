@@ -1,9 +1,9 @@
 #pragma once
 
 #include <set>
-#include <Entities/Entity.hh>
+#include <Entity/Entity.hh>
 #include <functional>
-#include <Entities/EntityTypedef.hpp>
+#include <Entity/EntityTypedef.hpp>
 
 namespace AGE
 {

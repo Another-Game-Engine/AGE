@@ -31,7 +31,7 @@
 #include <Core/Inputs/Input.hh>
 #include <Skinning/AnimationManager.hpp>
 #include <Core/ConfigurationManager.hpp>
-#include <Entities/ArchetypeManager.hpp>
+#include <Entity/ArchetypeManager.hpp>
 
 #endif
 

@@ -1,6 +1,6 @@
 #include "FPSCharacter.hh"
 
-#include <Entities/EntityData.hh>
+#include <Entity/EntityData.hh>
 #include <Core/AScene.hh>
 #include <Physics/PhysicsInterface.hpp>
 

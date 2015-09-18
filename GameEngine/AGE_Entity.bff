@@ -9,6 +9,7 @@
 
 	.CompilerIncludesPaths = ' /I"$ProjectPath$"'
 	                       + ' /I"$VendorsPath$"'
+	                       + ' /I"../."'
 
 
 	// Visual Studio Project Generation

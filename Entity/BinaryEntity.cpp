@@ -1,7 +1,7 @@
 #include "BinaryEntity.hpp"
 
-#include <Entities/EntityData.hh>
-#include <Entities/ArchetypeManager.hpp>
+#include <Entity/EntityData.hh>
+#include <Entity/ArchetypeManager.hpp>
 
 #include <Core/AScene.hh>
 

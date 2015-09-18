@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Entities/IArchetypeManager.hpp>
+#include <Entity/IArchetypeManager.hpp>
 #include <map>
 
 namespace AGE

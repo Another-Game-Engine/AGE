@@ -3,7 +3,7 @@
 #include <map>
 #include <functional>
 #include <Components/Component.hh>
-#include <Entities/EntityTypedef.hpp>
+#include <Entity/EntityTypedef.hpp>
 
 #define TYPE_TO_STRING(T)(#T);
 

@@ -2,7 +2,7 @@
 
 #include "EntityTypedef.hpp"
 #include <Core/Link.hpp>
-#include "Entities/Entity.hh"
+#include "Entity/Entity.hh"
 
 namespace AGE
 {

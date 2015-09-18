@@ -2,7 +2,7 @@
 
 #include <Components/Component.hh>
 #include <cereal/types/string.hpp>
-#include <Entities/Entity.hh>
+#include <Entity/Entity.hh>
 #include <cereal/types/memory.hpp>
 #include <Render/Key.hh>
 #include <AssetManagement/Instance/MaterialInstance.hh>
