@@ -4,8 +4,6 @@
 #include "QueuePusher.hpp"
 #include "QueueOwner.hpp"
 #include <Utils/Containers/Vector.hpp>
-#include <Render/GeometryManagement/Painting/PaintingManager.hh>
-#include <Render/Pipelining/Pipelines/IRenderingPipeline.hh>
 #include <memory>
 #include <vector>
 #include <Render/Properties/Properties.hh>
@@ -21,6 +19,8 @@ namespace AGE
 	struct DrawableCollection;
 	struct RenderCamera;
 	struct RenderImgui;
+	class PaintingManager;
+	class IRenderingPipeline;
 
 	typedef Properties Material;
 

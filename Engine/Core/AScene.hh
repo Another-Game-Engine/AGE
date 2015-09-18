@@ -21,7 +21,7 @@
 #include <fstream>
 #include "Entity/EntityData.hh"
 
-#include "ComponentManager.hpp"
+#include "Core/ComponentManager.hpp"
 
 
 namespace AGE

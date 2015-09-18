@@ -2,7 +2,7 @@
 
 #include <Utils/ObjectPool.hpp>
 #include <memory>
-#include "Component.hh"
+#include "Components/Component.hh"
 
 namespace AGE
 {

@@ -3,7 +3,7 @@
 {
 	.ProjectName		= 'AGE_Core'
 	.ProjectDestPath	= './TMP_SOLUTIONS/AGE_Core/'
-	.ProjectPath		= 'Core'
+	.ProjectPath		= 'Engine'
 
 	#include "FBuildPath.bff"
 
@@ -23,6 +23,8 @@
 
 		// Vendors
 		.IncludeSearchPath               = '$ProjectPath$\'
+		                                 + '$ProjectPath$\Core'
+		                                 + '$ProjectPath$\Entity'
 
 		// Exclude Tests
 	}

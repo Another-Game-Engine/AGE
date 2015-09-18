@@ -1,11 +1,6 @@
 #pragma once
 
 #include <Core/AScene.hh>
-#include <Core/Engine.hh>
-#include <memory>
-
-#include <Systems/PhysicsSystem.hpp>
-#include "../Plugins/Physics/PhysX/PhysXPhysics.hpp"
 
 ///////////////////////////
 // This scene is used to keep archetypes in
@@ -15,6 +10,8 @@
 
 namespace AGE
 {
+	class Engine;
+
 	class ArchetypeScene : public AScene
 	{
 	public:
