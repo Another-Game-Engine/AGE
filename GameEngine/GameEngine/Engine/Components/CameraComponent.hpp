@@ -3,7 +3,6 @@
 #include <Components/Component.hh>
 #include <Render/Textures/TextureCubeMap.hh>
 #include <Utils/Serialization/MatrixSerialization.hpp>
-#include <Core/PrepareKey.hpp>
 #include <Render/PipelineTypes.hpp>
 #include <set>
 
@@ -45,7 +44,6 @@ namespace AGE
 #endif
 	private:
 		CameraData _data;
-		AGE::PrepareKey _key;
 	};
 
 	template <typename Archive>

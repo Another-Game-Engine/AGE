@@ -1,8 +1,12 @@
 #pragma once
 
-#include <System/System.h>
-#include <Core/EntityFilter.hpp>
 #include <vector>
+
+#include <System/System.h>
+
+#include <Core/EntityFilter.hpp>
+
+#include <glm/fwd.hpp>
 
 namespace AGE
 {

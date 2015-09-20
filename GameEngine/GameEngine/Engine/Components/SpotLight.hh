@@ -12,6 +12,7 @@ namespace AGE
 	class Mat4;
 	class Vec3;
 	class Vec1;
+	class BFCCullableHandle;
 
 	struct SpotLightData
 	{

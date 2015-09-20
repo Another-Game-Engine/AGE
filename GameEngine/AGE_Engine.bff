@@ -19,6 +19,7 @@
 						   + ' /I"$VendorsPath$"\zlib\include\'
 						   + ' /I"$VendorsPath$"\PhysX\PhysXSDK\Include\'
 						   + ' /IFileUtils\'
+						   + ' /IEngine\' // temporary
 
 
 	// Visual Studio Project Generation
