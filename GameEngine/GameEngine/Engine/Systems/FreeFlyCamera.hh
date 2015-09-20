@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Systems/System.h>
+#include <System/System.h>
 #include <Core/EntityFilter.hpp>
 #include <vector>
 

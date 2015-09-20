@@ -1,7 +1,7 @@
 #include <Core/Engine.hh>
 #include <limits>
 #include <Core/AScene.hh>
-#include <Systems/System.h>
+#include <System/System.h>
 #include <Core/EntityFilter.hpp>
 #include <Entity/EntityFlags.hh>
 #include <fstream>
