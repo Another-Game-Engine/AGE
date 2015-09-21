@@ -11,7 +11,7 @@
 #include "MaterialInterface.hpp"
 #include "ColliderInterface.hpp"
 #include "RaycasterInterface.hpp"
-#include "../AssetManagement/AssetManager.hh"
+#include "AssetManagement/AssetManager.hh"
 
 namespace AGE
 {

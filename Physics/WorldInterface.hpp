@@ -13,7 +13,7 @@
 #include "CollisionListener.hpp"
 #include "TriggerListener.hpp"
 #include "CharacterControllerInterface.hh"
-#include "../AssetManagement/Instance/MeshInstance.hh"
+#include <AssetManagement/Instance/MeshInstance.hh>
 
 namespace AGE
 {

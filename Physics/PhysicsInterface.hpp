@@ -7,8 +7,8 @@
 #include <glm/glm.hpp>
 
 #include "EngineType.hpp"
-#include "../Utils/DependenciesInjector.hpp"
-#include "../AssetManagement/AssetManager.hh"
+#include "Utils/DependenciesInjector.hpp"
+#include <AssetManagement/AssetManager.hh>
 
 namespace AGE
 {
