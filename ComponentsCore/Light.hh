@@ -4,13 +4,14 @@
 #include <Utils/Serialization/VectorSerialization.hpp>
 #include <Render/Textures/ITexture.hh>
 #include <memory>
+#include <glm/glm.hpp>
+#include <BFC/BFCCullableHandle.hpp>
 
 namespace gl { class GeometryManager; class Vertices; class Indices; }
 
 namespace AGE
 {
 	class IProperty;
-	class BFCCullableHandle;
 
 	struct PointLightComponent : public ComponentBase
 	{

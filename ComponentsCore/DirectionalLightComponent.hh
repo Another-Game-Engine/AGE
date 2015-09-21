@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Components/Component.hh>
-#include <glm/fwd.hpp>
+#include <glm/glm.hpp>
 #include <Utils/Serialization/VectorSerialization.hpp>
 
 namespace AGE
@@ -44,7 +44,6 @@ namespace AGE
 
 	private:
 		DirectionalLightData _data;
-		AGE::PrepareKey _key;
 	};
 }
 

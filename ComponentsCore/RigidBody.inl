@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Components/RigidBody.hpp>
+#include <ComponentsCore/RigidBody.hpp>
 
 namespace AGE
 {

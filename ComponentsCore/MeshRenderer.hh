@@ -9,10 +9,6 @@
 #include <AssetManagement/Instance/MeshInstance.hh>
 #include <Render/Pipelining/Render/RenderModes.hh>
 
-#ifdef EDITOR_ENABLED
-#include <WorldEditorGlobal.hpp>
-#endif
-
 namespace AGE
 {
 
@@ -76,9 +72,7 @@ namespace AGE
 		std::string _meshPath;
 		std::string _materialPath;
 		std::string _animationPath;
-#ifdef AGE_BFC
 		std::vector<BFCCullableHandle> _drawableHandle;
-#endif
 
 		RenderModeSet _renderMode;
 

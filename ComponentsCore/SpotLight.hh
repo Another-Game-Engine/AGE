@@ -1,9 +1,10 @@
 #pragma once
 
 #include <Components/Component.hh>
-#include <glm/fwd.hpp>
+#include <glm/glm.hpp>
 #include <Utils/Serialization/VectorSerialization.hpp>
 #include <Render/Textures/ITexture.hh>
+#include <BFC/BFCCullableHandle.hpp>
 
 namespace AGE
 {

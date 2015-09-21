@@ -7,13 +7,12 @@
 #include <Physics/Collision.hpp>
 #include <Physics/MaterialInterface.hpp>
 #include <Physics/Trigger.hpp>
-#include <Systems/PhysicsSystem.hpp>
 #include <Utils/Serialization/VectorSerialization.hpp>
 
 namespace AGE
 {
 	struct Link;
-
+	class PhysicsSystem;
 	namespace Private
 	{
 		class CollisionSystem;
