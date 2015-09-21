@@ -186,8 +186,8 @@ Compiler( 'Compiler-x64' )
 [
   .ProjectBuildCommand    = 'cd ^$(SolutionDir)\../ &amp; fbuild.exe -vs -verbose -cache -wrapper ^$(ProjectName)-^$(Configuration)'
   .ProjectRebuildCommand    = 'cd ^$(SolutionDir)\../ &amp; fbuild.exe -vs -verbose -cache -clean -wrapper ^$(ProjectName)-^$(Configuration)'
-  .OutputDirectory      = '^$(SolutionDir)\..\tmp2'
-  .IntermediateDirectory    = '^$(SolutionDir)\..\tmp2'
+  .OutputDirectory      = '^$(SolutionDir)\..\tmp'
+  .IntermediateDirectory    = '^$(SolutionDir)\..\tmp'
   .Platform = 'Win32' // unused
   .PlatformToolset = 'v120'
   .IncludeSearchPath      = '^$(SolutionDir);^$(ProjectDir);.\'
