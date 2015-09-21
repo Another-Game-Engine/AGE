@@ -1,7 +1,7 @@
 #include <cassert>
 
 #include <Physics/ICollisionListener.hpp>
-#include <Systems/CollisionSystem.hpp>
+#include <SystemsCore/CollisionSystem.hpp>
 
 namespace AGE
 {

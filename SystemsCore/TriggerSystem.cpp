@@ -1,4 +1,4 @@
-#include <Systems/TriggerSystem.hpp>
+#include <SystemsCore/TriggerSystem.hpp>
 #include <Physics/Trigger.hpp>
 #include <Physics/PhysicsInterface.hpp>
 

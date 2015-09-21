@@ -9,7 +9,7 @@
 #include <Entity/EntityData.hh>
 
 #include <Core/AScene.hh>
-#include <Systems/PhysicsSystem.hpp>
+#include <SystemsCore/PhysicsSystem.hpp>
 
 #include <Physics/RaycasterInterface.hpp>
 #include <Physics/RaycastHit.hpp>

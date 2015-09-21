@@ -1,5 +1,5 @@
 #include "LifetimeSystem.hpp"
-#include <ComponentsCore/Lifetime.hpp>
+#include <Components/Lifetime.hpp>
 #include <Entity/Entity.hh>
 #include <Core/AScene.hh>
 

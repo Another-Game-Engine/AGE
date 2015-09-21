@@ -1,14 +1,14 @@
 #include <limits>
 
-#include <Systems/PhysicsSystem.hpp>
+#include <SystemsCore/PhysicsSystem.hpp>
 #include <Physics/EngineTypeToPluginName.hpp>
 #include <Physics/WorldInterface.hpp>
 #include <Physics/Fallback/NullPhysics.hpp>
 #include <ComponentsCore/RigidBody.hpp>
 #include <ComponentsCore/Collider.hpp>
 #include <ComponentsCore/PhysicsData.hpp>
-#include <Systems/CollisionSystem.hpp>
-#include <Systems/TriggerSystem.hpp>
+#include <SystemsCore/CollisionSystem.hpp>
+#include <SystemsCore/TriggerSystem.hpp>
 #include <Utils/Profiler.hpp>
 #include <Utils/MatrixConversion.hpp>
 

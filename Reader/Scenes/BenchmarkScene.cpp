@@ -4,7 +4,7 @@
 
 #include <Scenes/BenchmarkScene.hpp>
 #include <Configuration.hpp>
-#include <Utils/Age_Imgui.hpp>
+#include <Core/Age_Imgui.hpp>
 #include <Utils/MathematicTools.hh>
 #include <Skinning/AnimationManager.hpp>
 #include <Threads/ThreadManager.hpp>
@@ -25,20 +25,21 @@
 #include <ComponentsCore/SpotLight.hh>
 #include <ComponentsCore/RigidBody.hpp>
 #include <ComponentsCore/MeshRenderer.hh>
-#include <ComponentsCore/Lifetime.hpp>
-#include <ComponentsCore/RotationComponent.hpp>
+#include <Components/Lifetime.hpp>
+#include <Components/RotationComponent.hpp>
 #include <ComponentsCore/Collider.hpp>
 #include <Components/ArchetypeComponent.hpp>
 #include <ComponentsCore/CharacterController.hh>
 #include <ComponentsCore/PhysicsData.hpp>
+#include <ComponentsCore/DirectionalLightComponent.hh>
 
 #include <Components/ComponentRegistrationManager.hpp>
 
 #include <Systems/RotationSystem.hpp>
-#include <Systems/DebugSystem.hpp>
-#include <Systems/RenderCameraSystem.hpp>
-#include <Systems/CharacterControllerSystem.hh>
-#include <Systems/FPSCharacterSystem.hh>
+#include <SystemsCore/DebugSystem.hpp>
+#include <SystemsCore/RenderCameraSystem.hpp>
+#include <SystemsCore/CharacterControllerSystem.hh>
+#include <SystemsCore/FPSCharacterSystem.hh>
 #include <Systems/BasicDemoCameraSystem.hh>
 
 #include <Render/Program.hh>
@@ -56,10 +57,10 @@
 #include <Skinning/Skeleton.hpp>
 #include <Utils/MatrixConversion.hpp>
 
-#include <Systems/FreeFlyCamera.hh>
+#include <SystemsCore/FreeFlyCamera.hh>
 
 
-#include <Systems/PhysicsSystem.hpp>
+#include <SystemsCore/PhysicsSystem.hpp>
 
 #include <Graphic/DRBCameraDrawableList.hpp>
 #include <Graphic/BFCCullableTypes.hpp>
@@ -201,7 +202,7 @@ namespace AGE
 
 		}
 
-		if (getInstance<Input>()->getPhysicalKeyJustReleased(AGE_ESCAPE))
+		if (getInstance<Input>()->getPhysicalKeyJustReleased(AgeKeys::AGE_ESCAPE))
 			return (false);
 
 
@@ -251,7 +252,7 @@ namespace AGE
 			_chunkCounter = 0;
 		}
 
-		if (ImGui::Button("Reload shaders or type R") || getInstance<Input>()->getPhysicalKeyPressed(AGE_r))
+		if (ImGui::Button("Reload shaders or type R") || getInstance<Input>()->getPhysicalKeyPressed(AgeKeys::AGE_r))
 		{
 			GetRenderThread()->getQueue()->emplaceTask<Tasks::Render::ReloadShaders>();
 		}

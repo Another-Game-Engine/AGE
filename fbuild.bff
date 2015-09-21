@@ -226,12 +226,9 @@ Compiler( 'Compiler-x64' )
 #include "GameEngine\AGE_Graphic.bff"
 #include "GameEngine\AGE_Render.bff"
 #include "GameEngine\AGE_ComponentsCore.bff"
+#include "GameEngine\AGE_SystemsCore.bff"
 
 #include "GameEngine\AGE_Core.bff"
-
-// temporary
-#include "GameEngine\AGE_Engine.bff"
-
 
 #include "GameEngine\AGE_Reader.bff"
 
@@ -267,6 +264,7 @@ Alias( 'All' )
                   , 'AGE_Graphic-proj'
                   , 'AGE_Render-proj'
                   , 'AGE_ComponentsCore-proj'
+                  , 'AGE_SystemsCore-proj'
                   , 'AGE_Core-proj'
                   , 'AGEngine-proj'
                   , 'AGEReader-proj' }
@@ -289,8 +287,8 @@ Alias( 'proj' )
                   , 'AGE_Graphic-proj'
                   , 'AGE_Render-proj'
                   , 'AGE_ComponentsCore-proj'
+                  , 'AGE_SystemsCore-proj'
                   , 'AGE_Core-proj'
-                  , 'AGEngine-proj'
                   , 'AGEReader-proj'
             }
 }
@@ -313,8 +311,8 @@ VSSolution( 'solution' )
                                         , 'AGE_Graphic-proj'
                                         , 'AGE_Render-proj'
                                         , 'AGE_ComponentsCore-proj'
+                                        , 'AGE_SystemsCore-proj'
                                         , 'AGE_Core-proj'
-                                        , 'AGEngine-proj'
                                         , 'AGEReader-proj'
                                         }  // Project(s) to include in Solution
 

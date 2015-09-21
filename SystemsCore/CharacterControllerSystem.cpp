@@ -9,7 +9,7 @@
 #include <Entity/EntityData.hh>
 
 #include <Core/AScene.hh>
-#include <Systems/PhysicsSystem.hpp>
+#include <SystemsCore/PhysicsSystem.hpp>
 
 #include <Physics/RaycasterInterface.hpp>
 #include <Physics/RaycastHit.hpp>
@@ -50,24 +50,24 @@ namespace AGE
 		Input *inputs = _scene->getInstance<Input>();
 
 		// translations
-		if (inputs->getPhysicalKeyPressed(AGE_w))
+		if (inputs->getPhysicalKeyPressed(AgeKeys::AGE_w))
 			relativeMove += glm::vec3(0, 0, -1);
-		if (inputs->getPhysicalKeyPressed(AGE_s))
+		if (inputs->getPhysicalKeyPressed(AgeKeys::AGE_s))
 			relativeMove += glm::vec3(0, 0, 1);
-		if (inputs->getPhysicalKeyPressed(AGE_a))
+		if (inputs->getPhysicalKeyPressed(AgeKeys::AGE_a))
 			relativeMove += glm::vec3(-1, 0, 0);
-		if (inputs->getPhysicalKeyPressed(AGE_d))
+		if (inputs->getPhysicalKeyPressed(AgeKeys::AGE_d))
 			relativeMove += glm::vec3(1, 0, 0);
 		if (relativeMove != glm::vec3(0))
 			relativeMove = glm::normalize(relativeMove) * camTranslationSpeed * time;
 		// rotations
-		if (inputs->getPhysicalKeyPressed(AGE_UP))
+		if (inputs->getPhysicalKeyPressed(AgeKeys::AGE_UP))
 			deltaCamAngles.x += camRotationSpeed * time;
-		if (inputs->getPhysicalKeyPressed(AGE_DOWN))
+		if (inputs->getPhysicalKeyPressed(AgeKeys::AGE_DOWN))
 			deltaCamAngles.x -= camRotationSpeed * time;
-		if (inputs->getPhysicalKeyPressed(AGE_RIGHT))
+		if (inputs->getPhysicalKeyPressed(AgeKeys::AGE_RIGHT))
 			deltaCamAngles.y -= camRotationSpeed * time;
-		if (inputs->getPhysicalKeyPressed(AGE_LEFT))
+		if (inputs->getPhysicalKeyPressed(AgeKeys::AGE_LEFT))
 			deltaCamAngles.y += camRotationSpeed * time;
 		for (Entity const &entity : _filter.getCollection())
 		{

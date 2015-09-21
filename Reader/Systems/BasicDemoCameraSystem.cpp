@@ -5,13 +5,13 @@
 #include <ComponentsCore/CameraComponent.hpp>
 #include <ComponentsCore/Light.hh>
 #include <ComponentsCore/MeshRenderer.hh>
-#include <ComponentsCore/Lifetime.hpp>
+#include <Components/Lifetime.hpp>
 
 #include <Entity/Entity.hh>
 #include <Entity/EntityData.hh>
 
 #include <Core/AScene.hh>
-#include <Systems/PhysicsSystem.hpp>
+#include <SystemsCore/PhysicsSystem.hpp>
 
 #include <Physics/RaycasterInterface.hpp>
 #include <Physics/RaycastHit.hpp>
@@ -19,7 +19,7 @@
 #include <Physics/CharacterControllerInterface.hh>
 #include <Core/Inputs/Input.hh>
 
-#include <Systems/RenderCameraSystem.hpp>
+#include <SystemsCore/RenderCameraSystem.hpp>
 #include <imgui/imgui.h>
 
 #include <AssetManagement/AssetManager.hh>
@@ -50,7 +50,7 @@ namespace AGE
 		for (Entity const &entity : _filter.getCollection())
 		{
 			static float trigger = 1.0f;
-			if (_scene->getInstance<Input>()->getPhysicalKeyPressed(AGE_SPACE) && trigger >= 0.15f)
+			if (_scene->getInstance<Input>()->getPhysicalKeyPressed(AgeKeys::AGE_SPACE) && trigger >= 0.15f)
 			{
 				trigger = 0.0f;
 				auto e = _scene->createEntity();

@@ -2,7 +2,7 @@
 
 #include <Components/Component.hh>
 #include <Utils/Serialization/VectorSerialization.hpp>
-#include <stdint.h>
+#include <glm/glm.hpp>
 
 namespace AGE
 {

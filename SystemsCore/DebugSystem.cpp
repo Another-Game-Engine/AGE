@@ -1,9 +1,9 @@
-#include <Systems/DebugSystem.hpp>
+#include <SystemsCore/DebugSystem.hpp>
 #include <ComponentsCore/Light.hh>
 #include <imgui/imgui.h>
 #include <Core/Engine.hh>
 #include <Core/AScene.hh>
-#include <Systems/PhysicsSystem.hpp>
+#include <SystemsCore/PhysicsSystem.hpp>
 
 namespace AGE
 {

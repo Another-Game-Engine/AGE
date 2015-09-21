@@ -1,5 +1,5 @@
 #include "RotationSystem.hpp"
-#include <ComponentsCore/RotationComponent.hpp>
+#include <Components/RotationComponent.hpp>
 #include <Entity/Entity.hh>
 #include <Entity/EntityData.hh>
 #include <Core/Link.hpp>

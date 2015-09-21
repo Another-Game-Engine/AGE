@@ -1,7 +1,7 @@
 #include <cassert>
 
 #include <Physics/ITriggerListener.hpp>
-#include <Systems/TriggerSystem.hpp>
+#include <SystemsCore/TriggerSystem.hpp>
 
 namespace AGE
 {

@@ -9,8 +9,8 @@
 
 	.CompilerIncludesPaths = ' /I"$ProjectPath$"'
 						   + ' /I"$VendorsPath$"'
-						   + ' /I"$EnginePath$"'
 						   + ' /I"$NewEnginePath$"'
+						   + ' /I./'
 						   + ' /I"$VendorsPath$"\OpenGL\include\'
 						   + ' /I"$VendorsPath$"\bullet\src\'
 						   + ' /I"$VendorsPath$"\fmod\inc\'
@@ -33,6 +33,8 @@
 		// Vendors
 		.IncludeSearchPath               = '$ProjectPath$\'
 										 + ';$EnginePath$\'
+										 + ';$NewEnginePath$\'
+										 + ';.\'
 		                                 + ';$VendorsPath$\OpenGL\include\'
 		                                 + ';$VendorsPath$\bullet\src\'
 		                                 + ';$VendorsPath$\fmod\inc\'
@@ -107,8 +109,8 @@
 			                              , 'AGE_Graphic-Lib-$Platform$-$Config$'
 			                              , 'AGE_Render-Lib-$Platform$-$Config$'
 			                              , 'AGE_ComponentsCore-Lib-$Platform$-$Config$'
+			                              , 'AGE_SystemsCore-Lib-$Platform$-$Config$'
 			                              , 'AGE_Core-Lib-$Platform$-$Config$'
-			                              , 'AGEngine-Lib-$Platform$-$Config$'
 			                              , 'AGEReader-Lib-$Platform$-$Config$'
 			                              , 'AGE_Utils-Lib-$Platform$-$Config$' }
 			.LinkerOutput				= '$OutputBase$/$ProjectName$.exe'
