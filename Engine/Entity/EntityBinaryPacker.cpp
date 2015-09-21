@@ -9,8 +9,6 @@
 #include <Components/ComponentRegistrationManager.hpp>
 #include <Components/ArchetypeComponent.hpp>
 
-//#include <WorldEditorGlobal.hpp>
-
 namespace AGE
 {
 	void CreateBinaryEntityPack(BinaryEntityPack &pack, Entity &selection)
