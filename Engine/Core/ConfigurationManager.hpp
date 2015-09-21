@@ -100,7 +100,7 @@ namespace AGE
 			auto it = _confs.find(name);
 			if (it == std::end(_confs))
 				return;
-			auto ptr = dynamic_cast<ConfigurationValue<T>*>(it->second.get());
+			auto ptr = (ConfigurationValue<T>*)(it->second.get());
 			if (!ptr)
 				return;
 			ptr->value = value;
@@ -113,7 +113,7 @@ namespace AGE
 		{
 			if (_confs.find(name) == std::end(_confs))
 				return nullptr;
-			return dynamic_cast<ConfigurationValue<T>*>(_confs[name].get());
+			return (ConfigurationValue<T>*)(_confs[name].get());
 		}
 
 	private:
