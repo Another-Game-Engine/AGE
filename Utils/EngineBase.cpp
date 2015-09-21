@@ -2,6 +2,8 @@
 
 namespace AGE
 {
+	EngineBase *EngineBase::g_engineInstance = nullptr;
+
 	std::size_t EngineBase::getNumberOfArguments(void) const
 	{
 		return numberOfArguments;

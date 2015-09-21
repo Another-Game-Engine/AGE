@@ -9,7 +9,7 @@ namespace AGE
 	{
 		while (isRunning())
 		{
-			g_engineInstance->getInstance<FileSystem>()->update();
+			EngineBase::g_engineInstance->getInstance<FileSystem>()->update();
 		}
 	}
 }

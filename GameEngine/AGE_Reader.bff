@@ -24,7 +24,8 @@
 	VCXProject( '$ProjectName$-proj' )
 	{
 		.ProjectOutput				= '$ProjectDestPath$\$ProjectName$.vcxproj'
-		.ProjectInputPaths			= { '$ProjectPath$\', '$VendorsPath$\imgui\' }
+		.ProjectInputPaths			= { '$ProjectPath$\',
+		                                '$VendorsPath$\imgui\' }
         .ProjectBasePath            = { '$ProjectPath$\'
                                         , '$VendorsPath$\' }
 
@@ -40,6 +41,8 @@
 		                                 + ';$VendorsPath$\fmod\inc\'
 		                                 + ';$VendorsPath$\minizip\include\'
 		                                 + ';$VendorsPath$\zlib\include\'
+		                                 +  './'
+		                                 +  '$VendorsPath$\'
 	}
 
 	// Unity

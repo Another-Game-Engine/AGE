@@ -38,7 +38,7 @@ namespace AGE
 		// @Jojo I stop your filesystem
 		//thread->run();
 		password = p;
-		auto engine = g_engineInstance;
+		auto engine = EngineBase::g_engineInstance;
 		dataPath = engine->getDataPath();
 		// Set to true if you want to ignore case if data directory
 		dataICase = false;
@@ -48,7 +48,7 @@ namespace AGE
 
 	void FileSystem::finalize(void)
 	{
-		auto engine = g_engineInstance;
+		auto engine = EngineBase::g_engineInstance;
 		while (true)
 		{
 			thread->lock();
@@ -82,7 +82,7 @@ namespace AGE
 
 	void FileSystem::update(void)
 	{
-		auto engine = g_engineInstance;
+		auto engine = EngineBase::g_engineInstance;
 		bool suspend = true;
 		thread->lock();
 		if (!queuedFiles.empty())
@@ -208,7 +208,7 @@ namespace AGE
 
 	bool FileSystem::loadDirectory(const char *name)
 	{
-		auto engine = g_engineInstance;
+		auto engine = EngineBase::g_engineInstance;
 		Directory directory;
 		if (directory.open(name) == false)
 		{
@@ -248,7 +248,7 @@ namespace AGE
 
 	bool FileSystem::loadFile(const char *n, int priority, float weight)
 	{
-		auto engine = g_engineInstance;
+		auto engine = EngineBase::g_engineInstance;
 		std::string name(n);
 		if (name.empty())
 		{
@@ -437,7 +437,7 @@ namespace AGE
 
 	std::shared_ptr<FileInterface> FileSystem::getFile(const char *n, const char *mode)
 	{
-		auto engine = g_engineInstance;
+		auto engine = EngineBase::g_engineInstance;
 		std::string name = std::string(n);
 		if (name.empty())
 		{
@@ -554,7 +554,7 @@ namespace AGE
 
 	bool FileSystem::forceFile(const char *n)
 	{
-		auto engine = g_engineInstance;
+		auto engine = EngineBase::g_engineInstance;
 		std::string name(n);
 		if (name.empty())
 		{
@@ -579,7 +579,7 @@ namespace AGE
 
 	bool FileSystem::removeFile(const char *n)
 	{
-		auto engine = g_engineInstance;
+		auto engine = EngineBase::g_engineInstance;
 		std::string name(n);
 		if (name.empty())
 		{
@@ -620,7 +620,7 @@ namespace AGE
 
 	bool FileSystem::checkFile(const char *n)
 	{
-		auto engine = g_engineInstance;
+		auto engine = EngineBase::g_engineInstance;
 		std::string name(n);
 		if (name.empty())
 		{
@@ -654,7 +654,7 @@ namespace AGE
 
 	bool FileSystem::validateFile(const char *n) const
 	{
-		auto engine = g_engineInstance;
+		auto engine = EngineBase::g_engineInstance;
 		std::string name(n);
 		if (name.empty())
 		{

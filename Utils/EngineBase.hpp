@@ -7,6 +7,8 @@ namespace AGE
 	class EngineBase : public DependenciesInjector
 	{
 	public:
+		static EngineBase *g_engineInstance;
+
 		std::size_t getNumberOfArguments(void) const;
 		const std::string &getArgument(std::size_t num) const;
 
@@ -46,6 +48,4 @@ namespace AGE
 		std::size_t frame = 0;
 		float _timeMultiplier = 1.0f;
 	};
-
-	static EngineBase *g_engineInstance = nullptr;
 }

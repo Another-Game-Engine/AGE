@@ -364,15 +364,15 @@ namespace AGE
 
 	Engine *GetEngine()
 	{
-		AGE_ASSERT(AGE::g_engineInstance != nullptr);
-		return (Engine*)AGE::g_engineInstance;
+		AGE_ASSERT(AGE::EngineBase::g_engineInstance != nullptr);
+		return (Engine*)AGE::EngineBase::g_engineInstance;
 	}
 
 	Engine *CreateEngine()
 	{
-		AGE_ASSERT(AGE::g_engineInstance == nullptr);
-		AGE::g_engineInstance = GetThreadManager()->createEngine();
-		return (Engine*)AGE::g_engineInstance;
+		AGE_ASSERT(AGE::EngineBase::g_engineInstance == nullptr);
+		AGE::EngineBase::g_engineInstance = GetThreadManager()->createEngine();
+		return (Engine*)AGE::EngineBase::g_engineInstance;
 	}
 
 }
