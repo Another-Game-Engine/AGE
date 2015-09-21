@@ -3,7 +3,7 @@
 #include "Thread.hpp"
 #include "QueuePusher.hpp"
 #include "QueueOwner.hpp"
-#include "Core/Key.hh"
+#include "Utils/Key.hh"
 
 #include "glm/fwd.hpp"
 

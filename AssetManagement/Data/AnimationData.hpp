@@ -1,12 +1,13 @@
 #pragma once
 
-#include <Skinning/AnimationChannel.hpp>
 #include <cereal/types/vector.hpp>
 #include <cereal/types/string.hpp>
 #include <stdint.h>
 
 namespace AGE
 {
+	struct AnimationChannel;
+
 	struct AnimationData
 	{
 		std::string name;

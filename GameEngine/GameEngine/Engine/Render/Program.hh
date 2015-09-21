@@ -3,7 +3,7 @@
 #include <memory>
 #include <Render/UnitProg.hh>
 #include <Render/ProgramResources/IProgramResources.hh>
-#include <Core/Key.hh>
+#include <Utils/Key.hh>
 #include <Render/ProgramResources/Factory/ProgramResourcesFactory.hh>
 #include <Utils/Debug.hpp>
 

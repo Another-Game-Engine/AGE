@@ -3,7 +3,7 @@
 # include <string>
 # include <Utils/AABoundingBox.hh>
 # include <vector>
-# include <Core/Key.hh>
+# include <Utils/Key.hh>
 # include <Render/GeometryManagement/Data/Vertices.hh>
 # include <Render/GeometryManagement/Painting/Painter.hh>
 # include <Render/Pipelining/Render/RenderModes.hh>

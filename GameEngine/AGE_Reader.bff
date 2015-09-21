@@ -102,6 +102,7 @@
 			                              , 'AGE_BFC-Lib-$Platform$-$Config$'
 			                              , 'AGE_Text-Lib-$Platform$-$Config$'
 			                              , 'AGE_Physics-Lib-$Platform$-$Config$'
+			                              , 'AGE_AssetManagement-Lib-$Platform$-$Config$'
 			                              , 'AGE_Core-Lib-$Platform$-$Config$'
 			                              , 'AGEngine-Lib-$Platform$-$Config$'
 			                              , 'AGEReader-Lib-$Platform$-$Config$'

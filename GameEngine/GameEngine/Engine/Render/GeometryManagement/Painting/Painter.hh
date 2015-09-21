@@ -5,7 +5,7 @@
 #include <Utils/MemoryPool.hpp>
 #include <memory>
 #include <vector>
-#include <Core/Key.hh>
+#include <Utils/Key.hh>
 #include <Render/Program.hh>
 #include <Render/GeometryManagement/Data/Vertices.hh>
 #include <Render/GeometryManagement/Buffer/BufferPrograms.hh>

@@ -1,0 +1,96 @@
+// Core
+//------------------------------------------------------------------------------
+{
+	#include "FBuildPath.bff"
+
+	.ProjectName		= 'AGE_AssetManagement'
+	.ProjectDestPath	= './$ProjectsFolder$/AGE_AssetManagement/'
+	.ProjectPath		= 'AssetManagement'
+
+	.CompilerIncludesPaths = ' /I"$ProjectPath$"'
+	                       + ' /I"$VendorsPath$"'
+
+
+	// Visual Studio Project Generation
+	//--------------------------------------------------------------------------
+	VCXProject( '$ProjectName$-proj' )
+	{
+		.ProjectOutput				= '$ProjectDestPath$\$ProjectName$.vcxproj'
+		.ProjectInputPaths			= { '$ProjectPath$\' }
+		.ProjectBasePath			= {'$ProjectPath$\'}
+
+		.ProjectAllowedFileExtensions = { '.h' '.cpp' '.c' '.hh' '.hpp' }
+
+		// Vendors
+		.IncludeSearchPath               = '$ProjectPath$\'
+
+		// Exclude Tests
+	}
+
+	// Unity
+	//--------------------------------------------------------------------------
+
+        .UnityNumFiles   = 12
+        .UnityInputPath  = { '$ProjectDestPath$\' }
+
+	{
+		// Windows
+		Unity( '$ProjectName$-Unity-Windows' )
+		{
+		    .UnityInputPath				= '$ProjectPath$\'
+		    .UnityOutputPath			= '$OutputBase$\Unity\$ProjectPath$\'
+		    //.UnityInputExcludePath		= '$ProjectPath$\CoreTest\' // Exclude Tests
+		}
+	}
+
+	//--------------------------------------------------------------------------
+	ForEach( .Config in .ProjectConfigs )
+	{
+		Using( .Config )
+
+		.IncludeSearchPath          + '$ProjectPath$\'
+	}
+
+
+
+	// Windows
+	//--------------------------------------------------------------------------
+	ForEach( .Config in .Configs_Windows_MSVC )
+	{
+		Using( .Config )
+		.OutputBase + '\$Platform$-$Config$'
+
+		// Static Library
+		Library( '$ProjectName$-Lib-$Platform$-$Config$' )
+		{
+			// Input (Unity)
+			.CompilerInputUnity			= '$ProjectName$-Unity-Windows'
+
+			.CompilerInputPath          = '$ProjectPath$'
+
+			.CompilerOptions            + ' $CompilerIncludesPaths$'
+
+			// Output
+			.CompilerOutputPath			= '$OutputBase$\$ProjectName$\'
+ 			.LibrarianOutput 			= '$OutputBase$\$ProjectName$\$ProjectName$.lib'
+		}
+		Alias( '$ProjectName$-$Platform$-$Config$' ) { .Targets = '$ProjectName$-Lib-$Platform$-$Config$' }
+	}
+
+	// Aliases
+	//--------------------------------------------------------------------------
+	// Per-Config
+	Alias( '$ProjectName$-Debug' )		{ .Targets = { '$ProjectName$-X64-Debug' } }
+	Alias( '$ProjectName$-Profile' )	{ .Targets = { '$ProjectName$-X64-Profile' } }
+	Alias( '$ProjectName$-Release' )	{ .Targets = { '$ProjectName$-X64-Release' } }
+	Alias( '$ProjectName$-Retail' )	    { .Targets = { '$ProjectName$-X64-Retail' } }
+
+	// Per-Platform
+	Alias( '$ProjectName$-X64' )		{ .Targets = { '$ProjectName$-X64-Debug', '$ProjectName$-X64-Release', '$ProjectName$-X64-Profile', '$ProjectName$-X64-Retail' } }
+
+	// All
+	Alias( '$ProjectName$' )
+	{
+		.Targets = { '$ProjectName$-Debug', '$ProjectName$-Profile', '$ProjectName$-Release', '$ProjectName$-Retail' }
+	}
+}

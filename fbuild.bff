@@ -221,6 +221,7 @@ Compiler( 'Compiler-x64' )
 #include "GameEngine\AGE_BFC.bff"
 #include "GameEngine\AGE_Text.bff"
 #include "GameEngine\AGE_Physics.bff"
+#include "GameEngine\AGE_AssetManagement.bff"
 
 #include "GameEngine\AGE_Core.bff"
 
@@ -257,6 +258,7 @@ Alias( 'All' )
                   , 'AGE_BFC-proj'
                   , 'AGE_Text-proj'
                   , 'AGE_Physics-proj'
+                  , 'AGE_AssetManagement-proj'
                   , 'AGE_Core-proj'
                   , 'AGEngine-proj'
                   , 'AGEReader-proj' }
@@ -274,6 +276,7 @@ Alias( 'proj' )
                   , 'AGE_BFC-proj'
                   , 'AGE_Text-proj'
                   , 'AGE_Physics-proj'
+                  , 'AGE_AssetManagement-proj'
                   , 'AGE_Core-proj'
                   , 'AGEngine-proj'
                   , 'AGEReader-proj'
@@ -293,6 +296,7 @@ VSSolution( 'solution' )
                                         , 'AGE_BFC-proj'
                                         , 'AGE_Text-proj'
                                         , 'AGE_Physics-proj'
+                                        , 'AGE_AssetManagement-proj'
                                         , 'AGE_Core-proj'
                                         , 'AGEngine-proj'
                                         , 'AGEReader-proj'
