@@ -3,14 +3,14 @@
 {
 	#include "FBuildPath.bff"
 
-	.ProjectName		= 'AGE_AssetManagement'
-	.ProjectDestPath	= './$ProjectsFolder$/AGE_AssetManagement/'
-	.ProjectPath		= 'AssetManagement'
+	.ProjectName		= 'AGE_Graphic'
+	.ProjectDestPath	= './$ProjectsFolder$/AGE_Graphic/'
+	.ProjectPath		= 'Graphic'
 
 	.CompilerIncludesPaths = ' /I"$ProjectPath$"'
 	                       + ' /I"$VendorsPath$"'
                            + ' /I"$VendorsPath$"\OpenGL\include\'
-                           + ' /I"$NewEnginePath$"' // used for TMQ
+	                       + ' /I"$NewEnginePath$"'
 
 	// Visual Studio Project Generation
 	//--------------------------------------------------------------------------

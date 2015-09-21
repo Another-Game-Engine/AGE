@@ -3,14 +3,18 @@
 #include <Render/Textures/Texture2D.hh>
 #include <Render/OpenGLTask/OpenGLState.hh>
 #include <Render/GeometryManagement/Painting/Painter.hh>
-#include <Culling/Output/RenderPipeline.hh>
+#include <Render/GeometryManagement/SimpleGeometryManager.hpp>
+#include <Render/GeometryManagement/SimpleGeometry.hh>
 #include <Render/ProgramResources/Types/Uniform/Mat4.hh>
 #include <Render/ProgramResources/Types/Uniform/Sampler/Sampler2D.hh>
 #include <Render/ProgramResources/Types/Uniform/Vec3.hh>
+
 #include <Threads/RenderThread.hpp>
 #include <Threads/ThreadManager.hpp>
+
 #include <Core/ConfigurationManager.hpp>
 #include <Core/Engine.hh>
+
 #include <Graphic/DRBCameraDrawableList.hpp>
 
 #define DRAW_2D_LINE_VERTEX "deferred_shading/draw2DLine.vp"
@@ -75,7 +79,7 @@ namespace AGE
 		_programs[PROGRAM_DRAW_2D_LINE]->use();
 
 		std::shared_ptr<AGE::Painter> lines;
-		auto &_2dLines = GetRenderThread()->debug2Dlines;
+		auto &_2dLines = Singleton<SimpleGeometryManager>::getInstance()->debug2Dlines;
 
 		if (_2dLines.verticesKey.isValid() && _2dLines.painterKey.isValid())
 		{
@@ -88,7 +92,7 @@ namespace AGE
 		_programs[PROGRAM_DRAW_3D_LINE]->use();
 		_programs[PROGRAM_DRAW_3D_LINE]->get_resource<Mat4>("viewProj").set(infos.cameraInfos.data.projection * infos.cameraInfos.view);
 
-		auto _3dLines = GetRenderThread()->debug3Dlines;
+		auto _3dLines = Singleton<SimpleGeometryManager>::getInstance()->debug3Dlines;
 		if (_3dLines.verticesKey.isValid() && _3dLines.painterKey.isValid())
 		{
 			lines = _painterManager->get_painter(_3dLines.painterKey);
@@ -100,7 +104,7 @@ namespace AGE
 		OpenGLState::glEnable(GL_DEPTH_TEST);
 		OpenGLState::glDepthFunc(GL_LESS);
 
-		auto &_3dlinesDepth = GetRenderThread()->debug3DlinesDepth;
+		auto &_3dlinesDepth = Singleton<SimpleGeometryManager>::getInstance()->debug3DlinesDepth;
 		if (_3dlinesDepth.painterKey.isValid() && _3dlinesDepth.painterKey.isValid())
 		{
 			lines = _painterManager->get_painter(_3dlinesDepth.painterKey);

@@ -1,9 +1,8 @@
-#include <Render/Pipelining/Pipelines/CustomRenderPass/DownSample.hh>
+#include <Render/Pipelining/Pipelines/CustomRenderPass/GaussianBlur.hh>
 
 #include <Render/Textures/Texture2D.hh>
 #include <Render/OpenGLTask/OpenGLState.hh>
 #include <Render/GeometryManagement/Painting/Painter.hh>
-#include <Culling/Output/RenderPipeline.hh>
 #include <Render/ProgramResources/Types/Uniform/Sampler/Sampler2D.hh>
 #include <Render/ProgramResources/Types/Uniform/Vec2.hh>
 #include <Threads/RenderThread.hpp>
@@ -17,25 +16,26 @@
 #include "Graphic/DRBCameraDrawableList.hpp"
 #include "Graphic/DRBPointLightData.hpp"
 
-#define PROGRAM_DOWN_SAMPLE_VERTEX "deferred_shading/down_sample.vp"
-#define PROGRAM_DOWN_SAMPLE_FRAG "deferred_shading/down_sample.fp"
+#define PROGRAM_BLUR_H_VERTEX "deferred_shading/blurh.vp"
+#define PROGRAM_BLUR_V_VERTEX "deferred_shading/blurv.vp"
+#define PROGRAM_BLUR_FRAG "deferred_shading/blur.fp"
 
 namespace AGE
 {
 	enum Programs
 	{
-		PROGRAM_DOWN_SAMPLE = 0,
+		PROGRAM_BLUR = 0,
 		PROGRAM_NBR
 	};
 
-	DownSample::DownSample(glm::uvec2 const &screenSize, std::shared_ptr<PaintingManager> painterManager,
-		std::shared_ptr<Texture2D> src, std::shared_ptr<Texture2D> dst) :
+	GaussianBlur::GaussianBlur(glm::uvec2 const &screenSize, std::shared_ptr<PaintingManager> painterManager,
+		std::shared_ptr<Texture2D> src, std::shared_ptr<Texture2D> dst, bool horizontal) :
 										FrameBufferRender(screenSize.x, screenSize.y, painterManager)
 	{
 		push_storage_output(GL_COLOR_ATTACHMENT0, dst);
 
-		_source = src;
 		_inverseSourceSize = 1.0f / glm::vec2(screenSize);
+		_source = src;
 
 		_programs.resize(PROGRAM_NBR);
 
@@ -46,10 +46,15 @@ namespace AGE
 		// you have to set shader directory in configuration path
 		AGE_ASSERT(shaderPath != nullptr);
 
-		auto vertexShaderPath = shaderPath->getValue() + PROGRAM_DOWN_SAMPLE_VERTEX;
-		auto fragmentShaderPath = shaderPath->getValue() + PROGRAM_DOWN_SAMPLE_FRAG;
+		std::string vertexShaderPath;
 
-		_programs[PROGRAM_DOWN_SAMPLE] = std::make_shared<Program>(Program(std::string("down_sample"),
+		if (horizontal)
+			vertexShaderPath = shaderPath->getValue() + PROGRAM_BLUR_H_VERTEX;
+		else
+			vertexShaderPath = shaderPath->getValue() + PROGRAM_BLUR_V_VERTEX;
+		auto fragmentShaderPath = shaderPath->getValue() + PROGRAM_BLUR_FRAG;
+
+		_programs[PROGRAM_BLUR] = std::make_shared<Program>(Program(std::string("gaussian_blur"),
 		{
 			std::make_shared<UnitProg>(vertexShaderPath, GL_VERTEX_SHADER),
 			std::make_shared<UnitProg>(fragmentShaderPath, GL_FRAGMENT_SHADER)
@@ -60,22 +65,22 @@ namespace AGE
 		_quadPainter = _painterManager->get_painter(quadPainterKey);
 	}
 
-	void DownSample::renderPass(const DRBCameraDrawableList &infos)
+	void GaussianBlur::renderPass(const DRBCameraDrawableList &infos)
 	{
-		SCOPE_profile_gpu_i("DownSample");
-		SCOPE_profile_cpu_i("RenderTimer", "DownSample");
+		SCOPE_profile_gpu_i("GaussianBlur");
+		SCOPE_profile_cpu_i("RenderTimer", "GaussianBlur");
 
 		OpenGLState::glDepthMask(GL_FALSE);
 		OpenGLState::glDisable(GL_DEPTH_TEST);
 		OpenGLState::glDisable(GL_STENCIL_TEST);
 		OpenGLState::glDisable(GL_CULL_FACE);
 
-		_programs[PROGRAM_DOWN_SAMPLE]->use();
-		_programs[PROGRAM_DOWN_SAMPLE]->get_resource<Sampler2D>("sourceTexture").set(_source);
-		_programs[PROGRAM_DOWN_SAMPLE]->get_resource<Vec2>("inverseSourceSize").set(_inverseSourceSize);
+		_programs[PROGRAM_BLUR]->use();
+		_programs[PROGRAM_BLUR]->get_resource<Sampler2D>("sourceTexture").set(_source);
+		_programs[PROGRAM_BLUR]->get_resource<Vec2>("inverseSourceSize").set(_inverseSourceSize);
 
-		_quadPainter->uniqueDrawBegin(_programs[PROGRAM_DOWN_SAMPLE]);
-		_quadPainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_DOWN_SAMPLE], Properties(), _quadVertices);
+		_quadPainter->uniqueDrawBegin(_programs[PROGRAM_BLUR]);
+		_quadPainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BLUR], Properties(), _quadVertices);
 		_quadPainter->uniqueDrawEnd();
 	}
 }

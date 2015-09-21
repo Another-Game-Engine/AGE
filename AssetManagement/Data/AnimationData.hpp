@@ -4,10 +4,10 @@
 #include <cereal/types/string.hpp>
 #include <stdint.h>
 
+#include <skinning/AnimationChannel.hpp>
+
 namespace AGE
 {
-	struct AnimationChannel;
-
 	struct AnimationData
 	{
 		std::string name;

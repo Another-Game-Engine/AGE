@@ -222,6 +222,9 @@ Compiler( 'Compiler-x64' )
 #include "GameEngine\AGE_Text.bff"
 #include "GameEngine\AGE_Physics.bff"
 #include "GameEngine\AGE_AssetManagement.bff"
+#include "GameEngine\AGE_Skinning.bff"
+#include "GameEngine\AGE_Graphic.bff"
+#include "GameEngine\AGE_Render.bff"
 
 #include "GameEngine\AGE_Core.bff"
 
@@ -259,6 +262,9 @@ Alias( 'All' )
                   , 'AGE_Text-proj'
                   , 'AGE_Physics-proj'
                   , 'AGE_AssetManagement-proj'
+                  , 'AGE_Skinning-proj'
+                  , 'AGE_Graphic-proj'
+                  , 'AGE_Render-proj'
                   , 'AGE_Core-proj'
                   , 'AGEngine-proj'
                   , 'AGEReader-proj' }
@@ -277,6 +283,9 @@ Alias( 'proj' )
                   , 'AGE_Text-proj'
                   , 'AGE_Physics-proj'
                   , 'AGE_AssetManagement-proj'
+                  , 'AGE_Skinning-proj'
+                  , 'AGE_Graphic-proj'
+                  , 'AGE_Render-proj'
                   , 'AGE_Core-proj'
                   , 'AGEngine-proj'
                   , 'AGEReader-proj'
@@ -297,6 +306,9 @@ VSSolution( 'solution' )
                                         , 'AGE_Text-proj'
                                         , 'AGE_Physics-proj'
                                         , 'AGE_AssetManagement-proj'
+                                        , 'AGE_Skinning-proj'
+                                        , 'AGE_Graphic-proj'
+                                        , 'AGE_Render-proj'
                                         , 'AGE_Core-proj'
                                         , 'AGEngine-proj'
                                         , 'AGEReader-proj'

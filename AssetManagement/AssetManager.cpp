@@ -8,6 +8,7 @@
 #include <AssetManagement/Data/TextureData.hh>
 #include <AssetManagement/Instance/MaterialInstance.hh>
 #include <AssetManagement/Instance/MeshInstance.hh>
+
 #include <Threads/ThreadManager.hpp>
 #include <Threads/Tasks/BasicTasks.hpp>
 #include <Threads/RenderThread.hpp>
@@ -16,14 +17,18 @@
 #include <Threads/QueueOwner.hpp>
 #include <Threads/Thread.hpp>
 #include <Threads/Tasks/ToRenderTasks.hpp>
-#include <Render/Textures/Texture2D.hh>
-#include <Render/GeometryManagement/Painting/Painter.hh>
+#include <Threads/RenderThread.hpp>
 
+// TODO : @FASTBUILD @FBUILD passer le painer manager en Singleton, le detacher du render thread
+
+#include <Render/Textures/Texture2D.hh>
+#include <Render/GeometryManagement/Painting/PaintingManager.hh>
 #include <Render/Properties/Transformation.hh>
 #include <Render/Properties/Materials/Color.hh>
 #include <Render/Properties/Materials/MapColor.hh>
 #include <Render/Properties/Materials/ScaleUVs.hpp>
 #include <Render/Properties/Materials/Ratio.hh>
+#include <Render/GeometryManagement/Painting/Painter.hh>
 
 #include <AssetManagement/OpenGLDDSLoader.hh>
 
