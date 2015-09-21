@@ -1,5 +1,5 @@
 #include <Systems/DebugSystem.hpp>
-#include <Components/Light.hh>
+#include <ComponentsCore/Light.hh>
 #include <imgui/imgui.h>
 #include <Core/Engine.hh>
 #include <Core/AScene.hh>

@@ -7,9 +7,9 @@
 #include <Core/AScene.hh>
 #include <Systems/LifetimeSystem.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include <Components/MeshRenderer.hh>
-#include <Components/Light.hh>
-#include <Components/CameraComponent.hpp>
+#include <ComponentsCore/MeshRenderer.hh>
+#include <ComponentsCore/Light.hh>
+#include <ComponentsCore/CameraComponent.hpp>
 #include <AssetManagement/AssetManager.hh>
 #include <Context/IRenderContext.hh>
 #include <CONFIGS.hh>

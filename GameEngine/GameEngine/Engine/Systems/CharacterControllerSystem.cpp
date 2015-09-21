@@ -1,9 +1,9 @@
 #include "CharacterControllerSystem.hh"
 
-#include <Components/RigidBody.hpp>
-#include <Components/Collider.hpp>
-#include <Components/CameraComponent.hpp>
-#include <Components/CharacterController.hh>
+#include <ComponentsCore/RigidBody.hpp>
+#include <ComponentsCore/Collider.hpp>
+#include <ComponentsCore/CameraComponent.hpp>
+#include <ComponentsCore/CharacterController.hh>
 
 #include <Entity/Entity.hh>
 #include <Entity/EntityData.hh>

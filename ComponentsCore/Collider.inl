@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Components/Collider.hpp>
+#include <ComponentsCore/Collider.hpp>
 
 namespace AGE
 {

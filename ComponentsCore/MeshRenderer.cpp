@@ -1,4 +1,4 @@
-#include <Components/MeshRenderer.hh>
+#include <ComponentsCore/MeshRenderer.hh>
 #include "Core/Engine.hh"
 #include <Core/AScene.hh>
 #include <AssetManagement/Instance/MeshInstance.hh>

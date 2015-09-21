@@ -1,4 +1,4 @@
-#include <Components/DirectionalLightComponent.hh>
+#include <ComponentsCore/DirectionalLightComponent.hh>
 #include <Core/AScene.hh>
 #include <Utils/MathematicTools.hh>
 #include <Threads/ThreadManager.hpp>

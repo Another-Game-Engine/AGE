@@ -4,9 +4,9 @@
 #include <Physics/EngineTypeToPluginName.hpp>
 #include <Physics/WorldInterface.hpp>
 #include <Physics/Fallback/NullPhysics.hpp>
-#include <Components/RigidBody.hpp>
-#include <Components/Collider.hpp>
-#include <Components/PhysicsData.hpp>
+#include <ComponentsCore/RigidBody.hpp>
+#include <ComponentsCore/Collider.hpp>
+#include <ComponentsCore/PhysicsData.hpp>
 #include <Systems/CollisionSystem.hpp>
 #include <Systems/TriggerSystem.hpp>
 #include <Utils/Profiler.hpp>

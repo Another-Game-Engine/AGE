@@ -1,9 +1,9 @@
 #include "RenderCameraSystem.hpp"
 
-#include <Components/CameraComponent.hpp>
-#include <Components/SpotLight.hh>
-#include <Components/DirectionalLightComponent.hh>
-#include <Components/Light.hh>
+#include <ComponentsCore/CameraComponent.hpp>
+#include <ComponentsCore/SpotLight.hh>
+#include <ComponentsCore/DirectionalLightComponent.hh>
+#include <ComponentsCore/Light.hh>
 
 #include <Core/Engine.hh>
 #include <Core/AScene.hh>

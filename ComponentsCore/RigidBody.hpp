@@ -169,4 +169,4 @@ namespace AGE
 
 CEREAL_CLASS_VERSION(AGE::RigidBody, 1);
 
-#include <Components/RigidBody.inl>
+#include <ComponentsCore/RigidBody.inl>

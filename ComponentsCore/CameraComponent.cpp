@@ -1,4 +1,4 @@
-#include <Components/CameraComponent.hpp>
+#include <ComponentsCore/CameraComponent.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <Threads/ThreadManager.hpp>
 #include <Threads/MainThread.hpp>

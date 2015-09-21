@@ -4,7 +4,7 @@
 
 #include <System/System.h>
 #include <Physics/TriggerListener.hpp>
-#include <Components/Collider.hpp>
+#include <ComponentsCore/Collider.hpp>
 #include <Physics/ITriggerListener.hpp>
 
 namespace AGE

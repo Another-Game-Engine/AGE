@@ -4,7 +4,7 @@
 #include <Configuration.hpp>
 
 #ifdef AGE_ENABLE_IMGUI
-#include <Utils/Age_Imgui.hpp>
+#include <Core/Age_Imgui.hpp>
 #endif
 
 namespace AGE
@@ -30,7 +30,7 @@ namespace AGE
 		auto it = _toAgeMappedKey.find(contextKey);
 
 		if (it == _toAgeMappedKey.end())
-			return (AGE_KEY_UNKNOWN);
+			return (AgeKeys::AGE_KEY_UNKNOWN);
 		return (it->second);
 	}
 
@@ -39,7 +39,7 @@ namespace AGE
 		auto it = _toAgePhysicalKey.find(contextKey);
 
 		if (it == _toAgePhysicalKey.end())
-			return (AGE_KEY_UNKNOWN);
+			return (AgeKeys::AGE_KEY_UNKNOWN);
 		return (it->second);
 	}
 
@@ -48,7 +48,7 @@ namespace AGE
 		auto it = _toAgeWindowInput.find(contextInput);
 
 		if (it == _toAgeWindowInput.end())
-			return (AGE_WINDOW_UNKNOWN);
+			return (AgeWindowInputs::AGE_WINDOW_UNKNOWN);
 		return (it->second);
 	}
 
@@ -57,7 +57,7 @@ namespace AGE
 		auto it = _toAgeMouseButton.find(contextInput);
 
 		if (it == _toAgeMouseButton.end())
-			return (AGE_MOUSE_UNKNOWN);
+			return (AgeMouseButtons::AGE_MOUSE_UNKNOWN);
 		return (it->second);
 	}
 
@@ -66,7 +66,7 @@ namespace AGE
 		auto it = _toAgeJoystickAxis.find(contextInput);
 
 		if (it == _toAgeJoystickAxis.end())
-			return (AGE_JOYSTICK_AXIS_UNKNOWN);
+			return (AgeJoystickAxis::AGE_JOYSTICK_AXIS_UNKNOWN);
 		return (it->second);
 	}
 
@@ -75,7 +75,7 @@ namespace AGE
 		auto it = _toAgeJoystickButtons.find(contextInput);
 
 		if (it == _toAgeJoystickButtons.end())
-			return (AGE_JOYSTICK_BUTTON_UNKNOWN);
+			return (AgeJoystickButtons::AGE_JOYSTICK_BUTTON_UNKNOWN);
 		return (it->second);
 	}
 
@@ -84,7 +84,7 @@ namespace AGE
 		auto it = _toAgeJoystickHatDirections.find(contextInput);
 
 		if (it == _toAgeJoystickHatDirections.end())
-			return (AGE_JOYSTICK_HAT_CENTERED);
+			return (AgeJoystickHatDirections::AGE_JOYSTICK_HAT_CENTERED);
 		return (it->second);
 	}
 }

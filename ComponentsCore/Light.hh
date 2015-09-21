@@ -10,6 +10,7 @@ namespace gl { class GeometryManager; class Vertices; class Indices; }
 namespace AGE
 {
 	class IProperty;
+	class BFCCullableHandle;
 
 	struct PointLightComponent : public ComponentBase
 	{

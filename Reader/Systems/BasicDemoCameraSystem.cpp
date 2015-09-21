@@ -1,11 +1,11 @@
 #include "BasicDemoCameraSystem.hh"
 
-#include <Components/RigidBody.hpp>
-#include <Components/Collider.hpp>
-#include <Components/CameraComponent.hpp>
-#include <Components/Light.hh>
-#include <Components/MeshRenderer.hh>
-#include <Components/Lifetime.hpp>
+#include <ComponentsCore/RigidBody.hpp>
+#include <ComponentsCore/Collider.hpp>
+#include <ComponentsCore/CameraComponent.hpp>
+#include <ComponentsCore/Light.hh>
+#include <ComponentsCore/MeshRenderer.hh>
+#include <ComponentsCore/Lifetime.hpp>
 
 #include <Entity/Entity.hh>
 #include <Entity/EntityData.hh>

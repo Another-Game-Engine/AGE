@@ -3,14 +3,14 @@
 {
 	#include "FBuildPath.bff"
 
-	.ProjectName		= 'AGE_Core'
-	.ProjectDestPath	= './$ProjectsFolder$/AGE_Core/'
-	.ProjectPath		= 'Engine'
+	.ProjectName		= 'AGE_ComponentsCore'
+	.ProjectDestPath	= './$ProjectsFolder$/AGE_ComponentsCore/'
+	.ProjectPath		= 'ComponentsCore'
 
 	.CompilerIncludesPaths = ' /I"$ProjectPath$"'
 	                       + ' /I"$VendorsPath$"'
-	                       + ' /I"$VendorsPath$"\OpenGL\include\'
-	                       + ' /I"$EnginePath$"'
+	                       + ' /I"$NewEnginePath$"'
+                           + ' /I"$VendorsPath$"\OpenGL\include\'
 
 	// Visual Studio Project Generation
 	//--------------------------------------------------------------------------
@@ -24,9 +24,6 @@
 
 		// Vendors
 		.IncludeSearchPath               = '$ProjectPath$\'
-		                                 + '$ProjectPath$\Core'
-		                                 + '$ProjectPath$\Entity'
-		                                 + '$VendorsPath$\Entity'
 
 		// Exclude Tests
 	}

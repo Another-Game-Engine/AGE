@@ -1,11 +1,11 @@
 #include <Systems/FreeFlyCamera.hh>
-#include <Components/CameraComponent.hpp>
+#include <ComponentsCore/CameraComponent.hpp>
 #include <Core/Inputs/Input.hh>
 #include <Context/IRenderContext.hh>
 #include <Threads/RenderThread.hpp>
 #include <Threads/ThreadManager.hpp>
 #include <Threads/Tasks/ToRenderTasks.hpp>
-#include <Components/FreeFlyComponent.hh>
+#include <ComponentsCore/FreeFlyComponent.hh>
 #include <Core/AScene.hh>
 
 namespace AGE

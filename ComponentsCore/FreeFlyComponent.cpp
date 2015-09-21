@@ -1,4 +1,4 @@
-#include <Components/FreeFlyComponent.hh>
+#include <ComponentsCore/FreeFlyComponent.hh>
 
 namespace AGE
 {

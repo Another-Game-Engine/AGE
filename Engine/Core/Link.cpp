@@ -5,7 +5,7 @@
 #include <Utils/Debug.hpp>
 #include <Utils/MatrixConversion.hpp>
 #include <Core/AScene.hh>
-#include <Components/Collider.hpp>
+#include <ComponentsCore/Collider.hpp>
 #include <BFC/BFCLinkTracker.hpp>
 
 

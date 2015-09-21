@@ -1,4 +1,4 @@
-#include <Components/SpotLight.hh>
+#include <ComponentsCore/SpotLight.hh>
 #include <Core/AScene.hh>
 #include <Utils/MathematicTools.hh>
 #include <glm/glm.hpp>

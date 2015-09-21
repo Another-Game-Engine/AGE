@@ -1,6 +1,6 @@
-#include <Components/RigidBody.hpp>
-#include <Components/Collider.hpp>
-#include <Components/PhysicsData.hpp>
+#include <ComponentsCore/RigidBody.hpp>
+#include <ComponentsCore/Collider.hpp>
+#include <ComponentsCore/PhysicsData.hpp>
 #include <Core/AScene.hh>
 #include <Physics/PhysicsInterface.hpp>
 #include <Physics/WorldInterface.hpp>

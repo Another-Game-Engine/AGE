@@ -1,6 +1,8 @@
 #pragma once
 
 #include <context/IRenderContext.hh>
+#include <sdl/sdl_joystick.h>
+#include <Core/Inputs/AgeInputs.hh>
 
 class SDL_Window;
 typedef int32_t SDL_JoystickID;

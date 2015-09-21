@@ -179,4 +179,4 @@ namespace AGE
 
 CEREAL_CLASS_VERSION(AGE::Collider, 1);
 
-#include <Components/Collider.inl>
+#include <ComponentsCore/Collider.inl>

@@ -106,6 +106,7 @@
 			                              , 'AGE_Skinning-Lib-$Platform$-$Config$'
 			                              , 'AGE_Graphic-Lib-$Platform$-$Config$'
 			                              , 'AGE_Render-Lib-$Platform$-$Config$'
+			                              , 'AGE_ComponentsCore-Lib-$Platform$-$Config$'
 			                              , 'AGE_Core-Lib-$Platform$-$Config$'
 			                              , 'AGEngine-Lib-$Platform$-$Config$'
 			                              , 'AGEReader-Lib-$Platform$-$Config$'

@@ -3,7 +3,7 @@
 #include <string>
 #include <list>
 
-#include "Components/MeshRenderer.hh"
+#include "ComponentsCore/MeshRenderer.hh"
 
 static				int uniqueId()
 {

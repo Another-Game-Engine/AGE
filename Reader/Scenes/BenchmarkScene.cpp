@@ -19,18 +19,18 @@
 
 #include <Configuration.hpp>
 
-#include <Components/FreeFlyComponent.hh>
-#include <Components/CameraComponent.hpp>
-#include <Components/Light.hh>
-#include <Components/SpotLight.hh>
-#include <Components/RigidBody.hpp>
-#include <Components/MeshRenderer.hh>
-#include <Components/Lifetime.hpp>
-#include <Components/RotationComponent.hpp>
-#include <Components/Collider.hpp>
+#include <ComponentsCore/FreeFlyComponent.hh>
+#include <ComponentsCore/CameraComponent.hpp>
+#include <ComponentsCore/Light.hh>
+#include <ComponentsCore/SpotLight.hh>
+#include <ComponentsCore/RigidBody.hpp>
+#include <ComponentsCore/MeshRenderer.hh>
+#include <ComponentsCore/Lifetime.hpp>
+#include <ComponentsCore/RotationComponent.hpp>
+#include <ComponentsCore/Collider.hpp>
 #include <Components/ArchetypeComponent.hpp>
-#include <Components/CharacterController.hh>
-#include <Components/PhysicsData.hpp>
+#include <ComponentsCore/CharacterController.hh>
+#include <ComponentsCore/PhysicsData.hpp>
 
 #include <Components/ComponentRegistrationManager.hpp>
 
