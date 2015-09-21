@@ -36,7 +36,8 @@ namespace AGE
 		: Thread(AGE::Thread::ThreadType::Render)
 		, _context(nullptr),
 		paintingManager(std::make_shared<PaintingManager>()),
-		pipelines(RenderType::TOTAL)
+		pipelines(RenderType::TOTAL),
+		_depthMapManager(nullptr)
 	{
 		_imguiRenderlist = nullptr;
 		_frameCounter = 0;
