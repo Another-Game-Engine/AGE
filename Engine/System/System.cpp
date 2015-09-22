@@ -3,31 +3,36 @@
 
 namespace AGE
 {
-	System::System(AScene *scene) :
+	SystemType SystemBase::_typeCounter = 0;
+
+	SystemBase::SystemBase(AScene *scene, const SystemType typeId) :
 		_scene(scene)
 		, _activated(false)
-	{}
+		, _typeId(typeId)
+	{
+		AGE_ASSERT(_typeId != std::size_t(-1));
+	}
 
-	System::~System()
+	SystemBase::~SystemBase()
 	{
 	}
 
 
-	void System::update(float time)
+	void SystemBase::update(float time)
 	{
 		updateBegin(time);
 		mainUpdate(time);
 		updateEnd(time);
 	}
 
-	bool System::init()
+	bool SystemBase::init()
 	{
 		if (!initialize())
 			return false;
 		return setActivation(true);
 	}
 
-	bool System::setActivation(bool tof)
+	bool SystemBase::setActivation(bool tof)
 	{
 		auto res = false;
 		if (tof && _activated)
@@ -47,38 +52,38 @@ namespace AGE
 		return res;
 	}
 
-	bool System::isActivated() const
+	bool SystemBase::isActivated() const
 	{
 		return _activated;
 	}
 	
-	void System::finalize(void)
+	void SystemBase::finalize(void)
 	{
 	}
 	
-	void System::updateBegin(float time) 
+	void SystemBase::updateBegin(float time) 
 	{
 	}
 
-	void System::updateEnd(float time)
+	void SystemBase::updateEnd(float time)
 	{
 	}
 
-	void System::mainUpdate(float time)
+	void SystemBase::mainUpdate(float time)
 	{
 	}
 
-	bool System::initialize()
+	bool SystemBase::initialize()
 	{
 		return true;
 	}
 	
-	bool System::activate()
+	bool SystemBase::activate()
 	{
 		return true;
 	}
 
-	bool System::deactivate()
+	bool SystemBase::deactivate()
 	{
 		return true;
 	}

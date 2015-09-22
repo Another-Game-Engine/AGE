@@ -12,7 +12,7 @@ namespace AGE
 {
 	struct Link;
 
-	class FreeFlyCamera : public System
+	class FreeFlyCamera : public System<FreeFlyCamera>
 	{
 	public:
 		FreeFlyCamera() = delete;

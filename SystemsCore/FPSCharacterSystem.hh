@@ -5,7 +5,7 @@
 
 namespace AGE
 {
-	class FPSCharacterSystem : public System
+	class FPSCharacterSystem : public System<FPSCharacterSystem>
 	{
 	public:
 		FPSCharacterSystem() = delete;

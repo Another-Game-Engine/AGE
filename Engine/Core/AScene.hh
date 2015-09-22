@@ -28,7 +28,7 @@ namespace AGE
 {
 	class Engine;
 	class EntityFilter;
-	class System;
+	class SystemBase;
 	class SceneManager;
 	struct Link;
 
@@ -40,7 +40,7 @@ namespace AGE
 	class AScene : public DependenciesInjector, public EntityIdRegistrationManager, public ComponentManager
 	{
 	private:
-		std::multimap<std::size_t, std::shared_ptr<System> >                    _systems;
+		std::multimap<std::size_t, std::shared_ptr<SystemBase> >                    _systems;
 		std::array<std::list<EntityFilter*>, MAX_CPT_NUMBER + MAX_TAG_NUMBER>   _filters;
 		std::list<EntityFilter*>                                                 _allFilters;
 		AGE::ObjectPool<EntityData>                                             _entityPool;
@@ -125,7 +125,7 @@ namespace AGE
 			SCOPE_profile_cpu_function("Scenes");
 			for (auto &e : _systems)
 			{
-				if (typeid(*e.second.get()).name() == typeid(T).name())
+				if (e.second->getTypeId() == System<T>::getTypeId())
 					return std::static_pointer_cast<T>(e.second);
 			}
 			return nullptr;

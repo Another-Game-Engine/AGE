@@ -5,7 +5,7 @@
 
 namespace AGE
 {
-	class CharacterControllerSystem : public System
+	class CharacterControllerSystem : public System<CharacterControllerSystem>
 	{
 	public:
 		CharacterControllerSystem() = delete;

@@ -12,7 +12,7 @@
 
 namespace AGE
 {
-	class PhysicsSystem final : public System, public PluginManager<Physics::PhysicsInterface>
+	class PhysicsSystem final : public System<PhysicsSystem>, public PluginManager<Physics::PhysicsInterface>
 	{
 	public:
 		// Constructors

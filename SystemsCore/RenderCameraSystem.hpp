@@ -5,7 +5,7 @@
 
 namespace AGE
 {
-	class RenderCameraSystem : public System
+	class RenderCameraSystem : public System<RenderCameraSystem>
 	{
 	public:
 		RenderCameraSystem() = delete;

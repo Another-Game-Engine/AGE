@@ -4,7 +4,7 @@
 
 namespace AGE
 {
-	class LifetimeSystem : public AGE::System
+	class LifetimeSystem : public AGE::System<LifetimeSystem>
 	{
 	public:
 		LifetimeSystem(AScene *scene);

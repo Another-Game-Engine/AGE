@@ -5,7 +5,7 @@
 
 namespace AGE
 {
-	class BasicDemoCameraSystem : public System
+	class BasicDemoCameraSystem : public System<BasicDemoCameraSystem>
 	{
 	public:
 		BasicDemoCameraSystem() = delete;

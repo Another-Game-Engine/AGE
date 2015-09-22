@@ -11,7 +11,7 @@ namespace AGE
 {
 	namespace Private
 	{
-		class TriggerSystem final : public System, public Physics::TriggerListener
+		class TriggerSystem final : public System<TriggerSystem>, public Physics::TriggerListener
 		{
 		public:
 			// Constructors

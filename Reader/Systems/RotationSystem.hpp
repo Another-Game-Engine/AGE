@@ -2,7 +2,7 @@
 
 namespace AGE
 {
-	class RotationSystem : public AGE::System
+	class RotationSystem : public AGE::System<RotationSystem>
 	{
 	public:
 		RotationSystem(AScene *scene);

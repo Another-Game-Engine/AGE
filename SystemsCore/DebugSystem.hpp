@@ -5,7 +5,7 @@
 
 namespace AGE
 {
-	class DebugSystem : public System
+	class DebugSystem : public System<DebugSystem>
 	{
 	public:
 		DebugSystem() = delete;

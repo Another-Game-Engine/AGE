@@ -11,7 +11,7 @@ namespace AGE
 {
 	namespace Private
 	{
-		class CollisionSystem final : public System, public Physics::CollisionListener
+		class CollisionSystem final : public System<CollisionSystem>, public Physics::CollisionListener
 		{
 		public:
 			// Constructors
