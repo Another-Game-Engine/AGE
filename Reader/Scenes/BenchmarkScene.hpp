@@ -16,14 +16,14 @@
 #include <AssetManagement/Instance/AnimationInstance.hh>
 #include <Render/Textures/TextureCubeMap.hh>
 
-# define VERTEX_SHADER "../../Shaders/test_pipeline_1.vp"
-# define FRAG_SHADER "../../Shaders/test_pipeline_1.fp"
-# define DEFFERED_VERTEX_SHADER "../../Shaders/Deffered_shading/deffered_shading_get_buffer.vp"
-# define DEFFERED_FRAG_SHADER "../../Shaders/Deffered_shading/deffered_shading_get_buffer.fp"
-# define DEFFERED_VERTEX_SHADER_ACCUM "../../Shaders/Deffered_shading/deffered_shading_lighting.vp"
-# define DEFFERED_FRAG_SHADER_ACCUM "../../Shaders/Deffered_shading/deffered_shading_lighting.fp"
-# define DEFERRED_FRAG_SHADER_MERGE "../../Shaders/Deffered_shading/deferred_shading_merge.fp"
-# define DEFERRED_VERTEX_SHADER_MERGE "../../Shaders/Deffered_shading/deferred_shading_merge.vp"
+# define VERTEX_SHADER "../../GameEngine/Shaders/test_pipeline_1.vp"
+# define FRAG_SHADER "../../GameEngine/Shaders/test_pipeline_1.fp"
+# define DEFFERED_VERTEX_SHADER "../../GameEngine/Shaders/Deffered_shading/deffered_shading_get_buffer.vp"
+# define DEFFERED_FRAG_SHADER "../../GameEngine/Shaders/Deffered_shading/deffered_shading_get_buffer.fp"
+# define DEFFERED_VERTEX_SHADER_ACCUM "../../GameEngine/Shaders/Deffered_shading/deffered_shading_lighting.vp"
+# define DEFFERED_FRAG_SHADER_ACCUM "../../GameEngine/Shaders/Deffered_shading/deffered_shading_lighting.fp"
+# define DEFERRED_FRAG_SHADER_MERGE "../../GameEngine/Shaders/Deffered_shading/deferred_shading_merge.fp"
+# define DEFERRED_VERTEX_SHADER_MERGE "../../GameEngine/Shaders/Deffered_shading/deferred_shading_merge.vp"
 
 namespace AGE
 {
