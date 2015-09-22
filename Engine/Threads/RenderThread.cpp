@@ -436,7 +436,7 @@ namespace AGE
 
 		registerCallback<AGE::Tasks::Basic::Exit>([&](AGE::Tasks::Basic::Exit& msg)
 		{
-			AGE::CreateEngine()->deleteInstance<IRenderContext>();
+			AGE::GetEngine()->deleteInstance<IRenderContext>();
 			this->_insideRun = false;
 		});
 
