@@ -44,7 +44,7 @@ char const *UnitProg::handleRequireToken(std::string &sources)
 		assert(end != std::string::npos);
 		auto file = sources.substr(startFile, end - startFile);
 		sources.erase(start, 9 + file.size() + 1);
-		file = std::string("../../GameEngine/Shaders/tool/" + file);
+		file = std::string("../../Datas/Shaders/tool/" + file);
 		std::fstream f(file.c_str());
 		assert(!f.fail()); //Fail to open the 'file' inside Shaders/tool/
 		std::ostringstream stream;

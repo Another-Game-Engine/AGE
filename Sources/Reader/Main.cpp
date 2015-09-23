@@ -54,7 +54,7 @@ int			main(int ac, char **av)
 		AGE::GetThreadManager()->setAsWorker(true, true, false);
 
 		auto configurationManager = engine->getInstance<ConfigurationManager>();
-		configurationManager->setConfiguration<std::string>(std::string("ShadersPath"), std::string(engine->getApplicationPath() + "/../../GameEngine/Shaders/"));
+		configurationManager->setConfiguration<std::string>(std::string("ShadersPath"), std::string(engine->getApplicationPath() + "/../../Datas/Shaders/"));
 
 		engine->setInstance<Timer>();
 		engine->setInstance<AGE::AssetsManager>();
