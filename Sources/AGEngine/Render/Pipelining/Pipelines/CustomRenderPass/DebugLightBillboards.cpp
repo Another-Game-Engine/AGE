@@ -18,8 +18,8 @@
 #include <Core/Engine.hh>
 #include <AssetManagement/AssetManager.hh>
 
-#define DEFERRED_SHADING_DEBUG_LIGHT_VERTEX "../../GameEngine/Shaders/deferred_shading/deferred_shading_debug_light.vp"
-#define DEFERRED_SHADING_DEBUG_LIGHT_FRAG "../../GameEngine/Shaders/deferred_shading/deferred_shading_debug_light.fp"
+#define DEFERRED_SHADING_DEBUG_LIGHT_VERTEX "../../Datas/Shaders/deferred_shading/deferred_shading_debug_light.vp"
+#define DEFERRED_SHADING_DEBUG_LIGHT_FRAG "../../Datas/Shaders/deferred_shading/deferred_shading_debug_light.fp"
 
 #include "Render/Textures/TextureBuffer.hh"
 #include "Render/ProgramResources/Types/Uniform/Sampler/SamplerBuffer.hh"
