@@ -1,7 +1,7 @@
 #pragma once
 
 #include <System/System.h>
-#include <Components\CameraComponent.hpp>
+#include <ComponentsCore\CameraComponent.hpp>
 
 #define MAX_SCENE_NAME_LENGTH 255
 
@@ -12,7 +12,7 @@ namespace AGE
 
 	namespace WE
 	{
-		class EntityManager : public System
+		class EntityManager : public System<EntityManager>
 		{
 		public:
 			EntityManager(AScene *scene);

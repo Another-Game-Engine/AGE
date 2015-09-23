@@ -56,7 +56,7 @@ namespace AGE
 
 	bool SceneSelectorScene::_userUpdateEnd(float time)
 	{
-		if (getInstance<Input>()->getPhysicalKeyJustReleased(AGE_ESCAPE))
+		if (getInstance<Input>()->getPhysicalKeyJustReleased(AgeKeys::AGE_ESCAPE))
 			return (false);
 		return true;
 	}

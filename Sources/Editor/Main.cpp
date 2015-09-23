@@ -28,7 +28,6 @@
 #include <Threads/Tasks/BasicTasks.hpp>
 #include <Threads/TaskScheduler.hpp>
 #include <Core/ConfigurationManager.hpp>
-#include <Entities/ArchetypeLibrary.hpp>
 
 //SCENE
 #include <Scenes/AssetsEditorScene.hpp>
@@ -40,20 +39,20 @@
 //COMPONENT REGISTRAR
 #include <EDITOR_COMPONENT_REGISTER.cpp>
 
-#include <Components/CameraComponent.hpp>
-#include <Components/MeshRenderer.hh>
-#include <Components/Light.hh>
-#include <Components/RigidBody.hpp>
-#include <Components/SpotLight.hh>
-#include <Components/DirectionalLightComponent.hh>
-#include <Components/FreeFlyComponent.hh>
+#include <ComponentsCore/CameraComponent.hpp>
+#include <ComponentsCore/MeshRenderer.hh>
+#include <ComponentsCore/Light.hh>
+#include <ComponentsCore/RigidBody.hpp>
+#include <ComponentsCore/SpotLight.hh>
+#include <ComponentsCore/DirectionalLightComponent.hh>
+#include <ComponentsCore/FreeFlyComponent.hh>
 #include <Components/ArchetypeComponent.hpp>
-#include <Components/Collider.hpp>
-#include <Components/CharacterController.hh>
+#include <ComponentsCore/Collider.hpp>
+#include <ComponentsCore/CharacterController.hh>
 
 //COMPONENTS
 #include <Components/EntityRepresentation.hpp>
-#include <Components\PhysicsData.hpp>
+#include <ComponentsCore\PhysicsData.hpp>
 
 #include <Managers/ArchetypesEditorManager.hpp>
 

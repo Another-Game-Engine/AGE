@@ -1,6 +1,6 @@
 #include "ReadableEntity.hpp"
 
-#include <Entities/EntityData.hh>
+#include <Entity/EntityData.hh>
 
 #include <cereal/types/vector.hpp>
 #include <cereal/types/map.hpp>
@@ -12,7 +12,7 @@
 
 #include <Utils/Debug.hpp>
 
-#include <Entities/BinaryEntity.hpp>
+#include <Entity/BinaryEntity.hpp>
 
 #include <Components/ArchetypeComponent.hpp>
 

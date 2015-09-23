@@ -2,9 +2,9 @@
 
 #include <set>
 #include <map>
-#include <Entities/Archetype.hpp>
+#include <Entity/Archetype.hpp>
 #include <Entities/ReadableEntityPack.hpp>
-#include <Entities/IArchetypeManager.hpp>
+#include <Entity/IArchetypeManager.hpp>
 
 namespace AGE
 {

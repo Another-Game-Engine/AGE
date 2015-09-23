@@ -1,5 +1,5 @@
 #include "AssetsDatabase.hpp"
-#include <FileUtils/FileUtils/FileSystemHelpers.hpp>
+#include <FileUtils/FileSystemHelpers.hpp>
 
 namespace AGE
 {

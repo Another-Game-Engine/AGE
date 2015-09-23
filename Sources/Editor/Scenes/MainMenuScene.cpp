@@ -99,13 +99,13 @@ namespace AGE
 	{
 		auto input = getInstance<Input>();
 		
-		auto ctrl = input->getPhysicalKeyPressed(AGE_LCTRL);
-		ctrl |= input->getPhysicalKeyPressed(AGE_RCTRL);
+		auto ctrl = input->getPhysicalKeyPressed(AgeKeys::AGE_LCTRL);
+		ctrl |= input->getPhysicalKeyPressed(AgeKeys::AGE_RCTRL);
 
-		auto shift = input->getPhysicalKeyPressed(AGE_LSHIFT);
-		shift |= input->getPhysicalKeyPressed(AGE_RSHIFT);
+		auto shift = input->getPhysicalKeyPressed(AgeKeys::AGE_LSHIFT);
+		shift |= input->getPhysicalKeyPressed(AgeKeys::AGE_RSHIFT);
 
-		auto qKey = input->getPhysicalKeyPressed(AGE_q);
+		auto qKey = input->getPhysicalKeyPressed(AgeKeys::AGE_q);
 
 		if (ctrl && shift && qKey)
 		{

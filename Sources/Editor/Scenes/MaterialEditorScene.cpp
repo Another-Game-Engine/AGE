@@ -4,7 +4,7 @@
 #include <Convertor/MaterialConvertor.hpp>
 #include <Utils/Directory.hpp>
 #include <Utils/Path.hpp>
-#include <FileUtils/FileUtils/FileSystemHelpers.hpp>
+#include <FileUtils/FileSystemHelpers.hpp>
 #include <EditorConfiguration.hpp>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>

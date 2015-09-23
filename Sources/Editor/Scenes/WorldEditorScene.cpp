@@ -6,10 +6,10 @@
 #include <imgui\imgui.h>
 #include <Systems/EntityManager.hpp>
 #include <Systems/AssetsAndComponentRelationsSystem.hpp>
-#include <Systems/PhysicsSystem.hpp>
+#include <SystemsCore/PhysicsSystem.hpp>
 #include <AssetManagement/AssetManager.hh>
 
-#include <Components/CameraComponent.hpp>
+#include <ComponentsCore/CameraComponent.hpp>
 
 #include <Threads/ThreadManager.hpp>
 #include <Threads/RenderThread.hpp>
@@ -17,14 +17,14 @@
 #include <Threads/Commands/ToRenderCommands.hpp>
 #include <Threads/Tasks/BasicTasks.hpp>
 #include <Threads/Tasks/ToRenderTasks.hpp>
-#include <Components/FreeFlyComponent.hh>
-#include <Systems/FreeFlyCamera.hh>
+#include <ComponentsCore/FreeFlyComponent.hh>
+#include <SystemsCore/FreeFlyCamera.hh>
 #include <Components/EntityRepresentation.hpp>
 #include <Managers/ArchetypesEditorManager.hpp>
 #include <EditorConfiguration.hpp>
 
-#include "Systems/RenderCameraSystem.hpp"
-#include "Systems/CharacterControllerSystem.hh"
+#include "SystemsCore/RenderCameraSystem.hpp"
+#include "SystemsCore/CharacterControllerSystem.hh"
 
 #include "../Plugins/Physics/PhysX/PhysXPhysics.hpp"
 

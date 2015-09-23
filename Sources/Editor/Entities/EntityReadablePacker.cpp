@@ -1,6 +1,6 @@
 #include "EntityReadablePacker.hpp"
-#include <Entities/EntityData.hh>
-#include <Entities/Entity.hh>
+#include <Entity/EntityData.hh>
+#include <Entity/Entity.hh>
 #include <Entities/ReadableEntityPack.hpp>
 #include <Entities/ReadableEntity.hpp>
 #include <Managers/ArchetypesEditorManager.hpp>
@@ -8,8 +8,6 @@
 #include <Components/ComponentRegistrationManager.hpp>
 #include <Components/ArchetypeComponent.hpp>
 #include <Components/EntityRepresentation.hpp>
-
-#include <WorldEditorGlobal.hpp>
 
 namespace AGE
 {

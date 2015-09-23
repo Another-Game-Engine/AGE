@@ -137,7 +137,16 @@
 										+ ' $VendorsPath$/OpenGL/lib/x64/sdl2main.lib'
 										+ ' $VendorsPath$/minizip\lib\windows\x64/minizip.lib'
 										+ ' $VendorsPath$/zlib\lib\windows\x64/zlib.lib'
-
+										+ ' $VendorsPath$/assimp\x64\Release/assimp.lib'
+										+ ' $VendorsPath$/DirectXTex\DirectXTex\Bin\Desktop_2013\x64\$Config$\DirectXTex.lib'
+										+ ' $VendorsPath$/Physx/Binaries\x64\$Config$\Physics_PhysX_x64.lib'
+										+ ' $VendorsPath$/bullet\lib\x64$Config$/BulletCollision_$Config$.lib'
+										+ ' $VendorsPath$/bullet\lib\x64$Config$/BulletDynamics_$Config$.lib'
+										+ ' $VendorsPath$/bullet\lib\x64$Config$/BulletFileLoader_$Config$.lib'
+										+ ' $VendorsPath$/bullet\lib\x64$Config$/BulletWorldImporter_$Config$.lib'
+										+ ' $VendorsPath$/bullet\lib\x64$Config$/GLUI_$Config$.lib'
+										+ ' $VendorsPath$/bullet\lib\x64$Config$/HACD_$Config$.lib'
+										+ ' $VendorsPath$/bullet\lib\x64$Config$/LinearMath_$Config$.lib'
 		}
 		Alias( '$ProjectName$-$Platform$-$Config$' ) { .Targets = '$ProjectName$-Exe-$Platform$-$Config$' }
 

@@ -6,7 +6,7 @@ namespace AGE
 {
 	namespace WE
 	{
-		class AssetsAndComponentRelationsSystem : public System
+		class AssetsAndComponentRelationsSystem : public System<AssetsAndComponentRelationsSystem>
 		{
 		public:
 			AssetsAndComponentRelationsSystem(AScene *scene);

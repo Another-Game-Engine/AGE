@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MeshColliderInterface.hpp"
+#include "Physics/MeshColliderInterface.hpp"
 #include "PhysXCollider.hpp"
 
 #pragma warning(push)

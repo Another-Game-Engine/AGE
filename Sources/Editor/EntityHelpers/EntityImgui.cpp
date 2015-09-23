@@ -1,9 +1,9 @@
 #include "EntityImgui.hpp"
 
-#include <Entities/Entity.hh>
+#include <Entity/Entity.hh>
 #include <Components/EntityRepresentation.hpp>
 #include <Components/ComponentRegistrationManager.hpp>
-#include <Components/MeshRenderer.hh>
+#include <ComponentsCore/MeshRenderer.hh>
 
 #include <Components/ArchetypeComponent.hpp>
 

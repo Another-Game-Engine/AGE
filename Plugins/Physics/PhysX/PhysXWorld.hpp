@@ -1,6 +1,6 @@
 #pragma once
 
-#include "WorldInterface.hpp"
+#include "Physics/WorldInterface.hpp"
 #include "PhysXPhysics.hpp"
 #include "PhysXRigidBody.hpp"
 #include "PhysXMaterial.hpp"
@@ -8,9 +8,9 @@
 #include "PhysXCapsuleCollider.hpp"
 #include "PhysXMeshCollider.hpp"
 #include "PhysXSphereCollider.hpp"
-#include "MemoryPoolHelper.hpp"
-#include "CollisionListener.hpp"
-#include "TriggerListener.hpp"
+#include "Physics/MemoryPoolHelper.hpp"
+#include "Physics/CollisionListener.hpp"
+#include "Physics/TriggerListener.hpp"
 
 namespace AGE
 {

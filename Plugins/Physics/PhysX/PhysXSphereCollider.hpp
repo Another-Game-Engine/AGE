@@ -1,6 +1,6 @@
 #pragma once
 
-#include "SphereColliderInterface.hpp"
+#include "Physics/SphereColliderInterface.hpp"
 #include "PhysXCollider.hpp"
 
 #pragma warning(push)

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "RigidBodyInterface.hpp"
+#include "Physics/RigidBodyInterface.hpp"
 
 namespace AGE
 {

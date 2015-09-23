@@ -1,6 +1,6 @@
 #pragma once
 
-#include "BoxColliderInterface.hpp"
+#include "Physics/BoxColliderInterface.hpp"
 #include "PhysXCollider.hpp"
 
 #pragma warning(push)

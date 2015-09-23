@@ -3,7 +3,7 @@
 #include "AssetFileManager.hpp"
 
 #include <FileUtils/AssetFiles/File.hpp>
-#include <FileUtils/FileUtils/FileSystemHelpers.hpp>
+#include <FileUtils/FileSystemHelpers.hpp>
 #include <FileUtils/AssetFiles/AssetsTypes.hpp>
 
 #include "AssetFiles/MeshRawFile.hpp"

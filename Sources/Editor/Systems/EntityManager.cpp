@@ -3,18 +3,18 @@
 #include <Components/EntityRepresentation.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <Components/ComponentRegistrationManager.hpp>
-#include <Components/MeshRenderer.hh>
+#include <ComponentsCore/MeshRenderer.hh>
 #include <AssetManagement/AssetManager.hh>
 #include <EditorConfiguration.hpp>
-#include <Components/CameraComponent.hpp>
-#include <Components/FreeFlyComponent.hh>
-#include <Entities/Archetype.hpp>
+#include <ComponentsCore/CameraComponent.hpp>
+#include <ComponentsCore/FreeFlyComponent.hh>
+#include <Entity/Archetype.hpp>
 #include <Managers/ArchetypesEditorManager.hpp>
 #include <EntityHelpers/EntityImgui.hpp>
 #include <Entities/EntityReadablePacker.hpp>
 #include <Entities/ReadableEntityPack.hpp>
-#include <Entities/EntityBinaryPacker.hpp>
-#include <Entities/BinaryEntityPack.hpp>
+#include <Entity/EntityBinaryPacker.hpp>
+#include <Entity/BinaryEntityPack.hpp>
 #include <Core/Inputs/Input.hh>
 #include <Components/ArchetypeComponent.hpp>
 
@@ -104,8 +104,6 @@ namespace AGE
 
 					generateBasicEntities();
 
-					WESerialization::SetSerializeForEditor(true);
-
 					auto sceneFileName = WE::EditorConfiguration::getSelectedScenePath() + ".raw_scene";
 
 					strcpy_s(_sceneName, WE::EditorConfiguration::getSelectedSceneName().c_str());
@@ -128,7 +126,6 @@ namespace AGE
 				if (_saveScene)
 				{
 					((WE::ArchetypeEditorManager*)(_scene->getInstance<IArchetypeManager>()))->save();
-					WESerialization::SetSerializeForEditor(true);
 
 					//auto parent = _gizmoEntity.getLinkPtr()->getParent();
 					//_gizmoEntity.getLinkPtr()->detachParent();
@@ -148,7 +145,6 @@ namespace AGE
 					//	_gizmoEntity.getLinkPtr()->attachParent(parent);
 					//}
 
-					WESerialization::SetSerializeForEditor(false);
 					_saveScene = false;
 				}
 
@@ -436,10 +432,10 @@ namespace AGE
 
 				auto input = _scene->getInstance<Input>();
 
-				auto ctrl = input->getPhysicalKeyPressed(AGE_LCTRL);
-				ctrl |= input->getPhysicalKeyPressed(AGE_RCTRL);
+				auto ctrl = input->getPhysicalKeyPressed(AgeKeys::AGE_LCTRL);
+				ctrl |= input->getPhysicalKeyPressed(AgeKeys::AGE_RCTRL);
 
-				auto sKey = input->getPhysicalKeyPressed(AGE_s);
+				auto sKey = input->getPhysicalKeyPressed(AgeKeys::AGE_s);
 
 				if (ctrl && sKey && _sceneName[0])
 				{

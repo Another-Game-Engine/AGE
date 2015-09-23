@@ -2,7 +2,7 @@
 
 #include <PxPhysicsAPI.h>
 
-#include "MaterialInterface.hpp"
+#include "Physics/MaterialInterface.hpp"
 
 namespace AGE
 {

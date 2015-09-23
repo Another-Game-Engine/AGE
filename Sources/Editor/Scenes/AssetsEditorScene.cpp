@@ -6,7 +6,7 @@
 #include <Core/Timer.hh>
 #include <AssetManagement/AssetManager.hh>
 #include <Threads/RenderThread.hpp>
-#include <Utils/Age_Imgui.hpp>
+#include <Core/Age_Imgui.hpp>
 #include <Threads/Tasks/BasicTasks.hpp>
 #include <Threads/TaskScheduler.hpp>
 
@@ -32,7 +32,7 @@
 #include <Utils/Directory.hpp>
 #include <Utils/Path.hpp>
 #include <Utils/Debug.hpp>
-#include <FileUtils/FileUtils/FileSystemHelpers.hpp>
+#include <FileUtils/FileSystemHelpers.hpp>
 
 #include <EditorConfiguration.hpp>
 #include <AssetFiles/RawFileFilter.hpp>

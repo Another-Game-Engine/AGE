@@ -1,12 +1,12 @@
 #include <AssetFiles/AssetFileManager.hpp>
-#include <FileUtils/FileUtils/FileSystemHelpers.hpp>
+#include <FileUtils/FileSystemHelpers.hpp>
 #include <AssetFiles/MeshRawFile.hpp>
 #include <AssetFiles/TextureRawFile.hpp>
 #include <AssetFiles/MaterialRawFile.hpp>
-#include <AssetFiles/CookedFile.hpp>
-#include <AssetFiles/AssetsTypes.hpp>
+#include <FileUtils/AssetFiles/CookedFile.hpp>
+#include <FileUtils/AssetFiles/AssetsTypes.hpp>
 #include <LowLevelUtils/BitOperations.hpp>
-#include <AssetFiles/Folder.hpp>
+#include <FileUtils/AssetFiles/Folder.hpp>
 #include <imgui/imgui.h>
 #include <vector>
 #include <Convertor/AssetDataSet.hpp>

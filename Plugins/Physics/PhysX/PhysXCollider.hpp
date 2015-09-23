@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ColliderInterface.hpp"
+#include "Physics/ColliderInterface.hpp"
 #include "PhysXPhysics.hpp"
 #include "PhysXMaterial.hpp"
 

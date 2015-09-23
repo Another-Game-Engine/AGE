@@ -3,16 +3,17 @@
 #include <Threads/ThreadManager.hpp>
 #include <Components/EntityRepresentation.hpp>
 #include <EntityHelpers/EntityImgui.hpp>
-#include <Utils/Age_Imgui.hpp>
-#include <Entities\ArchetypeScenes.hpp>
+#include <Core/Age_Imgui.hpp>
+#include <Entity\ArchetypeScenes.hpp>
 #include <Utils/Directory.hpp>
-#include <FileUtils/FileUtils/FileSystemHelpers.hpp>
+#include <FileUtils/FileSystemHelpers.hpp>
 #include <Entities/ReadableEntityPack.hpp>
 #include <Entities/EntityReadablePacker.hpp>
 #include <Systems\AssetsAndComponentRelationsSystem.hpp>
-#include <Entities\BinaryEntityPack.hpp>
+#include <Entity\BinaryEntityPack.hpp>
 #include <Components/ComponentRegistrationManager.hpp>
 #include <Components/ArchetypeComponent.hpp>
+#include <Core/Engine.hh>
 
 namespace AGE
 {

@@ -9,7 +9,7 @@
 
 #include <Core/AScene.hh>
 
-#include <Entities/BinaryEntityPack.hpp>
+#include <Entity/BinaryEntityPack.hpp>
 
 #include <Components/ComponentRegistrationManager.hpp>
 

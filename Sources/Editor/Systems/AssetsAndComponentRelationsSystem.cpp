@@ -1,9 +1,9 @@
 #include "AssetsAndComponentRelationsSystem.hpp"
 #include <imgui/imgui.h>
-#include <Components/RigidBody.hpp>
-#include <Components/MeshRenderer.hh>
+#include <ComponentsCore/RigidBody.hpp>
+#include <ComponentsCore/MeshRenderer.hh>
 #include <Scenes/AssetsEditorScene.hpp>
-#include <AssetFiles/RawFile.hpp>
+#include <FileUtils/AssetFiles/RawFile.hpp>
 #include <Components/EntityRepresentation.hpp>
 
 namespace AGE
@@ -11,7 +11,7 @@ namespace AGE
 	namespace WE
 	{
 		AssetsAndComponentRelationsSystem::AssetsAndComponentRelationsSystem(AScene *scene)
-			: System(scene)
+			: System<AssetsAndComponentRelationsSystem>(scene)
 			, _rigidBodies(std::move(scene))
 			, _meshRenderer(std::move(scene))
 			, _all(std::move(scene))
