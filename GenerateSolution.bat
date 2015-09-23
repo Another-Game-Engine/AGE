@@ -1,3 +1,3 @@
 @echo on
 
-FBuild.exe -verbose solution
+FastBuild/FBuild.exe -verbose solution

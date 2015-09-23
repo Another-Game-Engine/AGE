@@ -1,3 +1,3 @@
 @echo on
 
-FBuild.exe -verbose -vs
+FastBuild/FBuild.exe -verbose -vs
