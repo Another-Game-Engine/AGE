@@ -1,7 +1,7 @@
 // Core
 //------------------------------------------------------------------------------
 {
-	#include "FBuildPath.bff"
+	#include "../../FastBuild/FBuildPath.bff"
 
 	.ProjectName		= 'AGE_ImGui'
 	.ProjectDestPath	= './$ProjectsFolder$/AGE_ImGui/'

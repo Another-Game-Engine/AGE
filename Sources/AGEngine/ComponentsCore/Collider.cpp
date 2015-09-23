@@ -9,7 +9,7 @@
 #include <FileUtils/AssetFiles/CookedFileFilter.hpp>
 #include <FileUtils/AssetFiles/Folder.hpp>
 #include <FileUtils/AssetFiles/CookedFile.hpp>
-#include <FileUtils/FileUtils/FileSystemHelpers.hpp>
+#include <FileUtils/FileSystemHelpers.hpp>
 
 #include <Utils/MatrixConversion.hpp>
 

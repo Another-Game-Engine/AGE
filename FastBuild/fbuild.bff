@@ -172,7 +172,7 @@ Compiler( 'Compiler-x64' )
 //------------------------------------------------------------------------------
 // 
 //------------------------------------------------------------------------------
-.OutputBase = './tmp'
+.OutputBase = './Build'
 
 //------------------------------------------------------------------------------
 // Unity/Blob files (shared across configs)
@@ -184,10 +184,10 @@ Compiler( 'Compiler-x64' )
 //------------------------------------------------------------------------------
 .ProjectCommon = 
 [
-  .ProjectBuildCommand    = 'cd ^$(SolutionDir)\../ &amp; fbuild.exe -vs -verbose -cache -wrapper ^$(ProjectName)-^$(Configuration)'
-  .ProjectRebuildCommand    = 'cd ^$(SolutionDir)\../ &amp; fbuild.exe -vs -verbose -cache -clean -wrapper ^$(ProjectName)-^$(Configuration)'
-  .OutputDirectory      = '^$(SolutionDir)\..\tmp'
-  .IntermediateDirectory    = '^$(SolutionDir)\..\tmp'
+  .ProjectBuildCommand    = 'cd ^$(SolutionDir)\../FastBuild/ &amp; fbuild.exe -vs -verbose -cache -wrapper ^$(ProjectName)-^$(Configuration)'
+  .ProjectRebuildCommand    = 'cd ^$(SolutionDir)\../FastBuild/ &amp; fbuild.exe -vs -verbose -cache -clean -wrapper ^$(ProjectName)-^$(Configuration)'
+  .OutputDirectory      = '^$(SolutionDir)\..\Build'
+  .IntermediateDirectory    = '^$(SolutionDir)\..\Build'
   .Platform = 'Win32' // unused
   .PlatformToolset = 'v120'
   .IncludeSearchPath      = '^$(SolutionDir);^$(ProjectDir);.\'
@@ -210,27 +210,26 @@ Compiler( 'Compiler-x64' )
 //------------------------------------------------------------------------------
 .Configs_Windows_MSVC = { .X64DebugConfig, .X64ProfileConfig, .X64ReleaseConfig, .X64RetailConfig }
 
-#include "GameEngine\FBuildPath.bff"
+#include "FBuildPath.bff"
 
 // Core
-#include "GameEngine\AGE_ImGui.bff"
+#include "$SourcePath$\AGEngine\AGE_ImGui.bff"
+#include "$SourcePath$\AGEngine\Utils/AGE_Utils.bff"
+#include "$SourcePath$\AGEngine\LowLevelUtils/AGE_LowLevelUtils.bff"
+#include "$SourcePath$\AGEngine\FileUtils/AGE_FileUtils.bff"
+#include "$SourcePath$\AGEngine\BFC/AGE_BFC.bff"
+#include "$SourcePath$\AGEngine\Text/AGE_Text.bff"
+#include "$SourcePath$\AGEngine\Physics/AGE_Physics.bff"
+#include "$SourcePath$\AGEngine\AssetManagement/AGE_AssetManagement.bff"
+#include "$SourcePath$\AGEngine\Skinning/AGE_Skinning.bff"
+#include "$SourcePath$\AGEngine\Graphic/AGE_Graphic.bff"
+#include "$SourcePath$\AGEngine\Render/AGE_Render.bff"
+#include "$SourcePath$\AGEngine\ComponentsCore/AGE_ComponentsCore.bff"
+#include "$SourcePath$\AGEngine\SystemsCore/AGE_SystemsCore.bff"
 
-#include "GameEngine\AGE_Utils.bff"
-#include "GameEngine\AGE_LowLevelUtils.bff"
-#include "GameEngine\AGE_FileUtils.bff"
-#include "GameEngine\AGE_BFC.bff"
-#include "GameEngine\AGE_Text.bff"
-#include "GameEngine\AGE_Physics.bff"
-#include "GameEngine\AGE_AssetManagement.bff"
-#include "GameEngine\AGE_Skinning.bff"
-#include "GameEngine\AGE_Graphic.bff"
-#include "GameEngine\AGE_Render.bff"
-#include "GameEngine\AGE_ComponentsCore.bff"
-#include "GameEngine\AGE_SystemsCore.bff"
+#include "$SourcePath$\AGEngine\Engine\AGE_Core.bff"
 
-#include "GameEngine\AGE_Core.bff"
-
-#include "GameEngine\AGE_Reader.bff"
+#include "$SourcePath$\Reader/AGE_Reader.bff"
 
 
 
@@ -266,7 +265,6 @@ Alias( 'All' )
                   , 'AGE_ComponentsCore-proj'
                   , 'AGE_SystemsCore-proj'
                   , 'AGE_Core-proj'
-                  , 'AGEngine-proj'
                   , 'AGEReader-proj' }
 }
 

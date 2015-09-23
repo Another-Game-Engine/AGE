@@ -1,15 +1,14 @@
 // Core
 //------------------------------------------------------------------------------
 {
-	#include "FBuildPath.bff"
+	#include "../../../FastBuild/FBuildPath.bff"
 
 	.ProjectName		= 'AGE_Physics'
 	.ProjectDestPath	= './$ProjectsFolder$/AGE_Physics/'
-	.ProjectPath		= 'Physics'
+	.ProjectPath		= '$AGEngineSourceDir$/Physics'
 
-	.CompilerIncludesPaths = ' /I"$ProjectPath$"'
+	.CompilerIncludesPaths = ' /I"$ProjectPath$"/..'
 	                       + ' /I"$VendorsPath$"'
-	                       + ' /I"$NewEnginePath$"'
                            + ' /I"$VendorsPath$"\OpenGL\include\'
 	                       + ' /I"$EnginePath$"' // a virer !
 

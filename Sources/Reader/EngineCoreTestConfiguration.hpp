@@ -1,6 +1,6 @@
 #pragma once
 
-#include <FileUtils/FileUtils/FileSystemHelpers.hpp>
+#include <FileUtils/FileSystemHelpers.hpp>
 #include <Utils/Serialization/SerializationArchives.hpp>
 #include <fstream>
 #include <cereal/types/string.hpp>
@@ -15,9 +15,9 @@ namespace AGE
 {
 	struct ECTConfigurations
 	{
-		std::string _cookedAssetsDirectory = "../../GameEngine/Assets/Serialized/";
-		std::string _exportSceneFolder = "../../Reader/DemoScenes/";
-		std::string _exportArchetypeFolder = "../../GameEngine/Archetypes/";
+		std::string _cookedAssetsDirectory = "../../Datas/Assets/Serialized/";
+		std::string _exportSceneFolder = "../../Datas/DemoScenes/";
+		std::string _exportArchetypeFolder = "../../Datas/Archetypes/";
 		std::string _lastSceneOpened = "";
 		int _selectedScene = 0;
 

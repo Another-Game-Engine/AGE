@@ -1,15 +1,15 @@
 // Core
 //------------------------------------------------------------------------------
 {
-	#include "FBuildPath.bff"
+	#include "../../../FastBuild/FBuildPath.bff"
 
 	.ProjectName		= 'AGE_Render'
 	.ProjectDestPath	= './$ProjectsFolder$/AGE_Render/'
-	.ProjectPath		= 'Render'
+	.ProjectPath		= '$AGEngineSourceDir$/Render'
 
-	.CompilerIncludesPaths = ' /I"$ProjectPath$"'
+	.CompilerIncludesPaths = ' /I"$ProjectPath$"/..'
 	                       + ' /I"$VendorsPath$"'
-	                       + ' /I"$NewEnginePath$"'
+	                       + ' /I"$EnginePath$"'
 	                       + ' /IBFC'
 	                       + ' /IGraphic'
                            + ' /I"$VendorsPath$"\OpenGL\include\'

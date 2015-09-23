@@ -1,15 +1,15 @@
 // Core
 //------------------------------------------------------------------------------
 {
-	#include "FBuildPath.bff"
+	#include "../../../FastBuild/FBuildPath.bff"
 
 	.ProjectName		= 'AGE_SystemsCore'
 	.ProjectDestPath	= './$ProjectsFolder$/AGE_SystemsCore/'
-	.ProjectPath		= 'SystemsCore'
+	.ProjectPath		= '$AGEngineSourceDir$/SystemsCore'
 
-	.CompilerIncludesPaths = ' /I"$ProjectPath$"'
+	.CompilerIncludesPaths = ' /I"$ProjectPath$"/..'
 	                       + ' /I"$VendorsPath$"'
-	                       + ' /I"$NewEnginePath$"'
+	                       + ' /I"$EnginePath$"'
                            + ' /I"$VendorsPath$"\OpenGL\include\'
 
 	// Visual Studio Project Generation

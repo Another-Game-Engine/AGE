@@ -1,13 +1,13 @@
 // Core
 //------------------------------------------------------------------------------
 {
-	#include "FBuildPath.bff"
+	#include "../../../FastBuild/FBuildPath.bff"
 
 	.ProjectName		= 'AGE_Skinning'
 	.ProjectDestPath	= './$ProjectsFolder$/AGE_Skinning/'
-	.ProjectPath		= 'Skinning'
+	.ProjectPath		= '$AGEngineSourceDir$/Skinning'
 
-	.CompilerIncludesPaths = ' /I"$ProjectPath$"'
+	.CompilerIncludesPaths = ' /I"$ProjectPath$"/..'
 	                       + ' /I"$VendorsPath$"'
 
 

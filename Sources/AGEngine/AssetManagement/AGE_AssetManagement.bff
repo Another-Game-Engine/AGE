@@ -1,16 +1,16 @@
 // Core
 //------------------------------------------------------------------------------
 {
-	#include "FBuildPath.bff"
+	#include "../../../FastBuild/FBuildPath.bff"
 
 	.ProjectName		= 'AGE_AssetManagement'
 	.ProjectDestPath	= './$ProjectsFolder$/AGE_AssetManagement/'
-	.ProjectPath		= 'AssetManagement'
+	.ProjectPath		= '$AGEngineSourceDir$/AssetManagement'
 
-	.CompilerIncludesPaths = ' /I"$ProjectPath$"'
+	.CompilerIncludesPaths = ' /I"$ProjectPath$/.."'
 	                       + ' /I"$VendorsPath$"'
                            + ' /I"$VendorsPath$"\OpenGL\include\'
-                           + ' /I"$NewEnginePath$"' // used for TMQ
+                           + ' /I"$EnginePath$"' // used for TMQ
 
 	// Visual Studio Project Generation
 	//--------------------------------------------------------------------------
@@ -23,7 +23,7 @@
 		.ProjectAllowedFileExtensions = { '.h' '.cpp' '.c' '.hh' '.hpp' }
 
 		// Vendors
-		.IncludeSearchPath               = '$ProjectPath$\'
+		.IncludeSearchPath               = '$ProjectPath$'
 
 		// Exclude Tests
 	}

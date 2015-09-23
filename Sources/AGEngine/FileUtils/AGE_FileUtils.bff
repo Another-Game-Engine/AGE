@@ -1,13 +1,13 @@
 // Core
 //------------------------------------------------------------------------------
 {
-	#include "FBuildPath.bff"
+	#include "../../../FastBuild/FBuildPath.bff"
 
 	.ProjectName		= 'AGE_FileUtils'
 	.ProjectDestPath	= './$ProjectsFolder$/AGE_FileUtils/'
-	.ProjectPath		= 'FileUtils'
+	.ProjectPath		= '$AGEngineSourceDir$/FileUtils'
 
-	.CompilerIncludesPaths = ' /I"$ProjectPath$"'
+	.CompilerIncludesPaths = ' /I"$ProjectPath$"/..'
 	                       + ' /I"$VendorsPath$"'
 	                       + ' /I"$VendorsPath$"\zlib\include\'
 	                       + ' /I"$VendorsPath$"\minizip\include\'

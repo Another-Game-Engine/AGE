@@ -1,6 +1,6 @@
 #include "ArchetypeManager.hpp"
 #include <Utils/Directory.hpp>
-#include <FileUtils/FileUtils/FileSystemHelpers.hpp>
+#include <FileUtils/FileSystemHelpers.hpp>
 #include <Utils/Debug.hpp>
 #include <Entity/BinaryEntityPack.hpp>
 #include <Entity/ArchetypeScenes.hpp>

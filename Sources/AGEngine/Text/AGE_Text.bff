@@ -1,13 +1,13 @@
 // Core
 //------------------------------------------------------------------------------
 {
-	#include "FBuildPath.bff"
+	#include "../../../FastBuild/FBuildPath.bff"
 
 	.ProjectName		= 'AGE_Text'
 	.ProjectDestPath	= './$ProjectsFolder$/AGE_Text/'
-	.ProjectPath		= 'Text'
+	.ProjectPath		= '$AGEngineSourceDir$/Text'
 
-	.CompilerIncludesPaths = ' /I"$ProjectPath$"'
+	.CompilerIncludesPaths = ' /I"$ProjectPath$"/..'
 	                       + ' /I"$VendorsPath$"'
                            + ' /I"$VendorsPath$"\OpenGL\include\'
 

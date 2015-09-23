@@ -1,22 +1,23 @@
 // Core
 //------------------------------------------------------------------------------
 {
-	#include "FBuildPath.bff"
+	#include "../../FastBuild/FBuildPath.bff"
 
 	.ProjectName		= 'AGEReader'
 	.ProjectDestPath	= './$ProjectsFolder$/AGE_Reader/'
-	.ProjectPath		= 'Reader'
+	.ProjectPath		= '$AGEngineSourceDir$/../Reader'
 
 	.CompilerIncludesPaths = ' /I"$ProjectPath$"'
 						   + ' /I"$VendorsPath$"'
-						   + ' /I"$NewEnginePath$"'
-						   + ' /I./'
+						   + ' /I"$AGEngineSourceDir$"/../AGEngine/Engine/'
+						   + ' /I"$AGEngineSourceDir$"/../AGEngine/'
+						   + ' /I"$AGEngineSourceDir$"/../'
+						   + ' /I../AGEngine/'
 						   + ' /I"$VendorsPath$"\OpenGL\include\'
 						   + ' /I"$VendorsPath$"\bullet\src\'
 						   + ' /I"$VendorsPath$"\fmod\inc\'
 						   + ' /I"$VendorsPath$"\minizip\include\'
 						   + ' /I"$VendorsPath$"\zlib\include\'
-						   + ' /IUtils'
 
 
 	// Visual Studio Project Generation
@@ -34,8 +35,9 @@
 		// Vendors
 		.IncludeSearchPath               = '$ProjectPath$\'
 										 + ';$EnginePath$\'
-										 + ';$NewEnginePath$\'
+										 + ';$EnginePath$\'
 										 + ';.\'
+										 + ';../AGEngine/'
 		                                 + ';$VendorsPath$\OpenGL\include\'
 		                                 + ';$VendorsPath$\bullet\src\'
 		                                 + ';$VendorsPath$\fmod\inc\'
