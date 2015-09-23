@@ -1,4 +1,4 @@
 @echo on
 
 cd FastBuild
-FBuild.exe -verbose solution
+FBuild.exe -verbose EditorSolution ReaderSolution

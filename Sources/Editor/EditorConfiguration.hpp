@@ -1,6 +1,6 @@
 #pragma once
 
-#include <FileUtils/FileUtils/FileSystemHelpers.hpp>
+#include <FileUtils/FileSystemHelpers.hpp>
 #include <Utils/Serialization/SerializationArchives.hpp>
 #include <fstream>
 #include <cereal/types/string.hpp>

@@ -230,7 +230,7 @@ Compiler( 'Compiler-x64' )
 #include "$SourcePath$\AGEngine\Engine\AGE_Core.bff"
 
 #include "$SourcePath$\Reader/AGE_Reader.bff"
-
+#include "$SourcePath$\Editor/AGE_Editor.bff"
 
 
 // Aliases : All-$Platform$
@@ -265,7 +265,8 @@ Alias( 'All' )
                   , 'AGE_ComponentsCore-proj'
                   , 'AGE_SystemsCore-proj'
                   , 'AGE_Core-proj'
-                  , 'AGEReader-proj' }
+                  , 'AGEReader-proj'
+				  , 'AGEEditor-proj' }
 }
 
 // Aliases : proj (all projects)
@@ -288,12 +289,13 @@ Alias( 'proj' )
                   , 'AGE_SystemsCore-proj'
                   , 'AGE_Core-proj'
                   , 'AGEReader-proj'
+				  , 'AGEEditor-proj'
             }
 }
 
 //------------------------------------------------------------------------------
 
-VSSolution( 'solution' )
+VSSolution( 'ReaderSolution' )
 {
   // Basic options
   .SolutionOutput                     = './$ProjectsFolder$/AGE_Reader.sln' // Path to Solution file to be generated
@@ -315,6 +317,34 @@ VSSolution( 'solution' )
                                         }  // Project(s) to include in Solution
 
   .SolutionBuildProject                = 'AGEReader-proj'
+
+  .SolutionConfigs                     = .ProjectConfigs
+  
+  .SolutionVisualStudioVersion         = "12.0.31101.00" 
+}
+
+VSSolution( 'EditorSolution' )
+{
+  // Basic options
+  .SolutionOutput                     = './$ProjectsFolder$/AGE_Editor.sln' // Path to Solution file to be generated
+  .SolutionProjects                   = { 'AGE_ImGui-proj'
+                                        , 'AGE_Utils-proj'
+                                        , 'AGE_FileUtils-proj'
+                                        , 'AGE_LowLevelUtils-proj'
+                                        , 'AGE_BFC-proj'
+                                        , 'AGE_Text-proj'
+                                        , 'AGE_Physics-proj'
+                                        , 'AGE_AssetManagement-proj'
+                                        , 'AGE_Skinning-proj'
+                                        , 'AGE_Graphic-proj'
+                                        , 'AGE_Render-proj'
+                                        , 'AGE_ComponentsCore-proj'
+                                        , 'AGE_SystemsCore-proj'
+                                        , 'AGE_Core-proj'
+                                        , 'AGEEditor-proj'
+                                        }  // Project(s) to include in Solution
+
+  .SolutionBuildProject                = 'AGEEditor-proj'
 
   .SolutionConfigs                     = .ProjectConfigs
   

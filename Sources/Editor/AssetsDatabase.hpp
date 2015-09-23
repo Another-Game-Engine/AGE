@@ -1,8 +1,8 @@
 #pragma once
 
 #include <Utils/Dependency.hpp>
-#include <AssetFiles/Folder.hpp>
-#include <AssetFiles/File.hpp>
+#include <FileUtils/AssetFiles/Folder.hpp>
+#include <FileUtils/AssetFiles/File.hpp>
 
 namespace AGE
 {

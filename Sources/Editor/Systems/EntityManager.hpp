@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Systems/System.h>
+#include <System/System.h>
 #include <Components\CameraComponent.hpp>
 
 #define MAX_SCENE_NAME_LENGTH 255
