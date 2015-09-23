@@ -131,6 +131,8 @@
 										+ ' User32.lib'
 										+ ' opengl32.lib'
 										+ ' glu32.lib'
+										+ ' windowscodecs.lib'
+										+ ' Ole32.lib'
 										+ ' $VendorsPath$/OpenGL/lib/x64/glew32.lib'
 										+ ' $VendorsPath$/OpenGL/lib/x64/sdl2.lib'
 										+ ' $VendorsPath$/OpenGL/lib/x64/sdl2main.lib'
