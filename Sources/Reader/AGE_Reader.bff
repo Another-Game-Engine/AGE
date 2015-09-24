@@ -60,7 +60,6 @@
 	    	.UnityInputPath              = { '$VendorsPath$\OpenGL\'
 		                                 , '$VendorsPath$\minizip\'
 		                                 , '$VendorsPath$\zlib\'
-		                                 , '$VendorsPath$\glm\'
 		                                 , '$VendorsPath$\cereal\' }
 
 		    .UnityOutputPath			= '$OutputBase$\Unity\$ProjectPath$\'

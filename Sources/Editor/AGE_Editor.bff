@@ -64,7 +64,6 @@
 	    	.UnityInputPath              = {'$VendorsPath$\OpenGL\'
 		                                 ,'$VendorsPath$\minizip\'
 		                                 ,'$VendorsPath$\zlib\'
-		                                 ,'$VendorsPath$\glm\'
 		                                 ,'$VendorsPath$\cereal\'
 		                                 ,'$EnginePath$\utils\'}
 
