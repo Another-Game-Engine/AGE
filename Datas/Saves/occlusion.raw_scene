@@ -153,292 +153,6 @@
             "link": {
                 "Position": {
                     "value0": 0,
-                    "value1": 0,
-                    "value2": 0
-                },
-                "Scale": {
-                    "value0": 1,
-                    "value1": 1,
-                    "value2": 1
-                },
-                "Orientation": {
-                    "value0": 0,
-                    "value1": 0,
-                    "value2": 0,
-                    "value3": 1
-                }
-            },
-            "children": [
-                2,
-                3,
-                4
-            ],
-            "flags": 0,
-            "components_number": [
-                0
-            ],
-            "archetypesDependency": [],
-            "AGE_CORE_EntityRepresentationComponent": {
-                "name": "wall-and-window"
-            }
-        },
-        "Entity_2": {
-            "link": {
-                "Position": {
-                    "value0": -2,
-                    "value1": 0,
-                    "value2": 4
-                },
-                "Scale": {
-                    "value0": 3,
-                    "value1": 3,
-                    "value2": 0.20000000298023224
-                },
-                "Orientation": {
-                    "value0": 0,
-                    "value1": 0,
-                    "value2": 0,
-                    "value3": 1
-                }
-            },
-            "children": [],
-            "flags": 0,
-            "components_number": [
-                0,
-                1,
-                2,
-                9
-            ],
-            "archetypesDependency": [],
-            "AGE_CORE_EntityRepresentationComponent": {
-                "name": "wall-right"
-            },
-            "AGE_CORE_MeshRenderer": {
-                "value0": "medievalpack/meshs/wall_f_door.mage",
-                "value1": "cube/cube.sage",
-                "value2": "",
-                "value3": {
-                    "type": 0,
-                    "data": 16
-                }
-            },
-            "AGE_CORE_RigidBody": {
-                "AngularDrag": 0.05000000074505806,
-                "AngularVelocity": {
-                    "value0": 0,
-                    "value1": 0,
-                    "value2": 0
-                },
-                "CenterOfMass": {
-                    "value0": 0,
-                    "value1": 0,
-                    "value2": 0
-                },
-                "LinearDrag": 0,
-                "LinearVelocity": {
-                    "value0": 0,
-                    "value1": 0,
-                    "value2": 0
-                },
-                "Mass": 1,
-                "DiagonalInertiaTensor": {
-                    "value0": 1,
-                    "value1": 1,
-                    "value2": 1
-                },
-                "MaxAngularVelocity": 1000000,
-                "MaxDepenetrationVelocity": 1000000,
-                "IsAffectedByGravity": false,
-                "IsKinematic": true,
-                "CollisionDetectionMode": 1
-            },
-            "AGE_CORE_PhysicsCollider": {
-                "ColliderType": 0,
-                "Material": "DefaultMaterial",
-                "IsATrigger": false,
-                "FilterGroup": 1,
-                "Center": {
-                    "value0": 0,
-                    "value1": 0,
-                    "value2": 0
-                },
-                "Size": {
-                    "value0": 3,
-                    "value1": 3,
-                    "value2": 0.20000000298023224
-                }
-            }
-        },
-        "Entity_3": {
-            "link": {
-                "Position": {
-                    "value0": 2,
-                    "value1": 0,
-                    "value2": 4
-                },
-                "Scale": {
-                    "value0": 3,
-                    "value1": 3,
-                    "value2": 0.20000000298023224
-                },
-                "Orientation": {
-                    "value0": 0,
-                    "value1": 0,
-                    "value2": 0,
-                    "value3": 1
-                }
-            },
-            "children": [],
-            "flags": 0,
-            "components_number": [
-                0,
-                1,
-                2,
-                9
-            ],
-            "archetypesDependency": [],
-            "AGE_CORE_EntityRepresentationComponent": {
-                "name": "wall-left"
-            },
-            "AGE_CORE_MeshRenderer": {
-                "value0": "medievalpack/meshs/wall_f_door.mage",
-                "value1": "cube/cube.sage",
-                "value2": "",
-                "value3": {
-                    "type": 0,
-                    "data": 16
-                }
-            },
-            "AGE_CORE_RigidBody": {
-                "AngularDrag": 0.05000000074505806,
-                "AngularVelocity": {
-                    "value0": 0,
-                    "value1": 0,
-                    "value2": 0
-                },
-                "CenterOfMass": {
-                    "value0": 0,
-                    "value1": 0,
-                    "value2": 0
-                },
-                "LinearDrag": 0,
-                "LinearVelocity": {
-                    "value0": 0,
-                    "value1": 0,
-                    "value2": 0
-                },
-                "Mass": 1,
-                "DiagonalInertiaTensor": {
-                    "value0": 1,
-                    "value1": 1,
-                    "value2": 1
-                },
-                "MaxAngularVelocity": 1000000,
-                "MaxDepenetrationVelocity": 1000000,
-                "IsAffectedByGravity": false,
-                "IsKinematic": true,
-                "CollisionDetectionMode": 1
-            },
-            "AGE_CORE_PhysicsCollider": {
-                "ColliderType": 0,
-                "Material": "DefaultMaterial",
-                "IsATrigger": false,
-                "FilterGroup": 1,
-                "Center": {
-                    "value0": 0,
-                    "value1": 0,
-                    "value2": 0
-                },
-                "Size": {
-                    "value0": 3,
-                    "value1": 3,
-                    "value2": 0.20000000298023224
-                }
-            }
-        },
-        "Entity_4": {
-            "link": {
-                "Position": {
-                    "value0": 0,
-                    "value1": 0.5,
-                    "value2": 4
-                },
-                "Scale": {
-                    "value0": 2,
-                    "value1": 2,
-                    "value2": 3
-                },
-                "Orientation": {
-                    "value0": 0,
-                    "value1": -0.70698469877243042,
-                    "value2": 0,
-                    "value3": 0.70722883939743042
-                }
-            },
-            "children": [],
-            "flags": 0,
-            "components_number": [
-                0,
-                1,
-                2,
-                9
-            ],
-            "archetypesDependency": [],
-            "AGE_CORE_EntityRepresentationComponent": {
-                "name": "window1"
-            },
-            "AGE_CORE_MeshRenderer": {
-                "value0": "pixar128 library/wood/american_cherry.mage",
-                "value1": "medievalpack/meshs/block_window_b.sage",
-                "value2": "",
-                "value3": {
-                    "type": 0,
-                    "data": 16
-                }
-            },
-            "AGE_CORE_RigidBody": {
-                "AngularDrag": 0.05000000074505806,
-                "AngularVelocity": {
-                    "value0": 0,
-                    "value1": 0,
-                    "value2": 0
-                },
-                "CenterOfMass": {
-                    "value0": 0,
-                    "value1": 0,
-                    "value2": 0
-                },
-                "LinearDrag": 0,
-                "LinearVelocity": {
-                    "value0": 0,
-                    "value1": 0,
-                    "value2": 0
-                },
-                "Mass": 1,
-                "DiagonalInertiaTensor": {
-                    "value0": 1,
-                    "value1": 1,
-                    "value2": 1
-                },
-                "MaxAngularVelocity": 1000000,
-                "MaxDepenetrationVelocity": 1000000,
-                "IsAffectedByGravity": false,
-                "IsKinematic": true,
-                "CollisionDetectionMode": 1
-            },
-            "AGE_CORE_PhysicsCollider": {
-                "ColliderType": 3,
-                "Material": "DefaultMaterial",
-                "IsATrigger": false,
-                "FilterGroup": 1,
-                "Mesh": "medievalpack/meshs/block_window_b",
-                "Convex": true
-            }
-        },
-        "Entity_5": {
-            "link": {
-                "Position": {
-                    "value0": 0,
                     "value1": 1,
                     "value2": 0
                 },
@@ -484,7 +198,7 @@
                 "Speed": 40
             }
         },
-        "Entity_6": {
+        "Entity_2": {
             "link": {
                 "Position": {
                     "value0": -7.5,
@@ -504,9 +218,9 @@
                 }
             },
             "children": [
-                7,
-                8,
-                9
+                3,
+                4,
+                5
             ],
             "flags": 0,
             "components_number": [
@@ -517,7 +231,7 @@
                 "name": "wall-and-window-gauche"
             }
         },
-        "Entity_7": {
+        "Entity_3": {
             "link": {
                 "Position": {
                     "value0": -2,
@@ -604,7 +318,7 @@
                 }
             }
         },
-        "Entity_8": {
+        "Entity_4": {
             "link": {
                 "Position": {
                     "value0": 2,
@@ -691,7 +405,7 @@
                 }
             }
         },
-        "Entity_9": {
+        "Entity_5": {
             "link": {
                 "Position": {
                     "value0": 0,
@@ -721,6 +435,292 @@
             "archetypesDependency": [],
             "AGE_CORE_EntityRepresentationComponent": {
                 "name": "window1-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "pixar128 library/wood/american_cherry.mage",
+                "value1": "medievalpack/meshs/block_window_b.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 16
+                }
+            },
+            "AGE_CORE_RigidBody": {
+                "AngularDrag": 0.05000000074505806,
+                "AngularVelocity": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "CenterOfMass": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "LinearDrag": 0,
+                "LinearVelocity": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Mass": 1,
+                "DiagonalInertiaTensor": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "MaxAngularVelocity": 1000000,
+                "MaxDepenetrationVelocity": 1000000,
+                "IsAffectedByGravity": false,
+                "IsKinematic": true,
+                "CollisionDetectionMode": 1
+            },
+            "AGE_CORE_PhysicsCollider": {
+                "ColliderType": 3,
+                "Material": "DefaultMaterial",
+                "IsATrigger": false,
+                "FilterGroup": 1,
+                "Mesh": "medievalpack/meshs/block_window_b",
+                "Convex": true
+            }
+        },
+        "Entity_6": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [
+                7,
+                8,
+                9
+            ],
+            "flags": 0,
+            "components_number": [
+                0
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "wall-and-window"
+            }
+        },
+        "Entity_7": {
+            "link": {
+                "Position": {
+                    "value0": -2,
+                    "value1": 0,
+                    "value2": 4
+                },
+                "Scale": {
+                    "value0": 3,
+                    "value1": 3,
+                    "value2": 0.20000000298023224
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                2,
+                9
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "wall-right"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "medievalpack/meshs/wall_f_door.mage",
+                "value1": "cube/cube.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 16
+                }
+            },
+            "AGE_CORE_RigidBody": {
+                "AngularDrag": 0.05000000074505806,
+                "AngularVelocity": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "CenterOfMass": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "LinearDrag": 0,
+                "LinearVelocity": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Mass": 1,
+                "DiagonalInertiaTensor": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "MaxAngularVelocity": 1000000,
+                "MaxDepenetrationVelocity": 1000000,
+                "IsAffectedByGravity": false,
+                "IsKinematic": true,
+                "CollisionDetectionMode": 1
+            },
+            "AGE_CORE_PhysicsCollider": {
+                "ColliderType": 0,
+                "Material": "DefaultMaterial",
+                "IsATrigger": false,
+                "FilterGroup": 1,
+                "Center": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Size": {
+                    "value0": 3,
+                    "value1": 3,
+                    "value2": 0.20000000298023224
+                }
+            }
+        },
+        "Entity_8": {
+            "link": {
+                "Position": {
+                    "value0": 2,
+                    "value1": 0,
+                    "value2": 4
+                },
+                "Scale": {
+                    "value0": 3,
+                    "value1": 3,
+                    "value2": 0.20000000298023224
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                2,
+                9
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "wall-left"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "medievalpack/meshs/wall_f_door.mage",
+                "value1": "cube/cube.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 16
+                }
+            },
+            "AGE_CORE_RigidBody": {
+                "AngularDrag": 0.05000000074505806,
+                "AngularVelocity": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "CenterOfMass": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "LinearDrag": 0,
+                "LinearVelocity": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Mass": 1,
+                "DiagonalInertiaTensor": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "MaxAngularVelocity": 1000000,
+                "MaxDepenetrationVelocity": 1000000,
+                "IsAffectedByGravity": false,
+                "IsKinematic": true,
+                "CollisionDetectionMode": 1
+            },
+            "AGE_CORE_PhysicsCollider": {
+                "ColliderType": 0,
+                "Material": "DefaultMaterial",
+                "IsATrigger": false,
+                "FilterGroup": 1,
+                "Center": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Size": {
+                    "value0": 3,
+                    "value1": 3,
+                    "value2": 0.20000000298023224
+                }
+            }
+        },
+        "Entity_9": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 0.5,
+                    "value2": 4
+                },
+                "Scale": {
+                    "value0": 2,
+                    "value1": 2,
+                    "value2": 3
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": -0.70698469877243042,
+                    "value2": 0,
+                    "value3": 0.70722883939743042
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                2,
+                9
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "window1"
             },
             "AGE_CORE_MeshRenderer": {
                 "value0": "pixar128 library/wood/american_cherry.mage",
@@ -1781,9 +1781,9 @@
         "Entity_26": {
             "link": {
                 "Position": {
-                    "value0": 0.030224490910768509,
-                    "value1": 0.27885788679122925,
-                    "value2": 8.77838134765625
+                    "value0": -0.82198160886764526,
+                    "value1": -3.0028083324432373,
+                    "value2": 9.7961235046386719
                 },
                 "Scale": {
                     "value0": 1,
@@ -1791,10 +1791,10 @@
                     "value2": 1
                 },
                 "Orientation": {
-                    "value0": 0.029990274459123611,
-                    "value1": -0.018990086391568184,
-                    "value2": 0.00056987709831446409,
-                    "value3": 0.99936962127685547
+                    "value0": 0.042929418385028839,
+                    "value1": 0.051521472632884979,
+                    "value2": 0.0022167826537042856,
+                    "value3": -0.99774634838104248
                 }
             },
             "children": [],
