@@ -23,11 +23,14 @@ namespace AGE
 
 	void DebugSystem::updateBegin(float time)
 	{
+#if defined(AGE_ENABLE_IMGUI)
 		ImGui::Begin("Debug system");
+#endif
 	}
 
 	void DebugSystem::mainUpdate(float time)
 	{
+#if defined(AGE_ENABLE_IMGUI)
 		ImGui::Text("Point light number : %i", _pointLights.getCollection().size());
 
 		if (ImGui::SliderFloat("Time multiplier", &_timeMultiplier, 0.0f, 10.0f))
@@ -47,11 +50,13 @@ namespace AGE
 				_scene->deactivateSystem<AGE::PhysicsSystem>();
 			}
 		}
-		
+#endif
 	}
 
 	void DebugSystem::updateEnd(float time)
 	{
+#if defined(AGE_ENABLE_IMGUI)
 		ImGui::End();
+#endif
 	}
 }

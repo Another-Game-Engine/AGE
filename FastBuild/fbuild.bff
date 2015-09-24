@@ -77,7 +77,7 @@ Compiler( 'Compiler-x64' )
 
   .CompilerOptions    + ' /Fo"%2"'
   .LibrarianOptions   = '/NOLOGO /OUT:"%2" "%1"' //@FBUILD : Il faudrait peut etre faire une configuration dll et une .lib et ajouter NODEFAULTLIB pour les dll
-  .LinkerOptions      = '/NOLOGO /INCREMENTAL:NO /OUT:"%2" "%1"'
+  .LinkerOptions      = '/NOLOGO /INCREMENTAL:NO /OUT:"%2" "%1" /DEBUG'
               + ' /IGNORE:4001' ; don't complain about linking libs only
 
   // Optimizations

@@ -158,10 +158,13 @@ namespace AGE
 		static int toto = 0;
 		++toto;
 		if (this->getNumberOfEntities() == 0 && toto > 10
+#if defined(AGE_ENABLE_IMGUI)
 			|| ImGui::ListBox("Scenes"
 			, &EngineCoreTestConfiguration::getSelectedSceneIndex()
 			, EngineCoreTestConfiguration::getScenesName().data()
-			, static_cast<int>(EngineCoreTestConfiguration::getScenesName().size())) && toto > 10)
+			, static_cast<int>(EngineCoreTestConfiguration::getScenesName().size())) && toto > 10
+#endif
+			)
 		{
 			EngineCoreTestConfiguration::saveConfigurations();
 			clearAllEntities();
@@ -213,8 +216,10 @@ namespace AGE
 
 		static bool rain = false;
 
+#if defined(AGE_ENABLE_IMGUI)
 		ImGui::Checkbox("Cube rain", &rain);
 		ImGui::Checkbox("Occlusion culling", &AGE::OcclusionConfig::g_Occlusion_is_enabled);
+#endif
 
 		if (rain && _chunkCounter >= _maxChunk)
 		{
@@ -252,13 +257,14 @@ namespace AGE
 			_chunkCounter = 0;
 		}
 
+#if defined(AGE_ENABLE_IMGUI)
 		if (ImGui::Button("Reload shaders or type R") || getInstance<Input>()->getPhysicalKeyPressed(AgeKeys::AGE_r))
 		{
 			GetRenderThread()->getQueue()->emplaceTask<Tasks::Render::ReloadShaders>();
 		}
 
 		ImGui::Text("%i entities", getNumberOfEntities());
-
+#endif
 		return true;
 	}
 
