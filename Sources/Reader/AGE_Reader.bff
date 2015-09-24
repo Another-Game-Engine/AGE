@@ -50,16 +50,20 @@
 	// Unity
 	//--------------------------------------------------------------------------
 
-        .UnityNumFiles   = 10
+        .UnityNumFiles   = 20
         .UnityInputPath  = { '$ProjectDestPath$\' }
 
 	{
 		// Windows
 		Unity( '$ProjectName$-Unity-Windows' )
 		{
-		    .UnityInputPath				= '$ProjectPath$\'
+	    	.UnityInputPath              = { '$VendorsPath$\OpenGL\'
+		                                 , '$VendorsPath$\minizip\'
+		                                 , '$VendorsPath$\zlib\'
+		                                 , '$VendorsPath$\glm\'
+		                                 , '$VendorsPath$\cereal\' }
+
 		    .UnityOutputPath			= '$OutputBase$\Unity\$ProjectPath$\'
-		    //.UnityInputExcludePath		= '$ProjectPath$\CoreTest\' // Exclude Tests
 		}
 	}
 
@@ -92,6 +96,8 @@
 		{
 			// Input (Unity)
 			.CompilerInputUnity			= '$ProjectName$-Unity-Windows'
+
+			.CompilerInputPath			= '$ProjectPath$'
 
 			// Output
 			.CompilerOutputPath			= '$OutputBase$\$ProjectName$\'

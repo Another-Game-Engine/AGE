@@ -39,7 +39,6 @@
 		// Vendors
 		.IncludeSearchPath               = '$ProjectPath$\'
 										 + ';$EnginePath$\'
-										 + ';$EnginePath$\'
 										 + ';.\'
 										 + ';../AGEngine/'
 		                                 + ';$VendorsPath$\OpenGL\include\'
@@ -49,23 +48,27 @@
 		                                 + ';$VendorsPath$\zlib\include\'
 										 + ';$VendorsPath$\assimp\include\'
 										 + ';$VendorsPath$\FreeImagePlus\include\'
-		                                 +  './'
 		                                 +  '$VendorsPath$\'
 	}
 
 	// Unity
 	//--------------------------------------------------------------------------
 
-        .UnityNumFiles   = 10
+        .UnityNumFiles   = 20
         .UnityInputPath  = { '$ProjectDestPath$\' }
 
 	{
 		// Windows
 		Unity( '$ProjectName$-Unity-Windows' )
 		{
-		    .UnityInputPath				= '$ProjectPath$\'
+	    	.UnityInputPath              = {'$VendorsPath$\OpenGL\'
+		                                 ,'$VendorsPath$\minizip\'
+		                                 ,'$VendorsPath$\zlib\'
+		                                 ,'$VendorsPath$\glm\'
+		                                 ,'$VendorsPath$\cereal\'
+		                                 ,'$EnginePath$\utils\'}
+
 		    .UnityOutputPath			= '$OutputBase$\Unity\$ProjectPath$\'
-		    //.UnityInputExcludePath		= '$ProjectPath$\CoreTest\' // Exclude Tests
 		}
 	}
 
@@ -81,7 +84,6 @@
 		                                 + ';$VendorsPath$\fmod\inc\'
 		                                 + ';$VendorsPath$\minizip\include\'
 		                                 + ';$VendorsPath$\zlib\include\'
-
 	}
 
 
@@ -98,6 +100,8 @@
 		{
 			// Input (Unity)
 			.CompilerInputUnity			= '$ProjectName$-Unity-Windows'
+
+			.CompilerInputPath			= '$ProjectPath$'
 
 			// Output
 			.CompilerOutputPath			= '$OutputBase$\$ProjectName$\'

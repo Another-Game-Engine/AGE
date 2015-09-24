@@ -28,22 +28,6 @@
 		// Exclude Tests
 	}
 
-	// Unity
-	//--------------------------------------------------------------------------
-
-        .UnityNumFiles   = 12
-        .UnityInputPath  = { '$ProjectDestPath$\' }
-
-	{
-		// Windows
-		Unity( '$ProjectName$-Unity-Windows' )
-		{
-		    .UnityInputPath				= '$ProjectPath$\'
-		    .UnityOutputPath			= '$OutputBase$\Unity\$ProjectPath$\'
-		    //.UnityInputExcludePath		= '$ProjectPath$\CoreTest\' // Exclude Tests
-		}
-	}
-
 	//--------------------------------------------------------------------------
 	ForEach( .Config in .ProjectConfigs )
 	{
@@ -64,9 +48,6 @@
 		// Static Library
 		Library( '$ProjectName$-Lib-$Platform$-$Config$' )
 		{
-			// Input (Unity)
-			.CompilerInputUnity			= '$ProjectName$-Unity-Windows'
-
 			.CompilerInputPath          = '$ProjectPath$'
 
 			.CompilerOptions            + ' $CompilerIncludesPaths$'

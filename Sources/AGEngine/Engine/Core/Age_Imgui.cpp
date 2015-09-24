@@ -261,7 +261,7 @@ namespace AGE
 		io.Fonts->ClearInputData();
 		io.Fonts->ClearTexData();
 #else
-		UNUSED(di);
+		UNUSED(en);
 #endif //AGE_ENABLE_IMGUI
 		return true;
 	}
@@ -326,8 +326,7 @@ namespace AGE
 #ifdef AGE_ENABLE_IMGUI
 		AGE::GetRenderThread()->setImguiDrawList(std::make_shared<AGE::RenderImgui>(draw_data->CmdLists, draw_data->CmdListsCount));
 #else
-		UNUSED(cmd_lists);
-		UNUSED(cmd_lists_count);
+		UNUSED(draw_data);
 #endif
 	}
 

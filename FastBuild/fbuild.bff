@@ -135,8 +135,8 @@ Compiler( 'Compiler-x64' )
   .Config         = 'Release'
   .CompilerOptions    + ' /DRELEASE /DEDITOR_ENABLED /DAGE_ENABLE_IMGUI /D_CRT_SECURE_NO_WARNINGS /DNDEBUG'
 
-    // Setup de-optimization options (FASTBUILD_DEOPTIMIZE_OBJECT)
-    .DeoptimizeWritableFilesWithToken   = true
+  // Setup de-optimization options (FASTBUILD_DEOPTIMIZE_OBJECT)
+  .DeoptimizeWritableFilesWithToken   = true
   .CompilerOptionsDeoptimized   = '$CompilerOptions$ /Od'
 
   .CompilerOptions    + .CompilerReleaseOptimizations             
@@ -149,10 +149,6 @@ Compiler( 'Compiler-x64' )
   .Config         = 'Profile'
   .CompilerOptions    + ' /DRELEASE /DAGE_ENABLE_PROFILING /D_CRT_SECURE_NO_WARNINGS /DNDEBUG'
 
-  .DeoptimizeWritableFilesWithToken = false
-
-  .CompilerOptionsDeoptimized   = '$CompilerOptions$ /Od'
-
   .CompilerOptions    + .CompilerReleaseOptimizations             
   .LibrarianOptions   + .LibrarianReleaseOptimizations
   .LinkerOptions      + .LinkerReleaseOptimizations
@@ -162,10 +158,6 @@ Compiler( 'Compiler-x64' )
   Using( .X64BaseConfig )
   .Config         = 'Retail'
   .CompilerOptions    + ' /DRELEASE /D_CRT_SECURE_NO_WARNINGS /DNDEBUG'
-
-  .DeoptimizeWritableFilesWithToken = false
-  
-  .CompilerOptionsDeoptimized   = '$CompilerOptions$ /Od'
 
   .CompilerOptions    + .CompilerReleaseOptimizations             
   .LibrarianOptions   + .LibrarianReleaseOptimizations
