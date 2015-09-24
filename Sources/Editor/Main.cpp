@@ -65,7 +65,7 @@ int			main(int ac, char **av)
 	engine->launch(std::function<bool()>([&]()
 	{
 		auto configurationManager = engine->getInstance<AGE::ConfigurationManager>();
-		configurationManager->setConfiguration<std::string>(std::string("ShadersPath"), std::string(engine->getApplicationPath() + "/../../Shaders/"));
+		configurationManager->setConfiguration<std::string>(std::string("ShadersPath"), std::string(engine->getApplicationPath() + "/../../Datas/Shaders/"));
 
 
 		engine->displayThreadsStatistics(false);
@@ -96,7 +96,7 @@ int			main(int ac, char **av)
 
 		engine->removeInstance<AGE::IArchetypeManager>();
 		engine->setInstance<AGE::WE::ArchetypeEditorManager, AGE::IArchetypeManager>();
-		engine->setInstance<AGE::WE::ArchetypeEditorManager>()->setLibraryFolder("../../Archetypes/");
+		engine->setInstance<AGE::WE::ArchetypeEditorManager>()->setLibraryFolder("../../Datas/Archetypes/");
 		engine->getInstance<AGE::WE::ArchetypeEditorManager>()->load();
 
 		engine->addScene(std::make_shared<AGE::MainMenuScene>(engine), AGE::MainMenuScene::Name);

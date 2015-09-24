@@ -1,7 +1,5 @@
 #pragma once
 
-#include <Core/AScene.hh>
-#include <Core/Engine.hh>
 #include <AssetManagement\Data\MaterialData.hh>
 #include <memory>
 #include "IMenuInheritrance.hpp"
@@ -16,6 +14,8 @@ namespace AGE { class WorldEditorScene; }
 
 namespace AGE
 {
+	class Engine;
+
 	enum class ModeMaterialEditor {
 		selectMaterial,
 		selectSubMaterial,
@@ -34,7 +34,7 @@ namespace AGE
 		size
 	};
 
-	class MaterialEditorScene : public AScene, public IMenuInheritance
+	class MaterialEditorScene : public IMenuInheritance
 	{
 	public:
 		static const std::string Name;

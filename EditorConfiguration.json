@@ -1,0 +1,16 @@
+{
+    "value0": {
+        "ptr_wrapper": {
+            "id": 2147483649,
+            "data": {
+                "cereal_class_version": 0,
+                "Raw assets directory": "../../Datas/Assets/Raw/",
+                "Cooked assets directory": "../../Datas/Assets/Serialized/",
+                "Edited scenes directory": "../../Datas/Saves/",
+                "Exported scenes directory": "../../EngineCoreTest/DemoScenes/",
+                "Saved archetypes directory": "../../Datas/Archetypes/",
+                "Exported archetypes directory": "../../Datas/Archetypes/"
+            }
+        }
+    }
+}

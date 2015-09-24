@@ -21,12 +21,12 @@ namespace AGE
 			friend class cereal::access;
 			struct Configurations
 			{
-				std::string _rawAssetsDirectory = "../../Assets/Raw/";
-				std::string _cookedAssetsDirectory = "../../Assets/Serialized/";
-				std::string _saveSceneFolder = "../../Tools/AssetsEditor/Saves/";
+				std::string _rawAssetsDirectory = "../../Datas/Assets/Raw/";
+				std::string _cookedAssetsDirectory = "../../Datas/Assets/Serialized/";
+				std::string _saveSceneFolder = "../../Datas/Saves/";
 				std::string _exportSceneFolder = "../../EngineCoreTest/DemoScenes/";
-				std::string _saveArchetypeFolder = "../../Tools/AssetsEditor/Archetypes/";
-				std::string _exportArchetypeFolder = "../../EngineCoreTest/Archetypes/";
+				std::string _saveArchetypeFolder = "../../Datas/Archetypes/";
+				std::string _exportArchetypeFolder = "../../Datas/Archetypes/";
 
 				int _selectedScene = 0;
 

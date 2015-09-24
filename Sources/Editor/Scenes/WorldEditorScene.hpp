@@ -1,13 +1,13 @@
 #pragma once
 
-#include <Core/AScene.hh>
-#include <Core/Engine.hh>
 #include <memory>
 #include "IMenuInheritrance.hpp"
 
 namespace AGE
 {
-	class WorldEditorScene : public AScene, public IMenuInheritance
+	class Engine;
+
+	class WorldEditorScene : public IMenuInheritance
 	{
 	public:
 		static const std::string Name;

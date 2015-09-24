@@ -11,7 +11,7 @@
 class DependenciesInjector
 {
 private:
-	AGE::SpinLock _mutex;
+	mutable AGE::SpinLock _mutex;
 	DependenciesInjector(DependenciesInjector const &) = delete;
 	DependenciesInjector &operator=(DependenciesInjector const &) = delete;
 
@@ -33,7 +33,7 @@ public:
 		std::unique_lock<AGE::SpinLock> lock(_mutex);
 
 		std::uint16_t id = T::getTypeId();
-		if (!hasInstance<T>())
+		if (!_unsafeHasInstance<T>())
 		{
 			auto p = _parent;
 			if (p)
@@ -52,7 +52,7 @@ public:
 	{
 		std::unique_lock<AGE::SpinLock> lock(_mutex);
 		std::uint16_t id = T::getTypeId();
-		if (!hasInstance<T>())
+		if (!_unsafeHasInstance<T>())
 		{
 			auto p = _parent;
 			if (p)
@@ -73,7 +73,7 @@ public:
 		std::unique_lock<AGE::SpinLock> lock(_mutex);
 
 		std::uint16_t id = T::getTypeId();
-		if (!hasInstance<T>())
+		if (!_unsafeHasInstance<T>())
 		{
 			auto p = _parent;
 			if (p)
@@ -122,9 +122,18 @@ public:
 	}
 
 	template <typename T>
-	bool hasInstance()
+	bool hasInstance() const
 	{
+		std::lock_guard<AGE::SpinLock> lock(_mutex);
 		std::uint16_t id = T::getTypeId();
 		return _instances.size() > id && _instances[id] != nullptr;
 	}
+
+	private:
+		template <typename T>
+		bool _unsafeHasInstance() const
+		{
+			std::uint16_t id = T::getTypeId();
+			return _instances.size() > id && _instances[id] != nullptr;
+		}
 };

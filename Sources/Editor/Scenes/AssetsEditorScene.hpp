@@ -17,7 +17,7 @@ namespace AGE
 	{
 		struct CookConfig;
 	}
-	class AssetsEditorScene : public AScene, public IMenuInheritance
+	class AssetsEditorScene : public IMenuInheritance
 	{
 	public:
 		static const std::string Name;

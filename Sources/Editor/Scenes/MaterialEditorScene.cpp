@@ -27,7 +27,7 @@ namespace AGE
 	const std::string MaterialEditorScene::Name = "Material Editor";
 
 	MaterialEditorScene::MaterialEditorScene(AGE::Engine *engine, std::shared_ptr<WorldEditorScene> const &world_editor)
-		: AScene(engine),
+		: IMenuInheritance(engine),
 		_world_editor(world_editor),
 		_mode(ModeMaterialEditor::selectMaterial),
 		_indexMaterial(-1)

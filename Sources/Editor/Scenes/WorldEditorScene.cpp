@@ -33,7 +33,7 @@ namespace AGE
 	const std::string WorldEditorScene::Name = "World Editor";
 
 	WorldEditorScene::WorldEditorScene(AGE::Engine *engine)
-		: AScene(engine)
+		: IMenuInheritance(engine)
 	{
 	}
 

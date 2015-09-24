@@ -33,8 +33,7 @@ namespace AGE
 
 		for (auto i = 0; i < TOOLS_NUMBER; ++i)
 		{
-			_scenes[i] = std::dynamic_pointer_cast<IMenuInheritance>(getEngine()->getScene(_toolsName[i])).get();
-			AGE_ASSERT(_scenes[i] != nullptr);
+			_scenes[i] = (IMenuInheritance*)((getEngine()->getScene(_toolsName[i])).get());
 		}
 
 		_scenes[WorldEditor]->_displayWindow = true;

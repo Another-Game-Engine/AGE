@@ -59,7 +59,7 @@ namespace AGE
 	std::vector<const char *> AssetsEditorScene::_cookedTextureFiles = std::vector<const char *>();
 
 	AssetsEditorScene::AssetsEditorScene(AGE::Engine *engine)
-		: AScene(engine)
+		: IMenuInheritance(engine)
 	{
 		RawFileFilter filter;
 		_raw.list(&filter, WE::EditorConfiguration::GetRawDirectory());

@@ -184,8 +184,8 @@ Compiler( 'Compiler-x64' )
 //------------------------------------------------------------------------------
 .ProjectCommon = 
 [
-  .ProjectBuildCommand    = 'cd ^$(SolutionDir)\../FastBuild/ &amp; fbuild.exe -vs -verbose -cache -wrapper ^$(ProjectName)-^$(Configuration)'
-  .ProjectRebuildCommand    = 'cd ^$(SolutionDir)\../FastBuild/ &amp; fbuild.exe -vs -verbose -cache -clean -wrapper ^$(ProjectName)-^$(Configuration)'
+  .ProjectBuildCommand    = 'cd ^$(SolutionDir)\../FastBuild/ &amp; fbuild.exe -vs -verbose -cache -wrapper -dist ^$(ProjectName)-^$(Configuration)'
+  .ProjectRebuildCommand    = 'cd ^$(SolutionDir)\../FastBuild/ &amp; fbuild.exe -vs -verbose -cache -clean -wrapper -dist ^$(ProjectName)-^$(Configuration)'
   .OutputDirectory      = '^$(SolutionDir)\..\Build'
   .IntermediateDirectory    = '^$(SolutionDir)\..\Build'
   .Platform = 'Win32' // unused
@@ -199,10 +199,10 @@ Compiler( 'Compiler-x64' )
   .RetailDefines        = 'RETAIL;EDITOR_ENABLED;'
 ]
 
-.ProjectX64Debug      = [ Using( .ProjectCommon ) .Config = 'x64-Debug' .PreprocessorDefinitions = .X64Defines + .DebugDefines ]
-.ProjectX64Profile    = [ Using( .ProjectCommon ) .Config = 'x64-Profile' .PreprocessorDefinitions = .X64Defines + .ProfileDefines ]
-.ProjectX64Release    = [ Using( .ProjectCommon ) .Config = 'x64-Release' .PreprocessorDefinitions = .X64Defines + .ReleaseDefines ]
-.ProjectX64Retail    = [ Using( .ProjectCommon ) .Config = 'x64-Retail' .PreprocessorDefinitions = .X64Defines + .RetailDefines ]
+.ProjectX64Debug      = [ Using( .ProjectCommon ) .Config = 'x64-Debug' .PreprocessorDefinitions = .X64Defines + .DebugDefines .OutputDirectory + '/x64-Debug' ]
+.ProjectX64Profile    = [ Using( .ProjectCommon ) .Config = 'x64-Profile' .PreprocessorDefinitions = .X64Defines + .ProfileDefines .OutputDirectory + '/x64-Profile' ]
+.ProjectX64Release    = [ Using( .ProjectCommon ) .Config = 'x64-Release' .PreprocessorDefinitions = .X64Defines + .ReleaseDefines .OutputDirectory + '/x64-Release' ]
+.ProjectX64Retail    = [ Using( .ProjectCommon ) .Config = 'x64-Retail' .PreprocessorDefinitions = .X64Defines + .RetailDefines .OutputDirectory + '/x64-Retail' ]
 
 .ProjectConfigs = { .ProjectX64Debug, .ProjectX64Profile, .ProjectX64Release, .ProjectX64Retail }
 
