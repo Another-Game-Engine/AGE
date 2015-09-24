@@ -145,19 +145,31 @@ Compiler( 'Compiler-x64' )
 ]
 .X64ProfileConfig =
 [
-  Using( .X64ReleaseConfig ) // Note: based on Release config
+  Using( .X64ReleaseConfig ) 
   .Config         = 'Profile'
-  //.CompilerOptions    + ' /DEDITOR_ENABLED'
+  .CompilerOptions    + ' /DRELEASE /DAGE_ENABLE_PROFILING /D_CRT_SECURE_NO_WARNINGS /DNDEBUG'
 
-    .DeoptimizeWritableFilesWithToken = false
+  .DeoptimizeWritableFilesWithToken = false
+
+  .CompilerOptionsDeoptimized   = '$CompilerOptions$ /Od'
+
+  .CompilerOptions    + .CompilerReleaseOptimizations             
+  .LibrarianOptions   + .LibrarianReleaseOptimizations
+  .LinkerOptions      + .LinkerReleaseOptimizations
 ]
 .X64RetailConfig =
 [
-  Using( .X64ReleaseConfig ) // Note: based on Release config
+  Using( .X64ReleaseConfig )
   .Config         = 'Retail'
-  //.CompilerOptions    + ' /DEDITOR_ENABLED '
+  .CompilerOptions    + ' /DRELEASE /D_CRT_SECURE_NO_WARNINGS /DNDEBUG'
 
   .DeoptimizeWritableFilesWithToken = false
+  
+  .CompilerOptionsDeoptimized   = '$CompilerOptions$ /Od'
+
+  .CompilerOptions    + .CompilerReleaseOptimizations             
+  .LibrarianOptions   + .LibrarianReleaseOptimizations
+  .LinkerOptions      + .LinkerReleaseOptimizations
 ]
 
 // Resource Compiler

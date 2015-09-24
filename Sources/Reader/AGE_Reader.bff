@@ -122,6 +122,7 @@
 			.LinkerOptions				+ ' /SUBSYSTEM:CONSOLE'
 										+ ' kernel32.lib'
 										+ ' Ws2_32.lib'
+										+ ' Advapi32.lib'
 										+ ' User32.lib'
 										+ ' opengl32.lib'
 										+ ' glu32.lib'
