@@ -16,10 +16,11 @@ namespace AGE
 		~FPSCharacter() = default;
 
 		void init(void);
+#if defined(EDITOR_ENABLED)
 		virtual void editorCreate(void) override final;
 		virtual void editorDelete(void) override final;
 		virtual bool editorUpdate(void) override final;
-
+#endif
 		// never copied
 		virtual void _copyFrom(const ComponentBase *model);
 

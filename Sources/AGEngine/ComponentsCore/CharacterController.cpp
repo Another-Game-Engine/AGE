@@ -11,6 +11,7 @@ namespace AGE
 		controller = entity->getScene()->getInstance<Physics::PhysicsInterface>()->getWorld()->createCharacterController();
 	}
 
+#if defined(EDITOR_ENABLED)
 	void CharacterController::editorCreate(void)
 	{
 
@@ -27,6 +28,7 @@ namespace AGE
 
 		return (modified);
 	}
+#endif
 
 	void CharacterController::_copyFrom(const ComponentBase *model)
 	{

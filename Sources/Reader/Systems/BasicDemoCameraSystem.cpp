@@ -71,8 +71,10 @@ namespace AGE
 			}
 			trigger += time;
 
+#if defined(EDITOR_ENABLED)
 			entity->getComponent<CameraComponent>()->editorUpdate();
 			////////////////////////////////////
+#endif
 
 			auto camComponent = entity->getComponent<CameraComponent>();
 			static char const *pipelineNames[RenderType::TOTAL] = { "Debug deferred rendering", "Deferred rendering" };

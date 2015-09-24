@@ -10,6 +10,7 @@ namespace AGE
 	{
 	}
 
+#if defined(EDITOR_ENABLED)
 	void FPSCharacter::editorCreate(void)
 	{
 
@@ -26,7 +27,7 @@ namespace AGE
 
 		return (modified);
 	}
-
+#endif
 	void FPSCharacter::_copyFrom(const ComponentBase *model)
 	{
 		(void)(model);

@@ -29,6 +29,7 @@ namespace AGE
 			return false;
 		}
 
+#if defined(EDITOR_ENABLED)
 		bool PhysicsData::serializeInExport()
 		{
 			return false;
@@ -38,6 +39,7 @@ namespace AGE
 		{
 			return false;
 		}
+#endif
 
 	}
 }

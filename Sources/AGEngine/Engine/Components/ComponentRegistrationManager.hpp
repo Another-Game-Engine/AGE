@@ -50,10 +50,12 @@ namespace AGE
 			
 			T tmpInstance;
 
+#if defined(EDITOR_ENABLED)
 			if (tmpInstance.isExposedInEditor())
 			{
 				_exposedTypes.insert(std::make_pair(key, ageId));
 			}
+#endif
 
 			_typeIds.insert(std::make_pair(key, ageId));
 			_ageTypeIds.insert(std::make_pair(ageId, key));
@@ -105,14 +107,18 @@ namespace AGE
 
 		inline const std::map<std::size_t, std::function<ComponentBase*(Entity *)>> &getCreationFunctions() { return _creationFunctions; }
 		inline const std::map<std::size_t, ComponentType> &getSystemIdToAgeIdMap() const { return _typeIds; }
+#if defined(EDITOR_ENABLED)
 		inline const std::map<std::size_t, ComponentType> &getExposedType() const { return _exposedTypes; }
+#endif
 		inline const std::map<ComponentType, std::size_t> &getAgeIdToSystemIdMap() const { return _ageTypeIds; }
 
 	private:
 		std::map<std::size_t, std::function<ComponentBase*(Entity *)>> _creationFunctions;
 		std::map<std::size_t, ComponentType> _typeIds;
 		// only exposed types in editor ( bool isExposedInEditor(){ return true; } )
+#if defined(EDITOR_ENABLED)
 		std::map<std::size_t, ComponentType> _exposedTypes;
+#endif
 		std::map<ComponentType, std::size_t> _ageTypeIds;
 		std::map < ComponentType, RegisterJsonFn> _jsonSaveMap;
 		std::map < ComponentType, LoadJsonFn> _jsonLoadMap;
