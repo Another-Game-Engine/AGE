@@ -145,7 +145,7 @@ Compiler( 'Compiler-x64' )
 ]
 .X64ProfileConfig =
 [
-  Using( .X64ReleaseConfig ) 
+  Using( .X64BaseConfig ) 
   .Config         = 'Profile'
   .CompilerOptions    + ' /DRELEASE /DAGE_ENABLE_PROFILING /D_CRT_SECURE_NO_WARNINGS /DNDEBUG'
 
@@ -159,7 +159,7 @@ Compiler( 'Compiler-x64' )
 ]
 .X64RetailConfig =
 [
-  Using( .X64ReleaseConfig )
+  Using( .X64BaseConfig )
   .Config         = 'Retail'
   .CompilerOptions    + ' /DRELEASE /D_CRT_SECURE_NO_WARNINGS /DNDEBUG'
 

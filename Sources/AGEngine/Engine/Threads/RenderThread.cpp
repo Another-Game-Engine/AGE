@@ -39,7 +39,9 @@ namespace AGE
 		pipelines(RenderType::TOTAL),
 		_depthMapManager(nullptr)
 	{
+#if defined(AGE_ENABLE_IMGUI)
 		_imguiRenderlist = nullptr;
+#endif
 		_frameCounter = 0;
 	}
 
