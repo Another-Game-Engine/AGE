@@ -239,3 +239,5 @@ TMP_SOLUTIONS
 GameEngine/Configuration.json
 GameEngine/Tools/AssetsEditor/Saves/do-not-commit.raw_scene
 configuration.json
+Datas/Saves/do-not-commit.raw_scene
+EditorConfiguration.json
