@@ -1,4 +1,5 @@
 #include "ArchetypeScenes.hpp"
+#include "SystemsCore/PhysicsSystem.hpp"
 
 namespace AGE
 {
@@ -11,9 +12,8 @@ namespace AGE
 
 	bool ArchetypeScene::_userStart()
 	{
-		//@URGENT
-		//addSystem<PhysicsSystem>(3, Physics::EngineType::PhysX, getInstance<AGE::AssetsManager>(), false);
-		//getInstance<Physics::PhysicsInterface>()->getWorld()->setGravity(0, 0, 0);
+		addSystem<PhysicsSystem>(3, Physics::EngineType::PhysX, getInstance<AGE::AssetsManager>(), false);
+		getInstance<Physics::PhysicsInterface>()->getWorld()->setGravity(0, 0, 0);
 		return true;
 	}
 

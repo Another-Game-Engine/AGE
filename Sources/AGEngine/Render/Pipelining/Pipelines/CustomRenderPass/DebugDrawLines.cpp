@@ -64,6 +64,8 @@ namespace AGE
 			std::make_shared<UnitProg>(fragDrawLine, GL_FRAGMENT_SHADER)
 		}));
 
+		Singleton<SimpleGeometryManager>::setInstance();
+
 		Key<Painter> quadPainterKey;
 	}
 

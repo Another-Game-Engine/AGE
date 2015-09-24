@@ -24,7 +24,7 @@ namespace AGE
 				std::string _rawAssetsDirectory = "../../Datas/Assets/Raw/";
 				std::string _cookedAssetsDirectory = "../../Datas/Assets/Serialized/";
 				std::string _saveSceneFolder = "../../Datas/Saves/";
-				std::string _exportSceneFolder = "../../EngineCoreTest/DemoScenes/";
+				std::string _exportSceneFolder = "../../Datas/DemoScenes/";
 				std::string _saveArchetypeFolder = "../../Datas/Archetypes/";
 				std::string _exportArchetypeFolder = "../../Datas/Archetypes/";
 
