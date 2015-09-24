@@ -10,6 +10,7 @@
 #include <BulletCollision/CollisionShapes/btBvhTriangleMeshShape.h>
 #include <BulletCollision/CollisionShapes/btConvexHullShape.h>
 #include "ConvertorStatusManager.hpp"
+#include <Utils/Debug.hpp>
 #include <PhysX/PhysXSDK/Include/PxPhysicsAPI.h>
 #include <PhysX/PhysXSDK/Include/extensions/PxExtensionsAPI.h>
 #include "Physics/PhysicsInterface.hpp"

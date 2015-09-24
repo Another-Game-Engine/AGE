@@ -61,47 +61,6 @@
             "link": {
                 "cereal_class_version": 0,
                 "Position": {
-                    "value0": 40,
-                    "value1": 0,
-                    "value2": 50
-                },
-                "Scale": {
-                    "value0": 1,
-                    "value1": 1,
-                    "value2": 1
-                },
-                "Orientation": {
-                    "value0": 0,
-                    "value1": 0,
-                    "value2": 0,
-                    "value3": 1
-                }
-            },
-            "children": [],
-            "flags": 0,
-            "components_number": [
-                8,
-                0
-            ],
-            "archetypesDependency": [
-                "static-camera"
-            ],
-            "AGE_CORE_ArchetypeComponent": {
-                "cereal_class_version": 3,
-                "archetypeName": "static-camera",
-                "synchronizePosition": false,
-                "synchronizeRotation": true,
-                "synchronizeScale": true,
-                "parentIsAnArchetype": false
-            },
-            "AGE_CORE_EntityRepresentationComponent": {
-                "cereal_class_version": 0,
-                "name": "static-camera-Copy-Copy"
-            }
-        },
-        "Entity_1": {
-            "link": {
-                "Position": {
                     "value0": 0,
                     "value1": 0,
                     "value2": 0
@@ -119,8 +78,8 @@
                 }
             },
             "children": [
-                2,
-                12
+                1,
+                11
             ],
             "flags": 0,
             "components_number": [
@@ -128,10 +87,11 @@
             ],
             "archetypesDependency": [],
             "AGE_CORE_EntityRepresentationComponent": {
+                "cereal_class_version": 0,
                 "name": "cube-group-group"
             }
         },
-        "Entity_2": {
+        "Entity_1": {
             "link": {
                 "Position": {
                     "value0": 0,
@@ -151,6 +111,7 @@
                 }
             },
             "children": [
+                2,
                 3,
                 4,
                 5,
@@ -158,8 +119,7 @@
                 7,
                 8,
                 9,
-                10,
-                11
+                10
             ],
             "flags": 0,
             "components_number": [
@@ -170,7 +130,7 @@
                 "name": "cube-group-Copy"
             }
         },
-        "Entity_3": {
+        "Entity_2": {
             "link": {
                 "Position": {
                     "value0": 16,
@@ -199,6 +159,7 @@
                 "static-cube"
             ],
             "AGE_CORE_ArchetypeComponent": {
+                "cereal_class_version": 3,
                 "archetypeName": "static-cube",
                 "synchronizePosition": false,
                 "synchronizeRotation": true,
@@ -209,7 +170,7 @@
                 "name": "static-cube-Copy-Copy"
             }
         },
-        "Entity_4": {
+        "Entity_3": {
             "link": {
                 "Position": {
                     "value0": 14,
@@ -248,7 +209,7 @@
                 "name": "static-cube-Copy-Copy"
             }
         },
-        "Entity_5": {
+        "Entity_4": {
             "link": {
                 "Position": {
                     "value0": 12,
@@ -287,7 +248,7 @@
                 "name": "static-cube-Copy-Copy"
             }
         },
-        "Entity_6": {
+        "Entity_5": {
             "link": {
                 "Position": {
                     "value0": 10,
@@ -326,7 +287,7 @@
                 "name": "static-cube-Copy-Copy"
             }
         },
-        "Entity_7": {
+        "Entity_6": {
             "link": {
                 "Position": {
                     "value0": 8,
@@ -365,7 +326,7 @@
                 "name": "static-cube-Copy-Copy"
             }
         },
-        "Entity_8": {
+        "Entity_7": {
             "link": {
                 "Position": {
                     "value0": 6,
@@ -404,7 +365,7 @@
                 "name": "static-cube-Copy-Copy"
             }
         },
-        "Entity_9": {
+        "Entity_8": {
             "link": {
                 "Position": {
                     "value0": 4,
@@ -443,10 +404,49 @@
                 "name": "static-cube-Copy-Copy"
             }
         },
-        "Entity_10": {
+        "Entity_9": {
             "link": {
                 "Position": {
                     "value0": 2,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_10": {
+            "link": {
+                "Position": {
+                    "value0": 0,
                     "value1": 0,
                     "value2": 0
                 },
@@ -487,45 +487,6 @@
                 "Position": {
                     "value0": 0,
                     "value1": 0,
-                    "value2": 0
-                },
-                "Scale": {
-                    "value0": 1,
-                    "value1": 1,
-                    "value2": 1
-                },
-                "Orientation": {
-                    "value0": 0,
-                    "value1": 0,
-                    "value2": 0,
-                    "value3": 1
-                }
-            },
-            "children": [],
-            "flags": 0,
-            "components_number": [
-                8,
-                0
-            ],
-            "archetypesDependency": [
-                "static-cube"
-            ],
-            "AGE_CORE_ArchetypeComponent": {
-                "archetypeName": "static-cube",
-                "synchronizePosition": false,
-                "synchronizeRotation": true,
-                "synchronizeScale": true,
-                "parentIsAnArchetype": false
-            },
-            "AGE_CORE_EntityRepresentationComponent": {
-                "name": "static-cube-Copy-Copy"
-            }
-        },
-        "Entity_12": {
-            "link": {
-                "Position": {
-                    "value0": 0,
-                    "value1": 0,
                     "value2": -5
                 },
                 "Scale": {
@@ -541,6 +502,7 @@
                 }
             },
             "children": [
+                12,
                 13,
                 14,
                 15,
@@ -548,8 +510,7 @@
                 17,
                 18,
                 19,
-                20,
-                21
+                20
             ],
             "flags": 0,
             "components_number": [
@@ -560,7 +521,7 @@
                 "name": "cube-group"
             }
         },
-        "Entity_13": {
+        "Entity_12": {
             "link": {
                 "Position": {
                     "value0": 16,
@@ -599,7 +560,7 @@
                 "name": "static-cube-Copy-Copy"
             }
         },
-        "Entity_14": {
+        "Entity_13": {
             "link": {
                 "Position": {
                     "value0": 14,
@@ -638,7 +599,7 @@
                 "name": "static-cube-Copy-Copy"
             }
         },
-        "Entity_15": {
+        "Entity_14": {
             "link": {
                 "Position": {
                     "value0": 12,
@@ -677,7 +638,7 @@
                 "name": "static-cube-Copy-Copy"
             }
         },
-        "Entity_16": {
+        "Entity_15": {
             "link": {
                 "Position": {
                     "value0": 10,
@@ -716,7 +677,7 @@
                 "name": "static-cube-Copy-Copy"
             }
         },
-        "Entity_17": {
+        "Entity_16": {
             "link": {
                 "Position": {
                     "value0": 8,
@@ -755,7 +716,7 @@
                 "name": "static-cube-Copy-Copy"
             }
         },
-        "Entity_18": {
+        "Entity_17": {
             "link": {
                 "Position": {
                     "value0": 6,
@@ -794,7 +755,7 @@
                 "name": "static-cube-Copy-Copy"
             }
         },
-        "Entity_19": {
+        "Entity_18": {
             "link": {
                 "Position": {
                     "value0": 4,
@@ -833,10 +794,49 @@
                 "name": "static-cube-Copy-Copy"
             }
         },
-        "Entity_20": {
+        "Entity_19": {
             "link": {
                 "Position": {
                     "value0": 2,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_20": {
+            "link": {
+                "Position": {
+                    "value0": 0,
                     "value1": 0,
                     "value2": 0
                 },
@@ -876,45 +876,6 @@
             "link": {
                 "Position": {
                     "value0": 0,
-                    "value1": 0,
-                    "value2": 0
-                },
-                "Scale": {
-                    "value0": 1,
-                    "value1": 1,
-                    "value2": 1
-                },
-                "Orientation": {
-                    "value0": 0,
-                    "value1": 0,
-                    "value2": 0,
-                    "value3": 1
-                }
-            },
-            "children": [],
-            "flags": 0,
-            "components_number": [
-                8,
-                0
-            ],
-            "archetypesDependency": [
-                "static-cube"
-            ],
-            "AGE_CORE_ArchetypeComponent": {
-                "archetypeName": "static-cube",
-                "synchronizePosition": false,
-                "synchronizeRotation": true,
-                "synchronizeScale": true,
-                "parentIsAnArchetype": false
-            },
-            "AGE_CORE_EntityRepresentationComponent": {
-                "name": "static-cube-Copy-Copy"
-            }
-        },
-        "Entity_22": {
-            "link": {
-                "Position": {
-                    "value0": 0,
                     "value1": 7,
                     "value2": 0
                 },
@@ -931,8 +892,8 @@
                 }
             },
             "children": [
-                23,
-                33
+                22,
+                32
             ],
             "flags": 0,
             "components_number": [
@@ -943,7 +904,7 @@
                 "name": "cube-group-group-Copy"
             }
         },
-        "Entity_23": {
+        "Entity_22": {
             "link": {
                 "Position": {
                     "value0": 0,
@@ -963,6 +924,7 @@
                 }
             },
             "children": [
+                23,
                 24,
                 25,
                 26,
@@ -970,8 +932,7 @@
                 28,
                 29,
                 30,
-                31,
-                32
+                31
             ],
             "flags": 0,
             "components_number": [
@@ -982,7 +943,7 @@
                 "name": "cube-group-Copy-Copy"
             }
         },
-        "Entity_24": {
+        "Entity_23": {
             "link": {
                 "Position": {
                     "value0": 16,
@@ -1021,7 +982,7 @@
                 "name": "static-cube-Copy-Copy"
             }
         },
-        "Entity_25": {
+        "Entity_24": {
             "link": {
                 "Position": {
                     "value0": 14,
@@ -1060,7 +1021,7 @@
                 "name": "static-cube-Copy-Copy"
             }
         },
-        "Entity_26": {
+        "Entity_25": {
             "link": {
                 "Position": {
                     "value0": 12,
@@ -1099,7 +1060,7 @@
                 "name": "static-cube-Copy-Copy"
             }
         },
-        "Entity_27": {
+        "Entity_26": {
             "link": {
                 "Position": {
                     "value0": 10,
@@ -1138,7 +1099,7 @@
                 "name": "static-cube-Copy-Copy"
             }
         },
-        "Entity_28": {
+        "Entity_27": {
             "link": {
                 "Position": {
                     "value0": 8,
@@ -1177,7 +1138,7 @@
                 "name": "static-cube-Copy-Copy"
             }
         },
-        "Entity_29": {
+        "Entity_28": {
             "link": {
                 "Position": {
                     "value0": 6,
@@ -1216,7 +1177,7 @@
                 "name": "static-cube-Copy-Copy"
             }
         },
-        "Entity_30": {
+        "Entity_29": {
             "link": {
                 "Position": {
                     "value0": 4,
@@ -1255,10 +1216,49 @@
                 "name": "static-cube-Copy-Copy"
             }
         },
-        "Entity_31": {
+        "Entity_30": {
             "link": {
                 "Position": {
                     "value0": 2,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_31": {
+            "link": {
+                "Position": {
+                    "value0": 0,
                     "value1": 0,
                     "value2": 0
                 },
@@ -1299,45 +1299,6 @@
                 "Position": {
                     "value0": 0,
                     "value1": 0,
-                    "value2": 0
-                },
-                "Scale": {
-                    "value0": 1,
-                    "value1": 1,
-                    "value2": 1
-                },
-                "Orientation": {
-                    "value0": 0,
-                    "value1": 0,
-                    "value2": 0,
-                    "value3": 1
-                }
-            },
-            "children": [],
-            "flags": 0,
-            "components_number": [
-                8,
-                0
-            ],
-            "archetypesDependency": [
-                "static-cube"
-            ],
-            "AGE_CORE_ArchetypeComponent": {
-                "archetypeName": "static-cube",
-                "synchronizePosition": false,
-                "synchronizeRotation": true,
-                "synchronizeScale": true,
-                "parentIsAnArchetype": false
-            },
-            "AGE_CORE_EntityRepresentationComponent": {
-                "name": "static-cube-Copy-Copy"
-            }
-        },
-        "Entity_33": {
-            "link": {
-                "Position": {
-                    "value0": 0,
-                    "value1": 0,
                     "value2": -5
                 },
                 "Scale": {
@@ -1353,6 +1314,7 @@
                 }
             },
             "children": [
+                33,
                 34,
                 35,
                 36,
@@ -1360,8 +1322,7 @@
                 38,
                 39,
                 40,
-                41,
-                42
+                41
             ],
             "flags": 0,
             "components_number": [
@@ -1372,7 +1333,7 @@
                 "name": "cube-group-Copy"
             }
         },
-        "Entity_34": {
+        "Entity_33": {
             "link": {
                 "Position": {
                     "value0": 16,
@@ -1411,7 +1372,7 @@
                 "name": "static-cube-Copy-Copy"
             }
         },
-        "Entity_35": {
+        "Entity_34": {
             "link": {
                 "Position": {
                     "value0": 14,
@@ -1450,7 +1411,7 @@
                 "name": "static-cube-Copy-Copy"
             }
         },
-        "Entity_36": {
+        "Entity_35": {
             "link": {
                 "Position": {
                     "value0": 12,
@@ -1489,7 +1450,7 @@
                 "name": "static-cube-Copy-Copy"
             }
         },
-        "Entity_37": {
+        "Entity_36": {
             "link": {
                 "Position": {
                     "value0": 10,
@@ -1528,7 +1489,7 @@
                 "name": "static-cube-Copy-Copy"
             }
         },
-        "Entity_38": {
+        "Entity_37": {
             "link": {
                 "Position": {
                     "value0": 8,
@@ -1567,7 +1528,7 @@
                 "name": "static-cube-Copy-Copy"
             }
         },
-        "Entity_39": {
+        "Entity_38": {
             "link": {
                 "Position": {
                     "value0": 6,
@@ -1606,7 +1567,7 @@
                 "name": "static-cube-Copy-Copy"
             }
         },
-        "Entity_40": {
+        "Entity_39": {
             "link": {
                 "Position": {
                     "value0": 4,
@@ -1645,10 +1606,49 @@
                 "name": "static-cube-Copy-Copy"
             }
         },
-        "Entity_41": {
+        "Entity_40": {
             "link": {
                 "Position": {
                     "value0": 2,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_41": {
+            "link": {
+                "Position": {
+                    "value0": 0,
                     "value1": 0,
                     "value2": 0
                 },
@@ -1688,45 +1688,6 @@
             "link": {
                 "Position": {
                     "value0": 0,
-                    "value1": 0,
-                    "value2": 0
-                },
-                "Scale": {
-                    "value0": 1,
-                    "value1": 1,
-                    "value2": 1
-                },
-                "Orientation": {
-                    "value0": 0,
-                    "value1": 0,
-                    "value2": 0,
-                    "value3": 1
-                }
-            },
-            "children": [],
-            "flags": 0,
-            "components_number": [
-                8,
-                0
-            ],
-            "archetypesDependency": [
-                "static-cube"
-            ],
-            "AGE_CORE_ArchetypeComponent": {
-                "archetypeName": "static-cube",
-                "synchronizePosition": false,
-                "synchronizeRotation": true,
-                "synchronizeScale": true,
-                "parentIsAnArchetype": false
-            },
-            "AGE_CORE_EntityRepresentationComponent": {
-                "name": "static-cube-Copy-Copy"
-            }
-        },
-        "Entity_43": {
-            "link": {
-                "Position": {
-                    "value0": 0,
                     "value1": -7,
                     "value2": 0
                 },
@@ -1743,8 +1704,8 @@
                 }
             },
             "children": [
-                44,
-                54
+                43,
+                53
             ],
             "flags": 0,
             "components_number": [
@@ -1755,7 +1716,7 @@
                 "name": "cube-group-group-Copy-Copy"
             }
         },
-        "Entity_44": {
+        "Entity_43": {
             "link": {
                 "Position": {
                     "value0": 0,
@@ -1775,6 +1736,7 @@
                 }
             },
             "children": [
+                44,
                 45,
                 46,
                 47,
@@ -1782,8 +1744,7 @@
                 49,
                 50,
                 51,
-                52,
-                53
+                52
             ],
             "flags": 0,
             "components_number": [
@@ -1794,7 +1755,7 @@
                 "name": "cube-group-Copy-Copy-Copy"
             }
         },
-        "Entity_45": {
+        "Entity_44": {
             "link": {
                 "Position": {
                     "value0": 16,
@@ -1833,7 +1794,7 @@
                 "name": "static-cube-Copy-Copy"
             }
         },
-        "Entity_46": {
+        "Entity_45": {
             "link": {
                 "Position": {
                     "value0": 14,
@@ -1872,7 +1833,7 @@
                 "name": "static-cube-Copy-Copy"
             }
         },
-        "Entity_47": {
+        "Entity_46": {
             "link": {
                 "Position": {
                     "value0": 12,
@@ -1911,7 +1872,7 @@
                 "name": "static-cube-Copy-Copy"
             }
         },
-        "Entity_48": {
+        "Entity_47": {
             "link": {
                 "Position": {
                     "value0": 10,
@@ -1950,7 +1911,7 @@
                 "name": "static-cube-Copy-Copy"
             }
         },
-        "Entity_49": {
+        "Entity_48": {
             "link": {
                 "Position": {
                     "value0": 8,
@@ -1989,7 +1950,7 @@
                 "name": "static-cube-Copy-Copy"
             }
         },
-        "Entity_50": {
+        "Entity_49": {
             "link": {
                 "Position": {
                     "value0": 6,
@@ -2028,7 +1989,7 @@
                 "name": "static-cube-Copy-Copy"
             }
         },
-        "Entity_51": {
+        "Entity_50": {
             "link": {
                 "Position": {
                     "value0": 4,
@@ -2067,10 +2028,49 @@
                 "name": "static-cube-Copy-Copy"
             }
         },
-        "Entity_52": {
+        "Entity_51": {
             "link": {
                 "Position": {
                     "value0": 2,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_52": {
+            "link": {
+                "Position": {
+                    "value0": 0,
                     "value1": 0,
                     "value2": 0
                 },
@@ -2111,45 +2111,6 @@
                 "Position": {
                     "value0": 0,
                     "value1": 0,
-                    "value2": 0
-                },
-                "Scale": {
-                    "value0": 1,
-                    "value1": 1,
-                    "value2": 1
-                },
-                "Orientation": {
-                    "value0": 0,
-                    "value1": 0,
-                    "value2": 0,
-                    "value3": 1
-                }
-            },
-            "children": [],
-            "flags": 0,
-            "components_number": [
-                8,
-                0
-            ],
-            "archetypesDependency": [
-                "static-cube"
-            ],
-            "AGE_CORE_ArchetypeComponent": {
-                "archetypeName": "static-cube",
-                "synchronizePosition": false,
-                "synchronizeRotation": true,
-                "synchronizeScale": true,
-                "parentIsAnArchetype": false
-            },
-            "AGE_CORE_EntityRepresentationComponent": {
-                "name": "static-cube-Copy-Copy"
-            }
-        },
-        "Entity_54": {
-            "link": {
-                "Position": {
-                    "value0": 0,
-                    "value1": 0,
                     "value2": -5
                 },
                 "Scale": {
@@ -2165,6 +2126,7 @@
                 }
             },
             "children": [
+                54,
                 55,
                 56,
                 57,
@@ -2172,8 +2134,7 @@
                 59,
                 60,
                 61,
-                62,
-                63
+                62
             ],
             "flags": 0,
             "components_number": [
@@ -2184,7 +2145,7 @@
                 "name": "cube-group-Copy-Copy"
             }
         },
-        "Entity_55": {
+        "Entity_54": {
             "link": {
                 "Position": {
                     "value0": 16,
@@ -2223,7 +2184,7 @@
                 "name": "static-cube-Copy-Copy"
             }
         },
-        "Entity_56": {
+        "Entity_55": {
             "link": {
                 "Position": {
                     "value0": 14,
@@ -2262,7 +2223,7 @@
                 "name": "static-cube-Copy-Copy"
             }
         },
-        "Entity_57": {
+        "Entity_56": {
             "link": {
                 "Position": {
                     "value0": 12,
@@ -2301,7 +2262,7 @@
                 "name": "static-cube-Copy-Copy"
             }
         },
-        "Entity_58": {
+        "Entity_57": {
             "link": {
                 "Position": {
                     "value0": 10,
@@ -2340,7 +2301,7 @@
                 "name": "static-cube-Copy-Copy"
             }
         },
-        "Entity_59": {
+        "Entity_58": {
             "link": {
                 "Position": {
                     "value0": 8,
@@ -2379,7 +2340,7 @@
                 "name": "static-cube-Copy-Copy"
             }
         },
-        "Entity_60": {
+        "Entity_59": {
             "link": {
                 "Position": {
                     "value0": 6,
@@ -2418,7 +2379,7 @@
                 "name": "static-cube-Copy-Copy"
             }
         },
-        "Entity_61": {
+        "Entity_60": {
             "link": {
                 "Position": {
                     "value0": 4,
@@ -2457,7 +2418,7 @@
                 "name": "static-cube-Copy-Copy"
             }
         },
-        "Entity_62": {
+        "Entity_61": {
             "link": {
                 "Position": {
                     "value0": 2,
@@ -2496,7 +2457,7 @@
                 "name": "static-cube-Copy-Copy"
             }
         },
-        "Entity_63": {
+        "Entity_62": {
             "link": {
                 "Position": {
                     "value0": 0,
@@ -2533,6 +2494,45 @@
             },
             "AGE_CORE_EntityRepresentationComponent": {
                 "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_63": {
+            "link": {
+                "Position": {
+                    "value0": 40,
+                    "value1": 0,
+                    "value2": 50
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-camera"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-camera",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-camera-Copy-Copy"
             }
         },
         "Entity_64": {

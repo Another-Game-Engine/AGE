@@ -77,7 +77,7 @@ Compiler( 'Compiler-x64' )
 
   .CompilerOptions    + ' /Fo"%2"'
   .LibrarianOptions   = '/NOLOGO /OUT:"%2" "%1"' //@FBUILD : Il faudrait peut etre faire une configuration dll et une .lib et ajouter NODEFAULTLIB pour les dll
-  .LinkerOptions      = '/NOLOGO /INCREMENTAL:NO /OUT:"%2" "%1" /DEBUG'
+  .LinkerOptions      = '/NOLOGO /INCREMENTAL:NO /OUT:"%2" "%1"'
               + ' /IGNORE:4001' ; don't complain about linking libs only
 
   // Optimizations
@@ -133,7 +133,7 @@ Compiler( 'Compiler-x64' )
 [
   Using( .X64BaseConfig )
   .Config         = 'Release'
-  .CompilerOptions    + ' /DRELEASE /DEDITOR_ENABLED /DAGE_ENABLE_IMGUI /D_CRT_SECURE_NO_WARNINGS'
+  .CompilerOptions    + ' /DRELEASE /DEDITOR_ENABLED /DAGE_ENABLE_IMGUI /D_CRT_SECURE_NO_WARNINGS /DNDEBUG'
 
     // Setup de-optimization options (FASTBUILD_DEOPTIMIZE_OBJECT)
     .DeoptimizeWritableFilesWithToken   = true
@@ -147,7 +147,7 @@ Compiler( 'Compiler-x64' )
 [
   Using( .X64ReleaseConfig ) // Note: based on Release config
   .Config         = 'Profile'
-  .CompilerOptions    + ' /DEDITOR_ENABLED'
+  //.CompilerOptions    + ' /DEDITOR_ENABLED'
 
     .DeoptimizeWritableFilesWithToken = false
 ]
@@ -155,7 +155,7 @@ Compiler( 'Compiler-x64' )
 [
   Using( .X64ReleaseConfig ) // Note: based on Release config
   .Config         = 'Retail'
-  .CompilerOptions    + ' /DEDITOR_ENABLED '
+  //.CompilerOptions    + ' /DEDITOR_ENABLED '
 
   .DeoptimizeWritableFilesWithToken = false
 ]
@@ -194,9 +194,9 @@ Compiler( 'Compiler-x64' )
   .X86Defines         = 'WIN32_LEAN_AND_MEAN;_WIN32;__WINDOWS__;WIN32;'
   .X64Defines         = 'WIN32_LEAN_AND_MEAN;_WIN32;__WINDOWS__;WIN64;'
   .DebugDefines       = 'DEBUG;AGE_ENABLE_IMGUI;EDITOR_ENABLED;'
-  .ProfileDefines       = 'RELEASE;EDITOR_ENABLED;'
+  .ProfileDefines       = 'RELEASE;NDEBUG'
   .ReleaseDefines       = 'RELEASE;AGE_ENABLE_IMGUI;EDITOR_ENABLED;'
-  .RetailDefines        = 'RETAIL;EDITOR_ENABLED;'
+  .RetailDefines        = 'RETAIL;'
 ]
 
 .ProjectX64Debug      = [ Using( .ProjectCommon ) .Config = 'x64-Debug' .PreprocessorDefinitions = .X64Defines + .DebugDefines .OutputDirectory + '/x64-Debug' ]
@@ -205,6 +205,7 @@ Compiler( 'Compiler-x64' )
 .ProjectX64Retail    = [ Using( .ProjectCommon ) .Config = 'x64-Retail' .PreprocessorDefinitions = .X64Defines + .RetailDefines .OutputDirectory + '/x64-Retail' ]
 
 .ProjectConfigs = { .ProjectX64Debug, .ProjectX64Profile, .ProjectX64Release, .ProjectX64Retail }
+.EditorProjectConfigs = { .ProjectX64Debug, .ProjectX64Release }
 
 // Configurations
 //------------------------------------------------------------------------------
@@ -346,7 +347,7 @@ VSSolution( 'EditorSolution' )
 
   .SolutionBuildProject                = 'AGEEditor-proj'
 
-  .SolutionConfigs                     = .ProjectConfigs
+  .SolutionConfigs                     = .EditorProjectConfigs
   
   .SolutionVisualStudioVersion         = "12.0.31101.00" 
 }
