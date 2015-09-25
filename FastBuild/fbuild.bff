@@ -130,6 +130,7 @@ Compiler( 'Compiler-x64' )
               + .CompilerDebugOptimizations             
   .LibrarianOptions   + .LibrarianDebugOptimizations
   .LinkerOptions      + .LinkerDebugOptimizations
+  .PhysxDir = '$VendorsPath$\PhysX\PhysXSDK\Lib\vc12win64-Debug'
 ]
 .X64ReleaseConfig =
 [
@@ -144,6 +145,7 @@ Compiler( 'Compiler-x64' )
   .CompilerOptions    + .CompilerReleaseOptimizations             
   .LibrarianOptions   + .LibrarianReleaseOptimizations
   .LinkerOptions      + .LinkerReleaseOptimizations
+  .PhysxDir = '$VendorsPath$\PhysX\PhysXSDK\Lib\vc12win64-Release'
 ]
 .X64ProfileConfig =
 [
@@ -154,6 +156,7 @@ Compiler( 'Compiler-x64' )
   .CompilerOptions    + .CompilerReleaseOptimizations             
   .LibrarianOptions   + .LibrarianReleaseOptimizations
   .LinkerOptions      + .LinkerReleaseOptimizations
+  .PhysxDir = '$VendorsPath$\PhysX\PhysXSDK\Lib\vc12win64-Release'
 ]
 .X64RetailConfig =
 [
@@ -164,6 +167,7 @@ Compiler( 'Compiler-x64' )
   .CompilerOptions    + .CompilerReleaseOptimizations             
   .LibrarianOptions   + .LibrarianReleaseOptimizations
   .LinkerOptions      + .LinkerReleaseOptimizations
+  .PhysxDir = '$VendorsPath$\PhysX\PhysXSDK\Lib\vc12win64-Release'
 ]
 
 // Resource Compiler
