@@ -231,8 +231,9 @@ Compiler( 'Compiler-x64' )
 #include "$SourcePath$\AGEngine\Render/AGE_Render.bff"
 #include "$SourcePath$\AGEngine\ComponentsCore/AGE_ComponentsCore.bff"
 #include "$SourcePath$\AGEngine\SystemsCore/AGE_SystemsCore.bff"
-
 #include "$SourcePath$\AGEngine\Engine\AGE_Core.bff"
+
+#include "$PluginsPath$\Physics\Physx\AGEPlugin_Physx.bff"
 
 #include "$SourcePath$\Reader/AGE_Reader.bff"
 #include "$SourcePath$\Editor/AGE_Editor.bff"
@@ -270,8 +271,9 @@ Alias( 'All' )
                   , 'AGE_ComponentsCore-proj'
                   , 'AGE_SystemsCore-proj'
                   , 'AGE_Core-proj'
+                  , 'AGEPlugin_Physx-proj'
                   , 'AGEReader-proj'
-				  , 'AGEEditor-proj' }
+				          , 'AGEEditor-proj' }
 }
 
 // Aliases : proj (all projects)
@@ -293,8 +295,9 @@ Alias( 'proj' )
                   , 'AGE_ComponentsCore-proj'
                   , 'AGE_SystemsCore-proj'
                   , 'AGE_Core-proj'
+                  , 'AGEPlugin_Physx-proj'
                   , 'AGEReader-proj'
-				  , 'AGEEditor-proj'
+				          , 'AGEEditor-proj'
             }
 }
 
@@ -318,6 +321,7 @@ VSSolution( 'ReaderSolution' )
                                         , 'AGE_ComponentsCore-proj'
                                         , 'AGE_SystemsCore-proj'
                                         , 'AGE_Core-proj'
+                                        , 'AGEPlugin_Physx-proj'
                                         , 'AGEReader-proj'
                                         }  // Project(s) to include in Solution
 
@@ -346,6 +350,7 @@ VSSolution( 'EditorSolution' )
                                         , 'AGE_ComponentsCore-proj'
                                         , 'AGE_SystemsCore-proj'
                                         , 'AGE_Core-proj'
+                                        , 'AGEPlugin_Physx-proj'
                                         , 'AGEEditor-proj'
                                         }  // Project(s) to include in Solution
 

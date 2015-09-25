@@ -1,5 +1,7 @@
 	.VendorsPath        = '../Vendors/'
 	.SourcePath         = '../Sources/'
 	.EnginePath         = '$SourcePath$/AGEngine/Engine'
-	.AGEngineSourceDir = '$SourcePath$/AGEngine/'
+	.AGEngineSourceDir  = '$SourcePath$/AGEngine/'
 	.ProjectsFolder     = '../Projects/'
+	.PluginsPath        = '../Plugins/'
+

@@ -1,0 +1,148 @@
+// 
+//------------------------------------------------------------------------------
+{
+	#include "../../../FastBuild/FBuildPath.bff"
+
+	.ProjectName		= 'AGEPlugin_PhysX'
+	.ProjectDestPath	= './$ProjectsFolder$/AGEPlugin_PhysX/'
+	.ProjectPath		= '$PluginsPath$/Physics/PhysX'
+
+	.CompilerIncludesPaths = ' /I"$ProjectPath$"/..'
+	                       + ' /I"$VendorsPath$"/'
+	                       + ' /I"$VendorsPath$"/PhysX/PhysXSDK/Include'
+                           + ' /I"$VendorsPath$"\OpenGL\include\'
+                       	   + ' /I"$AGEngineSourceDir$"/'
+                       	   + ' /I"$AGEngineSourceDir$"/Physics/'
+                       	   + ' /I"$AGEngineSourceDir$"/Engine/'
+
+	// Visual Studio Project Generation
+	//--------------------------------------------------------------------------
+	VCXProject( '$ProjectName$-proj' )
+	{
+		.ProjectOutput				= '$ProjectDestPath$\$ProjectName$.vcxproj'
+		.ProjectInputPaths			= { '$ProjectPath$\' }
+		.ProjectBasePath			= {'$ProjectPath$\'}
+
+		.ProjectAllowedFileExtensions = { '.h' '.cpp' '.c' '.hh' '.hpp' '.inl' }
+
+		// Vendors
+		.IncludeSearchPath               = '$ProjectPath$\'
+
+		// Exclude Tests
+	}
+
+	// Unity
+	//--------------------------------------------------------------------------
+
+        .UnityNumFiles   = 12
+        .UnityInputPath  = { '$ProjectDestPath$\' }
+
+	{
+		// Windows
+		Unity( '$ProjectName$-Unity-Windows' )
+		{
+		    .UnityInputPath				= '$ProjectPath$\'
+		    .UnityOutputPath			= '$OutputBase$\Unity\$ProjectPath$\'
+		    //.UnityInputExcludePath	= '$ProjectPath$\CoreTest\' // Exclude Tests
+		}
+	}
+
+	//--------------------------------------------------------------------------
+	ForEach( .Config in .ProjectConfigs )
+	{
+		Using( .Config )
+
+		.IncludeSearchPath          + '$ProjectPath$\'
+	}
+
+
+
+	// Windows
+	//--------------------------------------------------------------------------
+	ForEach( .Config in .Configs_Windows_MSVC )
+	{
+		Using( .Config )
+		.OutputBase + '\$Platform$-$Config$'
+
+				// Static Library
+		ObjectList( '$ProjectName$-Lib-$Platform$-$Config$' )
+		{
+			// Input (Unity)
+			.CompilerInputUnity			= '$ProjectName$-Unity-Windows'
+
+			.CompilerInputPath			= '$ProjectPath$'
+
+			// Output
+			.CompilerOutputPath			= '$OutputBase$\$ProjectName$\'
+ 			.LibrarianOutput 			= '$OutputBase$\$ProjectName$\$ProjectName$.lib'
+
+ 			.CompilerOptions            + ' $CompilerIncludesPaths$'
+		}
+
+		DLL( '$ProjectName$-DLL-$Platform$-$Config$' )
+		{
+			// Input (Unity)
+			.CompilerInputUnity			= '$ProjectName$-Unity-Windows'
+
+			.CompilerInputPath          = '$ProjectPath$'
+
+			.CompilerOptions            + ' $CompilerIncludesPaths$'
+
+			.Libraries					= { 'AGE_ImGui-Lib-$Platform$-$Config$'
+										  , 'AGE_FileUtils-Lib-$Platform$-$Config$'
+			                              //, 'AGE_LowLevelUtils-Lib-$Platform$-$Config$'
+			                              , 'AGE_BFC-Lib-$Platform$-$Config$'
+			                              //, 'AGE_Text-Lib-$Platform$-$Config$'
+			                              , 'AGE_Physics-Lib-$Platform$-$Config$'
+			                              , 'AGE_AssetManagement-Lib-$Platform$-$Config$'
+			                              //, 'AGE_Skinning-Lib-$Platform$-$Config$'
+			                              , 'AGE_Graphic-Lib-$Platform$-$Config$'
+			                              , 'AGE_Render-Lib-$Platform$-$Config$'
+			                              , 'AGE_ComponentsCore-Lib-$Platform$-$Config$'
+			                              //, 'AGE_SystemsCore-Lib-$Platform$-$Config$'
+			                              , 'AGE_Core-Lib-$Platform$-$Config$'
+			                              , 'AGE_Utils-Lib-$Platform$-$Config$'
+			                              , 'AGEPlugin_PhysX-Lib-$Platform$-$Config$' }
+
+			.CompilerOutputPath			= '$OutputBase$\$ProjectName$\'
+			.LinkerOptions				+ ' /SUBSYSTEM:CONSOLE'
+										+ ' kernel32.lib'
+										+ ' Ws2_32.lib'
+										+ ' Advapi32.lib'
+										+ ' User32.lib'
+										+ ' opengl32.lib'
+										+ ' glu32.lib'
+										+ ' $VendorsPath$/OpenGL/lib/x64/glew32.lib'
+										+ ' $VendorsPath$/OpenGL/lib/x64/sdl2.lib'
+										+ ' $VendorsPath$/OpenGL/lib/x64/sdl2main.lib'
+										+ ' $VendorsPath$/OpenGL/lib/x64/sdl2main.lib'
+										+ ' $VendorsPath$/PhysX\PhysXSDK\Lib\vc12win64/PhysX3Cooking$Config$_x64.lib'
+										+ ' $VendorsPath$/PhysX\PhysXSDK\Lib\vc12win64/PhysX3Common$Config$_x64.lib'
+										+ ' $VendorsPath$/PhysX\PhysXSDK\Lib\vc12win64/PhysX3Extensions$Config$.lib'
+										+ ' $VendorsPath$/PhysX\PhysXSDK\Lib\vc12win64/PhysX3CharacterKinematic$Config$_x64.lib'
+										+ ' $VendorsPath$/PhysX\PhysXSDK\Lib\vc12win64/PhysX3$Config$_x64.lib'
+										+ ' $VendorsPath$/PhysX\PhysXSDK\Lib\vc12win64/PhysX3Gpu$Config$_x64.lib'
+										+ ' $VendorsPath$/PhysX\PhysXSDK\Lib\vc12win64/PXTask$Config$.lib'
+
+ 			.LinkerOutput 			= '$OutputBase$\$ProjectName$.dll'
+		}
+		Alias( '$ProjectName$-$Platform$-$Config$' ) { .Targets = '$ProjectName$-DLL-$Platform$-$Config$' }
+	}
+
+	// Aliases
+	//--------------------------------------------------------------------------
+	// Per-Config
+	Alias( '$ProjectName$-Debug' )		{ .Targets = { '$ProjectName$-X64-Debug' } }
+	Alias( '$ProjectName$-Profile' )	{ .Targets = { '$ProjectName$-X64-Profile' } }
+	Alias( '$ProjectName$-Release' )	{ .Targets = { '$ProjectName$-X64-Release' } }
+	Alias( '$ProjectName$-Retail' )	    { .Targets = { '$ProjectName$-X64-Retail' } }
+
+	// Per-Platform
+	Alias( '$ProjectName$-X64' )		{ .Targets = { '$ProjectName$-X64-Debug', '$ProjectName$-X64-Release', '$ProjectName$-X64-Profile', '$ProjectName$-X64-Retail' } }
+
+	// All
+	Alias( '$ProjectName$' )
+	{
+		.Targets = { '$ProjectName$-Debug', '$ProjectName$-Profile', '$ProjectName$-Release', '$ProjectName$-Retail' }
+	}
+}

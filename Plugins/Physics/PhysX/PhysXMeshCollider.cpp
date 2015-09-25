@@ -2,7 +2,7 @@
 
 #include "PhysXMeshCollider.hpp"
 #include "PhysXWorld.hpp"
-#include "../../../GameEngine/Engine/AssetManagement/AssetManager.hh"
+#include "AssetManagement/AssetManager.hh"
 
 namespace AGE
 {
