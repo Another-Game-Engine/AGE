@@ -27,7 +27,7 @@ namespace AGE
 			virtual void setSize(const glm::vec3 &size) = 0;
 
 			virtual glm::vec3 getSize(void) const = 0;
-
+			virtual inline BoxColliderInterface     *getAsBoxColliderInterface() { return this; }
 		protected:
 			// Static Methods
 			static glm::vec3 GetDefaultCenter(void);

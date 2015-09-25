@@ -27,7 +27,7 @@ namespace AGE
 			virtual void setRadius(float radius) = 0;
 
 			virtual float getRadius(void) const = 0;
-
+			virtual inline SphereColliderInterface  *getAsSphereColliderInterface() { return this; }
 		protected:
 			// Static Methods
 			static glm::vec3 GetDefaultCenter(void);

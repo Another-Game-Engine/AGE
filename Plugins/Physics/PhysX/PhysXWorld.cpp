@@ -290,16 +290,16 @@ namespace AGE
 			switch (collider->getColliderType())
 			{
 				case ColliderType::Box:
-					destroy(dynamic_cast<PhysXBoxCollider *>(collider));
+					destroy(collider->getAsPhysXBoxCollider());
 					break;
 				case ColliderType::Capsule:
-					destroy(dynamic_cast<PhysXCapsuleCollider *>(collider));
+					destroy(collider->getAsPhysXCapsuleCollider());
 					break;
 				case ColliderType::Mesh:
-					destroy(dynamic_cast<PhysXMeshCollider *>(collider));
+					destroy(collider->getAsPhysXMeshCollider());
 					break;
 				case ColliderType::Sphere:
-					destroy(dynamic_cast<PhysXSphereCollider *>(collider));
+					destroy(collider->getAsPhysXSphereCollider());
 					break;
 				default:
 					assert(!"Never reached");

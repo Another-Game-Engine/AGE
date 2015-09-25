@@ -21,6 +21,11 @@ namespace AGE
 		class CapsuleColliderInterface;
 		class MeshColliderInterface;
 
+		class PhysXBoxCollider;
+		class PhysXCapsuleCollider;
+		class PhysXMeshCollider;
+		class PhysXSphereCollider;
+
 		class ColliderInterface
 		{
 			// Friendships
@@ -112,7 +117,14 @@ namespace AGE
 			virtual void setFilterGroup(FilterGroup group) = 0;
 
 			virtual FilterGroup getFilterGroup(void) const = 0;
-
+			virtual inline PhysXBoxCollider     *getAsPhysXBoxCollider() { assert(false); return nullptr; }
+			virtual inline PhysXCapsuleCollider *getAsPhysXCapsuleCollider() { assert(false); return nullptr; }
+			virtual inline PhysXMeshCollider    *getAsPhysXMeshCollider() { assert(false); return nullptr; }
+			virtual inline PhysXSphereCollider  *getAsPhysXSphereCollider() { assert(false); return nullptr; }
+			virtual inline BoxColliderInterface     *getAsBoxColliderInterface() { assert(false); return nullptr; }
+			virtual inline CapsuleColliderInterface *getAsapsuleColliderInterface() { assert(false); return nullptr; }
+			virtual inline MeshColliderInterface    *getAsMeshColliderInterface() { assert(false); return nullptr; }
+			virtual inline SphereColliderInterface  *getAsSphereColliderInterface() { assert(false); return nullptr; }
 		protected:
 			// Destructor
 			virtual ~ColliderInterface(void);

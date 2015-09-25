@@ -34,7 +34,7 @@ namespace AGE
 			virtual void setMesh(const std::string &mesh);
 
 			virtual void updateShape(void) = 0;
-
+			virtual inline MeshColliderInterface    *getAsMeshColliderInterface() { return this; }
 		protected:
 			// Static Methods
 			static bool IsConvexByDefault(void);

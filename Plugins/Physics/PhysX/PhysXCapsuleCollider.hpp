@@ -25,6 +25,7 @@ namespace AGE
 
 			// Assignment Operators
 			PhysXCapsuleCollider &operator=(const PhysXCapsuleCollider &) = delete;
+			virtual inline PhysXCapsuleCollider *getAsPhysXCapsuleCollider() { return this; }
 
 		private:
 			// Destructor

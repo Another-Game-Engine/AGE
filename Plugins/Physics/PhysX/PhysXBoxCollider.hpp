@@ -26,6 +26,7 @@ namespace AGE
 			// Assignment Operators
 			PhysXBoxCollider &operator=(const PhysXBoxCollider &) = delete;
 
+			virtual inline PhysXBoxCollider     *getAsPhysXBoxCollider() { return this; }
 		private:
 			// Destructor
 			~PhysXBoxCollider(void) = default;

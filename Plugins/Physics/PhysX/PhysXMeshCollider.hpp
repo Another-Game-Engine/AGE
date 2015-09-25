@@ -25,7 +25,7 @@ namespace AGE
 
 			// Assignment Operators
 			PhysXMeshCollider &operator=(const PhysXMeshCollider &) = delete;
-
+			virtual inline PhysXMeshCollider    *getAsPhysXMeshCollider() { return this; }
 		private:
 			// Static Methods
 			static physx::PxConvexMesh *CreateConvexMesh(WorldInterface *world, const std::string &meshPath);

@@ -25,7 +25,7 @@ namespace AGE
 
 			// Assignment Operators
 			PhysXSphereCollider &operator=(const PhysXSphereCollider &) = delete;
-
+			virtual inline PhysXSphereCollider  *getAsPhysXSphereCollider() { return this; }
 		private:
 			// Destructor
 			~PhysXSphereCollider(void) = default;

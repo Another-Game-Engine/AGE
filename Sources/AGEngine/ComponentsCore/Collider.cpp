@@ -109,13 +109,13 @@ namespace AGE
 		switch (getColliderType())
 		{
 			case Physics::ColliderType::Box:
-				collider->as<Physics::ColliderType::Box>()->setCenter(center);
+				collider->getAsBoxColliderInterface()->setCenter(center);
 				break;
 			case Physics::ColliderType::Capsule:
-				collider->as<Physics::ColliderType::Capsule>()->setCenter(center);
+				collider->getAsapsuleColliderInterface()->setCenter(center);
 				break;
 			case Physics::ColliderType::Sphere:
-				collider->as<Physics::ColliderType::Sphere>()->setCenter(center);
+				collider->getAsSphereColliderInterface()->setCenter(center);
 				break;
 			default:
 				assert(!"Invalid collider type");
@@ -129,11 +129,11 @@ namespace AGE
 		switch (getColliderType())
 		{
 			case Physics::ColliderType::Box:
-				return collider->as<Physics::ColliderType::Box>()->getCenter();
+				return collider->getAsBoxColliderInterface()->getCenter();
 			case Physics::ColliderType::Capsule:
-				return collider->as<Physics::ColliderType::Capsule>()->getCenter();
+				return collider->getAsapsuleColliderInterface()->getCenter();
 			case Physics::ColliderType::Sphere:
-				return collider->as<Physics::ColliderType::Sphere>()->getCenter();
+				return collider->getAsSphereColliderInterface()->getCenter();
 			default:
 				assert(!"Invalid collider type");
 				return glm::vec3();
@@ -147,7 +147,7 @@ namespace AGE
 		switch (getColliderType())
 		{
 			case Physics::ColliderType::Capsule:
-				collider->as<Physics::ColliderType::Capsule>()->setHeight(height);
+				collider->getAsapsuleColliderInterface()->setHeight(height);
 				break;
 			default:
 				assert(!"Invalid collider type");
@@ -161,7 +161,7 @@ namespace AGE
 		switch (getColliderType())
 		{
 			case Physics::ColliderType::Capsule:
-				return collider->as<Physics::ColliderType::Capsule>()->getHeight();
+				return collider->getAsapsuleColliderInterface()->getHeight();
 			default:
 				assert(!"Invalid collider type");
 				return 0.0f;
@@ -174,10 +174,10 @@ namespace AGE
 		switch (getColliderType())
 		{
 			case Physics::ColliderType::Capsule:
-				collider->as<Physics::ColliderType::Capsule>()->setRadius(radius);
+				collider->getAsapsuleColliderInterface()->setRadius(radius);
 				break;
 			case Physics::ColliderType::Sphere:
-				collider->as<Physics::ColliderType::Sphere>()->setRadius(radius);
+				collider->getAsSphereColliderInterface()->setRadius(radius);
 				break;
 			default:
 				assert(!"Invalid collider type");
@@ -191,9 +191,9 @@ namespace AGE
 		switch (getColliderType())
 		{
 			case Physics::ColliderType::Capsule:
-				return collider->as<Physics::ColliderType::Capsule>()->getRadius();
+				return collider->getAsapsuleColliderInterface()->getRadius();
 			case Physics::ColliderType::Sphere:
-				return collider->as<Physics::ColliderType::Sphere>()->getRadius();
+				return collider->getAsSphereColliderInterface()->getRadius();
 			default:
 				assert(!"Invalid collider type");
 				return 0.0f;
@@ -206,7 +206,7 @@ namespace AGE
 		switch (getColliderType())
 		{
 			case Physics::ColliderType::Box:
-				collider->as<Physics::ColliderType::Box>()->setSize(size);
+				collider->getAsBoxColliderInterface()->setSize(size);
 				break;
 			default:
 				assert(!"Invalid collider type");
@@ -220,7 +220,7 @@ namespace AGE
 		switch (getColliderType())
 		{
 			case Physics::ColliderType::Box:
-				return collider->as<Physics::ColliderType::Box>()->getSize();
+				return collider->getAsBoxColliderInterface()->getSize();
 			default:
 				assert(!"Invalid collider type");
 				return glm::vec3();
@@ -233,7 +233,7 @@ namespace AGE
 		switch (getColliderType())
 		{
 			case Physics::ColliderType::Mesh:
-				collider->as<Physics::ColliderType::Mesh>()->setMesh(mesh);
+				collider->getAsMeshColliderInterface()->setMesh(mesh);
 				break;
 			default:
 				assert(!"Invalid collider type");
@@ -247,7 +247,7 @@ namespace AGE
 		switch (getColliderType())
 		{
 			case Physics::ColliderType::Mesh:
-				return collider->as<Physics::ColliderType::Mesh>()->getMesh();
+				return collider->getAsMeshColliderInterface()->getMesh();
 			default:
 				assert(!"Invalid collider type");
 				static std::string emptyString;
@@ -263,7 +263,7 @@ namespace AGE
 			case Physics::ColliderType::Mesh:
 				if (isConcave())
 				{
-					collider->as<Physics::ColliderType::Mesh>()->setAsConvex();
+					collider->getAsMeshColliderInterface()->setAsConvex();
 					scale(entity->getLink().getScale());
 				}
 				break;
@@ -281,7 +281,7 @@ namespace AGE
 			case Physics::ColliderType::Mesh:
 				if (isConvex())
 				{
-					collider->as<Physics::ColliderType::Mesh>()->setAsConcave();
+					collider->getAsMeshColliderInterface()->setAsConcave();
 					scale(entity->getLink().getScale());
 				}
 				break;
@@ -297,7 +297,7 @@ namespace AGE
 		switch (getColliderType())
 		{
 			case Physics::ColliderType::Mesh:
-				return collider->as<Physics::ColliderType::Mesh>()->isConvex();
+				return collider->getAsMeshColliderInterface()->isConvex();
 			default:
 				assert(!"Invalid collider type");
 				return true;
@@ -310,7 +310,7 @@ namespace AGE
 		switch (getColliderType())
 		{
 			case Physics::ColliderType::Mesh:
-				return collider->as<Physics::ColliderType::Mesh>()->isConcave();
+				return collider->getAsMeshColliderInterface()->isConcave();
 			default:
 				assert(!"Invalid collider type");
 				return false;

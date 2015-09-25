@@ -122,7 +122,7 @@ namespace AGE
 		inline const typename ColliderInterface::DeduceColliderType<Type>::Type *ColliderInterface::as(void) const
 		{
 			assert(is<Type>() && "Invalid type");
-			return dynamic_cast<DeduceColliderType<Type>::Type *>(this);
+			return (DeduceColliderType<Type>::Type *)(this);
 		}
 	}
 }

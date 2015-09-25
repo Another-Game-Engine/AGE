@@ -44,7 +44,7 @@ namespace AGE
 #endif
 				if (func != nullptr)
 				{
-					return std::function<FunctionSignature>(reinterpret_cast<FunctionSignature *>(func));
+					return std::function<FunctionSignature>((FunctionSignature *)(func));
 				}
 				else
 				{

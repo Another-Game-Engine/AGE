@@ -137,12 +137,12 @@ namespace AGE
 		else
 		{
 #if defined(AGE_32_BIT)
-			static const std::string architectureSuffix = "_x86";
+			static const std::string architectureSuffix = "";// "_x86";
 #else
-			static const std::string architectureSuffix = "_x64";
+			static const std::string architectureSuffix = "";// "_x64";
 #endif
 #if defined(AGE_DEBUG)
-			static const std::string debugSuffix = "_d";
+			static const std::string debugSuffix = "";// "_d";
 #else
 			static const std::string debugSuffix = "";
 #endif

@@ -31,22 +31,6 @@
 		// Exclude Tests
 	}
 
-	// Unity
-	//--------------------------------------------------------------------------
-
-        .UnityNumFiles   = 12
-        .UnityInputPath  = { '$ProjectDestPath$\' }
-
-	{
-		// Windows
-		Unity( '$ProjectName$-Unity-Windows' )
-		{
-		    .UnityInputPath				= '$ProjectPath$\'
-		    .UnityOutputPath			= '$OutputBase$\Unity\$ProjectPath$\'
-		    //.UnityInputExcludePath	= '$ProjectPath$\CoreTest\' // Exclude Tests
-		}
-	}
-
 	//--------------------------------------------------------------------------
 	ForEach( .Config in .ProjectConfigs )
 	{
@@ -67,9 +51,6 @@
 				// Static Library
 		ObjectList( '$ProjectName$-Lib-$Platform$-$Config$' )
 		{
-			// Input (Unity)
-			.CompilerInputUnity			= '$ProjectName$-Unity-Windows'
-
 			.CompilerInputPath			= '$ProjectPath$'
 
 			// Output
@@ -81,35 +62,37 @@
 
 		DLL( '$ProjectName$-DLL-$Platform$-$Config$' )
 		{
-			// Input (Unity)
-			.CompilerInputUnity			= '$ProjectName$-Unity-Windows'
-
-			.CompilerInputPath          = '$ProjectPath$'
-
 			.CompilerOptions            + ' $CompilerIncludesPaths$'
 
 			.Libraries					= { 'AGE_ImGui-Lib-$Platform$-$Config$'
+			                              , 'AGE_Utils-Lib-$Platform$-$Config$'
 										  , 'AGE_FileUtils-Lib-$Platform$-$Config$'
-			                              //, 'AGE_LowLevelUtils-Lib-$Platform$-$Config$'
+			                              , 'AGE_LowLevelUtils-Lib-$Platform$-$Config$'
 			                              , 'AGE_BFC-Lib-$Platform$-$Config$'
-			                              //, 'AGE_Text-Lib-$Platform$-$Config$'
 			                              , 'AGE_Physics-Lib-$Platform$-$Config$'
 			                              , 'AGE_AssetManagement-Lib-$Platform$-$Config$'
-			                              //, 'AGE_Skinning-Lib-$Platform$-$Config$'
+			                              , 'AGE_Skinning-Lib-$Platform$-$Config$'
 			                              , 'AGE_Graphic-Lib-$Platform$-$Config$'
 			                              , 'AGE_Render-Lib-$Platform$-$Config$'
 			                              , 'AGE_ComponentsCore-Lib-$Platform$-$Config$'
-			                              //, 'AGE_SystemsCore-Lib-$Platform$-$Config$'
+			                              , 'AGE_SystemsCore-Lib-$Platform$-$Config$'
 			                              , 'AGE_Core-Lib-$Platform$-$Config$'
-			                              , 'AGE_Utils-Lib-$Platform$-$Config$'
 			                              , 'AGEPlugin_PhysX-Lib-$Platform$-$Config$' }
 
 			.CompilerOutputPath			= '$OutputBase$\$ProjectName$\'
-			.LinkerOptions				+ ' /SUBSYSTEM:CONSOLE'
-										+ ' kernel32.lib'
-										+ ' Ws2_32.lib'
-										+ ' Advapi32.lib'
-										+ ' User32.lib'
+			.LinkerOptions				+ ' /DLL'
+                                        + ' kernel32.lib'
+                                        + ' user32.lib'
+                                        + ' gdi32.lib'
+                                        + ' winspool.lib'
+                                        + ' comdlg32.lib'
+                                        + ' advapi32.lib'
+                                        + ' shell32.lib'
+                                        + ' ole32.lib'
+                                        + ' oleaut32.lib'
+                                        + ' uuid.lib'
+                                        + ' odbc32.lib'
+                                        + ' odbccp32.lib'
 										+ ' opengl32.lib'
 										+ ' glu32.lib'
 										+ ' $VendorsPath$/OpenGL/lib/x64/glew32.lib'
@@ -123,6 +106,8 @@
 										+ ' $VendorsPath$/PhysX\PhysXSDK\Lib\vc12win64/PhysX3$Config$_x64.lib'
 										+ ' $VendorsPath$/PhysX\PhysXSDK\Lib\vc12win64/PhysX3Gpu$Config$_x64.lib'
 										+ ' $VendorsPath$/PhysX\PhysXSDK\Lib\vc12win64/PXTask$Config$.lib'
+										+ ' $VendorsPath$/minizip\lib\windows\x64/minizip.lib'
+										+ ' $VendorsPath$/zlib\lib\windows\x64/zlib.lib'
 
  			.LinkerOutput 			= '$OutputBase$\$ProjectName$.dll'
 		}

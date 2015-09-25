@@ -12,9 +12,9 @@ namespace AGE
 
 		static const HashTable PhysicsEngineTypeToPluginNameTable
 		{
-			{ EngineType::Bullet, "Physics_Bullet" },
-			{ EngineType::PhysX, "Physics_PhysX" },
-			{ EngineType::Null, "Physics_Null" }
+			{ EngineType::Bullet, "AGEPlugin_Bullet" },
+			{ EngineType::PhysX, "AGEPlugin_PhysX" },
+			{ EngineType::Null, "AGEPlugin_Null" }
 		};
 
 		std::string GetPluginNameForEngine(EngineType physicsEngineType)
