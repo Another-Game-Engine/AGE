@@ -7,17 +7,17 @@
 	.ProjectDestPath	= './$ProjectsFolder$/AGE_Reader/'
 	.ProjectPath		= '$AGEngineSourceDir$/../Reader'
 
-	.CompilerIncludesPaths = ' /I"$ProjectPath$"'
-						   + ' /I"$VendorsPath$"'
-						   + ' /I"$AGEngineSourceDir$"/../AGEngine/Engine/'
-						   + ' /I"$AGEngineSourceDir$"/../AGEngine/'
-						   + ' /I"$AGEngineSourceDir$"/../'
+	.CompilerIncludesPaths = ' /I$ProjectPath$'
+						   + ' /I$VendorsPath$'
+						   + ' /I$AGEngineSourceDir$/../AGEngine/Engine/'
+						   + ' /I$AGEngineSourceDir$/../AGEngine/'
+						   + ' /I$AGEngineSourceDir$/../'
 						   + ' /I../AGEngine/'
-						   + ' /I"$VendorsPath$"\OpenGL\include\'
-						   + ' /I"$VendorsPath$"\bullet\src\'
-						   + ' /I"$VendorsPath$"\fmod\inc\'
-						   + ' /I"$VendorsPath$"\minizip\include\'
-						   + ' /I"$VendorsPath$"\zlib\include\'
+						   + ' /I$VendorsPath$\OpenGL\include\'
+						   + ' /I$VendorsPath$\bullet\src\'
+						   + ' /I$VendorsPath$\fmod\inc\'
+						   + ' /I$VendorsPath$\minizip\include\'
+						   + ' /I$VendorsPath$\zlib\include\'
 
 
 	// Visual Studio Project Generation
@@ -36,14 +36,12 @@
 		.IncludeSearchPath               = '$ProjectPath$\'
 										 + ';$EnginePath$\'
 										 + ';$EnginePath$\'
-										 + ';.\'
-										 + ';../AGEngine/'
+										 + ';AGEngineSourceDir'
 		                                 + ';$VendorsPath$\OpenGL\include\'
 		                                 + ';$VendorsPath$\bullet\src\'
 		                                 + ';$VendorsPath$\fmod\inc\'
 		                                 + ';$VendorsPath$\minizip\include\'
 		                                 + ';$VendorsPath$\zlib\include\'
-		                                 +  './'
 		                                 +  '$VendorsPath$\'
 	}
 

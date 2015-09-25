@@ -8,6 +8,8 @@
 ;
 ;-------------------------------------------------------------------------------
 
+#include "FBuildPath.bff"
+
 ;-------------------------------------------------------------------------------
 ; Windows Platform
 ;-------------------------------------------------------------------------------
@@ -194,7 +196,7 @@ Compiler( 'Compiler-x64' )
   .IntermediateDirectory    = '^$(SolutionDir)\..\Build'
   .Platform = 'Win32' // unused
   .PlatformToolset = 'v120'
-  .IncludeSearchPath      = '^$(SolutionDir);^$(ProjectDir);.\'
+  .IncludeSearchPath      = '^$(SolutionDir);^$(ProjectDir);.\;$VendorsPath$;'
   .X86Defines         = 'WIN32_LEAN_AND_MEAN;_WIN32;__WINDOWS__;WIN32;'
   .X64Defines         = 'WIN32_LEAN_AND_MEAN;_WIN32;__WINDOWS__;WIN64;'
   .DebugDefines       = 'DEBUG;AGE_ENABLE_IMGUI;EDITOR_ENABLED;'
@@ -214,8 +216,6 @@ Compiler( 'Compiler-x64' )
 // Configurations
 //------------------------------------------------------------------------------
 .Configs_Windows_MSVC = { .X64DebugConfig, .X64ProfileConfig, .X64ReleaseConfig, .X64RetailConfig }
-
-#include "FBuildPath.bff"
 
 // Core
 #include "$SourcePath$\AGEngine\AGE_ImGui.bff"

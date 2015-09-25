@@ -4,6 +4,8 @@
 #include <Utils/Serialization/SerializationArchives.hpp>
 #include <Utils/Debug.hpp>
 
+#include <cereal/details/traits.hpp>
+
 namespace AGE
 {
 	// Used to know if entity is archetype or not
@@ -30,7 +32,12 @@ namespace AGE
 		//////
 		////
 		// Serialization
-		template <typename Archive>
+		/////////////////////////////////////////////
+
+		// Load Json
+		// Save Json
+		// Editor only
+		template <class Archive, cereal::traits::EnableIf<cereal::traits::is_text_archive<Archive>::value> = cereal::traits::sfinae>
 		void serialize(Archive &ar, const std::uint32_t version)
 		{
 			ar(CEREAL_NVP(archetypeName));
@@ -46,6 +53,15 @@ namespace AGE
 				ar(CEREAL_NVP(synchronizePosition), CEREAL_NVP(synchronizeRotation), CEREAL_NVP(synchronizeScale), CEREAL_NVP(parentIsAnArchetype));
 #endif
 			}
+		}
+
+		// Load Binary
+		// Save Binary
+		// In game
+		template <class Archive, cereal::traits::DisableIf<cereal::traits::is_text_archive<Archive>::value> = cereal::traits::sfinae>
+		void serialize(Archive &ar, const std::uint32_t version)
+		{
+			ar(CEREAL_NVP(archetypeName));
 		}
 		virtual void postUnserialization();
 #ifdef EDITOR_ENABLED
