@@ -34,7 +34,7 @@
         .ProjectBasePath            = { '$ProjectPath$\'
                                         , '$VendorsPath$\' }
 
-		.ProjectAllowedFileExtensions = { '.h' '.cpp' '.c' '.hh' '.hpp' }
+		.ProjectAllowedFileExtensions = { '.h' '.cpp' '.c' '.hh' '.hpp' '.inl' }
 
 		// Vendors
 		.IncludeSearchPath               = '$ProjectPath$\'
