@@ -73,8 +73,6 @@ namespace AGE
 
 #if defined(EDITOR_ENABLED)
 			entity->getComponent<CameraComponent>()->editorUpdate();
-			////////////////////////////////////
-#endif
 
 			auto camComponent = entity->getComponent<CameraComponent>();
 			static char const *pipelineNames[RenderType::TOTAL] = { "Debug deferred rendering", "Deferred rendering" };
@@ -86,6 +84,7 @@ namespace AGE
 					_scene->getSystem<RenderCameraSystem>()->drawDebugLines(_pipelineIndex == (int)RenderType::DEBUG_DEFERRED ? true : false);
 				}
 			}
+#endif
 		}
 	}
 
