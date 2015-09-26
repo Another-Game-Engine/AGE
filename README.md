@@ -39,7 +39,7 @@ This program is released under the terms of the license contained in the file LI
 
 5 ) In cmd.exe go to AGE/ and run :
 
-- `mklink /J Vendors "{Path_to_your_Google Drive\Vendors"`
-- `mklink /J Datas/Assets "{Path_to_your_Google Drive\Assets"`
+- `mklink /J Vendors "{Path_to_your_Google Drive}\Vendors"`
+- `mklink /J Datas/Assets "{Path_to_your_Google Drive}\Assets"`
 
 Generated solutions will be found in Projects folder.
