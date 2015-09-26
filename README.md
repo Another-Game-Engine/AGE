@@ -27,13 +27,19 @@ This program is released under the terms of the license contained in the file LI
 ## Installation :
 
 1 ) In git bash run : GenerateProjects.bat
+
 2 ) In git bash run : GenerateSolution.bat
+
 3 ) Install Google drive Desktop
+
 4 ) Get Vendors and Assets on google drive :
-    - https://drive.google.com/folderview?id=0ByluCL7s-tHGT19YMWRadUtjWWc&usp=sharing
-    - https://drive.google.com/folderview?id=0ByluCL7s-tHGeU8wUTROMUhrYUE&usp=sharing
+
+- https://drive.google.com/folderview?id=0ByluCL7s-tHGT19YMWRadUtjWWc&usp=sharing
+- https://drive.google.com/folderview?id=0ByluCL7s-tHGeU8wUTROMUhrYUE&usp=sharing
+
 5 ) In cmd.exe go to AGE/ and run :
-    `mklink /J Vendors "{Path_to_your_Google Drive\Vendors"`
-    `mklink /J Datas/Assets "{Path_to_your_Google Drive\Assets"`
+
+- `mklink /J Vendors "{Path_to_your_Google Drive\Vendors"`
+- `mklink /J Datas/Assets "{Path_to_your_Google Drive\Assets"`
 
 Generated solutions will be found in Projects folder.
