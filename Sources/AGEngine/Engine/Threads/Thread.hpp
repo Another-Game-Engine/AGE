@@ -2,6 +2,7 @@
 
 #include <atomic>
 #include <string>
+#include <thread>
 
 namespace AGE
 {
@@ -50,11 +51,12 @@ namespace AGE
 		std::atomic_size_t taskCounter;
 		inline bool isWorker() const { return _worker; }
 		void setAsWorker(bool ToF);
-
+		inline std::thread &getThreadHandle() { return _threadHandle; }
 	protected:
 		// This function will generate the unique id of the thread
 		// It have to be called only in the thread context
 		std::size_t _registerId();
+		std::thread _threadHandle;
 
 		const ThreadType _id;
 		const std::string _name;

@@ -20,6 +20,7 @@ namespace AGE
 		_threadIdReference.resize(Thread::hardwareConcurency(), -1);
 		auto mt = new MainThread();
 		auto rt = new RenderThread();
+
 		_threads[Thread::Main] = mt;
 		_threads[Thread::Render] = rt;
 		mt->linkToNext(rt);
@@ -36,12 +37,30 @@ namespace AGE
 	
 	bool ThreadManager::initAndLaunch()
 	{
-		bool res = true;
+		int i = 0;
 		for (auto &t : _threads)
 		{
-			res = t->launch();
-			if (!res)
-				return false;
+			bool res = t->launch();
+			AGE_ASSERT(res);
+			if (i > Thread::Render)
+			{
+				auto voidHandle = t->getThreadHandle().native_handle();
+				HANDLE handle = (HANDLE)(voidHandle);
+				auto success = SetThreadAffinityMask(handle, 1 << i);
+				AGE_ASSERT(success != 0);
+			}
+			++i;
+		}
+		{
+			HANDLE handle = ::GetCurrentThread();
+			auto success = SetThreadAffinityMask(handle, 0x1);
+			AGE_ASSERT(success != 0);
+		}
+		{
+			auto voidHandle = GetRenderThread()->getThreadHandle().native_handle();
+			HANDLE handle = (HANDLE)(voidHandle);
+			auto success = SetThreadAffinityMask(handle, 0x2);
+			AGE_ASSERT(success != 0);
 		}
 		return true;
 	}

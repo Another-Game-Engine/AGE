@@ -84,7 +84,6 @@ namespace AGE
 		RenderThread &operator=(const RenderThread &) = delete;
 		RenderThread &operator=(RenderThread &&) = delete;
 
-		std::thread _threadHandle;
 		std::atomic_bool _insideRun;
 
 		std::size_t _frameCounter;

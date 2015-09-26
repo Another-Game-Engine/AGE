@@ -25,7 +25,6 @@ namespace AGE
 		TaskThread &operator=(TaskThread &&) = delete;
 		friend class ThreadManager;
 
-		std::thread _threadHandle;
 		std::atomic_bool _insideRun;
 		bool _run;
 	};
