@@ -82,7 +82,20 @@ namespace AGE
 		auto size = 0;
 		glGetProgramResourceName(_id, resource, GLuint(index), GLsizei(buffer.size()), (GLsizei *)&size, (GLchar *)buffer.data());
 		std::string name(buffer, 0, size);
-		auto element = _resources_factory.build(resource, (GLint)index, std::move(name));
+		// disgusting way to detect arrays
+		bool isArray = size > 0 && (name[size - 1] == ']');
+		if (isArray)
+		{
+			std::string nameWithoutBacketDisgusting;
+			for (auto &c : name)
+			{
+				if (c == '[')
+					break;
+				nameWithoutBacketDisgusting += c;
+			}
+			name = nameWithoutBacketDisgusting;
+		}
+		auto element = _resources_factory.build(resource, (GLint)index, std::move(name), isArray);
 		if (element) {
 			_program_resources.emplace_back(std::move(element));
 		}

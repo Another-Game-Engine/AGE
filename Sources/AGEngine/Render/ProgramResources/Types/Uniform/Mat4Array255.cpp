@@ -34,8 +34,8 @@ namespace AGE
 
 	IProgramResources & Mat4Array255::update()
 	{
-		if (!_update) {
-			glUniformMatrix4fv(_id, 200, GL_FALSE, (GLfloat *)(glm::value_ptr(*_value)));
+		if (!_update && _value) {
+			glUniformMatrix4fv(_id, 166, GL_FALSE, (GLfloat *)(glm::value_ptr(*_value)));
 			_update = true;
 		}
 		return (*this);

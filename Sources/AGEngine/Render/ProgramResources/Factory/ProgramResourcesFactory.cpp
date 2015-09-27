@@ -5,7 +5,7 @@
 #include <Render/Program.hh>
 #include <array>
 
-#define LAMBDA_PROTO [this](GLint id, std::string &&name)
+#define LAMBDA_PROTO [this](GLint id, std::string &&name, bool isArray)
 
 # define DECLAR_BUILDERS																																									  \
 																																															  \
@@ -17,7 +17,7 @@ std::make_pair(GL_UNIFORM, LAMBDA_PROTO																																						  \
 	glGetProgramResourceiv(_program.id(), GL_UNIFORM, id, nbr_prop, prop.data(), nbr_prop, nullptr, params.data());																			  \
 	if (params[1] == -1) {																																									  \
 																																															  \
-		return (_uniformsFactory.build(params[0], glGetUniformLocation(_program.id(), name.c_str()), std::move(name)));																											  \
+		return (_uniformsFactory.build(params[0], glGetUniformLocation(_program.id(), name.c_str()), std::move(name), isArray));																											  \
 	}																																														  \
 	_block_resources.emplace_back(std::make_unique<BlockResources>(id, std::move(name), params[0], glm::uvec3(params[2], params[3], params[4])));											  \
 	return (std::shared_ptr<IProgramResources>(nullptr));																																	  \
@@ -72,11 +72,11 @@ namespace AGE
 
 	}
 
-	std::shared_ptr<IProgramResources> ProgramResourcesFactory::build(GLenum mode, GLint id, std::string &&name)
+	std::shared_ptr<IProgramResources> ProgramResourcesFactory::build(GLenum mode, GLint id, std::string &&name, bool isArray)
 	{
 		for (auto &blue_print : _blue_prints) {
 			if (mode == blue_print.first) {
-				return (blue_print.second(id, std::move(name)));
+				return (blue_print.second(id, std::move(name), isArray));
 			}
 		}
 		return (std::unique_ptr<IProgramResources>(nullptr));
