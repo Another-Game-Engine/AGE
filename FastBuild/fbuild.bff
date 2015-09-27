@@ -194,8 +194,8 @@ Compiler( 'Compiler-x64' )
 //------------------------------------------------------------------------------
 .ProjectCommon = 
 [
-  .ProjectBuildCommand    = 'cd ^$(SolutionDir)\../FastBuild/ &amp; fbuild.exe -vs -verbose -cache -wrapper -dist ^$(ProjectName)-^$(Configuration)'
-  .ProjectRebuildCommand    = 'cd ^$(SolutionDir)\../FastBuild/ &amp; fbuild.exe -vs -verbose -cache -clean -wrapper -dist ^$(ProjectName)-^$(Configuration)'
+  .ProjectBuildCommand    = 'cd ^$(SolutionDir)\../FastBuild/ &amp; fbuild.exe -vs -verbose -cache -wrapper -report -showcmds ^$(ProjectName)-^$(Configuration)'
+  .ProjectRebuildCommand    = 'cd ^$(SolutionDir)\../FastBuild/ &amp; fbuild.exe -vs -verbose -cache -clean -wrapper ^$(ProjectName)-^$(Configuration)'
   .OutputDirectory      = '^$(SolutionDir)\..\Build'
   .IntermediateDirectory    = '^$(SolutionDir)\..\Build'
   .Platform = 'Win32' // unused
@@ -252,7 +252,8 @@ ForEach( .Platform in .Platforms )
   {
     .Targets    = { 'All-$Platform$-Debug',
               'All-$Platform$-Profile',
-              'All-$Platform$-Release'
+              'All-$Platform$-Release',
+              'All-$Platform$-Retail'
               }
   }
 }
