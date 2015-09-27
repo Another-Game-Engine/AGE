@@ -1,0 +1,366 @@
+; FBuild 
+;-------------------------------------------------------------------------------
+
+;-------------------------------------------------------------------------------
+;
+; AGE USERS ! VERY IMPORTANT !
+; cesar's variables
+;
+;-------------------------------------------------------------------------------
+
+#include "FBuildPath.bff"
+
+;-------------------------------------------------------------------------------
+; Windows Platform
+;-------------------------------------------------------------------------------
+.VSBasePath     = 'C:\Program Files (x86)\Microsoft Visual Studio 12.0\'
+.WindowsSDKBasePath = 'C:\Program Files (x86)\Windows Kits\8.1'
+
+;-------------------------------------------------------------------------------
+; Settings
+;-------------------------------------------------------------------------------
+Settings
+{
+  .Environment  = { "PATH=$VSBasePath$\Common7\IDE\;$VSBasePath$\VC\bin\",
+            "TMP=C:\Windows\Temp",
+            "SystemRoot=C:\Windows" }
+  .CachePath    = "C:\.fbuild.cache"
+}
+
+//------------------------------------------------------------------------------
+// Compilers
+//------------------------------------------------------------------------------
+Compiler( 'Compiler-x64' )
+{
+  .Root   = '$VSBasePath$\VC\bin'
+  .Executable = '$Root$\x86_amd64\cl.exe'
+  .ExtraFiles = { '$Root$\x86_amd64\c1.dll'
+          '$Root$\x86_amd64\c1ast.dll',
+          '$Root$\x86_amd64\c1xx.dll',
+          '$Root$\x86_amd64\c1xxast.dll',
+          '$Root$\x86_amd64\c2.dll',
+          '$Root$\x86_amd64\1033\clui.dll'
+          '$Root$\msobj120.dll'
+          '$Root$\mspdb120.dll'
+          '$Root$\mspdbsrv.exe'
+          '$Root$\mspdbcore.dll'
+          '$Root$\mspft120.dll'
+          '$VSBasePath$\VC\redist\x86\Microsoft.VC120.CRT\msvcp120.dll'
+          '$VSBasePath$\VC\redist\x86\Microsoft.VC120.CRT\msvcr120.dll'
+          '$VSBasePath$\VC\redist\x86\Microsoft.VC120.CRT\vccorlib120.dll'
+          }
+}
+
+//------------------------------------------------------------------------------
+// Configurations
+//------------------------------------------------------------------------------
+.MSVCBaseConfig =
+[
+  .AdditionalWarnings = ' /we4296' // 'operator': expression is always false
+              //' /we4062' // enumerator 'identifier' in a switch of enum 'enumeration' is not handled
+              // + ' /we4263' // 'function' : member function does not override any base class virtual member function
+              // + ' /we4265' // 'class': class has virtual functions, but destructor is not virtual
+              + ' /we4555' // expression has no effect; expected expression with side-effect
+              + ' /we4619' // #pragma warning : there is no warning number 'number'
+              // + ' /we4640' // 'instance' : construction of local static object is not thread-safe
+              // + ' /we4826' // Conversion from 'type1 ' to 'type_2' is sign-extended. This may cause unexpected runtime behavior.
+              + ' /we4836' // nonstandard extension used : 'type' : local types or unnamed types cannot be used as template arguments
+              //+ ' /we4905' // wide string literal cast to 'LPSTR'
+              //+ ' /we4906' // string literal cast to 'LPWSTR'
+
+  .CompilerOptions    = '"%1" /Z7 /d2Zi+ /nologo /c /W3'
+              + ' /Zc:inline'     // Remove unreferenced COMDATs at compile time (VS2013.2+)
+              //+ ' /Zc:strictStrings'  // Require const only usage of string literals (VS2013+)
+              + .AdditionalWarnings
+              + ' /fp:fast'
+              + ' /D_WIN32 /D__WINDOWS__'
+              + ' /D"_CRT_SECURE_NO_WARNINGS"' // don't warn about unsafe functions
+              + ' /D"_WINSOCK_DEPRECATED_NO_WARNINGS"' // don't warn about deprecated winsock functions - TODO:C Update API use
+
+  .CompilerOptions    + ' /Fo"%2"'
+  .LibrarianOptions   = '/NOLOGO /OUT:"%2" "%1"' //@FBUILD : Il faudrait peut etre faire une configuration dll et une .lib et ajouter NODEFAULTLIB pour les dll
+  .LinkerOptions      = '/NOLOGO /INCREMENTAL:NO /OUT:"%2" "%1" /DEBUG /MANIFEST'
+              + ' /IGNORE:4001' ; don't complain about linking libs only
+
+  // Optimizations
+  .CompilerDebugOptimizations   = ' /MDd /Od /RTC1 /GS /Oy- /GR-' //analyze
+  .CompilerReleaseOptimizations = ' /MD /Ox /Oy /Oi /GS- /GF /GL /Gy /Gw /GR- ' //analyze
+  .LibrarianDebugOptimizations  = ''
+  .LibrarianReleaseOptimizations  = ' /LTCG'
+  .LinkerDebugOptimizations   = ''
+  .LinkerReleaseOptimizations   = ' /LTCG /OPT:REF,ICF'
+
+  .BaseIncludePaths   = ' /I"./"'
+              + ' /I"$VSBasePath$/VC/include/"'
+              + ' /I"$WindowsSDKBasePath$/include/um"'
+              + ' /I"$WindowsSDKBasePath$/include/shared"'
+              + ' /I"$WindowsSDKBasePath$/include/winrt"'
+              + ' /I"$VSBasePath$/VC/include"'
+              + ' /I"$VSBasePath$/VC/atlmfc/include"'
+
+  .CompilerOptions    + .BaseIncludePaths
+
+  .WindowsLibPaths    = '$WindowsSDKBasePath$/lib/winv6.3/um'
+
+  .UseExceptions      = ' /EHsc'
+]
+
+
+// X64
+//------------------------------------------------------------------------------
+.X64BaseConfig = 
+[
+  Using( .MSVCBaseConfig )
+  .ToolsBasePath      = '$VSBasePath$\VC\bin\x86_amd64'
+  .Compiler       = 'Compiler-x64'
+  .Librarian        = '$ToolsBasePath$\lib.exe'
+  .Linker         = '$ToolsBasePath$\link.exe'
+  .CompilerOptions    + ' /DWIN64'
+                      + ' /DWIN32'
+
+  .LinkerOptions      + ' /MACHINE:X64'
+  .Platform       = 'x64'
+  .LinkerOptions      + ' /LIBPATH:"$WindowsLibPaths$/x64" /LIBPATH:"$VSBasePath$/VC/lib/amd64" /LIBPATH:"$VSBasePath$/VC/atlmfc/lib/amd64" /LIBRARYPATH:"$WindowsSDKBasePath$/lib/winv6.3/um/x64"'
+]
+.X64DebugConfig =
+[
+  Using( .X64BaseConfig )
+  .Config         = 'Debug'
+  .CompilerOptions    + ' /DDEBUG /DAGE_ENABLE_PROFILING /DEDITOR_ENABLED /DAGE_ENABLE_IMGUI /D_CRT_SECURE_NO_WARNINGS'
+              + .CompilerDebugOptimizations             
+  .LibrarianOptions   + .LibrarianDebugOptimizations
+  .LinkerOptions      + .LinkerDebugOptimizations
+  .PhysxDir = '$VendorsPath$\PhysX\PhysXSDK\Lib\vc12win64-Debug'
+]
+.X64ReleaseConfig =
+[
+  Using( .X64BaseConfig )
+  .Config         = 'Release'
+  .CompilerOptions    + ' /DRELEASE /DAGE_ENABLE_PROFILING /DEDITOR_ENABLED /DAGE_ENABLE_IMGUI /D_CRT_SECURE_NO_WARNINGS /DNDEBUG'
+
+  // Setup de-optimization options (FASTBUILD_DEOPTIMIZE_OBJECT)
+  .DeoptimizeWritableFilesWithToken   = true
+  .CompilerOptionsDeoptimized   = '$CompilerOptions$ /Od'
+
+  .CompilerOptions    + .CompilerReleaseOptimizations             
+  .LibrarianOptions   + .LibrarianReleaseOptimizations
+  .LinkerOptions      + .LinkerReleaseOptimizations
+  .PhysxDir = '$VendorsPath$\PhysX\PhysXSDK\Lib\vc12win64-Release'
+]
+.X64ProfileConfig =
+[
+  Using( .X64BaseConfig ) 
+  .Config         = 'Profile'
+  .CompilerOptions    + ' /DRELEASE /DAGE_ENABLE_PROFILING /D_CRT_SECURE_NO_WARNINGS /DNDEBUG'
+
+  .CompilerOptions    + .CompilerReleaseOptimizations             
+  .LibrarianOptions   + .LibrarianReleaseOptimizations
+  .LinkerOptions      + .LinkerReleaseOptimizations
+  .PhysxDir = '$VendorsPath$\PhysX\PhysXSDK\Lib\vc12win64-Release'
+]
+.X64RetailConfig =
+[
+  Using( .X64BaseConfig )
+  .Config         = 'Retail'
+  .CompilerOptions    + ' /DRELEASE /D_CRT_SECURE_NO_WARNINGS /DNDEBUG'
+
+  .CompilerOptions    + .CompilerReleaseOptimizations             
+  .LibrarianOptions   + .LibrarianReleaseOptimizations
+  .LinkerOptions      + .LinkerReleaseOptimizations
+  .PhysxDir = '$VendorsPath$\PhysX\PhysXSDK\Lib\vc12win64-Release'
+]
+
+// Resource Compiler
+//------------------------------------------------------------------------------
+.ResourceCompiler =
+[
+  .Compiler         = '$WindowsSDKBasePath$\Bin\x86\RC.exe'
+  .CompilerOutputExtension  = '.res'
+  .CompilerOptions      = '/nologo /fo"%2" %1'
+]
+
+//------------------------------------------------------------------------------
+// 
+//------------------------------------------------------------------------------
+.OutputBase = '../Build'
+
+//------------------------------------------------------------------------------
+// Unity/Blob files (shared across configs)
+//------------------------------------------------------------------------------
+.UnityInputIsolateWritableFiles = true
+
+//------------------------------------------------------------------------------
+// VisualStudio Project Generation
+//------------------------------------------------------------------------------
+.ProjectCommon = 
+[
+  .ProjectBuildCommand    = 'cd ^$(SolutionDir)\../FastBuild/ &amp; fbuild.exe -vs -verbose -cache -wrapper -dist ^$(ProjectName)-^$(Configuration)'
+  .ProjectRebuildCommand    = 'cd ^$(SolutionDir)\../FastBuild/ &amp; fbuild.exe -vs -verbose -cache -clean -wrapper -dist ^$(ProjectName)-^$(Configuration)'
+  .OutputDirectory      = '^$(SolutionDir)\..\Build'
+  .IntermediateDirectory    = '^$(SolutionDir)\..\Build'
+  .Platform = 'Win32' // unused
+  .PlatformToolset = 'v120'
+  .IncludeSearchPath      = '^$(SolutionDir);^$(ProjectDir);.\;$VendorsPath$;'
+  .X86Defines         = 'WIN32_LEAN_AND_MEAN;_WIN32;__WINDOWS__;WIN32;'
+  .X64Defines         = 'WIN32_LEAN_AND_MEAN;_WIN32;__WINDOWS__;WIN64;'
+  .DebugDefines       = 'DEBUG;AGE_ENABLE_IMGUI;EDITOR_ENABLED;'
+  .ProfileDefines       = 'RELEASE;NDEBUG'
+  .ReleaseDefines       = 'RELEASE;AGE_ENABLE_IMGUI;EDITOR_ENABLED;'
+  .RetailDefines        = 'RETAIL;'
+]
+
+.ProjectX64Debug      = [ Using( .ProjectCommon ) .Config = 'x64-Debug' .PreprocessorDefinitions = .X64Defines + .DebugDefines .OutputDirectory + '/x64-Debug' ]
+.ProjectX64Profile    = [ Using( .ProjectCommon ) .Config = 'x64-Profile' .PreprocessorDefinitions = .X64Defines + .ProfileDefines .OutputDirectory + '/x64-Profile' ]
+.ProjectX64Release    = [ Using( .ProjectCommon ) .Config = 'x64-Release' .PreprocessorDefinitions = .X64Defines + .ReleaseDefines .OutputDirectory + '/x64-Release' ]
+.ProjectX64Retail    = [ Using( .ProjectCommon ) .Config = 'x64-Retail' .PreprocessorDefinitions = .X64Defines + .RetailDefines .OutputDirectory + '/x64-Retail' ]
+
+.ProjectConfigs = { .ProjectX64Debug, .ProjectX64Profile, .ProjectX64Release, .ProjectX64Retail }
+.EditorProjectConfigs = { .ProjectX64Debug, .ProjectX64Release }
+
+// Configurations
+//------------------------------------------------------------------------------
+.Configs_Windows_MSVC = { .X64DebugConfig, .X64ProfileConfig, .X64ReleaseConfig, .X64RetailConfig }
+
+// Core
+#include "$SourcePath$\AGEngine\AGE_ImGui.bff"
+#include "$SourcePath$\AGEngine\Utils/AGE_Utils.bff"
+#include "$SourcePath$\AGEngine\LowLevelUtils/AGE_LowLevelUtils.bff"
+#include "$SourcePath$\AGEngine\FileUtils/AGE_FileUtils.bff"
+#include "$SourcePath$\AGEngine\BFC/AGE_BFC.bff"
+#include "$SourcePath$\AGEngine\Text/AGE_Text.bff"
+#include "$SourcePath$\AGEngine\Physics/AGE_Physics.bff"
+#include "$SourcePath$\AGEngine\AssetManagement/AGE_AssetManagement.bff"
+#include "$SourcePath$\AGEngine\Skinning/AGE_Skinning.bff"
+#include "$SourcePath$\AGEngine\Graphic/AGE_Graphic.bff"
+#include "$SourcePath$\AGEngine\Render/AGE_Render.bff"
+#include "$SourcePath$\AGEngine\ComponentsCore/AGE_ComponentsCore.bff"
+#include "$SourcePath$\AGEngine\SystemsCore/AGE_SystemsCore.bff"
+#include "$SourcePath$\AGEngine\Engine\AGE_Core.bff"
+
+#include "$PluginsPath$\Physics\Physx\AGEPlugin_Physx.bff"
+
+#include "$SourcePath$\Reader/AGE_Reader.bff"
+#include "$SourcePath$\Editor/AGE_Editor.bff"
+
+
+// Aliases : All-$Platform$
+//------------------------------------------------------------------------------
+.Platforms = { 'x64' }
+ForEach( .Platform in .Platforms )
+{
+  Alias( 'All-$Platform$' )
+  {
+    .Targets    = { 'All-$Platform$-Debug',
+              'All-$Platform$-Profile',
+              'All-$Platform$-Release'
+              }
+  }
+}
+
+// Aliases : All
+//------------------------------------------------------------------------------
+Alias( 'All' )
+{
+  .Targets    = { 'AGE_ImGui-proj'
+                  , 'AGE_Utils-proj'
+                  , 'AGE_FileUtils-proj'
+                  , 'AGE_LowLevelUtils-proj'
+                  , 'AGE_BFC-proj'
+                  , 'AGE_Text-proj'
+                  , 'AGE_Physics-proj'
+                  , 'AGE_AssetManagement-proj'
+                  , 'AGE_Skinning-proj'
+                  , 'AGE_Graphic-proj'
+                  , 'AGE_Render-proj'
+                  , 'AGE_ComponentsCore-proj'
+                  , 'AGE_SystemsCore-proj'
+                  , 'AGE_Core-proj'
+                  , 'AGEPlugin_Physx-proj'
+                  , 'AGEReader-proj'
+				          , 'AGEEditor-proj' }
+}
+
+// Aliases : proj (all projects)
+//------------------------------------------------------------------------------
+Alias( 'proj' )
+{
+  .Targets    = { 'All-proj'
+                  , 'AGE_ImGui-proj'
+                  , 'AGE_Utils-proj'
+                  , 'AGE_FileUtils-proj'
+                  , 'AGE_LowLevelUtils-proj'
+                  , 'AGE_BFC-proj'
+                  , 'AGE_Text-proj'
+                  , 'AGE_Physics-proj'
+                  , 'AGE_AssetManagement-proj'
+                  , 'AGE_Skinning-proj'
+                  , 'AGE_Graphic-proj'
+                  , 'AGE_Render-proj'
+                  , 'AGE_ComponentsCore-proj'
+                  , 'AGE_SystemsCore-proj'
+                  , 'AGE_Core-proj'
+                  , 'AGEPlugin_Physx-proj'
+                  , 'AGEReader-proj'
+				          , 'AGEEditor-proj'
+            }
+}
+
+//------------------------------------------------------------------------------
+
+VSSolution( 'ReaderSolution' )
+{
+  // Basic options
+  .SolutionOutput                     = './$ProjectsFolder$/AGE_Reader.sln' // Path to Solution file to be generated
+  .SolutionProjects                   = { 'AGE_ImGui-proj'
+                                        , 'AGE_Utils-proj'
+                                        , 'AGE_FileUtils-proj'
+                                        , 'AGE_LowLevelUtils-proj'
+                                        , 'AGE_BFC-proj'
+                                        , 'AGE_Text-proj'
+                                        , 'AGE_Physics-proj'
+                                        , 'AGE_AssetManagement-proj'
+                                        , 'AGE_Skinning-proj'
+                                        , 'AGE_Graphic-proj'
+                                        , 'AGE_Render-proj'
+                                        , 'AGE_ComponentsCore-proj'
+                                        , 'AGE_SystemsCore-proj'
+                                        , 'AGE_Core-proj'
+                                        , 'AGEPlugin_Physx-proj'
+                                        , 'AGEReader-proj'
+                                        }  // Project(s) to include in Solution
+
+  .SolutionBuildProject                = 'AGEReader-proj'
+
+  .SolutionConfigs                     = .ProjectConfigs
+  
+  .SolutionVisualStudioVersion         = "12.0.31101.00" 
+}
+
+VSSolution( 'EditorSolution' )
+{
+  // Basic options
+  .SolutionOutput                     = './$ProjectsFolder$/AGE_Editor.sln' // Path to Solution file to be generated
+  .SolutionProjects                   = { 'AGE_ImGui-proj'
+                                        , 'AGE_Utils-proj'
+                                        , 'AGE_FileUtils-proj'
+                                        , 'AGE_LowLevelUtils-proj'
+                                        , 'AGE_BFC-proj'
+                                        , 'AGE_Text-proj'
+                                        , 'AGE_Physics-proj'
+                                        , 'AGE_AssetManagement-proj'
+                                        , 'AGE_Skinning-proj'
+                                        , 'AGE_Graphic-proj'
+                                        , 'AGE_Render-proj'
+                                        , 'AGE_ComponentsCore-proj'
+                                        , 'AGE_SystemsCore-proj'
+                                        , 'AGE_Core-proj'
+                                        , 'AGEPlugin_Physx-proj'
+                                        , 'AGEEditor-proj'
+                                        }  // Project(s) to include in Solution
+
+  .SolutionBuildProject                = 'AGEEditor-proj'
+
+  .SolutionConfigs                     = .EditorProjectConfigs
+  
+  .SolutionVisualStudioVersion         = "12.0.31101.00" 
+}

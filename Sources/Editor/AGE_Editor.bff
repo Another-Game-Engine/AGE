@@ -1,0 +1,179 @@
+// Core
+//------------------------------------------------------------------------------
+{
+	#include "../../FastBuild/FBuildPath.bff"
+
+	.ProjectName		= 'AGEEditor'
+	.ProjectDestPath	= './$ProjectsFolder$/AGE_Editor/'
+	.ProjectPath		= '$AGEngineSourceDir$/../Editor'
+
+	.CompilerIncludesPaths = ' /I"$ProjectPath$"'
+						   + ' /I"$VendorsPath$"'
+						   + ' /I"$AGEngineSourceDir$"/../AGEngine/Engine/'
+						   + ' /I"$AGEngineSourceDir$"/../AGEngine/'
+						   + ' /I"$AGEngineSourceDir$"/../'
+						   + ' /I../AGEngine/'
+						   + ' /I"$VendorsPath$"\OpenGL\include\'
+						   + ' /I"$VendorsPath$"\bullet\src\'
+						   + ' /I"$VendorsPath$"\fmod\inc\'
+						   + ' /I"$VendorsPath$"\minizip\include\'
+						   + ' /I"$VendorsPath$"\zlib\include\'
+                           + ' /I"$VendorsPath$"\assimp\include\'
+                           + ' /I"$VendorsPath$"\FreeImagePlus\include\'
+                           + ' /I"$VendorsPath$"\FreeImage\include\'
+                           + ' /I"$VendorsPath$"\PhysX\PhysXSDK\Include/'
+
+
+	// Visual Studio Project Generation
+	//--------------------------------------------------------------------------
+	VCXProject( '$ProjectName$-proj' )
+	{
+		.ProjectOutput				= '$ProjectDestPath$\$ProjectName$.vcxproj'
+		.ProjectInputPaths			= { '$ProjectPath$\',
+		                                '$VendorsPath$\imgui\' }
+        .ProjectBasePath            = { '$ProjectPath$\'
+                                        , '$VendorsPath$\' }
+
+		.ProjectAllowedFileExtensions = { '.h' '.cpp' '.c' '.hh' '.hpp' '.inl' }
+
+		// Vendors
+		.IncludeSearchPath               = '$ProjectPath$\'
+										 + ';$EnginePath$\'
+										 + ';.\'
+										 + ';../AGEngine/'
+		                                 + ';$VendorsPath$\OpenGL\include\'
+		                                 + ';$VendorsPath$\bullet\src\'
+		                                 + ';$VendorsPath$\fmod\inc\'
+		                                 + ';$VendorsPath$\minizip\include\'
+		                                 + ';$VendorsPath$\zlib\include\'
+										 + ';$VendorsPath$\assimp\include\'
+										 + ';$VendorsPath$\FreeImagePlus\include\'
+		                                 +  '$VendorsPath$\'
+	}
+
+	// Unity
+	//--------------------------------------------------------------------------
+
+        .UnityNumFiles   = 20
+        .UnityInputPath  = { '$ProjectDestPath$\' }
+
+	{
+		// Windows
+		Unity( '$ProjectName$-Unity-Windows' )
+		{
+	    	.UnityInputPath              = {'$VendorsPath$\OpenGL\'
+		                                 ,'$VendorsPath$\minizip\'
+		                                 ,'$VendorsPath$\zlib\'
+		                                 ,'$VendorsPath$\cereal\'
+		                                 ,'$EnginePath$\utils\'}
+
+		    .UnityOutputPath			= '$OutputBase$\Unity\$ProjectPath$\'
+		}
+	}
+
+	//--------------------------------------------------------------------------
+	ForEach( .Config in .ProjectConfigs )
+	{
+		Using( .Config )
+
+		.IncludeSearchPath          + '$ProjectPath$\'
+										 + ';$ProjectPath$\'
+		                                 + ';$VendorsPath$\OpenGL\include\'
+		                                 + ';$VendorsPath$\bullet\src\'
+		                                 + ';$VendorsPath$\fmod\inc\'
+		                                 + ';$VendorsPath$\minizip\include\'
+		                                 + ';$VendorsPath$\zlib\include\'
+	}
+
+
+
+	// Windows
+	//--------------------------------------------------------------------------
+	ForEach( .Config in .Configs_Windows_MSVC )
+	{
+		Using( .Config )
+		.OutputBase + '\$Platform$-$Config$'
+
+		// Static Library
+		ObjectList( '$ProjectName$-Lib-$Platform$-$Config$' )
+		{
+			// Input (Unity)
+			.CompilerInputUnity			= '$ProjectName$-Unity-Windows'
+
+			.CompilerInputPath			= '$ProjectPath$'
+
+			// Output
+			.CompilerOutputPath			= '$OutputBase$\$ProjectName$\'
+ 			.LibrarianOutput 			= '$OutputBase$\$ProjectName$\$ProjectName$.lib'
+
+ 			.CompilerOptions            + ' $CompilerIncludesPaths$'
+		}
+
+		Executable( '$ProjectName$-Exe-$Platform$-$Config$' )
+		{
+
+			.Libraries					= { 'AGE_ImGui-Lib-$Platform$-$Config$'
+			                              , 'AGE_FileUtils-Lib-$Platform$-$Config$'
+			                              , 'AGE_LowLevelUtils-Lib-$Platform$-$Config$'
+			                              , 'AGE_BFC-Lib-$Platform$-$Config$'
+			                              , 'AGE_Text-Lib-$Platform$-$Config$'
+			                              , 'AGE_Physics-Lib-$Platform$-$Config$'
+			                              , 'AGE_AssetManagement-Lib-$Platform$-$Config$'
+			                              , 'AGE_Skinning-Lib-$Platform$-$Config$'
+			                              , 'AGE_Graphic-Lib-$Platform$-$Config$'
+			                              , 'AGE_Render-Lib-$Platform$-$Config$'
+			                              , 'AGE_ComponentsCore-Lib-$Platform$-$Config$'
+			                              , 'AGE_SystemsCore-Lib-$Platform$-$Config$'
+			                              , 'AGE_Core-Lib-$Platform$-$Config$'
+			                              , 'AGEEditor-Lib-$Platform$-$Config$'
+			                              , 'AGE_Utils-Lib-$Platform$-$Config$' }
+			.LinkerOutput				= '$OutputBase$/$ProjectName$.exe'
+			.LinkerOptions				+ ' /SUBSYSTEM:CONSOLE'
+										+ ' kernel32.lib'
+										+ ' Ws2_32.lib'
+										+ ' Advapi32.lib'
+										+ ' User32.lib'
+										+ ' opengl32.lib'
+										+ ' glu32.lib'
+										+ ' windowscodecs.lib'
+										+ ' Ole32.lib'
+										+ ' $VendorsPath$/OpenGL/lib/x64/glew32.lib'
+										+ ' $VendorsPath$/OpenGL/lib/x64/sdl2.lib'
+										+ ' $VendorsPath$/OpenGL/lib/x64/sdl2main.lib'
+										+ ' $VendorsPath$/OpenGL/lib/x64/sdl2main.lib'
+										+ ' $VendorsPath$/minizip\lib\windows\x64/minizip.lib'
+										+ ' $VendorsPath$/zlib\lib\windows\x64/zlib.lib'
+										+ ' $VendorsPath$/assimp\x64\Release/assimp.lib'
+										+ ' $VendorsPath$/DirectXTex\DirectXTex\Bin\Desktop_2013\x64\$Config$\DirectXTex.lib'
+                                        + ' $PhysxDir$/PhysX3Cooking_x64.lib'
+										+ ' $PhysxDir$/PhysX3Common_x64.lib'
+										+ ' $PhysxDir$/PhysX3Extensions.lib'
+										+ ' $PhysxDir$/PhysX3_x64.lib'
+										+ ' $VendorsPath$/bullet\lib\x64$Config$/BulletCollision_$Config$.lib'
+										+ ' $VendorsPath$/bullet\lib\x64$Config$/BulletDynamics_$Config$.lib'
+										+ ' $VendorsPath$/bullet\lib\x64$Config$/BulletFileLoader_$Config$.lib'
+										+ ' $VendorsPath$/bullet\lib\x64$Config$/BulletWorldImporter_$Config$.lib'
+										+ ' $VendorsPath$/bullet\lib\x64$Config$/GLUI_$Config$.lib'
+										+ ' $VendorsPath$/bullet\lib\x64$Config$/HACD_$Config$.lib'
+										+ ' $VendorsPath$/bullet\lib\x64$Config$/LinearMath_$Config$.lib'
+		}
+		Alias( '$ProjectName$-$Platform$-$Config$' ) { .Targets = '$ProjectName$-Exe-$Platform$-$Config$' }
+
+	}
+
+	// Aliases
+	//--------------------------------------------------------------------------
+	// Per-Config
+	Alias( '$ProjectName$-Debug' )		{ .Targets = { '$ProjectName$-X64-Debug' } }
+	Alias( '$ProjectName$-Profile' )	{ .Targets = { '$ProjectName$-X64-Profile' } }
+	Alias( '$ProjectName$-Release' )	{ .Targets = { '$ProjectName$-X64-Release' } }
+
+	// Per-Platform
+	Alias( '$ProjectName$-X64' )		{ .Targets = { '$ProjectName$-X64-Debug', '$ProjectName$-X64-Release', '$ProjectName$-X64-Profile' } }
+
+	// All
+	Alias( '$ProjectName$' )
+	{
+		.Targets = { '$ProjectName$-Debug', '$ProjectName$-Profile', '$ProjectName$-Release' }
+	}
+}
