@@ -53,6 +53,16 @@ namespace AGE
 		return (Key<Property>::createKey(int(_properties.size()) - 1));
 	}
 
+	Key<Property> Properties::add_property(std::shared_ptr<IProperty> &prop)
+	{
+		SCOPE_profile_cpu_function("RenderTimer");
+
+		RWLockGuard lock(_lock, true);
+		_properties.emplace_back(prop);
+		_hashToRefresh = true;
+		return (Key<Property>::createKey(int(_properties.size()) - 1));
+	}
+
 	void Properties::merge_properties(const Properties &other)
 	{
 		SCOPE_profile_cpu_function("RenderTimer");

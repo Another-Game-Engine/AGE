@@ -21,6 +21,10 @@
 //BFC
 #include "Graphic/GraphicElementManager.hpp"
 
+// tmp
+#include <Skinning/AnimationManager.hpp>
+#include <Render/Properties/SkeletonProperty.hpp>
+
 namespace AGE
 {
 	MeshRenderer::MeshRenderer() :
@@ -58,6 +62,36 @@ namespace AGE
 			}
 			_drawableHandle.clear();
 		}
+	}
+
+	void MeshRenderer::setAnimation(const Key<AGE::AnimationInstance> &animation)
+	{
+		AGE_ASSERT(animation.isValid());
+
+		if (_skeletonProperty)
+		{
+			AGE_ASSERT(false && "Le remove property ne fonctionne pas. Au passage, virer les clefs qui ne servent a rien.");
+		}
+
+		_animationInstance = animation;
+		enableRenderMode(AGE_SKINNED);
+		_updateGeometry();
+		_skeletonProperty = std::make_shared<SkeletonProperty>();
+
+		for (auto &h : _drawableHandle)
+		{
+			auto mesh = (DRBMesh*)(h.getPtr()); 
+			mesh->getDatas()->globalProperties.add_property(_skeletonProperty);
+		}
+	}
+
+	void MeshRenderer::hardCodedUpdateAnimation()
+	{
+		AGE_ASSERT(_animationInstance.isValid());
+		AGE_ASSERT(_skeletonProperty);
+
+		auto &bones = entity->getScene()->getInstance<AGE::AnimationManager>()->getBones(_animationInstance);
+		_skeletonProperty->set(bones);
 	}
 
 	bool MeshRenderer::setMeshAndMaterial(

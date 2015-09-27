@@ -210,7 +210,7 @@ namespace AGE
 			hexapod = createEntity();
 			hexapod->addComponent<MeshRenderer>(
 				getInstance<AGE::AssetsManager>()->getMesh("hexapod/animation/run.sage")
-				, getInstance<AGE::AssetsManager>()->getMaterial("ball/ball.mage"));
+				, getInstance<AGE::AssetsManager>()->getMaterial("ball/ball.mage"))->setAnimation(animationTestInstance);
 		}
 
 		if (getInstance<Input>()->getPhysicalKeyJustReleased(AgeKeys::AGE_ESCAPE))

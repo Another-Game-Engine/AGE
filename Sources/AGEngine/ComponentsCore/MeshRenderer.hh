@@ -18,6 +18,7 @@ namespace AGE
 	struct AnimationInstance;
 	class AScene;
 	class BFCCullableHandle;
+	class SkeletonProperty;
 
 	struct MeshRenderer : public ComponentBase
 	{
@@ -33,6 +34,8 @@ namespace AGE
 		template <typename Archive> void save(Archive &ar, const std::uint32_t version) const;
 		template <typename Archive> void load(Archive &ar, const std::uint32_t version);
 
+		void setAnimation(const Key<AGE::AnimationInstance> &animation);
+		void hardCodedUpdateAnimation();
 
 		bool setMeshAndMaterial(
 			const std::shared_ptr<AGE::MeshInstance> &_mesh,
@@ -73,6 +76,8 @@ namespace AGE
 		std::string _materialPath;
 		std::string _animationPath;
 		std::vector<BFCCullableHandle> _drawableHandle;
+		Key<AnimationInstance> _animationInstance;
+		std::shared_ptr<SkeletonProperty> _skeletonProperty = nullptr;
 
 		RenderModeSet _renderMode;
 
