@@ -130,8 +130,8 @@ namespace AGE
 		getInstance<AGE::AssetsManager>()->loadMaterial(OldFile("ball/ball.mage"), "DEMO_SCENE_BASIC_ASSETS");
 //		_skyboxTest = getInstance<AGE::AssetsManager>()->loadSkybox("test", OldFile("skyboxes/test.dds"), "DEMO_SCENE_BASIC_ASSETS");
 		_skyboxSpace = getInstance<AGE::AssetsManager>()->loadCubeMap("space", OldFile("skyboxes/space.dds"), "DEMO_SCENE_BASIC_ASSETS");
-		//getInstance<AGE::AssetsManager>()->loadAnimation(OldFile("hexapod/animation/hexapod@attack(1).aage"), "DEMO_SCENE_BASIC_ASSETS");
-		//getInstance<AGE::AssetsManager>()->loadSkeleton(OldFile("hexapod/animation/hexapod@attack(1).skage"), "DEMO_SCENE_BASIC_ASSETS");
+		getInstance<AGE::AssetsManager>()->loadAnimation(OldFile("hexapod/animation/run.aage"), "DEMO_SCENE_BASIC_ASSETS");
+		getInstance<AGE::AssetsManager>()->loadSkeleton(OldFile("hexapod/animation/run.skage"), "DEMO_SCENE_BASIC_ASSETS");
 
 		setInstance<AGE::AnimationManager>();
  
@@ -189,20 +189,21 @@ namespace AGE
 			}
 
 
-			//auto skeleton = getInstance<AssetsManager>()->getSkeleton("hexapod/animation/hexapod@attack(1).skage");
-			//auto animation = getInstance<AssetsManager>()->getAnimation("hexapod/animation/hexapod@attack(1).aage");
+			auto skeleton = getInstance<AssetsManager>()->getSkeleton("hexapod/animation/run.skage");
+			auto animation = getInstance<AssetsManager>()->getAnimation("hexapod/animation/run.aage");
 
-			//animationTestInstance = getInstance<AGE::AnimationManager>()->createAnimationInstance(skeleton, animation);
-
-			//auto &bones = getInstance<AGE::AnimationManager>()->getBones(animationTestInstance);
-			//for (auto &e : bones)
-			//{
-			//	auto entity = createEntity();
-			//	entity->addComponent<MeshRenderer>(
-			//		getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage")
-			//		, getInstance<AGE::AssetsManager>()->getMaterial("ball/ball.mage"));
-			//	bonesEntities.push_back(entity);
-			//}
+			animationTestInstance = getInstance<AGE::AnimationManager>()->createAnimationInstance(skeleton, animation);
+			auto &bones = getInstance<AGE::AnimationManager>()->getBones(animationTestInstance);
+			for (auto &e : bones)
+			{
+				auto entity = createEntity();
+				entity->addComponent<MeshRenderer>(
+					getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage")
+					, getInstance<AGE::AssetsManager>()->getMaterial("ball/ball.mage"));
+				bonesEntities.push_back(entity);
+				entity->getLink().setPosition(posFromMat4(e));
+				entity->getLink().setScale(0.1f);
+			}
 
 		}
 
@@ -277,6 +278,20 @@ namespace AGE
 		if (ImGui::Button("Reload shaders or type R") || getInstance<Input>()->getPhysicalKeyPressed(AgeKeys::AGE_r))
 		{
 			GetRenderThread()->getQueue()->emplaceTask<Tasks::Render::ReloadShaders>();
+		}
+
+		static float tt = 0;
+		tt += time;
+		getInstance<AGE::AnimationManager>()->update(tt);
+		auto skel = getInstance<AssetsManager>()->getSkeleton("hexapod/animation/run.skage");
+		skel->updateSkinning();
+
+		int i = 0;
+		auto &bones = getInstance<AGE::AnimationManager>()->getBones(animationTestInstance);
+		for (auto &e : bones)
+		{
+			bonesEntities[i]->getLink().setPosition(posFromMat4(e));
+			++i;
 		}
 
 		ImGui::Text("%i entities", getNumberOfEntities());

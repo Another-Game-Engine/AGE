@@ -1,7 +1,10 @@
 #include "Skeleton.hpp"
+
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+
 #include <AssetManagement/Instance/AnimationInstance.hh>
+#include <Utils/Profiler.hpp>
 
 using namespace AGE;
 
@@ -13,6 +16,8 @@ Skeleton::Skeleton()
 
 void Skeleton::updateSkinning()
 {
+	SCOPE_profile_cpu_function("Animations");
+
 	if (this->animations.size() == 0)
 		return;
 	readNodeHierarchy(this->firstBone);

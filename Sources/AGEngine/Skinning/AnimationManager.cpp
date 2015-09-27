@@ -1,5 +1,7 @@
 #include "AnimationManager.hpp"
 
+#include <Utils/Profiler.hpp>
+
 namespace AGE
 {
 	AnimationManager::AnimationManager()
@@ -20,6 +22,8 @@ namespace AGE
 
 	void AnimationManager::update(float time)
 	{
+		SCOPE_profile_cpu_function("Animations");
+
 		std::lock_guard<std::mutex> lock(_mutex); //dirty lock not definitive, to test purpose
 
 		for (auto &e : _list)
