@@ -1,0 +1,1 @@
+Here binary scenes created by Editor and used by Reader are saved.
