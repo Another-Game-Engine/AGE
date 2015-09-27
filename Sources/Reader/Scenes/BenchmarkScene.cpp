@@ -72,6 +72,7 @@ namespace AGE
 {
 	Key<AGE::AnimationInstance> animationTestInstance;
 	std::vector<Entity> bonesEntities;
+	Entity hexapod;
 
 
 	BenchmarkScene::BenchmarkScene(AGE::Engine *engine)
@@ -132,6 +133,7 @@ namespace AGE
 		_skyboxSpace = getInstance<AGE::AssetsManager>()->loadCubeMap("space", OldFile("skyboxes/space.dds"), "DEMO_SCENE_BASIC_ASSETS");
 		getInstance<AGE::AssetsManager>()->loadAnimation(OldFile("hexapod/animation/run.aage"), "DEMO_SCENE_BASIC_ASSETS");
 		getInstance<AGE::AssetsManager>()->loadSkeleton(OldFile("hexapod/animation/run.skage"), "DEMO_SCENE_BASIC_ASSETS");
+		getInstance<AGE::AssetsManager>()->loadMesh(OldFile("hexapod/animation/run.sage"), "DEMO_SCENE_BASIC_ASSETS");
 
 		setInstance<AGE::AnimationManager>();
  
@@ -205,6 +207,10 @@ namespace AGE
 				entity->getLink().setScale(0.1f);
 			}
 
+			hexapod = createEntity();
+			hexapod->addComponent<MeshRenderer>(
+				getInstance<AGE::AssetsManager>()->getMesh("hexapod/animation/run.sage")
+				, getInstance<AGE::AssetsManager>()->getMaterial("ball/ball.mage"));
 		}
 
 		if (getInstance<Input>()->getPhysicalKeyJustReleased(AgeKeys::AGE_ESCAPE))
