@@ -5,7 +5,7 @@
 namespace AGE
 {
 	SkeletonProperty::SkeletonProperty() :
-		AProperty(std::string("skeleton_matrix"))
+		AProperty(std::string("bones"))
 	{
 
 	}
@@ -18,7 +18,7 @@ namespace AGE
 
 	void SkeletonProperty::update(Mat4Array255 *res, SkeletonProperty *trans)
 	{
-		*res = trans->_matrixArray;
+		res->set(trans->_matrixArray, trans->_size);
 	}
 
 	void SkeletonProperty::instanciedUpdate(Mat4Array255 *, SkeletonProperty *)
@@ -36,6 +36,7 @@ namespace AGE
 		std::lock_guard<AGE::SpinLock> lock(_mutex);
 		AGE_ASSERT(mat.size() < 255);
 		memcpy((void*)&_matrixArray, mat.data(), mat.size() * sizeof(glm::mat4));
+		_size = mat.size();
 		return (*this);
 	}
 }

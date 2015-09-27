@@ -10,11 +10,11 @@ namespace AGE
 	class Mat4Array255 : public AProgramResources
 	{
 	public:
-		Mat4Array255(glm::mat4 *value, GLint id, std::string &&name);
+		Mat4Array255(GLint id, std::string &&name);
 		Mat4Array255(Mat4Array255 &&move);
 		Mat4Array255(Mat4Array255 const &copy);
 		Mat4Array255 &operator=(Mat4Array255 const &m) = delete;
-		Mat4Array255 &operator=(glm::mat4 *value);
+		void set(glm::mat4 *value, std::size_t size);
 
 	public:
 		virtual IProgramResources &update() override final;
@@ -26,6 +26,7 @@ namespace AGE
 		typedef glm::mat4 *type_t;
 
 	private:
-		glm::mat4 *_value;
+		glm::mat4 _value[255];
+		std::size_t _size;
 	};
 }

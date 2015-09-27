@@ -129,6 +129,8 @@ namespace AGE
 		getInstance<AGE::AssetsManager>()->loadMesh(OldFile("ball/ball.sage"), "DEMO_SCENE_BASIC_ASSETS");
 		getInstance<AGE::AssetsManager>()->loadMaterial(OldFile("cube/cube.mage"), "DEMO_SCENE_BASIC_ASSETS");
 		getInstance<AGE::AssetsManager>()->loadMaterial(OldFile("ball/ball.mage"), "DEMO_SCENE_BASIC_ASSETS");
+		getInstance<AGE::AssetsManager>()->loadMaterial(OldFile("hexapod/animation/run.mage"), "DEMO_SCENE_BASIC_ASSETS");
+
 //		_skyboxTest = getInstance<AGE::AssetsManager>()->loadSkybox("test", OldFile("skyboxes/test.dds"), "DEMO_SCENE_BASIC_ASSETS");
 		_skyboxSpace = getInstance<AGE::AssetsManager>()->loadCubeMap("space", OldFile("skyboxes/space.dds"), "DEMO_SCENE_BASIC_ASSETS");
 		getInstance<AGE::AssetsManager>()->loadAnimation(OldFile("hexapod/animation/run.aage"), "DEMO_SCENE_BASIC_ASSETS");
@@ -199,9 +201,9 @@ namespace AGE
 			for (auto &e : bones)
 			{
 				auto entity = createEntity();
-				entity->addComponent<MeshRenderer>(
-					getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage")
-					, getInstance<AGE::AssetsManager>()->getMaterial("ball/ball.mage"));
+				//entity->addComponent<MeshRenderer>(
+				//	getInstance<AGE::AssetsManager>()->getMesh("ball/ball.sage")
+				//	, getInstance<AGE::AssetsManager>()->getMaterial("ball/ball.mage"));
 				bonesEntities.push_back(entity);
 				entity->getLink().setPosition(posFromMat4(e));
 				entity->getLink().setScale(0.1f);
@@ -210,7 +212,8 @@ namespace AGE
 			hexapod = createEntity();
 			hexapod->addComponent<MeshRenderer>(
 				getInstance<AGE::AssetsManager>()->getMesh("hexapod/animation/run.sage")
-				, getInstance<AGE::AssetsManager>()->getMaterial("ball/ball.mage"))->setAnimation(animationTestInstance);
+				, getInstance<AGE::AssetsManager>()->getMaterial("hexapod/animation/run.mage"))->setAnimation(animationTestInstance);
+
 		}
 
 		if (getInstance<Input>()->getPhysicalKeyJustReleased(AgeKeys::AGE_ESCAPE))
@@ -298,6 +301,14 @@ namespace AGE
 		{
 			bonesEntities[i]->getLink().setPosition(posFromMat4(e));
 			++i;
+		}
+		hexapod->getComponent<MeshRenderer>()->hardCodedUpdateAnimation();
+
+		static float monsterRot[3] = { 0, 0, 0 };
+		if (ImGui::SliderFloat3("Monster Rot", monsterRot, -360, 360))
+		{
+			glm::quat finalOrientation = glm::quat(glm::vec3(monsterRot[0], monsterRot[1], monsterRot[2]));
+			hexapod->getLink().setOrientation(finalOrientation);
 		}
 
 		ImGui::Text("%i entities", getNumberOfEntities());
