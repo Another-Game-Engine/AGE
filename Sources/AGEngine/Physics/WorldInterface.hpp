@@ -14,6 +14,7 @@
 #include "TriggerListener.hpp"
 #include "CharacterControllerInterface.hh"
 #include <AssetManagement/Instance/MeshInstance.hh>
+#include "DebugInformation.hpp"
 
 namespace AGE
 {
@@ -86,6 +87,14 @@ namespace AGE
 
 			std::size_t getTargetFPS(void) const;
 
+			virtual void enableDebug(void);
+
+			virtual void disableDebug(void);
+
+			bool isDebugEnabled(void) const;
+
+			const DebugInformation &getDebugInformation(void) const;
+
 			void update(float elapsedTime);
 
 			void setFilterNameForFilterGroup(FilterGroup group, const std::string &name);
@@ -128,6 +137,8 @@ namespace AGE
 
 			ShapeTable concaveShapes;
 
+			DebugInformation debugInformation;
+
 			// Destructor
 			virtual ~WorldInterface(void) = default;
 
@@ -152,6 +163,8 @@ namespace AGE
 			std::size_t targetFPS = 60;
 
 			float accumulator = 0.0f;
+
+			bool debugEnabled = false;
 
 			HashTable filterNameToFilterGroup;
 

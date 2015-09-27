@@ -61,6 +61,7 @@
 
 
 #include <SystemsCore/PhysicsSystem.hpp>
+#include <SystemsCore/PhysicsDebugSystem.hpp>
 
 #include <Graphic/DRBCameraDrawableList.hpp>
 #include <Graphic/BFCCullableTypes.hpp>
@@ -218,6 +219,22 @@ namespace AGE
 
 #if defined(AGE_ENABLE_IMGUI)
 		ImGui::Checkbox("Cube rain", &rain);
+		
+		static bool physicsDebug = false;
+		bool lastValue = physicsDebug;
+		ImGui::Checkbox("Physics Debug", &physicsDebug);
+		if (physicsDebug != lastValue)
+		{
+			if (physicsDebug)
+			{
+				addSystem<Private::PhysicsDebugSystem>(5);
+			}
+			else
+			{
+				deleteSystem<Private::PhysicsDebugSystem>();
+			}
+		}
+
 		ImGui::Checkbox("Occlusion culling", &AGE::OcclusionConfig::g_Occlusion_is_enabled);
 #endif
 
@@ -256,7 +273,6 @@ namespace AGE
 			}
 			_chunkCounter = 0;
 		}
-
 #if defined(AGE_ENABLE_IMGUI)
 		if (ImGui::Button("Reload shaders or type R") || getInstance<Input>()->getPhysicalKeyPressed(AgeKeys::AGE_r))
 		{
