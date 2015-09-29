@@ -41,5 +41,6 @@ This program is released under the terms of the license contained in the file LI
 
 - `mklink /J Vendors "{Path_to_your_Google Drive}\Vendors"`
 - `mklink /J Datas/Assets "{Path_to_your_Google Drive}\Assets"`
+-  CopyDll.bat
 
 Generated solutions will be found in Projects folder.
