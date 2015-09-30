@@ -29,6 +29,7 @@
 #include <Render/Properties/Materials/ScaleUVs.hpp>
 #include <Render/Properties/Materials/Ratio.hh>
 #include <Render/GeometryManagement/Painting/Painter.hh>
+#include <Render/GeometryManagement/Data/Vertices.hh>
 
 #include <AssetManagement/OpenGLDDSLoader.hh>
 
@@ -39,6 +40,20 @@
 #ifdef AGE_ENABLE_IMGUI
 #include <imgui/imgui.h>
 #endif
+
+# define LAMBDA_FUNCTION [](AGE::Vertices &vertices, size_t index, AGE::SubMeshData const &data)
+
+static std::pair<std::pair<GLenum, std::string>, std::function<void(AGE::Vertices &vertices, size_t index, AGE::SubMeshData const &data)>> g_InfosTypes[AGE::MeshInfos::END] =
+{
+	std::make_pair(std::make_pair(GL_FLOAT_VEC3, std::string("position")), LAMBDA_FUNCTION{ vertices.set_data<glm::vec3>(data.positions, std::string("position")); }),
+	std::make_pair(std::make_pair(GL_FLOAT_VEC3, std::string("normal")), LAMBDA_FUNCTION{ vertices.set_data<glm::vec3>(data.normals, std::string("normal")); }),
+	std::make_pair(std::make_pair(GL_FLOAT_VEC3, std::string("tangent")), LAMBDA_FUNCTION{ vertices.set_data<glm::vec3>(data.tangents, std::string("tangent")); }),
+	std::make_pair(std::make_pair(GL_FLOAT_VEC3, std::string("biTangents")), LAMBDA_FUNCTION{ vertices.set_data<glm::vec3>(data.biTangents, std::string("biTangents")); }),
+	std::make_pair(std::make_pair(GL_FLOAT_VEC2, std::string("texCoord")), LAMBDA_FUNCTION{ vertices.set_data<glm::vec2>(data.uvs[0], std::string("texCoord")); }),
+	std::make_pair(std::make_pair(GL_FLOAT_VEC4, std::string("blendWeight")), LAMBDA_FUNCTION{ vertices.set_data<glm::vec4>(data.weights, std::string("blendWeight")); }),
+	std::make_pair(std::make_pair(GL_FLOAT_VEC4, std::string("blendIndice")), LAMBDA_FUNCTION{ vertices.set_data<glm::vec4>(data.boneIndices, std::string("blendIndice")); }),
+	std::make_pair(std::make_pair(GL_FLOAT_VEC4, std::string("color")), LAMBDA_FUNCTION{ vertices.set_data<glm::vec4>(data.colors, std::string("color")); })
+};
 
 namespace AGE
 {
@@ -513,6 +528,7 @@ namespace AGE
 			auto &painter = paintingManager->get_painter(mesh->painter);
 			mesh->vertices = painter->add_vertices(data.positions.size(), data.indices.size());
 			auto vertices = painter->get_vertices(mesh->vertices);
+			mesh->isSkinned = data.infos.test(MeshInfos::BoneIndices);
 			for (auto i = 0ull; i < data.infos.size(); ++i)
 			{
 				if (data.infos.test(i))
