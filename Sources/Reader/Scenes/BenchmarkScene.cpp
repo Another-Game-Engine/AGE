@@ -32,6 +32,7 @@
 #include <ComponentsCore/CharacterController.hh>
 #include <ComponentsCore/PhysicsData.hpp>
 #include <ComponentsCore/DirectionalLightComponent.hh>
+#include <Skinning/AnimatedSklComponent.hpp>
 
 #include <Components/ComponentRegistrationManager.hpp>
 
@@ -110,6 +111,7 @@ namespace AGE
 		REGISTER_COMPONENT_TYPE(AGE::ArchetypeComponent);
 		REGISTER_COMPONENT_TYPE(AGE::RigidBody);
 		REGISTER_COMPONENT_TYPE(AGE::CharacterController);
+		REGISTER_COMPONENT_TYPE(AGE::AnimatedSklComponent);
 
 		getInstance<AGE::AssetsManager>()->setAssetsDirectory(EngineCoreTestConfiguration::GetCookedDirectory());
 
@@ -211,9 +213,9 @@ namespace AGE
 
 			hexapod = createEntity();
 			hexapod->addComponent<MeshRenderer>(
-				getInstance<AGE::AssetsManager>()->getMesh("hexapod/animation/run.sage")
+				getInstance<AGE::AssetsManager>()->getMesh("hexapod/animation/run.sage")         // todo : to remove this method
 				, getInstance<AGE::AssetsManager>()->getMaterial("hexapod/animation/run.mage"))->setAnimation(animationTestInstance);
-
+			hexapod->addComponent<AGE::AnimatedSklComponent>("hexapod/animation/run.skage");
 		}
 
 		if (getInstance<Input>()->getPhysicalKeyJustReleased(AgeKeys::AGE_ESCAPE))

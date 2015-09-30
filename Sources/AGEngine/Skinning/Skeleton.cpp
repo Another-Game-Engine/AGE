@@ -8,10 +8,11 @@
 
 using namespace AGE;
 
-Skeleton::Skeleton()
+Skeleton::Skeleton(const char *_path /*= nullptr*/)
 : name("noname")
 , firstBone(0)
 , inverseGlobal(glm::mat4(1))
+, path(path)
 {}
 
 void Skeleton::updateSkinning()

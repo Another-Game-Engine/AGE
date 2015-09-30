@@ -19,27 +19,23 @@ namespace AGE
 	void AnimatedSklComponent::_copyFrom(const ComponentBase *model)
 	{}
 
-	void AnimatedSklComponent::init(const std::string &skeletonPath /*= ""*/)
+	void AnimatedSklComponent::init(const std::string &skeletonPath /*= ""*/, std::shared_ptr<Skeleton> skeletonAsset /*= nullptr*/)
 	{
-		_loadAndSetSkeleton(skeletonPath);
+		if (skeletonAsset != nullptr)
+			_skeletonAsset = skeletonAsset;
+		else if (skeletonPath.empty() == false)
+			_loadAndSetSkeleton(skeletonPath);
 	}
-
-	void AnimatedSklComponent::init(std::shared_ptr<Skeleton> skeletonAsset /*= nullptr*/)
-	{}
 
 	void AnimatedSklComponent::reset()
 	{
 		_skeletonAsset = nullptr;
-#if defined(EDITOR_ENABLED)
 		_skeletonFilePath.clear();
-#endif
 	}
 
 	void AnimatedSklComponent::_loadAndSetSkeleton(const std::string &skeletonPath)
 	{
-#if defined(EDITOR_ENABLED)
 		_skeletonFilePath = skeletonPath;
-#endif
 		auto assetsManager = entity->getScene()->getInstance<AssetsManager>();
 		AGE_ASSERT(assetsManager != nullptr);
 		_skeletonAsset = assetsManager->getSkeleton(skeletonPath);
@@ -55,8 +51,6 @@ namespace AGE
 
 #ifdef EDITOR_ENABLED
 	bool AnimatedSklComponent::editorUpdate()
-	{
-		return true;
-	}
+	{ return true;}
 #endif
 }

@@ -20,14 +20,14 @@ namespace AGE
 	struct Skeleton
 	{
 	public:
-		Skeleton();
+		Skeleton(const char *path = nullptr);
 		std::string name;
 		AGE::Vector<Bone> bones;
 		AGE::Vector<AnimationInstance*> animations;
 		std::uint32_t firstBone;
 		glm::mat4 inverseGlobal;
 		std::map<std::string, std::uint32_t> bonesReferences;
-
+		const std::string path;
 		void updateSkinning();
 
 	private:

@@ -416,7 +416,7 @@ namespace AGE
 	bool AssetsManager::loadSkeleton(const OldFile &_filePath, const std::string &loadingChannel)
 	{
 		OldFile filePath(_assetsDirectory + _filePath.getFullName());
-		auto skeleton = std::make_shared<Skeleton>();
+		auto skeleton = std::make_shared<Skeleton>(_filePath.getFileName().c_str());
 		if (!filePath.exists()) 
 		{
 			std::cerr << "AssetsManager : File [" << filePath.getFullName() << "] does not exists." << std::endl;
