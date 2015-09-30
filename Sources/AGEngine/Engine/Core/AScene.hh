@@ -137,7 +137,7 @@ namespace AGE
 			SCOPE_profile_cpu_function("Scenes");
 			for (auto &e : _systems)
 			{
-				if (typeid(*e.second.get()).name() == typeid(T).name())
+				if (e.second->getTypeId() == System<T>::getTypeId())
 				{
 					e.second->finalize();
 					_systems.erase(std::find(_systems.begin(), _systems.end(), e));
