@@ -109,6 +109,31 @@ namespace AGE
 		}
 	}
 
+	void BFCBlockManagerFactory::fillOnBlock(CullableTypeID channel, LFList<BFCItem> &result, std::size_t blockId, IBFCCullCallback *callback)
+	{
+		SCOPE_profile_cpu_function("BFC");
+
+		AGE_ASSERT(channel < MaxCullableTypeID);
+		if (channel >= _managers.size())
+		{
+			return;
+		}
+		auto &manager = _managers[channel];
+		AGE_ASSERT(blockId < manager._blocks.size());
+		auto &block = manager._blocks[blockId];
+		for (auto &item : block->_items)
+		{
+			if (item.getDrawable())
+			{
+				result.push(&item);
+			}
+		}
+		if (callback)
+		{
+			(*callback)(result, blockId);
+		}
+	}
+
 	std::size_t BFCBlockManagerFactory::getBlockNumberToCull(CullableTypeID channel) const
 	{
 		AGE_ASSERT(channel < MaxCullableTypeID);

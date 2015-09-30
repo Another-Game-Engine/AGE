@@ -246,6 +246,7 @@ namespace AGE
 		}
 
 		ImGui::Checkbox("Occlusion culling", &AGE::OcclusionConfig::g_Occlusion_is_enabled);
+		ImGui::Checkbox("Enable culling", &getSystem<RenderCameraSystem>()->enableCulling());
 #endif
 
 		if (rain && _chunkCounter >= _maxChunk)

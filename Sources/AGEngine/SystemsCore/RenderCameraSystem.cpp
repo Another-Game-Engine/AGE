@@ -156,7 +156,8 @@ namespace AGE
 		_spotLights(std::move(scene)),
 		_directionnalLights(std::move(scene)),
 		_pointLights(std::move(scene)),
-		_drawDebugLines(false)
+		_drawDebugLines(false),
+		_cullingEnabled(true)
 	{
 		_name = "Camera system";
 	}
@@ -380,10 +381,21 @@ namespace AGE
 			for (std::size_t i = 0; i < meshBlocksToCullNumber; ++i)
 			{
 				BFCBlockManagerFactory *bf = _scene->getBfcBlockManagerFactory();
-				EmplaceTask<Tasks::Basic::VoidFunction>([bf, i, &cameraFrustum, &counter, &meshList](){
-					bf->cullOnBlock(BFCCullableType::CullableMesh, meshList, cameraFrustum, i);
-					counter.fetch_add(1);
-				});
+
+				if (_cullingEnabled)
+				{
+					EmplaceTask<Tasks::Basic::VoidFunction>([bf, i, &cameraFrustum, &counter, &meshList](){
+						bf->cullOnBlock(BFCCullableType::CullableMesh, meshList, cameraFrustum, i);
+						counter.fetch_add(1);
+					});
+				}
+				else
+				{
+					EmplaceTask<Tasks::Basic::VoidFunction>([bf, i, &counter, &meshList](){
+						bf->fillOnBlock(BFCCullableType::CullableMesh, meshList, i);
+						counter.fetch_add(1);
+					});
+				}
 			}
 
 			for (std::size_t i = 0; i < pointLightBlocksToCullNumber; ++i)
