@@ -18,7 +18,6 @@ namespace AGE
 	struct AnimationInstance;
 	class AScene;
 	class BFCCullableHandle;
-	class SkeletonProperty;
 
 	struct MeshRenderer : public ComponentBase
 	{
@@ -77,7 +76,6 @@ namespace AGE
 		std::string _animationPath;
 		std::vector<BFCCullableHandle> _drawableHandle;
 		Key<AnimationInstance> _animationInstance;
-		std::shared_ptr<SkeletonProperty> _skeletonProperty = nullptr;
 
 		RenderModeSet _renderMode;
 

@@ -23,7 +23,6 @@
 
 // tmp
 #include <Skinning/AnimationManager.hpp>
-#include <Render/Properties/SkeletonProperty.hpp>
 
 namespace AGE
 {
@@ -68,30 +67,24 @@ namespace AGE
 	{
 		AGE_ASSERT(animation.isValid());
 
-		if (_skeletonProperty)
-		{
-			AGE_ASSERT(false && "Le remove property ne fonctionne pas. Au passage, virer les clefs qui ne servent a rien.");
-		}
+		// TODO
+		//if (_skeletonProperty)
+		//{
+		//	AGE_ASSERT(false && "Le remove property ne fonctionne pas. Au passage, virer les clefs qui ne servent a rien.");
+		//}
 
 		_animationInstance = animation;
-		enableRenderMode(AGE_SKINNED);
 		_updateGeometry();
-		_skeletonProperty = std::make_shared<SkeletonProperty>();
-
-		for (auto &h : _drawableHandle)
-		{
-			auto mesh = (DRBMesh*)(h.getPtr()); 
-			mesh->getDatas()->globalProperties.add_property(_skeletonProperty);
-		}
 	}
 
 	void MeshRenderer::hardCodedUpdateAnimation()
 	{
-		AGE_ASSERT(_animationInstance.isValid());
-		AGE_ASSERT(_skeletonProperty);
-
-		auto &bones = entity->getScene()->getInstance<AGE::AnimationManager>()->getBones(_animationInstance);
-		_skeletonProperty->set(bones);
+		//TODO
+		//AGE_ASSERT(_animationInstance.isValid());
+		//AGE_ASSERT(_skeletonProperty);
+		//
+		//auto &bones = entity->getScene()->getInstance<AGE::AnimationManager>()->getBones(_animationInstance);
+		//_skeletonProperty->set(bones);
 	}
 
 	bool MeshRenderer::setMeshAndMaterial(
@@ -160,6 +153,12 @@ namespace AGE
 		for (auto &submesh : _mesh->subMeshs)
 		{
 			auto handle = manager->addMesh(submesh, _material);
+
+			// if the loaded mesh have skinning information we set it in the component to
+			if (std::static_pointer_cast<DRBMeshData>(handle.getPtr()->getDatas())->hadRenderMode(RenderModes::AGE_SKINNED))
+			{
+				_renderMode.set(RenderModes::AGE_SKINNED);
+			}
 			std::static_pointer_cast<DRBMeshData>(handle.getPtr()->getDatas())->setRenderModes(_renderMode);
 			entity->getLink().pushAnObject(handle);
 			_drawableHandle.push_back(handle);

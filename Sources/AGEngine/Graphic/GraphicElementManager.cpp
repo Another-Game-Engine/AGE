@@ -7,9 +7,7 @@
 
 #include "AssetManagement/Instance/MeshInstance.hh"
 #include "AssetManagement/Instance/MaterialInstance.hh"
-
-
-
+#include <Render/Properties/SkeletonProperty.hpp>
 
 namespace AGE
 {
@@ -30,7 +28,9 @@ namespace AGE
 		drbMesh->datas->setAABB(meshInstance.boundingBox);
 		
 		drbMesh->datas->globalProperties.merge_properties(meshInstance.properties);
-		
+		auto skeletonProperty = std::make_shared<SkeletonProperty>();
+		drbMesh->datas->globalProperties.add_property(skeletonProperty);
+
 		std::size_t materialIndex = meshInstance.defaultMaterialIndex < materialInstance->datas.size() ? meshInstance.defaultMaterialIndex : 0;
 		auto &material = materialInstance->datas[materialIndex];
 
