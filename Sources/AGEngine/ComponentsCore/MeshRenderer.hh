@@ -33,7 +33,6 @@ namespace AGE
 		template <typename Archive> void save(Archive &ar, const std::uint32_t version) const;
 		template <typename Archive> void load(Archive &ar, const std::uint32_t version);
 
-		void setAnimation(const Key<AGE::AnimationInstance> &animation);
 		void hardCodedUpdateAnimation();
 
 		bool setMeshAndMaterial(
@@ -75,7 +74,6 @@ namespace AGE
 		std::string _materialPath;
 		std::string _animationPath;
 		BFCCullableHandleGroup _drawableHandle;
-		Key<AnimationInstance> _animationInstance;
 
 		RenderModeSet _renderMode;
 

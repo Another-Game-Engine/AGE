@@ -5,6 +5,7 @@
 namespace AGE
 {
 	struct Skeleton;
+	struct AnimationData;
 
 	class AnimatedSklComponent : public ComponentBase
 	{
@@ -16,6 +17,8 @@ namespace AGE
 		virtual void _copyFrom(const ComponentBase *model);
 
 		void init(const std::string &skeletonPath = "", std::shared_ptr<Skeleton> skeletonAsset = nullptr);
+		void setAnimation(const std::string &animationPath);
+		void setAnimation(std::shared_ptr<AnimationData> animationAssetPtr);
 
 		virtual void reset();
 
@@ -60,7 +63,12 @@ namespace AGE
 		std::string _skeletonFilePath;
 		std::shared_ptr<Skeleton> _skeletonAsset;
 
+		std::string _animationFilePath;
+		std::shared_ptr<AnimationData> _animationAsset;
+
 		void _loadAndSetSkeleton(const std::string &skeletonPath);
+		void _loadAndSetAnimation(const std::string &animationPath);
+		void _setAnimation();
 	};
 }
 

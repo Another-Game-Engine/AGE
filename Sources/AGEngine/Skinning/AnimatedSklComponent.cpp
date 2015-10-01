@@ -33,13 +33,35 @@ namespace AGE
 		_skeletonFilePath.clear();
 	}
 
+	void AnimatedSklComponent::setAnimation(const std::string &animationPath)
+	{
+		if (animationPath.empty() == false)
+		{
+			_loadAndSetAnimation(animationPath);
+		}
+	}
+
+	void AnimatedSklComponent::setAnimation(std::shared_ptr<AnimationData> animationAssetPtr)
+	{
+		AGE_ASSERT(animationAssetPtr != nullptr);
+		// if there is already an animation
+		if (_animationAsset != nullptr)
+		{
+			AGE_ASSERT(false && "TODO");
+		}
+		_animationAsset = animationAssetPtr;
+		_setAnimation();
+	}
+
 	void AnimatedSklComponent::_loadAndSetSkeleton(const std::string &skeletonPath)
 	{
+		AGE_ASSERT(skeletonPath.empty() == false);
+
 		_skeletonFilePath = skeletonPath;
 		auto assetsManager = entity->getScene()->getInstance<AssetsManager>();
 		AGE_ASSERT(assetsManager != nullptr);
 		_skeletonAsset = assetsManager->getSkeleton(skeletonPath);
-		if (!skeletonPath.empty() && (_skeletonAsset == nullptr))
+		if (_skeletonAsset == nullptr)
 		{
 			assetsManager->pushNewCallback(skeletonPath, entity->getScene(),
 				std::function<void()>([=](){
@@ -47,6 +69,34 @@ namespace AGE
 			}));
 			assetsManager->loadSkeleton(skeletonPath);
 		}
+	}
+
+	void AnimatedSklComponent::_loadAndSetAnimation(const std::string &animationPath)
+	{
+		AGE_ASSERT(animationPath.empty() == false);
+
+		_animationFilePath = animationPath;
+		auto assetsManager = entity->getScene()->getInstance<AssetsManager>();
+		AGE_ASSERT(assetsManager != nullptr);
+
+		_animationAsset = assetsManager->getAnimation(animationPath);
+		if (_animationAsset == nullptr)
+		{
+			assetsManager->pushNewCallback(animationPath, entity->getScene(),
+				std::function<void()>([=](){
+				this->_setAnimation();
+			}));
+			assetsManager->loadAnimation(animationPath);
+		}
+		else
+		{
+			_setAnimation();
+		}
+	}
+
+	void AnimatedSklComponent::_setAnimation()
+	{
+
 	}
 
 #ifdef EDITOR_ENABLED

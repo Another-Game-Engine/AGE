@@ -53,20 +53,6 @@ namespace AGE
 		_resetDrawableHandle();
 	}
 
-	void MeshRenderer::setAnimation(const Key<AGE::AnimationInstance> &animation)
-	{
-		AGE_ASSERT(animation.isValid());
-
-		// TODO
-		//if (_skeletonProperty)
-		//{
-		//	AGE_ASSERT(false && "Le remove property ne fonctionne pas. Au passage, virer les clefs qui ne servent a rien.");
-		//}
-
-		_animationInstance = animation;
-		_updateGeometry();
-	}
-
 	void MeshRenderer::hardCodedUpdateAnimation()
 	{
 		//TODO
