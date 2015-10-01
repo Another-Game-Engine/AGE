@@ -12,4 +12,11 @@ namespace AGE
 		return o._itemID == _itemID && o._elementPtr == _elementPtr;
 	}
 
+	///////////////////
+	// Group
+
+	bool BFCCullableHandleGroup::invalid() const
+	{
+		return (_handles.empty() == false);
+	}
 }
