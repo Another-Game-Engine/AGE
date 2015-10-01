@@ -3,7 +3,7 @@
 #include <memory>
 
 #include "Utils/ObjectPool.hpp"
-#include "DRBMesh.hpp"
+#include "DRBSkinnedMesh.hpp"
 #include "Utils/Dependency.hpp"
 
 namespace AGE
@@ -26,5 +26,6 @@ namespace AGE
 	private:
 		BFCBlockManagerFactory *_bfcBlockManager = nullptr;
 		ObjectPool<DRBMesh> _meshPool;
+		ObjectPool<DRBSkinnedMesh> _skinnedMeshPool;
 	};
 }

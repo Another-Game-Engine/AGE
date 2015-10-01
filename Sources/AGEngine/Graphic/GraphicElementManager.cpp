@@ -27,22 +27,31 @@ namespace AGE
 
 		for (auto &submesh : mesh->subMeshs)
 		{
-			DRBMesh *drbMesh = _meshPool.create();
+			DRBMesh *drbMesh = nullptr;
+			
+			if (submesh.isSkinned)
+			{
+				auto drbMeshSkeleton = _skinnedMeshPool.create();
+				drbMesh = drbMeshSkeleton;
+
+				if (skeletonProperty == nullptr)
+				{
+					skeletonProperty = std::make_shared<SkeletonProperty>();
+				}
+				drbMesh->datas->globalProperties.add_property(skeletonProperty);
+				drbMeshSkeleton->_skeletonProperty = skeletonProperty;
+			}
+			else
+			{
+				drbMesh = _meshPool.create();
+			}
+
 
 			drbMesh->datas->setVerticesKey(submesh.vertices);
 			drbMesh->datas->setPainterKey(submesh.painter);
 			drbMesh->datas->setAABB(submesh.boundingBox);
 
 			drbMesh->datas->globalProperties.merge_properties(submesh.properties);
-
-			if (submesh.isSkinned)
-			{
-				if (skeletonProperty == nullptr)
-				{
-					skeletonProperty = std::make_shared<SkeletonProperty>();
-				}
-				drbMesh->datas->globalProperties.add_property(skeletonProperty);
-			}
 
 			std::size_t materialIndex = submesh.defaultMaterialIndex < materialInstance->datas.size() ? submesh.defaultMaterialIndex : 0;
 			auto &material = materialInstance->datas[materialIndex];
@@ -64,7 +73,14 @@ namespace AGE
 
 		for (auto &m : handle.getHandles())
 		{
-			_meshPool.destroy(m.getPtr());
+			if (std::static_pointer_cast<DRBMeshData>(m.getPtr()->getDatas())->hadRenderMode(RenderModes::AGE_SKINNED))
+			{
+				_skinnedMeshPool.destroy(m.getPtr());
+			}
+			else
+			{
+				_meshPool.destroy(m.getPtr());
+			}
 			_bfcBlockManager->deleteItem(m);
 		}
 		handle.getHandles().clear();
