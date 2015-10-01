@@ -16,14 +16,12 @@ namespace AGE
 		struct AnimationNode
 		{
 			std::string rawAnimationPath;
-			std::string animationName; //name.aage
 			AnimationNode();
 
 			template <typename Archive>
 			void serialize(Archive &ar, std::uint32_t const version)
 			{
 				ar(CEREAL_NVP(rawAnimationPath));
-				ar(CEREAL_NVP(animationName));
 			}
 		};
 
@@ -32,7 +30,6 @@ namespace AGE
 		bool editableName = true;
 
 		std::string rawMeshPath; // used for skin and skeleton
-		std::string meshExportName; // name.skage + name.sage
 
 		std::list<AnimationNode> animations;
 
@@ -47,7 +44,6 @@ namespace AGE
 		{
 			ar(CEREAL_NVP(name));
 			ar(CEREAL_NVP(rawMeshPath));
-			ar(CEREAL_NVP(meshExportName));
 			ar(cereal::make_nvp("Animations", animations));
 		}
 	};
@@ -57,6 +53,8 @@ namespace AGE
 		std::shared_ptr<AnimationsExportConfig> _config = nullptr;
 		std::string _rootPath;
 		std::string _filePath;
+	private:
+		void cook();
 	public:
 		static AnimationExportConfigManager *getInstance();
 		void update();

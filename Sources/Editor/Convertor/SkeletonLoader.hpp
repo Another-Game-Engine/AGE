@@ -33,13 +33,23 @@ namespace AGE
 				std::cerr << "Skeleton convertor error : creating directory" << std::endl;
 				return false;
 			}
-			auto fileName = cookingTask->dataSet->filePath.getShortFileName() + ".skage";
-			auto name = cookingTask->serializedDirectory.path().directory_string() + "\\" + cookingTask->dataSet->filePath.getFolder() + fileName;
+			{
+				auto fileName = cookingTask->dataSet->filePath.getShortFileName() + ".skage";
+				auto name = cookingTask->serializedDirectory.path().directory_string() + "\\" + cookingTask->dataSet->filePath.getFolder() + fileName;
 
-			std::ofstream ofs(name, std::ios::trunc | std::ios::binary);
-			cereal::PortableBinaryOutputArchive ar(ofs);
-			ar(*cookingTask->skeleton);
-			Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PopTask(tid);
+				std::ofstream ofs(name, std::ios::trunc | std::ios::binary);
+				cereal::PortableBinaryOutputArchive ar(ofs);
+				ar(*cookingTask->skeleton);
+				Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PopTask(tid);
+			}
+			{
+				auto fileName = cookingTask->dataSet->filePath.getShortFileName() + ".json";
+				auto name = cookingTask->serializedDirectory.path().directory_string() + "\\" + cookingTask->dataSet->filePath.getFolder() + fileName;
+
+				std::ofstream ofs(name, std::ios::trunc | std::ios::binary);
+				cereal::JSONOutputArchive ar(ofs);
+				ar(*cookingTask->skeleton);
+			}
 			return true;
 		}
 
@@ -161,29 +171,23 @@ namespace AGE
 	private:
 		static void loadSkeletonFromAssimp(Skeleton *_skeleton, aiNode *_node, std::uint32_t &minDepth)
 		{
-			if (_skeleton->bonesReferences.find(_node->mName.data) != std::end(_skeleton->bonesReferences))
-			{
-				for (unsigned int a = 0; a < _node->mNumChildren; a++)
-				{
-					loadSkeletonFromAssimp(_skeleton, _node->mChildren[a], minDepth);
-				}
-				return;
-			}
 			auto index = _skeleton->bones.size();
-			_skeleton->bones.push_back(AGE::Bone());
-			_skeleton->bones.back().index = static_cast<uint32_t>(index);
-			_skeleton->bones.back().name = _node->mName.data;
-			_skeleton->bones.back().transformation = AssimpLoader::aiMat4ToGlm(_node->mTransformation);
-			_skeleton->bones.back().offset = glm::inverse(AssimpLoader::aiMat4ToGlm(_node->mTransformation));
-			_skeleton->bonesReferences.insert(std::make_pair(_node->mName.data, static_cast<uint32_t>(index)));
 
-			std::uint32_t depth = getDepth(_node);
-			if (depth < minDepth)
+			if (_skeleton->bonesReferences.find(_node->mName.data) == std::end(_skeleton->bonesReferences))
 			{
-				minDepth = depth;
-				_skeleton->firstBone = static_cast<uint32_t>(index);
+				_skeleton->bones.push_back(AGE::Bone());
+				_skeleton->bones.back().index = static_cast<uint32_t>(index);
+				_skeleton->bones.back().name = _node->mName.data;
+				_skeleton->bones.back().transformation = AssimpLoader::aiMat4ToGlm(_node->mTransformation);
+				_skeleton->bones.back().offset = glm::inverse(AssimpLoader::aiMat4ToGlm(_node->mTransformation));
+				_skeleton->bonesReferences.insert(std::make_pair(_node->mName.data, static_cast<uint32_t>(index)));
+				std::uint32_t depth = getDepth(_node);
+				if (depth < minDepth)
+				{
+					minDepth = depth;
+					_skeleton->firstBone = static_cast<uint32_t>(index);
+				}
 			}
-
 			for (unsigned int a = 0; a < _node->mNumChildren; a++)
 			{
 				loadSkeletonFromAssimp(_skeleton, _node->mChildren[a], minDepth);

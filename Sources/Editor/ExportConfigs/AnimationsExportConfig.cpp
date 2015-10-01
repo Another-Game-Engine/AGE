@@ -11,6 +11,16 @@
 #include <FileUtils/AssetFiles/Folder.hpp>
 #include <FileUtils/AssetFiles/RawFile.hpp>
 
+//CONVERTOR
+#include <Convertor/SkeletonLoader.hpp>
+#include <Convertor/AnimationsLoader.hpp>
+#include <Convertor/MeshLoader.hpp>
+#include <Convertor/MaterialConvertor.hpp>
+#include <Convertor/ImageLoader.hpp>
+#include <Convertor/PhysicsLoader.hpp>
+#include <Convertor/ConvertorStatusManager.hpp>
+#include <Convertor/AssetDataSet.hpp>
+
 namespace AGE
 {
 	AnimationExportConfigManager *AnimationExportConfigManager::getInstance()
@@ -50,7 +60,8 @@ namespace AGE
 			file.close();
 			_config->editableName = false;
 		}
-
+		if (cook)
+			this->cook();
 		if (close)
 			_config = nullptr;
 	}
@@ -124,54 +135,48 @@ namespace AGE
 
 			if (extension == "fbx")
 			{
-				phageName = FileUtils::RemoveExtension(file->getFileName());
+				phageName = file->getPath();
 
-				if (std::find(fbxInFolder.begin(), fbxInFolder.end(), phageName) == fbxInFolder.end())
-				{
-					fbxInFolder.push_back(phageName);
-				}
+				fbxInFolder.push_back(phageName);
 			}
 		}));
 
 		std::string res = "";
 		bool clicked = false;
-		ImGui::OpenPopup("Select mesh");
-		if (ImGui::BeginPopupModal("Select mesh", NULL, ImGuiWindowFlags_AlwaysAutoResize))
-		{
-			static ImGuiTextFilter filter;
+		ImGui::Begin("Select mesh");
+		static ImGuiTextFilter filter;
 
-			filter.Draw();
-			for (auto &e : fbxInFolder)
+		filter.Draw();
+		for (auto &e : fbxInFolder)
+		{
+			if (filter.PassFilter(e.c_str()))
 			{
-				if (filter.PassFilter(e.c_str()))
+				if (ImGui::SmallButton(e.c_str()))
 				{
-					if (ImGui::SmallButton(e.c_str()))
-					{
-						res = e;
-						clicked = true;
-					}
+					res = e;
+					clicked = true;
 				}
 			}
-			if (ImGui::Button("Cancel", ImVec2(120, 0))) { ImGui::CloseCurrentPopup(); res = "NULL"; }
-			if (clicked == true) { ImGui::CloseCurrentPopup(); }
-			ImGui::EndPopup();
 		}
+		if (ImGui::Button("Cancel", ImVec2(120, 0))) { res = "NULL"; }
+		ImGui::End();
 
 		return res;
 	}
 
 	void AnimationsExportConfig::displayGui(bool &save, bool &close, bool &cook)
 	{
-		static AnimationNode *selectedNode = nullptr;
+		static std::string *selectedNode = nullptr;
 
 		if (selectedNode != nullptr)
 		{
-			selectedNode->rawAnimationPath = selectFbx();
-			if (selectedNode->rawAnimationPath == "NULL")
+			*selectedNode = selectFbx();
+			if (*selectedNode == "NULL")
 			{
-				selectedNode->rawAnimationPath = "";
+				*selectedNode = "";
+				selectedNode = nullptr;
 			}
-			else if (selectedNode->rawAnimationPath.empty() == false)
+			else if (selectedNode->empty() == false)
 			{
 				selectedNode = nullptr;
 			}
@@ -194,6 +199,23 @@ namespace AGE
 			ImGui::TextDisabled("Editing : %s.", name.c_str());
 		}
 
+		if (rawMeshPath.empty())
+		{
+			if (ImGui::Button("Select mesh for skin and skeleton"))
+			{
+				selectedNode = &rawMeshPath;
+			}
+		}
+		else
+		{
+			ImGui::Text(rawMeshPath.c_str());
+			ImGui::SameLine();
+			if (ImGui::Button("Edit"))
+			{
+				selectedNode = &rawMeshPath;
+			}
+		}
+
 		std::list<AnimationNode>::iterator it = std::begin(animations);
 		int id = 0;
 		while (it != std::end(animations))
@@ -202,17 +224,11 @@ namespace AGE
 
 			bool increment = true;
 
-			static char animnameBuf[maxNameLength] = "";
-			strcpy(animnameBuf, it->animationName.c_str());
-			if (ImGui::InputText("Animation name", animnameBuf, maxNameLength))
-			{
-				it->animationName = animnameBuf;
-			}
 			if (it->rawAnimationPath.empty())
 			{
 				if (ImGui::Button("Select mesh"))
 				{
-					selectedNode = &(*it);
+					selectedNode = &(it->rawAnimationPath);
 				}
 			}
 			else
@@ -221,7 +237,7 @@ namespace AGE
 				ImGui::SameLine();
 				if (ImGui::Button("Edit"))
 				{
-					selectedNode = &(*it);
+					selectedNode = &(it->rawAnimationPath);
 				}
 			}
 
@@ -240,6 +256,7 @@ namespace AGE
 		{
 			animations.push_back(AnimationNode());
 		}
+		ImGui::Separator();
 		if (ImGui::Button("Save and cook"))
 		{
 			save = true;
@@ -258,4 +275,82 @@ namespace AGE
 		}
 		ImGui::End();
 	}
+
+	void AnimationExportConfigManager::cook()
+	{
+		auto meshPath = _config->rawMeshPath;
+		auto rawDir = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>(WE::EditorConfiguration::GetRawDirectory()).path().directory_string();
+		std::replace(rawDir.begin(), rawDir.end(), '\\', '/');
+		auto find = meshPath.find(rawDir);
+		if (find != std::string::npos)
+		{
+			meshPath.erase(find, find + rawDir.size());
+		}
+		else
+		{
+			std::cerr << "Error not finding path blablabla." << std::endl;
+			AGE_BREAK();
+		}
+
+		auto dataSet = std::make_shared<AssetDataSet>(meshPath);
+		auto cookingTask = std::make_shared<CookingTask>(dataSet);
+
+		cookingTask->serializedDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>(WE::EditorConfiguration::GetCookedDirectory());
+		cookingTask->rawDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>(WE::EditorConfiguration::GetRawDirectory());
+
+		dataSet->loadSkeleton = true;
+		dataSet->loadAnimations = false;
+		dataSet->loadMesh = true;
+		dataSet->loadMaterials = false;
+		dataSet->loadTextures = false;
+		dataSet->loadPhysic = false;
+		dataSet->normalize = false;
+
+		cookingTask->skeleton = nullptr;
+		cookingTask->mesh = nullptr;
+
+		AGE::AssimpLoader::Load(cookingTask);
+		AGE::SkeletonLoader::load(cookingTask);
+		AGE::MeshLoader::load(cookingTask);
+
+		for (auto &it : _config->animations) // chaque animation
+		{
+			if (it.rawAnimationPath.empty())
+				continue;
+
+			meshPath = it.rawAnimationPath;
+			find = meshPath.find(rawDir);
+			if (find != std::string::npos)
+			{
+				meshPath.erase(find, find + rawDir.size());
+			}
+			else
+			{
+				std::cerr << "Error not finding path blablabla." << std::endl;
+				AGE_BREAK();
+			}
+
+			auto dataSetAnim = std::make_shared<AssetDataSet>(meshPath);
+			auto cookingTaskAnim = std::make_shared<CookingTask>(dataSetAnim);
+
+
+			cookingTaskAnim->serializedDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>(WE::EditorConfiguration::GetCookedDirectory());
+			cookingTaskAnim->rawDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>(WE::EditorConfiguration::GetRawDirectory());
+
+			dataSetAnim->loadSkeleton = false;
+			dataSetAnim->loadAnimations = true;
+			dataSetAnim->loadMesh = false;
+			dataSetAnim->loadMaterials = false;
+			dataSetAnim->loadTextures = false;
+			dataSetAnim->loadPhysic = false;
+			cookingTaskAnim->skeleton = cookingTask->skeleton;
+			cookingTaskAnim->mesh = cookingTask->mesh;
+			AGE::AssimpLoader::Load(cookingTaskAnim);
+			AGE::AnimationsLoader::load(cookingTaskAnim);
+			AGE::AnimationsLoader::save(cookingTaskAnim);
+		}
+		AGE::SkeletonLoader::save(cookingTask);
+		AGE::MeshLoader::save(cookingTask);
+	}
+
 }
