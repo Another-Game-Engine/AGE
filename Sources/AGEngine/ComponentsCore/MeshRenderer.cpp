@@ -50,17 +50,7 @@ namespace AGE
 		_mesh = nullptr;
 		_material = nullptr;
 		_renderMode.reset();
-
-		if (_drawableHandle.size() != 0)
-		{
-			for (auto &drawable : _drawableHandle)
-			{
-				auto manager = entity->getScene()->getInstance<GraphicElementManager>();
-				manager->removeMesh(drawable);
-				entity->getLink().popAnObject(drawable);
-			}
-			_drawableHandle.clear();
-		}
+		_resetDrawableHandle();
 	}
 
 	void MeshRenderer::setAnimation(const Key<AGE::AnimationInstance> &animation)
@@ -141,29 +131,27 @@ namespace AGE
 			return;
 		}
 		auto manager = entity->getScene()->getInstance<GraphicElementManager>();
-		if (_drawableHandle.size() != 0)
+		_resetDrawableHandle();
+		_drawableHandle = manager->addMesh(_mesh, _material);
+		
+		for (auto &handle : _drawableHandle.getHandles())
 		{
-			for (auto &drawable : _drawableHandle)
-			{
-				manager->removeMesh(drawable);
-				entity->getLink().popAnObject(drawable);
-			}
-			_drawableHandle.clear();
-		}
-		for (auto &submesh : _mesh->subMeshs)
-		{
-			auto handle = manager->addMesh(submesh, _material);
-
-			// if the loaded mesh have skinning information we set it in the component to
-			if (std::static_pointer_cast<DRBMeshData>(handle.getPtr()->getDatas())->hadRenderMode(RenderModes::AGE_SKINNED))
-			{
-				_renderMode.set(RenderModes::AGE_SKINNED);
-			}
 			std::static_pointer_cast<DRBMeshData>(handle.getPtr()->getDatas())->setRenderModes(_renderMode);
 			entity->getLink().pushAnObject(handle);
-			_drawableHandle.push_back(handle);
 		}
 	}
+
+	void MeshRenderer::_resetDrawableHandle()
+	{
+		if (_drawableHandle.invalid() != false)
+		{
+			for (auto &sm : _drawableHandle.getHandles())
+				entity->getLink().popAnObject(sm);
+			auto manager = entity->getScene()->getInstance<GraphicElementManager>();
+			manager->removeMesh(_drawableHandle);
+		}
+	}
+
 
 	bool MeshRenderer::reload_material() {
 		if (_material) {

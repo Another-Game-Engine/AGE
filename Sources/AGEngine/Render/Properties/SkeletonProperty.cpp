@@ -10,6 +10,12 @@ namespace AGE
 
 	}
 
+	SkeletonProperty::~SkeletonProperty()
+	{
+
+	}
+
+
 	SkeletonProperty::SkeletonProperty(SkeletonProperty &&move) :
 		AProperty(std::move(move))
 	{

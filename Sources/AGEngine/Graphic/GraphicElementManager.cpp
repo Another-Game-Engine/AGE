@@ -17,37 +17,56 @@ namespace AGE
 		AGE_ASSERT(factory != nullptr);
 	}
 
-	BFCCullableHandle GraphicElementManager::addMesh(const SubMeshInstance &meshInstance, std::shared_ptr<MaterialSetInstance> materialInstance)
+	BFCCullableHandleGroup GraphicElementManager::addMesh(std::shared_ptr<MeshInstance> mesh, std::shared_ptr<MaterialSetInstance> materialInstance)
 	{
 		SCOPE_profile_cpu_function("DRB");
 
-		DRBMesh *drbMesh = _meshPool.create();
+		BFCCullableHandleGroup result;
 
-		drbMesh->datas->setVerticesKey(meshInstance.vertices);
-		drbMesh->datas->setPainterKey(meshInstance.painter);
-		drbMesh->datas->setAABB(meshInstance.boundingBox);
-		
-		drbMesh->datas->globalProperties.merge_properties(meshInstance.properties);
-		auto skeletonProperty = std::make_shared<SkeletonProperty>();
-		drbMesh->datas->globalProperties.add_property(skeletonProperty);
+		std::shared_ptr<SkeletonProperty> skeletonProperty = nullptr;
 
-		std::size_t materialIndex = meshInstance.defaultMaterialIndex < materialInstance->datas.size() ? meshInstance.defaultMaterialIndex : 0;
-		auto &material = materialInstance->datas[materialIndex];
-
-		for (auto &p : material._properties)
+		for (auto &submesh : mesh->subMeshs)
 		{
-			drbMesh->datas->globalProperties.add_property(p);
-		}
+			DRBMesh *drbMesh = _meshPool.create();
 
-		BFCCullableHandle result = _bfcBlockManager->createItem(drbMesh);
+			drbMesh->datas->setVerticesKey(submesh.vertices);
+			drbMesh->datas->setPainterKey(submesh.painter);
+			drbMesh->datas->setAABB(submesh.boundingBox);
+
+			drbMesh->datas->globalProperties.merge_properties(submesh.properties);
+
+			if (submesh.isSkinned)
+			{
+				if (skeletonProperty == nullptr)
+				{
+					skeletonProperty = std::make_shared<SkeletonProperty>();
+				}
+				drbMesh->datas->globalProperties.add_property(skeletonProperty);
+			}
+
+			std::size_t materialIndex = submesh.defaultMaterialIndex < materialInstance->datas.size() ? submesh.defaultMaterialIndex : 0;
+			auto &material = materialInstance->datas[materialIndex];
+
+			for (auto &p : material._properties)
+			{
+				drbMesh->datas->globalProperties.add_property(p);
+			}
+
+			BFCCullableHandle resultMesh = _bfcBlockManager->createItem(drbMesh);
+			result.getHandles().push_back(resultMesh);
+		}
 		return result;
 	}
 
-	void GraphicElementManager::removeMesh(BFCCullableHandle &handle)
+	void GraphicElementManager::removeMesh(BFCCullableHandleGroup &handle)
 	{
 		SCOPE_profile_cpu_function("DRB");
 
-		_meshPool.destroy(handle.getPtr());
-		_bfcBlockManager->deleteItem(handle);
+		for (auto &m : handle.getHandles())
+		{
+			_meshPool.destroy(m.getPtr());
+			_bfcBlockManager->deleteItem(m);
+		}
+		handle.getHandles().clear();
 	}
 }

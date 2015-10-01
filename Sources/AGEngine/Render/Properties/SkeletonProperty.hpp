@@ -16,6 +16,7 @@ namespace AGE
 	{
 	public:
 		SkeletonProperty();
+		virtual ~SkeletonProperty();
 		SkeletonProperty(SkeletonProperty &&move);
 		SkeletonProperty(SkeletonProperty const &copy) = delete;
 		SkeletonProperty &operator=(SkeletonProperty const &other) = delete;

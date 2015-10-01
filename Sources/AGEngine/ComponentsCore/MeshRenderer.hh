@@ -8,6 +8,7 @@
 #include <AssetManagement/Instance/MaterialInstance.hh>
 #include <AssetManagement/Instance/MeshInstance.hh>
 #include <Render/Pipelining/Render/RenderModes.hh>
+#include <BFC/BFCCullableHandle.hpp>
 
 namespace AGE
 {
@@ -17,7 +18,6 @@ namespace AGE
 	struct PrepareKey;
 	struct AnimationInstance;
 	class AScene;
-	class BFCCullableHandle;
 
 	struct MeshRenderer : public ComponentBase
 	{
@@ -74,12 +74,13 @@ namespace AGE
 		std::string _meshPath;
 		std::string _materialPath;
 		std::string _animationPath;
-		std::vector<BFCCullableHandle> _drawableHandle;
+		BFCCullableHandleGroup _drawableHandle;
 		Key<AnimationInstance> _animationInstance;
 
 		RenderModeSet _renderMode;
 
 		void _updateGeometry();
+		void _resetDrawableHandle();
 		MeshRenderer(MeshRenderer const &) = delete;
 	};
 
