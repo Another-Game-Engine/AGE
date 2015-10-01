@@ -17,6 +17,6 @@ namespace AGE
 
 	bool BFCCullableHandleGroup::invalid() const
 	{
-		return (_handles.empty() == false);
+		return _handles.empty();
 	}
 }
