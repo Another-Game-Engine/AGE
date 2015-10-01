@@ -10,14 +10,12 @@ namespace AGE
 	AnimationManager::~AnimationManager()
 	{}
 
-	Key<AnimationInstance> AnimationManager::createAnimationInstance(std::shared_ptr<Skeleton> skeleton, std::shared_ptr<AnimationData> animation)
+	std::shared_ptr<AnimationInstance> AnimationManager::createAnimationInstance(std::shared_ptr<Skeleton> skeleton, std::shared_ptr<AnimationData> animation)
 	{
 		std::lock_guard<std::mutex> lock(_mutex); //dirty lock not definitive, to test purpose
 
 		auto instance = std::make_shared<AnimationInstance>(skeleton, animation);
-		_list.push_back(instance);
-		instance->key = Key<AnimationInstance>::createKey((uint32_t)(_list.size() - 1));
-		return instance->key;
+		return instance;
 	}
 
 	void AnimationManager::update(float time)
@@ -26,14 +24,9 @@ namespace AGE
 
 		std::lock_guard<std::mutex> lock(_mutex); //dirty lock not definitive, to test purpose
 
-		for (auto &e : _list)
-		{
-			e->update(time);
-		}
-	}
-
-	std::vector<glm::mat4> &AnimationManager::getBones(const Key<AnimationInstance> &key)
-	{
-		return _list[key.getId()]->transformations;
+		//for (auto &e : _list)
+		//{
+		//	e->update(time);
+		//}
 	}
 }

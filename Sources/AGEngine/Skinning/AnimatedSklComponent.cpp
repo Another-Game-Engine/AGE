@@ -1,10 +1,13 @@
 #include "AnimatedSklComponent.hpp"
+
 #include "Skeleton.hpp"
+#include "AnimationManager.hpp"
 
 #include "assetmanagement/assetmanager.hh"
 
 #include "Entity/Entity.hh"
 #include "Entity/EntityData.hh"
+
 #include "Core/AScene.hh"
 
 namespace AGE
@@ -30,7 +33,10 @@ namespace AGE
 	void AnimatedSklComponent::reset()
 	{
 		_skeletonAsset = nullptr;
+		_animationAsset = nullptr;
 		_skeletonFilePath.clear();
+		_animationFilePath.clear();
+		_animationInstance = nullptr;
 	}
 
 	void AnimatedSklComponent::setAnimation(const std::string &animationPath)
@@ -66,6 +72,7 @@ namespace AGE
 			assetsManager->pushNewCallback(skeletonPath, entity->getScene(),
 				std::function<void()>([=](){
 				_skeletonAsset = assetsManager->getSkeleton(skeletonPath);
+				this->_setAnimation();
 			}));
 			assetsManager->loadSkeleton(skeletonPath);
 		}
@@ -96,7 +103,17 @@ namespace AGE
 
 	void AnimatedSklComponent::_setAnimation()
 	{
-
+		if (_skeletonAsset == nullptr || _animationAsset == nullptr)
+		{
+			return;
+		}
+		if (_animationInstance != nullptr)
+		{
+			AGE_ASSERT(false && "TODO");
+		}
+		auto animationManager = entity->getScene()->getInstance<AnimationManager>();
+		AGE_ASSERT(animationManager != nullptr);
+		_animationInstance = animationManager->createAnimationInstance(_skeletonAsset, _animationAsset);
 	}
 
 #ifdef EDITOR_ENABLED

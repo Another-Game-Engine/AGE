@@ -6,6 +6,7 @@ namespace AGE
 {
 	struct Skeleton;
 	struct AnimationData;
+	struct AnimationInstance;
 
 	class AnimatedSklComponent : public ComponentBase
 	{
@@ -65,6 +66,8 @@ namespace AGE
 
 		std::string _animationFilePath;
 		std::shared_ptr<AnimationData> _animationAsset;
+
+		std::shared_ptr<AnimationInstance> _animationInstance;
 
 		void _loadAndSetSkeleton(const std::string &skeletonPath);
 		void _loadAndSetAnimation(const std::string &animationPath);
