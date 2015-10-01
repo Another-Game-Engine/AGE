@@ -30,6 +30,8 @@ namespace AGE
 
 	void AnimatedSklSystem::mainUpdate(float time)
 	{
+		SCOPE_profile_cpu_function("Animations");
+
 		static float hackTime = 0;
 		hackTime += time;
 

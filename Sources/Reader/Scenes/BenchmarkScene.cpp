@@ -72,8 +72,6 @@
 
 namespace AGE
 {
-	Key<AGE::AnimationInstance> animationTestInstance;
-	std::vector<Entity> bonesEntities;
 	Entity hexapod;
 
 

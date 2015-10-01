@@ -82,6 +82,8 @@ namespace AGE
 
 	void MeshRenderer::setSkinningMatrix(const std::vector<glm::mat4> &skinningMatrix)
 	{
+		SCOPE_profile_cpu_function("Animations");
+
 		for (auto &handle : _drawableHandle.getHandles())
 		{
 			if (std::static_pointer_cast<DRBMeshData>(handle.getPtr()->getDatas())->hadRenderMode(RenderModes::AGE_SKINNED))
