@@ -22,6 +22,7 @@ namespace AGE
 			struct Configurations
 			{
 				std::string _rawAssetsDirectory = "../../Datas/Assets/Raw/";
+				std::string _animationExportSettingDirectory = "../../Datas/Assets/Raw/AnimationsExports";
 				std::string _cookedAssetsDirectory = "../../Datas/Assets/Serialized/";
 				std::string _saveSceneFolder = "../../Datas/Saves/";
 				std::string _exportSceneFolder = "../../Datas/DemoScenes/";
@@ -34,6 +35,8 @@ namespace AGE
 				std::vector<std::string> _scenesPaths;
 				std::list<std::string> _scenesNamesCache;
 				std::vector<const char*> _scenesNames;
+				std::vector<const char*> _animationsExportsConfigsNames;
+				std::list<std::string> _animationsExportsConfigsNamesCache;
 
 				friend class cereal::access;
 
@@ -46,6 +49,10 @@ namespace AGE
 					ar(cereal::make_nvp("Exported scenes directory", _exportSceneFolder));
 					ar(cereal::make_nvp("Saved archetypes directory", _saveArchetypeFolder));
 					ar(cereal::make_nvp("Exported archetypes directory", _exportArchetypeFolder));
+					if (version > 0)
+					{
+						ar(cereal::make_nvp("Raw assets directory", _animationExportSettingDirectory));
+					}
 				}
 			};
 
@@ -54,12 +61,14 @@ namespace AGE
 			static std::shared_ptr<Configurations> _configurations;
 		public:
 			static const std::string &GetRawDirectory();
+			static const std::string &GetAnimationExportDirectory();
 			static const std::string &GetCookedDirectory();
 			static const std::string &GetEditedSceneDirectory();
 			static const std::string &GetExportedSceneDirectory();
 			static const std::string &GetEditedArchetypeDirectory();
 			static const std::string &GetExportedArchetypeDirectory();
 			static std::vector<const char*> getScenesName();
+			static std::vector<const char*> getAnimationsExportsNames();
 			static const std::vector<std::string> &getScenesPath();
 			static const std::string getSelectedScenePath();
 			static const std::string getSelectedSceneName();
@@ -71,4 +80,4 @@ namespace AGE
 	}
 }
 
-CEREAL_CLASS_VERSION(AGE::WE::EditorConfiguration::Configurations, 0)
+CEREAL_CLASS_VERSION(AGE::WE::EditorConfiguration::Configurations, 1)

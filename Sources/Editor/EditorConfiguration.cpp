@@ -33,6 +33,12 @@ namespace AGE
 		{
 			return _getConfigurations()->_rawAssetsDirectory;
 		}
+
+		const std::string &EditorConfiguration::GetAnimationExportDirectory()
+		{
+			return _getConfigurations()->_animationExportSettingDirectory;
+		}
+
 		const std::string &EditorConfiguration::GetCookedDirectory()
 		{
 			return _getConfigurations()->_cookedAssetsDirectory;
@@ -56,6 +62,10 @@ namespace AGE
 		std::vector<const char*> EditorConfiguration::getScenesName()
 		{
 			return _getConfigurations()->_scenesNames;
+		}
+		std::vector<const char*> EditorConfiguration::getAnimationsExportsNames()
+		{
+			return _getConfigurations()->_animationsExportsConfigsNames;
 		}
 		const std::vector<std::string> &EditorConfiguration::getScenesPath()
 		{
@@ -83,37 +93,67 @@ namespace AGE
 		}
 		void EditorConfiguration::RefreshScenesDirectoryListing()
 		{
-			Directory dir;
-			auto editedSceneDirectory = GetEditedSceneDirectory();
-			const bool succeed = dir.open(editedSceneDirectory.c_str());
-			AGE_ASSERT(succeed && "Impossible to open directory");
-
-			_getConfigurations()->_scenesPaths.clear();
-			_getConfigurations()->_scenesNames.clear();
-			_getConfigurations()->_scenesNamesCache.clear();
-
-			for (auto it = dir.recursive_begin(); it != dir.recursive_end(); ++it)
 			{
-				if (Directory::IsFile(*it))
+				Directory dir;
+				auto editedSceneDirectory = GetEditedSceneDirectory();
+				const bool succeed = dir.open(editedSceneDirectory.c_str());
+				AGE_ASSERT(succeed && "Impossible to open directory");
+
+				_getConfigurations()->_scenesPaths.clear();
+				_getConfigurations()->_scenesNames.clear();
+				_getConfigurations()->_scenesNamesCache.clear();
+
+				for (auto it = dir.recursive_begin(); it != dir.recursive_end(); ++it)
 				{
-					auto file = std::string(*it);
-					auto find = file.find(".raw_scene");
-					if (find != std::string::npos)
+					if (Directory::IsFile(*it))
 					{
-						_getConfigurations()->_scenesNamesCache.push_back(Path::BaseName(file.substr(0, find).c_str()));
-						_getConfigurations()->_scenesNames.push_back(_getConfigurations()->_scenesNamesCache.back().c_str());
-						_getConfigurations()->_scenesPaths.push_back(_getConfigurations()->_saveSceneFolder + _getConfigurations()->_scenesNames.back());
+						auto file = std::string(*it);
+						auto find = file.find(".raw_scene");
+						if (find != std::string::npos)
+						{
+							_getConfigurations()->_scenesNamesCache.push_back(Path::BaseName(file.substr(0, find).c_str()));
+							_getConfigurations()->_scenesNames.push_back(_getConfigurations()->_scenesNamesCache.back().c_str());
+							_getConfigurations()->_scenesPaths.push_back(_getConfigurations()->_saveSceneFolder + _getConfigurations()->_scenesNames.back());
+						}
 					}
 				}
-			}
-			dir.close();
+				dir.close();
 
-			auto &selectedIndex = _getConfigurations()->_selectedScene;
-			if (selectedIndex >= _getConfigurations()->_scenesNames.size())
-			{
-				selectedIndex = 0;
-				return;
+				auto &selectedIndex = _getConfigurations()->_selectedScene;
+				if (selectedIndex >= _getConfigurations()->_scenesNames.size())
+				{
+					selectedIndex = 0;
+					return;
+				}
 			}
+			/////////////////////////////////////////////////////
+			{
+				Directory dir;
+				auto editedDirectory = GetAnimationExportDirectory();
+				const bool succeed = dir.open(editedDirectory.c_str());
+				AGE_ASSERT(succeed && "Impossible to open directory");
+
+				_getConfigurations()->_animationsExportsConfigsNames.clear();
+				_getConfigurations()->_animationsExportsConfigsNamesCache.clear();
+
+				for (auto it = dir.recursive_begin(); it != dir.recursive_end(); ++it)
+				{
+					if (Directory::IsFile(*it))
+					{
+						auto file = std::string(*it);
+						auto find = file.find(".AnimExportConfig");
+						if (find != std::string::npos)
+						{
+							_getConfigurations()->_animationsExportsConfigsNamesCache.push_back(Path::BaseName(file.substr(0, find).c_str()));
+							_getConfigurations()->_animationsExportsConfigsNames.push_back(_getConfigurations()->_animationsExportsConfigsNamesCache.back().c_str());
+						}
+					}
+				}
+
+				dir.close();
+
+			}
+
 		}
 		void EditorConfiguration::_saveConfigurations()
 		{

@@ -5,6 +5,9 @@
 #include "MaterialEditorScene.hh"
 #include <Core/Inputs/Input.hh>
 #include "IMenuInheritrance.hpp"
+#include "EditorConfiguration.hpp"
+
+#include "ExportConfigs/AnimationsExportConfig.hpp"
 
 namespace AGE
 {
@@ -71,6 +74,23 @@ namespace AGE
 					}
 				}
 
+				if (ImGui::BeginMenu("Animations exports"))
+				{
+					static int selectedExport = 0;
+					if (ImGui::ListBox("Scenes", &selectedExport, WE::EditorConfiguration::getAnimationsExportsNames().data(), static_cast<int>(WE::EditorConfiguration::getAnimationsExportsNames().size())))
+					{
+						std::string path = WE::EditorConfiguration::GetAnimationExportDirectory();
+						path += "/";
+						path += WE::EditorConfiguration::getAnimationsExportsNames()[selectedExport];
+						AnimationExportConfigManager::getInstance()->edit(path);
+					}
+					if (ImGui::MenuItem("Create new one", nullptr, nullptr))
+					{
+						AnimationExportConfigManager::getInstance()->create(WE::EditorConfiguration::GetAnimationExportDirectory());
+					}
+					ImGui::EndMenu();
+				}
+
 				ImGui::Separator();
 
 				if (ImGui::MenuItem("Exit", "CTRL+SHIFT+Q"))
@@ -91,6 +111,12 @@ namespace AGE
 
 			ImGui::EndMainMenuBar();
 		}
+
+		//////////////////////
+		///// DEGUEU 
+
+		AnimationExportConfigManager::getInstance()->update();
+
 		return true;
 	}
 
