@@ -2,7 +2,6 @@
 
 # include <vector>
 # include <memory>
-# include <Render/Program.hh>
 # include <Render/Properties/AProperty.hh>
 # include <glm/glm.hpp>
 

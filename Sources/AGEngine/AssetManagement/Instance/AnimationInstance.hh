@@ -18,6 +18,7 @@ namespace AGE
 
 		inline const std::vector<glm::mat4> &getBones() const { return transformations; }
 		inline std::shared_ptr<Skeleton> getSkeleton() const { return skeleton; }
+		void update(float t);
 
 
 		std::shared_ptr<AnimationData> animationData;
@@ -25,7 +26,6 @@ namespace AGE
 		std::shared_ptr<Skeleton> skeleton;
 		AGE::Vector<glm::mat4> transformations;
 		AGE::Vector<glm::mat4> bindPoses;
-		void update(float t);
 	};
 
 }

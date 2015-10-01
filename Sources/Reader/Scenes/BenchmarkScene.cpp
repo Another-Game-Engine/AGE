@@ -42,6 +42,7 @@
 #include <SystemsCore/CharacterControllerSystem.hh>
 #include <SystemsCore/FPSCharacterSystem.hh>
 #include <Systems/BasicDemoCameraSystem.hh>
+#include <Skinning/AnimatedSklSystem.hpp>
 
 #include <Render/Program.hh>
 #include <Render/ProgramResources/Types/Uniform/Vec1.hh>
@@ -122,6 +123,7 @@ namespace AGE
 		addSystem<AGE::CharacterControllerSystem>(0, false);
 		addSystem<AGE::FPSCharacterSystem>(0);
 
+		addSystem<AGE::AnimatedSklSystem>(0);
 		addSystem<AGE::LifetimeSystem>(2);
 		addSystem<AGE::FreeFlyCamera>(0);
 		addSystem<AGE::RotationSystem>(0);
@@ -278,11 +280,9 @@ namespace AGE
 
 		static float tt = 0;
 		tt += time;
-		getInstance<AGE::AnimationManager>()->update(tt);
-		auto skel = getInstance<AssetsManager>()->getSkeleton("hexapod/animation/run.skage");
-		skel->updateSkinning();
-
-		hexapod->getComponent<MeshRenderer>()->hardCodedUpdateAnimation();
+		//getInstance<AGE::AnimationManager>()->update(tt);
+		//auto skel = getInstance<AssetsManager>()->getSkeleton("hexapod/animation/run.skage");
+		//skel->updateSkinning();
 
 		static float monsterRot[3] = { 0, 0, 0 };
 		if (ImGui::SliderFloat3("Monster Rot", monsterRot, -360, 360))

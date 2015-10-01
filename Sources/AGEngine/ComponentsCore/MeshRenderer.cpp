@@ -14,6 +14,7 @@
 #include <Utils/Debug.hpp>
 #endif
 #include "Graphic\DRBMeshData.hpp"
+#include "Graphic/DRBSkinnedMesh.hpp"
 
 //tmp
 #include "Configuration.hpp"
@@ -53,16 +54,6 @@ namespace AGE
 		_resetDrawableHandle();
 	}
 
-	void MeshRenderer::hardCodedUpdateAnimation()
-	{
-		//TODO
-		//AGE_ASSERT(_animationInstance.isValid());
-		//AGE_ASSERT(_skeletonProperty);
-		//
-		//auto &bones = entity->getScene()->getInstance<AGE::AnimationManager>()->getBones(_animationInstance);
-		//_skeletonProperty->set(bones);
-	}
-
 	bool MeshRenderer::setMeshAndMaterial(
 		const std::shared_ptr<AGE::MeshInstance> &mesh,
 		const std::shared_ptr<AGE::MaterialSetInstance> &material)
@@ -87,6 +78,19 @@ namespace AGE
 	void MeshRenderer::disableRenderMode(RenderModes mode)
 	{
 		_renderMode[mode] = false;
+	}
+
+	void MeshRenderer::setSkinningMatrix(const std::vector<glm::mat4> &skinningMatrix)
+	{
+		for (auto &handle : _drawableHandle.getHandles())
+		{
+			if (std::static_pointer_cast<DRBMeshData>(handle.getPtr()->getDatas())->hadRenderMode(RenderModes::AGE_SKINNED))
+			{
+				((DRBSkinnedMesh*)(handle.getPtr()))->setSkinningMatrix(skinningMatrix);
+				return;
+			}
+		}
+		AGE_ASSERT(false, "You tried to update skinning matrix of a non skinned mesh.");
 	}
 
 	void MeshRenderer::_copyFrom(const ComponentBase *model)

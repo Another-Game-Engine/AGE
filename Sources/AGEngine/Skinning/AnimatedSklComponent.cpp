@@ -71,10 +71,10 @@ namespace AGE
 		{
 			assetsManager->pushNewCallback(skeletonPath, entity->getScene(),
 				std::function<void()>([=](){
-				_skeletonAsset = assetsManager->getSkeleton(skeletonPath);
+				this->_skeletonAsset = assetsManager->getSkeleton(skeletonPath);
 				this->_setAnimation();
 			}));
-			assetsManager->loadSkeleton(skeletonPath);
+			assetsManager->loadSkeleton(skeletonPath, skeletonPath);
 		}
 	}
 
@@ -91,9 +91,10 @@ namespace AGE
 		{
 			assetsManager->pushNewCallback(animationPath, entity->getScene(),
 				std::function<void()>([=](){
+				this->_animationAsset = assetsManager->getAnimation(animationPath);
 				this->_setAnimation();
 			}));
-			assetsManager->loadAnimation(animationPath);
+			assetsManager->loadAnimation(animationPath, animationPath);
 		}
 		else
 		{

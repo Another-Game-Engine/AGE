@@ -201,7 +201,7 @@ namespace AGE
 		{
 			auto &d = *j;
 			auto mesh = std::static_pointer_cast<DRBMeshData>(d);
-			if (mesh->hadRenderMode(AGE_OCCLUDER))
+			if (mesh->hadRenderMode(AGE_OCCLUDER) || mesh->hadRenderMode(AGE_SKINNED))
 			{
 				++j;
 				continue;

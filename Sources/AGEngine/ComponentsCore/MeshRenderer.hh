@@ -1,13 +1,13 @@
 #pragma once
 
-#include <Components/Component.hh>
 #include <cereal/types/string.hpp>
-#include <Entity/Entity.hh>
 #include <cereal/types/memory.hpp>
-#include <Utils/Key.hh>
-#include <AssetManagement/Instance/MaterialInstance.hh>
-#include <AssetManagement/Instance/MeshInstance.hh>
+#include <glm/fwd.hpp>
+
+#include <Components/Component.hh>
+
 #include <Render/Pipelining/Render/RenderModes.hh>
+
 #include <BFC/BFCCullableHandle.hpp>
 
 namespace AGE
@@ -15,9 +15,9 @@ namespace AGE
 
 	struct MeshInstance; 
 	struct MaterialSetInstance;
-	struct PrepareKey;
 	struct AnimationInstance;
 	class AScene;
+	struct MaterialInstance;
 
 	struct MeshRenderer : public ComponentBase
 	{
@@ -33,8 +33,6 @@ namespace AGE
 		template <typename Archive> void save(Archive &ar, const std::uint32_t version) const;
 		template <typename Archive> void load(Archive &ar, const std::uint32_t version);
 
-		void hardCodedUpdateAnimation();
-
 		bool setMeshAndMaterial(
 			const std::shared_ptr<AGE::MeshInstance> &_mesh,
 			const std::shared_ptr<AGE::MaterialSetInstance> &_material);
@@ -44,6 +42,8 @@ namespace AGE
 
 		void enableRenderMode(RenderModes mode);
 		void disableRenderMode(RenderModes mode);
+
+		void setSkinningMatrix(const std::vector<glm::mat4> &skinningMatrix);
 
 		virtual void _copyFrom(const ComponentBase *destination);
 

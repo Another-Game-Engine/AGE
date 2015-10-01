@@ -24,6 +24,8 @@ namespace AGE
 		virtual void reset();
 
 		inline std::shared_ptr<Skeleton> getSkeleton() { return _skeletonAsset; }
+		inline std::shared_ptr<AnimationData> getAnimationData() { return _animationAsset; }
+		inline std::shared_ptr<AnimationInstance> getAnimation() { return _animationInstance; }
 
 		//////
 		////

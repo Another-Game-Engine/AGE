@@ -30,6 +30,9 @@ void AnimationInstance::update(float t)
 
 	for (std::size_t i = 0; i < animationData->channels.size(); ++i)
 	{
+		auto &test1 = animationData->channels[i];
+		auto &test2 = test1.boneIndex;
+		auto &test3 = bindPoses[test2];
 		animationData->channels[i].getInterpolatedTransform(localTime, bindPoses[animationData->channels[i].boneIndex]);
 	}
 }
