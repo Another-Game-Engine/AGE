@@ -392,13 +392,14 @@ namespace AGE
 			{
 				return (true);
 			}
-			_animations.insert(std::make_pair(filePath.getFullName(), animation));
 		}
 		auto future = AGE::EmplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=](){
 			SCOPE_profile_cpu_i("AssetsLoad", "LoadAnimation");
 			std::ifstream ifs(filePath.getFullName(), std::ios::binary);
 			cereal::PortableBinaryInputArchive ar(ifs);
 			ar(*animation.get());
+			std::lock_guard<std::mutex> lock(_mutex);
+			_animations.insert(std::make_pair(filePath.getFullName(), animation));
 			return AssetsLoadingResult(false);
 		});
 		pushNewAsset(loadingChannel, _filePath.getFullName(), future);
@@ -407,6 +408,8 @@ namespace AGE
 
 	std::shared_ptr<AnimationData> AssetsManager::getAnimation(const OldFile &_filePath)
 	{
+		std::lock_guard<std::mutex> lock(_mutex);
+
 		OldFile filePath(_assetsDirectory + _filePath.getFullName());
 		if (_animations.find(filePath.getFullName()) != std::end(_animations))
 			return _animations[filePath.getFullName()];
@@ -428,13 +431,14 @@ namespace AGE
 			{
 				return (true);
 			}
-			_skeletons.insert(std::make_pair(filePath.getFullName(), skeleton));
 		}
 		auto future = AGE::EmplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=](){
 			SCOPE_profile_cpu_i("AssetsLoad", "LoadSkeleton");
 			std::ifstream ifs(filePath.getFullName(), std::ios::binary);
 			cereal::PortableBinaryInputArchive ar(ifs);
 			ar(*skeleton.get());
+			std::lock_guard<std::mutex> lock(_mutex);
+			_skeletons.insert(std::make_pair(filePath.getFullName(), skeleton));
 			return true;
 		});
 		pushNewAsset(loadingChannel, _filePath.getFullName(), future);
@@ -444,6 +448,8 @@ namespace AGE
 
 	std::shared_ptr<Skeleton> AssetsManager::getSkeleton(const OldFile &_filePath)
 	{
+		std::lock_guard<std::mutex> lock(_mutex);
+
 		OldFile filePath(_assetsDirectory + _filePath.getFullName());
 		if (_skeletons.find(filePath.getFullName()) != std::end(_skeletons))
 			return _skeletons[filePath.getFullName()];
