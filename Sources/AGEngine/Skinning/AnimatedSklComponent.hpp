@@ -18,8 +18,8 @@ namespace AGE
 		virtual void _copyFrom(const ComponentBase *model);
 
 		void init(const std::string &skeletonPath = "", std::shared_ptr<Skeleton> skeletonAsset = nullptr);
-		void setAnimation(const std::string &animationPath);
-		void setAnimation(std::shared_ptr<AnimationData> animationAssetPtr);
+		void setAnimation(const std::string &animationPath, bool isShared = false);
+		void setAnimation(std::shared_ptr<AnimationData> animationAssetPtr, bool isShared = false);
 
 		virtual void reset();
 
@@ -70,6 +70,7 @@ namespace AGE
 		std::shared_ptr<AnimationData> _animationAsset;
 
 		std::shared_ptr<AnimationInstance> _animationInstance;
+		bool _animIsShared;
 
 		void _loadAndSetSkeleton(const std::string &skeletonPath);
 		void _loadAndSetAnimation(const std::string &animationPath);

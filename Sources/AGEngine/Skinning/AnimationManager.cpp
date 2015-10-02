@@ -16,21 +16,39 @@ namespace AGE
 	AnimationManager::~AnimationManager()
 	{}
 
-	std::shared_ptr<AnimationInstance> AnimationManager::createAnimationInstance(std::shared_ptr<Skeleton> skeleton, std::shared_ptr<AnimationData> animation)
+	// if shared arg is true, the AnimationInstance will be a shared one (can be usefull for crowd for example)
+	std::shared_ptr<AnimationInstance> AnimationManager::createAnimationInstance(std::shared_ptr<Skeleton> skeleton, std::shared_ptr<AnimationData> animation, bool shared)
 	{
 		SCOPE_profile_cpu_function("Animations");
 
 		std::lock_guard<std::mutex> lock(_mutex); //dirty lock not definitive, to test purpose
 
-		auto instance = std::make_shared<AnimationInstance>(skeleton, animation);
 		auto find = _animations.find(skeleton);
 		if (find == _animations.end())
 		{
 			std::list<std::shared_ptr<AnimationInstance>> list;
 			_animations.insert(std::make_pair(skeleton, list));
 		}
-		_animations[skeleton].push_back(instance);
-		return instance;
+
+		std::shared_ptr<AnimationInstance> res = nullptr;
+
+		if (shared)
+		{
+			for (auto &f : _animations[skeleton])
+			{
+				if (f->isShared() && f->getAnimation() == animation)
+				{
+					res = f;
+					res->_instanceCounter++;
+					return res;
+				}
+			}
+		}
+		res = std::make_shared<AnimationInstance>(skeleton, animation);
+		_animations[skeleton].push_back(res);
+		res->_isShared = shared;
+		res->_instanceCounter++;
+		return res;
 	}
 
 	void AnimationManager::deleteAnimationInstance(std::shared_ptr<AnimationInstance> animation)
@@ -41,7 +59,11 @@ namespace AGE
 
 		auto skeleton = animation->getSkeleton();
 		AGE_ASSERT(_animations.find(skeleton) != _animations.end());
-		_animations[skeleton].remove(animation);
+		animation->_instanceCounter--;
+		if (animation->_instanceCounter == 0)
+		{
+			_animations[skeleton].remove(animation);
+		}
 	}
 
 	void AnimationManager::update(float time)

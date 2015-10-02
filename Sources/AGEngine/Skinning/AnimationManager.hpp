@@ -19,7 +19,8 @@ namespace AGE
 	public:
 		AnimationManager();
 		virtual ~AnimationManager();
-		std::shared_ptr<AnimationInstance> createAnimationInstance(std::shared_ptr<Skeleton> skeleton, std::shared_ptr<AnimationData> animation);
+		// if shared arg is true, the AnimationInstance will be a shared one (can be usefull for crowd for example)
+		std::shared_ptr<AnimationInstance> createAnimationInstance(std::shared_ptr<Skeleton> skeleton, std::shared_ptr<AnimationData> animation, bool shared);
 		void deleteAnimationInstance(std::shared_ptr<AnimationInstance> animation);
 		void update(float time);
 

@@ -318,6 +318,23 @@ namespace AGE
 				hexapod2->getLink().setPosition(glm::vec3(3, 1, 4));
 				hexapod2->addComponent<PointLightComponent>();
 			}
+
+
+			for (auto i = -5; i < 5; ++i)
+			{
+				for (auto j = -5; j < 5; ++j)
+				{
+					{
+						auto hexapod2 = createEntity();
+						hexapod2->addComponent<MeshRenderer>(
+							getInstance<AGE::AssetsManager>()->getMesh("hexapod/hexapod.sage")
+							, getInstance<AGE::AssetsManager>()->getMaterial("hexapod/hexapod.mage"));
+						auto skeletonCpt = hexapod2->addComponent<AGE::AnimatedSklComponent>("hexapod/hexapod.skage");
+						skeletonCpt->setAnimation("hexapod/run.aage", true);
+						hexapod2->getLink().setPosition(glm::vec3(i * 2, 5, j * 2));
+					}
+				}
+			}
 		}
 
 		if (getInstance<Input>()->getPhysicalKeyJustReleased(AgeKeys::AGE_ESCAPE))

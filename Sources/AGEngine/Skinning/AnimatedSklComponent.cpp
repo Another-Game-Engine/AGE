@@ -28,6 +28,7 @@ namespace AGE
 			_skeletonAsset = skeletonAsset;
 		else if (skeletonPath.empty() == false)
 			_loadAndSetSkeleton(skeletonPath);
+		_animIsShared = false;
 	}
 
 	void AnimatedSklComponent::reset()
@@ -43,18 +44,21 @@ namespace AGE
 		_skeletonFilePath.clear();
 		_animationFilePath.clear();
 		_animationInstance = nullptr;
+		_animIsShared = false;
 	}
 
-	void AnimatedSklComponent::setAnimation(const std::string &animationPath)
+	void AnimatedSklComponent::setAnimation(const std::string &animationPath, bool isShared /*= false*/)
 	{
+		_animIsShared = isShared;
 		if (animationPath.empty() == false)
 		{
 			_loadAndSetAnimation(animationPath);
 		}
 	}
 
-	void AnimatedSklComponent::setAnimation(std::shared_ptr<AnimationData> animationAssetPtr)
+	void AnimatedSklComponent::setAnimation(std::shared_ptr<AnimationData> animationAssetPtr, bool isShared /*= false*/)
 	{
+		_animIsShared = isShared;
 		AGE_ASSERT(animationAssetPtr != nullptr);
 		_animationAsset = animationAssetPtr;
 		_setAnimation();
@@ -115,7 +119,7 @@ namespace AGE
 		{
 			animationManager->deleteAnimationInstance(_animationInstance);
 		}
-		_animationInstance = animationManager->createAnimationInstance(_skeletonAsset, _animationAsset);
+		_animationInstance = animationManager->createAnimationInstance(_skeletonAsset, _animationAsset, _animIsShared);
 	}
 
 #ifdef EDITOR_ENABLED
