@@ -69,8 +69,7 @@ namespace AGE{
 		glm::uvec3 key = glm::uvec3(static_cast<unsigned int>(t));
 		glm::uvec3 nextKey = glm::uvec3(key.x + 1);
 
-		if (nextKey.z >= translation.size() || nextKey.x >= scale.size() || nextKey.y >= rotation.size())
-			findKeyIndex(t, key, nextKey);
+		findKeyIndex(t, key, nextKey);
 
 		res = glm::translate(glm::mat4(1), glm::mix(translation[key.z].value, translation[nextKey.z].value, (t - translation[key.z].time) / translation[key.z].deltaTime));
 		res = glm::scale(res, glm::mix(scale[key.x].value, scale[nextKey.x].value, (t - scale[key.x].time) / scale[key.x].deltaTime));
