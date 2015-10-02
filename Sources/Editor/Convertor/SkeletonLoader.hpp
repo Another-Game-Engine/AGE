@@ -42,14 +42,6 @@ namespace AGE
 				ar(*cookingTask->skeleton);
 				Singleton<AGE::AE::ConvertorStatusManager>::getInstance()->PopTask(tid);
 			}
-			{
-				auto fileName = cookingTask->dataSet->filePath.getShortFileName() + ".json";
-				auto name = cookingTask->serializedDirectory.path().directory_string() + "\\" + cookingTask->dataSet->filePath.getFolder() + fileName;
-
-				std::ofstream ofs(name, std::ios::trunc | std::ios::binary);
-				cereal::JSONOutputArchive ar(ofs);
-				ar(*cookingTask->skeleton);
-			}
 			return true;
 		}
 
