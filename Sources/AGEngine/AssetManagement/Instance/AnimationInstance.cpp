@@ -13,7 +13,6 @@ AnimationInstance::AnimationInstance(std::shared_ptr<Skeleton> pSkeleton, std::s
 	: skeleton(pSkeleton)
 	, animationData(pAnimation)
 {
-	skeleton->animations.push_back(this);	
 	bindPoses.resize(skeleton->bones.size(), glm::mat4(1));
 	transformations.resize(skeleton->bones.size(), glm::mat4(1));
 	if (!animationData)

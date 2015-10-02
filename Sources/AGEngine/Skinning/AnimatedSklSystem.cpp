@@ -3,10 +3,13 @@
 #include <Entity/Entity.hh>
 #include <Entity/EntityData.hh>
 
-#include "AnimatedSklComponent.hpp"
-#include "Skeleton.hpp"
+#include "Skinning/AnimatedSklComponent.hpp"
+#include "Skinning/Skeleton.hpp"
+#include "Skinning/AnimationManager.hpp"
 
 #include "AssetManagement/Instance/AnimationInstance.hh"
+
+#include "Core/AScene.hh"
 
 #include <ComponentsCore/MeshRenderer.hh>
 
@@ -35,6 +38,10 @@ namespace AGE
 		static float hackTime = 0;
 		hackTime += time;
 
+		auto animationManager = _scene->getInstance<AnimationManager>();
+		AGE_ASSERT(animationManager != nullptr);
+		animationManager->update(hackTime);
+
 		auto &collection = _filter.getCollection();
 		for (auto &e : collection)
 		{
@@ -44,8 +51,8 @@ namespace AGE
 			auto animation = skelCpt->getAnimation();
 			if (animation)
 			{
-				animation->update(hackTime);
-				skelCpt->getSkeleton()->updateSkinning();
+				//animation->update(hackTime);
+				//skelCpt->getSkeleton()->updateSkinning();
 				meshCpt->setSkinningMatrix(animation->getBones());
 			}
 		}

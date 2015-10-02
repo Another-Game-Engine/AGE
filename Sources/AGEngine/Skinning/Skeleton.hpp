@@ -23,15 +23,14 @@ namespace AGE
 		Skeleton(const char *path = nullptr);
 		std::string name;
 		AGE::Vector<Bone> bones;
-		AGE::Vector<AnimationInstance*> animations;
 		std::uint32_t firstBone;
 		glm::mat4 inverseGlobal;
 		std::map<std::string, std::uint32_t> bonesReferences;
 		const std::string path;
-		void updateSkinning();
+		void updateSkinning(std::shared_ptr<AnimationInstance> animInstance);
 
 	private:
-		void readNodeHierarchy(unsigned int boneID);
+		void readNodeHierarchy(unsigned int boneID, std::shared_ptr<AnimationInstance> animInstance);
 	};
 
 	template <class Archive>

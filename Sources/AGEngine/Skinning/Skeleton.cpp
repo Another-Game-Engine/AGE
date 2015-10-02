@@ -15,43 +15,34 @@ Skeleton::Skeleton(const char *_path /*= nullptr*/)
 , path(path)
 {}
 
-void Skeleton::updateSkinning()
+void Skeleton::updateSkinning(std::shared_ptr<AnimationInstance> animInstance)
 {
 	SCOPE_profile_cpu_function("Animations");
 
-	if (this->animations.size() == 0)
-		return;
-	readNodeHierarchy(this->firstBone);
+	readNodeHierarchy(this->firstBone, animInstance);
 
-	for (std::size_t j = 0; j < this->animations.size(); ++j)
+	auto &transformations = animInstance->transformations;
+	for (std::size_t i = 0; i < bones.size(); ++i)
 	{
-		if (this->animations[j]->animationData)
-		{
-			for (std::size_t i = 0; i < bones.size(); ++i)
-			{
-				this->animations[j]->transformations[i] *= this->bones[i].offset;
-			}
-		}
+		transformations[i] *= bones[i].offset;
 	}
 }
 
 void Skeleton::readNodeHierarchy(
-	unsigned int boneID)
+	unsigned int boneID
+	, std::shared_ptr<AnimationInstance> animInstance)
 {
-	glm::mat4 nodeT = bones[boneID].transformation;
+	auto &animation = *(animInstance.get());
 	auto &bone = bones[boneID];
 
-	for (unsigned int i = 0; i < this->animations.size(); ++i)
-	{
-		nodeT = this->animations[i]->bindPoses[boneID];
-		if (boneID == firstBone)
-			this->animations[i]->transformations[boneID] = /*this->inverseGlobal * */ nodeT;
-		else
-			this->animations[i]->transformations[boneID] = this->animations[i]->transformations[bone.parent] * nodeT;
-	}
+	glm::mat4 nodeT = animation.bindPoses[boneID];
+	if (boneID == firstBone)
+		animation.transformations[boneID] = nodeT;
+	else
+		animation.transformations[boneID] = animation.transformations[bone.parent] * nodeT;
 
 	for (unsigned int i = 0; i < bones[boneID].children.size(); ++i)
 	{
-		readNodeHierarchy(bones[boneID].children[i]);
+		readNodeHierarchy(bones[boneID].children[i], animInstance);
 	}
 }

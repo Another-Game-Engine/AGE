@@ -20,7 +20,7 @@ namespace AGE
 		inline std::shared_ptr<Skeleton> getSkeleton() const { return skeleton; }
 		void update(float t);
 
-
+//todo private:
 		std::shared_ptr<AnimationData> animationData;
 		float time;
 		std::shared_ptr<Skeleton> skeleton;

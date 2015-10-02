@@ -32,6 +32,12 @@ namespace AGE
 
 	void AnimatedSklComponent::reset()
 	{
+		if (_animationInstance != nullptr)
+		{
+			auto animationManager = entity->getScene()->getInstance<AnimationManager>();
+			AGE_ASSERT(animationManager != nullptr);
+			animationManager->deleteAnimationInstance(_animationInstance);
+		}
 		_skeletonAsset = nullptr;
 		_animationAsset = nullptr;
 		_skeletonFilePath.clear();
@@ -50,11 +56,6 @@ namespace AGE
 	void AnimatedSklComponent::setAnimation(std::shared_ptr<AnimationData> animationAssetPtr)
 	{
 		AGE_ASSERT(animationAssetPtr != nullptr);
-		// if there is already an animation
-		if (_animationAsset != nullptr)
-		{
-			AGE_ASSERT(false && "TODO");
-		}
 		_animationAsset = animationAssetPtr;
 		_setAnimation();
 	}
@@ -108,12 +109,12 @@ namespace AGE
 		{
 			return;
 		}
-		if (_animationInstance != nullptr)
-		{
-			AGE_ASSERT(false && "TODO");
-		}
 		auto animationManager = entity->getScene()->getInstance<AnimationManager>();
 		AGE_ASSERT(animationManager != nullptr);
+		if (_animationInstance != nullptr)
+		{
+			animationManager->deleteAnimationInstance(_animationInstance);
+		}
 		_animationInstance = animationManager->createAnimationInstance(_skeletonAsset, _animationAsset);
 	}
 
