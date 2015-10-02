@@ -131,13 +131,13 @@ namespace AGE
 		getInstance<AGE::AssetsManager>()->loadMesh(OldFile("ball/ball.sage"), "DEMO_SCENE_BASIC_ASSETS");
 		getInstance<AGE::AssetsManager>()->loadMaterial(OldFile("cube/cube.mage"), "DEMO_SCENE_BASIC_ASSETS");
 		getInstance<AGE::AssetsManager>()->loadMaterial(OldFile("ball/ball.mage"), "DEMO_SCENE_BASIC_ASSETS");
-		getInstance<AGE::AssetsManager>()->loadMaterial(OldFile("hexapod/animation/hexapod.mage"), "DEMO_SCENE_BASIC_ASSETS");
+		getInstance<AGE::AssetsManager>()->loadMaterial(OldFile("hexapod/hexapod.mage"), "DEMO_SCENE_BASIC_ASSETS");
 
 //		_skyboxTest = getInstance<AGE::AssetsManager>()->loadSkybox("test", OldFile("skyboxes/test.dds"), "DEMO_SCENE_BASIC_ASSETS");
 		_skyboxSpace = getInstance<AGE::AssetsManager>()->loadCubeMap("space", OldFile("skyboxes/space.dds"), "DEMO_SCENE_BASIC_ASSETS");
-		//getInstance<AGE::AssetsManager>()->loadAnimation(OldFile("hexapod/animation/run.aage"), "DEMO_SCENE_BASIC_ASSETS");
-		//getInstance<AGE::AssetsManager>()->loadSkeleton(OldFile("hexapod/animation/run.skage"), "DEMO_SCENE_BASIC_ASSETS");
-		getInstance<AGE::AssetsManager>()->loadMesh(OldFile("hexapod/animation/hexapod.sage"), "DEMO_SCENE_BASIC_ASSETS");
+		//getInstance<AGE::AssetsManager>()->loadAnimation(OldFile("hexapod/run.aage"), "DEMO_SCENE_BASIC_ASSETS");
+		//getInstance<AGE::AssetsManager>()->loadSkeleton(OldFile("hexapod/run.skage"), "DEMO_SCENE_BASIC_ASSETS");
+		getInstance<AGE::AssetsManager>()->loadMesh(OldFile("hexapod/hexapod.sage"), "DEMO_SCENE_BASIC_ASSETS");
 
 		setInstance<AGE::AnimationManager>();
  
@@ -197,61 +197,125 @@ namespace AGE
 			{
 				auto hexapod2 = createEntity();
 				hexapod2->addComponent<MeshRenderer>(
-					getInstance<AGE::AssetsManager>()->getMesh("hexapod/animation/hexapod.sage")
-					, getInstance<AGE::AssetsManager>()->getMaterial("hexapod/animation/hexapod.mage"));
-				auto skeletonCpt = hexapod2->addComponent<AGE::AnimatedSklComponent>("hexapod/animation/hexapod.skage");
-				skeletonCpt->setAnimation("hexapod/animation/run.aage");
+					getInstance<AGE::AssetsManager>()->getMesh("hexapod/hexapod.sage")
+					, getInstance<AGE::AssetsManager>()->getMaterial("hexapod/hexapod.mage"));
+				auto skeletonCpt = hexapod2->addComponent<AGE::AnimatedSklComponent>("hexapod/hexapod.skage");
+				skeletonCpt->setAnimation("hexapod/attack-1.aage");
 				hexapod2->addComponent<PointLightComponent>();
+				hexapod2->getLink().setPosition(glm::vec3(-8, 1, 0));
+			}
+			{
+				auto hexapod2 = createEntity();
+				hexapod2->addComponent<MeshRenderer>(
+					getInstance<AGE::AssetsManager>()->getMesh("hexapod/hexapod.sage")
+					, getInstance<AGE::AssetsManager>()->getMaterial("hexapod/hexapod.mage"));
+				auto skeletonCpt = hexapod2->addComponent<AGE::AnimatedSklComponent>("hexapod/hexapod.skage");
+				skeletonCpt->setAnimation("hexapod/attack-2.aage");
+				hexapod2->getLink().setPosition(glm::vec3(-6, 1, 0));
+			}
+			{
+				auto hexapod2 = createEntity();
+				hexapod2->addComponent<MeshRenderer>(
+					getInstance<AGE::AssetsManager>()->getMesh("hexapod/hexapod.sage")
+					, getInstance<AGE::AssetsManager>()->getMaterial("hexapod/hexapod.mage"));
+				auto skeletonCpt = hexapod2->addComponent<AGE::AnimatedSklComponent>("hexapod/hexapod.skage");
+				skeletonCpt->setAnimation("hexapod/attack-3.aage");
+				hexapod2->getLink().setPosition(glm::vec3(-4, 1, 0));
+				hexapod2->addComponent<PointLightComponent>();
+			}
+			{
+				auto hexapod2 = createEntity();
+				hexapod2->addComponent<MeshRenderer>(
+					getInstance<AGE::AssetsManager>()->getMesh("hexapod/hexapod.sage")
+					, getInstance<AGE::AssetsManager>()->getMaterial("hexapod/hexapod.mage"));
+				auto skeletonCpt = hexapod2->addComponent<AGE::AnimatedSklComponent>("hexapod/hexapod.skage");
+				skeletonCpt->setAnimation("hexapod/attack-4.aage");
+				hexapod2->getLink().setPosition(glm::vec3(-2, 1, 0));
+			}
+			{
+				auto hexapod2 = createEntity();
+				hexapod2->addComponent<MeshRenderer>(
+					getInstance<AGE::AssetsManager>()->getMesh("hexapod/hexapod.sage")
+					, getInstance<AGE::AssetsManager>()->getMaterial("hexapod/hexapod.mage"));
+				auto skeletonCpt = hexapod2->addComponent<AGE::AnimatedSklComponent>("hexapod/hexapod.skage");
+				skeletonCpt->setAnimation("hexapod/dead.aage");
 				hexapod2->getLink().setPosition(glm::vec3(0, 1, 0));
-			}
-			{
-				auto hexapod2 = createEntity();
-				hexapod2->addComponent<MeshRenderer>(
-					getInstance<AGE::AssetsManager>()->getMesh("hexapod/animation/hexapod.sage")
-					, getInstance<AGE::AssetsManager>()->getMaterial("hexapod/animation/hexapod.mage"));
-				auto skeletonCpt = hexapod2->addComponent<AGE::AnimatedSklComponent>("hexapod/animation/hexapod.skage");
-				skeletonCpt->setAnimation("hexapod/animation/idle.aage");
-				hexapod2->getLink().setPosition(glm::vec3(2, 1, 0));
 				hexapod2->addComponent<PointLightComponent>();
 			}
 			{
 				auto hexapod2 = createEntity();
 				hexapod2->addComponent<MeshRenderer>(
-					getInstance<AGE::AssetsManager>()->getMesh("hexapod/animation/hexapod.sage")
-					, getInstance<AGE::AssetsManager>()->getMaterial("hexapod/animation/hexapod.mage"));
-				auto skeletonCpt = hexapod2->addComponent<AGE::AnimatedSklComponent>("hexapod/animation/hexapod.skage");
-				skeletonCpt->setAnimation("hexapod/animation/jump.aage");
+					getInstance<AGE::AssetsManager>()->getMesh("hexapod/hexapod.sage")
+					, getInstance<AGE::AssetsManager>()->getMaterial("hexapod/hexapod.mage"));
+				auto skeletonCpt = hexapod2->addComponent<AGE::AnimatedSklComponent>("hexapod/hexapod.skage");
+				skeletonCpt->setAnimation("hexapod/get_hit.aage");
+				hexapod2->getLink().setPosition(glm::vec3(2, 1, 0));
+			}
+			{
+				auto hexapod2 = createEntity();
+				hexapod2->addComponent<MeshRenderer>(
+					getInstance<AGE::AssetsManager>()->getMesh("hexapod/hexapod.sage")
+					, getInstance<AGE::AssetsManager>()->getMaterial("hexapod/hexapod.mage"));
+				auto skeletonCpt = hexapod2->addComponent<AGE::AnimatedSklComponent>("hexapod/hexapod.skage");
+				skeletonCpt->setAnimation("hexapod/get_hit_l.aage");
 				hexapod2->getLink().setPosition(glm::vec3(4, 1, 0));
 				hexapod2->addComponent<PointLightComponent>();
 			}
 			{
 				auto hexapod2 = createEntity();
 				hexapod2->addComponent<MeshRenderer>(
-					getInstance<AGE::AssetsManager>()->getMesh("hexapod/animation/hexapod.sage")
-					, getInstance<AGE::AssetsManager>()->getMaterial("hexapod/animation/hexapod.mage"));
-				auto skeletonCpt = hexapod2->addComponent<AGE::AnimatedSklComponent>("hexapod/animation/hexapod.skage");
-				skeletonCpt->setAnimation("hexapod/animation/attack-1.aage");
+					getInstance<AGE::AssetsManager>()->getMesh("hexapod/hexapod.sage")
+					, getInstance<AGE::AssetsManager>()->getMaterial("hexapod/hexapod.mage"));
+				auto skeletonCpt = hexapod2->addComponent<AGE::AnimatedSklComponent>("hexapod/hexapod.skage");
+				skeletonCpt->setAnimation("hexapod/get_hit_r.aage");
 				hexapod2->getLink().setPosition(glm::vec3(6, 1, 0));
+			}
+			{
+				auto hexapod2 = createEntity();
+				hexapod2->addComponent<MeshRenderer>(
+					getInstance<AGE::AssetsManager>()->getMesh("hexapod/hexapod.sage")
+					, getInstance<AGE::AssetsManager>()->getMaterial("hexapod/hexapod.mage"));
+				auto skeletonCpt = hexapod2->addComponent<AGE::AnimatedSklComponent>("hexapod/hexapod.skage");
+				skeletonCpt->setAnimation("hexapod/idle.aage");
+				hexapod2->getLink().setPosition(glm::vec3(8, 1, 0));
 				hexapod2->addComponent<PointLightComponent>();
 			}
 			{
 				auto hexapod2 = createEntity();
 				hexapod2->addComponent<MeshRenderer>(
-					getInstance<AGE::AssetsManager>()->getMesh("hexapod/animation/hexapod.sage")
-					, getInstance<AGE::AssetsManager>()->getMaterial("hexapod/animation/hexapod.mage"));
-				auto skeletonCpt = hexapod2->addComponent<AGE::AnimatedSklComponent>("hexapod/animation/hexapod.skage");
-				skeletonCpt->setAnimation("hexapod/animation/attack-2.aage");
-				hexapod2->getLink().setPosition(glm::vec3(8, 1, 0));
-				hexapod2->addComponent<PointLightComponent>();
+					getInstance<AGE::AssetsManager>()->getMesh("hexapod/hexapod.sage")
+					, getInstance<AGE::AssetsManager>()->getMaterial("hexapod/hexapod.mage"));
+				auto skeletonCpt = hexapod2->addComponent<AGE::AnimatedSklComponent>("hexapod/hexapod.skage");
+				skeletonCpt->setAnimation("hexapod/jump.aage");
+				hexapod2->getLink().setPosition(glm::vec3(-3, 1, 4));
 			}
-						{
+			{
 				auto hexapod2 = createEntity();
 				hexapod2->addComponent<MeshRenderer>(
-					getInstance<AGE::AssetsManager>()->getMesh("hexapod/animation/hexapod.sage")
-					, getInstance<AGE::AssetsManager>()->getMaterial("hexapod/animation/hexapod.mage"));
-				auto skeletonCpt = hexapod2->addComponent<AGE::AnimatedSklComponent>("hexapod/animation/hexapod.skage");
-				skeletonCpt->setAnimation("hexapod/animation/attack-3.aage");
-				hexapod2->getLink().setPosition(glm::vec3(10, 1, 0));
+					getInstance<AGE::AssetsManager>()->getMesh("hexapod/hexapod.sage")
+					, getInstance<AGE::AssetsManager>()->getMaterial("hexapod/hexapod.mage"));
+				auto skeletonCpt = hexapod2->addComponent<AGE::AnimatedSklComponent>("hexapod/hexapod.skage");
+				skeletonCpt->setAnimation("hexapod/run.aage");
+				hexapod2->getLink().setPosition(glm::vec3(-1, 1, 4));
+				hexapod2->addComponent<PointLightComponent>();
+			}
+			{
+				auto hexapod2 = createEntity();
+				hexapod2->addComponent<MeshRenderer>(
+					getInstance<AGE::AssetsManager>()->getMesh("hexapod/hexapod.sage")
+					, getInstance<AGE::AssetsManager>()->getMaterial("hexapod/hexapod.mage"));
+				auto skeletonCpt = hexapod2->addComponent<AGE::AnimatedSklComponent>("hexapod/hexapod.skage");
+				skeletonCpt->setAnimation("hexapod/shot.aage");
+				hexapod2->getLink().setPosition(glm::vec3(1, 1, 4));
+			}
+			{
+				auto hexapod2 = createEntity();
+				hexapod2->addComponent<MeshRenderer>(
+					getInstance<AGE::AssetsManager>()->getMesh("hexapod/hexapod.sage")
+					, getInstance<AGE::AssetsManager>()->getMaterial("hexapod/hexapod.mage"));
+				auto skeletonCpt = hexapod2->addComponent<AGE::AnimatedSklComponent>("hexapod/hexapod.skage");
+				skeletonCpt->setAnimation("hexapod/walk.aage");
+				hexapod2->getLink().setPosition(glm::vec3(3, 1, 4));
 				hexapod2->addComponent<PointLightComponent>();
 			}
 		}
@@ -333,7 +397,7 @@ namespace AGE
 		static float tt = 0;
 		tt += time;
 		//getInstance<AGE::AnimationManager>()->update(tt);
-		//auto skel = getInstance<AssetsManager>()->getSkeleton("hexapod/animation/run.skage");
+		//auto skel = getInstance<AssetsManager>()->getSkeleton("hexapod/run.skage");
 		//skel->updateSkinning();
 
 		static float monsterRot[3] = { 0, 0, 0 };
