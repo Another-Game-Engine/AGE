@@ -117,7 +117,7 @@ namespace AGE
 			}
 			skeleton->inverseGlobal = glm::inverse(AssimpLoader::aiMat4ToGlm(boneOrigin->mTransformation));
 			
-			loadSkeletonFromAssimp(skeleton, boneOrigin, minDepth);
+			loadSkeletonFromAssimp(skeleton, cookingTask->assimpScene->mRootNode, minDepth);
 
 			//we fill bone hierarchy
 			for (unsigned int i = 0; i < skeleton->bones.size(); ++i)
