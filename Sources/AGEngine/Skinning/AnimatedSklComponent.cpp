@@ -335,7 +335,17 @@ namespace AGE
 
 	void AnimatedSklComponent::editorCopyFrom(AnimatedSklComponent *o)
 	{
-		_config = o->_config;
+		if (_config == nullptr)
+			_config = std::make_shared<Config>();
+
+		if (o->_config->isShared)
+			_config = o->_config;
+		else
+		{
+			_config->animationFilePath = o->_config->animationFilePath;
+			_config->skeletonFilePath = o->_config->skeletonFilePath;
+			_config->timeMultiplier = o->_config->timeMultiplier;
+		}
 	}
 
 	void AnimatedSklComponent::editorCreate()
