@@ -253,36 +253,6 @@ namespace AGE
 		}
 		static float refreshStats = 0.0;
 		refreshStats += _timer->getElapsed();
-		auto &stats = GetThreadManager()->getStatistics();
-		if (refreshStats >= 1.0)
-		{
-			for (auto i = (std::size_t)Thread::Main; i < Thread::hardwareConcurency(); ++i)
-			{
-				auto &e = stats[i];
-				e.waitCopy[e.secondCounter] = e.averageWaitTime;
-				e.workCopy[e.secondCounter] = e.averageWorkTime;
-				e.totalCopy[e.secondCounter] = e.averageWaitTime + e.averageWorkTime;
-				++e.secondCounter;
-				if (e.secondCounter >= e.waitCopy.size())
-					e.secondCounter = 0;
-			}
-			refreshStats = 0.0;
-		}
-		for (auto i = (std::size_t)Thread::Main; i < Thread::hardwareConcurency(); ++i)
-		{
-			auto &e = stats[i];
-			e.averageWaitTimeCopy = e.averageWaitTime;
-			e.averageWorkTimeCopy = e.averageWorkTime;
-		}
-
-		if (_displayThreadsStatistics)
-		{
-			_renderThreadsStatistics();
-		}
-		if (_displayFps)
-		{
-			_renderFpsStatitstics();
-		}
 
 		if (GetMainThread()->isRenderFrame())
 		{
@@ -291,75 +261,6 @@ namespace AGE
 			++frame;
 		}
 		return true;
-	}
-
-	void Engine::_renderThreadsStatistics()
-	{
-		SCOPE_profile_cpu_function("Engine");
-#ifdef AGE_ENABLE_IMGUI
-		if (ImGui::Begin("Threads statistics", (bool*)0, ImVec2(0, 0), -1.0f, ImGuiWindowFlags_AlwaysAutoResize))
-		{
-			auto &stats = GetThreadManager()->getStatistics();
-			for (auto i = (std::size_t)Thread::Main; i <= Thread::Render; ++i)
-			{
-				auto &e = stats[i];
-				e.averageWaitTimeCopy = e.averageWaitTime;
-				e.averageWorkTimeCopy = e.averageWorkTime;
-				if (ImGui::CollapsingHeader(e.name.c_str(), (const char*)0, true, true))
-				{
-					if (e.averageWaitTime + e.averageWorkTime != 0)
-						ImGui::Text(std::string("Total : " + std::to_string(e.averageWaitTimeCopy + e.averageWorkTimeCopy) + " ms.").c_str());
-					ImGui::Text(std::string("Work : " + std::to_string((float)e.averageWorkTimeCopy) + " ms.").c_str());
-					ImGui::Text(std::string("Wait : " + std::to_string((float)e.averageWaitTimeCopy) + " ms.").c_str());
-					if (e.averageWaitTimeCopy + e.averageWorkTimeCopy > 0)
-						ImGui::Text(std::string("FPS : " + std::to_string((int)(1000 / (e.averageWaitTimeCopy + e.averageWorkTimeCopy))) + ".").c_str());
-					ImGui::PlotLines("Frame Times", e.totalCopy.data(), (int)e.totalCopy.size(), (int)e.secondCounter, e.name.c_str(), 0.0f, 40.0f, ImVec2(200, 30));
-					if (ImGui::TreeNode((void*)(&e), "Details"))
-					{
-						ImGui::PlotLines("Wait Times", e.waitCopy.data(), (int)e.waitCopy.size(), (int)e.secondCounter, e.name.c_str(), 0.0f, 40.0f, ImVec2(200, 30));
-						ImGui::TreePop();
-					}
-				}
-			}
-			if (ImGui::CollapsingHeader("Workers"))
-			{
-				for (auto i = (std::size_t)Thread::Worker1; i < Thread::hardwareConcurency(); ++i)
-				{
-					auto &e = stats[i];
-					ImGui::Text("%s", e.name.c_str());
-					ImGui::PlotLines("", e.workCopy.data(), (int)e.workCopy.size(), (int)e.secondCounter, e.name.c_str(), 0.0f, 40.0f, ImVec2(200, 30));
-					ImGui::Separator();
-				}
-			}
-		}
-		ImGui::End();
-#endif
-	}
-
-	void Engine::_renderFpsStatitstics()
-	{
-		SCOPE_profile_cpu_function("Engine");
-#ifdef AGE_ENABLE_IMGUI
-		if (!ImGui::Begin("Example: Fixed OverlayFPS OVERLAY", (bool*)1, ImVec2(0, 0), 0.3f, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings))
-		{
-			ImGui::End();
-		}
-		else
-		{
-			ImGui::SetWindowPos(ImVec2(10, 10));
-			{
-				auto &e = GetThreadManager()->getStatistics()[Thread::Main];
-				if (e.averageWaitTimeCopy + e.averageWorkTimeCopy > 0)
-					ImGui::Text("Main : %i fps", (int)(1000 / (e.averageWaitTimeCopy + e.averageWorkTimeCopy)));
-			}
-			{
-				auto &e = GetThreadManager()->getStatistics()[Thread::Render];
-				if (e.averageWaitTimeCopy + e.averageWorkTimeCopy > 0)
-					ImGui::Text("Render : %i fps", (int)(1000 / (e.averageWaitTimeCopy + e.averageWorkTimeCopy)));
-			}
-			ImGui::End();
-		}
-#endif
 	}
 
 	Engine *GetEngine()

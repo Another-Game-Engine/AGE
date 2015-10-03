@@ -28,11 +28,6 @@ namespace AGE
 		{
 			_threads[i] = new TaskThread(Thread::ThreadType(i));
 		}
-
-		for (std::size_t i = Thread::Main; i < Thread::hardwareConcurency(); ++i)
-		{
-			_threadsStatistics[i].name = Thread::threadTypeToString(Thread::ThreadType(i));
-		}
 	}
 	
 	bool ThreadManager::initAndLaunch()
@@ -134,53 +129,6 @@ namespace AGE
 		return static_cast<RenderThread*>(_threads[Thread::Render]);
 	}
 
-	void ThreadManager::updateThreadStatistics(Thread::ThreadType id, std::size_t workTime, std::size_t sleepTime)
-	{
-		SCOPE_profile_cpu_function("Threads manager");
-		auto &s = _threadsStatistics[id];
-		if (s.frameCounter >= s.work.size())
-		{
-			s.frameCounter = 0;
-		}
-		s.work[s.frameCounter] = workTime;
-		s.wait[s.frameCounter++] = sleepTime;
-		float newWaitTime = 0;
-		float newWorkTime = 0;
-		for (auto i = 0; i < s.work.size(); ++i)
-		{
-			newWorkTime += s.work[i];
-			newWaitTime += s.wait[i];
-		}
-		s.averageWaitTime = newWaitTime / (float)s.work.size() / 1000.0f;
-		s.averageWorkTime = newWorkTime / (float)s.work.size() / 1000.0f;
-	}
-
-	TMQ::HybridQueue *ThreadManager::getAvailableTaskQueue(bool futur, Thread::ThreadType type)
-	{
-		std::size_t res = -1;
-		{
-			std::lock_guard<SpinLock> lock(_mutex);
-			if (_iterator >= Thread::hardwareConcurency())
-				_iterator = Thread::Main;
-			while (!_threads[_iterator]->isWorker())
-			{
-				++_iterator;
-				if (_iterator >= Thread::hardwareConcurency())
-					_iterator = Thread::Main;
-			}
-			res = _iterator;
-			++_iterator;
-		}
-		_threads[res]->taskCounter++;
-		// Disgusting !!!!! Heheh ! Shame on me :D
-		if (res > Thread::Render)
-			return static_cast<TaskThread*>(_threads[res])->getQueue();
-		else if (res == 0)
-			return static_cast<MainThread*>(_threads[res])->getQueue();
-		else
-			return static_cast<RenderThread*>(_threads[res])->getQueue();
-	}
-
 	void ThreadManager::forEachThreads(std::function<void(AGE::Thread *)> &&fn)
 	{
 		for (auto &e : _threads)
@@ -237,16 +185,4 @@ namespace AGE
 			threadManager->exit();
 		});
 	}
-
-	ThreadManager::ThreadStatistics::ThreadStatistics()
-		: name("")
-		, averageWorkTime(0)
-		, averageWaitTime(0)
-		, frameCounter(0)
-		, secondCounter(0)
-	{
-		work.fill(0);
-		wait.fill(0);
-	}
-
 }

@@ -25,7 +25,6 @@ namespace AGE
 
 
 		inline void displayFps(bool tof) { _displayFps = tof; }
-		inline void displayThreadsStatistics(bool tof) { _displayThreadsStatistics = tof; }
 
 		Engine(void);
 		Engine(int argc, char *argv[]);
@@ -39,14 +38,11 @@ namespace AGE
 	private:
 		static const std::size_t BufferSize = 1024;
 
-		void _renderThreadsStatistics();
-		void _renderFpsStatitstics();
 
 		Timer *_timer;
 		bool _initialized = false;
 
 		bool _displayFps = true;
-		bool _displayThreadsStatistics = true;
 	};
 
 	Engine *CreateEngine();

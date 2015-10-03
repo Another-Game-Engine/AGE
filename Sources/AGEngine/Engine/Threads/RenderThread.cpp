@@ -646,9 +646,6 @@ namespace AGE
 
 			workEnd = std::chrono::high_resolution_clock::now();
 			auto waitCount = std::chrono::duration_cast<std::chrono::microseconds>(waitEnd - waitStart).count();
-			GetThreadManager()->updateThreadStatistics(this->_id
-				, std::chrono::duration_cast<std::chrono::microseconds>(workEnd - workStart).count() - waitCount
-				, waitCount);
 		}
 		return true;
 	}

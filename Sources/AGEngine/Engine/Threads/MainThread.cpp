@@ -80,10 +80,6 @@ namespace AGE
 		workCount = std::chrono::duration_cast<std::chrono::microseconds>(workEnd - workStart).count();
 		workCount -= waitCount;
 
-		GetThreadManager()->updateThreadStatistics(this->_id
-			, workCount
-			, waitCount);
-		
 		if (_isRenderFrame)
 		{
 			++_frameCounter;
