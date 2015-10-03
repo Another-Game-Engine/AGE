@@ -56,7 +56,14 @@ namespace AGE
 #ifdef EDITOR_ENABLED
 		editorDelete();
 #endif
+	}
 
+	void AnimatedSklComponent::postUnserialization()
+	{
+		if (_skeletonFilePath.empty() == false)
+			_loadAndSetSkeleton(_skeletonFilePath);
+		if (_animationFilePath.empty() == false)
+			_loadAndSetAnimation(_animationFilePath);
 	}
 
 	void AnimatedSklComponent::setAnimation(const std::string &animationPath, bool isShared /*= false*/)
@@ -184,7 +191,11 @@ namespace AGE
 			if (extension == "aage")
 			{
 				phageName = file->getPath();
-
+				auto find = phageName.find(assetsDirectory);
+				if (find != std::string::npos)
+				{
+					phageName.erase(find, find + assetsDirectory.size());
+				}
 				fbxInFolder.push_back(phageName);
 			}
 		}));
@@ -249,7 +260,11 @@ namespace AGE
 			if (extension == "skage")
 			{
 				phageName = file->getPath();
-
+				auto find = phageName.find(assetsDirectory);
+				if (find != std::string::npos)
+				{
+					phageName.erase(find, find + assetsDirectory.size());
+				}
 				fbxInFolder.push_back(phageName);
 			}
 		}));
@@ -325,7 +340,8 @@ namespace AGE
 
 	void AnimatedSklComponent::editorCreate()
 	{
-		_config = std::make_shared<Config>();
+		if (!_config)
+			_config = std::make_shared<Config>();
 	}
 	void AnimatedSklComponent::editorDelete()
 	{

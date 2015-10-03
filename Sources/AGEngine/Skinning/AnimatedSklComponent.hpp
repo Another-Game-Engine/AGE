@@ -26,11 +26,11 @@ namespace AGE
 		void setAnimation(std::shared_ptr<AnimationData> animationAssetPtr, bool isShared = false);
 
 		virtual void reset();
+		virtual void postUnserialization();
 
 		inline std::shared_ptr<Skeleton> getSkeleton() { return _skeletonAsset; }
 		inline std::shared_ptr<AnimationData> getAnimationData() { return _animationAsset; }
 		inline std::shared_ptr<AnimationInstance> getAnimation() { return _animationInstance; }
-
 	private:
 		std::string _skeletonFilePath;
 		std::shared_ptr<Skeleton> _skeletonAsset;
@@ -89,6 +89,10 @@ namespace AGE
 		template <class Archive, cereal::traits::EnableIf<cereal::traits::is_text_archive<Archive>::value> = cereal::traits::sfinae>
 		void serialize(Archive &ar, const std::uint32_t version)
 		{
+			if (_config == nullptr)
+			{
+				_config = std::make_shared<Config>();
+			}
 			ar(cereal::make_nvp("Skeleton", _config->skeletonFilePath));
 			ar(cereal::make_nvp("Animation", _config->animationFilePath));
 			ar(cereal::make_nvp("IsShared", _config->isShared));
