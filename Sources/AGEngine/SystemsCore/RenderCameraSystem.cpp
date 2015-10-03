@@ -171,7 +171,8 @@ namespace AGE
 			++keyCounter;
 			++i;
 		}
-		key->keyHolder.size = keyCounter;
+		if (key)
+			key->keyHolder.size = keyCounter;
 		res.resize(j);
 	}
 
