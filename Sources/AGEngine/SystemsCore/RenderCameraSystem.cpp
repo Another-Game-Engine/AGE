@@ -57,7 +57,11 @@ namespace AGE
 
 			AGE_ASSERT(blockNumber > 0);
 			matrixKeyArray = new MatrixHandler[blockNumber * MaxItemID]();
-			list           = new LFList<BFCItem>[blockNumber]();
+			list           = new LFList<BFCItem>*[blockNumber];
+			for (auto i = 0; i < blockNumber; ++i)
+			{
+				list[i] = new LFList<BFCItem>();
+			}
 			total          = 0;
 		}
 
@@ -67,18 +71,21 @@ namespace AGE
 
 			if (matrixKeyArray)
 				delete[] matrixKeyArray;
-			if (list)
-				delete[] list;
+			for (auto i = 0; i < blockNumber; ++i)
+			{
+				delete list[i];
+			}
+			delete[] list;
 		}
 
 		MatrixHandler   *matrixKeyArray = nullptr;
-		LFList<BFCItem> *list = nullptr;
+		LFList<BFCItem> **list = nullptr;
 		std::atomic_size_t total;
 		const std::size_t blockNumber;
 
 		virtual void operator()(LFList<BFCItem> &, std::size_t blockId);
 		void sortAll();
-		void fill(std::vector<DRBSpotLightOccluder> &res);
+		void fill(std::vector<DRBSpotLightOccluder> &res, std::list<std::shared_ptr<DRBData>> &skinned);
 	};
 
 	inline bool compare(const ShadowCasterBFCCallback::MatrixHandler &a, const ShadowCasterBFCCallback::MatrixHandler &b)
@@ -90,17 +97,27 @@ namespace AGE
 	{
 		SCOPE_profile_cpu_function("Camera system");
 
-		auto &listBlock = list[blockId];
+		auto &listBlock = *(list[blockId]);
+		auto skinnedList = new LFList<BFCItem>();
 		total.fetch_add(listBlock.getSize());
 		std::size_t index = blockId * MaxItemID;
 		while (listBlock.getSize() > 0)
 		{
-			DRBMeshData * mesh = (DRBMeshData*)(listBlock.pop()->getDrawable()->getDatas().get());
-			matrixKeyArray[index].key = ConcatenateKey(mesh->getPainterKey(), mesh->getVerticesKey());
-			matrixKeyArray[index].matrix = mesh->getTransformation();
-			++index;
+			auto *item = listBlock.pop();
+			DRBMeshData * mesh = (DRBMeshData*)(item->getDrawable()->getDatas().get());
+			if (mesh->hadRenderMode(AGE_SKINNED))
+			{
+				skinnedList->push(item);
+			}
+			else
+			{
+				matrixKeyArray[index].key = ConcatenateKey(mesh->getPainterKey(), mesh->getVerticesKey());
+				matrixKeyArray[index].matrix = mesh->getTransformation();
+				++index;
+			}
 		}
-
+		delete list[blockId];
+		list[blockId] = skinnedList;
 		std::sort((matrixKeyArray + blockId * MaxItemID), (matrixKeyArray + (blockId + 1) * MaxItemID), compare);
 	}
 
@@ -111,9 +128,18 @@ namespace AGE
 		std::sort(matrixKeyArray, (matrixKeyArray + blockNumber * MaxItemID), compare);
 	}
 
-	void ShadowCasterBFCCallback::fill(std::vector<DRBSpotLightOccluder> &res)
+	void ShadowCasterBFCCallback::fill(std::vector<DRBSpotLightOccluder> &res, std::list<std::shared_ptr<DRBData>> &skinned)
 	{
 		SCOPE_profile_cpu_function("Camera system");
+
+		for (auto i = 0; i < blockNumber; ++i)
+		{
+			while (list[i]->getSize() > 0)
+			{
+				auto *item = list[i]->pop();
+				skinned.push_back(item->getDrawable()->getDatas());
+			}
+		}
 
 		if (total == 0)
 		{
@@ -335,7 +361,7 @@ namespace AGE
 				BFCBlockManagerFactory *bf = _scene->getBfcBlockManagerFactory();
 				EmplaceTask<Tasks::Basic::VoidFunction>([bf, i, &spotlightFrustum, &counter, &shadowCaster]()
 				{
-					auto &list = shadowCaster.list[i];
+					auto &list = *(shadowCaster.list[i]);
 					bf->cullOnBlock(BFCCullableType::CullableMesh, list, spotlightFrustum, i, &shadowCaster);
 					counter.fetch_add(1);
 				});
@@ -349,7 +375,7 @@ namespace AGE
 			}
 
 			shadowCaster.sortAll();
-			shadowCaster.fill(spotDrawableList->occluders);
+			shadowCaster.fill(spotDrawableList->occluders, spotDrawableList->skinnedMesh);
 			spotLightList.push_back(spotDrawableList);
 		}
 		for (auto &pointLightEntity : _pointLights.getCollection())

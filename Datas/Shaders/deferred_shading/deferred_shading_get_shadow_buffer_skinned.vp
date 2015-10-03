@@ -1,0 +1,26 @@
+#version 330
+
+layout (location = 0) in vec3 position;
+layout (location = 1) in vec4 blendWeight;
+layout (location = 2) in vec4 blendIndice;
+
+uniform mat4 light_matrix;
+uniform mat4 model_matrix;
+
+uniform mat4 bones[166];
+
+void main()
+{
+	vec4 newPosition = vec4(position, 1);
+	newPosition = vec4(0);
+	if (blendWeight.x > 0.0f)
+		newPosition += (bones[int(blendIndice.x)] * vec4(position, 1)) * blendWeight.x;
+	if (blendWeight.y > 0.0f)
+		newPosition += (bones[int(blendIndice.y)] * vec4(position, 1)) * blendWeight.y;
+	if (blendWeight.z > 0.0f)
+		newPosition += (bones[int(blendIndice.z)] * vec4(position, 1)) * blendWeight.z;
+	if (blendWeight.w > 0.0f)
+		newPosition += (bones[int(blendIndice.w)] * vec4(position, 1)) * blendWeight.w;
+
+	gl_Position = light_matrix * model_matrix * vec4(newPosition.xyz, 1);
+}
