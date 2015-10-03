@@ -80,7 +80,6 @@ namespace AGE
 		_renderMode[mode] = false;
 	}
 
-	START_NOT_OPTIMIZED
 	void MeshRenderer::setSkinningMatrix(const std::vector<glm::mat4> &skinningMatrix)
 	{
 		SCOPE_profile_cpu_function("Animations");
@@ -97,7 +96,7 @@ namespace AGE
 		}
 		AGE_ASSERT(false, "You tried to update skinning matrix of a non skinned mesh.");
 	}
-	START_NOT_OPTIMIZED
+
 	void MeshRenderer::_copyFrom(const ComponentBase *model)
 	{
 		auto o = static_cast<const MeshRenderer*>(model);

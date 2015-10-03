@@ -20,7 +20,11 @@ namespace AGE
 	{}
 
 	void AnimatedSklComponent::_copyFrom(const ComponentBase *model)
-	{}
+	{
+#ifdef EDITOR_ENABLED
+		editorCopyFrom((AnimatedSklComponent*)(model));
+#endif
+	}
 
 	void AnimatedSklComponent::init(const std::string &skeletonPath /*= ""*/, std::shared_ptr<Skeleton> skeletonAsset /*= nullptr*/)
 	{
@@ -29,6 +33,10 @@ namespace AGE
 		else if (skeletonPath.empty() == false)
 			_loadAndSetSkeleton(skeletonPath);
 		_animIsShared = false;
+		_timeMultiplier = 10.0f;
+#ifdef EDITOR_ENABLED
+		editorCreate();
+#endif
 	}
 
 	void AnimatedSklComponent::reset()
@@ -45,6 +53,10 @@ namespace AGE
 		_animationFilePath.clear();
 		_animationInstance = nullptr;
 		_animIsShared = false;
+#ifdef EDITOR_ENABLED
+		editorDelete();
+#endif
+
 	}
 
 	void AnimatedSklComponent::setAnimation(const std::string &animationPath, bool isShared /*= false*/)
@@ -120,10 +132,312 @@ namespace AGE
 			animationManager->deleteAnimationInstance(_animationInstance);
 		}
 		_animationInstance = animationManager->createAnimationInstance(_skeletonAsset, _animationAsset, _animIsShared);
+		_animationInstance->_timeMultiplier = _timeMultiplier;
 	}
 
-#ifdef EDITOR_ENABLED
-	bool AnimatedSklComponent::editorUpdate()
-	{ return true;}
-#endif
 }
+
+
+// EDITOR
+#ifdef EDITOR_ENABLED
+
+#include <ImGui/ImGui.h>
+#include <FileUtils/FileSystemHelpers.hpp>
+#include <FileUtils/AssetFiles/CookedFileFilter.hpp>
+#include <FileUtils/AssetFiles/Folder.hpp>
+#include <FileUtils/AssetFiles/CookedFile.hpp>
+#include "../Editor/EditorConfiguration.hpp"
+
+namespace AGE
+{
+	std::string selectAnimation(const std::string &assetsDirectory)
+	{
+		static bool folderInitialized = false;
+		static FileUtils::Folder meshFolder = FileUtils::Folder();
+
+		bool hasChanged = false;
+
+		if (folderInitialized == false)
+		{
+			FileUtils::CookedFileFilter filter;
+			meshFolder.list(&filter, assetsDirectory);
+			folderInitialized = true;
+		}
+
+		std::list<std::string> fbxInFolder;
+
+		fbxInFolder.clear();
+
+		meshFolder.update(
+			std::function<bool(FileUtils::Folder*)>([&](FileUtils::Folder* folder) {
+			return true;
+		}),
+			std::function<bool(FileUtils::Folder*)>([](FileUtils::Folder* folder) {
+			return true;
+		}),
+			std::function<void(FileUtils::CookedFile*)>([&](FileUtils::CookedFile* file) {
+
+			auto extension = FileUtils::GetExtension(file->getFileName());
+			// Name of the file without extension and without _static or _dynamic
+			std::string phageName;
+
+			if (extension == "aage")
+			{
+				phageName = file->getPath();
+
+				fbxInFolder.push_back(phageName);
+			}
+		}));
+
+		std::string res = "";
+		bool clicked = false;
+
+		if (ImGui::BeginPopupModal("Select Animation", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+		{
+			static ImGuiTextFilter filter;
+
+			filter.Draw();
+			for (auto &e : fbxInFolder)
+			{
+				if (filter.PassFilter(e.c_str()))
+				{
+					if (ImGui::SmallButton(e.c_str()))
+					{
+						res = e;
+						clicked = true;
+						ImGui::CloseCurrentPopup();
+					}
+				}
+			}
+			if (ImGui::Button("Cancel", ImVec2(120, 0))) { res = "NULL"; ImGui::CloseCurrentPopup(); }
+			ImGui::EndPopup();
+		}
+		return res;
+	}
+
+	std::string selectSkeleton(const std::string &assetsDirectory)
+	{
+		static bool folderInitialized = false;
+		static FileUtils::Folder meshFolder = FileUtils::Folder();
+
+		bool hasChanged = false;
+
+		if (folderInitialized == false)
+		{
+			FileUtils::CookedFileFilter filter;
+			meshFolder.list(&filter, assetsDirectory);
+			folderInitialized = true;
+		}
+
+		std::list<std::string> fbxInFolder;
+
+		fbxInFolder.clear();
+
+		meshFolder.update(
+			std::function<bool(FileUtils::Folder*)>([&](FileUtils::Folder* folder) {
+			return true;
+		}),
+			std::function<bool(FileUtils::Folder*)>([](FileUtils::Folder* folder) {
+			return true;
+		}),
+			std::function<void(FileUtils::CookedFile*)>([&](FileUtils::CookedFile* file) {
+
+			auto extension = FileUtils::GetExtension(file->getFileName());
+			// Name of the file without extension and without _static or _dynamic
+			std::string phageName;
+
+			if (extension == "skage")
+			{
+				phageName = file->getPath();
+
+				fbxInFolder.push_back(phageName);
+			}
+		}));
+
+		std::string res = "";
+		bool clicked = false;
+
+		if (ImGui::BeginPopupModal("Select Skeleton", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+		{
+			static ImGuiTextFilter filter;
+
+			filter.Draw();
+			for (auto &e : fbxInFolder)
+			{
+				if (filter.PassFilter(e.c_str()))
+				{
+					if (ImGui::SmallButton(e.c_str()))
+					{
+						res = e;
+						clicked = true;
+						ImGui::CloseCurrentPopup();
+					}
+				}
+			}
+			if (ImGui::Button("Cancel", ImVec2(120, 0))) { res = "NULL"; ImGui::CloseCurrentPopup(); }
+			ImGui::EndPopup();
+		}
+		return res;
+	}
+
+
+	std::shared_ptr<AnimatedSklComponent::Config> AnimatedSklComponent::getSharedConfig()
+	{
+		if (_config->isShared == true)
+		{
+			for (auto it = std::begin(getSharedConfigList()); it != std::end(getSharedConfigList()); ++it)
+			{
+				if ((*it)->skeletonFilePath == _config->skeletonFilePath
+					&& (*it)->animationFilePath == _config->animationFilePath)
+				{
+					return *it;
+				}
+			}
+		}
+		return nullptr;
+	}
+
+	void AnimatedSklComponent::cleanConfigPtr()
+	{
+		Config *ptr = _config.get();
+		_config = nullptr;
+
+		if (ptr->isShared == true)
+		{
+			for (auto it = std::begin(getSharedConfigList()); it != std::end(getSharedConfigList()); ++it)
+			{
+				if ((*it).get() == ptr)
+				{
+					if ((*it).use_count() == 1)
+					{
+						getSharedConfigList().erase(it);
+					}
+					break;
+				}
+			}
+		}
+	}
+
+	void AnimatedSklComponent::editorCopyFrom(AnimatedSklComponent *o)
+	{
+		_config = o->_config;
+	}
+
+	void AnimatedSklComponent::editorCreate()
+	{
+		_config = std::make_shared<Config>();
+	}
+	void AnimatedSklComponent::editorDelete()
+	{
+		if (_config)
+			return;
+	}
+
+	bool AnimatedSklComponent::editorUpdate()
+	{
+		bool modified = false;
+
+		static std::string *selectedSkeleton = nullptr;
+		static std::string *selectedAnimation = nullptr;
+
+		if (selectedSkeleton != nullptr)
+		{
+			*selectedSkeleton = selectSkeleton(entity->getScene()->getInstance<AGE::AssetsManager>()->getAssetsDirectory());
+			if (*selectedSkeleton == "NULL")
+			{
+				*selectedSkeleton = "";
+				selectedSkeleton = nullptr;
+			}
+			else if (selectedSkeleton->empty() == false)
+			{
+				selectedSkeleton = nullptr;
+			}
+			return true;
+		}
+
+		if (selectedAnimation != nullptr)
+		{
+			*selectedAnimation = selectAnimation(entity->getScene()->getInstance<AGE::AssetsManager>()->getAssetsDirectory());
+			if (*selectedAnimation == "NULL")
+			{
+				*selectedAnimation = "";
+				selectedAnimation = nullptr;
+			}
+			else if (selectedAnimation->empty() == false)
+			{
+				selectedAnimation = nullptr;
+			}
+			return true;
+		}
+
+		/////////////////////////////////
+
+		if (_config->skeletonFilePath.empty())
+		{
+			if (ImGui::Button("Select skeleton"))
+			{
+				ImGui::OpenPopup("Select Skeleton");
+				selectedSkeleton= &_config->skeletonFilePath;
+			}
+		}
+		else
+		{
+			ImGui::Text(_config->skeletonFilePath.c_str());
+			ImGui::SameLine();
+			if (ImGui::Button("Edit skeleton"))
+			{
+				ImGui::OpenPopup("Select Skeleton");
+				selectedSkeleton = &_config->skeletonFilePath;
+			}
+		}
+
+		if (_config->animationFilePath.empty())
+		{
+			if (ImGui::Button("Select animation"))
+			{
+				ImGui::OpenPopup("Select Animation");
+				selectedAnimation = &_config->animationFilePath;
+			}
+		}
+		else
+		{
+			ImGui::Text(_config->animationFilePath.c_str());
+			ImGui::SameLine();
+			if (ImGui::Button("Edit animation"))
+			{
+				ImGui::OpenPopup("Select Animation");
+				selectedAnimation = &_config->animationFilePath;
+			}
+		}
+
+		modified |= ImGui::InputFloat("Speed", &_config->timeMultiplier);
+
+		if (ImGui::Checkbox("Is shared", &_config->isShared))
+		{
+			modified = true;
+			if (_config->isShared)
+			{
+				auto ptr = getSharedConfig();
+				if (ptr == nullptr)
+				{
+					getSharedConfigList().push_back(_config);
+				}
+				else
+				{
+					_config = ptr;
+				}
+			}
+			else
+			{
+				_config->isShared = true;
+				auto ptr = std::make_shared<Config>(*_config.get());
+				ptr->isShared = false;
+				cleanConfigPtr();
+				_config = ptr;
+			}
+		}
+
+		return modified;
+	}
+}
+#endif

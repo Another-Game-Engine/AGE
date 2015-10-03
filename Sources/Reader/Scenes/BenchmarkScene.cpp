@@ -194,7 +194,7 @@ namespace AGE
 				load(sceneFileName);
 			}
 
-			{
+			/*{
 				auto hexapod2 = createEntity();
 				hexapod2->addComponent<MeshRenderer>(
 					getInstance<AGE::AssetsManager>()->getMesh("hexapod/hexapod.sage")
@@ -335,7 +335,7 @@ namespace AGE
 					}
 				}
 			}
-		}
+			*/}
 
 		if (getInstance<Input>()->getPhysicalKeyJustReleased(AgeKeys::AGE_ESCAPE))
 			return (false);
