@@ -26,7 +26,7 @@ namespace AGE
 
 	void Mat4Array255::set(glm::mat4 *m, std::size_t size)
 	{
-		AGE_ASSERT(size < 255);
+		AGE_ASSERT(size <= 255);
 		memcpy((void*)&_value, m, size * sizeof(glm::mat4));
 		_size = size;
 		_update = false;

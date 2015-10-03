@@ -7,7 +7,7 @@ namespace AGE
 	SkeletonProperty::SkeletonProperty() :
 		AProperty(std::string("bones"))
 	{
-
+		std::fill(_matrixArray, _matrixArray + sizeof(_matrixArray) / sizeof(glm::mat4), glm::mat4(1));
 	}
 
 	SkeletonProperty::~SkeletonProperty()

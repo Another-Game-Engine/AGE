@@ -137,7 +137,7 @@ namespace AGE
 
 	void MeshRenderer::_resetDrawableHandle()
 	{
-		if (_drawableHandle.invalid() != false)
+		if (_drawableHandle.invalid() == false)
 		{
 			for (auto &sm : _drawableHandle.getHandles())
 				entity->getLink().popAnObject(sm);

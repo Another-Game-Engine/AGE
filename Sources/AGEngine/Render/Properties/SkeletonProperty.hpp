@@ -27,6 +27,6 @@ namespace AGE
 
 	private:
 		glm::mat4 _matrixArray[255];
-		std::size_t _size = 0;
+		std::size_t _size = 255;
 	};
 }
