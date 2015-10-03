@@ -200,12 +200,6 @@ namespace AGE
 	}
 
 #ifdef EDITOR_ENABLED
-	void MeshRenderer::editorCreate()
-	{}
-
-	void MeshRenderer::editorDelete()
-	{}
-
 	bool MeshRenderer::editorUpdate()
 	{
 		bool modified = false;

@@ -352,16 +352,6 @@ namespace AGE
 
 #ifdef EDITOR_ENABLED
 
-	void Collider::editorCreate(void)
-	{
-		return;
-	}
-
-	void Collider::editorDelete(void)
-	{
-		return;
-	}
-
 	bool Collider::editorUpdate(void)
 	{
 		if (editorStruct == nullptr)

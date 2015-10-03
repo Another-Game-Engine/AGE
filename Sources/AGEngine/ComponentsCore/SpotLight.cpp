@@ -120,13 +120,6 @@ namespace AGE
 	}
 
 #ifdef EDITOR_ENABLED
-	void SpotLightComponent::editorCreate()
-	{}
-
-	void SpotLightComponent::editorDelete()
-	{
-	}
-
 	bool SpotLightComponent::editorUpdate()
 	{
 		bool modified = false;

@@ -37,8 +37,6 @@ namespace AGE
 		virtual void postUnserialization();
 
 #ifdef EDITOR_ENABLED
-		virtual void editorCreate();
-		virtual void editorDelete();
 		virtual bool editorUpdate();
 #endif
 

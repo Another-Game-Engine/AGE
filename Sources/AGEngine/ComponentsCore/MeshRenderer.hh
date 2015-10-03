@@ -58,8 +58,6 @@ namespace AGE
 		std::size_t selectedMaterialIndex = 0;
 		std::string selectedMaterialName = "";
 
-		virtual void editorCreate();
-		virtual void editorDelete();
 		virtual bool editorUpdate();
 #endif
 

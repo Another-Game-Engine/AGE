@@ -37,8 +37,6 @@ namespace AGE
 
 #ifdef EDITOR_ENABLED
 		void addSkyBoxToChoice(std::string const &type, std::shared_ptr<TextureCubeMap> const &texture);
-		virtual void editorCreate();
-		virtual void editorDelete();
 		virtual bool editorUpdate();
 		std::unordered_map<std::string, std::shared_ptr<TextureCubeMap>> _choicesSkymap;
 #endif

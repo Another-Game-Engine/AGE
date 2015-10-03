@@ -261,7 +261,7 @@ namespace AGE
 								{
 									if (ImGui::Selectable(ComponentRegistrationManager::getInstance().getComponentName(t.second).c_str()))
 									{
-										creationFn.at(t.first)(&entity);
+										auto cptPtr = creationFn.at(t.first)(&entity);
 									}
 								}
 							}

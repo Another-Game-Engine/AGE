@@ -54,6 +54,7 @@
 //COMPONENTS
 #include <Components/EntityRepresentation.hpp>
 #include <ComponentsCore\PhysicsData.hpp>
+#include <Skinning/AnimatedSklComponent.hpp>
 
 #include <Managers/ArchetypesEditorManager.hpp>
 
@@ -68,8 +69,6 @@ int			main(int ac, char **av)
 		auto configurationManager = engine->getInstance<AGE::ConfigurationManager>();
 		configurationManager->setConfiguration<std::string>(std::string("ShadersPath"), std::string(engine->getApplicationPath() + "/../../Datas/Shaders/"));
 
-
-		engine->displayThreadsStatistics(false);
 
 		AGE::GetThreadManager()->setAsWorker(false, false, false);
 		engine->setInstance<AGE::Timer>();
@@ -92,6 +91,7 @@ int			main(int ac, char **av)
 		REGISTER_COMPONENT_TYPE(AGE::Collider);
 		REGISTER_COMPONENT_TYPE(AGE::RigidBody);
 		REGISTER_COMPONENT_TYPE(AGE::CharacterController);
+		REGISTER_COMPONENT_TYPE(AGE::AnimatedSklComponent);
 
 		RegisterComponents();
 

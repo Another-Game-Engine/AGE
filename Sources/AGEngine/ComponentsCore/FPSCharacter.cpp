@@ -11,16 +11,6 @@ namespace AGE
 	}
 
 #if defined(EDITOR_ENABLED)
-	void FPSCharacter::editorCreate(void)
-	{
-
-	}
-
-	void FPSCharacter::editorDelete(void)
-	{
-
-	}
-
 	bool FPSCharacter::editorUpdate(void)
 	{
 		bool modified = false;

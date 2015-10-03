@@ -71,12 +71,6 @@ namespace AGE
 		_choicesSkymap[type] = texture;
 	}
 
-	void CameraComponent::editorCreate()
-	{}
-
-	void CameraComponent::editorDelete()
-	{}
-
 	bool CameraComponent::editorUpdate()
 	{
 		bool modified = false;

@@ -106,10 +106,6 @@ namespace AGE
 
 #ifdef EDITOR_ENABLED
 
-		virtual void editorCreate(void) override final;
-
-		virtual void editorDelete(void) override final;
-
 		virtual bool editorUpdate(void) override final;
 
 		struct EditorStruct final
