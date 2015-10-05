@@ -89,6 +89,7 @@ namespace AGE
 		template <class Archive, cereal::traits::EnableIf<cereal::traits::is_text_archive<Archive>::value> = cereal::traits::sfinae>
 		void serialize(Archive &ar, const std::uint32_t version)
 		{
+#if defined(EDITOR_ENABLED)
 			if (_config == nullptr)
 			{
 				_config = std::make_shared<Config>();
@@ -97,6 +98,7 @@ namespace AGE
 			ar(cereal::make_nvp("Animation", _config->animationFilePath));
 			ar(cereal::make_nvp("IsShared", _config->isShared));
 			ar(cereal::make_nvp("TimeMultiplier", _config->timeMultiplier));
+#endif
 		}
 
 		// Load Binary
