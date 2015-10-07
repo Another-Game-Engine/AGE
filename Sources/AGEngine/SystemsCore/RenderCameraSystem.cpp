@@ -57,11 +57,8 @@ namespace AGE
 
 			AGE_ASSERT(blockNumber > 0);
 			matrixKeyArray = new MatrixHandler[blockNumber * MaxItemID]();
-			list           = new LFList<BFCItem>*[blockNumber];
-			for (auto i = 0; i < blockNumber; ++i)
-			{
-				list[i] = new LFList<BFCItem>();
-			}
+			list           = new LFList<BFCItem>[blockNumber];
+			skinnedList    = new LFList<BFCItem>[blockNumber];
 			total          = 0;
 		}
 
@@ -71,15 +68,13 @@ namespace AGE
 
 			if (matrixKeyArray)
 				delete[] matrixKeyArray;
-			for (auto i = 0; i < blockNumber; ++i)
-			{
-				delete list[i];
-			}
 			delete[] list;
+			delete[] skinnedList;
 		}
 
 		MatrixHandler   *matrixKeyArray = nullptr;
-		LFList<BFCItem> **list = nullptr;
+		LFList<BFCItem> *list = nullptr;
+		LFList<BFCItem> *skinnedList = nullptr;
 		std::atomic_size_t total;
 		const std::size_t blockNumber;
 
@@ -97,8 +92,7 @@ namespace AGE
 	{
 		SCOPE_profile_cpu_function("Camera system");
 
-		auto &listBlock = *(list[blockId]);
-		auto skinnedList = new LFList<BFCItem>();
+		auto &listBlock = list[blockId];
 		total.fetch_add(listBlock.getSize());
 		std::size_t index = blockId * MaxItemID;
 		while (listBlock.getSize() > 0)
@@ -107,7 +101,7 @@ namespace AGE
 			DRBMeshData * mesh = (DRBMeshData*)(item->getDrawable()->getDatas().get());
 			if (mesh->hadRenderMode(AGE_SKINNED))
 			{
-				skinnedList->push(item);
+				skinnedList[blockId].push(item);
 			}
 			else
 			{
@@ -116,8 +110,6 @@ namespace AGE
 				++index;
 			}
 		}
-		delete list[blockId];
-		list[blockId] = skinnedList;
 		std::sort((matrixKeyArray + blockId * MaxItemID), (matrixKeyArray + (blockId + 1) * MaxItemID), compare);
 	}
 
@@ -134,9 +126,9 @@ namespace AGE
 
 		for (auto i = 0; i < blockNumber; ++i)
 		{
-			while (list[i]->getSize() > 0)
+			while (skinnedList[i].getSize() > 0)
 			{
-				auto *item = list[i]->pop();
+				auto *item = skinnedList[i].pop();
 				skinned.push_back(item->getDrawable()->getDatas());
 			}
 		}
@@ -169,10 +161,10 @@ namespace AGE
 			}
 			res[j++] = DRBSpotLightOccluder(std::move(matrixKeyArray[i].matrix));
 			++keyCounter;
+			std::size_t ttdebug = total;
 			++i;
 		}
-		if (key)
-			key->keyHolder.size = keyCounter;
+		key->keyHolder.size = keyCounter;
 		res.resize(j);
 	}
 
@@ -355,28 +347,32 @@ namespace AGE
 			std::atomic_size_t counter = 0;
 
 			std::size_t meshBlocksToCullNumber = _scene->getBfcBlockManagerFactory()->getBlockNumberToCull(BFCCullableType::CullableMesh);
-			ShadowCasterBFCCallback shadowCaster(meshBlocksToCullNumber);
 
-			for (std::size_t i = 0; i < meshBlocksToCullNumber; ++i)
+			if (meshBlocksToCullNumber > 0)
 			{
-				BFCBlockManagerFactory *bf = _scene->getBfcBlockManagerFactory();
-				EmplaceTask<Tasks::Basic::VoidFunction>([bf, i, &spotlightFrustum, &counter, &shadowCaster]()
-				{
-					auto &list = *(shadowCaster.list[i]);
-					bf->cullOnBlock(BFCCullableType::CullableMesh, list, spotlightFrustum, i, &shadowCaster);
-					counter.fetch_add(1);
-				});
-			}
+				ShadowCasterBFCCallback shadowCaster(meshBlocksToCullNumber);
 
-			{
-				SCOPE_profile_cpu_i("Camera system", "Cull for spots");
-				while (counter < meshBlocksToCullNumber )
+				for (std::size_t i = 0; i < meshBlocksToCullNumber; ++i)
 				{
+					BFCBlockManagerFactory *bf = _scene->getBfcBlockManagerFactory();
+					EmplaceTask<Tasks::Basic::VoidFunction>([bf, i, &spotlightFrustum, &counter, &shadowCaster]()
+					{
+						auto &list = shadowCaster.list[i];
+						bf->cullOnBlock(BFCCullableType::CullableMesh, list, spotlightFrustum, i, &shadowCaster);
+						counter.fetch_add(1);
+					});
 				}
-			}
 
-			shadowCaster.sortAll();
-			shadowCaster.fill(spotDrawableList->occluders, spotDrawableList->skinnedMesh);
+				{
+					SCOPE_profile_cpu_i("Camera system", "Cull for spots");
+					while (counter < meshBlocksToCullNumber)
+					{
+					}
+				}
+
+				shadowCaster.sortAll();
+				shadowCaster.fill(spotDrawableList->occluders, spotDrawableList->skinnedMesh);
+			}
 			spotLightList.push_back(spotDrawableList);
 		}
 		for (auto &pointLightEntity : _pointLights.getCollection())
