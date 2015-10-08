@@ -103,7 +103,7 @@ namespace AGE
 		AGE_ASSERT(!_initialized && "Engine already initialized.");
 		Age_microprofileInit();
 		{
-			auto futur = GetRenderThread()->getQueue()->emplaceFutureTask<Tasks::Render::CreateRenderContext, bool>(this);
+			auto futur = TMQ::TaskManager::emplaceRenderFutureTask<Tasks::Render::CreateRenderContext, bool>(this);
 			auto success = futur.get();
 			if (!success)
 			{
@@ -207,7 +207,7 @@ namespace AGE
 		if (!fn())
 			return false;
 		{
-			auto futur = GetRenderThread()->getQueue()->emplaceFutureTask<Tasks::Render::InitRenderPipelines, bool>(this);
+			auto futur = TMQ::TaskManager::emplaceRenderFutureTask<Tasks::Render::InitRenderPipelines, bool>(this);
 			auto success = futur.get();
 			if (!success)
 			{
@@ -257,7 +257,7 @@ namespace AGE
 		if (GetMainThread()->isRenderFrame())
 		{
 
-			GetRenderThread()->getQueue()->emplaceTask<Commands::ToRender::Flush>();
+			TMQ::TaskManager::emplaceRenderTask<Commands::ToRender::Flush>();
 			++frame;
 		}
 		return true;

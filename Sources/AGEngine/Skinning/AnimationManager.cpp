@@ -8,6 +8,8 @@
 #include <Threads/TaskScheduler.hpp>
 #include <Threads/Tasks/BasicTasks.hpp>
 
+#include <TMQ/Queue.hpp>
+
 namespace AGE
 {
 	AnimationManager::AnimationManager()
@@ -82,7 +84,7 @@ namespace AGE
 				for (auto &a : s.second)
 				{
 					auto skeleton = s.first;
-					EmplaceTask<Tasks::Basic::VoidFunction>([a, skeleton, &counter, time](){
+					TMQ::TaskManager::emplaceSharedTask<Tasks::Basic::VoidFunction>([a, skeleton, &counter, time](){
 						a->update(time);
 						skeleton->updateSkinning(a);
 						counter.fetch_add(1);

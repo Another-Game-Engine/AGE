@@ -62,7 +62,7 @@ namespace AGE
 				TMQ::MessageBase *task = nullptr;
 				do {
 					waitStart = std::chrono::high_resolution_clock::now();
-					getQueue()->tryToGetTask(task, 0);
+					TMQ::TaskManager::MainThreadGetTask(task);
 					waitEnd = std::chrono::high_resolution_clock::now();
 					waitCount += std::chrono::duration_cast<std::chrono::microseconds>(waitEnd - waitStart).count();
 

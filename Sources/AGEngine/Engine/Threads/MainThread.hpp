@@ -11,7 +11,7 @@ namespace AGE
 	class Engine;
 	class AScene;
 
-	class MainThread : public Thread, public QueuePusher, public QueueOwner
+	class MainThread : public Thread, public QueueOwner
 	{
 	public:
 		virtual bool init();
@@ -41,6 +41,5 @@ namespace AGE
 
 		AGE::Engine *_engine;
 		AScene *_activeScene;
-		TMQ::PtrQueue taskQueue;
 	};
 }

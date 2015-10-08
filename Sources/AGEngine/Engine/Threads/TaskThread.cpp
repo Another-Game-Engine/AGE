@@ -24,6 +24,7 @@ namespace AGE
 		registerCallback<AGE::Tasks::Basic::Exit>([&](AGE::Tasks::Basic::Exit& msg)
 		{
 			this->_insideRun = false;
+			TMQ::TaskManager::emplaceSharedTask<Tasks::Basic::Exit>();
 		});
 		return true;
 	}
@@ -46,7 +47,7 @@ namespace AGE
 
 	bool TaskThread::stop()
 	{
-		getQueue()->emplaceTask<Tasks::Basic::Exit>();
+		TMQ::TaskManager::emplaceSharedTask<Tasks::Basic::Exit>();
 		if (_threadHandle.joinable())
 			_threadHandle.join();
 		return true;
@@ -69,7 +70,8 @@ namespace AGE
 		while (_run && _insideRun)
 		{
 			waitStart = std::chrono::high_resolution_clock::now();
-			getQueue()->getTask(task);
+			while (TMQ::TaskManager::TaskThreadGetTask(task) == false)
+			{ }
 			waitEnd = std::chrono::high_resolution_clock::now();
 			workStart = std::chrono::high_resolution_clock::now();
 			if (task != nullptr)

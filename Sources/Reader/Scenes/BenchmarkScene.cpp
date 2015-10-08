@@ -70,6 +70,8 @@
 #include <BFC/BFCBlockManagerFactory.hpp>
 #include <BFC/BFCLinkTracker.hpp>
 
+#include <glm/gtc/random.hpp>
+
 namespace AGE
 {
 	Entity hexapod;
@@ -131,13 +133,8 @@ namespace AGE
 		getInstance<AGE::AssetsManager>()->loadMesh(OldFile("ball/ball.sage"), "DEMO_SCENE_BASIC_ASSETS");
 		getInstance<AGE::AssetsManager>()->loadMaterial(OldFile("cube/cube.mage"), "DEMO_SCENE_BASIC_ASSETS");
 		getInstance<AGE::AssetsManager>()->loadMaterial(OldFile("ball/ball.mage"), "DEMO_SCENE_BASIC_ASSETS");
-		getInstance<AGE::AssetsManager>()->loadMaterial(OldFile("hexapod/hexapod.mage"), "DEMO_SCENE_BASIC_ASSETS");
 
-//		_skyboxTest = getInstance<AGE::AssetsManager>()->loadSkybox("test", OldFile("skyboxes/test.dds"), "DEMO_SCENE_BASIC_ASSETS");
 		_skyboxSpace = getInstance<AGE::AssetsManager>()->loadCubeMap("space", OldFile("skyboxes/space.dds"), "DEMO_SCENE_BASIC_ASSETS");
-		//getInstance<AGE::AssetsManager>()->loadAnimation(OldFile("hexapod/run.aage"), "DEMO_SCENE_BASIC_ASSETS");
-		//getInstance<AGE::AssetsManager>()->loadSkeleton(OldFile("hexapod/run.skage"), "DEMO_SCENE_BASIC_ASSETS");
-		getInstance<AGE::AssetsManager>()->loadMesh(OldFile("hexapod/hexapod.sage"), "DEMO_SCENE_BASIC_ASSETS");
 
 		setInstance<AGE::AnimationManager>();
  
@@ -192,6 +189,15 @@ namespace AGE
 			if (!sceneFileName.empty())
 			{
 				load(sceneFileName);
+			}
+
+			for (std::size_t i = 0; i < 10000; ++i)
+			{
+				auto hexapod2 = createEntity();
+				hexapod2->addComponent<MeshRenderer>(
+					getInstance<AGE::AssetsManager>()->getMesh("cube/cube.sage")
+					, getInstance<AGE::AssetsManager>()->getMaterial("cube/cube.mage"));
+				hexapod2->getLink().setPosition(glm::ballRand(100.0f));
 			}
 
 			/*{
@@ -408,7 +414,7 @@ namespace AGE
 #if defined(AGE_ENABLE_IMGUI)
 		if (ImGui::Button("Reload shaders or type R") || getInstance<Input>()->getPhysicalKeyPressed(AgeKeys::AGE_r))
 		{
-			GetRenderThread()->getQueue()->emplaceTask<Tasks::Render::ReloadShaders>();
+			TMQ::TaskManager::emplaceRenderTask<Tasks::Render::ReloadShaders>();
 		}
 
 		static float tt = 0;

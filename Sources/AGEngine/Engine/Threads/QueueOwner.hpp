@@ -11,8 +11,6 @@ namespace AGE
 	class QueueOwner
 	{
 	public:
-		inline TMQ::HybridQueue *getQueue() { return &_queue; }
-
 		template <typename T>
 		void registerCallback(const std::function<void(T &)> &fn)
 		{
@@ -32,13 +30,8 @@ namespace AGE
 		}
 
 		bool execute(TMQ::MessageBase *task);
-		void computeTasksWhile(std::function<bool()> &condition);
 	protected:
-		TMQ::HybridQueue _queue;
-
 		AGE::Vector<std::unique_ptr<ICallbackContainer>> _individualCommandCallbacks;
 		static AGE::Vector<std::unique_ptr<ICallbackContainer>> _sharedCommandCallbacks;
-
-		friend class QueuePusher;
 	};
 }

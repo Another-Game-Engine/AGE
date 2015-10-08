@@ -148,7 +148,7 @@ namespace AGE
 		}
 		auto &material = it_material->second;
 		material.second->datas.clear();
-		auto future = AGE::EmplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]()
+		auto future = TMQ::TaskManager::emplaceSharedFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]()
 		{
 			SCOPE_profile_cpu_i("AssetsLoad", "LoadMaterial");
 			if (!filePath.exists())
@@ -249,7 +249,7 @@ namespace AGE
 			}
 			_materials.insert(std::make_pair(filePath.getFullName(), std::make_pair(std::make_shared<bool>(true), material)));
 		}
-		auto future = AGE::EmplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]()
+		auto future = TMQ::TaskManager::emplaceSharedFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]()
 		{
 			SCOPE_profile_cpu_i("AssetsLoad", "LoadMaterial");
 			if (!filePath.exists()) 
@@ -368,7 +368,7 @@ namespace AGE
 			_textures.insert(std::make_pair(filePath.getFullName(), textureInterface));
 		}
 
-		auto future = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]()
+		auto future = TMQ::TaskManager::emplaceRenderFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]()
 		{
 			SCOPE_profile_cpu_i("AssetsLoad", "LoadTexture");
 
@@ -402,7 +402,7 @@ namespace AGE
 			_cubeMaps.insert(std::make_pair(name, texture));
 		}
 
-		auto future = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]()
+		auto future = TMQ::TaskManager::emplaceRenderFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]()
 		{
 			std::shared_ptr<ATexture> loaded = OpenGLDDSLoader::loadDDSFile(filePath);
 			if (loaded == nullptr)
@@ -433,7 +433,7 @@ namespace AGE
 			}
 			_animations.insert(std::make_pair(filePath.getFullName(), nullptr));
 		}
-		auto future = AGE::EmplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]() mutable {
+		auto future = TMQ::TaskManager::emplaceSharedFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]() mutable {
 			LoadingCallback callback(1, [=]()
 			{
 				std::lock_guard<std::mutex> lock(this->_mutex);
@@ -484,7 +484,7 @@ namespace AGE
 			this->_skeletons[filePath.getFullName()] = skeleton;
 		});
 
-		auto future = AGE::EmplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]() mutable {
+		auto future = TMQ::TaskManager::emplaceSharedFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]() mutable {
 			SCOPE_profile_cpu_i("AssetsLoad", "LoadSkeleton");
 			std::ifstream ifs(filePath.getFullName(), std::ios::binary);
 			cereal::PortableBinaryInputArchive ar(ifs);
@@ -519,7 +519,7 @@ namespace AGE
 			}
 			this->_meshs.insert(std::make_pair(filePath.getFullName(), nullptr));
 		}
-		auto future = AGE::EmplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]()
+		auto future = TMQ::TaskManager::emplaceSharedFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]()
 		{
 			SCOPE_profile_cpu_i("AssetsLoad", "LoadMesh");
 
@@ -546,7 +546,7 @@ namespace AGE
 			// If no vertex pool correspond to submesh
 			for (std::size_t i = 0; i < data->subMeshs.size(); ++i)
 			{
-				auto future = AGE::EmplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]() mutable
+				auto future = TMQ::TaskManager::emplaceSharedFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]() mutable
 				{
 					loadSubmesh(data, i, &meshInstance->subMeshs[i], loadingChannel, callback);
 					return AssetsLoadingResult(false);
@@ -571,7 +571,7 @@ namespace AGE
 		auto maxSize = data.positions.size();
 		mesh->boundingBox = data.boundingBox;
 		mesh->defaultMaterialIndex = data.defaultMaterialIndex;
-		auto future = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]() mutable {
+		auto future = TMQ::TaskManager::emplaceRenderFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]() mutable {
 			SCOPE_profile_cpu_i("AssetsLoad", "LoadSubMesh");
 
 			auto &paintingManager = GetRenderThread()->paintingManager;

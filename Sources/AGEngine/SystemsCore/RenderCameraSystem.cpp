@@ -283,7 +283,7 @@ namespace AGE
 			}
 			if (drawDebugLines)
 			{
-				GetRenderThread()->getQueue()->emplaceTask<AGE::Commands::ToRender::Draw2DQuad>(glm::vec2(minPoint.x, minPoint.y), glm::vec2(minPoint.x, maxPoint.y), glm::vec2(maxPoint.x, maxPoint.y), glm::vec2(maxPoint.x, minPoint.y), glm::vec3(0, 1, 0));
+				TMQ::TaskManager::emplaceRenderTask<AGE::Commands::ToRender::Draw2DQuad>(glm::vec2(minPoint.x, minPoint.y), glm::vec2(minPoint.x, maxPoint.y), glm::vec2(maxPoint.x, maxPoint.y), glm::vec2(maxPoint.x, minPoint.y), glm::vec3(0, 1, 0));
 			}
 			++j;
 		}
@@ -342,12 +342,12 @@ namespace AGE
 
 				if (_drawDebugLines)
 				{
-					AGE::GetRenderThread()->getQueue()->emplaceTask<Commands::ToRender::Draw3DQuad>(aNear, bNear, cNear, dNear, color, activateDepth);
-					AGE::GetRenderThread()->getQueue()->emplaceTask<Commands::ToRender::Draw3DQuad>(aFar, bFar, cFar, dFar, color, activateDepth);
-					AGE::GetRenderThread()->getQueue()->emplaceTask<Commands::ToRender::Draw3DLine>(aNear, aFar, color, activateDepth);
-					AGE::GetRenderThread()->getQueue()->emplaceTask<Commands::ToRender::Draw3DLine>(bNear, bFar, color, activateDepth);
-					AGE::GetRenderThread()->getQueue()->emplaceTask<Commands::ToRender::Draw3DLine>(cNear, cFar, color, activateDepth);
-					AGE::GetRenderThread()->getQueue()->emplaceTask<Commands::ToRender::Draw3DLine>(dNear, dFar, color, activateDepth);
+					TMQ::TaskManager::emplaceRenderTask<Commands::ToRender::Draw3DQuad>(aNear, bNear, cNear, dNear, color, activateDepth);
+					TMQ::TaskManager::emplaceRenderTask<Commands::ToRender::Draw3DQuad>(aFar, bFar, cFar, dFar, color, activateDepth);
+					TMQ::TaskManager::emplaceRenderTask<Commands::ToRender::Draw3DLine>(aNear, aFar, color, activateDepth);
+					TMQ::TaskManager::emplaceRenderTask<Commands::ToRender::Draw3DLine>(bNear, bFar, color, activateDepth);
+					TMQ::TaskManager::emplaceRenderTask<Commands::ToRender::Draw3DLine>(cNear, cFar, color, activateDepth);
+					TMQ::TaskManager::emplaceRenderTask<Commands::ToRender::Draw3DLine>(dNear, dFar, color, activateDepth);
 				}
 
 				std::atomic_size_t counter = 0;
@@ -361,7 +361,7 @@ namespace AGE
 					for (std::size_t i = 0; i < meshBlocksToCullNumber; ++i)
 					{
 						BFCBlockManagerFactory *bf = _scene->getBfcBlockManagerFactory();
-						EmplaceTask<Tasks::Basic::VoidFunction>([bf, i, &spotlightFrustum, &counter, &shadowCaster]()
+						TMQ::TaskManager::emplaceSharedTask<Tasks::Basic::VoidFunction>([bf, i, &spotlightFrustum, &counter, &shadowCaster]()
 						{
 							auto &list = shadowCaster.list[i];
 							bf->cullOnBlock(BFCCullableType::CullableMesh, list, spotlightFrustum, i, 1, &shadowCaster);
@@ -420,14 +420,14 @@ namespace AGE
 
 					if (_cullingEnabled)
 					{
-						EmplaceTask<Tasks::Basic::VoidFunction>([bf, i, &cameraFrustum, &counter, &meshList, blocksPerTask](){
+						TMQ::TaskManager::emplaceSharedTask<Tasks::Basic::VoidFunction>([bf, i, &cameraFrustum, &counter, &meshList, blocksPerTask](){
 							bf->cullOnBlock(BFCCullableType::CullableMesh, meshList, cameraFrustum, i, blocksPerTask);
 							counter.fetch_add(blocksPerTask);
 						});
 					}
 					else
 					{
-						EmplaceTask<Tasks::Basic::VoidFunction>([bf, i, &counter, &meshList, blocksPerTask](){
+						TMQ::TaskManager::emplaceSharedTask<Tasks::Basic::VoidFunction>([bf, i, &counter, &meshList, blocksPerTask](){
 							bf->fillOnBlock(BFCCullableType::CullableMesh, meshList, i, blocksPerTask);
 							counter.fetch_add(blocksPerTask);
 						});
@@ -441,7 +441,7 @@ namespace AGE
 				for (std::size_t i = 0; i < pointLightBlocksToCullNumber; ++i)
 				{
 					BFCBlockManagerFactory *bf = _scene->getBfcBlockManagerFactory();
-					EmplaceTask<Tasks::Basic::VoidFunction>([bf, i, &cameraFrustum, &counter, &pointLightListToCull](){
+					TMQ::TaskManager::emplaceSharedTask<Tasks::Basic::VoidFunction>([bf, i, &cameraFrustum, &counter, &pointLightListToCull](){
 						bf->cullOnBlock(BFCCullableType::CullablePointLight, pointLightListToCull, cameraFrustum, i, 1);
 						counter.fetch_add(1);
 					});
@@ -476,7 +476,7 @@ namespace AGE
 
 			cameraList->spotLights = spotLightList;
 			cameraList->pointLights = pointLightList;
-			AGE::GetRenderThread()->getQueue()->emplaceTask<AGE::DRBCameraDrawableListCommand>(cameraList);
+			TMQ::TaskManager::emplaceRenderTask<AGE::DRBCameraDrawableListCommand>(cameraList);
 		}
 	}
 

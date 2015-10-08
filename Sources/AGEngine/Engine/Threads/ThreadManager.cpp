@@ -23,7 +23,7 @@ namespace AGE
 
 		_threads[Thread::Main] = mt;
 		_threads[Thread::Render] = rt;
-		mt->linkToNext(rt);
+
 		for (std::size_t i = Thread::Worker1; i < Thread::hardwareConcurency(); ++i)
 		{
 			_threads[i] = new TaskThread(Thread::ThreadType(i));

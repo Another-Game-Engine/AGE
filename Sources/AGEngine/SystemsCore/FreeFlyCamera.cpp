@@ -102,11 +102,11 @@ namespace AGE
 		// On click, the context grab the mouse
 		if (inputs->getMouseButtonJustPressed(AgeMouseButtons::AGE_MOUSE_RIGHT))
 		{
-			GetRenderThread()->getQueue()->emplaceTask<Tasks::Render::ContextGrabMouse>(true);
+			TMQ::TaskManager::emplaceRenderTask<Tasks::Render::ContextGrabMouse>(true);
 		}
 		else if (inputs->getMouseButtonJustReleased(AgeMouseButtons::AGE_MOUSE_RIGHT))
 		{
-			GetRenderThread()->getQueue()->emplaceTask<Tasks::Render::ContextGrabMouse>(false);
+			TMQ::TaskManager::emplaceRenderTask<Tasks::Render::ContextGrabMouse>(false);
 		}
 		// If clicked, handle the rotation with the mouse
 		if (inputs->getMouseButtonPressed(AgeMouseButtons::AGE_MOUSE_RIGHT))

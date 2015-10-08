@@ -393,7 +393,7 @@ namespace AGE
 					static bool first = true;
 					if (first || imguiRenderList)
 					{
-						GetMainThread()->getQueue()->emplaceTask<ImGuiEndOfFrame>();
+						TMQ::TaskManager::emplaceMainTask<ImGuiEndOfFrame>();
 						first = false;
 					}
 #endif
@@ -440,6 +440,7 @@ namespace AGE
 		{
 			AGE::GetEngine()->deleteInstance<IRenderContext>();
 			this->_insideRun = false;
+			TMQ::TaskManager::emplaceSharedTask<Tasks::Basic::Exit>();
 		});
 
 		registerCallback<AGE::Tasks::Render::ContextGrabMouse>([&](AGE::Tasks::Render::ContextGrabMouse &msg)
@@ -595,7 +596,7 @@ namespace AGE
 
 	bool RenderThread::stop()
 	{
-		getQueue()->emplaceTask<Tasks::Basic::Exit>();
+		TMQ::TaskManager::emplaceRenderTask<Tasks::Basic::Exit>();
 		if (_threadHandle.joinable())
 			_threadHandle.join();
 		return true;
@@ -635,7 +636,10 @@ namespace AGE
 			SCOPE_profile_cpu_i("RenderTimer", "Get and execute tasks");
 			waitStart = std::chrono::high_resolution_clock::now();
 			TMQ::MessageBase *task = nullptr;
-			getQueue()->getTask(task);
+			
+			while (TMQ::TaskManager::RenderThreadGetTask(task) == false)
+			{ }
+
 			waitEnd = std::chrono::high_resolution_clock::now();
 			if (task)
 			{
