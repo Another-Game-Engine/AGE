@@ -57,6 +57,45 @@ static std::pair<std::pair<GLenum, std::string>, std::function<void(AGE::Vertice
 
 namespace AGE
 {
+	struct LoadingCallback
+	{
+		LoadingCallback(std::size_t target, std::function<void(void)> callback)
+		{
+			ptr = std::make_shared<Internal>(target, callback);
+		}
+		LoadingCallback(const LoadingCallback &o)
+		{
+			ptr = o.ptr;
+		}
+		~LoadingCallback()
+		{
+		}
+		void increment()
+		{
+			if (++(ptr->counter) == ptr->target)
+			{
+				ptr->callback();
+			}
+		}
+	private:
+		struct Internal
+		{
+			const size_t target;
+			std::atomic_size_t counter;
+			std::function<void(void)> callback;
+
+			Internal(std::size_t _target, std::function<void(void)> _callback)
+				: target(_target), counter(0), callback(_callback)
+			{}
+			Internal() = delete;
+		};
+		std::shared_ptr<Internal> ptr = nullptr;
+
+		LoadingCallback() = delete;
+		LoadingCallback& operator=(const LoadingCallback &) = delete;
+	};
+
+
 	AssetsManager::AssetsManager()
 	{
 		QueueOwner::registerSharedCallback<LoadAssetMessage>([](LoadAssetMessage &msg){msg.setValue(msg.function()); });
@@ -392,14 +431,19 @@ namespace AGE
 			{
 				return (true);
 			}
+			_animations.insert(std::make_pair(filePath.getFullName(), nullptr));
 		}
-		auto future = AGE::EmplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=](){
+		auto future = AGE::EmplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]() mutable {
+			LoadingCallback callback(1, [=]()
+			{
+				std::lock_guard<std::mutex> lock(this->_mutex);
+				this->_animations[filePath.getFullName()] = animation;
+			});
 			SCOPE_profile_cpu_i("AssetsLoad", "LoadAnimation");
 			std::ifstream ifs(filePath.getFullName(), std::ios::binary);
 			cereal::PortableBinaryInputArchive ar(ifs);
 			ar(*animation.get());
-			std::lock_guard<std::mutex> lock(_mutex);
-			_animations.insert(std::make_pair(filePath.getFullName(), animation));
+			callback.increment();
 			return AssetsLoadingResult(false);
 		});
 		pushNewAsset(loadingChannel, _filePath.getFullName(), future);
@@ -431,14 +475,21 @@ namespace AGE
 			{
 				return (true);
 			}
+			_skeletons.insert(std::make_pair(filePath.getFullName(), nullptr));
 		}
-		auto future = AGE::EmplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=](){
+
+		LoadingCallback callback(1, [=]()
+		{
+			std::lock_guard<std::mutex> lock(this->_mutex);
+			this->_skeletons[filePath.getFullName()] = skeleton;
+		});
+
+		auto future = AGE::EmplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]() mutable {
 			SCOPE_profile_cpu_i("AssetsLoad", "LoadSkeleton");
 			std::ifstream ifs(filePath.getFullName(), std::ios::binary);
 			cereal::PortableBinaryInputArchive ar(ifs);
 			ar(*skeleton.get());
-			std::lock_guard<std::mutex> lock(_mutex);
-			_skeletons.insert(std::make_pair(filePath.getFullName(), skeleton));
+			callback.increment();
 			return true;
 		});
 		pushNewAsset(loadingChannel, _filePath.getFullName(), future);
@@ -466,7 +517,7 @@ namespace AGE
 			{
 				return (true);
 			}
-			_meshs.insert(std::make_pair(filePath.getFullName(), meshInstance));
+			this->_meshs.insert(std::make_pair(filePath.getFullName(), nullptr));
 		}
 		auto future = AGE::EmplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]()
 		{
@@ -484,11 +535,21 @@ namespace AGE
 			meshInstance->subMeshs.resize(data->subMeshs.size());
 			meshInstance->name = data->name;
 			meshInstance->path = _filePath.getFullName();
+
+
+			LoadingCallback callback(data->subMeshs.size(), [=]()
+			{
+				std::lock_guard<std::mutex> lock(this->_mutex);
+				this->_meshs[filePath.getFullName()] = meshInstance;
+			});
+
 			// If no vertex pool correspond to submesh
 			for (std::size_t i = 0; i < data->subMeshs.size(); ++i)
 			{
-				auto future = AGE::EmplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=](){
+				auto future = AGE::EmplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]() mutable
+				{
 					loadSubmesh(data, i, &meshInstance->subMeshs[i], loadingChannel);
+					callback.increment();
 					return AssetsLoadingResult(false);
 				});
 				pushNewAsset(loadingChannel, data->subMeshs[i].name, future);

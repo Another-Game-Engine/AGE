@@ -59,7 +59,7 @@ namespace AGE
 			matrixKeyArray = new MatrixHandler[blockNumber * MaxItemID]();
 			list           = new LFList<BFCItem>[blockNumber];
 			skinnedList    = new LFList<BFCItem>[blockNumber];
-			total          = 0;
+			totalNotSkinned = 0;
 		}
 
 		~ShadowCasterBFCCallback()
@@ -75,7 +75,7 @@ namespace AGE
 		MatrixHandler   *matrixKeyArray = nullptr;
 		LFList<BFCItem> *list = nullptr;
 		LFList<BFCItem> *skinnedList = nullptr;
-		std::atomic_size_t total;
+		std::atomic_size_t totalNotSkinned;
 		const std::size_t blockNumber;
 
 		virtual void operator()(LFList<BFCItem> &, std::size_t blockId);
@@ -93,7 +93,6 @@ namespace AGE
 		SCOPE_profile_cpu_function("Camera system");
 
 		auto &listBlock = list[blockId];
-		total.fetch_add(listBlock.getSize());
 		std::size_t index = blockId * MaxItemID;
 		while (listBlock.getSize() > 0)
 		{
@@ -110,6 +109,7 @@ namespace AGE
 				++index;
 			}
 		}
+		totalNotSkinned.fetch_add(index);
 		std::sort((matrixKeyArray + blockId * MaxItemID), (matrixKeyArray + (blockId + 1) * MaxItemID), compare);
 	}
 
@@ -133,12 +133,12 @@ namespace AGE
 			}
 		}
 
-		if (total == 0)
+		if (totalNotSkinned == 0)
 		{
 			return;
 		}
 
-		std::size_t max = total;
+		std::size_t max = totalNotSkinned;
 		res.resize(max * 2);
 		std::size_t i = 0;
 		DRBSpotLightOccluder *key = nullptr;
@@ -161,10 +161,10 @@ namespace AGE
 			}
 			res[j++] = DRBSpotLightOccluder(std::move(matrixKeyArray[i].matrix));
 			++keyCounter;
-			std::size_t ttdebug = total;
 			++i;
 		}
-		key->keyHolder.size = keyCounter;
+		if (key)
+			key->keyHolder.size = keyCounter;
 		res.resize(j);
 	}
 
