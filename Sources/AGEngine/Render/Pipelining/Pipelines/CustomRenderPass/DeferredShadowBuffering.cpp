@@ -170,7 +170,11 @@ namespace AGE
 				auto &current = occluders[occluderCounter];
 				AGE_ASSERT(current.isKeyHolder() == true);
 				// too much occluder for 1 spotlight ( > 1024)
-				AGE_ASSERT(current.keyHolder.size <= _maxMatrixInstancied);
+				auto size = current.keyHolder.size;
+				if (current.keyHolder.size > _maxMatrixInstancied)
+				{
+					size = _maxMatrixInstancied;
+				}
 				
 				Key<Painter> painterKey;
 				UnConcatenateKey(current.keyHolder.key, painterKey, verticesKey);
@@ -180,13 +184,9 @@ namespace AGE
 				{
 					painter = _painterManager->get_painter(painterKey);
 					painter->instanciedDrawBegin(_programs[PROGRAM_BUFFERING]);
-					_positionBuffer->set((void*)(&occluders[occluderCounter]), current.keyHolder.size);
-					painter->instanciedDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], verticesKey, current.keyHolder.size);
+					_positionBuffer->set((void*)(&occluders[occluderCounter]), size);
+					painter->instanciedDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], verticesKey, size);
 					painter->instanciedDrawEnd();
-				}
-				else
-				{
-					int debug = 666;
 				}
 				occluderCounter += current.keyHolder.size;
 			}
