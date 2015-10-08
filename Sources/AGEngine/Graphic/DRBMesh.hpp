@@ -15,9 +15,8 @@ namespace AGE
 	{
 	public:
 		DRBMesh();
-		virtual CullableTypeID getBFCType() const;
 		virtual glm::vec4 setBFCTransform(const glm::mat4 &transformation);
-		virtual const std::shared_ptr<DRBData> getDatas() const;
+		const std::shared_ptr<DRBMeshData> getDatas() const;
 
 		std::shared_ptr<DRBMeshData> datas;
 	}; 

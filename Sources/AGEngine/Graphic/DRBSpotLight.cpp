@@ -6,13 +6,14 @@ namespace AGE
 {
 
 	DRBSpotLight::DRBSpotLight()
+		: BFCCullableObject(BFCCullableType::CullableSpotLight)
 	{
 		_datas = std::make_shared<DRBSpotLightData>();
 	}
 
-	const std::shared_ptr<DRBData> DRBSpotLight::getDatas() const
+	const std::shared_ptr<DRBSpotLightData> DRBSpotLight::getDatas() const
 	{
-		return std::static_pointer_cast<DRBData>(_datas);
+		return _datas;
 	}
 
 	glm::vec4 DRBSpotLight::setBFCTransform(const glm::mat4 &transformation)

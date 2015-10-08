@@ -18,6 +18,10 @@
 #include <Graphic/DRBSpotLightData.hpp>
 #include <Graphic/BFCCullableTypes.hpp>
 #include <Graphic/DRBMeshData.hpp>
+#include <Graphic/DRBMesh.hpp>
+#include <Graphic/DRBSkinnedMesh.hpp>
+#include <Graphic/DRBPointLight.hpp>
+#include <Graphic/DRBSpotLight.hpp>
 
 #include <Threads/ThreadManager.hpp>
 #include <Threads/RenderThread.hpp>
@@ -97,7 +101,7 @@ namespace AGE
 		while (listBlock.getSize() > 0)
 		{
 			auto *item = listBlock.pop();
-			DRBMeshData * mesh = (DRBMeshData*)(item->getDrawable()->getDatas().get());
+			DRBMeshData * mesh = ((DRBMesh*)(item->getDrawable()))->getDatas().get();
 			if (mesh->hadRenderMode(AGE_SKINNED))
 			{
 				skinnedList[blockId].push(item);
@@ -129,7 +133,7 @@ namespace AGE
 			while (skinnedList[i].getSize() > 0)
 			{
 				auto *item = skinnedList[i].pop();
-				skinned.push_back(item->getDrawable()->getDatas());
+				skinned.push_back(((DRBSkinnedMesh*)(item->getDrawable()))->getDatas());
 			}
 		}
 
@@ -297,74 +301,76 @@ namespace AGE
 		}
 
 		std::list<std::shared_ptr<DRBSpotLightDrawableList>> spotLightList;
-		std::list<std::shared_ptr<DRBData>> pointLightList;
+		std::list<std::shared_ptr<DRBPointLightData>> pointLightList;
 
 
-		for (auto &spotEntity : _spotLights.getCollection())
 		{
-			auto spot = spotEntity->getComponent<SpotLightComponent>();
-			auto spotDrawableList = std::make_shared<DRBSpotLightDrawableList>();
-			spotDrawableList->spotLight = spot->getCullableHandle().getPtr()->getDatas();
-
-			auto spotData = std::static_pointer_cast<DRBSpotLightData>(spotDrawableList->spotLight);
-
-			glm::mat4 spotViewProj = spot->updateShadowMatrix();
-
-			Frustum spotlightFrustum;
-			spotlightFrustum.setMatrix(spotViewProj);
-
-			// Draw spotlight frustum debug:
-			glm::vec4 worldPos = glm::inverse(spotViewProj) * glm::vec4(-1, -1, -1, 1.0f);
-			glm::vec3 aNear = glm::vec3(worldPos / worldPos.w);
-			worldPos = glm::inverse(spotViewProj) * glm::vec4(-1, 1, -1, 1.0f);
-			glm::vec3 bNear = glm::vec3(worldPos / worldPos.w);
-			worldPos = glm::inverse(spotViewProj) * glm::vec4(1, 1, -1, 1.0f);
-			glm::vec3 cNear = glm::vec3(worldPos / worldPos.w);
-			worldPos = glm::inverse(spotViewProj) * glm::vec4(1, -1, -1, 1.0f);
-			glm::vec3 dNear = glm::vec3(worldPos / worldPos.w);
-			worldPos = glm::inverse(spotViewProj) * glm::vec4(-1, -1, 1, 1.0f);
-			glm::vec3 aFar = glm::vec3(worldPos / worldPos.w);
-			worldPos = glm::inverse(spotViewProj) * glm::vec4(-1, 1, 1, 1.0f);
-			glm::vec3 bFar = glm::vec3(worldPos / worldPos.w);
-			worldPos = glm::inverse(spotViewProj) * glm::vec4(1, 1, 1, 1.0f);
-			glm::vec3 cFar = glm::vec3(worldPos / worldPos.w);
-			worldPos = glm::inverse(spotViewProj) * glm::vec4(1, -1, 1, 1.0f);
-			glm::vec3 dFar = glm::vec3(worldPos / worldPos.w);
-
-			glm::vec3 color = glm::vec3(1, 0, 0);
-			bool activateDepth = true;
-
-			if (_drawDebugLines)
+			SCOPE_profile_cpu_i("Camera system", "Cull for spots");
+			for (auto &spotEntity : _spotLights.getCollection())
 			{
-				AGE::GetRenderThread()->getQueue()->emplaceTask<Commands::ToRender::Draw3DQuad>(aNear, bNear, cNear, dNear, color, activateDepth);
-				AGE::GetRenderThread()->getQueue()->emplaceTask<Commands::ToRender::Draw3DQuad>(aFar, bFar, cFar, dFar, color, activateDepth);
-				AGE::GetRenderThread()->getQueue()->emplaceTask<Commands::ToRender::Draw3DLine>(aNear, aFar, color, activateDepth);
-				AGE::GetRenderThread()->getQueue()->emplaceTask<Commands::ToRender::Draw3DLine>(bNear, bFar, color, activateDepth);
-				AGE::GetRenderThread()->getQueue()->emplaceTask<Commands::ToRender::Draw3DLine>(cNear, cFar, color, activateDepth);
-				AGE::GetRenderThread()->getQueue()->emplaceTask<Commands::ToRender::Draw3DLine>(dNear, dFar, color, activateDepth);
-			}
+				auto spot = spotEntity->getComponent<SpotLightComponent>();
+				auto spotDrawableList = std::make_shared<DRBSpotLightDrawableList>();
+				spotDrawableList->spotLight = spot->getCullableHandle().getPtr<DRBSpotLight>()->getDatas();
 
-			std::atomic_size_t counter = 0;
+				auto spotData = std::static_pointer_cast<DRBSpotLightData>(spotDrawableList->spotLight);
 
-			std::size_t meshBlocksToCullNumber = _scene->getBfcBlockManagerFactory()->getBlockNumberToCull(BFCCullableType::CullableMesh);
+				glm::mat4 spotViewProj = spot->updateShadowMatrix();
 
-			if (meshBlocksToCullNumber > 0)
-			{
-				ShadowCasterBFCCallback shadowCaster(meshBlocksToCullNumber);
+				Frustum spotlightFrustum;
+				spotlightFrustum.setMatrix(spotViewProj);
 
-				for (std::size_t i = 0; i < meshBlocksToCullNumber; ++i)
+				// Draw spotlight frustum debug:
+				glm::vec4 worldPos = glm::inverse(spotViewProj) * glm::vec4(-1, -1, -1, 1.0f);
+				glm::vec3 aNear = glm::vec3(worldPos / worldPos.w);
+				worldPos = glm::inverse(spotViewProj) * glm::vec4(-1, 1, -1, 1.0f);
+				glm::vec3 bNear = glm::vec3(worldPos / worldPos.w);
+				worldPos = glm::inverse(spotViewProj) * glm::vec4(1, 1, -1, 1.0f);
+				glm::vec3 cNear = glm::vec3(worldPos / worldPos.w);
+				worldPos = glm::inverse(spotViewProj) * glm::vec4(1, -1, -1, 1.0f);
+				glm::vec3 dNear = glm::vec3(worldPos / worldPos.w);
+				worldPos = glm::inverse(spotViewProj) * glm::vec4(-1, -1, 1, 1.0f);
+				glm::vec3 aFar = glm::vec3(worldPos / worldPos.w);
+				worldPos = glm::inverse(spotViewProj) * glm::vec4(-1, 1, 1, 1.0f);
+				glm::vec3 bFar = glm::vec3(worldPos / worldPos.w);
+				worldPos = glm::inverse(spotViewProj) * glm::vec4(1, 1, 1, 1.0f);
+				glm::vec3 cFar = glm::vec3(worldPos / worldPos.w);
+				worldPos = glm::inverse(spotViewProj) * glm::vec4(1, -1, 1, 1.0f);
+				glm::vec3 dFar = glm::vec3(worldPos / worldPos.w);
+
+				glm::vec3 color = glm::vec3(1, 0, 0);
+				bool activateDepth = true;
+
+				if (_drawDebugLines)
 				{
-					BFCBlockManagerFactory *bf = _scene->getBfcBlockManagerFactory();
-					EmplaceTask<Tasks::Basic::VoidFunction>([bf, i, &spotlightFrustum, &counter, &shadowCaster]()
-					{
-						auto &list = shadowCaster.list[i];
-						bf->cullOnBlock(BFCCullableType::CullableMesh, list, spotlightFrustum, i, &shadowCaster);
-						counter.fetch_add(1);
-					});
+					AGE::GetRenderThread()->getQueue()->emplaceTask<Commands::ToRender::Draw3DQuad>(aNear, bNear, cNear, dNear, color, activateDepth);
+					AGE::GetRenderThread()->getQueue()->emplaceTask<Commands::ToRender::Draw3DQuad>(aFar, bFar, cFar, dFar, color, activateDepth);
+					AGE::GetRenderThread()->getQueue()->emplaceTask<Commands::ToRender::Draw3DLine>(aNear, aFar, color, activateDepth);
+					AGE::GetRenderThread()->getQueue()->emplaceTask<Commands::ToRender::Draw3DLine>(bNear, bFar, color, activateDepth);
+					AGE::GetRenderThread()->getQueue()->emplaceTask<Commands::ToRender::Draw3DLine>(cNear, cFar, color, activateDepth);
+					AGE::GetRenderThread()->getQueue()->emplaceTask<Commands::ToRender::Draw3DLine>(dNear, dFar, color, activateDepth);
 				}
 
+				std::atomic_size_t counter = 0;
+
+				std::size_t meshBlocksToCullNumber = _scene->getBfcBlockManagerFactory()->getBlockNumberToCull(BFCCullableType::CullableMesh);
+
+				if (meshBlocksToCullNumber > 0)
 				{
-					SCOPE_profile_cpu_i("Camera system", "Cull for spots");
+					ShadowCasterBFCCallback shadowCaster(meshBlocksToCullNumber);
+
+					for (std::size_t i = 0; i < meshBlocksToCullNumber; ++i)
+					{
+						BFCBlockManagerFactory *bf = _scene->getBfcBlockManagerFactory();
+						EmplaceTask<Tasks::Basic::VoidFunction>([bf, i, &spotlightFrustum, &counter, &shadowCaster]()
+						{
+							auto &list = shadowCaster.list[i];
+							bf->cullOnBlock(BFCCullableType::CullableMesh, list, spotlightFrustum, i, &shadowCaster);
+							counter.fetch_add(1);
+						});
+					}
+
+				{
+					SCOPE_profile_cpu_i("Camera system", "Cull for spots wait");
 					while (counter < meshBlocksToCullNumber)
 					{
 					}
@@ -372,18 +378,21 @@ namespace AGE
 
 				shadowCaster.sortAll();
 				shadowCaster.fill(spotDrawableList->occluders, spotDrawableList->skinnedMesh);
+				}
+				spotLightList.push_back(spotDrawableList);
 			}
-			spotLightList.push_back(spotDrawableList);
 		}
 		for (auto &pointLightEntity : _pointLights.getCollection())
 		{
 			auto point = pointLightEntity->getComponent<PointLightComponent>();
 			
-			pointLightList.push_back(point->getCullableHandle().getPtr()->getDatas());
+			pointLightList.push_back(point->getCullableHandle().getPtr<DRBPointLight>()->getDatas());
 		}
 
 		for (auto &cameraEntity : _cameras.getCollection())
 		{
+			SCOPE_profile_cpu_i("Camera system", "Cull for cam");
+
 			Frustum cameraFrustum;
 			auto camera = cameraEntity->getComponent<CameraComponent>();
 
@@ -400,38 +409,46 @@ namespace AGE
 			std::size_t meshBlocksToCullNumber = _scene->getBfcBlockManagerFactory()->getBlockNumberToCull(BFCCullableType::CullableMesh);
 			std::size_t pointLightBlocksToCullNumber = _scene->getBfcBlockManagerFactory()->getBlockNumberToCull(BFCCullableType::CullablePointLight);
 			std::size_t totalToCullNumber = meshBlocksToCullNumber + pointLightBlocksToCullNumber;
-			
-			for (std::size_t i = 0; i < meshBlocksToCullNumber; ++i)
-			{
-				BFCBlockManagerFactory *bf = _scene->getBfcBlockManagerFactory();
 
-				if (_cullingEnabled)
+
+			{
+				SCOPE_profile_cpu_i("Camera system", "Cull for cam mesh");
+				for (std::size_t i = 0; i < meshBlocksToCullNumber; ++i)
 				{
-					EmplaceTask<Tasks::Basic::VoidFunction>([bf, i, &cameraFrustum, &counter, &meshList](){
-						bf->cullOnBlock(BFCCullableType::CullableMesh, meshList, cameraFrustum, i);
-						counter.fetch_add(1);
-					});
+					BFCBlockManagerFactory *bf = _scene->getBfcBlockManagerFactory();
+
+					if (_cullingEnabled)
+					{
+						EmplaceTask<Tasks::Basic::VoidFunction>([bf, i, &cameraFrustum, &counter, &meshList](){
+							bf->cullOnBlock(BFCCullableType::CullableMesh, meshList, cameraFrustum, i);
+							counter.fetch_add(1);
+						});
+					}
+					else
+					{
+						EmplaceTask<Tasks::Basic::VoidFunction>([bf, i, &counter, &meshList](){
+							bf->fillOnBlock(BFCCullableType::CullableMesh, meshList, i);
+							counter.fetch_add(1);
+						});
+					}
 				}
-				else
+			}
+
+			{
+				SCOPE_profile_cpu_i("Camera system", "Cull for pointlights");
+
+				for (std::size_t i = 0; i < pointLightBlocksToCullNumber; ++i)
 				{
-					EmplaceTask<Tasks::Basic::VoidFunction>([bf, i, &counter, &meshList](){
-						bf->fillOnBlock(BFCCullableType::CullableMesh, meshList, i);
+					BFCBlockManagerFactory *bf = _scene->getBfcBlockManagerFactory();
+					EmplaceTask<Tasks::Basic::VoidFunction>([bf, i, &cameraFrustum, &counter, &pointLightListToCull](){
+						bf->cullOnBlock(BFCCullableType::CullablePointLight, pointLightListToCull, cameraFrustum, i);
 						counter.fetch_add(1);
 					});
 				}
 			}
 
-			for (std::size_t i = 0; i < pointLightBlocksToCullNumber; ++i)
 			{
-				BFCBlockManagerFactory *bf = _scene->getBfcBlockManagerFactory();
-				EmplaceTask<Tasks::Basic::VoidFunction>([bf, i, &cameraFrustum, &counter, &pointLightListToCull](){
-					bf->cullOnBlock(BFCCullableType::CullablePointLight, pointLightListToCull, cameraFrustum, i);
-					counter.fetch_add(1);
-				});
-			}
-
-			{
-				SCOPE_profile_cpu_i("Camera system", "Cull for cam");
+				SCOPE_profile_cpu_i("Camera system", "Cull for cam wait");
 				while (counter < totalToCullNumber)
 				{ }
 				//GetMainThread()->computeTasksWhile(std::function<bool()>([&counter, totalToCullNumber]() {
@@ -443,12 +460,12 @@ namespace AGE
 				SCOPE_profile_cpu_i("Camera system", "Copy LFList to std");
 				while (meshList.getSize() > 0)
 				{
-					cameraList->meshs.push_back(meshList.pop()->getDrawable()->getDatas());
+					cameraList->meshs.push_back(((DRBMesh*)(meshList.pop()->getDrawable()))->getDatas());
 				}
 
 				while (pointLightListToCull.getSize() > 0)
 				{
-					cameraList->pointLights.push_back(pointLightListToCull.pop()->getDrawable()->getDatas());
+					cameraList->pointLights.push_back(((DRBPointLight*)(pointLightListToCull.pop()->getDrawable()))->getDatas());
 				}
 			}
 			if (OcclusionConfig::g_Occlusion_is_enabled)

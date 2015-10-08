@@ -14,8 +14,7 @@ namespace AGE
 	{
 	public:
 		DRBPointLight();
-		virtual CullableTypeID getBFCType() const;
-		virtual const std::shared_ptr<DRBData> getDatas() const;
+		const std::shared_ptr<DRBPointLightData> getDatas() const;
 		virtual glm::vec4 setBFCTransform(const glm::mat4 &transformation) override;
 	private:
 		std::shared_ptr<DRBPointLightData> _datas;

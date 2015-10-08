@@ -73,7 +73,7 @@ namespace AGE
 
 		for (auto &m : handle.getHandles())
 		{
-			if (std::static_pointer_cast<DRBMeshData>(m.getPtr()->getDatas())->hadRenderMode(RenderModes::AGE_SKINNED))
+			if (m.getPtr<DRBMesh>()->getDatas()->hadRenderMode(RenderModes::AGE_SKINNED))
 			{
 				_skinnedMeshPool.destroy(m.getPtr());
 			}

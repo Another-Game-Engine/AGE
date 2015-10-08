@@ -7,6 +7,7 @@
 namespace AGE
 {
 	DRBMesh::DRBMesh()
+		: BFCCullableObject(BFCCullableType::CullableMesh)
 	{
 		datas = std::make_shared<DRBMeshData>();
 	}
@@ -17,13 +18,8 @@ namespace AGE
 		return BFCCullableObject::setBFCTransform(transformation);
 	}
 
-	const std::shared_ptr<DRBData> DRBMesh::getDatas() const
+	const std::shared_ptr<DRBMeshData> DRBMesh::getDatas() const
 	{
-		return std::static_pointer_cast<DRBData>(datas);
-	}
-
-	CullableTypeID DRBMesh::getBFCType() const
-	{
-		return BFCCullableType::CullableMesh;
+		return datas;
 	}
 }

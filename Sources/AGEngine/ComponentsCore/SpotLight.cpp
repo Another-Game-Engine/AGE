@@ -96,7 +96,7 @@ namespace AGE
 
 		auto spotLightTexture = entity->getScene()->getInstance<AssetsManager>()->getSpotLightTexture();
 
-		auto &properties = _graphicHandle.getPtr()->getDatas()->globalProperties;
+		auto &properties = ((DRBSpotLight*)(_graphicHandle.getPtr()))->getDatas()->globalProperties;
 		
 		properties.add_property(_propPosition);
 		properties.add_property(_propAttenuation);
@@ -104,9 +104,9 @@ namespace AGE
 		auto &castedPropPos = std::static_pointer_cast<AutoProperty<glm::vec3, Vec3>>(_propPosition);
 		auto &castedPropShadowMatrix = std::static_pointer_cast<AutoProperty<glm::mat4, Mat4>>(_propShadowMatrix);
 
-		std::static_pointer_cast<DRBSpotLightData>(_graphicHandle.getPtr()->getDatas())->registerDirectionProperty(castedPropDir);
-		std::static_pointer_cast<DRBSpotLightData>(_graphicHandle.getPtr()->getDatas())->registerPositionProperty(castedPropPos);
-		std::static_pointer_cast<DRBSpotLightData>(_graphicHandle.getPtr()->getDatas())->registerShadowMatrixProperty(castedPropShadowMatrix);
+		_graphicHandle.getPtr<DRBSpotLight>()->getDatas()->registerDirectionProperty(castedPropDir);
+		_graphicHandle.getPtr<DRBSpotLight>()->getDatas()->registerPositionProperty(castedPropPos);
+		_graphicHandle.getPtr<DRBSpotLight>()->getDatas()->registerShadowMatrixProperty(castedPropShadowMatrix);
 		properties.add_property(_propSpotCutOff);
 		properties.add_property(_propExponentLight);
 		properties.add_property(_propColorLight);

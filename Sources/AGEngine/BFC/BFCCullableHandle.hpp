@@ -17,6 +17,10 @@ namespace AGE
 		bool operator==(const BFCCullableHandle &o) const;
 		inline const BFCCullableObject *getPtr() const { return _elementPtr; }
 		inline BFCCullableObject *getPtr() { return _elementPtr; }
+		template<typename T> // be carefull that's static cast, be sure to call the good type
+		inline T *getPtr() { return (T*)(_elementPtr); }
+		template<typename T> // be carefull that's static cast, be sure to call the good type
+		inline const T *getPtr() const { return (T*)(_elementPtr); }
 		inline const BFCItemID getItemId() const { return _itemID; }
 
 	private:

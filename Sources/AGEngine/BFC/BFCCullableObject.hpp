@@ -17,11 +17,12 @@ namespace AGE
 	struct BFCCullableObject
 	{
 	public:
+		BFCCullableObject(CullableTypeID type) : _type(type) {}
 		virtual ~BFCCullableObject() {}
-		virtual CullableTypeID getBFCType() const = 0;
+		inline CullableTypeID getBFCType() const { return _type; };
 		virtual glm::vec4 setBFCTransform(const glm::mat4 &transformation);
-		virtual const std::shared_ptr<DRBData> getDatas() const = 0;
 	private:
 		glm::mat4 _transform;
+		const CullableTypeID _type;
 	};
 }

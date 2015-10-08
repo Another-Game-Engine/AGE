@@ -68,12 +68,12 @@ namespace AGE
 		auto manager = entity->getScene()->getInstance<DRBLightElementManager>();
 		_graphicHandle = manager->addPointLight();
 
-		_graphicHandle.getPtr()->getDatas()->globalProperties.add_property(_colorProperty);
-		_graphicHandle.getPtr()->getDatas()->globalProperties.add_property(_ambiantColorProperty);
+		_graphicHandle.getPtr<DRBPointLight>()->getDatas()->globalProperties.add_property(_colorProperty);
+		_graphicHandle.getPtr<DRBPointLight>()->getDatas()->globalProperties.add_property(_ambiantColorProperty);
 
 		entity->getLink().pushAnObject(_graphicHandle);
 
-		std::static_pointer_cast<DRBPointLightData>(_graphicHandle.getPtr()->getDatas())->setRange(glm::vec4(range.x, range.y, range.z, 1.0f));
+		_graphicHandle.getPtr<DRBPointLight>()->getDatas()->setRange(glm::vec4(range.x, range.y, range.z, 1.0f));
 		setColor(color);
 	}
 
@@ -120,7 +120,7 @@ namespace AGE
 		}
 		if (ImGui::SliderFloat3("Range", glm::value_ptr(range), 0.0f, 1.0f))
 		{
-			std::static_pointer_cast<DRBPointLightData>(_graphicHandle.getPtr()->getDatas())->setRange(glm::vec4(range.x, range.y, range.z, 1.0f));
+			_graphicHandle.getPtr<DRBPointLight>()->getDatas()->setRange(glm::vec4(range.x, range.y, range.z, 1.0f));
 			modified = true;
 		}
 		return modified;

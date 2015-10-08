@@ -18,6 +18,9 @@ namespace AGE
 {
 	struct DRBData;
 	class TextureCubeMap;
+	struct DRBPointLightData;
+	struct DRBSpotLightData;
+
 	struct DRBSpotLightOccluder
 	{
 		static const float invalidVector[4];
@@ -82,7 +85,7 @@ namespace AGE
 	struct DRBCameraDrawableList
 	{
 		std::list<std::shared_ptr<DRBData>> meshs;
-		std::list<std::shared_ptr<DRBData>> pointLights;
+		std::list<std::shared_ptr<DRBPointLightData>> pointLights;
 		std::list<std::shared_ptr<DRBSpotLightDrawableList>> spotLights;
 		CameraInfos cameraInfos;
 	};

@@ -88,9 +88,9 @@ namespace AGE
 			return;
 		for (auto &handle : _drawableHandle.getHandles())
 		{
-			if (std::static_pointer_cast<DRBMeshData>(handle.getPtr()->getDatas())->hadRenderMode(RenderModes::AGE_SKINNED))
+			if (handle.getPtr<DRBMesh>()->getDatas()->hadRenderMode(RenderModes::AGE_SKINNED))
 			{
-				((DRBSkinnedMesh*)(handle.getPtr()))->setSkinningMatrix(skinningMatrix);
+				handle.getPtr<DRBSkinnedMesh>()->setSkinningMatrix(skinningMatrix);
 				return;
 			}
 		}
@@ -130,7 +130,7 @@ namespace AGE
 		
 		for (auto &handle : _drawableHandle.getHandles())
 		{
-			std::static_pointer_cast<DRBMeshData>(handle.getPtr()->getDatas())->setRenderModes(_renderMode);
+			handle.getPtr<DRBMesh>()->getDatas()->setRenderModes(_renderMode);
 			entity->getLink().pushAnObject(handle);
 		}
 	}
