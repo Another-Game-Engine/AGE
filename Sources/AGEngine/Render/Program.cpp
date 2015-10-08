@@ -136,7 +136,8 @@ namespace AGE
 
 	Program & Program::update()
 	{
-		SCOPE_profile_cpu_function("RenderTimer");
+		//@PROFILER_COMMENTED
+		//SCOPE_profile_cpu_function("RenderTimer");
 
 		use();
 		for (auto &resource : _program_resources)
@@ -337,7 +338,8 @@ namespace AGE
 
 	void Program::updateProperties(Properties &properties)
 	{
-		SCOPE_profile_cpu_function("RenderTimer");
+		//@PROFILER_COMMENTED
+		//SCOPE_profile_cpu_function("RenderTimer");
 
 		std::size_t id = properties.getProgramId(_ageId);
 		if (id == -1)

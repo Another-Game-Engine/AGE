@@ -84,32 +84,41 @@ namespace AGE
 		}
 	}
 
-	void BFCBlockManagerFactory::cullOnBlock(CullableTypeID channel, LFList<BFCItem> &result, const Frustum &frustum, std::size_t blockId, IBFCCullCallback *callback)
+	void BFCBlockManagerFactory::cullOnBlock(CullableTypeID channel, LFList<BFCItem> &result, const Frustum &frustum, std::size_t blockIdFrom, std::size_t numberOfBlocks, IBFCCullCallback *callback)
 	{
 		SCOPE_profile_cpu_function("BFC");
 
 		AGE_ASSERT(channel < MaxCullableTypeID);
+
 		if (channel >= _managers.size())
 		{
 			return;
 		}
 		auto &manager = _managers[channel];
-		AGE_ASSERT(blockId < manager._blocks.size());
-		auto &block = manager._blocks[blockId];
-		for (auto &item : block->_items)
+
+		size_t i = 0;
+		while (i < numberOfBlocks)
 		{
-			if (item.getDrawable() && frustum.checkCollision(item.getPosition()))
+			auto blockId = blockIdFrom + i;
+			if (blockId >= manager._blocks.size())
+				break;
+			auto &block = manager._blocks[blockId];
+			for (auto &item : block->_items)
 			{
-				result.push(&item);
+				if (item.getDrawable() && frustum.checkCollision(item.getPosition()))
+				{
+					result.push(&item);
+				}
 			}
-		}
-		if (callback)
-		{
-			(*callback)(result, blockId);
+			if (callback)
+			{
+				(*callback)(result, blockId);
+			}
+			++i;
 		}
 	}
 
-	void BFCBlockManagerFactory::fillOnBlock(CullableTypeID channel, LFList<BFCItem> &result, std::size_t blockId, IBFCCullCallback *callback)
+	void BFCBlockManagerFactory::fillOnBlock(CullableTypeID channel, LFList<BFCItem> &result, std::size_t blockIdFrom, std::size_t numberOfBlocks, IBFCCullCallback *callback)
 	{
 		SCOPE_profile_cpu_function("BFC");
 
@@ -119,18 +128,25 @@ namespace AGE
 			return;
 		}
 		auto &manager = _managers[channel];
-		AGE_ASSERT(blockId < manager._blocks.size());
-		auto &block = manager._blocks[blockId];
-		for (auto &item : block->_items)
+		size_t i = 0;
+		while (i < numberOfBlocks)
 		{
-			if (item.getDrawable())
+			auto blockId = blockIdFrom + i;
+			if (blockId >= manager._blocks.size())
+				break;
+			auto &block = manager._blocks[blockId];
+			for (auto &item : block->_items)
 			{
-				result.push(&item);
+				if (item.getDrawable())
+				{
+					result.push(&item);
+				}
 			}
-		}
-		if (callback)
-		{
-			(*callback)(result, blockId);
+			if (callback)
+			{
+				(*callback)(result, blockId);
+			}
+			++i;
 		}
 	}
 

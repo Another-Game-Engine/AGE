@@ -364,7 +364,7 @@ namespace AGE
 						EmplaceTask<Tasks::Basic::VoidFunction>([bf, i, &spotlightFrustum, &counter, &shadowCaster]()
 						{
 							auto &list = shadowCaster.list[i];
-							bf->cullOnBlock(BFCCullableType::CullableMesh, list, spotlightFrustum, i, &shadowCaster);
+							bf->cullOnBlock(BFCCullableType::CullableMesh, list, spotlightFrustum, i, 1, &shadowCaster);
 							counter.fetch_add(1);
 						});
 					}
@@ -413,22 +413,23 @@ namespace AGE
 
 			{
 				SCOPE_profile_cpu_i("Camera system", "Cull for cam mesh");
-				for (std::size_t i = 0; i < meshBlocksToCullNumber; ++i)
+				const size_t blocksPerTask = 8;
+				for (std::size_t i = 0; i < meshBlocksToCullNumber; i += blocksPerTask)
 				{
 					BFCBlockManagerFactory *bf = _scene->getBfcBlockManagerFactory();
 
 					if (_cullingEnabled)
 					{
-						EmplaceTask<Tasks::Basic::VoidFunction>([bf, i, &cameraFrustum, &counter, &meshList](){
-							bf->cullOnBlock(BFCCullableType::CullableMesh, meshList, cameraFrustum, i);
-							counter.fetch_add(1);
+						EmplaceTask<Tasks::Basic::VoidFunction>([bf, i, &cameraFrustum, &counter, &meshList, blocksPerTask](){
+							bf->cullOnBlock(BFCCullableType::CullableMesh, meshList, cameraFrustum, i, blocksPerTask);
+							counter.fetch_add(blocksPerTask);
 						});
 					}
 					else
 					{
-						EmplaceTask<Tasks::Basic::VoidFunction>([bf, i, &counter, &meshList](){
-							bf->fillOnBlock(BFCCullableType::CullableMesh, meshList, i);
-							counter.fetch_add(1);
+						EmplaceTask<Tasks::Basic::VoidFunction>([bf, i, &counter, &meshList, blocksPerTask](){
+							bf->fillOnBlock(BFCCullableType::CullableMesh, meshList, i, blocksPerTask);
+							counter.fetch_add(blocksPerTask);
 						});
 					}
 				}
@@ -441,7 +442,7 @@ namespace AGE
 				{
 					BFCBlockManagerFactory *bf = _scene->getBfcBlockManagerFactory();
 					EmplaceTask<Tasks::Basic::VoidFunction>([bf, i, &cameraFrustum, &counter, &pointLightListToCull](){
-						bf->cullOnBlock(BFCCullableType::CullablePointLight, pointLightListToCull, cameraFrustum, i);
+						bf->cullOnBlock(BFCCullableType::CullablePointLight, pointLightListToCull, cameraFrustum, i, 1);
 						counter.fetch_add(1);
 					});
 				}

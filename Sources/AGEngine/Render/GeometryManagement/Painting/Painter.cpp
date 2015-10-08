@@ -109,8 +109,9 @@ namespace AGE
 
 	void Painter::uniqueDraw(GLenum mode, std::shared_ptr<Program> const &program, Properties &properties, const Key<Vertices> &vertice)
 	{
-		SCOPE_profile_gpu_i("Unique Draw");
-		SCOPE_profile_cpu_function("PainterTimer");
+		//@PROFILER_COMMENTED
+		//SCOPE_profile_gpu_i("Unique Draw");
+		//SCOPE_profile_cpu_function("PainterTimer");
 
 		// be sure to call uniqueDrawBegin() before and uniqueDrawEnd() after
 		AGE_ASSERT(_isInUniqueDraw);
@@ -128,8 +129,9 @@ namespace AGE
 
 	void Painter::instanciedDraw(GLenum mode, std::shared_ptr<Program> const &program, const Key<Vertices> &vertice, std::size_t count)
 	{
-		SCOPE_profile_gpu_i("Instancied Draw");
-		SCOPE_profile_cpu_function("PainterTimer");
+		//@PROFILER_COMMENTED
+		//SCOPE_profile_gpu_i("Instancied Draw");
+		//SCOPE_profile_cpu_function("PainterTimer");
 
 		// be sure to call uniqueDrawBegin() before and uniqueDrawEnd() after
 		AGE_ASSERT(_isInstanciedDraw);
