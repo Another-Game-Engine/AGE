@@ -109,7 +109,7 @@ namespace AGE
 				++index;
 			}
 		}
-		totalNotSkinned.fetch_add(index);
+		totalNotSkinned.fetch_add(index - blockId * MaxItemID);
 		std::sort((matrixKeyArray + blockId * MaxItemID), (matrixKeyArray + (blockId + 1) * MaxItemID), compare);
 	}
 

@@ -548,8 +548,7 @@ namespace AGE
 			{
 				auto future = AGE::EmplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]() mutable
 				{
-					loadSubmesh(data, i, &meshInstance->subMeshs[i], loadingChannel);
-					callback.increment();
+					loadSubmesh(data, i, &meshInstance->subMeshs[i], loadingChannel, callback);
 					return AssetsLoadingResult(false);
 				});
 				pushNewAsset(loadingChannel, data->subMeshs[i].name, future);
@@ -561,7 +560,7 @@ namespace AGE
 		return (true);
 	}
 
-	void AssetsManager::loadSubmesh(std::shared_ptr<MeshData> fileData, std::size_t index, SubMeshInstance *mesh, const std::string &loadingChannel)
+	void AssetsManager::loadSubmesh(std::shared_ptr<MeshData> fileData, std::size_t index, SubMeshInstance *mesh, const std::string &loadingChannel, LoadingCallback callback)
 	{
 		auto &data = fileData->subMeshs[index];
 		std::size_t size = data.infos.count();
@@ -572,7 +571,7 @@ namespace AGE
 		auto maxSize = data.positions.size();
 		mesh->boundingBox = data.boundingBox;
 		mesh->defaultMaterialIndex = data.defaultMaterialIndex;
-		auto future = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]() {
+		auto future = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]() mutable {
 			SCOPE_profile_cpu_i("AssetsLoad", "LoadSubMesh");
 
 			auto &paintingManager = GetRenderThread()->paintingManager;
@@ -604,6 +603,7 @@ namespace AGE
 				}
 			}
 			vertices->set_indices(data.indices);
+			callback.increment();
 			return AssetsLoadingResult(false);
 		});
 		pushNewAsset(loadingChannel, data.name, future);

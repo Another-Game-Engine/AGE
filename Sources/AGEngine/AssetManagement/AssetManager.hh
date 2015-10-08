@@ -30,6 +30,7 @@ namespace AGE
 	class Painter;
 	class Texture2D;
 	class TextureCubeMap;
+	struct LoadingCallback;
 
 	struct Skeleton;
 	struct AnimationData;
@@ -152,7 +153,7 @@ private:
 		std::atomic<bool> _isLoading;
 	private:
 		void pushNewAsset(const std::string &loadingChannel, const std::string &filename, std::future<AssetsLoadingResult> &future);
-		void loadSubmesh(std::shared_ptr<MeshData> data, std::size_t index, SubMeshInstance *mesh, const std::string &loadingChannel);
+		void loadSubmesh(std::shared_ptr<MeshData> data, std::size_t index, SubMeshInstance *mesh, const std::string &loadingChannel, LoadingCallback callback);
 	};
 }
 
