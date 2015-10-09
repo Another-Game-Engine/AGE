@@ -63,7 +63,7 @@ namespace AGE
 		free(_commandBuffer);
 	}
 
-	void ShadowCasterResult::prepareForComputation(std::shared_ptr<DRBSpotLightData> &spotlightData)
+	void ShadowCasterResult::prepareForComputation(glm::mat4 spotMat)
 	{
 		SCOPE_profile_cpu_function("ShadowCaster");
 
@@ -75,6 +75,7 @@ namespace AGE
 		}
 		_matrixBufferIndex = 0;
 		_taskCounter = 0;
+		_spotMatrix = spotMat;
 
 	}
 
@@ -113,6 +114,7 @@ namespace AGE
 		std::size_t index = _matrixBufferIndex.fetch_add(aSize);
 		if (index + aSize >= _matrixBufferSize)
 		{
+			_matrixBufferIndex.fetch_sub(aSize);
 			return;
 		}
 		memcpy(_matrixBuffer + index, array.data(), aSize * sizeof(ShadowCasterMatrixHandler));
@@ -132,7 +134,7 @@ namespace AGE
 
 		if (_matrixBufferIndex != 0)
 		{
-			std::size_t max = _matrixBufferIndex;
+			std::size_t max = _matrixBufferIndex.load() > _matrixBufferSize ? _matrixBufferSize : _matrixBufferIndex.load();
 			std::size_t i = 0;
 
 			ShadowCasterSpotLightOccluder *key = nullptr;
@@ -176,7 +178,7 @@ namespace AGE
 			}
 		}
 		_globalCounter->fetch_sub(1);
-		_cullingResultPool->enqueue(this);
+		//_cullingResultPool->enqueue(this);
 	}
 
 

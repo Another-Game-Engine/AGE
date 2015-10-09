@@ -29,6 +29,7 @@
 #include <Graphic/BFCCullableTypes.hpp>
 #include <Threads/Tasks/BasicTasks.hpp>
 #include <Utils/Frustum.hh>
+#include "ShadowMapCollection.hpp"
 
 #define DEFERRED_SHADING_SHADOW_BUFFERING_VERTEX "deferred_shading/deferred_shading_get_shadow_buffer.vp"
 #define DEFERRED_SHADING_SHADOW_BUFFERING_VERTEX_SKINNED "deferred_shading/deferred_shading_get_shadow_buffer_skinned.vp"
@@ -90,7 +91,7 @@ namespace AGE
 	}
 
 
-	void DeferredShadowBuffering::renderPass(const DRBCameraDrawableList &infos)
+	void DeferredShadowBuffering::renderPass(const DRBCameraDrawableList &/*infos*/)
 	{
 		//@PROUT
 		SCOPE_profile_gpu_i("DeferredShadowBuffering render pass");
@@ -108,72 +109,51 @@ namespace AGE
 
 		_programs[PROGRAM_BUFFERING]->use();
 
-		// handle the number of sample
-		if (_depthBuffers.size() < infos.spotLights.size())
-		{
-			std::size_t count = infos.spotLights.size() - _depthBuffers.size();
-			for (int index = 0; index < count; ++index)
-			{
-				_depthBuffers.push_back(createRenderPassOutput<Texture2D>(_frame_buffer.width(), _frame_buffer.height(), GL_DEPTH24_STENCIL8, true));
-				_depthBuffers.back()->bind();
-				_depthBuffers.back()->parameter(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-				_depthBuffers.back()->parameter(GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-				_depthBuffers.back()->parameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-				_depthBuffers.back()->parameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-				_depthBuffers.back()->parameter(GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
-			}
-		}
-		else if (_depthBuffers.size() > infos.spotLights.size())
-		{
-			std::size_t count = _depthBuffers.size() - infos.spotLights.size();
-			for (int index = 0; index < count; ++index)
-			{
-				_depthBuffers.pop_back();
-			}
-		}
-		// start to render to texture for each depth map
-		auto it = _depthBuffers.begin();
+		std::vector<ShadowCasterResult*> spotList;
+		ShadowCasterResult* r = nullptr;
+		while (_toDraw.try_dequeue(r))
+			spotList.push_back(r);
 
-		glViewport(0, 0, _frame_buffer.width(), _frame_buffer.height());
+		// handle the number of sample
+
+		auto w = _frame_buffer.width(); auto h = _frame_buffer.height();
+
+
+		glViewport(0, 0, w, h);
 
 		// we clear
-		for (auto &spotLightPtr : infos.spotLights)
+		int i = 0;
+		for (auto &spotLightPtr : spotList)
 		{
 			SCOPE_profile_gpu_i("Spotlight pass clear");
 			SCOPE_profile_cpu_i("RenderTimer", "Spotlight pass clear");
 
-			_frame_buffer.attachment(*(*it), GL_DEPTH_STENCIL_ATTACHMENT);
+			auto depth = ShadowMapCollection::getDepthBuffer(i++, w, h);
+			_frame_buffer.attachment(*depth.get(), GL_DEPTH_STENCIL_ATTACHMENT);
 			glClear(GL_DEPTH_BUFFER_BIT);
-			DRBSpotLightData *spotlight = (DRBSpotLightData*)(spotLightPtr->spotLight.get());
-			spotlight->shadowMap = *it;
-			++it;
 		}
 
-		it = _depthBuffers.begin();
-
+		i = 0;
 		// we render instancied occluders
-		for (auto &spotLightPtr : infos.spotLights)
+		for (auto &spotLightPtr : spotList)
 		{
 			SCOPE_profile_gpu_i("Spotlight pass");
 			SCOPE_profile_cpu_i("RenderTimer", "Spotlight pass");
 
-			DRBSpotLightData *spotlight = (DRBSpotLightData*)(spotLightPtr->spotLight.get());
+			auto depth = ShadowMapCollection::getDepthBuffer(i++, w, h);
 
-			_frame_buffer.attachment(*(*it), GL_DEPTH_STENCIL_ATTACHMENT);
-			_programs[PROGRAM_BUFFERING]->registerProperties(spotlight->globalProperties);
-			_programs[PROGRAM_BUFFERING]->updateNonInstanciedProperties(spotlight->globalProperties);
+			_frame_buffer.attachment(*depth.get(), GL_DEPTH_STENCIL_ATTACHMENT);
+			_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("light_matrix").set(spotLightPtr->_spotMatrix);
 			_programs[PROGRAM_BUFFERING]->get_resource<SamplerBuffer>("model_matrix_tbo").set(_positionBuffer);
 
 			_positionBuffer->resetOffset();
 
 			std::shared_ptr<Painter> painter = nullptr;
-			//std::shared_ptr<Painter> oldPainter = nullptr;
 			Key<Vertices> verticesKey;
-			//Key<Vertices> oldVerticesKey;
 
 			// draw for the spot light selected
-			auto &occluders = spotLightPtr->occluders;
-			std::size_t occluderSize = occluders.size();
+			auto &occluders = spotLightPtr->_commandBuffer;
+			std::size_t occluderSize = spotLightPtr->_commandBufferIndex;
 			std::size_t occluderCounter = 0;
 
 			while (occluderCounter < occluderSize)
@@ -201,61 +181,61 @@ namespace AGE
 				}
 				occluderCounter += current.keyHolder.size;
 			}
-			++it;
+			_cullingResultsPool.enqueue(spotLightPtr);
 		}
 
-		it = _depthBuffers.begin();
+		//it = _depthBuffers.begin();
 
-		// we render skinned occluders
-		for (auto &spotLightPtr : infos.spotLights)
-		{
-			SCOPE_profile_gpu_i("Spotlight pass");
-			SCOPE_profile_cpu_i("RenderTimer", "Spotlight pass");
+		//// we render skinned occluders
+		//for (auto &spotLightPtr : infos.spotLights)
+		//{
+		//	SCOPE_profile_gpu_i("Spotlight pass");
+		//	SCOPE_profile_cpu_i("RenderTimer", "Spotlight pass");
 
-			DRBSpotLightData *spotlight = (DRBSpotLightData*)(spotLightPtr->spotLight.get());
-			auto &meshList = (std::list<std::shared_ptr<DRBMeshData>>&)(spotLightPtr->skinnedMesh);
+		//	DRBSpotLightData *spotlight = (DRBSpotLightData*)(spotLightPtr->spotLight.get());
+		//	auto &meshList = (std::list<std::shared_ptr<DRBMeshData>>&)(spotLightPtr->skinnedMesh);
 
-			_frame_buffer.attachment(*(*it), GL_DEPTH_STENCIL_ATTACHMENT);
-			_programs[PROGRAM_BUFFERING_SKINNED]->registerProperties(spotlight->globalProperties);
-			_programs[PROGRAM_BUFFERING_SKINNED]->updateNonInstanciedProperties(spotlight->globalProperties);
+		//	_frame_buffer.attachment(*(*it), GL_DEPTH_STENCIL_ATTACHMENT);
+		//	_programs[PROGRAM_BUFFERING_SKINNED]->registerProperties(spotlight->globalProperties);
+		//	_programs[PROGRAM_BUFFERING_SKINNED]->updateNonInstanciedProperties(spotlight->globalProperties);
 
-			std::shared_ptr<Painter> painter = nullptr;
-			std::shared_ptr<Painter> oldPainter = nullptr;
+		//	std::shared_ptr<Painter> painter = nullptr;
+		//	std::shared_ptr<Painter> oldPainter = nullptr;
 
-			for (auto &meshPaint : meshList)
-			{
-				//temporary
-				//todo, do not spawn entity while mesh is not loaded
-				//currently it's not safe, because the paiter key can be invalid
-				//during the first frames
-				if (meshPaint->getPainterKey().isValid())
-				{
-					painter = _painterManager->get_painter(meshPaint->getPainterKey());
-					if (painter != oldPainter)
-					{
-						if (oldPainter)
-						{
-							oldPainter->uniqueDrawEnd();
-						}
-						painter->uniqueDrawBegin(_programs[PROGRAM_BUFFERING_SKINNED]);
-					}
-					oldPainter = painter;
-					painter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING_SKINNED], meshPaint->globalProperties, meshPaint->getVerticesKey());
-				}
-			}
-			if (oldPainter)
-			{
-				oldPainter->uniqueDrawEnd();
-			}
+		//	for (auto &meshPaint : meshList)
+		//	{
+		//		//temporary
+		//		//todo, do not spawn entity while mesh is not loaded
+		//		//currently it's not safe, because the paiter key can be invalid
+		//		//during the first frames
+		//		if (meshPaint->getPainterKey().isValid())
+		//		{
+		//			painter = _painterManager->get_painter(meshPaint->getPainterKey());
+		//			if (painter != oldPainter)
+		//			{
+		//				if (oldPainter)
+		//				{
+		//					oldPainter->uniqueDrawEnd();
+		//				}
+		//				painter->uniqueDrawBegin(_programs[PROGRAM_BUFFERING_SKINNED]);
+		//			}
+		//			oldPainter = painter;
+		//			painter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING_SKINNED], meshPaint->globalProperties, meshPaint->getVerticesKey());
+		//		}
+		//	}
+		//	if (oldPainter)
+		//	{
+		//		oldPainter->uniqueDrawEnd();
+		//	}
 
-			++it;
-		}
+		//	++it;
+		//}
 	}
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void DeferredShadowBuffering::prepareRender(std::shared_ptr<DRBSpotLightData> &spotlightData, BFCBlockManagerFactory *bf, Frustum frustum, std::atomic_size_t *counter)
+	void DeferredShadowBuffering::prepareRender(glm::mat4 spotlightMat, BFCBlockManagerFactory *bf, Frustum frustum, std::atomic_size_t *counter)
 	{
 		SCOPE_profile_cpu_i("RenderTimer", "Prepare render shadow");
 
@@ -264,8 +244,9 @@ namespace AGE
 		{
 			result = new ShadowCasterResult(&_cullerPool, &_cullingResultsPool);
 		}
-		result->prepareForComputation(spotlightData);
+		result->prepareForComputation(spotlightMat);
 		result->cull(bf, frustum, counter);
+		_toDraw.enqueue(result);
 	}
 
 

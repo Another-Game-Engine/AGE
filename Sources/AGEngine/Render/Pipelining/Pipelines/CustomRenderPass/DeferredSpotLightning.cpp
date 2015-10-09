@@ -16,6 +16,8 @@
 #include "Graphic\DRBCameraDrawableList.hpp"
 #include "Graphic/DRBSpotLightData.hpp"
 
+#include "ShadowMapCollection.hpp"
+
 #define DEFERRED_SHADING_SPOT_LIGHT_VERTEX "deferred_shading/deferred_shading_spot_light.vp"
 #define DEFERRED_SHADING_SPOT_LIGHT_FRAG "deferred_shading/deferred_shading_spot_light.fp"
 
@@ -91,12 +93,15 @@ namespace AGE
 
 		auto painter = _painterManager->get_painter(_quadPainter);
 		//@CESAR_OPTIMIZE
+		int i = 0;
+		auto w = _frame_buffer.width(); auto h = _frame_buffer.height();
 		for (auto &spot : infos.spotLights)
 		{
 			auto &spotlight = (std::shared_ptr<DRBSpotLightData>&)(spot->spotLight);
 
+			auto depth = ShadowMapCollection::getDepthBuffer(i++, w, h);
 			// @PROUT todo to add in properties
-			_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("shadow_map").set(spotlight->shadowMap);
+			_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("shadow_map").set(depth);
 
 			painter->uniqueDrawBegin(_programs[PROGRAM_LIGHTNING]);
 			painter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_LIGHTNING], spotlight->globalProperties, _quad);

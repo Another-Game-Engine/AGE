@@ -183,8 +183,9 @@ namespace AGE
 			for (auto &spotEntity : _spotLights.getCollection())
 			{
 				auto spot = spotEntity->getComponent<SpotLightComponent>();
-				//auto spotDrawableList = std::make_shared<DRBSpotLightDrawableList>();
-				//spotDrawableList->spotLight = spot->getCullableHandle().getPtr<DRBSpotLight>()->getDatas();
+				auto spotDrawableList = std::make_shared<DRBSpotLightDrawableList>();
+				spotDrawableList->spotLight = spot->getCullableHandle().getPtr<DRBSpotLight>()->getDatas();
+				spotLightList.push_back(spotDrawableList);
 				
 				auto spotData = std::static_pointer_cast<DRBSpotLightData>(spot->getCullableHandle().getPtr<DRBSpotLight>()->getDatas());
 				glm::mat4 spotViewProj = spot->updateShadowMatrix();
@@ -227,7 +228,7 @@ namespace AGE
 				BFCBlockManagerFactory *bf = _scene->getBfcBlockManagerFactory();
 				if (DeferredShadowBuffering::instance)
 				{
-					DeferredShadowBuffering::instance->prepareRender(spotData, bf, spotlightFrustum, &SPOT_COUNTER);
+					DeferredShadowBuffering::instance->prepareRender(spotViewProj, bf, spotlightFrustum, &SPOT_COUNTER);
 				}
 			}
 		}
@@ -237,6 +238,15 @@ namespace AGE
 			auto point = pointLightEntity->getComponent<PointLightComponent>();
 			
 			pointLightList.push_back(point->getCullableHandle().getPtr<DRBPointLight>()->getDatas());
+		}
+
+		///////////////////////////////
+		/// BLOCKING WAIT FOR SPOTS
+		{
+			SCOPE_profile_cpu_i("Camera system", "Cull for spots wait");
+			while (SPOT_COUNTER.load() > 0)
+			{
+			}
 		}
 
 		for (auto &cameraEntity : _cameras.getCollection())
@@ -327,13 +337,6 @@ namespace AGE
 			cameraList->spotLights = spotLightList;
 			cameraList->pointLights = pointLightList;
 			TMQ::TaskManager::emplaceRenderTask<AGE::DRBCameraDrawableListCommand>(cameraList);
-		}
-
-		{
-			SCOPE_profile_cpu_i("Camera system", "Cull for spots wait");
-			while (SPOT_COUNTER.load() > 0)
-			{
-			}
 		}
 
 	}

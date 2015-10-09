@@ -58,12 +58,13 @@ namespace AGE
 		ShadowCasterResult(moodycamel::ConcurrentQueue<ShadowCasterBFCCallback*> *cullerPool, moodycamel::ConcurrentQueue<ShadowCasterResult*> *cullingResultPool);
 		~ShadowCasterResult();
 		void cull(BFCBlockManagerFactory *bf, Frustum frustum, std::atomic_size_t *globalCounter);
-		void prepareForComputation(std::shared_ptr<DRBSpotLightData> &spotlightData);
+		void prepareForComputation(glm::mat4 spotMat);
 		void mergeChunk(const BFCArray<ShadowCasterMatrixHandler> &array);
 		void sortAll();
 		inline std::atomic_size_t *getTaskCounter() { return &_taskCounter; }
 		void recycle(ShadowCasterBFCCallback *ptr);
-	private:
+		glm::mat4                  _spotMatrix;
+
 
 		void computeCommandBuffer();
 
