@@ -183,46 +183,44 @@ namespace AGE
 			for (auto &spotEntity : _spotLights.getCollection())
 			{
 				auto spot = spotEntity->getComponent<SpotLightComponent>();
-				auto spotDrawableList = std::make_shared<DRBSpotLightDrawableList>();
-				spotDrawableList->spotLight = spot->getCullableHandle().getPtr<DRBSpotLight>()->getDatas();
-
-				auto spotData = std::static_pointer_cast<DRBSpotLightData>(spotDrawableList->spotLight);
-
+				//auto spotDrawableList = std::make_shared<DRBSpotLightDrawableList>();
+				//spotDrawableList->spotLight = spot->getCullableHandle().getPtr<DRBSpotLight>()->getDatas();
+				
+				auto spotData = std::static_pointer_cast<DRBSpotLightData>(spot->getCullableHandle().getPtr<DRBSpotLight>()->getDatas());
 				glm::mat4 spotViewProj = spot->updateShadowMatrix();
-
 				Frustum spotlightFrustum;
 				spotlightFrustum.setMatrix(spotViewProj);
-
-				// Draw spotlight frustum debug:
-				glm::vec4 worldPos = glm::inverse(spotViewProj) * glm::vec4(-1, -1, -1, 1.0f);
-				glm::vec3 aNear = glm::vec3(worldPos / worldPos.w);
-				worldPos = glm::inverse(spotViewProj) * glm::vec4(-1, 1, -1, 1.0f);
-				glm::vec3 bNear = glm::vec3(worldPos / worldPos.w);
-				worldPos = glm::inverse(spotViewProj) * glm::vec4(1, 1, -1, 1.0f);
-				glm::vec3 cNear = glm::vec3(worldPos / worldPos.w);
-				worldPos = glm::inverse(spotViewProj) * glm::vec4(1, -1, -1, 1.0f);
-				glm::vec3 dNear = glm::vec3(worldPos / worldPos.w);
-				worldPos = glm::inverse(spotViewProj) * glm::vec4(-1, -1, 1, 1.0f);
-				glm::vec3 aFar = glm::vec3(worldPos / worldPos.w);
-				worldPos = glm::inverse(spotViewProj) * glm::vec4(-1, 1, 1, 1.0f);
-				glm::vec3 bFar = glm::vec3(worldPos / worldPos.w);
-				worldPos = glm::inverse(spotViewProj) * glm::vec4(1, 1, 1, 1.0f);
-				glm::vec3 cFar = glm::vec3(worldPos / worldPos.w);
-				worldPos = glm::inverse(spotViewProj) * glm::vec4(1, -1, 1, 1.0f);
-				glm::vec3 dFar = glm::vec3(worldPos / worldPos.w);
-
-				glm::vec3 color = glm::vec3(1, 0, 0);
-				bool activateDepth = true;
-
-				if (_drawDebugLines)
-				{
-					TMQ::TaskManager::emplaceRenderTask<Commands::ToRender::Draw3DQuad>(aNear, bNear, cNear, dNear, color, activateDepth);
-					TMQ::TaskManager::emplaceRenderTask<Commands::ToRender::Draw3DQuad>(aFar, bFar, cFar, dFar, color, activateDepth);
-					TMQ::TaskManager::emplaceRenderTask<Commands::ToRender::Draw3DLine>(aNear, aFar, color, activateDepth);
-					TMQ::TaskManager::emplaceRenderTask<Commands::ToRender::Draw3DLine>(bNear, bFar, color, activateDepth);
-					TMQ::TaskManager::emplaceRenderTask<Commands::ToRender::Draw3DLine>(cNear, cFar, color, activateDepth);
-					TMQ::TaskManager::emplaceRenderTask<Commands::ToRender::Draw3DLine>(dNear, dFar, color, activateDepth);
-				}
+				
+				//// Draw spotlight frustum debug:
+				//glm::vec4 worldPos = glm::inverse(spotViewProj) * glm::vec4(-1, -1, -1, 1.0f);
+				//glm::vec3 aNear = glm::vec3(worldPos / worldPos.w);
+				//worldPos = glm::inverse(spotViewProj) * glm::vec4(-1, 1, -1, 1.0f);
+				//glm::vec3 bNear = glm::vec3(worldPos / worldPos.w);
+				//worldPos = glm::inverse(spotViewProj) * glm::vec4(1, 1, -1, 1.0f);
+				//glm::vec3 cNear = glm::vec3(worldPos / worldPos.w);
+				//worldPos = glm::inverse(spotViewProj) * glm::vec4(1, -1, -1, 1.0f);
+				//glm::vec3 dNear = glm::vec3(worldPos / worldPos.w);
+				//worldPos = glm::inverse(spotViewProj) * glm::vec4(-1, -1, 1, 1.0f);
+				//glm::vec3 aFar = glm::vec3(worldPos / worldPos.w);
+				//worldPos = glm::inverse(spotViewProj) * glm::vec4(-1, 1, 1, 1.0f);
+				//glm::vec3 bFar = glm::vec3(worldPos / worldPos.w);
+				//worldPos = glm::inverse(spotViewProj) * glm::vec4(1, 1, 1, 1.0f);
+				//glm::vec3 cFar = glm::vec3(worldPos / worldPos.w);
+				//worldPos = glm::inverse(spotViewProj) * glm::vec4(1, -1, 1, 1.0f);
+				//glm::vec3 dFar = glm::vec3(worldPos / worldPos.w);
+				//
+				//glm::vec3 color = glm::vec3(1, 0, 0);
+				//bool activateDepth = true;
+				//
+				//if (_drawDebugLines)
+				//{
+				//	TMQ::TaskManager::emplaceRenderTask<Commands::ToRender::Draw3DQuad>(aNear, bNear, cNear, dNear, color, activateDepth);
+				//	TMQ::TaskManager::emplaceRenderTask<Commands::ToRender::Draw3DQuad>(aFar, bFar, cFar, dFar, color, activateDepth);
+				//	TMQ::TaskManager::emplaceRenderTask<Commands::ToRender::Draw3DLine>(aNear, aFar, color, activateDepth);
+				//	TMQ::TaskManager::emplaceRenderTask<Commands::ToRender::Draw3DLine>(bNear, bFar, color, activateDepth);
+				//	TMQ::TaskManager::emplaceRenderTask<Commands::ToRender::Draw3DLine>(cNear, cFar, color, activateDepth);
+				//	TMQ::TaskManager::emplaceRenderTask<Commands::ToRender::Draw3DLine>(dNear, dFar, color, activateDepth);
+				//}
 
 				std::size_t meshBlocksToCullNumber = _scene->getBfcBlockManagerFactory()->getBlockNumberToCull(BFCCullableType::CullableMesh);
 
@@ -231,42 +229,8 @@ namespace AGE
 				{
 					DeferredShadowBuffering::instance->prepareRender(spotData, bf, spotlightFrustum, &SPOT_COUNTER);
 				}
-
-				//if (meshBlocksToCullNumber > 0)
-				//{
-				//	ShadowCasterBFCCallback shadowCaster(meshBlocksToCullNumber);
-
-				//	for (std::size_t i = 0; i < meshBlocksToCullNumber; ++i)
-				//	{
-				//		BFCBlockManagerFactory *bf = _scene->getBfcBlockManagerFactory();
-				//		TMQ::TaskManager::emplaceSharedTask<Tasks::Basic::VoidFunction>([bf, i, &spotlightFrustum, &counter, &shadowCaster]()
-				//		{
-				//			auto &list = shadowCaster.list[i];
-				//			bf->cullOnBlock(BFCCullableType::CullableMesh, list, spotlightFrustum, i, 1, &shadowCaster);
-				//			counter.fetch_add(1);
-				//		});
-				//	}
-
-				//	{
-				//		SCOPE_profile_cpu_i("Camera system", "Cull for spots wait");
-				//		while (counter < meshBlocksToCullNumber)
-				//		{
-				//		}
-				//	}
-
-				//shadowCaster.sortAll();
-				//shadowCaster.fill(spotDrawableList->occluders, spotDrawableList->skinnedMesh);
-				//}
-				spotLightList.push_back(spotDrawableList);
 			}
 		}
-
-						{
-							SCOPE_profile_cpu_i("Camera system", "Cull for spots wait");
-							while (SPOT_COUNTER.load() > 0)
-							{
-							}
-						}
 
 		for (auto &pointLightEntity : _pointLights.getCollection())
 		{
@@ -364,6 +328,14 @@ namespace AGE
 			cameraList->pointLights = pointLightList;
 			TMQ::TaskManager::emplaceRenderTask<AGE::DRBCameraDrawableListCommand>(cameraList);
 		}
+
+		{
+			SCOPE_profile_cpu_i("Camera system", "Cull for spots wait");
+			while (SPOT_COUNTER.load() > 0)
+			{
+			}
+		}
+
 	}
 
 	void RenderCameraSystem::updateEnd(float time)

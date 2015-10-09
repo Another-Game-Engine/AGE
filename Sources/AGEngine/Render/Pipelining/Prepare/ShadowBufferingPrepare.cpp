@@ -47,11 +47,11 @@ namespace AGE
 		, moodycamel::ConcurrentQueue<ShadowCasterResult*> *cullingResultPool)
 	{
 		_matrixBufferIndex = 0;
-		_matrixBufferSize = 12000;
+		_matrixBufferSize = 2048;
 		_matrixBuffer = (ShadowCasterMatrixHandler*)malloc(sizeof(ShadowCasterMatrixHandler) * _matrixBufferSize);
 
 		_commandBufferIndex = 0;
-		_commandBufferSize = 12000;
+		_commandBufferSize = 2048;
 		_commandBuffer = (ShadowCasterSpotLightOccluder*)malloc(sizeof(ShadowCasterSpotLightOccluder) * _commandBufferSize);
 
 		_cullerPool = cullerPool;
