@@ -44,135 +44,6 @@
 
 namespace AGE
 {
-	class ShadowCasterBFCCallback : public IBFCCullCallback
-	{
-	public:
-		struct MatrixHandler
-		{
-			ConcatenatedKey key;
-			glm::mat4 matrix;
-			MatrixHandler() : key(-1), matrix(glm::mat4(1)) {}
-			MatrixHandler(MatrixHandler &&o) : key(std::move(o.key)), matrix(std::move(o.matrix)) {}
-		};
-		ShadowCasterBFCCallback(std::size_t _blockNumber)
-			: blockNumber(_blockNumber)
-		{
-			SCOPE_profile_cpu_function("Camera system");
-
-			AGE_ASSERT(blockNumber > 0);
-			matrixKeyArray = new MatrixHandler[blockNumber * MaxItemID]();
-			list           = new LFList<BFCItem>[blockNumber];
-			skinnedList    = new LFList<BFCItem>[blockNumber];
-			totalNotSkinned = 0;
-		}
-
-		~ShadowCasterBFCCallback()
-		{
-			SCOPE_profile_cpu_function("Camera system");
-
-			if (matrixKeyArray)
-				delete[] matrixKeyArray;
-			delete[] list;
-			delete[] skinnedList;
-		}
-
-		MatrixHandler   *matrixKeyArray = nullptr;
-		LFList<BFCItem> *list = nullptr;
-		LFList<BFCItem> *skinnedList = nullptr;
-		std::atomic_size_t totalNotSkinned;
-		const std::size_t blockNumber;
-
-		virtual void operator()(LFList<BFCItem> &, std::size_t blockId);
-		void sortAll();
-		void fill(std::vector<DRBSpotLightOccluder> &res, std::list<std::shared_ptr<DRBData>> &skinned);
-	};
-
-	inline bool compare(const ShadowCasterBFCCallback::MatrixHandler &a, const ShadowCasterBFCCallback::MatrixHandler &b)
-	{
-		return (a.key < b.key);
-	}
-
-	void ShadowCasterBFCCallback::operator()(LFList<BFCItem> &, std::size_t blockId)
-	{
-		SCOPE_profile_cpu_function("Camera system");
-
-		auto &listBlock = list[blockId];
-		std::size_t index = blockId * MaxItemID;
-		while (listBlock.getSize() > 0)
-		{
-			auto *item = listBlock.pop();
-			DRBMeshData * mesh = ((DRBMesh*)(item->getDrawable()))->getDatas().get();
-			if (mesh->hadRenderMode(AGE_SKINNED))
-			{
-				skinnedList[blockId].push(item);
-			}
-			else
-			{
-				matrixKeyArray[index].key = ConcatenateKey(mesh->getPainterKey(), mesh->getVerticesKey());
-				matrixKeyArray[index].matrix = mesh->getTransformation();
-				++index;
-			}
-		}
-		totalNotSkinned.fetch_add(index - blockId * MaxItemID);
-		std::sort((matrixKeyArray + blockId * MaxItemID), (matrixKeyArray + (blockId + 1) * MaxItemID), compare);
-	}
-
-	void ShadowCasterBFCCallback::sortAll()
-	{
-		SCOPE_profile_cpu_function("Camera system");
-
-		std::sort(matrixKeyArray, (matrixKeyArray + blockNumber * MaxItemID), compare);
-	}
-
-	void ShadowCasterBFCCallback::fill(std::vector<DRBSpotLightOccluder> &res, std::list<std::shared_ptr<DRBData>> &skinned)
-	{
-		SCOPE_profile_cpu_function("Camera system");
-
-		for (auto i = 0; i < blockNumber; ++i)
-		{
-			while (skinnedList[i].getSize() > 0)
-			{
-				auto *item = skinnedList[i].pop();
-				skinned.push_back(((DRBSkinnedMesh*)(item->getDrawable()))->getDatas());
-			}
-		}
-
-		if (totalNotSkinned == 0)
-		{
-			return;
-		}
-
-		std::size_t max = totalNotSkinned;
-		res.resize(max * 2);
-		std::size_t i = 0;
-		DRBSpotLightOccluder *key = nullptr;
-		ConcatenatedKey lastKey = -1;
-		std::size_t keyCounter = 0;
-		std::size_t j = 0;
-		while (i < max)
-		{
-			auto &c = matrixKeyArray[i];
-			if (c.key != lastKey)
-			{
-				if (key)
-				{
-					key->keyHolder.size = keyCounter;
-				}
-				keyCounter = 0;
-				lastKey = c.key;
-				res[j] = DRBSpotLightOccluder(std::move(c.key));
-				key = &(res[j++]);
-			}
-			res[j++] = DRBSpotLightOccluder(std::move(matrixKeyArray[i].matrix));
-			++keyCounter;
-			++i;
-		}
-		if (key)
-			key->keyHolder.size = keyCounter;
-		res.resize(j);
-	}
-
-
 	RenderCameraSystem::RenderCameraSystem(AScene *scene) :
 		System(std::move(scene)),
 		_cameras(std::move(scene)),
@@ -354,31 +225,31 @@ namespace AGE
 
 				std::size_t meshBlocksToCullNumber = _scene->getBfcBlockManagerFactory()->getBlockNumberToCull(BFCCullableType::CullableMesh);
 
-				if (meshBlocksToCullNumber > 0)
-				{
-					ShadowCasterBFCCallback shadowCaster(meshBlocksToCullNumber);
+				//if (meshBlocksToCullNumber > 0)
+				//{
+				//	ShadowCasterBFCCallback shadowCaster(meshBlocksToCullNumber);
 
-					for (std::size_t i = 0; i < meshBlocksToCullNumber; ++i)
-					{
-						BFCBlockManagerFactory *bf = _scene->getBfcBlockManagerFactory();
-						TMQ::TaskManager::emplaceSharedTask<Tasks::Basic::VoidFunction>([bf, i, &spotlightFrustum, &counter, &shadowCaster]()
-						{
-							auto &list = shadowCaster.list[i];
-							bf->cullOnBlock(BFCCullableType::CullableMesh, list, spotlightFrustum, i, 1, &shadowCaster);
-							counter.fetch_add(1);
-						});
-					}
+				//	for (std::size_t i = 0; i < meshBlocksToCullNumber; ++i)
+				//	{
+				//		BFCBlockManagerFactory *bf = _scene->getBfcBlockManagerFactory();
+				//		TMQ::TaskManager::emplaceSharedTask<Tasks::Basic::VoidFunction>([bf, i, &spotlightFrustum, &counter, &shadowCaster]()
+				//		{
+				//			auto &list = shadowCaster.list[i];
+				//			bf->cullOnBlock(BFCCullableType::CullableMesh, list, spotlightFrustum, i, 1, &shadowCaster);
+				//			counter.fetch_add(1);
+				//		});
+				//	}
 
-				{
-					SCOPE_profile_cpu_i("Camera system", "Cull for spots wait");
-					while (counter < meshBlocksToCullNumber)
-					{
-					}
-				}
+				//	{
+				//		SCOPE_profile_cpu_i("Camera system", "Cull for spots wait");
+				//		while (counter < meshBlocksToCullNumber)
+				//		{
+				//		}
+				//	}
 
-				shadowCaster.sortAll();
-				shadowCaster.fill(spotDrawableList->occluders, spotDrawableList->skinnedMesh);
-				}
+				//shadowCaster.sortAll();
+				//shadowCaster.fill(spotDrawableList->occluders, spotDrawableList->skinnedMesh);
+				//}
 				spotLightList.push_back(spotDrawableList);
 			}
 		}

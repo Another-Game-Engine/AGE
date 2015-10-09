@@ -15,6 +15,8 @@ namespace AGE
 		DeferredShadowBuffering(glm::uvec2 const &screenSize, std::shared_ptr<PaintingManager> painterManager);
 		virtual ~DeferredShadowBuffering() = default;
 		virtual void init();
+
+		void prepareRender();
 	protected:
 		virtual void renderPass(const DRBCameraDrawableList &infos);
 

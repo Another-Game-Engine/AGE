@@ -191,7 +191,7 @@ namespace AGE
 				load(sceneFileName);
 			}
 
-			for (std::size_t i = 0; i < 10000; ++i)
+			for (std::size_t i = 0; i < 100; ++i)
 			{
 				auto hexapod2 = createEntity();
 				hexapod2->addComponent<MeshRenderer>(
