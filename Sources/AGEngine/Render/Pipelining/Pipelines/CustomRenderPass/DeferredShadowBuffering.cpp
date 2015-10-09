@@ -23,6 +23,13 @@
 #include "Render/Textures/TextureBuffer.hh"
 #include "Render/ProgramResources/Types/Uniform/Sampler/SamplerBuffer.hh"
 
+// culling
+#include <BFC/BFCBlockManagerFactory.hpp>
+#include <Render\Pipelining\Prepare\ShadowBufferingPrepare.hpp>
+#include <Graphic/BFCCullableTypes.hpp>
+#include <Threads/Tasks/BasicTasks.hpp>
+#include <Utils/Frustum.hh>
+
 #define DEFERRED_SHADING_SHADOW_BUFFERING_VERTEX "deferred_shading/deferred_shading_get_shadow_buffer.vp"
 #define DEFERRED_SHADING_SHADOW_BUFFERING_VERTEX_SKINNED "deferred_shading/deferred_shading_get_shadow_buffer_skinned.vp"
 #define DEFERRED_SHADING_SHADOW_BUFFERING_FRAG "deferred_shading/deferred_shading_get_shadow_buffer.fp"
@@ -36,9 +43,13 @@ namespace AGE
 		PROGRAM_NBR
 	};
 
+	DeferredShadowBuffering *DeferredShadowBuffering::instance = nullptr;
+
 	DeferredShadowBuffering::DeferredShadowBuffering(glm::uvec2 const &screenSize, std::shared_ptr<PaintingManager> painterManager) :
 		FrameBufferRender(screenSize.x, screenSize.y, painterManager)
 	{
+		instance = this;
+
 		auto confManager = GetEngine()->getInstance<ConfigurationManager>();
 		auto shaderPath = confManager->getConfiguration<std::string>("ShadersPath");
 		_programs.resize(PROGRAM_NBR);
@@ -244,9 +255,17 @@ namespace AGE
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void DeferredShadowBuffering::prepareRender()
+	void DeferredShadowBuffering::prepareRender(std::shared_ptr<DRBSpotLightData> &spotlightData, BFCBlockManagerFactory *bf, Frustum frustum, std::atomic_size_t *counter)
 	{
+		SCOPE_profile_cpu_i("RenderTimer", "Prepare render shadow");
 
+		ShadowCasterResult *result = nullptr;
+		if (_cullingResultsPool.try_dequeue(result) == false)
+		{
+			result = new ShadowCasterResult(&_cullerPool, &_cullingResultsPool);
+		}
+		result->prepareForComputation(spotlightData);
+		result->cull(bf, frustum, counter);
 	}
 
 

@@ -42,6 +42,9 @@
 
 #include <algorithm>
 
+//hack
+#include "Render\Pipelining\Pipelines\CustomRenderPass\DeferredShadowBuffering.hh"
+
 namespace AGE
 {
 	RenderCameraSystem::RenderCameraSystem(AScene *scene) :
@@ -174,7 +177,7 @@ namespace AGE
 		std::list<std::shared_ptr<DRBSpotLightDrawableList>> spotLightList;
 		std::list<std::shared_ptr<DRBPointLightData>> pointLightList;
 
-
+		std::atomic_size_t SPOT_COUNTER = 0;
 		{
 			SCOPE_profile_cpu_i("Camera system", "Cull for spots");
 			for (auto &spotEntity : _spotLights.getCollection())
@@ -221,9 +224,13 @@ namespace AGE
 					TMQ::TaskManager::emplaceRenderTask<Commands::ToRender::Draw3DLine>(dNear, dFar, color, activateDepth);
 				}
 
-				std::atomic_size_t counter = 0;
-
 				std::size_t meshBlocksToCullNumber = _scene->getBfcBlockManagerFactory()->getBlockNumberToCull(BFCCullableType::CullableMesh);
+
+				BFCBlockManagerFactory *bf = _scene->getBfcBlockManagerFactory();
+				if (DeferredShadowBuffering::instance)
+				{
+					DeferredShadowBuffering::instance->prepareRender(spotData, bf, spotlightFrustum, &SPOT_COUNTER);
+				}
 
 				//if (meshBlocksToCullNumber > 0)
 				//{
@@ -253,6 +260,14 @@ namespace AGE
 				spotLightList.push_back(spotDrawableList);
 			}
 		}
+
+						{
+							SCOPE_profile_cpu_i("Camera system", "Cull for spots wait");
+							while (SPOT_COUNTER.load() > 0)
+							{
+							}
+						}
+
 		for (auto &pointLightEntity : _pointLights.getCollection())
 		{
 			auto point = pointLightEntity->getComponent<PointLightComponent>();

@@ -7,10 +7,21 @@
 #include <Graphic/DRBMeshData.hpp>
 #include <Graphic/DRBMesh.hpp>
 
+//for ShadowCasterResult
+#include <BFC/BFCBlockManagerFactory.hpp>
+#include <Render\Pipelining\Prepare\ShadowBufferingPrepare.hpp>
+#include <Graphic/BFCCullableTypes.hpp>
+#include <Threads/Tasks/BasicTasks.hpp>
+#include <TMQ/Queue.hpp>
+#include <Utils/Frustum.hh>
+
 #include "Utils/Profiler.hpp"
 
 namespace AGE
 {
+	const float ShadowCasterSpotLightOccluder::invalidVector[4] = { std::numeric_limits<float>::lowest(), std::numeric_limits<float>::lowest(), std::numeric_limits<float>::lowest(), std::numeric_limits<float>::lowest() };
+
+
 	ShadowCasterSpotLightOccluder::ShadowCasterSpotLightOccluder()
 		: matrix({ std::array < float, 4 > { 1, 2, 3, 4 }, std::array < float, 4 > { 1, 2, 3, 4 }, std::array < float, 4 > { 1, 2, 3, 4 }, std::array < float, 4 > { 1, 2, 3, 4 } })
 	{}
@@ -32,17 +43,19 @@ namespace AGE
 	//////////////////////////////////////////////////////////////////////
 	//////////////////////////////////////////////////////////////////////
 
-	ShadowCasterResult::ShadowCasterResult()
+	ShadowCasterResult::ShadowCasterResult(moodycamel::ConcurrentQueue<ShadowCasterBFCCallback*> *cullerPool
+		, moodycamel::ConcurrentQueue<ShadowCasterResult*> *cullingResultPool)
 	{
 		_matrixBufferIndex = 0;
-		_matrixBufferSize = 512;
+		_matrixBufferSize = 12000;
 		_matrixBuffer = (ShadowCasterMatrixHandler*)malloc(sizeof(ShadowCasterMatrixHandler) * _matrixBufferSize);
 
 		_commandBufferIndex = 0;
-		_commandBufferSize = 512;
+		_commandBufferSize = 12000;
 		_commandBuffer = (ShadowCasterSpotLightOccluder*)malloc(sizeof(ShadowCasterSpotLightOccluder) * _commandBufferSize);
 
-		_commandBufferHaveEnoughPlace = true;
+		_cullerPool = cullerPool;
+		_cullingResultPool = cullingResultPool;
 	}
 	ShadowCasterResult::~ShadowCasterResult()
 	{
@@ -52,29 +65,50 @@ namespace AGE
 
 	void ShadowCasterResult::prepareForComputation(std::shared_ptr<DRBSpotLightData> &spotlightData)
 	{
-		// command buffer dont't have enough place
-		if (_commandBufferHaveEnoughPlace == false)
-		{
-			_commandBufferSize = _commandBufferSize * 15 / 10;
-			_commandBuffer = (ShadowCasterSpotLightOccluder*)realloc(_commandBuffer, _commandBufferSize * sizeof(ShadowCasterSpotLightOccluder));
-			AGE_ASSERT(_commandBuffer != nullptr);
-		}
+		SCOPE_profile_cpu_function("ShadowCaster");
+
 		_commandBufferIndex = 0;
 
 		// matrix buffer dont't have enough place
-		if (_matrixBufferSize >= _matrixBufferIndex)
+		if (_matrixBufferSize <= _matrixBufferIndex)
 		{
-			_matrixBufferSize = _matrixBufferIndex;
-			_matrixBuffer = (ShadowCasterMatrixHandler*)realloc(_matrixBuffer, _matrixBufferSize * sizeof(ShadowCasterMatrixHandler));
-			AGE_ASSERT(_matrixBuffer != nullptr);
 		}
 		_matrixBufferIndex = 0;
+		_taskCounter = 0;
 
+	}
 
+	void ShadowCasterResult::cull(BFCBlockManagerFactory *bf, Frustum frustum, std::atomic_size_t *globalCounter)
+	{
+		globalCounter->fetch_add(1);
+
+		auto meshBlocksToCullNumber = bf->getBlockNumberToCull(BFCCullableType::CullableMesh);
+		_globalCounter = globalCounter;
+		_taskCounter = meshBlocksToCullNumber;
+
+		for (std::size_t i = 0; i < meshBlocksToCullNumber; ++i)
+		{
+			ShadowCasterBFCCallback *culler = nullptr;
+			if (_cullerPool->try_dequeue(culler) == false)
+				culler = new ShadowCasterBFCCallback();
+			culler->reset(i, this);
+
+			TMQ::TaskManager::emplaceSharedTask<Tasks::Basic::VoidFunction>([bf, i, frustum, culler]()
+			{
+				bf->cullOnBlock(BFCCullableType::CullableMesh, frustum, i, 1, culler);
+			});
+		}
+	}
+
+	void ShadowCasterResult::recycle(ShadowCasterBFCCallback *ptr)
+	{
+		_cullerPool->enqueue(ptr);
 	}
 
 	void ShadowCasterResult::mergeChunk(const BFCArray<ShadowCasterMatrixHandler> &array)
 	{
+		SCOPE_profile_cpu_function("ShadowCaster");
+
 		auto aSize = array.size();
 		std::size_t index = _matrixBufferIndex.fetch_add(aSize);
 		if (index + aSize >= _matrixBufferSize)
@@ -85,61 +119,66 @@ namespace AGE
 	}
 	void ShadowCasterResult::sortAll()
 	{
+		SCOPE_profile_cpu_function("ShadowCaster");
+
 		std::size_t index = _matrixBufferIndex.load();
 		std::sort(_matrixBuffer, (_matrixBuffer + (index >= _matrixBufferSize ? _matrixBufferSize : index)), compare);
+		computeCommandBuffer();
 	}
 
 	void ShadowCasterResult::computeCommandBuffer()
 	{
-		if (_matrixBufferIndex == 0)
+		SCOPE_profile_cpu_function("ShadowCaster");
+
+		if (_matrixBufferIndex != 0)
 		{
-			return;
-		}
+			std::size_t max = _matrixBufferIndex;
+			std::size_t i = 0;
 
-		std::size_t max = _matrixBufferIndex;
-		std::size_t i = 0;
+			ShadowCasterSpotLightOccluder *key = nullptr;
+			ConcatenatedKey lastKey = -1;
+			std::size_t keyCounter = 0;
+			_commandBufferIndex = 0;
 
-		ShadowCasterSpotLightOccluder *key = nullptr;
-		ConcatenatedKey lastKey = -1;
-		std::size_t keyCounter = 0;
-		_commandBufferIndex = 0;
-
-		while (i < max && _commandBufferIndex < _commandBufferSize)
-		{
-			auto &c = _matrixBuffer[i];
-			if (c.key != lastKey)
+			while (i < max && _commandBufferIndex < _commandBufferSize)
 			{
-				if (key)
+				auto &c = _matrixBuffer[i];
+				if (c.key != lastKey)
 				{
-					key->keyHolder.size = keyCounter;
+					if (key)
+					{
+						key->keyHolder.size = keyCounter;
+					}
+					keyCounter = 0;
+					lastKey = c.key;
+					if (_commandBufferIndex + 1 >= _commandBufferSize)
+					{
+						key = nullptr;
+						break;
+					}
+					_commandBuffer[_commandBufferIndex] = ShadowCasterSpotLightOccluder(std::move(c.key));
+					key = &(_commandBuffer[_commandBufferIndex++]);
 				}
-				keyCounter = 0;
-				lastKey = c.key;
-				if (_commandBufferIndex + 1 >= _commandBufferSize)
+				if (_commandBufferIndex >= _commandBufferSize)
 				{
-					key = nullptr;
 					break;
 				}
-				_commandBuffer[_commandBufferIndex] = ShadowCasterSpotLightOccluder(std::move(c.key));
-				key = &(_commandBuffer[_commandBufferIndex++]);
+				_commandBuffer[_commandBufferIndex++] = ShadowCasterSpotLightOccluder(std::move(_matrixBuffer[i].matrix));
+				++keyCounter;
+				++i;
 			}
-			if (_commandBufferIndex >= _commandBufferSize)
-			{
-				break;
-			}
-			_commandBuffer[_commandBufferIndex++] = ShadowCasterSpotLightOccluder(std::move(_matrixBuffer[i].matrix));
-			++keyCounter;
-			++i;
-		}
-		if (key)
-			key->keyHolder.size = keyCounter;
+			if (key)
+				key->keyHolder.size = keyCounter;
 
-		// command buffer dont't have enough place
-		if (i < max - 1)
-		{
-			_commandBufferHaveEnoughPlace = false;
+			// command buffer dont't have enough place
+			if (i < max - 1)
+			{
+			}
 		}
+		_globalCounter->fetch_sub(1);
+		_cullingResultPool->enqueue(this);
 	}
+
 
 	//////////////////////////////////////////////////////////////////////
 	//////////////////////////////////////////////////////////////////////
@@ -156,13 +195,12 @@ namespace AGE
 	{
 	}
 
-	void ShadowCasterBFCCallback::reset(std::size_t _blockId, std::size_t _totalBlockNumber, std::atomic_size_t *_counter)
+	void ShadowCasterBFCCallback::reset(std::size_t _blockId, ShadowCasterResult *_result)
 	{
-		doneCounter = _counter;
-		numberOfTask = _totalBlockNumber;
 		_array.clear();
 		matrixKeyArray.clear();
 		blockNumber = 0;
+		result = _result;
 	}
 
 	void ShadowCasterBFCCallback::operator()()
@@ -182,14 +220,11 @@ namespace AGE
 		{
 			std::sort(matrixKeyArray.data(), (matrixKeyArray.data() + matrixKeyArray.size()), compare);
 		}
-
-		doneCounter->fetch_add(1);
-		if (doneCounter->load() == numberOfTask)
+		result->mergeChunk(matrixKeyArray);
+		if (result->getTaskCounter()->fetch_sub(1) == 1)
 		{
-			//TMQ::TaskManager::emplaceSharedTask<Tasks::Basic::VoidFunction>([](){
-			// TODO
-			//});
+			result->sortAll();
 		}
-		
+		result->recycle(this);
 	}
 }

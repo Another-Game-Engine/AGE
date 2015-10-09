@@ -9,9 +9,13 @@
 // for ShadowCasterResult
 #include <atomic>
 
+#include <concurrentqueue/concurrentqueue.h>
+
 namespace AGE
 {
 	struct DRBSpotLightData;
+	class BFCBlockManagerFactory;
+	class Frustum;
 
 	struct ShadowCasterSpotLightOccluder
 	{
@@ -46,14 +50,19 @@ namespace AGE
 		ShadowCasterMatrixHandler(ShadowCasterMatrixHandler &&o) : key(std::move(o.key)), matrix(std::move(o.matrix)) {}
 	};
 
+	class ShadowCasterBFCCallback;
+
 	class ShadowCasterResult
 	{
 	public:
-		ShadowCasterResult();
+		ShadowCasterResult(moodycamel::ConcurrentQueue<ShadowCasterBFCCallback*> *cullerPool, moodycamel::ConcurrentQueue<ShadowCasterResult*> *cullingResultPool);
 		~ShadowCasterResult();
+		void cull(BFCBlockManagerFactory *bf, Frustum frustum, std::atomic_size_t *globalCounter);
 		void prepareForComputation(std::shared_ptr<DRBSpotLightData> &spotlightData);
 		void mergeChunk(const BFCArray<ShadowCasterMatrixHandler> &array);
 		void sortAll();
+		inline std::atomic_size_t *getTaskCounter() { return &_taskCounter; }
+		void recycle(ShadowCasterBFCCallback *ptr);
 	private:
 
 		void computeCommandBuffer();
@@ -66,6 +75,11 @@ namespace AGE
 		std::size_t                _commandBufferSize;
 		ShadowCasterSpotLightOccluder       *_commandBuffer;
 		bool                       _commandBufferHaveEnoughPlace;
+
+		std::atomic_size_t         _taskCounter;
+		std::atomic_size_t         *_globalCounter = nullptr;
+		moodycamel::ConcurrentQueue<ShadowCasterBFCCallback*>  *_cullerPool;
+		moodycamel::ConcurrentQueue<ShadowCasterResult*>  *_cullingResultPool;
 	};
 
 	class ShadowCasterBFCCallback : public IBFCCuller
@@ -73,12 +87,11 @@ namespace AGE
 	public:
 		ShadowCasterBFCCallback();
 		~ShadowCasterBFCCallback();
-		void reset(std::size_t _blockId, std::size_t _totalBlockNumber, std::atomic_size_t *_counter);
+		void reset(std::size_t _blockId, ShadowCasterResult *_result);
 
-		std::atomic_size_t *doneCounter   = nullptr;
-		std::size_t        numberOfTask  = 0;
 		BFCArray<ShadowCasterMatrixHandler> matrixKeyArray;
 		std::size_t        blockNumber = 0;
+		ShadowCasterResult *result = nullptr;
 
 		virtual void operator()();
 	};

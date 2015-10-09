@@ -118,6 +118,38 @@ namespace AGE
 		}
 	}
 
+	void BFCBlockManagerFactory::cullOnBlock(CullableTypeID channel, const Frustum &frustum, std::size_t blockIdFrom, std::size_t numberOfBlocks, IBFCCuller *culler)
+	{
+		SCOPE_profile_cpu_function("BFC");
+
+		AGE_ASSERT(channel < MaxCullableTypeID);
+
+		if (channel >= _managers.size())
+		{
+			return;
+		}
+		auto &manager = _managers[channel];
+
+		size_t i = 0;
+		while (i < numberOfBlocks)
+		{
+			auto blockId = blockIdFrom + i;
+			if (blockId >= manager._blocks.size())
+				break;
+			auto &block = manager._blocks[blockId];
+			for (auto &item : block->_items)
+			{
+				if (item.getDrawable() && frustum.checkCollision(item.getPosition()))
+				{
+					culler->push(item);
+				}
+			}
+			(*culler)();
+			++i;
+		}
+	}
+
+
 	void BFCBlockManagerFactory::fillOnBlock(CullableTypeID channel, LFList<BFCItem> &result, std::size_t blockIdFrom, std::size_t numberOfBlocks, IBFCCullCallback *callback)
 	{
 		SCOPE_profile_cpu_function("BFC");
