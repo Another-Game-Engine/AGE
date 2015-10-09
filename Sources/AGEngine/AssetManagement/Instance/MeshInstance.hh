@@ -20,6 +20,7 @@ namespace AGE
 		Properties properties;
 		AGE::AABoundingBox boundingBox;
 		uint16_t defaultMaterialIndex;
+		bool isSkinned = false;
 	};
 
 	struct MeshInstance

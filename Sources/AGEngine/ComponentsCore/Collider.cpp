@@ -6,15 +6,14 @@
 #include <Physics/WorldInterface.hpp>
 #include <AssetManagement/AssetManager.hh>
 
-#include <FileUtils/AssetFiles/CookedFileFilter.hpp>
-#include <FileUtils/AssetFiles/Folder.hpp>
-#include <FileUtils/AssetFiles/CookedFile.hpp>
-#include <FileUtils/FileSystemHelpers.hpp>
-
 #include <Utils/MatrixConversion.hpp>
 
 #ifdef EDITOR_ENABLED
 #include <imgui/imgui.h>
+#include <FileUtils/AssetFiles/CookedFileFilter.hpp>
+#include <FileUtils/AssetFiles/Folder.hpp>
+#include <FileUtils/AssetFiles/CookedFile.hpp>
+#include <FileUtils/FileSystemHelpers.hpp>
 #endif
 
 namespace AGE
@@ -352,16 +351,6 @@ namespace AGE
 	}
 
 #ifdef EDITOR_ENABLED
-
-	void Collider::editorCreate(void)
-	{
-		return;
-	}
-
-	void Collider::editorDelete(void)
-	{
-		return;
-	}
 
 	bool Collider::editorUpdate(void)
 	{

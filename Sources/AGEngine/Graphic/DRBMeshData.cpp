@@ -36,7 +36,7 @@ namespace AGE
 	void DRBMeshData::setRenderModes(const RenderModeSet &modes)
 	{
 		RWLockGuard(_lock, true);
-		_renderMode = modes;
+		_renderMode |= modes;
 	}
 
 	void DRBMeshData::setAABB(const AABoundingBox &box)

@@ -1,26 +1,31 @@
 #pragma once
 
+#include <map>
+#include <list>
+#include <memory>
+#include <mutex>
+
 #include <Utils/Dependency.hpp>
 #include <Utils/Containers/Vector.hpp>
-#include <memory>
-#include <AssetManagement/Data/AnimationData.hpp>
 #include <AssetManagement/Instance/AnimationInstance.hh>
-#include <mutex>
-#include <Skinning/Skeleton.hpp>
 
 namespace AGE
 {
+	struct AnimationData;
+	struct Skeleton;
+
 	class AnimationManager : public Dependency < AnimationManager >
 	{
 	public:
 		AnimationManager();
 		virtual ~AnimationManager();
-		Key<AnimationInstance> createAnimationInstance(std::shared_ptr<Skeleton> skeleton, std::shared_ptr<AnimationData> animation);
+		// if shared arg is true, the AnimationInstance will be a shared one (can be usefull for crowd for example)
+		std::shared_ptr<AnimationInstance> createAnimationInstance(std::shared_ptr<Skeleton> skeleton, std::shared_ptr<AnimationData> animation, bool shared);
+		void deleteAnimationInstance(std::shared_ptr<AnimationInstance> animation);
 		void update(float time);
-		std::vector<glm::mat4> &getBones(const Key<AnimationInstance> &key);
 
 	private:
-		std::vector<std::shared_ptr<AGE::AnimationInstance>> _list;
 		std::mutex _mutex;
+		std::map<std::shared_ptr<Skeleton>, std::list<std::shared_ptr<AnimationInstance>>> _animations;
 	};
 }

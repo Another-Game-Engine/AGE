@@ -1,11 +1,12 @@
 #pragma once
 
 # include <Render/Properties/IProperty.hh>
-# include <Render/Program.hh>
 # include <utility>
 
 namespace AGE
 {
+	class IProgramResources;
+
 	class AProperty : public IProperty
 	{
 	protected:

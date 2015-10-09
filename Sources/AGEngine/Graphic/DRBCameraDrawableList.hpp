@@ -54,7 +54,8 @@ namespace AGE
 	};
 	struct DRBSpotLightDrawableList
 	{
-		std::vector<DRBSpotLightOccluder> occluders;
+		std::vector<DRBSpotLightOccluder> occluders; // used for instancied rendering (non skinned)
+		std::list<std::shared_ptr<DRBData>> skinnedMesh;
 		std::shared_ptr<DRBData> spotLight;
 	};
 

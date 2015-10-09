@@ -1,7 +1,7 @@
 #include "BFCLink.hpp"
 #include "BFCLinkTracker.hpp"
 #include "BFCBlockManagerFactory.hpp"
-
+#include <Utils/Profiler.hpp>
 #include <Utils/Debug.hpp>
 
 namespace AGE
@@ -25,6 +25,8 @@ namespace AGE
 
 	void BFCLink::registerToTracker()
 	{
+		SCOPE_profile_cpu_function("BFC");
+
 		if (_bfcTrackerIndex != -1)
 		{
 			return;

@@ -1,23 +1,24 @@
 #pragma once
 
 #include <memory>
-#include <Utils/Dependency.hpp>
-#include <Utils/DependenciesInjector.hpp>
-#include <Utils/OldFile.hpp>
 #include <bitset>
-#include <AssetManagement/Data/MeshData.hh>
-#include <Render/GeometryManagement/Painting/Painter.hh>
-#include <Render/GeometryManagement/Data/Vertices.hh>
 #include <map>
 #include <future>
-#include <TMQ/message.hpp>
 #include <functional>
 #include <string>
 #include <utility>
 
+#include <Utils/Dependency.hpp>
+#include <Utils/DependenciesInjector.hpp>
+#include <Utils/OldFile.hpp>
+#include <Utils/Key.hh>
+
+#include <AssetManagement/Data/MeshData.hh>
+
+#include <TMQ/message.hpp>
+
 #include <cereal/archives/json.hpp>
 #include <cereal/types/unordered_set.hpp>
-#include <Render/Textures/TextureCubeMap.hh>
 
 namespace AGE
 {
@@ -28,20 +29,8 @@ namespace AGE
 	class ITexture;
 	class Painter;
 	class Texture2D;
-
-# define LAMBDA_FUNCTION [](Vertices &vertices, size_t index, SubMeshData const &data)
-
-static std::pair<std::pair<GLenum, std::string>, std::function<void(Vertices &vertices, size_t index, SubMeshData const &data)>> g_InfosTypes[MeshInfos::END] =
-{
-	std::make_pair(std::make_pair(GL_FLOAT_VEC3, std::string("position")), LAMBDA_FUNCTION{ vertices.set_data<glm::vec3>(data.positions, std::string("position")); }),
-	std::make_pair(std::make_pair(GL_FLOAT_VEC3, std::string("normal")), LAMBDA_FUNCTION{ vertices.set_data<glm::vec3>(data.normals, std::string("normal")); }),
-	std::make_pair(std::make_pair(GL_FLOAT_VEC3, std::string("tangent")), LAMBDA_FUNCTION{ vertices.set_data<glm::vec3>(data.tangents, std::string("tangent")); }),
-	std::make_pair(std::make_pair(GL_FLOAT_VEC3, std::string("biTangents")), LAMBDA_FUNCTION{ vertices.set_data<glm::vec3>(data.biTangents, std::string("biTangents")); }),
-	std::make_pair(std::make_pair(GL_FLOAT_VEC2, std::string("texCoord")), LAMBDA_FUNCTION{ vertices.set_data<glm::vec2>(data.uvs[0], std::string("texCoord")); }),
-	std::make_pair(std::make_pair(GL_FLOAT_VEC4, std::string("blendWeight")), LAMBDA_FUNCTION{ vertices.set_data<glm::vec4>(data.weights, std::string("blendWeight")); }),
-	std::make_pair(std::make_pair(GL_FLOAT_VEC4, std::string("blendIndice")), LAMBDA_FUNCTION{ vertices.set_data<glm::vec4>(data.boneIndices, std::string("blendIndice")); }),
-	std::make_pair(std::make_pair(GL_FLOAT_VEC4, std::string("color")), LAMBDA_FUNCTION{ vertices.set_data<glm::vec4>(data.colors, std::string("color")); })
-};
+	class TextureCubeMap;
+	struct LoadingCallback;
 
 	struct Skeleton;
 	struct AnimationData;
@@ -164,7 +153,7 @@ private:
 		std::atomic<bool> _isLoading;
 	private:
 		void pushNewAsset(const std::string &loadingChannel, const std::string &filename, std::future<AssetsLoadingResult> &future);
-		void loadSubmesh(std::shared_ptr<MeshData> data, std::size_t index, SubMeshInstance *mesh, const std::string &loadingChannel);
+		void loadSubmesh(std::shared_ptr<MeshData> data, std::size_t index, SubMeshInstance *mesh, const std::string &loadingChannel, LoadingCallback callback);
 	};
 }
 

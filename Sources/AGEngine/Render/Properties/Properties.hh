@@ -21,6 +21,7 @@ namespace AGE
 
 	public:
 		Key<Property> add_property(std::shared_ptr<IProperty> const &prop);
+		Key<Property> add_property(std::shared_ptr<IProperty> &prop);
 		void remove_property(Key<Property> const &prop);
 		void merge_properties(const Properties &other);
 		std::size_t getProgramId(std::size_t programId);

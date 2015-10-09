@@ -24,6 +24,7 @@
 #include <Graphic/DRBCameraDrawableList.hpp>
 
 #define DEFERRED_SHADING_BUFFERING_VERTEX "deferred_shading/deferred_shading_get_buffer.vp"
+#define DEFERRED_SHADING_BUFFERING_VERTEX_SKINNED "deferred_shading/deferred_shading_get_buffer_skinned.vp"
 #define DEFERRED_SHADING_BUFFERING_FRAG "deferred_shading/deferred_shading_get_buffer.fp"
 
 namespace AGE
@@ -31,6 +32,7 @@ namespace AGE
 	enum Programs
 	{
 		PROGRAM_BUFFERING = 0,
+		PROGRAM_BUFFERING_SKINNED = 1,
 		PROGRAM_NBR
 	};
 
@@ -63,14 +65,27 @@ namespace AGE
 		// you have to set shader directory in configuration path
 		AGE_ASSERT(shaderPath != nullptr);
 
-		auto vertexShaderPath = shaderPath->getValue() + DEFERRED_SHADING_BUFFERING_VERTEX;
-		auto fragmentShaderPath = shaderPath->getValue() + DEFERRED_SHADING_BUFFERING_FRAG;
-
-		_programs[PROGRAM_BUFFERING] = std::make_shared<Program>(Program(std::string("program_buffering"),
 		{
-			std::make_shared<UnitProg>(vertexShaderPath, GL_VERTEX_SHADER),
-			std::make_shared<UnitProg>(fragmentShaderPath, GL_FRAGMENT_SHADER)
-		}));
+			auto vertexShaderPath = shaderPath->getValue() + DEFERRED_SHADING_BUFFERING_VERTEX;
+			auto fragmentShaderPath = shaderPath->getValue() + DEFERRED_SHADING_BUFFERING_FRAG;
+
+			_programs[PROGRAM_BUFFERING] = std::make_shared<Program>(Program(std::string("program_buffering"),
+			{
+				std::make_shared<UnitProg>(vertexShaderPath, GL_VERTEX_SHADER),
+				std::make_shared<UnitProg>(fragmentShaderPath, GL_FRAGMENT_SHADER)
+			}));
+		}
+		{
+			auto vertexShaderPath = shaderPath->getValue() + DEFERRED_SHADING_BUFFERING_VERTEX_SKINNED;
+			auto fragmentShaderPath = shaderPath->getValue() + DEFERRED_SHADING_BUFFERING_FRAG;
+
+			_programs[PROGRAM_BUFFERING_SKINNED] = std::make_shared<Program>(Program(std::string("program_buffering_skinned"),
+			{
+				std::make_shared<UnitProg>(vertexShaderPath, GL_VERTEX_SHADER),
+				std::make_shared<UnitProg>(fragmentShaderPath, GL_FRAGMENT_SHADER)
+			}));
+			//_programs[PROGRAM_BUFFERING_SKINNED]->
+		}
 	}
 
 	void DeferredBasicBuffering::renderPass(const DRBCameraDrawableList &infos)
@@ -116,8 +131,8 @@ namespace AGE
 					//todo, do not spawn entity while mesh is not loaded
 					//currently it's not safe, because the painter key can be invalid
 					//during the first frames
-					if (meshPaint->getPainterKey().isValid() && meshPaint->hadRenderMode(AGE_OCCLUDER))
-					{
+					if (meshPaint->getPainterKey().isValid() && meshPaint->hadRenderMode(AGE_OCCLUDER) && meshPaint->hadRenderMode(AGE_SKINNED) == false)
+					{ // Pour le moment on rend les mesh skinned que en non occluder a l'arrache pour le test
 						painter = _painterManager->get_painter(meshPaint->getPainterKey());
 						if (painter != oldPainter)
 						{
@@ -170,8 +185,8 @@ namespace AGE
 				//todo, do not spawn entity while mesh is not loaded
 				//currently it's not safe, because the painter key can be invalid
 				//during the first frames
-				if (meshPaint->getPainterKey().isValid() && meshPaint->hadRenderMode(AGE_OCCLUDER) == false)
-				{
+				if (meshPaint->getPainterKey().isValid() && meshPaint->hadRenderMode(AGE_OCCLUDER) == false && meshPaint->hadRenderMode(AGE_SKINNED) == false)
+				{ // Pour le moment on rend les mesh skinned que en non occluder a l'arrache pour le test
 					painter = _painterManager->get_painter(meshPaint->getPainterKey());
 					if (painter != oldPainter)
 					{
@@ -183,6 +198,26 @@ namespace AGE
 					}
 					oldPainter = painter;
 					painter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], meshPaint->globalProperties, meshPaint->getVerticesKey());
+				}
+				else if (meshPaint->getPainterKey().isValid() && meshPaint->hadRenderMode(AGE_SKINNED) == true)
+				{
+					_programs[PROGRAM_BUFFERING_SKINNED]->use();
+					_programs[PROGRAM_BUFFERING_SKINNED]->get_resource<Mat4>("projection_matrix").set(infos.cameraInfos.data.projection);
+					_programs[PROGRAM_BUFFERING_SKINNED]->get_resource<Mat4>("view_matrix").set(infos.cameraInfos.view);
+
+					painter = _painterManager->get_painter(meshPaint->getPainterKey());
+					if (painter != oldPainter)
+					{
+						if (oldPainter)
+						{
+							oldPainter->uniqueDrawEnd();
+						}
+						painter->uniqueDrawBegin(_programs[PROGRAM_BUFFERING_SKINNED]);
+					}
+					oldPainter = painter;
+					painter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING_SKINNED], meshPaint->globalProperties, meshPaint->getVerticesKey());
+
+					_programs[PROGRAM_BUFFERING]->use();
 				}
 			}
 			if (oldPainter)

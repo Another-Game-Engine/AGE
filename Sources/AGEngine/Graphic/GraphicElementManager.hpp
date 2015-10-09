@@ -3,7 +3,7 @@
 #include <memory>
 
 #include "Utils/ObjectPool.hpp"
-#include "DRBMesh.hpp"
+#include "DRBSkinnedMesh.hpp"
 #include "Utils/Dependency.hpp"
 
 namespace AGE
@@ -13,6 +13,7 @@ namespace AGE
 	struct MaterialSetInstance;
 
 	class BFCCullableHandle;
+	class BFCCullableHandleGroup;
 	class BFCBlockManagerFactory;
 
 	// That's a SCENE dependency, and not a global one, set on per scene
@@ -20,10 +21,11 @@ namespace AGE
 	{
 	public:
 		GraphicElementManager(BFCBlockManagerFactory *factory);
-		BFCCullableHandle addMesh(const SubMeshInstance &meshInstance, std::shared_ptr<MaterialSetInstance> materialInstance);
-		void removeMesh(BFCCullableHandle &handle);
+		BFCCullableHandleGroup addMesh(std::shared_ptr<MeshInstance> meshInstance, std::shared_ptr<MaterialSetInstance> materialInstance);
+		void removeMesh(BFCCullableHandleGroup &handle);
 	private:
 		BFCBlockManagerFactory *_bfcBlockManager = nullptr;
 		ObjectPool<DRBMesh> _meshPool;
+		ObjectPool<DRBSkinnedMesh> _skinnedMeshPool;
 	};
 }

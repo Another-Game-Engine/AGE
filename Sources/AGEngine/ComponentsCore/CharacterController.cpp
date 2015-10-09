@@ -12,16 +12,6 @@ namespace AGE
 	}
 
 #if defined(EDITOR_ENABLED)
-	void CharacterController::editorCreate(void)
-	{
-
-	}
-
-	void CharacterController::editorDelete(void)
-	{
-
-	}
-
 	bool CharacterController::editorUpdate(void)
 	{
 		bool modified = false;

@@ -8,7 +8,6 @@
 # include <glm/glm.hpp>
 # include <bitset>
 # include <Utils/AABoundingBox.hh>
-# include <Utils/OpenGL.hh>
 #include <stdint.h>
 
 namespace AGE

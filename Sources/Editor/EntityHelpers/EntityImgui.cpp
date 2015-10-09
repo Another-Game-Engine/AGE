@@ -148,7 +148,6 @@ namespace AGE
 							if (deleted)
 							{
 								modified = true;
-								ptr->editorDelete();
 								entity->removeComponent(i);
 							}
 							ImGui::PopID();

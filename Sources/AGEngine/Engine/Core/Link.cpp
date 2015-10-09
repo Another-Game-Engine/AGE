@@ -4,10 +4,10 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <Utils/Debug.hpp>
 #include <Utils/MatrixConversion.hpp>
+#include <Utils/Profiler.hpp>
 #include <Core/AScene.hh>
 #include <ComponentsCore/Collider.hpp>
 #include <BFC/BFCLinkTracker.hpp>
-
 
 using namespace AGE;
 
@@ -85,6 +85,8 @@ void Link::internalSetPosition(const glm::vec3 &v, bool recalculate)
 
 void Link::internalSetForward(const glm::vec3 &v, bool recalculate)
 {
+	SCOPE_profile_cpu_function("Link");
+
 	BFC_ADD();
 	_localDirty = true;
 	glm::vec4 get = glm::mat4(glm::toMat4(_orientation) * glm::translate(glm::mat4(1), v))[3];
@@ -99,6 +101,8 @@ void Link::internalSetForward(const glm::vec3 &v, bool recalculate)
 
 void Link::internalSetTransform(const glm::mat4 &t, bool recalculate)
 {
+	SCOPE_profile_cpu_function("Link");
+
 	BFC_ADD();
 	//_localDirty = true;
 	//auto p = t * glm::vec4(1,1,1,1);
@@ -119,6 +123,8 @@ void Link::internalSetTransform(const glm::mat4 &t, bool recalculate)
 
 void Link::internalSetScale(const glm::vec3 &v, bool recalculate)
 {
+	SCOPE_profile_cpu_function("Link");
+
 	BFC_ADD();
 	_localDirty = true;
 	_scale = v;
@@ -130,6 +136,8 @@ void Link::internalSetScale(const glm::vec3 &v, bool recalculate)
 
 void Link::internalSetOrientation(const glm::quat &v, bool recalculate)
 {
+	SCOPE_profile_cpu_function("Link");
+
 	BFC_ADD();
 	_localDirty = true;
 	_orientation = v;
@@ -146,6 +154,8 @@ const glm::mat4 Link::getLocalTransform() const
 
 const glm::mat4 &Link::getLocalTransform()
 {
+	SCOPE_profile_cpu_function("Link");
+
 	if (_localDirty)
 	{
 		_localTransformation = glm::mat4(1);
@@ -178,6 +188,8 @@ Link::Link()
 
 Link::Link(EntityData *entity, AScene *scene)
 {
+	SCOPE_profile_cpu_function("Link");
+
 	_entityPtr = entity;
 	_scene = scene;
 	reset();
@@ -188,6 +200,8 @@ Link::Link(EntityData *entity, AScene *scene)
 
 void Link::reset()
 {
+	SCOPE_profile_cpu_function("Link");
+
 	_position = glm::vec3(0);
 	_scale = glm::vec3(1);
 	_orientation = glm::quat(glm::mat4(1));
@@ -199,6 +213,8 @@ void Link::reset()
 
 void Link::attachChild(Link *child)
 {
+	SCOPE_profile_cpu_function("Link");
+
 	if (child->hasParent(this))
 	{
 		// already linked
@@ -217,6 +233,8 @@ void Link::attachChild(Link *child)
 
 void Link::detachChild(Link *child)
 {
+	SCOPE_profile_cpu_function("Link");
+
 	if (!child->hasParent(this))
 	{
 		// are not connected
@@ -229,6 +247,8 @@ void Link::detachChild(Link *child)
 
 void Link::detachChildren()
 {
+	SCOPE_profile_cpu_function("Link");
+
 	for (auto &e : _children)
 	{
 		e->_removeParent();
@@ -248,6 +268,8 @@ bool Link::hasChild(const Link *child) const
 
 void Link::attachParent(Link *parent)
 {
+	SCOPE_profile_cpu_function("Link");
+
 	if (hasParent(parent))
 	{
 		// already linked
@@ -266,6 +288,8 @@ void Link::attachParent(Link *parent)
 
 void Link::detachParent()
 {
+	SCOPE_profile_cpu_function("Link");
+
 	if (!hasParent())
 	{
 		// are not connected
@@ -278,6 +302,8 @@ void Link::detachParent()
 
 void Link::_setChild(Link *ptr)
 {
+	SCOPE_profile_cpu_function("Link");
+
 	if (!hasParent())
 	{
 		_attachToRoot();
@@ -287,12 +313,16 @@ void Link::_setChild(Link *ptr)
 
 void Link::_setParent(Link *ptr)
 {
+	SCOPE_profile_cpu_function("Link");
+
 	_detachFromRoot();
 	_parent = ptr;
 }
 
 void Link::_removeChild(Link *ptr)
 {
+	SCOPE_profile_cpu_function("Link");
+
 	if (_children.size() == 0)
 		return;
 	auto lastIndex = _children.size() - 1;
@@ -314,6 +344,8 @@ void Link::_removeChild(Link *ptr)
 
 void Link::_detachFromRoot()
 {
+	SCOPE_profile_cpu_function("Link");
+
 	if (!_scene || !_parent)
 		return; // because it's root
 	auto root = _scene->getRootLink();
@@ -326,6 +358,8 @@ void Link::_detachFromRoot()
 
 void Link::_attachToRoot()
 {
+	SCOPE_profile_cpu_function("Link");
+
 	if (!_scene)
 		return; // because it's root
 	if (!hasParent())
@@ -337,12 +371,16 @@ void Link::_attachToRoot()
 
 void Link::_removeParent()
 {
+	SCOPE_profile_cpu_function("Link");
+
 	_detachFromRoot();
 	_parent = nullptr;
 }
 
 void Link::_updateGlobalTransform()
 {
+	SCOPE_profile_cpu_function("Link");
+
 	BFC_ADD();
 	glm::mat4 p = glm::mat4(1);
 	if (hasParent())

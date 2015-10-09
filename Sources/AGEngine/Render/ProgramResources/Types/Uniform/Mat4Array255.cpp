@@ -1,41 +1,41 @@
 #include <Render/ProgramResources/Types/Uniform/Mat4Array255.hh>
+
 #include <glm/gtc/type_ptr.hpp>
-#include <iostream>
+
+#include <Utils/Debug.hpp>
 
 namespace AGE
 {
-	Mat4Array255::Mat4Array255(glm::mat4 *value, GLint id, std::string &&name) :
-		AProgramResources(id, std::move(name), GL_UNIFORM),
-		_value(value)
+	Mat4Array255::Mat4Array255(GLint id, std::string &&name) :
+		AProgramResources(id, std::move(name), GL_UNIFORM)
 	{
-
+		_size = 0;
 	}
 
 	Mat4Array255::Mat4Array255(Mat4Array255 &&move) :
-		AProgramResources(std::move(move)),
-		_value(move._value)
+		AProgramResources(std::move(move))
 	{
-
+		AGE_ASSERT("Not implemented");
 	}
 
 	Mat4Array255::Mat4Array255(Mat4Array255 const &copy) :
-		AProgramResources(copy),
-		_value(copy._value)
+		AProgramResources(copy)
 	{
-
+		AGE_ASSERT("Not implemented");
 	}
 
-	Mat4Array255 &Mat4Array255::operator=(glm::mat4 *m)
+	void Mat4Array255::set(glm::mat4 *m, std::size_t size)
 	{
+		AGE_ASSERT(size <= 255);
+		memcpy((void*)&_value, m, size * sizeof(glm::mat4));
+		_size = size;
 		_update = false;
-		_value = m;
-		return (*this);
 	}
 
 	IProgramResources & Mat4Array255::update()
 	{
-		if (!_update) {
-			glUniformMatrix4fv(_id, 200, GL_FALSE, (GLfloat *)(glm::value_ptr(*_value)));
+		if (!_update && _value) {
+			glUniformMatrix4fv(_id, _size, GL_FALSE, (GLfloat *)(glm::value_ptr(_value[0])));
 			_update = true;
 		}
 		return (*this);

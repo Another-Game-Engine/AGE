@@ -23,6 +23,9 @@
 #include <Managers/ArchetypesEditorManager.hpp>
 #include <EditorConfiguration.hpp>
 
+#include <Skinning/AnimationManager.hpp>
+#include <Skinning/AnimatedSklSystem.hpp>
+
 #include "SystemsCore/RenderCameraSystem.hpp"
 #include "SystemsCore/CharacterControllerSystem.hh"
 
@@ -45,13 +48,14 @@ namespace AGE
 	{
 		WE::EditorConfiguration::RefreshScenesDirectoryListing();
 		getInstance<AGE::AssetsManager>()->setAssetsDirectory(WE::EditorConfiguration::GetCookedDirectory());
-
+		setInstance<AGE::AnimationManager>();
 		addSystem<WE::AssetsAndComponentRelationsSystem>(0);
 		addSystem<WE::EntityManager>(1);
 		addSystem<FreeFlyCamera>(2);
 		addSystem<CharacterControllerSystem>(2, true);
 		addSystem<PhysicsSystem>(3, Physics::EngineType::PhysX, getInstance<AGE::AssetsManager>(), false);
 		getInstance<Physics::PhysicsInterface>()->getWorld()->setGravity(0, 0, 0);
+		addSystem<AGE::AnimatedSklSystem>(0);
 		addSystem<RenderCameraSystem>(1000);
 		return true;
 	}

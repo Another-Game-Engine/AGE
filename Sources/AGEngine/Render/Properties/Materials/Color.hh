@@ -1,6 +1,7 @@
 #pragma once
 
 # include <Render/Properties/AProperty.hh>
+#include <glm/glm.hpp>
 
 namespace AGE
 {

@@ -10,7 +10,7 @@ namespace AGE
 		bool CookedFileFilter::isValidFile(const std::tr2::sys::path &path)
 		{
 			auto extension = FileUtils::GetExtension(path);
-			if (extension == "dds" || extension == "mage" || extension == "phage" || extension == "sage")
+			if (extension == "dds" || extension == "mage" || extension == "phage" || extension == "sage" || extension == "skage" || extension == "aage")
 				return true;
 			return false;
 		}
@@ -34,6 +34,16 @@ namespace AGE
 			{
 				t = std::make_shared<CookedFile>(path, parent);
 				t->_type = AssetType::Cooked | AssetType::Mesh;
+			}
+			else if (extension == "aage")
+			{
+				t = std::make_shared<CookedFile>(path, parent);
+				t->_type = AssetType::Cooked | AssetType::Animation;
+			}
+			else if (extension == "skage")
+			{
+				t = std::make_shared<CookedFile>(path, parent);
+				t->_type = AssetType::Cooked | AssetType::Skeleton;
 			}
 
 			if (t)

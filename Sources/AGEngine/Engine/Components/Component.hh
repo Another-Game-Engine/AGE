@@ -44,8 +44,6 @@ namespace AGE
 		virtual bool doSerialize();
 
 #ifdef EDITOR_ENABLED
-		virtual void editorCreate(){}
-		virtual void editorDelete(){}
 		// return true if modified
 		virtual bool editorUpdate();
 		virtual bool isExposedInEditor();

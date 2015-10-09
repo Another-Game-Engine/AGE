@@ -7,9 +7,7 @@
 
 #include "AssetManagement/Instance/MeshInstance.hh"
 #include "AssetManagement/Instance/MaterialInstance.hh"
-
-
-
+#include <Render/Properties/SkeletonProperty.hpp>
 
 namespace AGE
 {
@@ -19,35 +17,72 @@ namespace AGE
 		AGE_ASSERT(factory != nullptr);
 	}
 
-	BFCCullableHandle GraphicElementManager::addMesh(const SubMeshInstance &meshInstance, std::shared_ptr<MaterialSetInstance> materialInstance)
+	BFCCullableHandleGroup GraphicElementManager::addMesh(std::shared_ptr<MeshInstance> mesh, std::shared_ptr<MaterialSetInstance> materialInstance)
 	{
 		SCOPE_profile_cpu_function("DRB");
 
-		DRBMesh *drbMesh = _meshPool.create();
+		BFCCullableHandleGroup result;
 
-		drbMesh->datas->setVerticesKey(meshInstance.vertices);
-		drbMesh->datas->setPainterKey(meshInstance.painter);
-		drbMesh->datas->setAABB(meshInstance.boundingBox);
-		
-		drbMesh->datas->globalProperties.merge_properties(meshInstance.properties);
-		
-		std::size_t materialIndex = meshInstance.defaultMaterialIndex < materialInstance->datas.size() ? meshInstance.defaultMaterialIndex : 0;
-		auto &material = materialInstance->datas[materialIndex];
+		std::shared_ptr<SkeletonProperty> skeletonProperty = nullptr;
 
-		for (auto &p : material._properties)
+		for (auto &submesh : mesh->subMeshs)
 		{
-			drbMesh->datas->globalProperties.add_property(p);
-		}
+			DRBMesh *drbMesh = nullptr;
+			
+			if (submesh.isSkinned)
+			{
+				auto drbMeshSkeleton = _skinnedMeshPool.create();
+				drbMesh = drbMeshSkeleton;
 
-		BFCCullableHandle result = _bfcBlockManager->createItem(drbMesh);
+				if (skeletonProperty == nullptr)
+				{
+					skeletonProperty = std::make_shared<SkeletonProperty>();
+				}
+				drbMesh->datas->globalProperties.add_property(skeletonProperty);
+				drbMeshSkeleton->_skeletonProperty = skeletonProperty;
+			}
+			else
+			{
+				drbMesh = _meshPool.create();
+			}
+
+
+			drbMesh->datas->setVerticesKey(submesh.vertices);
+			drbMesh->datas->setPainterKey(submesh.painter);
+			drbMesh->datas->setAABB(submesh.boundingBox);
+
+			drbMesh->datas->globalProperties.merge_properties(submesh.properties);
+
+			std::size_t materialIndex = submesh.defaultMaterialIndex < materialInstance->datas.size() ? submesh.defaultMaterialIndex : 0;
+			auto &material = materialInstance->datas[materialIndex];
+
+			for (auto &p : material._properties)
+			{
+				drbMesh->datas->globalProperties.add_property(p);
+			}
+
+			BFCCullableHandle resultMesh = _bfcBlockManager->createItem(drbMesh);
+			result.getHandles().push_back(resultMesh);
+		}
 		return result;
 	}
 
-	void GraphicElementManager::removeMesh(BFCCullableHandle &handle)
+	void GraphicElementManager::removeMesh(BFCCullableHandleGroup &handle)
 	{
 		SCOPE_profile_cpu_function("DRB");
 
-		_meshPool.destroy(handle.getPtr());
-		_bfcBlockManager->deleteItem(handle);
+		for (auto &m : handle.getHandles())
+		{
+			if (std::static_pointer_cast<DRBMeshData>(m.getPtr()->getDatas())->hadRenderMode(RenderModes::AGE_SKINNED))
+			{
+				_skinnedMeshPool.destroy(m.getPtr());
+			}
+			else
+			{
+				_meshPool.destroy(m.getPtr());
+			}
+			_bfcBlockManager->deleteItem(m);
+		}
+		handle.getHandles().clear();
 	}
 }

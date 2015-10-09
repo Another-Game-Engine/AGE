@@ -29,6 +29,7 @@
 #include <Render/Properties/Materials/ScaleUVs.hpp>
 #include <Render/Properties/Materials/Ratio.hh>
 #include <Render/GeometryManagement/Painting/Painter.hh>
+#include <Render/GeometryManagement/Data/Vertices.hh>
 
 #include <AssetManagement/OpenGLDDSLoader.hh>
 
@@ -40,8 +41,61 @@
 #include <imgui/imgui.h>
 #endif
 
+# define LAMBDA_FUNCTION [](AGE::Vertices &vertices, size_t index, AGE::SubMeshData const &data)
+
+static std::pair<std::pair<GLenum, std::string>, std::function<void(AGE::Vertices &vertices, size_t index, AGE::SubMeshData const &data)>> g_InfosTypes[AGE::MeshInfos::END] =
+{
+	std::make_pair(std::make_pair(GL_FLOAT_VEC3, std::string("position")), LAMBDA_FUNCTION{ vertices.set_data<glm::vec3>(data.positions, std::string("position")); }),
+	std::make_pair(std::make_pair(GL_FLOAT_VEC3, std::string("normal")), LAMBDA_FUNCTION{ vertices.set_data<glm::vec3>(data.normals, std::string("normal")); }),
+	std::make_pair(std::make_pair(GL_FLOAT_VEC3, std::string("tangent")), LAMBDA_FUNCTION{ vertices.set_data<glm::vec3>(data.tangents, std::string("tangent")); }),
+	std::make_pair(std::make_pair(GL_FLOAT_VEC3, std::string("biTangents")), LAMBDA_FUNCTION{ vertices.set_data<glm::vec3>(data.biTangents, std::string("biTangents")); }),
+	std::make_pair(std::make_pair(GL_FLOAT_VEC2, std::string("texCoord")), LAMBDA_FUNCTION{ vertices.set_data<glm::vec2>(data.uvs[0], std::string("texCoord")); }),
+	std::make_pair(std::make_pair(GL_FLOAT_VEC4, std::string("blendWeight")), LAMBDA_FUNCTION{ vertices.set_data<glm::vec4>(data.weights, std::string("blendWeight")); }),
+	std::make_pair(std::make_pair(GL_FLOAT_VEC4, std::string("blendIndice")), LAMBDA_FUNCTION{ vertices.set_data<glm::vec4>(data.boneIndices, std::string("blendIndice")); }),
+	std::make_pair(std::make_pair(GL_FLOAT_VEC4, std::string("color")), LAMBDA_FUNCTION{ vertices.set_data<glm::vec4>(data.colors, std::string("color")); })
+};
+
 namespace AGE
 {
+	struct LoadingCallback
+	{
+		LoadingCallback(std::size_t target, std::function<void(void)> callback)
+		{
+			ptr = std::make_shared<Internal>(target, callback);
+		}
+		LoadingCallback(const LoadingCallback &o)
+		{
+			ptr = o.ptr;
+		}
+		~LoadingCallback()
+		{
+		}
+		void increment()
+		{
+			if (++(ptr->counter) == ptr->target)
+			{
+				ptr->callback();
+			}
+		}
+	private:
+		struct Internal
+		{
+			const size_t target;
+			std::atomic_size_t counter;
+			std::function<void(void)> callback;
+
+			Internal(std::size_t _target, std::function<void(void)> _callback)
+				: target(_target), counter(0), callback(_callback)
+			{}
+			Internal() = delete;
+		};
+		std::shared_ptr<Internal> ptr = nullptr;
+
+		LoadingCallback() = delete;
+		LoadingCallback& operator=(const LoadingCallback &) = delete;
+	};
+
+
 	AssetsManager::AssetsManager()
 	{
 		QueueOwner::registerSharedCallback<LoadAssetMessage>([](LoadAssetMessage &msg){msg.setValue(msg.function()); });
@@ -377,13 +431,19 @@ namespace AGE
 			{
 				return (true);
 			}
-			_animations.insert(std::make_pair(filePath.getFullName(), animation));
+			_animations.insert(std::make_pair(filePath.getFullName(), nullptr));
 		}
-		auto future = AGE::EmplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=](){
+		auto future = AGE::EmplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]() mutable {
+			LoadingCallback callback(1, [=]()
+			{
+				std::lock_guard<std::mutex> lock(this->_mutex);
+				this->_animations[filePath.getFullName()] = animation;
+			});
 			SCOPE_profile_cpu_i("AssetsLoad", "LoadAnimation");
 			std::ifstream ifs(filePath.getFullName(), std::ios::binary);
 			cereal::PortableBinaryInputArchive ar(ifs);
 			ar(*animation.get());
+			callback.increment();
 			return AssetsLoadingResult(false);
 		});
 		pushNewAsset(loadingChannel, _filePath.getFullName(), future);
@@ -392,6 +452,8 @@ namespace AGE
 
 	std::shared_ptr<AnimationData> AssetsManager::getAnimation(const OldFile &_filePath)
 	{
+		std::lock_guard<std::mutex> lock(_mutex);
+
 		OldFile filePath(_assetsDirectory + _filePath.getFullName());
 		if (_animations.find(filePath.getFullName()) != std::end(_animations))
 			return _animations[filePath.getFullName()];
@@ -401,7 +463,7 @@ namespace AGE
 	bool AssetsManager::loadSkeleton(const OldFile &_filePath, const std::string &loadingChannel)
 	{
 		OldFile filePath(_assetsDirectory + _filePath.getFullName());
-		auto skeleton = std::make_shared<Skeleton>();
+		auto skeleton = std::make_shared<Skeleton>(_filePath.getFileName().c_str());
 		if (!filePath.exists()) 
 		{
 			std::cerr << "AssetsManager : File [" << filePath.getFullName() << "] does not exists." << std::endl;
@@ -413,13 +475,21 @@ namespace AGE
 			{
 				return (true);
 			}
-			_skeletons.insert(std::make_pair(filePath.getFullName(), skeleton));
+			_skeletons.insert(std::make_pair(filePath.getFullName(), nullptr));
 		}
-		auto future = AGE::EmplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=](){
+
+		LoadingCallback callback(1, [=]()
+		{
+			std::lock_guard<std::mutex> lock(this->_mutex);
+			this->_skeletons[filePath.getFullName()] = skeleton;
+		});
+
+		auto future = AGE::EmplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]() mutable {
 			SCOPE_profile_cpu_i("AssetsLoad", "LoadSkeleton");
 			std::ifstream ifs(filePath.getFullName(), std::ios::binary);
 			cereal::PortableBinaryInputArchive ar(ifs);
 			ar(*skeleton.get());
+			callback.increment();
 			return true;
 		});
 		pushNewAsset(loadingChannel, _filePath.getFullName(), future);
@@ -429,6 +499,8 @@ namespace AGE
 
 	std::shared_ptr<Skeleton> AssetsManager::getSkeleton(const OldFile &_filePath)
 	{
+		std::lock_guard<std::mutex> lock(_mutex);
+
 		OldFile filePath(_assetsDirectory + _filePath.getFullName());
 		if (_skeletons.find(filePath.getFullName()) != std::end(_skeletons))
 			return _skeletons[filePath.getFullName()];
@@ -445,7 +517,7 @@ namespace AGE
 			{
 				return (true);
 			}
-			_meshs.insert(std::make_pair(filePath.getFullName(), meshInstance));
+			this->_meshs.insert(std::make_pair(filePath.getFullName(), nullptr));
 		}
 		auto future = AGE::EmplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]()
 		{
@@ -463,11 +535,20 @@ namespace AGE
 			meshInstance->subMeshs.resize(data->subMeshs.size());
 			meshInstance->name = data->name;
 			meshInstance->path = _filePath.getFullName();
+
+
+			LoadingCallback callback(data->subMeshs.size(), [=]()
+			{
+				std::lock_guard<std::mutex> lock(this->_mutex);
+				this->_meshs[filePath.getFullName()] = meshInstance;
+			});
+
 			// If no vertex pool correspond to submesh
 			for (std::size_t i = 0; i < data->subMeshs.size(); ++i)
 			{
-				auto future = AGE::EmplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=](){
-					loadSubmesh(data, i, &meshInstance->subMeshs[i], loadingChannel);
+				auto future = AGE::EmplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]() mutable
+				{
+					loadSubmesh(data, i, &meshInstance->subMeshs[i], loadingChannel, callback);
 					return AssetsLoadingResult(false);
 				});
 				pushNewAsset(loadingChannel, data->subMeshs[i].name, future);
@@ -479,7 +560,7 @@ namespace AGE
 		return (true);
 	}
 
-	void AssetsManager::loadSubmesh(std::shared_ptr<MeshData> fileData, std::size_t index, SubMeshInstance *mesh, const std::string &loadingChannel)
+	void AssetsManager::loadSubmesh(std::shared_ptr<MeshData> fileData, std::size_t index, SubMeshInstance *mesh, const std::string &loadingChannel, LoadingCallback callback)
 	{
 		auto &data = fileData->subMeshs[index];
 		std::size_t size = data.infos.count();
@@ -490,7 +571,7 @@ namespace AGE
 		auto maxSize = data.positions.size();
 		mesh->boundingBox = data.boundingBox;
 		mesh->defaultMaterialIndex = data.defaultMaterialIndex;
-		auto future = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]() {
+		auto future = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<LoadAssetMessage, AssetsLoadingResult>([=]() mutable {
 			SCOPE_profile_cpu_i("AssetsLoad", "LoadSubMesh");
 
 			auto &paintingManager = GetRenderThread()->paintingManager;
@@ -513,6 +594,7 @@ namespace AGE
 			auto &painter = paintingManager->get_painter(mesh->painter);
 			mesh->vertices = painter->add_vertices(data.positions.size(), data.indices.size());
 			auto vertices = painter->get_vertices(mesh->vertices);
+			mesh->isSkinned = data.infos.test(MeshInfos::BoneIndices);
 			for (auto i = 0ull; i < data.infos.size(); ++i)
 			{
 				if (data.infos.test(i))
@@ -521,6 +603,7 @@ namespace AGE
 				}
 			}
 			vertices->set_indices(data.indices);
+			callback.increment();
 			return AssetsLoadingResult(false);
 		});
 		pushNewAsset(loadingChannel, data.name, future);

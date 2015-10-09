@@ -34,8 +34,6 @@ namespace AGE
 		void setColor(const glm::vec3 &color);
 
 #ifdef EDITOR_ENABLED
-		virtual void editorCreate();
-		virtual void editorDelete();
 		virtual bool editorUpdate();
 #endif
 

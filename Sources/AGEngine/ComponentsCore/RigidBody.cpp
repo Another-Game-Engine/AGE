@@ -266,16 +266,6 @@ namespace AGE
 
 #ifdef EDITOR_ENABLED
 
-	void RigidBody::editorCreate(void)
-	{
-		return;
-	}
-
-	void RigidBody::editorDelete(void)
-	{
-		return;
-	}
-
 	bool RigidBody::editorUpdate(void)
 	{
 		if (editorStruct == nullptr)

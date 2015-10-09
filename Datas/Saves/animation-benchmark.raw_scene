@@ -1,0 +1,5782 @@
+{
+    "value0": {
+        "cereal_class_version": 0,
+        "componentsIdReferenceTable": [
+            {
+                "key": 0,
+                "value": 2633202538906912002
+            },
+            {
+                "key": 1,
+                "value": 4279995424560007376
+            },
+            {
+                "key": 2,
+                "value": 9228130898566333550
+            },
+            {
+                "key": 3,
+                "value": 2719950380395641793
+            },
+            {
+                "key": 4,
+                "value": 12568265209258137674
+            },
+            {
+                "key": 5,
+                "value": 7226899121077071394
+            },
+            {
+                "key": 6,
+                "value": 8685391846632613471
+            },
+            {
+                "key": 7,
+                "value": 11957752261005749183
+            },
+            {
+                "key": 8,
+                "value": 17192082489458106606
+            },
+            {
+                "key": 9,
+                "value": 16239045169874622267
+            },
+            {
+                "key": 10,
+                "value": 6441919271708046876
+            },
+            {
+                "key": 11,
+                "value": 15079484947096660329
+            },
+            {
+                "key": 12,
+                "value": 8718854852507163888
+            },
+            {
+                "key": 13,
+                "value": 13917482855567903631
+            }
+        ],
+        "entityNumber": 130,
+        "Entity_0": {
+            "cereal_class_version": 0,
+            "link": {
+                "cereal_class_version": 0,
+                "Position": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": -2.5
+                },
+                "Scale": {
+                    "value0": 20,
+                    "value1": 20,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "cereal_class_version": 0,
+                "name": "wall"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "cereal_class_version": 3,
+                "value0": "cube/cube.mage",
+                "value1": "cube/cube.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 16
+                }
+            }
+        },
+        "Entity_1": {
+            "link": {
+                "Position": {
+                    "value0": -2,
+                    "value1": 2,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 0.30000001192092896,
+                    "value1": 0.30000001192092896,
+                    "value2": 0.30000001192092896
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [
+                2,
+                8,
+                14,
+                20,
+                26
+            ],
+            "flags": 0,
+            "components_number": [
+                0
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "gg"
+            }
+        },
+        "Entity_2": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [
+                3,
+                4,
+                5,
+                6,
+                7
+            ],
+            "flags": 0,
+            "components_number": [
+                0
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "mg"
+            }
+        },
+        "Entity_3": {
+            "link": {
+                "Position": {
+                    "value0": -4,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "cereal_class_version": 0,
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/shot.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_4": {
+            "link": {
+                "Position": {
+                    "value0": -2,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/run.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_5": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/idle.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_6": {
+            "link": {
+                "Position": {
+                    "value0": 2,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/attack-1.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_7": {
+            "link": {
+                "Position": {
+                    "value0": 4,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/get_hit_r.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_8": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": -4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0.078459098935127258,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 0.99691730737686157
+                }
+            },
+            "children": [
+                9,
+                10,
+                11,
+                12,
+                13
+            ],
+            "flags": 0,
+            "components_number": [
+                0
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "mg-Copy"
+            }
+        },
+        "Entity_9": {
+            "link": {
+                "Position": {
+                    "value0": -4,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/shot.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_10": {
+            "link": {
+                "Position": {
+                    "value0": -2,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/run.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_11": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/idle.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_12": {
+            "link": {
+                "Position": {
+                    "value0": 2,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/attack-1.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_13": {
+            "link": {
+                "Position": {
+                    "value0": 4,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/get_hit_r.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_14": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": -6,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0.078459098935127258,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 0.99691730737686157
+                }
+            },
+            "children": [
+                15,
+                16,
+                17,
+                18,
+                19
+            ],
+            "flags": 0,
+            "components_number": [
+                0
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "mg-Copy-Copy"
+            }
+        },
+        "Entity_15": {
+            "link": {
+                "Position": {
+                    "value0": -4,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/shot.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_16": {
+            "link": {
+                "Position": {
+                    "value0": -2,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/run.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_17": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/idle.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_18": {
+            "link": {
+                "Position": {
+                    "value0": 2,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/attack-1.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_19": {
+            "link": {
+                "Position": {
+                    "value0": 4,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/get_hit_r.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_20": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": -2,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0.078459098935127258,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 0.99691730737686157
+                }
+            },
+            "children": [
+                21,
+                22,
+                23,
+                24,
+                25
+            ],
+            "flags": 0,
+            "components_number": [
+                0
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "mg-Copy-Copy-Copy"
+            }
+        },
+        "Entity_21": {
+            "link": {
+                "Position": {
+                    "value0": -4,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/shot.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_22": {
+            "link": {
+                "Position": {
+                    "value0": -2,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/run.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_23": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/idle.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_24": {
+            "link": {
+                "Position": {
+                    "value0": 2,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/attack-1.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_25": {
+            "link": {
+                "Position": {
+                    "value0": 4,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy-Copy-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/get_hit_r.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_26": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": -8,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0.078459098935127258,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 0.99691730737686157
+                }
+            },
+            "children": [
+                27,
+                28,
+                29,
+                30,
+                31
+            ],
+            "flags": 0,
+            "components_number": [
+                0
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "mg-Copy-Copy-Copy-Copy"
+            }
+        },
+        "Entity_27": {
+            "link": {
+                "Position": {
+                    "value0": -4,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/shot.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_28": {
+            "link": {
+                "Position": {
+                    "value0": -2,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/run.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_29": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/idle.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_30": {
+            "link": {
+                "Position": {
+                    "value0": 2,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy-Copy-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/attack-1.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_31": {
+            "link": {
+                "Position": {
+                    "value0": 4,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy-Copy-Copy-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/get_hit_r.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_32": {
+            "link": {
+                "Position": {
+                    "value0": 2,
+                    "value1": 2,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 0.30000001192092896,
+                    "value1": 0.30000001192092896,
+                    "value2": 0.30000001192092896
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [
+                33,
+                39,
+                45,
+                51,
+                57
+            ],
+            "flags": 0,
+            "components_number": [
+                0
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "gg-Copy"
+            }
+        },
+        "Entity_33": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [
+                34,
+                35,
+                36,
+                37,
+                38
+            ],
+            "flags": 0,
+            "components_number": [
+                0
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "mg-Copy"
+            }
+        },
+        "Entity_34": {
+            "link": {
+                "Position": {
+                    "value0": -4,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/shot.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_35": {
+            "link": {
+                "Position": {
+                    "value0": -2,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/run.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_36": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/idle.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_37": {
+            "link": {
+                "Position": {
+                    "value0": 2,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/attack-1.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_38": {
+            "link": {
+                "Position": {
+                    "value0": 4,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/get_hit_r.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_39": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": -4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0.078459098935127258,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 0.99691730737686157
+                }
+            },
+            "children": [
+                40,
+                41,
+                42,
+                43,
+                44
+            ],
+            "flags": 0,
+            "components_number": [
+                0
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "mg-Copy-Copy"
+            }
+        },
+        "Entity_40": {
+            "link": {
+                "Position": {
+                    "value0": -4,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/shot.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_41": {
+            "link": {
+                "Position": {
+                    "value0": -2,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/run.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_42": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/idle.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_43": {
+            "link": {
+                "Position": {
+                    "value0": 2,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/attack-1.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_44": {
+            "link": {
+                "Position": {
+                    "value0": 4,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/get_hit_r.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_45": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": -6,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0.078459098935127258,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 0.99691730737686157
+                }
+            },
+            "children": [
+                46,
+                47,
+                48,
+                49,
+                50
+            ],
+            "flags": 0,
+            "components_number": [
+                0
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "mg-Copy-Copy-Copy"
+            }
+        },
+        "Entity_46": {
+            "link": {
+                "Position": {
+                    "value0": -4,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/shot.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_47": {
+            "link": {
+                "Position": {
+                    "value0": -2,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/run.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_48": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/idle.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_49": {
+            "link": {
+                "Position": {
+                    "value0": 2,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/attack-1.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_50": {
+            "link": {
+                "Position": {
+                    "value0": 4,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy-Copy-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/get_hit_r.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_51": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": -2,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0.078459098935127258,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 0.99691730737686157
+                }
+            },
+            "children": [
+                52,
+                53,
+                54,
+                55,
+                56
+            ],
+            "flags": 0,
+            "components_number": [
+                0
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "mg-Copy-Copy-Copy-Copy"
+            }
+        },
+        "Entity_52": {
+            "link": {
+                "Position": {
+                    "value0": -4,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/shot.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_53": {
+            "link": {
+                "Position": {
+                    "value0": -2,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/run.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_54": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/idle.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_55": {
+            "link": {
+                "Position": {
+                    "value0": 2,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy-Copy-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/attack-1.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_56": {
+            "link": {
+                "Position": {
+                    "value0": 4,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy-Copy-Copy-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/get_hit_r.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_57": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": -8,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0.078459098935127258,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 0.99691730737686157
+                }
+            },
+            "children": [
+                58,
+                59,
+                60,
+                61,
+                62
+            ],
+            "flags": 0,
+            "components_number": [
+                0
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "mg-Copy-Copy-Copy-Copy-Copy"
+            }
+        },
+        "Entity_58": {
+            "link": {
+                "Position": {
+                    "value0": -4,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/shot.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_59": {
+            "link": {
+                "Position": {
+                    "value0": -2,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/run.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_60": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy-Copy-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/idle.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_61": {
+            "link": {
+                "Position": {
+                    "value0": 2,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy-Copy-Copy-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/attack-1.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_62": {
+            "link": {
+                "Position": {
+                    "value0": 4,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy-Copy-Copy-Copy-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/get_hit_r.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_63": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 8
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                5
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "camera"
+            },
+            "AGE_CORE_CameraComponent": {
+                "cereal_class_version": 0,
+                "projection": {
+                    "value0": {
+                        "value0": 0.97427862882614136,
+                        "value1": 0,
+                        "value2": 0,
+                        "value3": 0,
+                        "value4": 0,
+                        "value5": 1.732050895690918,
+                        "value6": 0,
+                        "value7": 0,
+                        "value8": 0,
+                        "value9": 0,
+                        "value10": -1.0001000165939331,
+                        "value11": -1,
+                        "value12": 0,
+                        "value13": 0,
+                        "value14": -0.20001000165939331,
+                        "value15": 0
+                    }
+                }
+            }
+        },
+        "Entity_64": {
+            "link": {
+                "Position": {
+                    "value0": -2,
+                    "value1": -2,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 0.30000001192092896,
+                    "value1": 0.30000001192092896,
+                    "value2": 0.30000001192092896
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [
+                65,
+                71,
+                77,
+                83,
+                89
+            ],
+            "flags": 0,
+            "components_number": [
+                0
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "gg-Copy-Copy"
+            }
+        },
+        "Entity_65": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [
+                66,
+                67,
+                68,
+                69,
+                70
+            ],
+            "flags": 0,
+            "components_number": [
+                0
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "mg-Copy-Copy"
+            }
+        },
+        "Entity_66": {
+            "link": {
+                "Position": {
+                    "value0": -4,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/shot.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_67": {
+            "link": {
+                "Position": {
+                    "value0": -2,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/run.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_68": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/idle.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_69": {
+            "link": {
+                "Position": {
+                    "value0": 2,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/attack-1.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_70": {
+            "link": {
+                "Position": {
+                    "value0": 4,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/get_hit_r.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_71": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": -4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0.078459098935127258,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 0.99691730737686157
+                }
+            },
+            "children": [
+                72,
+                73,
+                74,
+                75,
+                76
+            ],
+            "flags": 0,
+            "components_number": [
+                0
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "mg-Copy-Copy-Copy"
+            }
+        },
+        "Entity_72": {
+            "link": {
+                "Position": {
+                    "value0": -4,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/shot.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_73": {
+            "link": {
+                "Position": {
+                    "value0": -2,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/run.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_74": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/idle.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_75": {
+            "link": {
+                "Position": {
+                    "value0": 2,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/attack-1.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_76": {
+            "link": {
+                "Position": {
+                    "value0": 4,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy-Copy-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/get_hit_r.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_77": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": -6,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0.078459098935127258,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 0.99691730737686157
+                }
+            },
+            "children": [
+                78,
+                79,
+                80,
+                81,
+                82
+            ],
+            "flags": 0,
+            "components_number": [
+                0
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "mg-Copy-Copy-Copy-Copy"
+            }
+        },
+        "Entity_78": {
+            "link": {
+                "Position": {
+                    "value0": -4,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/shot.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_79": {
+            "link": {
+                "Position": {
+                    "value0": -2,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/run.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_80": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/idle.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_81": {
+            "link": {
+                "Position": {
+                    "value0": 2,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy-Copy-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/attack-1.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_82": {
+            "link": {
+                "Position": {
+                    "value0": 4,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy-Copy-Copy-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/get_hit_r.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_83": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": -2,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0.078459098935127258,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 0.99691730737686157
+                }
+            },
+            "children": [
+                84,
+                85,
+                86,
+                87,
+                88
+            ],
+            "flags": 0,
+            "components_number": [
+                0
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "mg-Copy-Copy-Copy-Copy-Copy"
+            }
+        },
+        "Entity_84": {
+            "link": {
+                "Position": {
+                    "value0": -4,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/shot.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_85": {
+            "link": {
+                "Position": {
+                    "value0": -2,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/run.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_86": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy-Copy-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/idle.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_87": {
+            "link": {
+                "Position": {
+                    "value0": 2,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy-Copy-Copy-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/attack-1.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_88": {
+            "link": {
+                "Position": {
+                    "value0": 4,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy-Copy-Copy-Copy-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/get_hit_r.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_89": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": -8,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0.078459098935127258,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 0.99691730737686157
+                }
+            },
+            "children": [
+                90,
+                91,
+                92,
+                93,
+                94
+            ],
+            "flags": 0,
+            "components_number": [
+                0
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "mg-Copy-Copy-Copy-Copy-Copy-Copy"
+            }
+        },
+        "Entity_90": {
+            "link": {
+                "Position": {
+                    "value0": -4,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/shot.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_91": {
+            "link": {
+                "Position": {
+                    "value0": -2,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy-Copy-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/run.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_92": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy-Copy-Copy-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/idle.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_93": {
+            "link": {
+                "Position": {
+                    "value0": 2,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy-Copy-Copy-Copy-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/attack-1.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_94": {
+            "link": {
+                "Position": {
+                    "value0": 4,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy-Copy-Copy-Copy-Copy-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/get_hit_r.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_95": {
+            "link": {
+                "Position": {
+                    "value0": 2,
+                    "value1": -2,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 0.30000001192092896,
+                    "value1": 0.30000001192092896,
+                    "value2": 0.30000001192092896
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [
+                96,
+                102,
+                108,
+                114,
+                120
+            ],
+            "flags": 0,
+            "components_number": [
+                0
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "gg-Copy-Copy"
+            }
+        },
+        "Entity_96": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [
+                97,
+                98,
+                99,
+                100,
+                101
+            ],
+            "flags": 0,
+            "components_number": [
+                0
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "mg-Copy-Copy"
+            }
+        },
+        "Entity_97": {
+            "link": {
+                "Position": {
+                    "value0": -4,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/shot.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_98": {
+            "link": {
+                "Position": {
+                    "value0": -2,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/run.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_99": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/idle.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_100": {
+            "link": {
+                "Position": {
+                    "value0": 2,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/attack-1.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_101": {
+            "link": {
+                "Position": {
+                    "value0": 4,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/get_hit_r.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_102": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": -4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0.078459098935127258,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 0.99691730737686157
+                }
+            },
+            "children": [
+                103,
+                104,
+                105,
+                106,
+                107
+            ],
+            "flags": 0,
+            "components_number": [
+                0
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "mg-Copy-Copy-Copy"
+            }
+        },
+        "Entity_103": {
+            "link": {
+                "Position": {
+                    "value0": -4,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/shot.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_104": {
+            "link": {
+                "Position": {
+                    "value0": -2,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/run.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_105": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/idle.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_106": {
+            "link": {
+                "Position": {
+                    "value0": 2,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/attack-1.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_107": {
+            "link": {
+                "Position": {
+                    "value0": 4,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy-Copy-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/get_hit_r.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_108": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": -6,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0.078459098935127258,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 0.99691730737686157
+                }
+            },
+            "children": [
+                109,
+                110,
+                111,
+                112,
+                113
+            ],
+            "flags": 0,
+            "components_number": [
+                0
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "mg-Copy-Copy-Copy-Copy"
+            }
+        },
+        "Entity_109": {
+            "link": {
+                "Position": {
+                    "value0": -4,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/shot.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_110": {
+            "link": {
+                "Position": {
+                    "value0": -2,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/run.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_111": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/idle.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_112": {
+            "link": {
+                "Position": {
+                    "value0": 2,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy-Copy-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/attack-1.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_113": {
+            "link": {
+                "Position": {
+                    "value0": 4,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy-Copy-Copy-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/get_hit_r.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_114": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": -2,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0.078459098935127258,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 0.99691730737686157
+                }
+            },
+            "children": [
+                115,
+                116,
+                117,
+                118,
+                119
+            ],
+            "flags": 0,
+            "components_number": [
+                0
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "mg-Copy-Copy-Copy-Copy-Copy"
+            }
+        },
+        "Entity_115": {
+            "link": {
+                "Position": {
+                    "value0": -4,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/shot.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_116": {
+            "link": {
+                "Position": {
+                    "value0": -2,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/run.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_117": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy-Copy-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/idle.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_118": {
+            "link": {
+                "Position": {
+                    "value0": 2,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy-Copy-Copy-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/attack-1.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_119": {
+            "link": {
+                "Position": {
+                    "value0": 4,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy-Copy-Copy-Copy-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/get_hit_r.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_120": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": -8,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0.078459098935127258,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 0.99691730737686157
+                }
+            },
+            "children": [
+                121,
+                122,
+                123,
+                124,
+                125
+            ],
+            "flags": 0,
+            "components_number": [
+                0
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "mg-Copy-Copy-Copy-Copy-Copy-Copy"
+            }
+        },
+        "Entity_121": {
+            "link": {
+                "Position": {
+                    "value0": -4,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/shot.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_122": {
+            "link": {
+                "Position": {
+                    "value0": -2,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy-Copy-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/run.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_123": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy-Copy-Copy-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/idle.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_124": {
+            "link": {
+                "Position": {
+                    "value0": 2,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy-Copy-Copy-Copy-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/attack-1.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_125": {
+            "link": {
+                "Position": {
+                    "value0": 4,
+                    "value1": 4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                11
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "monster-Copy-Copy-Copy-Copy-Copy-Copy-Copy-Copy-Copy-Copy"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "hexapod/hexapod.mage",
+                "value1": "hexapod/hexapod.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_SKINNING_AnimatedSklComponent": {
+                "Skeleton": "hexapod/hexapod.skage",
+                "Animation": "hexapod/get_hit_r.aage",
+                "IsShared": false,
+                "TimeMultiplier": 10
+            }
+        },
+        "Entity_126": {
+            "link": {
+                "Position": {
+                    "value0": -2,
+                    "value1": 2,
+                    "value2": 2
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                4
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "spot"
+            },
+            "AGE_CORE_SpotLightComponent": {
+                "cereal_class_version": 0,
+                "color": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 0,
+                    "value3": 1
+                },
+                "range": {
+                    "value0": 1,
+                    "value1": 0.10000000149011612,
+                    "value2": 0.0099999997764825821
+                },
+                "exponent": 5,
+                "cutOff": 0.5
+            }
+        },
+        "Entity_127": {
+            "link": {
+                "Position": {
+                    "value0": -2,
+                    "value1": -2,
+                    "value2": 2
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                4
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "spot-Copy"
+            },
+            "AGE_CORE_SpotLightComponent": {
+                "color": {
+                    "value0": 1,
+                    "value1": 0.039215687662363052,
+                    "value2": 1,
+                    "value3": 1
+                },
+                "range": {
+                    "value0": 1,
+                    "value1": 0.10000000149011612,
+                    "value2": 0.0099999997764825821
+                },
+                "exponent": 5,
+                "cutOff": 0.5
+            }
+        },
+        "Entity_128": {
+            "link": {
+                "Position": {
+                    "value0": 2,
+                    "value1": -2,
+                    "value2": 2
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                4
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "spot-Copy-Copy"
+            },
+            "AGE_CORE_SpotLightComponent": {
+                "color": {
+                    "value0": 0,
+                    "value1": 1,
+                    "value2": 1,
+                    "value3": 1
+                },
+                "range": {
+                    "value0": 1,
+                    "value1": 0.10000000149011612,
+                    "value2": 0.0099999997764825821
+                },
+                "exponent": 5,
+                "cutOff": 0.5
+            }
+        },
+        "Entity_129": {
+            "link": {
+                "Position": {
+                    "value0": 2,
+                    "value1": 2,
+                    "value2": 2
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                4
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "spot-Copy-Copy-Copy"
+            },
+            "AGE_CORE_SpotLightComponent": {
+                "color": {
+                    "value0": 0,
+                    "value1": 1,
+                    "value2": 0,
+                    "value3": 1
+                },
+                "range": {
+                    "value0": 1,
+                    "value1": 0.10000000149011612,
+                    "value2": 0.0099999997764825821
+                },
+                "exponent": 5,
+                "cutOff": 0.5
+            }
+        }
+    }
+}

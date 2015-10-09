@@ -110,12 +110,6 @@ namespace AGE
 
 
 #ifdef EDITOR_ENABLED
-	void PointLightComponent::editorCreate()
-	{}
-
-	void PointLightComponent::editorDelete()
-	{}
-
 	bool PointLightComponent::editorUpdate()
 	{
 		bool modified = false;

@@ -14,12 +14,16 @@
 #include <Utils/Debug.hpp>
 #endif
 #include "Graphic\DRBMeshData.hpp"
+#include "Graphic/DRBSkinnedMesh.hpp"
 
 //tmp
 #include "Configuration.hpp"
 
 //BFC
 #include "Graphic/GraphicElementManager.hpp"
+
+// tmp
+#include <Skinning/AnimationManager.hpp>
 
 namespace AGE
 {
@@ -47,17 +51,7 @@ namespace AGE
 		_mesh = nullptr;
 		_material = nullptr;
 		_renderMode.reset();
-
-		if (_drawableHandle.size() != 0)
-		{
-			for (auto &drawable : _drawableHandle)
-			{
-				auto manager = entity->getScene()->getInstance<GraphicElementManager>();
-				manager->removeMesh(drawable);
-				entity->getLink().popAnObject(drawable);
-			}
-			_drawableHandle.clear();
-		}
+		_resetDrawableHandle();
 	}
 
 	bool MeshRenderer::setMeshAndMaterial(
@@ -84,6 +78,23 @@ namespace AGE
 	void MeshRenderer::disableRenderMode(RenderModes mode)
 	{
 		_renderMode[mode] = false;
+	}
+
+	void MeshRenderer::setSkinningMatrix(const std::vector<glm::mat4> &skinningMatrix)
+	{
+		SCOPE_profile_cpu_function("Animations");
+
+		if (_drawableHandle.invalid())
+			return;
+		for (auto &handle : _drawableHandle.getHandles())
+		{
+			if (std::static_pointer_cast<DRBMeshData>(handle.getPtr()->getDatas())->hadRenderMode(RenderModes::AGE_SKINNED))
+			{
+				((DRBSkinnedMesh*)(handle.getPtr()))->setSkinningMatrix(skinningMatrix);
+				return;
+			}
+		}
+		AGE_ASSERT(false, "You tried to update skinning matrix of a non skinned mesh.");
 	}
 
 	void MeshRenderer::_copyFrom(const ComponentBase *model)
@@ -114,23 +125,27 @@ namespace AGE
 			return;
 		}
 		auto manager = entity->getScene()->getInstance<GraphicElementManager>();
-		if (_drawableHandle.size() != 0)
+		_resetDrawableHandle();
+		_drawableHandle = manager->addMesh(_mesh, _material);
+		
+		for (auto &handle : _drawableHandle.getHandles())
 		{
-			for (auto &drawable : _drawableHandle)
-			{
-				manager->removeMesh(drawable);
-				entity->getLink().popAnObject(drawable);
-			}
-			_drawableHandle.clear();
-		}
-		for (auto &submesh : _mesh->subMeshs)
-		{
-			auto handle = manager->addMesh(submesh, _material);
 			std::static_pointer_cast<DRBMeshData>(handle.getPtr()->getDatas())->setRenderModes(_renderMode);
 			entity->getLink().pushAnObject(handle);
-			_drawableHandle.push_back(handle);
 		}
 	}
+
+	void MeshRenderer::_resetDrawableHandle()
+	{
+		if (_drawableHandle.invalid() == false)
+		{
+			for (auto &sm : _drawableHandle.getHandles())
+				entity->getLink().popAnObject(sm);
+			auto manager = entity->getScene()->getInstance<GraphicElementManager>();
+			manager->removeMesh(_drawableHandle);
+		}
+	}
+
 
 	bool MeshRenderer::reload_material() {
 		if (_material) {
@@ -184,12 +199,6 @@ namespace AGE
 	}
 
 #ifdef EDITOR_ENABLED
-	void MeshRenderer::editorCreate()
-	{}
-
-	void MeshRenderer::editorDelete()
-	{}
-
 	bool MeshRenderer::editorUpdate()
 	{
 		bool modified = false;

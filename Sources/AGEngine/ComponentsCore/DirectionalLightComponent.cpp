@@ -58,12 +58,6 @@ namespace AGE
 	}
 
 #ifdef EDITOR_ENABLED
-	void DirectionalLightComponent::editorCreate()
-	{}
-
-	void DirectionalLightComponent::editorDelete()
-	{}
-
 	bool DirectionalLightComponent::editorUpdate()
 	{
 		bool modified = false;
