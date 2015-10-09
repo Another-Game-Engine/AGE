@@ -393,6 +393,21 @@ namespace AGE
 				// global orientation not supported
 			}
 		}
+#else
+		setAngularDrag(m->getAngularDrag());
+		setAngularVelocity(m->getAngularVelocity());
+		setCenterOfMass(m->getCenterOfMass());
+		setLinearDrag(m->getLinearDrag());
+		setLinearVelocity(m->getLinearVelocity());
+		setMass(m->getMass());
+		setDiagonalInertiaTensor(m->getDiagonalInertiaTensor());
+		setMaxAngularVelocity(m->getMaxAngularVelocity());
+		setMaxDepenetrationVelocity(m->getMaxDepenetrationVelocity());
+		affectByGravity(m->isAffectedByGravity());
+		setPosition(m->getPosition());
+		setRotation(m->getRotation());
+		setAsKinematic(m->isKinematic());
+		setCollisionDetectionMode(m->getCollisionDetectionMode());
 #endif
 	}
 }
