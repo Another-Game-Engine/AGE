@@ -117,7 +117,6 @@ namespace AGE
 				collider->getAsSphereColliderInterface()->setCenter(center);
 				break;
 			default:
-				assert(!"Invalid collider type");
 				break;
 		}
 	}
@@ -134,7 +133,6 @@ namespace AGE
 			case Physics::ColliderType::Sphere:
 				return collider->getAsSphereColliderInterface()->getCenter();
 			default:
-				assert(!"Invalid collider type");
 				return glm::vec3();
 		}
 
@@ -149,7 +147,6 @@ namespace AGE
 				collider->getAsapsuleColliderInterface()->setHeight(height);
 				break;
 			default:
-				assert(!"Invalid collider type");
 				break;
 		}
 	}
@@ -179,7 +176,6 @@ namespace AGE
 				collider->getAsSphereColliderInterface()->setRadius(radius);
 				break;
 			default:
-				assert(!"Invalid collider type");
 				break;
 		}
 	}
@@ -194,7 +190,6 @@ namespace AGE
 			case Physics::ColliderType::Sphere:
 				return collider->getAsSphereColliderInterface()->getRadius();
 			default:
-				assert(!"Invalid collider type");
 				return 0.0f;
 		}
 	}
@@ -208,7 +203,6 @@ namespace AGE
 				collider->getAsBoxColliderInterface()->setSize(size);
 				break;
 			default:
-				assert(!"Invalid collider type");
 				break;
 		}
 	}
@@ -221,7 +215,6 @@ namespace AGE
 			case Physics::ColliderType::Box:
 				return collider->getAsBoxColliderInterface()->getSize();
 			default:
-				assert(!"Invalid collider type");
 				return glm::vec3();
 		}
 	}
@@ -235,7 +228,6 @@ namespace AGE
 				collider->getAsMeshColliderInterface()->setMesh(mesh);
 				break;
 			default:
-				assert(!"Invalid collider type");
 				break;
 		}
 	}
@@ -248,7 +240,6 @@ namespace AGE
 			case Physics::ColliderType::Mesh:
 				return collider->getAsMeshColliderInterface()->getMesh();
 			default:
-				assert(!"Invalid collider type");
 				static std::string emptyString;
 				return emptyString;
 		}
@@ -267,7 +258,6 @@ namespace AGE
 				}
 				break;
 			default:
-				assert(!"Invalid collider type");
 				break;
 		}
 	}
@@ -285,7 +275,6 @@ namespace AGE
 				}
 				break;
 			default:
-				assert(!"Invalid collider type");
 				break;
 		}
 	}
@@ -298,7 +287,6 @@ namespace AGE
 			case Physics::ColliderType::Mesh:
 				return collider->getAsMeshColliderInterface()->isConvex();
 			default:
-				assert(!"Invalid collider type");
 				return true;
 		}
 	}
@@ -311,7 +299,6 @@ namespace AGE
 			case Physics::ColliderType::Mesh:
 				return collider->getAsMeshColliderInterface()->isConcave();
 			default:
-				assert(!"Invalid collider type");
 				return false;
 		}
 	}
@@ -502,6 +489,19 @@ namespace AGE
 		Link *link = entity.getLinkPtr();
 		auto p = scaleFromMat4(link->getGlobalTransform());
 		//scale(p / getSize());
+#else
+		setMaterial(m->getMaterial()->getName());
+		setAsTrigger(m->isATrigger());
+		setFilterGroup(m->getFilterGroup());
+		setCenter(m->getCenter());
+		setHeight(m->getHeight());
+		setRadius(m->getRadius());
+		setSize(m->getSize());
+		setMesh(m->getMesh());
+		if (m->isConvex())
+			setAsConvex();
+		else if (m->isConcave())
+			setAsConcave();
 #endif
 	}
 }
