@@ -267,8 +267,9 @@ namespace AGE
 			LFList<BFCItem> meshList;
 			LFList<BFCItem> pointLightListToCull;
 			std::size_t meshBlocksToCullNumber = _scene->getBfcBlockManagerFactory()->getBlockNumberToCull(BFCCullableType::CullableMesh);
+			std::size_t skinnedMeshBlocksToCullNumber = _scene->getBfcBlockManagerFactory()->getBlockNumberToCull(BFCCullableType::CullableSkinnedMesh);
 			std::size_t pointLightBlocksToCullNumber = _scene->getBfcBlockManagerFactory()->getBlockNumberToCull(BFCCullableType::CullablePointLight);
-			std::size_t totalToCullNumber = meshBlocksToCullNumber + pointLightBlocksToCullNumber;
+			counter = meshBlocksToCullNumber + pointLightBlocksToCullNumber + skinnedMeshBlocksToCullNumber;
 
 
 			{
@@ -281,15 +282,30 @@ namespace AGE
 					if (_cullingEnabled)
 					{
 						TMQ::TaskManager::emplaceSharedTask<Tasks::Basic::VoidFunction>([bf, i, &cameraFrustum, &counter, &meshList, blocksPerTask](){
-							bf->cullOnBlock(BFCCullableType::CullableMesh, meshList, cameraFrustum, i, blocksPerTask);
-							counter.fetch_add(blocksPerTask);
+							counter.fetch_sub(bf->cullOnBlock(BFCCullableType::CullableMesh, meshList, cameraFrustum, i, blocksPerTask));
 						});
 					}
 					else
 					{
 						TMQ::TaskManager::emplaceSharedTask<Tasks::Basic::VoidFunction>([bf, i, &counter, &meshList, blocksPerTask](){
-							bf->fillOnBlock(BFCCullableType::CullableMesh, meshList, i, blocksPerTask);
-							counter.fetch_add(blocksPerTask);
+							counter.fetch_sub(bf->fillOnBlock(BFCCullableType::CullableMesh, meshList, i, blocksPerTask));
+						});
+					}
+				}
+				for (std::size_t i = 0; i < skinnedMeshBlocksToCullNumber; i += blocksPerTask)
+				{
+					BFCBlockManagerFactory *bf = _scene->getBfcBlockManagerFactory();
+
+					if (_cullingEnabled)
+					{
+						TMQ::TaskManager::emplaceSharedTask<Tasks::Basic::VoidFunction>([bf, i, &cameraFrustum, &counter, &meshList, blocksPerTask](){
+							counter.fetch_sub(bf->cullOnBlock(BFCCullableType::CullableSkinnedMesh, meshList, cameraFrustum, i, blocksPerTask));
+						});
+					}
+					else
+					{
+						TMQ::TaskManager::emplaceSharedTask<Tasks::Basic::VoidFunction>([bf, i, &counter, &meshList, blocksPerTask](){
+							counter.fetch_sub(bf->fillOnBlock(BFCCullableType::CullableSkinnedMesh, meshList, i, blocksPerTask));
 						});
 					}
 				}
@@ -302,15 +318,14 @@ namespace AGE
 				{
 					BFCBlockManagerFactory *bf = _scene->getBfcBlockManagerFactory();
 					TMQ::TaskManager::emplaceSharedTask<Tasks::Basic::VoidFunction>([bf, i, &cameraFrustum, &counter, &pointLightListToCull](){
-						bf->cullOnBlock(BFCCullableType::CullablePointLight, pointLightListToCull, cameraFrustum, i, 1);
-						counter.fetch_add(1);
+						counter.fetch_sub(bf->cullOnBlock(BFCCullableType::CullablePointLight, pointLightListToCull, cameraFrustum, i, 1));
 					});
 				}
 			}
 
 			{
 				SCOPE_profile_cpu_i("Camera system", "Cull for cam wait");
-				while (counter < totalToCullNumber)
+				while (counter != 0)
 				{ }
 				//GetMainThread()->computeTasksWhile(std::function<bool()>([&counter, totalToCullNumber]() {
 				//	return counter >= totalToCullNumber;

@@ -6,7 +6,8 @@
 namespace AGE
 {
 	DRBSkinnedMesh::DRBSkinnedMesh()
-		: _skeletonProperty(nullptr)
+		: DRBMesh(BFCCullableType::CullableSkinnedMesh)
+		, _skeletonProperty(nullptr)
 	{
 		datas->setRenderMode(RenderModes::AGE_SKINNED, true);
 	}

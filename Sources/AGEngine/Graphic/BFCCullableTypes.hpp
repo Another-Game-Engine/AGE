@@ -9,6 +9,7 @@ namespace AGE
 	{
 		CullableMesh = 0,
 		CullablePointLight,
-		CullableSpotLight
+		CullableSpotLight,
+		CullableSkinnedMesh
 	};
 }

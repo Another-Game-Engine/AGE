@@ -191,14 +191,14 @@ namespace AGE
 				load(sceneFileName);
 			}
 
-			for (std::size_t i = 0; i < 10000; ++i)
-			{
-				auto hexapod2 = createEntity();
-				hexapod2->addComponent<MeshRenderer>(
-					getInstance<AGE::AssetsManager>()->getMesh("cube/cube.sage")
-					, getInstance<AGE::AssetsManager>()->getMaterial("cube/cube.mage"));
-				hexapod2->getLink().setPosition(glm::ballRand(100.0f));
-			}
+			//for (std::size_t i = 0; i < 10000; ++i)
+			//{
+			//	auto hexapod2 = createEntity();
+			//	hexapod2->addComponent<MeshRenderer>(
+			//		getInstance<AGE::AssetsManager>()->getMesh("cube/cube.sage")
+			//		, getInstance<AGE::AssetsManager>()->getMaterial("cube/cube.mage"));
+			//	hexapod2->getLink().setPosition(glm::ballRand(100.0f));
+			//}
 
 			/*{
 				auto hexapod2 = createEntity();

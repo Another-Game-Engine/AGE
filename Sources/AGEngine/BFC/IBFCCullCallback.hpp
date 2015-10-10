@@ -52,12 +52,12 @@ namespace AGE
 
 	typedef BFCArray<BFCItem> BFCCullVector;
 
-	// used as callback for traditionnal BFCCulling
-	class IBFCCullCallback
-	{
-	public:
-		virtual void operator()(LFList<BFCItem> &result, std::size_t blockId) = 0;
-	};
+	//// used as callback for traditionnal BFCCulling
+	//class IBFCCullCallback
+	//{
+	//public:
+	//	virtual void operator()(LFList<BFCItem> &result, std::size_t blockId) = 0;
+	//};
 
 	// used for custom culling
 	class IBFCCuller

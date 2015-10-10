@@ -12,6 +12,14 @@ namespace AGE
 		datas = std::make_shared<DRBMeshData>();
 	}
 
+	// used by heritate types
+	DRBMesh::DRBMesh(CullableTypeID type)
+		: BFCCullableObject(type)
+	{
+		datas = std::make_shared<DRBMeshData>();
+	}
+
+
 	glm::vec4 DRBMesh::setBFCTransform(const glm::mat4 &transformation)
 	{
 		datas->setTransformation(transformation);

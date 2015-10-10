@@ -13,6 +13,8 @@ namespace AGE
 
 	struct DRBMesh : public BFCCullableObject
 	{
+	protected:
+		DRBMesh(CullableTypeID type);
 	public:
 		DRBMesh();
 		virtual glm::vec4 setBFCTransform(const glm::mat4 &transformation);
