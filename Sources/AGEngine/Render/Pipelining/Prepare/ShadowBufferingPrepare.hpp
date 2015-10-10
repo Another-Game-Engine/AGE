@@ -8,6 +8,7 @@
 
 // for ShadowCasterResult
 #include <atomic>
+#include <vector>
 
 #include <concurrentqueue/concurrentqueue.h>
 
@@ -51,22 +52,29 @@ namespace AGE
 	};
 
 	class ShadowCasterBFCCallback;
+	class SkinnedShadowCasterBFCCallback;
+	struct DRBSkinnedMesh;
 
 	class ShadowCasterResult
 	{
 	public:
-		ShadowCasterResult(moodycamel::ConcurrentQueue<ShadowCasterBFCCallback*> *cullerPool, moodycamel::ConcurrentQueue<ShadowCasterResult*> *cullingResultPool);
+		ShadowCasterResult(moodycamel::ConcurrentQueue<ShadowCasterBFCCallback*> *cullerPool, moodycamel::ConcurrentQueue<SkinnedShadowCasterBFCCallback*> *skinnedCullerPool , moodycamel::ConcurrentQueue<ShadowCasterResult*> *cullingResultPool);
 		~ShadowCasterResult();
 		void cull(BFCBlockManagerFactory *bf, Frustum frustum, std::atomic_size_t *globalCounter);
 		void prepareForComputation(glm::mat4 spotMat);
 		void mergeChunk(const BFCArray<ShadowCasterMatrixHandler> &array);
+		void mergeChunk(const BFCArray<DRBSkinnedMesh*> &array);
 		void sortAll();
 		inline std::atomic_size_t *getTaskCounter() { return &_taskCounter; }
 		void recycle(ShadowCasterBFCCallback *ptr);
+		void recycle(SkinnedShadowCasterBFCCallback *ptr);
 		glm::mat4                  _spotMatrix;
 
 
 		void computeCommandBuffer();
+
+		std::atomic_size_t         _skinnedBufferIndex;
+		std::vector<DRBSkinnedMesh*> _skinnedBuffer;
 
 		std::atomic_size_t         _matrixBufferIndex;
 		std::size_t                _matrixBufferSize;
@@ -80,6 +88,7 @@ namespace AGE
 		std::atomic_size_t         _taskCounter;
 		std::atomic_size_t         *_globalCounter = nullptr;
 		moodycamel::ConcurrentQueue<ShadowCasterBFCCallback*>  *_cullerPool;
+		moodycamel::ConcurrentQueue<SkinnedShadowCasterBFCCallback*>  *_skinnedCullerPool;
 		moodycamel::ConcurrentQueue<ShadowCasterResult*>  *_cullingResultPool;
 	};
 
@@ -88,10 +97,22 @@ namespace AGE
 	public:
 		ShadowCasterBFCCallback();
 		~ShadowCasterBFCCallback();
-		void reset(std::size_t _blockId, ShadowCasterResult *_result);
+		void reset(ShadowCasterResult *_result);
 
 		BFCArray<ShadowCasterMatrixHandler> matrixKeyArray;
-		std::size_t        blockNumber = 0;
+		ShadowCasterResult *result = nullptr;
+
+		virtual void operator()();
+	};
+
+	class SkinnedShadowCasterBFCCallback : public IBFCCuller
+	{
+	public:
+		SkinnedShadowCasterBFCCallback();
+		~SkinnedShadowCasterBFCCallback();
+		void reset(ShadowCasterResult *_result);
+
+		BFCArray<DRBSkinnedMesh*> meshs;
 		ShadowCasterResult *result = nullptr;
 
 		virtual void operator()();

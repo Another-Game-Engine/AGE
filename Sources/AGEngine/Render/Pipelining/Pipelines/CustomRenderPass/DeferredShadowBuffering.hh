@@ -13,6 +13,7 @@ namespace AGE
 	struct DRBSpotLightData;
 	class ShadowCasterResult;
 	class ShadowCasterBFCCallback;
+	class SkinnedShadowCasterBFCCallback;
 	class Frustum;
 	class BFCBlockManagerFactory;
 
@@ -39,5 +40,6 @@ namespace AGE
 		moodycamel::ConcurrentQueue<ShadowCasterResult*>       _toDraw;
 		moodycamel::ConcurrentQueue<ShadowCasterResult*>       _cullingResultsPool;
 		moodycamel::ConcurrentQueue<ShadowCasterBFCCallback*>  _cullerPool;
+		moodycamel::ConcurrentQueue<SkinnedShadowCasterBFCCallback*>  _skinnedCullerPool;
 	};
 }

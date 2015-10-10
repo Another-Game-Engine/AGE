@@ -44,17 +44,22 @@ namespace AGE
 	//////////////////////////////////////////////////////////////////////
 
 	ShadowCasterResult::ShadowCasterResult(moodycamel::ConcurrentQueue<ShadowCasterBFCCallback*> *cullerPool
+		, moodycamel::ConcurrentQueue<SkinnedShadowCasterBFCCallback*> *skinnedCullerPool
 		, moodycamel::ConcurrentQueue<ShadowCasterResult*> *cullingResultPool)
 	{
 		_matrixBufferIndex = 0;
 		_matrixBufferSize = 2048;
 		_matrixBuffer = (ShadowCasterMatrixHandler*)malloc(sizeof(ShadowCasterMatrixHandler) * _matrixBufferSize);
 
+		_skinnedBufferIndex = 0;
+		_skinnedBuffer.resize(1024);
+
 		_commandBufferIndex = 0;
 		_commandBufferSize = 2048;
 		_commandBuffer = (ShadowCasterSpotLightOccluder*)malloc(sizeof(ShadowCasterSpotLightOccluder) * _commandBufferSize);
 
 		_cullerPool = cullerPool;
+		_skinnedCullerPool = skinnedCullerPool;
 		_cullingResultPool = cullingResultPool;
 	}
 	ShadowCasterResult::~ShadowCasterResult()
@@ -74,6 +79,7 @@ namespace AGE
 		{
 		}
 		_matrixBufferIndex = 0;
+		_skinnedBufferIndex = 0;
 		_taskCounter = 0;
 		_spotMatrix = spotMat;
 
@@ -84,19 +90,34 @@ namespace AGE
 		globalCounter->fetch_add(1);
 
 		auto meshBlocksToCullNumber = bf->getBlockNumberToCull(BFCCullableType::CullableMesh);
+		auto skinnedMeshBlocksToCullNumber = bf->getBlockNumberToCull(BFCCullableType::CullableSkinnedMesh);
+
 		_globalCounter = globalCounter;
-		_taskCounter = meshBlocksToCullNumber;
+		_taskCounter = meshBlocksToCullNumber + skinnedMeshBlocksToCullNumber;
 
 		for (std::size_t i = 0; i < meshBlocksToCullNumber; ++i)
 		{
 			ShadowCasterBFCCallback *culler = nullptr;
 			if (_cullerPool->try_dequeue(culler) == false)
 				culler = new ShadowCasterBFCCallback();
-			culler->reset(i, this);
+			culler->reset(this);
 
 			TMQ::TaskManager::emplaceSharedTask<Tasks::Basic::VoidFunction>([bf, i, frustum, culler]()
 			{
 				bf->cullOnBlock(BFCCullableType::CullableMesh, frustum, i, 1, culler);
+			});
+		}
+
+		for (std::size_t i = 0; i < skinnedMeshBlocksToCullNumber; ++i)
+		{
+			SkinnedShadowCasterBFCCallback *culler = nullptr;
+			if (_skinnedCullerPool->try_dequeue(culler) == false)
+				culler = new SkinnedShadowCasterBFCCallback();
+			culler->reset(this);
+
+			TMQ::TaskManager::emplaceSharedTask<Tasks::Basic::VoidFunction>([bf, i, frustum, culler]()
+			{
+				bf->cullOnBlock(BFCCullableType::CullableSkinnedMesh, frustum, i, 1, culler);
 			});
 		}
 	}
@@ -104,6 +125,11 @@ namespace AGE
 	void ShadowCasterResult::recycle(ShadowCasterBFCCallback *ptr)
 	{
 		_cullerPool->enqueue(ptr);
+	}
+
+	void ShadowCasterResult::recycle(SkinnedShadowCasterBFCCallback *ptr)
+	{
+		_skinnedCullerPool->enqueue(ptr);
 	}
 
 	void ShadowCasterResult::mergeChunk(const BFCArray<ShadowCasterMatrixHandler> &array)
@@ -119,6 +145,21 @@ namespace AGE
 		}
 		memcpy(_matrixBuffer + index, array.data(), aSize * sizeof(ShadowCasterMatrixHandler));
 	}
+
+	void ShadowCasterResult::mergeChunk(const BFCArray<DRBSkinnedMesh*> &array)
+	{
+		SCOPE_profile_cpu_function("ShadowCaster");
+
+		auto aSize = array.size();
+		std::size_t index = _skinnedBufferIndex.fetch_add(aSize);
+		if (index + aSize >= _skinnedBuffer.size())
+		{
+			_skinnedBufferIndex.fetch_sub(aSize);
+			return;
+		}
+		memcpy(_skinnedBuffer.data() + index, array.data(), aSize * sizeof(DRBSkinnedMesh*));
+	}
+
 	void ShadowCasterResult::sortAll()
 	{
 		SCOPE_profile_cpu_function("ShadowCaster");
@@ -197,11 +238,10 @@ namespace AGE
 	{
 	}
 
-	void ShadowCasterBFCCallback::reset(std::size_t _blockId, ShadowCasterResult *_result)
+	void ShadowCasterBFCCallback::reset(ShadowCasterResult *_result)
 	{
 		_array.clear();
 		matrixKeyArray.clear();
-		blockNumber = 0;
 		result = _result;
 	}
 
@@ -223,6 +263,46 @@ namespace AGE
 			std::sort(matrixKeyArray.data(), (matrixKeyArray.data() + matrixKeyArray.size()), compare);
 		}
 		result->mergeChunk(matrixKeyArray);
+		if (result->getTaskCounter()->fetch_sub(1) == 1)
+		{
+			result->sortAll();
+		}
+		result->recycle(this);
+	}
+
+	//////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////
+
+	SkinnedShadowCasterBFCCallback::SkinnedShadowCasterBFCCallback()
+	{
+	}
+
+	SkinnedShadowCasterBFCCallback::~SkinnedShadowCasterBFCCallback()
+	{
+	}
+
+	void SkinnedShadowCasterBFCCallback::reset(ShadowCasterResult *_result)
+	{
+		_array.clear();
+		meshs.clear();
+		result = _result;
+	}
+
+	void SkinnedShadowCasterBFCCallback::operator()()
+	{
+		SCOPE_profile_cpu_function("ShadowCaster");
+
+		for (ItemID i = 0; i < _array.size(); ++i)
+		{
+			DRBSkinnedMesh* mesh = ((DRBSkinnedMesh*)(_array[i].getDrawable()));
+			meshs.push(mesh);
+		}
+
+		result->mergeChunk(meshs);
 		if (result->getTaskCounter()->fetch_sub(1) == 1)
 		{
 			result->sortAll();

@@ -223,8 +223,6 @@ namespace AGE
 				//	TMQ::TaskManager::emplaceRenderTask<Commands::ToRender::Draw3DLine>(dNear, dFar, color, activateDepth);
 				//}
 
-				std::size_t meshBlocksToCullNumber = _scene->getBfcBlockManagerFactory()->getBlockNumberToCull(BFCCullableType::CullableMesh);
-
 				BFCBlockManagerFactory *bf = _scene->getBfcBlockManagerFactory();
 				if (DeferredShadowBuffering::instance)
 				{

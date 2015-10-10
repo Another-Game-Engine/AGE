@@ -19,6 +19,7 @@
 #include "Graphic/DRBCameraDrawableList.hpp"
 #include "Graphic/DRBSpotLightData.hpp"
 #include "Graphic/DRBMeshData.hpp"
+#include "Graphic/DRBSkinnedMesh.hpp"
 
 #include "Render/Textures/TextureBuffer.hh"
 #include "Render/ProgramResources/Types/Uniform/Sampler/SamplerBuffer.hh"
@@ -184,52 +185,52 @@ namespace AGE
 			_cullingResultsPool.enqueue(spotLightPtr);
 		}
 
-		//it = _depthBuffers.begin();
+		i = 0;
+		// we render skinned occluders
+		for (auto &spotLightPtr : spotList)
+		{
+			SCOPE_profile_gpu_i("Spotlight pass");
+			SCOPE_profile_cpu_i("RenderTimer", "Spotlight pass");
 
-		//// we render skinned occluders
-		//for (auto &spotLightPtr : infos.spotLights)
-		//{
-		//	SCOPE_profile_gpu_i("Spotlight pass");
-		//	SCOPE_profile_cpu_i("RenderTimer", "Spotlight pass");
+			auto depth = ShadowMapCollection::getDepthBuffer(i++, w, h);
 
-		//	DRBSpotLightData *spotlight = (DRBSpotLightData*)(spotLightPtr->spotLight.get());
-		//	auto &meshList = (std::list<std::shared_ptr<DRBMeshData>>&)(spotLightPtr->skinnedMesh);
+			_frame_buffer.attachment(*depth.get(), GL_DEPTH_STENCIL_ATTACHMENT);
+			_programs[PROGRAM_BUFFERING_SKINNED]->get_resource<Mat4>("light_matrix").set(spotLightPtr->_spotMatrix);
+			//	_programs[PROGRAM_BUFFERING_SKINNED]->registerProperties(spotlight->globalProperties);
+			//	_programs[PROGRAM_BUFFERING_SKINNED]->updateNonInstanciedProperties(spotlight->globalProperties);
 
-		//	_frame_buffer.attachment(*(*it), GL_DEPTH_STENCIL_ATTACHMENT);
-		//	_programs[PROGRAM_BUFFERING_SKINNED]->registerProperties(spotlight->globalProperties);
-		//	_programs[PROGRAM_BUFFERING_SKINNED]->updateNonInstanciedProperties(spotlight->globalProperties);
+			std::shared_ptr<Painter> painter = nullptr;
+			std::shared_ptr<Painter> oldPainter = nullptr;
 
-		//	std::shared_ptr<Painter> painter = nullptr;
-		//	std::shared_ptr<Painter> oldPainter = nullptr;
-
-		//	for (auto &meshPaint : meshList)
-		//	{
-		//		//temporary
-		//		//todo, do not spawn entity while mesh is not loaded
-		//		//currently it's not safe, because the paiter key can be invalid
-		//		//during the first frames
-		//		if (meshPaint->getPainterKey().isValid())
-		//		{
-		//			painter = _painterManager->get_painter(meshPaint->getPainterKey());
-		//			if (painter != oldPainter)
-		//			{
-		//				if (oldPainter)
-		//				{
-		//					oldPainter->uniqueDrawEnd();
-		//				}
-		//				painter->uniqueDrawBegin(_programs[PROGRAM_BUFFERING_SKINNED]);
-		//			}
-		//			oldPainter = painter;
-		//			painter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING_SKINNED], meshPaint->globalProperties, meshPaint->getVerticesKey());
-		//		}
-		//	}
-		//	if (oldPainter)
-		//	{
-		//		oldPainter->uniqueDrawEnd();
-		//	}
-
-		//	++it;
-		//}
+			for (auto &mesh : spotLightPtr->_skinnedBuffer)
+			{
+				//temporary
+				//todo, do not spawn entity while mesh is not loaded
+				//currently it's not safe, because the paiter key can be invalid
+				//during the first frames
+				if (mesh == nullptr)
+					continue;
+				auto meshPaint = mesh->getDatas();
+				if (meshPaint->getPainterKey().isValid())
+				{
+					painter = _painterManager->get_painter(meshPaint->getPainterKey());
+					if (painter != oldPainter)
+					{
+						if (oldPainter)
+						{
+							oldPainter->uniqueDrawEnd();
+						}
+						painter->uniqueDrawBegin(_programs[PROGRAM_BUFFERING_SKINNED]);
+					}
+					oldPainter = painter;
+					painter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING_SKINNED], meshPaint->globalProperties, meshPaint->getVerticesKey());
+				}
+			}
+			if (oldPainter)
+			{
+				oldPainter->uniqueDrawEnd();
+			}
+		}
 	}
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -242,7 +243,7 @@ namespace AGE
 		ShadowCasterResult *result = nullptr;
 		if (_cullingResultsPool.try_dequeue(result) == false)
 		{
-			result = new ShadowCasterResult(&_cullerPool, &_cullingResultsPool);
+			result = new ShadowCasterResult(&_cullerPool, &_skinnedCullerPool, &_cullingResultsPool);
 		}
 		result->prepareForComputation(spotlightMat);
 		result->cull(bf, frustum, counter);
