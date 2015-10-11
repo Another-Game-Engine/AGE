@@ -60,19 +60,12 @@ namespace AGE
 			SCOPE_profile_cpu_i("MainThread", "Execute tasks");
 			{
 				TMQ::MessageBase *task = nullptr;
-				do {
-					waitStart = std::chrono::high_resolution_clock::now();
-					TMQ::TaskManager::MainThreadGetTask(task);
-					waitEnd = std::chrono::high_resolution_clock::now();
-					waitCount += std::chrono::duration_cast<std::chrono::microseconds>(waitEnd - waitStart).count();
-
-					if (task)
-					{
-						SCOPE_profile_cpu_i("MainThread", "Execute task");
-						auto result = execute(task);
-						assert(result); // we receive a task that we cannot handle
-					}
-				} while (task != nullptr);
+				while (TMQ::TaskManager::MainThreadGetTask(task))
+				{
+					SCOPE_profile_cpu_i("MainThread", "Execute task");
+					auto result = execute(task);
+					assert(result); // we receive a task that we cannot handle
+				}
 			}
 		}
 
