@@ -13,6 +13,9 @@ namespace AGE
 	struct MaterialInstance
 	{
 		std::vector<std::shared_ptr<Property>> _properties;
+
+		// unique id (generated with a simple rand() for now, that's temporary)
+		std::size_t _id;
 	};
 
 	struct MaterialSetInstance

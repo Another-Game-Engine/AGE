@@ -163,9 +163,11 @@ namespace AGE
 			material.second->path = _filePath.getFullName();
 			for (auto &material_data : material_data_set->collection)
 			{
-
 				material.second->datas.push_back(MaterialInstance());
 				auto &materialSubset = material.second->datas.back();
+
+				// hard coded unique id generation. Temporary;
+				materialSubset._id = rand();
 
 				auto &shininess = std::make_shared<Ratio>("shininess");
 				materialSubset._properties.push_back(shininess);
@@ -267,6 +269,9 @@ namespace AGE
 
 				material->datas.push_back(MaterialInstance());
 				auto &materialSubset = material->datas.back();
+
+				// hard coded unique id generation. Temporary;
+				materialSubset._id = rand();
 
 				auto &shininess = std::make_shared<Ratio>("shininess");
 				materialSubset._properties.push_back(shininess);

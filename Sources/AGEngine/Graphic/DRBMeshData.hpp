@@ -23,7 +23,7 @@ namespace AGE
 		const Key<Vertices> &getVerticesKey() const;
 		bool hadRenderMode(RenderModes mode) const;
 		AABoundingBox getAABB() const;
-
+		std::size_t materialId = -1;
 	private:
 		Key<Painter> _painter;
 		Key<Vertices> _vertices;

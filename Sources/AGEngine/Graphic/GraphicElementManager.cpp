@@ -56,6 +56,9 @@ namespace AGE
 			std::size_t materialIndex = submesh.defaultMaterialIndex < materialInstance->datas.size() ? submesh.defaultMaterialIndex : 0;
 			auto &material = materialInstance->datas[materialIndex];
 
+			// we set the material unique id
+			drbMesh->datas->materialId = material._id;
+
 			for (auto &p : material._properties)
 			{
 				drbMesh->datas->globalProperties.add_property(p);
