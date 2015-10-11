@@ -81,9 +81,10 @@ namespace AGE
 		glm::mat4 view;
 		CameraData data;
 	};
-
+	class MeshCasterResult;
 	struct DRBCameraDrawableList
 	{
+		MeshCasterResult *cameraMeshs = nullptr;
 		std::list<std::shared_ptr<DRBData>> meshs;
 		std::list<std::shared_ptr<DRBPointLightData>> pointLights;
 		std::list<std::shared_ptr<DRBSpotLightDrawableList>> spotLights;

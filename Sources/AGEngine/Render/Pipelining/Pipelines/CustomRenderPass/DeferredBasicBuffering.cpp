@@ -7,6 +7,7 @@
 #include <Render/OpenGLTask/OpenGLState.hh>
 #include <Render/GeometryManagement/Painting/Painter.hh>
 #include <Render/ProgramResources/Types/Uniform/Mat4.hh>
+#include <Render/ProgramResources/Types/Uniform/Vec1.hh>
 #include <Core/ConfigurationManager.hpp>
 #include <Core/Engine.hh>
 #include <Configuration.hpp>
@@ -15,13 +16,24 @@
 #include <Render/OcclusionTools/DepthMapHandle.hpp>
 #include <Render/OcclusionTools/DepthMap.hpp>
 #include <render/OcclusionTools/OcclusionOptions.hpp>
+#include <Render/Pipelining/Pipelines/PipelineTools.hh>
 
 #include "Graphic/DRBMesh.hpp"
 #include "Graphic/DRBMeshData.hpp"
 
 #include "AssetManagement\Instance\MeshInstance.hh"
 
+#include "Render/Textures/TextureBuffer.hh"
+#include "Render/ProgramResources/Types/Uniform/Sampler/SamplerBuffer.hh"
+
 #include <Graphic/DRBCameraDrawableList.hpp>
+
+// culling
+#include <BFC/BFCBlockManagerFactory.hpp>
+#include <Render\Pipelining\Prepare\MeshBufferingPrepare.hpp>
+#include <Graphic/BFCCullableTypes.hpp>
+#include <Threads/Tasks/BasicTasks.hpp>
+#include <Utils/Frustum.hh>
 
 #define DEFERRED_SHADING_BUFFERING_VERTEX "deferred_shading/deferred_shading_get_buffer.vp"
 #define DEFERRED_SHADING_BUFFERING_VERTEX_SKINNED "deferred_shading/deferred_shading_get_buffer_skinned.vp"
@@ -29,6 +41,9 @@
 
 namespace AGE
 {
+	DeferredBasicBuffering *DeferredBasicBuffering::instance = nullptr;
+
+
 	enum Programs
 	{
 		PROGRAM_BUFFERING = 0,
@@ -46,10 +61,8 @@ namespace AGE
 	{
 		AGE_ASSERT(depth != nullptr);
 
-
-		// We dont want to take the skinned or transparent meshes
-		_forbidden[AGE_SKINNED] = true;
-		_forbidden[AGE_SEMI_TRANSPARENT] = true;
+		instance = this;
+		_cullingResultsPool.enqueue(new MeshCasterResult(&_cullerPool, &_cullingResultsPool));
 
 		push_storage_output(GL_COLOR_ATTACHMENT0, diffuse);
 		push_storage_output(GL_COLOR_ATTACHMENT1, normal);
@@ -88,8 +101,22 @@ namespace AGE
 		}
 	}
 
+	void DeferredBasicBuffering::init()
+	{
+		// We dont want to take the skinned or transparent meshes
+		_forbidden[AGE_SKINNED] = true;
+		_forbidden[AGE_SEMI_TRANSPARENT] = true;
+
+		_positionBuffer = createRenderPassOutput<TextureBuffer>(_maxInstanciedShadowCaster, GL_RGBA32F, _sizeofMatrix, GL_DYNAMIC_DRAW);
+
+	}
+
 	void DeferredBasicBuffering::renderPass(const DRBCameraDrawableList &infos)
 	{
+		auto toDraw = infos.cameraMeshs;
+		if (toDraw == nullptr)
+			return;
+
 		SCOPE_profile_gpu_i("DeferredBasicBuffering render pass");
 		SCOPE_profile_cpu_i("RenderTimer", "DeferredBasicBuffering render pass");
 		{
@@ -110,123 +137,123 @@ namespace AGE
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 		}
 
-		auto &meshList = (std::list<std::shared_ptr<DRBMeshData>>&)(infos.meshs);
+		//auto &meshList = (std::list<std::shared_ptr<DRBMeshData>>&)(infos.meshs);
 
-		if (OcclusionConfig::g_Occlusion_is_enabled)
-		{
-			int occluderCounter = 0;
-			{
-				SCOPE_profile_gpu_i("Occluders pass");
-				SCOPE_profile_cpu_i("RenderTimer", "Occluders pass");
+		//if (OcclusionConfig::g_Occlusion_is_enabled)
+		//{
+		//	int occluderCounter = 0;
+		//	{
+		//		SCOPE_profile_gpu_i("Occluders pass");
+		//		SCOPE_profile_cpu_i("RenderTimer", "Occluders pass");
 
-				_programs[PROGRAM_BUFFERING]->use();
-				_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("projection_matrix").set(infos.cameraInfos.data.projection);
-				_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("view_matrix").set(infos.cameraInfos.view);
+		//		_programs[PROGRAM_BUFFERING]->use();
+		//		_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("projection_matrix").set(infos.cameraInfos.data.projection);
+		//		_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("view_matrix").set(infos.cameraInfos.view);
 
-				std::shared_ptr<Painter> painter = nullptr;
-				std::shared_ptr<Painter> oldPainter = nullptr;
-				for (auto &meshPaint : meshList)
-				{
-					//temporary
-					//todo, do not spawn entity while mesh is not loaded
-					//currently it's not safe, because the painter key can be invalid
-					//during the first frames
-					if (meshPaint->getPainterKey().isValid() && meshPaint->hadRenderMode(AGE_OCCLUDER) && meshPaint->hadRenderMode(AGE_SKINNED) == false)
-					{ // Pour le moment on rend les mesh skinned que en non occluder a l'arrache pour le test
-						painter = _painterManager->get_painter(meshPaint->getPainterKey());
-						if (painter != oldPainter)
-						{
-							if (oldPainter)
-							{
-								oldPainter->uniqueDrawEnd();
-							}
-							painter->uniqueDrawBegin(_programs[PROGRAM_BUFFERING]);
-						}
-						oldPainter = painter;
-						painter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], meshPaint->globalProperties, meshPaint->getVerticesKey());
-						++occluderCounter;
-					}
-				}
-				if (oldPainter)
-				{
-					oldPainter->uniqueDrawEnd();
-				}
-			}
-			if (occluderCounter > 0)
-			{
-				SCOPE_profile_gpu_i("Copy occlusion depth to CPU");
-				SCOPE_profile_cpu_i("RenderTimer", "Copy occlusion depth to CPU");
+		//		std::shared_ptr<Painter> painter = nullptr;
+		//		std::shared_ptr<Painter> oldPainter = nullptr;
+		//		for (auto &meshPaint : meshList)
+		//		{
+		//			//temporary
+		//			//todo, do not spawn entity while mesh is not loaded
+		//			//currently it's not safe, because the painter key can be invalid
+		//			//during the first frames
+		//			if (meshPaint->getPainterKey().isValid() && meshPaint->hadRenderMode(AGE_OCCLUDER) && meshPaint->hadRenderMode(AGE_SKINNED) == false)
+		//			{ // Pour le moment on rend les mesh skinned que en non occluder a l'arrache pour le test
+		//				painter = _painterManager->get_painter(meshPaint->getPainterKey());
+		//				if (painter != oldPainter)
+		//				{
+		//					if (oldPainter)
+		//					{
+		//						oldPainter->uniqueDrawEnd();
+		//					}
+		//					painter->uniqueDrawBegin(_programs[PROGRAM_BUFFERING]);
+		//				}
+		//				oldPainter = painter;
+		//				painter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], meshPaint->globalProperties, meshPaint->getVerticesKey());
+		//				++occluderCounter;
+		//			}
+		//		}
+		//		if (oldPainter)
+		//		{
+		//			oldPainter->uniqueDrawEnd();
+		//		}
+		//	}
+		//	if (occluderCounter > 0)
+		//	{
+		//		SCOPE_profile_gpu_i("Copy occlusion depth to CPU");
+		//		SCOPE_profile_cpu_i("RenderTimer", "Copy occlusion depth to CPU");
 
-				auto writableBuffer = GetRenderThread()->getDepthMapManager().getWritableMap();
-				auto mipmapLevel = GetRenderThread()->getDepthMapManager().getMipmapLevel();
+		//		auto writableBuffer = GetRenderThread()->getDepthMapManager().getWritableMap();
+		//		auto mipmapLevel = GetRenderThread()->getDepthMapManager().getMipmapLevel();
 
-				if (writableBuffer.isValid())
-				{
-					writableBuffer.setMV(infos.cameraInfos.data.projection * infos.cameraInfos.view);
-					glActiveTexture(GL_TEXTURE0);
-					_depth->bind();
-					glGenerateMipmap(GL_TEXTURE_2D);
-					_depth->get(static_cast<GLint>(mipmapLevel), GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, writableBuffer.getWritableBuffer());
-					_depth->unbind();
-				}
-			}
+		//		if (writableBuffer.isValid())
+		//		{
+		//			writableBuffer.setMV(infos.cameraInfos.data.projection * infos.cameraInfos.view);
+		//			glActiveTexture(GL_TEXTURE0);
+		//			_depth->bind();
+		//			glGenerateMipmap(GL_TEXTURE_2D);
+		//			_depth->get(static_cast<GLint>(mipmapLevel), GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, writableBuffer.getWritableBuffer());
+		//			_depth->unbind();
+		//		}
+		//	}
 
 
-		{
-			SCOPE_profile_gpu_i("Draw occluded objects");
-			SCOPE_profile_cpu_i("RenderTimer", "Draw occluded objects");
+		//{
+		//	SCOPE_profile_gpu_i("Draw occluded objects");
+		//	SCOPE_profile_cpu_i("RenderTimer", "Draw occluded objects");
 
-			std::shared_ptr<Painter> painter = nullptr;
-			std::shared_ptr<Painter> oldPainter = nullptr;
+		//	std::shared_ptr<Painter> painter = nullptr;
+		//	std::shared_ptr<Painter> oldPainter = nullptr;
 
-			for (auto &meshPaint : meshList)
-			{
-				//temporary
-				//todo, do not spawn entity while mesh is not loaded
-				//currently it's not safe, because the painter key can be invalid
-				//during the first frames
-				if (meshPaint->getPainterKey().isValid() && meshPaint->hadRenderMode(AGE_OCCLUDER) == false && meshPaint->hadRenderMode(AGE_SKINNED) == false)
-				{ // Pour le moment on rend les mesh skinned que en non occluder a l'arrache pour le test
-					painter = _painterManager->get_painter(meshPaint->getPainterKey());
-					if (painter != oldPainter)
-					{
-						if (oldPainter)
-						{
-							oldPainter->uniqueDrawEnd();
-						}
-						painter->uniqueDrawBegin(_programs[PROGRAM_BUFFERING]);
-					}
-					oldPainter = painter;
-					painter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], meshPaint->globalProperties, meshPaint->getVerticesKey());
-				}
-				else if (meshPaint->getPainterKey().isValid() && meshPaint->hadRenderMode(AGE_SKINNED) == true)
-				{
-					_programs[PROGRAM_BUFFERING_SKINNED]->use();
-					_programs[PROGRAM_BUFFERING_SKINNED]->get_resource<Mat4>("projection_matrix").set(infos.cameraInfos.data.projection);
-					_programs[PROGRAM_BUFFERING_SKINNED]->get_resource<Mat4>("view_matrix").set(infos.cameraInfos.view);
+		//	for (auto &meshPaint : meshList)
+		//	{
+		//		//temporary
+		//		//todo, do not spawn entity while mesh is not loaded
+		//		//currently it's not safe, because the painter key can be invalid
+		//		//during the first frames
+		//		if (meshPaint->getPainterKey().isValid() && meshPaint->hadRenderMode(AGE_OCCLUDER) == false && meshPaint->hadRenderMode(AGE_SKINNED) == false)
+		//		{ // Pour le moment on rend les mesh skinned que en non occluder a l'arrache pour le test
+		//			painter = _painterManager->get_painter(meshPaint->getPainterKey());
+		//			if (painter != oldPainter)
+		//			{
+		//				if (oldPainter)
+		//				{
+		//					oldPainter->uniqueDrawEnd();
+		//				}
+		//				painter->uniqueDrawBegin(_programs[PROGRAM_BUFFERING]);
+		//			}
+		//			oldPainter = painter;
+		//			painter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], meshPaint->globalProperties, meshPaint->getVerticesKey());
+		//		}
+		//		else if (meshPaint->getPainterKey().isValid() && meshPaint->hadRenderMode(AGE_SKINNED) == true)
+		//		{
+		//			_programs[PROGRAM_BUFFERING_SKINNED]->use();
+		//			_programs[PROGRAM_BUFFERING_SKINNED]->get_resource<Mat4>("projection_matrix").set(infos.cameraInfos.data.projection);
+		//			_programs[PROGRAM_BUFFERING_SKINNED]->get_resource<Mat4>("view_matrix").set(infos.cameraInfos.view);
 
-					painter = _painterManager->get_painter(meshPaint->getPainterKey());
-					if (painter != oldPainter)
-					{
-						if (oldPainter)
-						{
-							oldPainter->uniqueDrawEnd();
-						}
-						painter->uniqueDrawBegin(_programs[PROGRAM_BUFFERING_SKINNED]);
-					}
-					oldPainter = painter;
-					painter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING_SKINNED], meshPaint->globalProperties, meshPaint->getVerticesKey());
+		//			painter = _painterManager->get_painter(meshPaint->getPainterKey());
+		//			if (painter != oldPainter)
+		//			{
+		//				if (oldPainter)
+		//				{
+		//					oldPainter->uniqueDrawEnd();
+		//				}
+		//				painter->uniqueDrawBegin(_programs[PROGRAM_BUFFERING_SKINNED]);
+		//			}
+		//			oldPainter = painter;
+		//			painter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING_SKINNED], meshPaint->globalProperties, meshPaint->getVerticesKey());
 
-					_programs[PROGRAM_BUFFERING]->use();
-				}
-			}
-			if (oldPainter)
-			{
-				oldPainter->uniqueDrawEnd();
-			}
-		}
-		}
-		else // !occlusion enabled
+		//			_programs[PROGRAM_BUFFERING]->use();
+		//		}
+		//	}
+		//	if (oldPainter)
+		//	{
+		//		oldPainter->uniqueDrawEnd();
+		//	}
+		//}
+		//}
+		//else // !occlusion enabled
 		{
 			{
 				SCOPE_profile_gpu_i("Draw all objects");
@@ -235,36 +262,95 @@ namespace AGE
 				_programs[PROGRAM_BUFFERING]->use();
 				_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("projection_matrix").set(infos.cameraInfos.data.projection);
 				_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("view_matrix").set(infos.cameraInfos.view);
+				_programs[PROGRAM_BUFFERING]->get_resource<SamplerBuffer>("model_matrix_tbo").set(_positionBuffer);
+				auto matrixOffset = _programs[PROGRAM_BUFFERING]->get_resource<Vec1>("matrixOffset");
 
-				std::shared_ptr<Painter> painter = nullptr;
-				std::shared_ptr<Painter> oldPainter = nullptr;
+					_positionBuffer->resetOffset();
 
-				for (auto &meshPaint : meshList)
-				{
-					//temporary
-					//todo, do not spawn entity while mesh is not loaded
-					//currently it's not safe, because the paiter key can be invalid
-					//during the first frames
-					if (meshPaint->getPainterKey().isValid())
+					std::shared_ptr<Painter> painter = nullptr;
+					Key<Vertices> verticesKey;
+
+					// draw for the spot light selected
+					auto &occluders = toDraw->_commandBuffer;
+					std::size_t occluderCounter = 0;
+
+					auto matrixBegin = toDraw->matrixOffset;
+					auto matrixEnd = toDraw->commandBufferSize - matrixBegin;
+					_positionBuffer->set((void*)(&toDraw->_commandBuffer[matrixBegin]), matrixEnd);
+
+					while (true)
 					{
-						painter = _painterManager->get_painter(meshPaint->getPainterKey());
-						if (painter != oldPainter)
+						auto &current = occluders[occluderCounter];
+						if (current.isKeyHolder() == false)
 						{
-							if (oldPainter)
-							{
-								oldPainter->uniqueDrawEnd();
-							}
-							painter->uniqueDrawBegin(_programs[PROGRAM_BUFFERING]);
+							break;
 						}
-						oldPainter = painter;
-						painter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], meshPaint->globalProperties, meshPaint->getVerticesKey());
+
+						Key<Painter> painterKey;
+						UnConcatenateKey(current.keyHolder.vertice, painterKey, verticesKey);
+						auto size = current.keyHolder.size;
+						auto offset = current.keyHolder.offset - matrixBegin;
+
+						if (painterKey.isValid())
+						{
+							painter = _painterManager->get_painter(painterKey);
+							painter->instanciedDrawBegin(_programs[PROGRAM_BUFFERING]);
+							matrixOffset.set(float(offset));
+							painter->instanciedDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], verticesKey, size);
+							painter->instanciedDrawEnd();
+						}
+						++occluderCounter;
 					}
+					_cullingResultsPool.enqueue(toDraw);
 				}
-				if (oldPainter)
-				{
-					oldPainter->uniqueDrawEnd();
-				}
+
+				//std::shared_ptr<Painter> painter = nullptr;
+				//std::shared_ptr<Painter> oldPainter = nullptr;
+
+				//for (auto &meshPaint : meshList)
+				//{
+				//	//temporary
+				//	//todo, do not spawn entity while mesh is not loaded
+				//	//currently it's not safe, because the paiter key can be invalid
+				//	//during the first frames
+				//	if (meshPaint->getPainterKey().isValid())
+				//	{
+				//		painter = _painterManager->get_painter(meshPaint->getPainterKey());
+				//		if (painter != oldPainter)
+				//		{
+				//			if (oldPainter)
+				//			{
+				//				oldPainter->uniqueDrawEnd();
+				//			}
+				//			painter->uniqueDrawBegin(_programs[PROGRAM_BUFFERING]);
+				//		}
+				//		oldPainter = painter;
+				//		painter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], meshPaint->globalProperties, meshPaint->getVerticesKey());
+				//	}
+				//}
+				//if (oldPainter)
+				//{
+				//	oldPainter->uniqueDrawEnd();
+				//}
 			}
 		}
+
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+		MeshCasterResult *DeferredBasicBuffering::prepareRender(glm::mat4 cameraMat, BFCBlockManagerFactory *bf, Frustum frustum, std::atomic_size_t *counter)
+	{
+		SCOPE_profile_cpu_i("RenderTimer", "Prepare render mesh");
+
+		MeshCasterResult *result = nullptr;
+		if (_cullingResultsPool.try_dequeue(result) == false)
+		{
+			return nullptr;
+		}
+		result->prepareForComputation(cameraMat);
+		result->cull(bf, frustum, counter);
+		return result;
 	}
 }

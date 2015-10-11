@@ -7,8 +7,9 @@ layout (location = 3) in vec3 tangent;
 
 uniform mat4 projection_matrix;
 uniform mat4 view_matrix;
-uniform mat4 model_matrix;
+uniform samplerBuffer model_matrix_tbo;
 uniform float scaleUvs;
+uniform float matrixOffset;
 
 uniform sampler2D diffuse_map;
 uniform sampler2D normal_map;
@@ -40,6 +41,14 @@ vec3 scaleFromMat4(const mat4 m)
 
 void main()
 {
+	int id = (gl_InstanceID + int(matrixOffset)) * 4;
+	vec4 col1 = texelFetch(model_matrix_tbo, id);
+	vec4 col2 = texelFetch(model_matrix_tbo, id + 1);
+	vec4 col3 = texelFetch(model_matrix_tbo, id + 2);
+	vec4 col4 = texelFetch(model_matrix_tbo, id + 3);
+	// Now assemble the four columns into a matrix.
+	mat4 model_matrix = mat4(col1, col2, col3, col4);
+
 	mat3 normal_matrix = transpose(inverse(mat3(model_matrix)));
 	VertexOut.inter_normal = normalize(normal_matrix * normal);
 	VertexOut.inter_texCoord = texCoord;
