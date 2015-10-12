@@ -42,20 +42,23 @@ namespace AGE
 				auto voidHandle = t->getThreadHandle().native_handle();
 				HANDLE handle = (HANDLE)(voidHandle);
 				//auto success = SetThreadAffinityMask(handle, 1 << i);
-				//AGE_ASSERT(success != 0);
+				auto success = SetThreadPriority(handle, THREAD_PRIORITY_TIME_CRITICAL);
+				AGE_ASSERT(success != 0);
 			}
 			++i;
 		}
 		{
 			HANDLE handle = ::GetCurrentThread();
+			auto success = SetThreadPriority(handle, THREAD_PRIORITY_TIME_CRITICAL);
 			//auto success = SetThreadAffinityMask(handle, 0x1);
-			//AGE_ASSERT(success != 0);
+			AGE_ASSERT(success != 0);
 		}
 		{
 			auto voidHandle = GetRenderThread()->getThreadHandle().native_handle();
 			HANDLE handle = (HANDLE)(voidHandle);
+			auto success = SetThreadPriority(handle, THREAD_PRIORITY_TIME_CRITICAL);
 			//auto success = SetThreadAffinityMask(handle, 0x2);
-			//AGE_ASSERT(success != 0);
+			AGE_ASSERT(success != 0);
 		}
 		return true;
 	}
