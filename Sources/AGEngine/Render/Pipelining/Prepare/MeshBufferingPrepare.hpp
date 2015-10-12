@@ -19,6 +19,7 @@ namespace AGE
 	struct DRBMeshData;
 	class BFCBlockManagerFactory;
 	class Frustum;
+	struct MaterialInstance;
 
 	class MeshCasterBFCCallback;
 
@@ -29,7 +30,7 @@ namespace AGE
 		struct KeyHolder
 		{
 			ConcatenatedKey vertice; // 8
-			std::size_t     material; // 8
+			MaterialInstance    *material; // 8
 			std::size_t     size; // 8
 			std::size_t     offset; //8
 		};
@@ -41,7 +42,7 @@ namespace AGE
 
 		MeshCasterCommand();
 		MeshCasterCommand(glm::mat4 &&mat);
-		MeshCasterCommand(ConcatenatedKey &&k, std::size_t &&mat);
+		MeshCasterCommand(ConcatenatedKey &&k, MaterialInstance *&&material);
 
 		inline bool isKeyHolder() const
 		{
@@ -52,9 +53,9 @@ namespace AGE
 	struct MeshCasterMatrixHandler
 	{
 		ConcatenatedKey vertice; // painter and vertice id
-		std::size_t material;
+		MaterialInstance *material;
 		glm::mat4 matrix;
-		MeshCasterMatrixHandler() : vertice(-1), material(-1), matrix(glm::mat4(1)) {}
+		MeshCasterMatrixHandler() : vertice(-1), material(nullptr), matrix(glm::mat4(1)) {}
 		MeshCasterMatrixHandler(MeshCasterMatrixHandler &&o) : vertice(std::move(o.vertice)), material(std::move(o.material)), matrix(std::move(o.matrix)) {}
 	};
 

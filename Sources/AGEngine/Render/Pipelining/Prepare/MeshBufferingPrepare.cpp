@@ -29,7 +29,7 @@ namespace AGE
 	{
 		memcpy(&matrix, glm::value_ptr(mat), sizeof(glm::mat4));
 	}
-	MeshCasterCommand::MeshCasterCommand(ConcatenatedKey &&k, std::size_t &&mat)
+	MeshCasterCommand::MeshCasterCommand(ConcatenatedKey &&k, MaterialInstance *&&mat)
 	{
 		keyHolder.vertice = std::move(k);
 		keyHolder.material = std::move(mat);
@@ -120,7 +120,7 @@ namespace AGE
 		
 			MeshCasterCommand *key = nullptr;
 			ConcatenatedKey lastVerticeKey = -1;
-			std::size_t lastMaterialKey = -1;
+			MaterialInstance *lastMaterialPtr = nullptr;
 
 			std::size_t keyCounter = 0;
 			std::size_t keyIndice = 0;
@@ -130,7 +130,7 @@ namespace AGE
 			while (i < max && matrixCounter > keyIndice)
 			{
 				auto &c = _meshBuffer[i];
-				if (c.vertice != lastVerticeKey && c.material != lastMaterialKey)
+				if (c.vertice != lastVerticeKey && c.material != lastMaterialPtr)
 				{
 					if (key)
 					{
@@ -139,7 +139,7 @@ namespace AGE
 					}
 					keyCounter = 0;
 					lastVerticeKey = c.vertice;
-					lastMaterialKey = c.material;
+					lastMaterialPtr = c.material;
 					_commandBuffer[keyIndice] = MeshCasterCommand(std::move(c.vertice), std::move(c.material));
 					key = &(_commandBuffer[keyIndice++]);
 				}
@@ -188,7 +188,7 @@ namespace AGE
 			DRBMeshData * mesh = ((DRBMesh*)(_array[i].getDrawable()))->getDatas().get();
 			MeshCasterMatrixHandler h;
 			h.vertice = ConcatenateKey(mesh->getPainterKey(), mesh->getVerticesKey());
-			h.material = mesh->materialId;
+			h.material = ((DRBMesh*)(_array[i].getDrawable()))->material;
 			h.matrix = mesh->getTransformation();
 			meshs.push(h);
 		}

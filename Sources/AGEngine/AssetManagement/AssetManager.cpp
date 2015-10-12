@@ -166,40 +166,37 @@ namespace AGE
 				material.second->datas.push_back(MaterialInstance());
 				auto &materialSubset = material.second->datas.back();
 
-				// hard coded unique id generation. Temporary;
-				materialSubset._id = rand();
-
 				auto &shininess = std::make_shared<Ratio>("shininess");
-				materialSubset._properties.push_back(shininess);
+				materialSubset._properties.add_property(shininess);
 				shininess->set(material_data.shininess);
 
 				auto diffuse = std::make_shared<Color>("diffuse");
-				materialSubset._properties.push_back(diffuse);
+				materialSubset._properties.add_property(diffuse);
 				diffuse->set(material_data.diffuse);
 
 				auto ambient = std::make_shared<Color>("ambient");
-				materialSubset._properties.push_back(ambient);
+				materialSubset._properties.add_property(ambient);
 				ambient->set(material_data.ambient);
 
 				auto emissive = std::make_shared<Color>("emissive");
-				materialSubset._properties.push_back(emissive);
+				materialSubset._properties.add_property(emissive);
 				emissive->set(material_data.emissive);
 
 				auto reflective = std::make_shared<Color>("reflective");
-				materialSubset._properties.push_back(reflective);
+				materialSubset._properties.add_property(reflective);
 				reflective->set(material_data.reflective);
 
 				auto specular = std::make_shared<Color>("specular");
-				materialSubset._properties.push_back(specular);
+				materialSubset._properties.add_property(specular);
 				specular->set(material_data.specular);
 
 				auto normalTex = std::make_shared<MapColor>("normal");
-				materialSubset._properties.push_back(normalTex);
+				materialSubset._properties.add_property(normalTex);
 				auto normalTexPtr = std::static_pointer_cast<Texture2D>(loadTexture(material_data.normalTexPath, loadingChannel));
 				normalTex->set(normalTexPtr);
 
 				auto diffuseTex = std::make_shared<MapColor>("diffuse");
-				materialSubset._properties.push_back(diffuseTex);
+				materialSubset._properties.add_property(diffuseTex);
 				auto diffuseTexPtr = std::static_pointer_cast<Texture2D>(loadTexture(material_data.diffuseTexPath, loadingChannel));
 				if (diffuseTexPtr == nullptr)
 				{
@@ -208,27 +205,27 @@ namespace AGE
 				diffuseTex->set(diffuseTexPtr);
 
 				auto ambientTex = std::make_shared<MapColor>("ambient");
-				materialSubset._properties.push_back(ambientTex);
+				materialSubset._properties.add_property(ambientTex);
 				auto ambientTexPtr = std::static_pointer_cast<Texture2D>(loadTexture(material_data.ambientTexPath, loadingChannel));
 				ambientTex->set(ambientTexPtr);
 
 				auto emissiveTex = std::make_shared<MapColor>("emissive");
-				materialSubset._properties.push_back(emissiveTex);
+				materialSubset._properties.add_property(emissiveTex);
 				auto emissiveTexPtr = std::static_pointer_cast<Texture2D>(loadTexture(material_data.emissiveTexPath, loadingChannel));
 				emissiveTex->set(emissiveTexPtr);
 
 				auto reflectiveTex = std::make_shared<MapColor>("reflective");
-				materialSubset._properties.push_back(reflectiveTex);
+				materialSubset._properties.add_property(reflectiveTex);
 				auto reflectiveTexPtr = std::static_pointer_cast<Texture2D>(loadTexture(material_data.reflectiveTexPath, loadingChannel));
 				reflectiveTex->set(reflectiveTexPtr);
 
 				auto specularTex = std::make_shared<MapColor>("specular");
-				materialSubset._properties.push_back(specularTex);
+				materialSubset._properties.add_property(specularTex);
 				auto specularTexPtr = std::static_pointer_cast<Texture2D>(loadTexture(material_data.specularTexPath, loadingChannel));
 				specularTex->set(specularTexPtr);
 
 				auto scaleUVs = std::make_shared<ScaleUVs>();
-				materialSubset._properties.push_back(scaleUVs);
+				materialSubset._properties.add_property(scaleUVs);
 				scaleUVs->set(material_data.scaleUVs);
 			}
 			material.second->_valid = true;
@@ -270,40 +267,37 @@ namespace AGE
 				material->datas.push_back(MaterialInstance());
 				auto &materialSubset = material->datas.back();
 
-				// hard coded unique id generation. Temporary;
-				materialSubset._id = rand();
-
 				auto &shininess = std::make_shared<Ratio>("shininess");
-				materialSubset._properties.push_back(shininess);
+				materialSubset._properties.add_property(shininess);
 				shininess->set(material_data.shininess);
 
 				auto diffuse = std::make_shared<Color>("diffuse");
-				materialSubset._properties.push_back(diffuse);
+				materialSubset._properties.add_property(diffuse);
 				diffuse->set(material_data.diffuse);
 
 				auto ambient = std::make_shared<Color>("ambient");
-				materialSubset._properties.push_back(ambient);
+				materialSubset._properties.add_property(ambient);
 				ambient->set(material_data.ambient);
 
 				auto emissive = std::make_shared<Color>("emissive");
-				materialSubset._properties.push_back(emissive);
+				materialSubset._properties.add_property(emissive);
 				emissive->set(material_data.emissive);
 
 				auto reflective = std::make_shared<Color>("reflective");
-				materialSubset._properties.push_back(reflective);
+				materialSubset._properties.add_property(reflective);
 				reflective->set(material_data.reflective);
 
 				auto specular = std::make_shared<Color>("specular");
-				materialSubset._properties.push_back(specular);
+				materialSubset._properties.add_property(specular);
 				specular->set(material_data.specular);
 
 				auto normalTex = std::make_shared<MapColor>("normal");
-				materialSubset._properties.push_back(normalTex);
+				materialSubset._properties.add_property(normalTex);
 				auto normalTexPtr = std::static_pointer_cast<Texture2D>(loadTexture(material_data.normalTexPath, loadingChannel));
 				normalTex->set(normalTexPtr);
 
 				auto diffuseTex = std::make_shared<MapColor>("diffuse");
-				materialSubset._properties.push_back(diffuseTex);
+				materialSubset._properties.add_property(diffuseTex);
 				auto diffuseTexPtr = std::static_pointer_cast<Texture2D>(loadTexture(material_data.diffuseTexPath, loadingChannel));
 				if (diffuseTexPtr == nullptr)
 				{
@@ -312,27 +306,27 @@ namespace AGE
 				diffuseTex->set(diffuseTexPtr);
 
 				auto ambientTex = std::make_shared<MapColor>("ambient");
-				materialSubset._properties.push_back(ambientTex);
+				materialSubset._properties.add_property(ambientTex);
 				auto ambientTexPtr = std::static_pointer_cast<Texture2D>(loadTexture(material_data.ambientTexPath, loadingChannel));
 				ambientTex->set(ambientTexPtr);
 
 				auto emissiveTex = std::make_shared<MapColor>("emissive");
-				materialSubset._properties.push_back(emissiveTex);
+				materialSubset._properties.add_property(emissiveTex);
 				auto emissiveTexPtr = std::static_pointer_cast<Texture2D>(loadTexture(material_data.emissiveTexPath, loadingChannel));
 				emissiveTex->set(emissiveTexPtr);
 
 				auto reflectiveTex = std::make_shared<MapColor>("reflective");
-				materialSubset._properties.push_back(reflectiveTex);
+				materialSubset._properties.add_property(reflectiveTex);
 				auto reflectiveTexPtr = std::static_pointer_cast<Texture2D>(loadTexture(material_data.reflectiveTexPath, loadingChannel));
 				reflectiveTex->set(reflectiveTexPtr);
 
 				auto specularTex = std::make_shared<MapColor>("specular");
-				materialSubset._properties.push_back(specularTex);
+				materialSubset._properties.add_property(specularTex);
 				auto specularTexPtr = std::static_pointer_cast<Texture2D>(loadTexture(material_data.specularTexPath, loadingChannel));
 				specularTex->set(specularTexPtr);
 
 				auto scaleUVs = std::make_shared<ScaleUVs>();
-				materialSubset._properties.push_back(scaleUVs);
+				materialSubset._properties.add_property(scaleUVs);
 				scaleUVs->set(material_data.scaleUVs);
 
 //				auto futureSubMaterial = AGE::GetRenderThread()->getQueue()->emplaceFutureTask<Tasks::Render::AddMaterial, MaterialInstance>(material_data);

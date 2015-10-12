@@ -28,6 +28,9 @@
 
 #include <Graphic/DRBCameraDrawableList.hpp>
 
+// ca ne devrait pas etre la c'est degueulasse
+#include "AssetManagement\Instance\MaterialInstance.hh"
+
 // culling
 #include <BFC/BFCBlockManagerFactory.hpp>
 #include <Render\Pipelining\Prepare\MeshBufferingPrepare.hpp>
@@ -293,6 +296,8 @@ namespace AGE
 
 						if (painterKey.isValid())
 						{
+							_programs[PROGRAM_BUFFERING]->registerProperties(current.keyHolder.material->_properties);
+							_programs[PROGRAM_BUFFERING]->updateProperties(current.keyHolder.material->_properties);
 							painter = _painterManager->get_painter(painterKey);
 							painter->instanciedDrawBegin(_programs[PROGRAM_BUFFERING]);
 							matrixOffset.set(float(offset));
