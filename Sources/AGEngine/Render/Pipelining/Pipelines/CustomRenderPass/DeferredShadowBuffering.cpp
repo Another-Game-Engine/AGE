@@ -6,6 +6,7 @@
 #include <Render/OpenGLTask/OpenGLState.hh>
 #include <Render/GeometryManagement/Painting/Painter.hh>
 #include <Render/ProgramResources/Types/Uniform/Mat4.hh>
+#include <Render/ProgramResources/Types/Uniform/Vec1.hh>
 #include <Core/ConfigurationManager.hpp>
 #include <Core/Engine.hh>
 #include <Configuration.hpp>
@@ -146,6 +147,7 @@ namespace AGE
 			_frame_buffer.attachment(*depth.get(), GL_DEPTH_STENCIL_ATTACHMENT);
 			_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("light_matrix").set(spotLightPtr->_spotMatrix);
 			_programs[PROGRAM_BUFFERING]->get_resource<SamplerBuffer>("model_matrix_tbo").set(_positionBuffer);
+			auto matrixOffset = _programs[PROGRAM_BUFFERING]->get_resource<Vec1>("matrixOffset");
 
 			_positionBuffer->resetOffset();
 
@@ -154,33 +156,36 @@ namespace AGE
 
 			// draw for the spot light selected
 			auto &occluders = spotLightPtr->_commandBuffer;
-			std::size_t occluderSize = spotLightPtr->_commandBufferIndex;
 			std::size_t occluderCounter = 0;
 
-			while (occluderCounter < occluderSize)
+			auto matrixBegin = spotLightPtr->matrixOffset;
+			auto matrixEnd = spotLightPtr->commandBufferSize - matrixBegin;
+			if (matrixEnd > _maxMatrixInstancied)
+				matrixEnd = _maxMatrixInstancied;
+			_positionBuffer->set((void*)(&occluders[matrixBegin]), matrixEnd);
+
+			while (true)
 			{
 				auto &current = occluders[occluderCounter];
-				AGE_ASSERT(current.isKeyHolder() == true);
-				// too much occluder for 1 spotlight ( > 1024)
-				auto size = current.keyHolder.size;
-				if (current.keyHolder.size > _maxMatrixInstancied)
+				if (current.isKeyHolder() == false)
 				{
-					size = _maxMatrixInstancied;
+					break;
 				}
-				
+
 				Key<Painter> painterKey;
 				UnConcatenateKey(current.keyHolder.key, painterKey, verticesKey);
+				auto size = current.keyHolder.size;
+				auto offset = current.keyHolder.offset - matrixBegin;
 
-				++occluderCounter;
 				if (painterKey.isValid())
 				{
 					painter = _painterManager->get_painter(painterKey);
 					painter->instanciedDrawBegin(_programs[PROGRAM_BUFFERING]);
-					_positionBuffer->set((void*)(&occluders[occluderCounter]), size);
+					matrixOffset.set(float(offset));
 					painter->instanciedDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], verticesKey, size);
 					painter->instanciedDrawEnd();
 				}
-				occluderCounter += current.keyHolder.size;
+				++occluderCounter;
 			}
 			_cullingResultsPool.enqueue(spotLightPtr);
 		}

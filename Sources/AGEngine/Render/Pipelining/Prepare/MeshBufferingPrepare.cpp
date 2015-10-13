@@ -125,7 +125,7 @@ namespace AGE
 			std::size_t keyCounter = 0;
 			std::size_t keyIndice = 0;
 
-			std::size_t matrixCounter = 16384 - 1;
+			std::size_t matrixCounter = commandBufferSize - 1;
 		
 			while (i < max && matrixCounter > keyIndice)
 			{

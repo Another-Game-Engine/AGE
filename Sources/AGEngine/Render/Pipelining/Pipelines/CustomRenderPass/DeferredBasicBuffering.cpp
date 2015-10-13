@@ -276,7 +276,7 @@ namespace AGE
 
 					auto matrixBegin = toDraw->matrixOffset;
 					auto matrixEnd = toDraw->commandBufferSize - matrixBegin;
-					_positionBuffer->set((void*)(&toDraw->_commandBuffer[matrixBegin]), matrixEnd);
+					_positionBuffer->set((void*)(&occluders[matrixBegin]), matrixEnd);
 
 					while (true)
 					{

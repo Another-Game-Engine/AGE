@@ -76,7 +76,7 @@ namespace AGE
 
 		static const std::size_t commandBufferSize = 16384;
 
-		LFVector<MeshCasterMatrixHandler, 16384>                _meshBuffer;
+		LFVector<MeshCasterMatrixHandler, commandBufferSize>    _meshBuffer;
 		std::array<MeshCasterCommand, commandBufferSize>        _commandBuffer;
 		std::size_t matrixOffset;
 

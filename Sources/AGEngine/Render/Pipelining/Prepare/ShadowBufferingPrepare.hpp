@@ -2,6 +2,8 @@
 
 #include "BFC/IBFCCullCallback.hpp"
 
+#include <Utils/Containers/LFVector.hpp>
+
 // for ShadowCasterSpotLightOccluder
 #include "Utils/Key.hh"
 #include <array>
@@ -26,11 +28,12 @@ namespace AGE
 		{
 			ConcatenatedKey key; // 8
 			std::size_t     size; // 8
+			std::size_t     offset; //8
 		};
 		union
 		{
 			std::array<std::array<float, 4>, 4> matrix; // 64
-			KeyHolder keyHolder; // 16
+			KeyHolder keyHolder; // 24
 		};
 
 		ShadowCasterSpotLightOccluder();
@@ -80,10 +83,9 @@ namespace AGE
 		std::size_t                _matrixBufferSize;
 		ShadowCasterMatrixHandler  *_matrixBuffer;
 
-		std::size_t                _commandBufferIndex;
-		std::size_t                _commandBufferSize;
-		ShadowCasterSpotLightOccluder       *_commandBuffer;
-		bool                       _commandBufferHaveEnoughPlace;
+		static const std::size_t commandBufferSize = 2028;
+		std::array<ShadowCasterSpotLightOccluder, commandBufferSize>    _commandBuffer;
+		std::size_t matrixOffset;
 
 		std::atomic_size_t         _taskCounter;
 		std::atomic_size_t         *_globalCounter = nullptr;

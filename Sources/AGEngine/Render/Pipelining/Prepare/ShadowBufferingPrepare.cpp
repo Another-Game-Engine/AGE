@@ -54,10 +54,6 @@ namespace AGE
 		_skinnedBufferIndex = 0;
 		_skinnedBuffer.resize(1024);
 
-		_commandBufferIndex = 0;
-		_commandBufferSize = 2048;
-		_commandBuffer = (ShadowCasterSpotLightOccluder*)malloc(sizeof(ShadowCasterSpotLightOccluder) * _commandBufferSize);
-
 		_cullerPool = cullerPool;
 		_skinnedCullerPool = skinnedCullerPool;
 		_cullingResultPool = cullingResultPool;
@@ -65,14 +61,11 @@ namespace AGE
 	ShadowCasterResult::~ShadowCasterResult()
 	{
 		free(_matrixBuffer);
-		free(_commandBuffer);
 	}
 
 	void ShadowCasterResult::prepareForComputation(glm::mat4 spotMat)
 	{
 		SCOPE_profile_cpu_function("ShadowCaster");
-
-		_commandBufferIndex = 0;
 
 		// matrix buffer dont't have enough place
 		if (_matrixBufferSize <= _matrixBufferIndex)
@@ -180,10 +173,13 @@ namespace AGE
 
 			ShadowCasterSpotLightOccluder *key = nullptr;
 			ConcatenatedKey lastKey = -1;
-			std::size_t keyCounter = 0;
-			_commandBufferIndex = 0;
 
-			while (i < max && _commandBufferIndex < _commandBufferSize)
+			std::size_t keyCounter = 0;
+			std::size_t keyIndice = 0;
+
+			std::size_t matrixCounter = commandBufferSize - 1;
+
+			while (i < max && matrixCounter > keyIndice)
 			{
 				auto &c = _matrixBuffer[i];
 				if (c.key != lastKey)
@@ -191,35 +187,26 @@ namespace AGE
 					if (key)
 					{
 						key->keyHolder.size = keyCounter;
+						key->keyHolder.offset = matrixCounter + 1;
 					}
 					keyCounter = 0;
 					lastKey = c.key;
-					if (_commandBufferIndex + 1 >= _commandBufferSize)
-					{
-						key = nullptr;
-						break;
-					}
-					_commandBuffer[_commandBufferIndex] = ShadowCasterSpotLightOccluder(std::move(c.key));
-					key = &(_commandBuffer[_commandBufferIndex++]);
+					_commandBuffer[keyIndice] = ShadowCasterSpotLightOccluder(std::move(c.key));
+					key = &(_commandBuffer[keyIndice++]);
 				}
-				if (_commandBufferIndex >= _commandBufferSize)
-				{
-					break;
-				}
-				_commandBuffer[_commandBufferIndex++] = ShadowCasterSpotLightOccluder(std::move(_matrixBuffer[i].matrix));
+				_commandBuffer[matrixCounter--] = ShadowCasterSpotLightOccluder(std::move(_matrixBuffer[i].matrix));
 				++keyCounter;
 				++i;
 			}
-			if (key)
-				key->keyHolder.size = keyCounter;
+			matrixOffset = matrixCounter + 1;
 
-			// command buffer dont't have enough place
-			if (i < max - 1)
+			if (key)
 			{
+				key->keyHolder.size = keyCounter;
+				key->keyHolder.offset = matrixCounter + 1;
 			}
 		}
 		_globalCounter->fetch_sub(1);
-		//_cullingResultPool->enqueue(this);
 	}
 
 
