@@ -7,6 +7,7 @@
 #include <Render/Pipelining/Pipelines/CustomRenderPass/DeferredShadowBuffering.hh>
 #include <Render/Pipelining/Pipelines/CustomRenderPass/DeferredSkyBox.hh>
 #include <Render/Pipelining/Pipelines/CustomRenderPass/DeferredOnScreen.hh>
+#include <Render/Pipelining/Pipelines/CustomRenderPass/DeferredSSAO.hh>
 
 #include <Render/Pipelining/Pipelines/CustomRenderPass/DebugDrawLines.hh>
 #include <Render/Pipelining/Pipelines/CustomRenderPass/DebugLightBillboards.hh>
@@ -30,6 +31,7 @@ namespace AGE
 
 		// We create the render pass
 		_deferredSkybox = std::make_shared<DeferredSkyBox>(screen_size, _painter_manager, _diffuse, _depthStencil, _lightAccumulation);
+		std::shared_ptr<DeferredSSAO> deferredSSAO = std::make_shared<DeferredSSAO>(screen_size, _painter_manager);
 		std::shared_ptr<DeferredBasicBuffering> basicBuffering = std::make_shared<DeferredBasicBuffering>(screen_size, _painter_manager, _diffuse, _normal, _specular, _depthStencil);
 		std::shared_ptr<DeferredSpotLightning> spotLightning = std::make_shared<DeferredSpotLightning>(screen_size, _painter_manager, _normal, _depthStencil, _specular, _lightAccumulation, _shinyAccumulation);
 		std::shared_ptr<DeferredShadowBuffering> shadowBuffering = std::make_shared<DeferredShadowBuffering>(glm::uvec2(RESOLUTION_SHADOW_X, RESOLUTION_SHADOW_Y), _painter_manager);
@@ -45,6 +47,7 @@ namespace AGE
 		// The entry point is the basic buffering pass
 		setAmbient(glm::vec3(0.2f));
 		setSkyboxLighting(glm::vec3(0.8f));
+		_rendering_list.emplace_back(deferredSSAO);
 		_rendering_list.emplace_back(shadowBuffering);
 		_rendering_list.emplace_back(basicBuffering);
 		_rendering_list.emplace_back(directionalLightning);
