@@ -10,9 +10,36 @@
 
 namespace AGE
 {
-	class BFCOutput;
+	class BFCOutput
+	{
+	public:
+		void treatCulledChunk(const BFCCullVector &array)
+		{
+			_treatCulledChunk(array);
+			std::size_t count = _counter.fetch_sub(1);
+			if (count == 0)
+			{
+				treatCulledResult();
+			}
+		}
+		void treatCulledResult()
+		{
+			_treatCulledResult();
+		}
+		void setNumberOfBlocks(const std::size_t number)
+		{
+			_counter = number;
+		}
+		virtual void _treatCulledChunk(const BFCCullVector &array) = 0;
+		virtual void _treatCulledResult() = 0;
+	private:
+		std::atomic_size_t _counter;
+	};
+	// TODO
+	// specialize output for non-skinned shadow mesh, and basic deferred render mesh
+
+
 	class BFCOutputChunkResult;
-	class BFCOutputTotalResult;
 
 	// will treat culling results
 	// for render pass (BFCCullingOutput)
@@ -61,9 +88,10 @@ namespace AGE
 				}
 				for (std::size_t i = 0; i < blockNumber; ++i)
 				{
-					TaskManager::emplaceSharedTask<Tasks::Basic::VoidFunction>([factory, i, &channel, &_culler]()
+					TaskManager::emplaceSharedTask<Tasks::Basic::VoidFunction>([factory, i, &channel, &_culler, &_counter]()
 					{
-						factory->cullOnBlock(_culler, i, 1, channel.second);
+						factory->cullOnBlock(channel.first, _culler, i, 1, channel.second);
+						_counter.fetch_sub(1);
 					});
 				}
 			}
@@ -110,11 +138,5 @@ namespace AGE
 		void
 	private:
 		Frustum            _frustum;
-	};
-
-	class BFCFrustumCuller
-	{
-	public:
-	private:
 	};
 }
