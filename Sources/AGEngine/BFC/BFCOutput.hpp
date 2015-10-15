@@ -75,6 +75,7 @@ namespace AGE
 
 		virtual void _treatCulledChunk(const BFCCullArray &array) = 0;
 		virtual void _treatCulledResult() = 0;
+		inline std::size_t getDataOffset() const { return _dataOffset; }
 	protected:
 		std::size_t         _dataOffset;
 		std::atomic_size_t  _counter;
@@ -158,6 +159,9 @@ namespace AGE
 			_rawInfos.pushChunk(chunck->rawChunck.data(), chunck->rawChunck.size());
 			_chunckQueue->enqueue(chunck);
 		}
+
+		inline std::size_t getDataSize() const { return CommandNbr - getDataOffset(); }
+		inline const std::array<CommandType, CommandNbr> &getCommands() const { return _commands; }
 	private:
 		LFQueue<BFCOutputChunk*>			*_chunckQueue;
 		LFVector<RawInfosType, RawInfosNbr> _rawInfos;

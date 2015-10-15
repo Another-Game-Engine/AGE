@@ -9,7 +9,7 @@
 
 #include "Utils/Key.hh"
 
-//@ANTHO pass in .cpp and remove max include
+#include <Render/Pipelining/Prepare/MeshBufferingPrepare.hpp>
 
 // to remove
 #include "Utils/Debug.hpp"
@@ -81,10 +81,10 @@ namespace AGE
 		glm::mat4 view;
 		CameraData data;
 	};
-	class MeshCasterResult;
+
 	struct DRBCameraDrawableList
 	{
-		MeshCasterResult *cameraMeshs = nullptr;
+		MeshBuffering::CullingOutput *cameraMeshs = nullptr;
 		std::list<std::shared_ptr<DRBData>> meshs;
 		std::list<std::shared_ptr<DRBPointLightData>> pointLights;
 		std::list<std::shared_ptr<DRBSpotLightDrawableList>> spotLights;

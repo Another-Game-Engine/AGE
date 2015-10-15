@@ -14,6 +14,7 @@ namespace AGE
 		BFCItem();
 		void setDrawable(BFCCullableObject *drawable);
 		inline BFCCullableObject *getDrawable() { return _drawable; }
+		inline const BFCCullableObject *getDrawable() const { return _drawable; }
 		void setPosition(const glm::vec4 &position);
 		inline glm::vec4 getPosition() { return _position; }
 	private:

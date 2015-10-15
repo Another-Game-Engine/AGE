@@ -65,7 +65,7 @@ namespace AGE
 		AGE_ASSERT(depth != nullptr);
 
 		instance = this;
-		_cullingResultsPool.enqueue(new MeshCasterResult(&_cullerPool, &_cullingResultsPool));
+		_cullingResultsPool.enqueue(new MeshBuffering::CullingOutput());
 
 		push_storage_output(GL_COLOR_ATTACHMENT0, diffuse);
 		push_storage_output(GL_COLOR_ATTACHMENT1, normal);
@@ -274,11 +274,10 @@ namespace AGE
 					Key<Vertices> verticesKey;
 
 					// draw for the spot light selected
-					auto &occluders = toDraw->_commandBuffer;
+					auto &occluders = toDraw->getCommands();
 					std::size_t occluderCounter = 0;
 
-					auto matrixBegin = toDraw->matrixOffset;
-					auto matrixEnd = toDraw->commandBufferSize - matrixBegin;
+					auto matrixEnd = toDraw->getDataSize();
 					_positionBuffer->set((void*)(&occluders[matrixBegin]), matrixEnd);
 
 					while (true)
@@ -345,17 +344,4 @@ namespace AGE
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-		MeshCasterResult *DeferredBasicBuffering::prepareRender(glm::mat4 cameraMat, BFCBlockManagerFactory *bf, Frustum frustum, std::atomic_size_t *counter)
-	{
-		SCOPE_profile_cpu_i("RenderTimer", "Prepare render mesh");
-
-		MeshCasterResult *result = nullptr;
-		if (_cullingResultsPool.try_dequeue(result) == false)
-		{
-			return nullptr;
-		}
-		result->prepareForComputation(cameraMat);
-		result->cull(bf, frustum, counter);
-		return result;
-	}
 }

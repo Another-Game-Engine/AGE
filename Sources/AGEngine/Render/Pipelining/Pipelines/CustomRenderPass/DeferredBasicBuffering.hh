@@ -3,7 +3,9 @@
 #include <Render/Pipelining/Render/FrameBufferRender.hh>
 #include <glm\glm.hpp>
 
-#include <concurrentqueue/concurrentqueue.h>
+#include <Utils/Containers/LFQueue.hpp>
+
+#include <Render/Pipelining/Prepare/MeshBufferingPrepare.hpp>
 
 namespace AGE
 {
@@ -11,8 +13,6 @@ namespace AGE
 
 	class BFCBlockManagerFactory;
 	class Frustum;
-	class MeshCasterResult;
-	class MeshCasterBFCCallback;
 	class TextureBuffer;
 	class Texture2D;
 
@@ -30,7 +30,6 @@ namespace AGE
 								std::shared_ptr<Texture2D> specular,
 								std::shared_ptr<Texture2D> depth);
 		virtual ~DeferredBasicBuffering() = default;
-		MeshCasterResult *prepareRender(glm::mat4, BFCBlockManagerFactory *bf, Frustum frustum, std::atomic_size_t *counter);
 	protected:
 		virtual void renderPass(const DRBCameraDrawableList &infos);
 		std::shared_ptr<Texture2D> _depth;
@@ -43,7 +42,6 @@ namespace AGE
 		static const std::size_t _sizeofMatrix = sizeof(glm::mat4);
 		static const std::size_t _maxInstanciedShadowCaster = _maxMatrixInstancied;
 
-		moodycamel::ConcurrentQueue<MeshCasterResult*>       _cullingResultsPool;
-		moodycamel::ConcurrentQueue<MeshCasterBFCCallback*>    _cullerPool;
+		LFQueue<MeshBuffering::CullingOutput*>          _cullingResultsPool;
 	};
 }

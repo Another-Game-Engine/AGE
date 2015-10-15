@@ -2,42 +2,22 @@
 
 #include "BFC/BFCOutput.hpp"
 
+#include <utils/key.hh>
+
+#include <glm/glm.hpp>
+
 namespace AGE
 {
+	struct MaterialInstance;
+
 	namespace MeshBuffering
 	{
 		struct MeshRawType
 		{
-			static void Treat(const BFCItem &item, BFCArray<MeshRawType> &result)
-			{
-				DRBMeshData * mesh = ((DRBMesh*)(item.getDrawable()))->getDatas().get();
-				MeshRawType h;
-				h.vertice = ConcatenateKey(mesh->getPainterKey(), mesh->getVerticesKey());
-				h.material = ((DRBMesh*)(item.getDrawable()))->material;
-				h.matrix = mesh->getTransformation();
-				result.push(h);
-			}
-
-			static bool Compare(const MeshRawType &a, const MeshRawType &b)
-			{
-				if (a.material == b.material)
-				{
-					return a.vertice < b.vertice;
-				}
-				return a.material < b.material;
-			}
-
-			static MeshRawType Invalid()
-			{
-				MeshRawType invalid;
-				invalid.material = nullptr;
-				invalid.vertice  = -1;
-			}
-
-			bool operator!=(const MeshRawType &o)
-			{
-				return (material != o.material || vertice != o.vertice);
-			}
+			static void Treat(const BFCItem &item, BFCArray<MeshRawType> &result);
+			static bool Compare(const MeshRawType &a, const MeshRawType &b);
+			static MeshRawType Invalid();
+			bool operator!=(const MeshRawType &o);
 
 			ConcatenatedKey     vertice;
 			MaterialInstance    *material;
@@ -59,29 +39,13 @@ namespace AGE
 				KeyHolder keyHolder; // 16
 			};
 
-			MeshCasterCommand();
-			MeshCasterCommand(glm::mat4 &&mat);
-			MeshCasterCommand(ConcatenatedKey &&k, MaterialInstance *&&material);
-
-			inline bool isKeyHolder() const
-			{
-				return (memcmp(&matrix[3][0], &invalidVector, sizeof(invalidVector)) == 0);
-			}
-
-			inline void setAsCommandKey(const MeshRawType &raw)
-			{
-				keyHolder.material = raw.material;
-				keyHolder.vertice  = raw.vertice;
-				memcpy(&(matrix[3][0]), &(invalidVector), sizeof(invalidVector));
-			}
-
-			inline void setAsCommandData(const MeshRawType &raw)
-			{
-				matrix = raw.matrix;
-			}
+			bool isKeyHolder() const;
+			void setAsCommandKey(const MeshRawType &raw);
+			void setAsCommandData(const MeshRawType &raw);
 		};
 
-		typedef BFCCommand<MeshRawType> MeshCommand;
+		typedef BFCCommand<MeshCommandType> MeshCommand;
+		typedef BFCOutput<MeshBuffering::MeshRawType, 16384, MeshBuffering::MeshCommand, 16384> CullingOutput;
 	}
 }
 
