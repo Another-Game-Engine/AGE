@@ -51,6 +51,10 @@ namespace AGE
 
 	struct EMPTY_BFCRawType
 	{
+		static void Treat(const BFCItem &, BFCArray<EMPTY_BFCRawType> &){}
+		static bool Compare(const EMPTY_BFCRawType &a, const EMPTY_BFCRawType &b){ return true; }
+		static EMPTY_BFCRawType Invalid() { return EMPTY_BFCRawType(); }
+		bool operator!=(const EMPTY_BFCRawType &o) { return true; }
 	};
 
 	struct EMPTY_BFCCommand
