@@ -1,12 +1,10 @@
 #pragma once
 
-#include <list>
-
 #include "BFCBlockManager.hpp"
 #include "BFCItemID.hpp"
-
 #include "IBFCCullCallback.hpp"
 
+#include <Utils/Containers/LFList.hpp>
 
 namespace AGE
 {
