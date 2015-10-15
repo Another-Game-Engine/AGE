@@ -14,6 +14,7 @@ namespace AGE
 	class  BFCCullableHandle;
 	struct DRBData;
 	class Frustum;
+	class IBFCOutput;
 
 	static const CullableTypeID MaxCullableTypeID = MaxBlockManagerID;
 
@@ -36,7 +37,7 @@ namespace AGE
 			, CullerType &culler
 			, std::size_t from
 			, std::size_t numberOfBlocks
-			, std::vector<BFCOutput*> &outputs)
+			, std::vector<IBFCOutput*> &outputs)
 		{
 			SCOPE_profile_cpu_function("BFC");
 
