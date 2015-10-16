@@ -20,38 +20,7 @@ namespace AGE
 	};
 	*/
 
-	template<typename CommandType>
-	struct BFCCommand
-	{
-		inline void setKeySizeAndOffset(std::size_t size, std::size_t offset)
-		{
-			_size = size;
-			_offset = offset;
-		}
-		inline std::size_t getSize() const { return _size; }
-		inline std::size_t getOffset() const { return _offset; }
-
-		template <typename RawType>
-		inline void setAsCommandKey(const RawType &raw)
-		{
-			command.setAsCommandKey(raw);
-		}
-
-		template <typename RawType>
-		inline void setAsCommandData(const RawType &raw)
-		{
-			command.setAsCommandData(raw);
-		}
-
-		inline const CommandType *operator->() const { return &command; }
-		inline CommandType *operator->() { return &command; }
-	private:
-		std::size_t _size = 0;
-		std::size_t _offset = 0;
-	public:
-		CommandType command;
-	};
-
+	// Example
 	struct EMPTY_BFCRawType
 	{
 		static void Treat(const BFCItem &, BFCArray<EMPTY_BFCRawType> &){}
@@ -60,13 +29,15 @@ namespace AGE
 		bool operator!=(const EMPTY_BFCRawType &o) { return true; }
 	};
 
+	// Example
 	struct EMPTY_BFCCommand
 	{
 		inline void setAsCommandKey(const EMPTY_BFCRawType &){}
 		inline void setAsCommandData(const EMPTY_BFCRawType &){}
+		inline void setKeySizeAndOffset(std::size_t , std::size_t){}
 	};
 
-	typedef BFCCommand<EMPTY_BFCCommand> BFCEmptyCommand;
+	typedef EMPTY_BFCCommand BFCEmptyCommand;
 
 	class IBFCOutput
 	{
@@ -101,15 +72,25 @@ namespace AGE
 		{
 			BFCArray<RawInfosType> rawChunck;
 			BFCOutput              *output;
+			inline void reset() { rawChunck.clear(); }
 		};
+
+		inline void reset()
+		{
+			_rawInfos.clear();
+			_counter = 0;
+			_dataOffset = 0;
+			_resultQueue = nullptr;
+		}
 
 		virtual void _treatCulledChunk(const BFCCullArray &array)
 		{
 			BFCOutputChunk *chunk = nullptr;
-			if (_chunckQueue->try_dequeue(chunk) == false)
+			if (_chunckQueue.try_dequeue(chunk) == false)
 			{
 				chunk = new BFCOutputChunk();
 			}
+			chunk->reset();
 
 			for (ItemID i = 0; i < array.size(); ++i)
 			{
@@ -167,7 +148,7 @@ namespace AGE
 		void mergeChunck(BFCOutputChunk *chunck)
 		{
 			_rawInfos.pushChunk(chunck->rawChunck.data(), chunck->rawChunck.size());
-			_chunckQueue->enqueue(chunck);
+			_chunckQueue.enqueue(chunck);
 		}
 
 		inline std::size_t getDataSize() const { return CommandNbr - getDataOffset(); }
@@ -182,6 +163,7 @@ namespace AGE
 			}
 			AGE_ASSERT(instance->_isInUse == false);
 			instance->_isInUse = true;
+			instance->reset();
 			return instance;
 		}
 		static void RecycleOutput(BFCOutput *output)
@@ -191,7 +173,7 @@ namespace AGE
 			getInstancePool().enqueue(output);
 		}
 	private:
-		LFQueue<BFCOutputChunk*>			*_chunckQueue;
+		static LFQueue<BFCOutputChunk*>	    _chunckQueue;
 		LFVector<RawInfosType, RawInfosNbr> _rawInfos;
 		std::array<CommandType, CommandNbr> _commands;
 		bool                                _isInUse = false;
@@ -204,4 +186,7 @@ namespace AGE
 			return instance;
 		}
 	};
+
+	template <typename RawInfosType, std::size_t RawInfosNbr, typename CommandType, std::size_t CommandNbr>
+	LFQueue< typename BFCOutput< RawInfosType, RawInfosNbr, CommandType, CommandNbr >::BFCOutputChunk*> BFCOutput<RawInfosType, RawInfosNbr, CommandType, CommandNbr>::_chunckQueue = LFQueue< BFCOutput< RawInfosType, RawInfosNbr, CommandType, CommandNbr >::BFCOutputChunk*>();
 }

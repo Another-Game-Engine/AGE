@@ -283,20 +283,20 @@ namespace AGE
 					while (true)
 					{
 						auto &current = occluders[occluderCounter];
-						if (current->isKeyHolder() == false)
+						if (current.isKeyHolder() == false)
 						{
 							break;
 						}
 
 						Key<Painter> painterKey;
-						UnConcatenateKey(current->keyHolder.vertice, painterKey, verticesKey);
+						UnConcatenateKey(current.keyHolder.vertice, painterKey, verticesKey);
 						auto size = current.getSize();
 						auto offset = current.getOffset() - matrixBegin;
 
 						if (painterKey.isValid())
 						{
-							_programs[PROGRAM_BUFFERING]->registerProperties(current->keyHolder.material->_properties);
-							_programs[PROGRAM_BUFFERING]->updateProperties(current->keyHolder.material->_properties);
+							_programs[PROGRAM_BUFFERING]->registerProperties(current.keyHolder.material->_properties);
+							_programs[PROGRAM_BUFFERING]->updateProperties(current.keyHolder.material->_properties);
 							painter = _painterManager->get_painter(painterKey);
 							painter->instanciedDrawBegin(_programs[PROGRAM_BUFFERING]);
 							matrixOffset.set(float(offset));

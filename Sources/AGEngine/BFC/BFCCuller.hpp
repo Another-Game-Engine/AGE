@@ -11,6 +11,9 @@
 #include <vector>
 #include <map>
 
+#include "TMQ/Queue.hpp"
+#include "Threads/Tasks/BasicTasks.hpp"
+
 namespace AGE
 {
 	class IBFCOutput;
@@ -58,14 +61,16 @@ namespace AGE
 				}
 				for (std::size_t i = 0; i < blockNumber; ++i)
 				{
-					TaskManager::emplaceSharedTask<Tasks::Basic::VoidFunction>([factory, i, &channel, &_culler, &_counter]()
+					TMQ::TaskManager::emplaceSharedTask<Tasks::Basic::VoidFunction>([factory, i, &channel, this]()
 					{
-						factory->cullOnBlock(channel.first, _culler, i, 1, channel.second);
+						// TODO make a global pool of culler
+						CullerType cullerCopy = _culler;
+						factory->cullOnBlock(channel.first, cullerCopy, i, 1, channel.second);
 						_counter.fetch_sub(1);
 					});
 				}
 			}
-			return _counter;
+			return &_counter;
 		}
 
 	private:
@@ -83,6 +88,7 @@ namespace AGE
 		{
 		public:
 			inline const BFCCullArray      &getArray() const { return _cullerArray; }
+			inline void                    reset() { _cullerArray.clear(); }
 		protected:
 			BFCCullArray      _cullerArray;
 		};

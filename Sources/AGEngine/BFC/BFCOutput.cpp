@@ -13,7 +13,7 @@ namespace AGE
 	{
 		_treatCulledChunk(array);
 		std::size_t count = _counter.fetch_sub(1);
-		if (count == 0)
+		if (count == 1)
 		{
 			treatCulledResult();
 		}

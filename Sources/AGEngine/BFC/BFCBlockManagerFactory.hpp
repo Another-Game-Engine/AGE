@@ -3,6 +3,7 @@
 #include "BFCBlockManager.hpp"
 #include "BFCItemID.hpp"
 #include "IBFCCullCallback.hpp"
+#include "BFCBlock.hpp"
 
 #include <Utils/Containers/LFList.hpp>
 
@@ -50,7 +51,7 @@ namespace AGE
 			size_t i = 0;
 			while (i < numberOfBlocks)
 			{
-				auto blockId = blockIdFrom + i;
+				auto blockId = from + i;
 				if (blockId >= manager._blocks.size())
 					break;
 				auto &block = manager._blocks[blockId];
@@ -60,7 +61,7 @@ namespace AGE
 				}
 				++i;
 			}
-			for (auto &outut : outputs)
+			for (auto &output : outputs)
 			{
 				output->treatCulledChunk(culler.getArray());
 			}

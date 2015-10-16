@@ -32,20 +32,30 @@ namespace AGE
 			{
 				ConcatenatedKey  vertice; // 8
 				MaterialInstance *material; // 8
+				std::size_t size; // 8
+				std::size_t offset; // 8
 			};
 			union
 			{
 				std::array<std::array<float, 4>, 4> matrix; // 64
-				KeyHolder keyHolder; // 16
+				KeyHolder keyHolder; // 32
 			};
+
+			inline void setKeySizeAndOffset(std::size_t size, std::size_t offset)
+			{
+				keyHolder.size = size;
+				keyHolder.offset = offset;
+			}
+
+			inline std::size_t getSize() const { return keyHolder.size; }
+			inline std::size_t getOffset() const { return keyHolder.offset; }
 
 			bool isKeyHolder() const;
 			void setAsCommandKey(const RawType &raw);
 			void setAsCommandData(const RawType &raw);
 		};
 
-		typedef BFCCommand<CommandType> MeshCommand;
-		typedef BFCOutput<MeshBuffering::RawType, 16384, MeshBuffering::MeshCommand, 16384> CullingOutput;
+		typedef BFCOutput<MeshBuffering::RawType, 16384, MeshBuffering::CommandType, 16384> CullingOutput;
 	}
 }
 
