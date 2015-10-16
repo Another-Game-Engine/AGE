@@ -17,47 +17,126 @@ namespace AGE
 			static void Treat(const BFCItem &item, BFCArray<RawType> &result);
 			static bool Compare(const RawType &a, const RawType &b);
 			static RawType Invalid();
-			bool operator!=(const RawType &o);
+			bool operator!=(const RawType &o) const;
 
 			ConcatenatedKey     vertice;
 			MaterialInstance    *material;
-			glm::mat4           matrix;    
+			glm::mat4           matrix;
 		};
 
-		struct CommandType
+		template <std::size_t CommandNbr>
+		class CommandGenerator
 		{
-			static const float invalidVector[4];
+		public:
+			struct CommandType
+			{
+				static const float invalidVector[4];
 
-			struct KeyHolder
-			{
-				ConcatenatedKey  vertice; // 8
-				MaterialInstance *material; // 8
-				std::size_t size; // 8
-				std::size_t offset; // 8
-			};
-			union
-			{
-				std::array<std::array<float, 4>, 4> matrix; // 64
-				KeyHolder keyHolder; // 32
+				struct KeyHolder
+				{
+					ConcatenatedKey  vertice; // 8
+					MaterialInstance *material; // 8
+					std::size_t size; // 8
+					std::size_t offset; // 8
+				};
+				union
+				{
+					std::array<std::array<float, 4>, 4> matrix; // 64
+					KeyHolder keyHolder; // 32
+				};
+
+				inline void setKeySizeAndOffset(std::size_t size, std::size_t offset)
+				{
+					keyHolder.size = size;
+					keyHolder.offset = offset;
+				}
+
+				inline std::size_t getSize() const { return keyHolder.size; }
+				inline std::size_t getOffset() const { return keyHolder.offset; }
+
+				bool isKeyHolder() const
+				{
+					return (memcmp(&matrix[3][0], &invalidVector, sizeof(invalidVector)) == 0);
+				}
+
+				void setAsCommandKey(const RawType &raw)
+				{
+					keyHolder.material = raw.material;
+					keyHolder.vertice = raw.vertice;
+					memcpy(&(matrix[3][0]), &(invalidVector), sizeof(invalidVector));
+				}
+
+				void setAsCommandData(const RawType &raw)
+				{
+					memcpy(&matrix, glm::value_ptr(raw.matrix), sizeof(glm::mat4));
+				}
 			};
 
-			inline void setKeySizeAndOffset(std::size_t size, std::size_t offset)
+			template <typename RawInfosType, std::size_t RawInfosNbr>
+			void treatCulledResult(const LFVector<RawInfosType, RawInfosNbr> &rawInfos)
 			{
-				keyHolder.size = size;
-				keyHolder.offset = offset;
+				if (rawInfos.size() != 0)
+				{
+					std::size_t max = rawInfos.size();
+					std::size_t i = 0;
+
+					CommandType *key = nullptr;
+					RawInfosType lastInfos = RawInfosType::Invalid();
+
+					std::size_t keyCounter = 0;
+					std::size_t keyIndice = 0;
+
+					std::size_t dataCounter = _commands.size() - 1;
+
+					while (i < max && dataCounter > keyIndice)
+					{
+						auto &c = rawInfos[i];
+						if (c != lastInfos)
+						{
+							if (key)
+							{
+								key->setKeySizeAndOffset(keyCounter, dataCounter + 1);
+							}
+							keyCounter = 0;
+							lastInfos = c;
+							_commands[keyIndice].setAsCommandKey(c);
+							key = &(_commands[keyIndice++]);
+						}
+						_commands[dataCounter--].setAsCommandData(rawInfos[i]);
+						++keyCounter;
+						++i;
+					}
+					_dataOffset = dataCounter + 1;
+					if (key)
+					{
+						key->setKeySizeAndOffset(keyCounter, dataCounter + 1);
+					}
+				}
 			}
 
-			inline std::size_t getSize() const { return keyHolder.size; }
-			inline std::size_t getOffset() const { return keyHolder.offset; }
+			inline void reset()
+			{
+				_dataOffset = 0;
+			}
 
-			bool isKeyHolder() const;
-			void setAsCommandKey(const RawType &raw);
-			void setAsCommandData(const RawType &raw);
+			inline const std::array<CommandType, CommandNbr> &getCommands() const { return _commands; }
+			inline std::size_t getDataOffset() const { return _dataOffset; }
+			inline std::size_t getDataSize() const { return CommandNbr - _dataOffset; }
+		private:
+			std::array<CommandType, CommandNbr> _commands;
+			std::size_t _dataOffset;
 		};
-
-		typedef BFCOutput<MeshBuffering::RawType, 16384, MeshBuffering::CommandType, 16384> CullingOutput;
+		typedef BFCOutput<MeshBuffering::RawType, 16384, CommandGenerator<16384>> CullingOutput;
 	}
+	template <std::size_t T>
+	const float MeshBuffering::CommandGenerator<T>::CommandType::invalidVector[4] = { std::numeric_limits<float>::lowest(), std::numeric_limits<float>::lowest(), std::numeric_limits<float>::lowest(), std::numeric_limits<float>::lowest() };
 }
+
+
+///////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////
+
 
 //
 //#include "BFC/IBFCCullCallback.hpp"

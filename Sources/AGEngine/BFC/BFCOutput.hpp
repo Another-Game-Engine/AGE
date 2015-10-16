@@ -56,15 +56,13 @@ namespace AGE
 
 		virtual void _treatCulledChunk(const BFCCullArray &array) = 0;
 		virtual void _treatCulledResult() = 0;
-		inline std::size_t getDataOffset() const { return _dataOffset; }
 	protected:
-		std::size_t         _dataOffset;
 		std::atomic_size_t  _counter;
 		LFQueue<IBFCOutput*> *_resultQueue;
 	};
 
 	template <typename RawInfosType, std::size_t RawInfosNbr
-		     ,typename CommandType,  std::size_t CommandNbr>
+		     ,typename CommandGenerator>
 	class BFCOutput : public IBFCOutput
 	{
 	public:
@@ -79,8 +77,8 @@ namespace AGE
 		{
 			_rawInfos.clear();
 			_counter = 0;
-			_dataOffset = 0;
 			_resultQueue = nullptr;
+			_commandGenerator.reset();
 		}
 
 		virtual void _treatCulledChunk(const BFCCullArray &array)
@@ -106,43 +104,7 @@ namespace AGE
 
 		virtual void _treatCulledResult()
 		{
-			if (_rawInfos.size() != 0)
-			{
-				std::size_t max = _rawInfos.size();
-				std::size_t i = 0;
-
-				CommandType *key = nullptr;
-				RawInfosType lastInfos = RawInfosType::Invalid();
-
-				std::size_t keyCounter = 0;
-				std::size_t keyIndice = 0;
-
-				std::size_t dataCounter = _commands.size() - 1;
-
-				while (i < max && dataCounter > keyIndice)
-				{
-					auto &c = _rawInfos[i];
-					if (c != lastInfos)
-					{
-						if (key)
-						{
-							key->setKeySizeAndOffset(keyCounter, dataCounter + 1);
-						}
-						keyCounter = 0;
-						lastInfos = c;
-						_commands[keyIndice].setAsCommandKey(c);
-						key = &(_commands[keyIndice++]);
-					}
-					_commands[dataCounter--].setAsCommandData(_rawInfos[i]);
-					++keyCounter;
-					++i;
-				}
-				_dataOffset = dataCounter + 1;
-				if (key)
-				{
-					key->setKeySizeAndOffset(keyCounter, dataCounter + 1);
-				}
-			}
+			_commandGenerator.treatCulledResult(_rawInfos);
 		}
 
 		void mergeChunck(BFCOutputChunk *chunck)
@@ -150,9 +112,6 @@ namespace AGE
 			_rawInfos.pushChunk(chunck->rawChunck.data(), chunck->rawChunck.size());
 			_chunckQueue.enqueue(chunck);
 		}
-
-		inline std::size_t getDataSize() const { return CommandNbr - getDataOffset(); }
-		inline const std::array<CommandType, CommandNbr> &getCommands() const { return _commands; }
 
 		static BFCOutput *GetNewOutput()
 		{
@@ -172,10 +131,11 @@ namespace AGE
 			output->_isInUse = false;
 			getInstancePool().enqueue(output);
 		}
+		inline const CommandGenerator &getCommandGenerator() const { return _commandGenerator; }
 	private:
 		static LFQueue<BFCOutputChunk*>	    _chunckQueue;
 		LFVector<RawInfosType, RawInfosNbr> _rawInfos;
-		std::array<CommandType, CommandNbr> _commands;
+		CommandGenerator                    _commandGenerator;
 		bool                                _isInUse = false;
 
 		// not thread safe, but if used correctly, it should
@@ -187,6 +147,6 @@ namespace AGE
 		}
 	};
 
-	template <typename RawInfosType, std::size_t RawInfosNbr, typename CommandType, std::size_t CommandNbr>
-	LFQueue< typename BFCOutput< RawInfosType, RawInfosNbr, CommandType, CommandNbr >::BFCOutputChunk*> BFCOutput<RawInfosType, RawInfosNbr, CommandType, CommandNbr>::_chunckQueue = LFQueue< BFCOutput< RawInfosType, RawInfosNbr, CommandType, CommandNbr >::BFCOutputChunk*>();
+	template <typename RawInfosType, std::size_t RawInfosNbr, typename CommandGenerator>
+	LFQueue< typename BFCOutput< RawInfosType, RawInfosNbr, CommandGenerator >::BFCOutputChunk*> BFCOutput<RawInfosType, RawInfosNbr, CommandGenerator>::_chunckQueue = LFQueue< BFCOutput< RawInfosType, RawInfosNbr, CommandGenerator >::BFCOutputChunk*>();
 }

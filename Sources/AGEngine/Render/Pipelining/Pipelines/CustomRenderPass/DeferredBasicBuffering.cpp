@@ -273,11 +273,12 @@ namespace AGE
 					Key<Vertices> verticesKey;
 
 					// draw for the spot light selected
-					auto &occluders = toDraw->getCommands();
+					auto &generator = toDraw->getCommandGenerator();
+					auto &occluders = generator.getCommands();
 					std::size_t occluderCounter = 0;
 
-					auto matrixBegin = toDraw->getDataOffset();
-					auto matrixEnd = toDraw->getDataSize();
+					auto matrixBegin = generator.getDataOffset();
+					auto matrixEnd = generator.getDataSize();
 					_positionBuffer->set((void*)(&occluders[matrixBegin]), matrixEnd);
 
 					while (true)

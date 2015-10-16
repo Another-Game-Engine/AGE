@@ -4,7 +4,6 @@ namespace AGE
 {
 	IBFCOutput::IBFCOutput()
 	{
-		_dataOffset = 0;
 		_counter.store(0);
 		_resultQueue = nullptr;
 	}
