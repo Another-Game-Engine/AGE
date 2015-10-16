@@ -64,9 +64,11 @@ namespace AGE
 					TMQ::TaskManager::emplaceSharedTask<Tasks::Basic::VoidFunction>([factory, i, &channel, this]()
 					{
 						// TODO make a global pool of culler
-						CullerType cullerCopy = _culler;
-						factory->cullOnBlock(channel.first, cullerCopy, i, 1, channel.second);
+						CullerType *culler = BFCCullerMethod<CullerType>::GetNewCullerMethod();
+						*culler = _culler;
+						factory->cullOnBlock(channel.first, *culler, i, 1, channel.second);
 						_counter.fetch_sub(1);
+						BFCCullerMethod<CullerType>::Recycle(culler);
 					});
 				}
 			}
@@ -82,15 +84,36 @@ namespace AGE
 	// Cullers
 	//////////////////////////////////////////
 
-	namespace BFCPrivate
+	template <typename T>
+	class BFCCullerMethod
 	{
-		class CullerBase
+	public:
+		inline const BFCCullArray      &getArray() const { return _cullerArray; }
+		inline void                    reset() { _cullerArray.clear(); }
+		static T                       *GetNewCullerMethod()
 		{
-		public:
-			inline const BFCCullArray      &getArray() const { return _cullerArray; }
-			inline void                    reset() { _cullerArray.clear(); }
-		protected:
-			BFCCullArray      _cullerArray;
-		};
-	}
+			T *t;
+			if (_pool.try_dequeue(t) == false)
+			{
+				t = new T();
+			}
+			t->reset();
+			return t;
+		}
+		static void                   Recycle(T *t)
+		{
+			_pool.enqueue(t);
+		}
+		BFCCullerMethod &operator=(const BFCCullerMethod &o)
+		{
+			// do nothing, we don't want to copy array
+			return *this;
+		}
+	protected:
+		BFCCullArray      _cullerArray;
+		static LFQueue<T*> _pool;
+	};
+
+	template <typename T>
+	LFQueue<T*> BFCCullerMethod<T>::_pool = LFQueue<T*>();
 }

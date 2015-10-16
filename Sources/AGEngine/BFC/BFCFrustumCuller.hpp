@@ -4,7 +4,7 @@
 
 namespace AGE
 {
-	class BFCFrustumCuller : public BFCPrivate::CullerBase
+	class BFCFrustumCuller : public BFCCullerMethod<BFCFrustumCuller>
 	{
 	public:
 		void prepareForCulling(const Frustum &frustum)
@@ -18,7 +18,11 @@ namespace AGE
 				_cullerArray.push(item);
 			}
 		}
-
+		BFCFrustumCuller &operator=(BFCFrustumCuller &o)
+		{
+			_frustum = o._frustum;
+			return *this;
+		}
 	private:
 		Frustum            _frustum;
 	};
