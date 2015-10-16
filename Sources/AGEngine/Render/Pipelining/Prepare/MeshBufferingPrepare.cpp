@@ -7,19 +7,21 @@
 
 namespace AGE
 {
+	const float MeshBuffering::CommandType::invalidVector[4] = { std::numeric_limits<float>::lowest(), std::numeric_limits<float>::lowest(), std::numeric_limits<float>::lowest(), std::numeric_limits<float>::lowest() };
+	
 	namespace MeshBuffering
 	{
-		void MeshRawType::Treat(const BFCItem &item, BFCArray<MeshRawType> &result)
+		void RawType::Treat(const BFCItem &item, BFCArray<RawType> &result)
 		{
 			DRBMeshData * mesh = ((DRBMesh*)(item.getDrawable()))->getDatas().get();
-			MeshRawType h;
+			RawType h;
 			h.vertice = ConcatenateKey(mesh->getPainterKey(), mesh->getVerticesKey());
 			h.material = ((DRBMesh*)(item.getDrawable()))->material;
 			h.matrix = mesh->getTransformation();
 			result.push(h);
 		}
 
-		bool MeshRawType::Compare(const MeshRawType &a, const MeshRawType &b)
+		bool RawType::Compare(const RawType &a, const RawType &b)
 		{
 			if (a.material == b.material)
 			{
@@ -28,33 +30,34 @@ namespace AGE
 			return a.material < b.material;
 		}
 
-		MeshRawType MeshRawType::Invalid()
+		RawType RawType::Invalid()
 		{
-			MeshRawType invalid;
+			RawType invalid;
 			invalid.material = nullptr;
 			invalid.vertice = -1;
+			return invalid;
 		}
 
-		bool MeshRawType::operator!=(const MeshRawType &o)
+		bool RawType::operator!=(const RawType &o)
 		{
 			return (material != o.material || vertice != o.vertice);
 		}
 
 		//////////////////////////////////////////////////////////////////////////////////
 
-		bool MeshCommandType::isKeyHolder() const
+		bool CommandType::isKeyHolder() const
 		{
 			return (memcmp(&matrix[3][0], &invalidVector, sizeof(invalidVector)) == 0);
 		}
 
-		void MeshCommandType::setAsCommandKey(const MeshRawType &raw)
+		void CommandType::setAsCommandKey(const RawType &raw)
 		{
 			keyHolder.material = raw.material;
 			keyHolder.vertice = raw.vertice;
 			memcpy(&(matrix[3][0]), &(invalidVector), sizeof(invalidVector));
 		}
 
-		void MeshCommandType::setAsCommandData(const MeshRawType &raw)
+		void CommandType::setAsCommandData(const RawType &raw)
 		{
 			memcpy(&matrix, glm::value_ptr(raw.matrix), sizeof(glm::mat4));
 		}

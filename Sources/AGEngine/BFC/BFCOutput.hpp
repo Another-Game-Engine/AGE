@@ -42,6 +42,9 @@ namespace AGE
 		{
 			command.setAsCommandData(raw);
 		}
+
+		inline const CommandType *operator->() const { return &command; }
+		inline CommandType *operator->() { return &command; }
 	private:
 		std::size_t _size = 0;
 		std::size_t _offset = 0;
@@ -73,6 +76,13 @@ namespace AGE
 		void treatCulledResult();
 		void setNumberOfBlocks(const std::size_t number);
 
+		template <typename ResultType>
+		void setResultQueue(LFQueue<ResultType*> *resultQueue)
+		{
+			static_assert(std::is_base_of<IBFCOutput, ResultType>::value, "Output type have to inherit from IBFCOutput");
+			_resultQueue = (LFQueue<IBFCOutput*>*)(resultQueue);
+		}
+
 		virtual void _treatCulledChunk(const BFCCullArray &array) = 0;
 		virtual void _treatCulledResult() = 0;
 		inline std::size_t getDataOffset() const { return _dataOffset; }
@@ -96,7 +106,7 @@ namespace AGE
 		virtual void _treatCulledChunk(const BFCCullArray &array)
 		{
 			BFCOutputChunk *chunk = nullptr;
-			if (_chunckQueue->dequeue(chunk) == false)
+			if (_chunckQueue->try_dequeue(chunk) == false)
 			{
 				chunk = new BFCOutputChunk();
 			}
@@ -106,7 +116,7 @@ namespace AGE
 				RawInfosType::Treat(array[i], chunk->rawChunck);
 			}
 
-			if (chunk->rawChunck > 0)
+			if (chunk->rawChunck.size() > 0)
 			{
 				std::sort(chunk->rawChunck.data(), (chunk->rawChunck.data() + chunk->rawChunck.size()), RawInfosType::Compare);
 			}
@@ -162,9 +172,36 @@ namespace AGE
 
 		inline std::size_t getDataSize() const { return CommandNbr - getDataOffset(); }
 		inline const std::array<CommandType, CommandNbr> &getCommands() const { return _commands; }
+
+		static BFCOutput *GetNewOutput()
+		{
+			BFCOutput *instance = nullptr;
+			if (getInstancePool().try_dequeue(instance) == false)
+			{
+				instance = new BFCOutput();
+			}
+			AGE_ASSERT(instance->_isInUse == false);
+			instance->_isInUse = true;
+			return instance;
+		}
+		static void RecycleOutput(BFCOutput *output)
+		{
+			AGE_ASSERT(output->_isInUse == true);
+			output->_isInUse = false;
+			getInstancePool().enqueue(output);
+		}
 	private:
 		LFQueue<BFCOutputChunk*>			*_chunckQueue;
 		LFVector<RawInfosType, RawInfosNbr> _rawInfos;
 		std::array<CommandType, CommandNbr> _commands;
+		bool                                _isInUse = false;
+
+		// not thread safe, but if used correctly, it should
+		// be called by mainthread first, before other threads
+		static LFQueue<BFCOutput*> &getInstancePool()
+		{
+			static LFQueue<BFCOutput*> instance;
+			return instance;
+		}
 	};
 }

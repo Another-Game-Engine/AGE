@@ -12,19 +12,19 @@ namespace AGE
 
 	namespace MeshBuffering
 	{
-		struct MeshRawType
+		struct RawType
 		{
-			static void Treat(const BFCItem &item, BFCArray<MeshRawType> &result);
-			static bool Compare(const MeshRawType &a, const MeshRawType &b);
-			static MeshRawType Invalid();
-			bool operator!=(const MeshRawType &o);
+			static void Treat(const BFCItem &item, BFCArray<RawType> &result);
+			static bool Compare(const RawType &a, const RawType &b);
+			static RawType Invalid();
+			bool operator!=(const RawType &o);
 
 			ConcatenatedKey     vertice;
 			MaterialInstance    *material;
 			glm::mat4           matrix;    
 		};
 
-		struct MeshCommandType
+		struct CommandType
 		{
 			static const float invalidVector[4];
 
@@ -40,12 +40,12 @@ namespace AGE
 			};
 
 			bool isKeyHolder() const;
-			void setAsCommandKey(const MeshRawType &raw);
-			void setAsCommandData(const MeshRawType &raw);
+			void setAsCommandKey(const RawType &raw);
+			void setAsCommandData(const RawType &raw);
 		};
 
-		typedef BFCCommand<MeshCommandType> MeshCommand;
-		typedef BFCOutput<MeshBuffering::MeshRawType, 16384, MeshBuffering::MeshCommand, 16384> CullingOutput;
+		typedef BFCCommand<CommandType> MeshCommand;
+		typedef BFCOutput<MeshBuffering::RawType, 16384, MeshBuffering::MeshCommand, 16384> CullingOutput;
 	}
 }
 

@@ -24,6 +24,12 @@ namespace AGE
 			return _array[i];
 		}
 
+		inline const T &operator[](const ItemID i) const
+		{
+			AGE_ASSERT(i < _index);
+			return _array[i];
+		}
+
 		inline void clear()
 		{
 			_index = 0;

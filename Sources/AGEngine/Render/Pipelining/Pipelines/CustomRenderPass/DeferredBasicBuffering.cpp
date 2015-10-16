@@ -65,7 +65,6 @@ namespace AGE
 		AGE_ASSERT(depth != nullptr);
 
 		instance = this;
-		_cullingResultsPool.enqueue(new MeshBuffering::CullingOutput());
 
 		push_storage_output(GL_COLOR_ATTACHMENT0, diffuse);
 		push_storage_output(GL_COLOR_ATTACHMENT1, normal);
@@ -277,26 +276,27 @@ namespace AGE
 					auto &occluders = toDraw->getCommands();
 					std::size_t occluderCounter = 0;
 
+					auto matrixBegin = toDraw->getDataOffset();
 					auto matrixEnd = toDraw->getDataSize();
 					_positionBuffer->set((void*)(&occluders[matrixBegin]), matrixEnd);
 
 					while (true)
 					{
 						auto &current = occluders[occluderCounter];
-						if (current.isKeyHolder() == false)
+						if (current->isKeyHolder() == false)
 						{
 							break;
 						}
 
 						Key<Painter> painterKey;
-						UnConcatenateKey(current.keyHolder.vertice, painterKey, verticesKey);
-						auto size = current.keyHolder.size;
-						auto offset = current.keyHolder.offset - matrixBegin;
+						UnConcatenateKey(current->keyHolder.vertice, painterKey, verticesKey);
+						auto size = current.getSize();
+						auto offset = current.getOffset() - matrixBegin;
 
 						if (painterKey.isValid())
 						{
-							_programs[PROGRAM_BUFFERING]->registerProperties(current.keyHolder.material->_properties);
-							_programs[PROGRAM_BUFFERING]->updateProperties(current.keyHolder.material->_properties);
+							_programs[PROGRAM_BUFFERING]->registerProperties(current->keyHolder.material->_properties);
+							_programs[PROGRAM_BUFFERING]->updateProperties(current->keyHolder.material->_properties);
 							painter = _painterManager->get_painter(painterKey);
 							painter->instanciedDrawBegin(_programs[PROGRAM_BUFFERING]);
 							matrixOffset.set(float(offset));
@@ -305,7 +305,10 @@ namespace AGE
 						}
 						++occluderCounter;
 					}
-					_cullingResultsPool.enqueue(toDraw);
+					// Important !
+					// After use, we have to recycle it ! Or
+					// we will leak
+					MeshOutput::RecycleOutput(toDraw);
 				}
 
 				//std::shared_ptr<Painter> painter = nullptr;
@@ -337,6 +340,12 @@ namespace AGE
 				//	oldPainter->uniqueDrawEnd();
 				//}
 			}
+		}
+
+
+		LFQueue<MeshBuffering::CullingOutput*>* DeferredBasicBuffering::getMeshResultQueue()
+		{
+			return &_cullingResults;
 		}
 
 

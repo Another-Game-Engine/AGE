@@ -14,6 +14,9 @@
 #include <BFC/BFCBlockManagerFactory.hpp>
 #include <BFC/BFCCullableObject.hpp>
 
+#include <BFC/BFCCuller.hpp>
+#include <BFC/BFCFrustumCuller.hpp>
+
 #include <Graphic/DRBCameraDrawableList.hpp>
 #include <Graphic/DRBSpotLightData.hpp>
 #include <Graphic/BFCCullableTypes.hpp>
@@ -271,7 +274,18 @@ namespace AGE
 			BFCBlockManagerFactory *bf = _scene->getBfcBlockManagerFactory();
 			if (DeferredBasicBuffering::instance)
 			{
-				// CESAR BANCHER ICI
+				//We create a culler, whit the culling rule "Frustum"
+				BFCCuller<BFCFrustumCuller> cameraCuller;
+				//We pass infos for frustum culling
+				cameraCuller.prepareForCulling(cameraFrustum);
+				//We get an output of a specific type
+				//here it's for mesh for basic buffering pass
+				auto meshOutput = DeferredBasicBuffering::MeshOutput::GetNewOutput();
+				//We get the ptr of the queue where the output should be push at the end of the
+				//culling and preparation process
+				auto resultQueue = DeferredBasicBuffering::instance->getMeshResultQueue();
+				meshOutput->setResultQueue(resultQueue);
+				cameraCuller.addOutput(BFCCullableType::CullableMesh, meshOutput);
 				//cameraList->cameraMeshs = DeferredBasicBuffering::instance->prepareRender(camera->getProjection(), bf, cameraFrustum, &MESH_COUNTER);
 			}
 

@@ -8,8 +8,13 @@
 // You can add them render pass outputs, specify their culling channels,
 // and specialize their render preparation jobs
 
+#include <vector>
+#include <map>
+
 namespace AGE
 {
+	class IBFCOutput;
+
 	template <typename CullerType>
 	class BFCCuller
 	{
@@ -30,12 +35,12 @@ namespace AGE
 		}
 
 		template<typename OutputType>
-		void addOutput(BFCCullableType cullingChannel, OutputType *output)
+		void addOutput(CullableTypeID cullingChannel, OutputType *output)
 		{
 			auto find = _channels.find(cullingChannel);
 			if (find == std::end(_channels))
 			{
-				_channels.insert(std::make_pair(cullingChannel, std::vector<IBFCOutput*>()))
+				_channels.insert(std::make_pair(cullingChannel, std::vector<IBFCOutput*>()));
 			}
 			_channels[cullingChannel].push_back(output);
 		}
@@ -65,7 +70,7 @@ namespace AGE
 
 	private:
 		CullerType                               _culler;
-		std::map<BFCCullableType, std::vector<IBFCOutput>> _channels;
+		std::map<CullableTypeID, std::vector<IBFCOutput*>> _channels;
 		std::atomic_size_t                       _counter;
 	};
 
@@ -82,24 +87,4 @@ namespace AGE
 			BFCCullArray      _cullerArray;
 		};
 	}
-
-	class BFCFrustumCuller : public BFCPrivate::CullerBase
-	{
-	public:
-		void prepareForCulling(const Frustum &frustum)
-		{
-			_frustum = frustum;
-		}
-		inline void cullItem(const BFCItem &item)
-		{
-			if (item.getDrawable() && _frustum.checkCollision(item.getPosition()))
-			{
-				_cullerArray.push(item);
-			}
-		}
-
-		void
-	private:
-		Frustum            _frustum;
-	};
 }
