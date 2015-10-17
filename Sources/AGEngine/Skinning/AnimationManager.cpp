@@ -13,7 +13,9 @@
 namespace AGE
 {
 	AnimationManager::AnimationManager()
-	{}
+	{
+		_currentBonesBufferIndex = 0;
+	}
 
 	AnimationManager::~AnimationManager()
 	{}
@@ -47,6 +49,7 @@ namespace AGE
 			}
 		}
 		res = std::make_shared<AnimationInstance>(skeleton, animation);
+		_bonesBufferSize += res->getTransformationBufferSize();
 		_animations[skeleton].push_back(res);
 		res->_isShared = shared;
 		res->_instanceCounter++;
@@ -64,6 +67,7 @@ namespace AGE
 		animation->_instanceCounter--;
 		if (animation->_instanceCounter == 0)
 		{
+			_bonesBufferSize -= animation->getTransformationBufferSize();
 			_animations[skeleton].remove(animation);
 		}
 	}
@@ -76,6 +80,25 @@ namespace AGE
 
 		std::atomic_int16_t counter = 0;
 		int taskNumber = 0;
+		auto &transformationBuffer = _bonesBuffers[_currentBonesBufferIndex];
+		std::size_t index = 0;
+
+		if (transformationBuffer.size() < _bonesBufferSize)
+		{
+			transformationBuffer.resize(_bonesBufferSize);
+		}
+
+		for (auto &s : _animations)
+		{
+			for (auto &a : s.second)
+			{
+				std::size_t indexCpy = index;
+				index += a->_tranformationBufferSize;
+				AGE_ASSERT(index <= transformationBuffer.size());
+				a->_tranformationBuffer = &transformationBuffer[indexCpy];
+				a->_transformationIndex = indexCpy;
+			}
+		}
 
 		{
 			SCOPE_profile_cpu_i("Animations", "Pushing skinning tasks");
@@ -99,5 +122,6 @@ namespace AGE
 			{
 			}
 		}
+		_currentBonesBufferIndex = (_currentBonesBufferIndex + 1) % 2;
 	}
 }

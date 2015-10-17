@@ -15,9 +15,9 @@ namespace AGE
 	DRBSkinnedMesh::~DRBSkinnedMesh()
 	{}
 
-	void DRBSkinnedMesh::setSkinningMatrix(const std::vector<glm::mat4> &skinningMatrix)
+	void DRBSkinnedMesh::setSkinningMatrix(const glm::mat4 *skinningMatrix, std::size_t size)
 	{
-		_skeletonProperty->set(skinningMatrix);
+		_skeletonProperty->set(skinningMatrix, size);
 	}
 
 }

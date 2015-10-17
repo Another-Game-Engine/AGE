@@ -23,7 +23,7 @@ namespace AGE
 		PROPERTY_INSTANCIED_UPDATE_FUNCTION(SkeletonProperty, Mat4Array255);
 	public:
 		glm::mat4 *get();
-		SkeletonProperty &set(const std::vector<glm::mat4> &mat);
+		SkeletonProperty &set(const glm::mat4 *skinningMatrix, std::size_t size);
 
 	private:
 		glm::mat4 _matrixArray[255];

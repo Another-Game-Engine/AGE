@@ -37,12 +37,12 @@ namespace AGE
 		return (_matrixArray);
 	}
 
-	SkeletonProperty & SkeletonProperty::set(const std::vector<glm::mat4> &mat)
+	SkeletonProperty & SkeletonProperty::set(const glm::mat4 *skinningMatrix, std::size_t size)
 	{
 		std::lock_guard<AGE::SpinLock> lock(_mutex);
-		AGE_ASSERT(mat.size() < 255);
-		memcpy((void*)&_matrixArray, mat.data(), mat.size() * sizeof(glm::mat4));
-		_size = mat.size();
+		AGE_ASSERT(size < 255);
+		memcpy((void*)&_matrixArray, skinningMatrix, size * sizeof(glm::mat4));
+		_size = size;
 		return (*this);
 	}
 }

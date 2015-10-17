@@ -8,6 +8,7 @@ namespace AGE
 {
 	struct Skeleton;
 	struct AnimationData;
+	class AnimationManager;
 
 	struct AnimationInstance
 	{
@@ -16,7 +17,9 @@ namespace AGE
 		AnimationInstance(const AnimationInstance &) = default;
 		AnimationInstance &operator=(const AnimationInstance &) = default;
 
-		inline const std::vector<glm::mat4> &getBones() const { return transformations; }
+		inline std::size_t getTransformationsIndex() const { return _transformationIndex; }
+		inline const glm::mat4 *getTransformations() const { return _tranformationBuffer; }
+		inline glm::mat4 *getTransformations() { return _tranformationBuffer; }
 		inline std::shared_ptr<Skeleton> getSkeleton() const { return skeleton; }
 		inline std::shared_ptr<AnimationData> getAnimation() const { return animationData; }
 		void update(float t);
@@ -25,16 +28,19 @@ namespace AGE
 		inline std::size_t getInstanceCounter() const { return _instanceCounter; }
 		inline bool isShared() const { return _isShared; }
 		inline bool shareSameAnimation(const std::shared_ptr<AnimationData> &anim) const { return anim == animationData; }
+		inline std::size_t getTransformationBufferSize() const { return _tranformationBufferSize; }
 
 //todo private:
 		std::shared_ptr<AnimationData> animationData;
 		float time;
 		std::shared_ptr<Skeleton> skeleton;
-		AGE::Vector<glm::mat4> transformations;
 		AGE::Vector<glm::mat4> bindPoses;
 		float _timeMultiplier = 10.0f;
 		std::size_t _instanceCounter = 0;
 		bool _isShared = false;
+		std::size_t _transformationIndex = -1;
+		glm::mat4 *_tranformationBuffer = nullptr;
+		const std::size_t _tranformationBufferSize;
 	};
 
 }

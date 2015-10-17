@@ -80,7 +80,7 @@ namespace AGE
 		_renderMode[mode] = false;
 	}
 
-	void MeshRenderer::setSkinningMatrix(const std::vector<glm::mat4> &skinningMatrix)
+	void MeshRenderer::setSkinningMatrix(const glm::mat4 *skinningMatrix, std::size_t size)
 	{
 		SCOPE_profile_cpu_function("Animations");
 
@@ -90,7 +90,7 @@ namespace AGE
 		{
 			if (handle.getPtr<DRBMesh>()->getDatas()->hadRenderMode(RenderModes::AGE_SKINNED))
 			{
-				handle.getPtr<DRBSkinnedMesh>()->setSkinningMatrix(skinningMatrix);
+				handle.getPtr<DRBSkinnedMesh>()->setSkinningMatrix(skinningMatrix, size);
 				return;
 			}
 		}

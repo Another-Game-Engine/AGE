@@ -12,15 +12,15 @@ using namespace AGE;
 AnimationInstance::AnimationInstance(std::shared_ptr<Skeleton> pSkeleton, std::shared_ptr<AnimationData> pAnimation)
 	: skeleton(pSkeleton)
 	, animationData(pAnimation)
+	, _tranformationBufferSize(pSkeleton->bones.size())
 {
 	bindPoses.resize(skeleton->bones.size(), glm::mat4(1));
-	transformations.resize(skeleton->bones.size(), glm::mat4(1));
 	if (!animationData)
 	{
-		for (auto i = 0; i < transformations.size(); ++i)
-		{
-			transformations[i] = skeleton->bones[i].transformation;
-		}
+		//for (auto i = 0; i < _tranformationBufferSize; ++i)
+		//{
+		//	_tranformationBuffer[i] = skeleton->bones[i].transformation;
+		//}
 	}
 }
 

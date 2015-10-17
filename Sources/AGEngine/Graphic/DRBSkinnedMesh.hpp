@@ -17,7 +17,7 @@ namespace AGE
 		// virtual CullableTypeID getBFCType() const;
 
 		inline std::shared_ptr<SkeletonProperty> getSkeletonProperty() const { return _skeletonProperty; }
-		void setSkinningMatrix(const std::vector<glm::mat4> &skinningMatrix);
+		void setSkinningMatrix(const glm::mat4 *skinningMatrix, std::size_t size);
 	private:
 		std::shared_ptr<SkeletonProperty> _skeletonProperty;
 		friend class GraphicElementManager;
