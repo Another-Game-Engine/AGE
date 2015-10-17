@@ -31,8 +31,8 @@ namespace AGE
 								std::shared_ptr<Texture2D> depth);
 		virtual ~DeferredBasicBuffering() = default;
 
-		LFQueue<MeshBuffering::CullingOutput*>* getMeshResultQueue();
-		typedef MeshBuffering::CullingOutput MeshOutput;
+		LFQueue<BasicCommandGeneration::MeshAndMaterialOutput*>* getMeshResultQueue();
+		typedef BasicCommandGeneration::MeshAndMaterialOutput MeshOutput;
 	protected:
 		virtual void renderPass(const DRBCameraDrawableList &infos);
 		std::shared_ptr<Texture2D> _depth;
@@ -45,6 +45,6 @@ namespace AGE
 		static const std::size_t _sizeofMatrix = sizeof(glm::mat4);
 		static const std::size_t _maxInstanciedShadowCaster = _maxMatrixInstancied;
 
-		LFQueue<MeshBuffering::CullingOutput*>          _cullingResults;
+		LFQueue<BasicCommandGeneration::MeshAndMaterialOutput*>          _cullingResults;
 	};
 }

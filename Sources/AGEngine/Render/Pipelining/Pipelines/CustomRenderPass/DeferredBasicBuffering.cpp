@@ -344,7 +344,7 @@ namespace AGE
 		}
 
 
-		LFQueue<MeshBuffering::CullingOutput*>* DeferredBasicBuffering::getMeshResultQueue()
+		LFQueue<BasicCommandGeneration::MeshAndMaterialOutput*>* DeferredBasicBuffering::getMeshResultQueue()
 		{
 			return &_cullingResults;
 		}

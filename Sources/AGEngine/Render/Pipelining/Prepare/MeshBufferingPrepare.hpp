@@ -10,18 +10,40 @@ namespace AGE
 {
 	struct MaterialInstance;
 
-	namespace MeshBuffering
+	namespace BasicCommandGeneration
 	{
-		struct RawType
+		struct MeshRawType
 		{
-			static void Treat(const BFCItem &item, BFCArray<RawType> &result);
-			static bool Compare(const RawType &a, const RawType &b);
-			static RawType Invalid();
-			bool operator!=(const RawType &o) const;
+			static void Treat(const BFCItem &item, BFCArray<MeshRawType> &result);
+			static bool Compare(const MeshRawType &a, const MeshRawType &b);
+			static MeshRawType Invalid();
+			bool operator!=(const MeshRawType &o) const;
 
 			ConcatenatedKey     vertice;
 			MaterialInstance    *material;
 			glm::mat4           matrix;
+		};
+		struct ShadowRawType
+		{
+			static void Treat(const BFCItem &item, BFCArray<ShadowRawType> &result);
+			static bool Compare(const ShadowRawType &a, const ShadowRawType &b);
+			static ShadowRawType Invalid();
+			bool operator!=(const ShadowRawType &o) const;
+
+			ConcatenatedKey     vertice;
+			glm::mat4           matrix;
+		};
+		struct SkinnedMeshRawType
+		{
+			static void Treat(const BFCItem &item, BFCArray<SkinnedMeshRawType> &result);
+			static bool Compare(const SkinnedMeshRawType &a, const SkinnedMeshRawType &b);
+			static SkinnedMeshRawType Invalid();
+			bool operator!=(const SkinnedMeshRawType &o) const;
+
+			ConcatenatedKey     vertice;
+			MaterialInstance    *material;
+			glm::mat4           matrix;
+			size_t              bonesIndex;
 		};
 
 		template <std::size_t CommandNbr>
@@ -59,14 +81,25 @@ namespace AGE
 					return (memcmp(&matrix[3][0], &invalidVector, sizeof(invalidVector)) == 0);
 				}
 
-				void setAsCommandKey(const RawType &raw)
+				void setAsCommandKey(const MeshRawType &raw)
 				{
 					keyHolder.material = raw.material;
 					keyHolder.vertice = raw.vertice;
 					memcpy(&(matrix[3][0]), &(invalidVector), sizeof(invalidVector));
 				}
 
-				void setAsCommandData(const RawType &raw)
+				void setAsCommandData(const MeshRawType &raw)
+				{
+					memcpy(&matrix, glm::value_ptr(raw.matrix), sizeof(glm::mat4));
+				}
+
+				void setAsCommandKey(const ShadowRawType &raw)
+				{
+					keyHolder.vertice = raw.vertice;
+					memcpy(&(matrix[3][0]), &(invalidVector), sizeof(invalidVector));
+				}
+
+				void setAsCommandData(const ShadowRawType &raw)
 				{
 					memcpy(&matrix, glm::value_ptr(raw.matrix), sizeof(glm::mat4));
 				}
@@ -126,10 +159,94 @@ namespace AGE
 			std::array<CommandType, CommandNbr> _commands;
 			std::size_t _dataOffset;
 		};
-		typedef BFCOutput<MeshBuffering::RawType, 16384, CommandGenerator<16384>> CullingOutput;
+		////////////////////////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////////////////////////
+
+		struct CommandSkinAndMaterial
+		{
+			std::size_t matrixOffset;
+			std::size_t bonesOffset;
+			ConcatenatedKey  vertice;
+			MaterialInstance *material;
+			std::size_t size;
+		};
+		struct CommandSkin
+		{
+			std::size_t matrixOffset;
+			std::size_t bonesOffset;
+			ConcatenatedKey  vertice;
+			std::size_t size;
+		};
+
+		//template <typename CommandType, std::size_t CommandNbr>
+		//class SkinnedCommandGenerator
+		//{
+		//public:
+		//	typedef glm::mat4 Matrix;
+		//	typedef std::vector<glm::mat4> Bones;
+
+		//	template <typename RawInfosType, std::size_t RawInfosNbr>
+		//	void treatCulledResult(const LFVector<RawInfosType, RawInfosNbr> &rawInfos)
+		//	{
+		//		if (rawInfos.size() != 0)
+		//		{
+		//			std::size_t max = rawInfos.size();
+		//			std::size_t i = 0;
+
+		//			CommandSkinAndMaterial *key = nullptr;
+		//			RawInfosType lastInfos = RawInfosType::Invalid();
+
+		//			std::size_t keyCounter = 0;
+		//			std::size_t keyIndice = 0;
+		//			std::size_t matrixCounter = 0;
+
+		//			while (i < max && dataCounter < RawInfosNbr)
+		//			{
+		//				auto &c = rawInfos[i];
+		//				if (c != lastInfos)
+		//				{
+		//					if (key)
+		//					{
+		//						key->setKeySizeAndOffset(keyCounter, dataCounter + 1);
+		//					}
+		//					keyCounter = 0;
+		//					lastInfos = c;
+		//					_commands[keyIndice].setAsCommandKey(c);
+		//					key = &(_commands[keyIndice++]);
+		//				}
+		//				_commands[dataCounter--].setAsCommandData(rawInfos[i]);
+		//				++keyCounter;
+		//				++i;
+		//			}
+		//			_dataOffset = dataCounter + 1;
+		//			if (key)
+		//			{
+		//				key->setKeySizeAndOffset(keyCounter, dataCounter + 1);
+		//			}
+		//		}
+		//	}
+
+		//	inline void reset()
+		//	{
+		//		_dataOffset = 0;
+		//	}
+
+		//	inline const std::array<CommandType, CommandNbr> &getCommands() const { return _commands; }
+		//	inline std::size_t getDataOffset() const { return _dataOffset; }
+		//	inline std::size_t getDataSize() const { return CommandNbr - _dataOffset; }
+		//private:
+		//	std::array<CommandType, CommandNbr> _commands;
+		//	std::array<Matrix, CommandNbr> _commands;
+
+		//	std::size_t _dataOffset;
+		//};
+
+		typedef BFCOutput<BasicCommandGeneration::MeshRawType, 16384, CommandGenerator<16384>> MeshAndMaterialOutput;
+		typedef BFCOutput<BasicCommandGeneration::ShadowRawType, 1024, CommandGenerator<1024>> MeshShadowOutput;
 	}
 	template <std::size_t T>
-	const float MeshBuffering::CommandGenerator<T>::CommandType::invalidVector[4] = { std::numeric_limits<float>::lowest(), std::numeric_limits<float>::lowest(), std::numeric_limits<float>::lowest(), std::numeric_limits<float>::lowest() };
+	const float BasicCommandGeneration::CommandGenerator<T>::CommandType::invalidVector[4] = { std::numeric_limits<float>::lowest(), std::numeric_limits<float>::lowest(), std::numeric_limits<float>::lowest(), std::numeric_limits<float>::lowest() };
 }
 
 
