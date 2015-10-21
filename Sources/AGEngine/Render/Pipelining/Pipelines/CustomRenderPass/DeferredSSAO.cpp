@@ -54,6 +54,11 @@ namespace AGE
 		return (rand() % 1000) / 1000.0 * 2.0 - 1.0;
 	}
 
+	static float lerp(float start, float end, float step)
+	{
+		return (1.0 - step) * start + step * end;  
+	}
+
 	void DeferredSSAO::renderPass(const DRBCameraDrawableList &infos)
 	{
 		if (!_is_initialized) 
@@ -65,7 +70,10 @@ namespace AGE
 				auto &current = _kernels[index];
 				current = glm::vec3(get_normalized_random(), get_normalized_random(), get_normalized_random());
 				current = glm::normalize(current);
-				std::cout << "x " << current.x << ",y " << current.y << ",z " << current.z << std::endl;
+				float scale = float(index) / float(_kernels.size());
+				scale = lerp(0.1f, 1.0f, scale * scale);
+				current = current * scale;
+				//std::cout << "Kernel sample: " << current.x << " " << current.y << " " << current.z << std::endl;
 			}
             _is_initialized = true;
 		}
