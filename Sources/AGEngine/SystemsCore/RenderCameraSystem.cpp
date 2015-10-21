@@ -274,7 +274,7 @@ namespace AGE
 			BFCBlockManagerFactory *bf = _scene->getBfcBlockManagerFactory();
 			if (DeferredBasicBuffering::instance)
 			{
-				//We create a culler, whit the culling rule "Frustum"
+				//We create a culler, with the culling rule "Frustum"
 				BFCCuller<BFCFrustumCuller> cameraCuller;
 				//We pass infos for frustum culling
 				cameraCuller.prepareForCulling(cameraFrustum);

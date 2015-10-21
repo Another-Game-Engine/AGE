@@ -62,7 +62,7 @@ namespace AGE
 	};
 
 	template <typename RawInfosType, std::size_t RawInfosNbr
-		     ,typename CommandGenerator>
+	         ,typename CommandOutput>
 	class BFCOutput : public IBFCOutput
 	{
 	public:
@@ -78,7 +78,6 @@ namespace AGE
 			_rawInfos.clear();
 			_counter = 0;
 			_resultQueue = nullptr;
-			_commandGenerator.reset();
 		}
 
 		virtual void _treatCulledChunk(const BFCCullArray &array)
@@ -104,7 +103,28 @@ namespace AGE
 
 		virtual void _treatCulledResult()
 		{
-			_commandGenerator.treatCulledResult(_rawInfos);
+			std::sort(_rawInfos.data(), _rawInfos.data() + _rawInfos.size(), RawInfosType::Compare);
+			if (_rawInfos.size() != 0)
+			{
+				std::size_t max = _rawInfos.size();
+				std::size_t i = 0;
+
+				RawInfosType lastInfos = RawInfosType::Invalid();
+
+				_commandOutput.begin(); //TODO
+				while (i < max)
+				{
+					auto &c = _rawInfos[i];
+					if (c != lastInfos)
+					{
+						lastInfos = c;
+						_commandOutput.setKeyInfos(c); //TODO
+					}
+					_commandOutput.setCommandData(c); //TODO
+					++i;
+				}
+				_commandOutput.end(); //TODO
+			}
 		}
 
 		void mergeChunck(BFCOutputChunk *chunck)
@@ -131,11 +151,11 @@ namespace AGE
 			output->_isInUse = false;
 			getInstancePool().enqueue(output);
 		}
-		inline const CommandGenerator &getCommandGenerator() const { return _commandGenerator; }
+		inline const CommandOutput &getCommandOutput() const { return _commandOutput; }
 	private:
 		static LFQueue<BFCOutputChunk*>	    _chunckQueue;
 		LFVector<RawInfosType, RawInfosNbr> _rawInfos;
-		CommandGenerator                    _commandGenerator;
+		CommandOutput                       _commandOutput;
 		bool                                _isInUse = false;
 
 		// not thread safe, but if used correctly, it should

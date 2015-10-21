@@ -273,35 +273,27 @@ namespace AGE
 					Key<Vertices> verticesKey;
 
 					// draw for the spot light selected
-					auto &generator = toDraw->getCommandGenerator();
-					auto &occluders = generator.getCommands();
+					auto &generator = toDraw->getCommandOutput();
+					auto &occluders = generator._commands;
 					std::size_t occluderCounter = 0;
 
-					auto matrixBegin = generator.getDataOffset();
-					auto matrixEnd = generator.getDataSize();
-					_positionBuffer->set((void*)(&occluders[matrixBegin]), matrixEnd);
+					_positionBuffer->set((void*)(generator._datas.data()), generator._datas.size());
 
-					while (true)
+					while (occluderCounter < occluders.size())
 					{
 						auto &current = occluders[occluderCounter];
-						if (current.isKeyHolder() == false)
-						{
-							break;
-						}
 
 						Key<Painter> painterKey;
-						UnConcatenateKey(current.keyHolder.vertice, painterKey, verticesKey);
-						auto size = current.getSize();
-						auto offset = current.getOffset() - matrixBegin;
+						UnConcatenateKey(current.verticeKey, painterKey, verticesKey);
 
 						if (painterKey.isValid())
 						{
-							_programs[PROGRAM_BUFFERING]->registerProperties(current.keyHolder.material->_properties);
-							_programs[PROGRAM_BUFFERING]->updateProperties(current.keyHolder.material->_properties);
+							_programs[PROGRAM_BUFFERING]->registerProperties(current.material->_properties);
+							_programs[PROGRAM_BUFFERING]->updateProperties(current.material->_properties);
 							painter = _painterManager->get_painter(painterKey);
 							painter->instanciedDrawBegin(_programs[PROGRAM_BUFFERING]);
-							matrixOffset.set(float(offset));
-							painter->instanciedDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], verticesKey, size);
+							matrixOffset.set(float(current.from));
+							painter->instanciedDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], verticesKey, current.size);
 							painter->instanciedDrawEnd();
 						}
 						++occluderCounter;
