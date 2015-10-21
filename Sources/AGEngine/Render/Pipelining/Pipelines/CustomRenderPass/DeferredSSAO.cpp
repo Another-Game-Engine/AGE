@@ -15,6 +15,8 @@
 
 #include "Graphic/DRBCameraDrawableList.hpp"
 #include "Graphic/DRBPointLightData.hpp"
+#include <cstdlib>
+#include <ctime>
 
 namespace AGE
 {
@@ -25,9 +27,9 @@ namespace AGE
 
 	DeferredSSAO::DeferredSSAO(glm::uvec2 const &screenSize, std::shared_ptr<PaintingManager> painterManager) :
 		FrameBufferRender(screenSize.x, screenSize.y, painterManager),
-		_is_initialized(false),
-		_kernels(nullptr)
+		_is_initialized(false)
 	{
+		srand(time(NULL));
 		_programs.resize(PROGRAM_NBR);
 		auto confManager = GetEngine()->getInstance<ConfigurationManager>();
 		auto shaderPath = confManager->getConfiguration<std::string>("ShadersPath");
@@ -47,21 +49,25 @@ namespace AGE
 		_quadPainter = _painterManager->get_painter(quadPainterKey);
 	}
 
-	DeferredSSAO::~DeferredSSAO()
+	static double get_normalized_random() 
 	{
-		//delete[] _kernels;
+		return (rand() % 1000) / 1000.0 * 2.0 - 1.0;
 	}
 
 	void DeferredSSAO::renderPass(const DRBCameraDrawableList &infos)
 	{
-		std::cout << "SSAO presents" << std::endl;
-		//if (!_is_initialized) 
-		//{
-		//	kernel = new glm::vec3[KERNEL_SIZE];
-		//	for (int i = 0; i < KERNEL_SIZE; ++i)
-		//	{
-		//		kernel[]
-		//	}
-		//}
+		if (!_is_initialized) 
+		{
+			std::cout << "SSAO Kernel generated" << std::endl;
+			_kernels.resize(KERNEL_SIZE);
+			for (auto index = 0ull; index < _kernels.size(); ++index)
+			{
+				auto &current = _kernels[index];
+				current = glm::vec3(get_normalized_random(), get_normalized_random(), get_normalized_random());
+				current = glm::normalize(current);
+				std::cout << "x " << current.x << ",y " << current.y << ",z " << current.z << std::endl;
+			}
+            _is_initialized = true;
+		}
 	}
 }

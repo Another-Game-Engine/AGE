@@ -2,6 +2,7 @@
 
 #include <Render/Pipelining/Render/FrameBufferRender.hh>
 #include <glm/glm.hpp>
+#include <vector>
 
 #define KERNEL_SIZE 16
 
@@ -20,7 +21,7 @@ namespace AGE
         virtual void renderPass(const DRBCameraDrawableList &infos);
 
         bool _is_initialized;
-        glm::vec3 *_kernels;
+        std::vector<glm::vec3> _kernels;
         Key<Vertices> _quadVertices;
         std::shared_ptr<Painter> _quadPainter;
     };
