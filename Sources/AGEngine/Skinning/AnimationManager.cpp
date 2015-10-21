@@ -10,6 +10,9 @@
 
 #include <TMQ/Queue.hpp>
 
+// pour le hack deguelasse de l'upload bones
+#include <Threads\Tasks\ToRenderTasks.hpp>
+
 namespace AGE
 {
 	AnimationManager::AnimationManager()
@@ -122,6 +125,7 @@ namespace AGE
 			{
 			}
 		}
+		TMQ::TaskManager::emplaceRenderTask<AGE::Tasks::UploadBonesToGPU>(&_bonesBuffers[_currentBonesBufferIndex]);
 		_currentBonesBufferIndex = (_currentBonesBufferIndex + 1) % 2;
 	}
 }

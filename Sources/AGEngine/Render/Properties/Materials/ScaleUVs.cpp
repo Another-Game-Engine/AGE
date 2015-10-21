@@ -29,13 +29,11 @@ namespace AGE
 
 	bool const & ScaleUVs::get()
 	{
-		std::lock_guard<AGE::SpinLock> lock(_mutex);
 		return (_tof);
 	}
 
 	ScaleUVs & ScaleUVs::set(bool const &tof)
 	{
-		std::lock_guard<AGE::SpinLock> lock(_mutex);
 		_tof = tof;
 		return (*this);
 	}

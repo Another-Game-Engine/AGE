@@ -28,13 +28,11 @@ namespace AGE
 
 	std::shared_ptr<Texture2D> const & MapColor::get()
 	{
-		std::lock_guard<AGE::SpinLock> lock(_mutex);
 		return (_texture);
 	}
 
 	MapColor & MapColor::set(std::shared_ptr<Texture2D> const &map)
 	{
-		std::lock_guard<AGE::SpinLock> lock(_mutex);
 		_texture = map;
 		return (*this);
 	}

@@ -42,13 +42,11 @@ namespace AGE
 
 	glm::mat4 const & Transformation::get()
 	{
-		std::lock_guard<AGE::SpinLock> lock(_mutex);
 		return (_model_matrix);
 	}
 
 	Transformation & Transformation::set(glm::mat4 const &mat)
 	{
-		std::lock_guard<AGE::SpinLock> lock(_mutex);
 		_model_matrix = mat;
 		return (*this);
 	}

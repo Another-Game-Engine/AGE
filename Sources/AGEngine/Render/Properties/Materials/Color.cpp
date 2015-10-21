@@ -29,13 +29,11 @@ namespace AGE
 
 	glm::vec4 const & Color::get()
 	{
-		std::lock_guard<AGE::SpinLock> lock(_mutex);
 		return (_color);
 	}
 
 	Color & Color::set(glm::vec4 const &color)
 	{
-		std::lock_guard<AGE::SpinLock> lock(_mutex);
 		_color = color;
 		return (*this);
 	}

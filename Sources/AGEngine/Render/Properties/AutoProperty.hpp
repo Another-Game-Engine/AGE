@@ -19,7 +19,6 @@ namespace AGE
 
 		const DataType &getValue()
 		{
-			std::lock_guard<AGE::SpinLock> lock(_mutex);
 			return _data;
 		}
 
@@ -29,7 +28,6 @@ namespace AGE
 
 		void set(const DataType &value)
 		{
-			std::lock_guard<AGE::SpinLock> lock(_mutex);
 			_data = value;
 		}
 
@@ -40,7 +38,7 @@ namespace AGE
 
 		static inline void _updateFunctionLock(IProgramResources *r, IProperty*p)
 		{
-			p->_mutex.lock(); AutoProperty::update((UpdateType*)(r), (AutoProperty*)(p)); p->_mutex.unlock();
+			AutoProperty::update((UpdateType*)(r), (AutoProperty*)(p));
 		}
 		inline virtual void(*getUpdateFunction())(IProgramResources *, IProperty*)
 		{
@@ -54,7 +52,7 @@ namespace AGE
 
 		static inline void _instanciedUpdateFunctionLock(IProgramResources *r, IProperty*p)
 		{
-			p->_mutex.lock(); AutoProperty::instanciedUpdate((UpdateType*)(r), (AutoProperty*)(p)); p->_mutex.unlock();
+			AutoProperty::instanciedUpdate((UpdateType*)(r), (AutoProperty*)(p));
 		}
 		inline virtual void(*getInstanciedUpdateFunction())(IProgramResources *, IProperty*)
 		{	
@@ -65,7 +63,6 @@ namespace AGE
 		virtual void _autoSet(void *dataPtr)
 		{
 			// totally unsafe, you have to be sure of what you're doing
-			std::lock_guard<AGE::SpinLock> lock(_mutex);
 			auto newData = (DataType*)(dataPtr);
 			_data = *newData;
 		}

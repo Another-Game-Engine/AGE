@@ -14,6 +14,8 @@ namespace AGE
 
 	struct DRBSpotLightData : public DRBData
 	{
+		Properties globalProperties;
+
 		DRBSpotLightData();
 		virtual ~DRBSpotLightData();
 

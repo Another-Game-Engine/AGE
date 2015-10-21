@@ -39,13 +39,11 @@ namespace AGE
 
 	glm::vec3 const & AABB::get()
 	{
-		std::lock_guard<AGE::SpinLock> lock(_mutex);
 		return (_aabb);
 	}
 
 	AABB & AABB::set(glm::vec3 const &mat)
 	{
-		std::lock_guard<AGE::SpinLock> lock(_mutex);
 		_aabb = mat;
 		return (*this);
 	}

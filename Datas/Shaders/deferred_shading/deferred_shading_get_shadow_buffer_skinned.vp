@@ -6,21 +6,39 @@ layout (location = 2) in vec4 blendIndice;
 
 uniform mat4 light_matrix;
 uniform mat4 model_matrix;
+uniform float matrixOffset;
+uniform float bonesOffset;
 
-uniform mat4 bones[166];
+uniform samplerBuffer model_matrix_tbo;
+uniform samplerBuffer bones_matrix_tbo;
+
+mat4 getMat(samplerBuffer sampler, int id)
+{
+	vec4 col1 = texelFetch(sampler, id);
+	vec4 col2 = texelFetch(sampler, id + 1);
+	vec4 col3 = texelFetch(sampler, id + 2);
+	vec4 col4 = texelFetch(sampler, id + 3);
+	// Now assemble the four columns into a matrix.
+	return mat4(col1, col2, col3, col4);
+}
 
 void main()
 {
+	int id = (gl_InstanceID + int(matrixOffset)) * 4;
+	int boneId = int(bonesOffset) * 4;
+
+	mat4 model_matrix = getMat(model_matrix_tbo, id);
+
 	vec4 newPosition = vec4(position, 1);
 	newPosition = vec4(0);
 	if (blendWeight.x > 0.0f)
-		newPosition += (bones[int(blendIndice.x)] * vec4(position, 1)) * blendWeight.x;
+		newPosition += (getMat(bones_matrix_tbo, int(blendIndice.x) * 4 + boneId) * vec4(position, 1)) * blendWeight.x;
 	if (blendWeight.y > 0.0f)
-		newPosition += (bones[int(blendIndice.y)] * vec4(position, 1)) * blendWeight.y;
+		newPosition += (getMat(bones_matrix_tbo, int(blendIndice.y) * 4 + boneId) * vec4(position, 1)) * blendWeight.y;
 	if (blendWeight.z > 0.0f)
-		newPosition += (bones[int(blendIndice.z)] * vec4(position, 1)) * blendWeight.z;
+		newPosition += (getMat(bones_matrix_tbo, int(blendIndice.z) * 4 + boneId) * vec4(position, 1)) * blendWeight.z;
 	if (blendWeight.w > 0.0f)
-		newPosition += (bones[int(blendIndice.w)] * vec4(position, 1)) * blendWeight.w;
+		newPosition += (getMat(bones_matrix_tbo, int(blendIndice.w) * 4 + boneId) * vec4(position, 1)) * blendWeight.w;
 
 	gl_Position = light_matrix * model_matrix * vec4(newPosition.xyz, 1);
 }

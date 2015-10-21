@@ -26,6 +26,10 @@
 #include <Render/Pipelining/Pipelines/CustomPipeline/DeferredShading.hh>
 #include <Render/Properties/Transformation.hh>
 
+// pour le hack deguelasse du bones texture
+#include <Render\Pipelining\Pipelines\PipelineTools.hh>
+#include <Render\Textures\TextureBuffer.hh>
+
 #include <utility>
 
 #include "Graphic/DRBCameraDrawableList.hpp"
@@ -371,6 +375,7 @@ namespace AGE
 			pipelines[DEBUG_DEFERRED] = std::make_unique<DebugDeferredShading>(_context->getScreenSize(), paintingManager);
 			_recompileShaders();
 			_initPipelines();
+			_bonesTexture = createRenderPassOutput<TextureBuffer>(8184 * 2, GL_RGBA32F, sizeof(glm::mat4), GL_DYNAMIC_DRAW);
 			msg.setValue(true);
 		});
 
@@ -571,6 +576,11 @@ namespace AGE
 				debug3DlinesColorDepth.clear();
 				debug3DlinesPointsDepth.clear();
 			}
+		});
+
+		registerCallback<AGE::Tasks::UploadBonesToGPU>([&](AGE::Tasks::UploadBonesToGPU& msg)
+		{
+			_bonesTexture->set(msg.bones->data(), msg.bones->size());
 		});
 
 		return true;

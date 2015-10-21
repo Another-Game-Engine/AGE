@@ -1,6 +1,7 @@
 #pragma once
 
 #include <TMQ/message.hpp>
+#include <glm/fwd.hpp>
 
 namespace AGE
 {
@@ -11,7 +12,12 @@ namespace AGE
 
 	namespace Tasks
 	{
-
+		struct UploadBonesToGPU
+		{
+			std::vector<glm::mat4> *bones;
+			UploadBonesToGPU(std::vector<glm::mat4> *_bones)
+				: bones(_bones){}
+		};
 		class Render
 		{
 		public:

@@ -201,6 +201,8 @@ namespace AGE
 
 			_frame_buffer.attachment(*depth.get(), GL_DEPTH_STENCIL_ATTACHMENT);
 			_programs[PROGRAM_BUFFERING_SKINNED]->get_resource<Mat4>("light_matrix").set(spotLightPtr->_spotMatrix);
+			auto matrixOffset = _programs[PROGRAM_BUFFERING_SKINNED]->get_resource<Vec1>("matrixOffset");
+
 			//	_programs[PROGRAM_BUFFERING_SKINNED]->registerProperties(spotlight->globalProperties);
 			//	_programs[PROGRAM_BUFFERING_SKINNED]->updateNonInstanciedProperties(spotlight->globalProperties);
 
@@ -228,7 +230,9 @@ namespace AGE
 						painter->uniqueDrawBegin(_programs[PROGRAM_BUFFERING_SKINNED]);
 					}
 					oldPainter = painter;
-					painter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING_SKINNED], meshPaint->globalProperties, meshPaint->getVerticesKey());
+					//@TOTO
+					matrixOffset.set(float(mesh->getSkinningIndex()));
+					painter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING_SKINNED], Properties(), meshPaint->getVerticesKey());
 				}
 			}
 			if (oldPainter)

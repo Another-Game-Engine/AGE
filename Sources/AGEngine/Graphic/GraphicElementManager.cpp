@@ -23,8 +23,6 @@ namespace AGE
 
 		BFCCullableHandleGroup result;
 
-		std::shared_ptr<SkeletonProperty> skeletonProperty = nullptr;
-
 		for (auto &submesh : mesh->subMeshs)
 		{
 			DRBMesh *drbMesh = nullptr;
@@ -33,13 +31,6 @@ namespace AGE
 			{
 				auto drbMeshSkeleton = _skinnedMeshPool.create();
 				drbMesh = drbMeshSkeleton;
-
-				if (skeletonProperty == nullptr)
-				{
-					skeletonProperty = std::make_shared<SkeletonProperty>();
-				}
-				drbMesh->datas->globalProperties.add_property(skeletonProperty);
-				drbMeshSkeleton->_skeletonProperty = skeletonProperty;
 			}
 			else
 			{
@@ -51,7 +42,8 @@ namespace AGE
 			drbMesh->datas->setPainterKey(submesh.painter);
 			drbMesh->datas->setAABB(submesh.boundingBox);
 
-			drbMesh->datas->globalProperties.merge_properties(submesh.properties);
+			//@TOTO
+			//drbMesh->datas->globalProperties.merge_properties(submesh.properties);
 
 			std::size_t materialIndex = submesh.defaultMaterialIndex < materialInstance->datas.size() ? submesh.defaultMaterialIndex : 0;
 			auto &material = materialInstance->datas[materialIndex];

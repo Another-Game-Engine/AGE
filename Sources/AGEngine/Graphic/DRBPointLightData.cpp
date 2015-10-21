@@ -22,7 +22,6 @@ namespace AGE
 
 	void DRBPointLightData::setRange(const glm::vec4 &range)
 	{
-		RWLockGuard(_lock, true);
 		_rangeProperty->autoSet(range);
 		_range = range;
 	}

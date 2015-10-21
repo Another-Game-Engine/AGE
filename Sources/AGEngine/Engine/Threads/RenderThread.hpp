@@ -28,6 +28,7 @@ namespace AGE
 	class Painter;
 	class IProperty;
 	class Vertices;
+	class TextureBuffer;
 
 	class RenderThread : public Thread, public QueueOwner
 	{
@@ -96,6 +97,8 @@ namespace AGE
 		SdlContext *_context;
 		DepthMapManager *_depthMapManager;
 		AGE::SpinLock _mutex;
+
+		std::shared_ptr<AGE::TextureBuffer> _bonesTexture;
 
 		friend class ThreadManager;
 	};

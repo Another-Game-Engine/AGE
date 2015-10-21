@@ -8,7 +8,6 @@ namespace AGE
 
 	Properties::Properties(std::vector<std::shared_ptr<IProperty>> const &properties)
 	{
-		RWLockGuard lock(_lock, true);
 		_properties = properties;
 		_shaderHash = 0;
 		_hashToRefresh = false;
@@ -16,8 +15,6 @@ namespace AGE
 
 	Properties::Properties(Properties &&other)
 	{
-		RWLockGuard lock(_lock, true);
-		RWLockGuard lockO(other._lock, false);
 		_properties = std::move(other._properties);
 		_shaderHash = other._shaderHash;
 		_hashToRefresh = other._hashToRefresh;
@@ -25,8 +22,6 @@ namespace AGE
 
 	Properties::Properties(Properties const &other)
 	{
-		RWLockGuard lock(_lock, true);
-		RWLockGuard lockO(other._lock, false);
 		_properties = other._properties;
 		_shaderHash = other._shaderHash;
 		_hashToRefresh = other._hashToRefresh;
@@ -34,7 +29,6 @@ namespace AGE
 
 	Properties::~Properties()
 	{
-		RWLockGuard lock(_lock, true);
 		auto debug = _properties.size();
 		for (size_t i = 0; i < _properties.size(); ++i)
 		{
@@ -47,7 +41,6 @@ namespace AGE
 	{
 		SCOPE_profile_cpu_function("RenderTimer");
 
-		RWLockGuard lock(_lock, true);
 		_properties.emplace_back(prop);
 		_hashToRefresh = true;
 		return (Key<Property>::createKey(int(_properties.size()) - 1));
@@ -57,7 +50,6 @@ namespace AGE
 	{
 		SCOPE_profile_cpu_function("RenderTimer");
 
-		RWLockGuard lock(_lock, true);
 		_properties.emplace_back(prop);
 		_hashToRefresh = true;
 		return (Key<Property>::createKey(int(_properties.size()) - 1));
@@ -67,15 +59,10 @@ namespace AGE
 	{
 		SCOPE_profile_cpu_function("RenderTimer");
 
-		_lock.ReadLock();
-		RWLockGuard lockO(other._lock, false);
 		for (auto &p : other._properties)
 		{
-			_lock.ReadUnlock();
 			add_property(p);
-			_lock.ReadLock();
 		}
-		_lock.ReadUnlock();
 	}
 
 	std::size_t Properties::getProgramId(std::size_t programId)
@@ -99,8 +86,6 @@ namespace AGE
 
 	void Properties::_computeHash()
 	{
-		RWLockGuard lock(_lock, true);
-
 		_shaderHash = 0;
 		for (auto &p : _properties)
 		{
@@ -113,7 +98,6 @@ namespace AGE
 	// NOT WORKING -> you invalid Key doing that !
 	void Properties::remove_property(Key<IProperty> const &prop)
 	{
-		RWLockGuard lock(_lock, true);
 		if (prop.getId() != _properties.size() - 1)
 		{
 			std::swap(_properties[prop.getId()], _properties[_properties.size() - 1]);

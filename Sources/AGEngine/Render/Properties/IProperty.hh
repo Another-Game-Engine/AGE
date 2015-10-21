@@ -15,7 +15,7 @@ namespace AGE
 #define PROPERTY_UPDATE_FUNCTION(PROPERTY_TYPE, RESOURCE_TYPE)\
 	static void update(RESOURCE_TYPE*, PROPERTY_TYPE*);\
 	static inline void _updateFunctionLock(IProgramResources *r, IProperty*p){\
-	    p->_mutex.lock(); PROPERTY_TYPE::update((RESOURCE_TYPE*)(r), (PROPERTY_TYPE*)(p)); p->_mutex.unlock();\
+	    PROPERTY_TYPE::update((RESOURCE_TYPE*)(r), (PROPERTY_TYPE*)(p));\
 	}\
     inline virtual void(*getUpdateFunction())(IProgramResources *, IProperty*) {\
 	    return PROPERTY_TYPE::_updateFunctionLock;\
@@ -24,7 +24,7 @@ namespace AGE
 #define PROPERTY_INSTANCIED_UPDATE_FUNCTION(PROPERTY_TYPE, RESOURCE_TYPE)\
 	static void instanciedUpdate(RESOURCE_TYPE*, PROPERTY_TYPE*);\
 	static inline void _instanciedUpdateFunctionLock(IProgramResources *r, IProperty*p){\
-	   p->_mutex.lock(); PROPERTY_TYPE::instanciedUpdate((RESOURCE_TYPE*)(r), (PROPERTY_TYPE*)(p)); p->_mutex.unlock();\
+	   PROPERTY_TYPE::instanciedUpdate((RESOURCE_TYPE*)(r), (PROPERTY_TYPE*)(p));\
 			}\
 	inline virtual void(*getInstanciedUpdateFunction())(IProgramResources *, IProperty*) {\
 	    return PROPERTY_TYPE::_instanciedUpdateFunctionLock;\
@@ -63,8 +63,6 @@ namespace AGE
 		const std::string _name;
 		std::size_t _hash;
 		//dirty:
-	public:
-		mutable AGE::SpinLock _mutex;
 	};
 
 	typedef IProperty Property;

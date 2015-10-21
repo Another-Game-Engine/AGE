@@ -52,7 +52,7 @@ namespace AGE
 			if (animation)
 			{
 				// TODO
-				meshCpt->setSkinningMatrix(animation->getTransformations(), animation->getTransformationBufferSize());
+				meshCpt->setSkinningMatrix(animation->getTransformationsIndex());
 			}
 		}
 	}

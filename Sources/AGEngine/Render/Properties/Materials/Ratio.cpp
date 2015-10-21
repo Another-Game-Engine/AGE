@@ -29,13 +29,11 @@ namespace AGE
 
 	float Ratio::get()
 	{
-		std::lock_guard<AGE::SpinLock> lock(_mutex);
 		return (_ratio);
 	}
 
 	Ratio & Ratio::set(float ratio)
 	{
-		std::lock_guard<AGE::SpinLock> lock(_mutex);
 		_ratio = ratio;
 		return (*this);
 	}

@@ -33,7 +33,6 @@ namespace AGE
 
 		std::size_t getPropertyIndex(const std::string &name) const
 		{
-			RWLockGuard lock(_lock, false);
 			std::size_t res = 0;
 			for (auto &e : _properties)
 			{
@@ -48,7 +47,6 @@ namespace AGE
 
 		std::shared_ptr<IProperty> &getProperty(const std::string &name)
 		{
-			RWLockGuard lock(_lock, false);
 			int res = 0;
 			for (auto &e : _properties)
 			{
@@ -64,7 +62,6 @@ namespace AGE
 
 		inline std::shared_ptr<IProperty> &getProperty(const std::size_t &index) 
 		{
-			RWLockGuard lock(_lock, false);
 			return _properties[index];
 		}
 
@@ -75,13 +72,11 @@ namespace AGE
 		std::vector<std::size_t> _shadersGivenId;
 		std::size_t _shaderHash;
 		bool        _hashToRefresh;
-		mutable RWLock _lock;
 	};
 
 	template <typename type_t>
 	std::shared_ptr<type_t> Properties::get_property(Key<Property> const &key) const
 	{
-		RWLockGuard lock(_lock, false);
 		return (std::static_pointer_cast<type_t>(_properties[key.getId()]));
 	}
 }

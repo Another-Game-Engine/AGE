@@ -16,10 +16,10 @@ namespace AGE
 		// Will returm DRBMesh
 		// virtual CullableTypeID getBFCType() const;
 
-		inline std::shared_ptr<SkeletonProperty> getSkeletonProperty() const { return _skeletonProperty; }
-		void setSkinningMatrix(const glm::mat4 *skinningMatrix, std::size_t size);
+		inline std::size_t getSkinningIndex() const { return _skinningMatrixIndex; }
+		void setSkinningMatrix(std::size_t size);
 	private:
-		std::shared_ptr<SkeletonProperty> _skeletonProperty;
+		std::size_t _skinningMatrixIndex;
 		friend class GraphicElementManager;
 	}; 
 }
