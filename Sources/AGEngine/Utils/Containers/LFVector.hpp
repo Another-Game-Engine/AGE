@@ -33,7 +33,7 @@ namespace AGE
 		inline bool         pushChunk(const T *data, std::size_t size)
 		{
 			std::size_t index = _index.fetch_add(size);
-			if (index >= _capacity)
+			if (index + size >= _capacity)
 			{
 				_index = _capacity;
 				return false;

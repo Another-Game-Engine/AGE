@@ -152,6 +152,7 @@ namespace AGE
 			getInstancePool().enqueue(output);
 		}
 		inline const CommandOutput &getCommandOutput() const { return _commandOutput; }
+		inline CommandOutput &getCommandOutput() { return _commandOutput; }
 	private:
 		static LFQueue<BFCOutputChunk*>	    _chunckQueue;
 		LFVector<RawInfosType, RawInfosNbr> _rawInfos;

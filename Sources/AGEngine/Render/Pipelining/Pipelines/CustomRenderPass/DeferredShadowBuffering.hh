@@ -5,6 +5,8 @@
 #include <glm/glm.hpp>
 
 #include <concurrentqueue/concurrentqueue.h>
+#include <Utils/Containers/LFQueue.hpp>
+#include <Render\Pipelining\Prepare\MeshBufferingPrepare.hpp>
 
 namespace AGE
 {
@@ -27,7 +29,8 @@ namespace AGE
 		virtual ~DeferredShadowBuffering() = default;
 		virtual void init();
 
-		void prepareRender(glm::mat4, BFCBlockManagerFactory *bf, Frustum frustum, std::atomic_size_t *counter);
+		LFQueue<BasicCommandGeneration::MeshShadowOutput*>* getMeshResultQueue();
+		typedef BasicCommandGeneration::MeshShadowOutput MeshOutput;
 	protected:
 		virtual void renderPass(const DRBCameraDrawableList &infos);
 
@@ -37,9 +40,11 @@ namespace AGE
 		static const std::size_t _sizeofMatrix = sizeof(glm::mat4);
 		static const std::size_t _maxInstanciedShadowCaster = _maxMatrixInstancied;
 
-		moodycamel::ConcurrentQueue<ShadowCasterResult*>       _toDraw;
-		moodycamel::ConcurrentQueue<ShadowCasterResult*>       _cullingResultsPool;
-		moodycamel::ConcurrentQueue<ShadowCasterBFCCallback*>  _cullerPool;
-		moodycamel::ConcurrentQueue<SkinnedShadowCasterBFCCallback*>  _skinnedCullerPool;
+		LFQueue<BasicCommandGeneration::MeshShadowOutput*>          _cullingResults;
+
+		//moodycamel::ConcurrentQueue<ShadowCasterResult*>       _toDraw;
+		//moodycamel::ConcurrentQueue<ShadowCasterResult*>       _cullingResultsPool;
+		//moodycamel::ConcurrentQueue<ShadowCasterBFCCallback*>  _cullerPool;
+		//moodycamel::ConcurrentQueue<SkinnedShadowCasterBFCCallback*>  _skinnedCullerPool;
 	};
 }

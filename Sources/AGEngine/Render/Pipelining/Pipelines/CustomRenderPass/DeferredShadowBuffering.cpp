@@ -111,16 +111,14 @@ namespace AGE
 
 		_programs[PROGRAM_BUFFERING]->use();
 
-		std::vector<ShadowCasterResult*> spotList;
-		ShadowCasterResult* r = nullptr;
-		while (_toDraw.try_dequeue(r))
+		std::vector<MeshOutput*> spotList;
+		MeshOutput *r = nullptr;
+		while (_cullingResults.try_dequeue(r))
 			spotList.push_back(r);
 
 		// handle the number of sample
 
 		auto w = _frame_buffer.width(); auto h = _frame_buffer.height();
-
-
 		glViewport(0, 0, w, h);
 
 		// we clear
@@ -145,119 +143,100 @@ namespace AGE
 			auto depth = ShadowMapCollection::getDepthBuffer(i++, w, h);
 
 			_frame_buffer.attachment(*depth.get(), GL_DEPTH_STENCIL_ATTACHMENT);
-			_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("light_matrix").set(spotLightPtr->_spotMatrix);
+			_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("light_matrix").set(spotLightPtr->getCommandOutput()._spotLightMatrix);
 			_programs[PROGRAM_BUFFERING]->get_resource<SamplerBuffer>("model_matrix_tbo").set(_positionBuffer);
 			auto matrixOffset = _programs[PROGRAM_BUFFERING]->get_resource<Vec1>("matrixOffset");
 
 			_positionBuffer->resetOffset();
 
+
 			std::shared_ptr<Painter> painter = nullptr;
 			Key<Vertices> verticesKey;
 
 			// draw for the spot light selected
-			auto &occluders = spotLightPtr->_commandBuffer;
+			auto &generator = spotLightPtr->getCommandOutput();
+			auto &occluders = generator._commands;
 			std::size_t occluderCounter = 0;
 
-			auto matrixBegin = spotLightPtr->matrixOffset;
-			auto matrixEnd = spotLightPtr->commandBufferSize - matrixBegin;
-			if (matrixEnd > _maxMatrixInstancied)
-				matrixEnd = _maxMatrixInstancied;
-			_positionBuffer->set((void*)(&occluders[matrixBegin]), matrixEnd);
+			_positionBuffer->set((void*)(generator._datas.data()), generator._datas.size());
 
-			while (true)
+			while (occluderCounter < occluders.size())
 			{
 				auto &current = occluders[occluderCounter];
-				if (current.isKeyHolder() == false)
-				{
-					break;
-				}
 
 				Key<Painter> painterKey;
-				UnConcatenateKey(current.keyHolder.key, painterKey, verticesKey);
-				auto size = current.keyHolder.size;
-				auto offset = current.keyHolder.offset - matrixBegin;
+				UnConcatenateKey(current.verticeKey, painterKey, verticesKey);
 
 				if (painterKey.isValid())
 				{
 					painter = _painterManager->get_painter(painterKey);
 					painter->instanciedDrawBegin(_programs[PROGRAM_BUFFERING]);
-					matrixOffset.set(float(offset));
-					painter->instanciedDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], verticesKey, size);
+					matrixOffset.set(float(current.from));
+					painter->instanciedDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], verticesKey, current.size);
 					painter->instanciedDrawEnd();
 				}
 				++occluderCounter;
 			}
-			_cullingResultsPool.enqueue(spotLightPtr);
+			// Important !
+			// After use, we have to recycle it ! Or
+			// we will leak
+			MeshOutput::RecycleOutput(spotLightPtr);
 		}
 
 		i = 0;
 		// we render skinned occluders
-		for (auto &spotLightPtr : spotList)
-		{
-			SCOPE_profile_gpu_i("Spotlight pass");
-			SCOPE_profile_cpu_i("RenderTimer", "Spotlight pass");
+		//for (auto &spotLightPtr : spotList)
+		//{
+		//	SCOPE_profile_gpu_i("Spotlight pass");
+		//	SCOPE_profile_cpu_i("RenderTimer", "Spotlight pass");
 
-			auto depth = ShadowMapCollection::getDepthBuffer(i++, w, h);
+		//	auto depth = ShadowMapCollection::getDepthBuffer(i++, w, h);
 
-			_frame_buffer.attachment(*depth.get(), GL_DEPTH_STENCIL_ATTACHMENT);
-			_programs[PROGRAM_BUFFERING_SKINNED]->get_resource<Mat4>("light_matrix").set(spotLightPtr->_spotMatrix);
-			auto matrixOffset = _programs[PROGRAM_BUFFERING_SKINNED]->get_resource<Vec1>("matrixOffset");
+		//	_frame_buffer.attachment(*depth.get(), GL_DEPTH_STENCIL_ATTACHMENT);
+		//	_programs[PROGRAM_BUFFERING_SKINNED]->get_resource<Mat4>("light_matrix").set(spotLightPtr->spot);
+		//	auto matrixOffset = _programs[PROGRAM_BUFFERING_SKINNED]->get_resource<Vec1>("matrixOffset");
 
-			//	_programs[PROGRAM_BUFFERING_SKINNED]->registerProperties(spotlight->globalProperties);
-			//	_programs[PROGRAM_BUFFERING_SKINNED]->updateNonInstanciedProperties(spotlight->globalProperties);
+		//	//	_programs[PROGRAM_BUFFERING_SKINNED]->registerProperties(spotlight->globalProperties);
+		//	//	_programs[PROGRAM_BUFFERING_SKINNED]->updateNonInstanciedProperties(spotlight->globalProperties);
 
-			std::shared_ptr<Painter> painter = nullptr;
-			std::shared_ptr<Painter> oldPainter = nullptr;
+		//	std::shared_ptr<Painter> painter = nullptr;
+		//	std::shared_ptr<Painter> oldPainter = nullptr;
 
-			for (auto &mesh : spotLightPtr->_skinnedBuffer)
-			{
-				//temporary
-				//todo, do not spawn entity while mesh is not loaded
-				//currently it's not safe, because the paiter key can be invalid
-				//during the first frames
-				if (mesh == nullptr)
-					continue;
-				auto meshPaint = mesh->getDatas();
-				if (meshPaint->getPainterKey().isValid())
-				{
-					painter = _painterManager->get_painter(meshPaint->getPainterKey());
-					if (painter != oldPainter)
-					{
-						if (oldPainter)
-						{
-							oldPainter->uniqueDrawEnd();
-						}
-						painter->uniqueDrawBegin(_programs[PROGRAM_BUFFERING_SKINNED]);
-					}
-					oldPainter = painter;
-					//@TOTO
-					matrixOffset.set(float(mesh->getSkinningIndex()));
-					painter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING_SKINNED], Properties(), meshPaint->getVerticesKey());
-				}
-			}
-			if (oldPainter)
-			{
-				oldPainter->uniqueDrawEnd();
-			}
-		}
+		//	for (auto &mesh : spotLightPtr->_skinnedBuffer)
+		//	{
+		//		//temporary
+		//		//todo, do not spawn entity while mesh is not loaded
+		//		//currently it's not safe, because the paiter key can be invalid
+		//		//during the first frames
+		//		if (mesh == nullptr)
+		//			continue;
+		//		auto meshPaint = mesh->getDatas();
+		//		if (meshPaint->getPainterKey().isValid())
+		//		{
+		//			painter = _painterManager->get_painter(meshPaint->getPainterKey());
+		//			if (painter != oldPainter)
+		//			{
+		//				if (oldPainter)
+		//				{
+		//					oldPainter->uniqueDrawEnd();
+		//				}
+		//				painter->uniqueDrawBegin(_programs[PROGRAM_BUFFERING_SKINNED]);
+		//			}
+		//			oldPainter = painter;
+		//			//@TOTO
+		//			matrixOffset.set(float(mesh->getSkinningIndex()));
+		//			painter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING_SKINNED], Properties(), meshPaint->getVerticesKey());
+		//		}
+		//	}
+		//	if (oldPainter)
+		//	{
+		//		oldPainter->uniqueDrawEnd();
+		//	}
+		//}
 	}
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void DeferredShadowBuffering::prepareRender(glm::mat4 spotlightMat, BFCBlockManagerFactory *bf, Frustum frustum, std::atomic_size_t *counter)
+	LFQueue<BasicCommandGeneration::MeshShadowOutput*>* DeferredShadowBuffering::getMeshResultQueue()
 	{
-		SCOPE_profile_cpu_i("RenderTimer", "Prepare render shadow");
-
-		ShadowCasterResult *result = nullptr;
-		if (_cullingResultsPool.try_dequeue(result) == false)
-		{
-			result = new ShadowCasterResult(&_cullerPool, &_skinnedCullerPool, &_cullingResultsPool);
-		}
-		result->prepareForComputation(spotlightMat);
-		result->cull(bf, frustum, counter);
-		_toDraw.enqueue(result);
+		return &_cullingResults;
 	}
-
-
 }

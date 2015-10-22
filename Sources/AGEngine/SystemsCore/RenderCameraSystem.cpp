@@ -196,41 +196,28 @@ namespace AGE
 				Frustum spotlightFrustum;
 				spotlightFrustum.setMatrix(spotViewProj);
 				
-				//// Draw spotlight frustum debug:
-				//glm::vec4 worldPos = glm::inverse(spotViewProj) * glm::vec4(-1, -1, -1, 1.0f);
-				//glm::vec3 aNear = glm::vec3(worldPos / worldPos.w);
-				//worldPos = glm::inverse(spotViewProj) * glm::vec4(-1, 1, -1, 1.0f);
-				//glm::vec3 bNear = glm::vec3(worldPos / worldPos.w);
-				//worldPos = glm::inverse(spotViewProj) * glm::vec4(1, 1, -1, 1.0f);
-				//glm::vec3 cNear = glm::vec3(worldPos / worldPos.w);
-				//worldPos = glm::inverse(spotViewProj) * glm::vec4(1, -1, -1, 1.0f);
-				//glm::vec3 dNear = glm::vec3(worldPos / worldPos.w);
-				//worldPos = glm::inverse(spotViewProj) * glm::vec4(-1, -1, 1, 1.0f);
-				//glm::vec3 aFar = glm::vec3(worldPos / worldPos.w);
-				//worldPos = glm::inverse(spotViewProj) * glm::vec4(-1, 1, 1, 1.0f);
-				//glm::vec3 bFar = glm::vec3(worldPos / worldPos.w);
-				//worldPos = glm::inverse(spotViewProj) * glm::vec4(1, 1, 1, 1.0f);
-				//glm::vec3 cFar = glm::vec3(worldPos / worldPos.w);
-				//worldPos = glm::inverse(spotViewProj) * glm::vec4(1, -1, 1, 1.0f);
-				//glm::vec3 dFar = glm::vec3(worldPos / worldPos.w);
-				//
-				//glm::vec3 color = glm::vec3(1, 0, 0);
-				//bool activateDepth = true;
-				//
-				//if (_drawDebugLines)
-				//{
-				//	TMQ::TaskManager::emplaceRenderTask<Commands::ToRender::Draw3DQuad>(aNear, bNear, cNear, dNear, color, activateDepth);
-				//	TMQ::TaskManager::emplaceRenderTask<Commands::ToRender::Draw3DQuad>(aFar, bFar, cFar, dFar, color, activateDepth);
-				//	TMQ::TaskManager::emplaceRenderTask<Commands::ToRender::Draw3DLine>(aNear, aFar, color, activateDepth);
-				//	TMQ::TaskManager::emplaceRenderTask<Commands::ToRender::Draw3DLine>(bNear, bFar, color, activateDepth);
-				//	TMQ::TaskManager::emplaceRenderTask<Commands::ToRender::Draw3DLine>(cNear, cFar, color, activateDepth);
-				//	TMQ::TaskManager::emplaceRenderTask<Commands::ToRender::Draw3DLine>(dNear, dFar, color, activateDepth);
-				//}
 
 				BFCBlockManagerFactory *bf = _scene->getBfcBlockManagerFactory();
 				if (DeferredShadowBuffering::instance)
 				{
-					DeferredShadowBuffering::instance->prepareRender(spotViewProj, bf, spotlightFrustum, &SPOT_COUNTER);
+					//We create a culler, with the culling rule "Frustum"
+					BFCCuller<BFCFrustumCuller> spotCuller;
+					//We pass infos for frustum culling
+					spotCuller.prepareForCulling(spotlightFrustum);
+					//We get an output of a specific type
+					//here it's for mesh for basic buffering pass
+					auto meshOutput = DeferredShadowBuffering::MeshOutput::GetNewOutput();
+					//We get the ptr of the queue where the output should be push at the end of the
+					//culling and preparation process
+					auto resultQueue = DeferredShadowBuffering::instance->getMeshResultQueue();
+					meshOutput->setResultQueue(resultQueue);
+					meshOutput->getCommandOutput()._spotLightMatrix = spotViewProj;
+					spotCuller.addOutput(BFCCullableType::CullableMesh, meshOutput);
+					auto counter = spotCuller.cull(bf);
+					while (counter->load() > 0)
+					{
+					}
+					//DeferredShadowBuffering::instance->prepareRender(spotViewProj, bf, spotlightFrustum, &SPOT_COUNTER);
 				}
 			}
 		}
@@ -316,10 +303,6 @@ namespace AGE
 
 			{
 				SCOPE_profile_cpu_i("Camera system", "Copy LFList to std");
-				//while (meshList.getSize() > 0)
-				//{
-				//	cameraList->meshs.push_back(((DRBMesh*)(meshList.pop()->getDrawable()))->getDatas());
-				//}
 
 				while (pointLightListToCull.getSize() > 0)
 				{
