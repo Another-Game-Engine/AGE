@@ -181,7 +181,8 @@ namespace AGE
 		std::list<std::shared_ptr<DRBSpotLightDrawableList>> spotLightList;
 		std::list<std::shared_ptr<DRBPointLightData>> pointLightList;
 
-		std::atomic_size_t SPOT_COUNTER = 0;
+		std::list<std::atomic_uint64_t*> spotCounters;
+		std::list<BFCCuller<BFCFrustumCuller>> spotCullers;
 		{
 			SCOPE_profile_cpu_i("Camera system", "Cull for spots");
 			for (auto &spotEntity : _spotLights.getCollection())
@@ -201,23 +202,30 @@ namespace AGE
 				if (DeferredShadowBuffering::instance)
 				{
 					//We create a culler, with the culling rule "Frustum"
-					BFCCuller<BFCFrustumCuller> spotCuller;
+					spotCullers.emplace_back();
+					auto &spotCuller = spotCullers.back();
+
 					//We pass infos for frustum culling
 					spotCuller.prepareForCulling(spotlightFrustum);
 					//We get an output of a specific type
 					//here it's for mesh for basic buffering pass
 					auto meshOutput = DeferredShadowBuffering::MeshOutput::GetNewOutput();
+					auto skinnedOutput = DeferredShadowBuffering::SkinnedOutput::GetNewOutput();
 					//We get the ptr of the queue where the output should be push at the end of the
 					//culling and preparation process
-					auto resultQueue = DeferredShadowBuffering::instance->getMeshResultQueue();
-					meshOutput->setResultQueue(resultQueue);
+					auto meshResultQueue = DeferredShadowBuffering::instance->getMeshResultQueue();
+					auto skinnedResultQueue = DeferredShadowBuffering::instance->getSkinnedResultQueue();
+					meshOutput->setResultQueue(meshResultQueue);
+					skinnedOutput->setResultQueue(skinnedResultQueue);
+
 					meshOutput->getCommandOutput()._spotLightMatrix = spotViewProj;
+					skinnedOutput->getCommandOutput()._spotLightMatrix = spotViewProj;
+
 					spotCuller.addOutput(BFCCullableType::CullableMesh, meshOutput);
+					spotCuller.addOutput(BFCCullableType::CullableSkinnedMesh, skinnedOutput);
+
 					auto counter = spotCuller.cull(bf);
-					while (counter->load() > 0)
-					{
-					}
-					//DeferredShadowBuffering::instance->prepareRender(spotViewProj, bf, spotlightFrustum, &SPOT_COUNTER);
+					spotCounters.push_back(counter);
 				}
 			}
 		}
@@ -233,8 +241,12 @@ namespace AGE
 		/// BLOCKING WAIT FOR SPOTS
 		{
 			SCOPE_profile_cpu_i("Camera system", "Cull for spots wait");
-			while (SPOT_COUNTER.load() > 0)
+			std::size_t tot = 1;
+			while (tot > 0)
 			{
+				tot = 0;
+				for (auto &e : spotCounters)
+					tot += e->load();
 			}
 		}
 

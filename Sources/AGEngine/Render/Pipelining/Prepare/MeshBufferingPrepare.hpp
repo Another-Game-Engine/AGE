@@ -47,6 +47,17 @@ namespace AGE
 			glm::mat4           matrix;
 			size_t              bonesIndex;
 		};
+		struct SkinnedShadowRawType
+		{
+			static void Treat(const BFCItem &item, BFCArray<SkinnedShadowRawType> &result);
+			static bool Compare(const SkinnedShadowRawType &a, const SkinnedShadowRawType &b);
+			static SkinnedShadowRawType Invalid();
+			bool operator!=(const SkinnedShadowRawType &o) const;
+
+			ConcatenatedKey     vertice;
+			glm::mat4           matrix;
+			size_t              bonesIndex;
+		};
 
 		struct MeshCommandOutput
 		{
@@ -115,6 +126,79 @@ namespace AGE
 			std::size_t            _dataIndex;
 			std::vector<Command>   _commands;
 			std::vector<glm::mat4> _datas;
+		};
+
+		struct SkinnedShadowCommandOutput
+		{
+
+			struct Command
+			{
+				std::size_t from;
+				std::size_t size;
+				ConcatenatedKey verticeKey;
+				std::size_t bonesIndex;
+			};
+
+			void begin()
+			{
+				_dataIndex = 0;
+				_commandIndex = 0;
+				_commands.clear();
+				_commands.reserve(124);
+				_datas.clear();
+				_datas.reserve(1024);
+				_currentCommandIndex = -1;
+			}
+
+			~SkinnedShadowCommandOutput()
+			{
+			}
+
+			SkinnedShadowCommandOutput()
+			{
+				begin();
+			}
+
+			void end()
+			{
+				if (_currentCommandIndex != -1)
+				{
+					Command *command = nullptr;
+					command = &_commands[_currentCommandIndex];
+					command->size = _datas.size() - command->from;
+				}
+			}
+
+			void setKeyInfos(const SkinnedShadowRawType &infos)
+			{
+				Command *command = nullptr;
+				if (_currentCommandIndex != -1)
+				{
+					command = &_commands[_currentCommandIndex];
+					command->size = _datas.size() - command->from;
+				}
+				_commands.push_back(Command());
+				command = &_commands.back();
+				_currentCommandIndex = _commands.size() - 1;
+
+				command->from = _datas.size();
+				command->verticeKey = infos.vertice;
+				command->bonesIndex = infos.bonesIndex;
+			}
+
+			void setCommandData(const SkinnedShadowRawType &infos)
+			{
+				_datas.push_back(infos.matrix);
+			}
+
+			std::size_t            _currentCommandIndex;
+
+			std::size_t            _commandIndex;
+			std::size_t            _dataIndex;
+			std::vector<Command>   _commands;
+			std::vector<glm::mat4> _datas;
+
+			glm::mat4              _spotLightMatrix;
 		};
 
 		struct MeshShadowCommandOutput
@@ -190,6 +274,7 @@ namespace AGE
 
 		typedef BFCOutput<BasicCommandGeneration::MeshRawType, 16384, MeshCommandOutput> MeshAndMaterialOutput;
 		typedef BFCOutput<BasicCommandGeneration::ShadowRawType, 16384, MeshShadowCommandOutput> MeshShadowOutput;
+		typedef BFCOutput<BasicCommandGeneration::SkinnedShadowRawType, 512, SkinnedShadowCommandOutput> SkinnedShadowOutput;
 	}
 }
 

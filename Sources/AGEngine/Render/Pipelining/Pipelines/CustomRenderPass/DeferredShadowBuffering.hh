@@ -30,7 +30,9 @@ namespace AGE
 		virtual void init();
 
 		LFQueue<BasicCommandGeneration::MeshShadowOutput*>* getMeshResultQueue();
+		LFQueue<BasicCommandGeneration::SkinnedShadowOutput*>* getSkinnedResultQueue();
 		typedef BasicCommandGeneration::MeshShadowOutput MeshOutput;
+		typedef BasicCommandGeneration::SkinnedShadowOutput SkinnedOutput;
 	protected:
 		virtual void renderPass(const DRBCameraDrawableList &infos);
 
@@ -41,6 +43,7 @@ namespace AGE
 		static const std::size_t _maxInstanciedShadowCaster = _maxMatrixInstancied;
 
 		LFQueue<BasicCommandGeneration::MeshShadowOutput*>          _cullingResults;
+		LFQueue<BasicCommandGeneration::SkinnedShadowOutput*>          _skinnedCullingResults;
 
 		//moodycamel::ConcurrentQueue<ShadowCasterResult*>       _toDraw;
 		//moodycamel::ConcurrentQueue<ShadowCasterResult*>       _cullingResultsPool;

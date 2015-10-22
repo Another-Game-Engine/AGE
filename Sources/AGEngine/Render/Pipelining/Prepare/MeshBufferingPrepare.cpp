@@ -110,5 +110,39 @@ namespace AGE
 		{
 			return (material != o.material || vertice != o.vertice || bonesIndex != o.bonesIndex);
 		}
+
+		//////////////////////////////////////////////////////////////////////////////////////
+
+		void SkinnedShadowRawType::Treat(const BFCItem &item, BFCArray<SkinnedShadowRawType> &result)
+		{
+			DRBMeshData * mesh = ((DRBSkinnedMesh*)(item.getDrawable()))->getDatas().get();
+			SkinnedShadowRawType h;
+			h.vertice = ConcatenateKey(mesh->getPainterKey(), mesh->getVerticesKey());
+			h.matrix = mesh->getTransformation();
+			h.bonesIndex = ((DRBSkinnedMesh*)(item.getDrawable()))->getSkinningIndex();
+			result.push(h);
+		}
+
+		bool SkinnedShadowRawType::Compare(const SkinnedShadowRawType &a, const SkinnedShadowRawType &b)
+		{
+			if (a.bonesIndex == b.bonesIndex)
+			{
+				return a.bonesIndex < b.bonesIndex;
+			}
+			return a.vertice < b.vertice;
+		}
+
+		SkinnedShadowRawType SkinnedShadowRawType::Invalid()
+		{
+			SkinnedShadowRawType invalid;
+			invalid.vertice = -1;
+			invalid.bonesIndex = 0;
+			return invalid;
+		}
+
+		bool SkinnedShadowRawType::operator!=(const SkinnedShadowRawType &o) const
+		{
+			return (vertice != o.vertice || bonesIndex != o.bonesIndex);
+		}
 	}
 }

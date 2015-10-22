@@ -69,7 +69,7 @@ namespace AGE
 #ifdef AGE_ENABLE_IMGUI
 		void setImguiDrawList(std::shared_ptr<AGE::RenderImgui> &list);
 #endif
-
+		std::shared_ptr<AGE::TextureBuffer> getBonesTexture() { return _bonesTexture; }
 	public:
 		std::shared_ptr<PaintingManager> paintingManager;
 		std::vector<std::unique_ptr<IRenderingPipeline>> pipelines;

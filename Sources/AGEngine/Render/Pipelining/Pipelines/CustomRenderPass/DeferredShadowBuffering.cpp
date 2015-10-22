@@ -111,10 +111,15 @@ namespace AGE
 
 		_programs[PROGRAM_BUFFERING]->use();
 
-		std::vector<MeshOutput*> spotList;
+		std::vector<MeshOutput*> spotListMesh;
 		MeshOutput *r = nullptr;
 		while (_cullingResults.try_dequeue(r))
-			spotList.push_back(r);
+			spotListMesh.push_back(r);
+
+		std::vector<SkinnedOutput*> spotListSkinned;
+		SkinnedOutput *s = nullptr;
+		while (_skinnedCullingResults.try_dequeue(s))
+			spotListSkinned.push_back(s);
 
 		// handle the number of sample
 
@@ -123,7 +128,7 @@ namespace AGE
 
 		// we clear
 		int i = 0;
-		for (auto &spotLightPtr : spotList)
+		for (auto &spotLightPtr : spotListMesh)
 		{
 			SCOPE_profile_gpu_i("Spotlight pass clear");
 			SCOPE_profile_cpu_i("RenderTimer", "Spotlight pass clear");
@@ -135,7 +140,7 @@ namespace AGE
 
 		i = 0;
 		// we render instancied occluders
-		for (auto &spotLightPtr : spotList)
+		for (auto &spotLightPtr : spotListMesh)
 		{
 			SCOPE_profile_gpu_i("Spotlight pass");
 			SCOPE_profile_cpu_i("RenderTimer", "Spotlight pass");
@@ -181,6 +186,59 @@ namespace AGE
 			// After use, we have to recycle it ! Or
 			// we will leak
 			MeshOutput::RecycleOutput(spotLightPtr);
+		}
+
+		i = 0;
+		// we render instancied occluders
+		for (auto &spotLightPtr : spotListSkinned)
+		{
+			SCOPE_profile_gpu_i("Spotlight pass");
+			SCOPE_profile_cpu_i("RenderTimer", "Spotlight pass");
+
+			auto depth = ShadowMapCollection::getDepthBuffer(i++, w, h);
+
+			_frame_buffer.attachment(*depth.get(), GL_DEPTH_STENCIL_ATTACHMENT);
+			_programs[PROGRAM_BUFFERING_SKINNED]->get_resource<Mat4>("light_matrix").set(spotLightPtr->getCommandOutput()._spotLightMatrix);
+			_programs[PROGRAM_BUFFERING_SKINNED]->get_resource<SamplerBuffer>("model_matrix_tbo").set(_positionBuffer);
+			_programs[PROGRAM_BUFFERING_SKINNED]->get_resource<SamplerBuffer>("bones_matrix_tbo").set(GetRenderThread()->getBonesTexture());
+			auto matrixOffset = _programs[PROGRAM_BUFFERING_SKINNED]->get_resource<Vec1>("matrixOffset");
+			auto bonesOffset = _programs[PROGRAM_BUFFERING_SKINNED]->get_resource<Vec1>("bonesOffset");
+
+			_positionBuffer->resetOffset();
+
+
+			std::shared_ptr<Painter> painter = nullptr;
+			Key<Vertices> verticesKey;
+
+			// draw for the spot light selected
+			auto &generator = spotLightPtr->getCommandOutput();
+			auto &occluders = generator._commands;
+			std::size_t occluderCounter = 0;
+
+			_positionBuffer->set((void*)(generator._datas.data()), generator._datas.size() > _maxInstanciedShadowCaster ? _maxInstanciedShadowCaster : generator._datas.size());
+
+			while (occluderCounter < occluders.size())
+			{
+				auto &current = occluders[occluderCounter];
+
+				Key<Painter> painterKey;
+				UnConcatenateKey(current.verticeKey, painterKey, verticesKey);
+
+				if (painterKey.isValid())
+				{
+					painter = _painterManager->get_painter(painterKey);
+					painter->instanciedDrawBegin(_programs[PROGRAM_BUFFERING_SKINNED]);
+					matrixOffset.set(float(current.from));
+					matrixOffset.set(float(current.bonesIndex));
+					painter->instanciedDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING_SKINNED], verticesKey, current.size);
+					painter->instanciedDrawEnd();
+				}
+				++occluderCounter;
+			}
+			// Important !
+			// After use, we have to recycle it ! Or
+			// we will leak
+			SkinnedOutput::RecycleOutput(spotLightPtr);
 		}
 
 		i = 0;
@@ -238,5 +296,10 @@ namespace AGE
 	LFQueue<BasicCommandGeneration::MeshShadowOutput*>* DeferredShadowBuffering::getMeshResultQueue()
 	{
 		return &_cullingResults;
+	}
+
+	LFQueue<BasicCommandGeneration::SkinnedShadowOutput*>* DeferredShadowBuffering::getSkinnedResultQueue()
+	{
+		return &_skinnedCullingResults;
 	}
 }
