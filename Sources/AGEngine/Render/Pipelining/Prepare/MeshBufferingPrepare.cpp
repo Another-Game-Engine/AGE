@@ -79,18 +79,17 @@ namespace AGE
 			h.vertice = ConcatenateKey(mesh->getPainterKey(), mesh->getVerticesKey());
 			h.material = ((DRBMesh*)(item.getDrawable()))->material;
 			h.matrix = mesh->getTransformation();
-			// TODO
-			//h.bones = ((DRBSkinnedMesh*)(item.getDrawable()))->getBones();
+			h.bonesIndex = ((DRBSkinnedMesh*)(item.getDrawable()))->getSkinningIndex();
 			result.push(h);
 		}
 
 		bool SkinnedMeshRawType::Compare(const SkinnedMeshRawType &a, const SkinnedMeshRawType &b)
 		{
-			if (a.bonesIndex == b.bonesIndex)
+			if (a.material == b.material)
 			{
-				if (a.material == b.material)
+				if (a.bonesIndex == b.bonesIndex)
 				{
-					return a.vertice < b.vertice;
+						return a.vertice < b.vertice;
 				}
 				return a.bonesIndex < b.bonesIndex;
 			}
@@ -102,7 +101,7 @@ namespace AGE
 			SkinnedMeshRawType invalid;
 			invalid.material = nullptr;
 			invalid.vertice = -1;
-			invalid.bonesIndex = 0;
+			invalid.bonesIndex = -1;
 			return invalid;
 		}
 
@@ -125,7 +124,7 @@ namespace AGE
 
 		bool SkinnedShadowRawType::Compare(const SkinnedShadowRawType &a, const SkinnedShadowRawType &b)
 		{
-			if (a.bonesIndex == b.bonesIndex)
+			if (a.vertice == b.vertice)
 			{
 				return a.bonesIndex < b.bonesIndex;
 			}

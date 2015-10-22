@@ -62,7 +62,8 @@ namespace AGE
 
 		_positionBuffer = createRenderPassOutput<TextureBuffer>(_maxInstanciedBillboard, GL_RGBA32F, sizeof(glm::mat4), GL_DYNAMIC_DRAW);
 
-		_programs[PROGRAM_BUFFERING_LIGHT]->get_resource<SamplerBuffer>("model_matrix_tbo")->addInstanciedAlias("model_matrix");
+		//@TOTO
+		//_programs[PROGRAM_BUFFERING_LIGHT]->get_resource<SamplerBuffer>("model_matrix_tbo")->addInstanciedAlias("model_matrix");
 	}
 
 	void DebugLightBillboards::renderPass(const DRBCameraDrawableList &infos)

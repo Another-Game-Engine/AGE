@@ -280,12 +280,17 @@ namespace AGE
 				//We get an output of a specific type
 				//here it's for mesh for basic buffering pass
 				auto meshOutput = DeferredBasicBuffering::MeshOutput::GetNewOutput();
+				auto skinnedMeshOutput = DeferredBasicBuffering::SkinnedMeshOutput::GetNewOutput();
 				cameraList->cameraMeshs = meshOutput;
+				cameraList->cameraSkinnedMeshs = skinnedMeshOutput;
 				//We get the ptr of the queue where the output should be push at the end of the
 				//culling and preparation process
-				auto resultQueue = DeferredBasicBuffering::instance->getMeshResultQueue();
-				meshOutput->setResultQueue(resultQueue);
+				auto meshResultQueue = DeferredBasicBuffering::instance->getMeshResultQueue();
+				auto skinnedMeshResultQueue = DeferredBasicBuffering::instance->getSkinnedMeshResultQueue();
+				meshOutput->setResultQueue(meshResultQueue);
+				skinnedMeshOutput->setResultQueue(skinnedMeshResultQueue);
 				cameraCuller.addOutput(BFCCullableType::CullableMesh, meshOutput);
+				cameraCuller.addOutput(BFCCullableType::CullableSkinnedMesh, skinnedMeshOutput);
 				auto counter = cameraCuller.cull(bf);
 				while (counter->load() > 0)
 				{ }

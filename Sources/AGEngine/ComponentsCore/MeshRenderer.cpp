@@ -86,15 +86,16 @@ namespace AGE
 
 		if (_drawableHandle.invalid())
 			return;
+		bool success = false;
 		for (auto &handle : _drawableHandle.getHandles())
 		{
 			if (handle.getPtr<DRBMesh>()->getDatas()->hadRenderMode(RenderModes::AGE_SKINNED))
 			{
 				handle.getPtr<DRBSkinnedMesh>()->setSkinningMatrix(size);
-				return;
+				success = true;
 			}
 		}
-		AGE_ASSERT(false, "You tried to update skinning matrix of a non skinned mesh.");
+		AGE_ASSERT(success, "You tried to update skinning matrix of a non skinned mesh.");
 	}
 
 	void MeshRenderer::_copyFrom(const ComponentBase *model)

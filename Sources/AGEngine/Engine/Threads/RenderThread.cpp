@@ -580,6 +580,7 @@ namespace AGE
 
 		registerCallback<AGE::Tasks::UploadBonesToGPU>([&](AGE::Tasks::UploadBonesToGPU& msg)
 		{
+			SCOPE_profile_cpu_i("!!!HACK!!!", "Upload bones matrix to GPU");
 			_bonesTexture->set(msg.bones->data(), msg.bones->size());
 		});
 

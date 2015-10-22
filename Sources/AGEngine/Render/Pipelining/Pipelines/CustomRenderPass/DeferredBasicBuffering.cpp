@@ -143,215 +143,127 @@ namespace AGE
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 		}
 
-		//auto &meshList = (std::list<std::shared_ptr<DRBMeshData>>&)(infos.meshs);
-
-		//if (OcclusionConfig::g_Occlusion_is_enabled)
-		//{
-		//	int occluderCounter = 0;
-		//	{
-		//		SCOPE_profile_gpu_i("Occluders pass");
-		//		SCOPE_profile_cpu_i("RenderTimer", "Occluders pass");
-
-		//		_programs[PROGRAM_BUFFERING]->use();
-		//		_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("projection_matrix").set(infos.cameraInfos.data.projection);
-		//		_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("view_matrix").set(infos.cameraInfos.view);
-
-		//		std::shared_ptr<Painter> painter = nullptr;
-		//		std::shared_ptr<Painter> oldPainter = nullptr;
-		//		for (auto &meshPaint : meshList)
-		//		{
-		//			//temporary
-		//			//todo, do not spawn entity while mesh is not loaded
-		//			//currently it's not safe, because the painter key can be invalid
-		//			//during the first frames
-		//			if (meshPaint->getPainterKey().isValid() && meshPaint->hadRenderMode(AGE_OCCLUDER) && meshPaint->hadRenderMode(AGE_SKINNED) == false)
-		//			{ // Pour le moment on rend les mesh skinned que en non occluder a l'arrache pour le test
-		//				painter = _painterManager->get_painter(meshPaint->getPainterKey());
-		//				if (painter != oldPainter)
-		//				{
-		//					if (oldPainter)
-		//					{
-		//						oldPainter->uniqueDrawEnd();
-		//					}
-		//					painter->uniqueDrawBegin(_programs[PROGRAM_BUFFERING]);
-		//				}
-		//				oldPainter = painter;
-		//				painter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], meshPaint->globalProperties, meshPaint->getVerticesKey());
-		//				++occluderCounter;
-		//			}
-		//		}
-		//		if (oldPainter)
-		//		{
-		//			oldPainter->uniqueDrawEnd();
-		//		}
-		//	}
-		//	if (occluderCounter > 0)
-		//	{
-		//		SCOPE_profile_gpu_i("Copy occlusion depth to CPU");
-		//		SCOPE_profile_cpu_i("RenderTimer", "Copy occlusion depth to CPU");
-
-		//		auto writableBuffer = GetRenderThread()->getDepthMapManager().getWritableMap();
-		//		auto mipmapLevel = GetRenderThread()->getDepthMapManager().getMipmapLevel();
-
-		//		if (writableBuffer.isValid())
-		//		{
-		//			writableBuffer.setMV(infos.cameraInfos.data.projection * infos.cameraInfos.view);
-		//			glActiveTexture(GL_TEXTURE0);
-		//			_depth->bind();
-		//			glGenerateMipmap(GL_TEXTURE_2D);
-		//			_depth->get(static_cast<GLint>(mipmapLevel), GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, writableBuffer.getWritableBuffer());
-		//			_depth->unbind();
-		//		}
-		//	}
-
-
-		//{
-		//	SCOPE_profile_gpu_i("Draw occluded objects");
-		//	SCOPE_profile_cpu_i("RenderTimer", "Draw occluded objects");
-
-		//	std::shared_ptr<Painter> painter = nullptr;
-		//	std::shared_ptr<Painter> oldPainter = nullptr;
-
-		//	for (auto &meshPaint : meshList)
-		//	{
-		//		//temporary
-		//		//todo, do not spawn entity while mesh is not loaded
-		//		//currently it's not safe, because the painter key can be invalid
-		//		//during the first frames
-		//		if (meshPaint->getPainterKey().isValid() && meshPaint->hadRenderMode(AGE_OCCLUDER) == false && meshPaint->hadRenderMode(AGE_SKINNED) == false)
-		//		{ // Pour le moment on rend les mesh skinned que en non occluder a l'arrache pour le test
-		//			painter = _painterManager->get_painter(meshPaint->getPainterKey());
-		//			if (painter != oldPainter)
-		//			{
-		//				if (oldPainter)
-		//				{
-		//					oldPainter->uniqueDrawEnd();
-		//				}
-		//				painter->uniqueDrawBegin(_programs[PROGRAM_BUFFERING]);
-		//			}
-		//			oldPainter = painter;
-		//			painter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], meshPaint->globalProperties, meshPaint->getVerticesKey());
-		//		}
-		//		else if (meshPaint->getPainterKey().isValid() && meshPaint->hadRenderMode(AGE_SKINNED) == true)
-		//		{
-		//			_programs[PROGRAM_BUFFERING_SKINNED]->use();
-		//			_programs[PROGRAM_BUFFERING_SKINNED]->get_resource<Mat4>("projection_matrix").set(infos.cameraInfos.data.projection);
-		//			_programs[PROGRAM_BUFFERING_SKINNED]->get_resource<Mat4>("view_matrix").set(infos.cameraInfos.view);
-
-		//			painter = _painterManager->get_painter(meshPaint->getPainterKey());
-		//			if (painter != oldPainter)
-		//			{
-		//				if (oldPainter)
-		//				{
-		//					oldPainter->uniqueDrawEnd();
-		//				}
-		//				painter->uniqueDrawBegin(_programs[PROGRAM_BUFFERING_SKINNED]);
-		//			}
-		//			oldPainter = painter;
-		//			painter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING_SKINNED], meshPaint->globalProperties, meshPaint->getVerticesKey());
-
-		//			_programs[PROGRAM_BUFFERING]->use();
-		//		}
-		//	}
-		//	if (oldPainter)
-		//	{
-		//		oldPainter->uniqueDrawEnd();
-		//	}
-		//}
-		//}
-		//else // !occlusion enabled
+		if (infos.cameraMeshs)
 		{
+			auto toDraw = infos.cameraMeshs;
+			SCOPE_profile_gpu_i("Draw all objects");
+			SCOPE_profile_cpu_i("RenderTimer", "Draw occluded objects");
+
+			_programs[PROGRAM_BUFFERING]->use();
+			_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("projection_matrix").set(infos.cameraInfos.data.projection);
+			_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("view_matrix").set(infos.cameraInfos.view);
+			_programs[PROGRAM_BUFFERING]->get_resource<SamplerBuffer>("model_matrix_tbo").set(_positionBuffer);
+			auto matrixOffset = _programs[PROGRAM_BUFFERING]->get_resource<Vec1>("matrixOffset");
+
+			_positionBuffer->resetOffset();
+
+			std::shared_ptr<Painter> painter = nullptr;
+			Key<Vertices> verticesKey;
+
+			// draw for the spot light selected
+			auto &generator = toDraw->getCommandOutput();
+			auto &occluders = generator._commands;
+			std::size_t occluderCounter = 0;
+
+			_positionBuffer->set((void*)(generator._datas.data()), generator._datas.size());
+
+			while (occluderCounter < occluders.size())
 			{
-				SCOPE_profile_gpu_i("Draw all objects");
-				SCOPE_profile_cpu_i("RenderTimer", "Draw occluded objects");
+				auto &current = occluders[occluderCounter];
 
-				_programs[PROGRAM_BUFFERING]->use();
-				_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("projection_matrix").set(infos.cameraInfos.data.projection);
-				_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("view_matrix").set(infos.cameraInfos.view);
-				_programs[PROGRAM_BUFFERING]->get_resource<SamplerBuffer>("model_matrix_tbo").set(_positionBuffer);
-				auto matrixOffset = _programs[PROGRAM_BUFFERING]->get_resource<Vec1>("matrixOffset");
+				Key<Painter> painterKey;
+				UnConcatenateKey(current.verticeKey, painterKey, verticesKey);
 
-					_positionBuffer->resetOffset();
+				if (painterKey.isValid())
+				{
+					_programs[PROGRAM_BUFFERING]->get_resource<Vec4>("diffuse_color").set(current.material->diffuse);
+					_programs[PROGRAM_BUFFERING]->get_resource<Sampler2D>("diffuse_map").set(current.material->diffuseTex);
+					_programs[PROGRAM_BUFFERING]->get_resource<Vec4>("specular_color").set(current.material->specular);
+					_programs[PROGRAM_BUFFERING]->get_resource<Vec1>("shininess_ratio").set(current.material->shininess);
+					_programs[PROGRAM_BUFFERING]->get_resource<Sampler2D>("normal_map").set(current.material->normalTex);
 
-					std::shared_ptr<Painter> painter = nullptr;
-					Key<Vertices> verticesKey;
-
-					// draw for the spot light selected
-					auto &generator = toDraw->getCommandOutput();
-					auto &occluders = generator._commands;
-					std::size_t occluderCounter = 0;
-
-					_positionBuffer->set((void*)(generator._datas.data()), generator._datas.size());
-
-					while (occluderCounter < occluders.size())
-					{
-						auto &current = occluders[occluderCounter];
-
-						Key<Painter> painterKey;
-						UnConcatenateKey(current.verticeKey, painterKey, verticesKey);
-
-						if (painterKey.isValid())
-						{
-							//@TOTO
-							_programs[PROGRAM_BUFFERING]->get_resource<Vec4>("diffuse_color").set(current.material->diffuse);
-							_programs[PROGRAM_BUFFERING]->get_resource<Sampler2D>("diffuse_map").set(current.material->diffuseTex);
-							_programs[PROGRAM_BUFFERING]->get_resource<Vec4>("specular_color").set(current.material->specular);
-							_programs[PROGRAM_BUFFERING]->get_resource<Vec1>("shininess_ratio").set(current.material->shininess);
-							_programs[PROGRAM_BUFFERING]->get_resource<Sampler2D>("normal_map").set(current.material->normalTex);
-
-							//_programs[PROGRAM_BUFFERING]->registerProperties(current.material->_properties);
-							//_programs[PROGRAM_BUFFERING]->updateProperties(current.material->_properties);
-							painter = _painterManager->get_painter(painterKey);
-							painter->instanciedDrawBegin(_programs[PROGRAM_BUFFERING]);
-							matrixOffset.set(float(current.from));
-							painter->instanciedDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], verticesKey, current.size);
-							painter->instanciedDrawEnd();
-						}
-						++occluderCounter;
-					}
-					// Important !
-					// After use, we have to recycle it ! Or
-					// we will leak
-					MeshOutput::RecycleOutput(toDraw);
+					painter = _painterManager->get_painter(painterKey);
+					painter->instanciedDrawBegin(_programs[PROGRAM_BUFFERING]);
+					matrixOffset.set(float(current.from));
+					painter->instanciedDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], verticesKey, current.size);
+					painter->instanciedDrawEnd();
 				}
-
-				//std::shared_ptr<Painter> painter = nullptr;
-				//std::shared_ptr<Painter> oldPainter = nullptr;
-
-				//for (auto &meshPaint : meshList)
-				//{
-				//	//temporary
-				//	//todo, do not spawn entity while mesh is not loaded
-				//	//currently it's not safe, because the paiter key can be invalid
-				//	//during the first frames
-				//	if (meshPaint->getPainterKey().isValid())
-				//	{
-				//		painter = _painterManager->get_painter(meshPaint->getPainterKey());
-				//		if (painter != oldPainter)
-				//		{
-				//			if (oldPainter)
-				//			{
-				//				oldPainter->uniqueDrawEnd();
-				//			}
-				//			painter->uniqueDrawBegin(_programs[PROGRAM_BUFFERING]);
-				//		}
-				//		oldPainter = painter;
-				//		painter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING], meshPaint->globalProperties, meshPaint->getVerticesKey());
-				//	}
-				//}
-				//if (oldPainter)
-				//{
-				//	oldPainter->uniqueDrawEnd();
-				//}
+				++occluderCounter;
 			}
+			// Important !
+			// After use, we have to recycle it ! Or
+			// we will leak
+			MeshOutput::RecycleOutput(toDraw);
 		}
 
-
-		LFQueue<BasicCommandGeneration::MeshAndMaterialOutput*>* DeferredBasicBuffering::getMeshResultQueue()
+		if (infos.cameraSkinnedMeshs)
 		{
-			return &_cullingResults;
-		}
+			auto toDraw = infos.cameraSkinnedMeshs;
 
+			SCOPE_profile_gpu_i("Draw all skinned objects");
+			SCOPE_profile_cpu_i("RenderTimer", "Draw skinned objects");
+
+			_programs[PROGRAM_BUFFERING_SKINNED]->use();
+			_programs[PROGRAM_BUFFERING_SKINNED]->get_resource<Mat4>("projection_matrix").set(infos.cameraInfos.data.projection);
+			_programs[PROGRAM_BUFFERING_SKINNED]->get_resource<Mat4>("view_matrix").set(infos.cameraInfos.view);
+			_programs[PROGRAM_BUFFERING_SKINNED]->get_resource<SamplerBuffer>("model_matrix_tbo").set(_positionBuffer);
+			_programs[PROGRAM_BUFFERING_SKINNED]->get_resource<SamplerBuffer>("bones_matrix_tbo").set(GetRenderThread()->getBonesTexture());
+			auto matrixOffset = _programs[PROGRAM_BUFFERING_SKINNED]->get_resource<Vec1>("matrixOffset");
+			auto bonesOffset = _programs[PROGRAM_BUFFERING_SKINNED]->get_resource<Vec1>("bonesOffset");
+
+			_positionBuffer->resetOffset();
+
+			std::shared_ptr<Painter> painter = nullptr;
+			Key<Vertices> verticesKey;
+
+			// draw for the spot light selected
+			auto &generator = toDraw->getCommandOutput();
+			auto &occluders = generator._commands;
+			std::size_t occluderCounter = 0;
+
+			_positionBuffer->set((void*)(generator._datas.data()), generator._datas.size());
+
+			while (occluderCounter < occluders.size())
+			{
+				auto &current = occluders[occluderCounter];
+
+				Key<Painter> painterKey;
+				UnConcatenateKey(current.verticeKey, painterKey, verticesKey);
+
+				if (painterKey.isValid())
+				{
+					_programs[PROGRAM_BUFFERING_SKINNED]->get_resource<Vec4>("diffuse_color").set(current.material->diffuse);
+					_programs[PROGRAM_BUFFERING_SKINNED]->get_resource<Sampler2D>("diffuse_map").set(current.material->diffuseTex);
+					_programs[PROGRAM_BUFFERING_SKINNED]->get_resource<Vec4>("specular_color").set(current.material->specular);
+					_programs[PROGRAM_BUFFERING_SKINNED]->get_resource<Vec1>("shininess_ratio").set(current.material->shininess);
+					_programs[PROGRAM_BUFFERING_SKINNED]->get_resource<Sampler2D>("normal_map").set(current.material->normalTex);
+
+					painter = _painterManager->get_painter(painterKey);
+					painter->instanciedDrawBegin(_programs[PROGRAM_BUFFERING_SKINNED]);
+					matrixOffset.set(float(current.from));
+					bonesOffset.set(float(current.bonesIndex));
+					painter->instanciedDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING_SKINNED], verticesKey, current.size);
+					painter->instanciedDrawEnd();
+				}
+				++occluderCounter;
+			}
+			// Important !
+			// After use, we have to recycle it ! Or
+			// we will leak
+			SkinnedMeshOutput::RecycleOutput(toDraw);
+		}
+	}
+
+
+	LFQueue<BasicCommandGeneration::MeshAndMaterialOutput*>* DeferredBasicBuffering::getMeshResultQueue()
+	{
+		return &_cullingResults;
+	}
+
+	LFQueue<BasicCommandGeneration::SkinnedMeshAndMaterialOutput*>* DeferredBasicBuffering::getSkinnedMeshResultQueue()
+	{
+		return &_skinnedCullingResults;
+	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

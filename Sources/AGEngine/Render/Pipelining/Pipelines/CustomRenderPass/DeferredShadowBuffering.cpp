@@ -229,7 +229,7 @@ namespace AGE
 					painter = _painterManager->get_painter(painterKey);
 					painter->instanciedDrawBegin(_programs[PROGRAM_BUFFERING_SKINNED]);
 					matrixOffset.set(float(current.from));
-					matrixOffset.set(float(current.bonesIndex));
+					bonesOffset.set(float(current.bonesIndex));
 					painter->instanciedDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING_SKINNED], verticesKey, current.size);
 					painter->instanciedDrawEnd();
 				}

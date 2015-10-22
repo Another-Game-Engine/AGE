@@ -32,7 +32,9 @@ namespace AGE
 		virtual ~DeferredBasicBuffering() = default;
 
 		LFQueue<BasicCommandGeneration::MeshAndMaterialOutput*>* getMeshResultQueue();
+		LFQueue<BasicCommandGeneration::SkinnedMeshAndMaterialOutput*>* getSkinnedMeshResultQueue();
 		typedef BasicCommandGeneration::MeshAndMaterialOutput MeshOutput;
+		typedef BasicCommandGeneration::SkinnedMeshAndMaterialOutput SkinnedMeshOutput;
 	protected:
 		virtual void renderPass(const DRBCameraDrawableList &infos);
 		std::shared_ptr<Texture2D> _depth;
@@ -46,5 +48,6 @@ namespace AGE
 		static const std::size_t _maxInstanciedShadowCaster = _maxMatrixInstancied;
 
 		LFQueue<BasicCommandGeneration::MeshAndMaterialOutput*>          _cullingResults;
+		LFQueue<BasicCommandGeneration::SkinnedMeshAndMaterialOutput*>   _skinnedCullingResults;
 	};
 }
