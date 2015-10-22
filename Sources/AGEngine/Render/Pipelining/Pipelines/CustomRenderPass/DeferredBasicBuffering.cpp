@@ -6,8 +6,12 @@
 #include <Render/Textures/Texture2D.hh>
 #include <Render/OpenGLTask/OpenGLState.hh>
 #include <Render/GeometryManagement/Painting/Painter.hh>
+
 #include <Render/ProgramResources/Types/Uniform/Mat4.hh>
 #include <Render/ProgramResources/Types/Uniform/Vec1.hh>
+#include <Render/ProgramResources/Types/Uniform/Vec4.hh>
+#include <Render/ProgramResources/Types/Uniform/Sampler/Sampler2D.hh>
+
 #include <Core/ConfigurationManager.hpp>
 #include <Core/Engine.hh>
 #include <Configuration.hpp>
@@ -288,8 +292,15 @@ namespace AGE
 
 						if (painterKey.isValid())
 						{
-							_programs[PROGRAM_BUFFERING]->registerProperties(current.material->_properties);
-							_programs[PROGRAM_BUFFERING]->updateProperties(current.material->_properties);
+							//@TOTO
+							_programs[PROGRAM_BUFFERING]->get_resource<Vec4>("diffuse_color").set(current.material->diffuse);
+							_programs[PROGRAM_BUFFERING]->get_resource<Sampler2D>("diffuse_map").set(current.material->diffuseTex);
+							_programs[PROGRAM_BUFFERING]->get_resource<Vec4>("specular_color").set(current.material->specular);
+							_programs[PROGRAM_BUFFERING]->get_resource<Vec1>("shininess_ratio").set(current.material->shininess);
+							_programs[PROGRAM_BUFFERING]->get_resource<Sampler2D>("normal_map").set(current.material->normalTex);
+
+							//_programs[PROGRAM_BUFFERING]->registerProperties(current.material->_properties);
+							//_programs[PROGRAM_BUFFERING]->updateProperties(current.material->_properties);
 							painter = _painterManager->get_painter(painterKey);
 							painter->instanciedDrawBegin(_programs[PROGRAM_BUFFERING]);
 							matrixOffset.set(float(current.from));

@@ -7,10 +7,8 @@ in VertexData {
 } VertexIn;
 
 uniform vec4 diffuse_color;
-uniform float diffuse_ratio;
 uniform sampler2D diffuse_map;
-uniform vec3 specular_color;
-uniform float specular_ratio;
+uniform vec4 specular_color;
 uniform float shininess_ratio;
 uniform sampler2D normal_map;
 
@@ -32,5 +30,5 @@ void main(void)
 	diffuse_frag = texture(diffuse_map, VertexIn.inter_texCoord) * diffuse_color; // diffuse_color * diffuse_ratio
 	vec3 normal = perturb_normal() * 0.5f + 0.5f;
 	normal_frag = vec4(normal, 1.0f);
-	specular_frag = vec4(vec3(specular_color), shininess_ratio) + vec4(1,0,1,1);
+	specular_frag = vec4(vec3(specular_color), shininess_ratio);
 }

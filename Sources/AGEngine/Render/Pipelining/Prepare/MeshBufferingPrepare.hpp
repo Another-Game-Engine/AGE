@@ -22,7 +22,7 @@ namespace AGE
 			bool operator!=(const MeshRawType &o) const;
 
 			ConcatenatedKey     vertice;
-			MaterialInstance    *material;
+			const MaterialInstance    *material;
 			glm::mat4           matrix;
 		};
 		struct ShadowRawType
@@ -43,7 +43,7 @@ namespace AGE
 			bool operator!=(const SkinnedMeshRawType &o) const;
 
 			ConcatenatedKey     vertice;
-			MaterialInstance    *material;
+			const MaterialInstance    *material;
 			glm::mat4           matrix;
 			size_t              bonesIndex;
 		};
@@ -56,7 +56,7 @@ namespace AGE
 				std::size_t from;
 				std::size_t size;
 				ConcatenatedKey verticeKey;
-				MaterialInstance *material;
+				const MaterialInstance *material;
 			};
 
 			void begin()
