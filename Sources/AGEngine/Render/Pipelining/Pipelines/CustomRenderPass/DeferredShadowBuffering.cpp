@@ -158,7 +158,7 @@ namespace AGE
 			auto &occluders = generator._commands;
 			std::size_t occluderCounter = 0;
 
-			_positionBuffer->set((void*)(generator._datas.data()), generator._datas.size());
+			_positionBuffer->set((void*)(generator._datas.data()), generator._datas.size() > _maxInstanciedShadowCaster ? _maxInstanciedShadowCaster : generator._datas.size());
 
 			while (occluderCounter < occluders.size())
 			{

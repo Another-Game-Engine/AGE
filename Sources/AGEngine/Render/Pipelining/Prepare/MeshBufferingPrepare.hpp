@@ -136,7 +136,6 @@ namespace AGE
 				_datas.clear();
 				_datas.reserve(1024);
 				_currentCommandIndex = -1;
-				_currentDataIndex = -1;
 			}
 
 			~MeshShadowCommandOutput()
@@ -154,7 +153,7 @@ namespace AGE
 				{
 					Command *command = nullptr;
 					command = &_commands[_currentCommandIndex];
-					command->size = _currentDataIndex - command->from;
+					command->size = _datas.size() - command->from;
 				}
 			}
 
@@ -164,24 +163,22 @@ namespace AGE
 				if (_currentCommandIndex != -1)
 				{
 					command = &_commands[_currentCommandIndex];
-					command->size = _currentDataIndex - command->from;
+					command->size = _datas.size() - command->from;
 				}
 				_commands.push_back(Command());
 				command = &_commands.back();
 				_currentCommandIndex = _commands.size() - 1;
 
-				command->from = _currentCommandIndex;
+				command->from = _datas.size();
 				command->verticeKey = infos.vertice;
 			}
 
 			void setCommandData(const ShadowRawType &infos)
 			{
 				_datas.push_back(infos.matrix);
-				++_currentDataIndex;
 			}
 
 			std::size_t            _currentCommandIndex;
-			std::size_t            _currentDataIndex;
 
 			std::size_t            _commandIndex;
 			std::size_t            _dataIndex;
