@@ -43,7 +43,7 @@ namespace AGE
 	{
 	public:
 		IBFCOutput();
-		void treatCulledChunk(const BFCCullArray &array);
+		void treatCulledChunk(const BFCCullArray *array);
 		void treatCulledResult();
 		void setNumberOfBlocks(const std::size_t number);
 
@@ -54,7 +54,7 @@ namespace AGE
 			_resultQueue = (LFQueue<IBFCOutput*>*)(resultQueue);
 		}
 
-		virtual void _treatCulledChunk(const BFCCullArray &array) = 0;
+		virtual void _treatCulledChunk(const BFCCullArray *array) = 0;
 		virtual void _treatCulledResult() = 0;
 	protected:
 		std::atomic_size_t  _counter;
@@ -80,32 +80,37 @@ namespace AGE
 			_resultQueue = nullptr;
 		}
 
-		virtual void _treatCulledChunk(const BFCCullArray &array)
+		virtual void _treatCulledChunk(const BFCCullArray *array)
 		{
-			BFCOutputChunk *chunk = nullptr;
-			if (_chunckQueue.try_dequeue(chunk) == false)
+			if (array)
 			{
-				chunk = new BFCOutputChunk();
-			}
-			chunk->reset();
+				BFCOutputChunk *chunk = nullptr;
 
-			for (ItemID i = 0; i < array.size(); ++i)
-			{
-				RawInfosType::Treat(array[i], chunk->rawChunck);
-			}
+				if (_chunckQueue.try_dequeue(chunk) == false)
+				{
+					chunk = new BFCOutputChunk();
+				}
+				chunk->reset();
 
-			if (chunk->rawChunck.size() > 0)
-			{
-				std::sort(chunk->rawChunck.data(), (chunk->rawChunck.data() + chunk->rawChunck.size()), RawInfosType::Compare);
+				for (ItemID i = 0; i < array->size(); ++i)
+				{
+					RawInfosType::Treat((*array)[i], chunk->rawChunck);
+				}
+
+				if (chunk->rawChunck.size() > 0)
+				{
+					std::sort(chunk->rawChunck.data(), (chunk->rawChunck.data() + chunk->rawChunck.size()), RawInfosType::Compare);
+				}
+				mergeChunck(chunk);
 			}
-			mergeChunck(chunk);
 		}
 
 		virtual void _treatCulledResult()
 		{
-			std::sort(_rawInfos.data(), _rawInfos.data() + _rawInfos.size(), RawInfosType::Compare);
 			if (_rawInfos.size() != 0)
 			{
+				std::sort(_rawInfos.data(), _rawInfos.data() + _rawInfos.size(), RawInfosType::Compare);
+
 				std::size_t max = _rawInfos.size();
 				std::size_t i = 0;
 
@@ -129,8 +134,11 @@ namespace AGE
 
 		void mergeChunck(BFCOutputChunk *chunck)
 		{
-			_rawInfos.pushChunk(chunck->rawChunck.data(), chunck->rawChunck.size());
-			_chunckQueue.enqueue(chunck);
+			if (chunck)
+			{
+				_rawInfos.pushChunk(chunck->rawChunck.data(), chunck->rawChunck.size());
+				_chunckQueue.enqueue(chunck);
+			}
 		}
 
 		static BFCOutput *GetNewOutput()

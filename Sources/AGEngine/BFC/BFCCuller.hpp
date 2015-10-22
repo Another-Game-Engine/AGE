@@ -66,10 +66,14 @@ namespace AGE
 						// TODO make a global pool of culler
 						CullerType *culler = BFCCullerMethod<CullerType>::GetNewCullerMethod();
 						*culler = _culler;
-						factory->cullOnBlock(channel.first, *culler, i, 1, channel.second);
+						factory->cullOnBlock(channel.first, culler, i, 1, channel.second);
 						_counter.fetch_sub(1);
 						BFCCullerMethod<CullerType>::Recycle(culler);
 					});
+				}
+				if (blockNumber == 0)
+				{
+					factory->cullOnBlock<CullerType>(channel.first, nullptr, 0, 1, channel.second);
 				}
 			}
 			return &_counter;

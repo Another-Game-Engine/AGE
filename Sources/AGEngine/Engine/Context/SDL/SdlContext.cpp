@@ -44,7 +44,7 @@ namespace AGE
 	void SdlContext::swapContext()
 	{
 #ifdef AGE_ENABLE_PROFILING
-		MicroProfileFlip();
+		MicroProfileFlip(0);
 #endif
 		{
 			SCOPE_profile_cpu_i("RenderTimer", "swapContext");

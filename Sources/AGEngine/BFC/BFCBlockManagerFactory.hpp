@@ -33,7 +33,7 @@ namespace AGE
 		template <typename CullerType>
 		void cullOnBlock(
 			CullableTypeID channel
-			, CullerType &culler
+			, CullerType *culler
 			, std::size_t from
 			, std::size_t numberOfBlocks
 			, std::vector<IBFCOutput*> &outputs)
@@ -42,28 +42,28 @@ namespace AGE
 
 			AGE_ASSERT(channel < MaxCullableTypeID);
 
-			if (channel >= _managers.size())
+			if (channel < _managers.size())
 			{
-				return;
-			}
-			auto &manager = _managers[channel];
+				auto &manager = _managers[channel];
 
-			size_t i = 0;
-			while (i < numberOfBlocks)
-			{
-				auto blockId = from + i;
-				if (blockId >= manager._blocks.size())
-					break;
-				auto &block = manager._blocks[blockId];
-				for (auto &item : block->_items)
+				size_t i = 0;
+				while (i < numberOfBlocks)
 				{
-					culler.cullItem(item);
+					auto blockId = from + i;
+					if (blockId >= manager._blocks.size())
+						break;
+					auto &block = manager._blocks[blockId];
+					for (auto &item : block->_items)
+					{
+						culler->cullItem(item);
+					}
+					++i;
 				}
-				++i;
 			}
 			for (auto &output : outputs)
 			{
-				output->treatCulledChunk(culler.getArray());
+				auto array = (culler == nullptr ? nullptr : &culler->getArray());
+				output->treatCulledChunk(array);
 			}
 		}
 	private:
