@@ -199,52 +199,56 @@ namespace AGE
 		{
 			auto toDraw = infos.cameraSkinnedMeshs;
 
-			SCOPE_profile_gpu_i("Draw all skinned objects");
-			SCOPE_profile_cpu_i("RenderTimer", "Draw skinned objects");
-
-			_programs[PROGRAM_BUFFERING_SKINNED]->use();
-			_programs[PROGRAM_BUFFERING_SKINNED]->get_resource<Mat4>("projection_matrix").set(infos.cameraInfos.data.projection);
-			_programs[PROGRAM_BUFFERING_SKINNED]->get_resource<Mat4>("view_matrix").set(infos.cameraInfos.view);
-			_programs[PROGRAM_BUFFERING_SKINNED]->get_resource<SamplerBuffer>("model_matrix_tbo").set(_positionBuffer);
-			_programs[PROGRAM_BUFFERING_SKINNED]->get_resource<SamplerBuffer>("bones_matrix_tbo").set(GetRenderThread()->getBonesTexture());
-			auto matrixOffset = _programs[PROGRAM_BUFFERING_SKINNED]->get_resource<Vec1>("matrixOffset");
-			auto bonesOffset = _programs[PROGRAM_BUFFERING_SKINNED]->get_resource<Vec1>("bonesOffset");
-
-			_positionBuffer->resetOffset();
-
-			std::shared_ptr<Painter> painter = nullptr;
-			Key<Vertices> verticesKey;
-
-			// draw for the spot light selected
-			auto &generator = toDraw->getCommandOutput();
-			auto &occluders = generator._commands;
-			std::size_t occluderCounter = 0;
-
-			_positionBuffer->set((void*)(generator._datas.data()), generator._datas.size() > _maxMatrixInstancied ? _maxMatrixInstancied : generator._datas.size());
-
-			while (occluderCounter < occluders.size())
+			if (toDraw->getCommandOutput()._commands.size() > 0)
 			{
-				auto &current = occluders[occluderCounter];
 
-				Key<Painter> painterKey;
-				UnConcatenateKey(current.verticeKey, painterKey, verticesKey);
+				SCOPE_profile_gpu_i("Draw all skinned objects");
+				SCOPE_profile_cpu_i("RenderTimer", "Draw skinned objects");
 
-				if (painterKey.isValid())
+				_programs[PROGRAM_BUFFERING_SKINNED]->use();
+				_programs[PROGRAM_BUFFERING_SKINNED]->get_resource<Mat4>("projection_matrix").set(infos.cameraInfos.data.projection);
+				_programs[PROGRAM_BUFFERING_SKINNED]->get_resource<Mat4>("view_matrix").set(infos.cameraInfos.view);
+				_programs[PROGRAM_BUFFERING_SKINNED]->get_resource<SamplerBuffer>("model_matrix_tbo").set(_positionBuffer);
+				_programs[PROGRAM_BUFFERING_SKINNED]->get_resource<SamplerBuffer>("bones_matrix_tbo").set(GetRenderThread()->getBonesTexture());
+				auto matrixOffset = _programs[PROGRAM_BUFFERING_SKINNED]->get_resource<Vec1>("matrixOffset");
+				auto bonesOffset = _programs[PROGRAM_BUFFERING_SKINNED]->get_resource<Vec1>("bonesOffset");
+
+				_positionBuffer->resetOffset();
+
+				std::shared_ptr<Painter> painter = nullptr;
+				Key<Vertices> verticesKey;
+
+				// draw for the spot light selected
+				auto &generator = toDraw->getCommandOutput();
+				auto &occluders = generator._commands;
+				std::size_t occluderCounter = 0;
+
+				_positionBuffer->set((void*)(generator._datas.data()), generator._datas.size() > _maxMatrixInstancied ? _maxMatrixInstancied : generator._datas.size());
+
+				while (occluderCounter < occluders.size())
 				{
-					_programs[PROGRAM_BUFFERING_SKINNED]->get_resource<Vec4>("diffuse_color").set(current.material->diffuse);
-					_programs[PROGRAM_BUFFERING_SKINNED]->get_resource<Sampler2D>("diffuse_map").set(current.material->diffuseTex);
-					_programs[PROGRAM_BUFFERING_SKINNED]->get_resource<Vec4>("specular_color").set(current.material->specular);
-					_programs[PROGRAM_BUFFERING_SKINNED]->get_resource<Vec1>("shininess_ratio").set(current.material->shininess);
-					_programs[PROGRAM_BUFFERING_SKINNED]->get_resource<Sampler2D>("normal_map").set(current.material->normalTex);
+					auto &current = occluders[occluderCounter];
 
-					painter = _painterManager->get_painter(painterKey);
-					painter->instanciedDrawBegin(_programs[PROGRAM_BUFFERING_SKINNED]);
-					matrixOffset.set(float(current.from));
-					bonesOffset.set(float(current.bonesIndex));
-					painter->instanciedDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING_SKINNED], verticesKey, current.size);
-					painter->instanciedDrawEnd();
+					Key<Painter> painterKey;
+					UnConcatenateKey(current.verticeKey, painterKey, verticesKey);
+
+					if (painterKey.isValid())
+					{
+						_programs[PROGRAM_BUFFERING_SKINNED]->get_resource<Vec4>("diffuse_color").set(current.material->diffuse);
+						_programs[PROGRAM_BUFFERING_SKINNED]->get_resource<Sampler2D>("diffuse_map").set(current.material->diffuseTex);
+						_programs[PROGRAM_BUFFERING_SKINNED]->get_resource<Vec4>("specular_color").set(current.material->specular);
+						_programs[PROGRAM_BUFFERING_SKINNED]->get_resource<Vec1>("shininess_ratio").set(current.material->shininess);
+						_programs[PROGRAM_BUFFERING_SKINNED]->get_resource<Sampler2D>("normal_map").set(current.material->normalTex);
+
+						painter = _painterManager->get_painter(painterKey);
+						painter->instanciedDrawBegin(_programs[PROGRAM_BUFFERING_SKINNED]);
+						matrixOffset.set(float(current.from));
+						bonesOffset.set(float(current.bonesIndex));
+						painter->instanciedDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING_SKINNED], verticesKey, current.size);
+						painter->instanciedDrawEnd();
+					}
+					++occluderCounter;
 				}
-				++occluderCounter;
 			}
 			// Important !
 			// After use, we have to recycle it ! Or

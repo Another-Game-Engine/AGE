@@ -187,7 +187,7 @@ namespace AGE
 			SCOPE_profile_cpu_i("Camera system", "Cull for spots");
 			for (auto &spotEntity : _spotLights.getCollection())
 			{
-				SCOPE_profile_cpu_i("Camera system", "A");
+				SCOPE_profile_cpu_i("Camera system", "Spot");
 				auto spot = spotEntity->getComponent<SpotLightComponent>();
 				auto spotDrawableList = std::make_shared<DRBSpotLightDrawableList>();
 				spotDrawableList->spotLight = spot->getCullableHandle().getPtr<DRBSpotLight>()->getDatas();
@@ -198,39 +198,29 @@ namespace AGE
 				Frustum spotlightFrustum;
 				spotlightFrustum.setMatrix(spotViewProj);
 				
-				SCOPE_profile_cpu_i("Camera system", "B");
 				BFCBlockManagerFactory *bf = _scene->getBfcBlockManagerFactory();
 				if (DeferredShadowBuffering::instance)
 				{
 					//We create a culler, with the culling rule "Frustum"
 					spotCullers.emplace_back();
 					auto &spotCuller = spotCullers.back();
-					SCOPE_profile_cpu_i("Camera system", "C");
 					//We pass infos for frustum culling
 					spotCuller.prepareForCulling(spotlightFrustum);
 					//We get an output of a specific type
 					//here it's for mesh for basic buffering pass
-					SCOPE_profile_cpu_i("Camera system", "C1");
 					auto meshOutput = DeferredShadowBuffering::MeshOutput::GetNewOutput();
-					SCOPE_profile_cpu_i("Camera system", "C2");
 					auto skinnedOutput = DeferredShadowBuffering::SkinnedOutput::GetNewOutput();
 					//We get the ptr of the queue where the output should be push at the end of the
 					//culling and preparation process
-					SCOPE_profile_cpu_i("Camera system", "C3");
 					auto meshResultQueue = DeferredShadowBuffering::instance->getMeshResultQueue();
-					SCOPE_profile_cpu_i("Camera system", "C4");
 					auto skinnedResultQueue = DeferredShadowBuffering::instance->getSkinnedResultQueue();
-					SCOPE_profile_cpu_i("Camera system", "C5");
 					meshOutput->setResultQueue(meshResultQueue);
-					SCOPE_profile_cpu_i("Camera system", "C6");
 					skinnedOutput->setResultQueue(skinnedResultQueue);
-					SCOPE_profile_cpu_i("Camera system", "D");
 					meshOutput->getCommandOutput()._spotLightMatrix = spotViewProj;
 					skinnedOutput->getCommandOutput()._spotLightMatrix = spotViewProj;
 
 					spotCuller.addOutput(BFCCullableType::CullableMesh, meshOutput);
 					spotCuller.addOutput(BFCCullableType::CullableSkinnedMesh, skinnedOutput);
-					SCOPE_profile_cpu_i("Camera system", "E");
 					auto counter = spotCuller.cull(bf);
 					spotCounters.push_back(counter);
 				}
