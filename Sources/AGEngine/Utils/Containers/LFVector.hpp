@@ -24,29 +24,46 @@ namespace AGE
 		inline size_t const capacity() const { return _capacity; }
 		inline size_t const size() const { return _index; }
 		inline void         clear() { _index = 0; }
-		inline void         push(const T &object)
+		inline bool         push(const T &object)
 		{
 			std::size_t index = _index.fetch_add(1);
-			AGE_ASSERT(index < _capacity);
-			_array[index] = object;
-		}
-		inline bool         pushChunk(const T *data, std::size_t size)
-		{
-			std::size_t index = _index.fetch_add(size);
-			if (index + size >= _capacity)
+			if (index >= _capacity)
 			{
 				_index = _capacity;
 				return false;
 			}
-			memcpy(_array + index, data, size * sizeof(T));
+			_array[index] = object;
 			return true;
 		}
+		inline std::size_t         pushChunk(const T *data, std::size_t size)
+		{
+			std::size_t index = _index.fetch_add(size);
+			std::size_t availableSize = size;
+
+			if (index >= _capacity)
+			{
+				_index = _capacity;
+				return 0;
+			}
+			if (index + size >= _capacity)
+			{
+				_index = _capacity;
+				availableSize = _capacity - index;
+			}
+			memcpy(_array + index, data, availableSize * sizeof(T));
+			return availableSize;
+		}
 		template <typename ...Args>
-		inline void         emplace(Args... args)
+		inline bool         emplace(Args... args)
 		{
 			std::size_t index = _index.fetch_add(1);
-			AGE_ASSERT(index < _capacity);
+			if (index >= _capacity)
+			{
+				_index = _capacity;
+				return false;
+			}
 			_array[index] = T(args...);
+			return true;
 		}
 		T &operator[](const size_t i)
 		{

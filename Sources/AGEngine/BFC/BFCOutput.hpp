@@ -23,7 +23,7 @@ namespace AGE
 	// Example
 	struct EMPTY_BFCRawType
 	{
-		static void Treat(const BFCItem &, BFCArray<EMPTY_BFCRawType> &){}
+		static bool Treat(const BFCItem &, BFCArray<EMPTY_BFCRawType> &){}
 		static bool Compare(const EMPTY_BFCRawType &a, const EMPTY_BFCRawType &b){ return true; }
 		static EMPTY_BFCRawType Invalid() { return EMPTY_BFCRawType(); }
 		bool operator!=(const EMPTY_BFCRawType &o) { return true; }
@@ -94,7 +94,9 @@ namespace AGE
 
 				for (ItemID i = 0; i < array->size(); ++i)
 				{
-					RawInfosType::Treat((*array)[i], chunk->rawChunck);
+					// return false if the array is full
+					if (RawInfosType::Treat((*array)[i], chunk->rawChunck) == false)
+						break;
 				}
 
 				if (chunk->rawChunck.size() > 0)

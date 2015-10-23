@@ -16,7 +16,7 @@ namespace AGE
 	{
 		struct MeshRawType
 		{
-			static void Treat(const BFCItem &item, BFCArray<MeshRawType> &result);
+			static bool Treat(const BFCItem &item, BFCArray<MeshRawType> &result);
 			static bool Compare(const MeshRawType &a, const MeshRawType &b);
 			static MeshRawType Invalid();
 			bool operator!=(const MeshRawType &o) const;
@@ -27,7 +27,7 @@ namespace AGE
 		};
 		struct ShadowRawType
 		{
-			static void Treat(const BFCItem &item, BFCArray<ShadowRawType> &result);
+			static bool Treat(const BFCItem &item, BFCArray<ShadowRawType> &result);
 			static bool Compare(const ShadowRawType &a, const ShadowRawType &b);
 			static ShadowRawType Invalid();
 			bool operator!=(const ShadowRawType &o) const;
@@ -37,7 +37,7 @@ namespace AGE
 		};
 		struct SkinnedMeshRawType
 		{
-			static void Treat(const BFCItem &item, BFCArray<SkinnedMeshRawType> &result);
+			static bool Treat(const BFCItem &item, BFCArray<SkinnedMeshRawType> &result);
 			static bool Compare(const SkinnedMeshRawType &a, const SkinnedMeshRawType &b);
 			static SkinnedMeshRawType Invalid();
 			bool operator!=(const SkinnedMeshRawType &o) const;
@@ -49,7 +49,7 @@ namespace AGE
 		};
 		struct SkinnedShadowRawType
 		{
-			static void Treat(const BFCItem &item, BFCArray<SkinnedShadowRawType> &result);
+			static bool Treat(const BFCItem &item, BFCArray<SkinnedShadowRawType> &result);
 			static bool Compare(const SkinnedShadowRawType &a, const SkinnedShadowRawType &b);
 			static SkinnedShadowRawType Invalid();
 			bool operator!=(const SkinnedShadowRawType &o) const;

@@ -10,14 +10,14 @@ namespace AGE
 {	
 	namespace BasicCommandGeneration
 	{
-		void MeshRawType::Treat(const BFCItem &item, BFCArray<MeshRawType> &result)
+		bool MeshRawType::Treat(const BFCItem &item, BFCArray<MeshRawType> &result)
 		{
 			DRBMeshData * mesh = ((DRBMesh*)(item.getDrawable()))->getDatas().get();
 			MeshRawType h;
 			h.vertice = ConcatenateKey(mesh->getPainterKey(), mesh->getVerticesKey());
 			h.material = ((DRBMesh*)(item.getDrawable()))->material;
 			h.matrix = mesh->getTransformation();
-			result.push(h);
+			return result.push(h);
 		}
 
 		bool MeshRawType::Compare(const MeshRawType &a, const MeshRawType &b)
@@ -44,13 +44,13 @@ namespace AGE
 
 		//////////////////////////////////////////////////////////////////////////////////
 
-		void ShadowRawType::Treat(const BFCItem &item, BFCArray<ShadowRawType> &result)
+		bool ShadowRawType::Treat(const BFCItem &item, BFCArray<ShadowRawType> &result)
 		{
 			DRBMeshData * mesh = ((DRBMesh*)(item.getDrawable()))->getDatas().get();
 			ShadowRawType h;
 			h.vertice = ConcatenateKey(mesh->getPainterKey(), mesh->getVerticesKey());
 			h.matrix = mesh->getTransformation();
-			result.push(h);
+			return result.push(h);
 		}
 
 		bool ShadowRawType::Compare(const ShadowRawType &a, const ShadowRawType &b)
@@ -72,7 +72,7 @@ namespace AGE
 
 		//////////////////////////////////////////////////////////////////////////////////////
 
-		void SkinnedMeshRawType::Treat(const BFCItem &item, BFCArray<SkinnedMeshRawType> &result)
+		bool SkinnedMeshRawType::Treat(const BFCItem &item, BFCArray<SkinnedMeshRawType> &result)
 		{
 			DRBMeshData * mesh = ((DRBSkinnedMesh*)(item.getDrawable()))->getDatas().get();
 			SkinnedMeshRawType h;
@@ -80,7 +80,7 @@ namespace AGE
 			h.material = ((DRBMesh*)(item.getDrawable()))->material;
 			h.matrix = mesh->getTransformation();
 			h.bonesIndex = ((DRBSkinnedMesh*)(item.getDrawable()))->getSkinningIndex();
-			result.push(h);
+			return result.push(h);
 		}
 
 		bool SkinnedMeshRawType::Compare(const SkinnedMeshRawType &a, const SkinnedMeshRawType &b)
@@ -112,14 +112,14 @@ namespace AGE
 
 		//////////////////////////////////////////////////////////////////////////////////////
 
-		void SkinnedShadowRawType::Treat(const BFCItem &item, BFCArray<SkinnedShadowRawType> &result)
+		bool SkinnedShadowRawType::Treat(const BFCItem &item, BFCArray<SkinnedShadowRawType> &result)
 		{
 			DRBMeshData * mesh = ((DRBSkinnedMesh*)(item.getDrawable()))->getDatas().get();
 			SkinnedShadowRawType h;
 			h.vertice = ConcatenateKey(mesh->getPainterKey(), mesh->getVerticesKey());
 			h.matrix = mesh->getTransformation();
 			h.bonesIndex = ((DRBSkinnedMesh*)(item.getDrawable()))->getSkinningIndex();
-			result.push(h);
+			return result.push(h);
 		}
 
 		bool SkinnedShadowRawType::Compare(const SkinnedShadowRawType &a, const SkinnedShadowRawType &b)

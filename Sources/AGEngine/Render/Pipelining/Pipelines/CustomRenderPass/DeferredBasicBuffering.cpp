@@ -116,7 +116,6 @@ namespace AGE
 		_positionBuffer = createRenderPassOutput<TextureBuffer>(_maxInstanciedShadowCaster, GL_RGBA32F, _sizeofMatrix, GL_DYNAMIC_DRAW);
 
 	}
-
 	void DeferredBasicBuffering::renderPass(const DRBCameraDrawableList &infos)
 	{
 		auto toDraw = infos.cameraMeshs;
@@ -165,7 +164,7 @@ namespace AGE
 			auto &occluders = generator._commands;
 			std::size_t occluderCounter = 0;
 
-			_positionBuffer->set((void*)(generator._datas.data()), generator._datas.size());
+			_positionBuffer->set((void*)(generator._datas.data()), generator._datas.size() > _maxMatrixInstancied ? _maxMatrixInstancied : generator._datas.size());
 
 			while (occluderCounter < occluders.size())
 			{
@@ -221,7 +220,7 @@ namespace AGE
 			auto &occluders = generator._commands;
 			std::size_t occluderCounter = 0;
 
-			_positionBuffer->set((void*)(generator._datas.data()), generator._datas.size());
+			_positionBuffer->set((void*)(generator._datas.data()), generator._datas.size() > _maxMatrixInstancied ? _maxMatrixInstancied : generator._datas.size());
 
 			while (occluderCounter < occluders.size())
 			{
@@ -253,7 +252,6 @@ namespace AGE
 			SkinnedMeshOutput::RecycleOutput(toDraw);
 		}
 	}
-
 
 	LFQueue<BasicCommandGeneration::MeshAndMaterialOutput*>* DeferredBasicBuffering::getMeshResultQueue()
 	{

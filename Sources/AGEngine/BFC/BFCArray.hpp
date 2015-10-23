@@ -11,11 +11,16 @@ namespace AGE
 	class BFCArray
 	{
 	public:
-		inline void push(const T &item)
+		inline bool push(const T &item)
 		{
-			AGE_ASSERT(_index < MaxItemID);
+			if (_index >= MaxItemID)
+			{
+				_index = MaxItemID;
+				return false;
+			}
 
 			_array[_index++] = item;
+			return true;
 		}
 
 		inline T &operator[](const ItemID i)
