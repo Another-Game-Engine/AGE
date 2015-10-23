@@ -1,6 +1,8 @@
 #include <Render/ProgramResources/Types/Uniform/Sampler/SamplerBuffer.hh>
 #include <Render/Textures/TextureBuffer.hh>
 
+#include <iostream>
+
 namespace AGE
 {
 	SamplerBuffer::SamplerBuffer(GLint id, std::string &&name) :
