@@ -25,12 +25,14 @@ namespace AGE
 			{
 				CreateRenderContext(Engine *_engine);
 				Engine *engine;
+				virtual ~CreateRenderContext(){}
 			};
 
 			struct InitRenderPipelines: TMQ::FutureData < bool >
 			{
 				InitRenderPipelines(Engine *_engine);
 				Engine *engine;
+				virtual ~InitRenderPipelines(){}
 			};
 
 			struct ReloadShaders

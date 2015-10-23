@@ -32,6 +32,7 @@ namespace AGE
 
 		bool init(GLsizeiptr count, GLenum internal_format /*GL_R32F */, GLsizeiptr size, GLenum usage /* GL_STATIC_DRAW ...*/)
 		{
+			SCOPE_profile_cpu_function("TextureBuffer");
 			AGE_ASSERT(_bufferHandle == -1 && _textureHandle == -1 && _count == 0 && _size == 0 && _buffer == nullptr);
 			_count = count;
 			_size = size;
@@ -75,12 +76,14 @@ namespace AGE
 
 		void sendBuffer()
 		{
+			SCOPE_profile_cpu_function("TextureBuffer");
 			bindBuffer();
 			glBufferSubData(GL_TEXTURE_BUFFER, 0, _offset * _size, _buffer);
 		}
 
 		void set(GLvoid const *data, GLsizeiptr count)
 		{
+			SCOPE_profile_cpu_function("TextureBuffer");
 			AGE_ASSERT(count <= _count);
 			bindBuffer();
 			glBufferSubData(GL_TEXTURE_BUFFER, 0, _size * count, data);

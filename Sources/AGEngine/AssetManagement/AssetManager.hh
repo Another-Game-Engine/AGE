@@ -107,6 +107,7 @@ namespace AGE
 		{
 			std::function<AssetsLoadingResult()> function;
 			LoadAssetMessage(const std::function<AssetsLoadingResult()> &_function);
+			virtual ~LoadAssetMessage(){}
 		};
 
 	public:

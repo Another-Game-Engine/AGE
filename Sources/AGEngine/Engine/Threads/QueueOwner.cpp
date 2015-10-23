@@ -19,7 +19,6 @@ namespace AGE
 		{
 			return false;
 		}
-		task->_used = true;
 		return true;
 	}
 }
