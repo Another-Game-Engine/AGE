@@ -20,7 +20,6 @@ namespace AGE
 			return false;
 		}
 		task->_used = true;
-		delete task;
 		return true;
 	}
 }

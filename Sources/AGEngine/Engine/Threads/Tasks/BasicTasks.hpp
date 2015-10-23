@@ -33,6 +33,10 @@ namespace AGE
 				{
 
 				}
+				VoidFunction()
+				{
+
+				}
 				VoidFunction(std::function<void(void)> &&_function)
 					: function(std::move(_function))
 				{

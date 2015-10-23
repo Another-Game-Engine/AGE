@@ -59,17 +59,22 @@ namespace AGE
 				{
 					output->setNumberOfBlocks(blockNumber);
 				}
-				for (std::size_t i = 0; i < blockNumber; ++i)
+				if (blockNumber > 0)
 				{
-					TMQ::TaskManager::emplaceSharedTask<Tasks::Basic::VoidFunction>([factory, i, &channel, this]()
+					auto tasks = TMQ::TaskManager::allocSharedTasks<Tasks::Basic::VoidFunction>(blockNumber);
+					for (std::size_t i = 0; i < blockNumber; ++i)
 					{
-						// TODO make a global pool of culler
-						CullerType *culler = BFCCullerMethod<CullerType>::GetNewCullerMethod();
-						*culler = _culler;
-						factory->cullOnBlock(channel.first, culler, i, 1, channel.second);
-						_counter.fetch_sub(1);
-						BFCCullerMethod<CullerType>::Recycle(culler);
-					});
+						new (&tasks[i])TMQ::Message<Tasks::Basic::VoidFunction>([factory, i, &channel, this]()
+						{
+							// TODO make a global pool of culler
+							CullerType *culler = BFCCullerMethod<CullerType>::GetNewCullerMethod();
+							*culler = _culler;
+							factory->cullOnBlock(channel.first, culler, i, 1, channel.second);
+							_counter.fetch_sub(1);
+							BFCCullerMethod<CullerType>::Recycle(culler);
+						});
+					}
+					TMQ::TaskManager::pushAllocatedSharedTasks(tasks, blockNumber);
 				}
 				if (blockNumber == 0)
 				{

@@ -1,5 +1,5 @@
 #include "BFCOutput.hpp"
-
+#include "Utils/Profiler.hpp"
 namespace AGE
 {
 	IBFCOutput::IBFCOutput()
@@ -10,6 +10,8 @@ namespace AGE
 
 	void IBFCOutput::treatCulledChunk(const BFCCullArray *array)
 	{
+		SCOPE_profile_cpu_function("BFC");
+
 		_treatCulledChunk(array);
 		std::size_t count = _counter.fetch_sub(1);
 		// equal one when have cull stuff
@@ -22,6 +24,8 @@ namespace AGE
 
 	void IBFCOutput::treatCulledResult()
 	{
+		SCOPE_profile_cpu_function("BFC");
+
 		_treatCulledResult();
 		_resultQueue->enqueue(this);
 	}

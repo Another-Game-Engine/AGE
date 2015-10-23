@@ -2,6 +2,8 @@
 
 #include <TMQ/message.hpp>
 
+using namespace TMQ;
+
 namespace AGE
 {
 	struct ICallbackContainer
@@ -26,11 +28,13 @@ namespace AGE
 		{
 			_isValid = true;
 		}
-
 		virtual void operator()(TMQ::MessageBase *m)
 		{
 			assert(isValid());
-			function(static_cast<TMQ::Message<T>*>(m)->_data);
+			auto message = static_cast<TMQ::Message<T>*>(m);
+			T copy = message->_data;
+			message->~Message<T>();
+			function(copy);
 		}
 		virtual ~CallbackContainer(){}
 
