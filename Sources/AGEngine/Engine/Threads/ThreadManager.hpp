@@ -22,7 +22,6 @@ namespace AGE
 	class ThreadManager
 	{
 	public:
-		Thread *getCurrentThread() const;
 		MainThread *getMainThread() const;
 		RenderThread *getRenderThread() const;
 		Engine *createEngine();
@@ -55,8 +54,12 @@ namespace AGE
 
 	ThreadManager *GetThreadManager();
 	Thread *CurrentThread();
+	void SetCurrentThread(Thread *);
 	MainThread *GetMainThread();
 	RenderThread *GetRenderThread();
+	bool IsMainThread();
+	bool IsRenderThread();
+
 	bool InitAGE();
 	void ExitAGE();
 }

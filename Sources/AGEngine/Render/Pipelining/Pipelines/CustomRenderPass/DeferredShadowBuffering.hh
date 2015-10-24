@@ -43,11 +43,6 @@ namespace AGE
 		static const std::size_t _maxInstanciedShadowCaster = _maxMatrixInstancied;
 
 		LFQueue<BasicCommandGeneration::MeshShadowOutput*>          _cullingResults;
-		LFQueue<BasicCommandGeneration::SkinnedShadowOutput*>          _skinnedCullingResults;
-
-		//moodycamel::ConcurrentQueue<ShadowCasterResult*>       _toDraw;
-		//moodycamel::ConcurrentQueue<ShadowCasterResult*>       _cullingResultsPool;
-		//moodycamel::ConcurrentQueue<ShadowCasterBFCCallback*>  _cullerPool;
-		//moodycamel::ConcurrentQueue<SkinnedShadowCasterBFCCallback*>  _skinnedCullerPool;
+		LFQueue<BasicCommandGeneration::SkinnedShadowOutput*>       _skinnedCullingResults;
 	};
 }

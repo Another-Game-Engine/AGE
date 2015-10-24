@@ -23,6 +23,7 @@ namespace AGE
 	{
 		_systemId = std::this_thread::get_id().hash();
 		Singleton<ThreadManager>::getInstance()->registerThreadId(_systemId, _id);
+		SetCurrentThread(this);
 		return _id;
 	}
 

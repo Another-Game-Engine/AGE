@@ -14,7 +14,7 @@ namespace AGE
 		, _isInstanciedDraw(false)
 	{
 		// to be sure that this function is only called in render thread
-		AGE_ASSERT(GetThreadManager()->getCurrentThread() == (AGE::Thread*)GetRenderThread());
+		AGE_ASSERT(CurrentThread() == (AGE::Thread*)GetRenderThread());
 	}
 
 	Painter::Painter(Painter &&move) :
@@ -24,7 +24,7 @@ namespace AGE
 		, _isInstanciedDraw(std::move(move._isInstanciedDraw))
 	{
 		// to be sure that this function is only called in render thread
-		AGE_ASSERT(GetThreadManager()->getCurrentThread() == (AGE::Thread*)GetRenderThread());
+		AGE_ASSERT(CurrentThread() == (AGE::Thread*)GetRenderThread());
 	}
 
 	Key<Vertices> Painter::add_vertices(size_t nbrVertex, size_t nbrIndices)
@@ -32,7 +32,7 @@ namespace AGE
 		SCOPE_profile_cpu_function("PainterTimer");
 
 		// to be sure that this function is only called in render thread
-		AGE_ASSERT(GetThreadManager()->getCurrentThread() == (AGE::Thread*)GetRenderThread());
+		AGE_ASSERT(CurrentThread() == (AGE::Thread*)GetRenderThread());
 
 		auto offset = 0ull;
 		for (auto &vertices : _vertices) {
@@ -48,7 +48,7 @@ namespace AGE
 		SCOPE_profile_cpu_function("PainterTimer");
 
 		// to be sure that this function is only called in render thread
-		AGE_ASSERT(GetThreadManager()->getCurrentThread() == (AGE::Thread*)GetRenderThread());
+		AGE_ASSERT(CurrentThread() == (AGE::Thread*)GetRenderThread());
 
 		if (!key.isValid())
 		{
@@ -71,7 +71,7 @@ namespace AGE
 		SCOPE_profile_cpu_function("PainterTimer");
 
 		// to be sure that this function is only called in render thread
-		AGE_ASSERT(GetThreadManager()->getCurrentThread() == (AGE::Thread*)GetRenderThread());
+		AGE_ASSERT(CurrentThread() == (AGE::Thread*)GetRenderThread());
 
 		if (!key.isValid())
 		{
@@ -85,7 +85,7 @@ namespace AGE
 		SCOPE_profile_gpu_i("Draw");
 		SCOPE_profile_cpu_function("PainterTimer");
 		// to be sure that this function is only called in render thread
-		AGE_ASSERT(GetThreadManager()->getCurrentThread() == (AGE::Thread*)GetRenderThread());
+		AGE_ASSERT(CurrentThread() == (AGE::Thread*)GetRenderThread());
 		program->set_attributes(_buffer);
 		_buffer.bind();
 		_buffer.update();
@@ -117,7 +117,7 @@ namespace AGE
 		AGE_ASSERT(_isInUniqueDraw);
 
 		// to be sure that this function is only called in render thread
-		AGE_ASSERT(GetThreadManager()->getCurrentThread() == (AGE::Thread*)GetRenderThread());
+		AGE_ASSERT(CurrentThread() == (AGE::Thread*)GetRenderThread());
 
 		program->registerProperties(properties);
 		program->updateProperties(properties);
@@ -137,7 +137,7 @@ namespace AGE
 		AGE_ASSERT(_isInstanciedDraw);
 
 		// to be sure that this function is only called in render thread
-		AGE_ASSERT(GetThreadManager()->getCurrentThread() == (AGE::Thread*)GetRenderThread());
+		AGE_ASSERT(CurrentThread() == (AGE::Thread*)GetRenderThread());
 
 		program->update();
 		// TODO: Fix that properly! @Dorian
@@ -200,7 +200,7 @@ namespace AGE
 		SCOPE_profile_cpu_function("PainterTimer");
 
 		// to be sure that this function is only called in render thread
-		AGE_ASSERT(GetThreadManager()->getCurrentThread() == (AGE::Thread*)GetRenderThread());
+		AGE_ASSERT(CurrentThread() == (AGE::Thread*)GetRenderThread());
 
 		auto &types_buffer = _buffer.get_types();
 		if (types.size() != types_buffer.size()) {

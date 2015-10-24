@@ -10,6 +10,8 @@
 
 namespace AGE
 {
+	__declspec(thread) static AGE::Thread *g_currentThread = nullptr;
+
 	ThreadManager::ThreadManager()
 		: _engine(nullptr)
 	{
@@ -93,23 +95,6 @@ namespace AGE
 		_threadIdReference[type] = systemHash;
 	}
 
-	Thread *ThreadManager::getCurrentThread() const
-	{
-		auto hash = std::this_thread::get_id().hash();
-		std::size_t id = -1;
-		for (std::size_t i = 0; i < _threadIdReference.size(); ++i)
-		{
-			id = _threadIdReference[i];
-			if (id == hash)
-			{
-				assert(_threads[i] != nullptr);
-				return _threads[i];
-			}
-		}
-		assert(false);
-		return nullptr;
-	}
-
 	Engine *ThreadManager::createEngine()
 	{
 		_engine = getMainThread()->createEngine();
@@ -153,7 +138,13 @@ namespace AGE
 
 	Thread *CurrentThread()
 	{
-		return Singleton<ThreadManager>::getInstance()->getCurrentThread();
+		return g_currentThread;
+	}
+
+	void SetCurrentThread(Thread *t)
+	{
+		AGE_ASSERT(g_currentThread == nullptr);
+		g_currentThread = t;
 	}
 
 	MainThread *GetMainThread()
@@ -164,6 +155,16 @@ namespace AGE
 	RenderThread *GetRenderThread()
 	{
 		return Singleton<ThreadManager>::getInstance()->getRenderThread();
+	}
+
+	bool IsMainThread()
+	{
+		return (Singleton<ThreadManager>::getInstance()->getMainThread() == CurrentThread());
+	}
+
+	bool IsRenderThread()
+	{
+		return (Singleton<ThreadManager>::getInstance()->getRenderThread() == CurrentThread());
 	}
 
 	bool InitAGE()

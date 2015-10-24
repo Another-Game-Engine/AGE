@@ -56,7 +56,7 @@ namespace AGE
 	void RenderThread::_recompileShaders()
 	{
 		// to be sure that this function is only called in render thread
-		AGE_ASSERT(GetThreadManager()->getCurrentThread() == (AGE::Thread*)GetRenderThread());
+		AGE_ASSERT(CurrentThread() == (AGE::Thread*)GetRenderThread());
 
 		for (auto &e : pipelines)
 		{
@@ -71,7 +71,7 @@ namespace AGE
 	void RenderThread::_initPipelines()
 	{
 		// to be sure that this function is only called in render thread
-		AGE_ASSERT(GetThreadManager()->getCurrentThread() == (AGE::Thread*)GetRenderThread());
+		AGE_ASSERT(CurrentThread() == (AGE::Thread*)GetRenderThread());
 
 		for (auto &e : pipelines)
 		{
@@ -102,7 +102,7 @@ namespace AGE
 		};
 
 		// to be sure that this function is only called in render thread
-		AGE_ASSERT(GetThreadManager()->getCurrentThread() == (AGE::Thread*)GetRenderThread());
+		AGE_ASSERT(CurrentThread() == (AGE::Thread*)GetRenderThread());
 
 		if (SimpleGeometry::cubeMesh.verticesKey.isValid() &&
 			SimpleGeometry::cubeMesh.painterKey.isValid())
@@ -266,7 +266,7 @@ namespace AGE
 		};
 
 		// to be sure that this function is only called in render thread
-		AGE_ASSERT(GetThreadManager()->getCurrentThread() == (AGE::Thread*)GetRenderThread());
+		AGE_ASSERT(CurrentThread() == (AGE::Thread*)GetRenderThread());
 
 		if (SimpleGeometry::quadMesh.verticesKey.isValid() &&
 			SimpleGeometry::quadMesh.painterKey.isValid())
@@ -306,7 +306,7 @@ namespace AGE
 		std::vector<unsigned int> indices;
 
 		// to be sure that this function is only called in render thread
-		AGE_ASSERT(GetThreadManager()->getCurrentThread() == (AGE::Thread*)GetRenderThread());
+		AGE_ASSERT(CurrentThread() == (AGE::Thread*)GetRenderThread());
 
 		if (SimpleGeometry::icosphereMeshes[recursion].verticesKey.isValid() &&
 			SimpleGeometry::icosphereMeshes[recursion].painterKey.isValid())
