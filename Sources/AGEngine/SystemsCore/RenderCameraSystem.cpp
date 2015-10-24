@@ -203,7 +203,6 @@ namespace AGE
 		if (spotlightInfos != nullptr)
 		{
 			// we set camera infos
-			spotlightInfos->setCameraInfos(firstCameraComponent->getProjection(), firstCameraView);
 
 			SCOPE_profile_cpu_i("Camera system", "Cull for spots");
 			for (auto &spotEntity : _spotLights.getCollection())
@@ -217,7 +216,11 @@ namespace AGE
 				spotlightFrustum.setMatrix(spotViewProj);
 				
 				// we set spot infos
-				spotlightInfos->setSpotlightInfos(
+				auto output = spotlightInfos->createOutput();
+				
+				output.setCameraInfos(firstCameraComponent->getProjection(), firstCameraView);
+
+				auto &spotInfos = output.setSpotlightInfos(
 					spot->getPosition(),
 					spot->getAttenuation(),
 					spot->getDirection(),
@@ -235,14 +238,16 @@ namespace AGE
 				spotCuller.prepareForCulling(spotlightFrustum);
 				//We get an output of a specific type
 				//here it's for mesh for basic buffering pass
-				auto meshOutput = SpotlightRenderInfos::MeshOutput::GetNewOutput();
-				auto skinnedOutput = SpotlightRenderInfos::SkinnedOutput::GetNewOutput();
+
+				auto meshOutput = spotInfos.meshs;
+				auto skinnedOutput = spotInfos.skinnedMeshs;
 				//We get the ptr of the queue where the output should be push at the end of the
 				//culling and preparation process
-				auto meshResultQueue = spotlightInfos->getMeshResultQueue();
-				auto skinnedResultQueue = spotlightInfos->getSkinnedResultQueue();
-				meshOutput->setResultQueue(meshResultQueue);
-				skinnedOutput->setResultQueue(skinnedResultQueue);
+				
+				//auto meshResultQueue = spotlightInfos->getMeshResultQueue();
+				//auto skinnedResultQueue = spotlightInfos->getSkinnedResultQueue();
+				//meshOutput->setResultQueue(meshResultQueue);
+				//skinnedOutput->setResultQueue(skinnedResultQueue);
 				meshOutput->getCommandOutput()._spotLightMatrix = spotViewProj;
 				skinnedOutput->getCommandOutput()._spotLightMatrix = spotViewProj;
 

@@ -27,7 +27,8 @@ namespace AGE
 		SCOPE_profile_cpu_function("BFC");
 
 		_treatCulledResult();
-		_resultQueue->enqueue(this);
+		if (_resultQueue)
+			_resultQueue->enqueue(this);
 	}
 	
 	void IBFCOutput::setNumberOfBlocks(const std::size_t number)

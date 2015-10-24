@@ -10,6 +10,8 @@
 #include "Utils/Key.hh"
 
 #include <Render/Pipelining/Prepare/MeshBufferingPrepare.hpp>
+#include "Render\Pipelining\RenderInfos\SpotlightRenderInfos.hpp"
+
 
 // to remove
 #include "Utils/Debug.hpp"
@@ -84,6 +86,7 @@ namespace AGE
 
 	struct DRBCameraDrawableList
 	{
+		SpotlightRenderInfos::Output                  spotlightsOutput;
 		BasicCommandGeneration::MeshAndMaterialOutput *cameraMeshs = nullptr;
 		BasicCommandGeneration::SkinnedMeshAndMaterialOutput *cameraSkinnedMeshs = nullptr;
 
