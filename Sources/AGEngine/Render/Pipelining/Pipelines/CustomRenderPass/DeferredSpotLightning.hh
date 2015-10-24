@@ -7,6 +7,7 @@ namespace AGE
 {
 	class Texture2D;
 	class Program;
+	class IRenderingPipeline;
 
 	class DeferredSpotLightning : public FrameBufferRender
 	{
@@ -16,7 +17,8 @@ namespace AGE
 			std::shared_ptr<Texture2D> depth,
 			std::shared_ptr<Texture2D> specular,
 			std::shared_ptr<Texture2D> lightAccumulation,
-			std::shared_ptr<Texture2D> shinyAccumulation);
+			std::shared_ptr<Texture2D> shinyAccumulation,
+			IRenderingPipeline *pipeline);
 		virtual ~DeferredSpotLightning() = default;
 
 	protected:
@@ -28,6 +30,7 @@ namespace AGE
 		std::shared_ptr<Texture2D> _specularInput;
 		Key<Vertices> _quad;
 		Key<Painter> _quadPainter;
+		IRenderingPipeline *_pipeline;
 	};
 }
 

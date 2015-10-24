@@ -192,6 +192,7 @@ namespace AGE
 			// Important !
 			// After use, we have to recycle it ! Or
 			// we will leak
+			toDraw->reset();
 			MeshOutput::RecycleOutput(toDraw);
 		}
 
@@ -253,6 +254,7 @@ namespace AGE
 			// Important !
 			// After use, we have to recycle it ! Or
 			// we will leak
+			toDraw->reset();
 			SkinnedMeshOutput::RecycleOutput(toDraw);
 		}
 	}

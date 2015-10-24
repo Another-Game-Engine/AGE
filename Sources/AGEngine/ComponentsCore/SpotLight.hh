@@ -58,6 +58,10 @@ namespace AGE
 		inline float getExponent() const { return exponent; }
 
 		glm::mat4 updateShadowMatrix();
+		glm::vec3 getDirection() const;
+		glm::vec3 getColor() const;
+		glm::vec3 getPosition() const;
+		glm::vec3 getAttenuation() const;
 
 	private:
 		glm::vec4 color;

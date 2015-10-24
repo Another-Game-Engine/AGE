@@ -70,6 +70,11 @@ namespace AGE
 				const MaterialInstance *material;
 			};
 
+			void reset()
+			{
+				begin();
+			}
+
 			void begin()
 			{
 				_dataIndex = 0;
@@ -139,6 +144,11 @@ namespace AGE
 				const MaterialInstance *material;
 				std::size_t bonesIndex;
 			};
+
+			void reset()
+			{
+				begin();
+			}
 
 			void begin()
 			{
@@ -210,6 +220,11 @@ namespace AGE
 				std::size_t bonesIndex;
 			};
 
+			void reset()
+			{
+				begin();
+			}
+
 			void begin()
 			{
 				_dataIndex = 0;
@@ -227,7 +242,6 @@ namespace AGE
 
 			SkinnedShadowCommandOutput()
 			{
-				begin();
 			}
 
 			void end()
@@ -282,6 +296,11 @@ namespace AGE
 				ConcatenatedKey verticeKey;
 			};
 
+			void reset()
+			{
+				begin();
+			}
+
 			void begin()
 			{
 				_dataIndex = 0;
@@ -299,7 +318,6 @@ namespace AGE
 
 			MeshShadowCommandOutput()
 			{
-				begin();
 			}
 
 			void end()

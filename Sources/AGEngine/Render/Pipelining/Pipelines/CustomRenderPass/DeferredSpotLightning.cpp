@@ -18,6 +18,9 @@
 
 #include "ShadowMapCollection.hpp"
 
+#include <Render/Pipelining/Pipelines/IRenderingPipeline.hh>
+#include <Render/Pipelining/RenderInfos/SpotlightRenderInfos.hpp>
+
 #define DEFERRED_SHADING_SPOT_LIGHT_VERTEX "deferred_shading/deferred_shading_spot_light.vp"
 #define DEFERRED_SHADING_SPOT_LIGHT_FRAG "deferred_shading/deferred_shading_spot_light.fp"
 
@@ -34,9 +37,12 @@ namespace AGE
 		std::shared_ptr<Texture2D> depth,
 		std::shared_ptr<Texture2D> specular,
 		std::shared_ptr<Texture2D> lightAccumulation,
-		std::shared_ptr<Texture2D> shinyAccumulation) :
+		std::shared_ptr<Texture2D> shinyAccumulation,
+		IRenderingPipeline *pipeline) :
 		FrameBufferRender(screenSize.x, screenSize.y, painterManager)
 	{
+		_pipeline = pipeline;
+
 		push_storage_output(GL_COLOR_ATTACHMENT0, lightAccumulation);
 		push_storage_output(GL_COLOR_ATTACHMENT1, shinyAccumulation);
 		push_storage_output(GL_DEPTH_STENCIL_ATTACHMENT, depth);
@@ -64,23 +70,24 @@ namespace AGE
 
 	void DeferredSpotLightning::renderPass(const DRBCameraDrawableList &infos)
 	{
-		//@PROUT
 		SCOPE_profile_gpu_i("DeferredSpotLightning render pass");
 		SCOPE_profile_cpu_i("RenderTimer", "DeferredSpotLightning render pass");
 
-		glm::vec3 cameraPosition = -glm::transpose(glm::mat3(infos.cameraInfos.view)) * glm::vec3(infos.cameraInfos.view[3]);
+		if (_pipeline->getSpotlightRenderInfos()->getCameras().empty())
+			return;
 
-		{
-			SCOPE_profile_gpu_i("Overhead pipeline");
-			SCOPE_profile_cpu_i("RenderTimer", "Overhead pipeline");
-			_programs[PROGRAM_LIGHTNING]->use();
-			_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("projection_matrix").set(infos.cameraInfos.data.projection);
-			_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("view_matrix").set(infos.cameraInfos.view);
-			_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("normal_buffer").set(_normalInput);
-			_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("specular_buffer").set(_specularInput);
-			_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("depth_buffer").set(_depthInput);
-			_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("eye_pos").set(cameraPosition);
-		}
+		// Just one camera supported for the moment
+		auto &camera = _pipeline->getSpotlightRenderInfos()->getCameras().front();
+
+		glm::vec3 cameraPosition = -glm::transpose(glm::mat3(camera.view)) * glm::vec3(camera.view[3]);
+
+		_programs[PROGRAM_LIGHTNING]->use();
+		_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("projection_matrix").set(camera.projection);
+		_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("view_matrix").set(camera.view);
+		_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("normal_buffer").set(_normalInput);
+		_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("specular_buffer").set(_specularInput);
+		_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("depth_buffer").set(_depthInput);
+		_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("eye_pos").set(cameraPosition);
 
 		OpenGLState::glDisable(GL_CULL_FACE);
 		OpenGLState::glDisable(GL_DEPTH_TEST);
@@ -92,19 +99,24 @@ namespace AGE
 		OpenGLState::glBlendFunc(GL_ONE, GL_ONE);
 
 		auto painter = _painterManager->get_painter(_quadPainter);
-		//@CESAR_OPTIMIZE
 		int i = 0;
 		auto w = _frame_buffer.width(); auto h = _frame_buffer.height();
-		for (auto &spot : infos.spotLights)
+		for (auto &spot : _pipeline->getSpotlightRenderInfos()->getSpotlights())
 		{
-			auto &spotlight = (std::shared_ptr<DRBSpotLightData>&)(spot->spotLight);
-
 			auto depth = ShadowMapCollection::getDepthBuffer(i++, w, h);
-			// @PROUT todo to add in properties
+
 			_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("shadow_map").set(depth);
 
+			_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("position_light").set(spot.position);
+			_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("attenuation_light").set(spot.attenuation);
+			_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("direction_light").set(spot.direction);
+			_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("color_light").set(spot.color);
+			_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("light_matrix").set(spot.matrix);
+			_programs[PROGRAM_LIGHTNING]->get_resource<Vec1>("spot_cut_off").set(spot.cutOff);
+			_programs[PROGRAM_LIGHTNING]->get_resource<Vec1>("exponent_light").set(spot.exponent);
+
 			painter->uniqueDrawBegin(_programs[PROGRAM_LIGHTNING]);
-			painter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_LIGHTNING], spotlight->globalProperties, _quad);
+			painter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_LIGHTNING], Properties(), _quad);
 			painter->uniqueDrawEnd();
 		}
 	}

@@ -23,7 +23,13 @@ namespace AGE
 
 		struct Spotlight
 		{
-
+			glm::vec3 position;
+			glm::vec3 attenuation;
+			glm::vec3 direction;
+			glm::vec3 color;
+			glm::mat4 matrix;
+			float     cutOff;
+			float     exponent;
 		};
 
 		SpotlightRenderInfos();
@@ -35,6 +41,14 @@ namespace AGE
 		const std::vector<BasicCommandGeneration::MeshShadowOutput*> &getMeshs() const;
 		const std::vector<BasicCommandGeneration::SkinnedShadowOutput*> getSkinnedMeshs() const;
 		void setCameraInfos(const glm::mat4 &projection, const glm::mat4 &view);
+		void setSpotlightInfos(
+			const glm::vec3 &position,
+			const glm::vec3 &attenuation,
+			const glm::vec3 &direction,
+			const glm::vec3 &color,
+			const glm::mat4 &matrix,
+			const float &cutOff,
+			const float &exponent);
 		
 		// Call that after render preparation
 		void computeRenderInfos();

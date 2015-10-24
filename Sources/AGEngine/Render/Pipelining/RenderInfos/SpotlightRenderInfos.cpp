@@ -3,6 +3,8 @@
 #include "Utils/Debug.hpp"
 #include "Threads/ThreadManager.hpp"
 
+#include <Utils/Profiler.hpp>
+
 namespace AGE
 {
 	SpotlightRenderInfos::SpotlightRenderInfos()
@@ -55,9 +57,32 @@ namespace AGE
 		_cameraResults.enqueue(camera);
 	}
 
+	void SpotlightRenderInfos::setSpotlightInfos(
+		const glm::vec3 &position,
+		const glm::vec3 &attenuation,
+		const glm::vec3 &direction,
+		const glm::vec3 &color,
+		const glm::mat4 &matrix,
+		const float &cutOff,
+		const float &exponent)
+	{
+		AGE_ASSERT(IsMainThread());
+		Spotlight spot;
+		spot.position = position;
+		spot.attenuation = attenuation;
+		spot.direction = direction;
+		spot.color = color;
+		spot.matrix = matrix;
+		spot.cutOff = cutOff;
+		spot.exponent = exponent;
+		_spotlightResults.enqueue(spot);
+	}
+
 	// Call that after render preparation
 	void SpotlightRenderInfos::computeRenderInfos()
 	{
+		SCOPE_profile_cpu_function("RenderTimer");
+
 		AGE_ASSERT(IsRenderThread());
 
 		AGE_ASSERT(_meshs.empty());
@@ -93,18 +118,38 @@ namespace AGE
 	// Call that when the rendering is done
 	void SpotlightRenderInfos::clearRenderInfos()
 	{
+		SCOPE_profile_cpu_function("RenderTimer");
+
 		AGE_ASSERT(IsRenderThread());
 
+		SCOPE_profile_cpu_i("Toto", "A");
 		for (auto &e : _meshs)
+		{
+			SCOPE_profile_cpu_i("Toto", "A1");
+			e->reset();
+			SCOPE_profile_cpu_i("Toto", "A2");
 			BasicCommandGeneration::MeshShadowOutput::RecycleOutput(e);
+			SCOPE_profile_cpu_i("Toto", "A3");
+		}
+		SCOPE_profile_cpu_i("Toto", "B");
 		_meshs.clear();
+		SCOPE_profile_cpu_i("Toto", "C");
 
 		for (auto &e : _skinnedMeshs)
+		{
+			e->reset();
 			BasicCommandGeneration::SkinnedShadowOutput::RecycleOutput(e);
+		}
+		SCOPE_profile_cpu_i("Toto", "E");
+
 		_skinnedMeshs.clear();
+		SCOPE_profile_cpu_i("Toto", "F");
 
 		_cameras.clear();
+		SCOPE_profile_cpu_i("Toto", "G");
 
 		_spotlights.clear();
+		SCOPE_profile_cpu_i("Toto", "H");
+
 	}
 }

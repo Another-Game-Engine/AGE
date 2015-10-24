@@ -158,4 +158,27 @@ namespace AGE
 		return (spotViewProj);
 	}
 
+	glm::vec3 SpotLightComponent::getDirection() const
+	{
+		auto direction = glm::transpose(glm::inverse(glm::mat3(entity->getLink().getGlobalTransform()))) * glm::vec3(0.0f, 0.0f, -1.0f);
+		return direction;
+	}
+
+	glm::vec3 SpotLightComponent::getColor() const
+	{
+		return glm::vec3(color);
+	}
+
+	glm::vec3 SpotLightComponent::getPosition() const
+	{
+		auto position = glm::vec3(entity->getLink().getGlobalTransform()[3]);
+		return position;
+	}
+
+	glm::vec3 SpotLightComponent::getAttenuation() const
+	{
+		return range;
+	}
+
+
 }

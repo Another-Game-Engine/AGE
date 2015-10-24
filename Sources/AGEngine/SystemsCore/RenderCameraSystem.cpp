@@ -223,6 +223,16 @@ namespace AGE
 				Frustum spotlightFrustum;
 				spotlightFrustum.setMatrix(spotViewProj);
 				
+				// we set spot infos
+				spotlightInfos->setSpotlightInfos(
+					spot->getPosition(),
+					spot->getAttenuation(),
+					spot->getDirection(),
+					spot->getColor(),
+					spotViewProj,
+					spot->getCutOff(),
+					spot->getExponent());
+
 				BFCBlockManagerFactory *bf = _scene->getBfcBlockManagerFactory();
 
 				//We create a culler, with the culling rule "Frustum"

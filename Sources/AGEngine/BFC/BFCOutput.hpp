@@ -78,6 +78,7 @@ namespace AGE
 			_rawInfos.clear();
 			_counter = 0;
 			_resultQueue = nullptr;
+			_commandOutput.reset();
 		}
 
 		virtual void _treatCulledChunk(const BFCCullArray *array)
