@@ -6,6 +6,10 @@
 
 #include <glm/glm.hpp>
 
+// to move in .cpp
+#include <glm/gtc/type_ptr.hpp>
+
+#include <Utils/Containers/PODVector.hpp>
 #include <vector>
 
 namespace AGE
@@ -80,9 +84,7 @@ namespace AGE
 				_dataIndex = 0;
 				_commandIndex = 0;
 				_commands.clear();
-				_commands.reserve(124);
 				_datas.clear();
-				_datas.reserve(12000);
 				_currentCommandIndex = -1;
 				_currentDataIndex = 0;
 			}
@@ -120,7 +122,7 @@ namespace AGE
 
 			void setCommandData(const MeshRawType &infos)
 			{
-				_datas.push_back(infos.matrix);
+				memcpy(_datas.copy_back(), glm::value_ptr(infos.matrix), sizeof(float) * 16);
 				++_currentDataIndex;
 			}
 
@@ -129,8 +131,8 @@ namespace AGE
 
 			std::size_t            _commandIndex;
 			std::size_t            _dataIndex;
-			std::vector<Command>   _commands;
-			std::vector<glm::mat4> _datas;
+			PODVector<Command>     _commands;
+			PODVector<float[16]>   _datas;
 		};
 
 		struct SkinnedMeshCommandOutput
@@ -155,9 +157,7 @@ namespace AGE
 				_dataIndex = 0;
 				_commandIndex = 0;
 				_commands.clear();
-				_commands.reserve(512);
 				_datas.clear();
-				_datas.reserve(1024);
 				_currentCommandIndex = -1;
 				_currentDataIndex = 0;
 			}
@@ -196,7 +196,7 @@ namespace AGE
 
 			void setCommandData(const SkinnedMeshRawType &infos)
 			{
-				_datas.push_back(infos.matrix);
+				memcpy(_datas.copy_back(), glm::value_ptr(infos.matrix), sizeof(float) * 16);
 				++_currentDataIndex;
 			}
 
@@ -205,8 +205,8 @@ namespace AGE
 
 			std::size_t            _commandIndex;
 			std::size_t            _dataIndex;
-			std::vector<Command>   _commands;
-			std::vector<glm::mat4> _datas;
+			PODVector<Command>     _commands;
+			PODVector<float[16]>   _datas;
 		};
 
 		struct SkinnedShadowCommandOutput
@@ -230,9 +230,7 @@ namespace AGE
 				_dataIndex = 0;
 				_commandIndex = 0;
 				_commands.clear();
-				_commands.reserve(124);
 				_datas.clear();
-				_datas.reserve(1024);
 				_currentCommandIndex = -1;
 			}
 
@@ -273,15 +271,15 @@ namespace AGE
 
 			void setCommandData(const SkinnedShadowRawType &infos)
 			{
-				_datas.push_back(infos.matrix);
+				memcpy(_datas.copy_back(), glm::value_ptr(infos.matrix), sizeof(float) * 16);
 			}
 
 			std::size_t            _currentCommandIndex;
 
 			std::size_t            _commandIndex;
 			std::size_t            _dataIndex;
-			std::vector<Command>   _commands;
-			std::vector<glm::mat4> _datas;
+			PODVector<Command>     _commands;
+			PODVector<float[16]>   _datas;
 
 			glm::mat4              _spotLightMatrix;
 		};
@@ -306,9 +304,7 @@ namespace AGE
 				_dataIndex = 0;
 				_commandIndex = 0;
 				_commands.clear();
-				_commands.reserve(124);
 				_datas.clear();
-				_datas.reserve(1024);
 				_currentCommandIndex = -1;
 			}
 
@@ -348,15 +344,15 @@ namespace AGE
 
 			void setCommandData(const ShadowRawType &infos)
 			{
-				_datas.push_back(infos.matrix);
+				memcpy(_datas.copy_back(), glm::value_ptr(infos.matrix), sizeof(float) * 16);
 			}
 
 			std::size_t            _currentCommandIndex;
 
 			std::size_t            _commandIndex;
 			std::size_t            _dataIndex;
-			std::vector<Command>   _commands;
-			std::vector<glm::mat4> _datas;
+			PODVector<Command>     _commands;
+			PODVector<float[16]>   _datas;
 
 			glm::mat4              _spotLightMatrix;
 		};

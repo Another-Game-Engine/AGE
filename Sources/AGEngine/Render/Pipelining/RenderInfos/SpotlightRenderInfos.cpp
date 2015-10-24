@@ -122,34 +122,23 @@ namespace AGE
 
 		AGE_ASSERT(IsRenderThread());
 
-		SCOPE_profile_cpu_i("Toto", "A");
 		for (auto &e : _meshs)
 		{
-			SCOPE_profile_cpu_i("Toto", "A1");
 			e->reset();
-			SCOPE_profile_cpu_i("Toto", "A2");
 			BasicCommandGeneration::MeshShadowOutput::RecycleOutput(e);
-			SCOPE_profile_cpu_i("Toto", "A3");
 		}
-		SCOPE_profile_cpu_i("Toto", "B");
 		_meshs.clear();
-		SCOPE_profile_cpu_i("Toto", "C");
 
 		for (auto &e : _skinnedMeshs)
 		{
 			e->reset();
 			BasicCommandGeneration::SkinnedShadowOutput::RecycleOutput(e);
 		}
-		SCOPE_profile_cpu_i("Toto", "E");
 
 		_skinnedMeshs.clear();
-		SCOPE_profile_cpu_i("Toto", "F");
 
 		_cameras.clear();
-		SCOPE_profile_cpu_i("Toto", "G");
 
 		_spotlights.clear();
-		SCOPE_profile_cpu_i("Toto", "H");
-
 	}
 }
