@@ -12,27 +12,14 @@ namespace AGE
 {
 	class Texture2D;
 	class TextureBuffer;
-	struct DRBSpotLightData;
-	class ShadowCasterResult;
-	class ShadowCasterBFCCallback;
-	class SkinnedShadowCasterBFCCallback;
-	class Frustum;
-	class BFCBlockManagerFactory;
+	class IRenderingPipeline;
 
 	class DeferredShadowBuffering : public FrameBufferRender
 	{
 	public:
-		// hack for test
-		static DeferredShadowBuffering *instance;
-
-		DeferredShadowBuffering(glm::uvec2 const &screenSize, std::shared_ptr<PaintingManager> painterManager);
+		DeferredShadowBuffering(glm::uvec2 const &screenSize, std::shared_ptr<PaintingManager> painterManager, IRenderingPipeline *pipeline);
 		virtual ~DeferredShadowBuffering() = default;
 		virtual void init();
-
-		LFQueue<BasicCommandGeneration::MeshShadowOutput*>* getMeshResultQueue();
-		LFQueue<BasicCommandGeneration::SkinnedShadowOutput*>* getSkinnedResultQueue();
-		typedef BasicCommandGeneration::MeshShadowOutput MeshOutput;
-		typedef BasicCommandGeneration::SkinnedShadowOutput SkinnedOutput;
 	protected:
 		virtual void renderPass(const DRBCameraDrawableList &infos);
 
@@ -41,8 +28,6 @@ namespace AGE
 		static const std::size_t _maxMatrixInstancied = 4096;
 		static const std::size_t _sizeofMatrix = sizeof(glm::mat4);
 		static const std::size_t _maxInstanciedShadowCaster = _maxMatrixInstancied;
-
-		LFQueue<BasicCommandGeneration::MeshShadowOutput*>          _cullingResults;
-		LFQueue<BasicCommandGeneration::SkinnedShadowOutput*>       _skinnedCullingResults;
+		IRenderingPipeline *_pipeline;
 	};
 }

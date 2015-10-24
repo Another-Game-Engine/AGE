@@ -25,13 +25,11 @@
 #include "Render/Textures/TextureBuffer.hh"
 #include "Render/ProgramResources/Types/Uniform/Sampler/SamplerBuffer.hh"
 
-// culling
-#include <BFC/BFCBlockManagerFactory.hpp>
-#include <Render\Pipelining\Prepare\ShadowBufferingPrepare.hpp>
-#include <Graphic/BFCCullableTypes.hpp>
-#include <Threads/Tasks/BasicTasks.hpp>
-#include <Utils/Frustum.hh>
-#include "ShadowMapCollection.hpp"
+#include <Render\Pipelining\Pipelines\CustomRenderPass\ShadowMapCollection.hpp>
+
+#include <Render/Pipelining/Pipelines/IRenderingPipeline.hh>
+#include <Render/Pipelining/RenderInfos/SpotlightRenderInfos.hpp>
+
 
 #define DEFERRED_SHADING_SHADOW_BUFFERING_VERTEX "deferred_shading/deferred_shading_get_shadow_buffer.vp"
 #define DEFERRED_SHADING_SHADOW_BUFFERING_VERTEX_SKINNED "deferred_shading/deferred_shading_get_shadow_buffer_skinned.vp"
@@ -46,12 +44,10 @@ namespace AGE
 		PROGRAM_NBR
 	};
 
-	DeferredShadowBuffering *DeferredShadowBuffering::instance = nullptr;
-
-	DeferredShadowBuffering::DeferredShadowBuffering(glm::uvec2 const &screenSize, std::shared_ptr<PaintingManager> painterManager) :
+	DeferredShadowBuffering::DeferredShadowBuffering(glm::uvec2 const &screenSize, std::shared_ptr<PaintingManager> painterManager, IRenderingPipeline *pipeline) :
 		FrameBufferRender(screenSize.x, screenSize.y, painterManager)
 	{
-		instance = this;
+		_pipeline = pipeline;
 
 		auto confManager = GetEngine()->getInstance<ConfigurationManager>();
 		auto shaderPath = confManager->getConfiguration<std::string>("ShadersPath");
@@ -111,24 +107,15 @@ namespace AGE
 
 		_programs[PROGRAM_BUFFERING]->use();
 
-		std::vector<MeshOutput*> spotListMesh;
-		MeshOutput *r = nullptr;
-		while (_cullingResults.try_dequeue(r))
-			spotListMesh.push_back(r);
-
-		std::vector<SkinnedOutput*> spotListSkinned;
-		SkinnedOutput *s = nullptr;
-		while (_skinnedCullingResults.try_dequeue(s))
-			spotListSkinned.push_back(s);
+		auto passInfos = _pipeline->getSpotlightRenderInfos();
 
 		// handle the number of sample
-
 		auto w = _frame_buffer.width(); auto h = _frame_buffer.height();
 		glViewport(0, 0, w, h);
 
 		// we clear
 		int i = 0;
-		for (auto &spotLightPtr : spotListMesh)
+		for (int max = passInfos->getMeshs().size(); i < max; ++i)
 		{
 			SCOPE_profile_gpu_i("Spotlight pass clear");
 			SCOPE_profile_cpu_i("RenderTimer", "Spotlight pass clear");
@@ -140,7 +127,7 @@ namespace AGE
 
 		i = 0;
 		// we render instancied occluders
-		for (auto &spotLightPtr : spotListMesh)
+		for (auto &spotLightPtr : passInfos->getMeshs())
 		{
 			SCOPE_profile_gpu_i("Spotlight regular pass");
 			SCOPE_profile_cpu_i("RenderTimer", "Spotlight pass");
@@ -182,19 +169,14 @@ namespace AGE
 				}
 				++occluderCounter;
 			}
-			// Important !
-			// After use, we have to recycle it ! Or
-			// we will leak
-			MeshOutput::RecycleOutput(spotLightPtr);
 		}
 
 		i = 0;
 		// we render instancied occluders
-		for (auto &spotLightPtr : spotListSkinned)
+		for (auto &spotLightPtr : passInfos->getSkinnedMeshs())
 		{
 			if (spotLightPtr->getCommandOutput()._commands.size() == 0)
 			{
-				SkinnedOutput::RecycleOutput(spotLightPtr);
 				continue;
 			}
 			SCOPE_profile_gpu_i("Spotlight skinned pass");
@@ -240,20 +222,6 @@ namespace AGE
 				}
 				++occluderCounter;
 			}
-			// Important !
-			// After use, we have to recycle it ! Or
-			// we will leak
-			SkinnedOutput::RecycleOutput(spotLightPtr);
 		}
-	}
-
-	LFQueue<BasicCommandGeneration::MeshShadowOutput*>* DeferredShadowBuffering::getMeshResultQueue()
-	{
-		return &_cullingResults;
-	}
-
-	LFQueue<BasicCommandGeneration::SkinnedShadowOutput*>* DeferredShadowBuffering::getSkinnedResultQueue()
-	{
-		return &_skinnedCullingResults;
 	}
 }

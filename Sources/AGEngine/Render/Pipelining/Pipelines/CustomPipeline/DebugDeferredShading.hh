@@ -22,7 +22,8 @@ namespace AGE
 		virtual ~DebugDeferredShading();
 		DebugDeferredShading(DebugDeferredShading const &) = delete;
 		DebugDeferredShading &operator=(DebugDeferredShading const &) = delete;
-
+		virtual void renderBegin();
+		virtual void renderEnd();
 	public:
 		void setAmbient(glm::vec3 const &ambient);
 		void setSkyboxLighting(glm::vec3 const &lighting);

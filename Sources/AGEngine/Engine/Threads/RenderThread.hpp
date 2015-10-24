@@ -73,7 +73,6 @@ namespace AGE
 	public:
 		std::shared_ptr<PaintingManager> paintingManager;
 		std::vector<std::unique_ptr<IRenderingPipeline>> pipelines;
-
 	private:
 
 		void _recompileShaders();

@@ -45,6 +45,9 @@
 
 #include <algorithm>
 
+#include "Render/Pipelining/Pipelines/IrenderingPipeline.hh"
+#include "Render/Pipelining/RenderInfos/SpotlightRenderInfos.hpp"
+
 //hack
 #include "Render\Pipelining\Pipelines\CustomRenderPass\DeferredShadowBuffering.hh"
 #include "Render\Pipelining\Pipelines\CustomRenderPass\DeferredBasicBuffering.hh"
@@ -178,52 +181,72 @@ namespace AGE
 			return;
 		}
 
+		// if no camera
+		if (_cameras.getCollection().empty())
+		{
+			return;
+		}
+
+		// Get the first camera (only one camera is supported for the moment
+		auto firstCameraEntity = *(_cameras.getCollection().begin());
+		auto firstCameraView = glm::inverse(firstCameraEntity->getLink().getGlobalTransform());
+		auto firstCameraComponent = firstCameraEntity->getComponent<CameraComponent>();
+		auto &firstCameraData = firstCameraComponent->getData();
+		auto &cameraPipeline = GetRenderThread()->pipelines[firstCameraData.pipeline];
+		auto spotlightInfos = cameraPipeline->getSpotlightRenderInfos();
+
 		std::list<std::shared_ptr<DRBSpotLightDrawableList>> spotLightList;
 		std::list<std::shared_ptr<DRBPointLightData>> pointLightList;
 
 		std::list<std::atomic_uint64_t*> spotCounters;
 		std::list<BFCCuller<BFCFrustumCuller>> spotCullers;
+
+		if (spotlightInfos != nullptr)
 		{
+			// we set camera infos
+			spotlightInfos->setCameraInfos(firstCameraComponent->getProjection(), firstCameraView);
+
 			SCOPE_profile_cpu_i("Camera system", "Cull for spots");
 			for (auto &spotEntity : _spotLights.getCollection())
 			{
 				SCOPE_profile_cpu_i("Camera system", "Spot");
+
 				auto spot = spotEntity->getComponent<SpotLightComponent>();
+
+				// AJETER
 				auto spotDrawableList = std::make_shared<DRBSpotLightDrawableList>();
 				spotDrawableList->spotLight = spot->getCullableHandle().getPtr<DRBSpotLight>()->getDatas();
 				spotLightList.push_back(spotDrawableList);
-				
-				auto spotData = std::static_pointer_cast<DRBSpotLightData>(spot->getCullableHandle().getPtr<DRBSpotLight>()->getDatas());
+				//!
+
 				glm::mat4 spotViewProj = spot->updateShadowMatrix();
 				Frustum spotlightFrustum;
 				spotlightFrustum.setMatrix(spotViewProj);
 				
 				BFCBlockManagerFactory *bf = _scene->getBfcBlockManagerFactory();
-				if (DeferredShadowBuffering::instance)
-				{
-					//We create a culler, with the culling rule "Frustum"
-					spotCullers.emplace_back();
-					auto &spotCuller = spotCullers.back();
-					//We pass infos for frustum culling
-					spotCuller.prepareForCulling(spotlightFrustum);
-					//We get an output of a specific type
-					//here it's for mesh for basic buffering pass
-					auto meshOutput = DeferredShadowBuffering::MeshOutput::GetNewOutput();
-					auto skinnedOutput = DeferredShadowBuffering::SkinnedOutput::GetNewOutput();
-					//We get the ptr of the queue where the output should be push at the end of the
-					//culling and preparation process
-					auto meshResultQueue = DeferredShadowBuffering::instance->getMeshResultQueue();
-					auto skinnedResultQueue = DeferredShadowBuffering::instance->getSkinnedResultQueue();
-					meshOutput->setResultQueue(meshResultQueue);
-					skinnedOutput->setResultQueue(skinnedResultQueue);
-					meshOutput->getCommandOutput()._spotLightMatrix = spotViewProj;
-					skinnedOutput->getCommandOutput()._spotLightMatrix = spotViewProj;
 
-					spotCuller.addOutput(BFCCullableType::CullableMesh, meshOutput);
-					spotCuller.addOutput(BFCCullableType::CullableSkinnedMesh, skinnedOutput);
-					auto counter = spotCuller.cull(bf);
-					spotCounters.push_back(counter);
-				}
+				//We create a culler, with the culling rule "Frustum"
+				spotCullers.emplace_back();
+				auto &spotCuller = spotCullers.back();
+				//We pass infos for frustum culling
+				spotCuller.prepareForCulling(spotlightFrustum);
+				//We get an output of a specific type
+				//here it's for mesh for basic buffering pass
+				auto meshOutput = SpotlightRenderInfos::MeshOutput::GetNewOutput();
+				auto skinnedOutput = SpotlightRenderInfos::SkinnedOutput::GetNewOutput();
+				//We get the ptr of the queue where the output should be push at the end of the
+				//culling and preparation process
+				auto meshResultQueue = spotlightInfos->getMeshResultQueue();
+				auto skinnedResultQueue = spotlightInfos->getSkinnedResultQueue();
+				meshOutput->setResultQueue(meshResultQueue);
+				skinnedOutput->setResultQueue(skinnedResultQueue);
+				meshOutput->getCommandOutput()._spotLightMatrix = spotViewProj;
+				skinnedOutput->getCommandOutput()._spotLightMatrix = spotViewProj;
+
+				spotCuller.addOutput(BFCCullableType::CullableMesh, meshOutput);
+				spotCuller.addOutput(BFCCullableType::CullableSkinnedMesh, skinnedOutput);
+				auto counter = spotCuller.cull(bf);
+				spotCounters.push_back(counter);
 			}
 		}
 

@@ -8,6 +8,7 @@
 namespace AGE
 {
 	struct DRBCameraDrawableList;
+	class SpotlightRenderInfos;
 
 	class IRenderingPipeline
 	{
@@ -18,6 +19,10 @@ namespace AGE
 		virtual bool recompileShaders() = 0;
 		virtual bool init() = 0;
 		virtual bool isDebug() const = 0;
+
+		inline SpotlightRenderInfos *getSpotlightRenderInfos() { return _spotlightRenderInfos; }
+	protected:
+		SpotlightRenderInfos *_spotlightRenderInfos;
 	};
 
 }

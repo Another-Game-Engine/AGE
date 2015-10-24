@@ -14,6 +14,8 @@
 #include <Render/Pipelining/Pipelines/PipelineTools.hh>
 #include <Configuration.hpp>
 
+#include "Render/Pipelining/RenderInfos/SpotlightRenderInfos.hpp"
+
 namespace AGE
 {
 
@@ -32,7 +34,7 @@ namespace AGE
 		_deferredSkybox = std::make_shared<DeferredSkyBox>(screen_size, _painter_manager, _diffuse, _depthStencil, _lightAccumulation);
 		std::shared_ptr<DeferredBasicBuffering> basicBuffering = std::make_shared<DeferredBasicBuffering>(screen_size, _painter_manager, _diffuse, _normal, _specular, _depthStencil);
 		std::shared_ptr<DeferredSpotLightning> spotLightning = std::make_shared<DeferredSpotLightning>(screen_size, _painter_manager, _normal, _depthStencil, _specular, _lightAccumulation, _shinyAccumulation);
-		std::shared_ptr<DeferredShadowBuffering> shadowBuffering = std::make_shared<DeferredShadowBuffering>(glm::uvec2(RESOLUTION_SHADOW_X, RESOLUTION_SHADOW_Y), _painter_manager);
+		std::shared_ptr<DeferredShadowBuffering> shadowBuffering = std::make_shared<DeferredShadowBuffering>(glm::uvec2(RESOLUTION_SHADOW_X, RESOLUTION_SHADOW_Y), _painter_manager, this);
 		std::shared_ptr<DeferredPointLightning> pointLightning = std::make_shared<DeferredPointLightning>(screen_size, _painter_manager, _normal, _depthStencil, _specular, _lightAccumulation, _shinyAccumulation);
 		std::shared_ptr<DeferredDirectionalLightning> directionalLightning = std::make_shared<DeferredDirectionalLightning>(screen_size, _painter_manager, _normal, _depthStencil, _specular, _lightAccumulation, _shinyAccumulation);
 		_deferredMerging = std::make_shared<DeferredMerging>(screen_size, _painter_manager, _diffuse, _lightAccumulation, _shinyAccumulation);
@@ -55,6 +57,18 @@ namespace AGE
 		_rendering_list.emplace_back(debugLightBillboards);
 		_rendering_list.emplace_back(debugDrawLines);
 		_rendering_list.emplace_back(deferredOnScreen);
+
+		_spotlightRenderInfos = new SpotlightRenderInfos();
+	}
+
+	void DebugDeferredShading::renderBegin()
+	{
+		_spotlightRenderInfos->computeRenderInfos();
+	}
+
+	void DebugDeferredShading::renderEnd()
+	{
+		_spotlightRenderInfos->clearRenderInfos();
 	}
 
 	DebugDeferredShading::DebugDeferredShading(DebugDeferredShading &&move) :
