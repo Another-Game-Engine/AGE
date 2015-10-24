@@ -195,7 +195,6 @@ namespace AGE
 		auto &cameraPipeline = GetRenderThread()->pipelines[firstCameraData.pipeline];
 		auto spotlightInfos = cameraPipeline->getSpotlightRenderInfos();
 
-		std::list<std::shared_ptr<DRBSpotLightDrawableList>> spotLightList;
 		std::list<std::shared_ptr<DRBPointLightData>> pointLightList;
 
 		std::list<std::atomic_uint64_t*> spotCounters;
@@ -212,12 +211,6 @@ namespace AGE
 				SCOPE_profile_cpu_i("Camera system", "Spot");
 
 				auto spot = spotEntity->getComponent<SpotLightComponent>();
-
-				// AJETER
-				auto spotDrawableList = std::make_shared<DRBSpotLightDrawableList>();
-				spotDrawableList->spotLight = spot->getCullableHandle().getPtr<DRBSpotLight>()->getDatas();
-				spotLightList.push_back(spotDrawableList);
-				//!
 
 				glm::mat4 spotViewProj = spot->updateShadowMatrix();
 				Frustum spotlightFrustum;
@@ -361,7 +354,6 @@ namespace AGE
 				occlusionCulling(cameraList->meshs, _drawDebugLines);
 			}
 
-			cameraList->spotLights = spotLightList;
 			cameraList->pointLights = pointLightList;
 			TMQ::TaskManager::emplaceRenderTask<AGE::DRBCameraDrawableListCommand>(cameraList);
 		}

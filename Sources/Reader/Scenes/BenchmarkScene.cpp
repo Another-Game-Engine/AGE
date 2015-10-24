@@ -131,9 +131,15 @@ namespace AGE
 
 		getInstance<AGE::AssetsManager>()->loadMesh(OldFile("cube/cube.sage"), "DEMO_SCENE_BASIC_ASSETS");
 		getInstance<AGE::AssetsManager>()->loadMesh(OldFile("ball/ball.sage"), "DEMO_SCENE_BASIC_ASSETS");
+		getInstance<AGE::AssetsManager>()->loadMesh(OldFile("borderland_zero/zero.sage"), "DEMO_SCENE_BASIC_ASSETS");
+		getInstance<AGE::AssetsManager>()->loadMesh(OldFile("flash/flash.sage"), "DEMO_SCENE_BASIC_ASSETS");
+
+
 		getInstance<AGE::AssetsManager>()->loadMaterial(OldFile("cube/cube.mage"), "DEMO_SCENE_BASIC_ASSETS");
 		getInstance<AGE::AssetsManager>()->loadMaterial(OldFile("ball/ball.mage"), "DEMO_SCENE_BASIC_ASSETS");
-
+		getInstance<AGE::AssetsManager>()->loadMaterial(OldFile("borderland_zero/zero.mage"), "DEMO_SCENE_BASIC_ASSETS");
+		getInstance<AGE::AssetsManager>()->loadMaterial(OldFile("flash/flash.mage"), "DEMO_SCENE_BASIC_ASSETS");
+		
 		_skyboxSpace = getInstance<AGE::AssetsManager>()->loadCubeMap("space", OldFile("skyboxes/space.dds"), "DEMO_SCENE_BASIC_ASSETS");
 
 		setInstance<AGE::AnimationManager>();
@@ -191,13 +197,16 @@ namespace AGE
 				load(sceneFileName);
 			}
 
-			for (std::size_t i = 0; i < 10000; ++i)
+			auto cubeMesh = getInstance<AGE::AssetsManager>()->getMesh("cube/cube.sage");
+			auto cubeMat = getInstance<AGE::AssetsManager>()->getMaterial("cube/cube.mage");
+			
+			for (std::size_t i = 0; i < 10000; i++)
 			{
-				auto hexapod2 = createEntity();
-				hexapod2->addComponent<MeshRenderer>(
-					getInstance<AGE::AssetsManager>()->getMesh("cube/cube.sage")
-					, getInstance<AGE::AssetsManager>()->getMaterial("cube/cube.mage"));
-				hexapod2->getLink().setPosition(glm::ballRand(100.0f));
+				{
+					auto entity = createEntity();
+					entity->addComponent<MeshRenderer>(cubeMesh, cubeMat);
+					entity->getLink().setPosition(glm::ballRand(100.0f));
+				}
 			}
 
 			/*{

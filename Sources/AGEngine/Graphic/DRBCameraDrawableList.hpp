@@ -89,7 +89,6 @@ namespace AGE
 
 		std::list<std::shared_ptr<DRBData>> meshs;
 		std::list<std::shared_ptr<DRBPointLightData>> pointLights;
-		std::list<std::shared_ptr<DRBSpotLightDrawableList>> spotLights;
 		CameraInfos cameraInfos;
 	};
 
