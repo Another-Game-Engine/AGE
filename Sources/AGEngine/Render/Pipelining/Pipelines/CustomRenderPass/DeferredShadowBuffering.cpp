@@ -113,30 +113,19 @@ namespace AGE
 		auto w = _frame_buffer.width(); auto h = _frame_buffer.height();
 		glViewport(0, 0, w, h);
 
-		// we clear
 		int i = 0;
-		for (int max = passInfos->getSpotlights().size(); i < max; ++i)
-		{
-			SCOPE_profile_gpu_i("Spotlight pass clear");
-			SCOPE_profile_cpu_i("RenderTimer", "Spotlight pass clear");
-
-			auto depth = ShadowMapCollection::getDepthBuffer(i++, w, h);
-			_frame_buffer.attachment(*depth.get(), GL_DEPTH_STENCIL_ATTACHMENT);
-			glClear(GL_DEPTH_BUFFER_BIT);
-		}
-
-		i = 0;
 		// we render instancied occluders
 		for (auto &spot : passInfos->getSpotlights())
 		{
 			SCOPE_profile_gpu_i("Spotlight regular pass");
-			SCOPE_profile_cpu_i("RenderTimer", "Spotlight pass");
+			SCOPE_profile_cpu_i("RenderTimer", "Spotlight regular pass");
 
 			auto spotLightPtr = spot.meshs;
 
 			auto depth = ShadowMapCollection::getDepthBuffer(i++, w, h);
-
 			_frame_buffer.attachment(*depth.get(), GL_DEPTH_STENCIL_ATTACHMENT);
+			glClear(GL_DEPTH_BUFFER_BIT);
+
 			_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("light_matrix").set(spotLightPtr->getCommandOutput()._spotLightMatrix);
 			_programs[PROGRAM_BUFFERING]->get_resource<SamplerBuffer>("model_matrix_tbo").set(_positionBuffer);
 			auto matrixOffset = _programs[PROGRAM_BUFFERING]->get_resource<Vec1>("matrixOffset");
@@ -178,7 +167,7 @@ namespace AGE
 		for (auto &spot : passInfos->getSpotlights())
 		{
 			SCOPE_profile_gpu_i("Spotlight skinned pass");
-			SCOPE_profile_cpu_i("RenderTimer", "Spotlight pass");
+			SCOPE_profile_cpu_i("RenderTimer", "Spotlight skinned pass");
 
 			auto spotLightPtr = spot.skinnedMeshs;
 
