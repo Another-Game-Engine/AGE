@@ -87,6 +87,7 @@ namespace AGE
 	struct DRBCameraDrawableList
 	{
 		SpotlightRenderInfos::Output                  spotlightsOutput;
+
 		BasicCommandGeneration::MeshAndMaterialOutput *cameraMeshs = nullptr;
 		BasicCommandGeneration::SkinnedMeshAndMaterialOutput *cameraSkinnedMeshs = nullptr;
 

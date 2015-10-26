@@ -13,6 +13,8 @@ namespace AGE
 	Contains all infos needed by spotlight render pass
 	*/
 
+	struct DRBCameraDrawableList;
+
 	class SpotlightRenderInfos
 	{
 	public:
@@ -51,6 +53,8 @@ namespace AGE
 				const glm::mat4 &matrix,
 				const float &cutOff,
 				const float &exponent);
+			const std::vector<Spotlight> &getSpots() const { return _spots; }
+			const std::vector<Camera> &getCameras() const { return _cameras; }
 		private:
 			std::vector<Spotlight> _spots;
 			std::vector<Camera> _cameras;
@@ -62,22 +66,17 @@ namespace AGE
 
 		const std::vector<Camera> &getCameras() const;
 		const std::vector<Spotlight> &getSpotlights() const;
-		const std::vector<BasicCommandGeneration::MeshShadowOutput*> &getMeshs() const;
-		const std::vector<BasicCommandGeneration::SkinnedShadowOutput*> getSkinnedMeshs() const;
-
 		
 		// Call that after render preparation
-		void computeRenderInfos();
+		void computeRenderInfos(const DRBCameraDrawableList &infos);
 		
 		// Call that when the rendering is done
-		void clearRenderInfos();
+		void clearRenderInfos(const DRBCameraDrawableList &infos);
 
 	private:
 		LFQueue<BasicCommandGeneration::MeshShadowOutput*>          _cullingResults;
 		LFQueue<BasicCommandGeneration::SkinnedShadowOutput*>       _skinnedCullingResults;
 
-		std::vector<BasicCommandGeneration::MeshShadowOutput*>      _meshs;
-		std::vector<BasicCommandGeneration::SkinnedShadowOutput*>   _skinnedMeshs;
 		std::vector<Spotlight> _spotlights;
 		std::vector<Camera> _cameras;
 	};

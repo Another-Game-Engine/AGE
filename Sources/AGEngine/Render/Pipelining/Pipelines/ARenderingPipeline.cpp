@@ -64,13 +64,13 @@ namespace AGE
 	IRenderingPipeline & ARenderingPipeline::render(const DRBCameraDrawableList &infos)
 	{
 		SCOPE_profile_cpu_i("RenderTimer", "RenderPipeline");
-		renderBegin();
+		renderBegin(infos);
 		// We iterate over the entry points5
 		for (auto &renderPass : _rendering_list)
 		{
 			renderPass->render(infos);
 		}
-		renderEnd();
+		renderEnd(infos);
 		return (*this);
 	}
 }

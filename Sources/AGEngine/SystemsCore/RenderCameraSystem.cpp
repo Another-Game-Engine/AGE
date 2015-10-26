@@ -200,11 +200,14 @@ namespace AGE
 		std::list<std::atomic_uint64_t*> spotCounters;
 		std::list<BFCCuller<BFCFrustumCuller>> spotCullers;
 
+		auto spotLightOutput = spotlightInfos->createOutput();
+
 		if (spotlightInfos != nullptr)
 		{
 			// we set camera infos
 
 			SCOPE_profile_cpu_i("Camera system", "Cull for spots");
+			std::size_t spotlightCounter = 0;
 			for (auto &spotEntity : _spotLights.getCollection())
 			{
 				SCOPE_profile_cpu_i("Camera system", "Spot");
@@ -215,12 +218,9 @@ namespace AGE
 				Frustum spotlightFrustum;
 				spotlightFrustum.setMatrix(spotViewProj);
 				
-				// we set spot infos
-				auto output = spotlightInfos->createOutput();
-				
-				output.setCameraInfos(firstCameraComponent->getProjection(), firstCameraView);
+				spotLightOutput.setCameraInfos(firstCameraComponent->getProjection(), firstCameraView);
 
-				auto &spotInfos = output.setSpotlightInfos(
+				auto &spotInfos = spotLightOutput.setSpotlightInfos(
 					spot->getPosition(),
 					spot->getAttenuation(),
 					spot->getDirection(),
@@ -289,6 +289,7 @@ namespace AGE
 			std::atomic_size_t MESH_COUNTER = 0;
 
 			auto cameraList = std::make_shared<DRBCameraDrawableList>();
+			cameraList->spotlightsOutput = spotLightOutput;
 			cameraList->cameraInfos.data = camera->getData();
 			cameraList->cameraInfos.view = glm::inverse(cameraEntity->getLink().getGlobalTransform());
 

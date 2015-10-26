@@ -61,16 +61,16 @@ namespace AGE
 		_spotlightRenderInfos = new SpotlightRenderInfos();
 	}
 
-	void DebugDeferredShading::renderBegin()
+	void DebugDeferredShading::renderBegin(const DRBCameraDrawableList &infos)
 	{
 		SCOPE_profile_cpu_function("RenderTimer");
-		_spotlightRenderInfos->computeRenderInfos();
+		_spotlightRenderInfos->computeRenderInfos(infos);
 	}
 
-	void DebugDeferredShading::renderEnd()
+	void DebugDeferredShading::renderEnd(const DRBCameraDrawableList &infos)
 	{
 		SCOPE_profile_cpu_function("RenderTimer");
-		_spotlightRenderInfos->clearRenderInfos();
+		_spotlightRenderInfos->clearRenderInfos(infos);
 	}
 
 	DebugDeferredShading::DebugDeferredShading(DebugDeferredShading &&move) :

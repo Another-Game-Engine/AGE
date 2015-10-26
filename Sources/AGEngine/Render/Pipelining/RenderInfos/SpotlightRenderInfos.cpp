@@ -5,6 +5,8 @@
 
 #include <Utils/Profiler.hpp>
 
+#include <Graphic\DRBCameraDrawableList.hpp>
+
 namespace AGE
 {
 	SpotlightRenderInfos::SpotlightRenderInfos()
@@ -64,79 +66,48 @@ namespace AGE
 		return _spotlights;
 	}
 
-	const std::vector<BasicCommandGeneration::MeshShadowOutput*> &SpotlightRenderInfos::getMeshs() const
-	{
-		AGE_ASSERT(IsRenderThread());
-		return _meshs;
-	}
-
-	const std::vector<BasicCommandGeneration::SkinnedShadowOutput*> SpotlightRenderInfos::getSkinnedMeshs() const
-	{
-		AGE_ASSERT(IsRenderThread());
-		return _skinnedMeshs;
-	}
-
 	// Call that after render preparation
-	void SpotlightRenderInfos::computeRenderInfos()
+	void SpotlightRenderInfos::computeRenderInfos(const DRBCameraDrawableList &infos)
 	{
-		//SCOPE_profile_cpu_function("RenderTimer");
+		SCOPE_profile_cpu_function("RenderTimer");
 
-		//AGE_ASSERT(IsRenderThread());
+		AGE_ASSERT(IsRenderThread());
 
-		//AGE_ASSERT(_meshs.empty());
-		//AGE_ASSERT(_skinnedMeshs.empty());
-		//AGE_ASSERT(_cameras.empty());
-		//AGE_ASSERT(_spotlights.empty());
+		AGE_ASSERT(_cameras.empty());
+		AGE_ASSERT(_spotlights.empty());
 
-		//BasicCommandGeneration::MeshShadowOutput *mesh = nullptr;
-		//while (_cullingResults.try_dequeue(mesh))
-		//{
-		//	_meshs.push_back(mesh);
-		//}
+		for (auto &camera : infos.spotlightsOutput.getCameras())
+		{
+			_cameras.push_back(camera);
+		}
 
-		//BasicCommandGeneration::SkinnedShadowOutput *skinned = nullptr;
-		//while (_skinnedCullingResults.try_dequeue(skinned))
-		//{
-		//	_skinnedMeshs.push_back(skinned);
-		//}
-
-		//Camera camera;
-		//while (_cameraResults.try_dequeue(camera))
-		//{
-		//	_cameras.push_back(camera);
-		//}
-
-		//Spotlight spotlight;
-		//while (_spotlightResults.try_dequeue(spotlight))
-		//{
-		//	_spotlights.push_back(spotlight);
-		//}
+		for (auto &spot : infos.spotlightsOutput.getSpots())
+		{
+			_spotlights.push_back(spot);
+		}
 	}
 
 	// Call that when the rendering is done
-	void SpotlightRenderInfos::clearRenderInfos()
+	void SpotlightRenderInfos::clearRenderInfos(const DRBCameraDrawableList &infos)
 	{
-		//SCOPE_profile_cpu_function("RenderTimer");
+		SCOPE_profile_cpu_function("RenderTimer");
 
-		//AGE_ASSERT(IsRenderThread());
+		AGE_ASSERT(IsRenderThread());
 
-		//for (auto &e : _meshs)
-		//{
-		//	e->reset();
-		//	BasicCommandGeneration::MeshShadowOutput::RecycleOutput(e);
-		//}
-		//_meshs.clear();
-
-		//for (auto &e : _skinnedMeshs)
-		//{
-		//	e->reset();
-		//	BasicCommandGeneration::SkinnedShadowOutput::RecycleOutput(e);
-		//}
-
-		//_skinnedMeshs.clear();
-
-		//_cameras.clear();
-
-		//_spotlights.clear();
+		for (auto &e : _spotlights)
+		{
+			if (e.meshs)
+			{
+				e.meshs->reset();
+				BasicCommandGeneration::MeshShadowOutput::RecycleOutput(e.meshs);
+			}
+			if (e.skinnedMeshs)
+			{
+				e.skinnedMeshs->reset();
+				BasicCommandGeneration::SkinnedShadowOutput::RecycleOutput(e.skinnedMeshs);
+			}
+		}
+		_cameras.clear();
+		_spotlights.clear();
 	}
 }

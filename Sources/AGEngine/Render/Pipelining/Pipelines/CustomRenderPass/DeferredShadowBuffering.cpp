@@ -115,7 +115,7 @@ namespace AGE
 
 		// we clear
 		int i = 0;
-		for (int max = passInfos->getMeshs().size(); i < max; ++i)
+		for (int max = passInfos->getSpotlights().size(); i < max; ++i)
 		{
 			SCOPE_profile_gpu_i("Spotlight pass clear");
 			SCOPE_profile_cpu_i("RenderTimer", "Spotlight pass clear");
@@ -127,10 +127,12 @@ namespace AGE
 
 		i = 0;
 		// we render instancied occluders
-		for (auto &spotLightPtr : passInfos->getMeshs())
+		for (auto &spot : passInfos->getSpotlights())
 		{
 			SCOPE_profile_gpu_i("Spotlight regular pass");
 			SCOPE_profile_cpu_i("RenderTimer", "Spotlight pass");
+
+			auto spotLightPtr = spot.meshs;
 
 			auto depth = ShadowMapCollection::getDepthBuffer(i++, w, h);
 
@@ -173,14 +175,17 @@ namespace AGE
 
 		i = 0;
 		// we render instancied occluders
-		for (auto &spotLightPtr : passInfos->getSkinnedMeshs())
+		for (auto &spot : passInfos->getSpotlights())
 		{
+			SCOPE_profile_gpu_i("Spotlight skinned pass");
+			SCOPE_profile_cpu_i("RenderTimer", "Spotlight pass");
+
+			auto spotLightPtr = spot.skinnedMeshs;
+
 			if (spotLightPtr->getCommandOutput()._commands.size() == 0)
 			{
 				continue;
 			}
-			SCOPE_profile_gpu_i("Spotlight skinned pass");
-			SCOPE_profile_cpu_i("RenderTimer", "Spotlight pass");
 
 			auto depth = ShadowMapCollection::getDepthBuffer(i++, w, h);
 
