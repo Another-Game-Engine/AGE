@@ -18,7 +18,7 @@ namespace TMQ
 	private:
 		struct CircularBuffer
 		{
-			static const std::size_t BufferSize = 10000000; // 10 mega that's a lot too much but because
+			static const std::size_t BufferSize = 10000000 * 5; // 50 mega that's a lot too much but because
 			// we don't have any security to be sure that we didn't write over non deleted data it's better to be safe
 			char *buffer;
 			std::atomic_size_t index;
