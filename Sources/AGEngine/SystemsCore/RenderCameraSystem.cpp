@@ -197,7 +197,7 @@ namespace AGE
 
 		std::list<std::shared_ptr<DRBPointLightData>> pointLightList;
 
-		std::list<std::atomic_uint64_t*> spotCounters;
+		std::atomic_uint64_t spotCounter = 0;
 		std::list<BFCCuller<BFCFrustumCuller>> spotCullers;
 
 		auto spotLightOutput = spotlightInfos->createOutput();
@@ -253,8 +253,7 @@ namespace AGE
 
 				spotCuller.addOutput(BFCCullableType::CullableMesh, meshOutput);
 				spotCuller.addOutput(BFCCullableType::CullableSkinnedMesh, skinnedOutput);
-				auto counter = spotCuller.cull(bf);
-				spotCounters.push_back(counter);
+				auto counter = spotCuller.cull(bf, &spotCounter);
 			}
 		}
 
@@ -269,12 +268,10 @@ namespace AGE
 		/// BLOCKING WAIT FOR SPOTS
 		{
 			SCOPE_profile_cpu_i("Camera system", "Cull for spots wait");
-			std::size_t tot = 1;
-			while (tot > 0)
+			while (spotCounter.load() > 0)
 			{
-				tot = 0;
-				for (auto &e : spotCounters)
-					tot += e->load();
+				while (CurrentMainThread()->tryToStealTasks())
+				{ }
 			}
 		}
 
@@ -320,9 +317,14 @@ namespace AGE
 				skinnedMeshOutput->setResultQueue(skinnedMeshResultQueue);
 				cameraCuller.addOutput(BFCCullableType::CullableMesh, meshOutput);
 				cameraCuller.addOutput(BFCCullableType::CullableSkinnedMesh, skinnedMeshOutput);
-				auto counter = cameraCuller.cull(bf);
-				while (counter->load() > 0)
-				{ }
+				std::atomic_size_t camCounter;
+				cameraCuller.cull(bf, &camCounter);
+				while (camCounter.load() > 0)
+				{
+					while (CurrentMainThread()->tryToStealTasks())
+					{
+					}
+				}
 				//cameraList->cameraMeshs = DeferredBasicBuffering::instance->prepareRender(camera->getProjection(), bf, cameraFrustum, &MESH_COUNTER);
 			}
 
@@ -340,8 +342,12 @@ namespace AGE
 
 			{
 				SCOPE_profile_cpu_i("Camera system", "Cull for cam wait");
-				while (counter.load() > 0 || MESH_COUNTER.load() > 0)
-				{ }
+				while (MESH_COUNTER.load() > 0)
+				{
+					while (CurrentMainThread()->tryToStealTasks())
+					{
+					}
+				}
 				//GetMainThread()->computeTasksWhile(std::function<bool()>([&counter, totalToCullNumber]() {
 				//	return counter >= totalToCullNumber;
 				//}));

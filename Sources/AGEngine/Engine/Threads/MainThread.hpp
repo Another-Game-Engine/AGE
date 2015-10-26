@@ -20,6 +20,7 @@ namespace AGE
 		virtual bool stop();
 		bool run();
 		bool update();
+		bool tryToStealTasks();
 		AGE::Engine *createEngine();
 		AGE::Engine *getEngine();
 		inline AScene *getActiveScene() { return _activeScene; }

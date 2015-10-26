@@ -81,6 +81,22 @@ namespace AGE
 		return true;
 	}
 
+	bool MainThread::tryToStealTasks()
+	{
+		SCOPE_profile_cpu_i("MainThread", "Steal tasks");
+		{
+			TMQ::MessageBase *task = nullptr;
+			if (TMQ::TaskManager::MainThreadGetTask(task))
+			{
+				SCOPE_profile_cpu_i("MainThread", "Execute task");
+				auto result = execute(task);
+				assert(result); // we receive a task that we cannot handle
+				return true;
+			}
+		}
+		return false;
+	}
+
 	bool MainThread::run()
 	{
 		_run = true;

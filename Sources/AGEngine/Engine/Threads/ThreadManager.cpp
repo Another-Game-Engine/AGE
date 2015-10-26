@@ -125,12 +125,6 @@ namespace AGE
 		}
 	}
 
-	void ThreadManager::setAsWorker(bool mainThread, bool prepareThread, bool renderThread)
-	{
-		_threads[Thread::Main]->setAsWorker(mainThread);
-		_threads[Thread::Render]->setAsWorker(renderThread);
-	}
-
 	ThreadManager *GetThreadManager()
 	{
 		return Singleton<ThreadManager>::getInstance();
@@ -140,6 +134,13 @@ namespace AGE
 	{
 		return g_currentThread;
 	}
+
+	MainThread *CurrentMainThread()
+	{
+		AGE_ASSERT(g_currentThread && g_currentThread->isMainThread());
+		return static_cast<MainThread*>(g_currentThread);
+	}
+
 
 	void SetCurrentThread(Thread *t)
 	{

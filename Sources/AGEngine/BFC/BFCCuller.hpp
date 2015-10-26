@@ -34,7 +34,7 @@ namespace AGE
 		inline void prepareForCulling(Args... args)
 		{
 			_culler.prepareForCulling(args...);
-			_counter = 0;
+			_counter = nullptr;
 		}
 
 		template<typename OutputType>
@@ -48,12 +48,16 @@ namespace AGE
 			_channels[cullingChannel].push_back(output);
 		}
 
-		std::atomic_size_t *cull(BFCBlockManagerFactory *factory)
+		std::size_t cull(BFCBlockManagerFactory *factory, std::atomic_size_t *counter)
 		{
+			std::size_t res = 0;
+			_counter = counter;
+			AGE_ASSERT(_counter != nullptr);
 			for (auto &channel : _channels)
 			{
 				auto blockNumber = factory->getBlockNumberToCull(channel.first);
-				_counter.fetch_add(blockNumber);
+				res += blockNumber;
+				_counter->fetch_add(blockNumber);
 
 				for (IBFCOutput *output : channel.second)
 				{
@@ -70,7 +74,7 @@ namespace AGE
 							CullerType *culler = BFCCullerMethod<CullerType>::GetNewCullerMethod();
 							*culler = _culler;
 							factory->cullOnBlock(channel.first, culler, i, 1, channel.second);
-							_counter.fetch_sub(1);
+							_counter->fetch_sub(1);
 							BFCCullerMethod<CullerType>::Recycle(culler);
 						});
 					}
@@ -81,13 +85,13 @@ namespace AGE
 					factory->cullOnBlock<CullerType>(channel.first, nullptr, 0, 1, channel.second);
 				}
 			}
-			return &_counter;
+			return res;
 		}
 
 	private:
 		CullerType                               _culler;
 		std::map<CullableTypeID, std::vector<IBFCOutput*>> _channels;
-		std::atomic_size_t                       _counter;
+		std::atomic_size_t                       *_counter = nullptr;
 	};
 
 	// Cullers

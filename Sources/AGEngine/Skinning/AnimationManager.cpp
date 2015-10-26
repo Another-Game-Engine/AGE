@@ -7,6 +7,8 @@
 
 #include <Threads/TaskScheduler.hpp>
 #include <Threads/Tasks/BasicTasks.hpp>
+#include <Threads/ThreadManager.hpp>
+#include <Threads/MainThread.hpp>
 
 #include <TMQ/Queue.hpp>
 
@@ -120,9 +122,12 @@ namespace AGE
 			}
 		}
 		{
-			SCOPE_profile_cpu_i("Animations", "Waiting for skinning tasks");
-			while (counter < taskNumber)
+			SCOPE_profile_cpu_i("Animations", "Stealing skinning tasks");
+			while (counter.load() < taskNumber)
 			{
+				while (CurrentMainThread()->tryToStealTasks())
+				{
+				}
 			}
 		}
 		TMQ::TaskManager::emplaceRenderTask<AGE::Tasks::UploadBonesToGPU>(&_bonesBuffers[_currentBonesBufferIndex]);

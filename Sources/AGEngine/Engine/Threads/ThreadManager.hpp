@@ -30,7 +30,6 @@ namespace AGE
 		void exit();
 
 		void forEachThreads(std::function<void(AGE::Thread *)> &&fn);
-		void setAsWorker(bool mainThread, bool prepareThread, bool renderThread);
 	private:
 		Engine *_engine;
 		SpinLock _mutex;
@@ -54,6 +53,8 @@ namespace AGE
 
 	ThreadManager *GetThreadManager();
 	Thread *CurrentThread();
+	// return main thread if you are on it or ASSERT !
+	MainThread *CurrentMainThread();
 	void SetCurrentThread(Thread *);
 	MainThread *GetMainThread();
 	RenderThread *GetRenderThread();
