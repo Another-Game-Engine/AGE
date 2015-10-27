@@ -23,9 +23,7 @@ namespace AGE
 	{
 		glm::vec4 res = glm::vec4(glm::vec3(transformation[3]), 1.0f);
 		_datas->updateRange(glm::translate(glm::mat4(1), glm::vec3(res)));
-		// TODO -> remove global property !!!! And datas too !!!
-		const std::string str = "model_matrix";
-		std::static_pointer_cast<Transformation>(_datas->globalProperties.getProperty(str))->set(transformation);
+		//_datas->setTransformation(transformation);
 		return res;
 	}
 }

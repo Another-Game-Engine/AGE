@@ -32,7 +32,16 @@ namespace AGE
 		_range = range;
 	}
 
-	void DRBPointLightData::updateRange(const glm::mat4 &transformation)
+	// TODO -> remove global property !!!! And datas too !!!
+	void DRBPointLightData::setTransformation(const glm::mat4 &transformation)
+	{
+		DRBData::setTransformation(transformation);
+		// TODO -> remove global property !!!! And datas too !!!
+		const std::string str = "model_matrix";
+		std::static_pointer_cast<Transformation>(globalProperties.getProperty(str))->set(transformation);
+	}
+
+	void  DRBPointLightData::updateRange(const glm::mat4 &transformation)
 	{
 		float errorRate = 0.01f;
 		glm::vec3 lightRange;

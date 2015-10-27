@@ -21,6 +21,8 @@ namespace AGE
 		virtual ~DRBPointLightData();
 		void setRange(const glm::vec4 &range);
 		void updateRange(const glm::mat4 &transformation);
+		// TODO to remove
+		virtual void setTransformation(const glm::mat4 &transformation) override;
 	private:
 		glm::vec4 _range;
 		glm::mat4 _sphereTransform;
