@@ -88,6 +88,7 @@ namespace AGE
 	{
 		SpotlightRenderInfos::Output                  spotlightsOutput;
 
+		//TODO pass like spotlights
 		BasicCommandGeneration::MeshAndMaterialOutput *cameraMeshs = nullptr;
 		BasicCommandGeneration::SkinnedMeshAndMaterialOutput *cameraSkinnedMeshs = nullptr;
 

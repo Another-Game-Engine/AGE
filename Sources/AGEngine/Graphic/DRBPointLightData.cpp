@@ -4,6 +4,9 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 
+//TODO remove when removing properties
+#include "Render\Properties\Transformation.hh"
+
 namespace AGE
 {
 	DRBPointLightData::DRBPointLightData()
@@ -11,9 +14,12 @@ namespace AGE
 	{
 		_rangeProperty = std::make_shared<AutoProperty<glm::vec4, Vec4>>("attenuation_light");
 		_positionLightProperty = std::make_shared<AutoProperty<glm::vec3, Vec3>>("position_light");
+		std::shared_ptr<Transformation> transformationProperty = std::make_shared<Transformation>(glm::mat4(1));
+
 
 		globalProperties.add_property(_rangeProperty);
 		globalProperties.add_property(_positionLightProperty);
+		globalProperties.add_property(transformationProperty);
 	}
 
 	DRBPointLightData::~DRBPointLightData()
@@ -50,6 +56,7 @@ namespace AGE
 		AGE_ASSERT(lightRange.x > 0);
 		_sphereTransform = glm::scale(transformation, lightRange + lightRange * errorRate);
 		_positionLightProperty->autoSet(glm::vec3(_sphereTransform[3]));
+		//setRange(glm::vec4(lightRange.x, lightRange.y, lightRange.z, 1.0f));
 		setTransformation(_sphereTransform);
 	}
 }

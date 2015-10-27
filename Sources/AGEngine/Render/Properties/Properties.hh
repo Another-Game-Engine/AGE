@@ -45,6 +45,7 @@ namespace AGE
 			return -1;
 		}
 
+		// TODO remove
 		std::shared_ptr<IProperty> &getProperty(const std::string &name)
 		{
 			int res = 0;
