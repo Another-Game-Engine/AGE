@@ -151,7 +151,7 @@ Compiler( 'Compiler-x64' )
 [
   Using( .X64BaseConfig ) 
   .Config         = 'Profile'
-  .CompilerOptions    + ' /DRELEASE /DAGE_ENABLE_PROFILING /D_CRT_SECURE_NO_WARNINGS /DNDEBUG'
+  .CompilerOptions    + '/DRETAIL /DRELEASE /DAGE_ENABLE_PROFILING /D_CRT_SECURE_NO_WARNINGS /DNDEBUG'
 
   .CompilerOptions    + .CompilerReleaseOptimizations             
   .LibrarianOptions   + .LibrarianReleaseOptimizations
@@ -162,7 +162,7 @@ Compiler( 'Compiler-x64' )
 [
   Using( .X64BaseConfig )
   .Config         = 'Retail'
-  .CompilerOptions    + ' /DRELEASE /D_CRT_SECURE_NO_WARNINGS /DNDEBUG'
+  .CompilerOptions    + '/DRETAIL /DRELEASE /D_CRT_SECURE_NO_WARNINGS /DNDEBUG'
 
   .CompilerOptions    + .CompilerReleaseOptimizations             
   .LibrarianOptions   + .LibrarianReleaseOptimizations
