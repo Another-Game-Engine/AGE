@@ -2,9 +2,13 @@
 
 #include <System/System.h>
 #include <Core/EntityFilter.hpp>
+#include <BFC/BFCCuller.hpp>
+#include <BFC/BFCFrustumCuller.hpp>
 
 namespace AGE
 {
+	struct DRBCameraDrawableList;
+
 	class RenderCameraSystem : public System<RenderCameraSystem>
 	{
 	public:
@@ -21,9 +25,12 @@ namespace AGE
 		bool         _drawDebugLines;
 		bool         _cullingEnabled;
 
+		std::atomic_uint64_t _spotCounter;
+		std::vector<std::shared_ptr<DRBCameraDrawableList>> _camerasDrawLists;
+		std::list<std::atomic_size_t> _cameraCounters;
+		std::list<BFCCuller<BFCFrustumCuller>> _frustumCullers;
+
 		virtual bool initialize();
-		virtual void updateBegin(float time);
 		virtual void mainUpdate(float time);
-		virtual void updateEnd(float time);
 	};
 }

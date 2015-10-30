@@ -14,9 +14,6 @@
 #include <BFC/BFCBlockManagerFactory.hpp>
 #include <BFC/BFCCullableObject.hpp>
 
-#include <BFC/BFCCuller.hpp>
-#include <BFC/BFCFrustumCuller.hpp>
-
 #include <Graphic/DRBCameraDrawableList.hpp>
 #include <Graphic/DRBSpotLightData.hpp>
 #include <Graphic/BFCCullableTypes.hpp>
@@ -72,12 +69,8 @@ namespace AGE
 		_spotLights.requireComponent<SpotLightComponent>();
 		_directionnalLights.requireComponent<DirectionalLightComponent>();
 		_pointLights.requireComponent<PointLightComponent>();
+		_spotCounter = 0;
 		return (true);
-	}
-
-	void RenderCameraSystem::updateBegin(float time)
-	{
-
 	}
 
 	void RenderCameraSystem::drawDebugLines(bool activated)
@@ -173,6 +166,11 @@ namespace AGE
 	void RenderCameraSystem::mainUpdate(float time)
 	{
 		SCOPE_profile_cpu_function("Camera system");
+
+		AGE_ASSERT(_spotCounter == 0);
+		AGE_ASSERT(_camerasDrawLists.size() == 0);
+		AGE_ASSERT(_frustumCullers.empty());
+
 		_scene->getBfcLinkTracker()->reset();
 
 		// check if the render thread does not already have stuff to draw
@@ -197,8 +195,6 @@ namespace AGE
 
 		std::list<std::shared_ptr<DRBPointLightData>> pointLightList;
 
-		std::atomic_uint64_t spotCounter = 0;
-		std::list<BFCCuller<BFCFrustumCuller>> spotCullers;
 
 		auto spotLightOutput = spotlightInfos->createOutput();
 
@@ -217,7 +213,7 @@ namespace AGE
 				glm::mat4 spotViewProj = spot->updateShadowMatrix();
 				Frustum spotlightFrustum;
 				spotlightFrustum.setMatrix(spotViewProj);
-				
+
 				spotLightOutput.setCameraInfos(firstCameraComponent->getProjection(), firstCameraView);
 
 				auto &spotInfos = spotLightOutput.setSpotlightInfos(
@@ -232,8 +228,8 @@ namespace AGE
 				BFCBlockManagerFactory *bf = _scene->getBfcBlockManagerFactory();
 
 				//We create a culler, with the culling rule "Frustum"
-				spotCullers.emplace_back();
-				auto &spotCuller = spotCullers.back();
+				_frustumCullers.emplace_back();
+				auto &spotCuller = _frustumCullers.back();
 				//We pass infos for frustum culling
 				spotCuller.prepareForCulling(spotlightFrustum);
 				//We get an output of a specific type
@@ -243,7 +239,7 @@ namespace AGE
 				auto skinnedOutput = spotInfos.skinnedMeshs;
 				//We get the ptr of the queue where the output should be push at the end of the
 				//culling and preparation process
-				
+
 				//auto meshResultQueue = spotlightInfos->getMeshResultQueue();
 				//auto skinnedResultQueue = spotlightInfos->getSkinnedResultQueue();
 				//meshOutput->setResultQueue(meshResultQueue);
@@ -253,26 +249,15 @@ namespace AGE
 
 				spotCuller.addOutput(BFCCullableType::CullableMesh, meshOutput);
 				spotCuller.addOutput(BFCCullableType::CullableSkinnedMesh, skinnedOutput);
-				auto counter = spotCuller.cull(bf, &spotCounter);
+				spotCuller.cull(bf, &_spotCounter);
 			}
 		}
 
 		for (auto &pointLightEntity : _pointLights.getCollection())
 		{
 			auto point = pointLightEntity->getComponent<PointLightComponent>();
-			
-			pointLightList.push_back(point->getCullableHandle().getPtr<DRBPointLight>()->getDatas());
-		}
 
-		///////////////////////////////
-		/// BLOCKING WAIT FOR SPOTS
-		{
-			SCOPE_profile_cpu_i("Camera system", "Cull for spots wait");
-			while (spotCounter.load() > 0)
-			{
-				while (CurrentMainThread()->tryToStealTasks())
-				{ }
-			}
+			pointLightList.push_back(point->getCullableHandle().getPtr<DRBPointLight>()->getDatas());
 		}
 
 		for (auto &cameraEntity : _cameras.getCollection())
@@ -283,12 +268,12 @@ namespace AGE
 			auto camera = cameraEntity->getComponent<CameraComponent>();
 
 			std::atomic_size_t counter = 0;
-			std::atomic_size_t MESH_COUNTER = 0;
 
 			auto cameraList = std::make_shared<DRBCameraDrawableList>();
 			cameraList->spotlightsOutput = spotLightOutput;
 			cameraList->cameraInfos.data = camera->getData();
 			cameraList->cameraInfos.view = glm::inverse(cameraEntity->getLink().getGlobalTransform());
+			_camerasDrawLists.push_back(cameraList);
 
 			cameraFrustum.setMatrix(camera->getProjection() * cameraList->cameraInfos.view);
 
@@ -300,7 +285,8 @@ namespace AGE
 			if (DeferredBasicBuffering::instance)
 			{
 				//We create a culler, with the culling rule "Frustum"
-				BFCCuller<BFCFrustumCuller> cameraCuller;
+				_frustumCullers.emplace_back();
+				auto &cameraCuller = _frustumCullers.back();
 				//We pass infos for frustum culling
 				cameraCuller.prepareForCulling(cameraFrustum);
 				//We get an output of a specific type
@@ -317,15 +303,8 @@ namespace AGE
 				skinnedMeshOutput->setResultQueue(skinnedMeshResultQueue);
 				cameraCuller.addOutput(BFCCullableType::CullableMesh, meshOutput);
 				cameraCuller.addOutput(BFCCullableType::CullableSkinnedMesh, skinnedMeshOutput);
-				std::atomic_size_t camCounter;
-				cameraCuller.cull(bf, &camCounter);
-				while (camCounter.load() > 0)
-				{
-					while (CurrentMainThread()->tryToStealTasks())
-					{
-					}
-				}
-				//cameraList->cameraMeshs = DeferredBasicBuffering::instance->prepareRender(camera->getProjection(), bf, cameraFrustum, &MESH_COUNTER);
+				_cameraCounters.emplace_back(0);
+				cameraCuller.cull(bf, &_cameraCounters.back());
 			}
 
 			{
@@ -334,23 +313,8 @@ namespace AGE
 				for (std::size_t i = 0; i < pointLightBlocksToCullNumber; ++i)
 				{
 					BFCBlockManagerFactory *bf = _scene->getBfcBlockManagerFactory();
-					TMQ::TaskManager::emplaceSharedTask<Tasks::Basic::VoidFunction>([bf, i, &cameraFrustum, &counter, &pointLightListToCull](){
-						counter.fetch_sub(bf->cullOnBlock(BFCCullableType::CullablePointLight, pointLightListToCull, cameraFrustum, i, 1));
-					});
+					bf->cullOnBlock(BFCCullableType::CullablePointLight, pointLightListToCull, cameraFrustum, i, 1);
 				}
-			}
-
-			{
-				SCOPE_profile_cpu_i("Camera system", "Cull for cam wait");
-				while (MESH_COUNTER.load() > 0)
-				{
-					while (CurrentMainThread()->tryToStealTasks())
-					{
-					}
-				}
-				//GetMainThread()->computeTasksWhile(std::function<bool()>([&counter, totalToCullNumber]() {
-				//	return counter >= totalToCullNumber;
-				//}));
 			}
 
 			{
@@ -361,18 +325,40 @@ namespace AGE
 					cameraList->pointLights.push_back(((DRBPointLight*)(pointLightListToCull.pop()->getDrawable()))->getDatas());
 				}
 			}
-			if (OcclusionConfig::g_Occlusion_is_enabled)
-			{
-				occlusionCulling(cameraList->meshs, _drawDebugLines);
-			}
+			//if (OcclusionConfig::g_Occlusion_is_enabled)
+			//{
+			//	occlusionCulling(cameraList->meshs, _drawDebugLines);
+			//}
 
-			cameraList->pointLights = pointLightList;
-			TMQ::TaskManager::emplaceRenderTask<AGE::DRBCameraDrawableListCommand>(cameraList);
 		}
 
+		///////////////////////////////
+		/// BLOCKING WAIT FOR SPOTS
+		{
+			SCOPE_profile_cpu_i("Camera system", "Cull for spots wait");
+			while (_spotCounter.load() > 0)
+			{
+				while (CurrentMainThread()->tryToStealTasks())
+				{
+				}
+			}
+		}
+		auto counterIt = _cameraCounters.begin();
+		while (_cameraCounters.empty() == false)
+		{
+			if (counterIt->load() == 0)
+			{
+				counterIt = _cameraCounters.erase(counterIt);
+				continue;
+			}
+			CurrentMainThread()->tryToStealTasks();
+		}
+		for (auto &e : _camerasDrawLists)
+		{
+			TMQ::TaskManager::emplaceRenderTask<AGE::DRBCameraDrawableListCommand>(e);
+		}
+		_camerasDrawLists.clear();
+		_frustumCullers.clear();
 	}
 
-	void RenderCameraSystem::updateEnd(float time)
-	{
-	}
 }

@@ -13,6 +13,10 @@
 
 #include "TMQ/Queue.hpp"
 #include "Threads/Tasks/BasicTasks.hpp"
+#include "Utils/Containers/LFQueue.hpp"
+
+#include "BFC/BFCItemID.hpp"
+#include "BFC/BFCArray.hpp"
 
 namespace AGE
 {

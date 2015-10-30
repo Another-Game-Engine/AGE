@@ -9,11 +9,11 @@ namespace AGE
 	// - the block ID
 	// - the item ID
 
-	typedef uint8_t ItemID; // In fact it's : 6
-	static const ItemID MaxItemID = ItemID(0x1FF); // 511
-	typedef uint16_t BlockID;
-	static const BlockID MaxBlockID = BlockID(0x400); // 1024
-	typedef uint8_t BlockManagerID; // It's really 8
+	typedef uint16_t ItemID;
+	static const ItemID MaxItemID = ItemID(0x400); // 1024
+	typedef uint8_t BlockID;
+	static const BlockID MaxBlockID = BlockID(0xFF); // 255
+	typedef uint8_t BlockManagerID;
 	static const BlockManagerID MaxBlockManagerID = BlockManagerID(0xFF); // 255
 
 	typedef BlockManagerID CullableTypeID;
@@ -27,8 +27,8 @@ namespace AGE
 		bool operator==(const BFCItemID &o) const;
 	private:
 		BlockManagerID _blockManagerID = MaxBlockManagerID;
-		ItemID         _itemID = 0;
 		BlockID        _blockID = 0;
+		ItemID         _itemID = 0;
 
 		friend class BFCBlockManagerFactory;
 	};
