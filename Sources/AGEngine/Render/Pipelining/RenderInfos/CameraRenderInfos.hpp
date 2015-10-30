@@ -8,17 +8,13 @@
 
 namespace AGE
 {
-	/*
-	Contains all infos needed by spotlight render pass
-	*/
-
 	struct DRBCameraDrawableList;
 
-	class SpotlightRenderInfos
+	class CameraRenderInfos
 	{
 	public:
-		typedef BasicCommandGeneration::MeshShadowOutput MeshOutput;
-		typedef BasicCommandGeneration::SkinnedShadowOutput SkinnedOutput;
+		typedef BasicCommandGeneration::MeshAndMaterialOutput MeshOutput;
+		typedef BasicCommandGeneration::SkinnedMeshAndMaterialOutput SkinnedOutput;
 
 		struct Camera
 		{
@@ -26,15 +22,8 @@ namespace AGE
 			glm::mat4 view;
 		};
 
-		struct Spotlight
+		struct MeshInfos
 		{
-			glm::vec3 position;
-			glm::vec3 attenuation;
-			glm::vec3 direction;
-			glm::vec3 color;
-			glm::mat4 matrix;
-			float     cutOff;
-			float     exponent;
 			MeshOutput* meshs;
 			SkinnedOutput* skinnedMeshs;
 		};
@@ -43,28 +32,20 @@ namespace AGE
 		class Output
 		{
 		public:
-			void setCameraInfos(const glm::mat4 &projection, const glm::mat4 &view);
-			const Spotlight &setSpotlightInfos(
-				const glm::vec3 &position,
-				const glm::vec3 &attenuation,
-				const glm::vec3 &direction,
-				const glm::vec3 &color,
-				const glm::mat4 &matrix,
-				const float &cutOff,
-				const float &exponent);
-			const std::vector<Spotlight> &getSpots() const { return _spots; }
+			const MeshInfos &setCameraInfos(const glm::mat4 &projection, const glm::mat4 &view);
+			const std::vector<MeshInfos> &getMeshs() const { return _meshs; }
 			const std::vector<Camera> &getCameras() const { return _cameras; }
 		private:
-			std::vector<Spotlight> _spots;
+			std::vector<MeshInfos> _meshs;
 			std::vector<Camera> _cameras;
 		};
 
 		Output createOutput();
 
-		SpotlightRenderInfos();
+		CameraRenderInfos();
 
 		const std::vector<Camera> &getCameras() const;
-		const std::vector<Spotlight> &getSpotlights() const;
+		const std::vector<MeshInfos> &getMeshs() const;
 		
 		// Call that after render preparation
 		void computeRenderInfos(const DRBCameraDrawableList &infos);
@@ -76,7 +57,7 @@ namespace AGE
 		LFQueue<BasicCommandGeneration::MeshShadowOutput*>          _cullingResults;
 		LFQueue<BasicCommandGeneration::SkinnedShadowOutput*>       _skinnedCullingResults;
 
-		std::vector<Spotlight> _spotlights;
+		std::vector<MeshInfos> _meshs;
 		std::vector<Camera> _cameras;
 	};
 }
