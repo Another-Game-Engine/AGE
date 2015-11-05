@@ -466,12 +466,12 @@ namespace AGE
 
 			void EntityManager::generateBasicEntities()
 			{
-				auto camera = _scene->createEntity();
-				_cam = camera->addComponent<CameraComponent>();
-				camera->getLink().setPosition(glm::vec3(0, 3, 5));
-				camera->getLink().setForward(glm::vec3(0, 0, 0));
-				camera->addComponent<FreeFlyComponent>();
-				camera->addComponent<AGE::WE::EntityRepresentation>()->editorOnly = true;
+				//auto camera = _scene->createEntity();
+				//_cam = camera->addComponent<CameraComponent>();
+				//camera->getLink().setPosition(glm::vec3(0, 3, 5));
+				//camera->getLink().setForward(glm::vec3(0, 0, 0));
+				//camera->addComponent<FreeFlyComponent>();
+				//camera->addComponent<AGE::WE::EntityRepresentation>()->editorOnly = true;
 
 				//_gizmoEntity = _scene->createEntity();
 				//_gizmoEntity->addComponent<AGE::WE::EntityRepresentation>()->editorOnly = true;
