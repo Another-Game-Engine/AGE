@@ -152,7 +152,7 @@ namespace AGE
 			SCOPE_profile_cpu_function("Scenes");
 			for (auto &e : _systems)
 			{
-				if (typeid(*e.second.get()).name() == typeid(T).name())
+				if (e.second->getTypeId() == System<T>::getTypeId())
 					return e.second->setActivation(true);
 			}
 			return false;
@@ -163,7 +163,7 @@ namespace AGE
 		{
 			for (auto &e : _systems)
 			{
-				if (typeid(*e.second.get()).name() == typeid(T).name())
+				if (e.second->getTypeId() == System<T>::getTypeId())
 					return e.second->setActivation(false);
 			}
 			return false;
