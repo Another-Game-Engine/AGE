@@ -16,7 +16,10 @@ namespace AGE
 	{
 		glm::vec4 res = glm::vec4(glm::vec3(transformation[3]), 1.0f);
 		updateRange(glm::translate(glm::mat4(1), glm::vec3(res)));
-		return res;
+		// ici j'essaye de modifier la taille de la bounding sphere
+		// pour que le culling soit correct mais ca n'apas l'air de fonctionner
+		return glm::vec4(glm::vec3(transformation[3]), _range.x);
+		//return res;
 	}
 
 	void DRBPointLight::setRange(const glm::vec4 &range)

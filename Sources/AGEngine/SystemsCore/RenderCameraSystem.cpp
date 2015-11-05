@@ -192,9 +192,6 @@ namespace AGE
 		auto &cameraPipeline = GetRenderThread()->pipelines[firstCameraData.pipeline];
 		auto spotlightInfos = cameraPipeline->getSpotlightRenderInfos();
 
-		//std::list<std::shared_ptr<DRBPointLightData>> pointLightList;
-
-
 		auto spotLightOutput = spotlightInfos->createOutput();
 
 		if (spotlightInfos != nullptr)
@@ -252,13 +249,6 @@ namespace AGE
 			}
 		}
 
-		//for (auto &pointLightEntity : _pointLights.getCollection())
-		//{
-		//	auto point = pointLightEntity->getComponent<PointLightComponent>();
-
-		//	pointLightList.push_back(point->getCullableHandle().getPtr<DRBPointLight>()->getDatas());
-		//}
-
 		for (auto &cameraEntity : _cameras.getCollection())
 		{
 			SCOPE_profile_cpu_i("Camera system", "Cull for cam");
@@ -278,7 +268,7 @@ namespace AGE
 
 			LFList<BFCItem> pointLightListToCull;
 			std::size_t pointLightBlocksToCullNumber = _scene->getBfcBlockManagerFactory()->getBlockNumberToCull(BFCCullableType::CullablePointLight);
-			counter = /*meshBlocksToCullNumber +*/ pointLightBlocksToCullNumber /*+ skinnedMeshBlocksToCullNumber*/;
+			counter = pointLightBlocksToCullNumber;
 
 			BFCBlockManagerFactory *bf = _scene->getBfcBlockManagerFactory();
 			if (DeferredBasicBuffering::instance)
