@@ -12,6 +12,9 @@
 #include <Render/Pipelining/Pipelines/CustomRenderPass/DepthOfField.hh>
 #include <Render/Pipelining/Pipelines/CustomRenderPass/DeferredBloomMerge.hh>
 #include <Render/Pipelining/Pipelines/PipelineTools.hh>
+
+#include "Render/Pipelining/RenderInfos/SpotlightRenderInfos.hpp"
+
 #include <Configuration.hpp>
 
 namespace AGE
@@ -117,6 +120,19 @@ namespace AGE
 		_rendering_list.emplace_back(bloomMerge);
 
 		_rendering_list.emplace_back(deferredOnScreen);
+		_spotlightRenderInfos = new SpotlightRenderInfos();
+	}
+
+	void DeferredShading::renderBegin(const DRBCameraDrawableList &infos)
+	{
+		SCOPE_profile_cpu_function("RenderTimer");
+		_spotlightRenderInfos->computeRenderInfos(infos);
+	}
+
+	void DeferredShading::renderEnd(const DRBCameraDrawableList &infos)
+	{
+		SCOPE_profile_cpu_function("RenderTimer");
+		_spotlightRenderInfos->clearRenderInfos(infos);
 	}
 
 	DeferredShading::DeferredShading(DeferredShading &&move) :

@@ -22,7 +22,8 @@ namespace AGE
 		virtual ~DeferredShading();
 		DeferredShading(DeferredShading const &) = delete;
 		DeferredShading &operator=(DeferredShading const &) = delete;
-
+		virtual void renderBegin(const DRBCameraDrawableList &infos);
+		virtual void renderEnd(const DRBCameraDrawableList &infos);
 	public:
 		void setAmbient(glm::vec3 const &ambient);
 		void setSkyboxLighting(glm::vec3 const &lighting);
