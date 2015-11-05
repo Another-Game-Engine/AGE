@@ -20,8 +20,6 @@ namespace AGE
 	public:
 		DRBLightElementManager(BFCBlockManagerFactory *factory);
 		BFCCullableHandle addPointLight();
-		// Be carefull, there is to mush properties to pass in parametter, so you have to add Properties, manually
-		// after the handle creation
 		BFCCullableHandle addSpotLight();
 		void removePointLight(BFCCullableHandle &handle);
 		void removeSpotLight(BFCCullableHandle &handle);

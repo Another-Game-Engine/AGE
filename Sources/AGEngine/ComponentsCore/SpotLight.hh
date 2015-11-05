@@ -69,14 +69,6 @@ namespace AGE
 		float exponent;
 		float cutOff;
 
-		// TODO
-		std::shared_ptr<IProperty>      _propShadowMatrix;
-		std::shared_ptr<IProperty>      _propPosition;
-		std::shared_ptr<IProperty>      _propAttenuation;
-		std::shared_ptr<IProperty>      _propDirection;
-		std::shared_ptr<IProperty>      _propSpotCutOff;
-		std::shared_ptr<IProperty>      _propExponentLight;
-		std::shared_ptr<IProperty>      _propColorLight;
 		BFCCullableHandle               _graphicHandle;
 	};
 }

@@ -11,9 +11,7 @@
 #include <Threads/ThreadManager.hpp>
 #include <Configuration.hpp>
 
-#include "Graphic\DRBPointLightData.hpp"
 #include "Graphic\DRBCameraDrawableList.hpp"
-#include "Graphic\DRBSpotLightData.hpp"
 
 #include <Core/Engine.hh>
 #include <AssetManagement/AssetManager.hh>

@@ -15,7 +15,6 @@
 #include <BFC/BFCCullableObject.hpp>
 
 #include <Graphic/DRBCameraDrawableList.hpp>
-#include <Graphic/DRBSpotLightData.hpp>
 #include <Graphic/BFCCullableTypes.hpp>
 #include <Graphic/DRBMeshData.hpp>
 #include <Graphic/DRBMesh.hpp>

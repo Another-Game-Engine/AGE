@@ -14,9 +14,7 @@ namespace AGE
 	{
 	public:
 		DRBSpotLight();
-		const std::shared_ptr<DRBSpotLightData> getDatas() const;
 		virtual glm::vec4 setBFCTransform(const glm::mat4 &transformation);
 	private:
-		std::shared_ptr<DRBSpotLightData> _datas;
 	};
 }

@@ -12,7 +12,6 @@
 
 #include "Graphic/DRBLightElementManager.hpp"
 #include "Graphic/DRBData.hpp"
-#include "Graphic/DRBSpotLightData.hpp"
 
 #ifdef EDITOR_ENABLED
 #	include <imgui\imgui.h>
@@ -54,14 +53,6 @@ namespace AGE
 
 	void SpotLightComponent::reset()
 	{
-		_propShadowMatrix = nullptr;
-		_propSpotCutOff = nullptr;
-		_propPosition = nullptr;
-		_propExponentLight = nullptr;
-		_propDirection = nullptr;
-		_propColorLight = nullptr;
-		_propAttenuation = nullptr;
-
 		color = glm::vec4(1.0f);
 		range = glm::vec3(1.0f, 0.1f, 0.01f);
 		exponent = 5.0f;
@@ -82,34 +73,7 @@ namespace AGE
 		auto manager = entity->getScene()->getInstance<DRBLightElementManager>();
 		_graphicHandle = manager->addSpotLight();
 
-		_propShadowMatrix = std::make_shared<AutoProperty<glm::mat4, Mat4>>("light_matrix");
-		_propPosition = std::make_shared<AutoProperty<glm::vec3, Vec3>>("position_light");
-		_propAttenuation = std::make_shared<AutoProperty<glm::vec3, Vec3>>("attenuation_light");
-		_propAttenuation->autoSet(range);
-		_propDirection = std::make_shared<AutoProperty<glm::vec3, Vec3>>("direction_light");
-		_propSpotCutOff = std::make_shared<AutoProperty<float, Vec1>>("spot_cut_off");
-		_propSpotCutOff->autoSet(cutOff);
-		_propExponentLight = std::make_shared<AutoProperty<float, Vec1>>("exponent_light");
-		_propExponentLight->autoSet(exponent);
-		_propColorLight = std::make_shared<AutoProperty<glm::vec3, Vec3>>("color_light");
-		_propColorLight->autoSet(color);
-
 		auto spotLightTexture = entity->getScene()->getInstance<AssetsManager>()->getSpotLightTexture();
-
-		auto &properties = ((DRBSpotLight*)(_graphicHandle.getPtr()))->getDatas()->globalProperties;
-		
-		properties.add_property(_propPosition);
-		properties.add_property(_propAttenuation);
-		auto &castedPropDir = std::static_pointer_cast<AutoProperty<glm::vec3, Vec3>>(_propDirection);
-		auto &castedPropPos = std::static_pointer_cast<AutoProperty<glm::vec3, Vec3>>(_propPosition);
-		auto &castedPropShadowMatrix = std::static_pointer_cast<AutoProperty<glm::mat4, Mat4>>(_propShadowMatrix);
-
-		_graphicHandle.getPtr<DRBSpotLight>()->getDatas()->registerDirectionProperty(castedPropDir);
-		_graphicHandle.getPtr<DRBSpotLight>()->getDatas()->registerPositionProperty(castedPropPos);
-		_graphicHandle.getPtr<DRBSpotLight>()->getDatas()->registerShadowMatrixProperty(castedPropShadowMatrix);
-		properties.add_property(_propSpotCutOff);
-		properties.add_property(_propExponentLight);
-		properties.add_property(_propColorLight);
 
 		entity->getLink().pushAnObject(_graphicHandle);
 	}
@@ -125,22 +89,18 @@ namespace AGE
 		bool modified = false;
 		if (ImGui::ColorEdit3("Color", glm::value_ptr(color)))
 		{
-			_propColorLight->autoSet(glm::vec3(color.x, color.y, color.z));
 			modified = true;
 		}
 		if (ImGui::SliderFloat3("Range", glm::value_ptr(range), 0.0f, 1.0f))
 		{
-			_propAttenuation->autoSet(range);
 			modified = true;
 		}
 		if (ImGui::InputFloat("Exponent", &exponent))
 		{
-			_propExponentLight->autoSet(exponent);
 			modified = true;
 		}
 		if (ImGui::InputFloat("cut off", &cutOff))
 		{
-			_propSpotCutOff->autoSet(cutOff);
 			modified = true;
 		}
 		return modified;
@@ -154,7 +114,6 @@ namespace AGE
 		float adaptedFov = glm::min(spotFov + glm::radians(30.0f), glm::radians(179.9f));
 		glm::mat4 invTransform = glm::inverse(entity->getLink().getGlobalTransform());
 		glm::mat4 spotViewProj = glm::perspective(adaptedFov, 1.0f, 0.1f, 1000.0f) * invTransform;
-		_propShadowMatrix->autoSet(spotViewProj);
 		return (spotViewProj);
 	}
 

@@ -3,6 +3,7 @@
 #include "DRBData.hpp"
 #include "Render\Pipelining\Render\RenderModes.hh"
 #include "Utils/AABoundingBox.hh"
+#include "Utils/Key.hh"
 
 namespace AGE
 {

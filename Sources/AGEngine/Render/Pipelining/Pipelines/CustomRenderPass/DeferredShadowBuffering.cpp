@@ -18,7 +18,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "Graphic/DRBCameraDrawableList.hpp"
-#include "Graphic/DRBSpotLightData.hpp"
 #include "Graphic/DRBMeshData.hpp"
 #include "Graphic/DRBSkinnedMesh.hpp"
 

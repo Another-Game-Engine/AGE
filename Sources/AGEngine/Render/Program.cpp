@@ -5,7 +5,6 @@
 #include <Render/GeometryManagement/Buffer/BufferPrograms.hh>
 #include <Render/ProgramResources/Types/Attribute.hh>
 #include <Utils/Profiler.hpp>
-#include <Render/Properties/Properties.hh>
 
 namespace AGE
 {

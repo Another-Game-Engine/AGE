@@ -14,7 +14,6 @@
 #include <Core/Engine.hh>
 
 #include "Graphic\DRBCameraDrawableList.hpp"
-#include "Graphic/DRBSpotLightData.hpp"
 
 #include "ShadowMapCollection.hpp"
 

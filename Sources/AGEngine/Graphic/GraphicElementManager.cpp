@@ -42,9 +42,6 @@ namespace AGE
 			drbMesh->datas->setPainterKey(submesh.painter);
 			drbMesh->datas->setAABB(submesh.boundingBox);
 
-			//@TOTO
-			//drbMesh->datas->globalProperties.merge_properties(submesh.properties);
-
 			std::size_t materialIndex = submesh.defaultMaterialIndex < materialInstance->datas.size() ? submesh.defaultMaterialIndex : 0;
 			auto &material = materialInstance->datas[materialIndex];
 
