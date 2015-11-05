@@ -24,7 +24,6 @@
 #include <Render/GeometryManagement/Painting/PaintingManager.hh>
 #include <Render/OcclusionTools/DepthMapManager.hpp>
 #include <Render/Pipelining/Pipelines/CustomPipeline/DeferredShading.hh>
-#include <Render/Properties/Transformation.hh>
 
 // pour le hack deguelasse du bones texture
 #include <Render\Pipelining\Pipelines\PipelineTools.hh>

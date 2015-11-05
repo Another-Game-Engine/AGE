@@ -2,8 +2,6 @@
 #include "DRBData.hpp"
 #include "DRBMeshData.hpp"
 
-#include "Render\Properties\Transformation.hh"
-
 namespace AGE
 {
 	DRBMesh::DRBMesh()

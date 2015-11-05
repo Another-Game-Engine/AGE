@@ -7,7 +7,6 @@
 
 #include "AssetManagement/Instance/MeshInstance.hh"
 #include "AssetManagement/Instance/MaterialInstance.hh"
-#include <Render/Properties/SkeletonProperty.hpp>
 
 namespace AGE
 {

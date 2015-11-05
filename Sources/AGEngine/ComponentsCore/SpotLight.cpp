@@ -4,7 +4,6 @@
 #include <glm/glm.hpp>
 #include <AssetManagement/AssetManager.hh>
 
-#include "Render/Properties/AutoProperty.hpp"
 #include "Render/ProgramResources/Types/Uniform/Vec4.hh"
 #include "Render/ProgramResources/Types/Uniform/Vec3.hh"
 #include "Render/ProgramResources/Types/Uniform/Vec1.hh"

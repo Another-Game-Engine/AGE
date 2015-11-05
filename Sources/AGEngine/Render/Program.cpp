@@ -8,8 +8,6 @@
 
 namespace AGE
 {
-	std::size_t Program::_ageIdCounter = 0;
-
 	Program::Program(std::string &&name, std::vector<std::shared_ptr<UnitProg>> const &u) :
 		_unitsProg(u),
 		_resources_factory(*this),
@@ -20,7 +18,6 @@ namespace AGE
 #ifdef AGE_DEBUG
 		_version = 0;
 #endif
-		_ageId = -1;
 	}
 
 	Program::~Program()
@@ -47,7 +44,6 @@ namespace AGE
 		_name(std::move(move._name))
 	{
 		move._id = 0;
-		_ageId = move._ageId;
 	}
 
 	GLuint Program::id() const
@@ -230,10 +226,6 @@ namespace AGE
 #ifdef AGE_DEBUG
 		++_version;
 #endif
-		if (_ageId == -1)
-		{
-			_ageId = _ageIdCounter++;
-		}
 		return true;
 	}
 

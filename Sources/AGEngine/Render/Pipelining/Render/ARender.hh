@@ -14,6 +14,7 @@ namespace AGE
 {
 	struct BFCCullableObject;
 	struct DRBCameraDrawableList;
+	class  Program;
 
 	class ARender : public IRender
 	{

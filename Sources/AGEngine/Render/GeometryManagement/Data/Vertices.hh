@@ -5,7 +5,6 @@
 #include <stdint.h>
 #include <vector>
 #include <memory>
-#include <Render/Properties/IProperty.hh>
 
 namespace AGE
 {

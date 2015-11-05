@@ -9,9 +9,7 @@
 #include "Render/ProgramResources/Types/Uniform/Vec3.hh"
 #include "Render/ProgramResources/Types/Uniform/Vec1.hh"
 #include "Render/ProgramResources/Types/Uniform/Mat4.hh"
-#include "Render/Properties/Materials/Color.hh"
 #include "Render/ProgramResources/Types/Uniform/Sampler/Sampler3D.hh"
-#include "Render/Properties/AutoProperty.hpp"
 
 #include "Graphic/DRBLightElementManager.hpp"
 #include "Graphic/DRBData.hpp"

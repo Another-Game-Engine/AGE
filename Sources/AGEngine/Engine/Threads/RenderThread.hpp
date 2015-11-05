@@ -23,7 +23,6 @@ namespace AGE
 	struct RenderImgui;
 	class PaintingManager;
 	class IRenderingPipeline;
-	class Properties;
 	class DepthMapManager;
 	class Painter;
 	class IProperty;
@@ -57,7 +56,6 @@ namespace AGE
 		// End Debug drawing
 
 		// used by render scene, maybe should be protected
-		void createMeshProperty(const Key<Painter> &painter, Key<Properties> &properties, Key<IProperty> &transformation);
 		void getQuadGeometry(Key<Vertices> &vertices, Key<Painter> &painter);
 		void getIcoSphereGeometry(Key<Vertices> &vertices, Key<Painter> &painter, uint32_t recursion);
 		void getCube(Key<Vertices> &vertices, Key<Painter> &painter);

@@ -1,8 +1,5 @@
 #include "DRBData.hpp"
 
-#include "Render\Properties\Transformation.hh"
-
-
 namespace AGE
 {
 	DRBData::DRBData()

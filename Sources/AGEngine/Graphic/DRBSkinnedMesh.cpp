@@ -1,8 +1,6 @@
 #include "DRBSkinnedMesh.hpp"
 #include "DRBMeshData.hpp"
 
-#include <Render/Properties/SkeletonProperty.hpp>
-
 namespace AGE
 {
 	DRBSkinnedMesh::DRBSkinnedMesh()
