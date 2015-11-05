@@ -72,8 +72,6 @@ namespace AGE
 		auto manager = entity->getScene()->getInstance<DRBLightElementManager>();
 		_graphicHandle = manager->addSpotLight();
 
-		auto spotLightTexture = entity->getScene()->getInstance<AssetsManager>()->getSpotLightTexture();
-
 		entity->getLink().pushAnObject(_graphicHandle);
 	}
 

@@ -605,7 +605,7 @@ namespace AGE
 #ifdef AGE_ENABLE_IMGUI
 			ImGui::Begin("ASSETS LOADING", (bool*)1, ImVec2(0, 0), 0.3f, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings);
 			ImGui::SetWindowPos(ImVec2(30, 30));
-			ImGui::Text("Assets loading : %s / %s", std::to_string(toLoad).c_str(), std::to_string(total).c_str());
+			ImGui::Text("Assets loading : %i / %i", toLoad, total);
 			ImGui::End();
 #endif
 			_isLoading = true;
@@ -662,14 +662,14 @@ namespace AGE
 	std::shared_ptr<Texture2D> const &AssetsManager::getPointLightTexture()
 	{
 		if (!_pointLight)
-			_pointLight = std::static_pointer_cast<Texture2D>(loadTexture("pointlight.dds", ""));
+			_pointLight = std::static_pointer_cast<Texture2D>(loadTexture("pointlight.dds", "BASIC_ASSETS"));
 		return _pointLight;
 	}
 
 	std::shared_ptr<Texture2D> const &AssetsManager::getSpotLightTexture()
 	{
 		if (!_spotLight)
-			_spotLight = std::static_pointer_cast<Texture2D>(loadTexture("spotlight.dds", ""));
+			_spotLight = std::static_pointer_cast<Texture2D>(loadTexture("spotlight.dds", "BASIC_ASSETS"));
 		return _spotLight;
 	}
 

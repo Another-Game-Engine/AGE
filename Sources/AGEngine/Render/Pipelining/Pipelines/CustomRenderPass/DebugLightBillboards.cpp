@@ -84,36 +84,36 @@ namespace AGE
 				_programs[PROGRAM_BUFFERING_LIGHT]->get_resource<Mat4>("projection_matrix").set(infos.cameraInfos.data.projection);
 				_programs[PROGRAM_BUFFERING_LIGHT]->get_resource<Mat4>("view_matrix").set(infos.cameraInfos.view);
 			}
-			auto &pointLightList = infos.pointLights;
-			if (pointLightList.size() > 0)
-			{
-				SCOPE_profile_gpu_i("Render debug sprite lights");
-				SCOPE_profile_cpu_i("RenderTimer", "Render debug sprite pointlights");
+			//auto &pointLightList = infos.pointLights;
+			//if (pointLightList.size() > 0)
+			//{
+			//	SCOPE_profile_gpu_i("Render debug sprite lights");
+			//	SCOPE_profile_cpu_i("RenderTimer", "Render debug sprite pointlights");
 
-				auto map = GetEngine()->getInstance<AssetsManager>()->getPointLightTexture();
+			//	auto map = GetEngine()->getInstance<AssetsManager>()->getPointLightTexture();
 
-				_programs[PROGRAM_BUFFERING_LIGHT]->get_resource<SamplerBuffer>("model_matrix_tbo").set(_positionBuffer);
-				_programs[PROGRAM_BUFFERING_LIGHT]->get_resource<Sampler2D>("sprite_light_map").set(map);
+			//	_programs[PROGRAM_BUFFERING_LIGHT]->get_resource<SamplerBuffer>("model_matrix_tbo").set(_positionBuffer);
+			//	_programs[PROGRAM_BUFFERING_LIGHT]->get_resource<Sampler2D>("sprite_light_map").set(map);
 
-				_positionBuffer->resetOffset();
-				_quadPainter->instanciedDrawBegin(_programs[PROGRAM_BUFFERING_LIGHT]);
-				for (auto &pl : pointLightList)
-				{
-					if (_positionBuffer->isFull())
-					{
-						_positionBuffer->sendBuffer();
-						_quadPainter->instanciedDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING_LIGHT], _quadVertices, _positionBuffer->getOffset());
-						_positionBuffer->resetOffset();
-					}
-				}
-				if (_positionBuffer->isEmpty() == false)
-				{
-					_positionBuffer->sendBuffer();
-					_quadPainter->instanciedDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING_LIGHT], _quadVertices, _positionBuffer->getOffset());
-					_positionBuffer->resetOffset();
-				}
-				_quadPainter->instanciedDrawEnd();
-			}
+			//	_positionBuffer->resetOffset();
+			//	_quadPainter->instanciedDrawBegin(_programs[PROGRAM_BUFFERING_LIGHT]);
+			//	for (auto &pl : pointLightList)
+			//	{
+			//		if (_positionBuffer->isFull())
+			//		{
+			//			_positionBuffer->sendBuffer();
+			//			_quadPainter->instanciedDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING_LIGHT], _quadVertices, _positionBuffer->getOffset());
+			//			_positionBuffer->resetOffset();
+			//		}
+			//	}
+			//	if (_positionBuffer->isEmpty() == false)
+			//	{
+			//		_positionBuffer->sendBuffer();
+			//		_quadPainter->instanciedDraw(GL_TRIANGLES, _programs[PROGRAM_BUFFERING_LIGHT], _quadVertices, _positionBuffer->getOffset());
+			//		_positionBuffer->resetOffset();
+			//	}
+			//	_quadPainter->instanciedDrawEnd();
+			//}
 
 			//@CESAR TODO
 			//auto &spotLightList = infos.spotLights;

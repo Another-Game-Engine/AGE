@@ -62,15 +62,16 @@ namespace AGE
 
 	bool WorldEditorScene::_userUpdateBegin(float time)
 	{
+		if (_displayWindow)
+		{
+			getInstance<AGE::WE::ArchetypeEditorManager>()->update(this);
+		}
 		return true;
 	}
 
 	bool WorldEditorScene::_userUpdateEnd(float time)
 	{
-		if (_displayWindow)
-		{
-			getInstance<AGE::WE::ArchetypeEditorManager>()->update(this);
-		}
+
 		// TODO
 		//AGE::GetPrepareThread()->getQueue()->emplaceCommand<AGE::Commands::ToRender::RenderDrawLists>();
 		return true;
