@@ -76,7 +76,7 @@ namespace AGE
 		}
 
 		_quadPainter->uniqueDrawBegin(_programs[PROGRAM_SCREEN]);
-		_quadPainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_SCREEN], Properties(), _quadVertices);
+		_quadPainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_SCREEN], _quadVertices);
 		_quadPainter->uniqueDrawEnd();
 	}
 

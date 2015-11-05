@@ -81,7 +81,7 @@ namespace AGE
 		OpenGLState::glDisable(GL_DEPTH_TEST);
 		OpenGLState::glDisable(GL_STENCIL_TEST);
 		_quadPainter->uniqueDrawBegin(_programs[PROGRAM_MERGING]);
-		_quadPainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_MERGING], Properties(), _quadVertices);
+		_quadPainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_MERGING], _quadVertices);
 		_quadPainter->uniqueDrawEnd();
 	}
 

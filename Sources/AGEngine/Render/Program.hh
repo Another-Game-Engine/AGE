@@ -74,10 +74,6 @@ namespace AGE
 		void destroy();
 		inline bool isCompiled() { return _compiled; }
 
-		void registerProperties(Properties &properties);
-		void updateProperties(Properties &properties);
-		void updateInstanciedProperties(Properties &properties);
-		void updateNonInstanciedProperties(Properties &properties);
 	private:
 		void _get_resources();
 		void _get_resource(size_t index, GLenum resource, std::string const & buffer);

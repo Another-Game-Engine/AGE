@@ -193,7 +193,7 @@ namespace AGE
 		auto &cameraPipeline = GetRenderThread()->pipelines[firstCameraData.pipeline];
 		auto spotlightInfos = cameraPipeline->getSpotlightRenderInfos();
 
-		std::list<std::shared_ptr<DRBPointLightData>> pointLightList;
+		//std::list<std::shared_ptr<DRBPointLightData>> pointLightList;
 
 
 		auto spotLightOutput = spotlightInfos->createOutput();
@@ -253,12 +253,12 @@ namespace AGE
 			}
 		}
 
-		for (auto &pointLightEntity : _pointLights.getCollection())
-		{
-			auto point = pointLightEntity->getComponent<PointLightComponent>();
+		//for (auto &pointLightEntity : _pointLights.getCollection())
+		//{
+		//	auto point = pointLightEntity->getComponent<PointLightComponent>();
 
-			pointLightList.push_back(point->getCullableHandle().getPtr<DRBPointLight>()->getDatas());
-		}
+		//	pointLightList.push_back(point->getCullableHandle().getPtr<DRBPointLight>()->getDatas());
+		//}
 
 		for (auto &cameraEntity : _cameras.getCollection())
 		{
@@ -322,7 +322,13 @@ namespace AGE
 
 				while (pointLightListToCull.getSize() > 0)
 				{
-					cameraList->pointLights.push_back(((DRBPointLight*)(pointLightListToCull.pop()->getDrawable()))->getDatas());
+					cameraList->pointLights.push_back(PointlightInfos());
+					auto pl = (DRBPointLight*)pointLightListToCull.pop()->getDrawable();
+					cameraList->pointLights.back().range = pl->getRange();
+					cameraList->pointLights.back().sphereTransform = pl->getSphereTransform();
+					cameraList->pointLights.back().position = pl->getPosition();
+					cameraList->pointLights.back().colorLight = pl->getColorLight();
+					cameraList->pointLights.back().ambiantColor = pl->getAmbiantColor();
 				}
 			}
 			//if (OcclusionConfig::g_Occlusion_is_enabled)

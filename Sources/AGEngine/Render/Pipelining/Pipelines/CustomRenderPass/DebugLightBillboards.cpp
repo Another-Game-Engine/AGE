@@ -86,7 +86,7 @@ namespace AGE
 				_programs[PROGRAM_BUFFERING_LIGHT]->get_resource<Mat4>("projection_matrix").set(infos.cameraInfos.data.projection);
 				_programs[PROGRAM_BUFFERING_LIGHT]->get_resource<Mat4>("view_matrix").set(infos.cameraInfos.view);
 			}
-			auto &pointLightList = (std::list<std::shared_ptr<DRBPointLightData>>&)(infos.pointLights);
+			auto &pointLightList = infos.pointLights;
 			if (pointLightList.size() > 0)
 			{
 				SCOPE_profile_gpu_i("Render debug sprite lights");
@@ -101,8 +101,6 @@ namespace AGE
 				_quadPainter->instanciedDrawBegin(_programs[PROGRAM_BUFFERING_LIGHT]);
 				for (auto &pl : pointLightList)
 				{
-					_programs[PROGRAM_BUFFERING_LIGHT]->registerProperties(pl->globalProperties);
-					_programs[PROGRAM_BUFFERING_LIGHT]->updateProperties(pl->globalProperties);
 					if (_positionBuffer->isFull())
 					{
 						_positionBuffer->sendBuffer();

@@ -86,6 +86,15 @@ namespace AGE
 		CameraData data;
 	};
 
+	struct PointlightInfos
+	{
+		glm::vec3 range;
+		glm::vec3 position;
+		glm::mat4 sphereTransform;
+		glm::vec3 colorLight;
+		glm::vec3 ambiantColor;
+	};
+
 	struct DRBCameraDrawableList
 	{
 		SpotlightRenderInfos::Output                  spotlightsOutput;
@@ -96,7 +105,7 @@ namespace AGE
 		BasicCommandGeneration::SkinnedMeshAndMaterialOutput *cameraSkinnedMeshs = nullptr;
 
 		std::list<std::shared_ptr<DRBData>> meshs;
-		std::list<std::shared_ptr<DRBPointLightData>> pointLights;
+		std::vector<PointlightInfos> pointLights;
 		CameraInfos cameraInfos;
 	};
 

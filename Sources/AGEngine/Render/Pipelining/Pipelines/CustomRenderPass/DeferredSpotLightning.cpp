@@ -116,7 +116,7 @@ namespace AGE
 			_programs[PROGRAM_LIGHTNING]->get_resource<Vec1>("exponent_light").set(spot.exponent);
 
 			painter->uniqueDrawBegin(_programs[PROGRAM_LIGHTNING]);
-			painter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_LIGHTNING], Properties(), _quad);
+			painter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_LIGHTNING], _quad);
 			painter->uniqueDrawEnd();
 		}
 	}

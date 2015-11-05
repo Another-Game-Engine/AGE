@@ -23,11 +23,6 @@
 
 #include <Render/Textures/Texture2D.hh>
 #include <Render/GeometryManagement/Painting/PaintingManager.hh>
-#include <Render/Properties/Transformation.hh>
-#include <Render/Properties/Materials/Color.hh>
-#include <Render/Properties/Materials/MapColor.hh>
-#include <Render/Properties/Materials/ScaleUVs.hpp>
-#include <Render/Properties/Materials/Ratio.hh>
 #include <Render/GeometryManagement/Painting/Painter.hh>
 #include <Render/GeometryManagement/Data/Vertices.hh>
 

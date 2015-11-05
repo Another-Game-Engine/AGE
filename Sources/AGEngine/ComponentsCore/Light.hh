@@ -43,9 +43,6 @@ namespace AGE
 
 		BFCCullableHandle          _graphicHandle;
 
-		std::shared_ptr<IProperty> _colorProperty = nullptr;
-		std::shared_ptr<IProperty> _ambiantColorProperty = nullptr;
-
 		static float computePointLightRange(float minValue, glm::vec3 const &attenuation);
 	};
 

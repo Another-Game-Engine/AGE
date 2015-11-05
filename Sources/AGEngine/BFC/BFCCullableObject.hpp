@@ -21,7 +21,7 @@ namespace AGE
 		virtual ~BFCCullableObject() {}
 		inline CullableTypeID getBFCType() const { return _type; };
 		virtual glm::vec4 setBFCTransform(const glm::mat4 &transformation);
-	private:
+	protected:
 		glm::mat4 _transform;
 		const CullableTypeID _type;
 	};

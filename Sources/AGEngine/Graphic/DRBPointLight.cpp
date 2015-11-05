@@ -1,29 +1,53 @@
 #include "DRBPointLight.hpp"
 #include "DRBPointLightData.hpp"
 
-#include <glm/gtc/matrix_transform.hpp>
+#include "Utils/MathematicTools.hh"
 
-//TODO remove when removing properties
-#include "Render\Properties\Transformation.hh"
+#include <glm/gtc/matrix_transform.hpp>
 
 namespace AGE
 {
 	DRBPointLight::DRBPointLight()
 		: BFCCullableObject(BFCCullableType::CullablePointLight)
 	{
-		_datas = std::make_shared<DRBPointLightData>();
-	}
-
-	const std::shared_ptr<DRBPointLightData> DRBPointLight::getDatas() const
-	{
-		return _datas;
 	}
 
 	glm::vec4 DRBPointLight::setBFCTransform(const glm::mat4 &transformation)
 	{
 		glm::vec4 res = glm::vec4(glm::vec3(transformation[3]), 1.0f);
-		_datas->updateRange(glm::translate(glm::mat4(1), glm::vec3(res)));
-		//_datas->setTransformation(transformation);
+		updateRange(glm::translate(glm::mat4(1), glm::vec3(res)));
 		return res;
+	}
+
+	void DRBPointLight::setRange(const glm::vec4 &range)
+	{
+		_range = glm::vec3(range);
+	}
+
+	void  DRBPointLight::updateRange(const glm::mat4 &transformation)
+	{
+		float errorRate = 0.01f;
+		glm::vec3 lightRange;
+		glm::vec3 equation(_range.z, _range.y, _range.x);
+
+		// if the value of equation.z + equation.y * dist + equation.x * dist * dist == 256
+		// then the pixels are not lighted anymore (pxlColor = final_color / attenuation)
+		equation.z -= 256;
+		if (equation.x == 0) // first degree
+		{
+			// infinite range if there is no distance attenuation
+			AGE_ASSERT(equation.y != 0);
+			lightRange = glm::vec3(-equation.z / equation.y);
+		}
+		else // second degree
+		{
+			float d = Mathematic::secondDegreeDiscriminant(equation);
+			glm::vec2 res = Mathematic::resolveSecondDegree(equation, d);
+			lightRange = glm::vec3(glm::max(res.x, res.y));
+		}
+		AGE_ASSERT(lightRange.x > 0);
+		_sphereTransform = glm::scale(transformation, lightRange + lightRange * errorRate);
+		_position  = glm::vec3(_sphereTransform[3]);
+		_transform = transformation;
 	}
 }

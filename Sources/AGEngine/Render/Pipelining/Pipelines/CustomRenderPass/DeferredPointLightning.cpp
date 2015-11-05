@@ -104,6 +104,13 @@ namespace AGE
 			_programs[PROGRAM_STENCIL]->get_resource<Mat4>("view_matrix").set(infos.cameraInfos.view);
 		}
 
+		auto stencilModelMatrix = _programs[PROGRAM_STENCIL]->get_resource<Mat4>("model_matrix");
+		auto lightningModelMatrix = _programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("model_matrix");
+
+		auto colorLightProperty = _programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("color_light");
+		auto ambiantColorProperty = _programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("ambient_color");
+		auto attenuationProperty = _programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("attenuation_light");
+		auto positionProperty = _programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("position_light");
 
 		// Disable blending to clear the color buffer
 		OpenGLState::glDisable(GL_BLEND);
@@ -122,7 +129,7 @@ namespace AGE
 		OpenGLState::glClearStencil(0);
 		// Iterate throught each light
 
-		auto &pointList = (std::list<std::shared_ptr<DRBPointLightData>>&)(infos.pointLights);
+		auto &pointList = infos.pointLights;
 
 		for (auto &pl : pointList)
 		{
@@ -140,8 +147,9 @@ namespace AGE
 
 			// Question for Paul :
 			// This cannot be optimized, doing 2 for loop instead of one ?
+			stencilModelMatrix.set(pl.sphereTransform);
 			_spherePainter->uniqueDrawBegin(_programs[PROGRAM_STENCIL]);
-			_spherePainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_STENCIL], pl->globalProperties, _sphereVertices);
+			_spherePainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_STENCIL]/*, pl->globalProperties*/, _sphereVertices);
 			_spherePainter->uniqueDrawEnd();
 
 			OpenGLState::glColorMask(glm::bvec4(true));
@@ -150,8 +158,13 @@ namespace AGE
 			OpenGLState::glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
 			OpenGLState::glCullFace(GL_FRONT);
 
+			lightningModelMatrix.set(pl.sphereTransform);
+			colorLightProperty.set(pl.colorLight);
+			ambiantColorProperty.set(pl.ambiantColor);
+			attenuationProperty.set(pl.range);
+			positionProperty.set(pl.position);
 			_spherePainter->uniqueDrawBegin(_programs[PROGRAM_LIGHTNING]);
-			_spherePainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_LIGHTNING], pl->globalProperties, _sphereVertices);
+			_spherePainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_LIGHTNING]/*, pl->globalProperties*/, _sphereVertices);
 			_spherePainter->uniqueDrawEnd();
 
 		}

@@ -87,7 +87,7 @@ namespace AGE
 		{
 			lines = _painterManager->get_painter(_2dLines.painterKey);
 			lines->uniqueDrawBegin(_programs[PROGRAM_DRAW_2D_LINE]);
-			lines->uniqueDraw(GL_LINES, _programs[PROGRAM_DRAW_2D_LINE], Properties(), _2dLines.verticesKey);
+			lines->uniqueDraw(GL_LINES, _programs[PROGRAM_DRAW_2D_LINE], _2dLines.verticesKey);
 			lines->uniqueDrawEnd();
 		}
 
@@ -99,7 +99,7 @@ namespace AGE
 		{
 			lines = _painterManager->get_painter(_3dLines.painterKey);
 			lines->uniqueDrawBegin(_programs[PROGRAM_DRAW_3D_LINE]);
-			lines->uniqueDraw(GL_LINES, _programs[PROGRAM_DRAW_3D_LINE], Properties(), _3dLines.verticesKey);
+			lines->uniqueDraw(GL_LINES, _programs[PROGRAM_DRAW_3D_LINE], _3dLines.verticesKey);
 			lines->uniqueDrawEnd();
 		}
 
@@ -111,7 +111,7 @@ namespace AGE
 		{
 			lines = _painterManager->get_painter(_3dlinesDepth.painterKey);
 			lines->uniqueDrawBegin(_programs[PROGRAM_DRAW_3D_LINE]);
-			lines->uniqueDraw(GL_LINES, _programs[PROGRAM_DRAW_3D_LINE], Properties(), _3dlinesDepth.verticesKey);
+			lines->uniqueDraw(GL_LINES, _programs[PROGRAM_DRAW_3D_LINE], _3dlinesDepth.verticesKey);
 			lines->uniqueDrawEnd();
 		}
 	}
