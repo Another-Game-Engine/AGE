@@ -38,7 +38,7 @@ namespace AGE
 		void MaterialRawFile::cook()
 		{
 			auto cookingTask = std::make_shared<CookingTask>(dataSet);
-			AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=]()
+			TMQ::TaskManager::emplaceSharedTask<AGE::Tasks::Basic::VoidFunction>([=]()
 			{
 				cookingTask->serializedDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>(WE::EditorConfiguration::GetCookedDirectory());
 				cookingTask->rawDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>(WE::EditorConfiguration::GetRawDirectory());
