@@ -80,9 +80,25 @@ namespace AGE
 			}
 			else
 			{
-				if (itr->value.IsObject())
+				auto member = document[name].MemberBegin();
+				if (member->value.IsString())
 				{
 					setConfiguration<std::string>(std::string(name), "");
+					_confs[name]->load(document[name], document);
+				}
+				else if (member->value.IsInt())
+				{
+					setConfiguration<int>(std::string(name), 0);
+					_confs[name]->load(document[name], document);
+				}
+				else if (member->value.IsUint())
+				{
+					setConfiguration<unsigned int>(std::string(name), 0);
+					_confs[name]->load(document[name], document);
+				}
+				else if (member->value.IsBool_())
+				{
+					setConfiguration<bool>(std::string(name), false);
 					_confs[name]->load(document[name], document);
 				}
 			}

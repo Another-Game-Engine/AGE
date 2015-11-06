@@ -1,8 +1,8 @@
 #include "RenderThread.hpp"
 
 #include <Core/Engine.hh>
-#include <Core/Engine.hh>
 #include <Core/Age_Imgui.hpp>
+#include <Core/ConfigurationManager.hpp>
 
 #include <Utils/ThreadName.hpp>
 #include <Utils/OpenGL.hh>
@@ -346,7 +346,12 @@ namespace AGE
 		registerCallback<Tasks::Render::CreateRenderContext>([this](Tasks::Render::CreateRenderContext &msg)
 		{
 			_context = msg.engine->setInstance<SdlContext, IRenderContext>();
-			if (!_context->init(1280, 720, "~AGE~ V0.00001 Demo"))
+
+			auto configurationManager = msg.engine->getInstance<ConfigurationManager>();
+
+			auto w = configurationManager->getConfiguration<int>("windowW")->getValue();
+			auto h = configurationManager->getConfiguration<int>("windowH")->getValue();
+			if (!_context->init(w, h, "~AGE~ V0.00001 Demo"))
 			{
 				msg.setValue(false);
 				return;

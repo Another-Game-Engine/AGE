@@ -102,32 +102,9 @@ namespace AGE
 	{
 		AGE_ASSERT(!_initialized && "Engine already initialized.");
 		Age_microprofileInit();
-		{
-			auto futur = TMQ::TaskManager::emplaceRenderFutureTask<Tasks::Render::CreateRenderContext, bool>(this);
-			auto success = futur.get();
-			if (!success)
-			{
-				return false;
-			}
-		}
 
 		_timer = setInstance<Timer>();
-
 		setInstance<FileSystem>();
-
-#ifdef USE_DEFAULT_ENGINE_CONFIGURATION
-		setInstance<AGE::AssetsManager>();
-		setInstance<AGE::AnimationManager>();
-		setInstance<ConfigurationManager>("../../Configuration.json");
-		setInstance<ArchetypeManager, IArchetypeManager>()->setLibraryFolder("../../Datas/Archetypes/");
-
-		getInstance<ConfigurationManager>()->loadFile();
-		auto assetsFilePath = getInstance<ConfigurationManager>()->getConfiguration<std::string>("AssetsPath");
-		if (assetsFilePath != nullptr)
-		{
-			getInstance<AGE::AssetsManager>()->setAssetsDirectory(assetsFilePath->getValue());
-		}
-#endif //USE_DEFAULT_ENGINE_CONFIGURATION
 
 		wchar_t buf[BufferSize];
 		if (GetModuleFileNameW(nullptr, buf, sizeof(buf)))
@@ -204,6 +181,44 @@ namespace AGE
 		}
 		getInstance<FileSystem>()->initialize(password.c_str());
 
+		_initialized = true;
+
+		//if (!configurationManager->getConfiguration<bool>("fullScreen"))
+		//{
+		//	configurationManager->setConfiguration<bool>(std::string("fullScreen"), false);
+		//}
+
+		auto configurationManager = setInstance<ConfigurationManager>("Configuration.json");
+		configurationManager->loadFile();
+		if (!configurationManager->getConfiguration<int>("windowW"))
+		{
+			configurationManager->setConfiguration<int>(std::string("windowW"), 1280);
+		}
+		if (!configurationManager->getConfiguration<int>("windowH"))
+		{
+			configurationManager->setConfiguration<int>(std::string("windowH"), 720);
+		}
+
+		{
+			auto futur = TMQ::TaskManager::emplaceRenderFutureTask<Tasks::Render::CreateRenderContext, bool>(this);
+			auto success = futur.get();
+			if (!success)
+			{
+				return false;
+			}
+		}
+#ifdef USE_DEFAULT_ENGINE_CONFIGURATION
+		setInstance<AGE::AssetsManager>();
+		setInstance<AGE::AnimationManager>();
+		setInstance<ArchetypeManager, IArchetypeManager>()->setLibraryFolder("../../Datas/Archetypes/");
+
+		auto assetsFilePath = getInstance<ConfigurationManager>()->getConfiguration<std::string>("AssetsPath");
+		if (assetsFilePath != nullptr)
+		{
+			getInstance<AGE::AssetsManager>()->setAssetsDirectory(assetsFilePath->getValue());
+		}
+#endif //USE_DEFAULT_ENGINE_CONFIGURATION
+
 		if (!fn())
 			return false;
 		{
@@ -214,8 +229,6 @@ namespace AGE
 				return false;
 			}
 		}
-
-		_initialized = true;
 
 		GetMainThread()->run();
 

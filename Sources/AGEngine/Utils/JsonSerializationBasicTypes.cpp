@@ -19,6 +19,34 @@ namespace JsonSerialization
 		value = json["int"].GetInt();
 	}
 
+	void save(const unsigned int &value, rapidjson::Value &json, rapidjson::Document &document)
+	{
+		rapidjson::Value v(rapidjson::kNumberType);
+		v.SetUint(value);
+		json.AddMember("unsigned int", v, document.GetAllocator());
+	}
+
+	void load(unsigned int &value, rapidjson::Value &json, rapidjson::Document &document)
+	{
+		if (!json.HasMember("unsigned int"))
+			return;
+		value = json["unsigned int"].GetUint();
+	}
+
+	void save(const bool &value, rapidjson::Value &json, rapidjson::Document &document)
+	{
+		rapidjson::Value v;
+		v.SetBool_(value);
+		json.AddMember("bool", v, document.GetAllocator());
+	}
+
+	void load(bool &value, rapidjson::Value &json, rapidjson::Document &document)
+	{
+		if (!json.HasMember("bool"))
+			return;
+		value = json["bool"].GetBool_();
+	}
+
 	void save(const glm::uvec2 &value, rapidjson::Value &json, rapidjson::Document &document)
 	{
 		rapidjson::Value v(rapidjson::kArrayType);
