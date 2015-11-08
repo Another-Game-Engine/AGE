@@ -26,6 +26,9 @@ This program is released under the terms of the license contained in the file LI
 
 ## Installation :
 
+[WARNING] The project ONLY works on Visual Studio 2013[WARNING]
+[WARNING] The project ONLY works on Visual Studio 2013[WARNING]
+
 1 ) In git bash run : GenerateProjects.bat
 
 2 ) In git bash run : GenerateSolution.bat
