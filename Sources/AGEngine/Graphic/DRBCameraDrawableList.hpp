@@ -9,7 +9,11 @@
 
 #include "Utils/Key.hh"
 
-//@ANTHO pass in .cpp and remove max include
+#include <Render/Pipelining/Prepare/MeshBufferingPrepare.hpp>
+
+#include "Render\Pipelining\RenderInfos/SpotlightRenderInfos.hpp"
+#include "Render\Pipelining\RenderInfos/CameraRenderInfos.hpp"
+
 
 // to remove
 #include "Utils/Debug.hpp"
@@ -18,6 +22,9 @@ namespace AGE
 {
 	struct DRBData;
 	class TextureCubeMap;
+	struct DRBPointLightData;
+	struct DRBSpotLightData;
+
 	struct DRBSpotLightOccluder
 	{
 		static const float invalidVector[4];
@@ -79,11 +86,26 @@ namespace AGE
 		CameraData data;
 	};
 
+	struct PointlightInfos
+	{
+		glm::vec3 range;
+		glm::vec3 position;
+		glm::mat4 sphereTransform;
+		glm::vec3 colorLight;
+		glm::vec3 ambiantColor;
+	};
+
 	struct DRBCameraDrawableList
 	{
+		SpotlightRenderInfos::Output                  spotlightsOutput;
+		CameraRenderInfos::Output                     camerasOutput;
+
+		//TODO pass like spotlights
+		BasicCommandGeneration::MeshAndMaterialOutput *cameraMeshs = nullptr;
+		BasicCommandGeneration::SkinnedMeshAndMaterialOutput *cameraSkinnedMeshs = nullptr;
+
 		std::list<std::shared_ptr<DRBData>> meshs;
-		std::list<std::shared_ptr<DRBData>> pointLights;
-		std::list<std::shared_ptr<DRBSpotLightDrawableList>> spotLights;
+		std::vector<PointlightInfos> pointLights;
 		CameraInfos cameraInfos;
 	};
 

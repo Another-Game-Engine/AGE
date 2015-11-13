@@ -21,7 +21,7 @@ void Skeleton::updateSkinning(std::shared_ptr<AnimationInstance> animInstance)
 
 	readNodeHierarchy(this->firstBone, animInstance);
 
-	auto &transformations = animInstance->transformations;
+	auto transformations = animInstance->getTransformations();
 	for (std::size_t i = 0; i < bones.size(); ++i)
 	{
 		transformations[i] *= bones[i].offset;
@@ -37,9 +37,9 @@ void Skeleton::readNodeHierarchy(
 
 	glm::mat4 nodeT = animation.bindPoses[boneID];
 	if (boneID == firstBone)
-		animation.transformations[boneID] = nodeT;
+		animation.getTransformations()[boneID] = nodeT;
 	else
-		animation.transformations[boneID] = animation.transformations[bone.parent] * nodeT;
+		animation.getTransformations()[boneID] = animation.getTransformations()[bone.parent] * nodeT;
 
 	for (unsigned int i = 0; i < bones[boneID].children.size(); ++i)
 	{

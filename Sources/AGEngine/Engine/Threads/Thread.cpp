@@ -10,7 +10,6 @@ namespace AGE
 		, _name(threadTypeToString(type))
 		, _systemId(0)
 	{
-		_worker = true;
 		taskCounter = 0;
 	}
 
@@ -23,6 +22,7 @@ namespace AGE
 	{
 		_systemId = std::this_thread::get_id().hash();
 		Singleton<ThreadManager>::getInstance()->registerThreadId(_systemId, _id);
+		SetCurrentThread(this);
 		return _id;
 	}
 
@@ -106,9 +106,4 @@ namespace AGE
 		return res;
 	}
 
-	void Thread::setAsWorker(bool ToF)
-	{
-		assert(_id < ThreadType::Worker1);
-		_worker = ToF;
-	}
 }

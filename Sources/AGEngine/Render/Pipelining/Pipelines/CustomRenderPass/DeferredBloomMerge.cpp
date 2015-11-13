@@ -81,7 +81,7 @@ namespace AGE
 			_programs[PROGRAM_BLOOM_MERGE]->get_resource<Sampler2D>("blurredMap2").set(_blurred2);
 
 			_quadPainter->uniqueDrawBegin(_programs[PROGRAM_BLOOM_MERGE]);
-			_quadPainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BLOOM_MERGE], Properties(), _quadVertices);
+			_quadPainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BLOOM_MERGE], _quadVertices);
 			_quadPainter->uniqueDrawEnd();
 		}
 	}

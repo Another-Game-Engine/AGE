@@ -107,6 +107,7 @@ namespace AGE
 		{
 			std::function<AssetsLoadingResult()> function;
 			LoadAssetMessage(const std::function<AssetsLoadingResult()> &_function);
+			virtual ~LoadAssetMessage(){}
 		};
 
 	public:
@@ -121,7 +122,6 @@ namespace AGE
 		std::shared_ptr<AnimationData> getAnimation(const OldFile &filePath);
 		bool loadSkeleton(const OldFile &filePath, const std::string &loadingChannel = "");
 		std::shared_ptr<Skeleton> getSkeleton(const OldFile &filePath);
-		bool reloadMaterial(const OldFile &filePath, const std::string &loadingChannel = "");
 		bool loadMaterial(const OldFile &filePath, const std::string &loadingChannel = "");
 		std::shared_ptr<MaterialSetInstance> getMaterial(const OldFile &filePath);
 		std::shared_ptr<MeshInstance> getMesh(const OldFile &filePath);

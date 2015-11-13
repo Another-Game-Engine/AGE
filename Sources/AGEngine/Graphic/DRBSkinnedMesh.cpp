@@ -1,12 +1,10 @@
 #include "DRBSkinnedMesh.hpp"
 #include "DRBMeshData.hpp"
 
-#include <Render/Properties/SkeletonProperty.hpp>
-
 namespace AGE
 {
 	DRBSkinnedMesh::DRBSkinnedMesh()
-		: _skeletonProperty(nullptr)
+		: DRBMesh(BFCCullableType::CullableSkinnedMesh)
 	{
 		datas->setRenderMode(RenderModes::AGE_SKINNED, true);
 	}
@@ -14,9 +12,9 @@ namespace AGE
 	DRBSkinnedMesh::~DRBSkinnedMesh()
 	{}
 
-	void DRBSkinnedMesh::setSkinningMatrix(const std::vector<glm::mat4> &skinningMatrix)
+	void DRBSkinnedMesh::setSkinningMatrix(std::size_t size)
 	{
-		_skeletonProperty->set(skinningMatrix);
+		_skinningMatrixIndex = size;
 	}
 
 }

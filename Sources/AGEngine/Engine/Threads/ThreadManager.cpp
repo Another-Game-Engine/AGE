@@ -10,6 +10,8 @@
 
 namespace AGE
 {
+	__declspec(thread) static AGE::Thread *g_currentThread = nullptr;
+
 	ThreadManager::ThreadManager()
 		: _engine(nullptr)
 	{
@@ -23,7 +25,7 @@ namespace AGE
 
 		_threads[Thread::Main] = mt;
 		_threads[Thread::Render] = rt;
-		mt->linkToNext(rt);
+
 		for (std::size_t i = Thread::Worker1; i < Thread::hardwareConcurency(); ++i)
 		{
 			_threads[i] = new TaskThread(Thread::ThreadType(i));
@@ -41,20 +43,23 @@ namespace AGE
 			{
 				auto voidHandle = t->getThreadHandle().native_handle();
 				HANDLE handle = (HANDLE)(voidHandle);
-				auto success = SetThreadAffinityMask(handle, 1 << i);
+				//auto success = SetThreadAffinityMask(handle, 1 << i);
+				auto success = SetThreadPriority(handle, THREAD_PRIORITY_TIME_CRITICAL);
 				AGE_ASSERT(success != 0);
 			}
 			++i;
 		}
 		{
 			HANDLE handle = ::GetCurrentThread();
-			auto success = SetThreadAffinityMask(handle, 0x1);
+			auto success = SetThreadPriority(handle, THREAD_PRIORITY_TIME_CRITICAL);
+			//auto success = SetThreadAffinityMask(handle, 0x1);
 			AGE_ASSERT(success != 0);
 		}
 		{
 			auto voidHandle = GetRenderThread()->getThreadHandle().native_handle();
 			HANDLE handle = (HANDLE)(voidHandle);
-			auto success = SetThreadAffinityMask(handle, 0x2);
+			auto success = SetThreadPriority(handle, THREAD_PRIORITY_TIME_CRITICAL);
+			//auto success = SetThreadAffinityMask(handle, 0x2);
 			AGE_ASSERT(success != 0);
 		}
 		return true;
@@ -90,23 +95,6 @@ namespace AGE
 		_threadIdReference[type] = systemHash;
 	}
 
-	Thread *ThreadManager::getCurrentThread() const
-	{
-		auto hash = std::this_thread::get_id().hash();
-		std::size_t id = -1;
-		for (std::size_t i = 0; i < _threadIdReference.size(); ++i)
-		{
-			id = _threadIdReference[i];
-			if (id == hash)
-			{
-				assert(_threads[i] != nullptr);
-				return _threads[i];
-			}
-		}
-		assert(false);
-		return nullptr;
-	}
-
 	Engine *ThreadManager::createEngine()
 	{
 		_engine = getMainThread()->createEngine();
@@ -137,12 +125,6 @@ namespace AGE
 		}
 	}
 
-	void ThreadManager::setAsWorker(bool mainThread, bool prepareThread, bool renderThread)
-	{
-		_threads[Thread::Main]->setAsWorker(mainThread);
-		_threads[Thread::Render]->setAsWorker(renderThread);
-	}
-
 	ThreadManager *GetThreadManager()
 	{
 		return Singleton<ThreadManager>::getInstance();
@@ -150,7 +132,20 @@ namespace AGE
 
 	Thread *CurrentThread()
 	{
-		return Singleton<ThreadManager>::getInstance()->getCurrentThread();
+		return g_currentThread;
+	}
+
+	MainThread *CurrentMainThread()
+	{
+		AGE_ASSERT(g_currentThread && g_currentThread->isMainThread());
+		return static_cast<MainThread*>(g_currentThread);
+	}
+
+
+	void SetCurrentThread(Thread *t)
+	{
+		AGE_ASSERT(g_currentThread == nullptr);
+		g_currentThread = t;
 	}
 
 	MainThread *GetMainThread()
@@ -161,6 +156,16 @@ namespace AGE
 	RenderThread *GetRenderThread()
 	{
 		return Singleton<ThreadManager>::getInstance()->getRenderThread();
+	}
+
+	bool IsMainThread()
+	{
+		return (Singleton<ThreadManager>::getInstance()->getMainThread() == CurrentThread());
+	}
+
+	bool IsRenderThread()
+	{
+		return (Singleton<ThreadManager>::getInstance()->getRenderThread() == CurrentThread());
 	}
 
 	bool InitAGE()

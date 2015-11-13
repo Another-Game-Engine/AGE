@@ -51,8 +51,6 @@ int			main(int ac, char **av)
 
 	engine->launch(std::function<bool()>([&]()
 	{
-		AGE::GetThreadManager()->setAsWorker(true, true, false);
-
 		auto configurationManager = engine->getInstance<ConfigurationManager>();
 		configurationManager->setConfiguration<std::string>(std::string("ShadersPath"), std::string(engine->getApplicationPath() + "/../../Datas/Shaders/"));
 
@@ -60,7 +58,7 @@ int			main(int ac, char **av)
 		engine->setInstance<AGE::AssetsManager>();
 
 #ifdef AGE_ENABLE_IMGUI
-		AGE::GetRenderThread()->getQueue()->emplaceFutureTask<AGE::Tasks::Basic::BoolFunction, bool>([=](){
+		TMQ::TaskManager::emplaceRenderFutureTask<AGE::Tasks::Basic::BoolFunction, bool>([=](){
 			AGE::Imgui::getInstance()->init(engine);
 			return true;
 		}).get();

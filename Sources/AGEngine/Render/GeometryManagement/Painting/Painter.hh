@@ -9,7 +9,6 @@
 #include <Render/Program.hh>
 #include <Render/GeometryManagement/Data/Vertices.hh>
 #include <Render/GeometryManagement/Buffer/BufferPrograms.hh>
-#include <Render/Properties/Properties.hh>
 #include <Utils/SpinLock.hpp>
 
 namespace AGE
@@ -29,8 +28,8 @@ namespace AGE
 
 		Painter &remove_vertices(Key<Vertices> &key);
 		Vertices *get_vertices(Key<Vertices> const &key);
-		Painter &draw(GLenum mode, std::shared_ptr<Program> const &p, std::vector<Properties> &propertiesList, std::vector<Key<Vertices>> const &drawList);
-		void uniqueDraw(GLenum mode, std::shared_ptr<Program> const &program, Properties &properties, const Key<Vertices> &vertice);
+		Painter &draw(GLenum mode, std::shared_ptr<Program> const &p, std::vector<Key<Vertices>> const &drawList);
+		void uniqueDraw(GLenum mode, std::shared_ptr<Program> const &program, const Key<Vertices> &vertice);
 		void instanciedDraw(GLenum mode, std::shared_ptr<Program> const &program, const Key<Vertices> &vertice, std::size_t count);
 		void uniqueDrawBegin(std::shared_ptr<Program> const &program = nullptr);
 		void uniqueDrawEnd();
@@ -40,7 +39,6 @@ namespace AGE
 		BufferPrograms _buffer;
 		std::vector<Vertices> _vertices;
 		AGE::SpinLock _mutex;
-		std::vector<Key<Properties>> _propertiesToRemove;
 		bool _isInUniqueDraw;
 		bool _isInstanciedDraw;
 	};

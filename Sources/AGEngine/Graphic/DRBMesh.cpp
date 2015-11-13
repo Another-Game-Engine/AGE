@@ -2,14 +2,21 @@
 #include "DRBData.hpp"
 #include "DRBMeshData.hpp"
 
-#include "Render\Properties\Transformation.hh"
-
 namespace AGE
 {
 	DRBMesh::DRBMesh()
+		: BFCCullableObject(BFCCullableType::CullableMesh)
 	{
 		datas = std::make_shared<DRBMeshData>();
 	}
+
+	// used by heritate types
+	DRBMesh::DRBMesh(CullableTypeID type)
+		: BFCCullableObject(type)
+	{
+		datas = std::make_shared<DRBMeshData>();
+	}
+
 
 	glm::vec4 DRBMesh::setBFCTransform(const glm::mat4 &transformation)
 	{
@@ -17,13 +24,8 @@ namespace AGE
 		return BFCCullableObject::setBFCTransform(transformation);
 	}
 
-	const std::shared_ptr<DRBData> DRBMesh::getDatas() const
+	const std::shared_ptr<DRBMeshData> DRBMesh::getDatas() const
 	{
-		return std::static_pointer_cast<DRBData>(datas);
-	}
-
-	CullableTypeID DRBMesh::getBFCType() const
-	{
-		return BFCCullableType::CullableMesh;
+		return datas;
 	}
 }

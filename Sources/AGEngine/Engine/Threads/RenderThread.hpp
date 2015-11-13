@@ -23,11 +23,11 @@ namespace AGE
 	struct RenderImgui;
 	class PaintingManager;
 	class IRenderingPipeline;
-	class Properties;
 	class DepthMapManager;
 	class Painter;
 	class IProperty;
 	class Vertices;
+	class TextureBuffer;
 
 	class RenderThread : public Thread, public QueueOwner
 	{
@@ -56,7 +56,6 @@ namespace AGE
 		// End Debug drawing
 
 		// used by render scene, maybe should be protected
-		void createMeshProperty(const Key<Painter> &painter, Key<Properties> &properties, Key<IProperty> &transformation);
 		void getQuadGeometry(Key<Vertices> &vertices, Key<Painter> &painter);
 		void getIcoSphereGeometry(Key<Vertices> &vertices, Key<Painter> &painter, uint32_t recursion);
 		void getCube(Key<Vertices> &vertices, Key<Painter> &painter);
@@ -68,11 +67,10 @@ namespace AGE
 #ifdef AGE_ENABLE_IMGUI
 		void setImguiDrawList(std::shared_ptr<AGE::RenderImgui> &list);
 #endif
-
+		std::shared_ptr<AGE::TextureBuffer> getBonesTexture() { return _bonesTexture; }
 	public:
 		std::shared_ptr<PaintingManager> paintingManager;
 		std::vector<std::unique_ptr<IRenderingPipeline>> pipelines;
-
 	private:
 
 		void _recompileShaders();
@@ -96,6 +94,8 @@ namespace AGE
 		SdlContext *_context;
 		DepthMapManager *_depthMapManager;
 		AGE::SpinLock _mutex;
+
+		std::shared_ptr<AGE::TextureBuffer> _bonesTexture;
 
 		friend class ThreadManager;
 	};

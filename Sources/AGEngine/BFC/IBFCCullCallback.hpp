@@ -1,13 +1,15 @@
 #pragma once
 
-#include "Utils/Containers/LFList.hpp"
-#include "BFC/BFCItem.hpp"
+#include "BFCArray.hpp"
 
 namespace AGE
 {
-	class IBFCCullCallback
+	class IBFCCuller
 	{
 	public:
-		virtual void operator()(LFList<BFCItem> &result, std::size_t blockId) = 0;
+		virtual void operator()() = 0;
+		inline void push(const BFCItem &item) { _array.push(item); }
+	protected:
+		BFCCullArray      _array;
 	};
 }

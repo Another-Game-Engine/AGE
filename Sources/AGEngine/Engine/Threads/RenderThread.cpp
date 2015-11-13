@@ -1,8 +1,8 @@
 #include "RenderThread.hpp"
 
 #include <Core/Engine.hh>
-#include <Core/Engine.hh>
 #include <Core/Age_Imgui.hpp>
+#include <Core/ConfigurationManager.hpp>
 
 #include <Utils/ThreadName.hpp>
 #include <Utils/OpenGL.hh>
@@ -24,7 +24,10 @@
 #include <Render/GeometryManagement/Painting/PaintingManager.hh>
 #include <Render/OcclusionTools/DepthMapManager.hpp>
 #include <Render/Pipelining/Pipelines/CustomPipeline/DeferredShading.hh>
-#include <Render/Properties/Transformation.hh>
+
+// pour le hack deguelasse du bones texture
+#include <Render\Pipelining\Pipelines\PipelineTools.hh>
+#include <Render\Textures\TextureBuffer.hh>
 
 #include <utility>
 
@@ -52,7 +55,7 @@ namespace AGE
 	void RenderThread::_recompileShaders()
 	{
 		// to be sure that this function is only called in render thread
-		AGE_ASSERT(GetThreadManager()->getCurrentThread() == (AGE::Thread*)GetRenderThread());
+		AGE_ASSERT(CurrentThread() == (AGE::Thread*)GetRenderThread());
 
 		for (auto &e : pipelines)
 		{
@@ -67,7 +70,7 @@ namespace AGE
 	void RenderThread::_initPipelines()
 	{
 		// to be sure that this function is only called in render thread
-		AGE_ASSERT(GetThreadManager()->getCurrentThread() == (AGE::Thread*)GetRenderThread());
+		AGE_ASSERT(CurrentThread() == (AGE::Thread*)GetRenderThread());
 
 		for (auto &e : pipelines)
 		{
@@ -98,7 +101,7 @@ namespace AGE
 		};
 
 		// to be sure that this function is only called in render thread
-		AGE_ASSERT(GetThreadManager()->getCurrentThread() == (AGE::Thread*)GetRenderThread());
+		AGE_ASSERT(CurrentThread() == (AGE::Thread*)GetRenderThread());
 
 		if (SimpleGeometry::cubeMesh.verticesKey.isValid() &&
 			SimpleGeometry::cubeMesh.painterKey.isValid())
@@ -262,7 +265,7 @@ namespace AGE
 		};
 
 		// to be sure that this function is only called in render thread
-		AGE_ASSERT(GetThreadManager()->getCurrentThread() == (AGE::Thread*)GetRenderThread());
+		AGE_ASSERT(CurrentThread() == (AGE::Thread*)GetRenderThread());
 
 		if (SimpleGeometry::quadMesh.verticesKey.isValid() &&
 			SimpleGeometry::quadMesh.painterKey.isValid())
@@ -302,7 +305,7 @@ namespace AGE
 		std::vector<unsigned int> indices;
 
 		// to be sure that this function is only called in render thread
-		AGE_ASSERT(GetThreadManager()->getCurrentThread() == (AGE::Thread*)GetRenderThread());
+		AGE_ASSERT(CurrentThread() == (AGE::Thread*)GetRenderThread());
 
 		if (SimpleGeometry::icosphereMeshes[recursion].verticesKey.isValid() &&
 			SimpleGeometry::icosphereMeshes[recursion].painterKey.isValid())
@@ -343,7 +346,12 @@ namespace AGE
 		registerCallback<Tasks::Render::CreateRenderContext>([this](Tasks::Render::CreateRenderContext &msg)
 		{
 			_context = msg.engine->setInstance<SdlContext, IRenderContext>();
-			if (!_context->init(1280, 720, "~AGE~ V0.00001 Demo"))
+
+			auto configurationManager = msg.engine->getInstance<ConfigurationManager>();
+
+			auto w = configurationManager->getConfiguration<int>("windowW")->getValue();
+			auto h = configurationManager->getConfiguration<int>("windowH")->getValue();
+			if (!_context->init(w, h, "~AGE~ V0.00001 Demo"))
 			{
 				msg.setValue(false);
 				return;
@@ -371,6 +379,7 @@ namespace AGE
 			pipelines[DEBUG_DEFERRED] = std::make_unique<DebugDeferredShading>(_context->getScreenSize(), paintingManager);
 			_recompileShaders();
 			_initPipelines();
+			_bonesTexture = createRenderPassOutput<TextureBuffer>(8184 * 2, GL_RGBA32F, sizeof(glm::mat4), GL_DYNAMIC_DRAW);
 			msg.setValue(true);
 		});
 
@@ -393,7 +402,7 @@ namespace AGE
 					static bool first = true;
 					if (first || imguiRenderList)
 					{
-						GetMainThread()->getQueue()->emplaceTask<ImGuiEndOfFrame>();
+						TMQ::TaskManager::emplaceMainTask<ImGuiEndOfFrame>();
 						first = false;
 					}
 #endif
@@ -440,6 +449,7 @@ namespace AGE
 		{
 			AGE::GetEngine()->deleteInstance<IRenderContext>();
 			this->_insideRun = false;
+			TMQ::TaskManager::emplaceSharedTask<Tasks::Basic::Exit>();
 		});
 
 		registerCallback<AGE::Tasks::Render::ContextGrabMouse>([&](AGE::Tasks::Render::ContextGrabMouse &msg)
@@ -572,6 +582,12 @@ namespace AGE
 			}
 		});
 
+		registerCallback<AGE::Tasks::UploadBonesToGPU>([&](AGE::Tasks::UploadBonesToGPU& msg)
+		{
+			SCOPE_profile_cpu_i("!!!HACK!!!", "Upload bones matrix to GPU");
+			_bonesTexture->set(msg.bones->data(), msg.bones->size());
+		});
+
 		return true;
 	}
 
@@ -595,7 +611,7 @@ namespace AGE
 
 	bool RenderThread::stop()
 	{
-		getQueue()->emplaceTask<Tasks::Basic::Exit>();
+		TMQ::TaskManager::emplaceRenderTask<Tasks::Basic::Exit>();
 		if (_threadHandle.joinable())
 			_threadHandle.join();
 		return true;
@@ -635,7 +651,10 @@ namespace AGE
 			SCOPE_profile_cpu_i("RenderTimer", "Get and execute tasks");
 			waitStart = std::chrono::high_resolution_clock::now();
 			TMQ::MessageBase *task = nullptr;
-			getQueue()->getTask(task);
+			
+			while (TMQ::TaskManager::RenderThreadGetTask(task) == false)
+			{ }
+
 			waitEnd = std::chrono::high_resolution_clock::now();
 			if (task)
 			{

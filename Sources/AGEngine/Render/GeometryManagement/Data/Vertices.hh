@@ -5,7 +5,6 @@
 #include <stdint.h>
 #include <vector>
 #include <memory>
-#include <Render/Properties/IProperty.hh>
 
 namespace AGE
 {
@@ -44,7 +43,6 @@ namespace AGE
 		std::vector<uint8_t> _indices_data;
 		std::vector<std::pair<std::string, std::weak_ptr<BlockMemory>>> _block_memories;
 		std::weak_ptr<BlockMemory> _indices_block_memory;
-		std::vector<std::shared_ptr<IProperty>> _properties;
 	};
 
 	template <typename type_t>

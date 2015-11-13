@@ -7,11 +7,20 @@
 
 #include <Threads/TaskScheduler.hpp>
 #include <Threads/Tasks/BasicTasks.hpp>
+#include <Threads/ThreadManager.hpp>
+#include <Threads/MainThread.hpp>
+
+#include <TMQ/Queue.hpp>
+
+// pour le hack deguelasse de l'upload bones
+#include <Threads\Tasks\ToRenderTasks.hpp>
 
 namespace AGE
 {
 	AnimationManager::AnimationManager()
-	{}
+	{
+		_currentBonesBufferIndex = 0;
+	}
 
 	AnimationManager::~AnimationManager()
 	{}
@@ -45,6 +54,7 @@ namespace AGE
 			}
 		}
 		res = std::make_shared<AnimationInstance>(skeleton, animation);
+		_bonesBufferSize += res->getTransformationBufferSize();
 		_animations[skeleton].push_back(res);
 		res->_isShared = shared;
 		res->_instanceCounter++;
@@ -62,6 +72,7 @@ namespace AGE
 		animation->_instanceCounter--;
 		if (animation->_instanceCounter == 0)
 		{
+			_bonesBufferSize -= animation->getTransformationBufferSize();
 			_animations[skeleton].remove(animation);
 		}
 	}
@@ -74,6 +85,25 @@ namespace AGE
 
 		std::atomic_int16_t counter = 0;
 		int taskNumber = 0;
+		auto &transformationBuffer = _bonesBuffers[_currentBonesBufferIndex];
+		std::size_t index = 0;
+
+		if (transformationBuffer.size() < _bonesBufferSize)
+		{
+			transformationBuffer.resize(_bonesBufferSize);
+		}
+
+		for (auto &s : _animations)
+		{
+			for (auto &a : s.second)
+			{
+				std::size_t indexCpy = index;
+				index += a->_tranformationBufferSize;
+				AGE_ASSERT(index <= transformationBuffer.size());
+				a->_tranformationBuffer = &transformationBuffer[indexCpy];
+				a->_transformationIndex = indexCpy;
+			}
+		}
 
 		{
 			SCOPE_profile_cpu_i("Animations", "Pushing skinning tasks");
@@ -82,7 +112,7 @@ namespace AGE
 				for (auto &a : s.second)
 				{
 					auto skeleton = s.first;
-					EmplaceTask<Tasks::Basic::VoidFunction>([a, skeleton, &counter, time](){
+					TMQ::TaskManager::emplaceSharedTask<Tasks::Basic::VoidFunction>([a, skeleton, &counter, time](){
 						a->update(time);
 						skeleton->updateSkinning(a);
 						counter.fetch_add(1);
@@ -92,10 +122,15 @@ namespace AGE
 			}
 		}
 		{
-			SCOPE_profile_cpu_i("Animations", "Waiting for skinning tasks");
-			while (counter < taskNumber)
+			SCOPE_profile_cpu_i("Animations", "Stealing skinning tasks");
+			while (counter.load() < taskNumber)
 			{
+				while (CurrentMainThread()->tryToStealTasks())
+				{
+				}
 			}
 		}
+		TMQ::TaskManager::emplaceRenderTask<AGE::Tasks::UploadBonesToGPU>(&_bonesBuffers[_currentBonesBufferIndex]);
+		_currentBonesBufferIndex = (_currentBonesBufferIndex + 1) % 2;
 	}
 }

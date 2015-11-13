@@ -5,12 +5,9 @@
 #include <Render/GeometryManagement/Buffer/BufferPrograms.hh>
 #include <Render/ProgramResources/Types/Attribute.hh>
 #include <Utils/Profiler.hpp>
-#include <Render/Properties/Properties.hh>
 
 namespace AGE
 {
-	std::size_t Program::_ageIdCounter = 0;
-
 	Program::Program(std::string &&name, std::vector<std::shared_ptr<UnitProg>> const &u) :
 		_unitsProg(u),
 		_resources_factory(*this),
@@ -21,7 +18,6 @@ namespace AGE
 #ifdef AGE_DEBUG
 		_version = 0;
 #endif
-		_ageId = -1;
 	}
 
 	Program::~Program()
@@ -48,7 +44,6 @@ namespace AGE
 		_name(std::move(move._name))
 	{
 		move._id = 0;
-		_ageId = move._ageId;
 	}
 
 	GLuint Program::id() const
@@ -136,7 +131,8 @@ namespace AGE
 
 	Program & Program::update()
 	{
-		SCOPE_profile_cpu_function("RenderTimer");
+		//@PROFILER_COMMENTED
+		//SCOPE_profile_cpu_function("RenderTimer");
 
 		use();
 		for (auto &resource : _program_resources)
@@ -230,10 +226,6 @@ namespace AGE
 #ifdef AGE_DEBUG
 		++_version;
 #endif
-		if (_ageId == -1)
-		{
-			_ageId = _ageIdCounter++;
-		}
 		return true;
 	}
 
@@ -263,132 +255,5 @@ namespace AGE
 			}
 		}
 		return (nullptr);
-	}
-
-	void Program::registerProperties(Properties &properties)
-	{
-		SCOPE_profile_cpu_function("RenderTimer");
-
-		// if properties is empty we return
-		if (properties.empty())
-			return;
-
-		std::size_t id = properties.getProgramId(_ageId);
-		std::size_t hash = properties.getHash();
-
-		// if the properties is already registered
-		// and his hash didn't change
-		// we return
-		if (id != -1 && _propertiesRegister.size() != 0 && _propertiesRegister[id].propertiesHash == hash)
-			return;
-
-		PropertiesRegister *propRegister = nullptr;
-
-		id = 0;
-		// we search for the hash
-		for (auto &reg : _propertiesRegister)
-		{
-			if (reg.propertiesHash == hash)
-			{
-				propRegister = &reg;
-				break;
-			}
-			++id;
-		}
-
-		// if the hash never have been registered
-		if (propRegister == nullptr)
-		{
-			// we register the hash
-			_propertiesRegister.resize(_propertiesRegister.size() + 1);
-			id = _propertiesRegister.size() - 1;
-			propRegister = &_propertiesRegister[id];
-			propRegister->propertiesHash = hash;
-			// we register properties index
-			for (auto &r : _program_resources)
-			{
-				if (r->isInstancied())
-				{
-					auto &alias = r->getInstanciedAlias();
-					for (auto &a : alias)
-					{
-						std::shared_ptr<IProperty> p = properties.getProperty(a);
-						if (p != nullptr)
-						{
-							auto index = properties.getPropertyIndex(a);
-							propRegister->propertyIndex.push_back(PropertyRegister(index, r, p->getInstanciedUpdateFunction(), true));
-						}
-					}
-				}
-				else
-				{
-					std::shared_ptr<IProperty> p = properties.getProperty(r->name());
-					if (p)
-					{
-						auto index = properties.getPropertyIndex(r->name());
-						propRegister->propertyIndex.push_back(PropertyRegister(index, r, p->getUpdateFunction(), false));
-					}
-				}
-			}
-		}
-		// we give the id the the properties
-		properties.setProgramId(_ageId, id);
-	}
-
-	void Program::updateProperties(Properties &properties)
-	{
-		SCOPE_profile_cpu_function("RenderTimer");
-
-		std::size_t id = properties.getProgramId(_ageId);
-		if (id == -1)
-		{
-			return;
-		}
-		PropertiesRegister *propRegister = &_propertiesRegister[id];
-
-		for (auto &i : propRegister->propertyIndex)
-		{
-			i.updateFunction(i.resource.get(), properties.getProperty(i.index).get());
-		}
-	}
-
-	void Program::updateInstanciedProperties(Properties &properties)
-	{
-		SCOPE_profile_cpu_function("RenderTimer");
-
-		std::size_t id = properties.getProgramId(_ageId);
-		if (id == -1)
-		{
-			return;
-		}
-		PropertiesRegister *propRegister = &_propertiesRegister[id];
-
-		for (auto &i : propRegister->propertyIndex)
-		{
-			if (i.instancied)
-			{
-				i.updateFunction(i.resource.get(), properties.getProperty(i.index).get());
-			}
-		}
-	}
-
-	void Program::updateNonInstanciedProperties(Properties &properties)
-	{
-		SCOPE_profile_cpu_function("RenderTimer");
-
-		std::size_t id = properties.getProgramId(_ageId);
-		if (id == -1)
-		{
-			return;
-		}
-		PropertiesRegister *propRegister = &_propertiesRegister[id];
-
-		for (auto &i : propRegister->propertyIndex)
-		{
-			if (i.instancied == false)
-			{
-				i.updateFunction(i.resource.get(), properties.getProperty(i.index).get());
-			}
-		}
 	}
 }

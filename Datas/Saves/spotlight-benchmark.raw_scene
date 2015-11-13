@@ -48,10 +48,14 @@
             },
             {
                 "key": 11,
-                "value": 8718854852507163888
+                "value": 15079484947096660329
             },
             {
                 "key": 12,
+                "value": 8718854852507163888
+            },
+            {
+                "key": 13,
                 "value": 13917482855567903631
             }
         ],
@@ -60,47 +64,6 @@
             "cereal_class_version": 0,
             "link": {
                 "cereal_class_version": 0,
-                "Position": {
-                    "value0": 40,
-                    "value1": 0,
-                    "value2": 50
-                },
-                "Scale": {
-                    "value0": 1,
-                    "value1": 1,
-                    "value2": 1
-                },
-                "Orientation": {
-                    "value0": 0,
-                    "value1": 0,
-                    "value2": 0,
-                    "value3": 1
-                }
-            },
-            "children": [],
-            "flags": 0,
-            "components_number": [
-                8,
-                0
-            ],
-            "archetypesDependency": [
-                "static-camera"
-            ],
-            "AGE_CORE_ArchetypeComponent": {
-                "cereal_class_version": 3,
-                "archetypeName": "static-camera",
-                "synchronizePosition": false,
-                "synchronizeRotation": true,
-                "synchronizeScale": true,
-                "parentIsAnArchetype": false
-            },
-            "AGE_CORE_EntityRepresentationComponent": {
-                "cereal_class_version": 0,
-                "name": "static-camera-Copy-Copy"
-            }
-        },
-        "Entity_1": {
-            "link": {
                 "Position": {
                     "value0": 0,
                     "value1": 0,
@@ -119,8 +82,8 @@
                 }
             },
             "children": [
-                2,
-                12
+                1,
+                11
             ],
             "flags": 0,
             "components_number": [
@@ -128,10 +91,11 @@
             ],
             "archetypesDependency": [],
             "AGE_CORE_EntityRepresentationComponent": {
+                "cereal_class_version": 0,
                 "name": "cube-group-group"
             }
         },
-        "Entity_2": {
+        "Entity_1": {
             "link": {
                 "Position": {
                     "value0": 0,
@@ -151,6 +115,7 @@
                 }
             },
             "children": [
+                2,
                 3,
                 4,
                 5,
@@ -158,8 +123,7 @@
                 7,
                 8,
                 9,
-                10,
-                11
+                10
             ],
             "flags": 0,
             "components_number": [
@@ -170,7 +134,7 @@
                 "name": "cube-group-Copy"
             }
         },
-        "Entity_3": {
+        "Entity_2": {
             "link": {
                 "Position": {
                     "value0": 16,
@@ -199,6 +163,7 @@
                 "static-cube"
             ],
             "AGE_CORE_ArchetypeComponent": {
+                "cereal_class_version": 3,
                 "archetypeName": "static-cube",
                 "synchronizePosition": false,
                 "synchronizeRotation": true,
@@ -209,7 +174,7 @@
                 "name": "static-cube-Copy-Copy"
             }
         },
-        "Entity_4": {
+        "Entity_3": {
             "link": {
                 "Position": {
                     "value0": 14,
@@ -248,7 +213,7 @@
                 "name": "static-cube-Copy-Copy"
             }
         },
-        "Entity_5": {
+        "Entity_4": {
             "link": {
                 "Position": {
                     "value0": 12,
@@ -287,7 +252,7 @@
                 "name": "static-cube-Copy-Copy"
             }
         },
-        "Entity_6": {
+        "Entity_5": {
             "link": {
                 "Position": {
                     "value0": 10,
@@ -326,7 +291,7 @@
                 "name": "static-cube-Copy-Copy"
             }
         },
-        "Entity_7": {
+        "Entity_6": {
             "link": {
                 "Position": {
                     "value0": 8,
@@ -365,7 +330,7 @@
                 "name": "static-cube-Copy-Copy"
             }
         },
-        "Entity_8": {
+        "Entity_7": {
             "link": {
                 "Position": {
                     "value0": 6,
@@ -404,7 +369,7 @@
                 "name": "static-cube-Copy-Copy"
             }
         },
-        "Entity_9": {
+        "Entity_8": {
             "link": {
                 "Position": {
                     "value0": 4,
@@ -443,10 +408,49 @@
                 "name": "static-cube-Copy-Copy"
             }
         },
-        "Entity_10": {
+        "Entity_9": {
             "link": {
                 "Position": {
                     "value0": 2,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-cube"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-cube",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_10": {
+            "link": {
+                "Position": {
+                    "value0": 0,
                     "value1": 0,
                     "value2": 0
                 },
@@ -487,45 +491,6 @@
                 "Position": {
                     "value0": 0,
                     "value1": 0,
-                    "value2": 0
-                },
-                "Scale": {
-                    "value0": 1,
-                    "value1": 1,
-                    "value2": 1
-                },
-                "Orientation": {
-                    "value0": 0,
-                    "value1": 0,
-                    "value2": 0,
-                    "value3": 1
-                }
-            },
-            "children": [],
-            "flags": 0,
-            "components_number": [
-                8,
-                0
-            ],
-            "archetypesDependency": [
-                "static-cube"
-            ],
-            "AGE_CORE_ArchetypeComponent": {
-                "archetypeName": "static-cube",
-                "synchronizePosition": false,
-                "synchronizeRotation": true,
-                "synchronizeScale": true,
-                "parentIsAnArchetype": false
-            },
-            "AGE_CORE_EntityRepresentationComponent": {
-                "name": "static-cube-Copy-Copy"
-            }
-        },
-        "Entity_12": {
-            "link": {
-                "Position": {
-                    "value0": 0,
-                    "value1": 0,
                     "value2": -5
                 },
                 "Scale": {
@@ -541,6 +506,7 @@
                 }
             },
             "children": [
+                12,
                 13,
                 14,
                 15,
@@ -548,8 +514,7 @@
                 17,
                 18,
                 19,
-                20,
-                21
+                20
             ],
             "flags": 0,
             "components_number": [
@@ -560,7 +525,7 @@
                 "name": "cube-group"
             }
         },
-        "Entity_13": {
+        "Entity_12": {
             "link": {
                 "Position": {
                     "value0": 16,
@@ -599,7 +564,7 @@
                 "name": "static-cube-Copy-Copy"
             }
         },
-        "Entity_14": {
+        "Entity_13": {
             "link": {
                 "Position": {
                     "value0": 14,
@@ -638,7 +603,7 @@
                 "name": "static-cube-Copy-Copy"
             }
         },
-        "Entity_15": {
+        "Entity_14": {
             "link": {
                 "Position": {
                     "value0": 12,
@@ -677,7 +642,7 @@
                 "name": "static-cube-Copy-Copy"
             }
         },
-        "Entity_16": {
+        "Entity_15": {
             "link": {
                 "Position": {
                     "value0": 10,
@@ -716,7 +681,7 @@
                 "name": "static-cube-Copy-Copy"
             }
         },
-        "Entity_17": {
+        "Entity_16": {
             "link": {
                 "Position": {
                     "value0": 8,
@@ -755,7 +720,7 @@
                 "name": "static-cube-Copy-Copy"
             }
         },
-        "Entity_18": {
+        "Entity_17": {
             "link": {
                 "Position": {
                     "value0": 6,
@@ -794,7 +759,7 @@
                 "name": "static-cube-Copy-Copy"
             }
         },
-        "Entity_19": {
+        "Entity_18": {
             "link": {
                 "Position": {
                     "value0": 4,
@@ -833,7 +798,7 @@
                 "name": "static-cube-Copy-Copy"
             }
         },
-        "Entity_20": {
+        "Entity_19": {
             "link": {
                 "Position": {
                     "value0": 2,
@@ -872,7 +837,7 @@
                 "name": "static-cube-Copy-Copy"
             }
         },
-        "Entity_21": {
+        "Entity_20": {
             "link": {
                 "Position": {
                     "value0": 0,
@@ -909,6 +874,45 @@
             },
             "AGE_CORE_EntityRepresentationComponent": {
                 "name": "static-cube-Copy-Copy"
+            }
+        },
+        "Entity_21": {
+            "link": {
+                "Position": {
+                    "value0": 40,
+                    "value1": 0,
+                    "value2": 50
+                },
+                "Scale": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                8,
+                0
+            ],
+            "archetypesDependency": [
+                "static-camera"
+            ],
+            "AGE_CORE_ArchetypeComponent": {
+                "archetypeName": "static-camera",
+                "synchronizePosition": false,
+                "synchronizeRotation": true,
+                "synchronizeScale": true,
+                "parentIsAnArchetype": false
+            },
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "static-camera-Copy-Copy"
             }
         },
         "Entity_22": {
@@ -2655,7 +2659,7 @@
                 "color": {
                     "value0": 1,
                     "value1": 1,
-                    "value2": 1,
+                    "value2": 0,
                     "value3": 1
                 },
                 "range": {
@@ -2699,7 +2703,7 @@
             "AGE_CORE_SpotLightComponent": {
                 "color": {
                     "value0": 1,
-                    "value1": 1,
+                    "value1": 0,
                     "value2": 1,
                     "value3": 1
                 },
@@ -2743,7 +2747,7 @@
             },
             "AGE_CORE_SpotLightComponent": {
                 "color": {
-                    "value0": 1,
+                    "value0": 0,
                     "value1": 1,
                     "value2": 1,
                     "value3": 1
@@ -2788,8 +2792,8 @@
             },
             "AGE_CORE_SpotLightComponent": {
                 "color": {
-                    "value0": 1,
-                    "value1": 1,
+                    "value0": 0,
+                    "value1": 0,
                     "value2": 1,
                     "value3": 1
                 },
@@ -2834,8 +2838,8 @@
             "AGE_CORE_SpotLightComponent": {
                 "color": {
                     "value0": 1,
-                    "value1": 1,
-                    "value2": 1,
+                    "value1": 0,
+                    "value2": 0,
                     "value3": 1
                 },
                 "range": {
@@ -2878,9 +2882,9 @@
             },
             "AGE_CORE_SpotLightComponent": {
                 "color": {
-                    "value0": 1,
+                    "value0": 0,
                     "value1": 1,
-                    "value2": 1,
+                    "value2": 0,
                     "value3": 1
                 },
                 "range": {
@@ -2923,9 +2927,9 @@
             },
             "AGE_CORE_SpotLightComponent": {
                 "color": {
-                    "value0": 1,
-                    "value1": 1,
-                    "value2": 1,
+                    "value0": 0.0078431377187371254,
+                    "value1": 0.21176470816135406,
+                    "value2": 0.16862745583057404,
                     "value3": 1
                 },
                 "range": {
@@ -2968,9 +2972,9 @@
             },
             "AGE_CORE_SpotLightComponent": {
                 "color": {
-                    "value0": 1,
-                    "value1": 1,
-                    "value2": 1,
+                    "value0": 0.090196080505847931,
+                    "value1": 0.92156863212585449,
+                    "value2": 0.13333334028720856,
                     "value3": 1
                 },
                 "range": {
@@ -3013,9 +3017,9 @@
             },
             "AGE_CORE_SpotLightComponent": {
                 "color": {
-                    "value0": 1,
-                    "value1": 1,
-                    "value2": 1,
+                    "value0": 0.5372549295425415,
+                    "value1": 0,
+                    "value2": 0,
                     "value3": 1
                 },
                 "range": {
@@ -3058,9 +3062,9 @@
             },
             "AGE_CORE_SpotLightComponent": {
                 "color": {
-                    "value0": 1,
+                    "value0": 0,
                     "value1": 1,
-                    "value2": 1,
+                    "value2": 0.89411759376525879,
                     "value3": 1
                 },
                 "range": {
@@ -3103,9 +3107,9 @@
             },
             "AGE_CORE_SpotLightComponent": {
                 "color": {
-                    "value0": 1,
+                    "value0": 0.82352948188781738,
                     "value1": 1,
-                    "value2": 1,
+                    "value2": 0,
                     "value3": 1
                 },
                 "range": {
@@ -3148,8 +3152,8 @@
             },
             "AGE_CORE_SpotLightComponent": {
                 "color": {
-                    "value0": 1,
-                    "value1": 1,
+                    "value0": 0.28235292434692383,
+                    "value1": 0,
                     "value2": 1,
                     "value3": 1
                 },
@@ -3194,8 +3198,8 @@
             "AGE_CORE_SpotLightComponent": {
                 "color": {
                     "value0": 1,
-                    "value1": 1,
-                    "value2": 1,
+                    "value1": 0.37647056579589844,
+                    "value2": 0,
                     "value3": 1
                 },
                 "range": {
@@ -3238,9 +3242,9 @@
             },
             "AGE_CORE_SpotLightComponent": {
                 "color": {
-                    "value0": 1,
-                    "value1": 1,
-                    "value2": 1,
+                    "value0": 0.36539795994758606,
+                    "value1": 0.47058823704719543,
+                    "value2": 0,
                     "value3": 1
                 },
                 "range": {
@@ -3284,8 +3288,8 @@
             "AGE_CORE_SpotLightComponent": {
                 "color": {
                     "value0": 1,
-                    "value1": 1,
-                    "value2": 1,
+                    "value1": 0.5254901647567749,
+                    "value2": 0.5254901647567749,
                     "value3": 1
                 },
                 "range": {
@@ -3328,8 +3332,8 @@
             },
             "AGE_CORE_SpotLightComponent": {
                 "color": {
-                    "value0": 1,
-                    "value1": 1,
+                    "value0": 0.13333332538604736,
+                    "value1": 0.25568628311157227,
                     "value2": 1,
                     "value3": 1
                 },

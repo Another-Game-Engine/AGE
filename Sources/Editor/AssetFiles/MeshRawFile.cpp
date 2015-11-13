@@ -38,7 +38,7 @@ namespace AGE
 		void MeshRawFile::cook()
 		{
 			auto cookingTask = std::make_shared<CookingTask>(dataSet);
-			AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=]()
+			TMQ::TaskManager::emplaceSharedTask<AGE::Tasks::Basic::VoidFunction>([=]()
 			{
 				cookingTask->serializedDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>(WE::EditorConfiguration::GetCookedDirectory());
 				cookingTask->rawDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>(WE::EditorConfiguration::GetRawDirectory());
@@ -65,17 +65,17 @@ namespace AGE
 				}
 				else
 				{
-					AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=](){
+					TMQ::TaskManager::emplaceSharedTask<AGE::Tasks::Basic::VoidFunction>([=](){
 						AGE::AnimationsLoader::load(cookingTask);
 						AGE::AnimationsLoader::save(cookingTask);
 					});
-					AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=](){
+					TMQ::TaskManager::emplaceSharedTask<AGE::Tasks::Basic::VoidFunction>([=](){
 						AGE::MeshLoader::load(cookingTask);
 						AGE::MeshLoader::save(cookingTask);
 						AGE::PhysicsLoader::load(cookingTask);
 						AGE::PhysicsLoader::save(cookingTask);
 					});
-					AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=](){
+					TMQ::TaskManager::emplaceSharedTask<AGE::Tasks::Basic::VoidFunction>([=](){
 						AGE::SkeletonLoader::load(cookingTask);
 						AGE::SkeletonLoader::save(cookingTask);
 					});

@@ -59,7 +59,7 @@ namespace AGE
 		return _managers[id._blockManagerID]._blocks[id._blockID]->_items[id._itemID];
 	}
 
-	void BFCBlockManagerFactory::cullOnChannel(CullableTypeID channel, LFList<BFCItem> &result, const Frustum &frustum)
+	std::size_t BFCBlockManagerFactory::cullOnBlock(CullableTypeID channel, LFList<BFCItem> &result, const Frustum &frustum, std::size_t blockIdFrom, std::size_t numberOfBlocks)
 	{
 		SCOPE_profile_cpu_function("BFC");
 
@@ -67,13 +67,17 @@ namespace AGE
 
 		if (channel >= _managers.size())
 		{
-			return;
+			return 0;
 		}
-
 		auto &manager = _managers[channel];
 
-		for (auto &block : manager._blocks)
+		size_t i = 0;
+		while (i < numberOfBlocks)
 		{
+			auto blockId = blockIdFrom + i;
+			if (blockId >= manager._blocks.size())
+				break;
+			auto &block = manager._blocks[blockId];
 			for (auto &item : block->_items)
 			{
 				if (item.getDrawable() && frustum.checkCollision(item.getPosition()))
@@ -81,57 +85,75 @@ namespace AGE
 					result.push(&item);
 				}
 			}
+			++i;
 		}
+		return i;
 	}
 
-	void BFCBlockManagerFactory::cullOnBlock(CullableTypeID channel, LFList<BFCItem> &result, const Frustum &frustum, std::size_t blockId, IBFCCullCallback *callback)
+	std::size_t BFCBlockManagerFactory::cullOnBlock(CullableTypeID channel, const Frustum &frustum, std::size_t blockIdFrom, std::size_t numberOfBlocks, IBFCCuller *culler)
+	{
+		SCOPE_profile_cpu_function("BFC");
+
+		AGE_ASSERT(channel < MaxCullableTypeID);
+
+		if (channel >= _managers.size())
+		{
+			return 0;
+		}
+		auto &manager = _managers[channel];
+
+		size_t i = 0;
+		while (i < numberOfBlocks)
+		{
+			auto blockId = blockIdFrom + i;
+			if (blockId >= manager._blocks.size())
+				break;
+			auto &block = manager._blocks[blockId];
+			for (auto &item : block->_items)
+			{
+				if (item.getDrawable() && frustum.checkCollision(item.getPosition()))
+				{
+					culler->push(item);
+				}
+			}
+			(*culler)();
+			++i;
+		}
+		return i;
+	}
+
+
+	std::size_t BFCBlockManagerFactory::fillOnBlock(CullableTypeID channel, LFList<BFCItem> &result, std::size_t blockIdFrom, std::size_t numberOfBlocks, IBFCCuller *callback)
 	{
 		SCOPE_profile_cpu_function("BFC");
 
 		AGE_ASSERT(channel < MaxCullableTypeID);
 		if (channel >= _managers.size())
 		{
-			return;
+			return 0;
 		}
 		auto &manager = _managers[channel];
-		AGE_ASSERT(blockId < manager._blocks.size());
-		auto &block = manager._blocks[blockId];
-		for (auto &item : block->_items)
+		size_t i = 0;
+		while (i < numberOfBlocks)
 		{
-			if (item.getDrawable() && frustum.checkCollision(item.getPosition()))
+			auto blockId = blockIdFrom + i;
+			if (blockId >= manager._blocks.size())
+				break;
+			auto &block = manager._blocks[blockId];
+			for (auto &item : block->_items)
 			{
-				result.push(&item);
+				if (item.getDrawable())
+				{
+					result.push(&item);
+				}
 			}
-		}
-		if (callback)
-		{
-			(*callback)(result, blockId);
-		}
-	}
-
-	void BFCBlockManagerFactory::fillOnBlock(CullableTypeID channel, LFList<BFCItem> &result, std::size_t blockId, IBFCCullCallback *callback)
-	{
-		SCOPE_profile_cpu_function("BFC");
-
-		AGE_ASSERT(channel < MaxCullableTypeID);
-		if (channel >= _managers.size())
-		{
-			return;
-		}
-		auto &manager = _managers[channel];
-		AGE_ASSERT(blockId < manager._blocks.size());
-		auto &block = manager._blocks[blockId];
-		for (auto &item : block->_items)
-		{
-			if (item.getDrawable())
+			if (callback)
 			{
-				result.push(&item);
+				(*callback)();
 			}
+			++i;
 		}
-		if (callback)
-		{
-			(*callback)(result, blockId);
-		}
+		return i;
 	}
 
 	std::size_t BFCBlockManagerFactory::getBlockNumberToCull(CullableTypeID channel) const
@@ -143,5 +165,4 @@ namespace AGE
 		}
 		return _managers[channel]._blocks.size();
 	}
-
 }

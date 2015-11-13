@@ -7,10 +7,8 @@ in VertexData {
 } VertexIn;
 
 uniform vec4 diffuse_color;
-uniform float diffuse_ratio;
 uniform sampler2D diffuse_map;
-uniform vec3 specular_color;
-uniform float specular_ratio;
+uniform vec4 specular_color;
 uniform float shininess_ratio;
 uniform sampler2D normal_map;
 

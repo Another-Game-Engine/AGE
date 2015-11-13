@@ -58,6 +58,10 @@ namespace AGE
 		inline float getExponent() const { return exponent; }
 
 		glm::mat4 updateShadowMatrix();
+		glm::vec3 getDirection() const;
+		glm::vec3 getColor() const;
+		glm::vec3 getPosition() const;
+		glm::vec3 getAttenuation() const;
 
 	private:
 		glm::vec4 color;
@@ -65,14 +69,6 @@ namespace AGE
 		float exponent;
 		float cutOff;
 
-		// TODO
-		std::shared_ptr<IProperty>      _propShadowMatrix;
-		std::shared_ptr<IProperty>      _propPosition;
-		std::shared_ptr<IProperty>      _propAttenuation;
-		std::shared_ptr<IProperty>      _propDirection;
-		std::shared_ptr<IProperty>      _propSpotCutOff;
-		std::shared_ptr<IProperty>      _propExponentLight;
-		std::shared_ptr<IProperty>      _propColorLight;
 		BFCCullableHandle               _graphicHandle;
 	};
 }

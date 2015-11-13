@@ -3,6 +3,7 @@
 #include "DRBData.hpp"
 #include "Render\Pipelining\Render\RenderModes.hh"
 #include "Utils/AABoundingBox.hh"
+#include "Utils/Key.hh"
 
 namespace AGE
 {
@@ -23,7 +24,6 @@ namespace AGE
 		const Key<Vertices> &getVerticesKey() const;
 		bool hadRenderMode(RenderModes mode) const;
 		AABoundingBox getAABB() const;
-
 	private:
 		Key<Painter> _painter;
 		Key<Vertices> _vertices;

@@ -91,7 +91,7 @@ namespace AGE
 		
 		auto painter = _painterManager->get_painter(_painterCube);
 		painter->uniqueDrawBegin(_programs[PROGRAM_SKYBOX]);
-		painter->uniqueDraw(GL_QUADS, _programs[PROGRAM_SKYBOX], Properties(), _cube);
+		painter->uniqueDraw(GL_QUADS, _programs[PROGRAM_SKYBOX], _cube);
 		painter->uniqueDrawEnd();
 	}
 

@@ -14,12 +14,14 @@ namespace AGE
 	class ARenderingPipeline : public IRenderingPipeline
 	{
 	public:
-		virtual ~ARenderingPipeline() {}
+		virtual ~ARenderingPipeline();
 		virtual bool recompileShaders();
 		virtual bool init();
-
+		virtual void renderBegin(const DRBCameraDrawableList &){}
+		virtual void renderEnd(const DRBCameraDrawableList &){}
 		std::shared_ptr<PaintingManager> getPainterManager() const;
 		virtual IRenderingPipeline &render(const DRBCameraDrawableList &infos);
+
 	protected:
 		ARenderingPipeline(std::string &&name, std::shared_ptr<PaintingManager> const &painter_manager);
 		ARenderingPipeline(ARenderingPipeline &&move);
@@ -30,7 +32,7 @@ namespace AGE
 	protected:
 		std::string _name;
 		std::shared_ptr<PaintingManager> _painter_manager;
-		std::vector<std::shared_ptr<ARender>> _rendering_list;
+		std::vector<std::shared_ptr<ARender>> _rendering_list;	
 	};
 
 }

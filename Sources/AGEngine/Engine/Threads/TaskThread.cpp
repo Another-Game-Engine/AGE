@@ -24,6 +24,7 @@ namespace AGE
 		registerCallback<AGE::Tasks::Basic::Exit>([&](AGE::Tasks::Basic::Exit& msg)
 		{
 			this->_insideRun = false;
+			TMQ::TaskManager::emplaceSharedTask<Tasks::Basic::Exit>();
 		});
 		return true;
 	}
@@ -46,7 +47,7 @@ namespace AGE
 
 	bool TaskThread::stop()
 	{
-		getQueue()->emplaceTask<Tasks::Basic::Exit>();
+		TMQ::TaskManager::emplaceSharedTask<Tasks::Basic::Exit>();
 		if (_threadHandle.joinable())
 			_threadHandle.join();
 		return true;
@@ -60,18 +61,11 @@ namespace AGE
 		DWORD threadId = ::GetThreadId(static_cast<HANDLE>(_threadHandle.native_handle()));
 		SetThreadName(threadId, _name.c_str());
 
-		std::chrono::system_clock::time_point waitStart;
-		std::chrono::system_clock::time_point waitEnd;
-		std::chrono::system_clock::time_point workStart;
-		std::chrono::system_clock::time_point workEnd;
-
 		TMQ::MessageBase *task = nullptr;
 		while (_run && _insideRun)
 		{
-			waitStart = std::chrono::high_resolution_clock::now();
-			getQueue()->getTask(task);
-			waitEnd = std::chrono::high_resolution_clock::now();
-			workStart = std::chrono::high_resolution_clock::now();
+			while (TMQ::TaskManager::TaskThreadGetTask(task) == false)
+			{ }
 			if (task != nullptr)
 			{
 				//pop all tasks
@@ -79,7 +73,6 @@ namespace AGE
 				assert(result); // we receive a task that we cannot treat
 				taskCounter--;
 			}
-			workEnd = std::chrono::high_resolution_clock::now();
 		}
 		return true;
 	}

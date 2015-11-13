@@ -212,7 +212,7 @@ namespace AGE
 		_keyInputs[int(physicalInput)] = AGE_SET_PHYSICAL_KEY_JUST_PRESSED(_keyInputs[int(physicalInput)]);
 		_keyInputs[int(physicalInput)] = AGE_SET_PHYSICAL_KEY_PRESSED(_keyInputs[int(physicalInput)]);
 #ifdef AGE_ENABLE_IMGUI
-		GetMainThread()->getQueue()->emplaceTask<ImGuiKeyEvent>(mappedInput, true);
+		TMQ::TaskManager::emplaceMainTask<ImGuiKeyEvent>(mappedInput, true);
 #endif
 	}
 
@@ -225,7 +225,7 @@ namespace AGE
 		_keyInputs[int(physicalInput)] = AGE_RESET_PHYSICAL_KEY_STATE(_keyInputs[int(physicalInput)]);
 		_keyInputs[int(physicalInput)] = AGE_SET_PHYSICAL_KEY_JUST_RELEASED(_keyInputs[int(physicalInput)]);
 #ifdef AGE_ENABLE_IMGUI
-		GetMainThread()->getQueue()->emplaceTask<ImGuiKeyEvent>(mappedInput, false);
+		TMQ::TaskManager::emplaceMainTask<ImGuiKeyEvent>(mappedInput, false);
 #endif
 	}
 
@@ -310,7 +310,7 @@ namespace AGE
 			std::lock_guard<AGE::SpinLock> lock(_mutex);
 			mousePosition = glm::ivec2(_mousePosX, _mousePosY);
 		}
-		GetMainThread()->getQueue()->emplaceTask<ImGuiMouseStateEvent>(mousePosition,
+		TMQ::TaskManager::emplaceMainTask<ImGuiMouseStateEvent>(mousePosition,
 			getMouseButtonPressed(AgeMouseButtons::AGE_MOUSE_LEFT),
 			getMouseButtonPressed(AgeMouseButtons::AGE_MOUSE_MIDDLE),
 			getMouseButtonPressed(AgeMouseButtons::AGE_MOUSE_RIGHT),

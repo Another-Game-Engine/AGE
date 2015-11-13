@@ -9,11 +9,11 @@ namespace AGE
 	// - the block ID
 	// - the item ID
 
-	typedef uint8_t ItemID; // In fact it's : 6
-	static const ItemID MaxItemID = ItemID(0x3F); // 63
-	typedef uint8_t BlockID; // In fact it's : 10
-	static const BlockID MaxBlockID = BlockID(0x3FF); // 1023
-	typedef uint8_t BlockManagerID; // It's really 8
+	typedef uint16_t ItemID;
+	static const ItemID MaxItemID = ItemID(0x400); // 1024
+	typedef uint8_t BlockID;
+	static const BlockID MaxBlockID = BlockID(0xFF); // 255
+	typedef uint8_t BlockManagerID;
 	static const BlockManagerID MaxBlockManagerID = BlockManagerID(0xFF); // 255
 
 	typedef BlockManagerID CullableTypeID;

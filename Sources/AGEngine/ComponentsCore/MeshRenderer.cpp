@@ -80,21 +80,22 @@ namespace AGE
 		_renderMode[mode] = false;
 	}
 
-	void MeshRenderer::setSkinningMatrix(const std::vector<glm::mat4> &skinningMatrix)
+	void MeshRenderer::setSkinningMatrix(std::size_t size)
 	{
 		SCOPE_profile_cpu_function("Animations");
 
 		if (_drawableHandle.invalid())
 			return;
+		bool success = false;
 		for (auto &handle : _drawableHandle.getHandles())
 		{
-			if (std::static_pointer_cast<DRBMeshData>(handle.getPtr()->getDatas())->hadRenderMode(RenderModes::AGE_SKINNED))
+			if (handle.getPtr<DRBMesh>()->getDatas()->hadRenderMode(RenderModes::AGE_SKINNED))
 			{
-				((DRBSkinnedMesh*)(handle.getPtr()))->setSkinningMatrix(skinningMatrix);
-				return;
+				handle.getPtr<DRBSkinnedMesh>()->setSkinningMatrix(size);
+				success = true;
 			}
 		}
-		AGE_ASSERT(false, "You tried to update skinning matrix of a non skinned mesh.");
+		AGE_ASSERT(success, "You tried to update skinning matrix of a non skinned mesh.");
 	}
 
 	void MeshRenderer::_copyFrom(const ComponentBase *model)
@@ -130,7 +131,7 @@ namespace AGE
 		
 		for (auto &handle : _drawableHandle.getHandles())
 		{
-			std::static_pointer_cast<DRBMeshData>(handle.getPtr()->getDatas())->setRenderModes(_renderMode);
+			handle.getPtr<DRBMesh>()->getDatas()->setRenderModes(_renderMode);
 			entity->getLink().pushAnObject(handle);
 		}
 	}

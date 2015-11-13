@@ -43,7 +43,7 @@ namespace AGE
 		void enableRenderMode(RenderModes mode);
 		void disableRenderMode(RenderModes mode);
 
-		void setSkinningMatrix(const std::vector<glm::mat4> &skinningMatrix);
+		void setSkinningMatrix(std::size_t size);
 
 		virtual void _copyFrom(const ComponentBase *destination);
 

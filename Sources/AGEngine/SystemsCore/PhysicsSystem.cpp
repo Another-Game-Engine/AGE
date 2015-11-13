@@ -100,29 +100,32 @@ namespace AGE
 	{
 		SCOPE_profile_cpu_function("Physic");
 
-		RigidBody *rigidBody = nullptr;
-		Collider *collider = nullptr;
-		Link *link = nullptr;
-		for (const Entity &entity : entityFilter.getCollection())
+		if (_activateSimulation)
 		{
-			link = entity.getLinkPtr();
-			rigidBody = entity->getComponent<RigidBody>();
-			if (rigidBody != nullptr && rigidBody->isKinematic() == false)
+			RigidBody *rigidBody = nullptr;
+			Collider *collider = nullptr;
+			Link *link = nullptr;
+			for (const Entity &entity : entityFilter.getCollection())
 			{
-				//rigidBody->setPosition(posFromMat4(link->getGlobalTransform()));
-				// physx n'a pas l'air d'aimer ca
-				//rigidBody->setRotation(glm::quat_cast(link->getGlobalTransform()));
-				rigidBody->setPosition(link->getPosition());
-				rigidBody->setRotation(link->getOrientation());
-			}
-			else if (rigidBody == nullptr)
-			{
-				collider = entity->getComponent<Collider>();
-				//collider->setPosition(posFromMat4(link->getGlobalTransform()));
-				collider->setPosition(link->getPosition());
-				// physx n'a pas l'air d'aimer ca
-				//collider->setRotation(glm::quat_cast(link->getGlobalTransform()));
-				collider->setRotation(link->getOrientation());
+				link = entity.getLinkPtr();
+				rigidBody = entity->getComponent<RigidBody>();
+				if (rigidBody != nullptr && rigidBody->isKinematic() == false)
+				{
+					//rigidBody->setPosition(posFromMat4(link->getGlobalTransform()));
+					// physx n'a pas l'air d'aimer ca
+					//rigidBody->setRotation(glm::quat_cast(link->getGlobalTransform()));
+					rigidBody->setPosition(link->getPosition());
+					rigidBody->setRotation(link->getOrientation());
+				}
+				else if (rigidBody == nullptr)
+				{
+					collider = entity->getComponent<Collider>();
+					//collider->setPosition(posFromMat4(link->getGlobalTransform()));
+					collider->setPosition(link->getPosition());
+					// physx n'a pas l'air d'aimer ca
+					//collider->setRotation(glm::quat_cast(link->getGlobalTransform()));
+					collider->setRotation(link->getOrientation());
+				}
 			}
 		}
 	}
@@ -141,16 +144,19 @@ namespace AGE
 	{
 		SCOPE_profile_cpu_function("Physic");
 
-		RigidBody *rigidBody = nullptr;
-		Link *link = nullptr;
-		for (const Entity &entity : entityFilter.getCollection())
+		if (_activateSimulation)
 		{
-			link = entity.getLinkPtr();
-			rigidBody = entity->getComponent<RigidBody>();
-			if (rigidBody != nullptr && rigidBody->isKinematic() == false)
+			RigidBody *rigidBody = nullptr;
+			Link *link = nullptr;
+			for (const Entity &entity : entityFilter.getCollection())
 			{
-				link->setPosition(rigidBody->getPosition());
-				link->setOrientation(rigidBody->getRotation());
+				link = entity.getLinkPtr();
+				rigidBody = entity->getComponent<RigidBody>();
+				if (rigidBody != nullptr && rigidBody->isKinematic() == false)
+				{
+					link->setPosition(rigidBody->getPosition());
+					link->setOrientation(rigidBody->getRotation());
+				}
 			}
 		}
 	}

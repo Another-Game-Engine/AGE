@@ -39,7 +39,7 @@ namespace AGE
 		{
 			dataSet->loadTextures = true;
 			auto cookingTask = std::make_shared<CookingTask>(dataSet);
-			AGE::EmplaceTask<AGE::Tasks::Basic::VoidFunction>([=]()
+			TMQ::TaskManager::emplaceSharedTask<AGE::Tasks::Basic::VoidFunction>([=]()
 			{
 				cookingTask->texturesPath.insert(cookingTask->dataSet->filePath.getFullName());
 				cookingTask->serializedDirectory = std::tr2::sys::basic_directory_entry<std::tr2::sys::path>(WE::EditorConfiguration::GetCookedDirectory());

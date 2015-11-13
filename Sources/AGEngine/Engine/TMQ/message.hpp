@@ -7,18 +7,14 @@ namespace TMQ
 	struct MessageBase
 	{
 		virtual ~MessageBase();
-		MessageBase(std::size_t _uid, std::size_t _tid);
-		std::size_t uid;
-		std::size_t tid; // thread id
-		MessageBase(const MessageBase&o);
-		MessageBase &operator=(const MessageBase&o);
-		MessageBase(MessageBase&&o);
-		MessageBase &operator=(MessageBase&&o);
-		bool _used = false;
-		MessageBase *clone(char* dest);
+		MessageBase(std::size_t _uid);
+		const std::size_t uid;
+		MessageBase(const MessageBase&o) = delete;
+		MessageBase &operator=(const MessageBase&o) = delete;
+		MessageBase(MessageBase&&o) = delete;
+		MessageBase &operator=(MessageBase&&o) = delete;
 	protected:
 		static std::size_t __sharedIdCounter;
-		virtual MessageBase *_clone(char *dest) = 0;
 	};
 
 	template <typename T>
@@ -37,40 +33,21 @@ namespace TMQ
 		}
 
 		explicit Message(const T &data)
-			: MessageBase(getId(), std::this_thread::get_id().hash()), _data(data)
+			: MessageBase(getId()), _data(data)
 		{}
 
 		explicit Message(T &&data)
-			: MessageBase(getId(), std::this_thread::get_id().hash()), _data(std::move(data))
+			: MessageBase(getId()), _data(std::move(data))
 		{}
 
 		template <typename ...Args>
 		explicit Message(Args ...args)
-			: MessageBase(getId(), std::this_thread::get_id().hash()), _data(args...)
+			: MessageBase(getId()), _data(args...)
 		{
 		}
 
-		Message &operator=(const Message&o)
-		{
-			if (&o != this)
-			{
-				_data = o._data;
-			}
-			return *this;
-		}
-		Message(const Message&o)
-		{
-			if (&o != this)
-			{
-				_data = o._data;
-			}
-		}
-
-		virtual MessageBase *_clone(char *dest)
-		{
-			return new(dest)Message<T>(_data);
-		}
-
+		Message &operator=(const Message&o) = delete;
+		Message(const Message&o) = delete;
 		inline T &getData() { return _data; }
 	};
 

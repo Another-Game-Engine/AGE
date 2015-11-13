@@ -51,9 +51,8 @@ namespace AGE
 			auto animation = skelCpt->getAnimation();
 			if (animation)
 			{
-				//animation->update(hackTime);
-				//skelCpt->getSkeleton()->updateSkinning();
-				meshCpt->setSkinningMatrix(animation->getBones());
+				// TODO
+				meshCpt->setSkinningMatrix(animation->getTransformationsIndex());
 			}
 		}
 	}

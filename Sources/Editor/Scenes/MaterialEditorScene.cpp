@@ -194,7 +194,7 @@ namespace AGE
 			cereal::PortableBinaryOutputArchive ar(file);
 			ar(_current);
 			//_world_editor->getInstance<AssetsManager>()->requireMaterialReload(_current.name + ".mage");
-			_world_editor->getInstance<AssetsManager>()->reloadMaterial(_current.name + ".mage");
+			//_world_editor->getInstance<AssetsManager>()->reloadMaterial(_current.name + ".mage");
 		}
 	}
 

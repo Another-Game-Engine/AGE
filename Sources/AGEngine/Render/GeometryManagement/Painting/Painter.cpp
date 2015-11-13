@@ -1,5 +1,4 @@
 #include <Render/GeometryManagement/Painting/Painter.hh>
-#include <Render/Properties/Properties.hh>
 
 #include <Utils/Debug.hpp>
 #include <Threads/ThreadManager.hpp>
@@ -14,7 +13,7 @@ namespace AGE
 		, _isInstanciedDraw(false)
 	{
 		// to be sure that this function is only called in render thread
-		AGE_ASSERT(GetThreadManager()->getCurrentThread() == (AGE::Thread*)GetRenderThread());
+		AGE_ASSERT(CurrentThread() == (AGE::Thread*)GetRenderThread());
 	}
 
 	Painter::Painter(Painter &&move) :
@@ -24,7 +23,7 @@ namespace AGE
 		, _isInstanciedDraw(std::move(move._isInstanciedDraw))
 	{
 		// to be sure that this function is only called in render thread
-		AGE_ASSERT(GetThreadManager()->getCurrentThread() == (AGE::Thread*)GetRenderThread());
+		AGE_ASSERT(CurrentThread() == (AGE::Thread*)GetRenderThread());
 	}
 
 	Key<Vertices> Painter::add_vertices(size_t nbrVertex, size_t nbrIndices)
@@ -32,7 +31,7 @@ namespace AGE
 		SCOPE_profile_cpu_function("PainterTimer");
 
 		// to be sure that this function is only called in render thread
-		AGE_ASSERT(GetThreadManager()->getCurrentThread() == (AGE::Thread*)GetRenderThread());
+		AGE_ASSERT(CurrentThread() == (AGE::Thread*)GetRenderThread());
 
 		auto offset = 0ull;
 		for (auto &vertices : _vertices) {
@@ -48,7 +47,7 @@ namespace AGE
 		SCOPE_profile_cpu_function("PainterTimer");
 
 		// to be sure that this function is only called in render thread
-		AGE_ASSERT(GetThreadManager()->getCurrentThread() == (AGE::Thread*)GetRenderThread());
+		AGE_ASSERT(CurrentThread() == (AGE::Thread*)GetRenderThread());
 
 		if (!key.isValid())
 		{
@@ -71,7 +70,7 @@ namespace AGE
 		SCOPE_profile_cpu_function("PainterTimer");
 
 		// to be sure that this function is only called in render thread
-		AGE_ASSERT(GetThreadManager()->getCurrentThread() == (AGE::Thread*)GetRenderThread());
+		AGE_ASSERT(CurrentThread() == (AGE::Thread*)GetRenderThread());
 
 		if (!key.isValid())
 		{
@@ -80,12 +79,12 @@ namespace AGE
 		return (&_vertices[key.getId()]);
 	}
 
-	Painter & Painter::draw(GLenum mode, std::shared_ptr<Program> const &program, std::vector<Properties> &propertiesList, std::vector<Key<Vertices>> const &drawList)
+	Painter & Painter::draw(GLenum mode, std::shared_ptr<Program> const &program, std::vector<Key<Vertices>> const &drawList)
 	{
 		SCOPE_profile_gpu_i("Draw");
 		SCOPE_profile_cpu_function("PainterTimer");
 		// to be sure that this function is only called in render thread
-		AGE_ASSERT(GetThreadManager()->getCurrentThread() == (AGE::Thread*)GetRenderThread());
+		AGE_ASSERT(CurrentThread() == (AGE::Thread*)GetRenderThread());
 		program->set_attributes(_buffer);
 		_buffer.bind();
 		_buffer.update();
@@ -94,9 +93,6 @@ namespace AGE
 		{
 			if (draw_element.isValid())
 			{
-				auto &property = propertiesList[index];
-				program->registerProperties(property);
-				program->updateProperties(property);
 				program->update();
 				_vertices[draw_element.getId()].draw(mode);
 			}
@@ -107,19 +103,18 @@ namespace AGE
 		return (*this);
 	}
 
-	void Painter::uniqueDraw(GLenum mode, std::shared_ptr<Program> const &program, Properties &properties, const Key<Vertices> &vertice)
+	void Painter::uniqueDraw(GLenum mode, std::shared_ptr<Program> const &program, const Key<Vertices> &vertice)
 	{
-		SCOPE_profile_gpu_i("Unique Draw");
-		SCOPE_profile_cpu_function("PainterTimer");
+		//@PROFILER_COMMENTED
+		//SCOPE_profile_gpu_i("Unique Draw");
+		//SCOPE_profile_cpu_function("PainterTimer");
 
 		// be sure to call uniqueDrawBegin() before and uniqueDrawEnd() after
 		AGE_ASSERT(_isInUniqueDraw);
 
 		// to be sure that this function is only called in render thread
-		AGE_ASSERT(GetThreadManager()->getCurrentThread() == (AGE::Thread*)GetRenderThread());
+		AGE_ASSERT(CurrentThread() == (AGE::Thread*)GetRenderThread());
 
-		program->registerProperties(properties);
-		program->updateProperties(properties);
 		program->update();
 		// TODO: Fix that properly! @Dorian
 		if (vertice.getId() != std::uint32_t(-1) && vertice.getId() < _vertices.size())
@@ -128,14 +123,15 @@ namespace AGE
 
 	void Painter::instanciedDraw(GLenum mode, std::shared_ptr<Program> const &program, const Key<Vertices> &vertice, std::size_t count)
 	{
-		SCOPE_profile_gpu_i("Instancied Draw");
-		SCOPE_profile_cpu_function("PainterTimer");
+		//@PROFILER_COMMENTED
+		//SCOPE_profile_gpu_i("Instancied Draw");
+		//SCOPE_profile_cpu_function("PainterTimer");
 
 		// be sure to call uniqueDrawBegin() before and uniqueDrawEnd() after
 		AGE_ASSERT(_isInstanciedDraw);
 
 		// to be sure that this function is only called in render thread
-		AGE_ASSERT(GetThreadManager()->getCurrentThread() == (AGE::Thread*)GetRenderThread());
+		AGE_ASSERT(CurrentThread() == (AGE::Thread*)GetRenderThread());
 
 		program->update();
 		// TODO: Fix that properly! @Dorian
@@ -198,7 +194,7 @@ namespace AGE
 		SCOPE_profile_cpu_function("PainterTimer");
 
 		// to be sure that this function is only called in render thread
-		AGE_ASSERT(GetThreadManager()->getCurrentThread() == (AGE::Thread*)GetRenderThread());
+		AGE_ASSERT(CurrentThread() == (AGE::Thread*)GetRenderThread());
 
 		auto &types_buffer = _buffer.get_types();
 		if (types.size() != types_buffer.size()) {

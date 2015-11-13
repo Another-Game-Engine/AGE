@@ -6,18 +6,27 @@
 namespace AGE
 {
 
+	ARenderingPipeline::~ARenderingPipeline()
+	{
+		if (_spotlightRenderInfos != nullptr)
+		{
+			delete _spotlightRenderInfos;
+		}
+	}
+
+
 	ARenderingPipeline::ARenderingPipeline(std::string &&name, std::shared_ptr<PaintingManager> const &painter_manager) :
 		_name(std::move(name)),
 		_painter_manager(painter_manager)
 	{
-
+		_spotlightRenderInfos = nullptr;
 	}
 
 	ARenderingPipeline::ARenderingPipeline(ARenderingPipeline &&move) :
 		_name(std::move(move._name)),
 		_painter_manager(std::move(move._painter_manager))
 	{
-
+		_spotlightRenderInfos = nullptr;
 	}
 
 	std::shared_ptr<PaintingManager> ARenderingPipeline::getPainterManager() const
@@ -55,11 +64,13 @@ namespace AGE
 	IRenderingPipeline & ARenderingPipeline::render(const DRBCameraDrawableList &infos)
 	{
 		SCOPE_profile_cpu_i("RenderTimer", "RenderPipeline");
+		renderBegin(infos);
 		// We iterate over the entry points5
 		for (auto &renderPass : _rendering_list)
 		{
 			renderPass->render(infos);
 		}
+		renderEnd(infos);
 		return (*this);
 	}
 }

@@ -2,5 +2,5 @@
 
 namespace AGE
 {
-	bool OcclusionConfig::g_Occlusion_is_enabled = true;
+	bool OcclusionConfig::g_Occlusion_is_enabled = false;
 }
