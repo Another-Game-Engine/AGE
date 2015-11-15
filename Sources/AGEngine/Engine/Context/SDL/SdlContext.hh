@@ -27,6 +27,7 @@ namespace AGE
 
 	protected:
 		virtual bool _init();
+		virtual void _setFullscreen();
 
 	private:
 		SDL_Window		*_window;

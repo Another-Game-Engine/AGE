@@ -183,13 +183,13 @@ namespace AGE
 
 		_initialized = true;
 
-		//if (!configurationManager->getConfiguration<bool>("fullScreen"))
-		//{
-		//	configurationManager->setConfiguration<bool>(std::string("fullScreen"), false);
-		//}
 
 		auto configurationManager = setInstance<ConfigurationManager>("Configuration.json");
 		configurationManager->loadFile();
+		if (!configurationManager->getConfiguration<bool>("fullScreen"))
+		{
+			configurationManager->setConfiguration<bool>(std::string("fullScreen"), false);
+		}
 		if (!configurationManager->getConfiguration<int>("windowW"))
 		{
 			configurationManager->setConfiguration<int>(std::string("windowW"), 1280);

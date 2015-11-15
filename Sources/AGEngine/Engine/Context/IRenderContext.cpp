@@ -18,10 +18,11 @@ namespace AGE
 	{
 	}
 
-	bool IRenderContext::init(unsigned int swidth, unsigned int sheight, std::string && name)
+	bool IRenderContext::init(unsigned int swidth, unsigned int sheight, bool fullstreen, std::string && name)
 	{
 		_windowName = name;
 		_screenSize = glm::uvec2(swidth, sheight);
+		_fullscreen = fullstreen;
 		return _init();
 	}
 

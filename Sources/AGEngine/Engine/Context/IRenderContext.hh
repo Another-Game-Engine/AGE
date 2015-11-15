@@ -20,17 +20,21 @@ namespace AGE
 		IRenderContext();
 		virtual ~IRenderContext();
 
-		bool init(unsigned int swidth, unsigned int sheight, std::string && name);
+		bool init(unsigned int swidth, unsigned int sheight, bool fullstreen, std::string && name);
+		inline bool isFullscreen() const { return _fullscreen; }
+
 		inline glm::uvec2 getScreenSize() const { return _screenSize; }
 
 		virtual void swapContext() = 0;
 		virtual void refreshInputs() = 0;
 		virtual void setScreenSize(const glm::uvec2 &screenSize) = 0;
+		void setFullscreen(bool activated) { _fullscreen = activated; _setFullscreen(); }
 		virtual void grabMouse(bool grabMouse) = 0;
 
 	protected:
 		glm::uvec2 _screenSize;
 		std::string _windowName;
+		bool        _fullscreen;
 
 		static std::map<int, AgeKeys> _toAgeMappedKey;
 		static std::map<int, AgeKeys> _toAgePhysicalKey;
@@ -49,5 +53,6 @@ namespace AGE
 		AgeJoystickHatDirections findAgeJoystickHatDirection(int contextInput) const;
 
 		virtual bool _init() = 0;
+		virtual void _setFullscreen() = 0;
 	};
 }
