@@ -80,13 +80,11 @@ namespace AGE
 
 			auto camComponent = entity->getComponent<CameraComponent>();
 			static char const *pipelineNames[RenderType::TOTAL] = { "Debug deferred rendering", "Deferred rendering" };
-			if (ImGui::ListBox("Pipelines", &_pipelineIndex, pipelineNames, int(RenderType::TOTAL)))
+			ImGui::ListBox("Pipelines", &_pipelineIndex, pipelineNames, int(RenderType::TOTAL));
+			if (camComponent->getPipeline() != (RenderType)_pipelineIndex)
 			{
-				if (camComponent->getPipeline() != (RenderType)_pipelineIndex)
-				{
-					camComponent->setPipeline((RenderType)_pipelineIndex);
-					_scene->getSystem<RenderCameraSystem>()->drawDebugLines(_pipelineIndex == (int)RenderType::DEBUG_DEFERRED ? true : false);
-				}
+				camComponent->setPipeline((RenderType)_pipelineIndex);
+				_scene->getSystem<RenderCameraSystem>()->drawDebugLines(_pipelineIndex == (int)RenderType::DEBUG_DEFERRED ? true : false);
 			}
 #endif
 		}
