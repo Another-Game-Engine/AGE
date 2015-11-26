@@ -19,7 +19,7 @@ namespace AGE
 		if (_fullscreen)
 			flag |= SDL_WINDOW_FULLSCREEN;
 		if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK) != 0 ||
-			//SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1) != 0 ||
+			SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1) != 0 ||
 			//SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8) != 0 ||
 			(_window = SDL_CreateWindow(_windowName.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
 			_screenSize.x, _screenSize.y, flag)) == NULL ||

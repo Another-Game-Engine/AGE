@@ -59,15 +59,15 @@
                 "value": 13917482855567903631
             }
         ],
-        "entityNumber": 6,
+        "entityNumber": 7,
         "Entity_0": {
             "cereal_class_version": 0,
             "link": {
                 "cereal_class_version": 0,
                 "Position": {
-                    "value0": 1.8285863399505615,
-                    "value1": -3.6973335742950439,
-                    "value2": -0.4939359724521637
+                    "value0": 4.0968384742736816,
+                    "value1": -3.6562726497650146,
+                    "value2": -0.035305876284837723
                 },
                 "Scale": {
                     "value0": 1,
@@ -75,10 +75,10 @@
                     "value2": 1
                 },
                 "Orientation": {
-                    "value0": 0.04985586553812027,
-                    "value1": 0.76492244005203247,
-                    "value2": -0.059641864150762558,
-                    "value3": 0.63941448926925659
+                    "value0": -0.06847091019153595,
+                    "value1": 0.70107638835906982,
+                    "value2": 0.067942194640636444,
+                    "value3": 0.7065320611000061
                 }
             },
             "children": [],
@@ -345,6 +345,7 @@
             "components_number": [
                 0,
                 1,
+                2,
                 9
             ],
             "archetypesDependency": [],
@@ -361,6 +362,37 @@
                     "data": 0
                 }
             },
+            "AGE_CORE_RigidBody": {
+                "cereal_class_version": 1,
+                "AngularDrag": 0.05000000074505806,
+                "AngularVelocity": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "CenterOfMass": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "LinearDrag": 0,
+                "LinearVelocity": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Mass": 1,
+                "DiagonalInertiaTensor": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "MaxAngularVelocity": 1000000,
+                "MaxDepenetrationVelocity": 1000000,
+                "IsAffectedByGravity": false,
+                "IsKinematic": true,
+                "CollisionDetectionMode": 1
+            },
             "AGE_CORE_PhysicsCollider": {
                 "cereal_class_version": 1,
                 "ColliderType": 3,
@@ -369,6 +401,85 @@
                 "FilterGroup": 0,
                 "Mesh": "sponza/sponza",
                 "Convex": false
+            }
+        },
+        "Entity_6": {
+            "link": {
+                "Position": {
+                    "value0": 0,
+                    "value1": -4,
+                    "value2": 0
+                },
+                "Scale": {
+                    "value0": 2,
+                    "value1": 2,
+                    "value2": 2
+                },
+                "Orientation": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
+                }
+            },
+            "children": [],
+            "flags": 0,
+            "components_number": [
+                0,
+                1,
+                2,
+                9
+            ],
+            "archetypesDependency": [],
+            "AGE_CORE_EntityRepresentationComponent": {
+                "name": "spaceship"
+            },
+            "AGE_CORE_MeshRenderer": {
+                "value0": "spaceship/spaceship.mage",
+                "value1": "spaceship/spaceship.sage",
+                "value2": "",
+                "value3": {
+                    "type": 0,
+                    "data": 0
+                }
+            },
+            "AGE_CORE_RigidBody": {
+                "AngularDrag": 0.05000000074505806,
+                "AngularVelocity": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "CenterOfMass": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "LinearDrag": 0,
+                "LinearVelocity": {
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0
+                },
+                "Mass": 10,
+                "DiagonalInertiaTensor": {
+                    "value0": 1,
+                    "value1": 1,
+                    "value2": 1
+                },
+                "MaxAngularVelocity": 1000000,
+                "MaxDepenetrationVelocity": 1000000,
+                "IsAffectedByGravity": true,
+                "IsKinematic": false,
+                "CollisionDetectionMode": 1
+            },
+            "AGE_CORE_PhysicsCollider": {
+                "ColliderType": 3,
+                "Material": "DefaultMaterial",
+                "IsATrigger": false,
+                "FilterGroup": 1,
+                "Mesh": "spaceship/spaceship",
+                "Convex": true
             }
         }
     }
