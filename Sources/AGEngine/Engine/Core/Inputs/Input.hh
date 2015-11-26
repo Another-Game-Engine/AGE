@@ -65,12 +65,12 @@ namespace AGE
 		uint8_t _mouseInputs[AgeMouseButtons::AGE_MOUSE_BUTTONS_NUMBER];
 		uint8_t _keyInputs[AgeKeys::AGE_KEY_NUMBER];
 
-		std::atomic_int32_t _mousePosX;
-		std::atomic_int32_t _mousePosY;
-		std::atomic_int32_t _mouseDelX;
-		std::atomic_int32_t _mouseDelY;
-		std::atomic_int32_t _mouseWheelX;
-		std::atomic_int32_t _mouseWheelY;
+		std::uint32_t _mousePosX;
+		std::uint32_t _mousePosY;
+		std::uint32_t _mouseDelX;
+		std::uint32_t _mouseDelY;
+		std::uint32_t _mouseWheelX;
+		std::uint32_t _mouseWheelY;
 
 		AGE::SpinLock      _mutex;
 	};

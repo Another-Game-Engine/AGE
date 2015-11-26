@@ -414,13 +414,12 @@ namespace AGE
 					glClear(GL_COLOR_BUFFER_BIT);
 				}
 				++_frameCounter;
-			}
 
-			if (_context)
-			{
-				_context->refreshInputs();
+				if (_context)
+				{
+					_context->refreshInputs();
+				}
 			}
-
 		});
 
 		registerCallback<Tasks::Render::ReloadShaders>([&](Tasks::Render::ReloadShaders& msg)

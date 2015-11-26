@@ -179,6 +179,10 @@ namespace AGE
 				EngineCoreTestConfiguration::getSelectedSceneIndex() = (EngineCoreTestConfiguration::getSelectedSceneIndex() + 1) % EngineCoreTestConfiguration::getScenesName().size();
 				controllerRefreshed = true;
 			}
+			else if (controllerRefreshed == false && controller.getButtonJustReleased(AgeJoystickButtons::AGE_JOYSTICK_BUTTON_A))
+			{
+				controllerRefreshed = true;
+			}
 		}
 
 		static bool dixMilleCubes = false;
@@ -187,12 +191,12 @@ namespace AGE
 		ImGui::Checkbox("10 000 cubes", &dixMilleCubes);
 #endif
 
-		if (this->getNumberOfEntities() == 0 && toto > 10
+		if ((this->getNumberOfEntities() == 0 && toto > 10)
 #if defined(AGE_ENABLE_IMGUI)
 			|| (ImGui::ListBox("Scenes"
 			, &EngineCoreTestConfiguration::getSelectedSceneIndex()
 			, EngineCoreTestConfiguration::getScenesName().data()
-			, static_cast<int>(EngineCoreTestConfiguration::getScenesName().size())) && toto > 10)
+			, static_cast<int>(EngineCoreTestConfiguration::getScenesName().size())))
 #endif
 			|| controllerRefreshed
 			)

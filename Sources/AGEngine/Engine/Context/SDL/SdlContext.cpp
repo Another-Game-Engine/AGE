@@ -75,7 +75,8 @@ namespace AGE
 			_initJoysticks(*input);
 			_firstCall = false;
 		}
-		while (SDL_PollEvent(&events))
+		bool stop = false;
+		while (SDL_PollEvent(&events) && !stop)
 		{
 			switch (events.type)
 			{
@@ -140,6 +141,7 @@ namespace AGE
 			break;
 			case SDL_WINDOWEVENT:
 				input->addWindowInput(findAgeWindowInput(events.window.event));
+				stop = true;
 				break;
 			default:
 				input->addWindowInput(findAgeWindowInput(events.type));
