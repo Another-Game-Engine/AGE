@@ -15,6 +15,7 @@
 #include <Threads/ThreadManager.hpp>
 #include <Render/OcclusionTools/DepthMapHandle.hpp>
 #include <Render/OcclusionTools/DepthMap.hpp>
+#include <AssetManagement/AssetManager.hh>
 
 #include "Graphic/DRBCameraDrawableList.hpp"
 
@@ -57,6 +58,8 @@ namespace AGE
 			std::make_shared<UnitProg>(fragmentShaderPath, GL_FRAGMENT_SHADER)
 		}));
 		GetRenderThread()->getCube(_cube, _painterCube);
+
+		_spaceSkybox = GetEngine()->getInstance<AGE::AssetsManager>()->loadCubeMap("space", OldFile("skyboxes/space.dds"), "DEMO_SCENE_BASIC_ASSETS");
 	}
 
 	void DeferredSkyBox::setSkyboxLighting(glm::vec3 lighting)
@@ -85,7 +88,7 @@ namespace AGE
 			// TODO : Pass this infos as properties !
 			_programs[PROGRAM_SKYBOX]->get_resource<Mat4>("projection").set(infos.cameraInfos.data.projection);
 			_programs[PROGRAM_SKYBOX]->get_resource<Mat4>("view").set(infos.cameraInfos.view);
-			_programs[PROGRAM_SKYBOX]->get_resource<Sampler3D>("skybox").set(infos.cameraInfos.data.texture);
+			_programs[PROGRAM_SKYBOX]->get_resource<Sampler3D>("skybox").set(_spaceSkybox/*infos.cameraInfos.data.texture*/);
 			_programs[PROGRAM_SKYBOX]->get_resource<Vec3>("lighting").set(_lighting);
 		}
 		

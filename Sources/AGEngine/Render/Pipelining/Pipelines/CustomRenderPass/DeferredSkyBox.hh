@@ -6,6 +6,7 @@
 namespace AGE
 {
 	class Texture2D;
+	class TextureCubeMap;
 
 	class DeferredSkyBox : public FrameBufferRender
 	{
@@ -23,6 +24,7 @@ namespace AGE
 		virtual void renderPass(const DRBCameraDrawableList &infos);
 		Key<Painter> _painterCube;
 		Key<Vertices> _cube;
+		std::shared_ptr<TextureCubeMap> _spaceSkybox;
 
 		glm::vec3 _lighting;
 	};
