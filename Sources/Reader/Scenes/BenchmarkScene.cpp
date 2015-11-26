@@ -171,12 +171,16 @@ namespace AGE
 		{
 			if (controllerRefreshed == false && controller.getButtonJustReleased(AgeJoystickButtons::AGE_JOYSTICK_BUTTON_X))
 			{
-				EngineCoreTestConfiguration::getSelectedSceneIndex() = (EngineCoreTestConfiguration::getSelectedSceneIndex() - 1) % EngineCoreTestConfiguration::getScenesName().size();
+				EngineCoreTestConfiguration::getSelectedSceneIndex() -= 1;
+				if (EngineCoreTestConfiguration::getSelectedSceneIndex() < 0)
+					EngineCoreTestConfiguration::getSelectedSceneIndex() = EngineCoreTestConfiguration::getScenesName().size() - 1;
 				controllerRefreshed = true;
 			}
 			else if (controllerRefreshed == false && controller.getButtonJustReleased(AgeJoystickButtons::AGE_JOYSTICK_BUTTON_Y))
 			{
-				EngineCoreTestConfiguration::getSelectedSceneIndex() = (EngineCoreTestConfiguration::getSelectedSceneIndex() + 1) % EngineCoreTestConfiguration::getScenesName().size();
+				EngineCoreTestConfiguration::getSelectedSceneIndex() += 1;
+				if (EngineCoreTestConfiguration::getSelectedSceneIndex() >= EngineCoreTestConfiguration::getScenesName().size())
+					EngineCoreTestConfiguration::getSelectedSceneIndex() = 0;
 				controllerRefreshed = true;
 			}
 			else if (controllerRefreshed == false && controller.getButtonJustReleased(AgeJoystickButtons::AGE_JOYSTICK_BUTTON_A))
