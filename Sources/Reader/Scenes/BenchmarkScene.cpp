@@ -205,6 +205,7 @@ namespace AGE
 
 			EngineCoreTestConfiguration::saveConfigurations();
 			clearAllEntities();
+			getSystem<FreeFlyCamera>()->hackClear();
 
 			auto sceneFileName = EngineCoreTestConfiguration::getSelectedScenePath();
 

@@ -19,6 +19,7 @@ namespace AGE
 		FreeFlyCamera(AScene *scene);
 		~FreeFlyCamera() = default;
 
+		void hackClear() { _cameraAngles.clear(); }
 	private:
 		EntityFilter _cameras;
 		std::vector<glm::vec2> _cameraAngles;
