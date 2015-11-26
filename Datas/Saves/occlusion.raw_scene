@@ -48,10 +48,14 @@
             },
             {
                 "key": 11,
-                "value": 8718854852507163888
+                "value": 15079484947096660329
             },
             {
                 "key": 12,
+                "value": 8718854852507163888
+            },
+            {
+                "key": 13,
                 "value": 13917482855567903631
             }
         ],
@@ -173,7 +177,7 @@
             "components_number": [
                 0,
                 1,
-                12
+                13
             ],
             "archetypesDependency": [],
             "AGE_CORE_EntityRepresentationComponent": {
@@ -1555,7 +1559,7 @@
             "components_number": [
                 0,
                 1,
-                12
+                13
             ],
             "archetypesDependency": [],
             "AGE_CORE_EntityRepresentationComponent": {
@@ -1603,7 +1607,7 @@
             "components_number": [
                 0,
                 1,
-                12
+                13
             ],
             "archetypesDependency": [],
             "AGE_CORE_EntityRepresentationComponent": {
@@ -1651,7 +1655,7 @@
             "components_number": [
                 0,
                 1,
-                12
+                13
             ],
             "archetypesDependency": [],
             "AGE_CORE_EntityRepresentationComponent": {
@@ -1781,9 +1785,9 @@
         "Entity_26": {
             "link": {
                 "Position": {
-                    "value0": -0.82198160886764526,
-                    "value1": -3.0028083324432373,
-                    "value2": 9.7961235046386719
+                    "value0": -0.098859958350658417,
+                    "value1": 0.094117879867553711,
+                    "value2": 7.915865421295166
                 },
                 "Scale": {
                     "value0": 1,
@@ -1791,10 +1795,10 @@
                     "value2": 1
                 },
                 "Orientation": {
-                    "value0": 0.042929418385028839,
-                    "value1": 0.051521472632884979,
-                    "value2": 0.0022167826537042856,
-                    "value3": -0.99774634838104248
+                    "value0": 0.034070480614900589,
+                    "value1": 0.025278534740209579,
+                    "value2": -0.00086202827515080571,
+                    "value3": 0.99909931421279907
                 }
             },
             "children": [],
