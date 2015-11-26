@@ -636,34 +636,18 @@ namespace AGE
 		DWORD threadId = GetThreadId(static_cast<HANDLE>(_threadHandle.native_handle()));
 		SetThreadName(threadId, this->_name.c_str());
 
-		std::chrono::system_clock::time_point waitStart;
-		std::chrono::system_clock::time_point waitEnd;
-		std::chrono::system_clock::time_point workStart;
-		std::chrono::system_clock::time_point workEnd;
+		TMQ::MessageBase *task = nullptr;
 
 		while (_run && _insideRun)
 		{
 			SCOPE_profile_cpu_i("RenderTimer", "Update");
 
-			workStart = std::chrono::high_resolution_clock::now();
-
-			SCOPE_profile_cpu_i("RenderTimer", "Get and execute tasks");
-			waitStart = std::chrono::high_resolution_clock::now();
-			TMQ::MessageBase *task = nullptr;
-			
-			while (TMQ::TaskManager::RenderThreadGetTask(task) == false)
-			{ }
-
-			waitEnd = std::chrono::high_resolution_clock::now();
-			if (task)
+			if (TMQ::TaskManager::RenderThreadGetTask(task))
 			{
 				SCOPE_profile_cpu_i("RenderTimer", "Execute task");
 				auto success = execute(task); // we receive a task that we cannot treat
 				AGE_ASSERT(success);
 			}
-
-			workEnd = std::chrono::high_resolution_clock::now();
-			auto waitCount = std::chrono::duration_cast<std::chrono::microseconds>(waitEnd - waitStart).count();
 		}
 		return true;
 	}
