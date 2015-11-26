@@ -15,6 +15,9 @@ namespace AGE
 	private:
 		EntityFilter _pointLights;
 		float _timeMultiplier;
+		int _windowWidth;
+		int _windowHeight;
+		bool _fullscreen;
 
 		virtual bool initialize();
 		virtual void updateBegin(float time);

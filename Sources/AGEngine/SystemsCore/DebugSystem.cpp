@@ -4,6 +4,8 @@
 #include <Core/Engine.hh>
 #include <Core/AScene.hh>
 #include <SystemsCore/PhysicsSystem.hpp>
+#include <Context/IRenderContext.hh>
+#include <Core/ConfigurationManager.hpp>
 
 namespace AGE
 {
@@ -13,6 +15,9 @@ namespace AGE
 	{
 		_name = "Debug system";
 		_timeMultiplier = GetEngine()->getTimeMultiplier();
+		_windowWidth = _scene->getInstance<ConfigurationManager>()->getConfiguration<int>("windowW")->value;
+		_windowHeight = _scene->getInstance<ConfigurationManager>()->getConfiguration<int>("windowH")->value;
+		_fullscreen = _scene->getInstance<ConfigurationManager>()->getConfiguration<bool>("fullScreen")->value;
 	}
 
 	bool DebugSystem::initialize()
@@ -50,6 +55,22 @@ namespace AGE
 				_scene->deactivateSystem<AGE::PhysicsSystem>();
 			}
 		}
+		ImGui::Separator();
+		ImGui::Text("Options : applied after relaunch.");
+		auto context = _scene->getInstance<IRenderContext>();
+		if (ImGui::Checkbox("Fullscreen", &_fullscreen))
+		{
+			_scene->getInstance<ConfigurationManager>()->setValue<bool>(std::string("fullScreen"), _fullscreen);
+		}
+		if (ImGui::SliderInt("Window width", &_windowWidth, 800, 1920))
+		{
+			_scene->getInstance<ConfigurationManager>()->setValue<int>(std::string("windowW"), _windowWidth);
+		}
+		if (ImGui::SliderInt("Window height", &_windowHeight, 600, 1080))
+		{
+			_scene->getInstance<ConfigurationManager>()->setValue<int>(std::string("windowH"), _windowHeight);
+		}
+
 #endif
 	}
 

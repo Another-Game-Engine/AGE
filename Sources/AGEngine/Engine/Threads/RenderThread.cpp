@@ -351,7 +351,8 @@ namespace AGE
 
 			auto w = configurationManager->getConfiguration<int>("windowW")->getValue();
 			auto h = configurationManager->getConfiguration<int>("windowH")->getValue();
-			if (!_context->init(w, h, "~AGE~ V0.00001 Demo"))
+			auto f = configurationManager->getConfiguration<bool>("fullScreen")->getValue();
+			if (!_context->init(w, h, f, "~AGE~ V0.00001 Demo"))
 			{
 				msg.setValue(false);
 				return;

@@ -1,5 +1,5 @@
 #include "ThreadName.hpp"
-#include <microprofile/microprofile.h>
+#include <Utils/Profiler.hpp>
 
 #ifdef WIN32
 void SetThreadName( DWORD dwThreadID, const char* threadName)
