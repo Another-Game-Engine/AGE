@@ -60,26 +60,47 @@ namespace AGE
 	{
 		const std::string currentDir = Directory::GetCurrentDirectory();
 		const std::string absPath = Path::AbsoluteName(currentDir.c_str(), WE::EditorConfiguration::GetCookedDirectory().c_str());
-		std::vector<std::string> materialGettable;
-		std::vector<std::string> materialFullPath;
-		Directory dir;
-		const bool succeed = dir.open(absPath.c_str());
-		AGE_ASSERT(succeed && "Impossible to open directory");
-		for (auto it = dir.recursive_begin(); it != dir.recursive_end(); ++it)
+		static std::vector<std::string> materialGettable;
+		static std::vector<std::string> materialFullPath;
+		static int counter = 0;
+		++counter;
+		if (counter > 20)
 		{
-			if (Directory::IsFile(*it) && FileUtils::GetExtension(*it) == "mage")
+			materialGettable.clear();
+			materialFullPath.clear();
+
+			Directory dir;
+			const bool succeed = dir.open(absPath.c_str());
+			AGE_ASSERT(succeed && "Impossible to open directory");
+			for (auto it = dir.recursive_begin(); it != dir.recursive_end(); ++it)
 			{
-				materialGettable.push_back(std::string(Path::RelativeName(absPath.c_str(), *it)));
-				materialFullPath.push_back(*it);
+				if (Directory::IsFile(*it) && FileUtils::GetExtension(*it) == "mage")
+				{
+					materialGettable.push_back(std::string(Path::RelativeName(absPath.c_str(), *it)));
+					materialFullPath.push_back(*it);
+				}
+			}
+			dir.close();
+			counter = 0;
+		}
+
+		static ImGuiTextFilter filter;
+		ImGui::Text("Search");
+		filter.Draw();
+
+		ImGui::ListBoxHeader("List of existing material", size);
+		for (int i = 0; i < materialFullPath.size(); ++i)
+		{
+			if (filter.PassFilter(materialGettable[i].c_str()))
+			{
+				if (ImGui::Selectable(materialGettable[i].c_str()))
+				{
+					_indexMaterial = i;
+				}
 			}
 		}
-		dir.close();
-		char const **matListBox = new char const *[materialGettable.size()];
-		for (auto index = 0; index < materialFullPath.size(); ++index) {
-			matListBox[index] = materialGettable[index].c_str();
-		}
-		ImGui::ListBox("List of material existing", &_indexMaterial, matListBox, static_cast<int>(materialFullPath.size()));
-		delete[] matListBox;
+		ImGui::ListBoxFooter();
+
 		if (_indexMaterial != -1 && ImGui::Button("open a material"))
 		{
 			_resetEdition();
