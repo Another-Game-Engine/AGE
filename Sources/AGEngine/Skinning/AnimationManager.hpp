@@ -27,7 +27,7 @@ namespace AGE
 	private:
 		std::mutex _mutex;
 		std::map<std::shared_ptr<Skeleton>, std::list<std::shared_ptr<AnimationInstance>>> _animations;
-		std::vector<glm::mat4> _bonesBuffers[2];
+		std::vector<glm::mat4> _bonesBuffers[16];
 		std::uint8_t _currentBonesBufferIndex;
 		std::size_t  _bonesBufferSize = 0;
 	};

@@ -80,7 +80,8 @@ namespace AGE
 	void AnimationManager::update(float time)
 	{
 		SCOPE_profile_cpu_function("Animations");
-
+		if (GetMainThread()->isRenderFrame() == false)
+			return;
 		std::lock_guard<std::mutex> lock(_mutex); //dirty lock not definitive, to test purpose
 
 		std::atomic_int16_t counter = 0;
@@ -130,7 +131,10 @@ namespace AGE
 				}
 			}
 		}
-		TMQ::TaskManager::emplaceRenderTask<AGE::Tasks::UploadBonesToGPU>(&_bonesBuffers[_currentBonesBufferIndex]);
-		_currentBonesBufferIndex = (_currentBonesBufferIndex + 1) % 2;
+		if (taskNumber > 0)
+		{
+			TMQ::TaskManager::emplaceRenderTask<AGE::Tasks::UploadBonesToGPU>(&_bonesBuffers[_currentBonesBufferIndex]);
+			_currentBonesBufferIndex = (_currentBonesBufferIndex + 1) % 16;
+		}
 	}
 }
