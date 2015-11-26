@@ -194,10 +194,16 @@ namespace AGE
 		{
 			configurationManager->setConfiguration<int>(std::string("windowW"), 1280);
 		}
+		if (!configurationManager->getConfiguration<size_t>("frameCap"))
+		{
+			configurationManager->setConfiguration<size_t>(std::string("frameCap"), 0);
+		}
 		if (!configurationManager->getConfiguration<int>("windowH"))
 		{
 			configurationManager->setConfiguration<int>(std::string("windowH"), 720);
 		}
+		auto frameCap = configurationManager->getConfiguration<size_t>("frameCap");
+		GetMainThread()->setFrameCap(frameCap->value);
 
 		{
 			auto futur = TMQ::TaskManager::emplaceRenderFutureTask<Tasks::Render::CreateRenderContext, bool>(this);

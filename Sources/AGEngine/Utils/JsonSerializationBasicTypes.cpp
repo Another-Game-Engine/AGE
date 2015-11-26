@@ -33,6 +33,20 @@ namespace JsonSerialization
 		value = json["unsigned int"].GetUint();
 	}
 
+	void save(const size_t &value, rapidjson::Value &json, rapidjson::Document &document)
+	{
+		rapidjson::Value v(rapidjson::kNumberType);
+		v.SetUint64(value);
+		json.AddMember("size_t", v, document.GetAllocator());
+	}
+
+	void load(size_t &value, rapidjson::Value &json, rapidjson::Document &document)
+	{
+		if (!json.HasMember("size_t"))
+			return;
+		value = json["size_t"].GetUint64();
+	}
+
 	void save(const bool &value, rapidjson::Value &json, rapidjson::Document &document)
 	{
 		rapidjson::Value v;

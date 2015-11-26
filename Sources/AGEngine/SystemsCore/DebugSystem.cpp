@@ -6,6 +6,8 @@
 #include <SystemsCore/PhysicsSystem.hpp>
 #include <Context/IRenderContext.hh>
 #include <Core/ConfigurationManager.hpp>
+#include <Threads/MainThread.hpp>
+#include <Threads/ThreadManager.hpp>
 
 namespace AGE
 {
@@ -18,6 +20,7 @@ namespace AGE
 		_windowWidth = _scene->getInstance<ConfigurationManager>()->getConfiguration<int>("windowW")->value;
 		_windowHeight = _scene->getInstance<ConfigurationManager>()->getConfiguration<int>("windowH")->value;
 		_fullscreen = _scene->getInstance<ConfigurationManager>()->getConfiguration<bool>("fullScreen")->value;
+		_frameCap = _scene->getInstance<ConfigurationManager>()->getConfiguration<size_t>("frameCap")->value;
 	}
 
 	bool DebugSystem::initialize()
@@ -69,6 +72,24 @@ namespace AGE
 		if (ImGui::SliderInt("Window height", &_windowHeight, 600, 1080))
 		{
 			_scene->getInstance<ConfigurationManager>()->setValue<int>(std::string("windowH"), _windowHeight);
+		}
+		static int frameCap = _frameCap;
+		bool changeFrameCap = false;
+		if (ImGui::RadioButton("30 fps", &frameCap, 1000000 / 30))
+			changeFrameCap = true;
+		ImGui::SameLine();
+		if (ImGui::RadioButton("60 fps", &frameCap, 1000000 / 60))
+			changeFrameCap = true;
+		ImGui::SameLine();
+		if (ImGui::RadioButton("120 fps", &frameCap, 1000000 / 120))
+			changeFrameCap = true;
+		ImGui::SameLine();
+		if (ImGui::RadioButton("Max fps", &frameCap, 0))
+			changeFrameCap = true;
+		if (changeFrameCap)
+		{
+			GetMainThread()->setFrameCap(frameCap);
+			_scene->getInstance<ConfigurationManager>()->setValue<size_t>(std::string("frameCap"), frameCap);
 		}
 
 #endif

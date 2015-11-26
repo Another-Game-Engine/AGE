@@ -21,6 +21,7 @@ namespace AGE
 		});
 		_isRenderFrame = true;
 		_frameCounter = 0;
+		_frameCapInMicro = 1000000 / 60;
 		return true;
 	}
 
@@ -108,7 +109,7 @@ namespace AGE
 			start = std::chrono::high_resolution_clock::now();
 			_run = update();
 			auto stop = std::chrono::high_resolution_clock::now();
-			while (std::chrono::duration_cast<std::chrono::microseconds>(stop - start).count() < 16000)
+			while (std::chrono::duration_cast<std::chrono::microseconds>(stop - start).count() < _frameCapInMicro)
 			{
 				std::this_thread::yield();
 				stop = std::chrono::high_resolution_clock::now();

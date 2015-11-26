@@ -25,6 +25,7 @@ namespace AGE
 		AGE::Engine *getEngine();
 		inline AScene *getActiveScene() { return _activeScene; }
 		inline bool isRenderFrame() const { return _isRenderFrame; }
+		inline void setFrameCap(size_t micro) { _frameCapInMicro = micro; }
 	private:
 		MainThread();
 		virtual ~MainThread();
@@ -39,6 +40,7 @@ namespace AGE
 
 		bool _isRenderFrame;
 		std::size_t _frameCounter;
+		std::size_t _frameCapInMicro;
 
 		AGE::Engine *_engine;
 		AScene *_activeScene;

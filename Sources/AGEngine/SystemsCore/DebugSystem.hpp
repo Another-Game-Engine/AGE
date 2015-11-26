@@ -18,6 +18,7 @@ namespace AGE
 		int _windowWidth;
 		int _windowHeight;
 		bool _fullscreen;
+		size_t _frameCap;
 
 		virtual bool initialize();
 		virtual void updateBegin(float time);

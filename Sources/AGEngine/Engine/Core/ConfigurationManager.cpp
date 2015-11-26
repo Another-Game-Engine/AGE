@@ -86,14 +86,9 @@ namespace AGE
 					setConfiguration<std::string>(std::string(name), "");
 					_confs[name]->load(document[name], document);
 				}
-				else if (member->value.IsInt())
+				else if (member->value.IsUint64())
 				{
-					setConfiguration<int>(std::string(name), 0);
-					_confs[name]->load(document[name], document);
-				}
-				else if (member->value.IsUint())
-				{
-					setConfiguration<unsigned int>(std::string(name), 0);
+					setConfiguration<size_t>(std::string(name), 0);
 					_confs[name]->load(document[name], document);
 				}
 				else if (member->value.IsBool_())
