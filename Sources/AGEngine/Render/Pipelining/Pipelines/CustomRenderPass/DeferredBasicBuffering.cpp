@@ -180,6 +180,8 @@ namespace AGE
 					_programs[PROGRAM_BUFFERING]->get_resource<Vec4>("specular_color").set(current.material->specular);
 					_programs[PROGRAM_BUFFERING]->get_resource<Vec1>("shininess_ratio").set(current.material->shininess);
 					_programs[PROGRAM_BUFFERING]->get_resource<Sampler2D>("normal_map").set(current.material->normalTex);
+					_programs[PROGRAM_BUFFERING]->get_resource<Vec1>("scaleUvs").set(current.material->scaleUVs);
+
 
 					painter = _painterManager->get_painter(painterKey);
 					painter->instanciedDrawBegin(_programs[PROGRAM_BUFFERING]);
