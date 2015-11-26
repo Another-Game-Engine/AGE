@@ -4,6 +4,7 @@
 
 #include "BFC/BFCCullableHandle.hpp"
 #include "BFC/BFCBlockManagerFactory.hpp"
+#include "Utils/Profiler.hpp"
 
 namespace AGE
 {

@@ -21,6 +21,8 @@
 #include <BFC/BFCBlockManagerFactory.hpp>
 #include "Graphic/GraphicElementManager.hpp"
 #include "Graphic/DRBLightElementManager.hpp"
+#include "Utils/Profiler.hpp"
+
 
 namespace AGE
 {

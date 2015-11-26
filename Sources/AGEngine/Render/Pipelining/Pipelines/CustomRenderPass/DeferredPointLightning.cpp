@@ -10,6 +10,7 @@
 #include <Threads/ThreadManager.hpp>
 #include <Core/ConfigurationManager.hpp>
 #include <Core/Engine.hh>
+#include "Utils/Profiler.hpp"
 
 // TODO TO REMOVE
 #include <glm/gtc/matrix_transform.hpp>

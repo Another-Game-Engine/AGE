@@ -4,7 +4,6 @@
 
 #pragma comment(lib, "Ws2_32.lib")
 
-#include "microprofile/microprofile.h"
 
 #include <stdlib.h>
 #include <crtdbg.h>

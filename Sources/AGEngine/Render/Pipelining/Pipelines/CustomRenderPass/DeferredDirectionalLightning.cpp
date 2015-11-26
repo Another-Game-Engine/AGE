@@ -11,6 +11,8 @@
 #include <Threads/ThreadManager.hpp>
 #include <Core/ConfigurationManager.hpp>
 #include <Core/Engine.hh>
+#include "Utils/Profiler.hpp"
+
 
 #include "Graphic/DRBCameraDrawableList.hpp"
 

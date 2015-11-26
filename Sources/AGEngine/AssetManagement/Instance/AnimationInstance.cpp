@@ -5,7 +5,7 @@
 #include <Skinning/Skeleton.hpp>
 #include <Skinning/AnimationChannel.hpp>
 
-#include <Utils/Profiler.hpp>
+#include "Utils/Profiler.hpp"
 
 using namespace AGE;
 

@@ -7,6 +7,8 @@
 
 #include "AssetManagement/Instance/MeshInstance.hh"
 #include "AssetManagement/Instance/MaterialInstance.hh"
+#include "Utils/Profiler.hpp"
+
 
 namespace AGE
 {
