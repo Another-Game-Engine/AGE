@@ -14,7 +14,10 @@ namespace AGE
 		namespace ToRender
 		{
 			struct Flush{
-				std::size_t aligned;
+				bool isRenderFrame;
+				Flush(bool isRenderFrame)
+					: isRenderFrame(isRenderFrame)
+				{}
 			};
 
 			struct DrawTestTriangle

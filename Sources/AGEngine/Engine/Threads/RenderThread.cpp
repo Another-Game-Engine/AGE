@@ -386,34 +386,34 @@ namespace AGE
 
 		registerCallback<Commands::ToRender::Flush>([&](Commands::ToRender::Flush& msg)
 		{
+			SCOPE_profile_cpu_i("RenderTimer", "Render frame");
+			if (msg.isRenderFrame)
 			{
-				SCOPE_profile_cpu_i("RenderTimer", "Render frame");
-				{
 #ifdef AGE_ENABLE_IMGUI
-					std::shared_ptr<AGE::RenderImgui> imguiRenderList = nullptr;
-					{
-						std::lock_guard<AGE::SpinLock> lock(_mutex);
+				std::shared_ptr<AGE::RenderImgui> imguiRenderList = nullptr;
+				{
+					std::lock_guard<AGE::SpinLock> lock(_mutex);
 
-						imguiRenderList = _imguiRenderlist;
-					}
-					if (imguiRenderList != nullptr)
-					{
-						AGE::Imgui::getInstance()->renderThreadRenderFn(imguiRenderList->cmd_lists);
-					}
-					static bool first = true;
-					if (first || imguiRenderList)
-					{
-						TMQ::TaskManager::emplaceMainTask<ImGuiEndOfFrame>();
-						first = false;
-					}
-#endif
+					imguiRenderList = _imguiRenderlist;
 				}
+				if (imguiRenderList != nullptr)
+				{
+					AGE::Imgui::getInstance()->renderThreadRenderFn(imguiRenderList->cmd_lists);
+				}
+				static bool first = true;
+				if (first || imguiRenderList)
+				{
+					TMQ::TaskManager::emplaceMainTask<ImGuiEndOfFrame>();
+					first = false;
+				}
+#endif
 				_context->swapContext();
 				{
 					SCOPE_profile_gpu_i("Clear buffer");
 					SCOPE_profile_cpu_i("RenderTimer", "Clear buffer");
 					glClear(GL_COLOR_BUFFER_BIT);
 				}
+				++_frameCounter;
 			}
 
 			if (_context)
@@ -421,7 +421,6 @@ namespace AGE
 				_context->refreshInputs();
 			}
 
-			++_frameCounter;
 		});
 
 		registerCallback<Tasks::Render::ReloadShaders>([&](Tasks::Render::ReloadShaders& msg)

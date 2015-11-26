@@ -273,12 +273,8 @@ namespace AGE
 		static float refreshStats = 0.0;
 		refreshStats += _timer->getElapsed();
 
-		if (GetMainThread()->isRenderFrame())
-		{
-
-			TMQ::TaskManager::emplaceRenderTask<Commands::ToRender::Flush>();
-			++frame;
-		}
+		TMQ::TaskManager::emplaceRenderTask<Commands::ToRender::Flush>(GetMainThread()->isRenderFrame());
+		++frame;
 		return true;
 	}
 
