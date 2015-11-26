@@ -164,28 +164,43 @@ namespace AGE
 		}
 		static int toto = 0;
 		++toto;
+		Joystick controller;
+		auto inputs = getInstance<Input>();
+		static bool controllerRefreshed = false;
+		if (inputs->getJoystick(0, controller))
+		{
+			if (controllerRefreshed == false && controller.getButtonJustReleased(AgeJoystickButtons::AGE_JOYSTICK_BUTTON_X))
+			{
+				EngineCoreTestConfiguration::getSelectedSceneIndex() = (EngineCoreTestConfiguration::getSelectedSceneIndex() - 1) % EngineCoreTestConfiguration::getScenesName().size();
+				controllerRefreshed = true;
+			}
+			else if (controllerRefreshed == false && controller.getButtonJustReleased(AgeJoystickButtons::AGE_JOYSTICK_BUTTON_Y))
+			{
+				EngineCoreTestConfiguration::getSelectedSceneIndex() = (EngineCoreTestConfiguration::getSelectedSceneIndex() + 1) % EngineCoreTestConfiguration::getScenesName().size();
+				controllerRefreshed = true;
+			}
+		}
+
+		static bool dixMilleCubes = false;
+
+#if defined(AGE_ENABLE_IMGUI)
+		ImGui::Checkbox("10 000 cubes", &dixMilleCubes);
+#endif
+
 		if (this->getNumberOfEntities() == 0 && toto > 10
 #if defined(AGE_ENABLE_IMGUI)
-			|| ImGui::ListBox("Scenes"
+			|| (ImGui::ListBox("Scenes"
 			, &EngineCoreTestConfiguration::getSelectedSceneIndex()
 			, EngineCoreTestConfiguration::getScenesName().data()
-			, static_cast<int>(EngineCoreTestConfiguration::getScenesName().size())) && toto > 10
+			, static_cast<int>(EngineCoreTestConfiguration::getScenesName().size())) && toto > 10)
 #endif
+			|| controllerRefreshed
 			)
 		{
+			controllerRefreshed = false;
+
 			EngineCoreTestConfiguration::saveConfigurations();
 			clearAllEntities();
-
-//			auto camera = createEntity();
-//			GLOBAL_CAMERA = camera;
-//			auto cam = camera->addComponent<CameraComponent>();
-//			camera->addComponent<FreeFlyComponent>();
-//			cam->setPipeline(RenderType::DEFERRED);
-//			getSystem<RenderCameraSystem>()->drawDebugLines(false);
-//			cam->setTexture(_skyboxSpace);
-//			cam->addSkyBoxToChoice("space", _skyboxSpace);
-////			cam->addSkyBoxToChoice("test", _skyboxTest);
-//			camera->getLink().setPosition(glm::vec3(0, 2.5f, 4.5f));
 
 			auto sceneFileName = EngineCoreTestConfiguration::getSelectedScenePath();
 
@@ -197,12 +212,15 @@ namespace AGE
 			auto cubeMesh = getInstance<AGE::AssetsManager>()->getMesh("cube/cube.sage");
 			auto cubeMat = getInstance<AGE::AssetsManager>()->getMaterial("cube/cube.mage");
 			
-			for (std::size_t i = 0; i < 10000; i++)
+			if (dixMilleCubes)
 			{
+				for (std::size_t i = 0; i < 10000; i++)
 				{
-					auto entity = createEntity();
-					entity->addComponent<MeshRenderer>(cubeMesh, cubeMat);
-					entity->getLink().setPosition(glm::ballRand(100.0f));
+					{
+						auto entity = createEntity();
+						entity->addComponent<MeshRenderer>(cubeMesh, cubeMat);
+						entity->getLink().setPosition(glm::ballRand(100.0f));
+					}
 				}
 			}
 		}

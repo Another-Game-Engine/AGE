@@ -50,7 +50,10 @@ namespace AGE
 		for (Entity const &entity : _filter.getCollection())
 		{
 			static float trigger = 1.0f;
-			if (_scene->getInstance<Input>()->getPhysicalKeyPressed(AgeKeys::AGE_SPACE) && trigger >= 0.15f)
+			Joystick controller;
+			auto inputs = _scene->getInstance<Input>();
+			bool controllerEnabled = inputs->getJoystick(0, controller);
+			if ((inputs->getPhysicalKeyPressed(AgeKeys::AGE_SPACE) || (controllerEnabled && controller.getButtonPressed(AgeJoystickButtons::AGE_JOYSTICK_BUTTON_RIGHTSHOULDER))) && trigger >= 0.15f)
 			{
 				trigger = 0.0f;
 				auto e = _scene->createEntity();
@@ -69,6 +72,7 @@ namespace AGE
 				auto pl = e->addComponent<PointLightComponent>();
 				pl->setColor(glm::vec3(float(rand() % 100) / 100.0f, float(rand() % 100) / 100.0f, float(rand() % 100) / 100.0f));
 			}
+
 			trigger += time;
 
 #if defined(EDITOR_ENABLED)
