@@ -40,14 +40,14 @@
 
 static std::pair<std::pair<GLenum, StringID>, std::function<void(AGE::Vertices &vertices, size_t index, AGE::SubMeshData const &data)>> g_InfosTypes[AGE::MeshInfos::END] =
 {
-), LAMBDA_FUNCTION{ vertices.set_data<glm::vec3>(data.positions,      StringID("position", 0x4cbf3a26fca1d74a)); }),
-), LAMBDA_FUNCTION{ vertices.set_data<glm::vec3>(data.normals,          StringID("normal", 0x61053f0e3ebbd272)); }),
-), LAMBDA_FUNCTION{ vertices.set_data<glm::vec3>(data.tangents,        StringID("tangent", 0x3c52b7db8f51de22)); }),
+	std::make_pair(std::make_pair(GL_FLOAT_VEC3, StringID("position", 0x4cbf3a26fca1d74a)), LAMBDA_FUNCTION{ vertices.set_data<glm::vec3>(data.positions,      StringID("position", 0x4cbf3a26fca1d74a)); }),
+	std::make_pair(std::make_pair(GL_FLOAT_VEC3, StringID("normal", 0x61053f0e3ebbd272)), LAMBDA_FUNCTION{ vertices.set_data<glm::vec3>(data.normals,          StringID("normal", 0x61053f0e3ebbd272)); }),
+	std::make_pair(std::make_pair(GL_FLOAT_VEC3, StringID("tangent", 0x3c52b7db8f51de22)), LAMBDA_FUNCTION{ vertices.set_data<glm::vec3>(data.tangents,        StringID("tangent", 0x3c52b7db8f51de22)); }),
 	std::make_pair(std::make_pair(GL_FLOAT_VEC3, StringID("biTangents", 0xc9ccb62e082e82a2)), LAMBDA_FUNCTION{ vertices.set_data<glm::vec3>(data.biTangents,   StringID("biTangents", 0xc9ccb62e082e82a2)); }),
 	std::make_pair(std::make_pair(GL_FLOAT_VEC2, StringID("texCoord", 0xa0a9c94137957633)), LAMBDA_FUNCTION{ vertices.set_data<glm::vec2>(data.uvs[0],         StringID("texCoord", 0xa0a9c94137957633)); }),
-), LAMBDA_FUNCTION{ vertices.set_data<glm::vec4>(data.weights,     StringID("blendWeight", 0x4e02a6961ed59218)); }),
-), LAMBDA_FUNCTION{ vertices.set_data<glm::vec4>(data.boneIndices, StringID("blendIndice", 0x7beee96843342fb4)); }),
-), LAMBDA_FUNCTION{ vertices.set_data<glm::vec4>(data.colors,            StringID("color", 0x77f5c18e246c6638)); })
+	std::make_pair(std::make_pair(GL_FLOAT_VEC4, StringID("blendWeight", 0x4e02a6961ed59218)), LAMBDA_FUNCTION{ vertices.set_data<glm::vec4>(data.weights,     StringID("blendWeight", 0x4e02a6961ed59218)); }),
+	std::make_pair(std::make_pair(GL_FLOAT_VEC4, StringID("blendIndice", 0x7beee96843342fb4)), LAMBDA_FUNCTION{ vertices.set_data<glm::vec4>(data.boneIndices, StringID("blendIndice", 0x7beee96843342fb4)); }),
+	std::make_pair(std::make_pair(GL_FLOAT_VEC4, StringID("color", 0x77f5c18e246c6638)), LAMBDA_FUNCTION{ vertices.set_data<glm::vec4>(data.colors,            StringID("color", 0x77f5c18e246c6638)); })
 };
 
 namespace AGE

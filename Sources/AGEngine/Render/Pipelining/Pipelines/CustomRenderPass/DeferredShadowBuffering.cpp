@@ -84,7 +84,7 @@ namespace AGE
 
 		_positionBuffer = createRenderPassOutput<TextureBuffer>(_maxInstanciedShadowCaster, GL_RGBA32F, _sizeofMatrix, GL_DYNAMIC_DRAW);
 
-		_programs[PROGRAM_BUFFERING]->get_resource<SamplerBuffer>("model_matrix_tbo")->addInstanciedAlias("model_matrix");
+		_programs[PROGRAM_BUFFERING]->get_resource<SamplerBuffer>(StringID("model_matrix_tbo"))->addInstanciedAlias("model_matrix");
 	}
 
 
@@ -125,9 +125,9 @@ namespace AGE
 			_frame_buffer.attachment(*depth.get(), GL_DEPTH_STENCIL_ATTACHMENT);
 			glClear(GL_DEPTH_BUFFER_BIT);
 
-			_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("light_matrix").set(spotLightPtr->getCommandOutput()._spotLightMatrix);
-			_programs[PROGRAM_BUFFERING]->get_resource<SamplerBuffer>("model_matrix_tbo").set(_positionBuffer);
-			auto matrixOffset = _programs[PROGRAM_BUFFERING]->get_resource<Vec1>("matrixOffset");
+			_programs[PROGRAM_BUFFERING]->get_resource<Mat4>(StringID("light_matrix")).set(spotLightPtr->getCommandOutput()._spotLightMatrix);
+			_programs[PROGRAM_BUFFERING]->get_resource<SamplerBuffer>(StringID("model_matrix_tbo")).set(_positionBuffer);
+			auto matrixOffset = _programs[PROGRAM_BUFFERING]->get_resource<Vec1>(StringID("matrixOffset"));
 
 			_positionBuffer->resetOffset();
 
@@ -178,11 +178,11 @@ namespace AGE
 			auto depth = ShadowMapCollection::getDepthBuffer(i++, w, h);
 
 			_frame_buffer.attachment(*depth.get(), GL_DEPTH_STENCIL_ATTACHMENT);
-			_programs[PROGRAM_BUFFERING_SKINNED]->get_resource<Mat4>("light_matrix").set(spotLightPtr->getCommandOutput()._spotLightMatrix);
-			_programs[PROGRAM_BUFFERING_SKINNED]->get_resource<SamplerBuffer>("model_matrix_tbo").set(_positionBuffer);
-			_programs[PROGRAM_BUFFERING_SKINNED]->get_resource<SamplerBuffer>("bones_matrix_tbo").set(GetRenderThread()->getBonesTexture());
-			auto matrixOffset = _programs[PROGRAM_BUFFERING_SKINNED]->get_resource<Vec1>("matrixOffset");
-			auto bonesOffset = _programs[PROGRAM_BUFFERING_SKINNED]->get_resource<Vec1>("bonesOffset");
+			_programs[PROGRAM_BUFFERING_SKINNED]->get_resource<Mat4>(StringID("light_matrix")).set(spotLightPtr->getCommandOutput()._spotLightMatrix);
+			_programs[PROGRAM_BUFFERING_SKINNED]->get_resource<SamplerBuffer>(StringID("model_matrix_tbo")).set(_positionBuffer);
+			_programs[PROGRAM_BUFFERING_SKINNED]->get_resource<SamplerBuffer>(StringID("bones_matrix_tbo")).set(GetRenderThread()->getBonesTexture());
+			auto matrixOffset = _programs[PROGRAM_BUFFERING_SKINNED]->get_resource<Vec1>(StringID("matrixOffset"));
+			auto bonesOffset = _programs[PROGRAM_BUFFERING_SKINNED]->get_resource<Vec1>(StringID("bonesOffset"));
 
 			_positionBuffer->resetOffset();
 

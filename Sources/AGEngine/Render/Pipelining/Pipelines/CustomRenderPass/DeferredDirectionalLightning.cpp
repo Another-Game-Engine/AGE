@@ -75,12 +75,12 @@ namespace AGE
 		glm::vec3 cameraPosition = -glm::transpose(glm::mat3(infos.cameraInfos.view)) * glm::vec3(infos.cameraInfos.view[3]);
 
 		_programs[PROGRAM_LIGHTNING]->use();
-		_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("projection_matrix").set(infos.cameraInfos.data.projection);
-		_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("view_matrix").set(infos.cameraInfos.view);
-		_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("normal_buffer").set(_normalInput);
-		_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("depth_buffer").set(_depthInput);
-		_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("specular_buffer").set(_specularInput);
-		_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("eye_pos").set(cameraPosition);
+		_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>     (StringID("projection_matrix")).set(infos.cameraInfos.data.projection);
+		_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>     (StringID("view_matrix")).set(infos.cameraInfos.view);
+		_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>(StringID("normal_buffer")).set(_normalInput);
+		_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>(StringID("depth_buffer")).set(_depthInput);
+		_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>(StringID("specular_buffer")).set(_specularInput);
+		_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>     (StringID("eye_pos")).set(cameraPosition);
 
 		{
 			SCOPE_profile_gpu_i("clear buffer");

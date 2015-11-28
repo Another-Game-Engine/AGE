@@ -83,10 +83,10 @@ namespace AGE
 			OpenGLState::glDisable(GL_CULL_FACE);
 
 			_programs[PROGRAM_DEPTH_OF_FIELD]->use();
-			_programs[PROGRAM_DEPTH_OF_FIELD]->get_resource<Sampler2D>("cleanMap").set(_clean);
-			_programs[PROGRAM_DEPTH_OF_FIELD]->get_resource<Sampler2D>("depthMap").set(_depth);
-			_programs[PROGRAM_DEPTH_OF_FIELD]->get_resource<Sampler2D>("blurredMap1").set(_blurred1);
-			_programs[PROGRAM_DEPTH_OF_FIELD]->get_resource<Sampler2D>("blurredMap2").set(_blurred2);
+			_programs[PROGRAM_DEPTH_OF_FIELD]->get_resource<Sampler2D>(StringID("cleanMap")).set(_clean);
+			_programs[PROGRAM_DEPTH_OF_FIELD]->get_resource<Sampler2D>(StringID("depthMap")).set(_depth);
+			_programs[PROGRAM_DEPTH_OF_FIELD]->get_resource<Sampler2D>(StringID("blurredMap1")).set(_blurred1);
+			_programs[PROGRAM_DEPTH_OF_FIELD]->get_resource<Sampler2D>(StringID("blurredMap2")).set(_blurred2);
 
 			_quadPainter->uniqueDrawBegin(_programs[PROGRAM_DEPTH_OF_FIELD]);
 			_quadPainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_DEPTH_OF_FIELD], _quadVertices);

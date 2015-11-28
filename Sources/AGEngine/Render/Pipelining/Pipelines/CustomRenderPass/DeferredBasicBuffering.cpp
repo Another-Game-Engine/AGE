@@ -149,10 +149,10 @@ namespace AGE
 			SCOPE_profile_cpu_i("RenderTimer", "Draw occluded objects");
 
 			_programs[PROGRAM_BUFFERING]->use();
-			_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("projection_matrix").set(infos.cameraInfos.data.projection);
-			_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("view_matrix").set(infos.cameraInfos.view);
-			_programs[PROGRAM_BUFFERING]->get_resource<SamplerBuffer>("model_matrix_tbo").set(_positionBuffer);
-			auto matrixOffset = _programs[PROGRAM_BUFFERING]->get_resource<Vec1>("matrixOffset");
+			_programs[PROGRAM_BUFFERING]->get_resource<Mat4>(StringID("projection_matrix")).set(infos.cameraInfos.data.projection);
+			_programs[PROGRAM_BUFFERING]->get_resource<Mat4>(StringID("view_matrix")).set(infos.cameraInfos.view);
+			_programs[PROGRAM_BUFFERING]->get_resource<SamplerBuffer>(StringID("model_matrix_tbo")).set(_positionBuffer);
+			auto matrixOffset = _programs[PROGRAM_BUFFERING]->get_resource<Vec1>(StringID("matrixOffset"));
 
 			_positionBuffer->resetOffset();
 
@@ -175,12 +175,12 @@ namespace AGE
 
 				if (painterKey.isValid())
 				{
-					_programs[PROGRAM_BUFFERING]->get_resource<Vec4>("diffuse_color").set(current.material->diffuse);
-					_programs[PROGRAM_BUFFERING]->get_resource<Sampler2D>("diffuse_map").set(current.material->diffuseTex);
-					_programs[PROGRAM_BUFFERING]->get_resource<Vec4>("specular_color").set(current.material->specular);
-					_programs[PROGRAM_BUFFERING]->get_resource<Vec1>("shininess_ratio").set(current.material->shininess);
-					_programs[PROGRAM_BUFFERING]->get_resource<Sampler2D>("normal_map").set(current.material->normalTex);
-					_programs[PROGRAM_BUFFERING]->get_resource<Vec1>("scaleUvs").set(current.material->scaleUVs);
+					_programs[PROGRAM_BUFFERING]->get_resource<Vec4>     (StringID("diffuse_color")).set(current.material->diffuse);
+					_programs[PROGRAM_BUFFERING]->get_resource<Sampler2D>(StringID("diffuse_map")).set(current.material->diffuseTex);
+					_programs[PROGRAM_BUFFERING]->get_resource<Vec4>     (StringID("specular_color")).set(current.material->specular);
+					_programs[PROGRAM_BUFFERING]->get_resource<Vec1>     (StringID("shininess_ratio")).set(current.material->shininess);
+					_programs[PROGRAM_BUFFERING]->get_resource<Sampler2D>(StringID("normal_map")).set(current.material->normalTex);
+					_programs[PROGRAM_BUFFERING]->get_resource<Vec1>     (StringID("scaleUvs")).set(current.material->scaleUVs);
 
 
 					painter = _painterManager->get_painter(painterKey);
@@ -209,12 +209,12 @@ namespace AGE
 				SCOPE_profile_cpu_i("RenderTimer", "Draw skinned objects");
 
 				_programs[PROGRAM_BUFFERING_SKINNED]->use();
-				_programs[PROGRAM_BUFFERING_SKINNED]->get_resource<Mat4>("projection_matrix").set(infos.cameraInfos.data.projection);
-				_programs[PROGRAM_BUFFERING_SKINNED]->get_resource<Mat4>("view_matrix").set(infos.cameraInfos.view);
-				_programs[PROGRAM_BUFFERING_SKINNED]->get_resource<SamplerBuffer>("model_matrix_tbo").set(_positionBuffer);
-				_programs[PROGRAM_BUFFERING_SKINNED]->get_resource<SamplerBuffer>("bones_matrix_tbo").set(GetRenderThread()->getBonesTexture());
-				auto matrixOffset = _programs[PROGRAM_BUFFERING_SKINNED]->get_resource<Vec1>("matrixOffset");
-				auto bonesOffset = _programs[PROGRAM_BUFFERING_SKINNED]->get_resource<Vec1>("bonesOffset");
+				_programs[PROGRAM_BUFFERING_SKINNED]->get_resource<Mat4>         (StringID("projection_matrix")).set(infos.cameraInfos.data.projection);
+				_programs[PROGRAM_BUFFERING_SKINNED]->get_resource<Mat4>         (StringID("view_matrix")).set(infos.cameraInfos.view);
+				_programs[PROGRAM_BUFFERING_SKINNED]->get_resource<SamplerBuffer>(StringID("model_matrix_tbo")).set(_positionBuffer);
+				_programs[PROGRAM_BUFFERING_SKINNED]->get_resource<SamplerBuffer>(StringID("bones_matrix_tbo")).set(GetRenderThread()->getBonesTexture());
+				auto matrixOffset = _programs[PROGRAM_BUFFERING_SKINNED]->get_resource<Vec1>(StringID("matrixOffset"));
+				auto bonesOffset = _programs[PROGRAM_BUFFERING_SKINNED]->get_resource<Vec1> (StringID("bonesOffset"));
 
 				_positionBuffer->resetOffset();
 
@@ -237,11 +237,11 @@ namespace AGE
 
 					if (painterKey.isValid())
 					{
-						_programs[PROGRAM_BUFFERING_SKINNED]->get_resource<Vec4>("diffuse_color").set(current.material->diffuse);
-						_programs[PROGRAM_BUFFERING_SKINNED]->get_resource<Sampler2D>("diffuse_map").set(current.material->diffuseTex);
-						_programs[PROGRAM_BUFFERING_SKINNED]->get_resource<Vec4>("specular_color").set(current.material->specular);
-						_programs[PROGRAM_BUFFERING_SKINNED]->get_resource<Vec1>("shininess_ratio").set(current.material->shininess);
-						_programs[PROGRAM_BUFFERING_SKINNED]->get_resource<Sampler2D>("normal_map").set(current.material->normalTex);
+						_programs[PROGRAM_BUFFERING_SKINNED]->get_resource<Vec4>(StringID("diffuse_color")).set(current.material->diffuse);
+						_programs[PROGRAM_BUFFERING_SKINNED]->get_resource<Sampler2D>(StringID("diffuse_map")).set(current.material->diffuseTex);
+						_programs[PROGRAM_BUFFERING_SKINNED]->get_resource<Vec4>(StringID("specular_color")).set(current.material->specular);
+						_programs[PROGRAM_BUFFERING_SKINNED]->get_resource<Vec1>(StringID("shininess_ratio")).set(current.material->shininess);
+						_programs[PROGRAM_BUFFERING_SKINNED]->get_resource<Sampler2D>(StringID("normal_map")).set(current.material->normalTex);
 
 						painter = _painterManager->get_painter(painterKey);
 						painter->instanciedDrawBegin(_programs[PROGRAM_BUFFERING_SKINNED]);

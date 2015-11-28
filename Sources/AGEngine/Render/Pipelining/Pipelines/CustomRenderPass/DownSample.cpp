@@ -70,8 +70,8 @@ namespace AGE
 		OpenGLState::glDisable(GL_CULL_FACE);
 
 		_programs[PROGRAM_DOWN_SAMPLE]->use();
-		_programs[PROGRAM_DOWN_SAMPLE]->get_resource<Sampler2D>("sourceTexture").set(_source);
-		_programs[PROGRAM_DOWN_SAMPLE]->get_resource<Vec2>("inverseSourceSize").set(_inverseSourceSize);
+		_programs[PROGRAM_DOWN_SAMPLE]->get_resource<Sampler2D>(StringID("sourceTexture")).set(_source);
+		_programs[PROGRAM_DOWN_SAMPLE]->get_resource<Vec2>(StringID("inverseSourceSize")).set(_inverseSourceSize);
 
 		_quadPainter->uniqueDrawBegin(_programs[PROGRAM_DOWN_SAMPLE]);
 		_quadPainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_DOWN_SAMPLE], _quadVertices);

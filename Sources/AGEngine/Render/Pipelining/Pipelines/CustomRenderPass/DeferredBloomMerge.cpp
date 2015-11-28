@@ -76,9 +76,9 @@ namespace AGE
 			OpenGLState::glDisable(GL_CULL_FACE);
 
 			_programs[PROGRAM_BLOOM_MERGE]->use();
-			_programs[PROGRAM_BLOOM_MERGE]->get_resource<Sampler2D>("cleanMap").set(_clean);
-			_programs[PROGRAM_BLOOM_MERGE]->get_resource<Sampler2D>("blurredMap1").set(_blurred1);
-			_programs[PROGRAM_BLOOM_MERGE]->get_resource<Sampler2D>("blurredMap2").set(_blurred2);
+			_programs[PROGRAM_BLOOM_MERGE]->get_resource<Sampler2D>(StringID("cleanMap")).set(_clean);
+			_programs[PROGRAM_BLOOM_MERGE]->get_resource<Sampler2D>(StringID("blurredMap1")).set(_blurred1);
+			_programs[PROGRAM_BLOOM_MERGE]->get_resource<Sampler2D>(StringID("blurredMap2")).set(_blurred2);
 
 			_quadPainter->uniqueDrawBegin(_programs[PROGRAM_BLOOM_MERGE]);
 			_quadPainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_BLOOM_MERGE], _quadVertices);

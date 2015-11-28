@@ -126,18 +126,18 @@ namespace AGE
 		addSystem<AGE::RotationSystem>(0);
 		addSystem<AGE::RenderCameraSystem>(1000000);
 
-		getInstance<AGE::AssetsManager>()->loadMesh(OldFile("cube/cube.sage"), "DEMO_SCENE_BASIC_ASSETS");
-		getInstance<AGE::AssetsManager>()->loadMesh(OldFile("ball/ball.sage"), "DEMO_SCENE_BASIC_ASSETS");
-		getInstance<AGE::AssetsManager>()->loadMesh(OldFile("borderland_zero/zero.sage"), "DEMO_SCENE_BASIC_ASSETS");
-		getInstance<AGE::AssetsManager>()->loadMesh(OldFile("flash/flash.sage"), "DEMO_SCENE_BASIC_ASSETS");
+		getInstance<AGE::AssetsManager>()->loadMesh(OldFile("cube/cube.sage"), StringID("DEMO_SCENE_BASIC_ASSETS", 0x7da86c5b0388c438));
+		getInstance<AGE::AssetsManager>()->loadMesh(OldFile("ball/ball.sage"), StringID("DEMO_SCENE_BASIC_ASSETS", 0x7da86c5b0388c438));
+		getInstance<AGE::AssetsManager>()->loadMesh(OldFile("borderland_zero/zero.sage"), StringID("DEMO_SCENE_BASIC_ASSETS", 0x7da86c5b0388c438));
+		getInstance<AGE::AssetsManager>()->loadMesh(OldFile("flash/flash.sage"), StringID("DEMO_SCENE_BASIC_ASSETS", 0x7da86c5b0388c438));
 
 
-		getInstance<AGE::AssetsManager>()->loadMaterial(OldFile("cube/cube.mage"), "DEMO_SCENE_BASIC_ASSETS");
-		getInstance<AGE::AssetsManager>()->loadMaterial(OldFile("ball/ball.mage"), "DEMO_SCENE_BASIC_ASSETS");
-		getInstance<AGE::AssetsManager>()->loadMaterial(OldFile("borderland_zero/zero.mage"), "DEMO_SCENE_BASIC_ASSETS");
-		getInstance<AGE::AssetsManager>()->loadMaterial(OldFile("flash/flash.mage"), "DEMO_SCENE_BASIC_ASSETS");
+		getInstance<AGE::AssetsManager>()->loadMaterial(OldFile("cube/cube.mage"), StringID("DEMO_SCENE_BASIC_ASSETS", 0x7da86c5b0388c438));
+		getInstance<AGE::AssetsManager>()->loadMaterial(OldFile("ball/ball.mage"), StringID("DEMO_SCENE_BASIC_ASSETS", 0x7da86c5b0388c438));
+		getInstance<AGE::AssetsManager>()->loadMaterial(OldFile("borderland_zero/zero.mage"), StringID("DEMO_SCENE_BASIC_ASSETS", 0x7da86c5b0388c438));
+		getInstance<AGE::AssetsManager>()->loadMaterial(OldFile("flash/flash.mage"), StringID("DEMO_SCENE_BASIC_ASSETS", 0x7da86c5b0388c438));
 		
-		_skyboxSpace = getInstance<AGE::AssetsManager>()->loadCubeMap("space", OldFile("skyboxes/space.dds"), "DEMO_SCENE_BASIC_ASSETS");
+		_skyboxSpace = getInstance<AGE::AssetsManager>()->loadCubeMap("space", OldFile("skyboxes/space.dds"), StringID("DEMO_SCENE_BASIC_ASSETS", 0x7da86c5b0388c438));
 
 		setInstance<AGE::AnimationManager>();
  

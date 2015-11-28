@@ -62,7 +62,7 @@ namespace AGE
 		SCOPE_profile_gpu_i("DefferedOnScreen");
 		SCOPE_profile_cpu_function("RenderTime");
 		_programs[PROGRAM_SCREEN]->use();
-		_programs[PROGRAM_SCREEN]->get_resource<Sampler2D>("screen").set(_diffuseInput);
+		_programs[PROGRAM_SCREEN]->get_resource<Sampler2D>(StringID("screen")).set(_diffuseInput);
 
 		OpenGLState::glDisable(GL_BLEND);
 		OpenGLState::glDisable(GL_CULL_FACE);
@@ -71,8 +71,8 @@ namespace AGE
 		{
 			SCOPE_profile_gpu_i("Overhead pipeline");
 			SCOPE_profile_cpu_i("RenderTime", "Overhead pipeline");
-			_programs[PROGRAM_SCREEN]->get_resource<Vec2>("resolution").set(glm::vec2(viewport.x, viewport.y));
-			_programs[PROGRAM_SCREEN]->get_resource<Vec1>("activated").set(infos.cameraInfos.data.fxaa == true ? 1.0f : 0.f);
+			_programs[PROGRAM_SCREEN]->get_resource<Vec2>(StringID("resolution")).set(glm::vec2(viewport.x, viewport.y));
+			_programs[PROGRAM_SCREEN]->get_resource<Vec1>(StringID("activated")).set(infos.cameraInfos.data.fxaa == true ? 1.0f : 0.f);
 		}
 
 		_quadPainter->uniqueDrawBegin(_programs[PROGRAM_SCREEN]);

@@ -81,12 +81,12 @@ namespace AGE
 		glm::vec3 cameraPosition = -glm::transpose(glm::mat3(camera.view)) * glm::vec3(camera.view[3]);
 
 		_programs[PROGRAM_LIGHTNING]->use();
-		_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("projection_matrix").set(camera.projection);
-		_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("view_matrix").set(camera.view);
-		_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("normal_buffer").set(_normalInput);
-		_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("specular_buffer").set(_specularInput);
-		_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("depth_buffer").set(_depthInput);
-		_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("eye_pos").set(cameraPosition);
+		_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>(StringID("projection_matrix")).set(camera.projection);
+		_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>(StringID("view_matrix")).set(camera.view);
+		_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>(StringID("normal_buffer")).set(_normalInput);
+		_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>(StringID("specular_buffer")).set(_specularInput);
+		_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>(StringID("depth_buffer")).set(_depthInput);
+		_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>(StringID("eye_pos")).set(cameraPosition);
 
 		OpenGLState::glDisable(GL_CULL_FACE);
 		OpenGLState::glDisable(GL_DEPTH_TEST);
@@ -106,13 +106,13 @@ namespace AGE
 
 			_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("shadow_map").set(depth);
 
-			_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("position_light").set(spot.position);
-			_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("attenuation_light").set(spot.attenuation);
-			_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("direction_light").set(spot.direction);
-			_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("color_light").set(spot.color);
-			_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("light_matrix").set(spot.matrix);
-			_programs[PROGRAM_LIGHTNING]->get_resource<Vec1>("spot_cut_off").set(spot.cutOff);
-			_programs[PROGRAM_LIGHTNING]->get_resource<Vec1>("exponent_light").set(spot.exponent);
+			_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>(StringID("position_light")).set(spot.position);
+			_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>(StringID("attenuation_light")).set(spot.attenuation);
+			_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>(StringID("direction_light")).set(spot.direction);
+			_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>(StringID("color_light")).set(spot.color);
+			_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>(StringID("light_matrix")).set(spot.matrix);
+			_programs[PROGRAM_LIGHTNING]->get_resource<Vec1>(StringID("spot_cut_off")).set(spot.cutOff);
+			_programs[PROGRAM_LIGHTNING]->get_resource<Vec1>(StringID("exponent_light")).set(spot.exponent);
 
 			painter->uniqueDrawBegin(_programs[PROGRAM_LIGHTNING]);
 			painter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_LIGHTNING], _quad);
