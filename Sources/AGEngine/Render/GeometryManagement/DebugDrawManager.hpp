@@ -16,7 +16,7 @@ namespace AGE
 		void draw2DQuad(const glm::vec2 &_a, const glm::vec2 &_b, const glm::vec2 &_c, const glm::vec2 &_d, const glm::vec3 &_color);
 		void draw2DLine(const glm::vec2 &_start, const glm::vec2 &_end, const glm::vec3 &_color);
 		void renderBegin(std::shared_ptr<PaintingManager> paintingManager);
-		void renderEnd(std::shared_ptr<PaintingManager> paintingManager);
+		void renderEnd();
 	private:
 		// Debug Drawings
 		// 2D lines

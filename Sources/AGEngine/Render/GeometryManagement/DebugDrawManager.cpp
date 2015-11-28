@@ -114,6 +114,9 @@ namespace AGE
 		// TODO : check that's called by render thread only
 
 		SCOPE_profile_cpu_i("RenderTimer", "RenderDebugLines");
+
+		std::lock_guard<SpinLock> lock(_mutex);
+
 		// 2D lines
 		if (_debug2DlinesPoints.size() != 0)
 		{
@@ -148,7 +151,6 @@ namespace AGE
 			vertices->set_data<glm::vec3>(_debug2DlinesColor, StringID("color", 0x77f5c18e246c6638));
 			vertices->set_indices(indices);
 
-			_debug2DlinesPoints.clear();
 		}
 		// 3D lines
 		if (_debug3DlinesPoints.size() != 0)
@@ -184,7 +186,6 @@ namespace AGE
 			vertices->set_data<glm::vec3>(_debug3DlinesColor, StringID("color", 0x77f5c18e246c6638));
 			vertices->set_indices(indices);
 
-			_debug3DlinesPoints.clear();
 		}
 		// 3D lines with depth
 		if (_debug3DlinesPointsDepth.size() != 0)
@@ -220,12 +221,19 @@ namespace AGE
 			vertices->set_data<glm::vec3>(_debug3DlinesColorDepth, StringID("color", 0x77f5c18e246c6638));
 			vertices->set_indices(indices);
 
-			_debug3DlinesPointsDepth.clear();
 		}
+		_debug2DlinesPoints.clear();
+		_debug2DlinesColor.clear();
+		_debug3DlinesPoints.clear();
+		_debug3DlinesColor.clear();
+		_debug3DlinesPointsDepth.clear();
+		_debug3DlinesColorDepth.clear();
 	}
 
 	void DebugDrawManager::renderEnd()
 	{
+		// TODO : check that's called by render thread only
+
 		if (_line2DPainter != nullptr)
 		{
 			_line2DPainter->remove_vertices(Singleton<SimpleGeometryManager>::getInstance()->debug2Dlines.verticesKey);
