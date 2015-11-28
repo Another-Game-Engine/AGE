@@ -11,7 +11,7 @@ namespace AGE
 {
 	BufferPrograms::BufferPrograms(std::vector<std::pair<GLenum, StringID>> const &types) :
 		_types(types),
-		_indices_buffer(StringID("indices"), std::make_unique<IndexBuffer>())
+		_indices_buffer(StringID("indices", 0x144d56ffb313be92), std::make_unique<IndexBuffer>())
 	{
 		_buffers.reserve(_types.size());
 		_vertex_array.bind();

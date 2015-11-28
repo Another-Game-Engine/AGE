@@ -56,7 +56,7 @@ namespace AGE
 		std::string vertexShaderPath = shaderPath->getValue() + DEFERRED_SHADING_DIRECTIONAL_LIGHT_VERTEX;
 		std::string fragmentShaderPath = shaderPath->getValue() + DEFERRED_SHADING_DIRECTIONAL_LIGHT_FRAG;
 
-		_programs[PROGRAM_LIGHTNING] = std::make_shared<Program>(Program(StringID("program_directional_light"),
+		_programs[PROGRAM_LIGHTNING] = std::make_shared<Program>(Program(StringID("program_directional_light", 0x7e61ad386d9fad6f),
 		{
 			std::make_shared<UnitProg>(vertexShaderPath, GL_VERTEX_SHADER),
 			std::make_shared<UnitProg>(fragmentShaderPath, GL_FRAGMENT_SHADER)

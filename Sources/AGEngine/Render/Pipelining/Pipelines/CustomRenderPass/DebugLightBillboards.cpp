@@ -41,7 +41,7 @@ namespace AGE
 
 		_programs.resize(PROGRAM_NBR);
 
-		_programs[PROGRAM_BUFFERING_LIGHT] = std::make_shared<Program>(Program(StringID("debug_lights"),
+		_programs[PROGRAM_BUFFERING_LIGHT] = std::make_shared<Program>(Program(StringID("debug_lights", 0x24f5aba6b9b103d4),
 		{
 			std::make_shared<UnitProg>(DEFERRED_SHADING_DEBUG_LIGHT_VERTEX, GL_VERTEX_SHADER),
 			std::make_shared<UnitProg>(DEFERRED_SHADING_DEBUG_LIGHT_FRAG, GL_FRAGMENT_SHADER)

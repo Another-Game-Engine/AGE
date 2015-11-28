@@ -88,7 +88,7 @@ namespace AGE
 			auto vertexShaderPath = shaderPath->getValue() + DEFERRED_SHADING_BUFFERING_VERTEX;
 			auto fragmentShaderPath = shaderPath->getValue() + DEFERRED_SHADING_BUFFERING_FRAG;
 
-			_programs[PROGRAM_BUFFERING] = std::make_shared<Program>(Program(StringID("program_buffering"),
+			_programs[PROGRAM_BUFFERING] = std::make_shared<Program>(Program(StringID("program_buffering", 0x32f9e8e32519519a),
 			{
 				std::make_shared<UnitProg>(vertexShaderPath, GL_VERTEX_SHADER),
 				std::make_shared<UnitProg>(fragmentShaderPath, GL_FRAGMENT_SHADER)
@@ -98,7 +98,7 @@ namespace AGE
 			auto vertexShaderPath = shaderPath->getValue() + DEFERRED_SHADING_BUFFERING_VERTEX_SKINNED;
 			auto fragmentShaderPath = shaderPath->getValue() + DEFERRED_SHADING_BUFFERING_FRAG;
 
-			_programs[PROGRAM_BUFFERING_SKINNED] = std::make_shared<Program>(Program(StringID("program_buffering_skinned"),
+			_programs[PROGRAM_BUFFERING_SKINNED] = std::make_shared<Program>(Program(StringID("program_buffering_skinned", 0xfa36ccdf5a2b0029),
 			{
 				std::make_shared<UnitProg>(vertexShaderPath, GL_VERTEX_SHADER),
 				std::make_shared<UnitProg>(fragmentShaderPath, GL_FRAGMENT_SHADER)

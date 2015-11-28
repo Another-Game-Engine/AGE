@@ -45,7 +45,7 @@ namespace AGE
 		std::string vertexShaderPath = shaderPath->getValue() + DEFERRED_SHADING_SCREEN_VERTEX;
 		std::string fragmentShaderPath = shaderPath->getValue() + DEFERRED_SHADING_SCREEN_FRAG;
 
-		_programs[PROGRAM_SCREEN] = std::make_shared<Program>(Program(StringID("basic_3d_render"),
+		_programs[PROGRAM_SCREEN] = std::make_shared<Program>(Program(StringID("basic_3d_render", 0xa6c109902e71613e),
 		{
 			std::make_shared<UnitProg>(vertexShaderPath, GL_VERTEX_SHADER),
 			std::make_shared<UnitProg>(fragmentShaderPath, GL_FRAGMENT_SHADER)

@@ -52,7 +52,7 @@ namespace AGE
 		AGE_ASSERT(shaderPath != nullptr);
 		std::string vertexShaderPath = shaderPath->getValue() + DEFERRED_SHADING_BUFFERING_VERTEX;
 		std::string fragmentShaderPath = shaderPath->getValue() + DEFERRED_SHADING_BUFFERING_FRAG;
-		_programs[PROGRAM_SKYBOX] = std::make_shared<Program>(Program(StringID("program_skybox"),
+		_programs[PROGRAM_SKYBOX] = std::make_shared<Program>(Program(StringID("program_skybox", 0x0f7ae4250951bece),
 		{
 			std::make_shared<UnitProg>(vertexShaderPath, GL_VERTEX_SHADER),
 			std::make_shared<UnitProg>(fragmentShaderPath, GL_FRAGMENT_SHADER)

@@ -58,7 +58,7 @@ namespace AGE
 		std::string vertexShaderPath = shaderPath->getValue() + DEFERRED_SHADING_SPOT_LIGHT_VERTEX;
 		std::string fragmentShaderPath = shaderPath->getValue() + DEFERRED_SHADING_SPOT_LIGHT_FRAG;
 
-		_programs[PROGRAM_LIGHTNING] = std::make_shared<Program>(Program(StringID("program_spot_light"),
+		_programs[PROGRAM_LIGHTNING] = std::make_shared<Program>(Program(StringID("program_spot_light", 0xea31766bcb94cc9b),
 		{
 			std::make_shared<UnitProg>(vertexShaderPath, GL_VERTEX_SHADER),
 			std::make_shared<UnitProg>(fragmentShaderPath, GL_FRAGMENT_SHADER)

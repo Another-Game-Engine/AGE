@@ -57,7 +57,7 @@ namespace AGE
 			AGE_ASSERT(shaderPath != nullptr);
 			auto vertexShaderPath = shaderPath->getValue() + DEFERRED_SHADING_SHADOW_BUFFERING_VERTEX;
 			auto fragmentShaderPath = shaderPath->getValue() + DEFERRED_SHADING_SHADOW_BUFFERING_FRAG;
-			_programs[PROGRAM_BUFFERING] = std::make_shared<Program>(Program(StringID("program_shadow_buffering"),
+			_programs[PROGRAM_BUFFERING] = std::make_shared<Program>(Program(StringID("program_shadow_buffering", 0xd24fab7f2d0c323d),
 			{
 				std::make_shared<UnitProg>(vertexShaderPath, GL_VERTEX_SHADER),
 				std::make_shared<UnitProg>(fragmentShaderPath, GL_FRAGMENT_SHADER)
@@ -68,7 +68,7 @@ namespace AGE
 			AGE_ASSERT(shaderPath != nullptr);
 			auto vertexShaderPath = shaderPath->getValue() + DEFERRED_SHADING_SHADOW_BUFFERING_VERTEX_SKINNED;
 			auto fragmentShaderPath = shaderPath->getValue() + DEFERRED_SHADING_SHADOW_BUFFERING_FRAG;
-			_programs[PROGRAM_BUFFERING_SKINNED] = std::make_shared<Program>(Program(StringID("program_shadow_buffering"),
+			_programs[PROGRAM_BUFFERING_SKINNED] = std::make_shared<Program>(Program(StringID("program_shadow_buffering", 0xd24fab7f2d0c323d),
 			{
 				std::make_shared<UnitProg>(vertexShaderPath, GL_VERTEX_SHADER),
 				std::make_shared<UnitProg>(fragmentShaderPath, GL_FRAGMENT_SHADER)
