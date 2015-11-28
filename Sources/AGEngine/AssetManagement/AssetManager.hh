@@ -129,7 +129,7 @@ namespace AGE
 		std::shared_ptr<MeshInstance> getMesh(const OldFile &filePath);
 		std::shared_ptr<ITexture> loadTexture(const OldFile &filepath, const StringID &loadingChannel);
 		std::shared_ptr<TextureCubeMap> loadCubeMap(std::string const &name, OldFile &_filePath, const StringID &loadingChannel);
-		bool loadMesh(const OldFile &filePath, const StringID &loadingChannel = "");
+		bool loadMesh(const OldFile &filePath, const StringID &loadingChannel = StringID("Default", 0x11326fd2590f4e5e));
 		void setAssetsDirectory(const std::string &path) { _assetsDirectory = path; }
 		const std::string &getAssetsDirectory(void) const { return _assetsDirectory; }
 		void update();

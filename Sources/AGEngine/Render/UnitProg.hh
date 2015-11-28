@@ -1,14 +1,14 @@
 #pragma once
 
 # include <Utils/OpenGL.hh>
-#include <Utils/StringID.hpp>
+#include <string>
 # include <iostream>
 # include <vector>
 
 class UnitProg
 {
 public:
-	UnitProg(StringID const &filename, GLenum type);
+	UnitProg(const std::string const &filename, GLenum type);
 	UnitProg(UnitProg const &copy) = delete;
 	UnitProg(UnitProg &&move);
 	UnitProg &operator=(UnitProg const &u) = delete;
@@ -26,7 +26,7 @@ private:
 	char const *handleRequireToken(std::string &sources);
 
 private:
-	StringID _filename;
+	const std::string _filename;
 	GLenum _type;
 	GLuint _id;
 };
