@@ -93,25 +93,25 @@ namespace AGE
 			SCOPE_profile_gpu_i("Overhead pipeline");
 			SCOPE_profile_cpu_i("RenderTimer", "Overhead pipeline");
 			_programs[PROGRAM_LIGHTNING]->use();
-			_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>     (StringID("projection_matrix")).set(infos.cameraInfos.data.projection);
-			_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>     (StringID("view_matrix")).set(infos.cameraInfos.view);
-			_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>(StringID("normal_buffer")).set(_normalInput);
-			_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>(StringID("depth_buffer")).set(_depthInput);
-			_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>(StringID("specular_buffer")).set(_specularInput);
-			_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>     (StringID("eye_pos")).set(cameraPosition);
+			_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>     (StringID("projection_matrix", 0x92b1e336c34a1224)).set(infos.cameraInfos.data.projection);
+			_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>     (StringID("view_matrix", 0xd15d560e7965726c)).set(infos.cameraInfos.view);
+			_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>(StringID("normal_buffer", 0x313e2189c71f910d)).set(_normalInput);
+			_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>(StringID("depth_buffer", 0x2a88a65798cfc925)).set(_depthInput);
+			_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>(StringID("specular_buffer", 0x0824313afd644f03)).set(_specularInput);
+			_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>     (StringID("eye_pos", 0xe58566afddb7bc1f)).set(cameraPosition);
 
 			_programs[PROGRAM_STENCIL]->use();
-			_programs[PROGRAM_STENCIL]->get_resource<Mat4>(StringID("projection_matrix")).set(infos.cameraInfos.data.projection);
-			_programs[PROGRAM_STENCIL]->get_resource<Mat4>(StringID("view_matrix")).set(infos.cameraInfos.view);
+			_programs[PROGRAM_STENCIL]->get_resource<Mat4>(StringID("projection_matrix", 0x92b1e336c34a1224)).set(infos.cameraInfos.data.projection);
+			_programs[PROGRAM_STENCIL]->get_resource<Mat4>(StringID("view_matrix", 0xd15d560e7965726c)).set(infos.cameraInfos.view);
 		}
 
-		auto stencilModelMatrix = _programs[PROGRAM_STENCIL]->get_resource<Mat4>    (StringID("model_matrix"));
-		auto lightningModelMatrix = _programs[PROGRAM_LIGHTNING]->get_resource<Mat4>(StringID("model_matrix"));
+		auto stencilModelMatrix = _programs[PROGRAM_STENCIL]->get_resource<Mat4>    (StringID("model_matrix", 0x2a41db82e109c802));
+		auto lightningModelMatrix = _programs[PROGRAM_LIGHTNING]->get_resource<Mat4>(StringID("model_matrix", 0x2a41db82e109c802));
 
-		auto colorLightProperty = _programs[PROGRAM_LIGHTNING]->get_resource<Vec3>  (StringID("color_light"));
-		auto ambiantColorProperty = _programs[PROGRAM_LIGHTNING]->get_resource<Vec3>(StringID("ambient_color"));
-		auto attenuationProperty = _programs[PROGRAM_LIGHTNING]->get_resource<Vec3> (StringID("attenuation_light"));
-		auto positionProperty = _programs[PROGRAM_LIGHTNING]->get_resource<Vec3>    (StringID("position_light"));
+		auto colorLightProperty = _programs[PROGRAM_LIGHTNING]->get_resource<Vec3>  (StringID("color_light", 0x7da5b3f55d350b6f));
+		auto ambiantColorProperty = _programs[PROGRAM_LIGHTNING]->get_resource<Vec3>(StringID("ambient_color", 0x0bd5d46725794843));
+		auto attenuationProperty = _programs[PROGRAM_LIGHTNING]->get_resource<Vec3> (StringID("attenuation_light", 0x344423c4b06b660c));
+		auto positionProperty = _programs[PROGRAM_LIGHTNING]->get_resource<Vec3>    (StringID("position_light", 0x514f03a54d8ceae9));
 
 		// Disable blending to clear the color buffer
 		OpenGLState::glDisable(GL_BLEND);

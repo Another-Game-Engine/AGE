@@ -71,10 +71,10 @@ namespace AGE
 			SCOPE_profile_gpu_i("Overhead Pipeline");
 			SCOPE_profile_cpu_i("RenderTimer", "Overhead Pipeline");
 			_programs[PROGRAM_MERGING]->use();
-			_programs[PROGRAM_MERGING]->get_resource<Sampler2D>(StringID("diffuse_map")).set(_diffuseInput);
-			_programs[PROGRAM_MERGING]->get_resource<Sampler2D>(StringID("light_buffer")).set(_lightAccuInput);
-			_programs[PROGRAM_MERGING]->get_resource<Sampler2D>(StringID("shiny_buffer")).set(_shinyAccuInput);
-			_programs[PROGRAM_MERGING]->get_resource<Vec3>     (StringID("ambient_color")).set(_ambientColor);
+			_programs[PROGRAM_MERGING]->get_resource<Sampler2D>(StringID("diffuse_map", 0x1930bc220c3b5c20)).set(_diffuseInput);
+			_programs[PROGRAM_MERGING]->get_resource<Sampler2D>(StringID("light_buffer", 0x37fe4435679ee18a)).set(_lightAccuInput);
+			_programs[PROGRAM_MERGING]->get_resource<Sampler2D>(StringID("shiny_buffer", 0xb4ca9d8f47190a0b)).set(_shinyAccuInput);
+			_programs[PROGRAM_MERGING]->get_resource<Vec3>     (StringID("ambient_color", 0x0bd5d46725794843)).set(_ambientColor);
 		}
 		OpenGLState::glDisable(GL_BLEND);
 		OpenGLState::glDisable(GL_CULL_FACE);

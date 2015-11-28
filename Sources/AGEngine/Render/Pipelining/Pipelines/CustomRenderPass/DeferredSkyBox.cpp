@@ -86,10 +86,10 @@ namespace AGE
 
 			// @PROUT
 			// TODO : Pass this infos as properties !
-			_programs[PROGRAM_SKYBOX]->get_resource<Mat4>(StringID("projection")).set(infos.cameraInfos.data.projection);
-			_programs[PROGRAM_SKYBOX]->get_resource<Mat4>(StringID("view")).set(infos.cameraInfos.view);
-			_programs[PROGRAM_SKYBOX]->get_resource<Sampler3D>(StringID("skybox")).set(_spaceSkybox/*infos.cameraInfos.data.texture*/);
-			_programs[PROGRAM_SKYBOX]->get_resource<Vec3>(StringID("lighting")).set(_lighting);
+			_programs[PROGRAM_SKYBOX]->get_resource<Mat4>(StringID("projection", 0xe6cb463920c97e60)).set(infos.cameraInfos.data.projection);
+			_programs[PROGRAM_SKYBOX]->get_resource<Mat4>(StringID("view", 0xfe46f400c6b86658)).set(infos.cameraInfos.view);
+			_programs[PROGRAM_SKYBOX]->get_resource<Sampler3D>(StringID("skybox", 0x6158f98e0f0f6703)).set(_spaceSkybox/*infos.cameraInfos.data.texture*/);
+			_programs[PROGRAM_SKYBOX]->get_resource<Vec3>(StringID("lighting", 0xbdb1db35f64f56c9)).set(_lighting);
 		}
 		
 		auto painter = _painterManager->get_painter(_painterCube);

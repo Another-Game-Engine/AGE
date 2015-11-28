@@ -81,8 +81,8 @@ namespace AGE
 				SCOPE_profile_gpu_i("Overhead Pipeline");
 				SCOPE_profile_cpu_i("RenderTimer", "Overhead Pipeline");
 				_programs[PROGRAM_BUFFERING_LIGHT]->use();
-				_programs[PROGRAM_BUFFERING_LIGHT]->get_resource<Mat4>(StringID("projection_matrix")).set(infos.cameraInfos.data.projection);
-				_programs[PROGRAM_BUFFERING_LIGHT]->get_resource<Mat4>(StringID("view_matrix")).set(infos.cameraInfos.view);
+				_programs[PROGRAM_BUFFERING_LIGHT]->get_resource<Mat4>(StringID("projection_matrix", 0x92b1e336c34a1224)).set(infos.cameraInfos.data.projection);
+				_programs[PROGRAM_BUFFERING_LIGHT]->get_resource<Mat4>(StringID("view_matrix", 0xd15d560e7965726c)).set(infos.cameraInfos.view);
 			}
 			//auto &pointLightList = infos.pointLights;
 			//if (pointLightList.size() > 0)

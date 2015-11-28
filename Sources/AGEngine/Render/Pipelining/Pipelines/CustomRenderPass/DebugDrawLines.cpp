@@ -92,7 +92,7 @@ namespace AGE
 		}
 
 		_programs[PROGRAM_DRAW_3D_LINE]->use();
-		_programs[PROGRAM_DRAW_3D_LINE]->get_resource<Mat4>(StringID("viewProj")).set(infos.cameraInfos.data.projection * infos.cameraInfos.view);
+		_programs[PROGRAM_DRAW_3D_LINE]->get_resource<Mat4>(StringID("viewProj", 0x65d04b155c4790eb)).set(infos.cameraInfos.data.projection * infos.cameraInfos.view);
 
 		auto _3dLines = Singleton<SimpleGeometryManager>::getInstance()->debug3Dlines;
 		if (_3dLines.verticesKey.isValid() && _3dLines.painterKey.isValid())
