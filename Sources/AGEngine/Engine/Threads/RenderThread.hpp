@@ -39,22 +39,6 @@ namespace AGE
 		virtual bool launch();
 		virtual bool stop();
 
-		// Debug Drawings
-		// 2D lines
-		std::vector<glm::vec2> debug2DlinesPoints;
-		std::vector<glm::vec3> debug2DlinesColor;
-
-		std::vector<glm::vec3> debug3DlinesPoints;
-		std::vector<glm::vec3> debug3DlinesColor;
-		// 3D lines with depth test
-		std::vector<glm::vec3> debug3DlinesPointsDepth;
-		std::vector<glm::vec3> debug3DlinesColorDepth;
-		// Fill debug painters
-		void fillDebugPainter(std::shared_ptr<Painter> &line2DPainter,
-			std::shared_ptr<Painter> &line3DPainter,
-			std::shared_ptr<Painter> &line3DPainterDepth);
-		// End Debug drawing
-
 		// used by render scene, maybe should be protected
 		void getQuadGeometry(Key<Vertices> &vertices, Key<Painter> &painter);
 		void getIcoSphereGeometry(Key<Vertices> &vertices, Key<Painter> &painter, uint32_t recursion);
