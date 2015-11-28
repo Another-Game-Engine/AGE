@@ -2,12 +2,11 @@
 #include <Render/Program.hh>
 #include <assert.h>
 #include <array>
-#include <string>
 
 namespace AGE
 {
-	AProgramResources::AProgramResources(GLuint id, std::string &&name, GLenum type) :
-		_name(std::move(name)),
+	AProgramResources::AProgramResources(GLuint id, const StringID &name, GLenum type) :
+		_name(name),
 		_id(id),
 		_type(type),
 		_update(false)
@@ -32,7 +31,7 @@ namespace AGE
 
 	}
 
-	std::string const & AProgramResources::name() const
+	StringID const & AProgramResources::name() const
 	{
 		return (_name);
 	}

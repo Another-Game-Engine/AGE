@@ -55,7 +55,7 @@ namespace AGE
 
 	void UniformBlock::print() const
 	{
-		std::cout << "uniform block " << _name << ";" << std::endl;
+		std::cout << "uniform block " << _name.str() << ";" << std::endl;
 		for (auto &block_resource : _block_resources) {
 			std::cout << '\t';
 			block_resource->print();

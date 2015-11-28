@@ -44,7 +44,7 @@ namespace AGE
 
 	void Sampler3D::print() const
 	{
-		std::cout << "uniform sampler3D " << _name << ";";
+		std::cout << "uniform sampler3D " << _name.str() << ";";
 		std::cout << std::endl;
 	}
 

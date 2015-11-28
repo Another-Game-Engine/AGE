@@ -50,9 +50,9 @@ namespace AGE
 		auto shaderPath = confManager->getConfiguration<std::string>("ShadersPath");
 		// you have to set shader directory in configuration path
 		AGE_ASSERT(shaderPath != nullptr);
-		auto vertexShaderPath = shaderPath->getValue() + DEFERRED_SHADING_BUFFERING_VERTEX;
-		auto fragmentShaderPath = shaderPath->getValue() + DEFERRED_SHADING_BUFFERING_FRAG;
-		_programs[PROGRAM_SKYBOX] = std::make_shared<Program>(Program(std::string("program_skybox"),
+		std::string vertexShaderPath = shaderPath->getValue() + DEFERRED_SHADING_BUFFERING_VERTEX;
+		std::string fragmentShaderPath = shaderPath->getValue() + DEFERRED_SHADING_BUFFERING_FRAG;
+		_programs[PROGRAM_SKYBOX] = std::make_shared<Program>(Program(StringID("program_skybox"),
 		{
 			std::make_shared<UnitProg>(vertexShaderPath, GL_VERTEX_SHADER),
 			std::make_shared<UnitProg>(fragmentShaderPath, GL_FRAGMENT_SHADER)

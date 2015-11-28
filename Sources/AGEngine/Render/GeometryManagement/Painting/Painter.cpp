@@ -4,10 +4,12 @@
 #include <Threads/ThreadManager.hpp>
 #include <Utils/Profiler.hpp>
 
+#include <Utils/StringID.hpp>
+
 namespace AGE
 {
 
-	Painter::Painter(std::vector<std::pair<GLenum, std::string>>  const &types) :
+	Painter::Painter(std::vector<std::pair<GLenum, StringID>>  const &types) :
 		_buffer(types)
 		, _isInUniqueDraw(false)
 		, _isInstanciedDraw(false)
@@ -189,7 +191,7 @@ namespace AGE
 		_isInstanciedDraw = false;
 	}
 
-	bool Painter::coherent(std::vector<std::pair<GLenum, std::string>> const &types) const
+	bool Painter::coherent(std::vector<std::pair<GLenum, StringID>> const &types) const
 	{
 		SCOPE_profile_cpu_function("PainterTimer");
 

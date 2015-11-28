@@ -52,7 +52,7 @@ namespace AGE
 
 	void Vec1::print() const
 	{
-		std::cout << "uniform float " << _name << ";";
+		std::cout << "uniform float " << _name.str() << ";";
 		std::cout << std::endl;
 	}
 

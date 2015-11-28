@@ -49,7 +49,7 @@ namespace AGE
 
 	void Sampler2D::print() const
 	{
-		std::cout << "uniform sampler2D " << _name << ";";
+		std::cout << "uniform sampler2D " << _name.str() << ";";
 		std::cout << std::endl;
 	}
 

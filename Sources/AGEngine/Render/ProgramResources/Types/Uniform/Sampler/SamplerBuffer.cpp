@@ -51,7 +51,7 @@ namespace AGE
 
 	void SamplerBuffer::print() const
 	{
-		std::cout << "uniform SamplerBuffer " << _name << ";";
+		std::cout << "uniform SamplerBuffer " << _name.str() << ";";
 		std::cout << std::endl;
 	}
 

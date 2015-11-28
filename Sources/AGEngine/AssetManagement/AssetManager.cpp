@@ -440,7 +440,7 @@ namespace AGE
 			SCOPE_profile_cpu_i("AssetsLoad", "LoadSubMesh");
 
 			auto &paintingManager = GetRenderThread()->paintingManager;
-			std::vector<std::pair<GLenum, std::string>> types;
+			std::vector<std::pair<GLenum, StringID>> types;
 			for (auto i = 0ull; i < data.infos.size(); ++i)
 			{
 				if (data.infos.test(i))

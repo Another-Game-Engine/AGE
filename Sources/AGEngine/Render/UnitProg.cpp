@@ -8,7 +8,7 @@
 
 #define PATH_INCLUDE_SHADER_TOOL "../../Shader/tool/"
 
-UnitProg::UnitProg(std::string const &filename, GLenum type):
+UnitProg::UnitProg(StringID const &filename, GLenum type) :
 _filename(filename),
 _type(type),
 _id(0)
@@ -103,7 +103,7 @@ bool UnitProg::compile()
 	{
 		_id = glCreateShader(_type);
 	}
-	auto ret = compileUnitProg(_filename.c_str());
+	auto ret = compileUnitProg(_filename.str());
 	return ret;
 }
 

@@ -53,7 +53,7 @@ namespace AGE
 
 	void Mat4Array255::print() const
 	{
-		std::cout << "uniform mat4 " << _name << ";";
+		std::cout << "uniform mat4 " << _name.str() << ";";
 		std::cout << std::endl;
 	}
 }

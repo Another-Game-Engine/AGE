@@ -68,7 +68,7 @@ namespace AGE
 	void BlockResources::print() const
 	{
 		std::cout << "block resources " << available_types[_type].name;
-		std::cout << " " << _name << ";" << std::endl;
+		std::cout << " " << _name.str() << ";" << std::endl;
 	}
 
 	std::vector<uint8_t> const & BlockResources::data() const

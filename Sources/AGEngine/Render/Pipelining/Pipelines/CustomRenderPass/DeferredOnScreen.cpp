@@ -42,10 +42,10 @@ namespace AGE
 		// you have to set shader directory in configuration path
 		AGE_ASSERT(shaderPath != nullptr);
 
-		auto vertexShaderPath = shaderPath->getValue() + DEFERRED_SHADING_SCREEN_VERTEX;
-		auto fragmentShaderPath = shaderPath->getValue() + DEFERRED_SHADING_SCREEN_FRAG;
+		std::string vertexShaderPath = shaderPath->getValue() + DEFERRED_SHADING_SCREEN_VERTEX;
+		std::string fragmentShaderPath = shaderPath->getValue() + DEFERRED_SHADING_SCREEN_FRAG;
 
-		_programs[PROGRAM_SCREEN] = std::make_shared<Program>(Program(std::string("basic_3d_render"),
+		_programs[PROGRAM_SCREEN] = std::make_shared<Program>(Program(StringID("basic_3d_render"),
 		{
 			std::make_shared<UnitProg>(vertexShaderPath, GL_VERTEX_SHADER),
 			std::make_shared<UnitProg>(fragmentShaderPath, GL_FRAGMENT_SHADER)

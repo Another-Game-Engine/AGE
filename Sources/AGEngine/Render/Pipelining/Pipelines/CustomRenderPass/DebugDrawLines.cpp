@@ -49,7 +49,7 @@ namespace AGE
 		auto vertexDrawLine = shaderPath->getValue() + DRAW_2D_LINE_VERTEX;
 		auto fragDrawLine = shaderPath->getValue() + DRAW_2D_LINE_FRAG;
 
-		_programs[PROGRAM_DRAW_2D_LINE] = std::make_shared<Program>(Program(std::string("draw2DLine"),
+		_programs[PROGRAM_DRAW_2D_LINE] = std::make_shared<Program>(Program(StringID("draw2DLine"),
 		{
 			std::make_shared<UnitProg>(vertexDrawLine, GL_VERTEX_SHADER),
 			std::make_shared<UnitProg>(fragDrawLine, GL_FRAGMENT_SHADER)
@@ -58,7 +58,7 @@ namespace AGE
 		vertexDrawLine = shaderPath->getValue() + DRAW_3D_LINE_VERTEX;
 		fragDrawLine = shaderPath->getValue() + DRAW_3D_LINE_FRAG;
 
-		_programs[PROGRAM_DRAW_3D_LINE] = std::make_shared<Program>(Program(std::string("draw3DLine"),
+		_programs[PROGRAM_DRAW_3D_LINE] = std::make_shared<Program>(Program(StringID("draw3DLine"),
 		{
 			std::make_shared<UnitProg>(vertexDrawLine, GL_VERTEX_SHADER),
 			std::make_shared<UnitProg>(fragDrawLine, GL_FRAGMENT_SHADER)

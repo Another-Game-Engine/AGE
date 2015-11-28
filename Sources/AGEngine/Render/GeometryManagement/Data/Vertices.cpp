@@ -7,7 +7,7 @@
 
 namespace AGE
 {
-	Vertices::Vertices(std::vector<std::pair<GLenum, std::string>> const &types, size_t nbrVertex, size_t nbrIndices, size_t offset) :
+	Vertices::Vertices(std::vector<std::pair<GLenum, StringID>> const &types, size_t nbrVertex, size_t nbrIndices, size_t offset) :
 		_offset(offset),
 		_nbr_indices(nbrIndices),
 		_nbr_vertex(nbrVertex),
@@ -69,7 +69,7 @@ namespace AGE
 		return (_data.size());
 	}
 
-	std::vector<uint8_t> &&Vertices::transfer_data(std::string const &attribute)
+	std::vector<uint8_t> &&Vertices::transfer_data(StringID const &attribute)
 	{
 		for (auto &data : _data) {
 			if (data.first == attribute) {
@@ -84,12 +84,12 @@ namespace AGE
 		return (std::move(_indices_data));
 	}
 
-	std::pair<GLenum, std::string> Vertices::get_type(size_t index) const
+	std::pair<GLenum, StringID> Vertices::get_type(size_t index) const
 	{
 		return (_types[index]);
 	}
 
-	void Vertices::set_block_memory(std::shared_ptr<BlockMemory> const &blockMemory, std::string const &attribute)
+	void Vertices::set_block_memory(std::shared_ptr<BlockMemory> const &blockMemory, StringID const &attribute)
 	{
 		for (auto &block_memory : _block_memories)
 		{

@@ -12,6 +12,7 @@
 #include <Core/ConfigurationManager.hpp>
 #include <Core/Engine.hh>
 #include "Utils/Profiler.hpp"
+#include <Utils/StringID.hpp>
 
 
 #include "Graphic/DRBCameraDrawableList.hpp"
@@ -52,10 +53,10 @@ namespace AGE
 		// you have to set shader directory in configuration path
 		AGE_ASSERT(shaderPath != nullptr);
 
-		auto vertexShaderPath = shaderPath->getValue() + DEFERRED_SHADING_DIRECTIONAL_LIGHT_VERTEX;
-		auto fragmentShaderPath = shaderPath->getValue() + DEFERRED_SHADING_DIRECTIONAL_LIGHT_FRAG;
+		std::string vertexShaderPath = shaderPath->getValue() + DEFERRED_SHADING_DIRECTIONAL_LIGHT_VERTEX;
+		std::string fragmentShaderPath = shaderPath->getValue() + DEFERRED_SHADING_DIRECTIONAL_LIGHT_FRAG;
 
-		_programs[PROGRAM_LIGHTNING] = std::make_shared<Program>(Program(std::string("program_directional_light"),
+		_programs[PROGRAM_LIGHTNING] = std::make_shared<Program>(Program(StringID("program_directional_light"),
 		{
 			std::make_shared<UnitProg>(vertexShaderPath, GL_VERTEX_SHADER),
 			std::make_shared<UnitProg>(fragmentShaderPath, GL_FRAGMENT_SHADER)

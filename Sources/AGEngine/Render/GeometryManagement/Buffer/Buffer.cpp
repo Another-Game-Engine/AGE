@@ -3,7 +3,7 @@
 
 namespace AGE
 {
-	Buffer::Buffer(std::string &&name, std::unique_ptr<IBuffer> &&buffer) :
+	Buffer::Buffer(const StringID &name, std::unique_ptr<IBuffer> &&buffer) :
 		_request_resize(false),
 		_request_transfer(false),
 		_size_alloc(0),
@@ -116,7 +116,7 @@ namespace AGE
 		return (*this);
 	}
 
-	std::string const &Buffer::name() const
+	StringID const &Buffer::name() const
 	{
 		return _name;
 	}

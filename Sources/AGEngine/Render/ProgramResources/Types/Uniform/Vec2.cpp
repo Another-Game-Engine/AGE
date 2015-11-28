@@ -51,7 +51,7 @@ namespace AGE
 
 	void Vec2::print() const
 	{
-		std::cout << "uniform vec2 " << _name << ";";
+		std::cout << "uniform vec2 " << _name.str() << ";";
 		std::cout << std::endl;
 	}
 }

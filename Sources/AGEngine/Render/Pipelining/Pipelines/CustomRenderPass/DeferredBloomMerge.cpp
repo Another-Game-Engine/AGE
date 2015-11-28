@@ -52,7 +52,7 @@ namespace AGE
 		auto vertexShaderPath = shaderPath->getValue() + PROGRAM_BLOOM_MERGE_VERTEX;
 		auto fragmentShaderPath = shaderPath->getValue() + PROGRAM_BLOOM_MERGE_FRAG;
 
-		_programs[PROGRAM_BLOOM_MERGE] = std::make_shared<Program>(Program(std::string("bloom_merge"),
+		_programs[PROGRAM_BLOOM_MERGE] = std::make_shared<Program>(Program(StringID("bloom_merge"),
 		{
 			std::make_shared<UnitProg>(vertexShaderPath, GL_VERTEX_SHADER),
 			std::make_shared<UnitProg>(fragmentShaderPath, GL_FRAGMENT_SHADER)

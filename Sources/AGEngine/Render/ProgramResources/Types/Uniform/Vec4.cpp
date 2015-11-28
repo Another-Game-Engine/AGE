@@ -51,7 +51,7 @@ namespace AGE
 
 	void Vec4::print() const
 	{
-		std::cout << "uniform vec4 " << _name << ";";
+		std::cout << "uniform vec4 " << _name.str() << ";";
 		std::cout << std::endl;
 	}
 }
