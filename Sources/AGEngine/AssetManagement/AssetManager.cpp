@@ -38,16 +38,16 @@
 
 # define LAMBDA_FUNCTION [](AGE::Vertices &vertices, size_t index, AGE::SubMeshData const &data)
 
-static std::pair<std::pair<GLenum, std::string>, std::function<void(AGE::Vertices &vertices, size_t index, AGE::SubMeshData const &data)>> g_InfosTypes[AGE::MeshInfos::END] =
+static std::pair<std::pair<GLenum, StringID>, std::function<void(AGE::Vertices &vertices, size_t index, AGE::SubMeshData const &data)>> g_InfosTypes[AGE::MeshInfos::END] =
 {
-	std::make_pair(std::make_pair(GL_FLOAT_VEC3, std::string("position")), LAMBDA_FUNCTION{ vertices.set_data<glm::vec3>(data.positions, std::string("position")); }),
-	std::make_pair(std::make_pair(GL_FLOAT_VEC3, std::string("normal")), LAMBDA_FUNCTION{ vertices.set_data<glm::vec3>(data.normals, std::string("normal")); }),
-	std::make_pair(std::make_pair(GL_FLOAT_VEC3, std::string("tangent")), LAMBDA_FUNCTION{ vertices.set_data<glm::vec3>(data.tangents, std::string("tangent")); }),
-	std::make_pair(std::make_pair(GL_FLOAT_VEC3, std::string("biTangents")), LAMBDA_FUNCTION{ vertices.set_data<glm::vec3>(data.biTangents, std::string("biTangents")); }),
-	std::make_pair(std::make_pair(GL_FLOAT_VEC2, std::string("texCoord")), LAMBDA_FUNCTION{ vertices.set_data<glm::vec2>(data.uvs[0], std::string("texCoord")); }),
-	std::make_pair(std::make_pair(GL_FLOAT_VEC4, std::string("blendWeight")), LAMBDA_FUNCTION{ vertices.set_data<glm::vec4>(data.weights, std::string("blendWeight")); }),
-	std::make_pair(std::make_pair(GL_FLOAT_VEC4, std::string("blendIndice")), LAMBDA_FUNCTION{ vertices.set_data<glm::vec4>(data.boneIndices, std::string("blendIndice")); }),
-	std::make_pair(std::make_pair(GL_FLOAT_VEC4, std::string("color")), LAMBDA_FUNCTION{ vertices.set_data<glm::vec4>(data.colors, std::string("color")); })
+), LAMBDA_FUNCTION{ vertices.set_data<glm::vec3>(data.positions,      StringID("position", 0x4cbf3a26fca1d74a)); }),
+), LAMBDA_FUNCTION{ vertices.set_data<glm::vec3>(data.normals,          StringID("normal", 0x61053f0e3ebbd272)); }),
+), LAMBDA_FUNCTION{ vertices.set_data<glm::vec3>(data.tangents,        StringID("tangent", 0x3c52b7db8f51de22)); }),
+	std::make_pair(std::make_pair(GL_FLOAT_VEC3, StringID("biTangents", 0xc9ccb62e082e82a2)), LAMBDA_FUNCTION{ vertices.set_data<glm::vec3>(data.biTangents,   StringID("biTangents", 0xc9ccb62e082e82a2)); }),
+	std::make_pair(std::make_pair(GL_FLOAT_VEC2, StringID("texCoord", 0xa0a9c94137957633)), LAMBDA_FUNCTION{ vertices.set_data<glm::vec2>(data.uvs[0],         StringID("texCoord", 0xa0a9c94137957633)); }),
+), LAMBDA_FUNCTION{ vertices.set_data<glm::vec4>(data.weights,     StringID("blendWeight", 0x4e02a6961ed59218)); }),
+), LAMBDA_FUNCTION{ vertices.set_data<glm::vec4>(data.boneIndices, StringID("blendIndice", 0x7beee96843342fb4)); }),
+), LAMBDA_FUNCTION{ vertices.set_data<glm::vec4>(data.colors,            StringID("color", 0x77f5c18e246c6638)); })
 };
 
 namespace AGE
@@ -133,7 +133,7 @@ namespace AGE
 		return false;
 	}
 
-	bool AssetsManager::loadMaterial(const OldFile &_filePath, const std::string &loadingChannel)
+	bool AssetsManager::loadMaterial(const OldFile &_filePath, const StringID &loadingChannel)
 	{
 		auto material = std::make_shared<MaterialSetInstance>();
 		OldFile filePath(_assetsDirectory + _filePath.getFullName());
@@ -208,7 +208,7 @@ namespace AGE
 
 	std::shared_ptr<ITexture> AssetsManager::loadTexture(
 		const OldFile &_filePath
-		, const std::string &loadingChannel)
+		, const StringID &loadingChannel)
 	{
 		OldFile filePath(_assetsDirectory + _filePath.getFullName());
 
@@ -249,7 +249,7 @@ namespace AGE
 		return texture;
 	}
 
-	std::shared_ptr<TextureCubeMap> AssetsManager::loadCubeMap(std::string const &name, OldFile &_filePath, const std::string &loadingChannel)
+	std::shared_ptr<TextureCubeMap> AssetsManager::loadCubeMap(std::string const &name, OldFile &_filePath, const StringID &loadingChannel)
 	{
 		OldFile filePath(_assetsDirectory + _filePath.getFullName());
 
@@ -281,7 +281,7 @@ namespace AGE
 		return texture;
 	}
 
-	bool AssetsManager::loadAnimation(const OldFile &_filePath, const std::string &loadingChannel)
+	bool AssetsManager::loadAnimation(const OldFile &_filePath, const StringID &loadingChannel)
 	{
 		OldFile filePath(_assetsDirectory + _filePath.getFullName());
 		auto animation = std::make_shared<AnimationData>();
@@ -325,7 +325,7 @@ namespace AGE
 		return nullptr;
 	}
 
-	bool AssetsManager::loadSkeleton(const OldFile &_filePath, const std::string &loadingChannel)
+	bool AssetsManager::loadSkeleton(const OldFile &_filePath, const StringID &loadingChannel)
 	{
 		OldFile filePath(_assetsDirectory + _filePath.getFullName());
 		auto skeleton = std::make_shared<Skeleton>(_filePath.getFileName().c_str());
@@ -372,7 +372,7 @@ namespace AGE
 		return nullptr;
 	}
 
-	bool AssetsManager::loadMesh(const OldFile &_filePath, const std::string &loadingChannel)
+	bool AssetsManager::loadMesh(const OldFile &_filePath, const StringID &loadingChannel)
 	{
 		auto meshInstance = std::make_shared<MeshInstance>();
 		OldFile filePath(_assetsDirectory + _filePath.getFullName());
@@ -425,7 +425,7 @@ namespace AGE
 		return (true);
 	}
 
-	void AssetsManager::loadSubmesh(std::shared_ptr<MeshData> fileData, std::size_t index, SubMeshInstance *mesh, const std::string &loadingChannel, LoadingCallback callback)
+	void AssetsManager::loadSubmesh(std::shared_ptr<MeshData> fileData, std::size_t index, SubMeshInstance *mesh, const StringID &loadingChannel, LoadingCallback callback)
 	{
 		auto &data = fileData->subMeshs[index];
 		std::size_t size = data.infos.count();
@@ -474,7 +474,7 @@ namespace AGE
 		pushNewAsset(loadingChannel, data.name, future);
 	}
 
-	void AssetsManager::pushNewAsset(const std::string &loadingChannel, const std::string &filename, std::future<AssetsManager::AssetsLoadingResult> &future)
+	void AssetsManager::pushNewAsset(const StringID &loadingChannel, const std::string &filename, std::future<AssetsManager::AssetsLoadingResult> &future)
 	{
 		std::shared_ptr<AssetsManager::AssetsLoadingChannel> channel = nullptr;
 		{
@@ -488,7 +488,7 @@ namespace AGE
 		}
 	}
 
-	void AssetsManager::pushNewCallback(const std::string &loadingChannel, AScene *currentScene, std::function<void()> &callback)
+	void AssetsManager::pushNewCallback(const StringID &loadingChannel, AScene *currentScene, std::function<void()> &callback)
 	{
 		std::shared_ptr<AssetsManager::AssetsLoadingChannel> channel = nullptr;
 		{
@@ -567,7 +567,7 @@ namespace AGE
 	{
 		SCOPE_profile_cpu_function("Main thread");
 
-		std::vector<std::string> toErase;
+		std::vector<StringID> toErase;
 		int total = 0;
 		int toLoad = 0;
 		std::shared_ptr<AssetsManager::AssetsLoadingChannel> channel = nullptr;
@@ -621,7 +621,7 @@ namespace AGE
 		return _isLoading;
 	}
 
-	void AssetsManager::loadPackage(const OldFile &packagePath, const std::string &loadingChannel /*= ""*/)
+	void AssetsManager::loadPackage(const OldFile &packagePath, const StringID &loadingChannel)
 	{
 		if (!packagePath.exists())
 		{
@@ -637,7 +637,7 @@ namespace AGE
 		}
 	}
 
-	void AssetsManager::loadPackage(const AssetsPackage &package, const std::string &loadingChannel /*= ""*/)
+	void AssetsManager::loadPackage(const AssetsPackage &package, const StringID &loadingChannel)
 	{
 		for (auto &e : package.meshs)
 		{
@@ -649,7 +649,7 @@ namespace AGE
 		}
 	}
 
-	void AssetsManager::savePackage(const AssetsPackage &package, const std::string filePath)
+	void AssetsManager::savePackage(const AssetsPackage &package, const std::string &filePath)
 	{
 		std::ofstream file(filePath, std::ios::binary);
 		AGE_ASSERT(file.is_open());

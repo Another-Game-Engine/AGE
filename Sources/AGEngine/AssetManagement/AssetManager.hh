@@ -12,6 +12,7 @@
 #include <Utils/DependenciesInjector.hpp>
 #include <Utils/OldFile.hpp>
 #include <Utils/Key.hh>
+#include <Utils/StringID.hpp>
 
 #include <AssetManagement/Data/MeshData.hh>
 
@@ -19,6 +20,7 @@
 
 #include <cereal/archives/json.hpp>
 #include <cereal/types/unordered_set.hpp>
+
 
 namespace AGE
 {
@@ -115,24 +117,24 @@ namespace AGE
 		{
 
 		}
-		void loadPackage(const OldFile &packagePath, const std::string &loadingChannel = "");
-		void loadPackage(const AssetsPackage &package, const std::string &loadingChannel = "");
-		void savePackage(const AssetsPackage &package, const std::string filePath);
-		bool loadAnimation(const OldFile &filePath, const std::string &loadingChannel = "");
+		void loadPackage(const OldFile &packagePath, const StringID &loadingChannel = StringID("Default", 0x11326fd2590f4e5e));
+		void loadPackage(const AssetsPackage &package, const StringID &loadingChannel = StringID("Default", 0x11326fd2590f4e5e));
+		void savePackage(const AssetsPackage &package, const std::string &filePath);
+		bool loadAnimation(const OldFile &filePath, const StringID &loadingChannel = StringID("Default", 0x11326fd2590f4e5e));
 		std::shared_ptr<AnimationData> getAnimation(const OldFile &filePath);
-		bool loadSkeleton(const OldFile &filePath, const std::string &loadingChannel = "");
+		bool loadSkeleton(const OldFile &filePath, const StringID &loadingChannel = StringID("Default", 0x11326fd2590f4e5e));
 		std::shared_ptr<Skeleton> getSkeleton(const OldFile &filePath);
-		bool loadMaterial(const OldFile &filePath, const std::string &loadingChannel = "");
+		bool loadMaterial(const OldFile &filePath, const StringID &loadingChannel = StringID("Default", 0x11326fd2590f4e5e));
 		std::shared_ptr<MaterialSetInstance> getMaterial(const OldFile &filePath);
 		std::shared_ptr<MeshInstance> getMesh(const OldFile &filePath);
-		std::shared_ptr<ITexture> loadTexture(const OldFile &filepath, const std::string &loadingChannel);
-		std::shared_ptr<TextureCubeMap> loadCubeMap(std::string const &name, OldFile &_filePath, const std::string &loadingChannel);
-		bool loadMesh(const OldFile &filePath, const std::string &loadingChannel = "");
+		std::shared_ptr<ITexture> loadTexture(const OldFile &filepath, const StringID &loadingChannel);
+		std::shared_ptr<TextureCubeMap> loadCubeMap(std::string const &name, OldFile &_filePath, const StringID &loadingChannel);
+		bool loadMesh(const OldFile &filePath, const StringID &loadingChannel = "");
 		void setAssetsDirectory(const std::string &path) { _assetsDirectory = path; }
 		const std::string &getAssetsDirectory(void) const { return _assetsDirectory; }
 		void update();
 		bool isLoading();
-		void pushNewCallback(const std::string &loadingChannel, AScene *currentScene, std::function<void()> &callback);
+		void pushNewCallback(const StringID &loadingChannel, AScene *currentScene, std::function<void()> &callback);
 		std::shared_ptr<Texture2D> const &getPointLightTexture();
 		std::shared_ptr<Texture2D> const &getSpotLightTexture();
 		bool material_was_reloaded(const OldFile &_filePath) const;
@@ -140,20 +142,20 @@ namespace AGE
 private:
 		std::string _assetsDirectory;
 		std::map<std::bitset<MeshInfos::END>, Key<Painter>, BitsetComparer> _painters;
-		std::map<std::string, std::shared_ptr<MeshInstance>> _meshs;
-		std::map<std::string, std::shared_ptr<Skeleton>> _skeletons;
-		std::map<std::string, std::shared_ptr<AnimationData>> _animations;
-		std::map<std::string, std::pair<std::shared_ptr<bool>, std::shared_ptr<MaterialSetInstance>>> _materials;
-		std::map<std::string, std::shared_ptr<ITexture>> _textures;
-		std::map<std::string, std::shared_ptr<TextureCubeMap>> _cubeMaps;
-		std::map<std::string, std::shared_ptr<AssetsLoadingChannel>> _loadingChannels;
+		std::map<StringID, std::shared_ptr<MeshInstance>> _meshs;
+		std::map<StringID, std::shared_ptr<Skeleton>> _skeletons;
+		std::map<StringID, std::shared_ptr<AnimationData>> _animations;
+		std::map<StringID, std::pair<std::shared_ptr<bool>, std::shared_ptr<MaterialSetInstance>>> _materials;
+		std::map<StringID, std::shared_ptr<ITexture>> _textures;
+		std::map<StringID, std::shared_ptr<TextureCubeMap>> _cubeMaps;
+		std::map<StringID, std::shared_ptr<AssetsLoadingChannel>> _loadingChannels;
 		std::shared_ptr<Texture2D> _pointLight;
 		std::shared_ptr<Texture2D> _spotLight;
 		std::mutex _mutex;
 		std::atomic<bool> _isLoading;
 	private:
-		void pushNewAsset(const std::string &loadingChannel, const std::string &filename, std::future<AssetsLoadingResult> &future);
-		void loadSubmesh(std::shared_ptr<MeshData> data, std::size_t index, SubMeshInstance *mesh, const std::string &loadingChannel, LoadingCallback callback);
+		void pushNewAsset(const StringID &loadingChannel, const std::string &filename, std::future<AssetsLoadingResult> &future);
+		void loadSubmesh(std::shared_ptr<MeshData> data, std::size_t index, SubMeshInstance *mesh, const StringID &loadingChannel, LoadingCallback callback);
 	};
 }
 
