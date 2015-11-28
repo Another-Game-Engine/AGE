@@ -8,7 +8,7 @@
 class UnitProg
 {
 public:
-	UnitProg(const std::string const &filename, GLenum type);
+	UnitProg(const std::string &filename, GLenum type);
 	UnitProg(UnitProg const &copy) = delete;
 	UnitProg(UnitProg &&move);
 	UnitProg &operator=(UnitProg const &u) = delete;

@@ -15,6 +15,7 @@
 #endif
 #include "Graphic\DRBMeshData.hpp"
 #include "Graphic/DRBSkinnedMesh.hpp"
+#include "Utils/StringID.hpp"
 
 //tmp
 #include "Configuration.hpp"
