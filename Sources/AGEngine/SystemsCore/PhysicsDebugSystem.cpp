@@ -7,6 +7,7 @@
 #include <Render/GeometryManagement/DebugDrawManager.hpp>
 #include <Threads/ThreadManager.hpp>
 #include <Threads/MainThread.hpp>
+#include <Core/Engine.hh>
 
 namespace AGE
 {
@@ -23,6 +24,10 @@ namespace AGE
 		bool PhysicsDebugSystem::initialize(void)
 		{
 			_scene->getInstance<Physics::PhysicsInterface>()->getWorld()->enableDebug();
+			if (GetEngine()->hasInstance<DebugDrawManager>() == false)
+			{
+				GetEngine()->setInstance<DebugDrawManager>();
+			}
 			return true;
 		}
 
@@ -41,7 +46,7 @@ namespace AGE
 
 			const Physics::DebugInformation &information = _scene->getInstance<Physics::PhysicsInterface>()->getWorld()->getDebugInformation();
 
-			auto debugManager = _scene->getInstance<DebugDrawManager>();
+			auto debugManager = GetEngine()->getInstance<DebugDrawManager>();
 			AGE_ASSERT(debugManager);
 
 			for (const Physics::DebugInformation::Point &point : information.points)

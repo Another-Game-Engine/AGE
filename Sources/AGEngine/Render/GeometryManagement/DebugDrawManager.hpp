@@ -8,6 +8,9 @@
 
 namespace AGE
 {
+	class PaintingManager;
+	class Painter;
+
 	class DebugDrawManager : public Dependency < DebugDrawManager >
 	{
 	public:

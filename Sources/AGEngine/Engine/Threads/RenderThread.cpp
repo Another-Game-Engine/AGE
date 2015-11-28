@@ -20,6 +20,7 @@
 #include <Render/GeometryManagement/Painting/Painter.hh>
 #include <Render/Pipelining/Pipelines/CustomPipeline/DebugDeferredShading.hh>
 #include <Render/GeometryManagement/SimpleGeometryManager.hpp>
+#include <Render/GeometryManagement/DebugDrawManager.hpp>
 #include <Render/PipelineTypes.hpp>
 #include <Render/GeometryManagement/Painting/PaintingManager.hh>
 #include <Render/OcclusionTools/DepthMapManager.hpp>
@@ -349,7 +350,11 @@ namespace AGE
 
 			//if (pipelines[msg.list->cameraInfos.data.pipeline]->isDebug())
 			//{
-			auto debugDrawManager = GetEngine()->getInstance<DebugDrawManager>();
+			DebugDrawManager* debugDrawManager = nullptr;
+			if (GetEngine()->hasInstance<DebugDrawManager>())
+			{
+				debugDrawManager = GetEngine()->getInstance<DebugDrawManager>();
+			}
 			if (debugDrawManager)
 			{
 				debugDrawManager->renderBegin(paintingManager);

@@ -2,6 +2,12 @@
 
 #include <mutex>
 
+#include <Utils/OpenGL.hh>
+#include <Utils/StringID.hpp>
+
+#include <Render/GeometryManagement/Painting/PaintingManager.hh>
+#include <Render/GeometryManagement/SimpleGeometryManager.hpp>
+
 #include <Threads/ThreadManager.hpp>
 #include <Threads/MainThread.hpp>
 
@@ -75,7 +81,7 @@ namespace AGE
 		}
 	}
 
-	void DebugDrawManager::Draw2DQuad(const glm::vec2 &_a, const glm::vec2 &_b, const glm::vec2 &_c, const glm::vec2 &_d, const glm::vec3 &_color)
+	void DebugDrawManager::draw2DQuad(const glm::vec2 &_a, const glm::vec2 &_b, const glm::vec2 &_c, const glm::vec2 &_d, const glm::vec3 &_color)
 	{
 		std::lock_guard<SpinLock> lock(_mutex);
 
