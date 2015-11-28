@@ -4,14 +4,14 @@
 # include <stdint.h>
 # include <memory>
 # include <assert.h>
-# include <Render/ProgramResources/AProgramResources.hh>
+# include <Render/ProgramResources/IProgramResources.hh>
 # include <Render/ProgramResources/AInterfaceBlock.hh>
 # include <Render/ProgramResources/Types/BlockResources.hh>
 # include <Render/Buffer/UniformBuffer.hh>
 
 namespace AGE
 {
-	class UniformBlock : public AProgramResources, public AInterfaceBlock
+	class UniformBlock : public IProgramResources, public AInterfaceBlock
 	{
 	public:
 		UniformBlock(GLint id, std::string &&name, std::vector<std::unique_ptr<BlockResources>> &&blockResources, size_t sizeBuffer);

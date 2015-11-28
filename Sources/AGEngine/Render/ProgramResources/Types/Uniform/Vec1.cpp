@@ -4,21 +4,21 @@
 namespace AGE
 {
 	Vec1::Vec1(float v, GLint id, std::string &&name) :
-		AProgramResources(id, std::move(name), GL_UNIFORM),
+		IProgramResources(id, std::move(name), GL_UNIFORM),
 		_value(v)
 	{
 
 	}
 
 	Vec1::Vec1(Vec1 &&move) :
-		AProgramResources(std::move(move)),
+		IProgramResources(std::move(move)),
 		_value(move._value)
 	{
 
 	}
 
 	Vec1::Vec1(Vec1 const &copy) :
-		AProgramResources(copy),
+		IProgramResources(copy),
 		_value(copy._value)
 	{
 

@@ -1,10 +1,10 @@
 #pragma once
 
-#include <Render/ProgramResources/AProgramResources.hh>
+#include <Render/ProgramResources/IProgramResources.hh>
 
 namespace AGE
 {
-	class Vec1 : public AProgramResources
+	class Vec1 : public IProgramResources
 	{
 	public:
 		Vec1(float v, GLint id, std::string &&name);

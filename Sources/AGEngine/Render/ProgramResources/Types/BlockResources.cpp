@@ -7,7 +7,7 @@
 namespace AGE
 {
 	BlockResources::BlockResources(GLint id, std::string &&name, GLenum type, glm::uvec3 const &info) :
-		AProgramResources(id, std::move(name), type),
+		IProgramResources(id, std::move(name), type),
 		_parent(nullptr),
 		_offset(info.x),
 		_size_array(info.y),
@@ -18,7 +18,7 @@ namespace AGE
 	}
 
 	BlockResources::BlockResources(BlockResources &&move) :
-		AProgramResources(std::move(move)),
+		IProgramResources(std::move(move)),
 		_parent(std::move(move._parent)),
 		_offset(move._offset),
 		_size_array(move._size_array),

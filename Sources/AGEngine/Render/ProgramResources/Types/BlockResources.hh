@@ -1,16 +1,16 @@
 #pragma once
 
-# include <memory>
-# include <Render/ProgramResources/AProgramResources.hh>
-# include <vector>
-# include <tuple>
-# include <glm/glm.hpp>
+#include <memory>
+#include <Render/ProgramResources/IProgramResources.hh>
+#include <vector>
+#include <tuple>
+#include <glm/glm.hpp>
 
 namespace AGE
 {
 	class IInterfaceBlock;
 
-	class BlockResources : public AProgramResources
+	class BlockResources : public IProgramResources
 	{
 	public:
 		BlockResources(GLint id, std::string &&name, GLenum type, glm::uvec3 const &info);

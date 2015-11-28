@@ -6,21 +6,21 @@
 namespace AGE
 {
 	SamplerBuffer::SamplerBuffer(GLint id, std::string &&name) :
-		AProgramResources(id, std::move(name), GL_SAMPLER_BUFFER),
+		IProgramResources(id, std::move(name), GL_SAMPLER_BUFFER),
 		_texture(nullptr)
 	{
 		glUniform1i(_id, _id);
 	}
 
 	SamplerBuffer::SamplerBuffer(SamplerBuffer &&move) :
-		AProgramResources(std::move(move)),
+		IProgramResources(std::move(move)),
 		_texture(std::move(_texture))
 	{
 
 	}
 
 	SamplerBuffer::SamplerBuffer(SamplerBuffer const &copy) :
-		AProgramResources(copy),
+		IProgramResources(copy),
 		_texture(copy._texture)
 	{
 

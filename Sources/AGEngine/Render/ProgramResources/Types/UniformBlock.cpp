@@ -4,7 +4,7 @@
 namespace AGE
 {
 	UniformBlock::UniformBlock(GLint id, std::string &&name, std::vector<std::unique_ptr<BlockResources>> &&blockResources, size_t sizeBuffer) :
-		AProgramResources(id, std::move(name), GL_UNIFORM_BLOCK),
+		IProgramResources(id, std::move(name), GL_UNIFORM_BLOCK),
 		AInterfaceBlock(std::move(blockResources), sizeBuffer)
 	{
 		for (auto &resource : _block_resources) {
@@ -13,7 +13,7 @@ namespace AGE
 	}
 
 	UniformBlock::UniformBlock(GLint id, std::string &&name, std::vector<std::unique_ptr<BlockResources>> &&blockResources, AInterfaceBlock const &shared) :
-		AProgramResources(id, std::move(name), GL_UNIFORM_BLOCK),
+		IProgramResources(id, std::move(name), GL_UNIFORM_BLOCK),
 		AInterfaceBlock(std::move(blockResources), shared)
 	{
 		for (auto &resource : _block_resources) {
@@ -22,7 +22,7 @@ namespace AGE
 	}
 
 	UniformBlock::UniformBlock(UniformBlock &&move) :
-		AProgramResources(std::move(move)),
+		IProgramResources(std::move(move)),
 		AInterfaceBlock(std::move(move))
 	{
 		for (auto &resource : _block_resources) {

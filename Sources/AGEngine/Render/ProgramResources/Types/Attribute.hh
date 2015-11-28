@@ -1,6 +1,6 @@
 #pragma once
 
-# include <Render/ProgramResources/AProgramResources.hh>
+# include <Render/ProgramResources/IProgramResources.hh>
 # include <Render/ProgramResources/Types/ProgramResourcesType.hh>
 
 # include <memory>
@@ -11,7 +11,7 @@ namespace AGE
 {
 	class Buffer;
 
-	class Attribute : public AProgramResources
+	class Attribute : public IProgramResources
 	{
 	public:
 		Attribute(GLint index, GLuint location, const StringID &name, GlType const &type);

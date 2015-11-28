@@ -6,7 +6,7 @@
 namespace AGE
 {
 	Attribute::Attribute(GLint index, GLuint location, const StringID &name, GlType const &type) :
-		AProgramResources(index, name, GL_PROGRAM_INPUT),
+		IProgramResources(index, name, GL_PROGRAM_INPUT),
 		_location(location),
 		_available_type(type)
 	{
@@ -14,14 +14,14 @@ namespace AGE
 	}
 
 	Attribute::Attribute(Attribute &&move) :
-		AProgramResources(std::move(move)),
+		IProgramResources(std::move(move)),
 		_available_type(std::move(move._available_type))
 	{
 
 	}
 
 	Attribute::Attribute(Attribute const &copy) :
-		AProgramResources(copy),
+		IProgramResources(copy),
 		_available_type(copy._available_type)
 	{
 

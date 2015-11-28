@@ -1,13 +1,13 @@
 #pragma once
 
-# include <Render/ProgramResources/AProgramResources.hh>
+# include <Render/ProgramResources/IProgramResources.hh>
 # include <glm/glm.hpp>
 
 namespace AGE
 {
 	class Program;
 
-	class Mat4 : public AProgramResources
+	class Mat4 : public IProgramResources
 	{
 	public:
 		Mat4(glm::mat4 const &value, GLint id, std::string &&name);
