@@ -65,9 +65,9 @@
             "link": {
                 "cereal_class_version": 0,
                 "Position": {
-                    "value0": 4.0968384742736816,
-                    "value1": -3.6562726497650146,
-                    "value2": -0.035305876284837723
+                    "value0": 0,
+                    "value1": 2,
+                    "value2": 0
                 },
                 "Scale": {
                     "value0": 1,
@@ -75,32 +75,51 @@
                     "value2": 1
                 },
                 "Orientation": {
-                    "value0": -0.06847091019153595,
-                    "value1": 0.70107638835906982,
-                    "value2": 0.067942194640636444,
-                    "value3": 0.7065320611000061
+                    "value0": 0,
+                    "value1": 0,
+                    "value2": 0,
+                    "value3": 1
                 }
             },
             "children": [],
             "flags": 0,
             "components_number": [
-                8,
-                0
+                0,
+                5,
+                10
             ],
-            "archetypesDependency": [
-                "freefly-camera"
-            ],
-            "AGE_CORE_ArchetypeComponent": {
-                "cereal_class_version": 3,
-                "archetypeName": "freefly-camera",
-                "synchronizePosition": false,
-                "synchronizeRotation": true,
-                "synchronizeScale": true,
-                "parentIsAnArchetype": false
-            },
+            "archetypesDependency": [],
             "AGE_CORE_EntityRepresentationComponent": {
                 "cereal_class_version": 0,
-                "name": "freefly-camera-Copy-Copy"
+                "name": "camera"
+            },
+            "AGE_CORE_CameraComponent": {
+                "cereal_class_version": 0,
+                "projection": {
+                    "value0": {
+                        "value0": 1.2990380525588989,
+                        "value1": 0,
+                        "value2": 0,
+                        "value3": 0,
+                        "value4": 0,
+                        "value5": 1.732050895690918,
+                        "value6": 0,
+                        "value7": 0,
+                        "value8": 0,
+                        "value9": 0,
+                        "value10": -1.0001000165939331,
+                        "value11": -1,
+                        "value12": 0,
+                        "value13": 0,
+                        "value14": -0.20001000165939331,
+                        "value15": 0
+                    }
+                }
+            },
+            "AGE_CORE_CharacterController": {
+                "cereal_class_version": 0,
+                "value0": 0.5,
+                "value1": 2
             }
         },
         "Entity_1": {
@@ -398,7 +417,7 @@
                 "ColliderType": 3,
                 "Material": "DefaultMaterial",
                 "IsATrigger": false,
-                "FilterGroup": 0,
+                "FilterGroup": 1,
                 "Mesh": "sponza/sponza",
                 "Convex": false
             }

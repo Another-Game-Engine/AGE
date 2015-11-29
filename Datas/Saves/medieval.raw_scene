@@ -48,10 +48,14 @@
             },
             {
                 "key": 11,
-                "value": 8718854852507163888
+                "value": 15079484947096660329
             },
             {
                 "key": 12,
+                "value": 8718854852507163888
+            },
+            {
+                "key": 13,
                 "value": 13917482855567903631
             }
         ],
@@ -976,7 +980,7 @@
             "components_number": [
                 0,
                 1,
-                12
+                13
             ],
             "archetypesDependency": [],
             "AGE_CORE_EntityRepresentationComponent": {
@@ -1025,7 +1029,7 @@
             "components_number": [
                 0,
                 1,
-                12
+                13
             ],
             "archetypesDependency": [],
             "AGE_CORE_EntityRepresentationComponent": {
@@ -1105,7 +1109,7 @@
             "components_number": [
                 0,
                 1,
-                12
+                13
             ],
             "archetypesDependency": [],
             "AGE_CORE_EntityRepresentationComponent": {
@@ -1153,7 +1157,7 @@
             "components_number": [
                 0,
                 1,
-                12
+                13
             ],
             "archetypesDependency": [],
             "AGE_CORE_EntityRepresentationComponent": {
@@ -23584,9 +23588,9 @@
         "Entity_295": {
             "link": {
                 "Position": {
-                    "value0": -1.2058626413345337,
-                    "value1": 1.2620058059692383,
-                    "value2": -0.20413872599601746
+                    "value0": -4.2781472206115723,
+                    "value1": 3.8259994983673096,
+                    "value2": -4.9533367156982422
                 },
                 "Scale": {
                     "value0": 1,
@@ -23594,30 +23598,50 @@
                     "value2": 1
                 },
                 "Orientation": {
-                    "value0": 0.030232619494199753,
-                    "value1": -0.65403103828430176,
-                    "value2": 0.026175284758210182,
-                    "value3": 0.75540995597839355
+                    "value0": 0.010015075094997883,
+                    "value1": -0.9817776083946228,
+                    "value2": -0.054052237421274185,
+                    "value3": -0.18190878629684448
                 }
             },
             "children": [],
             "flags": 0,
             "components_number": [
-                8,
-                0
+                0,
+                5,
+                10
             ],
-            "archetypesDependency": [
-                "freefly-camera"
-            ],
-            "AGE_CORE_ArchetypeComponent": {
-                "archetypeName": "freefly-camera",
-                "synchronizePosition": false,
-                "synchronizeRotation": true,
-                "synchronizeScale": true,
-                "parentIsAnArchetype": false
-            },
+            "archetypesDependency": [],
             "AGE_CORE_EntityRepresentationComponent": {
-                "name": "freefly-camera-Copy-Copy"
+                "name": "camera"
+            },
+            "AGE_CORE_CameraComponent": {
+                "cereal_class_version": 0,
+                "projection": {
+                    "value0": {
+                        "value0": 1.2990380525588989,
+                        "value1": 0,
+                        "value2": 0,
+                        "value3": 0,
+                        "value4": 0,
+                        "value5": 1.732050895690918,
+                        "value6": 0,
+                        "value7": 0,
+                        "value8": 0,
+                        "value9": 0,
+                        "value10": -1.0001000165939331,
+                        "value11": -1,
+                        "value12": 0,
+                        "value13": 0,
+                        "value14": -0.20001000165939331,
+                        "value15": 0
+                    }
+                }
+            },
+            "AGE_CORE_CharacterController": {
+                "cereal_class_version": 0,
+                "value0": 0.5,
+                "value1": 2
             }
         },
         "Entity_296": {
