@@ -55,6 +55,11 @@ namespace AGE
 		PODVector<SimpleVec3> _debug3DlinesPointsDepth;
 		PODVector<SimpleVec3> _debug3DlinesColorDepth;
 
+		PODVector<unsigned int> indices2DLines;
+		PODVector<unsigned int> indices3DLines;
+		PODVector<unsigned int> indices3DLinesDepth;
+
+
 		SpinLock _mutex;
 
 		std::shared_ptr<Painter> _line2DPainter = nullptr;

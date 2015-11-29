@@ -144,6 +144,22 @@ namespace AGE
 		_indices_data = tmp;
 	}
 
+	void Vertices::set_indices(PODVector<unsigned int> const &data)
+	{
+		std::vector<uint8_t> tmp(data.size() * sizeof(unsigned int));
+		std::memcpy(tmp.data(), data.data(), tmp.size());
+		if (_indices_block_memory.lock())
+		{
+			_indices_block_memory.lock()->setDatas(tmp);
+			return;
+		}
+		if (tmp.size() != _indices_data.size())
+		{
+			return;
+		}
+		_indices_data = tmp;
+	}
+
 	void Vertices::draw(GLenum mode)
 	{
 		if (_indices_block_memory.lock())

@@ -31,11 +31,18 @@ namespace AGE
 		{
 			_debug3DlinesPointsDepth.push_back(_a);
 			_debug3DlinesPointsDepth.push_back(_b);
+			_debug3DlinesPointsDepth.push_back(_b);
 			_debug3DlinesPointsDepth.push_back(_c);
 			_debug3DlinesPointsDepth.push_back(_c);
 			_debug3DlinesPointsDepth.push_back(_d);
 			_debug3DlinesPointsDepth.push_back(_d);
 			_debug3DlinesPointsDepth.push_back(_a);
+
+			unsigned int i = indices3DLinesDepth.size();
+			for (unsigned int j = 0; j < 8; ++j)
+			{
+				indices3DLinesDepth.push_back(i + j);
+			}
 
 			_debug3DlinesColorDepth.push_back(_color);
 			_debug3DlinesColorDepth.push_back(_color);
@@ -56,6 +63,12 @@ namespace AGE
 			_debug3DlinesPoints.push_back(_d);
 			_debug3DlinesPoints.push_back(_d);
 			_debug3DlinesPoints.push_back(_a);
+
+			unsigned int i = indices3DLines.size();
+			for (unsigned int j = 0; j < 8; ++j)
+			{
+				indices3DLines.push_back(i + j);
+			}
 
 			_debug3DlinesColor.push_back(_color);
 			_debug3DlinesColor.push_back(_color);
@@ -75,6 +88,12 @@ namespace AGE
 			_debug3DlinesPointsDepth.push_back(_start);
 			_debug3DlinesPointsDepth.push_back(_end);
 
+			unsigned int i = indices3DLinesDepth.size();
+			for (unsigned int j = 0; j < 2; ++j)
+			{
+				indices3DLinesDepth.push_back(i + j);
+			}
+
 			_debug3DlinesColorDepth.push_back(_startColor);
 			_debug3DlinesColorDepth.push_back(_endColor);
 		}
@@ -82,6 +101,12 @@ namespace AGE
 		{
 			_debug3DlinesPoints.push_back(_start);
 			_debug3DlinesPoints.push_back(_end);
+
+			unsigned int i = indices3DLines.size();
+			for (unsigned int j = 0; j < 2; ++j)
+			{
+				indices3DLines.push_back(i + j);
+			}
 
 			_debug3DlinesColor.push_back(_startColor);
 			_debug3DlinesColor.push_back(_endColor);
@@ -98,6 +123,12 @@ namespace AGE
 		_debug2DlinesPoints.push_back(_d);
 		_debug2DlinesPoints.push_back(_a);
 
+		unsigned int i = indices2DLines.size();
+		for (unsigned int j = 0; j < 8; ++j)
+		{
+			indices2DLines.push_back(i + j);
+		}
+
 		_debug2DlinesColor.push_back(_color);
 		_debug2DlinesColor.push_back(_color);
 		_debug2DlinesColor.push_back(_color);
@@ -112,6 +143,12 @@ namespace AGE
 	{
 		_debug2DlinesPoints.push_back(_start);
 		_debug2DlinesPoints.push_back(_end);
+
+		unsigned int i = indices2DLines.size();
+		for (unsigned int j = 0; j < 2; ++j)
+		{
+			indices2DLines.push_back(i + j);
+		}
 
 		_debug2DlinesColor.push_back(_color);
 		_debug2DlinesColor.push_back(_color);
@@ -148,18 +185,12 @@ namespace AGE
 		// 2D lines
 		if (_debug2DlinesPoints.size() != 0)
 		{
-			std::vector<unsigned int> indices;
 			auto type = std::make_pair<GLenum, StringID>(GL_FLOAT_VEC2, StringID("position", 0x4cbf3a26fca1d74a));
 			std::vector<std::pair < GLenum, StringID > > types;
 			types.push_back(type);
 			type = std::make_pair<GLenum, StringID>(GL_FLOAT_VEC3, StringID("color", 0x77f5c18e246c6638));
 			types.push_back(type);
 
-			indices.resize(_debug2DlinesPoints.size());
-			for (int i = 0; i < _debug2DlinesPoints.size(); ++i)
-			{
-				indices[i] = i;
-			}
 			if (!paintingManager->has_painter(types))
 			{
 				Singleton<SimpleGeometryManager>::getInstance()->debug2Dlines.painterKey = paintingManager->add_painter(std::move(types));
@@ -172,29 +203,23 @@ namespace AGE
 
 			_line2DPainter = paintingManager->get_painter(Singleton<SimpleGeometryManager>::getInstance()->debug2Dlines.painterKey);
 
-			Singleton<SimpleGeometryManager>::getInstance()->debug2Dlines.verticesKey = _line2DPainter->add_vertices(_debug2DlinesPoints.size(), indices.size());
+			Singleton<SimpleGeometryManager>::getInstance()->debug2Dlines.verticesKey = _line2DPainter->add_vertices(_debug2DlinesPoints.size(), indices2DLines.size());
 			auto vertices = _line2DPainter->get_vertices(Singleton<SimpleGeometryManager>::getInstance()->debug2Dlines.verticesKey);
 
 			vertices->set_data<SimpleVec2>(_debug2DlinesPoints, StringID("position", 0x4cbf3a26fca1d74a));
 			vertices->set_data<SimpleVec3>(_debug2DlinesColor, StringID("color", 0x77f5c18e246c6638));
-			vertices->set_indices(indices);
+			vertices->set_indices(indices2DLines);
 
 		}
 		// 3D lines
 		if (_debug3DlinesPoints.size() != 0)
 		{
-			std::vector<unsigned int> indices;
 			auto type = std::make_pair<GLenum, StringID>(GL_FLOAT_VEC3, StringID("position", 0x4cbf3a26fca1d74a));
 			std::vector<std::pair < GLenum, StringID > > types;
 			types.push_back(type);
 			type = std::make_pair<GLenum, StringID>(GL_FLOAT_VEC3, StringID("color", 0x77f5c18e246c6638));
 			types.push_back(type);
 
-			indices.resize(_debug3DlinesPoints.size());
-			for (int i = 0; i < _debug3DlinesPoints.size(); ++i)
-			{
-				indices[i] = i;
-			}
 			if (!paintingManager->has_painter(types))
 			{
 				Singleton<SimpleGeometryManager>::getInstance()->debug3Dlines.painterKey = paintingManager->add_painter(std::move(types));
@@ -207,29 +232,23 @@ namespace AGE
 
 			_line3DPainter = paintingManager->get_painter(Singleton<SimpleGeometryManager>::getInstance()->debug3Dlines.painterKey);
 
-			Singleton<SimpleGeometryManager>::getInstance()->debug3Dlines.verticesKey = _line3DPainter->add_vertices(_debug3DlinesPoints.size(), indices.size());
+			Singleton<SimpleGeometryManager>::getInstance()->debug3Dlines.verticesKey = _line3DPainter->add_vertices(_debug3DlinesPoints.size(), indices3DLines.size());
 			auto vertices = _line3DPainter->get_vertices(Singleton<SimpleGeometryManager>::getInstance()->debug3Dlines.verticesKey);
 
 			vertices->set_data<SimpleVec3>(_debug3DlinesPoints, StringID("position", 0x4cbf3a26fca1d74a));
 			vertices->set_data<SimpleVec3>(_debug3DlinesColor, StringID("color", 0x77f5c18e246c6638));
-			vertices->set_indices(indices);
+			vertices->set_indices(indices3DLines);
 
 		}
 		// 3D lines with depth
 		if (_debug3DlinesPointsDepth.size() != 0)
 		{
-			std::vector<unsigned int> indices;
 			auto type = std::make_pair<GLenum, StringID>(GL_FLOAT_VEC3, StringID("position", 0x4cbf3a26fca1d74a));
 			std::vector<std::pair < GLenum, StringID > > types;
 			types.push_back(type);
 			type = std::make_pair<GLenum, StringID>(GL_FLOAT_VEC3, StringID("color", 0x77f5c18e246c6638));
 			types.push_back(type);
 
-			indices.resize(_debug3DlinesPointsDepth.size());
-			for (int i = 0; i < _debug3DlinesPointsDepth.size(); ++i)
-			{
-				indices[i] = i;
-			}
 			if (!paintingManager->has_painter(types))
 			{
 				Singleton<SimpleGeometryManager>::getInstance()->debug3DlinesDepth.painterKey = paintingManager->add_painter(std::move(types));
@@ -242,12 +261,12 @@ namespace AGE
 
 			_line3DPainterDepth = paintingManager->get_painter(Singleton<SimpleGeometryManager>::getInstance()->debug3DlinesDepth.painterKey);
 
-			Singleton<SimpleGeometryManager>::getInstance()->debug3DlinesDepth.verticesKey = _line3DPainterDepth->add_vertices(_debug3DlinesPointsDepth.size(), indices.size());
+			Singleton<SimpleGeometryManager>::getInstance()->debug3DlinesDepth.verticesKey = _line3DPainterDepth->add_vertices(_debug3DlinesPointsDepth.size(), indices3DLinesDepth.size());
 			auto vertices = _line3DPainterDepth->get_vertices(Singleton<SimpleGeometryManager>::getInstance()->debug3DlinesDepth.verticesKey);
 
 			vertices->set_data<SimpleVec3>(_debug3DlinesPointsDepth, StringID("position", 0x4cbf3a26fca1d74a));
 			vertices->set_data<SimpleVec3>(_debug3DlinesColorDepth, StringID("color", 0x77f5c18e246c6638));
-			vertices->set_indices(indices);
+			vertices->set_indices(indices3DLinesDepth);
 
 		}
 		_debug2DlinesPoints.clear();
@@ -256,6 +275,9 @@ namespace AGE
 		_debug3DlinesColor.clear();
 		_debug3DlinesPointsDepth.clear();
 		_debug3DlinesColorDepth.clear();
+		indices2DLines.clear();
+		indices3DLines.clear();
+		indices3DLinesDepth.clear();
 	}
 
 	void DebugDrawManager::renderEnd()

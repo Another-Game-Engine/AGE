@@ -401,22 +401,22 @@ namespace AGE
 			WorldInterface::enableDebug();
 			assert(scene != nullptr && "Invalid scene");
 			scene->setVisualizationParameter(physx::PxVisualizationParameter::eSCALE, 1.0f);
-			scene->setVisualizationParameter(physx::PxVisualizationParameter::eWORLD_AXES, 15.0f);
+			//scene->setVisualizationParameter(physx::PxVisualizationParameter::eWORLD_AXES, 15.0f);
 			/*scene->setVisualizationParameter(physx::PxVisualizationParameter::eBODY_AXES, 1.0f);
 			scene->setVisualizationParameter(physx::PxVisualizationParameter::eBODY_MASS_AXES, 1.0f);
 			scene->setVisualizationParameter(physx::PxVisualizationParameter::eBODY_LIN_VELOCITY, 1.0f);
 			scene->setVisualizationParameter(physx::PxVisualizationParameter::eBODY_ANG_VELOCITY, 1.0f);
 			scene->setVisualizationParameter(physx::PxVisualizationParameter::eCONTACT_POINT, 1.0f);*/
-			scene->setVisualizationParameter(physx::PxVisualizationParameter::eCONTACT_NORMAL, 5.0f);
-			scene->setVisualizationParameter(physx::PxVisualizationParameter::eCONTACT_FORCE, 5.0f);
-			scene->setVisualizationParameter(physx::PxVisualizationParameter::eACTOR_AXES, 2.5f);
+			//scene->setVisualizationParameter(physx::PxVisualizationParameter::eCONTACT_NORMAL, 5.0f);
+			//scene->setVisualizationParameter(physx::PxVisualizationParameter::eCONTACT_FORCE, 5.0f);
+			//scene->setVisualizationParameter(physx::PxVisualizationParameter::eACTOR_AXES, 2.5f);
 			//scene->setVisualizationParameter(physx::PxVisualizationParameter::eCOLLISION_AABBS, 1.0f);
 			scene->setVisualizationParameter(physx::PxVisualizationParameter::eCOLLISION_SHAPES, 1.0f);
 			//scene->setVisualizationParameter(physx::PxVisualizationParameter::eCOLLISION_AXES, 1.0f);
-			scene->setVisualizationParameter(physx::PxVisualizationParameter::eCOLLISION_EDGES, 1.0f);
-			scene->setVisualizationParameter(physx::PxVisualizationParameter::eCOLLISION_STATIC, 1.0f);
-			scene->setVisualizationParameter(physx::PxVisualizationParameter::eCOLLISION_DYNAMIC, 1.0f);
-			scene->setVisualizationParameter(physx::PxVisualizationParameter::eCOLLISION_PAIRS, 1.0f);
+			//scene->setVisualizationParameter(physx::PxVisualizationParameter::eCOLLISION_EDGES, 1.0f);
+			//scene->setVisualizationParameter(physx::PxVisualizationParameter::eCOLLISION_STATIC, 1.0f);
+			//scene->setVisualizationParameter(physx::PxVisualizationParameter::eCOLLISION_DYNAMIC, 1.0f);
+			//scene->setVisualizationParameter(physx::PxVisualizationParameter::eCOLLISION_PAIRS, 1.0f);
 
 		}
 
@@ -425,22 +425,22 @@ namespace AGE
 			WorldInterface::disableDebug();
 			assert(scene != nullptr && "Invalid scene");
 			scene->setVisualizationParameter(physx::PxVisualizationParameter::eSCALE, 0.0f);
-			scene->setVisualizationParameter(physx::PxVisualizationParameter::eWORLD_AXES, 0.0f);
+			//scene->setVisualizationParameter(physx::PxVisualizationParameter::eWORLD_AXES, 0.0f);
 			/*scene->setVisualizationParameter(physx::PxVisualizationParameter::eBODY_AXES, 0.0f);
 			scene->setVisualizationParameter(physx::PxVisualizationParameter::eBODY_MASS_AXES, 0.0f);
 			scene->setVisualizationParameter(physx::PxVisualizationParameter::eBODY_LIN_VELOCITY, 0.0f);
 			scene->setVisualizationParameter(physx::PxVisualizationParameter::eBODY_ANG_VELOCITY, 0.0f);
 			scene->setVisualizationParameter(physx::PxVisualizationParameter::eCONTACT_POINT, 0.0f);*/
-			scene->setVisualizationParameter(physx::PxVisualizationParameter::eCONTACT_NORMAL, 0.0f);
-			scene->setVisualizationParameter(physx::PxVisualizationParameter::eCONTACT_FORCE, 0.0f);
-			scene->setVisualizationParameter(physx::PxVisualizationParameter::eACTOR_AXES, 0.0f);
+			//scene->setVisualizationParameter(physx::PxVisualizationParameter::eCONTACT_NORMAL, 0.0f);
+			//scene->setVisualizationParameter(physx::PxVisualizationParameter::eCONTACT_FORCE, 0.0f);
+			//scene->setVisualizationParameter(physx::PxVisualizationParameter::eACTOR_AXES, 0.0f);
 			//scene->setVisualizationParameter(physx::PxVisualizationParameter::eCOLLISION_AABBS, 0.0f);
 			scene->setVisualizationParameter(physx::PxVisualizationParameter::eCOLLISION_SHAPES, 0.0f);
 			//scene->setVisualizationParameter(physx::PxVisualizationParameter::eCOLLISION_AXES, 0.0f);
-			scene->setVisualizationParameter(physx::PxVisualizationParameter::eCOLLISION_EDGES, 0.0f);
-			scene->setVisualizationParameter(physx::PxVisualizationParameter::eCOLLISION_STATIC, 0.0f);
-			scene->setVisualizationParameter(physx::PxVisualizationParameter::eCOLLISION_DYNAMIC, 0.0f);
-			scene->setVisualizationParameter(physx::PxVisualizationParameter::eCOLLISION_PAIRS, 0.0f);
+			//scene->setVisualizationParameter(physx::PxVisualizationParameter::eCOLLISION_EDGES, 0.0f);
+			//scene->setVisualizationParameter(physx::PxVisualizationParameter::eCOLLISION_STATIC, 0.0f);
+			//scene->setVisualizationParameter(physx::PxVisualizationParameter::eCOLLISION_DYNAMIC, 0.0f);
+			//scene->setVisualizationParameter(physx::PxVisualizationParameter::eCOLLISION_PAIRS, 0.0f);
 		}
 
 		void PhysXWorld::onConstraintBreak(physx::PxConstraintInfo *constraints, physx::PxU32 numberOfConstraints)

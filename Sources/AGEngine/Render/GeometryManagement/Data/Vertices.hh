@@ -31,6 +31,7 @@ namespace AGE
 		template <typename type_t> bool set_data(PODVector<type_t> const &data, StringID const &attribute);
 		unsigned int const *get_indices(size_t &size) const;
 		void set_indices(std::vector<unsigned int> const &data);
+		void set_indices(PODVector<unsigned int> const &data);
 		void set_block_memory(std::shared_ptr<BlockMemory> const &blockMemory, StringID const &attribute);
 		void set_indices_block_memory(std::shared_ptr<BlockMemory> const &blockMemory);
 		void remove();
