@@ -13,6 +13,12 @@
 #include "RaycasterInterface.hpp"
 #include "AssetManagement/AssetManager.hh"
 
+
+#include <Render/GeometryManagement/DebugDrawManager.hpp>
+#include <Threads/ThreadManager.hpp>
+#include <Threads/MainThread.hpp>
+#include <Core/Engine.hh>
+
 namespace AGE
 {
 	namespace Physics
@@ -178,18 +184,18 @@ namespace AGE
 			return debugEnabled;
 		}
 
-		inline const DebugInformation &WorldInterface::getDebugInformation(void) const
-		{
-			return debugInformation;
-		}
-
 		inline void WorldInterface::update(float elapsedTime)
 		{
-			if (isDebugEnabled())
-			{
-				debugInformation = DebugInformation();
-			}
+			//if (isDebugEnabled())
+			//{
+			//	debugInformation = DebugInformation();
+			//}
 			simulate(elapsedTime);
+			if (GetMainThread()->isRenderFrame() == true && GetEngine()->hasInstance<DebugDrawManager>())
+			{
+				auto debugDrawer = GetEngine()->getInstance<DebugDrawManager>();
+				fillDebugInformation(debugDrawer);
+			}
 			/*const float stepSize = 1.0f / static_cast<float>(targetFPS);
 			accumulator += elapsedTime;
 			while (accumulator >= stepSize)

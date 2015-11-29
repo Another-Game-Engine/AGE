@@ -236,56 +236,62 @@ namespace AGE
 				scene->simulate(stepSize, nullptr, scratchMemoryBlock, sizeof(scratchMemoryBlock));
 				scene->fetchResults(true);
 				notifyTriggers();
-				fillDebugInformation();
 			}
 		}
 
-		void PhysXWorld::fillDebugInformation(void)
+		void PhysXWorld::fillDebugInformation(DebugDrawManager *debugDrawManager)
 		{
 			if (isDebugEnabled())
 			{
+				//debugInformation.points.clear();
+				//debugInformation.lines.clear();
+				//debugInformation.triangles.clear();
+
 				const physx::PxRenderBuffer &renderBuffer = scene->getRenderBuffer();
-				for (physx::PxU32 index = 0; index < renderBuffer.getNbPoints(); ++index)
-				{
-					const physx::PxDebugPoint &point = renderBuffer.getPoints()[index];
-					DebugInformation::Point debugPoint;
-					debugPoint.color[0].r = static_cast<float>((point.color & 0xFF0000) >> 16) / 255.0f;
-					debugPoint.color[0].g = static_cast<float>((point.color & 0xFF00) >> 8) / 255.0f;
-					debugPoint.color[0].b = static_cast<float>(point.color & 0xFF) / 255.0f;
-					debugPoint.position[0] = glm::vec3(static_cast<float>(point.pos.x), static_cast<float>(point.pos.y), static_cast<float>(point.pos.z));
-					debugInformation.points.push_back(std::move(debugPoint));
-				}
+				//for (physx::PxU32 index = 0; index < renderBuffer.getNbPoints(); ++index)
+				//{
+				//	const physx::PxDebugPoint &point = renderBuffer.getPoints()[index];
+				//	DebugInformation::Point debugPoint;
+				//	debugPoint.color[0].r = static_cast<float>((point.color & 0xFF0000) >> 16) / 255.0f;
+				//	debugPoint.color[0].g = static_cast<float>((point.color & 0xFF00) >> 8) / 255.0f;
+				//	debugPoint.color[0].b = static_cast<float>(point.color & 0xFF) / 255.0f;
+				//	debugPoint.position[0] = glm::vec3(static_cast<float>(point.pos.x), static_cast<float>(point.pos.y), static_cast<float>(point.pos.z));
+				//	debugInformation.points.push_back(std::move(debugPoint));
+				//}
+				debugDrawManager->lock();
 				for (physx::PxU32 index = 0; index < renderBuffer.getNbLines(); ++index)
 				{
 					const physx::PxDebugLine &line = renderBuffer.getLines()[index];
-					DebugInformation::Line debugLine;
-					debugLine.color[0].r = static_cast<float>((line.color0 & 0xFF0000) >> 16) / 255.0f;
-					debugLine.color[0].g = static_cast<float>((line.color0 & 0xFF00) >> 8) / 255.0f;
-					debugLine.color[0].b = static_cast<float>(line.color0 & 0xFF) / 255.0f;
-					debugLine.position[0] = glm::vec3(static_cast<float>(line.pos0.x), static_cast<float>(line.pos0.y), static_cast<float>(line.pos0.z));
-					debugLine.color[1].r = static_cast<float>((line.color1 & 0xFF0000) >> 16) / 255.0f;
-					debugLine.color[1].g = static_cast<float>((line.color1 & 0xFF00) >> 8) / 255.0f;
-					debugLine.color[1].b = static_cast<float>(line.color1 & 0xFF) / 255.0f;
-					debugLine.position[1] = glm::vec3(static_cast<float>(line.pos1.x), static_cast<float>(line.pos1.y), static_cast<float>(line.pos1.z));
-					debugInformation.lines.push_back(std::move(debugLine));
+					debugDrawManager->draw3DLine(
+					{ static_cast<float>(line.pos0.x), static_cast<float>(line.pos0.y), static_cast<float>(line.pos0.z) },
+					{ static_cast<float>((line.color0 & 0xFF0000) >> 16) / 255.0f, static_cast<float>((line.color0 & 0xFF00) >> 8) / 255.0f, static_cast<float>(line.color0 & 0xFF) / 255.0f },
+					{ static_cast<float>(line.pos1.x), static_cast<float>(line.pos1.y), static_cast<float>(line.pos1.z) },
+					{ static_cast<float>((line.color1 & 0xFF0000) >> 16) / 255.0f, static_cast<float>((line.color1 & 0xFF00) >> 8) / 255.0f, static_cast<float>(line.color1 & 0xFF) / 255.0f},
+					false);
 				}
+			debugDrawManager->unlock();
 				for (physx::PxU32 index = 0; index < renderBuffer.getNbTriangles(); ++index)
 				{
 					const physx::PxDebugTriangle &triangle = renderBuffer.getTriangles()[index];
-					DebugInformation::Triangle debugTriangle;
-					debugTriangle.color[0].r = static_cast<float>((triangle.color0 & 0xFF0000) >> 16) / 255.0f;
-					debugTriangle.color[0].g = static_cast<float>((triangle.color0 & 0xFF00) >> 8) / 255.0f;
-					debugTriangle.color[0].b = static_cast<float>(triangle.color0 & 0xFF) / 255.0f;
-					debugTriangle.position[0] = glm::vec3(static_cast<float>(triangle.pos0.x), static_cast<float>(triangle.pos0.y), static_cast<float>(triangle.pos0.z));
-					debugTriangle.color[1].r = static_cast<float>((triangle.color1 & 0xFF0000) >> 16) / 255.0f;
-					debugTriangle.color[1].g = static_cast<float>((triangle.color1 & 0xFF00) >> 8) / 255.0f;
-					debugTriangle.color[1].b = static_cast<float>(triangle.color1 & 0xFF) / 255.0f;
-					debugTriangle.position[1] = glm::vec3(static_cast<float>(triangle.pos1.x), static_cast<float>(triangle.pos1.y), static_cast<float>(triangle.pos1.z));
-					debugTriangle.color[2].r = static_cast<float>((triangle.color2 & 0xFF0000) >> 16) / 255.0f;
-					debugTriangle.color[2].g = static_cast<float>((triangle.color2 & 0xFF00) >> 8) / 255.0f;
-					debugTriangle.color[2].b = static_cast<float>(triangle.color2 & 0xFF) / 255.0f;
-					debugTriangle.position[2] = glm::vec3(static_cast<float>(triangle.pos2.x), static_cast<float>(triangle.pos2.y), static_cast<float>(triangle.pos2.z));
-					debugInformation.triangles.push_back(std::move(debugTriangle));
+					
+					//	debugManager->draw3DLine(triangle.position[0], triangle.color[0], triangle.position[1], triangle.color[1], false);
+					//	debugManager->draw3DLine(triangle.position[1], triangle.color[1], triangle.position[2], triangle.color[2], false);
+					//	debugManager->draw3DLine(triangle.position[2], triangle.color[2], triangle.position[0], triangle.color[0], false);
+
+					//DebugInformation::Triangle debugTriangle;
+					//debugTriangle.color[0].r = static_cast<float>((triangle.color0 & 0xFF0000) >> 16) / 255.0f;
+					//debugTriangle.color[0].g = static_cast<float>((triangle.color0 & 0xFF00) >> 8) / 255.0f;
+					//debugTriangle.color[0].b = static_cast<float>(triangle.color0 & 0xFF) / 255.0f;
+					//debugTriangle.position[0] = glm::vec3(static_cast<float>(triangle.pos0.x), static_cast<float>(triangle.pos0.y), static_cast<float>(triangle.pos0.z));
+					//debugTriangle.color[1].r = static_cast<float>((triangle.color1 & 0xFF0000) >> 16) / 255.0f;
+					//debugTriangle.color[1].g = static_cast<float>((triangle.color1 & 0xFF00) >> 8) / 255.0f;
+					//debugTriangle.color[1].b = static_cast<float>(triangle.color1 & 0xFF) / 255.0f;
+					//debugTriangle.position[1] = glm::vec3(static_cast<float>(triangle.pos1.x), static_cast<float>(triangle.pos1.y), static_cast<float>(triangle.pos1.z));
+					//debugTriangle.color[2].r = static_cast<float>((triangle.color2 & 0xFF0000) >> 16) / 255.0f;
+					//debugTriangle.color[2].g = static_cast<float>((triangle.color2 & 0xFF00) >> 8) / 255.0f;
+					//debugTriangle.color[2].b = static_cast<float>(triangle.color2 & 0xFF) / 255.0f;
+					//debugTriangle.position[2] = glm::vec3(static_cast<float>(triangle.pos2.x), static_cast<float>(triangle.pos2.y), static_cast<float>(triangle.pos2.z));
+					//debugInformation.triangles.push_back(std::move(debugTriangle));
 				}
 			}
 		}

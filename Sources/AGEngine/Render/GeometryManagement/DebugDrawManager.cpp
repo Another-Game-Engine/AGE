@@ -25,105 +25,116 @@ inline AGE::DebugDrawManager::SimpleVec3 convert(const glm::vec3 &v)
 
 namespace AGE
 {
-	void DebugDrawManager::draw3dQuad(const glm::vec3 &_a, const glm::vec3 &_b, const glm::vec3 &_c, const glm::vec3 &_d, const glm::vec3 &_color, bool _depthTest)
+	void DebugDrawManager::draw3dQuad(SimpleVec3 &&_a, SimpleVec3 &&_b, SimpleVec3 &&_c, SimpleVec3 &&_d, SimpleVec3 &&_color, bool _depthTest)
 	{
-		std::lock_guard<SpinLock> lock(_mutex);
-
 		if (_depthTest)
 		{
-			_debug3DlinesPointsDepth.push_back(convert(_a));
-			_debug3DlinesPointsDepth.push_back(convert(_b));
-			_debug3DlinesPointsDepth.push_back(convert(_c));
-			_debug3DlinesPointsDepth.push_back(convert(_c));
-			_debug3DlinesPointsDepth.push_back(convert(_d));
-			_debug3DlinesPointsDepth.push_back(convert(_d));
-			_debug3DlinesPointsDepth.push_back(convert(_a));
+			_debug3DlinesPointsDepth.push_back(_a);
+			_debug3DlinesPointsDepth.push_back(_b);
+			_debug3DlinesPointsDepth.push_back(_c);
+			_debug3DlinesPointsDepth.push_back(_c);
+			_debug3DlinesPointsDepth.push_back(_d);
+			_debug3DlinesPointsDepth.push_back(_d);
+			_debug3DlinesPointsDepth.push_back(_a);
 
-			_debug3DlinesColorDepth.push_back(convert(_color));
-			_debug3DlinesColorDepth.push_back(convert(_color));
-			_debug3DlinesColorDepth.push_back(convert(_color));
-			_debug3DlinesColorDepth.push_back(convert(_color));
-			_debug3DlinesColorDepth.push_back(convert(_color));
-			_debug3DlinesColorDepth.push_back(convert(_color));
-			_debug3DlinesColorDepth.push_back(convert(_color));
-			_debug3DlinesColorDepth.push_back(convert(_color));
+			_debug3DlinesColorDepth.push_back(_color);
+			_debug3DlinesColorDepth.push_back(_color);
+			_debug3DlinesColorDepth.push_back(_color);
+			_debug3DlinesColorDepth.push_back(_color);
+			_debug3DlinesColorDepth.push_back(_color);
+			_debug3DlinesColorDepth.push_back(_color);
+			_debug3DlinesColorDepth.push_back(_color);
+			_debug3DlinesColorDepth.push_back(_color);
 		}
 		else
 		{
-			_debug3DlinesPoints.push_back(convert(_a));
-			_debug3DlinesPoints.push_back(convert(_b));
-			_debug3DlinesPoints.push_back(convert(_b));
-			_debug3DlinesPoints.push_back(convert(_c));
-			_debug3DlinesPoints.push_back(convert(_c));
-			_debug3DlinesPoints.push_back(convert(_d));
-			_debug3DlinesPoints.push_back(convert(_d));
-			_debug3DlinesPoints.push_back(convert(_a));
+			_debug3DlinesPoints.push_back(_a);
+			_debug3DlinesPoints.push_back(_b);
+			_debug3DlinesPoints.push_back(_b);
+			_debug3DlinesPoints.push_back(_c);
+			_debug3DlinesPoints.push_back(_c);
+			_debug3DlinesPoints.push_back(_d);
+			_debug3DlinesPoints.push_back(_d);
+			_debug3DlinesPoints.push_back(_a);
 
-			_debug3DlinesColor.push_back(convert(_color));
-			_debug3DlinesColor.push_back(convert(_color));
-			_debug3DlinesColor.push_back(convert(_color));
-			_debug3DlinesColor.push_back(convert(_color));
-			_debug3DlinesColor.push_back(convert(_color));
-			_debug3DlinesColor.push_back(convert(_color));
-			_debug3DlinesColor.push_back(convert(_color));
-			_debug3DlinesColor.push_back(convert(_color));
+			_debug3DlinesColor.push_back(_color);
+			_debug3DlinesColor.push_back(_color);
+			_debug3DlinesColor.push_back(_color);
+			_debug3DlinesColor.push_back(_color);
+			_debug3DlinesColor.push_back(_color);
+			_debug3DlinesColor.push_back(_color);
+			_debug3DlinesColor.push_back(_color);
+			_debug3DlinesColor.push_back(_color);
 		}
+	}
+
+	void DebugDrawManager::draw3DLine(SimpleVec3 &&_start, SimpleVec3 &&_startColor, SimpleVec3 &&_end, SimpleVec3 &&_endColor, bool _depthTest)
+	{
+		if (_depthTest)
+		{
+			_debug3DlinesPointsDepth.push_back(_start);
+			_debug3DlinesPointsDepth.push_back(_end);
+
+			_debug3DlinesColorDepth.push_back(_startColor);
+			_debug3DlinesColorDepth.push_back(_endColor);
+		}
+		else
+		{
+			_debug3DlinesPoints.push_back(_start);
+			_debug3DlinesPoints.push_back(_end);
+
+			_debug3DlinesColor.push_back(_startColor);
+			_debug3DlinesColor.push_back(_endColor);
+		}
+	}
+	void DebugDrawManager::draw2DQuad(SimpleVec2 &&_a, SimpleVec2 &&_b, SimpleVec2 &&_c, SimpleVec2 &&_d, SimpleVec3 &&_color)
+	{
+		_debug2DlinesPoints.push_back(_a);
+		_debug2DlinesPoints.push_back(_b);
+		_debug2DlinesPoints.push_back(_b);
+		_debug2DlinesPoints.push_back(_c);
+		_debug2DlinesPoints.push_back(_c);
+		_debug2DlinesPoints.push_back(_d);
+		_debug2DlinesPoints.push_back(_d);
+		_debug2DlinesPoints.push_back(_a);
+
+		_debug2DlinesColor.push_back(_color);
+		_debug2DlinesColor.push_back(_color);
+		_debug2DlinesColor.push_back(_color);
+		_debug2DlinesColor.push_back(_color);
+		_debug2DlinesColor.push_back(_color);
+		_debug2DlinesColor.push_back(_color);
+		_debug2DlinesColor.push_back(_color);
+		_debug2DlinesColor.push_back(_color);
+	}
+
+	void DebugDrawManager::draw2DLine(SimpleVec2 &&_start, SimpleVec2 &&_end, SimpleVec3 &&_color)
+	{
+		_debug2DlinesPoints.push_back(_start);
+		_debug2DlinesPoints.push_back(_end);
+
+		_debug2DlinesColor.push_back(_color);
+		_debug2DlinesColor.push_back(_color);
+	}
+
+	void DebugDrawManager::draw3dQuad(const glm::vec3 &_a, const glm::vec3 &_b, const glm::vec3 &_c, const glm::vec3 &_d, const glm::vec3 &_color, bool _depthTest)
+	{
+		draw3dQuad(convert(_a), convert(_b), convert(_c), convert(_d), convert(_color), _depthTest);
 	}
 
 	void DebugDrawManager::draw3DLine(const glm::vec3 &_start, const glm::vec3 &_startColor, const glm::vec3 &_end, const glm::vec3 &_endColor, bool _depthTest)
 	{
-		std::lock_guard<SpinLock> lock(_mutex);
-
-		if (_depthTest)
-		{
-			_debug3DlinesPointsDepth.push_back(convert(_start));
-			_debug3DlinesPointsDepth.push_back(convert(_end));
-
-			_debug3DlinesColorDepth.push_back(convert(_startColor));
-			_debug3DlinesColorDepth.push_back(convert(_endColor));
-		}
-		else
-		{
-			_debug3DlinesPoints.push_back(convert(_start));
-			_debug3DlinesPoints.push_back(convert(_end));
-
-			_debug3DlinesColor.push_back(convert(_startColor));
-			_debug3DlinesColor.push_back(convert(_endColor));
-		}
+		draw3DLine(convert(_start), convert(_startColor), convert(_end), convert(_endColor), _depthTest);
 	}
 
 	void DebugDrawManager::draw2DQuad(const glm::vec2 &_a, const glm::vec2 &_b, const glm::vec2 &_c, const glm::vec2 &_d, const glm::vec3 &_color)
 	{
-		std::lock_guard<SpinLock> lock(_mutex);
-
-		_debug2DlinesPoints.push_back(convert(_a));
-		_debug2DlinesPoints.push_back(convert(_b));
-		_debug2DlinesPoints.push_back(convert(_b));
-		_debug2DlinesPoints.push_back(convert(_c));
-		_debug2DlinesPoints.push_back(convert(_c));
-		_debug2DlinesPoints.push_back(convert(_d));
-		_debug2DlinesPoints.push_back(convert(_d));
-		_debug2DlinesPoints.push_back(convert(_a));
-
-		_debug2DlinesColor.push_back(convert(_color));
-		_debug2DlinesColor.push_back(convert(_color));
-		_debug2DlinesColor.push_back(convert(_color));
-		_debug2DlinesColor.push_back(convert(_color));
-		_debug2DlinesColor.push_back(convert(_color));
-		_debug2DlinesColor.push_back(convert(_color));
-		_debug2DlinesColor.push_back(convert(_color));
-		_debug2DlinesColor.push_back(convert(_color));
+		draw2DQuad(convert(_a), convert(_b), convert(_c), convert(_d), convert(_color));
 	}
 
 	void DebugDrawManager::draw2DLine(const glm::vec2 &_start, const glm::vec2 &_end, const glm::vec3 &_color)
 	{
-		std::lock_guard<SpinLock> lock(_mutex);
-
-		_debug2DlinesPoints.push_back(convert(_start));
-		_debug2DlinesPoints.push_back(convert(_end));
-
-		_debug2DlinesColor.push_back(convert(_color));
-		_debug2DlinesColor.push_back(convert(_color));
+		draw2DLine(convert(_start), convert(_end), convert(_color));
 	}
 
 	void DebugDrawManager::renderBegin(std::shared_ptr<PaintingManager> paintingManager)
