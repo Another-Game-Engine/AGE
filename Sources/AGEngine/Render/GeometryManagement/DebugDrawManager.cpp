@@ -11,6 +11,18 @@
 #include <Threads/ThreadManager.hpp>
 #include <Threads/MainThread.hpp>
 
+inline AGE::DebugDrawManager::SimpleVec2 convert(const glm::vec2 &v)
+{
+	AGE::DebugDrawManager::SimpleVec2 r{ v.x, v.y };
+	return r;
+}
+
+inline AGE::DebugDrawManager::SimpleVec3 convert(const glm::vec3 &v)
+{
+	AGE::DebugDrawManager::SimpleVec3 r{ v.x, v.y, v.z };
+	return r;
+}
+
 namespace AGE
 {
 	void DebugDrawManager::draw3dQuad(const glm::vec3 &_a, const glm::vec3 &_b, const glm::vec3 &_c, const glm::vec3 &_d, const glm::vec3 &_color, bool _depthTest)
@@ -19,43 +31,42 @@ namespace AGE
 
 		if (_depthTest)
 		{
-			_debug3DlinesPointsDepth.push_back(_a);
-			_debug3DlinesPointsDepth.push_back(_b);
-			_debug3DlinesPointsDepth.push_back(_b);
-			_debug3DlinesPointsDepth.push_back(_c);
-			_debug3DlinesPointsDepth.push_back(_c);
-			_debug3DlinesPointsDepth.push_back(_d);
-			_debug3DlinesPointsDepth.push_back(_d);
-			_debug3DlinesPointsDepth.push_back(_a);
+			_debug3DlinesPointsDepth.push_back(convert(_a));
+			_debug3DlinesPointsDepth.push_back(convert(_b));
+			_debug3DlinesPointsDepth.push_back(convert(_c));
+			_debug3DlinesPointsDepth.push_back(convert(_c));
+			_debug3DlinesPointsDepth.push_back(convert(_d));
+			_debug3DlinesPointsDepth.push_back(convert(_d));
+			_debug3DlinesPointsDepth.push_back(convert(_a));
 
-			_debug3DlinesColorDepth.push_back(_color);
-			_debug3DlinesColorDepth.push_back(_color);
-			_debug3DlinesColorDepth.push_back(_color);
-			_debug3DlinesColorDepth.push_back(_color);
-			_debug3DlinesColorDepth.push_back(_color);
-			_debug3DlinesColorDepth.push_back(_color);
-			_debug3DlinesColorDepth.push_back(_color);
-			_debug3DlinesColorDepth.push_back(_color);
+			_debug3DlinesColorDepth.push_back(convert(_color));
+			_debug3DlinesColorDepth.push_back(convert(_color));
+			_debug3DlinesColorDepth.push_back(convert(_color));
+			_debug3DlinesColorDepth.push_back(convert(_color));
+			_debug3DlinesColorDepth.push_back(convert(_color));
+			_debug3DlinesColorDepth.push_back(convert(_color));
+			_debug3DlinesColorDepth.push_back(convert(_color));
+			_debug3DlinesColorDepth.push_back(convert(_color));
 		}
 		else
 		{
-			_debug3DlinesPoints.push_back(_a);
-			_debug3DlinesPoints.push_back(_b);
-			_debug3DlinesPoints.push_back(_b);
-			_debug3DlinesPoints.push_back(_c);
-			_debug3DlinesPoints.push_back(_c);
-			_debug3DlinesPoints.push_back(_d);
-			_debug3DlinesPoints.push_back(_d);
-			_debug3DlinesPoints.push_back(_a);
+			_debug3DlinesPoints.push_back(convert(_a));
+			_debug3DlinesPoints.push_back(convert(_b));
+			_debug3DlinesPoints.push_back(convert(_b));
+			_debug3DlinesPoints.push_back(convert(_c));
+			_debug3DlinesPoints.push_back(convert(_c));
+			_debug3DlinesPoints.push_back(convert(_d));
+			_debug3DlinesPoints.push_back(convert(_d));
+			_debug3DlinesPoints.push_back(convert(_a));
 
-			_debug3DlinesColor.push_back(_color);
-			_debug3DlinesColor.push_back(_color);
-			_debug3DlinesColor.push_back(_color);
-			_debug3DlinesColor.push_back(_color);
-			_debug3DlinesColor.push_back(_color);
-			_debug3DlinesColor.push_back(_color);
-			_debug3DlinesColor.push_back(_color);
-			_debug3DlinesColor.push_back(_color);
+			_debug3DlinesColor.push_back(convert(_color));
+			_debug3DlinesColor.push_back(convert(_color));
+			_debug3DlinesColor.push_back(convert(_color));
+			_debug3DlinesColor.push_back(convert(_color));
+			_debug3DlinesColor.push_back(convert(_color));
+			_debug3DlinesColor.push_back(convert(_color));
+			_debug3DlinesColor.push_back(convert(_color));
+			_debug3DlinesColor.push_back(convert(_color));
 		}
 	}
 
@@ -65,19 +76,19 @@ namespace AGE
 
 		if (_depthTest)
 		{
-			_debug3DlinesPointsDepth.push_back(_start);
-			_debug3DlinesPointsDepth.push_back(_end);
+			_debug3DlinesPointsDepth.push_back(convert(_start));
+			_debug3DlinesPointsDepth.push_back(convert(_end));
 
-			_debug3DlinesColorDepth.push_back(_startColor);
-			_debug3DlinesColorDepth.push_back(_endColor);
+			_debug3DlinesColorDepth.push_back(convert(_startColor));
+			_debug3DlinesColorDepth.push_back(convert(_endColor));
 		}
 		else
 		{
-			_debug3DlinesPoints.push_back(_start);
-			_debug3DlinesPoints.push_back(_end);
+			_debug3DlinesPoints.push_back(convert(_start));
+			_debug3DlinesPoints.push_back(convert(_end));
 
-			_debug3DlinesColor.push_back(_startColor);
-			_debug3DlinesColor.push_back(_endColor);
+			_debug3DlinesColor.push_back(convert(_startColor));
+			_debug3DlinesColor.push_back(convert(_endColor));
 		}
 	}
 
@@ -85,34 +96,34 @@ namespace AGE
 	{
 		std::lock_guard<SpinLock> lock(_mutex);
 
-		_debug2DlinesPoints.push_back(_a);
-		_debug2DlinesPoints.push_back(_b);
-		_debug2DlinesPoints.push_back(_b);
-		_debug2DlinesPoints.push_back(_c);
-		_debug2DlinesPoints.push_back(_c);
-		_debug2DlinesPoints.push_back(_d);
-		_debug2DlinesPoints.push_back(_d);
-		_debug2DlinesPoints.push_back(_a);
+		_debug2DlinesPoints.push_back(convert(_a));
+		_debug2DlinesPoints.push_back(convert(_b));
+		_debug2DlinesPoints.push_back(convert(_b));
+		_debug2DlinesPoints.push_back(convert(_c));
+		_debug2DlinesPoints.push_back(convert(_c));
+		_debug2DlinesPoints.push_back(convert(_d));
+		_debug2DlinesPoints.push_back(convert(_d));
+		_debug2DlinesPoints.push_back(convert(_a));
 
-		_debug2DlinesColor.push_back(_color);
-		_debug2DlinesColor.push_back(_color);
-		_debug2DlinesColor.push_back(_color);
-		_debug2DlinesColor.push_back(_color);
-		_debug2DlinesColor.push_back(_color);
-		_debug2DlinesColor.push_back(_color);
-		_debug2DlinesColor.push_back(_color);
-		_debug2DlinesColor.push_back(_color);
+		_debug2DlinesColor.push_back(convert(_color));
+		_debug2DlinesColor.push_back(convert(_color));
+		_debug2DlinesColor.push_back(convert(_color));
+		_debug2DlinesColor.push_back(convert(_color));
+		_debug2DlinesColor.push_back(convert(_color));
+		_debug2DlinesColor.push_back(convert(_color));
+		_debug2DlinesColor.push_back(convert(_color));
+		_debug2DlinesColor.push_back(convert(_color));
 	}
 
 	void DebugDrawManager::draw2DLine(const glm::vec2 &_start, const glm::vec2 &_end, const glm::vec3 &_color)
 	{
 		std::lock_guard<SpinLock> lock(_mutex);
 
-		_debug2DlinesPoints.push_back(_start);
-		_debug2DlinesPoints.push_back(_end);
+		_debug2DlinesPoints.push_back(convert(_start));
+		_debug2DlinesPoints.push_back(convert(_end));
 
-		_debug2DlinesColor.push_back(_color);
-		_debug2DlinesColor.push_back(_color);
+		_debug2DlinesColor.push_back(convert(_color));
+		_debug2DlinesColor.push_back(convert(_color));
 	}
 
 	void DebugDrawManager::renderBegin(std::shared_ptr<PaintingManager> paintingManager)
@@ -153,8 +164,8 @@ namespace AGE
 			Singleton<SimpleGeometryManager>::getInstance()->debug2Dlines.verticesKey = _line2DPainter->add_vertices(_debug2DlinesPoints.size(), indices.size());
 			auto vertices = _line2DPainter->get_vertices(Singleton<SimpleGeometryManager>::getInstance()->debug2Dlines.verticesKey);
 
-			vertices->set_data<glm::vec2>(_debug2DlinesPoints, StringID("position", 0x4cbf3a26fca1d74a));
-			vertices->set_data<glm::vec3>(_debug2DlinesColor, StringID("color", 0x77f5c18e246c6638));
+			vertices->set_data<SimpleVec2>(_debug2DlinesPoints, StringID("position", 0x4cbf3a26fca1d74a));
+			vertices->set_data<SimpleVec3>(_debug2DlinesColor, StringID("color", 0x77f5c18e246c6638));
 			vertices->set_indices(indices);
 
 		}
@@ -188,8 +199,8 @@ namespace AGE
 			Singleton<SimpleGeometryManager>::getInstance()->debug3Dlines.verticesKey = _line3DPainter->add_vertices(_debug3DlinesPoints.size(), indices.size());
 			auto vertices = _line3DPainter->get_vertices(Singleton<SimpleGeometryManager>::getInstance()->debug3Dlines.verticesKey);
 
-			vertices->set_data<glm::vec3>(_debug3DlinesPoints, StringID("position", 0x4cbf3a26fca1d74a));
-			vertices->set_data<glm::vec3>(_debug3DlinesColor, StringID("color", 0x77f5c18e246c6638));
+			vertices->set_data<SimpleVec3>(_debug3DlinesPoints, StringID("position", 0x4cbf3a26fca1d74a));
+			vertices->set_data<SimpleVec3>(_debug3DlinesColor, StringID("color", 0x77f5c18e246c6638));
 			vertices->set_indices(indices);
 
 		}
@@ -223,8 +234,8 @@ namespace AGE
 			Singleton<SimpleGeometryManager>::getInstance()->debug3DlinesDepth.verticesKey = _line3DPainterDepth->add_vertices(_debug3DlinesPointsDepth.size(), indices.size());
 			auto vertices = _line3DPainterDepth->get_vertices(Singleton<SimpleGeometryManager>::getInstance()->debug3DlinesDepth.verticesKey);
 
-			vertices->set_data<glm::vec3>(_debug3DlinesPointsDepth, StringID("position", 0x4cbf3a26fca1d74a));
-			vertices->set_data<glm::vec3>(_debug3DlinesColorDepth, StringID("color", 0x77f5c18e246c6638));
+			vertices->set_data<SimpleVec3>(_debug3DlinesPointsDepth, StringID("position", 0x4cbf3a26fca1d74a));
+			vertices->set_data<SimpleVec3>(_debug3DlinesColorDepth, StringID("color", 0x77f5c18e246c6638));
 			vertices->set_indices(indices);
 
 		}
