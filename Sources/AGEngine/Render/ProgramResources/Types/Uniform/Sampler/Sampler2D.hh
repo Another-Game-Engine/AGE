@@ -1,13 +1,13 @@
 #pragma once
 
-# include <Render/ProgramResources/AProgramResources.hh>
-# include <memory>
+#include <Render/ProgramResources/IProgramResources.hh>
+#include <memory>
 
 namespace AGE
 {
 	class Texture2D;
 
-	class Sampler2D : public AProgramResources
+	class Sampler2D : public IProgramResources
 	{
 	public:
 		Sampler2D(GLint id, std::string &&name);

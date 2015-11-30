@@ -22,7 +22,7 @@ std::make_pair(GL_FLOAT_VEC3, LAMBDA_PROTO\
 }), \
 std::make_pair(GL_FLOAT_MAT4, LAMBDA_PROTO\
 { \
-	return isArray == false ? std::static_pointer_cast<AProgramResources>(std::make_shared<Mat4>(glm::mat4(1.0f), id, std::move(name))) : std::static_pointer_cast<AProgramResources>(std::make_shared<Mat4Array255>(id, std::move(name))); \
+	return isArray == false ? std::static_pointer_cast<IProgramResources>(std::make_shared<Mat4>(glm::mat4(1.0f), id, std::move(name))) : std::static_pointer_cast<IProgramResources>(std::make_shared<Mat4Array255>(id, std::move(name))); \
 }), \
 std::make_pair(GL_FLOAT, LAMBDA_PROTO\
 { \

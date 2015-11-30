@@ -5,21 +5,21 @@
 namespace AGE
 {
 	Sampler3D::Sampler3D(GLint id, std::string &&name) :
-		AProgramResources(id, std::move(name), GL_SAMPLER_CUBE),
+		IProgramResources(id, std::move(name), GL_SAMPLER_CUBE),
 		_texture(nullptr)
 	{
 		glUniform1i(_id, _id);
 	}
 
 	Sampler3D::Sampler3D(Sampler3D &&move) :
-		AProgramResources(std::move(move)),
+		IProgramResources(std::move(move)),
 		_texture(std::move(_texture))
 	{
 
 	}
 
 	Sampler3D::Sampler3D(Sampler3D const &copy) :
-		AProgramResources(copy),
+		IProgramResources(copy),
 		_texture(copy._texture)
 	{
 
@@ -44,7 +44,7 @@ namespace AGE
 
 	void Sampler3D::print() const
 	{
-		std::cout << "uniform sampler3D " << _name << ";";
+		std::cout << "uniform sampler3D " << _name.str() << ";";
 		std::cout << std::endl;
 	}
 

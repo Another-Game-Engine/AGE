@@ -8,10 +8,10 @@
 
 namespace AGE
 {
-	Program::Program(std::string &&name, std::vector<std::shared_ptr<UnitProg>> const &u) :
+	Program::Program(const StringID &name, std::vector<std::shared_ptr<UnitProg>> const &u) :
 		_unitsProg(u),
 		_resources_factory(*this),
-		_name(std::move(name)),
+		_name(name),
 		_compiled(false),
 		_id(0)
 	{
@@ -57,7 +57,7 @@ namespace AGE
 		return (*this);
 	}
 
-	Key<ProgramResource> & Program::get_key(std::string const &name)
+	Key<ProgramResource> & Program::get_key(StringID const &name)
 	{
 		for (auto index = 0; index < _program_resources.size(); ++index) {
 			if (name == _program_resources[index]->name()) {
@@ -163,7 +163,7 @@ namespace AGE
 		return *this;
 	}
 
-	bool Program::coherent_attributes(std::vector<std::pair<GLenum, std::string>> const &coherent)
+	bool Program::coherent_attributes(std::vector<std::pair<GLenum, StringID>> const &coherent)
 	{
 		for (auto &resource : _program_resources) {
 			if (resource->type() == GL_PROGRAM_INPUT) {
@@ -229,7 +229,7 @@ namespace AGE
 		return true;
 	}
 
-	std::string const & Program::name() const
+	StringID const & Program::name() const
 	{
 		return (_name);
 	}
@@ -247,7 +247,7 @@ namespace AGE
 		return (!(*this == p));
 	}
 
-	std::shared_ptr<IProgramResources> Program::get_resource_interface(std::string const &name)
+	std::shared_ptr<IProgramResources> Program::get_resource_interface(StringID const &name)
 	{
 		for (size_t index = 0; index < _program_resources.size(); ++index) {
 			if (name == _program_resources[index]->name()) {

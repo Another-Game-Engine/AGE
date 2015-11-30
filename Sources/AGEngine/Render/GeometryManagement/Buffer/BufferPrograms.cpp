@@ -1,4 +1,5 @@
 #include <Utils/Profiler.hpp>
+#include <Utils/StringID.hpp>
 #include <Render/GeometryManagement/Buffer/BufferPrograms.hh>
 #include <Render/Buffer/VertexBuffer.hh>
 #include <Render/Buffer/IndexBuffer.hh>
@@ -8,9 +9,9 @@
 
 namespace AGE
 {
-	BufferPrograms::BufferPrograms(std::vector<std::pair<GLenum, std::string>> const &types) :
+	BufferPrograms::BufferPrograms(std::vector<std::pair<GLenum, StringID>> const &types) :
 		_types(types),
-		_indices_buffer(std::string("indices"), std::make_unique<IndexBuffer>())
+		_indices_buffer(StringID("indices", 0x144d56ffb313be92), std::make_unique<IndexBuffer>())
 	{
 		_buffers.reserve(_types.size());
 		_vertex_array.bind();
@@ -19,7 +20,7 @@ namespace AGE
 			auto &iterator = available_types.find(type.first);
 			if (iterator != available_types.end()) {
 				auto &a = iterator->second;
-				_buffers.emplace_back(std::make_shared<Buffer>(std::string(type.second), std::make_unique<VertexBuffer>()));
+				_buffers.emplace_back(std::make_shared<Buffer>(StringID(type.second), std::make_unique<VertexBuffer>()));
 			}
 		}
 		_indices_buffer.bind();
@@ -91,7 +92,7 @@ namespace AGE
 		return (*this);
 	}
 
-	std::vector<std::pair<GLenum, std::string>> const & BufferPrograms::get_types() const
+	std::vector<std::pair<GLenum, StringID>> const & BufferPrograms::get_types() const
 	{
 		return (_types);
 	}

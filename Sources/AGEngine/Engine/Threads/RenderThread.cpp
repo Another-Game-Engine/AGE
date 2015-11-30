@@ -111,8 +111,8 @@ namespace AGE
 			return;
 		}
 
-		auto type = std::make_pair<GLenum, std::string>(GL_FLOAT_VEC3, "position");
-		std::vector<std::pair < GLenum, std::string > > types;
+		auto type = std::make_pair<GLenum, StringID>(GL_FLOAT_VEC3, StringID("position", 0x4cbf3a26fca1d74a));
+		std::vector<std::pair < GLenum, StringID > > types;
 		types.push_back(type);
 
 		if (!paintingManager->has_painter(types))
@@ -128,7 +128,7 @@ namespace AGE
 		SimpleGeometry::cubeMesh.verticesKey = painterPtr->add_vertices(positions.size(), indices.size());
 		auto vertices = painterPtr->get_vertices(SimpleGeometry::cubeMesh.verticesKey);
 
-		vertices->set_data<glm::vec3>(positions, std::string("position"));
+		vertices->set_data<glm::vec3>(positions, StringID("position", 0x4cbf3a26fca1d74a));
 		vertices->set_indices(indices);
 
 		v = SimpleGeometry::cubeMesh.verticesKey;
@@ -144,10 +144,10 @@ namespace AGE
 		if (debug2DlinesPoints.size() != 0)
 		{
 			std::vector<unsigned int> indices;
-			auto type = std::make_pair<GLenum, std::string>(GL_FLOAT_VEC2, "position");
-			std::vector<std::pair < GLenum, std::string > > types;
+			auto type = std::make_pair<GLenum, StringID>(GL_FLOAT_VEC2, StringID("position", 0x4cbf3a26fca1d74a));
+			std::vector<std::pair < GLenum, StringID > > types;
 			types.push_back(type);
-			type = std::make_pair<GLenum, std::string>(GL_FLOAT_VEC3, "color");
+			type = std::make_pair<GLenum, StringID>(GL_FLOAT_VEC3, StringID("color", 0x77f5c18e246c6638));
 			types.push_back(type);
 
 			indices.resize(debug2DlinesPoints.size());
@@ -170,8 +170,8 @@ namespace AGE
 			Singleton<SimpleGeometryManager>::getInstance()->debug2Dlines.verticesKey = line2DPainter->add_vertices(debug2DlinesPoints.size(), indices.size());
 			auto vertices = line2DPainter->get_vertices(Singleton<SimpleGeometryManager>::getInstance()->debug2Dlines.verticesKey);
 
-			vertices->set_data<glm::vec2>(debug2DlinesPoints, std::string("position"));
-			vertices->set_data<glm::vec3>(debug2DlinesColor, std::string("color"));
+			vertices->set_data<glm::vec2>(debug2DlinesPoints, StringID("position", 0x4cbf3a26fca1d74a));
+			vertices->set_data<glm::vec3>(debug2DlinesColor, StringID("color", 0x77f5c18e246c6638));
 			vertices->set_indices(indices);
 
 			debug2DlinesPoints.clear();
@@ -180,10 +180,10 @@ namespace AGE
 		if (debug3DlinesPoints.size() != 0)
 		{
 			std::vector<unsigned int> indices;
-			auto type = std::make_pair<GLenum, std::string>(GL_FLOAT_VEC3, "position");
-			std::vector<std::pair < GLenum, std::string > > types;
+			auto type = std::make_pair<GLenum, StringID>(GL_FLOAT_VEC3, StringID("position", 0x4cbf3a26fca1d74a));
+			std::vector<std::pair < GLenum, StringID > > types;
 			types.push_back(type);
-			type = std::make_pair<GLenum, std::string>(GL_FLOAT_VEC3, "color");
+			type = std::make_pair<GLenum, StringID>(GL_FLOAT_VEC3, StringID("color", 0x77f5c18e246c6638));
 			types.push_back(type);
 
 			indices.resize(debug3DlinesPoints.size());
@@ -206,8 +206,8 @@ namespace AGE
 			Singleton<SimpleGeometryManager>::getInstance()->debug3Dlines.verticesKey = line3DPainter->add_vertices(debug3DlinesPoints.size(), indices.size());
 			auto vertices = line3DPainter->get_vertices(Singleton<SimpleGeometryManager>::getInstance()->debug3Dlines.verticesKey);
 
-			vertices->set_data<glm::vec3>(debug3DlinesPoints, std::string("position"));
-			vertices->set_data<glm::vec3>(debug3DlinesColor, std::string("color"));
+			vertices->set_data<glm::vec3>(debug3DlinesPoints, StringID("position", 0x4cbf3a26fca1d74a));
+			vertices->set_data<glm::vec3>(debug3DlinesColor, StringID("color", 0x77f5c18e246c6638));
 			vertices->set_indices(indices);
 
 			debug3DlinesPoints.clear();
@@ -216,10 +216,10 @@ namespace AGE
 		if (debug3DlinesPointsDepth.size() != 0)
 		{
 			std::vector<unsigned int> indices;
-			auto type = std::make_pair<GLenum, std::string>(GL_FLOAT_VEC3, "position");
-			std::vector<std::pair < GLenum, std::string > > types;
+			auto type = std::make_pair<GLenum, StringID>(GL_FLOAT_VEC3, StringID("position", 0x4cbf3a26fca1d74a));
+			std::vector<std::pair < GLenum, StringID > > types;
 			types.push_back(type);
-			type = std::make_pair<GLenum, std::string>(GL_FLOAT_VEC3, "color");
+			type = std::make_pair<GLenum, StringID>(GL_FLOAT_VEC3, StringID("color", 0x77f5c18e246c6638));
 			types.push_back(type);
 
 			indices.resize(debug3DlinesPointsDepth.size());
@@ -242,8 +242,8 @@ namespace AGE
 			Singleton<SimpleGeometryManager>::getInstance()->debug3DlinesDepth.verticesKey = line3DPainterDepth->add_vertices(debug3DlinesPointsDepth.size(), indices.size());
 			auto vertices = line3DPainterDepth->get_vertices(Singleton<SimpleGeometryManager>::getInstance()->debug3DlinesDepth.verticesKey);
 
-			vertices->set_data<glm::vec3>(debug3DlinesPointsDepth, std::string("position"));
-			vertices->set_data<glm::vec3>(debug3DlinesColorDepth, std::string("color"));
+			vertices->set_data<glm::vec3>(debug3DlinesPointsDepth, StringID("position", 0x4cbf3a26fca1d74a));
+			vertices->set_data<glm::vec3>(debug3DlinesColorDepth, StringID("color", 0x77f5c18e246c6638));
 			vertices->set_indices(indices);
 
 			debug3DlinesPointsDepth.clear();
@@ -275,8 +275,8 @@ namespace AGE
 			return;
 		}
 
-		auto type = std::make_pair<GLenum, std::string>(GL_FLOAT_VEC2, "position");
-		std::vector<std::pair < GLenum, std::string > > types;
+		auto type = std::make_pair<GLenum, StringID>(GL_FLOAT_VEC2, StringID("position", 0x4cbf3a26fca1d74a));
+		std::vector<std::pair < GLenum, StringID > > types;
 		types.push_back(type);
 
 		if (!paintingManager->has_painter(types))
@@ -292,7 +292,7 @@ namespace AGE
 		SimpleGeometry::quadMesh.verticesKey = painterPtr->add_vertices(positions.size(), indices.size());
 		auto vertices = painterPtr->get_vertices(SimpleGeometry::quadMesh.verticesKey);
 
-		vertices->set_data<glm::vec2>(positions, std::string("position"));
+		vertices->set_data<glm::vec2>(positions, StringID("position", 0x4cbf3a26fca1d74a));
 		vertices->set_indices(indices);
 
 		v = SimpleGeometry::quadMesh.verticesKey;
@@ -317,8 +317,8 @@ namespace AGE
 
 		SimpleGeometry::generateIcoSphere(recursion, positions, indices);
 
-		auto type = std::make_pair<GLenum, std::string>(GL_FLOAT_VEC3, "position");
-		std::vector<std::pair < GLenum, std::string > > types;
+		auto type = std::make_pair<GLenum, StringID>(GL_FLOAT_VEC3, StringID("position", 0x4cbf3a26fca1d74a));
+		std::vector<std::pair < GLenum, StringID > > types;
 		types.push_back(type);
 
 		if (!paintingManager->has_painter(types))
@@ -334,7 +334,7 @@ namespace AGE
 		SimpleGeometry::icosphereMeshes[recursion].verticesKey = painterPtr->add_vertices(positions.size(), indices.size());
 		auto vertices = painterPtr->get_vertices(SimpleGeometry::icosphereMeshes[recursion].verticesKey);
 
-		vertices->set_data<glm::vec3>(positions, std::string("position"));
+		vertices->set_data<glm::vec3>(positions, StringID("position", 0x4cbf3a26fca1d74a));
 		vertices->set_indices(indices);
 
 		v = SimpleGeometry::icosphereMeshes[recursion].verticesKey;

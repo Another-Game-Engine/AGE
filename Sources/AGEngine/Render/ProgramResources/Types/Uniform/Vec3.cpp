@@ -4,21 +4,21 @@
 namespace AGE
 {
 	Vec3::Vec3(glm::vec3 const &value, GLint id, std::string &&name) :
-		AProgramResources(id, std::move(name), GL_UNIFORM),
+		IProgramResources(id, std::move(name), GL_UNIFORM),
 		_value(value)
 	{
 
 	}
 
 	Vec3::Vec3(Vec3 &&move) :
-		AProgramResources(std::move(move)),
+		IProgramResources(std::move(move)),
 		_value(move._value)
 	{
 
 	}
 
 	Vec3::Vec3(Vec3 const &copy) :
-		AProgramResources(copy),
+		IProgramResources(copy),
 		_value(copy._value)
 	{
 	}
@@ -51,7 +51,7 @@ namespace AGE
 
 	void Vec3::print() const
 	{
-		std::cout << "uniform vec3 " << _name << ";";
+		std::cout << "uniform vec3 " << _name.str() << ";";
 		std::cout << std::endl;
 	}
 }

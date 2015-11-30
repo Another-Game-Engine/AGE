@@ -1,11 +1,12 @@
 #include <Render/ProgramResources/Types/Attribute.hh>
 #include <Render/GeometryManagement/Buffer/Buffer.hh>
 #include <iostream>
+#include <Utils/StringID.hpp>
 
 namespace AGE
 {
-	Attribute::Attribute(GLint index, GLuint location, std::string &&name, GlType const &type) :
-		AProgramResources(index, std::move(name), GL_PROGRAM_INPUT),
+	Attribute::Attribute(GLint index, GLuint location, const StringID &name, GlType const &type) :
+		IProgramResources(index, name, GL_PROGRAM_INPUT),
 		_location(location),
 		_available_type(type)
 	{
@@ -13,14 +14,14 @@ namespace AGE
 	}
 
 	Attribute::Attribute(Attribute &&move) :
-		AProgramResources(std::move(move)),
+		IProgramResources(std::move(move)),
 		_available_type(std::move(move._available_type))
 	{
 
 	}
 
 	Attribute::Attribute(Attribute const &copy) :
-		AProgramResources(copy),
+		IProgramResources(copy),
 		_available_type(copy._available_type)
 	{
 
@@ -49,7 +50,7 @@ namespace AGE
 
 	void Attribute::print() const
 	{
-		std::cout << "attribute (location = " << _id << ") " << _available_type.name << " " << _name << ";";
+		std::cout << "attribute (location = " << _id << ") " << _available_type.name << " " << _name.str() << ";";
 		std::cout << std::endl;
 	}
 
@@ -59,12 +60,12 @@ namespace AGE
 		return *this;
 	}
 
-	bool Attribute::operator==(std::pair<GLenum, std::string> const &p) const
+	bool Attribute::operator==(std::pair<GLenum, StringID> const &p) const
 	{
 		return (_available_type == p.first && _name == p.second);
 	}
 
-	bool Attribute::operator!=(std::pair<GLenum, std::string> const &p) const
+	bool Attribute::operator!=(std::pair<GLenum, StringID> const &p) const
 	{
 		return (!(*this == p));
 	}

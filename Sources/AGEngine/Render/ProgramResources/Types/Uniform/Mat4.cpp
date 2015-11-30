@@ -5,21 +5,21 @@
 namespace AGE
 {
 	Mat4::Mat4(glm::mat4 const &value, GLint id, std::string &&name) :
-		AProgramResources(id, std::move(name), GL_UNIFORM),
+		IProgramResources(id, std::move(name), GL_UNIFORM),
 		_value(value)
 	{
 
 	}
 
 	Mat4::Mat4(Mat4 &&move) :
-		AProgramResources(std::move(move)),
+		IProgramResources(std::move(move)),
 		_value(move._value)
 	{
 
 	}
 
 	Mat4::Mat4(Mat4 const &copy) :
-		AProgramResources(copy),
+		IProgramResources(copy),
 		_value(copy._value)
 	{
 
@@ -53,7 +53,7 @@ namespace AGE
 
 	void Mat4::print() const
 	{
-		std::cout << "uniform mat4 " << _name << ";";
+		std::cout << "uniform mat4 " << _name.str() << ";";
 		std::cout << std::endl;
 	}
 }

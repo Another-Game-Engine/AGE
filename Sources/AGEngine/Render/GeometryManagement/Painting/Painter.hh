@@ -1,6 +1,5 @@
 #pragma once
 
-#include <string>
 #include <Utils/OpenGL.hh>
 #include <Utils/MemoryPool.hpp>
 #include <memory>
@@ -11,19 +10,21 @@
 #include <Render/GeometryManagement/Buffer/BufferPrograms.hh>
 #include <Utils/SpinLock.hpp>
 
+class StringID;
+
 namespace AGE
 {
 	class Painter
 	{
 	public:
-		Painter(std::vector<std::pair<GLenum, std::string>> const &types);
+		Painter(std::vector<std::pair<GLenum, StringID>> const &types);
 		Painter(Painter &&move);
 		~Painter() = default;
 		Painter(Painter const &) = default;
 
 	public:
 		bool coherent(std::shared_ptr<Program> const &prog) const;
-		bool coherent(std::vector<std::pair<GLenum, std::string>> const &types) const;
+		bool coherent(std::vector<std::pair<GLenum, StringID>> const &types) const;
 		Key<Vertices> add_vertices(size_t nbrVertex, size_t nbrIndices);
 
 		Painter &remove_vertices(Key<Vertices> &key);

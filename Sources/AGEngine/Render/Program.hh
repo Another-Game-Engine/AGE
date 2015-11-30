@@ -6,6 +6,7 @@
 #include <Utils/Key.hh>
 #include <Render/ProgramResources/Factory/ProgramResourcesFactory.hh>
 #include <Utils/Debug.hpp>
+#include <Utils/StringID.hpp>
 
 namespace AGE
 {
@@ -16,7 +17,7 @@ namespace AGE
 	class Program
 	{
 	public:
-		Program(std::string &&name, std::vector<std::shared_ptr<UnitProg>> const &units);
+		Program(const StringID &name, std::vector<std::shared_ptr<UnitProg>> const &units);
 		Program(Program const &copy) = delete;
 		Program(Program &&move);
 		~Program();
@@ -56,19 +57,19 @@ namespace AGE
 		};
 
 	public:
-		std::string const &name() const;
+		StringID const &name() const;
 		GLuint id() const;
-		Key<ProgramResource> &get_key(std::string const &name);
+		Key<ProgramResource> &get_key(StringID const &name);
 		template <typename type_t> ResourceHandle<type_t> get_resource(Key<ProgramResource> const &key);
-		template <typename type_t> ResourceHandle<type_t> get_resource(std::string const &name);
-		std::shared_ptr<IProgramResources> get_resource_interface(std::string const &name);
+		template <typename type_t> ResourceHandle<type_t> get_resource(StringID const &name);
+		std::shared_ptr<IProgramResources> get_resource_interface(StringID const &name);
 		bool has_resource(Key<ProgramResource> const &key);
 		Program const &use() const;
 		Program &update();
 		Program const &print_resources() const;
 		size_t nbr_resources() const;
 		Program &set_attributes(BufferPrograms const &buffers);
-		bool coherent_attributes(std::vector<std::pair<GLenum, std::string>> const &coherent);
+		bool coherent_attributes(std::vector<std::pair<GLenum, StringID>> const &coherent);
 		bool compile();
 		void destroy();
 		inline bool isCompiled() { return _compiled; }
@@ -82,7 +83,7 @@ namespace AGE
 		std::vector<std::shared_ptr<UnitProg>> _unitsProg;
 		ProgramResourcesFactory _resources_factory;
 		GLuint _id;
-		std::string const _name;
+		StringID const _name;
 		bool _compiled;
 
 #ifdef AGE_DEBUG
@@ -93,7 +94,7 @@ namespace AGE
 	};
 
 	template <typename type_t>
-	Program::ResourceHandle<type_t> Program::get_resource(std::string const &name)
+	Program::ResourceHandle<type_t> Program::get_resource(StringID const &name)
 	{
 		for (size_t index = 0; index < _program_resources.size(); ++index)
 		{

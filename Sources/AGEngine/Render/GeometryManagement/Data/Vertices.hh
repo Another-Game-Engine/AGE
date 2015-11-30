@@ -5,6 +5,7 @@
 #include <stdint.h>
 #include <vector>
 #include <memory>
+#include <Utils/StringID.hpp>
 
 namespace AGE
 {
@@ -13,7 +14,7 @@ namespace AGE
 	class Vertices
 	{
 	public:
-		Vertices(std::vector<std::pair<GLenum, std::string>> const &types, size_t nbrVertex, size_t nbrIndices, size_t offset);
+		Vertices(std::vector<std::pair<GLenum, StringID>> const &types, size_t nbrVertex, size_t nbrIndices, size_t offset);
 		Vertices(Vertices const &copy);
 		Vertices(Vertices &&move);
 
@@ -21,14 +22,14 @@ namespace AGE
 		size_t nbr_indices() const;
 		size_t nbr_vertex() const;
 		size_t nbr_buffer() const;
-		std::pair<GLenum, std::string> get_type(size_t index) const;
-		std::vector<uint8_t> &&transfer_data(std::string const &attribute);
+		std::pair<GLenum, StringID> get_type(size_t index) const;
+		std::vector<uint8_t> &&transfer_data(StringID const &attribute);
 		std::vector<uint8_t> &&transfer_indices_data();
 		template <typename type_t> type_t const *get_data(size_t index, size_t &size) const;
-		template <typename type_t> bool set_data(std::vector<type_t> const &data, std::string const &attribute);
+		template <typename type_t> bool set_data(std::vector<type_t> const &data, StringID const &attribute);
 		unsigned int const *get_indices(size_t &size) const;
 		void set_indices(std::vector<unsigned int> const &data);
-		void set_block_memory(std::shared_ptr<BlockMemory> const &blockMemory, std::string const &attribute);
+		void set_block_memory(std::shared_ptr<BlockMemory> const &blockMemory, StringID const &attribute);
 		void set_indices_block_memory(std::shared_ptr<BlockMemory> const &blockMemory);
 		void remove();
 		void reset(size_t o);
@@ -38,10 +39,10 @@ namespace AGE
 		size_t _offset;
 		size_t _nbr_indices;
 		size_t _nbr_vertex;
-		std::vector<std::pair<GLenum, std::string>> _types;
-		std::vector<std::pair<std::string, std::vector<uint8_t>>> _data;
+		std::vector<std::pair<GLenum, StringID>> _types;
+		std::vector<std::pair<StringID, std::vector<uint8_t>>> _data;
 		std::vector<uint8_t> _indices_data;
-		std::vector<std::pair<std::string, std::weak_ptr<BlockMemory>>> _block_memories;
+		std::vector<std::pair<StringID, std::weak_ptr<BlockMemory>>> _block_memories;
 		std::weak_ptr<BlockMemory> _indices_block_memory;
 	};
 
@@ -60,7 +61,7 @@ namespace AGE
 	}
 
 	template <typename type_t>
-	bool Vertices::set_data(std::vector<type_t> const &data, std::string const &attribute)
+	bool Vertices::set_data(std::vector<type_t> const &data, StringID const &attribute)
 	{
 		std::vector<uint8_t> tmp(data.size() * sizeof(type_t));
 

@@ -50,9 +50,9 @@ namespace AGE
 		auto shaderPath = confManager->getConfiguration<std::string>("ShadersPath");
 		// you have to set shader directory in configuration path
 		AGE_ASSERT(shaderPath != nullptr);
-		auto vertexShaderPath = shaderPath->getValue() + DEFERRED_SHADING_BUFFERING_VERTEX;
-		auto fragmentShaderPath = shaderPath->getValue() + DEFERRED_SHADING_BUFFERING_FRAG;
-		_programs[PROGRAM_SKYBOX] = std::make_shared<Program>(Program(std::string("program_skybox"),
+		std::string vertexShaderPath = shaderPath->getValue() + DEFERRED_SHADING_BUFFERING_VERTEX;
+		std::string fragmentShaderPath = shaderPath->getValue() + DEFERRED_SHADING_BUFFERING_FRAG;
+		_programs[PROGRAM_SKYBOX] = std::make_shared<Program>(Program(StringID("program_skybox", 0x0f7ae4250951bece),
 		{
 			std::make_shared<UnitProg>(vertexShaderPath, GL_VERTEX_SHADER),
 			std::make_shared<UnitProg>(fragmentShaderPath, GL_FRAGMENT_SHADER)
@@ -86,10 +86,10 @@ namespace AGE
 
 			// @PROUT
 			// TODO : Pass this infos as properties !
-			_programs[PROGRAM_SKYBOX]->get_resource<Mat4>("projection").set(infos.cameraInfos.data.projection);
-			_programs[PROGRAM_SKYBOX]->get_resource<Mat4>("view").set(infos.cameraInfos.view);
-			_programs[PROGRAM_SKYBOX]->get_resource<Sampler3D>("skybox").set(_spaceSkybox/*infos.cameraInfos.data.texture*/);
-			_programs[PROGRAM_SKYBOX]->get_resource<Vec3>("lighting").set(_lighting);
+			_programs[PROGRAM_SKYBOX]->get_resource<Mat4>(StringID("projection", 0xe6cb463920c97e60)).set(infos.cameraInfos.data.projection);
+			_programs[PROGRAM_SKYBOX]->get_resource<Mat4>(StringID("view", 0xfe46f400c6b86658)).set(infos.cameraInfos.view);
+			_programs[PROGRAM_SKYBOX]->get_resource<Sampler3D>(StringID("skybox", 0x6158f98e0f0f6703)).set(_spaceSkybox/*infos.cameraInfos.data.texture*/);
+			_programs[PROGRAM_SKYBOX]->get_resource<Vec3>(StringID("lighting", 0xbdb1db35f64f56c9)).set(_lighting);
 		}
 		
 		auto painter = _painterManager->get_painter(_painterCube);

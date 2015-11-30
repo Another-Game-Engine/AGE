@@ -4,13 +4,14 @@
 # include <Render/Buffer/IBuffer.hh>
 # include <Render/ProgramResources/Types/ProgramResourcesType.hh>
 # include <memory>
+#include <Utils/StringID.hpp>
 
 namespace AGE
 {
 	class Buffer
 	{
 	public:
-		Buffer(std::string &&name, std::unique_ptr<IBuffer> &&buffer);
+		Buffer(const StringID &name, std::unique_ptr<IBuffer> &&buffer);
 		Buffer(Buffer const &copy) = delete;
 		Buffer(Buffer &&move);
 
@@ -25,7 +26,7 @@ namespace AGE
 		Buffer &require_resize();
 		Buffer &require_transfer();
 		std::shared_ptr<BlockMemory> const &operator[](size_t index);
-		std::string const &name() const;
+		StringID const &name() const;
 
 	private:
 		bool _request_resize;
@@ -33,6 +34,6 @@ namespace AGE
 		size_t _size_alloc;
 		std::vector<std::shared_ptr<BlockMemory>> _block_memories;
 		std::unique_ptr<IBuffer> _buffer;
-		std::string _name;
+		StringID _name;
 	};
 }

@@ -1,13 +1,13 @@
 #pragma once
 
-# include <Render/ProgramResources/AProgramResources.hh>
-# include <glm/glm.hpp>
+#include <Render/ProgramResources/IProgramResources.hh>
+#include <glm/glm.hpp>
 
 namespace AGE
 {
 	class Program;
 
-	class Vec2 : public AProgramResources
+	class Vec2 : public IProgramResources
 	{
 	public:
 		Vec2(glm::vec2 const &value, GLint id, std::string &&name);

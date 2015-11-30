@@ -83,10 +83,10 @@ namespace AGE
 			OpenGLState::glDisable(GL_CULL_FACE);
 
 			_programs[PROGRAM_DEPTH_OF_FIELD]->use();
-			_programs[PROGRAM_DEPTH_OF_FIELD]->get_resource<Sampler2D>("cleanMap").set(_clean);
-			_programs[PROGRAM_DEPTH_OF_FIELD]->get_resource<Sampler2D>("depthMap").set(_depth);
-			_programs[PROGRAM_DEPTH_OF_FIELD]->get_resource<Sampler2D>("blurredMap1").set(_blurred1);
-			_programs[PROGRAM_DEPTH_OF_FIELD]->get_resource<Sampler2D>("blurredMap2").set(_blurred2);
+			_programs[PROGRAM_DEPTH_OF_FIELD]->get_resource<Sampler2D>(StringID("cleanMap", 0x90c5a5421e083038)).set(_clean);
+			_programs[PROGRAM_DEPTH_OF_FIELD]->get_resource<Sampler2D>(StringID("depthMap", 0xeb35b90435165cd4)).set(_depth);
+			_programs[PROGRAM_DEPTH_OF_FIELD]->get_resource<Sampler2D>(StringID("blurredMap1", 0x031e7d3c1b84e96a)).set(_blurred1);
+			_programs[PROGRAM_DEPTH_OF_FIELD]->get_resource<Sampler2D>(StringID("blurredMap2", 0x031e7c3c1b84e7b7)).set(_blurred2);
 
 			_quadPainter->uniqueDrawBegin(_programs[PROGRAM_DEPTH_OF_FIELD]);
 			_quadPainter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_DEPTH_OF_FIELD], _quadVertices);

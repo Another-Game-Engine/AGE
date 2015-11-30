@@ -12,6 +12,7 @@
 #include <Core/ConfigurationManager.hpp>
 #include <Core/Engine.hh>
 #include "Utils/Profiler.hpp"
+#include <Utils/StringID.hpp>
 
 
 #include "Graphic/DRBCameraDrawableList.hpp"
@@ -52,10 +53,10 @@ namespace AGE
 		// you have to set shader directory in configuration path
 		AGE_ASSERT(shaderPath != nullptr);
 
-		auto vertexShaderPath = shaderPath->getValue() + DEFERRED_SHADING_DIRECTIONAL_LIGHT_VERTEX;
-		auto fragmentShaderPath = shaderPath->getValue() + DEFERRED_SHADING_DIRECTIONAL_LIGHT_FRAG;
+		std::string vertexShaderPath = shaderPath->getValue() + DEFERRED_SHADING_DIRECTIONAL_LIGHT_VERTEX;
+		std::string fragmentShaderPath = shaderPath->getValue() + DEFERRED_SHADING_DIRECTIONAL_LIGHT_FRAG;
 
-		_programs[PROGRAM_LIGHTNING] = std::make_shared<Program>(Program(std::string("program_directional_light"),
+		_programs[PROGRAM_LIGHTNING] = std::make_shared<Program>(Program(StringID("program_directional_light", 0x7e61ad386d9fad6f),
 		{
 			std::make_shared<UnitProg>(vertexShaderPath, GL_VERTEX_SHADER),
 			std::make_shared<UnitProg>(fragmentShaderPath, GL_FRAGMENT_SHADER)
@@ -74,12 +75,12 @@ namespace AGE
 		glm::vec3 cameraPosition = -glm::transpose(glm::mat3(infos.cameraInfos.view)) * glm::vec3(infos.cameraInfos.view[3]);
 
 		_programs[PROGRAM_LIGHTNING]->use();
-		_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("projection_matrix").set(infos.cameraInfos.data.projection);
-		_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("view_matrix").set(infos.cameraInfos.view);
-		_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("normal_buffer").set(_normalInput);
-		_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("depth_buffer").set(_depthInput);
-		_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("specular_buffer").set(_specularInput);
-		_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("eye_pos").set(cameraPosition);
+		_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>     (StringID("projection_matrix", 0x92b1e336c34a1224)).set(infos.cameraInfos.data.projection);
+		_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>     (StringID("view_matrix", 0xd15d560e7965726c)).set(infos.cameraInfos.view);
+		_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>(StringID("normal_buffer", 0x313e2189c71f910d)).set(_normalInput);
+		_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>(StringID("depth_buffer", 0x2a88a65798cfc925)).set(_depthInput);
+		_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>(StringID("specular_buffer", 0x0824313afd644f03)).set(_specularInput);
+		_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>     (StringID("eye_pos", 0xe58566afddb7bc1f)).set(cameraPosition);
 
 		{
 			SCOPE_profile_gpu_i("clear buffer");

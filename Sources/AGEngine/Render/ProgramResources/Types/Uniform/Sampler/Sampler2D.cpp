@@ -5,21 +5,21 @@
 namespace AGE
 {
 	Sampler2D::Sampler2D(GLint id, std::string &&name) :
-		AProgramResources(id, std::move(name), GL_SAMPLER_2D),
+		IProgramResources(id, std::move(name), GL_SAMPLER_2D),
 		_texture(nullptr)
 	{
 		glUniform1i(_id, _id);
 	}
 
 	Sampler2D::Sampler2D(Sampler2D &&move) :
-		AProgramResources(std::move(move)),
+		IProgramResources(std::move(move)),
 		_texture(std::move(_texture))
 	{
 
 	}
 
 	Sampler2D::Sampler2D(Sampler2D const &copy) :
-		AProgramResources(copy),
+		IProgramResources(copy),
 		_texture(copy._texture)
 	{
 
@@ -49,7 +49,7 @@ namespace AGE
 
 	void Sampler2D::print() const
 	{
-		std::cout << "uniform sampler2D " << _name << ";";
+		std::cout << "uniform sampler2D " << _name.str() << ";";
 		std::cout << std::endl;
 	}
 

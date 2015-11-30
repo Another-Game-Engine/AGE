@@ -57,7 +57,7 @@ namespace AGE
 			AGE_ASSERT(shaderPath != nullptr);
 			auto vertexShaderPath = shaderPath->getValue() + DEFERRED_SHADING_SHADOW_BUFFERING_VERTEX;
 			auto fragmentShaderPath = shaderPath->getValue() + DEFERRED_SHADING_SHADOW_BUFFERING_FRAG;
-			_programs[PROGRAM_BUFFERING] = std::make_shared<Program>(Program(std::string("program_shadow_buffering"),
+			_programs[PROGRAM_BUFFERING] = std::make_shared<Program>(Program(StringID("program_shadow_buffering", 0xd24fab7f2d0c323d),
 			{
 				std::make_shared<UnitProg>(vertexShaderPath, GL_VERTEX_SHADER),
 				std::make_shared<UnitProg>(fragmentShaderPath, GL_FRAGMENT_SHADER)
@@ -68,7 +68,7 @@ namespace AGE
 			AGE_ASSERT(shaderPath != nullptr);
 			auto vertexShaderPath = shaderPath->getValue() + DEFERRED_SHADING_SHADOW_BUFFERING_VERTEX_SKINNED;
 			auto fragmentShaderPath = shaderPath->getValue() + DEFERRED_SHADING_SHADOW_BUFFERING_FRAG;
-			_programs[PROGRAM_BUFFERING_SKINNED] = std::make_shared<Program>(Program(std::string("program_shadow_buffering"),
+			_programs[PROGRAM_BUFFERING_SKINNED] = std::make_shared<Program>(Program(StringID("program_shadow_buffering", 0xd24fab7f2d0c323d),
 			{
 				std::make_shared<UnitProg>(vertexShaderPath, GL_VERTEX_SHADER),
 				std::make_shared<UnitProg>(fragmentShaderPath, GL_FRAGMENT_SHADER)
@@ -84,7 +84,7 @@ namespace AGE
 
 		_positionBuffer = createRenderPassOutput<TextureBuffer>(_maxInstanciedShadowCaster, GL_RGBA32F, _sizeofMatrix, GL_DYNAMIC_DRAW);
 
-		_programs[PROGRAM_BUFFERING]->get_resource<SamplerBuffer>("model_matrix_tbo")->addInstanciedAlias("model_matrix");
+		_programs[PROGRAM_BUFFERING]->get_resource<SamplerBuffer>(StringID("model_matrix_tbo", 0x6532aea46fc01c3a))->addInstanciedAlias("model_matrix");
 	}
 
 
@@ -125,9 +125,9 @@ namespace AGE
 			_frame_buffer.attachment(*depth.get(), GL_DEPTH_STENCIL_ATTACHMENT);
 			glClear(GL_DEPTH_BUFFER_BIT);
 
-			_programs[PROGRAM_BUFFERING]->get_resource<Mat4>("light_matrix").set(spotLightPtr->getCommandOutput()._spotLightMatrix);
-			_programs[PROGRAM_BUFFERING]->get_resource<SamplerBuffer>("model_matrix_tbo").set(_positionBuffer);
-			auto matrixOffset = _programs[PROGRAM_BUFFERING]->get_resource<Vec1>("matrixOffset");
+			_programs[PROGRAM_BUFFERING]->get_resource<Mat4>(StringID("light_matrix", 0x9c8229a430a9c8a9)).set(spotLightPtr->getCommandOutput()._spotLightMatrix);
+			_programs[PROGRAM_BUFFERING]->get_resource<SamplerBuffer>(StringID("model_matrix_tbo", 0x6532aea46fc01c3a)).set(_positionBuffer);
+			auto matrixOffset = _programs[PROGRAM_BUFFERING]->get_resource<Vec1>(StringID("matrixOffset", 0xb870d9a9a2c195f7));
 
 			_positionBuffer->resetOffset();
 
@@ -178,11 +178,11 @@ namespace AGE
 			auto depth = ShadowMapCollection::getDepthBuffer(i++, w, h);
 
 			_frame_buffer.attachment(*depth.get(), GL_DEPTH_STENCIL_ATTACHMENT);
-			_programs[PROGRAM_BUFFERING_SKINNED]->get_resource<Mat4>("light_matrix").set(spotLightPtr->getCommandOutput()._spotLightMatrix);
-			_programs[PROGRAM_BUFFERING_SKINNED]->get_resource<SamplerBuffer>("model_matrix_tbo").set(_positionBuffer);
-			_programs[PROGRAM_BUFFERING_SKINNED]->get_resource<SamplerBuffer>("bones_matrix_tbo").set(GetRenderThread()->getBonesTexture());
-			auto matrixOffset = _programs[PROGRAM_BUFFERING_SKINNED]->get_resource<Vec1>("matrixOffset");
-			auto bonesOffset = _programs[PROGRAM_BUFFERING_SKINNED]->get_resource<Vec1>("bonesOffset");
+			_programs[PROGRAM_BUFFERING_SKINNED]->get_resource<Mat4>(StringID("light_matrix", 0x9c8229a430a9c8a9)).set(spotLightPtr->getCommandOutput()._spotLightMatrix);
+			_programs[PROGRAM_BUFFERING_SKINNED]->get_resource<SamplerBuffer>(StringID("model_matrix_tbo", 0x6532aea46fc01c3a)).set(_positionBuffer);
+			_programs[PROGRAM_BUFFERING_SKINNED]->get_resource<SamplerBuffer>(StringID("bones_matrix_tbo", 0x3a7f8c7debc73024)).set(GetRenderThread()->getBonesTexture());
+			auto matrixOffset = _programs[PROGRAM_BUFFERING_SKINNED]->get_resource<Vec1>(StringID("matrixOffset", 0xb870d9a9a2c195f7));
+			auto bonesOffset = _programs[PROGRAM_BUFFERING_SKINNED]->get_resource<Vec1>(StringID("bonesOffset", 0xc8c5f289dcfef0cf));
 
 			_positionBuffer->resetOffset();
 

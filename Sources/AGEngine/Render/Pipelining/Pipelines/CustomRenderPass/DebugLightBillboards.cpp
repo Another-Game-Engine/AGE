@@ -41,7 +41,7 @@ namespace AGE
 
 		_programs.resize(PROGRAM_NBR);
 
-		_programs[PROGRAM_BUFFERING_LIGHT] = std::make_shared<Program>(Program(std::string("debug_lights"),
+		_programs[PROGRAM_BUFFERING_LIGHT] = std::make_shared<Program>(Program(StringID("debug_lights", 0x24f5aba6b9b103d4),
 		{
 			std::make_shared<UnitProg>(DEFERRED_SHADING_DEBUG_LIGHT_VERTEX, GL_VERTEX_SHADER),
 			std::make_shared<UnitProg>(DEFERRED_SHADING_DEBUG_LIGHT_FRAG, GL_FRAGMENT_SHADER)
@@ -81,8 +81,8 @@ namespace AGE
 				SCOPE_profile_gpu_i("Overhead Pipeline");
 				SCOPE_profile_cpu_i("RenderTimer", "Overhead Pipeline");
 				_programs[PROGRAM_BUFFERING_LIGHT]->use();
-				_programs[PROGRAM_BUFFERING_LIGHT]->get_resource<Mat4>("projection_matrix").set(infos.cameraInfos.data.projection);
-				_programs[PROGRAM_BUFFERING_LIGHT]->get_resource<Mat4>("view_matrix").set(infos.cameraInfos.view);
+				_programs[PROGRAM_BUFFERING_LIGHT]->get_resource<Mat4>(StringID("projection_matrix", 0x92b1e336c34a1224)).set(infos.cameraInfos.data.projection);
+				_programs[PROGRAM_BUFFERING_LIGHT]->get_resource<Mat4>(StringID("view_matrix", 0xd15d560e7965726c)).set(infos.cameraInfos.view);
 			}
 			//auto &pointLightList = infos.pointLights;
 			//if (pointLightList.size() > 0)

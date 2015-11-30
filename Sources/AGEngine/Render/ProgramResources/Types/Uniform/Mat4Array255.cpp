@@ -7,19 +7,19 @@
 namespace AGE
 {
 	Mat4Array255::Mat4Array255(GLint id, std::string &&name) :
-		AProgramResources(id, std::move(name), GL_UNIFORM)
+		IProgramResources(id, std::move(name), GL_UNIFORM)
 	{
 		_size = 0;
 	}
 
 	Mat4Array255::Mat4Array255(Mat4Array255 &&move) :
-		AProgramResources(std::move(move))
+		IProgramResources(std::move(move))
 	{
 		AGE_ASSERT("Not implemented");
 	}
 
 	Mat4Array255::Mat4Array255(Mat4Array255 const &copy) :
-		AProgramResources(copy)
+		IProgramResources(copy)
 	{
 		AGE_ASSERT("Not implemented");
 	}
@@ -53,7 +53,7 @@ namespace AGE
 
 	void Mat4Array255::print() const
 	{
-		std::cout << "uniform mat4 " << _name << ";";
+		std::cout << "uniform mat4 " << _name.str() << ";";
 		std::cout << std::endl;
 	}
 }

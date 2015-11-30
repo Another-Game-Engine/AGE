@@ -8,7 +8,7 @@
 
 #define PATH_INCLUDE_SHADER_TOOL "../../Shader/tool/"
 
-UnitProg::UnitProg(std::string const &filename, GLenum type):
+UnitProg::UnitProg(const std::string &filename, GLenum type) :
 _filename(filename),
 _type(type),
 _id(0)

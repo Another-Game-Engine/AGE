@@ -55,10 +55,10 @@ namespace AGE
 		auto shaderPath = confManager->getConfiguration<std::string>("ShadersPath");
 		// you have to set shader directory in configuration path
 		AGE_ASSERT(shaderPath != nullptr);
-		auto vertexShaderPath = shaderPath->getValue() + DEFERRED_SHADING_SPOT_LIGHT_VERTEX;
-		auto fragmentShaderPath = shaderPath->getValue() + DEFERRED_SHADING_SPOT_LIGHT_FRAG;
+		std::string vertexShaderPath = shaderPath->getValue() + DEFERRED_SHADING_SPOT_LIGHT_VERTEX;
+		std::string fragmentShaderPath = shaderPath->getValue() + DEFERRED_SHADING_SPOT_LIGHT_FRAG;
 
-		_programs[PROGRAM_LIGHTNING] = std::make_shared<Program>(Program(std::string("program_spot_light"),
+		_programs[PROGRAM_LIGHTNING] = std::make_shared<Program>(Program(StringID("program_spot_light", 0xea31766bcb94cc9b),
 		{
 			std::make_shared<UnitProg>(vertexShaderPath, GL_VERTEX_SHADER),
 			std::make_shared<UnitProg>(fragmentShaderPath, GL_FRAGMENT_SHADER)
@@ -81,12 +81,12 @@ namespace AGE
 		glm::vec3 cameraPosition = -glm::transpose(glm::mat3(camera.view)) * glm::vec3(camera.view[3]);
 
 		_programs[PROGRAM_LIGHTNING]->use();
-		_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("projection_matrix").set(camera.projection);
-		_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("view_matrix").set(camera.view);
-		_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("normal_buffer").set(_normalInput);
-		_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("specular_buffer").set(_specularInput);
-		_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("depth_buffer").set(_depthInput);
-		_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("eye_pos").set(cameraPosition);
+		_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>(StringID("projection_matrix", 0x92b1e336c34a1224)).set(camera.projection);
+		_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>(StringID("view_matrix", 0xd15d560e7965726c)).set(camera.view);
+		_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>(StringID("normal_buffer", 0x313e2189c71f910d)).set(_normalInput);
+		_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>(StringID("specular_buffer", 0x0824313afd644f03)).set(_specularInput);
+		_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>(StringID("depth_buffer", 0x2a88a65798cfc925)).set(_depthInput);
+		_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>(StringID("eye_pos", 0xe58566afddb7bc1f)).set(cameraPosition);
 
 		OpenGLState::glDisable(GL_CULL_FACE);
 		OpenGLState::glDisable(GL_DEPTH_TEST);
@@ -106,13 +106,13 @@ namespace AGE
 
 			_programs[PROGRAM_LIGHTNING]->get_resource<Sampler2D>("shadow_map").set(depth);
 
-			_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("position_light").set(spot.position);
-			_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("attenuation_light").set(spot.attenuation);
-			_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("direction_light").set(spot.direction);
-			_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>("color_light").set(spot.color);
-			_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>("light_matrix").set(spot.matrix);
-			_programs[PROGRAM_LIGHTNING]->get_resource<Vec1>("spot_cut_off").set(spot.cutOff);
-			_programs[PROGRAM_LIGHTNING]->get_resource<Vec1>("exponent_light").set(spot.exponent);
+			_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>(StringID("position_light", 0x514f03a54d8ceae9)).set(spot.position);
+			_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>(StringID("attenuation_light", 0x344423c4b06b660c)).set(spot.attenuation);
+			_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>(StringID("direction_light", 0xc2d48b1631dca809)).set(spot.direction);
+			_programs[PROGRAM_LIGHTNING]->get_resource<Vec3>(StringID("color_light", 0x7da5b3f55d350b6f)).set(spot.color);
+			_programs[PROGRAM_LIGHTNING]->get_resource<Mat4>(StringID("light_matrix", 0x9c8229a430a9c8a9)).set(spot.matrix);
+			_programs[PROGRAM_LIGHTNING]->get_resource<Vec1>(StringID("spot_cut_off", 0x60934f6991e9b910)).set(spot.cutOff);
+			_programs[PROGRAM_LIGHTNING]->get_resource<Vec1>(StringID("exponent_light", 0xef65e2e5c90f9125)).set(spot.exponent);
 
 			painter->uniqueDrawBegin(_programs[PROGRAM_LIGHTNING]);
 			painter->uniqueDraw(GL_TRIANGLES, _programs[PROGRAM_LIGHTNING], _quad);

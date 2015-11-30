@@ -42,10 +42,10 @@ namespace AGE
 		// you have to set shader directory in configuration path
 		AGE_ASSERT(shaderPath != nullptr);
 
-		auto vertexShaderPath = shaderPath->getValue() + DEFERRED_SHADING_SCREEN_VERTEX;
-		auto fragmentShaderPath = shaderPath->getValue() + DEFERRED_SHADING_SCREEN_FRAG;
+		std::string vertexShaderPath = shaderPath->getValue() + DEFERRED_SHADING_SCREEN_VERTEX;
+		std::string fragmentShaderPath = shaderPath->getValue() + DEFERRED_SHADING_SCREEN_FRAG;
 
-		_programs[PROGRAM_SCREEN] = std::make_shared<Program>(Program(std::string("basic_3d_render"),
+		_programs[PROGRAM_SCREEN] = std::make_shared<Program>(Program(StringID("basic_3d_render", 0xa6c109902e71613e),
 		{
 			std::make_shared<UnitProg>(vertexShaderPath, GL_VERTEX_SHADER),
 			std::make_shared<UnitProg>(fragmentShaderPath, GL_FRAGMENT_SHADER)
@@ -62,7 +62,7 @@ namespace AGE
 		SCOPE_profile_gpu_i("DefferedOnScreen");
 		SCOPE_profile_cpu_function("RenderTime");
 		_programs[PROGRAM_SCREEN]->use();
-		_programs[PROGRAM_SCREEN]->get_resource<Sampler2D>("screen").set(_diffuseInput);
+		_programs[PROGRAM_SCREEN]->get_resource<Sampler2D>(StringID("screen", 0x8be4c62929b73271)).set(_diffuseInput);
 
 		OpenGLState::glDisable(GL_BLEND);
 		OpenGLState::glDisable(GL_CULL_FACE);
@@ -71,8 +71,8 @@ namespace AGE
 		{
 			SCOPE_profile_gpu_i("Overhead pipeline");
 			SCOPE_profile_cpu_i("RenderTime", "Overhead pipeline");
-			_programs[PROGRAM_SCREEN]->get_resource<Vec2>("resolution").set(glm::vec2(viewport.x, viewport.y));
-			_programs[PROGRAM_SCREEN]->get_resource<Vec1>("activated").set(infos.cameraInfos.data.fxaa == true ? 1.0f : 0.f);
+			_programs[PROGRAM_SCREEN]->get_resource<Vec2>(StringID("resolution", 0x232c1e13c13df5af)).set(glm::vec2(viewport.x, viewport.y));
+			_programs[PROGRAM_SCREEN]->get_resource<Vec1>(StringID("activated", 0xf42ce409138b0d9c)).set(infos.cameraInfos.data.fxaa == true ? 1.0f : 0.f);
 		}
 
 		_quadPainter->uniqueDrawBegin(_programs[PROGRAM_SCREEN]);
