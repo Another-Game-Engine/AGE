@@ -48,10 +48,14 @@
             },
             {
                 "key": 11,
-                "value": 8718854852507163888
+                "value": 15079484947096660329
             },
             {
                 "key": 12,
+                "value": 8718854852507163888
+            },
+            {
+                "key": 13,
                 "value": 13917482855567903631
             }
         ],
@@ -136,7 +140,7 @@
                 "ColliderType": 3,
                 "Material": "DefaultMaterial",
                 "IsATrigger": false,
-                "FilterGroup": 0,
+                "FilterGroup": 1,
                 "Mesh": "medievalpack/meshs/wall_a",
                 "Convex": true
             }

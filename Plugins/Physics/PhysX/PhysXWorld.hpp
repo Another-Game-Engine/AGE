@@ -14,6 +14,8 @@
 
 namespace AGE
 {
+	class DebugDrawManager;
+
 	namespace Physics
 	{
 		class PhysXWorld final : public WorldInterface, public physx::PxSimulationEventCallback, public physx::PxBroadPhaseCallback, public MemoryPoolHelper<PhysXRigidBody, PhysXMaterial, PhysXBoxCollider, PhysXCapsuleCollider, PhysXMeshCollider, PhysXSphereCollider>
@@ -70,7 +72,7 @@ namespace AGE
 			// Methods
 			void notifyTriggers(void);
 
-			void fillDebugInformation(void);
+			virtual void fillDebugInformation(DebugDrawManager *debugDrawManager);
 
 			// Inherited Methods
 			void setGravity(const glm::vec3 &gravity) override final;

@@ -14,12 +14,12 @@
 #include "TriggerListener.hpp"
 #include "CharacterControllerInterface.hh"
 #include <AssetManagement/Instance/MeshInstance.hh>
-#include "DebugInformation.hpp"
 
 namespace AGE
 {
 	class RigidBody;
 	class Collider;
+	class DebugDrawManager;
 
 	namespace Physics
 	{
@@ -93,8 +93,6 @@ namespace AGE
 
 			bool isDebugEnabled(void) const;
 
-			const DebugInformation &getDebugInformation(void) const;
-
 			void update(float elapsedTime);
 
 			void setFilterNameForFilterGroup(FilterGroup group, const std::string &name);
@@ -124,6 +122,8 @@ namespace AGE
 
 			virtual void destroyCharacterController(CharacterControllerInterface *cc) = 0;
 
+			virtual void fillDebugInformation(DebugDrawManager *debugDrawManager) = 0;
+
 		protected:
 			// Type Aliases
 			using MaterialTable = std::unordered_map < std::string, std::pair < MaterialInterface *, std::atomic_uint32_t > >;
@@ -136,8 +136,6 @@ namespace AGE
 			ShapeTable convexShapes;
 
 			ShapeTable concaveShapes;
-
-			DebugInformation debugInformation;
 
 			// Destructor
 			virtual ~WorldInterface(void) = default;

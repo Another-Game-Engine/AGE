@@ -6,6 +6,7 @@
 #include <vector>
 #include <memory>
 #include <Utils/StringID.hpp>
+#include <Utils/Containers/PODVector.hpp>
 
 namespace AGE
 {
@@ -27,8 +28,10 @@ namespace AGE
 		std::vector<uint8_t> &&transfer_indices_data();
 		template <typename type_t> type_t const *get_data(size_t index, size_t &size) const;
 		template <typename type_t> bool set_data(std::vector<type_t> const &data, StringID const &attribute);
+		template <typename type_t> bool set_data(PODVector<type_t> const &data, StringID const &attribute);
 		unsigned int const *get_indices(size_t &size) const;
 		void set_indices(std::vector<unsigned int> const &data);
+		void set_indices(PODVector<unsigned int> const &data);
 		void set_block_memory(std::shared_ptr<BlockMemory> const &blockMemory, StringID const &attribute);
 		void set_indices_block_memory(std::shared_ptr<BlockMemory> const &blockMemory);
 		void remove();
@@ -62,6 +65,33 @@ namespace AGE
 
 	template <typename type_t>
 	bool Vertices::set_data(std::vector<type_t> const &data, StringID const &attribute)
+	{
+		std::vector<uint8_t> tmp(data.size() * sizeof(type_t));
+
+		std::memcpy(tmp.data(), data.data(), tmp.size());
+		auto index = 0;
+		for (auto &block_memory : _block_memories)
+		{
+			if (block_memory.first == attribute)
+			{
+				if (block_memory.second.lock())
+				{
+					block_memory.second.lock()->setDatas(tmp);
+					return true;
+				}
+				else
+				{
+					_data[index].second = tmp;
+					return true;
+				}
+			}
+			index++;
+		}
+		return false;
+	}
+
+	template <typename type_t>
+	bool Vertices::set_data(PODVector<type_t> const &data, StringID const &attribute)
 	{
 		std::vector<uint8_t> tmp(data.size() * sizeof(type_t));
 

@@ -97,7 +97,7 @@ namespace AGE
 		}
 		setMaterial(material);
 		setAsTrigger(isATrigger);
-		setFilterGroup(static_cast<Physics::FilterGroup>(filterGroup));
+		setFilterGroup(Physics::FilterGroup::Default/*static_cast<Physics::FilterGroup>(filterGroup)*/);
 	}
 
 	template <typename Archive>

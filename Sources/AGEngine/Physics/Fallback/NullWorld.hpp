@@ -31,6 +31,7 @@ namespace AGE
 			CharacterControllerInterface *createCharacterController() override final;
 
 			void destroyCharacterController(CharacterControllerInterface *cc) override final;
+			virtual void fillDebugInformation(DebugDrawManager *debugDrawManager){}
 
 		private:
 			// Destructor
