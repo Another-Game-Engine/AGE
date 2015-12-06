@@ -8,6 +8,109 @@
 #include <Core/ConfigurationManager.hpp>
 #include <Threads/MainThread.hpp>
 #include <Threads/ThreadManager.hpp>
+#include <Threads/Tasks/BasicTasks.hpp>
+
+#define LMT_ALLOC_NUMBER_PER_CHUNK 1024 * 4
+#define LMT_STACK_SIZE_PER_ALLOC 50
+#define LMT_CHUNK_NUMBER_PER_THREAD 16
+#define LMT_CACHE_SIZE 16
+#define LMT_IMGUI 1
+#define LMT_IMGUI_INCLUDE_PATH "imgui/imgui.h"
+
+#define LMT_TREAT_CHUNK(chunk) \
+SCOPE_profile_cpu_i("Alloc", "Alloc chunk"); \
+TMQ::TaskManager::emplaceSharedTask<AGE::Tasks::Basic::VoidFunction>([=](){LiveMemTracer::treatChunk(chunk);}); \
+
+#define LMT_IMPL 1
+
+#include "Utils/MemTracer.hpp"
+
+#define OVERRIDE_NEW 1
+
+#ifdef OVERRIDE_NEW
+//////////////////////////////////////////////////////////////////////////
+void* operator new(size_t count) throw(std::bad_alloc)
+{
+	return LiveMemTracer::alloc(count);
+}
+
+void* operator new(size_t count, const std::nothrow_t&) throw()
+{
+	return LiveMemTracer::alloc(count);
+}
+
+void* operator new(size_t count, size_t alignment) throw(std::bad_alloc)
+{
+	return LiveMemTracer::allocAligned(count, alignment);
+}
+
+void* operator new(size_t count, size_t alignment, const std::nothrow_t&) throw()
+{
+	return LiveMemTracer::allocAligned(count, alignment);
+}
+
+void* operator new[](size_t count) throw(std::bad_alloc)
+{
+	return LiveMemTracer::alloc(count);
+}
+
+void* operator new[](size_t count, const std::nothrow_t&) throw()
+{
+	return LiveMemTracer::alloc(count);
+}
+
+void* operator new[](size_t count, size_t alignment) throw(std::bad_alloc)
+{
+	return LiveMemTracer::allocAligned(count, alignment);
+}
+
+void* operator new[](size_t count, size_t alignment, const std::nothrow_t&) throw()
+{
+	return LiveMemTracer::allocAligned(count, alignment);
+}
+
+void operator delete(void* ptr) throw()
+{
+	return LiveMemTracer::dealloc(ptr);
+}
+
+void operator delete(void *ptr, const std::nothrow_t&) throw()
+{
+	return LiveMemTracer::dealloc(ptr);
+}
+
+void operator delete(void *ptr, size_t alignment) throw()
+{
+	return LiveMemTracer::deallocAligned(ptr);
+}
+
+void operator delete(void *ptr, size_t alignment, const std::nothrow_t&) throw()
+{
+	return LiveMemTracer::deallocAligned(ptr);
+}
+
+void operator delete[](void* ptr) throw()
+{
+	return LiveMemTracer::dealloc(ptr);
+}
+
+void operator delete[](void *ptr, const std::nothrow_t&) throw()
+{
+	return LiveMemTracer::dealloc(ptr);
+}
+
+void operator delete[](void *ptr, size_t alignment) throw()
+{
+	return LiveMemTracer::deallocAligned(ptr);
+}
+
+void operator delete[](void *ptr, size_t alignment, const std::nothrow_t&) throw()
+{
+	return LiveMemTracer::deallocAligned(ptr);
+}
+//////////////////////////////////////////////////////////////////////////
+#endif
+
 
 namespace AGE
 {
@@ -100,5 +203,7 @@ namespace AGE
 #if defined(AGE_ENABLE_IMGUI)
 		ImGui::End();
 #endif
+
+		LiveMemTracer::display(time);
 	}
 }
