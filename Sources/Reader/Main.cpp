@@ -38,11 +38,6 @@
 
 #include <chrono>
 
-
-
-
-
-
 using namespace AGE;
 
 int			main(int ac, char **av)

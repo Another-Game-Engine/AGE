@@ -1,4 +1,5 @@
 #include "BufferPool.hpp"
+#include <Utils/Memory.hpp>
 
 namespace AGE
 {
@@ -21,7 +22,7 @@ namespace AGE
 	bool BufferPool::_allocateChunk()
 	{
 		auto chunkSize = _getChunkSize();
-		auto newChunk = (Chunk*)malloc(chunkSize);
+		auto newChunk = (Chunk*)AGE_MALLOC(chunkSize);
 		if (!newChunk)
 			return false;
 		newChunk->emptySlotsNumber = _objectPerChunk;
@@ -80,7 +81,7 @@ namespace AGE
 		if (chunk->emptySlotsNumber == _objectPerChunk)
 		{
 			_freeObjectNumber -= _objectPerChunk;
-			free(chunk);
+			AGE_FREE(chunk);
 			_chunks.remove(chunk);
 		}
 
@@ -91,7 +92,7 @@ namespace AGE
 	{
 		for (auto &e : _chunks)
 		{
-			free(e);
+			AGE_FREE(e);
 		}
 	}
 

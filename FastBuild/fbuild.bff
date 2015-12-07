@@ -126,7 +126,7 @@ Compiler( 'Compiler-x64' )
 [
   Using( .X64BaseConfig )
   .Config         = 'Debug'
-  .CompilerOptions    + ' /DDEBUG /DAGE_ENABLE_PROFILING /DEDITOR_ENABLED /DAGE_ENABLE_IMGUI /D_CRT_SECURE_NO_WARNINGS'
+  .CompilerOptions    + ' /DDEBUG /DAGE_ENABLE_PROFILING /DEDITOR_ENABLED /DAGE_ENABLE_IMGUI /D_CRT_SECURE_NO_WARNINGS /DLMT_ENABLED'
               + .CompilerDebugOptimizations             
   .LibrarianOptions   + .LibrarianDebugOptimizations
   .LinkerOptions      + .LinkerDebugOptimizations
@@ -136,7 +136,7 @@ Compiler( 'Compiler-x64' )
 [
   Using( .X64BaseConfig )
   .Config         = 'Release'
-  .CompilerOptions    + ' /DRELEASE /DAGE_ENABLE_PROFILING /DEDITOR_ENABLED /DAGE_ENABLE_IMGUI /D_CRT_SECURE_NO_WARNINGS /DNDEBUG'
+  .CompilerOptions    + ' /DRELEASE /DAGE_ENABLE_PROFILING /DEDITOR_ENABLED /DAGE_ENABLE_IMGUI /D_CRT_SECURE_NO_WARNINGS /DNDEBUG /DLMT_ENABLED'
 
   // Setup de-optimization options (FASTBUILD_DEOPTIMIZE_OBJECT)
   .DeoptimizeWritableFilesWithToken   = true
