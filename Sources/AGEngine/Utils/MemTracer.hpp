@@ -207,7 +207,8 @@ namespace LiveMemTracer
 		int64_t count;
 		const char *name;
 		std::vector<Edge*> to;
-		Edge() : count(0), name(nullptr) {}
+		Edge *from;
+		Edge() : count(0), name(nullptr), from(nullptr) {}
 	};
 
 	__declspec(thread) static Chunk                     g_th_chunks[CHUNK_NUMBER];
@@ -449,6 +450,7 @@ void LiveMemTracer::updateTree(AllocStack &allocStack, int64_t size, bool checkT
 				{
 					previousPtr->to.push_back(currentPtr);
 				}
+				currentPtr->from = previousPtr;
 			}
 			else
 			{
@@ -711,10 +713,20 @@ static void recursiveImguiTreeDisplay(LiveMemTracer::Edge *edge, bool updateData
 	}
 }
 
+struct SearchNode
+{
+	const char *name;
+	int64_t count;
+	std::vector<SearchNode> callers;
+};
+
 void LiveMemTracer::display(float dt)
 {
 	static bool filterEmptyAlloc = true;
 	static float updateRatio = 0.f;
+	static const size_t SEARCH_STR_LENGTH = 1024;
+	static char searchStr[SEARCH_STR_LENGTH];
+	bool updateSearch = false;
 
 	bool updateData = false;
 	updateRatio += dt;
@@ -727,25 +739,40 @@ void LiveMemTracer::display(float dt)
 	if (ImGui::Begin("LiveMemoryProfiler"))
 	{
 		ImGui::Checkbox("Filter empty allocs", &filterEmptyAlloc); ImGui::SameLine();
+		if (ImGui::InputText("Search", searchStr, SEARCH_STR_LENGTH))
+		{
+			updateSearch = true;
+		}
+		ImGui::SameLine();
 		ImGui::Text("Memory used by LMT : %06f Mo", float(g_internalAllThreadsMemoryUsed.load()) / 1024.f / 1024.f);
 		ImGui::Separator();
-
+			
 		std::lock_guard<std::mutex> lock(g_mutex);
-		if (updateData)
-			std::sort(std::begin(g_allocStackRoots), std::end(g_allocStackRoots), edgeSortFunction);
-		Alloc *allocList = g_allocList;
-		ImGui::Columns(2);
-		ImGui::Text("Size");
-		ImGui::NextColumn();
-		ImGui::Text("Stack");
-		ImGui::NextColumn();
-		ImGui::Separator();
-		ImGui::Columns(1);
-		for (auto &e : g_allocStackRoots)
-		{
-			recursiveImguiTreeDisplay(e, updateData, filterEmptyAlloc);
-		}
 
+		if (updateSearch && strlen(searchStr) > 0)
+		{
+			Alloc *allocList = g_allocList;
+
+
+		}
+		else
+		{
+			if (updateData)
+			{
+				std::sort(std::begin(g_allocStackRoots), std::end(g_allocStackRoots), edgeSortFunction);
+			}
+			ImGui::Columns(2);
+			ImGui::Text("Size");
+			ImGui::NextColumn();
+			ImGui::Text("Stack");
+			ImGui::NextColumn();
+			ImGui::Separator();
+			ImGui::Columns(1);
+			for (auto &e : g_allocStackRoots)
+			{
+				recursiveImguiTreeDisplay(e, updateData, filterEmptyAlloc);
+			}
+		}
 	}
 	ImGui::End();
 }
