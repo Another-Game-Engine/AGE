@@ -84,7 +84,7 @@ namespace AGE
 
 		_positionBuffer = createRenderPassOutput<TextureBuffer>(_maxInstanciedShadowCaster, GL_RGBA32F, _sizeofMatrix, GL_DYNAMIC_DRAW);
 
-		_programs[PROGRAM_BUFFERING]->get_resource<SamplerBuffer>(StringID("model_matrix_tbo", 0x6532aea46fc01c3a))->addInstanciedAlias("model_matrix");
+		_programs[PROGRAM_BUFFERING]->get_resource<SamplerBuffer>(StringID("model_matrix_tbo", 0x6532aea46fc01c3a))->addInstanciedAlias("model_matrix", 0x3fa708246c7aeaa3);
 	}
 
 

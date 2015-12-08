@@ -6,6 +6,7 @@
 	.ProjectName		= 'AGE_AssetManagement'
 	.ProjectDestPath	= './$ProjectsFolder$/AGE_AssetManagement/'
 	.ProjectPath		= '$AGEngineSourceDir$/AssetManagement'
+	.PCHName			= '$ProjectName$_PCH'
 
 	.CompilerIncludesPaths = ' /I"$ProjectPath$/.."'
 	                       + ' /I"$VendorsPath$"'
@@ -48,6 +49,12 @@
 		// Static Library
 		Library( '$ProjectName$-Lib-$Platform$-$Config$' )
 		{
+			// Precompiled Header Creation/Use
+			.PCHInputFile				= '$ProjectPath$\$PCHName$.cpp'
+			.PCHOutputFile				= '$OutputBase$\$ProjectName$\$PCHName$.pch'
+			.PCHOptions					+ ' /Yc"$ProjectPath$\$PCHName$.h"'
+			.CompilerOptions			+ ' /Yu"$ProjectPath$\$PCHName$.h" /Fp"$PCHOutputFile$"'
+
 			.CompilerInputPath          = '$ProjectPath$'
 
 			.CompilerOptions            + ' $CompilerIncludesPaths$'

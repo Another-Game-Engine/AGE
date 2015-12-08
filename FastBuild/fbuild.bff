@@ -76,6 +76,8 @@ Compiler( 'Compiler-x64' )
               + ' /D_WIN32 /D__WINDOWS__'
               + ' /D"_CRT_SECURE_NO_WARNINGS"' // don't warn about unsafe functions
               + ' /D"_WINSOCK_DEPRECATED_NO_WARNINGS"' // don't warn about deprecated winsock functions - TODO:C Update API use
+  .PCHOptions       = .CompilerOptions
+              + ' /Fp"%2" /Fo"%3"'
 
   .CompilerOptions    + ' /Fo"%2"'
   .LibrarianOptions   = '/NOLOGO /OUT:"%2" "%1"' //@FBUILD : Il faudrait peut etre faire une configuration dll et une .lib et ajouter NODEFAULTLIB pour les dll
@@ -99,6 +101,7 @@ Compiler( 'Compiler-x64' )
               + ' /I"$VSBasePath$/VC/atlmfc/include"'
 
   .CompilerOptions    + .BaseIncludePaths
+  .PCHOptions       + .BaseIncludePaths
 
   .WindowsLibPaths    = '$WindowsSDKBasePath$/lib/winv6.3/um'
 
@@ -117,7 +120,7 @@ Compiler( 'Compiler-x64' )
   .Linker         = '$ToolsBasePath$\link.exe'
   .CompilerOptions    + ' /DWIN64'
                       + ' /DWIN32'
-
+  .PCHOptions         + ' /DWIN64'
   .LinkerOptions      + ' /MACHINE:X64'
   .Platform       = 'x64'
   .LinkerOptions      + ' /LIBPATH:"$WindowsLibPaths$/x64" /LIBPATH:"$VSBasePath$/VC/lib/amd64" /LIBPATH:"$VSBasePath$/VC/atlmfc/lib/amd64" /LIBRARYPATH:"$WindowsSDKBasePath$/lib/winv6.3/um/x64"'
@@ -128,6 +131,8 @@ Compiler( 'Compiler-x64' )
   .Config         = 'Debug'
   .CompilerOptions    + ' /DDEBUG /DAGE_ENABLE_PROFILING /DEDITOR_ENABLED /DAGE_ENABLE_IMGUI /D_CRT_SECURE_NO_WARNINGS'
               + .CompilerDebugOptimizations             
+  .PCHOptions       + ' /DDEBUG /DPROFILING_ENABLED'
+                    + .CompilerDebugOptimizations             
   .LibrarianOptions   + .LibrarianDebugOptimizations
   .LinkerOptions      + .LinkerDebugOptimizations
   .PhysxDir = '$VendorsPath$\PhysX\PhysXSDK\Lib\vc12win64-Debug'
@@ -137,12 +142,15 @@ Compiler( 'Compiler-x64' )
   Using( .X64BaseConfig )
   .Config         = 'Release'
   .CompilerOptions    + ' /DRELEASE /DAGE_ENABLE_PROFILING /DEDITOR_ENABLED /DAGE_ENABLE_IMGUI /D_CRT_SECURE_NO_WARNINGS /DNDEBUG'
+  .PCHOptions       + ' /DRELEASE'
 
   // Setup de-optimization options (FASTBUILD_DEOPTIMIZE_OBJECT)
   .DeoptimizeWritableFilesWithToken   = true
   .CompilerOptionsDeoptimized   = '$CompilerOptions$ /Od'
+  .PCHOptionsDeoptimized      = '$PCHOptions$ /Od'
 
   .CompilerOptions    + .CompilerReleaseOptimizations             
+  .PCHOptions         + .CompilerReleaseOptimizations             
   .LibrarianOptions   + .LibrarianReleaseOptimizations
   .LinkerOptions      + .LinkerReleaseOptimizations
   .PhysxDir = '$VendorsPath$\PhysX\PhysXSDK\Lib\vc12win64-Release'
@@ -152,6 +160,7 @@ Compiler( 'Compiler-x64' )
   Using( .X64BaseConfig ) 
   .Config         = 'Profile'
   .CompilerOptions    + ' /DRETAIL /DRELEASE /DAGE_ENABLE_PROFILING /D_CRT_SECURE_NO_WARNINGS /DNDEBUG'
+  .PCHOptions       + ' /DPROFILING_ENABLED'
 
   .CompilerOptions    + .CompilerReleaseOptimizations             
   .LibrarianOptions   + .LibrarianReleaseOptimizations
@@ -163,6 +172,7 @@ Compiler( 'Compiler-x64' )
   Using( .X64BaseConfig )
   .Config         = 'Retail'
   .CompilerOptions    + ' /DRETAIL /DRELEASE /D_CRT_SECURE_NO_WARNINGS /DNDEBUG'
+  .PCHOptions       + ' /DRETAIL'
 
   .CompilerOptions    + .CompilerReleaseOptimizations             
   .LibrarianOptions   + .LibrarianReleaseOptimizations

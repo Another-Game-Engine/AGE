@@ -6,6 +6,7 @@
 	.ProjectName		= 'AGE_ImGui'
 	.ProjectDestPath	= './$ProjectsFolder$/AGE_ImGui/'
 	.ProjectPath		= '$VendorsPath$/ImGui'
+	.PCHName			= '$ProjectName$_PCH'
 
 	.CompilerIncludesPaths = ' /I"$ProjectPath$"'
 
@@ -45,6 +46,12 @@
 		// Static Library
 		Library( '$ProjectName$-Lib-$Platform$-$Config$' )
 		{
+			// Precompiled Header Creation/Use
+			.PCHInputFile				= '$ProjectPath$\$PCHName$.cpp'
+			.PCHOutputFile				= '$OutputBase$\$ProjectName$\$PCHName$.pch'
+			.PCHOptions					+ ' /Yc"$ProjectPath$\$PCHName$.h"'
+			.CompilerOptions			+ ' /Yu"$ProjectPath$\$PCHName$.h" /Fp"$PCHOutputFile$"'
+
 			.CompilerInputPath          = '$ProjectPath$'
 
 			.CompilerOptions            + ' $CompilerIncludesPaths$'

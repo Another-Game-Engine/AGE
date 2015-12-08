@@ -6,6 +6,7 @@
 	.ProjectName		= 'AGE_SystemsCore'
 	.ProjectDestPath	= './$ProjectsFolder$/AGE_SystemsCore/'
 	.ProjectPath		= '$AGEngineSourceDir$/SystemsCore'
+	.PCHName			= '$ProjectName$_PCH'
 
 	.CompilerIncludesPaths = ' /I"$ProjectPath$"/..'
 	                       + ' /I"$VendorsPath$"'
@@ -41,6 +42,8 @@
 		    .UnityInputPath				= '$ProjectPath$\'
 		    .UnityOutputPath			= '$OutputBase$\Unity\$ProjectPath$\'
 		    //.UnityInputExcludePath		= '$ProjectPath$\CoreTest\' // Exclude Tests
+
+		    .UnityPCH               = '$ProjectPath$\$PCHName$.h'
 		}
 	}
 
@@ -64,6 +67,12 @@
 		// Static Library
 		Library( '$ProjectName$-Lib-$Platform$-$Config$' )
 		{
+			// Precompiled Header Creation/Use
+			.PCHInputFile				= '$ProjectPath$\$PCHName$.cpp'
+			.PCHOutputFile				= '$OutputBase$\$ProjectName$\$PCHName$.pch'
+			.PCHOptions					+ ' /Yc"$ProjectPath$\$PCHName$.h"'
+			.CompilerOptions			+ ' /Yu"$ProjectPath$\$PCHName$.h" /Fp"$PCHOutputFile$"'
+
 			// Input (Unity)
 			.CompilerInputUnity			= '$ProjectName$-Unity-Windows'
 
