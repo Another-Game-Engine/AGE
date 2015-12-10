@@ -12,6 +12,7 @@
 #define LMT_STACK_DICTIONARY_SIZE 1024 * 8
 #define LMT_TREE_DICTIONARY_SIZE 1024 * 32
 #define LMT_IMGUI 1
+#define LMT_PLATFORM_WINDOWS 1
 #define LMT_IMGUI_INCLUDE_PATH "imgui/imgui.h"
 
 #define LMT_TREAT_CHUNK(chunk) \
