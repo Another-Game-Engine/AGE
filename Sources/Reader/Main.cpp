@@ -5,6 +5,8 @@
 #pragma comment(lib, "Ws2_32.lib")
 
 
+#include <Utils/Memory.hpp>
+
 #include <stdlib.h>
 #include <crtdbg.h>
 #include <stdint.h>
@@ -42,6 +44,8 @@ using namespace AGE;
 
 int			main(int ac, char **av)
 {
+	LMT_INIT_SYMBOLS();
+	LMT_INIT();
 	///////////////////////////////////////////////////////////////////////////////////
 	/////////// NEW IMPLEMENTATION
 	///////////
@@ -74,5 +78,6 @@ int			main(int ac, char **av)
 		//engine->enableScene("BenchmarkScene2", 101);
 		return true;
 	}));
+	LMT_EXIT();
 	return (EXIT_SUCCESS);
 }

@@ -5,15 +5,23 @@
 #include <Utils/Profiler.hpp>
 
 #define LMT_ALLOC_NUMBER_PER_CHUNK 1024
-#define LMT_STACK_SIZE_PER_ALLOC 25
+#define LMT_STACK_SIZE_PER_ALLOC 50
 #define LMT_CHUNK_NUMBER_PER_THREAD 4
 #define LMT_CACHE_SIZE 32
-#define LMT_ALLOC_DICTIONARY_SIZE 1024 * 8
-#define LMT_STACK_DICTIONARY_SIZE 1024 * 8
+#define LMT_ALLOC_DICTIONARY_SIZE 1024 * 16
+#define LMT_STACK_DICTIONARY_SIZE 1024 * 16
 #define LMT_TREE_DICTIONARY_SIZE 1024 * 32
 #define LMT_IMGUI 1
 #define LMT_PLATFORM_WINDOWS 1
 #define LMT_IMGUI_INCLUDE_PATH "imgui/imgui.h"
+#define LMT_USE_MALLOC ::malloc
+#define LMT_USE_REALLOC ::realloc
+#define LMT_USE_FREE ::free
+
+
+#ifdef AGE_DEBUG
+#define LMT_DEBUG_DEV 1
+#endif
 
 #define LMT_TREAT_CHUNK(chunk) \
 SCOPE_profile_cpu_i("Alloc", "Alloc chunk"); \
