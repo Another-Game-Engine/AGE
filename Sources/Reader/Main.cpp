@@ -44,7 +44,6 @@ using namespace AGE;
 
 int			main(int ac, char **av)
 {
-	LMT_INIT_SYMBOLS();
 	LMT_INIT();
 	///////////////////////////////////////////////////////////////////////////////////
 	/////////// NEW IMPLEMENTATION
