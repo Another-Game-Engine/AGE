@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../LiveMemTrace/src/LiveMemTracer.hpp"
+#include "LiveMemTracer/LiveMemTracer.hpp"
 
 namespace AGE
 {

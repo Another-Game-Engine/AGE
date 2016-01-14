@@ -10,7 +10,7 @@
 #include <Threads/ThreadManager.hpp>
 #include <Threads/Tasks/BasicTasks.hpp>
 
-#include "../../LiveMemTrace/src/LiveMemTracer.hpp"
+#include "LiveMemTracer/LiveMemTracer.hpp"
 
 namespace AGE
 {
