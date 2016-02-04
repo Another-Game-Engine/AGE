@@ -113,7 +113,8 @@ namespace AGE
 			{
 				data->files[i] = files[i];
 			}
-			delete[] files;
+			if (data->numberOfFiles)
+				delete[] files;
 		}
 		data->files[data->numberOfFiles] = new char[std::strlen(name) + 1];
 		std::strcpy(data->files[data->numberOfFiles], name);
@@ -173,14 +174,16 @@ namespace AGE
 		{
 			delete[] data->directories[i];
 		}
-		delete[] data->directories;
+		if (data->numberOfDirectories)
+			delete[] data->directories;
 		data->numberOfDirectories = 0;
 		data->directories = nullptr;
 		for (std::size_t i = 0; i < data->numberOfFiles; ++i)
 		{
 			delete[] data->files[i];
 		}
-		delete[] data->files;
+		if (data->numberOfFiles)
+			delete[] data->files;
 		data->numberOfFiles = 0;
 		data->files = nullptr;
 	}

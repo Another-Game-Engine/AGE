@@ -26,7 +26,7 @@ namespace TMQ
 			CircularBuffer()
 			{
 				index = 0;
-				buffer = (char*)malloc(BufferSize);
+				buffer = new char[BufferSize]();
 				AGE_ASSERT(buffer != nullptr);
 			}
 

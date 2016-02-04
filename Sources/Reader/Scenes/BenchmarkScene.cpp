@@ -320,7 +320,6 @@ namespace AGE
 		return true;
 	}
 
-
 	bool BenchmarkScene::_userUpdateEnd(float time)
 	{
 #ifdef AGE_BFC

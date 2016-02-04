@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Utils/Debug.hpp>
+#include <Utils/Memory.hpp>
 #include <atomic>
 
 namespace AGE
@@ -109,11 +110,11 @@ namespace AGE
 			}
 			if (_buffer == nullptr)
 			{
-				_buffer = (T*)malloc(sizeof(T) * _capacity);
+				_buffer = (T*)AGE_MALLOC(sizeof(T) * _capacity);
 			}
 			else
 			{
-				_buffer = (T*)realloc((void*)_buffer, sizeof(T) * _capacity);
+				_buffer = (T*)AGE_REALLOC((void*)_buffer, sizeof(T) * _capacity);
 			}
 		}
 

@@ -7,6 +7,7 @@
 
 #include <Utils/Utils.hh>
 #include <Utils/Profiler.hpp>
+#include <Utils/Memory.hpp>
 
 #include <Threads/MainThread.hpp>
 #include <Threads/ThreadManager.hpp>
@@ -178,6 +179,9 @@ namespace AGE
 		io.KeyMap[ImGuiKey_X] =          int(AgeKeys::AGE_x);
 		io.KeyMap[ImGuiKey_Y] =          int(AgeKeys::AGE_y);
 		io.KeyMap[ImGuiKey_Z] =          int(AgeKeys::AGE_z);
+
+		io.MemAllocFn = &AGE::malloc;
+		io.MemFreeFn = &AGE::free;
 
 		io.RenderDrawListsFn = renderDrawLists;
 

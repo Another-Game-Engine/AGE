@@ -36,6 +36,8 @@
 
 #endif
 
+#include <Utils/Memory.hpp>
+
 #ifdef AGE_ENABLE_IMGUI
 
 #include <Core/Age_Imgui.hpp>
@@ -239,6 +241,7 @@ namespace AGE
 		GetMainThread()->run();
 
 		getInstance<ConfigurationManager>()->saveToFile();
+		LMT_EXIT();
 		return true;
 	}
 

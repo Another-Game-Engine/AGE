@@ -6,7 +6,7 @@
 
 #include <Utils/ThreadName.hpp>
 #include <Utils/OpenGL.hh>
-
+#include <Utils/Memory.hpp>
 #include <Utils/Debug.hpp>
 #include <Utils/Profiler.hpp>
 #include <Context/SDL/SdlContext.hh>
@@ -305,6 +305,7 @@ namespace AGE
 				{
 					_context->refreshInputs();
 				}
+				LMT_FLUSH();
 			}
 		});
 

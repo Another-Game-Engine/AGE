@@ -8,6 +8,9 @@
 #include <Core/ConfigurationManager.hpp>
 #include <Threads/MainThread.hpp>
 #include <Threads/ThreadManager.hpp>
+#include <Threads/Tasks/BasicTasks.hpp>
+
+#include "LiveMemTracer/LiveMemTracer.hpp"
 
 namespace AGE
 {
@@ -100,5 +103,7 @@ namespace AGE
 #if defined(AGE_ENABLE_IMGUI)
 		ImGui::End();
 #endif
+
+		LMT_DISPLAY(time);
 	}
 }

@@ -3,6 +3,7 @@
 #include <Utils/Debug.hpp>
 #include <Utils/Profiler.hpp>
 #include <Utils/OpenGL.hh>
+#include <Utils/Memory.hpp>
 
 #include "TextureBuffer.hh"
 
@@ -22,7 +23,7 @@ namespace AGE
 		}
 		if (_buffer)
 		{
-			free(_buffer);
+			AGE_FREE(_buffer);
 		}
 	}
 
@@ -39,7 +40,7 @@ namespace AGE
 		glGenTextures(1, &_textureHandle);
 		bind();
 		glTexBuffer(GL_TEXTURE_BUFFER, internal_format, _bufferHandle);
-		_buffer = (char*)malloc(size * count);
+		_buffer = (char*)AGE_MALLOC(size * count);
 		return true;
 	}
 

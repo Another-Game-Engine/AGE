@@ -6,6 +6,8 @@
 #include <vector>
 #include <thread>
 
+#include <Utils/Memory.hpp>
+
 #include "PhysXWorld.hpp"
 #include "PhysXRigidBody.hpp"
 #include "PhysXMaterial.hpp"
@@ -161,7 +163,7 @@ namespace AGE
 				return std::move(shapes);
 			}
 			std::fseek(stream, 0, SEEK_SET);
-			void *collectionBuffer = std::malloc(fileSize + PX_SERIAL_FILE_ALIGN);
+			void *collectionBuffer = AGE_MALLOC(fileSize + PX_SERIAL_FILE_ALIGN);
 			void *bytes = reinterpret_cast<void *>((reinterpret_cast<std::size_t>(collectionBuffer) + PX_SERIAL_FILE_ALIGN) & ~(PX_SERIAL_FILE_ALIGN - 1));
 			std::fread(bytes, 1, fileSize, stream);
 			std::fclose(stream);
